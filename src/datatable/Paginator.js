@@ -150,7 +150,6 @@ YAHOO.widget.Paginator.prototype = {
          */
         this.setAttributeConfig('containers', {
             value     : null,
-            writeOnce : true,
             validator : function (val) {
                 if (!l.isArray(val)) {
                     val = [val];
@@ -324,9 +323,49 @@ YAHOO.widget.Paginator.prototype = {
         this.createEvent('rowsPerPageChange');
         this.createEvent('alwaysVisibleChange');
 
-        this.createEvent('rendered');
+        /**
+         * Event fired when the Paginator is initially rendered
+         * @event render
+         */
+        this.createEvent('render');
+
+        /**
+         * Event fired when the Paginator is initially rendered
+         * @event rendered
+         * @deprecated use render event
+         */
+        this.createEvent('rendered'); // backward compatibility
+
+        /**
+         * Event fired when a change in pagination values is requested,
+         * either by interacting with the various ui components or via the
+         * setStartIndex(n) etc APIs.
+         * Subscribers will receive the proposed state as the first parameter.
+         * The proposed state object will contain the following keys:
+         * <ul>
+         *   <li>paginator - the Paginator instance</li>
+         *   <li>page</li>
+         *   <li>totalRecords</li>
+         *   <li>recordOffset - index of the first record on the new page</li>
+         *   <li>rowsPerPage</li>
+         *   <li>records - array containing [start index, end index] for the records on the new page</li>
+         *   <li>before - object literal with all these keys for the current state</li>
+         * </ul>
+         * @event changeRequest
+         */
         this.createEvent('changeRequest');
+
+        /**
+         * Event that fires before the destroy event.
+         * @event beforeDestroy
+         */
         this.createEvent('beforeDestroy');
+
+        /**
+         * Event used to trigger cleanup of ui components
+         * @event destroy
+         */
+        this.createEvent('destroy');
 
         // Listen for changes to totalRecords and alwaysVisible 
         this.subscribe('totalRecordsChange',this.updateVisibility,this,true);
@@ -411,9 +450,8 @@ YAHOO.widget.Paginator.prototype = {
      */
     destroy : function () {
         this.fireEvent('beforeDestroy');
-        for (var i = 0, len = this._containers.length; i < len; ++i) {
-            this._containers[i].innerHTML = '';
-        }
+        this.fireEvent('destroy');
+
         this.setAttributeConfig('rendered',{value:false});
     },
 
@@ -817,7 +855,7 @@ ui.FirstPageLink = function (p) {
     p.createEvent('firstPageLinkClassChange');
 
     p.subscribe('recordOffsetChange',this.update,this,true);
-    p.subscribe('beforeDestroy',this.destroy,this,true);
+    p.subscribe('destroy',this.destroy,this,true);
 
     // TODO: make this work
     p.subscribe('firstPageLinkLabelChange',this.update,this,true);
@@ -935,13 +973,15 @@ ui.FirstPageLink.prototype = {
     },
 
     /**
-     * Removes the onClick listener from the link in preparation for content
+     * Removes the link/span node and clears event listeners
      * removal.
      * @method destroy
      * @private
      */
     destroy : function () {
         YAHOO.util.Event.purgeElement(this.link);
+        this.current.parentNode.removeChild(this.current);
+        this.link = this.span = null;
     },
 
     /**
@@ -976,7 +1016,7 @@ ui.LastPageLink = function (p) {
     p.subscribe('recordOffsetChange',this.update,this,true);
     p.subscribe('totalRecordsChange',this.update,this,true);
     p.subscribe('rowsPerPageChange', this.update,this,true);
-    p.subscribe('beforeDestroy',this.destroy,this,true);
+    p.subscribe('destroy',this.destroy,this,true);
 
     // TODO: make this work
     p.subscribe('lastPageLinkLabelChange',this.update,this,true);
@@ -1119,13 +1159,14 @@ ui.LastPageLink.prototype = {
     },
 
     /**
-     * Removes the onClick listener from the link in preparation for content
-     * removal.
+     * Removes the link/span node and clears event listeners
      * @method destroy
      * @private
      */
     destroy : function () {
         YAHOO.util.Event.purgeElement(this.link);
+        this.current.parentNode.removeChild(this.current);
+        this.link = this.span = null;
     },
 
     /**
@@ -1157,7 +1198,7 @@ ui.PreviousPageLink = function (p) {
     p.createEvent('previousPageLinkClassChange');
 
     p.subscribe('recordOffsetChange',this.update,this,true);
-    p.subscribe('beforeDestroy',this.destroy,this,true);
+    p.subscribe('destroy',this.destroy,this,true);
 
     // TODO: make this work
     p.subscribe('previousPageLinkLabelChange',this.update,this,true);
@@ -1275,13 +1316,14 @@ ui.PreviousPageLink.prototype = {
     },
 
     /**
-     * Removes the onClick listener from the link in preparation for content
-     * removal.
+     * Removes the link/span node and clears event listeners
      * @method destroy
      * @private
      */
     destroy : function () {
         YAHOO.util.Event.purgeElement(this.link);
+        this.current.parentNode.removeChild(this.current);
+        this.link = this.span = null;
     },
 
     /**
@@ -1316,7 +1358,7 @@ ui.NextPageLink = function (p) {
     p.subscribe('recordOffsetChange',this.update,this,true);
     p.subscribe('totalRecordsChange',this.update,this,true);
     p.subscribe('rowsPerPageChange', this.update,this,true);
-    p.subscribe('beforeDestroy',this.destroy,this,true);
+    p.subscribe('destroy',this.destroy,this,true);
 
     // TODO: make this work
     p.subscribe('nextPageLinkLabelChange', this.update,this,true);
@@ -1438,13 +1480,14 @@ ui.NextPageLink.prototype = {
     },
 
     /**
-     * Removes the onClick listener from the link in preparation for content
-     * removal.
+     * Removes the link/span node and clears event listeners
      * @method destroy
      * @private
      */
     destroy : function () {
         YAHOO.util.Event.purgeElement(this.link);
+        this.current.parentNode.removeChild(this.current);
+        this.link = this.span = null;
     },
 
     /**
@@ -1483,7 +1526,7 @@ ui.PageLinks = function (p) {
     p.subscribe('rowsPerPageChange', this.rebuild,this,true);
     p.subscribe('pageLinkClassChange', this.rebuild,this,true);
     p.subscribe('currentPageClassChange', this.rebuild,this,true);
-    p.subscribe('beforeDestroy',this.destroy,this,true);
+    p.subscribe('destroy',this.destroy,this,true);
 
     //TODO: Make this work
     p.subscribe('pageLinksContainerClassChange', this.rebuild,this,true);
@@ -1689,13 +1732,14 @@ ui.PageLinks.prototype = {
     },
 
     /**
-     * Removes the onClick listener from the container in preparation for
-     * content removal.
+     * Removes the page links container node and clears event listeners
      * @method destroy
      * @private
      */
     destroy : function () {
         YAHOO.util.Event.purgeElement(this.container,true);
+        this.container.parentNode.removeChild(this.container);
+        this.container = null;
     },
 
     /**
@@ -1737,7 +1781,7 @@ ui.RowsPerPageDropdown = function (p) {
 
     p.subscribe('rowsPerPageChange',this.update,this,true);
     p.subscribe('rowsPerPageOptionsChange',this.rebuild,this,true);
-    p.subscribe('beforeDestroy',this.destroy,this,true);
+    p.subscribe('destroy',this.destroy,this,true);
 
     // TODO: make this work
     p.subscribe('rowsPerPageDropdownClassChange',this.rebuild,this,true);
@@ -1854,13 +1898,14 @@ ui.RowsPerPageDropdown.prototype = {
     },
 
     /**
-     * Removes the onChange listener from the select in preparation for content
-     * removal.
+     * Removes the select node and clears event listeners
      * @method destroy
      * @private
      */
     destroy : function () {
         YAHOO.util.Event.purgeElement(this.select);
+        this.select.parentNode.removeChild(this.select);
+        this.select = null;
     },
 
     /**
@@ -1897,6 +1942,7 @@ ui.CurrentPageReport = function (p) {
     p.subscribe('totalRecordsChange',this.update,this,true);
     p.subscribe('rowsPerPageChange', this.update,this,true);
     p.subscribe('pageReportTemplateChange', this.update,this,true);
+    p.subscribe('destroy',this.destroy,this,true);
 
     //TODO: make this work
     p.subscribe('pageReportClassChange', this.update,this,true);
@@ -1978,7 +2024,7 @@ ui.CurrentPageReport.init = function (p) {
  * @return {string}
  */
 ui.CurrentPageReport.sprintf = function (template, values) {
-    return template.replace(/{([\w\s\-]+)}/g, function (x,key) {
+    return template.replace(/\{([\w\s\-]+)\}/g, function (x,key) {
             return (key in values) ? values[key] : '';
         });
 };
@@ -2027,7 +2073,19 @@ ui.CurrentPageReport.prototype = {
         this.span.innerHTML = ui.CurrentPageReport.sprintf(
             this.paginator.get('pageReportTemplate'),
             this.paginator.get('pageReportValueGenerator')(this.paginator));
+    },
+
+    /**
+     * Removes the link/span node and clears event listeners
+     * removal.
+     * @method destroy
+     * @private
+     */
+    destroy : function () {
+        this.span.parentNode.removeChild(this.span);
+        this.span = null;
     }
+
 };
 
 })();

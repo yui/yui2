@@ -1,5 +1,82 @@
 DataTable Release Notes
 
+*** version 2.6.0 ***
+
+* Created new subclass ScrollingDataTable. Created new classes CellEditor,
+BaseCellEditor, and associated subclasses. As a result, the following API changes
+have been made:
+   - DataTable.editCheckbox is no longer supported. The CheckboxCellEditor class should be used instead.
+   - DataTable.editDate is no longer supported. The DateCellEditor class should be used instead.
+   - DataTable.editDropdown is no longer supported. The DropdownCellEditor class should be used instead.
+   - DataTable.editRadio is no longer supported. The RadioCellEditor class should be used instead.
+   - DataTable.editTextarea is no longer supported. The TextareaCellEditor class should be used instead.
+   - DataTable.editTextbox is no longer supported. The TextboxCellEditor class should be used instead.
+   - editorUpdateEvent is no longer supported.
+   - showCellEditorBtns() is no longer supported. The CellEditor method renderBtns() should be used instead.
+   - resetCellEditor() renamed to destroyCellEditor().
+   
+* Pagination and sorting have been reworked to better support dynamically driven
+DataTables. As a result, the following important changes have been made:
+    - Removed support for "magic meta" fields
+    - The following APIs have been removed:
+        * "paginationEventHandler" Attribute
+        * handleSimplePagination()
+        * handleDataSourcePagination()        
+        * updatePaginator()
+        * showPage()
+        * formatPaginator()
+        * formatPaginationDropdown()
+        * formatPaginatorLinks()
+    - The following APIs have been added:
+        * "dynamicData" Attribute
+    - The following APIs have been changed:
+        * onPaginatorChange() has been renamed to onPaginatorChangeRequest()
+    - Removed backward compatibility support for the "paginated" Attribute and
+   the object literal "paginator" Attribute value. Implementers must use the Paginator
+   class to populate the "paginator" Attribute.
+
+* The following APIs have been changed from static class properties to instance
+Attributes, to be set via the initial config or myDataTable.set():
+    - MSG_EMPTY
+    - MSG_ERROR
+    - MSG_LOADING
+    - COLOR_COLUMNFILLER (ScrollingDataTable)
+    
+* The initEvent will fire when rows are rendered from an initialized state, 
+and the renderEvent will always fire when rows are rendered. This is a slight change
+from prior behavior, when the the renderEvent would *not* fire if the initEvent
+was fired.
+
+* For consistency with other doBefore abstract methods, doBeforeShowCellEditor()
+returns true by default, and returns false to cancel showing the cell editor.
+
+* Column.minWidth default value now null.
+ 
+* Removed unused Column._oDefinition private property.
+
+* Hidden Columns are now manifested as cell liner elements with display:none to prevent content from being visible.
+ 
+* In the markup, the primary data TBODY is (once again) before the message TBODY element.
+ 
+* Resizeable Columns now create an additional resizer liner DIV element between
+the TH element and the liner DIV element. Implementers are advised to access the 
+liner DIV elements via Column.getThLinerEl() rather than TH.firstChild.
+ 
+* TR element IDs are now assigned with the corresponding Record ID.
+ 
+* Removed unused TD ID assignments.
+ 
+* All CSS clases representing Column states now assigned directly on TH and TD
+elements, not on liner DIV elements.
+ 
+* Added bottom border to last TR element in ScrollingDataTables.
+ 
+* Added updateCell method.
+
+
+
+
+
 *** version 2.5.2 ***
 
 * Paginator now updates recordOffset to the starting index of the last page when
@@ -42,6 +119,7 @@ Removed APIs
 
 Changed APIs
 
+    * initializeTable() - No longer takes any arguments. Data must be added as a separate step.
     * doBeforeLoadData(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.
     * formatCell() - The first argument, elCell, is now a reference to the cell liner element rather than the TD itself.
     * onDataReturnAppendRows(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.

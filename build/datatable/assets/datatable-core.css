@@ -1,20 +1,19 @@
 /* foundational CSS */
-.yui-dt {
-    border-bottom:1px solid transparent;
+
+/* scrollable */
+.yui-dt-tmp {
+    position:absolute;
+    left:-9000px;
 }
 
-.yui-dt-noop {
-    border-bottom:none;
+.yui-dt-scrollable .yui-dt-bd {
+    overflow:auto;
 }
-
-/* a11y headers */
-.yui-dt-hd {
-    display: none;
-}
-
 .yui-dt-scrollable .yui-dt-hd {
-    display: block;
-}
+    overflow:hidden;
+    position:relative; /* for ie overflow bug http://rowanw.com/bugs/overflow_relative.htm */
+} 
+
 .yui-dt-scrollable .yui-dt-bd thead tr,
 .yui-dt-scrollable .yui-dt-bd thead th {
     position:absolute;
@@ -38,7 +37,7 @@
 .yui-dt-hd {
     zoom:1; 
 }
-th.yui-dt-resizeable .yui-dt-liner {
+th.yui-dt-resizeable .yui-dt-resizerliner {
     position:relative;
 }
 .yui-dt-resizer {
@@ -48,6 +47,7 @@ th.yui-dt-resizeable .yui-dt-liner {
     height:100%;
     cursor:e-resize;
     cursor:col-resize;
+    background-color:#CCC;opacity:0;filter: alpha(opacity=0); /* Bug 1952811: IE transparency z-index */
 }
 .yui-dt-resizerproxy {
     visibility:hidden;
@@ -56,22 +56,16 @@ th.yui-dt-resizeable .yui-dt-liner {
 }
 
 /* hidden columns */
-.yui-skin-sam th.yui-dt-hidden .yui-dt-liner, 
-.yui-skin-sam td.yui-dt-hidden .yui-dt-liner {
+th.yui-dt-hidden .yui-dt-liner, 
+td.yui-dt-hidden .yui-dt-liner {
+    /*TODO: document change from 2.5.2 to 2.6
     margin:0;
     padding:0;
-    overflow:hidden;
     white-space:nowrap;
+    width:1px;
+    overflow:hidden;*/
+    display:none;
 }
-
-/* vertical and horizontal scrolling */
-.yui-dt-scrollable .yui-dt-bd {
-    overflow:auto;
-}
-.yui-dt-scrollable .yui-dt-hd {
-    overflow:hidden;
-    position:relative; /* for ie overflow bug http://rowanw.com/bugs/overflow_relative.htm */
-} 
 
 /* editing */
 .yui-dt-editor {

@@ -162,7 +162,7 @@ YAHOO.widget.ColumnSet.prototype = {
 
                 // Assign its parent as an attribute, if applicable
                 if(parent) {
-                    oColumn.parent = parent;
+                    oColumn._oParent = parent;
                 }
 
                 // The Column has descendants
@@ -212,6 +212,9 @@ YAHOO.widget.ColumnSet.prototype = {
                         }
                         if(oColumn.width && (child.width === undefined)) {
                             child.width = oColumn.width;
+                        }
+                        if(oColumn.minWidth && (child.minWidth === undefined)) {
+                            child.minWidth = oColumn.minWidth;
                         }
                         // Backward compatibility
                         if(oColumn.type && (child.type === undefined)) {
@@ -329,9 +332,9 @@ YAHOO.widget.ColumnSet.prototype = {
 
         // Store header relationships in an array for HEADERS attribute
         var recurseAncestorsForHeaders = function(i, oColumn) {
-            headers[i].push(oColumn._sId);
-            if(oColumn.parent) {
-                recurseAncestorsForHeaders(i, oColumn.parent);
+            headers[i].push(oColumn.getSanitizedKey());
+            if(oColumn._oParent) {
+                recurseAncestorsForHeaders(i, oColumn._oParent);
             }
         };
         for(i=0; i<keys.length; i++) {
@@ -395,21 +398,13 @@ YAHOO.widget.ColumnSet.prototype = {
                 var oColumn = oSelf.getColumnById(currentNode.yuiColumnId);
                 
                 if(oColumn) {    
-                    // Update the definition
-                    currentNode.abbr = oColumn.abbr;
-                    currentNode.className = oColumn.className;
-                    currentNode.editor = oColumn.editor;
-                    currentNode.editorOptions = oColumn.editorOptions;
-                    currentNode.formatter = oColumn.formatter;
-                    currentNode.hidden = oColumn.hidden;
-                    currentNode.key = oColumn.key;
-                    currentNode.label = oColumn.label;
-                    currentNode.minWidth = oColumn.minWidth;
-                    currentNode.resizeable = oColumn.resizeable;
-                    currentNode.selected = oColumn.selected;
-                    currentNode.sortable = oColumn.sortable;
-                    currentNode.sortOptions = oColumn.sortOptions;
-                    currentNode.width = oColumn.width;
+                    // Update the current values
+                    var oDefinition = oColumn.getDefinition();
+                    for(var name in oDefinition) {
+                        if(YAHOO.lang.hasOwnProperty(oDefinition, name)) {
+                            currentNode[name] = oDefinition[name];
+                        }
+                    }
                 }
                             
                 // The Column has descendants
@@ -517,7 +512,7 @@ YAHOO.widget.ColumnSet.prototype = {
  */
 YAHOO.widget.Column = function(oConfigs) {
     // Object literal defines Column attributes
-    if(oConfigs && (oConfigs.constructor == Object)) {
+    if(oConfigs && YAHOO.lang.isObject(oConfigs)) {
         for(var sConfig in oConfigs) {
             if(sConfig) {
                 this[sConfig] = oConfigs[sConfig];
@@ -528,6 +523,10 @@ YAHOO.widget.Column = function(oConfigs) {
     if(this.width && !YAHOO.lang.isNumber(this.width)) {
         this.width = null;
         YAHOO.log("The Column property width must be a number", "warn", this.toString());
+    }
+    if(this.editor && YAHOO.lang.isString(this.editor)) {
+        this.editor = new YAHOO.widget.CellEditor(this.editor, this.editorOptions);
+        YAHOO.log("The Column property editor must be an instance of YAHOO.widget.CellEditor", "warn", this.toString());
     }
 };
 
@@ -609,15 +608,6 @@ YAHOO.widget.Column.prototype = {
     _sId : null,
 
     /**
-     * Object literal definition
-     *
-     * @property _oDefinition
-     * @type Object
-     * @private
-     */
-    _oDefinition : null,
-
-    /**
      * Reference to Column's current position index within its ColumnSet's keys
      * array, if applicable. This property only applies to non-nested and bottom-
      * level child Columns.
@@ -666,15 +656,6 @@ YAHOO.widget.Column.prototype = {
      */
     _oParent : null,
 
-    /*TODO: remove
-     * The DOM reference the associated COL element.
-     *
-     * @property _elCol
-     * @type HTMLElement
-     * @private
-     */
-    //YAHOO.widget.Column.prototype._elCol = null;
-
     /**
      * The DOM reference to the associated TH element.
      *
@@ -685,6 +666,15 @@ YAHOO.widget.Column.prototype = {
     _elTh : null,
 
     /**
+     * The DOM reference to the associated TH element's liner DIV element.
+     *
+     * @property _elThLiner
+     * @type HTMLElement
+     * @private
+     */
+    _elThLiner : null,
+
+    /**
      * The DOM reference to the associated resizerelement (if any).
      *
      * @property _elResizer
@@ -692,6 +682,15 @@ YAHOO.widget.Column.prototype = {
      * @private
      */
     _elResizer : null,
+
+    /**
+     * Internal width tracker.
+     *
+     * @property _nWidth
+     * @type Number
+     * @private
+     */
+    _nWidth : null,
 
     /**
      * For unreg() purposes, a reference to the Column's DragDrop instance.
@@ -762,9 +761,9 @@ YAHOO.widget.Column.prototype = {
      *
      * @property minWidth
      * @type Number
-     * @default 10
+     * @default null
      */
-    minWidth : 10,
+    minWidth : null,
 
     /**
      * True if Column is in hidden state.
@@ -801,20 +800,12 @@ YAHOO.widget.Column.prototype = {
     formatter : null,
 
     /**
-     * Defines an editor function, otherwise Column is not editable.
+     * A CellEditor instance, otherwise Column is not editable.     
      *
      * @property editor
-     * @type String || HTMLFunction
+     * @type YAHOO.widget.CellEditor
      */
     editor : null,
-
-    /**
-     * Defines editor options for Column in an object literal of param:value pairs.
-     *
-     * @property editorOptions
-     * @type Object
-     */
-    editorOptions : null,
 
     /**
      * True if Column is resizeable, false otherwise. The Drag & Drop Utility is
@@ -903,18 +894,19 @@ YAHOO.widget.Column.prototype = {
      * @return {Object} Object literal definition.
      */
     getDefinition : function() {
-        var oDefinition = this._oDefinition;
+        var oDefinition = {};
         
         // Update the definition
         oDefinition.abbr = this.abbr;
         oDefinition.className = this.className;
         oDefinition.editor = this.editor;
-        oDefinition.editorOptions = this.editorOptions;
+        oDefinition.editorOptions = this.editorOptions; //TODO: deprecated
         oDefinition.formatter = this.formatter;
         oDefinition.key = this.key;
         oDefinition.label = this.label;
         oDefinition.minWidth = this.minWidth;
         oDefinition.resizeable = this.resizeable;
+        oDefinition.selected = this.selected;
         oDefinition.sortable = this.sortable;
         oDefinition.sortOptions = this.sortOptions;
         oDefinition.width = this.width;
@@ -930,6 +922,17 @@ YAHOO.widget.Column.prototype = {
      */
     getKey : function() {
         return this.key;
+    },
+    
+    /**
+     * Returns Column key which has been sanitized for DOM (class and ID) usage
+     * starts with letter, contains only letters, numbers, hyphen, or period.
+     *
+     * @method getSanitizedKey
+     * @return {String} Sanitized Column key.
+     */
+    getSanitizedKey : function() {
+        return this.getKey().replace(/[^\w\-.:]/g,"");
     },
 
     /**
@@ -1000,6 +1003,18 @@ YAHOO.widget.Column.prototype = {
      */
     getThEl : function() {
         return this._elTh;
+    },
+
+    /**
+     * Returns DOM reference to the key TH's liner DIV element. Introduced since
+     * resizeable Columns may have an extra resizer liner, making the DIV liner
+     * not reliably the TH element's first child.               
+     *
+     * @method getThLInerEl
+     * @return {HTMLElement} TH element.
+     */
+    getThLinerEl : function() {
+        return this._elThLiner;
     },
 
     /**
@@ -1112,7 +1127,7 @@ YAHOO.util.Sort = {
 YAHOO.widget.ColumnDD = function(oDataTable, oColumn, elTh, elTarget) {
     if(oDataTable && oColumn && elTh && elTarget) {
         this.datatable = oDataTable;
-        this.table = oDataTable.getTheadEl().parentNode;
+        this.table = oDataTable.getTableEl();
         this.column = oColumn;
         this.headCell = elTh;
         this.pointer = elTarget;
@@ -1123,6 +1138,10 @@ YAHOO.widget.ColumnDD = function(oDataTable, oColumn, elTh, elTarget) {
 
         //Set padding to account for children of nested columns
         this.setPadding(10, 0, (this.datatable.getTheadEl().offsetHeight + 10) , 0);
+
+        YAHOO.util.Event.on(window, 'resize', function() {
+            this.initConstraints();
+        }, this, true);
     }
     else {
         YAHOO.log("Column dragdrop could not be created","warn",oDataTable.toString());
@@ -1148,11 +1167,7 @@ if(YAHOO.util.DDProxy) {
     
             //Set the constraints based on the above calculations
             this.setXConstraint(left, right);
-            this.setYConstraint(10, 10);
-            
-            YAHOO.util.Event.on(window, 'resize', function() {
-                this.initConstraints();
-            }, this, true);
+            this.setYConstraint(10, 10);            
         },
         _resizeProxy: function() {
             this.constructor.superclass._resizeProxy.apply(this, arguments);
@@ -1181,48 +1196,46 @@ if(YAHOO.util.DDProxy) {
             }
         },
         onDragOver: function(ev, id) {
-            // Validate target
+            // Validate target as a Column
             var target = this.datatable.getColumn(id);
-            if(target) {
-                var mouseX = YAHOO.util.Event.getPageX(ev),
-                targetX = YAHOO.util.Dom.getX(id),
-                midX = targetX + ((YAHOO.util.Dom.get(id).offsetWidth)/2),
-                currentIndex =  this.column.getTreeIndex(),
-                targetIndex = target.getTreeIndex(),
-                newIndex = targetIndex;
-                
-                
-                if (mouseX < midX) {
-                   YAHOO.util.Dom.setX(this.pointer, targetX);
-                } else {
-                    var thisWidth = parseInt(target.getThEl().offsetWidth, 10);
-                    YAHOO.util.Dom.setX(this.pointer, (targetX + thisWidth));
-                    newIndex++;
+            if(target) {                
+                // Validate target as a top-level parent
+                var targetIndex = target.getTreeIndex();
+                while((targetIndex === null) && target.getParent()) {
+                    target = target.getParent();
+                    targetIndex = target.getTreeIndex();
                 }
-                if (targetIndex > currentIndex) {
-                    newIndex--;
+                if(targetIndex !== null) {
+                    // Are we placing to left or right of target?
+                    var elTarget = target.getThEl();
+                    var newIndex = targetIndex;
+                    var mouseX = YAHOO.util.Event.getPageX(ev),
+                        targetX = YAHOO.util.Dom.getX(elTarget),
+                        midX = targetX + ((YAHOO.util.Dom.get(elTarget).offsetWidth)/2),
+                        currentIndex =  this.column.getTreeIndex();
+                    
+                    if (mouseX < midX) {
+                       YAHOO.util.Dom.setX(this.pointer, targetX);
+                    } else {
+                        var targetWidth = parseInt(elTarget.offsetWidth, 10);
+                        YAHOO.util.Dom.setX(this.pointer, (targetX + targetWidth));
+                        newIndex++;
+                    }
+                    if (targetIndex > currentIndex) {
+                        newIndex--;
+                    }
+                    if(newIndex < 0) {
+                        newIndex = 0;
+                    }
+                    else if(newIndex > this.datatable.getColumnSet().tree[0].length) {
+                        newIndex = this.datatable.getColumnSet().tree[0].length;
+                    }
+                    this.newIndex = newIndex;
                 }
-                if(newIndex < 0) {
-                    newIndex = 0;
-                }
-                else if(newIndex > this.datatable.getColumnSet().tree[0].length) {
-                    newIndex = this.datatable.getColumnSet().tree[0].length;
-                }
-                this.newIndex = newIndex;
             }
         },
         onDragDrop: function() {
-            if(YAHOO.lang.isNumber(this.newIndex) && (this.newIndex !== this.column.getTreeIndex())) {
-                var oDataTable = this.datatable;
-                oDataTable._oChainRender.stop();
-                var aColumnDefs = oDataTable._oColumnSet.getDefinitions();
-                var oColumn = aColumnDefs.splice(this.column.getTreeIndex(),1)[0];
-                aColumnDefs.splice(this.newIndex, 0, oColumn);
-                oDataTable._initColumnSet(aColumnDefs);
-                oDataTable._initTheadEls();
-                oDataTable.render();
-                oDataTable.fireEvent("columnReorderEvent");
-            }
+            this.datatable.reorderColumn(this.column, this.newIndex);
         },
         endDrag: function() {
             this.newIndex = null;
@@ -1253,9 +1266,11 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elTh, sHandleId, elProx
         this.datatable = oDataTable;
         this.column = oColumn;
         this.headCell = elTh;
-        this.headCellLiner = elTh.firstChild;
+        this.headCellLiner = oColumn.getThLinerEl();
+        this.resizerLiner = elTh.firstChild;
         this.init(sHandleId, sHandleId, {dragOnly:true, dragElId: elProxy.id});
         this.initFrame(); // Needed for proxy
+        this.resetResizerEl(); // Needed when rowspan > 0
     }
     else {
         YAHOO.log("Column resizer could not be created","warn",oDataTable.toString());
@@ -1280,6 +1295,7 @@ if(YAHOO.util.DD) {
             resizerStyle.right = 0;
             resizerStyle.top = "auto";
             resizerStyle.bottom = 0;
+            resizerStyle.height = this.headCell.offsetHeight+"px";
         },
     
         /////////////////////////////////////////////////////////////////////////////
@@ -1297,7 +1313,7 @@ if(YAHOO.util.DD) {
         onMouseUp : function(e) {
             this.resetResizerEl();
             
-            var el = this.headCell.firstChild;
+            var el = this.headCellLiner;
             var newWidth = el.offsetWidth -
                 (parseInt(YAHOO.util.Dom.getStyle(el,"paddingLeft"),10)|0) -
                 (parseInt(YAHOO.util.Dom.getStyle(el,"paddingRight"),10)|0);
@@ -1312,7 +1328,7 @@ if(YAHOO.util.DD) {
          * @param e {string} The mousedown event
          */
         onMouseDown : function(e) {
-            this.startWidth = this.headCell.firstChild.offsetWidth;
+            this.startWidth = this.headCellLiner.offsetWidth;
             this.startX = YAHOO.util.Event.getXY(e)[0];
             this.nLinerPadding = (parseInt(YAHOO.util.Dom.getStyle(this.headCellLiner,"paddingLeft"),10)|0) +
                     (parseInt(YAHOO.util.Dom.getStyle(this.headCellLiner,"paddingRight"),10)|0);
@@ -1345,8 +1361,22 @@ if(YAHOO.util.DD) {
             if(newX > YAHOO.util.Dom.getX(this.headCellLiner)) {
                 var offsetX = newX - this.startX;
                 var newWidth = this.startWidth + offsetX - this.nLinerPadding;
-                this.datatable.setColumnWidth(this.column, newWidth);
+                if(newWidth > 0) {
+                    this.datatable.setColumnWidth(this.column, newWidth);
+                }
             }
         }
     });
 }
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Deprecated
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @property editorOptions
+ * @deprecated Pass configs directly to CellEditor constructor. 
+ */
+
