@@ -4456,6 +4456,12 @@ initializeTable : function() {
     // Clear the RecordSet
     this._oRecordSet.reset();
 
+    // Clear the Paginator's totalRecords if paginating
+    var pag = this.get('paginator');
+    if (pag) {
+        pag.set('totalRecords',0);
+    }
+
     // Clear selections
     this._unselectAllTrEls();
     this._unselectAllTdEls();
@@ -9545,13 +9551,25 @@ onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse,payload:oPayload});
 
     // Pass data through abstract method for any transformations
-    var ok = this.doBeforeLoadData(oRequest, oResponse, oPayload);
+    var ok    = this.doBeforeLoadData(oRequest, oResponse, oPayload),
+        pag   = this.get('paginator'),
+        index = 0;
 
     // Data ok to set
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
         // Update Records
         this._oRecordSet.reset();
-        this._oRecordSet.setRecords(oResponse.results);
+
+        if (this.get('dynamicData')) {
+            if (oPayload && oPayload.pagination &&
+                lang.isNumber(oPayload.pagination.recordOffset)) {
+                index = oPayload.pagination.recordOffset;
+            } else if (pag) {
+                index = pag.getStartIndex();
+            }
+        }
+
+        this._oRecordSet.setRecords(oResponse.results, index|0);
         
         // Update state
         this._handleDataReturnPayload(oRequest, oResponse, oPayload);
@@ -9614,7 +9632,7 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
     // Data ok to append
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
         // Insert rows
-        this.addRows(oResponse.results, oResponse.meta.recordInsertIndex || 0);
+        this.addRows(oResponse.results, oResponse.meta.recordInsertIndex|0);
 
         // Update state
         this._handleDataReturnPayload(sRequest, oResponse, oPayload);
@@ -9637,16 +9655,23 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse,payload:oPayload});
 
     // Pass data through abstract method for any transformations
-    var ok = this.doBeforeLoadData(oRequest, oResponse, oPayload);
+    var ok    = this.doBeforeLoadData(oRequest, oResponse, oPayload),
+        pag   = this.get('paginator'),
+        index = 0;
 
     // Data ok to set
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
         // Update Records
-        var oPaginator = this.get('paginator');
-        var index = oResponse.recordStartIndex ||
-            ((oPaginator && oPaginator instanceof Pag && oPayload.pagination && oPayload.pagination.recordOffset) ?
-            oPayload.pagination.recordOffset : 0);
-        this._oRecordSet.setRecords(oResponse.results, index);
+        if (this.get('dynamicData')) {
+            if (oPayload && oPayload.pagination &&
+                lang.isNumber(oPayload.pagination.recordOffset)) {
+                index = oPayload.pagination.recordOffset;
+            } else if (pag) {
+                index = pag.getStartIndex();
+            }
+        }
+
+        this._oRecordSet.setRecords(oResponse.results, index|0);
 
         // Update state
         this._handleDataReturnPayload(oRequest, oResponse, oPayload);
@@ -9673,25 +9698,27 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
         // Update with any pagination information
         var oPaginator = this.get('paginator');
         if (oPaginator) {
-            // Meta field trumps payload totalRecords
-            if (!lang.isUndefined(oResponse.meta.totalRecords)) {
-                oPaginator.set('totalRecords',parseInt(oResponse.meta.totalRecords,10)|0);
-            }
-            // Can we remove?
-            else if (!lang.isUndefined(oPayload.totalRecords)) {
-                oPaginator.set('totalRecords',parseInt(oPayload.totalRecords,10)|0);
-            }
-            
-            // Safety net to sync totalRecords value
             if(this.get("dynamicData")) {
-                if(oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
-                    oPaginator.set('totalRecords',this._oRecordSet.getLength());
+                var totalRecords = oPaginator.get('totalRecords');
+
+                // Meta field trumps payload totalRecords
+                if (oResponse.meta.totalRecords !== undefined) {
+                    totalRecords = parseInt(oResponse.meta.totalRecords,10)|0;
+                }
+                // Can we remove?
+                else if (oPayload.totalRecords !== undefined) {
+                    totalRecords = parseInt(oPayload.totalRecords,10)|0;
+                }
+
+                // Safety net to increase totalRecords if RecordSet is larger
+                // that assigned totalRecords
+                totalRecords = Math.max(totalRecords, this._oRecordSet.getLength());
+                if (oPaginator.get('totalRecords') !== totalRecords) {
+                    oPaginator.set('totalRecords',totalRecords);
                 }
             }
             else {
-                if(oPaginator.get('totalRecords') !== this._oRecordSet.getLength()) {
-                    oPaginator.set('totalRecords',this._oRecordSet.getLength());
-                }                
+                oPaginator.set('totalRecords',this._oRecordSet.getLength());
             }
 
             // Set the core paginator values in preparation for each render
