@@ -2002,18 +2002,18 @@ _initDomElements : function(elContainer) {
  * Destroy's the DataTable outer container element, if available.
  *
  * @method _destroyContainerEl
+ * @param elContainer {HTMLElement} Reference to the container element. 
  * @private
  */
-_destroyContainerEl : function() {
-    if(this._elContainer) {
-        Dom.removeClass(this._elContainer, DT.CLASS_DATATABLE);
-        Ev.purgeElement(this._elContainer, true);
-        this._elContainer.innerHTML = "";
-        this._elContainer = null;
-        this._elColgroup = null;
-        this._elThead = null;
-        this._elTbody = null;
-    }
+_destroyContainerEl : function(elContainer) {
+    Dom.removeClass(elContainer, DT.CLASS_DATATABLE);
+    Ev.purgeElement(elContainer, true);
+    elContainer.innerHTML = "";
+    
+    this._elContainer = null;
+    this._elColgroup = null;
+    this._elThead = null;
+    this._elTbody = null;
 },
 
 /**
@@ -2024,12 +2024,13 @@ _destroyContainerEl : function() {
  * @private
  */
 _initContainerEl : function(elContainer) {
-    // Destroy previous
-    this._destroyContainerEl();
-
     // Validate container
     elContainer = Dom.get(elContainer);
+    
     if(elContainer && elContainer.nodeName && (elContainer.nodeName.toLowerCase() == "div")) {
+        // Destroy previous
+        this._destroyContainerEl(elContainer);
+
         Dom.addClass(elContainer, DT.CLASS_DATATABLE);
         Ev.addListener(elContainer, "focus", this._onTableFocus, this);
         Ev.addListener(elContainer, "dblclick", this._onTableDblclick, this);
@@ -10724,6 +10725,13 @@ _syncColWidths : function() {
  * @deprecated Use onDataReturnSetRows
  */
 DT.prototype.onDataReturnSetRecords = DT.prototype.onDataReturnSetRows;
+
+/**
+ * Alias for onPaginatorChange for backward compatibility
+ * @method onPaginatorChange
+ * @deprecated Use onPaginatorChangeRequest
+ */
+DT.prototype.onPaginatorChange = DT.prototype.onPaginatorChangeRequest;
 
 /////////////////////////////////////////////////////////////////////////////
 //

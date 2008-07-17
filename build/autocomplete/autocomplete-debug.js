@@ -625,7 +625,7 @@ YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
     }
 };
 
-/*
+/**
 * A function that converts an AutoComplete query into a value which is then
 * passed to the DataSource's sendRequest method in order to retrieve data for 
 * the query. Implementers can customize this method for custom request syntaxes.

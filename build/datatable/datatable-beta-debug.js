@@ -1871,11 +1871,16 @@ RS.prototype = {
      */
     addRecords : function(aData, index) {
         if(lang.isArray(aData)) {
-            var newRecords = [];
+            var newRecords = [],
+                idx,i,l;
+
+            index = lang.isNumber(index) ? index : this._records.length;
+            idx = index;
+
             // Can't go backwards bc we need to preserve order
-            for(var i=0; i<aData.length; i++) {
+            for(i=0,l=aData.length; i<l; ++i) {
                 if(lang.isObject(aData[i])) {
-                    var record = this._addRecord(aData[i], index);
+                    var record = this._addRecord(aData[i], idx++);
                     newRecords.push(record);
                 }
            }
@@ -6475,18 +6480,18 @@ _initDomElements : function(elContainer) {
  * Destroy's the DataTable outer container element, if available.
  *
  * @method _destroyContainerEl
+ * @param elContainer {HTMLElement} Reference to the container element. 
  * @private
  */
-_destroyContainerEl : function() {
-    if(this._elContainer) {
-        Dom.removeClass(this._elContainer, DT.CLASS_DATATABLE);
-        Ev.purgeElement(this._elContainer, true);
-        this._elContainer.innerHTML = "";
-        this._elContainer = null;
-        this._elColgroup = null;
-        this._elThead = null;
-        this._elTbody = null;
-    }
+_destroyContainerEl : function(elContainer) {
+    Dom.removeClass(elContainer, DT.CLASS_DATATABLE);
+    Ev.purgeElement(elContainer, true);
+    elContainer.innerHTML = "";
+    
+    this._elContainer = null;
+    this._elColgroup = null;
+    this._elThead = null;
+    this._elTbody = null;
 },
 
 /**
@@ -6497,12 +6502,13 @@ _destroyContainerEl : function() {
  * @private
  */
 _initContainerEl : function(elContainer) {
-    // Destroy previous
-    this._destroyContainerEl();
-
     // Validate container
     elContainer = Dom.get(elContainer);
+    
     if(elContainer && elContainer.nodeName && (elContainer.nodeName.toLowerCase() == "div")) {
+        // Destroy previous
+        this._destroyContainerEl(elContainer);
+
         Dom.addClass(elContainer, DT.CLASS_DATATABLE);
         Ev.addListener(elContainer, "focus", this._onTableFocus, this);
         Ev.addListener(elContainer, "dblclick", this._onTableDblclick, this);
@@ -8928,6 +8934,12 @@ initializeTable : function() {
     
     // Clear the RecordSet
     this._oRecordSet.reset();
+
+    // Clear the Paginator's totalRecords if paginating
+    var pag = this.get('paginator');
+    if (pag) {
+        pag.set('totalRecords',0);
+    }
 
     // Clear selections
     this._unselectAllTrEls();
@@ -14018,13 +14030,25 @@ onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse,payload:oPayload});
 
     // Pass data through abstract method for any transformations
-    var ok = this.doBeforeLoadData(oRequest, oResponse, oPayload);
+    var ok    = this.doBeforeLoadData(oRequest, oResponse, oPayload),
+        pag   = this.get('paginator'),
+        index = 0;
 
     // Data ok to set
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
         // Update Records
         this._oRecordSet.reset();
-        this._oRecordSet.setRecords(oResponse.results);
+
+        if (this.get('dynamicData')) {
+            if (oPayload && oPayload.pagination &&
+                lang.isNumber(oPayload.pagination.recordOffset)) {
+                index = oPayload.pagination.recordOffset;
+            } else if (pag) {
+                index = pag.getStartIndex();
+            }
+        }
+
+        this._oRecordSet.setRecords(oResponse.results, index|0);
         
         // Update state
         this._handleDataReturnPayload(oRequest, oResponse, oPayload);
@@ -14087,7 +14111,7 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
     // Data ok to append
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
         // Insert rows
-        this.addRows(oResponse.results, oResponse.meta.recordInsertIndex || 0);
+        this.addRows(oResponse.results, oResponse.meta.recordInsertIndex|0);
 
         // Update state
         this._handleDataReturnPayload(sRequest, oResponse, oPayload);
@@ -14110,16 +14134,23 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse,payload:oPayload});
 
     // Pass data through abstract method for any transformations
-    var ok = this.doBeforeLoadData(oRequest, oResponse, oPayload);
+    var ok    = this.doBeforeLoadData(oRequest, oResponse, oPayload),
+        pag   = this.get('paginator'),
+        index = 0;
 
     // Data ok to set
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
         // Update Records
-        var oPaginator = this.get('paginator');
-        var index = oResponse.recordStartIndex ||
-            ((oPaginator && oPaginator instanceof Pag && oPayload.pagination && oPayload.pagination.recordOffset) ?
-            oPayload.pagination.recordOffset : 0);
-        this._oRecordSet.setRecords(oResponse.results, index);
+        if (this.get('dynamicData')) {
+            if (oPayload && oPayload.pagination &&
+                lang.isNumber(oPayload.pagination.recordOffset)) {
+                index = oPayload.pagination.recordOffset;
+            } else if (pag) {
+                index = pag.getStartIndex();
+            }
+        }
+
+        this._oRecordSet.setRecords(oResponse.results, index|0);
 
         // Update state
         this._handleDataReturnPayload(oRequest, oResponse, oPayload);
@@ -14146,25 +14177,27 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
         // Update with any pagination information
         var oPaginator = this.get('paginator');
         if (oPaginator) {
-            // Meta field trumps payload totalRecords
-            if (!lang.isUndefined(oResponse.meta.totalRecords)) {
-                oPaginator.set('totalRecords',parseInt(oResponse.meta.totalRecords,10)|0);
-            }
-            // Can we remove?
-            else if (!lang.isUndefined(oPayload.totalRecords)) {
-                oPaginator.set('totalRecords',parseInt(oPayload.totalRecords,10)|0);
-            }
-            
-            // Safety net to sync totalRecords value
             if(this.get("dynamicData")) {
-                if(oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
-                    oPaginator.set('totalRecords',this._oRecordSet.getLength());
+                var totalRecords = oPaginator.get('totalRecords');
+
+                // Meta field trumps payload totalRecords
+                if (oResponse.meta.totalRecords !== undefined) {
+                    totalRecords = parseInt(oResponse.meta.totalRecords,10)|0;
+                }
+                // Can we remove?
+                else if (oPayload.totalRecords !== undefined) {
+                    totalRecords = parseInt(oPayload.totalRecords,10)|0;
+                }
+
+                // Safety net to increase totalRecords if RecordSet is larger
+                // that assigned totalRecords
+                totalRecords = Math.max(totalRecords, this._oRecordSet.getLength());
+                if (oPaginator.get('totalRecords') !== totalRecords) {
+                    oPaginator.set('totalRecords',totalRecords);
                 }
             }
             else {
-                if(oPaginator.get('totalRecords') !== this._oRecordSet.getLength()) {
-                    oPaginator.set('totalRecords',this._oRecordSet.getLength());
-                }                
+                oPaginator.set('totalRecords',this._oRecordSet.getLength());
             }
 
             // Set the core paginator values in preparation for each render
@@ -15171,6 +15204,13 @@ _syncColWidths : function() {
  */
 DT.prototype.onDataReturnSetRecords = DT.prototype.onDataReturnSetRows;
 
+/**
+ * Alias for onPaginatorChange for backward compatibility
+ * @method onPaginatorChange
+ * @deprecated Use onPaginatorChangeRequest
+ */
+DT.prototype.onPaginatorChange = DT.prototype.onPaginatorChangeRequest;
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Deprecated static APIs
@@ -15544,10 +15584,11 @@ _initTmpEls : function() {
  * Destroy's the DataTable outer and inner container elements, if available.
  *
  * @method _destroyContainerEl
+ * @param elContainer {HTMLElement} Reference to the container element. 
  * @private
  */
-_destroyContainerEl : function() {
-    SDT.superclass._destroyContainerEl.call(this);
+_destroyContainerEl : function(elContainer) {
+    SDT.superclass._destroyContainerEl.call(this, elContainer);
     this._elHdContainer = null;
     this._elBdContainer = null;
 },

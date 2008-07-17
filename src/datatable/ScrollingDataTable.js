@@ -328,10 +328,11 @@ _initTmpEls : function() {
  * Destroy's the DataTable outer and inner container elements, if available.
  *
  * @method _destroyContainerEl
+ * @param elContainer {HTMLElement} Reference to the container element. 
  * @private
  */
-_destroyContainerEl : function() {
-    SDT.superclass._destroyContainerEl.call(this);
+_destroyContainerEl : function(elContainer) {
+    SDT.superclass._destroyContainerEl.call(this, elContainer);
     this._elHdContainer = null;
     this._elBdContainer = null;
 },
