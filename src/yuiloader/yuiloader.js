@@ -56,7 +56,7 @@
         'autocomplete': {
             'type': 'js',
             'path': 'autocomplete/autocomplete-min.js',
-            'requires': ['dom', 'event'],
+            'requires': ['dom', 'event', 'datasource'],
             'optional': ['connection', 'animation'],
             'skinnable': true
         },

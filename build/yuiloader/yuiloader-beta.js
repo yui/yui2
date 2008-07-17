@@ -441,7 +441,6 @@ var L = YAHOO.lang,
      * @return {boolean} the result
      */
     isFunction: function(o) {
-        // return ((typeof o === 'function' && o.apply) || false);
         return !!(typeof o === 'function' && o.apply);
     },
         
@@ -1709,7 +1708,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         'autocomplete': {
             'type': 'js',
             'path': 'autocomplete/autocomplete-min.js',
-            'requires': ['dom', 'event'],
+            'requires': ['dom', 'event', 'datasource'],
             'optional': ['connection', 'animation'],
             'skinnable': true
         },
