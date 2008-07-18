@@ -761,7 +761,8 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
     if(this.responseType === DS.TYPE_UNKNOWN) {
         var ctype = (oRawResponse.getResponseHeader) ? oRawResponse.getResponseHeader["Content-Type"] : null;
         if(ctype) {
-            if(ctype.indexOf("text/xml") > -1) { // xml
+             // xml
+            if(ctype.indexOf("text/xml") > -1) {
                 this.responseType = DS.TYPE_XML;
             }
             else if(ctype.indexOf("application/json") > -1) { // json
@@ -775,7 +776,8 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
             if(YAHOO.lang.isArray(oRawResponse)) { // array
                 this.responseType = DS.TYPE_JSARRAY;
             }
-            else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) { // xml
+             // xml
+            else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) {
                 this.responseType = DS.TYPE_XML;
             }
             else if(oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
@@ -1638,7 +1640,8 @@ util.LocalDataSource = function(oLiveData, oConfigs) {
     if(YAHOO.lang.isArray(oLiveData)) { // array
         this.responseType = DS.TYPE_JSARRAY;
     }
-    else if(oLiveData.nodeType && oLiveData.nodeType == 9) { // xml
+     // xml
+    else if(oLiveData.nodeType && oLiveData.nodeType == 9) {
         this.responseType = DS.TYPE_XML;
     }
     else if(oLiveData.nodeName && (oLiveData.nodeName.toLowerCase() == "table")) { // table
@@ -1725,7 +1728,8 @@ makeConnection : function(oRequest, oCallback, oCaller) {
         if(YAHOO.lang.isArray(oRawResponse)) { // array
             this.responseType = DS.TYPE_JSARRAY;
         }
-        else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) { // xml
+         // xml
+        else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) {
             this.responseType = DS.TYPE_XML;
         }
         else if(oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
@@ -1883,7 +1887,8 @@ makeConnection : function(oRequest, oCallback, oCaller) {
                 if(YAHOO.lang.isArray(oRawResponse)) { // array
                     oSelf.responseType = DS.TYPE_JSARRAY;
                 }
-                else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) { // xml
+                 // xml
+                else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) {
                     oSelf.responseType = DS.TYPE_XML;
                 }
                 else if(oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
@@ -2125,7 +2130,8 @@ makeConnection : function(oRequest, oCallback, oCaller) {
             if(this.responseType === DS.TYPE_UNKNOWN) {
                 var ctype = (oResponse.getResponseHeader) ? oResponse.getResponseHeader["Content-Type"] : null;
                 if(ctype) {
-                    if(ctype.indexOf("text/xml") > -1) { // xml
+                    // xml
+                    if(ctype.indexOf("text/xml") > -1) {
                         this.responseType = DS.TYPE_XML;
                     }
                     else if(ctype.indexOf("application/json") > -1) { // json

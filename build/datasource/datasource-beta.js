@@ -22,7 +22,7 @@ var lang   = YAHOO.lang,
  * Base class for the YUI DataSource utility.
  *
  * @namespace YAHOO.util
- * @class DataSourceBase
+ * @class YAHOO.util.DataSourceBase
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
  * @param oConfigs {object} (optional) Object literal of configuration values.
@@ -738,7 +738,8 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
     if(this.responseType === DS.TYPE_UNKNOWN) {
         var ctype = (oRawResponse.getResponseHeader) ? oRawResponse.getResponseHeader["Content-Type"] : null;
         if(ctype) {
-            if(ctype.indexOf("text/xml") > -1) { // xml
+             // xml
+            if(ctype.indexOf("text/xml") > -1) {
                 this.responseType = DS.TYPE_XML;
             }
             else if(ctype.indexOf("application/json") > -1) { // json
@@ -752,7 +753,8 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
             if(YAHOO.lang.isArray(oRawResponse)) { // array
                 this.responseType = DS.TYPE_JSARRAY;
             }
-            else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) { // xml
+             // xml
+            else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) {
                 this.responseType = DS.TYPE_XML;
             }
             else if(oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
@@ -1570,7 +1572,7 @@ lang.augmentProto(DS, util.EventProvider);
  * JavaScript object literals (JSON), XML documents, and HTML tables.
  *
  * @namespace YAHOO.util
- * @class LocalDataSource
+ * @class YAHOO.util.LocalDataSource
  * @extends YAHOO.util.DataSourceBase 
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
@@ -1582,7 +1584,8 @@ util.LocalDataSource = function(oLiveData, oConfigs) {
     if(YAHOO.lang.isArray(oLiveData)) { // array
         this.responseType = DS.TYPE_JSARRAY;
     }
-    else if(oLiveData.nodeType && oLiveData.nodeType == 9) { // xml
+     // xml
+    else if(oLiveData.nodeType && oLiveData.nodeType == 9) {
         this.responseType = DS.TYPE_XML;
     }
     else if(oLiveData.nodeName && (oLiveData.nodeName.toLowerCase() == "table")) { // table
@@ -1624,7 +1627,7 @@ lang.augmentObject(util.LocalDataSource, DS);
  * FunctionDataSource class for JavaScript functions.
  *
  * @namespace YAHOO.util
- * @class FunctionDataSource
+ * @class YAHOO.util.FunctionDataSource
  * @extends YAHOO.util.DataSourceBase  
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
@@ -1669,7 +1672,8 @@ makeConnection : function(oRequest, oCallback, oCaller) {
         if(YAHOO.lang.isArray(oRawResponse)) { // array
             this.responseType = DS.TYPE_JSARRAY;
         }
-        else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) { // xml
+         // xml
+        else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) {
             this.responseType = DS.TYPE_XML;
         }
         else if(oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
@@ -1712,7 +1716,7 @@ lang.augmentObject(util.FunctionDataSource, DS);
  * ScriptNodeDataSource class for accessing remote data via the YUI Get Utility. 
  *
  * @namespace YAHOO.util
- * @class ScriptNodeDataSource
+ * @class YAHOO.util.ScriptNodeDataSource
  * @extends YAHOO.util.DataSourceBase  
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
@@ -1827,7 +1831,8 @@ makeConnection : function(oRequest, oCallback, oCaller) {
                 if(YAHOO.lang.isArray(oRawResponse)) { // array
                     oSelf.responseType = DS.TYPE_JSARRAY;
                 }
-                else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) { // xml
+                 // xml
+                else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) {
                     oSelf.responseType = DS.TYPE_XML;
                 }
                 else if(oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
@@ -1928,7 +1933,7 @@ callbacks : []
  * Utility
  *
  * @namespace YAHOO.util
- * @class XHRDataSource
+ * @class YAHOO.util.XHRDataSource
  * @extends YAHOO.util.DataSourceBase  
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
@@ -2065,7 +2070,8 @@ makeConnection : function(oRequest, oCallback, oCaller) {
             if(this.responseType === DS.TYPE_UNKNOWN) {
                 var ctype = (oResponse.getResponseHeader) ? oResponse.getResponseHeader["Content-Type"] : null;
                 if(ctype) {
-                    if(ctype.indexOf("text/xml") > -1) { // xml
+                    // xml
+                    if(ctype.indexOf("text/xml") > -1) {
                         this.responseType = DS.TYPE_XML;
                     }
                     else if(ctype.indexOf("application/json") > -1) { // json
@@ -2223,7 +2229,7 @@ lang.augmentObject(util.XHRDataSource, DS);
  * Factory class for creating a BaseDataSource subclass instance.
  *
  * @namespace YAHOO.util
- * @class DataSource
+ * @class YAHOO.util.DataSource
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
  * @param oConfigs {object} (optional) Object literal of configuration values.
