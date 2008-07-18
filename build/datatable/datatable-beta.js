@@ -13824,9 +13824,10 @@ onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
 },
 
 /**
- * Receives reponse from DataSource, replaces all existing Records in 
- * RecordSet, updates TR elements with new data, and updates state UI for 
- * pagination and sorting from payload data, if necessary. 
+ * Callback function receives reponse from DataSource, replaces all existing
+ * Records in  RecordSet, updates TR elements with new data, and updates state
+ * UI for pagination and sorting from payload data, if necessary. 
+ *  
  * @method onDataReturnReplaceRows
  * @param oRequest {MIXED} Original generated request.
  * @param oResponse {Object} Response object.
@@ -13854,7 +13855,7 @@ onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
             }
         }
 
-        this._oRecordSet.setRecords(oResponse.results, index|0);
+        this._oRecordSet.setRecords(oResponse.results, index | 0);
         
         // Update state
         this._handleDataReturnPayload(oRequest, oResponse, oPayload);
@@ -13900,13 +13901,15 @@ onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
 
 /**
  * Callback function receives data from DataSource and inserts new records
- * starting at the index specified in oPayload.insertIndex.  If applicable,
- * creates or updates corresponding TR elements.
+ * starting at the index specified in oPayload.insertIndex. The value for
+ * oPayload.insertIndex can be populated when sending the request to the DataSource,
+ * or by accessing oPayload.insertIndex with the doBeforeLoadData() method at runtime.
+ * If applicable, creates or updates corresponding TR elements.
  *
  * @method onDataReturnInsertRows
  * @param sRequest {String} Original request.
  * @param oResponse {Object} Response object.
- * @param oPayload {MIXED} (optional) Additional argument(s)
+ * @param oPayload {MIXED} Argument payload, looks in oPayload.insertIndex.
  */
 onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse,payload:oPayload});
@@ -13917,7 +13920,7 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
     // Data ok to append
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
         // Insert rows
-        this.addRows(oResponse.results, oResponse.meta.recordInsertIndex|0);
+        this.addRows(oResponse.results, oPayload.insertIndex | 0);
 
         // Update state
         this._handleDataReturnPayload(sRequest, oResponse, oPayload);
@@ -13929,8 +13932,9 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
 },
 
 /**
- * Receives reponse from DataSource and populates the RecordSet with the
- * results.
+ * Call back function receives reponse from DataSource and populates the
+ * RecordSet with the results.
+ *  
  * @method onDataReturnSetRows
  * @param oRequest {MIXED} Original generated request.
  * @param oResponse {Object} Response object.
@@ -13956,7 +13960,7 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
             }
         }
 
-        this._oRecordSet.setRecords(oResponse.results, index|0);
+        this._oRecordSet.setRecords(oResponse.results, index | 0);
 
         // Update state
         this._handleDataReturnPayload(oRequest, oResponse, oPayload);
@@ -13971,7 +13975,8 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
 },
 
 /**
- * Updates the DataTable with state data sent in an onDataReturn* payload
+ * Updates the DataTable with state data sent in an onDataReturn* payload.
+ *  
  * @method _handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
  * @param oResponse {Object} Response object.
@@ -13986,13 +13991,13 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
             if(this.get("dynamicData")) {
                 var totalRecords = oPaginator.get('totalRecords');
 
-                // Meta field trumps payload totalRecords
+                // Meta field trumps locally known value
                 if (oResponse.meta.totalRecords !== undefined) {
-                    totalRecords = parseInt(oResponse.meta.totalRecords,10)|0;
+                    totalRecords = parseInt(oResponse.meta.totalRecords,10) | 0;
                 }
-                // Can we remove?
+                // Manual override by implementer
                 else if (oPayload.totalRecords !== undefined) {
-                    totalRecords = parseInt(oPayload.totalRecords,10)|0;
+                    totalRecords = parseInt(oPayload.totalRecords,10) | 0;
                 }
 
                 // Safety net to increase totalRecords if RecordSet is larger
