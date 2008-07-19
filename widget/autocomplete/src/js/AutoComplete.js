@@ -1034,6 +1034,7 @@ YAHOO.widget.AutoComplete.prototype.itemSelectEvent = null;
  *
  * @event unmatchedItemSelectEvent
  * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
+ * @param sSelection {String} The selected string.  
  */
 YAHOO.widget.AutoComplete.prototype.unmatchedItemSelectEvent = null;
 
@@ -1254,13 +1255,14 @@ YAHOO.widget.AutoComplete.prototype._nDisplayedItems = 0;
 YAHOO.widget.AutoComplete.prototype._sCurQuery = null;
 
 /**
- * Past queries this session (for saving delimited queries).
+ * Selections from previous queries (for saving delimited queries).
  *
- * @property _sSavedQuery
+ * @property _sPastSelections
  * @type String
+ * @default "" 
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._sSavedQuery = null;
+YAHOO.widget.AutoComplete.prototype._sPastSelections = "";
 
 /**
  * Stores initial input value used to determine if textboxChangeEvent should be fired.
@@ -1656,7 +1658,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
                 }
             }
         }
-        // A delimiter has been found so extract the latest query
+        // A delimiter has been found so extract the latest query from past selections
         if(nDelimIndex > -1) {
             var nQueryStart = nDelimIndex + 1;
             // Trim any white space from the beginning...
@@ -1664,12 +1666,13 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
                 nQueryStart += 1;
             }
             // ...and save the rest of the string for later
-            this._sSavedQuery = sQuery.substring(0,nQueryStart);
+            this._sPastSelections = sQuery.substring(0,nQueryStart);
             // Here is the query itself
             sQuery = sQuery.substr(nQueryStart);
         }
-        else if(sQuery.indexOf(this._sSavedQuery) < 0){
-            this._sSavedQuery = null;
+        // No delimiter found, so there are no selections from past queries
+        else {
+            this._sPastSelections = "";
         }
     }
 
@@ -1865,7 +1868,7 @@ YAHOO.widget.AutoComplete.prototype._clearSelection = function() {
     else {
          this._elTextbox.value = "";
     }
-    this._sSavedQuery = this._elTextbox.value;
+    this._sPastSelections = this._elTextbox.value;
 
     // Fire custom event
     this.selectionEnforceEvent.fire(this);
@@ -2165,30 +2168,33 @@ YAHOO.widget.AutoComplete.prototype._togglePrehighlight = function(elNewListItem
 YAHOO.widget.AutoComplete.prototype._updateValue = function(elListItem) {
     var elTextbox = this._elTextbox;
     var sDelimChar = (this.delimChar) ? (this.delimChar[0] || this.delimChar) : null;
-    var sSavedQuery = this._sSavedQuery;
     var sResultMatch = elListItem._sResultMatch;
-    elTextbox.focus();
 
-    // First clear text field
-    elTextbox.value = "";
-    // Grab data to put into text field
+    // Calculate the new value
+    var sNewValue = "";
     if(sDelimChar) {
-        if(sSavedQuery) {
-            elTextbox.value = sSavedQuery;
-        }
-        elTextbox.value += sResultMatch + sDelimChar;
+        // Preserve selections from past queries
+        sNewValue = this._sPastSelections;
+        // Add new selection plus delimiter
+        sNewValue += sResultMatch + sDelimChar;
         if(sDelimChar != " ") {
-            elTextbox.value += " ";
+            sNewValue += " ";
         }
     }
-    else { elTextbox.value = sResultMatch; }
+    else { 
+        sNewValue = sResultMatch;
+    }
+    
+    // Update input field
+    elTextbox.value = sNewValue
+    //elTextbox.focus();
 
-    // scroll to bottom of textarea if necessary
+    // Scroll to bottom of textarea if necessary
     if(elTextbox.type == "textarea") {
         elTextbox.scrollTop = elTextbox.scrollHeight;
     }
 
-    // move cursor to end
+    // Move cursor to end
     var end = elTextbox.value.length;
     this._selectText(elTextbox,end,end);
 
@@ -2205,6 +2211,7 @@ YAHOO.widget.AutoComplete.prototype._updateValue = function(elListItem) {
 YAHOO.widget.AutoComplete.prototype._selectItem = function(elListItem) {
     this._bItemSelected = true;
     this._updateValue(elListItem);
+    this._sPastSelections = this._elTextbox.value;
     this._cancelIntervalDetection(this);
     this.itemSelectEvent.fire(this, elListItem, elListItem._oResultData);
     YAHOO.log("Item selected: " + YAHOO.lang.dump(elListItem._oResultData), "info", this.toString());
@@ -2262,12 +2269,12 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
         }
         if(nNewItemIndex == -1) {
            // Go back to query (remove type-ahead string)
-            if(this.delimChar && this._sSavedQuery) {
+            if(this.delimChar) {
                 if(!this._textMatchesOption()) {
-                    this._elTextbox.value = this._sSavedQuery;
+                    this._elTextbox.value = this._sPastSelections;
                 }
                 else {
-                    this._elTextbox.value = this._sSavedQuery + this._sCurQuery;
+                    this._elTextbox.value = this._sPastSelections + this._sCurQuery;
                 }
             }
             else {
@@ -2750,8 +2757,8 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
                 }
                 // Treat current query as a valid selection
                 else {
-                    oSelf.unmatchedItemSelectEvent.fire(oSelf);
-                    YAHOO.log("Unmatched item selected", "info", oSelf.toString());
+                    oSelf.unmatchedItemSelectEvent.fire(oSelf, oSelf._sCurQuery);
+                    YAHOO.log("Unmatched item selected: " + oSelf._sCurQuery, "info", oSelf.toString());
                 }
             }
             // Container is open and current query matches a result
