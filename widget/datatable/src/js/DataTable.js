@@ -841,7 +841,7 @@ lang.augmentObject(DT, {
      */
     formatCurrency : function(el, oRecord, oColumn, oData) {
         el.innerHTML = util.Number.format(oData, {
-                prefix:"$",
+                prefix: this.get("currencySymbol"),
                 decimalPlaces:2,
                 decimalSeparator:".",
                 thousandsSeparator:","
@@ -1466,6 +1466,16 @@ initAttributes : function(oConfigs) {
          value: "Data error.", 	 
          validator: lang.isString 	 
      }); 	 
+
+    /**
+     * Currency symbol/prefix used by the default 'currency' column formatter.
+     * @attribute currencySymbol
+     * @type String
+     * @default "$"
+     */
+    this.setAttributeConfig("currencySymbol", {
+        value: "$"
+    });
 },
 
 /////////////////////////////////////////////////////////////////////////////
