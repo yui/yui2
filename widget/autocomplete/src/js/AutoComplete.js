@@ -1615,7 +1615,9 @@ YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
             /*(nKeyCode >= 36 && nKeyCode <= 38) || // home,left,up
             (nKeyCode == 40) || // down*/
             (nKeyCode >= 36 && nKeyCode <= 40) || // home,left,up, right, down
-            (nKeyCode >= 44 && nKeyCode <= 45)) { // print screen,insert
+            (nKeyCode >= 44 && nKeyCode <= 45) || // print screen,insert
+            (nKeyCode == 229) // Bug 2041973: Korean XP fires 2 keyup events, the key and 229
+        ) { 
         return true;
     }
     return false;
@@ -2186,8 +2188,7 @@ YAHOO.widget.AutoComplete.prototype._updateValue = function(elListItem) {
     }
     
     // Update input field
-    elTextbox.value = sNewValue
-    //elTextbox.focus();
+    elTextbox.value = sNewValue;
 
     // Scroll to bottom of textarea if necessary
     if(elTextbox.type == "textarea") {
