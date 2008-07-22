@@ -1259,8 +1259,7 @@ MenuItem.prototype = {
                 oMenu.lazyLoad = bLazyLoad;
 
             }
-            else if (typeof oSubmenu == "object" && oSubmenu.id && 
-                !oSubmenu.nodeType) {
+            else if (typeof oSubmenu == "object" && oSubmenu.id && !oSubmenu.nodeType) {
 
                 sSubmenuId = oSubmenu.id;
                 oSubmenuConfig = oSubmenu;
@@ -1278,8 +1277,7 @@ MenuItem.prototype = {
             }
             else {
 
-                oMenu = new this.SUBMENU_TYPE(oSubmenu,
-                                { lazyload: bLazyLoad, parent: this });
+                oMenu = new this.SUBMENU_TYPE(oSubmenu, { lazyload: bLazyLoad, parent: this });
 
 
                 // Set the value of the property to the Menu instance
@@ -1290,6 +1288,8 @@ MenuItem.prototype = {
 
 
             if (oMenu) {
+
+				oMenu.cfg.setProperty("preventcontextoverlap", true);
 
                 Dom.addClass(oElement, sClassName);
                 Dom.addClass(oAnchor, sLabelClassName);
