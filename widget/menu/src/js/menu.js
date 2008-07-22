@@ -2894,7 +2894,10 @@ _onBeforeShow: function (p_sType, p_aArgs) {
 _onShow: function (p_sType, p_aArgs) {
 
     var oParent = this.parent,
-        oParentMenu;
+        oParentMenu,
+		oElement,
+		nOffsetWidth,
+		sWidth;        
 
 
     function disableAutoSubmenuDisplay(p_oEvent) {
@@ -2926,6 +2929,14 @@ _onShow: function (p_sType, p_aArgs) {
     }
 
 
+	function onSubmenuHide(p_sType, p_aArgs, p_sWidth) {
+	
+		this.cfg.setProperty("width", "");
+		this.hideEvent.unsubscribe(onSubmenuHide, p_sWidth);
+	
+	}
+
+
     if (oParent) {
 
         oParentMenu = oParent.parent;
@@ -2941,6 +2952,34 @@ _onShow: function (p_sType, p_aArgs) {
             Event.on(document, "keydown", disableAutoSubmenuDisplay);
 
         }
+
+
+		// The following fixes an issue with the selected state of a MenuItem not rendering 
+		// correctly when a submenu is aligned to the left of its parent Menu instance.
+
+		if ((this.cfg.getProperty("x") < oParentMenu.cfg.getProperty("x")) && 
+			(UA.gecko < 1.9) && 
+			!this.cfg.getProperty("width")) {
+		
+			oElement = this.element;
+			nOffsetWidth = oElement.offsetWidth;
+			
+			/*
+				Measuring the difference of the offsetWidth before and after
+				setting the "width" style attribute allows us to compute the 
+				about of padding and borders applied to the element, which in 
+				turn allows us to set the "width" property correctly.
+			*/
+			
+			oElement.style.width = nOffsetWidth + "px";
+			
+			sWidth = (nOffsetWidth - (oElement.offsetWidth - nOffsetWidth)) + "px";
+			
+			this.cfg.setProperty("width", sWidth);
+		
+			this.hideEvent.subscribe(onSubmenuHide, sWidth);
+		
+		}
 
     }
 
@@ -3021,7 +3060,7 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         
         case "submenualignment":
 
-			if (this instanceof oParentMenu.constructor) {
+			if (this instanceof this.parent.parent.constructor) {
 		
 				p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
 		
