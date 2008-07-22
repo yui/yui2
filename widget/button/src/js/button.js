@@ -1103,6 +1103,10 @@
 
 					if (Menu && oMenu instanceof Menu) {
 
+						if (bLazyLoad) {
+							oMenu.cfg.setProperty("container", this.get("container"));
+						}
+
 						oMenu.cfg.setProperty("minscrollheight", this.get("menuminscrollheight"));
 						oMenu.cfg.setProperty("clicktohide", false);
 
