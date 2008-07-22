@@ -3236,53 +3236,6 @@ _onMenuItemConfigChange: function (p_sType, p_aArgs, p_oItem) {
 
 
 /**
-* @method enforceConstraints
-* @description The default event handler executed when the moveEvent is fired,  
-* if the "constraintoviewport" configuration property is set to true.
-* @param {String} type The name of the event that was fired.
-* @param {Array} args Collection of arguments sent when the 
-* event was fired.
-* @param {Array} obj Array containing the current Menu instance 
-* and the item that fired the event.
-*/
-enforceConstraints: function (type, args, obj) {
-
-	YAHOO.widget.Menu.superclass.enforceConstraints.apply(this, arguments);
-	
-	var oParent = this.parent,
-		oParentMenu,
-		nParentMenuX,
-		nNewX,
-		nX;
-	
-	
-	if (oParent) {
-	
-		oParentMenu = oParent.parent;
-
-		if (!(oParentMenu instanceof YAHOO.widget.MenuBar)) {
-	
-			nParentMenuX = oParentMenu.cfg.getProperty("x");
-			nX = this.cfg.getProperty("x");
-		
-	
-			if (nX < (nParentMenuX + oParent.element.offsetWidth)) {
-
-				nNewX = (nParentMenuX - this.element.offsetWidth);
-			
-				this.cfg.setProperty("x",  nNewX, true);
-				this.cfg.setProperty("xy", [nNewX, (this.cfg.getProperty("y"))], true);
-			
-			}
-		
-		}
-	
-	}
-
-},
-
-
-/**
 * @method configVisible
 * @description Event handler for when the "visible" configuration property 
 * the menu changes.
