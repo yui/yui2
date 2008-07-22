@@ -1545,7 +1545,7 @@
 					"tlbl": true,
 					"bltl": true,
 					"brtr": true
-				}
+				},
 
 				bPotentialContextOverlap = oOverlapPositions[aMenuAlignment[0] + aMenuAlignment[1]];
 
@@ -1740,7 +1740,7 @@
 
 							topConstraint = scrollY + nViewportOffset;
 							bottomConstraint = 
-								scrollY + viewPortHeight - nOverlayOffsetHeight - nViewportOffset;
+								scrollY + viewPortHeight - nMenuOffsetHeight - nViewportOffset;
 			
 							if (y < topConstraint) {
 								yNew  = topConstraint;
