@@ -2791,7 +2791,8 @@
                 oMenuField,
                 oReturnVal,
 				sMenuFieldName,
-				oMenuSrcElement;
+				oMenuSrcElement,
+				bMenuSrcElementIsSelect = false;
         
         
             if (oForm && !this.get("disabled")) {
@@ -2831,6 +2832,9 @@
                     YAHOO.log("Creating hidden field for menu.", "info", this.toString());
         
                     oMenuItem = this.get("selectedMenuItem");
+					oMenuSrcElement = oMenu.srcElement;
+					bMenuSrcElementIsSelect = (oMenuSrcElement && 
+												oMenuSrcElement.nodeName.toUpperCase() == "SELECT");
 
                     if (oMenuItem) {
 
@@ -2838,11 +2842,9 @@
 									oMenuItem.cfg.getProperty("text") : oMenuItem.value;
 
 						sButtonName = this.get("name");
-						
-						oMenuSrcElement = oMenu.srcElement;
 
 
-						if (oMenuSrcElement && oMenuSrcElement.nodeName.toUpperCase() == "SELECT") {
+						if (bMenuSrcElementIsSelect) {
 						
 							sMenuFieldName = oMenuSrcElement.name;
 						
@@ -2860,6 +2862,11 @@
 							oForm.appendChild(oMenuField);
 		
 						}
+                    
+                    }
+                    else if (bMenuSrcElementIsSelect) {
+					
+						oForm.appendChild(oMenuSrcElement);
                     
                     }
         
