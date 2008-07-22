@@ -2894,9 +2894,7 @@ _onBeforeShow: function (p_sType, p_aArgs) {
 _onShow: function (p_sType, p_aArgs) {
 
     var oParent = this.parent,
-        oParentMenu,
-        aParentAlignment,
-        aAlignment;
+        oParentMenu;
 
 
     function disableAutoSubmenuDisplay(p_oEvent) {
@@ -2918,11 +2916,8 @@ _onShow: function (p_sType, p_aArgs) {
 
                 oParentMenu.cfg.setProperty("autosubmenudisplay", false);
 
-                Event.removeListener(document, "mousedown", 
-                        disableAutoSubmenuDisplay);
-
-                Event.removeListener(document, "keydown", 
-                        disableAutoSubmenuDisplay);
+                Event.removeListener(document, "mousedown", disableAutoSubmenuDisplay);
+                Event.removeListener(document, "keydown", disableAutoSubmenuDisplay);
 
             }
         
@@ -2934,17 +2929,6 @@ _onShow: function (p_sType, p_aArgs) {
     if (oParent) {
 
         oParentMenu = oParent.parent;
-        aParentAlignment = oParentMenu.cfg.getProperty("submenualignment");
-        aAlignment = this.cfg.getProperty("submenualignment");
-
-
-        if ((aParentAlignment[0] != aAlignment[0]) &&
-            (aParentAlignment[1] != aAlignment[1])) {
-
-            this.cfg.setProperty("submenualignment", 
-                [aParentAlignment[0], aParentAlignment[1]]);
-        
-        }
 
 
         if (!oParentMenu.cfg.getProperty("autosubmenudisplay") && 
@@ -3033,7 +3017,17 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
 
             p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                 
-        break;        
+        break;
+        
+        case "submenualignment":
+
+			if (this instanceof oParentMenu.constructor) {
+		
+				p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
+		
+			}
+        
+        break;
         
     }
     
@@ -3053,7 +3047,8 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
 */
 _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 
-    var oParentCfg = p_oSubmenu.parent.parent.cfg,
+    var oParentMenu = p_oSubmenu.parent.parent,
+    	oParentCfg = oParentMenu.cfg,
 
         oConfig = {
 
@@ -3084,6 +3079,13 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
         },
         
         oLI;
+
+	
+	if (this instanceof oParentMenu.constructor) {
+
+		oConfig["submenualignment"] = oParentCfg.getProperty("submenuhidedelay");
+
+	}
 
 
     p_oSubmenu.cfg.applyConfig(oConfig);
