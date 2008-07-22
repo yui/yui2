@@ -303,7 +303,9 @@ YAHOO.widget.AutoComplete.prototype.maxResultsDisplayed = 10;
 /**
  * Number of seconds to delay before submitting a query request.  If a query
  * request is received before a previous one has completed its delay, the
- * previous request is cancelled and the new request is set to the delay.
+ * previous request is cancelled and the new request is set to the delay. If 
+ * typeAhead is also enabled, this value must always be less than the typeAheadDelay
+ * in order to avoid certain race conditions. 
  *
  * @property queryDelay
  * @type Number
@@ -313,7 +315,8 @@ YAHOO.widget.AutoComplete.prototype.queryDelay = 0.2;
 
 /**
  * If typeAhead is true, number of seconds to delay before updating input with
- * typeAhead value. This value must always be greater than the queryDelay.
+ * typeAhead value. In order to prevent certain race conditions, this value must
+ * always be greater than the queryDelay.
  *
  * @property typeAheadDelay
  * @type Number
@@ -428,7 +431,9 @@ YAHOO.widget.AutoComplete.prototype.forceSelection = false;
 YAHOO.widget.AutoComplete.prototype.allowBrowserAutocomplete = true;
 
 /**
- * Enabling this feature prevents the toggling of the container to a collapsed state. 
+ * Enabling this feature prevents the toggling of the container to a collapsed state.
+ * Setting to true does not automatically trigger the opening of the container.
+ * Implementers are advised to pre-load the container with an explicit "sendQuery()" call.   
  *
  * @property alwaysShowContainer
  * @type Boolean
@@ -626,9 +631,10 @@ YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
 };
 
 /**
-* A function that converts an AutoComplete query into a value which is then
+* A function that converts an AutoComplete query into a request value which is then
 * passed to the DataSource's sendRequest method in order to retrieve data for 
-* the query. Implementers can customize this method for custom request syntaxes.
+* the query. By default, returns a String with the syntax: "query={query}"
+* Implementers can customize this method for custom request syntaxes.
 * 
 * @method generateRequest
 * @param sQuery {String} Query string

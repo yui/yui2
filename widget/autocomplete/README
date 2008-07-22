@@ -31,7 +31,7 @@ to true.
 is the query matching string for the result.
 
 * In order to eliminate certain race conditions with the typeAhead feature, added
-typeAheadQueryDelay of default 0.5.
+typeAheadDelay of default 0.5.
 
 * Added new method filterResults() for an easily customizeable local string-
 matching algorithm.
