@@ -210,9 +210,9 @@
     
                 if (oAttribute && ("value" in oAttribute)) {
     
-                    me.logger.log("Setting attribute \"" + p_sAttribute + 
+                    YAHOO.log("Setting attribute \"" + p_sAttribute + 
                         "\" using source element's attribute value of \"" + 
-                        oAttribute.value + "\"");
+                        oAttribute.value + "\"", "info", me.toString());
     
                     p_oAttributes[p_sAttribute] = oAttribute.value;
     
@@ -421,14 +421,12 @@
     
                 YAHOO.log("No value specified for the button's \"id\" " + 
                     "attribute. Setting button id to \"" + p_oElement.id + 
-                    "\".", "warn");
+                    "\".", "info", this.toString());
     
             }
     
-            this.logger = new YAHOO.widget.LogWriter("Button " + p_oElement.id);
-    
-            this.logger.log("No source HTML element.  Building the button " +
-                    "using the set of configuration attributes.");
+            YAHOO.log("No source HTML element.  Building the button " +
+                    "using the set of configuration attributes.", "info", this.toString());
     
             fnSuperClass.call(this, (this.createButtonElement(p_oElement.type)), p_oElement);
     
@@ -450,10 +448,8 @@
                     
                     }
     
-                    this.logger = new YAHOO.widget.LogWriter("Button " + oConfig.attributes.id);
-                
-                    this.logger.log("Building the button using an existing " + 
-                            "HTML element as a source element.");
+                    YAHOO.log("Building the button using an existing " + 
+                            "HTML element as a source element.", "info", this.toString());
                 
                 
                     oConfig.attributes.srcelement = oElement;
@@ -463,9 +459,9 @@
                 
                     if (!oConfig.element) {
                 
-                        this.logger.log("Source element could not be used " +
+                        YAHOO.log("Source element could not be used " +
                                 "as is.  Creating a new HTML element for " + 
-                                "the button.");
+                                "the button.", "info", this.toString());
                 
                         oConfig.element = this.createButtonElement(oConfig.attributes.type);
                 
@@ -491,17 +487,14 @@
         
                         YAHOO.log("No value specified for the button's " +
                             "\"id\" attribute. Setting button id to \"" + 
-                            oConfig.attributes.id + "\".", "warn");
+                            oConfig.attributes.id + "\".", "info", this.toString());
         
                     }
     
                 }
     
-    
-                this.logger = new YAHOO.widget.LogWriter("Button " + oConfig.attributes.id);
-    
-                this.logger.log("Building the button using an existing HTML " + 
-                    "element as a source element.");
+                YAHOO.log("Building the button using an existing HTML " + 
+                    "element as a source element.", "info", this.toString());
     
     
                 oConfig.attributes.srcelement = p_oElement;
@@ -511,8 +504,9 @@
         
                 if (!oConfig.element) {
     
-                    this.logger.log("Source element could not be used as is." +
-                            "  Creating a new HTML element for the button.");
+                    YAHOO.log("Source element could not be used as is." +
+                            "  Creating a new HTML element for the button.", 
+                            "info", this.toString());
             
                     oConfig.element = this.createButtonElement(oConfig.attributes.type);
             
@@ -2804,7 +2798,7 @@
         
                 if (bCheckable || (m_oSubmitTrigger == this)) {
                 
-                    this.logger.log("Creating hidden field.");
+                    YAHOO.log("Creating hidden field.", "info", this.toString());
         
                     oButtonField = createInputElement((bCheckable ? sType : "hidden"),
                                     this.get("name"), this.get("value"), this.get("checked"));
@@ -2830,7 +2824,7 @@
             
                 if (Menu && oMenu && (oMenu instanceof Menu)) {
         
-                    this.logger.log("Creating hidden field for menu.");
+                    YAHOO.log("Creating hidden field for menu.", "info", this.toString());
         
                     oMenuItem = this.get("selectedMenuItem");
 
@@ -3189,7 +3183,7 @@
         
             }
         
-            this.logger.log("Initialization completed.");
+            YAHOO.log("Initialization completed.", "info", this.toString());
         
 
 			this.fireEvent("init", {
@@ -3715,7 +3709,7 @@
         */
         destroy: function () {
         
-            this.logger.log("Destroying ...");
+            YAHOO.log("Destroying ...", "info", this.toString());
         
             var oElement = this.get("element"),
                 oParentNode = oElement.parentNode,
@@ -3724,7 +3718,7 @@
         
             if (oMenu) {
         
-                this.logger.log("Destroying menu.");
+                YAHOO.log("Destroying menu.", "info", this.toString());
 
                 if (m_oOverlayManager && m_oOverlayManager.find(oMenu)) {
 
@@ -3736,7 +3730,7 @@
         
             }
         
-            this.logger.log("Removing DOM event listeners.");
+            YAHOO.log("Removing DOM event listeners.", "info", this.toString());
         
             Event.purgeElement(oElement);
             Event.purgeElement(this._button);
@@ -3754,7 +3748,7 @@
         
             }
 
-            this.logger.log("Removing CustomEvent listeners.");
+            YAHOO.log("Removing CustomEvent listeners.", "info", this.toString());
 
             this.unsubscribeAll();
 
@@ -3764,7 +3758,7 @@
             
             }
         
-            this.logger.log("Removing from document.");
+            YAHOO.log("Removing from document.", "info", this.toString());
         
             delete m_oButtons[this.get("id")];
 
@@ -3778,7 +3772,7 @@
 
             }
 
-            this.logger.log("Destroyed.");
+            YAHOO.log("Destroyed.", "info", this.toString());
         
         },
         
@@ -3989,7 +3983,7 @@
     
         if (nButtons > 0) {
     
-            YAHOO.log("Form contains " + nButtons + " YUI buttons.");
+            YAHOO.log("Form contains " + nButtons + " YUI buttons.", "info", this.toString());
     
             for (i = 0; i < nButtons; i++) {
     
