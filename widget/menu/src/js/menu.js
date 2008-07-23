@@ -2807,7 +2807,7 @@ _onBeforeShow: function (p_sType, p_aArgs) {
 
             if (this.parent) {
 
-                this.render(this.parent.element);            
+                this.render(this.parent.element);     
 
             }
             else {
@@ -3164,17 +3164,16 @@ _onSubmenuBeforeShow: function (p_sType, p_aArgs) {
         aAlignment = oParent.parent.cfg.getProperty("submenualignment");
 
 
-    if (!this.cfg.getProperty("context")) {
+	// Necessary to reset the context position in IE 7 Quirks Mode in order for submenus to appear 
+	// in the correct position.
+
+    if (!this.cfg.getProperty("context") || (UA.ie === 7 && document.compatMode === "BackCompat")) {
     
-        this.cfg.setProperty("context", 
-            [oParent.element, aAlignment[0], aAlignment[1]]);
+        this.cfg.setProperty("context", [oParent.element, aAlignment[0], aAlignment[1]]);
 
     }
-    else {
 
-        this.align();
-    
-    }
+	this.align();
 
 },
 
