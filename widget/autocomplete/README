@@ -36,6 +36,8 @@ typeAheadDelay of default 0.5.
 * Added new method filterResults() for an easily customizeable local string-
 matching algorithm.
 
+* The dataRequestEvent now passes along the request as well as the query string.
+
 
 *** version 2.5.2 ***
 
