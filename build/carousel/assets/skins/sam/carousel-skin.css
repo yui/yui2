@@ -1,0 +1,114 @@
+.yui-skin-sam .yui-carousel-container,
+.yui-skin-sam .yui-carousel-vertical-container {
+    border: 1px solid #808080;
+}
+
+.yui-skin-sam .yui-carousel-nav {
+    background: url(../../../img/sprite.png) repeat-x 0 0;
+    padding: 3px;
+    text-align: right;
+}
+
+.yui-skin-sam .yui-carousel-button {
+    background: url(../../../img/sprite.png) no-repeat 0 -600px;
+    float: right;
+    height: 19px;
+    margin: 5px;
+    overflow: hidden;
+    width: 40px;
+}
+
+.yui-skin-sam .yui-carousel-vertical-container .yui-carousel-button {
+    background-position: 0 -800px;
+}
+
+.yui-skin-sam .yui-carousel-button.disabled {
+    background-position: 0 -2000px;
+}
+
+.yui-skin-sam .yui-carousel-vertical-container .yui-carousel-button.disabled {
+    background-position: 0 -2100px;
+}
+
+.yui-skin-sam .yui-carousel-button input {
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    display: block;
+    height: 44px;
+    margin: -2px 0 0 -2px;
+    padding: 0 0 0 50px;
+}
+
+.yui-skin-sam span.first {
+    background-position: 0px -550px;
+    margin-left: -100px;
+    margin-right: 50px;
+    *margin: 5px 5px 5px -90px;
+}
+
+.yui-skin-sam .yui-carousel-vertical-container span.first {
+    background-position: 0px -750px;
+}
+
+.yui-skin-sam span.first-disabled {
+    background-position: 0 -1950px;
+}
+
+.yui-skin-sam .yui-carousel-vertical-container span.first-disabled {
+    background-position: 0 -2050px;
+}
+
+.yui-skin-sam .yui-carousel-pages {
+    float: right;
+    margin: 0;
+    margin-left: -220px;
+    margin-right: 100px;
+    *margin-left: -170px;
+    *margin-right: 0;
+    padding: 0;
+}
+
+.yui-skin-sam .yui-carousel-pages select {
+    position: relative;
+    *right: 50px;
+    top: 4px;
+}
+
+.yui-skin-sam .yui-carousel-vertical-container .yui-carousel-pages {
+    float: none;
+    margin: 0;
+}
+
+.yui-skin-sam .yui-carousel-pages li {
+    list-style: none;
+}
+
+.yui-skin-sam .yui-carousel-pages:after {
+    clear: both;
+    content: "";
+    display: block;
+}
+
+.yui-skin-sam .yui-carousel-pages li {
+    float: left;
+    height: 19px;
+}
+
+.yui-skin-sam .yui-carousel-pages li a {
+    background: url(../../../img/sprite.png) no-repeat 0 -650px;
+    display: block;
+    height: 9px;
+    margin: 10px 0 0 5px;
+    overflow: hidden;
+    width: 9px;
+}
+
+.yui-skin-sam .yui-carousel-pages li a em {
+    left: -10000px;
+    position: absolute;
+}
+
+.yui-skin-sam .yui-carousel-pages li a.selected {
+    background-position: 0 -700px;
+}
