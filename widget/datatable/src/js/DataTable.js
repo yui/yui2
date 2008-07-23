@@ -1340,9 +1340,10 @@ initAttributes : function(oConfigs) {
     /*
     * @attribute generateRequest
     * @description A function that converts an object literal of desired DataTable
-    * states into a value which is then passed to the DataSource's sendRequest
-    * method in order to retrieve data for those states. This function is passed
-    * an object literal of state data and a reference to the DataTable instance:
+    * states into a request value which is then passed to the DataSource's
+    * sendRequest method in order to retrieve data for those states. This
+    * function is passed an object literal of state data and a reference to the
+    * DataTable instance:
     *     
     * <dl>
     *   <dt>pagination<dt>
@@ -1362,6 +1363,9 @@ initAttributes : function(oConfigs) {
     *   <dt>self</dt>
     *   <dd>The DataTable instance</dd>
     * </dl>
+    * 
+    * and by default returns a String of syntax:
+    * "sort={sortColumn}&dir={sortDir}&startIndex={pageStartIndex}&results={rowsPerPage}"
     * @type function
     * @default HTMLFunction
     */
@@ -5363,7 +5367,7 @@ _setColumnWidthDynFunction : function(oColumn, sWidth, sOverflow) {
 
 /**
  * For one or all Columns, when Column is not hidden, width is not set, and minWidth
- * is set, validates auto-width against minWidth.
+ * and/or maxAutoWidth is set, validates auto-width against minWidth and maxAutoWidth.
  *
  * @method validateColumnWidths
  * @param oArg.column {YAHOO.widget.Column} (optional) One Column to validate. If null, all Columns' widths are validated.
@@ -5374,29 +5378,35 @@ validateColumnWidths : function(oColumn) {
     var bNeedsValidation = false;
     var allKeys = this._oColumnSet.keys;
     var elThLiner;
-    // Validate just one Column
-    if(oColumn && !oColumn.hidden && !oColumn.width && oColumn.minWidth && (oColumn.getKeyIndex() !== null)) {
+    // Validate just one Column's minWidth and/or maxAutoWidth
+    if(oColumn && !oColumn.hidden && !oColumn.width && (oColumn.getKeyIndex() !== null)) {
             elThLiner = oColumn.getThLinerEl();
-            if(elThLiner.offsetWidth < oColumn.minWidth) {
+            if((oColumn.minWidth > 0) && (elThLiner.offsetWidth < oColumn.minWidth)) {
                 elColgroupClone.childNodes[oColumn.getKeyIndex()].style.width = 
                         oColumn.minWidth + 
                         (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) +
                         (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
                 bNeedsValidation = true;
             }
+            else if((oColumn.maxAutoWidth > 0) && (elThLiner.offsetWidth > oColumn.maxAutoWidth)) {
+                this._setColumnWidth(oColumn, oColumn.maxAutoWidth+"px", "hidden");
+            }
     }
     // Validate all Columns
     else {
         for(var i=0, l=allKeys.length; i<l; i++) {
             oColumn = allKeys[i];
-            if(!oColumn.hidden && !oColumn.width && oColumn.minWidth) {
+            if(!oColumn.hidden && !oColumn.width) {
                 elThLiner = oColumn.getThLinerEl();
-                if(elThLiner.offsetWidth < oColumn.minWidth) {
+                if((oColumn.minWidth > 0) && (elThLiner.offsetWidth < oColumn.minWidth)) {
                     elColgroupClone.childNodes[i].style.width = 
                             oColumn.minWidth + 
                             (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) +
                             (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
                     bNeedsValidation = true;
+                }
+                else if((oColumn.maxAutoWidth > 0) && (elThLiner.offsetWidth > oColumn.maxAutoWidth)) {
+                    this._setColumnWidth(oColumn, oColumn.maxAutoWidth+"px", "hidden");
                 }
             }
         }

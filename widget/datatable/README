@@ -50,17 +50,19 @@ was fired.
 * For consistency with other doBefore abstract methods, doBeforeShowCellEditor()
 returns true by default, and returns false to cancel showing the cell editor.
 
-* Column.minWidth default value now null.
- 
-* Removed unused Column._oDefinition private property.
+* Added updateCell method.
 
-* Hidden Columns are now manifested as cell liner elements with display:none to prevent content from being visible.
+* Column changes:
+   - minWidth default value now null.
+   - Added Column.maxAutoWidth property
+   - Removed unused Column._oDefinition private property.
+   - Hidden Columns are now manifested as cell liner elements with display:none
+   to prevent content from being visible.
+   - Resizeable Columns now create an additional resizer liner DIV element between
+   the TH element and the liner DIV element. Implementers are advised to access the 
+   liner DIV elements via Column.getThLinerEl() rather than TH.firstChild.
  
 * In the markup, the primary data TBODY is (once again) before the message TBODY element.
- 
-* Resizeable Columns now create an additional resizer liner DIV element between
-the TH element and the liner DIV element. Implementers are advised to access the 
-liner DIV elements via Column.getThLinerEl() rather than TH.firstChild.
  
 * TR element IDs are now assigned with the corresponding Record ID.
  
@@ -71,7 +73,6 @@ elements, not on liner DIV elements.
  
 * Added bottom border to last TR element in ScrollingDataTables.
  
-* Added updateCell method.
 
 
 

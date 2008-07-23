@@ -609,10 +609,18 @@ _validateColumnWidth : function(oColumn, elTd) {
             var newWidth = Math.max(0,
                 (elWider.offsetWidth -(parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) - (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0)),
                 oColumn.minWidth);
+                
+            var sOverflow = 'visible';
             
+            // Now validate against maxAutoWidth
+            if((oColumn.maxAutoWidth > 0) && (newWidth > oColumn.maxAutoWidth)) {
+                newWidth = oColumn.maxAutoWidth;
+                sOverflow = "hidden";
+            }
+
             // Set to the wider auto-width
             this._elTbody.style.display = "none";
-            this._setColumnWidth(oColumn, newWidth+'px', 'visible');
+            this._setColumnWidth(oColumn, newWidth+'px', sOverflow);
             oColumn._calculatedWidth = newWidth;
             this._elTbody.style.display = "";
         }
@@ -622,7 +630,7 @@ _validateColumnWidth : function(oColumn, elTd) {
 /**
  * For one or all Columns of a ScrollingDataTable, when Column is not hidden,
  * and width is not set, syncs widths of header and body cells and 
- * validates that width against minWidth when necessary.
+ * validates that width against minWidth and/or maxAutoWidth as necessary.
  *
  * @method validateColumnWidths
  * @param oArg.column {YAHOO.widget.Column} (optional) One Column to validate. If null, all Columns' widths are validated.
@@ -661,6 +669,16 @@ validateColumnWidths : function(oColumn) {
     
     this._syncScroll();
 },
+
+/**
+ * Syncs padding around scrollable tables, including Column header right-padding
+ * and container width and height.
+ *
+ * @method syncScroll
+ */
+ syncScroll : function() {
+    this._syncScroll();
+ },
 
 /**
  * Syncs padding around scrollable tables, including Column header right-padding
@@ -889,8 +907,8 @@ reorderColumn : function(oColumn, index) {
 },
 
 /**
- * Sets given Column to given pixel width. If new width is less than minimum
- * width, sets to minimum width. Updates oColumn.width value.
+ * Sets given Column to given pixel width. If new width is less than minWidth
+ * width, sets to minWidth. Updates oColumn.width value.
  *
  * @method setColumnWidth
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -899,7 +917,7 @@ reorderColumn : function(oColumn, index) {
 setColumnWidth : function(oColumn, nWidth) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
-        // Validate new width against minimum width
+        // Validate new width against minWidth
         if(lang.isNumber(nWidth)) {
             nWidth = (nWidth > oColumn.minWidth) ? nWidth : oColumn.minWidth;
 
