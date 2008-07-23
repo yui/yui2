@@ -1963,11 +1963,54 @@ _onClick: function (p_sType, p_aArgs) {
 		nLen;
 
 
+	var hide = function () {
+
+		/*
+			There is an inconsistency between Firefox 2 for Mac OS X and Firefox 2 Windows 
+			regarding the triggering of the display of the browser's context menu and the 
+			subsequent firing of the "click" event. In Firefox for Windows, when the user 
+			triggers the display of the browser's context menu the "click" event also fires 
+			for the document object, even though the "click" event did not fire for the 
+			element that was the original target of the "contextmenu" event. This is unique 
+			to Firefox on Windows. For all other A-Grade browsers, including Firefox 2 for 
+			Mac OS X, the "click" event doesn't fire for the document object. 
+
+			This bug in Firefox 2 for Windows affects Menu as Menu instances listen for 
+			events at the document level and have an internal "click" event handler they 
+			use to hide themselves when clicked. As a result, in Firefox for Windows a 
+			Menu will hide when the user right clicks on a MenuItem to raise the browser's 
+			default context menu, because its internal "click" event handler ends up 
+			getting called.  The following line fixes this bug.
+		*/
+
+		if (!((UA.gecko && this.platform == "windows") && oEvent.button > 0)) {
+		
+			oRoot = this.getRoot();
+
+			if (oRoot instanceof YAHOO.widget.MenuBar || 
+				oRoot.cfg.getProperty("position") == "static") {
+
+				oRoot.clearActiveItem();
+
+			}
+			else {
+
+				oRoot.hide();
+			
+			}
+		
+		}	
+	
+	};
+
+
 	if (oItem) {
 	
 		if (oItem.cfg.getProperty("disabled")) {
 		
 			Event.preventDefault(oEvent);
+
+			hide.call(this);
 
 		}
 		else {
@@ -2037,41 +2080,7 @@ _onClick: function (p_sType, p_aArgs) {
 	
 			if (!oSubmenu) {
 	
-				/*
-					There is an inconsistency between Firefox 2 for Mac OS X and Firefox 2 Windows 
-					regarding the triggering of the display of the browser's context menu and the 
-					subsequent firing of the "click" event. In Firefox for Windows, when the user 
-					triggers the display of the browser's context menu the "click" event also fires 
-					for the document object, even though the "click" event did not fire for the 
-					element that was the original target of the "contextmenu" event. This is unique 
-					to Firefox on Windows. For all other A-Grade browsers, including Firefox 2 for 
-					Mac OS X, the "click" event doesn't fire for the document object. 
-
-					This bug in Firefox 2 for Windows affects Menu as Menu instances listen for 
-					events at the document level and have an internal "click" event handler they 
-					use to hide themselves when clicked. As a result, in Firefox for Windows a 
-					Menu will hide when the user right clicks on a MenuItem to raise the browser's 
-					default context menu, because its internal "click" event handler ends up 
-					getting called.  The following line fixes this bug.
-				*/
-
-				if (!((UA.gecko && this.platform == "windows") && oEvent.button > 0)) {
-				
-					oRoot = this.getRoot();
-	
-					if (oRoot instanceof YAHOO.widget.MenuBar || 
-						oRoot.cfg.getProperty("position") == "static") {
-		
-						oRoot.clearActiveItem();
-		
-					}
-					else {
-		
-						oRoot.hide();
-					
-					}
-				
-				}
+				hide.call(this);
 	
 			}
 			
