@@ -1,5 +1,10 @@
 YUI Library - Fonts - Release Notes
 
+Version 2.6.0
+
+   * Added font reduction and face restatement for select, input, button, and textarea
+   * Comments and formatting updates
+
 Version 2.5.2
 
   * Added comments regarding font shorthand filter for IE in Quirks Mode.
