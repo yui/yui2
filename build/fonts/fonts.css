@@ -3,21 +3,37 @@
  * x-small is for IE6/7 quirks mode.
  */
 body {
-	/* base font, with relative but unitless line height */
 	font:13px/1.231 arial,helvetica,clean,sans-serif;
-	/* fliters for all IE and uses keywords instead of pixels to preserve user-resize */
-	*font-size:small;
-	/* filters for IE quirks mode by using invalid shorthand syntax */
-	*font:x-small;
+	*font-size:small; /* for IE */
+	*font:x-small; /* for IE in quirks mode */
 }
+
+/**
+ * Nudge down to get to 13px equivalent for these form elements
+ */ 
+select,
+input,
+button,
+textarea {
+	font:99% arial,helvetica,clean,sans-serif;
+}
+
+/**
+ * To help tables remember to inherit
+ */
 table {
 	font-size:inherit;
 	font:100%;
 }
+
 /**
- * Bump up IE to get to 13px equivalent
+ * Bump up IE to get to 13px equivalent for these fixed-width elements
  */
-pre,code,kbd,samp,tt {
+pre,
+code,
+kbd,
+samp,
+tt {
 	font-family:monospace;
 	*font-size:108%;
 	line-height:100%;
