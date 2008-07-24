@@ -619,9 +619,20 @@
         * @type Boolean
         */
         _hasMouseEventHandlers: false,
+
+
+        /** 
+        * @property _nOptionRegionX
+        * @description Number representing the X coordinate of the leftmost edge of the Button's 
+        * option region.  Applies only to Buttons of type "split".
+        * @default 0
+        * @protected
+        * @type Number
+        */        
+        _nOptionRegionX: 0,
         
-        
-        
+
+
         // Constants
         
         
@@ -1838,8 +1849,30 @@
         */
         _onMouseOver: function (p_oEvent) {
         
+        	var sType = this.get("type"),
+        		oElement,
+				nOptionRegionX;
+
+
+			if (sType === "split") {
+
+				oElement = this.get("element");
+				nOptionRegionX = 
+					(Dom.getX(oElement) + (oElement.offsetWidth - this.OPTION_AREA_WIDTH));
+					
+				this._nOptionRegionX = nOptionRegionX;
+			
+			}
+        
+
             if (!this._hasMouseEventHandlers) {
         
+				if (sType === "split") {
+        
+	        		this.on("mousemove", this._onMouseMove);
+
+        		}
+
                 this.on("mouseout", this._onMouseOut);
                 this.on("mousedown", this._onMouseDown);
                 this.on("mouseup", this._onMouseUp);
@@ -1848,7 +1881,16 @@
         
             }
         
+
             this.addStateCSSClasses("hover");
+
+
+			if (sType === "split" && (Event.getPageX(p_oEvent) > nOptionRegionX)) {
+	
+				this.addStateCSSClasses("hoveroption");
+	
+			}
+
         
             if (this._activationButtonPressed) {
         
@@ -1871,7 +1913,35 @@
             }
 
         },
+
+
+        /**
+        * @method _onMouseMove
+        * @description "mousemove" event handler for the button.
+        * @protected
+        * @param {Event} p_oEvent Object representing the DOM event object  
+        * passed back by the event utility (YAHOO.util.Event).
+        */        
+        _onMouseMove: function (p_oEvent) {
         
+        	var nOptionRegionX = this._nOptionRegionX;
+        
+        	if (nOptionRegionX) {
+
+				if (Event.getPageX(p_oEvent) > nOptionRegionX) {
+					
+					this.addStateCSSClasses("hoveroption");
+	
+				}
+				else {
+
+					this.removeStateCSSClasses("hoveroption");
+				
+				}
+				
+        	}
+        
+        },
         
         /**
         * @method _onMouseOut
@@ -1881,21 +1951,31 @@
         * passed back by the event utility (YAHOO.util.Event).
         */
         _onMouseOut: function (p_oEvent) {
+
+			var sType = this.get("type");
         
             this.removeStateCSSClasses("hover");
         
-            if (this.get("type") != "menu") {
+
+            if (sType != "menu") {
         
                 this.removeStateCSSClasses("active");
         
             }
         
+
             if (this._activationButtonPressed || this._bOptionPressed) {
         
-                Event.on(document, "mouseup", this._onDocumentMouseUp, 
-                    null, this);
+                Event.on(document, "mouseup", this._onDocumentMouseUp, null, this);
         
             }
+
+
+			if (sType === "split" && (Event.getPageX(p_oEvent) > this._nOptionRegionX)) {
+			
+				this.removeStateCSSClasses("hoveroption");
+	
+			}
             
         },
         
@@ -1947,9 +2027,7 @@
         */
         _onMouseDown: function (p_oEvent) {
         
-            var sType,
-                oElement,
-                nX;
+            var sType;
         
         
             function onMouseUp() {
@@ -1975,10 +2053,7 @@
         
                 if (sType == "split") {
                 
-                    oElement = this.get("element");
-                    nX = Event.getPageX(p_oEvent) - Dom.getX(oElement);
-        
-                    if ((oElement.offsetWidth - this.OPTION_AREA_WIDTH) < nX) {
+                    if (Event.getPageX(p_oEvent) > this._nOptionRegionX) {
                         
                         this.fireEvent("option", p_oEvent);
         
@@ -2255,9 +2330,7 @@
                 sTitle,
                 oForm,
                 oSrcElement,
-                oElement,
-                bReturnVal,
-                nX;
+                bReturnVal;
         
 
             switch (sType) {
@@ -2318,10 +2391,7 @@
     
             case "split":
     
-                oElement = this.get("element");
-                nX = Event.getPageX(p_oEvent) - Dom.getX(oElement);
-    
-                if ((oElement.offsetWidth - this.OPTION_AREA_WIDTH) < nX) {
+                if (Event.getPageX(p_oEvent) > this._nOptionRegionX) {
     
                     bReturnVal = false;
                 
@@ -2737,7 +2807,7 @@
         
             if (Lang.isString(p_sState)) {
         
-                if (p_sState != "activeoption") {
+                if (p_sState != "activeoption" && p_sState != "hoveroption") {
         
                     this.addClass(this.CSS_CLASS_NAME + ("-" + p_sState));
         
