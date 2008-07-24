@@ -1736,7 +1736,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'carousel': {
             'type': 'js',
-            'path': 'carousel/carousel-min.js',
+            'path': 'carousel/carousel-beta-min.js',
             'requires': ['element'],
             'optional': ['animation'],
             'skinnable': true
