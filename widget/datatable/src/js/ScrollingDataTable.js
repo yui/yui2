@@ -675,17 +675,7 @@ validateColumnWidths : function(oColumn) {
  * and container width and height.
  *
  * @method syncScroll
- */
- syncScroll : function() {
-    this._syncScroll();
- },
-
-/**
- * Syncs padding around scrollable tables, including Column header right-padding
- * and container width and height.
- *
- * @method _syncScroll
- * @private
+ * @private 
  */
 _syncScroll : function() {
     this._syncScrollX();
@@ -699,7 +689,7 @@ _syncScroll : function() {
             document.body.style += '';
         }
     }
-},
+ },
 
 /**
  * Snaps container width for y-scrolling tables.
@@ -715,11 +705,11 @@ _syncScrollY : function() {
     if(!this.get("width")) {
         // Snap outer container width to content
         this._elContainer.style.width = 
-                (elBdContainer.scrollHeight >= elBdContainer.offsetHeight) ?
-                // but account for y-scrollbar if it is visible
-                (elTbody.parentNode.offsetWidth + 18) + "px" :
+                (elBdContainer.scrollHeight > elBdContainer.clientHeight) ?
+                // but account for y-scrollbar since it is visible
+                (elTbody.parentNode.clientWidth + 19) + "px" :
                 // no y-scrollbar, just borders
-                (elTbody.parentNode.offsetWidth + 2) + "px";
+                (elTbody.parentNode.clientWidth + 2) + "px";
     }
 },
 
@@ -738,7 +728,7 @@ _syncScrollX : function() {
         // Snap outer container height to content
         elBdContainer.style.height = 
                 // but account for x-scrollbar if it is visible
-                (elBdContainer.scrollWidth > elBdContainer.offsetWidth - 2) ?
+                (elBdContainer.scrollWidth > elBdContainer.offsetWidth ) ?
                 (elTbody.parentNode.offsetHeight + 18) + "px" : 
                 elTbody.parentNode.offsetHeight + "px";
     }
@@ -926,10 +916,23 @@ setColumnWidth : function(oColumn, nWidth) {
             
             // Resize the DOM elements
             this._setColumnWidth(oColumn, nWidth+"px");
-            this._syncScrollOverhang();
+            this._syncScroll();
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
             YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
+            return;
+        }
+        // Unsets a width to auto-size
+        else if(nWidth === null) {
+            // Save state
+            oColumn.width = nWidth;
+            
+            // Resize the DOM elements
+            this._setColumnWidth(oColumn, "auto");
+            this.validateColumnWidths(oColumn);
+            this.fireEvent("columnUnsetWidthEvent",{column:oColumn});
+            YAHOO.log("Column " + oColumn + " width unset", "info", this.toString());
+
             return;
         }
     }

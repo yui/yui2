@@ -43,9 +43,11 @@ Attributes, to be set via the initial config or myDataTable.set():
     - COLOR_COLUMNFILLER (ScrollingDataTable)
     
 * The initEvent will fire when rows are rendered from an initialized state, 
-and the renderEvent will always fire when rows are rendered. This is a slight change
-from prior behavior, when the the renderEvent would *not* fire if the initEvent
-was fired.
+and the renderEvent will always fire when rows are rendered, and also when the 
+underlying DOM incrementally changes (such as adding or deleting rows or Columns).
+This is a change from prior behavior, when the the renderEvent would *not* fire
+if the initEvent was fired and only when the entire view was rendered (such as a
+new page load).
 
 * For consistency with other doBefore abstract methods, doBeforeShowCellEditor()
 returns true by default, and returns false to cancel showing the cell editor.

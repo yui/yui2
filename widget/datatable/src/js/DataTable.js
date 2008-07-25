@@ -102,9 +102,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Initialize inline Cell editing
     //this._oCellEditor = this._initCellEditor();
     
-    // Element's constructor must first be called
-    //this.subscribe("tableMutationEvent",this._onTableMutationEvent);
-
     DT._nCount++;
     DT._nCurrentCount++;
     
@@ -3100,25 +3097,25 @@ _setSelections : function() {
  * @private
  */
 _onRenderChainEnd : function() {
-    this.validateColumnWidths();
     this.hideTableMessage();
     if(this._elTbody.rows.length === 0) {
         this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);        
     }
-},
+    this.validateColumnWidths();
 
-/*TODO
- * Whenever content is updated (due to data load, dynamic data, etc), calls
- * minWidth validation.  
- *
- * @method _onTableMutationEvent
- * @param oArgs.column {YAHOO.widget.Column) If mutation occurs only in one Column,
- * that Column instance.  
- * @private
- */
-//_onTableMutationEvent : function(oArgs) {
-//    this._validateColumnWidths((oArgs) ? oArgs.column : null);
-//},
+    var oSelf = this;
+    setTimeout(function() {
+        if(oSelf._bInit) {
+            oSelf._bInit = false;
+            oSelf.fireEvent("initEvent");
+        }
+
+        oSelf.fireEvent("renderEvent");
+        // Backward compatibility
+        oSelf.fireEvent("refreshEvent");
+        YAHOO.log("DataTable rendered", "info", oSelf.toString());
+    }, 0);
+},
 
 /**
  * Handles click events on the DOCUMENT.
@@ -4582,7 +4579,7 @@ render : function() {
         
         // Fire events in separate timeout thread so implementers can
         // subscribe immediately after the constructor
-        this._oChainRender.add({
+        /*this._oChainRender.add({
             method: function(oArg) {
                 if((this instanceof DT) && this._sId) {
                     // Fire initEvent for first render
@@ -4601,7 +4598,7 @@ render : function() {
                 }
             },
             scope: this
-        });
+        });*/
     }
     // Table has no rows
     else {
@@ -5156,7 +5153,8 @@ sortColumn : function(oColumn, sDir) {
  *
  * @method setColumnWidth
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param nWidth {Number} New width in pixels.
+ * @param nWidth {Number} New width in pixels. A null value auto-sizes Column,
+ * subject to minWidth and maxAutoWidth validations. 
  */
 setColumnWidth : function(oColumn, nWidth) {
     if(!(oColumn instanceof YAHOO.widget.Column)) {
@@ -5176,6 +5174,19 @@ setColumnWidth : function(oColumn, nWidth) {
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
             YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
+            return;
+        }
+        // Unsets a width to auto-size
+        else if(nWidth === null) {
+            // Save state
+            oColumn.width = nWidth;
+            
+            // Resize the DOM elements
+            this._setColumnWidth(oColumn, "auto");
+            this.validateColumnWidths(oColumn);
+            this.fireEvent("columnUnsetWidthEvent",{column:oColumn});
+            YAHOO.log("Column " + oColumn + " width unset", "info", this.toString());
+            
             return;
         }
     }
@@ -5860,7 +5871,6 @@ reorderColumn : function(oColumn, index) {
                 }
         
                 this.fireEvent("columnReorderEvent",{column:oNewColumn});
-                //this.fireEvent("tableMutationEvent");
                 YAHOO.log("Column \"" + oNewColumn.key + "\" reordered", "info", this.toString());
                 return oNewColumn;
             }
@@ -9807,15 +9817,9 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      */
 
     /**
-     * Fired when the DataTable's rows are rendered to the DOM.
+     * Fired when the DataTable's DOM is rendered or modified.
      *
      * @event renderEvent
-     */
-
-    /**
-     * Fired when any of the DataTable's content is changed.
-     *
-     * @event tableMutationEvent
      */
 
     /**
@@ -10119,6 +10123,13 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @event columnSetWidthEvent
      * @param oArgs.column {YAHOO.widget.Column} The Column instance.
      * @param oArgs.width {Number} The width in pixels.
+     */
+
+    /**
+     * Fired when a column width is unset.
+     *
+     * @event columnUnsetWidthEvent
+     * @param oArgs.column {YAHOO.widget.Column} The Column instance.
      */
 
     /**
