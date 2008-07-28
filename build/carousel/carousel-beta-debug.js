@@ -1,9 +1,19 @@
+/**
+ *----------------------------------------------------------------------------
+ * The Carousel module provides a widget for browsing among a set of like
+ * objects represented pictorially.
+ *
+ * @module carousel
+ * @requires yahoo, dom, event, element
+ * @optional animation
+ * @namespace YAHOO.widget
+ * @title Carousel Widget
+ *----------------------------------------------------------------------------
+ */
 (function () {
 
-    /**
-     *------------------------------------------------------------------------
+    /*
      * Private variables of the Carousel component
-     *------------------------------------------------------------------------
      */
 
     /* Some abbreviations to avoid lengthy typing and lookups. */
@@ -12,6 +22,24 @@
         Dom         = YAHOO.util.Dom,
         Event       = YAHOO.util.Event,
         JS          = YAHOO.lang;
+
+    /**
+     * The Carousel widget.
+     *
+     * @class Carousel
+     * @extends YAHOO.util.Element
+     * @constructor
+     * @param el {HTMLElement | String} The HTML element that represents the
+     * the container that houses the Carousel.
+     * @param cfg {Object} (optional) The configuration values
+     */
+    YAHOO.widget.Carousel = function (el, cfg) {
+        YAHOO.log("Component creation", WidgetName);
+
+        YAHOO.widget.Carousel.superclass.constructor.call(this, el, cfg);
+    }
+
+    Carousel = YAHOO.widget.Carousel;
 
     /**
      * The widget name.
@@ -27,10 +55,8 @@
      */
     var instances = {};
 
-    /**
-     *------------------------------------------------------------------------
+    /*
      * Custom events of the Carousel component
-     *------------------------------------------------------------------------
      */
 
     /**
@@ -215,38 +241,8 @@
      */
     var stopAutoPlayEvent = "stopAutoPlay";
 
-    /**
-     *------------------------------------------------------------------------
-     * The carousel module provides a widget for browsing among a set of like
-     * objects represented pictorially.
-     *
-     * @requires yahoo, dom, event, element
-     *------------------------------------------------------------------------
-     */
-
-    /**
-     * The Carousel widget.
-     *
-     * @namespace YAHOO.widget
-     * @class Carousel
-     * @extends YAHOO.util.Element
-     * @constructor
-     * @param el {HTMLElement | String} The HTML element that represents the
-     * the container that houses the Carousel.
-     * @param cfg {Object} (optional) The configuration values
-     */
-    YAHOO.widget.Carousel = function (el, cfg) {
-        YAHOO.log("Component creation", WidgetName);
-
-        YAHOO.widget.Carousel.superclass.constructor.call(this, el, cfg);
-    }
-
-    Carousel = YAHOO.widget.Carousel;
-
-    /**
-     *------------------------------------------------------------------------
+    /*
      * Static members and methods of the Carousel component
-     *------------------------------------------------------------------------
      */
 
     /**
@@ -262,10 +258,8 @@
 
     YAHOO.extend(Carousel, YAHOO.util.Element, {
 
-        /**
-         *--------------------------------------------------------------------
+        /*
          * Internal variables used within the Carousel component
-         *--------------------------------------------------------------------
          */
 
         /**
@@ -361,10 +355,8 @@
          */
         _recomputeSize: true,
 
-        /**
-         *--------------------------------------------------------------------
+        /*
          * CSS classes used by the Carousel component
-         *--------------------------------------------------------------------
          */
         
         CLASSES: {
@@ -511,10 +503,8 @@
 
         },
 
-        /**
-         *--------------------------------------------------------------------
+        /*
          * Configuration attributes for configuring the Carousel component
-         *--------------------------------------------------------------------
          */
         
         CONFIG: {
@@ -583,10 +573,8 @@
             
         },
 
-        /**
-         *--------------------------------------------------------------------
+        /*
          * Internationalizable strings in the Carousel component
-         *--------------------------------------------------------------------
          */
         
         STRINGS: {
@@ -617,10 +605,8 @@
             
         },
 
-        /**
-         *--------------------------------------------------------------------
+        /*
          * Public methods of the Carousel component
-         *--------------------------------------------------------------------
          */
 
         /**
@@ -1355,10 +1341,8 @@
             return WidgetName + (this.get ? " (#" + this.get("id") + ")" : "");
         },
 
-        /**
-         *--------------------------------------------------------------------
+        /*
          * Protected methods of the Carousel component
-         *--------------------------------------------------------------------
          */
         
         /**
@@ -1824,10 +1808,8 @@
         
     });
 
-    /**
-     *------------------------------------------------------------------------
+    /*
      * Private helper functions used by the Carousel component
-     *------------------------------------------------------------------------
      */
 
     /**
