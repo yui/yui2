@@ -249,8 +249,10 @@ var Dom = YAHOO.util.Dom,
                     { type: 'separator' },
                     { group: 'indentlist', label: 'Indenting and Lists',
                         buttons: [
-                            { type: 'push', label: 'Indent', value: 'indent', disabled: true },
-                            { type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
+                            //{ type: 'push', label: 'Indent', value: 'indent', disabled: true },
+                            //{ type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
+                            { type: 'push', label: 'Indent', value: 'indent' },
+                            { type: 'push', label: 'Outdent', value: 'outdent' },
                             { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
                             { type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist' }
                         ]
@@ -416,14 +418,16 @@ var Dom = YAHOO.util.Dom,
         * @description The Toolbar items that should be disabled if there is no selection present in the editor.
         * @type Array
         */
-        _disabled: [ 'createlink', 'forecolor', 'backcolor', 'fontname', 'fontsize', 'superscript', 'subscript', 'removeformat', 'heading', 'indent' ],
+        //_disabled: [ 'createlink', 'forecolor', 'backcolor', 'fontname', 'fontsize', 'superscript', 'subscript', 'removeformat', 'heading', 'indent' ],
+        _disabled: [ 'createlink', 'forecolor', 'backcolor', 'fontname', 'fontsize', 'superscript', 'subscript', 'removeformat', 'heading' ],
         /**
         * @private
         * @property _alwaysDisabled
         * @description The Toolbar items that should ALWAYS be disabled event if there is a selection present in the editor.
         * @type Object
         */
-        _alwaysDisabled: { 'outdent': true },
+        //_alwaysDisabled: { 'outdent': true },
+        _alwaysDisabled: { },
         /**
         * @private
         * @property _alwaysEnabled
@@ -1131,9 +1135,7 @@ var Dom = YAHOO.util.Dom,
         * @return {<a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>}
         */
         _renderPanel: function() {
-            var panel = null;
-            //if (!YAHOO.widget.EditorInfo.panel) {
-                panel = new YAHOO.widget.Overlay(this.get('id') + this.EDITOR_PANEL_ID, {
+            var panel = new YAHOO.widget.Overlay(this.get('id') + this.EDITOR_PANEL_ID, {
                     width: '300px',
                     iframe: true,
                     visible: false,
@@ -1141,10 +1143,6 @@ var Dom = YAHOO.util.Dom,
                     draggable: false,
                     close: false
                 });
-              //  YAHOO.widget.EditorInfo.panel = panel;
-            //} else {
-              //  panel = YAHOO.widget.EditorInfo.panel;
-           // }
             this.set('panel', panel);
 
             this.get('panel').setBody('---');
@@ -1621,7 +1619,9 @@ var Dom = YAHOO.util.Dom,
         cmd_indent: function(value) {
             var exec = true, selEl = this._getSelectedElement(), _bq = null;
 
-            if (this.browser.webkit || this.browser.ie || this.browser.gecko) {
+            //if (this.browser.webkit || this.browser.ie || this.browser.gecko) {
+            //if (this.browser.webkit || this.browser.ie) {
+            if (this.browser.ie) {
                 if (this._isElement(selEl, 'blockquote')) {
                     _bq = this._getDoc().createElement('blockquote');
                     _bq.innerHTML = selEl.innerHTML;
@@ -1642,7 +1642,7 @@ var Dom = YAHOO.util.Dom,
             } else {
                 value = 'blockquote';
             }
-            return [exec, 'indent', value];
+            return [exec, 'formatblock', value];
         },
         /**
         * @method cmd_outdent
@@ -1651,7 +1651,9 @@ var Dom = YAHOO.util.Dom,
         */
         cmd_outdent: function(value) {
             var exec = true, selEl = this._getSelectedElement(), _bq = null, _span = null;
-            if (this.browser.webkit || this.browser.ie || this.browser.gecko) {
+            //if (this.browser.webkit || this.browser.ie || this.browser.gecko) {
+            if (this.browser.webkit || this.browser.ie) {
+            //if (this.browser.ie) {
                 selEl = this._getSelectedElement();
                 if (this._isElement(selEl, 'blockquote')) {
                     var par = selEl.parentNode;
@@ -1670,9 +1672,9 @@ var Dom = YAHOO.util.Dom,
                 }
                 exec = false;
             } else {
-                value = 'blockquote';
+                value = false;
             }
-            return [exec, 'indent', value];
+            return [exec, 'outdent', value];
         },
         /* }}}*/        
         /**

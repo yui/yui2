@@ -949,7 +949,7 @@ var Dom = YAHOO.util.Dom,
                             this._buttonClick(ev, oButton);
                         }, oButton, this);
                         tmp.on('click', function(ev) {
-                            //YAHOO.util.Event.stopEvent(ev);
+                            YAHOO.util.Event.stopEvent(ev);
                         });
                     } else {
                         //Stop the mousedown event so we can trap the selection in the editor!
@@ -1413,14 +1413,16 @@ var Dom = YAHOO.util.Dom,
                     if (this._navCounter < 0) {
                         this._navCounter = (this._buttonList.length - 1);
                     }
-                    var el = this._buttonList[this._navCounter].get('element');
-                    if (this.browser.ie) {
-                        el = this._buttonList[this._navCounter].get('element').getElementsByTagName('a')[0];
-                    }
-                    if (this._buttonList[this._navCounter].get('disabled')) {
-                        this._navigateButtons(ev);
-                    } else {
-                        el.focus();
+                    if (this._buttonList[this._navCounter]) {
+                        var el = this._buttonList[this._navCounter].get('element');
+                        if (this.browser.ie) {
+                            el = this._buttonList[this._navCounter].get('element').getElementsByTagName('a')[0];
+                        }
+                        if (this._buttonList[this._navCounter].get('disabled')) {
+                            this._navigateButtons(ev);
+                        } else {
+                            el.focus();
+                        }
                     }
                     break;
             }
@@ -1450,7 +1452,7 @@ var Dom = YAHOO.util.Dom,
         getButtonById: function(id) {
             var len = this._buttonList.length;
             for (var i = 0; i < len; i++) {
-                if (this._buttonList[i].get('id') == id) {
+                if (this._buttonList[i] && this._buttonList[i].get('id') == id) {
                     return this._buttonList[i];
                 }
             }
@@ -1663,17 +1665,19 @@ var Dom = YAHOO.util.Dom,
             var len = this._buttonList.length;
             for (var i = 0; i < len; i++) {
                 var _button = this._buttonList[i];
-                var disabled = _button._configs.disabled._initialConfig.value;
-                if (_ex[_button.get('id')]) {
-                    this.enableButton(_button);
-                    this.selectButton(_button);
-                } else {
-                    if (disabled) {
-                        this.disableButton(_button);
-                    } else {
+                if (_button) {
+                    var disabled = _button._configs.disabled._initialConfig.value;
+                    if (_ex[_button.get('id')]) {
                         this.enableButton(_button);
+                        this.selectButton(_button);
+                    } else {
+                        if (disabled) {
+                            this.disableButton(_button);
+                        } else {
+                            this.enableButton(_button);
+                        }
+                        this.deselectButton(_button);
                     }
-                    this.deselectButton(_button);
                 }
             }
         },
@@ -1691,7 +1695,7 @@ var Dom = YAHOO.util.Dom,
 
                 var len = this._buttonList.length;
                 for (var i = 0; i < len; i++) {
-                    if (this._buttonList[i].get('id') == thisID) {
+                    if (this._buttonList[i] && this._buttonList[i].get('id') == thisID) {
                         this._buttonList[i] = null;
                     }
                 }

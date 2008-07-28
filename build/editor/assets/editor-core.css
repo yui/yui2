@@ -245,6 +245,10 @@
     padding: .25em .1em;
     zoom: 1;
 }
+/* Get the caret back in Geckp */
+.yui-editor-panel .bd .gecko form {
+    overflow: auto;
+}
 
 /* Setup the :after so that compliant browsers don't loose the bounding box */
 .yui-editor-panel .bd div.yui-editor-body-cont:after { display: block; clear: both; visibility: hidden; content: '.'; height: 0;}
@@ -322,7 +326,7 @@
     font-style: italic;
     display: block;
     float: left;
-    overflow:auto;
+    overflow: visible;
 }
 /* Image Height/Width original info container */
 .yui-editor-panel .height-width span.info {
