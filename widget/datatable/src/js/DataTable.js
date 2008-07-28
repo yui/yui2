@@ -90,7 +90,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
 
     // Call Element's constructor after DOM elements are created
     // but *before* table is populated with data
-    DT.superclass.constructor.call(this, this._elContainer, this._oConfigs);
+    DT.superclass.constructor.call(this, this._elContainer, this.configs);
     
     // Show message as soon as config is available
     this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
@@ -1866,7 +1866,7 @@ _initConfigs : function(oConfigs) {
     if(!oConfigs || !lang.isObject(oConfigs)) {
         oConfigs = {};
     }
-    this._oConfigs = oConfigs;
+    this.configs = oConfigs;
 },
 
 /**
@@ -2345,7 +2345,7 @@ _initThEl : function(elTh, oColumn) {
 /**
  * Disables DD from top-level Column TH elements.
  *
- * @method _initDraggableColumns
+ * @method _destroyDraggableColumns
  * @private
  */
 _destroyDraggableColumns : function() {
@@ -3129,26 +3129,36 @@ _setSelections : function() {
  * @private
  */
 _onRenderChainEnd : function() {
+    // Hide loading message
     this.hideTableMessage();
+    
+    // Show empty message
     if(this._elTbody.rows.length === 0) {
         this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);        
     }
-    //TODO: fire a new event here:
-    
-    
-    this.validateColumnWidths();
 
+    // Execute in timeout thread to give implementers a chance
+    // to subscribe after the constructor
     var oSelf = this;
     setTimeout(function() {
+        // Init event
         if(oSelf._bInit) {
             oSelf._bInit = false;
             oSelf.fireEvent("initEvent");
         }
 
+        // Render event
         oSelf.fireEvent("renderEvent");
         // Backward compatibility
         oSelf.fireEvent("refreshEvent");
         YAHOO.log("DataTable rendered", "info", oSelf.toString());
+
+        // Post-render routine
+        oSelf.validateColumnWidths();
+
+        // Post-render event
+        oSelf.fireEvent("postRenderEvent");
+        YAHOO.log("Post-render routine executed", "info", oSelf.toString());
     }, 0);
 },
 
@@ -3806,6 +3816,14 @@ _onDropdownChange : function(e, oSelf) {
 // Public member variables
 //
 /////////////////////////////////////////////////////////////////////////////
+/**
+ * Returns object literal of initial configs.
+ *
+ * @property configs
+ * @type Object
+ * @default {} 
+ */
+configs: null,
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -9865,6 +9883,13 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * Fired when the DataTable's DOM is rendered or modified.
      *
      * @event renderEvent
+     */
+
+    /**
+     * Fired when the DataTable's post-render routine is complete, including
+     * Column width validations.
+     *
+     * @event postRenderEvent
      */
 
     /**

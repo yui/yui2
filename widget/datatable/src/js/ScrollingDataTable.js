@@ -813,13 +813,43 @@ _syncScrollOverhang : function() {
 
 
 /**
- * Returns DOM reference to the DataTable's scrolling body container element, if any.
+ * Returns DOM reference to the DataTable's fixed header container element.
+ *
+ * @method getHdContainerEl
+ * @return {HTMLElement} Reference to DIV element.
+ */
+getHdContainerEl : function() {
+    return this._elHdContainer;
+},
+
+/**
+ * Returns DOM reference to the DataTable's scrolling body container element.
  *
  * @method getBdContainerEl
  * @return {HTMLElement} Reference to DIV element.
  */
 getBdContainerEl : function() {
     return this._elBdContainer;
+},
+
+/**
+ * Returns DOM reference to the DataTable's fixed header TABLE element.
+ *
+ * @method getHdTableEl
+ * @return {HTMLElement} Reference to TABLE element.
+ */
+getHdTableEl : function() {
+    return this._elHdTable;
+},
+
+/**
+ * Returns DOM reference to the DataTable's scrolling body TABLE element.
+ *
+ * @method getBdTableEl
+ * @return {HTMLElement} Reference to TABLE element.
+ */
+getBdTableEl : function() {
+    return this._elTable;
 },
 
 /**
