@@ -194,7 +194,6 @@ initAttributes : function(oConfigs) {
             this._elBdContainer.style.width = oParam;            
             this._syncScrollX();      
             this._syncScrollOverhang();
-            ///TODO: is this nec? force gecko redraw
         }
     });
 
@@ -332,6 +331,7 @@ _initTmpEls : function() {
  * @private
  */
 _destroyContainerEl : function(elContainer) {
+    Dom.removeClass(elContainer, DT.CLASS_SCROLLABLE);
     SDT.superclass._destroyContainerEl.call(this, elContainer);
     this._elHdContainer = null;
     this._elBdContainer = null;
@@ -609,10 +609,18 @@ _validateColumnWidth : function(oColumn, elTd) {
             var newWidth = Math.max(0,
                 (elWider.offsetWidth -(parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) - (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0)),
                 oColumn.minWidth);
+                
+            var sOverflow = 'visible';
             
+            // Now validate against maxAutoWidth
+            if((oColumn.maxAutoWidth > 0) && (newWidth > oColumn.maxAutoWidth)) {
+                newWidth = oColumn.maxAutoWidth;
+                sOverflow = "hidden";
+            }
+
             // Set to the wider auto-width
             this._elTbody.style.display = "none";
-            this._setColumnWidth(oColumn, newWidth+'px', 'visible');
+            this._setColumnWidth(oColumn, newWidth+'px', sOverflow);
             oColumn._calculatedWidth = newWidth;
             this._elTbody.style.display = "";
         }
@@ -622,7 +630,7 @@ _validateColumnWidth : function(oColumn, elTd) {
 /**
  * For one or all Columns of a ScrollingDataTable, when Column is not hidden,
  * and width is not set, syncs widths of header and body cells and 
- * validates that width against minWidth when necessary.
+ * validates that width against minWidth and/or maxAutoWidth as necessary.
  *
  * @method validateColumnWidths
  * @param oArg.column {YAHOO.widget.Column} (optional) One Column to validate. If null, all Columns' widths are validated.
@@ -667,7 +675,7 @@ validateColumnWidths : function(oColumn) {
  * and container width and height.
  *
  * @method _syncScroll
- * @private
+ * @private 
  */
 _syncScroll : function() {
     this._syncScrollX();
@@ -681,7 +689,7 @@ _syncScroll : function() {
             document.body.style += '';
         }
     }
-},
+ },
 
 /**
  * Snaps container width for y-scrolling tables.
@@ -697,11 +705,11 @@ _syncScrollY : function() {
     if(!this.get("width")) {
         // Snap outer container width to content
         this._elContainer.style.width = 
-                (elBdContainer.scrollHeight >= elBdContainer.offsetHeight) ?
-                // but account for y-scrollbar if it is visible
-                (elTbody.parentNode.offsetWidth + 18) + "px" :
+                (elBdContainer.scrollHeight > elBdContainer.clientHeight) ?
+                // but account for y-scrollbar since it is visible
+                (elTbody.parentNode.clientWidth + 19) + "px" :
                 // no y-scrollbar, just borders
-                (elTbody.parentNode.offsetWidth + 2) + "px";
+                (elTbody.parentNode.clientWidth + 2) + "px";
     }
 },
 
@@ -720,7 +728,7 @@ _syncScrollX : function() {
         // Snap outer container height to content
         elBdContainer.style.height = 
                 // but account for x-scrollbar if it is visible
-                (elBdContainer.scrollWidth > elBdContainer.offsetWidth - 2) ?
+                (elBdContainer.scrollWidth > elBdContainer.offsetWidth ) ?
                 (elTbody.parentNode.offsetHeight + 18) + "px" : 
                 elTbody.parentNode.offsetHeight + "px";
     }
@@ -805,13 +813,43 @@ _syncScrollOverhang : function() {
 
 
 /**
- * Returns DOM reference to the DataTable's scrolling body container element, if any.
+ * Returns DOM reference to the DataTable's fixed header container element.
+ *
+ * @method getHdContainerEl
+ * @return {HTMLElement} Reference to DIV element.
+ */
+getHdContainerEl : function() {
+    return this._elHdContainer;
+},
+
+/**
+ * Returns DOM reference to the DataTable's scrolling body container element.
  *
  * @method getBdContainerEl
  * @return {HTMLElement} Reference to DIV element.
  */
 getBdContainerEl : function() {
     return this._elBdContainer;
+},
+
+/**
+ * Returns DOM reference to the DataTable's fixed header TABLE element.
+ *
+ * @method getHdTableEl
+ * @return {HTMLElement} Reference to TABLE element.
+ */
+getHdTableEl : function() {
+    return this._elHdTable;
+},
+
+/**
+ * Returns DOM reference to the DataTable's scrolling body TABLE element.
+ *
+ * @method getBdTableEl
+ * @return {HTMLElement} Reference to TABLE element.
+ */
+getBdTableEl : function() {
+    return this._elTable;
 },
 
 /**
@@ -889,8 +927,8 @@ reorderColumn : function(oColumn, index) {
 },
 
 /**
- * Sets given Column to given pixel width. If new width is less than minimum
- * width, sets to minimum width. Updates oColumn.width value.
+ * Sets given Column to given pixel width. If new width is less than minWidth
+ * width, sets to minWidth. Updates oColumn.width value.
  *
  * @method setColumnWidth
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -899,7 +937,7 @@ reorderColumn : function(oColumn, index) {
 setColumnWidth : function(oColumn, nWidth) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
-        // Validate new width against minimum width
+        // Validate new width against minWidth
         if(lang.isNumber(nWidth)) {
             nWidth = (nWidth > oColumn.minWidth) ? nWidth : oColumn.minWidth;
 
@@ -908,10 +946,23 @@ setColumnWidth : function(oColumn, nWidth) {
             
             // Resize the DOM elements
             this._setColumnWidth(oColumn, nWidth+"px");
-            this._syncScrollOverhang();
+            this._syncScroll();
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
             YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
+            return;
+        }
+        // Unsets a width to auto-size
+        else if(nWidth === null) {
+            // Save state
+            oColumn.width = nWidth;
+            
+            // Resize the DOM elements
+            this._setColumnWidth(oColumn, "auto");
+            this.validateColumnWidths(oColumn);
+            this.fireEvent("columnUnsetWidthEvent",{column:oColumn});
+            YAHOO.log("Column " + oColumn + " width unset", "info", this.toString());
+
             return;
         }
     }

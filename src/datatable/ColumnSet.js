@@ -208,6 +208,9 @@ YAHOO.widget.ColumnSet.prototype = {
                         if(oColumn.minWidth && (child.minWidth === undefined)) {
                             child.minWidth = oColumn.minWidth;
                         }
+                        if(oColumn.maxAutoWidth && (child.maxAutoWidth === undefined)) {
+                            child.maxAutoWidth = oColumn.maxAutoWidth;
+                        }
                         // Backward compatibility
                         if(oColumn.type && (child.type === undefined)) {
                             child.type = oColumn.type;
@@ -769,6 +772,19 @@ YAHOO.widget.Column.prototype = {
     minWidth : null,
 
     /**
+     * When a width is not defined for a Column, maxAutoWidth defines an upper
+     * limit that the Column should be auto-sized to. If resizeable is enabled, 
+     * users may still resize to a greater width. Most useful for Columns intended
+     * to hold long unbroken, unwrapped Strings, such as URLs, to prevent very
+     * wide Columns from disrupting visual readability by inducing truncation.
+     *
+     * @property maxAutoWidth
+     * @type Number
+     * @default null
+     */
+    maxAutoWidth : null,
+
+    /**
      * True if Column is in hidden state.
      *
      * @property hidden
@@ -908,6 +924,7 @@ YAHOO.widget.Column.prototype = {
         oDefinition.key = this.key;
         oDefinition.label = this.label;
         oDefinition.minWidth = this.minWidth;
+        oDefinition.maxAutoWidth = this.maxAutoWidth;
         oDefinition.resizeable = this.resizeable;
         oDefinition.selected = this.selected;
         oDefinition.sortable = this.sortable;

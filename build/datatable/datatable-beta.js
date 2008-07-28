@@ -15835,7 +15835,7 @@ validateColumnWidths : function(oColumn) {
  * Syncs padding around scrollable tables, including Column header right-padding
  * and container width and height.
  *
- * @method syncScroll
+ * @method _syncScroll
  * @private 
  */
 _syncScroll : function() {

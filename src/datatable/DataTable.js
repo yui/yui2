@@ -90,7 +90,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
 
     // Call Element's constructor after DOM elements are created
     // but *before* table is populated with data
-    DT.superclass.constructor.call(this, this._elContainer, this._oConfigs);
+    DT.superclass.constructor.call(this, this._elContainer, this.configs);
     
     // Show message as soon as config is available
     this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
@@ -102,9 +102,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Initialize inline Cell editing
     //this._oCellEditor = this._initCellEditor();
     
-    // Element's constructor must first be called
-    //this.subscribe("tableMutationEvent",this._onTableMutationEvent);
-
     DT._nCount++;
     DT._nCurrentCount++;
     
@@ -841,7 +838,7 @@ lang.augmentObject(DT, {
      */
     formatCurrency : function(el, oRecord, oColumn, oData) {
         el.innerHTML = util.Number.format(oData, {
-                prefix:"$",
+                prefix: this.get("currencySymbol"),
                 decimalPlaces:2,
                 decimalSeparator:".",
                 thousandsSeparator:","
@@ -1321,7 +1318,14 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("draggableColumns", {
         value: false,
         validator: lang.isBoolean,
-        writeOnce: true
+        method: function(oParam) {
+            if(oParam) {
+                this._initDraggableColumns();
+            }
+            else {
+                this._destroyDraggableColumns();
+            }
+        }
     });
 
     /**
@@ -1340,9 +1344,10 @@ initAttributes : function(oConfigs) {
     /*
     * @attribute generateRequest
     * @description A function that converts an object literal of desired DataTable
-    * states into a value which is then passed to the DataSource's sendRequest
-    * method in order to retrieve data for those states. This function is passed
-    * an object literal of state data and a reference to the DataTable instance:
+    * states into a request value which is then passed to the DataSource's
+    * sendRequest method in order to retrieve data for those states. This
+    * function is passed an object literal of state data and a reference to the
+    * DataTable instance:
     *     
     * <dl>
     *   <dt>pagination<dt>
@@ -1362,6 +1367,9 @@ initAttributes : function(oConfigs) {
     *   <dt>self</dt>
     *   <dd>The DataTable instance</dd>
     * </dl>
+    * 
+    * and by default returns a String of syntax:
+    * "sort={sortColumn}&dir={sortDir}&startIndex={pageStartIndex}&results={rowsPerPage}"
     * @type function
     * @default HTMLFunction
     */
@@ -1466,6 +1474,16 @@ initAttributes : function(oConfigs) {
          value: "Data error.", 	 
          validator: lang.isString 	 
      }); 	 
+
+    /**
+     * Currency symbol/prefix used by the default 'currency' column formatter.
+     * @attribute currencySymbol
+     * @type String
+     * @default "$"
+     */
+    this.setAttributeConfig("currencySymbol", {
+        value: "$"
+    });
 },
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1848,7 +1866,7 @@ _initConfigs : function(oConfigs) {
     if(!oConfigs || !lang.isObject(oConfigs)) {
         oConfigs = {};
     }
-    this._oConfigs = oConfigs;
+    this.configs = oConfigs;
 },
 
 /**
@@ -2325,28 +2343,117 @@ _initThEl : function(elTh, oColumn) {
 },
 
 /**
+ * Disables DD from top-level Column TH elements.
+ *
+ * @method _destroyDraggableColumns
+ * @private
+ */
+_destroyDraggableColumns : function() {
+    var oColumn, elTh;
+    for(var i=0, l=this._oColumnSet.tree[0].length; i<l; i++) {
+        oColumn = this._oColumnSet.tree[0][i];
+        if(oColumn._dd) {
+            oColumn._dd = oColumn._dd.unreg();
+            Dom.removeClass(oColumn.getThEl(), DT.CLASS_DRAGGABLE);       
+        }
+    }
+},
+
+/**
+ * Initializes top-level Column TH elements into DD instances.
+ *
+ * @method _initDraggableColumns
+ * @private
+ */
+_initDraggableColumns : function() {
+    this._destroyDraggableColumns();
+    if(util.DD) {
+        var oColumn, elTh, elDragTarget;
+        for(var i=0, l=this._oColumnSet.tree[0].length; i<l; i++) {
+            oColumn = this._oColumnSet.tree[0][i];
+            elTh = oColumn.getThEl();
+            Dom.addClass(elTh, DT.CLASS_DRAGGABLE);
+            elDragTarget = DT._initColumnDragTargetEl();
+            oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTh, elDragTarget);
+        }
+    }
+    else {
+        YAHOO.log("Could not find DragDrop for draggable Columns", "warn", this.toString());
+    }
+},
+
+/**
+ * Disables resizeability on key Column TH elements.
+ *
+ * @method _destroyResizeableColumns
+ * @private
+ */
+_destroyResizeableColumns : function() {
+    var aKeys = this._oColumnSet.keys;
+    for(var i=0, l=aKeys.length; i<l; i++) {
+        if(aKeys[i]._ddResizer) {
+            aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
+            Dom.removeClass(aKeys[i].getThEl(), DT.CLASS_RESIZEABLE);
+        }
+    }
+},
+
+/**
+ * Initializes resizeability on key Column TH elements.
+ *
+ * @method _initResizeableColumns
+ * @private
+ */
+_initResizeableColumns : function() {
+    this._destroyResizeableColumns();
+    if(util.DD) {
+        var oColumn, elTh, elThLiner, elThResizerLiner, elThResizer, elResizerProxy, cancelClick;
+        for(var i=0, l=this._oColumnSet.keys.length; i<l; i++) {
+            oColumn = this._oColumnSet.keys[i];
+            if(oColumn.resizeable) {
+                elTh = oColumn.getThEl();
+                Dom.addClass(elTh, DT.CLASS_RESIZEABLE);
+                elThLiner = oColumn.getThLinerEl();
+                
+                // Bug 1915349: So resizer is as tall as TH when rowspan > 1
+                // Create a separate resizer liner with position:relative
+                elThResizerLiner = elTh.appendChild(document.createElement("div"));
+                elThResizerLiner.className = DT.CLASS_RESIZERLINER;
+                
+                // Move TH contents into the new resizer liner
+                elThResizerLiner.appendChild(elThLiner);
+                
+                // Create the resizer
+                elThResizer = elThResizerLiner.appendChild(document.createElement("div"));
+                elThResizer.id = elTh.id + "-resizer"; // Needed for ColumnResizer
+                elThResizer.className = DT.CLASS_RESIZER;
+                oColumn._elResizer = elThResizer;
+
+                // Create the resizer proxy, once globally
+                elResizerProxy = DT._initColumnResizerProxyEl();
+                oColumn._ddResizer = new YAHOO.util.ColumnResizer(
+                        this, oColumn, elTh, elThResizer, elResizerProxy);
+                cancelClick = function(e) {
+                    Ev.stopPropagation(e);
+                };
+                Ev.addListener(elThResizer,"click",cancelClick);
+            }
+        }
+    }
+    else {
+        YAHOO.log("Could not find DragDrop for resizeable Columns", "warn", this.toString());
+    }
+},
+
+/**
  * Destroys elements associated with Column functionality: ColumnDD and ColumnResizers.
  *
  * @method _destroyColumnHelpers
  * @private
  */
 _destroyColumnHelpers : function() {
-    var i=0;
-    // Destroy ColumnDDs
-    var aTree = this._oColumnSet.tree[0];
-    for(; i<aTree.length; i++) {
-        if(aTree[i]._dd) {
-            aTree[i]._dd = aTree[i]._dd.unreg();
-        }
-    }
-
-    // Destroy ColumnResizers
-    var aKeys = this._oColumnSet.keys;
-    for(i=0; i<aKeys.length; i++) {
-        if(aKeys[i]._ddResizer) {
-            aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
-        }
-    }
+    this._destroyDraggableColumns();
+    this._destroyResizeableColumns();
 },
 
 /**
@@ -2356,74 +2463,10 @@ _destroyColumnHelpers : function() {
  * @private
  */
 _initColumnHelpers : function() {
-///TODO: move draggableColumns functionality to Attribute method
-    this._destroyColumnHelpers();
-    
-    var aTree = this._oColumnSet.tree[0],
-        foundDD = (util.DD) ? true : false,
-        needDD = false,
-        oColumn, elTh,
-        i=0;
-    
-    ///TODO: converge the following loops
-    
-    // draggable
-    // HACK: Not able to use attribute since this code is run before
-    // attributes are initialized
-    if(this._oConfigs.draggableColumns) {
-        for(; i<this._oColumnSet.tree[0].length; i++) {
-            oColumn = this._oColumnSet.tree[0][i];
-            if(foundDD) {
-                elTh = oColumn.getThEl();
-                Dom.addClass(elTh, DT.CLASS_DRAGGABLE);
-                var elDragTarget = DT._initColumnDragTargetEl();
-                oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTh, elDragTarget);
-            }
-            else {
-                needDD = true;
-            }    
-        }
+    if(this.get("draggableColumns")) {
+        this._initDraggableColumns();
     }
-    // resizeable
-    for(i=0; i<this._oColumnSet.keys.length; i++) {
-        oColumn = this._oColumnSet.keys[i];
-        if(oColumn.resizeable) {
-            if(foundDD) {
-                elTh = oColumn.getThEl();
-                Dom.addClass(elTh, DT.CLASS_RESIZEABLE);
-                var elThLiner = oColumn.getThLinerEl();
-                
-                // Bug 1915349: So resizer is as tall as TH when rowspan > 1
-                // Create a separate resizer liner with position:relative
-                var elThResizerLiner = elTh.appendChild(document.createElement("div"));
-                elThResizerLiner.className = DT.CLASS_RESIZERLINER;
-                
-                // Move TH contents into the new resizer liner
-                elThResizerLiner.appendChild(elThLiner);
-                
-                // Create the resizer
-                var elThResizer = elThResizerLiner.appendChild(document.createElement("div"));
-                elThResizer.id = elTh.id + "-resizer"; // Needed for ColumnResizer
-                elThResizer.className = DT.CLASS_RESIZER;
-                oColumn._elResizer = elThResizer;
-
-                // Create the resizer proxy, once globally
-                var elResizerProxy = DT._initColumnResizerProxyEl();
-                oColumn._ddResizer = new YAHOO.util.ColumnResizer(
-                        this, oColumn, elTh, elThResizer, elResizerProxy);
-                var cancelClick = function(e) {
-                    Ev.stopPropagation(e);
-                };
-                Ev.addListener(elThResizer,"click",cancelClick);
-            }
-            else {
-                needDD = true;
-            }
-        }
-    }
-    if(needDD) {
-        YAHOO.log("Could not find DragDrop dependancy", "warn", this.toString());
-    }
+    this._initResizeableColumns();
 },
 
 /**
@@ -2629,8 +2672,8 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
         allClasses = [];
     }
     
-    // Hook for setting with via dynamic style
-    allClasses[allClasses.length] = this.getId() + "-" +oColumn.getId();
+    // Hook for setting width with via dynamic style uses key since ID is too disposable
+    allClasses[allClasses.length] = this.getId() + "-" +oColumn.getSanitizedKey();
 
     // Column key - minus any chars other than "A-Z", "a-z", "0-9", "_", "-", ".", or ":"
     allClasses[allClasses.length] = "yui-dt-col-" +oColumn.getSanitizedKey();
@@ -3086,25 +3129,38 @@ _setSelections : function() {
  * @private
  */
 _onRenderChainEnd : function() {
-    this.validateColumnWidths();
+    // Hide loading message
     this.hideTableMessage();
+    
+    // Show empty message
     if(this._elTbody.rows.length === 0) {
         this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);        
     }
-},
 
-/*TODO
- * Whenever content is updated (due to data load, dynamic data, etc), calls
- * minWidth validation.  
- *
- * @method _onTableMutationEvent
- * @param oArgs.column {YAHOO.widget.Column) If mutation occurs only in one Column,
- * that Column instance.  
- * @private
- */
-//_onTableMutationEvent : function(oArgs) {
-//    this._validateColumnWidths((oArgs) ? oArgs.column : null);
-//},
+    // Execute in timeout thread to give implementers a chance
+    // to subscribe after the constructor
+    var oSelf = this;
+    setTimeout(function() {
+        // Init event
+        if(oSelf._bInit) {
+            oSelf._bInit = false;
+            oSelf.fireEvent("initEvent");
+        }
+
+        // Render event
+        oSelf.fireEvent("renderEvent");
+        // Backward compatibility
+        oSelf.fireEvent("refreshEvent");
+        YAHOO.log("DataTable rendered", "info", oSelf.toString());
+
+        // Post-render routine
+        oSelf.validateColumnWidths();
+
+        // Post-render event
+        oSelf.fireEvent("postRenderEvent");
+        YAHOO.log("Post-render routine executed", "info", oSelf.toString());
+    }, 0);
+},
 
 /**
  * Handles click events on the DOCUMENT.
@@ -3760,6 +3816,14 @@ _onDropdownChange : function(e, oSelf) {
 // Public member variables
 //
 /////////////////////////////////////////////////////////////////////////////
+/**
+ * Returns object literal of initial configs.
+ *
+ * @property configs
+ * @type Object
+ * @default {} 
+ */
+configs: null,
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -4568,7 +4632,7 @@ render : function() {
         
         // Fire events in separate timeout thread so implementers can
         // subscribe immediately after the constructor
-        this._oChainRender.add({
+        /*this._oChainRender.add({
             method: function(oArg) {
                 if((this instanceof DT) && this._sId) {
                     // Fire initEvent for first render
@@ -4587,7 +4651,7 @@ render : function() {
                 }
             },
             scope: this
-        });
+        });*/
     }
     // Table has no rows
     else {
@@ -4655,12 +4719,10 @@ destroy : function() {
     this.unsubscribeAll();
 
     // Unhook DOM events
-    var elContainer = this._elContainer;
-    Ev.purgeElement(elContainer, true);
     Ev.removeListener(document, "click", this._onDocumentClick);
-
-    // Remove DOM elements
-    elContainer.innerHTML = "";
+    
+    // Clear out the container
+    this._destroyContainerEl(this._elContainer);
 
     // Null out objects
     for(var param in this) {
@@ -5142,7 +5204,8 @@ sortColumn : function(oColumn, sDir) {
  *
  * @method setColumnWidth
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param nWidth {Number} New width in pixels.
+ * @param nWidth {Number} New width in pixels. A null value auto-sizes Column,
+ * subject to minWidth and maxAutoWidth validations. 
  */
 setColumnWidth : function(oColumn, nWidth) {
     if(!(oColumn instanceof YAHOO.widget.Column)) {
@@ -5162,6 +5225,19 @@ setColumnWidth : function(oColumn, nWidth) {
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
             YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
+            return;
+        }
+        // Unsets a width to auto-size
+        else if(nWidth === null) {
+            // Save state
+            oColumn.width = nWidth;
+            
+            // Resize the DOM elements
+            this._setColumnWidth(oColumn, "auto");
+            this.validateColumnWidths(oColumn);
+            this.fireEvent("columnUnsetWidthEvent",{column:oColumn});
+            YAHOO.log("Column " + oColumn + " width unset", "info", this.toString());
+            
             return;
         }
     }
@@ -5230,8 +5306,8 @@ _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
     
     // We have a STYLE node to update
     if(s) {
-        // Unique classname for this Column instance
-        var sClassname = "." + this.getId() + "-" + oColumn.getId() + " ." + DT.CLASS_LINER;
+        // Use unique classname for this Column instance as a hook for resizing
+        var sClassname = "." + this.getId() + "-" + oColumn.getSanitizedKey() + " ." + DT.CLASS_LINER;
         
         // Hide for performance
         if(this._elTbody) {
@@ -5353,7 +5429,7 @@ _setColumnWidthDynFunction : function(oColumn, sWidth, sOverflow) {
 
 /**
  * For one or all Columns, when Column is not hidden, width is not set, and minWidth
- * is set, validates auto-width against minWidth.
+ * and/or maxAutoWidth is set, validates auto-width against minWidth and maxAutoWidth.
  *
  * @method validateColumnWidths
  * @param oArg.column {YAHOO.widget.Column} (optional) One Column to validate. If null, all Columns' widths are validated.
@@ -5364,29 +5440,35 @@ validateColumnWidths : function(oColumn) {
     var bNeedsValidation = false;
     var allKeys = this._oColumnSet.keys;
     var elThLiner;
-    // Validate just one Column
-    if(oColumn && !oColumn.hidden && !oColumn.width && oColumn.minWidth && (oColumn.getKeyIndex() !== null)) {
+    // Validate just one Column's minWidth and/or maxAutoWidth
+    if(oColumn && !oColumn.hidden && !oColumn.width && (oColumn.getKeyIndex() !== null)) {
             elThLiner = oColumn.getThLinerEl();
-            if(elThLiner.offsetWidth < oColumn.minWidth) {
+            if((oColumn.minWidth > 0) && (elThLiner.offsetWidth < oColumn.minWidth)) {
                 elColgroupClone.childNodes[oColumn.getKeyIndex()].style.width = 
                         oColumn.minWidth + 
                         (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) +
                         (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
                 bNeedsValidation = true;
             }
+            else if((oColumn.maxAutoWidth > 0) && (elThLiner.offsetWidth > oColumn.maxAutoWidth)) {
+                this._setColumnWidth(oColumn, oColumn.maxAutoWidth+"px", "hidden");
+            }
     }
     // Validate all Columns
     else {
         for(var i=0, l=allKeys.length; i<l; i++) {
             oColumn = allKeys[i];
-            if(!oColumn.hidden && !oColumn.width && oColumn.minWidth) {
+            if(!oColumn.hidden && !oColumn.width) {
                 elThLiner = oColumn.getThLinerEl();
-                if(elThLiner.offsetWidth < oColumn.minWidth) {
+                if((oColumn.minWidth > 0) && (elThLiner.offsetWidth < oColumn.minWidth)) {
                     elColgroupClone.childNodes[i].style.width = 
                             oColumn.minWidth + 
                             (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) +
                             (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
                     bNeedsValidation = true;
+                }
+                else if((oColumn.maxAutoWidth > 0) && (elThLiner.offsetWidth > oColumn.maxAutoWidth)) {
+                    this._setColumnWidth(oColumn, oColumn.maxAutoWidth+"px", "hidden");
                 }
             }
         }
@@ -5567,7 +5649,10 @@ removeColumn : function(oColumn) {
                 // Sort the indexes so we can remove from the right
                 aKeyIndexes.sort(function(a, b) {return YAHOO.util.Sort.compare(a, b);});
                 
-                // Remove TH
+                // Destroy previous THEAD
+                this._destroyTheadEl();
+    
+                // Create new THEAD
                 var aOrigColumnDefs = this._oColumnSet.getDefinitions();
                 oColumn = aOrigColumnDefs.splice(nColTreeIndex,1)[0];
                 this._initColumnSet(aOrigColumnDefs);
@@ -5642,7 +5727,10 @@ insertColumn : function(oColumn, index) {
         index = oColumnSet.tree[0].length;
     }
     
-    // Add TH
+    // Destroy previous THEAD
+    this._destroyTheadEl();
+    
+    // Create new THEAD
     var aNewColumnDefs = this._oColumnSet.getDefinitions();
     aNewColumnDefs.splice(index, 0, oColumn);
     this._initColumnSet(aNewColumnDefs);
@@ -5743,7 +5831,7 @@ reorderColumn : function(oColumn, index) {
                 allDescendants,
                 descKeyIndexes = [],
                 thisKey;
-            // Must be a parent Column
+            // Must be a parent Column...
             if(aOrigKeyIndexes === null) {
                 allDescendants = this._oColumnSet.getDescendants(oColumn);
                 for(i=0, l=allDescendants.length; i<l; i++) {
@@ -5757,16 +5845,19 @@ reorderColumn : function(oColumn, index) {
                     aOrigKeyIndexes = descKeyIndexes;
                 }
             }
-            // Must be a key Column
+            // ...or else must be a key Column
             else {
                 aOrigKeyIndexes = [aOrigKeyIndexes];
             }
             
-            if(aOrigKeyIndexes !== null) {
+            if(aOrigKeyIndexes !== null) {                   
                 // Sort the indexes
                 aOrigKeyIndexes.sort(function(a, b) {return YAHOO.util.Sort.compare(a, b);});
-            
-                // Reorder TH
+                
+                // Destroy previous THEAD
+                this._destroyTheadEl();
+    
+                // Create new THEAD
                 var aColumnDefs = this._oColumnSet.getDefinitions();
                 var oColumnDef = aColumnDefs.splice(nOrigTreeIndex,1)[0];
                 aColumnDefs.splice(index, 0, oColumnDef);
@@ -5800,7 +5891,7 @@ reorderColumn : function(oColumn, index) {
                 
                 // Sort the new indexes and grab the first one for the new location
                 var newIndex = aNewKeyIndexes.sort(function(a, b) {return YAHOO.util.Sort.compare(a, b);})[0];
-                
+
                 // Reorder COL
                 this._reorderColgroupColEl(aOrigKeyIndexes, newIndex);
                 
@@ -5814,18 +5905,21 @@ reorderColumn : function(oColumn, index) {
                             if((this instanceof DT) && this._sId) {
                                 var i = oArg.nCurrentRow, j, tmpTds, nextSibling,
                                     len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length,
-                                    aIndexes = oArg.aIndexes;
+                                    aIndexes = oArg.aIndexes, thisTr;
                                 // For each row
                                 for(; i < len; ++i) {
                                     tmpTds = [];
+                                    thisTr = allRows[i];
+                                    
                                     // Remove each TD
                                     for(j=aIndexes.length-1; j>-1; j--) {
-                                        tmpTds.push(allRows[i].removeChild(allRows[i].childNodes[aIndexes[j]]));
+                                        tmpTds.push(thisTr.removeChild(thisTr.childNodes[aIndexes[j]]));
                                     }
-                                    nextSibling = allRows[i].childNodes[newIndex] || null;
+                                    
                                     // Insert each TD
+                                    nextSibling = thisTr.childNodes[newIndex] || null;
                                     for(j=tmpTds.length-1; j>-1; j--) {
-                                        allRows[i].insertBefore(tmpTds[j], nextSibling);
+                                        thisTr.insertBefore(tmpTds[j], nextSibling);
                                     }                                    
                                 }
                                 oArg.nCurrentRow = i;
@@ -5840,7 +5934,6 @@ reorderColumn : function(oColumn, index) {
                 }
         
                 this.fireEvent("columnReorderEvent",{column:oNewColumn});
-                //this.fireEvent("tableMutationEvent");
                 YAHOO.log("Column \"" + oNewColumn.key + "\" reordered", "info", this.toString());
                 return oNewColumn;
             }
@@ -9787,15 +9880,16 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      */
 
     /**
-     * Fired when the DataTable's rows are rendered to the DOM.
+     * Fired when the DataTable's DOM is rendered or modified.
      *
      * @event renderEvent
      */
 
     /**
-     * Fired when any of the DataTable's content is changed.
+     * Fired when the DataTable's post-render routine is complete, including
+     * Column width validations.
      *
-     * @event tableMutationEvent
+     * @event postRenderEvent
      */
 
     /**
@@ -10099,6 +10193,13 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @event columnSetWidthEvent
      * @param oArgs.column {YAHOO.widget.Column} The Column instance.
      * @param oArgs.width {Number} The width in pixels.
+     */
+
+    /**
+     * Fired when a column width is unset.
+     *
+     * @event columnUnsetWidthEvent
+     * @param oArgs.column {YAHOO.widget.Column} The Column instance.
      */
 
     /**
