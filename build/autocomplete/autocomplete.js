@@ -296,7 +296,9 @@ YAHOO.widget.AutoComplete.prototype.maxResultsDisplayed = 10;
 /**
  * Number of seconds to delay before submitting a query request.  If a query
  * request is received before a previous one has completed its delay, the
- * previous request is cancelled and the new request is set to the delay.
+ * previous request is cancelled and the new request is set to the delay. If 
+ * typeAhead is also enabled, this value must always be less than the typeAheadDelay
+ * in order to avoid certain race conditions. 
  *
  * @property queryDelay
  * @type Number
@@ -306,7 +308,8 @@ YAHOO.widget.AutoComplete.prototype.queryDelay = 0.2;
 
 /**
  * If typeAhead is true, number of seconds to delay before updating input with
- * typeAhead value. This value must always be greater than the queryDelay.
+ * typeAhead value. In order to prevent certain race conditions, this value must
+ * always be greater than the queryDelay.
  *
  * @property typeAheadDelay
  * @type Number
@@ -421,7 +424,9 @@ YAHOO.widget.AutoComplete.prototype.forceSelection = false;
 YAHOO.widget.AutoComplete.prototype.allowBrowserAutocomplete = true;
 
 /**
- * Enabling this feature prevents the toggling of the container to a collapsed state. 
+ * Enabling this feature prevents the toggling of the container to a collapsed state.
+ * Setting to true does not automatically trigger the opening of the container.
+ * Implementers are advised to pre-load the container with an explicit "sendQuery()" call.   
  *
  * @property alwaysShowContainer
  * @type Boolean
@@ -619,9 +624,10 @@ YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
 };
 
 /**
-* A function that converts an AutoComplete query into a value which is then
+* A function that converts an AutoComplete query into a request value which is then
 * passed to the DataSource's sendRequest method in order to retrieve data for 
-* the query. Implementers can customize this method for custom request syntaxes.
+* the query. By default, returns a String with the syntax: "query={query}"
+* Implementers can customize this method for custom request syntaxes.
 * 
 * @method generateRequest
 * @param sQuery {String} Query string
@@ -670,14 +676,14 @@ YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
  * @return {Object} oParsedResponse or null. 
  */
 YAHOO.widget.AutoComplete.prototype.getSubsetMatches = function(sQuery) {
-    var subQuery, oCachedResponse;
+    var subQuery, oCachedResponse, subRequest;
     // Loop through substrings of each cached element's query property...
     for(var i = sQuery.length; i >= this.minQueryLength ; i--) {
-        subQuery = this.generateRequest(sQuery.substr(0,i));
-        this.dataRequestEvent.fire(this, subQuery);
+        subRequest = this.generateRequest(sQuery.substr(0,i));
+        this.dataRequestEvent.fire(this, subQuery, subRequest);
         
         // If a substring of the query is found in the cache
-        oCachedResponse = this.dataSource.getCachedResponse(subQuery);
+        oCachedResponse = this.dataSource.getCachedResponse(subRequest);
         if(oCachedResponse) {
             return this.filterResults.apply(this.dataSource, [sQuery, oCachedResponse, oCachedResponse, {scope:this}]);
         }
@@ -911,11 +917,12 @@ YAHOO.widget.AutoComplete.prototype.textboxFocusEvent = null;
 YAHOO.widget.AutoComplete.prototype.textboxKeyEvent = null;
 
 /**
- * Fired when the AutoComplete instance makes a query to the DataSource.
+ * Fired when the AutoComplete instance makes a request to the DataSource.
  * 
  * @event dataRequestEvent
  * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
- * @param sQuery {String} The query string.
+ * @param sQuery {String} The query string. 
+ * @param oRequest {Object} The request.
  */
 YAHOO.widget.AutoComplete.prototype.dataRequestEvent = null;
 
@@ -1600,7 +1607,9 @@ YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
             /*(nKeyCode >= 36 && nKeyCode <= 38) || // home,left,up
             (nKeyCode == 40) || // down*/
             (nKeyCode >= 36 && nKeyCode <= 40) || // home,left,up, right, down
-            (nKeyCode >= 44 && nKeyCode <= 45)) { // print screen,insert
+            (nKeyCode >= 44 && nKeyCode <= 45) || // print screen,insert
+            (nKeyCode == 229) // Bug 2041973: Korean XP fires 2 keyup events, the key and 229
+        ) { 
         return true;
     }
     return false;
@@ -1688,10 +1697,10 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
         this.dataSource.doBeforeCallback = this.filterResults;
     }
     
-    sQuery = this.generateRequest(sQuery);
-    this.dataRequestEvent.fire(this, sQuery);
+    var sRequest = this.generateRequest(sQuery);
+    this.dataRequestEvent.fire(this, sQuery, sRequest);
 
-    this.dataSource.sendRequest(sQuery, {
+    this.dataSource.sendRequest(sRequest, {
             success : this.handleResponse,
             failure : this.handleResponse,
             scope   : this,
@@ -2155,8 +2164,7 @@ YAHOO.widget.AutoComplete.prototype._updateValue = function(elListItem) {
     }
     
     // Update input field
-    elTextbox.value = sNewValue
-    //elTextbox.focus();
+    elTextbox.value = sNewValue;
 
     // Scroll to bottom of textarea if necessary
     if(elTextbox.type == "textarea") {
@@ -2237,12 +2245,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
         if(nNewItemIndex == -1) {
            // Go back to query (remove type-ahead string)
             if(this.delimChar) {
-                if(!this._textMatchesOption()) {
-                    this._elTextbox.value = this._sPastSelections;
-                }
-                else {
-                    this._elTextbox.value = this._sPastSelections + this._sCurQuery;
-                }
+                this._elTextbox.value = this._sPastSelections + this._sCurQuery;
             }
             else {
                 this._elTextbox.value = this._sCurQuery;
