@@ -194,7 +194,6 @@ initAttributes : function(oConfigs) {
             this._elBdContainer.style.width = oParam;            
             this._syncScrollX();      
             this._syncScrollOverhang();
-            ///TODO: is this nec? force gecko redraw
         }
     });
 
@@ -332,6 +331,7 @@ _initTmpEls : function() {
  * @private
  */
 _destroyContainerEl : function(elContainer) {
+    Dom.removeClass(elContainer, DT.CLASS_SCROLLABLE);
     SDT.superclass._destroyContainerEl.call(this, elContainer);
     this._elHdContainer = null;
     this._elBdContainer = null;

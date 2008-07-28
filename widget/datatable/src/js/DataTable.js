@@ -1318,7 +1318,14 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("draggableColumns", {
         value: false,
         validator: lang.isBoolean,
-        writeOnce: true
+        method: function(oParam) {
+            if(oParam) {
+                this._initDraggableColumns();
+            }
+            else {
+                this._destroyDraggableColumns();
+            }
+        }
     });
 
     /**
@@ -2336,28 +2343,117 @@ _initThEl : function(elTh, oColumn) {
 },
 
 /**
+ * Disables DD from top-level Column TH elements.
+ *
+ * @method _initDraggableColumns
+ * @private
+ */
+_destroyDraggableColumns : function() {
+    var oColumn, elTh;
+    for(var i=0, l=this._oColumnSet.tree[0].length; i<l; i++) {
+        oColumn = this._oColumnSet.tree[0][i];
+        if(oColumn._dd) {
+            oColumn._dd = oColumn._dd.unreg();
+            Dom.removeClass(oColumn.getThEl(), DT.CLASS_DRAGGABLE);       
+        }
+    }
+},
+
+/**
+ * Initializes top-level Column TH elements into DD instances.
+ *
+ * @method _initDraggableColumns
+ * @private
+ */
+_initDraggableColumns : function() {
+    this._destroyDraggableColumns();
+    if(util.DD) {
+        var oColumn, elTh, elDragTarget;
+        for(var i=0, l=this._oColumnSet.tree[0].length; i<l; i++) {
+            oColumn = this._oColumnSet.tree[0][i];
+            elTh = oColumn.getThEl();
+            Dom.addClass(elTh, DT.CLASS_DRAGGABLE);
+            elDragTarget = DT._initColumnDragTargetEl();
+            oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTh, elDragTarget);
+        }
+    }
+    else {
+        YAHOO.log("Could not find DragDrop for draggable Columns", "warn", this.toString());
+    }
+},
+
+/**
+ * Disables resizeability on key Column TH elements.
+ *
+ * @method _destroyResizeableColumns
+ * @private
+ */
+_destroyResizeableColumns : function() {
+    var aKeys = this._oColumnSet.keys;
+    for(var i=0, l=aKeys.length; i<l; i++) {
+        if(aKeys[i]._ddResizer) {
+            aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
+            Dom.removeClass(aKeys[i].getThEl(), DT.CLASS_RESIZEABLE);
+        }
+    }
+},
+
+/**
+ * Initializes resizeability on key Column TH elements.
+ *
+ * @method _initResizeableColumns
+ * @private
+ */
+_initResizeableColumns : function() {
+    this._destroyResizeableColumns();
+    if(util.DD) {
+        var oColumn, elTh, elThLiner, elThResizerLiner, elThResizer, elResizerProxy, cancelClick;
+        for(var i=0, l=this._oColumnSet.keys.length; i<l; i++) {
+            oColumn = this._oColumnSet.keys[i];
+            if(oColumn.resizeable) {
+                elTh = oColumn.getThEl();
+                Dom.addClass(elTh, DT.CLASS_RESIZEABLE);
+                elThLiner = oColumn.getThLinerEl();
+                
+                // Bug 1915349: So resizer is as tall as TH when rowspan > 1
+                // Create a separate resizer liner with position:relative
+                elThResizerLiner = elTh.appendChild(document.createElement("div"));
+                elThResizerLiner.className = DT.CLASS_RESIZERLINER;
+                
+                // Move TH contents into the new resizer liner
+                elThResizerLiner.appendChild(elThLiner);
+                
+                // Create the resizer
+                elThResizer = elThResizerLiner.appendChild(document.createElement("div"));
+                elThResizer.id = elTh.id + "-resizer"; // Needed for ColumnResizer
+                elThResizer.className = DT.CLASS_RESIZER;
+                oColumn._elResizer = elThResizer;
+
+                // Create the resizer proxy, once globally
+                elResizerProxy = DT._initColumnResizerProxyEl();
+                oColumn._ddResizer = new YAHOO.util.ColumnResizer(
+                        this, oColumn, elTh, elThResizer, elResizerProxy);
+                cancelClick = function(e) {
+                    Ev.stopPropagation(e);
+                };
+                Ev.addListener(elThResizer,"click",cancelClick);
+            }
+        }
+    }
+    else {
+        YAHOO.log("Could not find DragDrop for resizeable Columns", "warn", this.toString());
+    }
+},
+
+/**
  * Destroys elements associated with Column functionality: ColumnDD and ColumnResizers.
  *
  * @method _destroyColumnHelpers
  * @private
  */
 _destroyColumnHelpers : function() {
-    var i=0;
-    // Destroy ColumnDDs
-    var aTree = this._oColumnSet.tree[0];
-    for(; i<aTree.length; i++) {
-        if(aTree[i]._dd) {
-            aTree[i]._dd = aTree[i]._dd.unreg();
-        }
-    }
-
-    // Destroy ColumnResizers
-    var aKeys = this._oColumnSet.keys;
-    for(i=0; i<aKeys.length; i++) {
-        if(aKeys[i]._ddResizer) {
-            aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
-        }
-    }
+    this._destroyDraggableColumns();
+    this._destroyResizeableColumns();
 },
 
 /**
@@ -2367,74 +2463,10 @@ _destroyColumnHelpers : function() {
  * @private
  */
 _initColumnHelpers : function() {
-///TODO: move draggableColumns functionality to Attribute method
-    this._destroyColumnHelpers();
-    
-    var aTree = this._oColumnSet.tree[0],
-        foundDD = (util.DD) ? true : false,
-        needDD = false,
-        oColumn, elTh,
-        i=0;
-    
-    ///TODO: converge the following loops
-    
-    // draggable
-    // HACK: Not able to use attribute since this code is run before
-    // attributes are initialized
-    if(this._oConfigs.draggableColumns) {
-        for(; i<this._oColumnSet.tree[0].length; i++) {
-            oColumn = this._oColumnSet.tree[0][i];
-            if(foundDD) {
-                elTh = oColumn.getThEl();
-                Dom.addClass(elTh, DT.CLASS_DRAGGABLE);
-                var elDragTarget = DT._initColumnDragTargetEl();
-                oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTh, elDragTarget);
-            }
-            else {
-                needDD = true;
-            }    
-        }
+    if(this.get("draggableColumns")) {
+        this._initDraggableColumns();
     }
-    // resizeable
-    for(i=0; i<this._oColumnSet.keys.length; i++) {
-        oColumn = this._oColumnSet.keys[i];
-        if(oColumn.resizeable) {
-            if(foundDD) {
-                elTh = oColumn.getThEl();
-                Dom.addClass(elTh, DT.CLASS_RESIZEABLE);
-                var elThLiner = oColumn.getThLinerEl();
-                
-                // Bug 1915349: So resizer is as tall as TH when rowspan > 1
-                // Create a separate resizer liner with position:relative
-                var elThResizerLiner = elTh.appendChild(document.createElement("div"));
-                elThResizerLiner.className = DT.CLASS_RESIZERLINER;
-                
-                // Move TH contents into the new resizer liner
-                elThResizerLiner.appendChild(elThLiner);
-                
-                // Create the resizer
-                var elThResizer = elThResizerLiner.appendChild(document.createElement("div"));
-                elThResizer.id = elTh.id + "-resizer"; // Needed for ColumnResizer
-                elThResizer.className = DT.CLASS_RESIZER;
-                oColumn._elResizer = elThResizer;
-
-                // Create the resizer proxy, once globally
-                var elResizerProxy = DT._initColumnResizerProxyEl();
-                oColumn._ddResizer = new YAHOO.util.ColumnResizer(
-                        this, oColumn, elTh, elThResizer, elResizerProxy);
-                var cancelClick = function(e) {
-                    Ev.stopPropagation(e);
-                };
-                Ev.addListener(elThResizer,"click",cancelClick);
-            }
-            else {
-                needDD = true;
-            }
-        }
-    }
-    if(needDD) {
-        YAHOO.log("Could not find DragDrop dependancy", "warn", this.toString());
-    }
+    this._initResizeableColumns();
 },
 
 /**
@@ -2640,8 +2672,8 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
         allClasses = [];
     }
     
-    // Hook for setting with via dynamic style
-    allClasses[allClasses.length] = this.getId() + "-" +oColumn.getId();
+    // Hook for setting width with via dynamic style uses key since ID is too disposable
+    allClasses[allClasses.length] = this.getId() + "-" +oColumn.getSanitizedKey();
 
     // Column key - minus any chars other than "A-Z", "a-z", "0-9", "_", "-", ".", or ":"
     allClasses[allClasses.length] = "yui-dt-col-" +oColumn.getSanitizedKey();
@@ -3101,6 +3133,9 @@ _onRenderChainEnd : function() {
     if(this._elTbody.rows.length === 0) {
         this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);        
     }
+    //TODO: fire a new event here:
+    
+    
     this.validateColumnWidths();
 
     var oSelf = this;
@@ -4666,12 +4701,10 @@ destroy : function() {
     this.unsubscribeAll();
 
     // Unhook DOM events
-    var elContainer = this._elContainer;
-    Ev.purgeElement(elContainer, true);
     Ev.removeListener(document, "click", this._onDocumentClick);
-
-    // Remove DOM elements
-    elContainer.innerHTML = "";
+    
+    // Clear out the container
+    this._destroyContainerEl(this._elContainer);
 
     // Null out objects
     for(var param in this) {
@@ -5255,8 +5288,8 @@ _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
     
     // We have a STYLE node to update
     if(s) {
-        // Unique classname for this Column instance
-        var sClassname = "." + this.getId() + "-" + oColumn.getId() + " ." + DT.CLASS_LINER;
+        // Use unique classname for this Column instance as a hook for resizing
+        var sClassname = "." + this.getId() + "-" + oColumn.getSanitizedKey() + " ." + DT.CLASS_LINER;
         
         // Hide for performance
         if(this._elTbody) {
@@ -5598,7 +5631,10 @@ removeColumn : function(oColumn) {
                 // Sort the indexes so we can remove from the right
                 aKeyIndexes.sort(function(a, b) {return YAHOO.util.Sort.compare(a, b);});
                 
-                // Remove TH
+                // Destroy previous THEAD
+                this._destroyTheadEl();
+    
+                // Create new THEAD
                 var aOrigColumnDefs = this._oColumnSet.getDefinitions();
                 oColumn = aOrigColumnDefs.splice(nColTreeIndex,1)[0];
                 this._initColumnSet(aOrigColumnDefs);
@@ -5673,7 +5709,10 @@ insertColumn : function(oColumn, index) {
         index = oColumnSet.tree[0].length;
     }
     
-    // Add TH
+    // Destroy previous THEAD
+    this._destroyTheadEl();
+    
+    // Create new THEAD
     var aNewColumnDefs = this._oColumnSet.getDefinitions();
     aNewColumnDefs.splice(index, 0, oColumn);
     this._initColumnSet(aNewColumnDefs);
@@ -5774,7 +5813,7 @@ reorderColumn : function(oColumn, index) {
                 allDescendants,
                 descKeyIndexes = [],
                 thisKey;
-            // Must be a parent Column
+            // Must be a parent Column...
             if(aOrigKeyIndexes === null) {
                 allDescendants = this._oColumnSet.getDescendants(oColumn);
                 for(i=0, l=allDescendants.length; i<l; i++) {
@@ -5788,16 +5827,19 @@ reorderColumn : function(oColumn, index) {
                     aOrigKeyIndexes = descKeyIndexes;
                 }
             }
-            // Must be a key Column
+            // ...or else must be a key Column
             else {
                 aOrigKeyIndexes = [aOrigKeyIndexes];
             }
             
-            if(aOrigKeyIndexes !== null) {
+            if(aOrigKeyIndexes !== null) {                   
                 // Sort the indexes
                 aOrigKeyIndexes.sort(function(a, b) {return YAHOO.util.Sort.compare(a, b);});
-            
-                // Reorder TH
+                
+                // Destroy previous THEAD
+                this._destroyTheadEl();
+    
+                // Create new THEAD
                 var aColumnDefs = this._oColumnSet.getDefinitions();
                 var oColumnDef = aColumnDefs.splice(nOrigTreeIndex,1)[0];
                 aColumnDefs.splice(index, 0, oColumnDef);
@@ -5831,7 +5873,7 @@ reorderColumn : function(oColumn, index) {
                 
                 // Sort the new indexes and grab the first one for the new location
                 var newIndex = aNewKeyIndexes.sort(function(a, b) {return YAHOO.util.Sort.compare(a, b);})[0];
-                
+
                 // Reorder COL
                 this._reorderColgroupColEl(aOrigKeyIndexes, newIndex);
                 
@@ -5845,18 +5887,21 @@ reorderColumn : function(oColumn, index) {
                             if((this instanceof DT) && this._sId) {
                                 var i = oArg.nCurrentRow, j, tmpTds, nextSibling,
                                     len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length,
-                                    aIndexes = oArg.aIndexes;
+                                    aIndexes = oArg.aIndexes, thisTr;
                                 // For each row
                                 for(; i < len; ++i) {
                                     tmpTds = [];
+                                    thisTr = allRows[i];
+                                    
                                     // Remove each TD
                                     for(j=aIndexes.length-1; j>-1; j--) {
-                                        tmpTds.push(allRows[i].removeChild(allRows[i].childNodes[aIndexes[j]]));
+                                        tmpTds.push(thisTr.removeChild(thisTr.childNodes[aIndexes[j]]));
                                     }
-                                    nextSibling = allRows[i].childNodes[newIndex] || null;
+                                    
                                     // Insert each TD
+                                    nextSibling = thisTr.childNodes[newIndex] || null;
                                     for(j=tmpTds.length-1; j>-1; j--) {
-                                        allRows[i].insertBefore(tmpTds[j], nextSibling);
+                                        thisTr.insertBefore(tmpTds[j], nextSibling);
                                     }                                    
                                 }
                                 oArg.nCurrentRow = i;

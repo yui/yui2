@@ -57,7 +57,8 @@ th.yui-dt-resizeable .yui-dt-resizerliner {
 
 /* hidden columns */
 th.yui-dt-hidden .yui-dt-liner, 
-td.yui-dt-hidden .yui-dt-liner {
+td.yui-dt-hidden .yui-dt-liner,
+th.yui-dt-hidden .yui-dt-resizer {
     /*TODO: document change from 2.5.2 to 2.6
     margin:0;
     padding:0;
