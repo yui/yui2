@@ -99,9 +99,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Once per instance
     this._initEvents();
 
-    // Initialize inline Cell editing
-    //this._oCellEditor = this._initCellEditor();
-    
     DT._nCount++;
     DT._nCurrentCount++;
     
@@ -1435,7 +1432,7 @@ initAttributes : function(oConfigs) {
     * sorting and pagination will be handled directly on the client side, without
     * causing any new requests for data from the DataSource.
     * @type Boolean
-    * @default true
+    * @default false
     */
     this.setAttributeConfig("dynamicData", {
         value: false,
@@ -1886,12 +1883,7 @@ _initColumnSet : function(aColumnDefs) {
             oColumn = this._oColumnSet.keys[i];
             DT._oDynStyles["."+this.getId()+"-col"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
             if(oColumn.editor) {
-                oColumn.editor.unsubscribe("showEvent", this._onEditorShowEvent);
-                oColumn.editor.unsubscribe("keydownEvent", this._onEditorKeydownEvent);
-                oColumn.editor.unsubscribe("revertEvent", this._onEditorRevertEvent);
-                oColumn.editor.unsubscribe("saveEvent", this._onEditorSaveEvent);
-                oColumn.editor.unsubscribe("cancelEvent", this._onEditorCancelEvent);
-                oColumn.editor.unsubscribe("blurEvent", this._onEditorBlurEvent);
+                oColumn.editor.unsubscribeAll();
             }
         }
         
@@ -1915,12 +1907,12 @@ _initColumnSet : function(aColumnDefs) {
     for(i=0, l=allKeys.length; i<l; i++) {
         oColumn = allKeys[i];
         if(oColumn.editor) {
-            oColumn.editor.subscribe("showEvent", this._onEditorShowEvent);
-            oColumn.editor.subscribe("keydownEvent", this._onEditorKeydownEvent);
-            oColumn.editor.subscribe("revertEvent", this._onEditorRevertEvent);
-            oColumn.editor.subscribe("saveEvent", this._onEditorSaveEvent);
-            oColumn.editor.subscribe("cancelEvent", this._onEditorCancelEvent);
-            oColumn.editor.subscribe("blurEvent", this._onEditorBlurEvent);
+            oColumn.editor.subscribe("showEvent", this._onEditorShowEvent, this, true);
+            oColumn.editor.subscribe("keydownEvent", this._onEditorKeydownEvent, this, true);
+            oColumn.editor.subscribe("revertEvent", this._onEditorRevertEvent, this, true);
+            oColumn.editor.subscribe("saveEvent", this._onEditorSaveEvent, this, true);
+            oColumn.editor.subscribe("cancelEvent", this._onEditorCancelEvent, this, true);
+            oColumn.editor.subscribe("blurEvent", this._onEditorBlurEvent, this, true);
         }
     }
 },
@@ -2576,16 +2568,22 @@ _initMsgTbodyEl : function(elTable) {
 _initEvents : function () {
     // Initialize Column sort
     this._initColumnSort();
-
+        
     // Add the document level click listener
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
 
+    // Paginator integration
     this.subscribe('paginatorChange',function () {
         this._handlePaginatorChange.apply(this,arguments);
     });
 
     this.subscribe('initEvent',function () {
         this.renderPaginator();
+    });
+
+    // Initialize Cell Editing blur handler
+    this.subscribe('editorBlurEvent',function () {
+        this.onEditorBlurEvent.apply(this,arguments);
     });
 },
 
@@ -9221,6 +9219,7 @@ destroyCellEditor : function() {
  *
  * @method _onEditorShowEvent
  * @param oArgs {Object}  Custom Event args.
+ * @private 
  */
 _onEditorShowEvent : function(oArgs) {
     this.fireEvent("editorShowEvent", oArgs);
@@ -9231,6 +9230,7 @@ _onEditorShowEvent : function(oArgs) {
  * @param oArgs {Object}  Custom Event args. 
  *
  * @method _onEditorKeydownEvent
+ * @private 
  */
 _onEditorKeydownEvent : function(oArgs) {
     this.fireEvent("editorKeydownEvent", oArgs);
@@ -9240,7 +9240,8 @@ _onEditorKeydownEvent : function(oArgs) {
  * Passes through revertEvent of the active CellEditor.
  *
  * @method _onEditorRevertEvent
- * @param oArgs {Object}  Custom Event args.  
+ * @param oArgs {Object}  Custom Event args. 
+ * @private  
  */
 _onEditorRevertEvent : function(oArgs) {
     this.fireEvent("editorRevertEvent", oArgs);
@@ -9251,6 +9252,7 @@ _onEditorRevertEvent : function(oArgs) {
  *
  * @method _onEditorSaveEvent
  * @param oArgs {Object}  Custom Event args.  
+ * @private 
  */
 _onEditorSaveEvent : function(oArgs) {
     this.fireEvent("editorSaveEvent", oArgs);
@@ -9260,7 +9262,8 @@ _onEditorSaveEvent : function(oArgs) {
  * Passes through cancelEvent of the active CellEditor.
  *
  * @method _onEditorCancelEvent
- * @param oArgs {Object}  Custom Event args.  
+ * @param oArgs {Object}  Custom Event args.
+ * @private   
  */
 _onEditorCancelEvent : function(oArgs) {
     this.fireEvent("editorCancelEvent", oArgs);
@@ -9270,12 +9273,30 @@ _onEditorCancelEvent : function(oArgs) {
  * Passes through blurEvent of the active CellEditor.
  *
  * @method _onEditorBlurEvent
- * @param oArgs {Object}  Custom Event args.  
+ * @param oArgs {Object}  Custom Event args. 
+ * @private  
  */
 _onEditorBlurEvent : function(oArgs) {
     this.fireEvent("editorBlurEvent", oArgs);
 },
 
+/**
+ * Public handler of the editorBlurEvent. By default, saves on blur if
+ * disableBtns is true, otherwise cancels on blur. 
+ *
+ * @method onEditorBlurEvent
+ * @param oArgs {Object}  Custom Event args.  
+ */
+onEditorBlurEvent : function(oArgs) {
+    if(oArgs.editor.disableBtns) {
+        // Save on blur
+        oArgs.editor.save();
+    }      
+    else {
+        // Cancel on blur
+        oArgs.editor.cancel();
+    }      
+},
 
 
 

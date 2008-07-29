@@ -315,6 +315,7 @@ render : function() {
             oSelf.cancel();
             ///oSelf.focusTbodyEl();
         }
+        // Pass through event
         oSelf.fireEvent("keydownEvent", {editor:this, event:e});
     }, this);
     
@@ -613,10 +614,12 @@ lang.extend(widget.CheckboxCellEditor, BCE, {
 //
 /////////////////////////////////////////////////////////////////////////////
 /**
- * Array of checkbox values.
+ * Array of checkbox values. Can either be a simple array (e.g., ["red","green","blue"])
+ * or a an array of objects (e.g., [{label:"red", value:"#FF0000"},
+ * {label:"green", value:"#00FF00"}, {label:"blue", value:"#0000FF"}]). 
  *
  * @property checkboxOptions
- * @type String[] 
+ * @type String[] | Object[]
  */
 checkboxOptions : null,
 
@@ -649,14 +652,13 @@ value : null,
  */
 renderForm : function() {
     if(lang.isArray(this.checkboxOptions)) {
-        var checkboxOptions = this.checkboxOptions;
-        var checkboxValue, checkboxId, elLabel, j, k, m,
-            l=checkboxOptions.length;
+        var checkboxOption, checkboxValue, checkboxId, elLabel, j, l;
         
         // Create the checkbox buttons in an IE-friendly way...
-        for(j=0; j<l; j++) {
-            checkboxValue = lang.isValue(checkboxOptions[j].label) ?
-                    checkboxOptions[j].label : checkboxOptions[j];
+        for(j=0,l=this.checkboxOptions.length; j<l; j++) {
+            checkboxOption = this.checkboxOptions[j];
+            checkboxValue = lang.isValue(checkboxOption.value) ?
+                    checkboxOption.value : checkboxOption;
 
             checkboxId = this.getId() + "-chk" + j;
             this.container.innerHTML += "<input type=\"checkbox\"" +
@@ -666,7 +668,8 @@ renderForm : function() {
             // Create the labels in an IE-friendly way
             elLabel = this.container.appendChild(document.createElement("label"));
             elLabel.htmlFor = checkboxId;
-            elLabel.innerHTML = checkboxValue;
+            elLabel.innerHTML = lang.isValue(checkboxOption.label) ?
+                    checkboxOption.label : checkboxOption;
         }
         
         // Store the reference to the checkbox elements
@@ -675,15 +678,6 @@ renderForm : function() {
             allCheckboxes[allCheckboxes.length] = this.container.childNodes[j*2];
         }
         this.checkboxes = allCheckboxes;
-
-        /*TODO
-        if(this.disableBtns) {
-            Ev.addListener(this.container, "blur", function(v){
-                // Save on "blur"
-                this.save();
-            }, this, true);        
-        }
-        */
     }
     else {
         YAHOO.log("Could not find checkboxOptions", "error", this.toString());
@@ -908,6 +902,17 @@ lang.extend(widget.DropdownCellEditor, BCE, {
 //
 /////////////////////////////////////////////////////////////////////////////
 /**
+ * Array of dropdown values. Can either be a simple array (e.g., 
+ * ["Alabama","Alaska","Arizona","Arkansas"]) or a an array of objects (e.g., 
+ * [{label:"Alabama", value:"AL"}, {label:"Alaska", value:"AK"},
+ * {label:"Arizona", value:"AZ}, {label:"Arkansas", value:"AR}]). 
+ *
+ * @property dropdownOptions
+ * @type String[] | Object[]
+ */
+dropdownOptions : null,
+
+/**
  * Reference to Dropdown element.
  *
  * @property dropdown
@@ -932,13 +937,14 @@ renderForm : function() {
     this.dropdown = elDropdown;
     
     if(lang.isArray(this.dropdownOptions)) {
+        var dropdownOption, elOption;
         for(var i=0, j=this.dropdownOptions.length; i<j; i++) {
-            var dropdownOption = this.dropdownOptions[i];
-            var elOption = document.createElement("option");
+            dropdownOption = this.dropdownOptions[i];
+            elOption = document.createElement("option");
             elOption.value = (lang.isValue(dropdownOption.value)) ?
                     dropdownOption.value : dropdownOption;
-            elOption.innerHTML = (lang.isValue(dropdownOption.text)) ?
-                    dropdownOption.text : dropdownOption;
+            elOption.innerHTML = (lang.isValue(dropdownOption.label)) ?
+                    dropdownOption.label : dropdownOption;
             elOption = elDropdown.appendChild(elOption);
         }
         
@@ -1030,10 +1036,12 @@ lang.extend(widget.RadioCellEditor, BCE, {
 radios : null,
 
 /**
- * Array of radio values.
+ * Array of radio values. Can either be a simple array (e.g., ["yes","no","maybe"])
+ * or a an array of objects (e.g., [{label:"yes", value:1}, {label:"no", value:-1},
+ * {label:"maybe", value:0}]). 
  *
  * @property radioOptions
- * @type String[]
+ * @type String[] | Object[]
  */
 radioOptions : null,
 
@@ -1050,12 +1058,12 @@ radioOptions : null,
  */
 renderForm : function() {
     if(lang.isArray(this.radioOptions)) {
-        var radioOptions = this.radioOptions;
-        var radioValue, radioId, elLabel;
+        var radioOption, radioValue, radioId, elLabel;
         // Create the radio buttons in an IE-friendly way
-        for(var i=0, l=radioOptions.length; i<l; i++) {
-            radioValue = lang.isValue(radioOptions[i].label) ?
-                    radioOptions[i].label : radioOptions[i];
+        for(var i=0, l=this.radioOptions.length; i<l; i++) {
+            radioOption = this.radioOptions[i];
+            radioValue = lang.isValue(radioOption.value) ?
+                    radioOption.value : radioOption;
             radioId = this.getId() + "-radio" + i;
             this.container.innerHTML += "<input type=\"radio\"" +
                     " name=\"" + this.getId() + "\"" +
@@ -1065,7 +1073,8 @@ renderForm : function() {
             // Create the labels in an IE-friendly way
             elLabel = this.container.appendChild(document.createElement("label"));
             elLabel.htmlFor = radioId;
-            elLabel.innerHTML = radioValue;
+            elLabel.innerHTML = (lang.isValue(radioOption.label)) ?
+                    radioOption.label : radioOption;
         }
         
         // Store the reference to the checkbox elements

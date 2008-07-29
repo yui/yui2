@@ -78,7 +78,7 @@
 }
 
 /* editing */
-.yui-dt-editable {
+tbody .yui-dt-editable {
     cursor:pointer;
 }
 .yui-dt-editor {

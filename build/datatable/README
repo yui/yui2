@@ -14,6 +14,8 @@ have been made:
    - editorUpdateEvent is no longer supported.
    - showCellEditorBtns() is no longer supported. The CellEditor method renderBtns() should be used instead.
    - resetCellEditor() renamed to destroyCellEditor().
+   - Values for checkboxOptions, dropdownOptions, and radioOptions must be either a
+   simple Array or an array of object literals with properties "value" and "label".
    
 * Pagination and sorting have been reworked to better support dynamically driven
 DataTables. As a result, the following important changes have been made:
