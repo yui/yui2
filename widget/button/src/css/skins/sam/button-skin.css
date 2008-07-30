@@ -16,6 +16,13 @@
     margin: 0 -1px;
     *position: relative;    /* Necessary to get negative margins working in IE */
     *left: -1px;
+    
+	/* 
+		Don't apply rounded corners for IE 6 (Quirks and Standards Mode) and IE 7 Quirks Mode 
+		since it causes more problems than its worth.
+	*/
+	_margin: 0;
+	_position: static;    
 
 }
 
