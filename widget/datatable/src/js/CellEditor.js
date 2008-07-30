@@ -652,10 +652,10 @@ value : null,
  */
 renderForm : function() {
     if(lang.isArray(this.checkboxOptions)) {
-        var checkboxOption, checkboxValue, checkboxId, elLabel, j, l;
+        var checkboxOption, checkboxValue, checkboxId, elLabel, j, len;
         
         // Create the checkbox buttons in an IE-friendly way...
-        for(j=0,l=this.checkboxOptions.length; j<l; j++) {
+        for(j=0,len=this.checkboxOptions.length; j<len; j++) {
             checkboxOption = this.checkboxOptions[j];
             checkboxValue = lang.isValue(checkboxOption.value) ?
                     checkboxOption.value : checkboxOption;
@@ -674,7 +674,7 @@ renderForm : function() {
         
         // Store the reference to the checkbox elements
         var allCheckboxes = [];
-        for(j=0; j<l; j++) {
+        for(j=0; j<len; j++) {
             allCheckboxes[allCheckboxes.length] = this.container.childNodes[j*2];
         }
         this.checkboxes = allCheckboxes;
@@ -696,7 +696,7 @@ resetForm : function() {
     // Match checks to value
     for(var i=0, j=this.checkboxes.length; i<j; i++) {
         this.checkboxes[i].checked = false;
-        for(var k=0, l=originalValues.length; k<l; k++) {
+        for(var k=0, len=originalValues.length; k<len; k++) {
             if(this.checkboxes[i].value === originalValues[k]) {
                 this.checkboxes[i].checked = true;
             }
@@ -1060,7 +1060,7 @@ renderForm : function() {
     if(lang.isArray(this.radioOptions)) {
         var radioOption, radioValue, radioId, elLabel;
         // Create the radio buttons in an IE-friendly way
-        for(var i=0, l=this.radioOptions.length; i<l; i++) {
+        for(var i=0, len=this.radioOptions.length; i<len; i++) {
             radioOption = this.radioOptions[i];
             radioValue = lang.isValue(radioOption.value) ?
                     radioOption.value : radioOption;
@@ -1080,7 +1080,7 @@ renderForm : function() {
         // Store the reference to the checkbox elements
         var allRadios = [],
             elRadio;
-        for(var j=0; j<l; j++) {
+        for(var j=0; j<len; j++) {
             elRadio = this.container.childNodes[j*2];
             allRadios[allRadios.length] = elRadio;
         }

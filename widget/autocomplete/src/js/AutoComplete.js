@@ -1795,7 +1795,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
                         // Add additional data to the result array
                         var fields = this.dataSource.responseSchema.fields;
                         if(YAHOO.lang.isArray(fields) && (fields.length > 1)) {
-                            for(var k=1, l=fields.length; k<l; k++) {
+                            for(var k=1, len=fields.length; k<len; k++) {
                                 aResult[aResult.length] = oResult[fields[k].key || fields[k]];
                             }
                         }

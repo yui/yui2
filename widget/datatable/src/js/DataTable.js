@@ -1874,12 +1874,12 @@ _initConfigs : function(oConfigs) {
  * @private
  */
 _initColumnSet : function(aColumnDefs) {
-    var oColumn, i, l;
+    var oColumn, i, len;
     
     if(this._oColumnSet) {
         // First clear _oDynStyles for existing ColumnSet and
         // uregister CellEditor Custom Events
-        for(i=0, l=this._oColumnSet.keys.length; i<l; i++) {
+        for(i=0, len=this._oColumnSet.keys.length; i<len; i++) {
             oColumn = this._oColumnSet.keys[i];
             DT._oDynStyles["."+this.getId()+"-col"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
             if(oColumn.editor) {
@@ -1904,7 +1904,7 @@ _initColumnSet : function(aColumnDefs) {
 
     // Register CellEditor Custom Events
     var allKeys = this._oColumnSet.keys;
-    for(i=0, l=allKeys.length; i<l; i++) {
+    for(i=0, len=allKeys.length; i<len; i++) {
         oColumn = allKeys[i];
         if(oColumn.editor) {
             oColumn.editor.subscribe("showEvent", this._onEditorShowEvent, this, true);
@@ -2342,7 +2342,7 @@ _initThEl : function(elTh, oColumn) {
  */
 _destroyDraggableColumns : function() {
     var oColumn, elTh;
-    for(var i=0, l=this._oColumnSet.tree[0].length; i<l; i++) {
+    for(var i=0, len=this._oColumnSet.tree[0].length; i<len; i++) {
         oColumn = this._oColumnSet.tree[0][i];
         if(oColumn._dd) {
             oColumn._dd = oColumn._dd.unreg();
@@ -2361,7 +2361,7 @@ _initDraggableColumns : function() {
     this._destroyDraggableColumns();
     if(util.DD) {
         var oColumn, elTh, elDragTarget;
-        for(var i=0, l=this._oColumnSet.tree[0].length; i<l; i++) {
+        for(var i=0, len=this._oColumnSet.tree[0].length; i<len; i++) {
             oColumn = this._oColumnSet.tree[0][i];
             elTh = oColumn.getThEl();
             Dom.addClass(elTh, DT.CLASS_DRAGGABLE);
@@ -2382,7 +2382,7 @@ _initDraggableColumns : function() {
  */
 _destroyResizeableColumns : function() {
     var aKeys = this._oColumnSet.keys;
-    for(var i=0, l=aKeys.length; i<l; i++) {
+    for(var i=0, len=aKeys.length; i<len; i++) {
         if(aKeys[i]._ddResizer) {
             aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
             Dom.removeClass(aKeys[i].getThEl(), DT.CLASS_RESIZEABLE);
@@ -2400,7 +2400,7 @@ _initResizeableColumns : function() {
     this._destroyResizeableColumns();
     if(util.DD) {
         var oColumn, elTh, elThLiner, elThResizerLiner, elThResizer, elResizerProxy, cancelClick;
-        for(var i=0, l=this._oColumnSet.keys.length; i<l; i++) {
+        for(var i=0, len=this._oColumnSet.keys.length; i<len; i++) {
             oColumn = this._oColumnSet.keys[i];
             if(oColumn.resizeable) {
                 elTh = oColumn.getThEl();
@@ -4051,8 +4051,8 @@ getTrEl : function(row) {
             }
     }
     // By page row index
-    else if(lang.isNumber(row) && (row > -1) && (row < allRows.length)) {
-        return allRows[row];
+    else if(lang.isNumber(row)) {
+        return ((row > -1) && (row < allRows.length)) ? allRows[row] : null;
     }
     // By ID string or element reference
     else {
@@ -4715,7 +4715,7 @@ destroy : function() {
     this._destroyColumnHelpers();
     
     // Destroy all CellEditors
-    for(var i=0, l=this._oColumnSet.flat.length; i<l; i++) {
+    for(var i=0, len=this._oColumnSet.flat.length; i<len; i++) {
         if(this._oColumnSet.flat[i]._oCellEditor) {
             this._oColumnSet.flat[i]._oCellEditor.destroy();
             this._oColumnSet.flat[i]._oCellEditor = null;
@@ -5024,7 +5024,7 @@ getColumn : function(column) {
             if(elCell) {
                 // Find by TH el ID
                 var allColumns = this._oColumnSet.flat;
-                for(var i=0, l=allColumns.length; i<l; i++) {
+                for(var i=0, len=allColumns.length; i<len; i++) {
                     if(allColumns[i].getThEl().id === elCell.id) {
                         oColumn = allColumns[i];
                     } 
@@ -5464,7 +5464,7 @@ validateColumnWidths : function(oColumn) {
     }
     // Validate all Columns
     else {
-        for(var i=0, l=allKeys.length; i<l; i++) {
+        for(var i=0, len=allKeys.length; i<len; i++) {
             oColumn = allKeys[i];
             if(!oColumn.hidden && !oColumn.width) {
                 elThLiner = oColumn.getThLinerEl();
@@ -5631,13 +5631,13 @@ removeColumn : function(oColumn) {
         var nColTreeIndex = oColumn.getTreeIndex();
         if(nColTreeIndex !== null) {
             // Which key index(es)
-            var i, l,
+            var i, len,
                 aKeyIndexes = oColumn.getKeyIndex();
             // Must be a parent Column
             if(aKeyIndexes === null) {
                 var descKeyIndexes = [];
                 var allDescendants = this._oColumnSet.getDescendants(oColumn);
-                for(i=0, l=allDescendants.length; i<l; i++) {
+                for(i=0, len=allDescendants.length; i<len; i++) {
                     // Is this descendant a key Column?
                     var thisKey = allDescendants[i].getKeyIndex();
                     if(thisKey !== null) {
@@ -5749,10 +5749,10 @@ insertColumn : function(oColumn, index) {
     var oNewColumn = oColumnSet.tree[0][index];
     
     // Get key index(es) for new Column
-    var i, l,
+    var i, len,
         descKeyIndexes = [];
     var allDescendants = oColumnSet.getDescendants(oNewColumn);
-    for(i=0, l=allDescendants.length; i<l; i++) {
+    for(i=0, len=allDescendants.length; i<len; i++) {
         // Is this descendant a key Column?
         var thisKey = allDescendants[i].getKeyIndex();
         if(thisKey !== null) {
@@ -5778,7 +5778,7 @@ insertColumn : function(oColumn, index) {
             // Get templates for each new TD
             var aTdTemplates = [],
                 elTdTemplate;
-            for(i=0, l=descKeyIndexes.length; i<l; i++) {
+            for(i=0, len=descKeyIndexes.length; i<len; i++) {
                 var thisKeyIndex = descKeyIndexes[i];
                 elTdTemplate = this._getTrTemplateEl().childNodes[i].cloneNode(true);
                 elTdTemplate = this._formatTdEl(this._oColumnSet.keys[thisKeyIndex], elTdTemplate, thisKeyIndex, (thisKeyIndex===this._oColumnSet.keys.length-1));
@@ -5834,7 +5834,7 @@ reorderColumn : function(oColumn, index) {
         var nOrigTreeIndex = oColumn.getTreeIndex();
         if((nOrigTreeIndex !== null) && (nOrigTreeIndex !== index)) {
             // Which key index(es)
-            var i, l,
+            var i, len,
                 aOrigKeyIndexes = oColumn.getKeyIndex(),
                 allDescendants,
                 descKeyIndexes = [],
@@ -5842,7 +5842,7 @@ reorderColumn : function(oColumn, index) {
             // Must be a parent Column...
             if(aOrigKeyIndexes === null) {
                 allDescendants = this._oColumnSet.getDescendants(oColumn);
-                for(i=0, l=allDescendants.length; i<l; i++) {
+                for(i=0, len=allDescendants.length; i<len; i++) {
                     // Is this descendant a key Column?
                     thisKey = allDescendants[i].getKeyIndex();
                     if(thisKey !== null) {
@@ -5881,7 +5881,7 @@ reorderColumn : function(oColumn, index) {
                 if(aNewKeyIndexes === null) {
                     descKeyIndexes = [];
                     allDescendants = this._oColumnSet.getDescendants(oNewColumn);
-                    for(i=0, l=allDescendants.length; i<l; i++) {
+                    for(i=0, len=allDescendants.length; i<len; i++) {
                         // Is this descendant a key Column?
                         thisKey = allDescendants[i].getKeyIndex();
                         if(thisKey !== null) {
