@@ -1088,11 +1088,21 @@
 				this.removeListener("appendTo", onAppendTo);
 			
 			}
+			
+			
+			function setMenuContainer() {
+
+				oMenu.cfg.setProperty("container", oButtonElement.parentNode);
+				
+				this.removeListener("appendTo", setMenuContainer);
+			
+			}
 
 
 			function initMenu() {
 		
-				var aMenuAlignment;
+				var aMenuAlignment,
+					oContainer;
 		
 				if (oMenu) {
 
@@ -1115,7 +1125,20 @@
 					if (Menu && oMenu instanceof Menu) {
 
 						if (bLazyLoad) {
-							oMenu.cfg.setProperty("container", this.get("container"));
+
+							oContainer = this.get("container");
+
+							if (oContainer) {
+
+								oMenu.cfg.setProperty("container", oContainer);
+
+							}
+							else {
+
+								this.on("appendTo", setMenuContainer);
+
+							}
+
 						}
 
 						oMenu.cfg.setProperty("minscrollheight", this.get("menuminscrollheight"));
