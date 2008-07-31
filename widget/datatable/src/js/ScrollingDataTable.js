@@ -853,6 +853,19 @@ getBdTableEl : function() {
 },
 
 /**
+ * Disables ScrollingDataTable UI.
+ *
+ * @method disable
+ */
+disable : function() {
+    var elMask = this._elMask;
+    elMask.style.width = this._elBdContainer.offsetWidth + "px";
+    elMask.style.height = this._elHdContainer.offsetHeight + this._elBdContainer.offsetHeight + "px";
+    elMask.style.display = "";
+    this.fireEvent("disableEvent");
+},
+
+/**
  * Removes given Column. NOTE: You cannot remove nested Columns. You can only remove
  * non-nested Columns, and top-level parent Columns (which will remove all
  * children Columns).

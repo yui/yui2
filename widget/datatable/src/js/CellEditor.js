@@ -125,10 +125,13 @@ _initConfigs : function(oConfigs) {
 _initEvents : function() {
     this.createEvent("showEvent");
     this.createEvent("keydownEvent");
+    this.createEvent("invalidDataEvent");
     this.createEvent("revertEvent");
     this.createEvent("saveEvent");
     this.createEvent("cancelEvent");
     this.createEvent("blurEvent");
+    this.createEvent("blockEvent");
+    this.createEvent("unblockEvent");
 },
 
 
@@ -148,6 +151,18 @@ _initEvents : function() {
 // Public properties
 //
 /////////////////////////////////////////////////////////////////////////////
+/**
+ * Implementer defined function that can submit the input value to a server. This
+ * function must accept the arguments fnCallback and oNewValue. When the submission
+ * is complete, the function must also call fnCallback(bSuccess, oNewValue) to 
+ * finish the save routine in the CellEditor. This function can also be used to 
+ * perform extra validation or input value manipulation. 
+ *
+ * @property asyncSubmitter
+ * @type HTMLFunction
+ */
+asyncSubmitter : null,
+
 /**
  * DataTable instance.
  *
@@ -235,7 +250,25 @@ validator : null,
 isActive : false,
 
 /**
- * True is Ok/Cancel buttons should not be displayed in the CellEditor.
+ * Text to display on Save button.
+ *
+ * @property LABEL_SAVE
+ * @type String
+ * @default "Save"
+ */
+LABEL_SAVE : "Save",
+
+/**
+ * Text to display on Cancel button.
+ *
+ * @property LABEL_CANCEL
+ * @type String
+ * @default "Cancel"
+ */
+LABEL_CANCEL : "Cancel",
+
+/**
+ * True if Save/Cancel buttons should not be displayed in the CellEditor.
  *
  * @property disableBtns
  * @type Boolean
@@ -243,7 +276,23 @@ isActive : false,
  */
 disableBtns : false,
 
+/**
+ * Reference to Save button, if available.
+ *
+ * @property btnSave
+ * @type HTMLElement
+ * @default null
+ */
+btnSave : null,
 
+/**
+ * Reference to Cancel button, if available.
+ *
+ * @property btnCancel
+ * @type HTMLElement
+ * @default null
+ */
+btnCancel : null,
 
 
 
@@ -340,17 +389,19 @@ renderBtns : function() {
     // Save button
     var elSaveBtn = elBtnsDiv.appendChild(document.createElement("button"));
     elSaveBtn.className = DT.CLASS_DEFAULT;
-    elSaveBtn.innerHTML = "OK"; // TODO: Configurable
+    elSaveBtn.innerHTML = this.LABEL_SAVE;
     Ev.addListener(elSaveBtn, "click", function(oArgs) {
         this.save();
     }, this, true);
+    this.btnSave = elSaveBtn;
 
     // Cancel button
     var elCancelBtn = elBtnsDiv.appendChild(document.createElement("button"));
-    elCancelBtn.innerHTML = "Cancel"; //TODO: Configurable
+    elCancelBtn.innerHTML = this.LABEL_CANCEL;
     Ev.addListener(elCancelBtn, "click", function(oArgs) {
         this.cancel();
     }, this, true);
+    this.btnCancel = elCancelBtn;
 },
 
 /**
@@ -430,6 +481,26 @@ show : function() {
 },
 
 /**
+ * Fires blockEvent
+ *
+ * @method block
+ */
+block : function() {
+    this.fireEvent("blockEvent", {editor:this});
+    YAHOO.log("CellEditor blocked", "info", this.toString()); 
+},
+
+/**
+ * Fires unblockEvent
+ *
+ * @method unblock
+ */
+unblock : function() {
+    this.fireEvent("unblockEvent", {editor:this});
+    YAHOO.log("CellEditor unblocked", "info", this.toString()); 
+},
+
+/**
  * Saves value of CellEditor and hides UI.
  *
  * @method save
@@ -444,25 +515,48 @@ save : function() {
         validValue = this.validator.call(this.dataTable, inputValue, this.value, this);
         if(validValue === null ) {
             this.resetForm();
-            this.fireEvent("revertEvent",
+            this.fireEvent("invalidDataEvent",
                     {editor:this, oldData:this.value, newData:inputValue});
             YAHOO.log("Could not save Cell Editor input due to invalid data " +
                     lang.dump(inputValue), "warn", this.toString());
             return;
         }
     }
+        
+    var oSelf = this;
+    var finishSave = function(bSuccess, oNewValue) {
+        var oOrigValue = YAHOO.widget.DataTable._cloneObject(oSelf.value);
+        if(bSuccess) {
+            // Update new value
+            oSelf.value = oNewValue;
+            oSelf.dataTable.updateCell(oSelf.record, oSelf.column, oNewValue);
+            
+            // Hide CellEditor
+            oSelf.container.style.display = "none";
+            oSelf.isActive = false;
+            oSelf.dataTable._oCellEditor =  null;
+            
+            oSelf.fireEvent("saveEvent",
+                    {editor:oSelf, oldData:oOrigValue, newData:oSelf.value});
+            YAHOO.log("Cell Editor input saved", "info", this.toString());
+        }
+        else {
+            oSelf.resetForm();
+            oSelf.fireEvent("revertEvent",
+                    {editor:oSelf, oldData:oOrigValue, newData:oNewValue});
+            YAHOO.log("Could not save Cell Editor input " +
+                    lang.dump(oNewValue), "warn", oSelf.toString());
+        }
+        oSelf.unblock();
+    };
     
-    // Update new value
-    this.dataTable.updateCell(this.record, this.column, validValue);
-    
-    // Hide CellEditor
-    this.container.style.display = "none";
-    this.isActive = false;
-    this.dataTable._oCellEditor =  null;
-    
-    this.fireEvent("saveEvent",
-            {editor:this, oldData:this.value, newData:validValue});
-    YAHOO.log("Cell Editor input saved", "info", this.toString());
+    this.block();
+    if(lang.isFunction(this.asyncSubmitter)) {
+        this.asyncSubmitter.call(this, finishSave, validValue);
+    } 
+    else {   
+        finishSave(true, validValue);
+    }
 },
 
 /**
@@ -479,7 +573,7 @@ cancel : function() {
         YAHOO.log("CellEditor canceled", "info", this.toString());
     }
     else {
-        YAHOO.log("CellEditor not active to cancel", "warn", this.toString());
+        YAHOO.log("Unable to cancel CellEditor", "warn", this.toString());
     }
 },
 
@@ -544,7 +638,15 @@ lang.augmentProto(BCE, util.EventProvider);
  */
 
 /**
- * Fired when a CellEditor input is reverted.
+ * Fired when a CellEditor input is reverted due to invalid data.
+ *
+ * @event invalidDataEvent
+ * @param oArgs.newData {Object} New data value from form input field.
+ * @param oArgs.oldData {Object} Old data value.
+ */
+
+/**
+ * Fired when a CellEditor input is reverted due to asyncSubmitter failure.
  *
  * @event revertEvent
  * @param oArgs.newData {Object} New data value from form input field.
@@ -594,6 +696,7 @@ lang.augmentProto(BCE, util.EventProvider);
  *
  * @namespace YAHOO.widget
  * @class CheckboxCellEditor
+ * @extends YAHOO.widget.BaseCellEditor
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
  * @param elCell {HTMLElement} TD element. 
@@ -750,6 +853,7 @@ lang.augmentObject(widget.CheckboxCellEditor, BCE);
  *
  * @namespace YAHOO.widget
  * @class DateCellEditor
+ * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
  * @param elCell {HTMLElement} TD element. 
@@ -884,6 +988,7 @@ lang.augmentObject(widget.DateCellEditor, BCE);
  *
  * @namespace YAHOO.widget
  * @class DropdownCellEditor
+ * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
  * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
@@ -1008,6 +1113,7 @@ lang.augmentObject(widget.DropdownCellEditor, BCE);
  *
  * @namespace YAHOO.widget
  * @class RadioCellEditor
+ * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
  * @param elCell {HTMLElement} TD element. 
@@ -1106,7 +1212,6 @@ renderForm : function() {
     else {
         YAHOO.log("Could not find radioOptions", "error", this.toString());
     }
-
 },
 
 /**
@@ -1171,6 +1276,7 @@ lang.augmentObject(widget.RadioCellEditor, BCE);
  *
  * @namespace YAHOO.widget
  * @class TextareaCellEditor
+ * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
  * @param elCell {HTMLElement} TD element. 
@@ -1285,6 +1391,7 @@ lang.augmentObject(widget.TextareaCellEditor, BCE);
  *
  * @namespace YAHOO.widget
  * @class TextboxCellEditor
+ * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
  * @param elCell {HTMLElement} TD element. 
@@ -1428,10 +1535,11 @@ DT.Editors = {
 /****************************************************************************/
     
 /**
- * Factory class for creating a BaseCellEditor subclass instance.
+ * Factory class for instantiating a BaseCellEditor subclass.
  *
  * @namespace YAHOO.widget
  * @class CellEditor
+ * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
  * @param sType {String} Editor type.
