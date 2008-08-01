@@ -1,5 +1,11 @@
 /* foundational CSS */
 
+/* mask */
+.yui-skin-sam .yui-dt-mask {
+    position:absolute;
+    z-index:9500;
+}
+
 /* scrollable */
 .yui-dt-tmp {
     position:absolute;

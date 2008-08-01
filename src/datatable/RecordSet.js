@@ -323,13 +323,13 @@ RS.prototype = {
     addRecords : function(aData, index) {
         if(lang.isArray(aData)) {
             var newRecords = [],
-                idx,i,l;
+                idx,i,len;
 
             index = lang.isNumber(index) ? index : this._records.length;
             idx = index;
 
             // Can't go backwards bc we need to preserve order
-            for(i=0,l=aData.length; i<l; ++i) {
+            for(i=0,len=aData.length; i<len; ++i) {
                 if(lang.isObject(aData[i])) {
                     var record = this._addRecord(aData[i], idx++);
                     newRecords.push(record);

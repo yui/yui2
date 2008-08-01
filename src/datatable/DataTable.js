@@ -184,6 +184,17 @@ lang.augmentObject(DT, {
     CLASS_MESSAGE : "yui-dt-message",
 
     /**
+     * Class name assigned to mask element when DataTable is disabled.
+     *
+     * @property DataTable.CLASS_MASK
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt-mask"
+     */
+    CLASS_MASK : "yui-dt-mask",
+
+    /**
      * Class name assigned to data elements.
      *
      * @property DataTable.CLASS_DATA
@@ -1338,7 +1349,7 @@ initAttributes : function(oConfigs) {
          validator: lang.isNumber 	 
      }); 	 
 
-    /*
+    /**
     * @attribute generateRequest
     * @description A function that converts an object literal of desired DataTable
     * states into a request value which is then passed to the DataSource's
@@ -1349,10 +1360,10 @@ initAttributes : function(oConfigs) {
     * <dl>
     *   <dt>pagination<dt>
     *   <dd>        
-    *         <dt></dt>
-    *         <dd></dd>
-    *         <dt></dt>
-    *         <dd></dd>
+    *         <dt>offsetRecord</dt>
+    *         <dd>{Number} Index of the first Record of the desired page</dd>
+    *         <dt>rowsPerPage</dt>
+    *         <dd>{Number} Number of rows per page</dd>
     *   </dd>
     *   <dt>sortedBy</dt>
     *   <dd>                
@@ -1554,6 +1565,15 @@ _oChainRender : null,
  * @private
  */
 _elContainer : null,
+
+/**
+ * DOM reference to the mask element for the DataTable instance which disables it.
+ *
+ * @property _elMask
+ * @type HTMLElement
+ * @private
+ */
+_elMask : null,
 
 /**
  * DOM reference to the TABLE element for the DataTable instance.
@@ -1874,12 +1894,12 @@ _initConfigs : function(oConfigs) {
  * @private
  */
 _initColumnSet : function(aColumnDefs) {
-    var oColumn, i, l;
+    var oColumn, i, len;
     
     if(this._oColumnSet) {
         // First clear _oDynStyles for existing ColumnSet and
         // uregister CellEditor Custom Events
-        for(i=0, l=this._oColumnSet.keys.length; i<l; i++) {
+        for(i=0, len=this._oColumnSet.keys.length; i<len; i++) {
             oColumn = this._oColumnSet.keys[i];
             DT._oDynStyles["."+this.getId()+"-col"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
             if(oColumn.editor) {
@@ -1904,7 +1924,7 @@ _initColumnSet : function(aColumnDefs) {
 
     // Register CellEditor Custom Events
     var allKeys = this._oColumnSet.keys;
-    for(i=0, l=allKeys.length; i<l; i++) {
+    for(i=0, len=allKeys.length; i<len; i++) {
         oColumn = allKeys[i];
         if(oColumn.editor) {
             oColumn.editor.subscribe("showEvent", this._onEditorShowEvent, this, true);
@@ -1913,6 +1933,8 @@ _initColumnSet : function(aColumnDefs) {
             oColumn.editor.subscribe("saveEvent", this._onEditorSaveEvent, this, true);
             oColumn.editor.subscribe("cancelEvent", this._onEditorCancelEvent, this, true);
             oColumn.editor.subscribe("blurEvent", this._onEditorBlurEvent, this, true);
+            oColumn.editor.subscribe("blockEvent", this._onEditorBlockEvent, this, true);
+            oColumn.editor.subscribe("unblockEvent", this._onEditorUnblockEvent, this, true);
         }
     }
 },
@@ -2027,7 +2049,7 @@ _destroyContainerEl : function(elContainer) {
 },
 
 /**
- * Initializes the DataTable outer container element.
+ * Initializes the DataTable outer container element, including a mask.
  *
  * @method _initContainerEl
  * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
@@ -2045,6 +2067,11 @@ _initContainerEl : function(elContainer) {
         Ev.addListener(elContainer, "focus", this._onTableFocus, this);
         Ev.addListener(elContainer, "dblclick", this._onTableDblclick, this);
         this._elContainer = elContainer;
+        
+        var elMask = document.createElement("div");
+        elMask.className = DT.CLASS_MASK;
+        elMask.style.display = "none";
+        this._elMask = elContainer.appendChild(elMask);
     }
 },
 
@@ -2342,7 +2369,7 @@ _initThEl : function(elTh, oColumn) {
  */
 _destroyDraggableColumns : function() {
     var oColumn, elTh;
-    for(var i=0, l=this._oColumnSet.tree[0].length; i<l; i++) {
+    for(var i=0, len=this._oColumnSet.tree[0].length; i<len; i++) {
         oColumn = this._oColumnSet.tree[0][i];
         if(oColumn._dd) {
             oColumn._dd = oColumn._dd.unreg();
@@ -2361,7 +2388,7 @@ _initDraggableColumns : function() {
     this._destroyDraggableColumns();
     if(util.DD) {
         var oColumn, elTh, elDragTarget;
-        for(var i=0, l=this._oColumnSet.tree[0].length; i<l; i++) {
+        for(var i=0, len=this._oColumnSet.tree[0].length; i<len; i++) {
             oColumn = this._oColumnSet.tree[0][i];
             elTh = oColumn.getThEl();
             Dom.addClass(elTh, DT.CLASS_DRAGGABLE);
@@ -2382,7 +2409,7 @@ _initDraggableColumns : function() {
  */
 _destroyResizeableColumns : function() {
     var aKeys = this._oColumnSet.keys;
-    for(var i=0, l=aKeys.length; i<l; i++) {
+    for(var i=0, len=aKeys.length; i<len; i++) {
         if(aKeys[i]._ddResizer) {
             aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
             Dom.removeClass(aKeys[i].getThEl(), DT.CLASS_RESIZEABLE);
@@ -2400,7 +2427,7 @@ _initResizeableColumns : function() {
     this._destroyResizeableColumns();
     if(util.DD) {
         var oColumn, elTh, elThLiner, elThResizerLiner, elThResizer, elResizerProxy, cancelClick;
-        for(var i=0, l=this._oColumnSet.keys.length; i<l; i++) {
+        for(var i=0, len=this._oColumnSet.keys.length; i<len; i++) {
             oColumn = this._oColumnSet.keys[i];
             if(oColumn.resizeable) {
                 elTh = oColumn.getThEl();
@@ -2573,18 +2600,16 @@ _initEvents : function () {
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
 
     // Paginator integration
-    this.subscribe('paginatorChange',function () {
+    this.subscribe("paginatorChange",function () {
         this._handlePaginatorChange.apply(this,arguments);
     });
 
-    this.subscribe('initEvent',function () {
+    this.subscribe("initEvent",function () {
         this.renderPaginator();
     });
 
-    // Initialize Cell Editing blur handler
-    this.subscribe('editorBlurEvent',function () {
-        this.onEditorBlurEvent.apply(this,arguments);
-    });
+    // Initialize CellEditor integration
+    this._initCellEditing();
 },
 
 /** 	 
@@ -2606,8 +2631,25 @@ _initColumnSort : function() {
             this._configs.sortedBy.value.dir = DT.CLASS_ASC;
         }
     }
-}, 	 
- 
+},
+
+/** 	 
+  * Initializes CellEditor integration. 	 
+  * 	 
+  * @method _initCellEditing 	 
+  * @private 	 
+  */ 	 
+_initCellEditing : function() {
+    this.subscribe("editorBlurEvent",function () {
+        this.onEditorBlurEvent.apply(this,arguments);
+    });
+    this.subscribe("editorBlockEvent",function () {
+        this.onEditorBlockEvent.apply(this,arguments);
+    });
+    this.subscribe("editorUnblockEvent",function () {
+        this.onEditorUnblockEvent.apply(this,arguments);
+    });
+},
 
 
 
@@ -3887,14 +3929,24 @@ getRecordSet : function() {
  * state with the following properties:
  * <dl>
  * <dt>pagination</dt>
- * <dd></dd>
+ * <dd>Instance of YAHOO.widget.Paginator</dd>
  *
  * <dt>sortedBy</dt>
- * <dd></dd>
- *
- * <dt>selections</dt>
- * <dd></dd>
+ * <dd>
+ *     <dl>
+ *         <dt>sortedBy.key</dt>
+ *         <dd>{String} Key of sorted Column</dd>
+ *         <dt>sortedBy.dir</dt>
+ *         <dd>{String} Initial sort direction, either YAHOO.widget.DataTable.CLASS_ASC or YAHOO.widget.DataTable.CLASS_DESC</dd>
+ *     </dl>
  * </dd>
+ *
+ * <dt>selectedRows</dt>
+ * <dd>Array of selected rows by Record ID.</dd>
+ *
+ * <dt>selectedCells</dt>
+ * <dd>Selected cells as an array of object literals:
+ *     {recordId:sRecordId, columnKey:sColumnKey}</dd>
  * </dl>
  *  
  * @method getState
@@ -4041,8 +4093,8 @@ getTrEl : function(row) {
             }
     }
     // By page row index
-    else if(lang.isNumber(row) && (row > -1) && (row < allRows.length)) {
-        return allRows[row];
+    else if(lang.isNumber(row)) {
+        return ((row > -1) && (row < allRows.length)) ? allRows[row] : null;
     }
     // By ID string or element reference
     else {
@@ -4686,6 +4738,30 @@ render : function() {
 },
 
 /**
+ * Disables DataTable UI.
+ *
+ * @method disable
+ */
+disable : function() {
+    var elTable = this._elTable;
+    var elMask = this._elMask;
+    elMask.style.width = elTable.offsetWidth + "px";
+    elMask.style.height = elTable.offsetHeight + "px";
+    elMask.style.display = "";
+    this.fireEvent("disableEvent");
+},
+
+/**
+ * Undisables DataTable UI.
+ *
+ * @method undisable
+ */
+undisable : function() {
+    this._elMask.style.display = "none";
+    this.fireEvent("undisableEvent");
+},
+
+/**
  * Nulls out the entire DataTable instance and related objects, removes attached
  * event listeners, and clears out DOM elements inside the container. After
  * calling this method, the instance reference should be expliclitly nulled by
@@ -4705,7 +4781,7 @@ destroy : function() {
     this._destroyColumnHelpers();
     
     // Destroy all CellEditors
-    for(var i=0, l=this._oColumnSet.flat.length; i<l; i++) {
+    for(var i=0, len=this._oColumnSet.flat.length; i<len; i++) {
         if(this._oColumnSet.flat[i]._oCellEditor) {
             this._oColumnSet.flat[i]._oCellEditor.destroy();
             this._oColumnSet.flat[i]._oCellEditor = null;
@@ -5014,7 +5090,7 @@ getColumn : function(column) {
             if(elCell) {
                 // Find by TH el ID
                 var allColumns = this._oColumnSet.flat;
-                for(var i=0, l=allColumns.length; i<l; i++) {
+                for(var i=0, len=allColumns.length; i<len; i++) {
                     if(allColumns[i].getThEl().id === elCell.id) {
                         oColumn = allColumns[i];
                     } 
@@ -5454,7 +5530,7 @@ validateColumnWidths : function(oColumn) {
     }
     // Validate all Columns
     else {
-        for(var i=0, l=allKeys.length; i<l; i++) {
+        for(var i=0, len=allKeys.length; i<len; i++) {
             oColumn = allKeys[i];
             if(!oColumn.hidden && !oColumn.width) {
                 elThLiner = oColumn.getThLinerEl();
@@ -5621,13 +5697,13 @@ removeColumn : function(oColumn) {
         var nColTreeIndex = oColumn.getTreeIndex();
         if(nColTreeIndex !== null) {
             // Which key index(es)
-            var i, l,
+            var i, len,
                 aKeyIndexes = oColumn.getKeyIndex();
             // Must be a parent Column
             if(aKeyIndexes === null) {
                 var descKeyIndexes = [];
                 var allDescendants = this._oColumnSet.getDescendants(oColumn);
-                for(i=0, l=allDescendants.length; i<l; i++) {
+                for(i=0, len=allDescendants.length; i<len; i++) {
                     // Is this descendant a key Column?
                     var thisKey = allDescendants[i].getKeyIndex();
                     if(thisKey !== null) {
@@ -5739,10 +5815,10 @@ insertColumn : function(oColumn, index) {
     var oNewColumn = oColumnSet.tree[0][index];
     
     // Get key index(es) for new Column
-    var i, l,
+    var i, len,
         descKeyIndexes = [];
     var allDescendants = oColumnSet.getDescendants(oNewColumn);
-    for(i=0, l=allDescendants.length; i<l; i++) {
+    for(i=0, len=allDescendants.length; i<len; i++) {
         // Is this descendant a key Column?
         var thisKey = allDescendants[i].getKeyIndex();
         if(thisKey !== null) {
@@ -5768,7 +5844,7 @@ insertColumn : function(oColumn, index) {
             // Get templates for each new TD
             var aTdTemplates = [],
                 elTdTemplate;
-            for(i=0, l=descKeyIndexes.length; i<l; i++) {
+            for(i=0, len=descKeyIndexes.length; i<len; i++) {
                 var thisKeyIndex = descKeyIndexes[i];
                 elTdTemplate = this._getTrTemplateEl().childNodes[i].cloneNode(true);
                 elTdTemplate = this._formatTdEl(this._oColumnSet.keys[thisKeyIndex], elTdTemplate, thisKeyIndex, (thisKeyIndex===this._oColumnSet.keys.length-1));
@@ -5824,7 +5900,7 @@ reorderColumn : function(oColumn, index) {
         var nOrigTreeIndex = oColumn.getTreeIndex();
         if((nOrigTreeIndex !== null) && (nOrigTreeIndex !== index)) {
             // Which key index(es)
-            var i, l,
+            var i, len,
                 aOrigKeyIndexes = oColumn.getKeyIndex(),
                 allDescendants,
                 descKeyIndexes = [],
@@ -5832,7 +5908,7 @@ reorderColumn : function(oColumn, index) {
             // Must be a parent Column...
             if(aOrigKeyIndexes === null) {
                 allDescendants = this._oColumnSet.getDescendants(oColumn);
-                for(i=0, l=allDescendants.length; i<l; i++) {
+                for(i=0, len=allDescendants.length; i<len; i++) {
                     // Is this descendant a key Column?
                     thisKey = allDescendants[i].getKeyIndex();
                     if(thisKey !== null) {
@@ -5871,7 +5947,7 @@ reorderColumn : function(oColumn, index) {
                 if(aNewKeyIndexes === null) {
                     descKeyIndexes = [];
                     allDescendants = this._oColumnSet.getDescendants(oNewColumn);
-                    for(i=0, l=allDescendants.length; i<l; i++) {
+                    for(i=0, len=allDescendants.length; i<len; i++) {
                         // Is this descendant a key Column?
                         thisKey = allDescendants[i].getKeyIndex();
                         if(thisKey !== null) {
@@ -9281,6 +9357,28 @@ _onEditorBlurEvent : function(oArgs) {
 },
 
 /**
+ * Passes through blockEvent of the active CellEditor.
+ *
+ * @method _onEditorBlockEvent
+ * @param oArgs {Object}  Custom Event args. 
+ * @private  
+ */
+_onEditorBlockEvent : function(oArgs) {
+    this.fireEvent("editorBlockEvent", oArgs);
+},
+
+/**
+ * Passes through unblockEvent of the active CellEditor.
+ *
+ * @method _onEditorUnblockEvent
+ * @param oArgs {Object}  Custom Event args. 
+ * @private  
+ */
+_onEditorUnblockEvent : function(oArgs) {
+    this.fireEvent("editorUnblockEvent", oArgs);
+},
+
+/**
  * Public handler of the editorBlurEvent. By default, saves on blur if
  * disableBtns is true, otherwise cancels on blur. 
  *
@@ -9298,7 +9396,25 @@ onEditorBlurEvent : function(oArgs) {
     }      
 },
 
+/**
+ * Public handler of the editorBlockEvent. By default, disables DataTable UI.
+ *
+ * @method onEditorBlockEvent
+ * @param oArgs {Object}  Custom Event args.  
+ */
+onEditorBlockEvent : function(oArgs) {
+    this.disable();
+},
 
+/**
+ * Public handler of the editorUnblockEvent. By default, undisables DataTable UI.
+ *
+ * @method onEditorUnblockEvent
+ * @param oArgs {Object}  Custom Event args.  
+ */
+onEditorUnblockEvent : function(oArgs) {
+    this.undisable();
+},
 
 
 
@@ -9911,6 +10027,18 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * Column width validations.
      *
      * @event postRenderEvent
+     */
+
+    /**
+     * Fired when the DataTable is disabled.
+     *
+     * @event disableEvent
+     */
+
+    /**
+     * Fired when the DataTable is undisabled.
+     *
+     * @event undisableEvent
      */
 
     /**
@@ -10586,7 +10714,19 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.
      */
 
+    /**
+     * Fired when a CellEditor is blocked.
+     *
+     * @event editorBlockEvent
+     * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.
+     */
 
+    /**
+     * Fired when a CellEditor is unblocked.
+     *
+     * @event editorUnblockEvent
+     * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.
+     */
 
 
 

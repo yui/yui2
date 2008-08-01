@@ -1215,7 +1215,7 @@ parseXMLData : function(oRequest, oFullResponse) {
                         // ...then fallback, but check for multiple child nodes
                         if(!data) {
                             var datapieces = [];
-                            for(var j=0, l=item.childNodes.length; j<l; j++) {
+                            for(var j=0, len=item.childNodes.length; j<len; j++) {
                                 if(item.childNodes[j].nodeValue) {
                                     datapieces[datapieces.length] = item.childNodes[j].nodeValue;
                                 }

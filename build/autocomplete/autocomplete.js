@@ -481,6 +481,26 @@ YAHOO.widget.AutoComplete.prototype.toString = function() {
 };
 
  /**
+ * Returns DOM reference to input element.
+ *
+ * @method getInputEl
+ * @return {HTMLELement} DOM reference to input element.
+ */
+YAHOO.widget.AutoComplete.prototype.getInputEl = function() {
+    return this._elTextbox;
+};
+
+ /**
+ * Returns DOM reference to container element.
+ *
+ * @method getContainerEl
+ * @return {HTMLELement} DOM reference to container element.
+ */
+YAHOO.widget.AutoComplete.prototype.getContainerEl = function() {
+    return this._elContainer;
+};
+
+ /**
  * Returns true if widget instance is currently focused.
  *
  * @method isFocused
@@ -665,7 +685,19 @@ YAHOO.widget.AutoComplete.prototype.generateRequest = function(sQuery) {
  * @param sQuery {String} Query string.
  */
 YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
-    this._sendQuery(sQuery);
+    // Adjust programatically sent queries to look like they input by user
+    // when delimiters are enabled
+    var newQuery = (this.delimChar) ? this._elTextbox.value + sQuery : sQuery;
+    this._sendQuery(newQuery);
+};
+
+/**
+ * Collapses container.
+ *
+ * @method collapseContainer
+ */
+YAHOO.widget.AutoComplete.prototype.collapseContainer = function() {
+    this._toggleContainer(false);
 };
 
 /**
@@ -1631,7 +1663,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     // Delimiter has been enabled
     var aDelimChar = (this.delimChar) ? this.delimChar : null;
     if(aDelimChar) {
-        // Loop through all possible delimiters and find the latest one
+        // Loop through all possible delimiters and find the rightmost one in the query
         // A " " may be a false positive if they are defined as delimiters AND
         // are used to separate delimited queries
         var nDelimIndex = -1;
@@ -1651,7 +1683,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
                 }
             }
         }
-        // A delimiter has been found so extract the latest query from past selections
+        // A delimiter has been found in the query so extract the latest query from past selections
         if(nDelimIndex > -1) {
             var nQueryStart = nDelimIndex + 1;
             // Trim any white space from the beginning...
@@ -1663,7 +1695,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
             // Here is the query itself
             sQuery = sQuery.substr(nQueryStart);
         }
-        // No delimiter found, so there are no selections from past queries
+        // No delimiter found in the query, so there are no selections from past queries
         else {
             this._sPastSelections = "";
         }
@@ -1777,7 +1809,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
                         // Add additional data to the result array
                         var fields = this.dataSource.responseSchema.fields;
                         if(YAHOO.lang.isArray(fields) && (fields.length > 1)) {
-                            for(var k=1, l=fields.length; k<l; k++) {
+                            for(var k=1, len=fields.length; k<len; k++) {
                                 aResult[aResult.length] = oResult[fields[k].key || fields[k]];
                             }
                         }
@@ -2053,10 +2085,12 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
 
             if(bShow) {
                 oSelf._toggleContainerHelpers(true);
+                oSelf._bContainerOpen = bShow;
                 oSelf.containerExpandEvent.fire(oSelf);
             }
             else {
                 oSelf._elContent.style.display = "none";
+                oSelf._bContainerOpen = bShow;
                 oSelf.containerCollapseEvent.fire(oSelf);
             }
      	};
@@ -2066,21 +2100,21 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         this._elContent.style.display = "";
         oAnim.onComplete.subscribe(onAnimComplete);
         oAnim.animate();
-        this._bContainerOpen = bShow;
     }
     // Else don't animate, just show or hide
     else {
         if(bShow) {
             this._elContent.style.display = "";
             this._toggleContainerHelpers(true);
+            this._bContainerOpen = bShow;
             this.containerExpandEvent.fire(this);
         }
         else {
             this._toggleContainerHelpers(false);
             this._elContent.style.display = "none";
+            this._bContainerOpen = bShow;
             this.containerCollapseEvent.fire(this);
         }
-        this._bContainerOpen = bShow;
    }
 
 };

@@ -190,6 +190,7 @@ YAHOO.widget.ColumnSet.prototype = {
                         if(oColumn.editor && (child.editor === undefined)) {
                             child.editor = oColumn.editor;
                         }
+                        //TODO: Deprecated
                         if(oColumn.editorOptions && (child.editorOptions === undefined)) {
                             child.editorOptions = oColumn.editorOptions;
                         }
@@ -921,6 +922,7 @@ YAHOO.widget.Column.prototype = {
         oDefinition.editor = this.editor;
         oDefinition.editorOptions = this.editorOptions; //TODO: deprecated
         oDefinition.formatter = this.formatter;
+        oDefinition.hidden = this.hidden;
         oDefinition.key = this.key;
         oDefinition.label = this.label;
         oDefinition.minWidth = this.minWidth;

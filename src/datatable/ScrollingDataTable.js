@@ -470,13 +470,13 @@ _initBdTheadEl : function(elTable) {
         // Add TRs to the THEAD;
         var oColumnSet = this._oColumnSet,
             colTree = oColumnSet.tree,
-            elTh, elTheadTr, oColumn, i, j, k, l;
+            elTh, elTheadTr, oColumn, i, j, k, len;
 
         for(i=0, k=colTree.length; i<k; i++) {
             elTheadTr = elThead.appendChild(document.createElement("tr"));
     
             // ...and create TH cells
-            for(j=0, l=colTree[i].length; j<l; j++) {
+            for(j=0, len=colTree[i].length; j<len; j++) {
                 oColumn = colTree[i][j];
                 elTh = elTheadTr.appendChild(document.createElement("th"));
                 this._initBdThEl(elTh,oColumn,i,j);
@@ -850,6 +850,19 @@ getHdTableEl : function() {
  */
 getBdTableEl : function() {
     return this._elTable;
+},
+
+/**
+ * Disables ScrollingDataTable UI.
+ *
+ * @method disable
+ */
+disable : function() {
+    var elMask = this._elMask;
+    elMask.style.width = this._elBdContainer.offsetWidth + "px";
+    elMask.style.height = this._elHdContainer.offsetHeight + this._elBdContainer.offsetHeight + "px";
+    elMask.style.display = "";
+    this.fireEvent("disableEvent");
 },
 
 /**
