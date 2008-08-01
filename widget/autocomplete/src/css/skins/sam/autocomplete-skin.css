@@ -31,6 +31,7 @@
 /* styles for result item */
 .yui-skin-sam .yui-ac-content li {
     margin:0;padding:2px 5px;cursor:default;white-space:nowrap;
+    zoom:1; /* For IE to trigger mouse events on LI */
 }
 
 /* styles for prehighlighted result item */
