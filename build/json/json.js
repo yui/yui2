@@ -149,7 +149,7 @@ function _prepare(s) {
  * escape sequences, safe values, and properly placed open square brackets
  * are replaced with placeholders or removed.  Then in the final step, the
  * result of all these replacements is checked for invalid characters.
- * @method isValid
+ * @method _isValid
  * @param str {String} JSON string to be tested
  * @return {boolean} is the string safe for eval?
  * @static
@@ -290,7 +290,6 @@ return {
      * @throws SyntaxError
      * @method parse
      * @static
-     * @public
      */
     parse : function (s,reviver) {
         // sanitize
@@ -319,7 +318,6 @@ return {
      * @param d {number} (optional) depth limit to recurse objects/arrays (practical minimum 1)
      * @return {string} JSON string representation of the input
      * @static
-     * @public
      */
     stringify : function (o,w,d) {
         if (o !== undefined) {
