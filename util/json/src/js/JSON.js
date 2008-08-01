@@ -1,6 +1,8 @@
 /**
  * Provides methods to parse JSON strings and convert objects to JSON strings.
  * @module json
+ * @class JSON
+ * @static
  */
 
 (function () {
@@ -263,10 +265,7 @@ function _stringify(h,key,d,w,pstack) {
     return undefined; // invalid input
 }
 
-/*
- * @class YAHOO.lang.JSON
- * @static
- */
+// Create the JSON static
 YAHOO.lang.JSON = {
     /**
      * Four step determination whether a string is valid JSON.  In three steps,
