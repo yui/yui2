@@ -4,8 +4,7 @@
  * @class JSON
  * @static
  */
-
-(function () {
+YAHOO.lang.JSON = (function () {
 
 var l = YAHOO.lang,
 
@@ -265,8 +264,8 @@ function _stringify(h,key,d,w,pstack) {
     return undefined; // invalid input
 }
 
-// Create the JSON static
-YAHOO.lang.JSON = {
+// Return the public API
+return {
     /**
      * Four step determination whether a string is valid JSON.  In three steps,
      * escape sequences, safe values, and properly placed open square brackets
