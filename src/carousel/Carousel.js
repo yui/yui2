@@ -18,7 +18,6 @@
 
     /* Some abbreviations to avoid lengthy typing and lookups. */
     var Carousel,
-        CustomEvent = YAHOO.util.CustomEvent,
         Dom         = YAHOO.util.Dom,
         Event       = YAHOO.util.Event,
         JS          = YAHOO.lang;
@@ -680,15 +679,19 @@
          * @return {Boolean} Return true on success, false otherwise
          */
         addItems: function (items) {
-            var i, n;
+            var i, n, rv = true;
 
             if (!JS.isArray(items)) {
                 return false;
             }
 
             for (i = 0, n = items.length; i < n; i++) {
-                this.addItem(items[i][0], items[i][1]);
+                if (this.addItem(items[i][0], items[i][1]) === false) {
+                    rv = false;
+                }
             }
+
+            return rv;
         },
 
         /**
@@ -2051,6 +2054,7 @@
      *
      * @method keyboardEventHandler
      * @param ev {Event} The event that is being handled.
+     * @param o {Object} The current object instance.
      * @private
      */
     function keyboardEventHandler(ev, o) {
