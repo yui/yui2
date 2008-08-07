@@ -1431,7 +1431,8 @@
         
         /**
          * Find the Carousel within a container. The Carousel is identified by
-         * the first element that matches the carousel element tag.
+         * the first element that matches the carousel element tag or the
+         * element that has the Carousel class.
          *
          * @method parseCarousel
          * @param parent {HTMLElement} The parent element to look under
