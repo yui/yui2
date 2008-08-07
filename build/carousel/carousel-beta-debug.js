@@ -18,7 +18,6 @@
 
     /* Some abbreviations to avoid lengthy typing and lookups. */
     var Carousel,
-        CustomEvent = YAHOO.util.CustomEvent,
         Dom         = YAHOO.util.Dom,
         Event       = YAHOO.util.Event,
         JS          = YAHOO.lang;
@@ -680,15 +679,19 @@
          * @return {Boolean} Return true on success, false otherwise
          */
         addItems: function (items) {
-            var i, n;
+            var i, n, rv = true;
 
             if (!JS.isArray(items)) {
                 return false;
             }
 
             for (i = 0, n = items.length; i < n; i++) {
-                this.addItem(items[i][0], items[i][1]);
+                if (this.addItem(items[i][0], items[i][1]) === false) {
+                    rv = false;
+                }
             }
+
+            return rv;
         },
 
         /**
@@ -1045,24 +1048,23 @@
          * @return {Boolean} Return true on success, false otherwise
          */
         removeItem: function (index) {
-            var num = this.get("numItems"), item;
+            var item, num = this.get("numItems");
 
             if (index < 0 || index >= num) {
                 YAHOO.log("Index out of bounds", "error", WidgetName);
                 return false;
             }
-            
-            if (this.get("selectedItem") == index) {
-                this.set("selectedItem", this._getSelectedItem(index - 1));
-            }
-            
-            item = this._itemsTable.items.splice(index, 1);
-            this.set("numItems", num - 1);
-            
-            this.fireEvent(itemRemovedEvent,
-                    { pos: index, ev: itemRemovedEvent });
 
-            return true;
+            item = this._itemsTable.items.splice(index, 1);
+            if (item && item.length == 1) {
+                this.set("numItems", num - 1);
+
+                this.fireEvent(itemRemovedEvent,
+                        { item: item[0], pos: index, ev: itemRemovedEvent });
+                return true;
+            }
+
+            return false;
         },
 
         /**
@@ -1428,7 +1430,8 @@
         
         /**
          * Find the Carousel within a container. The Carousel is identified by
-         * the first element that matches the carousel element tag.
+         * the first element that matches the carousel element tag or the
+         * element that has the Carousel class.
          *
          * @method parseCarousel
          * @param parent {HTMLElement} The parent element to look under
@@ -2051,6 +2054,7 @@
      *
      * @method keyboardEventHandler
      * @param ev {Event} The event that is being handled.
+     * @param o {Object} The current object instance.
      * @private
      */
     function keyboardEventHandler(ev, o) {
@@ -2514,7 +2518,7 @@
      * @private
      */
     function syncUI(o) {
-        var el, i, item, oel, pos, sibling;
+        var el, i, item, num, oel, pos, sibling;
         
         if (!JS.isObject(o)) {
             return;
@@ -2565,16 +2569,24 @@
             }
             break;            
         case itemRemovedEvent:
-            item = this._itemsTable.items[pos];
+            num  = this.get("numItems");
+            item = o.item;
+            pos  = o.pos;
+
             if (item && (el = Dom.get(item.id))) {
                 if (el && Dom.isAncestor(this._carouselEl, el)) {
                     Event.purgeElement(el, true);
                     this._carouselEl.removeChild(el);
                 }
+
+                if (this.get("selectedItem") == pos) {
+                    pos = pos >= num ? num - 1 : pos;
+                    this.set("selectedItem", pos);
+                }
             } else {
                 YAHOO.log("Unable to find item", "warn", WidgetName);
             }
-            break;        
+            break;
         case loadItemsEvent:
             for (i = o.first; i <= o.last; i++) {
                 el = this._createCarouselItem({
