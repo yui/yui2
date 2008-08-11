@@ -1270,10 +1270,6 @@
                 this.fireEvent(pageChangeEvent, newPage);
             }
 
-            if (item != this._selectedItem) { // out of sync
-                this.set("selectedItem", this._getSelectedItem(item));
-            }
-
             delete this._autoPlayTimer;
             if (this.get("autoPlay") > 0) {
                 this.startAutoPlay();
