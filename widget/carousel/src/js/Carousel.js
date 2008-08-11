@@ -1249,8 +1249,7 @@
                 anim = new YAHOO.util.Motion(this._carouselEl, animAttrs,
                         animCfg.speed, animCfg.effect);
                 anim.onComplete.subscribe(function (ev) {
-                    var first = this.get("firstVisible"),
-                        num   = this.get("numVisible");
+                    var first = this.get("firstVisible");
                     
                     this._isAnimationInProgress = false;
                     this.fireEvent(afterScrollEvent,
@@ -1475,7 +1474,6 @@
         _parseCarouselItems: function () {
             var child,
                 elId,
-                i      = this._itemsTable.numItems,
                 node,
                 parent = this._carouselEl;
 
@@ -1927,7 +1925,6 @@
      */
     function getScrollOffset(delta) {
         var itemSize = 0,
-            reveal   = this.get("revealAmount"),
             size     = 0;
 
         itemSize = getCarouselItemSize.call(this);
@@ -2189,7 +2186,7 @@
         itemSize   = getCarouselItemSize.call(this, which);
         size       = itemSize * num;
 
-        this._recomputeSize = size == 0; // bleh!
+        this._recomputeSize = (size == 0); // bleh!
         if (this._recomputeSize) {
             return;             // no use going further, bail out!
         }
