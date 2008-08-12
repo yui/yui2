@@ -3189,6 +3189,10 @@ _onRenderChainEnd : function() {
 
         // Render event
         oSelf.fireEvent("renderEvent");
+        /*if(YAHOO.example.Performance.trialStart) {
+            YAHOO.log((new Date()).getTime() - YAHOO.example.Performance.trialStart.getTime() + " ms", "time");
+            YAHOO.example.Performance.trialStart = null;
+        }*/
         // Backward compatibility
         oSelf.fireEvent("refreshEvent");
         YAHOO.log("DataTable rendered", "info", oSelf.toString());
@@ -4596,7 +4600,7 @@ initializeTable : function() {
  * @method render
  */
 render : function() {
-//YAHOO.log("start render","time");
+//YAHOO.example.Performance.trialStart = new Date();
 
     this._oChainRender.stop();
     YAHOO.log("DataTable rendering...", "info", this.toString());
@@ -4880,6 +4884,19 @@ focusTheadEl : function() {
 focusTbodyEl : function() {
     this._focusEl(this._elTbody);
 },
+
+/**
+ * Setting display:none on DataTable or any parent may impact width validations.
+ * After setting display back to "", implementers should call this method to 
+ * manually perform those validations.
+ *
+ * @method onShow
+ */
+onShow : function() {
+    this.validateColumnWidths();
+},
+
+
 
 
 
