@@ -1333,6 +1333,15 @@ if(YAHOO.util.DD) {
          * @param e {string} The mouseup event
          */
         onMouseUp : function(e) {
+            // Reset height of all resizer els in case TH's have changed height
+            var allKeys = this.datatable.getColumnSet().keys,
+                col;
+            for(var i=0, len=allKeys.length; i<len; i++) {
+                col = allKeys[i];
+                if(col._ddResizer) {
+                    col._ddResizer.resetResizerEl();
+                }
+            }
             this.resetResizerEl();
             
             var el = this.headCellLiner;
@@ -1372,6 +1381,25 @@ if(YAHOO.util.DD) {
             }
         },
     
+        /**
+         * Handles start drag on the Column resizer.
+         *
+         * @method startDrag
+         * @param e {string} The drag event
+         */
+        startDrag : function() {
+            // Shrinks height of all resizer els to not hold open TH els
+            var allKeys = this.datatable.getColumnSet().keys,
+                thisKey = this.column.getKeyIndex(),
+                col;
+            for(var i=0, len=allKeys.length; i<len; i++) {
+                col = allKeys[i];
+                if(col._ddResizer) {
+                    YAHOO.util.Dom.get(col._ddResizer.handleElId).style.height = "1em";
+                }
+            }
+        },
+
         /**
          * Handles drag events on the Column resizer.
          *
