@@ -143,8 +143,7 @@ var Dom = YAHOO.util.Dom,
     
         "SUBMENU_ALIGNMENT": { 
             key: "submenualignment", 
-            value: ["tl","tr"],
-            suppressEvent: true
+            value: ["tl","tr"]
         },
     
         "AUTO_SUBMENU_DISPLAY": { 
@@ -5393,8 +5392,7 @@ initDefaultConfig: function () {
         { 
             handler: this.configShadow,
             value: DEFAULT_CONFIG.SHADOW.value, 
-            validator: DEFAULT_CONFIG.SHADOW.validator,
-            suppressEvent: DEFAULT_CONFIG.SHADOW.suppressEvent
+            validator: DEFAULT_CONFIG.SHADOW.validator
         }
     );
 

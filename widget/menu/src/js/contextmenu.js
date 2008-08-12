@@ -180,7 +180,7 @@ init: function(p_oElement, p_oConfig) {
     this.beforeInitEvent.fire(ContextMenu);
 
 
-    if(p_oConfig) {
+    if (p_oConfig) {
 
         this.cfg.applyConfig(p_oConfig, true);
 
@@ -254,7 +254,7 @@ _removeEventHandlers: function() {
 
         Event.removeListener(oTrigger, EVENT_TYPES.CONTEXT_MENU, this._onTriggerContextMenu);    
         
-        if(YAHOO.env.ua.opera) {
+        if (YAHOO.env.ua.opera) {
         
             Event.removeListener(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick);
     
@@ -282,7 +282,7 @@ _removeEventHandlers: function() {
 */
 _onTriggerClick: function(p_oEvent, p_oMenu) {
 
-    if(p_oEvent.ctrlKey) {
+    if (p_oEvent.ctrlKey) {
     
         Event.stopEvent(p_oEvent);
 
@@ -327,7 +327,7 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 		
 	
 	
-		if(!this._bCancelled) {
+		if (!this._bCancelled) {
 	
 			// Position and display the context menu
 	
@@ -371,7 +371,7 @@ toString: function() {
     var sReturnVal = "ContextMenu",
         sId = this.id;
 
-    if(sId) {
+    if (sId) {
 
         sReturnVal += (" " + sId);
     
@@ -448,14 +448,14 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
     
     var oTrigger = p_aArgs[0];
 
-    if(oTrigger) {
+    if (oTrigger) {
 
         /*
             If there is a current "trigger" - remove the event handlers 
             from that element(s) before assigning new ones
         */
 
-        if(this._oTrigger) {
+        if (this._oTrigger) {
         
             this._removeEventHandlers();
 
@@ -477,7 +477,7 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
             Opera to prevent default browser behaviors.
         */
 
-        if(YAHOO.env.ua.opera) {
+        if (YAHOO.env.ua.opera) {
         
             Event.on(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick, this, true);
 
