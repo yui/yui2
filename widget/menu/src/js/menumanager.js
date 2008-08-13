@@ -524,12 +524,8 @@
             
                     }
             
-                    p_oMenu.cfg.subscribeToConfigEvent("visible", 
-                        onMenuVisibleConfigChange);
-
-                    p_oMenu.destroyEvent.subscribe(onMenuDestroy, p_oMenu, 
-                                            this);
-            
+                    p_oMenu.cfg.subscribeToConfigEvent("visible", onMenuVisibleConfigChange);
+                    p_oMenu.destroyEvent.subscribe(onMenuDestroy, p_oMenu, this);
                     p_oMenu.itemAddedEvent.subscribe(onItemAdded);
                     p_oMenu.focusEvent.subscribe(onMenuFocus);
                     p_oMenu.blurEvent.subscribe(onMenuBlur);
