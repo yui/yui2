@@ -76,8 +76,7 @@ var Event = YAHOO.util.Event,
     
         "SUBMENU_ALIGNMENT": { 
             key: "submenualignment", 
-            value: ["tl","bl"],
-            suppressEvent: true 
+            value: ["tl","bl"]
         },
     
         "AUTO_SUBMENU_DISPLAY": { 
