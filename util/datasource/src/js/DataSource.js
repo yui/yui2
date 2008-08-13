@@ -2161,10 +2161,11 @@ makeConnection : function(oRequest, oCallback, oCaller) {
                 oResponse.statusText, "error", this.toString());
 
         // Backward compatibility
-        if((this.liveData.lastIndexOf("?") !== this.liveData.length-1) &&
+        if(lang.isString(this.liveData) && lang.isString(oRequest) &&
+            (this.liveData.lastIndexOf("?") !== this.liveData.length-1) &&
             (oRequest.indexOf("?") !== 0)){
-                YAHOO.log("DataSources using XHR no longer supply a \"?\"" +
-                " between the host and query parameters" +
+                YAHOO.log("DataSources using XHR no longer automatically supply " + 
+                "a \"?\" between the host and query parameters" +
                 " -- please check that the request URL is correct", "warn", this.toString());
         }
 
