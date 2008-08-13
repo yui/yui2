@@ -656,12 +656,12 @@ clearInterval : function(nId) {
  *
  * @method clearAllIntervals
  */
-clearAllIntervals : function(nId) {
+clearAllIntervals : function() {
     var tracker = this._aIntervals || [];
     for(var i=tracker.length-1; i>-1; i--) {
-        tracker.splice(i,1);
-        clearInterval(nId);
+        clearInterval(tracker[i]);
     }
+    tracker = [];
 },
 
 /**
