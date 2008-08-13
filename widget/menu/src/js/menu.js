@@ -282,53 +282,20 @@ GROUP_TITLE_TAG_NAME: "h6",
 * @description Array representing the default x and y position that a menu 
 * should have when it is positioned outside the viewport by the 
 * "poistionOffScreen" method.
-* @default [-10000, -10000]
+* @default "-999em"
 * @final
-* @type Array
+* @type String
 */
-OFF_SCREEN_POSITION: [-10000, -10000],
+OFF_SCREEN_POSITION: "-999em",
 
 
 // Private properties
 
 
 /** 
-* @property _nHideDelayId
-* @description Number representing the time-out setting used to cancel the 
-* hiding of a menu.
-* @default null
-* @private
-* @type Number
-*/
-_nHideDelayId: null,
-
-
-/** 
-* @property _nShowDelayId
-* @description Number representing the time-out setting used to cancel the 
-* showing of a menu.
-* @default null
-* @private
-* @type Number
-*/
-_nShowDelayId: null,
-
-
-/** 
-* @property _nSubmenuHideDelayId
-* @description Number representing the time-out setting used to cancel the 
-* hiding of a submenu.
-* @default null
-* @private
-* @type Number
-*/
-_nSubmenuHideDelayId: null,
-
-
-/** 
 * @property _bHideDelayEventHandlersAssigned
 * @description Boolean indicating if the "mouseover" and "mouseout" event 
-* handlers used for hiding the menu via a call to "window.setTimeout" have 
+* handlers used for hiding the menu via a call to "YAHOO.lang.later" have 
 * already been assigned.
 * @default false
 * @private
@@ -617,7 +584,7 @@ init: function (p_oElement, p_oConfig) {
 
     if (typeof p_oElement == "string") {
 
-        oElement = document.getElementById(p_oElement);
+        oElement = Dom.get(p_oElement);
 
     }
     else if (p_oElement.tagName) {
@@ -1426,12 +1393,9 @@ _configureSubmenu: function (p_oItem) {
             so they they can be applied to the submenu.
         */
 
-        this.cfg.configChangedEvent.subscribe(this._onParentMenuConfigChange, 
-                oSubmenu, true);
+        this.cfg.configChangedEvent.subscribe(this._onParentMenuConfigChange, oSubmenu, true);
 
         this.renderEvent.subscribe(this._onParentMenuRender, oSubmenu, true);
-
-        oSubmenu.beforeShowEvent.subscribe(this._onSubmenuBeforeShow);
 
     }
 
@@ -1495,11 +1459,11 @@ _onVisibleChange: function (p_sType, p_aArgs) {
 */
 _cancelHideDelay: function () {
 
-    var oRoot = this.getRoot();
+    var oTimer = this.getRoot()._hideDelayTimer;
 
-    if (oRoot._nHideDelayId) {
+    if (oTimer) {
 
-        window.clearTimeout(oRoot._nHideDelayId);
+		oTimer.cancel();
 
     }
 
@@ -1516,10 +1480,9 @@ _execHideDelay: function () {
 
     this._cancelHideDelay();
 
-    var oRoot = this.getRoot(),
-        me = this;
-
-    function hideMenu() {
+    var oRoot = this.getRoot();
+        
+	oRoot._hideDelayTimer = Lang.later(oRoot.cfg.getProperty("hidedelay"), this, function () {
     
         if (oRoot.activeItem) {
 
@@ -1527,18 +1490,14 @@ _execHideDelay: function () {
 
         }
 
-        if (oRoot == me && !(me instanceof YAHOO.widget.MenuBar) && 
-            me.cfg.getProperty("position") == "dynamic") {
+        if (oRoot == this && !(this instanceof YAHOO.widget.MenuBar) && 
+            this.cfg.getProperty("position") == "dynamic") {
 
-            me.hide();
+            this.hide();
         
         }
     
-    }
-
-
-    oRoot._nHideDelayId = 
-        window.setTimeout(hideMenu, oRoot.cfg.getProperty("hidedelay"));
+    });
 
 },
 
@@ -1550,42 +1509,13 @@ _execHideDelay: function () {
 */
 _cancelShowDelay: function () {
 
-    var oRoot = this.getRoot();
+    var oTimer = this.getRoot()._showDelayTimer;
 
-    if (oRoot._nShowDelayId) {
+    if (oTimer) {
 
-        window.clearTimeout(oRoot._nShowDelayId);
-
-    }
-
-},
-
-
-/**
-* @method _execShowDelay
-* @description Shows the menu after the number of milliseconds specified by 
-* the "showdelay" configuration property have ellapsed.
-* @private
-* @param {YAHOO.widget.Menu} p_oMenu Object specifying the menu that should 
-* be made visible.
-*/
-_execShowDelay: function (p_oMenu) {
-
-    var oRoot = this.getRoot();
-
-    function showMenu() {
-
-        if (p_oMenu.parent.cfg.getProperty("selected")) {
-
-            p_oMenu.show();
-
-        }
+        oTimer.cancel();
 
     }
-
-
-    oRoot._nShowDelayId = 
-        window.setTimeout(showMenu, oRoot.cfg.getProperty("showdelay"));
 
 },
 
@@ -1604,17 +1534,15 @@ _execShowDelay: function (p_oMenu) {
 */
 _execSubmenuHideDelay: function (p_oSubmenu, p_nMouseX, p_nHideDelay) {
 
-    var me = this;
+	p_oSubmenu._submenuHideDelayTimer = Lang.later(50, this, function () {
 
-    p_oSubmenu._nSubmenuHideDelayId = window.setTimeout(function () {
+        if (this._nCurrentMouseX > (p_nMouseX + 10)) {
 
-        if (me._nCurrentMouseX > (p_nMouseX + 10)) {
-
-            p_oSubmenu._nSubmenuHideDelayId = window.setTimeout(function () {
+            p_oSubmenu._submenuHideDelayTimer = Lang.later(p_nHideDelay, p_oSubmenu, function () {
         
-                p_oSubmenu.hide();
+                this.hide();
 
-            }, p_nHideDelay);
+            });
 
         }
         else {
@@ -1622,8 +1550,8 @@ _execSubmenuHideDelay: function (p_oSubmenu, p_nMouseX, p_nHideDelay) {
             p_oSubmenu.hide();
         
         }
-
-    }, 50);
+	
+	});
 
 },
 
@@ -1713,12 +1641,25 @@ _onMouseOver: function (p_sType, p_aArgs) {
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
         oTarget = Event.getTarget(oEvent),
+        oRoot = this.getRoot(),
+        oSubmenuHideDelayTimer = this._submenuHideDelayTimer,
         oParentMenu,
         nShowDelay,
         bShowDelay,
         oActiveItem,
         oItemCfg,
         oSubmenu;
+
+
+    var showSubmenu = function () {
+
+        if (this.parent.cfg.getProperty("selected")) {
+
+            this.show();
+
+        }
+
+    };
 
 
     if (!this._bStopMouseEventHandlers) {
@@ -1735,9 +1676,9 @@ _onMouseOver: function (p_sType, p_aArgs) {
 			this.clearActiveItem();
 	
 	
-			if (this.parent && this._nSubmenuHideDelayId) {
+			if (this.parent && oSubmenuHideDelayTimer) {
 	
-				window.clearTimeout(this._nSubmenuHideDelayId);
+				oSubmenuHideDelayTimer.cancel();
 	
 				this.parent.cfg.setProperty("selected", true);
 	
@@ -1804,7 +1745,8 @@ _onMouseOver: function (p_sType, p_aArgs) {
 			
 					if (bShowDelay) {
 	
-						this._execShowDelay(oSubmenu);
+						oRoot._showDelayTimer = 
+							Lang.later(oRoot.cfg.getProperty("showdelay"), oSubmenu, showSubmenu);
 			
 					}
 					else {
@@ -2105,7 +2047,6 @@ _onKeyDown: function (p_sType, p_aArgs) {
 
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
-        me = this,
         oSubmenu,
         oItemCfg,
         oParentItem,
@@ -2131,13 +2072,13 @@ _onKeyDown: function (p_sType, p_aArgs) {
     */
     function stopMouseEventHandlers() {
 
-        me._bStopMouseEventHandlers = true;
+        this._bStopMouseEventHandlers = true;
         
-        window.setTimeout(function () {
+        Lang.later(10, this, function () {
+
+            this._bStopMouseEventHandlers = false;
         
-            me._bStopMouseEventHandlers = false;
-        
-        }, 10);
+        });
 
     }
 
@@ -2762,7 +2703,8 @@ _onBeforeShow: function (p_sType, p_aArgs) {
 
     var nOptions,
         n,
-        oSrcElement;
+        oSrcElement,
+        oContainer = this.cfg.getProperty("container");
 
 
     if (this.lazyLoad && this.getItemGroups().length === 0) {
@@ -2816,7 +2758,7 @@ _onBeforeShow: function (p_sType, p_aArgs) {
                 }
                 else {
                 
-                    this.render(this.cfg.getProperty("container"));
+                    this.render(oContainer);
                 
                 }
 
@@ -2837,7 +2779,7 @@ _onBeforeShow: function (p_sType, p_aArgs) {
             }
             else {
 
-                this.render(this.cfg.getProperty("container"));
+                this.render(oContainer);
 
             }                
 
@@ -3097,7 +3039,8 @@ _onShow: function (p_sType, p_aArgs) {
         oParentMenu,
 		oElement,
 		nOffsetWidth,
-		sWidth;        
+		sWidth,
+		aAlignment;        
 
 
     function disableAutoSubmenuDisplay(p_oEvent) {
@@ -3180,6 +3123,18 @@ _onShow: function (p_sType, p_aArgs) {
 			this.hideEvent.subscribe(onSubmenuHide, sWidth);
 		
 		}
+
+
+		aAlignment = oParentMenu.cfg.getProperty("submenualignment");
+	
+	
+		if (!this.cfg.getProperty("context")) {
+		
+			this.cfg.setProperty("context", [oParent.element, aAlignment[0], aAlignment[1]]);
+	
+		}
+		
+		this.align();		
 
     }
 
@@ -3328,7 +3283,7 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 	
 	if (this instanceof oParentMenu.constructor) {
 
-		oConfig["submenualignment"] = oParentCfg.getProperty("submenuhidedelay");
+		oConfig["submenualignment"] = oParentCfg.getProperty("submenualignment");
 
 	}
 
@@ -3353,34 +3308,6 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 
     }
     
-},
-
-
-/**
-* @method _onSubmenuBeforeShow
-* @description "beforeshow" event handler for a submenu.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onSubmenuBeforeShow: function (p_sType, p_aArgs) {
-
-    var oParent = this.parent,
-        aAlignment = oParent.parent.cfg.getProperty("submenualignment");
-
-
-	// Necessary to reset the context position in IE 7 Quirks Mode in order for submenus to appear 
-	// in the correct position.
-
-    if (!this.cfg.getProperty("context") || (UA.ie === 7 && document.compatMode === "BackCompat")) {
-    
-        this.cfg.setProperty("context", [oParent.element, aAlignment[0], aAlignment[1]]);
-
-    }
-
-	this.align();
-
 },
 
 
@@ -3678,10 +3605,9 @@ configContainer: function (p_sType, p_aArgs, p_oMenu) {
 
 	var oElement = p_aArgs[0];
 
-	if (typeof oElement == 'string') {
+	if (typeof oElement == "string") {
 
-        this.cfg.setProperty("container", document.getElementById(oElement), 
-                true);
+        this.cfg.setProperty("container", Dom.get(oElement), true);
 
 	}
 
@@ -4226,13 +4152,16 @@ initEvents: function () {
 positionOffScreen: function () {
 
     var oIFrame = this.iframe,
-        aPos = this.OFF_SCREEN_POSITION;
-
-    Dom.setXY(this.element, aPos);
+    	oElement = this.element,
+        sPos = this.OFF_SCREEN_POSITION;
+    
+    oElement.style.top = "";
+    oElement.style.left = "";
     
     if (oIFrame) {
 
-        Dom.setXY(oIFrame, aPos);
+		oIFrame.style.top = sPos;
+		oIFrame.style.left = sPos;
     
     }
 
