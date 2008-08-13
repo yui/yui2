@@ -121,7 +121,8 @@
 		an item in a MenuBar to a submenu
 	*/
 
-	*zoom: 1; 
+	*zoom: 1;
+	_zoom: normal;
     border: solid 1px #808080;
     background-color: #fff;
     
