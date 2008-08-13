@@ -1811,8 +1811,7 @@ MenuItem.prototype = {
 
         var oParent = this.parent,
             oAnchor = this._oAnchor,
-            oActiveItem = oParent.activeItem,
-            me = this;
+            oActiveItem = oParent.activeItem;
 
 
         function setFocus() {
@@ -1829,7 +1828,7 @@ MenuItem.prototype = {
 	
 					oAnchor.focus();
 					
-					me.focusEvent.fire();
+					this.focusEvent.fire();
                 
                 }
 
@@ -1852,7 +1851,7 @@ MenuItem.prototype = {
                 position and focus the menu.
             */
 
-            window.setTimeout(setFocus, 0);
+            Lang.later(0, this, setFocus);
 
         }
 
@@ -1871,15 +1870,12 @@ MenuItem.prototype = {
         if (!this.cfg.getProperty("disabled") && oParent && 
             oParent.cfg.getProperty("visible")) {
 
-
-            var me = this;
-            
-            window.setTimeout(function () {
+            Lang.later(0, this, function () {
 
                 try {
     
-                    me._oAnchor.blur();
-                    me.blurEvent.fire();    
+                    this._oAnchor.blur();
+                    this.blurEvent.fire();    
 
                 } 
                 catch (e) {
