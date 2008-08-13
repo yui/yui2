@@ -3503,22 +3503,6 @@ configPosition: function (p_sType, p_aArgs, p_oMenu) {
     
     }
 
-
-    if (sCSSPosition == "absolute") {
-
-        nZIndex = oCfg.getProperty("zindex");
-
-        if (!nZIndex || nZIndex === 0) {
-
-            nZIndex = this.parent ? 
-                (this.parent.parent.cfg.getProperty("zindex") + 1) : 1;
-
-            oCfg.setProperty("zindex", nZIndex);
-
-        }
-
-    }
-
 },
 
 
@@ -4952,16 +4936,6 @@ initDefaultConfig: function () {
     * "position" configuration property is set to dynamic.
     * @type Boolean
     * @default false
-    */
-
-    
-    /**
-    * @config zindex
-    * @description Number representing the CSS z-index of the Menu.  This 
-    * property is only applied when the "position" configuration property is 
-    * set to dynamic.
-    * @type Number
-    * @default null
     */
     
     
