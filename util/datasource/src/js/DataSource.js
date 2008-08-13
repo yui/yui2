@@ -347,6 +347,19 @@ convertDate : function(oData) {
 
 });
 
+// Done in separate step so referenced functions are defined.
+/**
+ * Data parsing functions.
+ * @property DataSource.Parser
+ * @type Object
+ * @static
+ */
+DS.Parser = {
+    string   : DS.parseString,
+    number   : DS.parseNumber,
+    date     : DS.parseDate
+};
+
 // Prototype properties and methods
 DS.prototype = {
 
@@ -991,9 +1004,11 @@ parseArrayData : function(oRequest, oFullResponse) {
                 }
             }
 
-            var parsers = {};
+            var parsers = {}, p;
             for (i = fields.length - 1; i >= 0; --i) {
-                var p = fields[i].parser || fields[i].converter;
+                p = (typeof fields[i].parser === 'function' ?
+                          fields[i].parser :
+                          DS.Parser[fields[i].parser+'']) || fields[i].converter;
                 if (p) {
                     parsers[fields[i].key] = p;
                 }
@@ -1121,8 +1136,11 @@ parseTextData : function(oRequest, oFullResponse) {
                                                 YAHOO.log("The field property converter has been deprecated" +
                                                         " in favor of parser", "warn", this.toString());
                                             }
-                                            if(field.parser) {
-                                                data = field.parser.call(this, data);
+                                            var parser = (typeof field.parser === 'function') ?
+                                                field.parser :
+                                                DS.Parser[field.parser+''];
+                                            if(parser) {
+                                                data = parser.call(this, data);
                                             }
                                             // Safety measure
                                             if(data === undefined) {
@@ -1275,8 +1293,11 @@ parseXMLData : function(oRequest, oFullResponse) {
                     YAHOO.log("The field property converter has been deprecated" +
                             " in favor of parser", "warn", this.toString());
                 }
-                if(field.parser) {
-                    data = field.parser.call(this, data);
+                var parser = (typeof field.parser === 'function') ?
+                    field.parser :
+                    DS.Parser[field.parser+''];
+                if(parser) {
+                    data = parser.call(this, data);
                 }
                 // Safety measure
                 if(data === undefined) {
@@ -1386,10 +1407,14 @@ parseJSONData : function(oRequest, oFullResponse) {
         if (!bError) {
             // Step 2. Parse out field data if identified
             if(schema.fields) {
+                var field;
                 // Build the field parser map and location paths
                 for (i = fields.length - 1; i >= 0; --i) {
-                    key    = fields[i].key || fields[i];
-                    parser = fields[i].parser || fields[i].converter;
+                    field = fields[i];
+                    key    = field.key || field;
+                    parser = ((typeof field.parser === 'function') ?
+                        field.parser :
+                        DS.Parser[field.parser+'']) || field.converter;
                     path   = buildPath(key);
     
                     if (parser) {
@@ -1506,8 +1531,11 @@ parseHTMLTableData : function(oRequest, oFullResponse) {
                     YAHOO.log("The field property converter has been deprecated" +
                             " in favor of parser", "warn", this.toString());
                 }
-                if(field.parser) {
-                    data = field.parser.call(this, data);
+                var parser = (typeof field.parser === 'function') ?
+                    field.parser :
+                    DS.Parser[field.parser+''];
+                if(parser) {
+                    data = parser.call(this, data);
                 }
                 // Safety measure
                 if(data === undefined) {
