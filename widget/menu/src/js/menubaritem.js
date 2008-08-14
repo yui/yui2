@@ -23,8 +23,7 @@
 */
 YAHOO.widget.MenuBarItem = function(p_oObject, p_oConfig) {
 
-    YAHOO.widget.MenuBarItem.superclass.constructor.call(this, 
-        p_oObject, p_oConfig);
+    YAHOO.widget.MenuBarItem.superclass.constructor.call(this, p_oObject, p_oConfig);
 
 };
 

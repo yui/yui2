@@ -58,10 +58,6 @@
 		_HD = "hd",
 		_HAS_TITLE = "hastitle",
 		_CONTEXT = "context",
-		_TRBR = "trbr",
-		_TLBL = "tlbl",
-		_BLTL = "bltl",
-		_BRTR = "brtr",
 		_EMPTY_STRING = "",
 		_MOUSEDOWN = "mousedown",
 		_KEYDOWN = "keydown",
@@ -2889,10 +2885,10 @@ getConstrainedY: function (y) {
 
 		oOverlapPositions = {
 
-			_TRBR: true,
-			_TLBL: true,
-			_BLTL: true,
-			_BRTR: true
+			"trbr": true,
+			"tlbl": true,
+			"bltl": true,
+			"brtr": true
 
 		},
 

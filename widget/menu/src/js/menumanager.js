@@ -22,8 +22,33 @@
 */
 (function () {
 
-    var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
+    var _DIV = "DIV",
+    	_HD = "hd",
+    	_BD = "bd",
+    	_FT = "ft",
+    	_LI = "LI",
+    	_DISABLED = "disabled",
+		_MOUSEOVER = "mouseover",
+		_MOUSEOUT = "mouseout",
+		_MOUSEDOWN = "mousedown",
+		_MOUSEUP = "mouseup",
+		_CLICK = "click",
+		_KEYDOWN = "keydown",
+		_KEYUP = "keyup",
+		_KEYPRESS = "keypress",
+		_CLICK_TO_HIDE = "clicktohide",
+		_POSITION = "position", 
+		_DYNAMIC = "dynamic",
+		_SHOW_DELAY = "showdelay",
+		_SELECTED = "selected",
+		_VISIBLE = "visible",
+		_UL = "UL",
+		_MENUMANAGER = "MenuManager",
+    	
+    
+    	Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event,
+        Lang = YAHOO.lang;
 
 
     /**
@@ -99,20 +124,20 @@
             
                 switch (p_oElement.tagName.toUpperCase()) {
                         
-                case "DIV":
+                case _DIV:
     
                     oParentNode = p_oElement.parentNode;
     
                     // Check if the DIV is the inner "body" node of a menu
 
                     if ((
-                            Dom.hasClass(p_oElement, "hd") ||
-                            Dom.hasClass(p_oElement, "bd") ||
-                            Dom.hasClass(p_oElement, "ft")
+                            Dom.hasClass(p_oElement, _HD) ||
+                            Dom.hasClass(p_oElement, _BD) ||
+                            Dom.hasClass(p_oElement, _FT)
                         ) && 
                         oParentNode && 
                         oParentNode.tagName && 
-                        oParentNode.tagName.toUpperCase() == "DIV") {
+                        oParentNode.tagName.toUpperCase() == _DIV) {
                     
                         returnVal = oParentNode;
                     
@@ -125,7 +150,7 @@
                 
                     break;
 
-                case "LI":
+                case _LI:
     
                     returnVal = p_oElement;
                     
@@ -186,7 +211,7 @@
     
                 sTagName = oElement.tagName.toUpperCase();
         
-                if (sTagName == "LI") {
+                if (sTagName == _LI) {
             
                     sId = oElement.id;
             
@@ -198,7 +223,7 @@
                     }
                 
                 }
-                else if (sTagName == "DIV") {
+                else if (sTagName == _DIV) {
                 
                     if (oElement.id) {
                     
@@ -218,15 +243,12 @@
     
                 // Fire the Custom Event that corresponds the current DOM event    
         
-                if (oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
+                if (oMenuItem && !oMenuItem.cfg.getProperty(_DISABLED)) {
     
                     oMenuItem[sCustomEventType].fire(p_oEvent);                   
     
     
-                    if (
-                            p_oEvent.type == "keyup" || 
-                            p_oEvent.type == "mousedown") 
-                    {
+                    if (p_oEvent.type == _KEYUP || p_oEvent.type == _MOUSEDOWN) {
     
                         if (m_oFocusedMenuItem != oMenuItem) {
                         
@@ -247,7 +269,7 @@
                 oMenu[sCustomEventType].fire(p_oEvent, oMenuItem);
             
             }
-            else if (p_oEvent.type == "mousedown") {
+            else if (p_oEvent.type == _MOUSEDOWN) {
     
                 if (m_oFocusedMenuItem) {
     
@@ -265,20 +287,20 @@
                 
                 for (var i in m_oVisibleMenus) {
         
-                    if (YAHOO.lang.hasOwnProperty(m_oVisibleMenus, i)) {
+                    if (Lang.hasOwnProperty(m_oVisibleMenus, i)) {
         
                         oMenu = m_oVisibleMenus[i];
 
-                        if (oMenu.cfg.getProperty("clicktohide") && 
+                        if (oMenu.cfg.getProperty(_CLICK_TO_HIDE) && 
                             !(oMenu instanceof YAHOO.widget.MenuBar) && 
-                            oMenu.cfg.getProperty("position") == "dynamic") {
+                            oMenu.cfg.getProperty(_POSITION) == _DYNAMIC) {
         
                             oMenu.hide();
         
                         }
                         else {
                             
-							if (oMenu.cfg.getProperty("showdelay") > 0) {
+							if (oMenu.cfg.getProperty(_SHOW_DELAY) > 0) {
 							
 								oMenu._cancelShowDelay();
 							
@@ -288,7 +310,7 @@
 							if (oMenu.activeItem) {
 						
 								oMenu.activeItem.blur();
-								oMenu.activeItem.cfg.setProperty("selected", false);
+								oMenu.activeItem.cfg.setProperty(_SELECTED, false);
 						
 								oMenu.activeItem = null;            
 						
@@ -301,7 +323,7 @@
                 } 
     
             }
-            else if (p_oEvent.type == "keyup") { 
+            else if (p_oEvent.type == _KEYUP) { 
     
                 if (m_oFocusedMenuItem) {
     
@@ -396,7 +418,7 @@
                 m_oVisibleMenus[sId] = this;
                 
                 YAHOO.log(this + " added to the collection of visible menus.", 
-                	"info", "MenuManager");
+                	"info", _MENUMANAGER);
             
             }
             else if (m_oVisibleMenus[sId]) {
@@ -404,7 +426,7 @@
                 delete m_oVisibleMenus[sId];
                 
                 YAHOO.log(this + " removed from the collection of visible menus.", 
-                	"info", "MenuManager");
+                	"info", _MENUMANAGER);
             
             }
         
@@ -443,7 +465,7 @@
                 
                 p_oMenuItem.destroyEvent.unsubscribe(onItemDestroy);
     
-                YAHOO.log(p_oMenuItem + " successfully unregistered.", "info", "MenuManager");
+                YAHOO.log(p_oMenuItem + " successfully unregistered.", "info", _MENUMANAGER);
     
             }
 
@@ -474,7 +496,7 @@
         
                     oItem.destroyEvent.subscribe(onItemDestroy);
         
-                    YAHOO.log(oItem + " successfully registered.", "info", "MenuManager");
+                    YAHOO.log(oItem + " successfully registered.", "info", _MENUMANAGER);
         
                 }
     
@@ -508,29 +530,29 @@
             
                         oDoc = document;
                 
-                        Event.on(oDoc, "mouseover", onDOMEvent, this, true);
-                        Event.on(oDoc, "mouseout", onDOMEvent, this, true);
-                        Event.on(oDoc, "mousedown", onDOMEvent, this, true);
-                        Event.on(oDoc, "mouseup", onDOMEvent, this, true);
-                        Event.on(oDoc, "click", onDOMEvent, this, true);
-                        Event.on(oDoc, "keydown", onDOMEvent, this, true);
-                        Event.on(oDoc, "keyup", onDOMEvent, this, true);
-                        Event.on(oDoc, "keypress", onDOMEvent, this, true);
+                        Event.on(oDoc, _MOUSEOVER, onDOMEvent, this, true);
+                        Event.on(oDoc, _MOUSEOUT, onDOMEvent, this, true);
+                        Event.on(oDoc, _MOUSEDOWN, onDOMEvent, this, true);
+                        Event.on(oDoc, _MOUSEUP, onDOMEvent, this, true);
+                        Event.on(oDoc, _CLICK, onDOMEvent, this, true);
+                        Event.on(oDoc, _KEYDOWN, onDOMEvent, this, true);
+                        Event.on(oDoc, _KEYUP, onDOMEvent, this, true);
+                        Event.on(oDoc, _KEYPRESS, onDOMEvent, this, true);
     
     
                         m_bInitializedEventHandlers = true;
                         
-                        YAHOO.log("DOM event handlers initialized.", "info", "MenuManager");
+                        YAHOO.log("DOM event handlers initialized.", "info", _MENUMANAGER);
             
                     }
             
-                    p_oMenu.cfg.subscribeToConfigEvent("visible", onMenuVisibleConfigChange);
+                    p_oMenu.cfg.subscribeToConfigEvent(_VISIBLE, onMenuVisibleConfigChange);
                     p_oMenu.destroyEvent.subscribe(onMenuDestroy, p_oMenu, this);
                     p_oMenu.itemAddedEvent.subscribe(onItemAdded);
                     p_oMenu.focusEvent.subscribe(onMenuFocus);
                     p_oMenu.blurEvent.subscribe(onMenuBlur);
         
-                    YAHOO.log(p_oMenu + " successfully registered.", "info", "MenuManager");
+                    YAHOO.log(p_oMenu + " successfully registered.", "info", _MENUMANAGER);
         
                 }
         
@@ -577,7 +599,7 @@
 
                         delete m_oMenus[sId];
             
-                        YAHOO.log(p_oMenu + " successfully unregistered.", "info", "MenuManager");
+                        YAHOO.log(p_oMenu + " successfully unregistered.", "info", _MENUMANAGER);
         
 
                         /*
@@ -590,7 +612,7 @@
                             delete m_oVisibleMenus[sId];
                             
                             YAHOO.log(p_oMenu + " unregistered from the" + 
-                                        " collection of visible menus.", "info", "MenuManager");
+                                        " collection of visible menus.", "info", _MENUMANAGER);
        
                         }
 
@@ -599,7 +621,7 @@
 
                         if (p_oMenu.cfg) {
 
-                            p_oMenu.cfg.unsubscribeFromConfigEvent("visible", 
+                            p_oMenu.cfg.unsubscribeFromConfigEvent(_VISIBLE, 
                                 onMenuVisibleConfigChange);
                             
                         }
@@ -629,12 +651,12 @@
         
                 for (var i in m_oVisibleMenus) {
         
-                    if (YAHOO.lang.hasOwnProperty(m_oVisibleMenus, i)) {
+                    if (Lang.hasOwnProperty(m_oVisibleMenus, i)) {
         
                         oMenu = m_oVisibleMenus[i];
         
                         if (!(oMenu instanceof YAHOO.widget.MenuBar) && 
-                            oMenu.cfg.getProperty("position") == "dynamic") {
+                            oMenu.cfg.getProperty(_POSITION) == _DYNAMIC) {
         
                             oMenu.hide();
         
@@ -740,7 +762,7 @@
                     returnVal;
     
 
-                if (oUL && oUL.tagName && oUL.tagName.toUpperCase() == "UL") {
+                if (oUL && oUL.tagName && oUL.tagName.toUpperCase() == _UL) {
 
                     oNode = oUL.firstChild;
 
@@ -824,7 +846,7 @@
             */
             toString: function () {
             
-                return "MenuManager";
+                return _MENUMANAGER;
             
             }
     

@@ -1,5 +1,9 @@
 (function () {
 
+	var _XY = "xy",
+		_MOUSEDOWN = "mousedown",
+		_CONTEXTMENU = "ContextMenu",
+		_SPACE = " ";
 
 /**
 * Creates a list of options or commands which are made visible in response to 
@@ -47,7 +51,7 @@ var Event = YAHOO.util.Event,
     EVENT_TYPES = {
 
         "TRIGGER_CONTEXT_MENU": "triggerContextMenu",
-        "CONTEXT_MENU": (YAHOO.env.ua.opera ? "mousedown" : "contextmenu"),
+        "CONTEXT_MENU": (YAHOO.env.ua.opera ? _MOUSEDOWN : "contextmenu"),
         "CLICK": "click"
 
     },
@@ -81,7 +85,7 @@ var Event = YAHOO.util.Event,
 */
 function position(p_sType, p_aArgs, p_aPos) {
 
-    this.cfg.setProperty("xy", p_aPos);
+    this.cfg.setProperty(_XY, p_aPos);
     
     this.beforeShowEvent.unsubscribe(position, p_aPos);
 
@@ -305,7 +309,7 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 
     var aXY;
 
-    if (!(p_oEvent.type == "mousedown" && !p_oEvent.ctrlKey)) {
+    if (!(p_oEvent.type == _MOUSEDOWN && !p_oEvent.ctrlKey)) {
 
 		/*
 			Prevent the browser's default context menu from appearing and 
@@ -341,7 +345,7 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 			}
 			else {
 	
-				this.cfg.setProperty("xy", aXY);
+				this.cfg.setProperty(_XY, aXY);
 			
 			}
 	
@@ -368,12 +372,12 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 */
 toString: function() {
 
-    var sReturnVal = "ContextMenu",
+    var sReturnVal = _CONTEXTMENU,
         sId = this.id;
 
     if (sId) {
 
-        sReturnVal += (" " + sId);
+        sReturnVal += (_SPACE + sId);
     
     }
 
