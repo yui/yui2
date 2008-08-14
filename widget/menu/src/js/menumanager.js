@@ -247,38 +247,12 @@
     
                     oMenuItem[sCustomEventType].fire(p_oEvent);                   
     
-    
-                    if (p_oEvent.type == _KEYUP || p_oEvent.type == _MOUSEDOWN) {
-    
-                        if (m_oFocusedMenuItem != oMenuItem) {
-                        
-                            if (m_oFocusedMenuItem) {
-    
-                                m_oFocusedMenuItem.blurEvent.fire();
-                            
-                            }
-    
-                            oMenuItem.focusEvent.fire();
-                        
-                        }
-                    
-                    }
-    
                 }
         
                 oMenu[sCustomEventType].fire(p_oEvent, oMenuItem);
             
             }
             else if (p_oEvent.type == _MOUSEDOWN) {
-    
-                if (m_oFocusedMenuItem) {
-    
-                    m_oFocusedMenuItem.blurEvent.fire();
-    
-                    m_oFocusedMenuItem = null;
-    
-                }
-    
     
                 /*
                     If the target of the event wasn't a menu, hide all 
@@ -321,17 +295,6 @@
                     }
         
                 } 
-    
-            }
-            else if (p_oEvent.type == _KEYUP) { 
-    
-                if (m_oFocusedMenuItem) {
-    
-                    m_oFocusedMenuItem.blurEvent.fire();
-    
-                    m_oFocusedMenuItem = null;
-    
-                }
     
             }
     
@@ -538,7 +501,19 @@
                         Event.on(oDoc, _KEYDOWN, onDOMEvent, this, true);
                         Event.on(oDoc, _KEYUP, onDOMEvent, this, true);
                         Event.on(oDoc, _KEYPRESS, onDOMEvent, this, true);
+                        
+                        if (YAHOO.env.ua.ie) {
+                        
+							Event.on(oDoc, "focusin", onDOMEvent, this, true);
+							Event.on(oDoc, "focusout", onDOMEvent, this, true);
     
+    					}
+    					else {
+    					
+    						oDoc.addEventListener("focus", onDOMEvent, true);
+    						oDoc.addEventListener("blur", onDOMEvent, true);
+    					
+    					}
     
                         m_bInitializedEventHandlers = true;
                         

@@ -1497,14 +1497,8 @@ _configureSubmenu: function (p_oItem) {
 */
 _subscribeToItemEvents: function (p_oItem) {
 
-    p_oItem.focusEvent.subscribe(this._onMenuItemFocus);
-
-    p_oItem.blurEvent.subscribe(this._onMenuItemBlur);
-
     p_oItem.destroyEvent.subscribe(this._onMenuItemDestroy, p_oItem, this);
-
-    p_oItem.cfg.configChangedEvent.subscribe(this._onMenuItemConfigChange,
-        p_oItem, this);
+    p_oItem.cfg.configChangedEvent.subscribe(this._onMenuItemConfigChange, p_oItem, this);
 
 },
 
@@ -3394,36 +3388,6 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 
     }
     
-},
-
-
-/**
-* @method _onMenuItemFocus
-* @description "focus" event handler for the menu's items.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onMenuItemFocus: function (p_sType, p_aArgs) {
-
-    this.parent.focusEvent.fire(this);
-
-},
-
-
-/**
-* @method _onMenuItemBlur
-* @description "blur" event handler for the menu's items.
-* @private
-* @param {String} p_sType String representing the name of the event 
-* that was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onMenuItemBlur: function (p_sType, p_aArgs) {
-
-    this.parent.blurEvent.fire(this);
-
 },
 
 
