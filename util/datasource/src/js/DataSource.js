@@ -986,8 +986,7 @@ parseData : function(oRequest, oFullResponse) {
  * @param oFullResponse {Object} The full Array from the live database.
  * @return {Object} Parsed response object with the following properties:<br>
  *     - results (Array) Array of parsed data results<br>
- *     - error (Boolean) True if there was an error<br>
- *     - totalRecords (Number) Total number of records (if available)
+ *     - error (Boolean) True if there was an error
  */
 parseArrayData : function(oRequest, oFullResponse) {
     if(lang.isArray(oFullResponse)) {
@@ -1086,8 +1085,7 @@ parseArrayData : function(oRequest, oFullResponse) {
  * @param oFullResponse {Object} The full text response from the live database.
  * @return {Object} Parsed response object with the following properties:<br>
  *     - results (Array) Array of parsed data results<br>
- *     - error (Boolean) True if there was an error<br>
- *     - totalRecords (Number) Total number of records (if available)
+ *     - error (Boolean) True if there was an error
  */
 parseTextData : function(oRequest, oFullResponse) {
     if(lang.isString(oFullResponse)) {
@@ -1187,8 +1185,7 @@ parseTextData : function(oRequest, oFullResponse) {
  * @param oFullResponse {Object} The full XML response from the live database.
  * @return {Object} Parsed response object with the following properties<br>
  *     - results (Array) Array of parsed data results<br>
- *     - error (Boolean) True if there was an error<br>
- *     - totalRecords (Number) Total number of records (if available)
+ *     - error (Boolean) True if there was an error
  */
 parseXMLData : function(oRequest, oFullResponse) {
     var bError = false,
@@ -1197,12 +1194,7 @@ parseXMLData : function(oRequest, oFullResponse) {
         xmlList = null,
         metaNode      = schema.metaNode,
         metaLocators  = schema.metaFields || {},
-        totRecLocator = schema.totalRecords, // Back compat
         i,k,loc,v;
-
-    if (totRecLocator && !metaLocators.totalRecords) {
-        metaLocators.totalRecords = totRecLocator;
-    }
 
     // In case oFullResponse is something funky
     try {
@@ -1329,8 +1321,7 @@ parseXMLData : function(oRequest, oFullResponse) {
  * @param oFullResponse {Object} The full JSON from the live database.
  * @return {Object} Parsed response object with the following properties<br>
  *     - results (Array) Array of parsed data results<br>
- *     - error (Boolean) True if there was an error<br>
- *     - totalRecords (Number) Total number of records (if available)
+ *     - error (Boolean) True if there was an error
  */
 parseJSONData : function(oRequest, oFullResponse) {
     var oParsedResponse = {results:[],meta:{}};
@@ -1459,12 +1450,6 @@ parseJSONData : function(oRequest, oFullResponse) {
                 results = resultsList;
             }
 
-            // Step 3. Pull meta fields from oFullResponse if identified
-            if (schema.totalRecords && !metaFields.totalRecords) {
-                // for backward compatibility
-                metaFields.totalRecords = schema.totalRecords;
-            }
-
             for (key in metaFields) {
                 if (lang.hasOwnProperty(metaFields,key)) {
                     path = buildPath(metaFields[key]);
@@ -1502,8 +1487,7 @@ parseJSONData : function(oRequest, oFullResponse) {
  * @param oFullResponse {Object} The full HTML element reference from the live database.
  * @return {Object} Parsed response object with the following properties<br>
  *     - results (Array) Array of parsed data results<br>
- *     - error (Boolean) True if there was an error<br>
- *     - totalRecords (Number) Total number of records (if available)
+ *     - error (Boolean) True if there was an error
  */
 parseHTMLTableData : function(oRequest, oFullResponse) {
     var bError = false;

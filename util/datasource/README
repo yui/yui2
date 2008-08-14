@@ -4,7 +4,7 @@ DataSource Release Notes
 
 * Empty responses of TYPE_FLAT no longer return empty string results.
 * Parsing of totalRecords is no longer supported as a top-leval schema value.
-Implementers should access this value of using metaFields.
+Implementers should access this value of using a metaField.
 * XML parsing has been updated for support of CDATA sections and long text values
 split into multiple nodes.
 * Now passing oCallback object to doBeforeCallback() and doBeforeParseData() methods.
