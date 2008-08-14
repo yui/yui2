@@ -1158,7 +1158,7 @@ YAHOO.widget.ColumnDD = function(oDataTable, oColumn, elTh, elTarget) {
         this.initFrame(); // Needed for DDProxy
         this.invalidHandleTypes = {};
 
-        //Set padding to account for children of nested columns
+        // Set top/bottom padding to account for children of nested columns
         this.setPadding(10, 0, (this.datatable.getTheadEl().offsetHeight + 10) , 0);
 
         YAHOO.util.Event.on(window, 'resize', function() {
@@ -1293,6 +1293,9 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elTh, sHandleId, elProx
         this.init(sHandleId, sHandleId, {dragOnly:true, dragElId: elProxy.id});
         this.initFrame(); // Needed for proxy
         this.resetResizerEl(); // Needed when rowspan > 0
+
+        // Set right padding for bug 1858462
+        this.setPadding(0, 1, 0, 0);
     }
     else {
         YAHOO.log("Column resizer could not be created","warn",oDataTable.toString());

@@ -1516,8 +1516,8 @@ lang.augmentObject(widget.TextboxCellEditor, BCE);
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Editor formatting functions.
- * @property DataTable.Formatter
+ * CellEditor subclasses.
+ * @property DataTable.Editors
  * @type Object
  * @static
  */
