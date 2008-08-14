@@ -9986,6 +9986,11 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
             // Set the sorting values in preparation for refresh
             this.set('sortedBy', oPayload.sortedBy);
         }
+        // Backwards compatibility
+        if (oPayload.sorting) {
+            // Set the sorting values in preparation for refresh
+            this.set('sortedBy', oPayload.sorting);
+        }
     }
 },
 
