@@ -3958,7 +3958,8 @@ getRecordSet : function() {
  */
 getState : function() {
     return {
-        pagination: this.get("paginator") ? this.get("paginator").getState() : null, //this.get("paginator").getState ? this.get("paginator").getState() : null;
+        totalRecords: this.get('paginator') ? this.get('paginator').get("totalRecords") : this._oRecordSet.getLength(),
+        pagination: this.get("paginator") ? this.get("paginator").getState() : null,
         sortedBy: this.get("sortedBy"),
         selectedRows: this.getSelectedRows(),
         selectedCells: this.getSelectedCells()
@@ -9781,9 +9782,11 @@ onEventCancelCellEditor : function(oArgs) {
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
-    this.initializeTable();
-
-    this.onDataReturnSetRows(sRequest,oResponse,oPayload);
+    if((this instanceof DT) && this._sId) {
+        this.initializeTable();
+    
+        this.onDataReturnSetRows(sRequest,oResponse,oPayload);
+    }
 },
 
 /**
@@ -9797,38 +9800,40 @@ onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
-    this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse,payload:oPayload});
-
-    // Pass data through abstract method for any transformations
-    var ok    = this.doBeforeLoadData(oRequest, oResponse, oPayload),
-        pag   = this.get('paginator'),
-        index = 0;
-
-    // Data ok to set
-    if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
-        // Update Records
-        this._oRecordSet.reset();
-
-        if (this.get('dynamicData')) {
-            if (oPayload && oPayload.pagination &&
-                lang.isNumber(oPayload.pagination.recordOffset)) {
-                index = oPayload.pagination.recordOffset;
-            } else if (pag) {
-                index = pag.getStartIndex();
+    if((this instanceof DT) && this._sId) {
+        this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse,payload:oPayload});
+    
+        // Pass data through abstract method for any transformations
+        var ok    = this.doBeforeLoadData(oRequest, oResponse, oPayload),
+            pag   = this.get('paginator'),
+            index = 0;
+    
+        // Data ok to set
+        if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
+            // Update Records
+            this._oRecordSet.reset();
+    
+            if (this.get('dynamicData')) {
+                if (oPayload && oPayload.pagination &&
+                    lang.isNumber(oPayload.pagination.recordOffset)) {
+                    index = oPayload.pagination.recordOffset;
+                } else if (pag) {
+                    index = pag.getStartIndex();
+                }
             }
+    
+            this._oRecordSet.setRecords(oResponse.results, index | 0);
+            
+            // Update state
+            this._handleDataReturnPayload(oRequest, oResponse, oPayload);
+            
+            // Update UI
+            this.render();    
         }
-
-        this._oRecordSet.setRecords(oResponse.results, index | 0);
-        
-        // Update state
-        this._handleDataReturnPayload(oRequest, oResponse, oPayload);
-        
-        // Update UI
-        this.render();    
-    }
-    // Error
-    else if(ok && oResponse.error) {
-        this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
+        // Error
+        else if(ok && oResponse.error) {
+            this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
+        }
     }
 },
 
@@ -9843,22 +9848,24 @@ onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
-    this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse,payload:oPayload});
-
-    // Pass data through abstract method for any transformations
-    var ok = this.doBeforeLoadData(sRequest, oResponse, oPayload);
-
-    // Data ok to append
-    if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {        
-        // Append rows
-        this.addRows(oResponse.results);
-
-        // Update state
-        this._handleDataReturnPayload(sRequest, oResponse, oPayload);
-    }
-    // Error
-    else if(ok && oResponse.error) {
-        this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
+    if((this instanceof DT) && this._sId) {
+        this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse,payload:oPayload});
+    
+        // Pass data through abstract method for any transformations
+        var ok = this.doBeforeLoadData(sRequest, oResponse, oPayload);
+    
+        // Data ok to append
+        if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {        
+            // Append rows
+            this.addRows(oResponse.results);
+    
+            // Update state
+            this._handleDataReturnPayload(sRequest, oResponse, oPayload);
+        }
+        // Error
+        else if(ok && oResponse.error) {
+            this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
+        }
     }
 },
 
@@ -9875,27 +9882,29 @@ onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
  * @param oPayload {MIXED} Argument payload, looks in oPayload.insertIndex.
  */
 onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
-    this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse,payload:oPayload});
-
-    // Pass data through abstract method for any transformations
-    var ok = this.doBeforeLoadData(sRequest, oResponse, oPayload);
-
-    // Data ok to append
-    if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
-        // Insert rows
-        this.addRows(oResponse.results, oPayload.insertIndex | 0);
-
-        // Update state
-        this._handleDataReturnPayload(sRequest, oResponse, oPayload);
-    }
-    // Error
-    else if(ok && oResponse.error) {
-        this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
+    if((this instanceof DT) && this._sId) {
+        this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse,payload:oPayload});
+    
+        // Pass data through abstract method for any transformations
+        var ok = this.doBeforeLoadData(sRequest, oResponse, oPayload);
+    
+        // Data ok to append
+        if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
+            // Insert rows
+            this.addRows(oResponse.results, oPayload.insertIndex | 0);
+    
+            // Update state
+            this._handleDataReturnPayload(sRequest, oResponse, oPayload);
+        }
+        // Error
+        else if(ok && oResponse.error) {
+            this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
+        }
     }
 },
 
 /**
- * Call back function receives reponse from DataSource and populates the
+ * Callback function receives reponse from DataSource and populates the
  * RecordSet with the results.
  *  
  * @method onDataReturnSetRows
@@ -9904,36 +9913,41 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
-    this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse,payload:oPayload});
-
-    // Pass data through abstract method for any transformations
-    var ok    = this.doBeforeLoadData(oRequest, oResponse, oPayload),
-        pag   = this.get('paginator'),
-        index = 0;
-
-    // Data ok to set
-    if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
-        // Update Records
-        if (this.get('dynamicData')) {
-            if (oPayload && oPayload.pagination &&
-                lang.isNumber(oPayload.pagination.recordOffset)) {
-                index = oPayload.pagination.recordOffset;
-            } else if (pag) {
-                index = pag.getStartIndex();
+    if((this instanceof DT) && this._sId) {
+        this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse,payload:oPayload});
+    
+        // Pass data through abstract method for any transformations
+        var ok    = this.doBeforeLoadData(oRequest, oResponse, oPayload),
+            pag   = this.get('paginator'),
+            index = 0;
+    
+        // Data ok to set
+        if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
+            // Update Records
+            if (this.get('dynamicData')) {
+                if (oPayload && oPayload.pagination &&
+                    lang.isNumber(oPayload.pagination.recordOffset)) {
+                    index = oPayload.pagination.recordOffset;
+                } else if (pag) {
+                    index = pag.getStartIndex();
+                }
             }
+    
+            this._oRecordSet.setRecords(oResponse.results, index | 0);
+    
+            // Update state
+            this._handleDataReturnPayload(oRequest, oResponse, oPayload);
+            
+            // Update UI
+            this.render();
         }
-
-        this._oRecordSet.setRecords(oResponse.results, index | 0);
-
-        // Update state
-        this._handleDataReturnPayload(oRequest, oResponse, oPayload);
-        
-        // Update UI
-        this.render();
+        // Error
+        else if(ok && oResponse.error) {
+            this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
+        }
     }
-    // Error
-    else if(ok && oResponse.error) {
-        this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
+    else {
+        YAHOO.log("Instance destroyed before data returned.","info",this.toString());
     }
 },
 
@@ -9964,7 +9978,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
                 }
 
                 // Safety net to increase totalRecords if RecordSet is larger
-                // that assigned totalRecords
+                // than assigned totalRecords
                 totalRecords = Math.max(totalRecords, this._oRecordSet.getLength());
                 if (oPaginator.get('totalRecords') !== totalRecords) {
                     oPaginator.set('totalRecords',totalRecords);
@@ -9987,7 +10001,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
             this.set('sortedBy', oPayload.sortedBy);
         }
         // Backwards compatibility
-        if (oPayload.sorting) {
+        else if (oPayload.sorting) {
             // Set the sorting values in preparation for refresh
             this.set('sortedBy', oPayload.sorting);
         }
