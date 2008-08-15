@@ -75,26 +75,8 @@
 		_SPACE = " ",
 		_MOUSEOVER = "mouseover",
 		_MOUSEOUT = "mouseout",
-        _MOUSEUP = "mouseup",
-        _CLICK = "click",
-        _KEYPRESS = "keypress",
-        _KEYUP = "keyup",
-        _FOCUS = "focus",
-        _BLUR = "blur",
         _ITEM_ADDED = "itemAdded",
         _ITEM_REMOVED = "itemRemoved",
-		_MOUSEOVER_EVENT = "mouseOverEvent",
-		_MOUSEOUT_EVENT = "mouseOutEvent",
-		_MOUSEDOWN_EVENT = "mouseDownEvent",
-		_MOUSEUP_EVENT = "mouseUpEvent",
-		_CLICK_EVENT = "clickEvent",
-		_KEYPRESS_EVENT = "keyPressEvent",
-		_KEYDOWN_EVENT = "keyDownEvent",
-		_KEYUP_EVENT = "keyUpEvent",
-		_FOCUS_EVENT = "focusEvent",
-		_BLUR_EVENT = "blurEvent",
-		_ITEM_ADDED_EVENT = "itemAddedEvent",
-		_ITEM_REMOVED_EVENT = "itemRemovedEvent",
         _HIDDEN = "hidden",
         _YUI_MENU_SHADOW = "yui-menu-shadow",
         _YUI_MENU_SHADOW_VISIBLE = _YUI_MENU_SHADOW + "-visible",
@@ -178,18 +160,18 @@ var Dom = YAHOO.util.Dom,
 
 	EVENT_TYPES = [
     
-		[_MOUSEOVER_EVENT, _MOUSEOVER],
-		[_MOUSEOUT_EVENT, _MOUSEOUT],
-		[_MOUSEDOWN_EVENT, _MOUSEDOWN],
-		[_MOUSEUP_EVENT, _MOUSEUP],
-		[_CLICK_EVENT, _CLICK],
-		[_KEYPRESS_EVENT, _KEYPRESS],
-		[_KEYDOWN_EVENT, _KEYDOWN],
-		[_KEYUP_EVENT, _KEYUP],
-		[_FOCUS_EVENT, _FOCUS],
-		[_BLUR_EVENT, _BLUR],
-		[_ITEM_ADDED_EVENT, _ITEM_ADDED],
-		[_ITEM_REMOVED_EVENT, _ITEM_REMOVED]
+		["mouseOverEvent", _MOUSEOVER],
+		["mouseOutEvent", _MOUSEOUT],
+		["mouseDownEvent", _MOUSEDOWN],
+		["mouseUpEvent", "mouseup"],
+		["clickEvent", "click"],
+		["keyPressEvent", "keypress"],
+		["keyDownEvent", _KEYDOWN],
+		["keyUpEvent", "keyup"],
+		["focusEvent", "focus"],
+		["blurEvent", "blur"],
+		["itemAddedEvent", _ITEM_ADDED],
+		["itemRemovedEvent", _ITEM_REMOVED]
 
 	],
 
@@ -1702,7 +1684,6 @@ _onMouseOver: function (p_sType, p_aArgs) {
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
         oTarget = Event.getTarget(oEvent),
-        oParent = this.parent,
         oRoot = this.getRoot(),
         oSubmenuHideDelayTimer = this._submenuHideDelayTimer,
         oParentMenu,
@@ -1738,13 +1719,13 @@ _onMouseOver: function (p_sType, p_aArgs) {
 			this.clearActiveItem();
 	
 	
-			if (oParent && oSubmenuHideDelayTimer) {
+			if (this.parent && oSubmenuHideDelayTimer) {
 	
 				oSubmenuHideDelayTimer.cancel();
 	
-				oParent.cfg.setProperty(_SELECTED, true);
+				this.parent.cfg.setProperty(_SELECTED, true);
 	
-				oParentMenu = oParent.parent;
+				oParentMenu = this.parent.parent;
 	
 				oParentMenu._bHandledMouseOutEvent = true;
 				oParentMenu._bHandledMouseOverEvent = false;
@@ -2109,7 +2090,6 @@ _onKeyDown: function (p_sType, p_aArgs) {
 
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
-        oParent = this.parent,
         oSubmenu,
         oItemCfg,
         oParentItem,
@@ -2149,6 +2129,7 @@ _onKeyDown: function (p_sType, p_aArgs) {
     if (oItem && !oItem.cfg.getProperty(_DISABLED)) {
 
         oItemCfg = oItem.cfg;
+        oParentItem = this.parent;
 
         switch(oEvent.keyCode) {
     
@@ -2312,9 +2293,9 @@ _onKeyDown: function (p_sType, p_aArgs) {
     
             case 37:    // Left arrow
     
-                if (oParent) {
+                if (oParentItem) {
     
-                    oParentMenu = oParent.parent;
+                    oParentMenu = oParentItem.parent;
     
                     if (oParentMenu instanceof YAHOO.widget.MenuBar) {
     
@@ -2344,7 +2325,7 @@ _onKeyDown: function (p_sType, p_aArgs) {
     
                         this.hide();
     
-                        oParent.focus();
+                        oParentItem.focus();
                     
                     }
     
@@ -2368,9 +2349,9 @@ _onKeyDown: function (p_sType, p_aArgs) {
         
             this.hide();
 
-            if (oParent) {
+            if (this.parent) {
 
-                oParent.focus();
+                this.parent.focus();
             
             }
 
@@ -2766,8 +2747,6 @@ _onBeforeShow: function (p_sType, p_aArgs) {
     var nOptions,
         n,
         oSrcElement,
-        oParent = this.parent,
-        oParentMenu,
         oContainer = this.cfg.getProperty(_CONTAINER);
 
 
@@ -2782,26 +2761,22 @@ _onBeforeShow: function (p_sType, p_aArgs) {
 
         if (this.itemData) {
 
-            if (oParent) {
-            
-            	oParentMenu = oParent.parent;
-            
-				if (oParentMenu && oParentMenu.srcElement && 
-					oParentMenu.srcElement.tagName.toUpperCase() == _SELECT) {
-	
-					nOptions = this.itemData.length;
-		
-					for (n=0; n < nOptions; n++) {
-	
-						if (this.itemData[n].tagName) {
-	
-							this.addItem((new this.ITEM_TYPE(this.itemData[n])));
-		
-						}
-		
-					}
-	
-				}
+            if (this.parent && this.parent.parent && 
+                this.parent.parent.srcElement && 
+                this.parent.parent.srcElement.tagName.toUpperCase() == 
+                _SELECT) {
+
+                nOptions = this.itemData.length;
+    
+                for(n=0; n<nOptions; n++) {
+
+                    if (this.itemData[n].tagName) {
+
+                        this.addItem((new this.ITEM_TYPE(this.itemData[n])));
+    
+                    }
+    
+                }
             
             }
             else {
@@ -2840,9 +2815,9 @@ _onBeforeShow: function (p_sType, p_aArgs) {
         }
         else {
 
-            if (oParent) {
+            if (this.parent) {
 
-                this.render(oParent.element);     
+                this.render(this.parent.element);     
 
             }
             else {
