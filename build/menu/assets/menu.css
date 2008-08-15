@@ -1,8 +1,14 @@
 /* Menu & MenuBar styles */
 
+.yuimenu {
+
+    top: -999em;
+    left: -999em;
+
+}
+
 .yuimenubar {
 
-    visibility: visible;
     position: static;
 
 }
@@ -10,10 +16,7 @@
 .yuimenu .yuimenu,
 .yuimenubar .yuimenu {
 
-    visibility: hidden;
     position: absolute;
-    top: -10000px;
-    left: -10000px;
 
 }
 
