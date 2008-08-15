@@ -732,7 +732,6 @@ MenuItem.prototype = {
 
         var oSrcEl = this.srcElement,
             oConfig = this.cfg,
-            oParent = this.parent,
             oNode,
             aOptions,
             nOptions,
@@ -742,11 +741,13 @@ MenuItem.prototype = {
 
         if (oSrcEl.childNodes.length > 0) {
 
-            if (oParent.lazyLoad && oParent.srcElement && 
-                oParent.srcElement.tagName.toUpperCase() == _SELECT) {
+            if (this.parent.lazyLoad && this.parent.srcElement && 
+                this.parent.srcElement.tagName.toUpperCase() == _SELECT) {
 
-                oConfig.setProperty(_SUBMENU, 
-                        { id: Dom.generateId(), itemdata: oSrcEl.childNodes });
+                oConfig.setProperty(
+                        _SUBMENU, 
+                        { id: Dom.generateId(), itemdata: oSrcEl.childNodes }
+                    );
 
             }
             else {
@@ -1231,8 +1232,7 @@ MenuItem.prototype = {
 
         var oSubmenu = p_aArgs[0],
             oConfig = this.cfg,
-            oParent = this.parent,
-            bLazyLoad = oParent && oParent.lazyLoad,
+            bLazyLoad = this.parent && this.parent.lazyLoad,
             oMenu,
             sSubmenuId,
             oSubmenuConfig;
@@ -1278,16 +1278,19 @@ MenuItem.prototype = {
             if (oMenu) {
 
 				oMenu.cfg.setProperty(_PREVENT_CONTEXT_OVERLAP, true);
-				
-				if (oConfig.getProperty(_URL) !== _HASH) {
-
-					oConfig.setProperty(_URL, (_HASH + oMenu.id));
-
-				}
 
                 addClassNameForState.call(this, _HAS_SUBMENU);
 
+
+				if (oConfig.getProperty(_URL) !== _HASH) {
+				
+					oConfig.setProperty(_URL, (_HASH + oMenu.id));
+				
+				}
+
+
                 this._oSubmenu = oMenu;
+
 
                 if (UA.opera) {
                 
@@ -1666,8 +1669,7 @@ MenuItem.prototype = {
     */
     getNextEnabledSibling: function () {
 
-        var oParent = this.parent,
-        	nGroupIndex,
+        var nGroupIndex,
             aItemGroups,
             oNextItem,
             nNextGroupIndex,
@@ -1680,11 +1682,11 @@ MenuItem.prototype = {
 
         }
 
-        if (oParent instanceof Menu) {
+        if (this.parent instanceof Menu) {
 
             nGroupIndex = this.groupIndex;
     
-            aItemGroups = oParent.getItemGroups();
+            aItemGroups = this.parent.getItemGroups();
     
             if (this.index < (aItemGroups[nGroupIndex].length - 1)) {
     
@@ -1731,8 +1733,7 @@ MenuItem.prototype = {
     */
     getPreviousEnabledSibling: function () {
 
-        var oParent = this.parent,
-        	nGroupIndex,
+        var nGroupIndex,
             aItemGroups,
             oPreviousItem,
             nPreviousGroupIndex,
@@ -1752,15 +1753,16 @@ MenuItem.prototype = {
 
         }
 
-       if (oParent instanceof Menu) {
+       if (this.parent instanceof Menu) {
 
             nGroupIndex = this.groupIndex;
-            aItemGroups = oParent.getItemGroups();
+            aItemGroups = this.parent.getItemGroups();
 
     
             if (this.index > getFirstItemIndex(aItemGroups[nGroupIndex], 0)) {
     
-                oPreviousItem = getPreviousArrayItem(aItemGroups[nGroupIndex], (this.index-1));
+                oPreviousItem = getPreviousArrayItem(aItemGroups[nGroupIndex], 
+                        (this.index-1));
     
             }
             else {
@@ -1833,8 +1835,7 @@ MenuItem.prototype = {
         }
 
 
-        if (!this.cfg.getProperty(_DISABLED) && oParent && 
-            oParent.cfg.getProperty(_VISIBLE) && 
+        if (!this.cfg.getProperty(_DISABLED) && oParent && oParent.cfg.getProperty(_VISIBLE) && 
             this.element.style.display != _NONE) {
 
 
@@ -1860,8 +1861,7 @@ MenuItem.prototype = {
 
         var oParent = this.parent;
 
-        if (!this.cfg.getProperty(_DISABLED) && oParent && 
-            oParent.cfg.getProperty(_VISIBLE)) {
+        if (!this.cfg.getProperty(_DISABLED) && oParent && oParent.cfg.getProperty(_VISIBLE)) {
 
             Lang.later(0, this, function () {
 
