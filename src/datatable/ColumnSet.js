@@ -1158,7 +1158,7 @@ YAHOO.widget.ColumnDD = function(oDataTable, oColumn, elTh, elTarget) {
         this.initFrame(); // Needed for DDProxy
         this.invalidHandleTypes = {};
 
-        //Set padding to account for children of nested columns
+        // Set top/bottom padding to account for children of nested columns
         this.setPadding(10, 0, (this.datatable.getTheadEl().offsetHeight + 10) , 0);
 
         YAHOO.util.Event.on(window, 'resize', function() {
@@ -1293,6 +1293,9 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elTh, sHandleId, elProx
         this.init(sHandleId, sHandleId, {dragOnly:true, dragElId: elProxy.id});
         this.initFrame(); // Needed for proxy
         this.resetResizerEl(); // Needed when rowspan > 0
+
+        // Set right padding for bug 1858462
+        this.setPadding(0, 1, 0, 0);
     }
     else {
         YAHOO.log("Column resizer could not be created","warn",oDataTable.toString());
@@ -1333,6 +1336,15 @@ if(YAHOO.util.DD) {
          * @param e {string} The mouseup event
          */
         onMouseUp : function(e) {
+            // Reset height of all resizer els in case TH's have changed height
+            var allKeys = this.datatable.getColumnSet().keys,
+                col;
+            for(var i=0, len=allKeys.length; i<len; i++) {
+                col = allKeys[i];
+                if(col._ddResizer) {
+                    col._ddResizer.resetResizerEl();
+                }
+            }
             this.resetResizerEl();
             
             var el = this.headCellLiner;
@@ -1372,6 +1384,25 @@ if(YAHOO.util.DD) {
             }
         },
     
+        /**
+         * Handles start drag on the Column resizer.
+         *
+         * @method startDrag
+         * @param e {string} The drag event
+         */
+        startDrag : function() {
+            // Shrinks height of all resizer els to not hold open TH els
+            var allKeys = this.datatable.getColumnSet().keys,
+                thisKey = this.column.getKeyIndex(),
+                col;
+            for(var i=0, len=allKeys.length; i<len; i++) {
+                col = allKeys[i];
+                if(col._ddResizer) {
+                    YAHOO.util.Dom.get(col._ddResizer.handleElId).style.height = "1em";
+                }
+            }
+        },
+
         /**
          * Handles drag events on the Column resizer.
          *

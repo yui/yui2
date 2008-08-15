@@ -724,7 +724,8 @@ YAHOO.widget.AutoComplete.prototype.getSubsetMatches = function(sQuery) {
 };
 
 /**
- * Executed by DataSource (within DataSource scope) to handle responseStripAfter cleanup.
+ * Executed by DataSource (within DataSource scope via doBeforeParseData()) to
+ * handle responseStripAfter cleanup.
  *
  * @method preparseRawResponse
  * @param sQuery {String} Query string.
@@ -740,8 +741,8 @@ YAHOO.widget.AutoComplete.prototype.preparseRawResponse = function(oRequest, oFu
 };
 
 /**
- * Executed by DataSource (within DataSource scope) to filter results through a
- * simple client-side matching algorithm. 
+ * Executed by DataSource (within DataSource scope via doBeforeCallback()) to
+ * filter results through a simple client-side matching algorithm. 
  *
  * @method filterResults
  * @param sQuery {String} Original request.
@@ -829,7 +830,9 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 YAHOO.widget.AutoComplete.prototype.handleResponse = function(sQuery, oResponse, oPayload) {
-    this._populateList(sQuery, oResponse, oPayload);
+    if((this instanceof YAHOO.widget.AutoComplete) && this._sId) {
+        this._populateList(sQuery, oResponse, oPayload);
+    }
 };
 
 /**

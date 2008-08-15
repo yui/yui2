@@ -335,6 +335,19 @@ convertDate : function(oData) {
 
 });
 
+// Done in separate step so referenced functions are defined.
+/**
+ * Data parsing functions.
+ * @property DataSource.Parser
+ * @type Object
+ * @static
+ */
+DS.Parser = {
+    string   : DS.parseString,
+    number   : DS.parseNumber,
+    date     : DS.parseDate
+};
+
 // Prototype properties and methods
 DS.prototype = {
 
@@ -635,12 +648,12 @@ clearInterval : function(nId) {
  *
  * @method clearAllIntervals
  */
-clearAllIntervals : function(nId) {
+clearAllIntervals : function() {
     var tracker = this._aIntervals || [];
     for(var i=tracker.length-1; i>-1; i--) {
-        tracker.splice(i,1);
-        clearInterval(nId);
+        clearInterval(tracker[i]);
     }
+    tracker = [];
 },
 
 /**
@@ -945,8 +958,7 @@ parseData : function(oRequest, oFullResponse) {
  * @param oFullResponse {Object} The full Array from the live database.
  * @return {Object} Parsed response object with the following properties:<br>
  *     - results (Array) Array of parsed data results<br>
- *     - error (Boolean) True if there was an error<br>
- *     - totalRecords (Number) Total number of records (if available)
+ *     - error (Boolean) True if there was an error
  */
 parseArrayData : function(oRequest, oFullResponse) {
     if(lang.isArray(oFullResponse)) {
@@ -963,9 +975,11 @@ parseArrayData : function(oRequest, oFullResponse) {
                 }
             }
 
-            var parsers = {};
+            var parsers = {}, p;
             for (i = fields.length - 1; i >= 0; --i) {
-                var p = fields[i].parser || fields[i].converter;
+                p = (typeof fields[i].parser === 'function' ?
+                          fields[i].parser :
+                          DS.Parser[fields[i].parser+'']) || fields[i].converter;
                 if (p) {
                     parsers[fields[i].key] = p;
                 }
@@ -1039,8 +1053,7 @@ parseArrayData : function(oRequest, oFullResponse) {
  * @param oFullResponse {Object} The full text response from the live database.
  * @return {Object} Parsed response object with the following properties:<br>
  *     - results (Array) Array of parsed data results<br>
- *     - error (Boolean) True if there was an error<br>
- *     - totalRecords (Number) Total number of records (if available)
+ *     - error (Boolean) True if there was an error
  */
 parseTextData : function(oRequest, oFullResponse) {
     if(lang.isString(oFullResponse)) {
@@ -1087,8 +1100,11 @@ parseTextData : function(oRequest, oFullResponse) {
                                             if(!field.parser && field.converter) {
                                                 field.parser = field.converter;
                                             }
-                                            if(field.parser) {
-                                                data = field.parser.call(this, data);
+                                            var parser = (typeof field.parser === 'function') ?
+                                                field.parser :
+                                                DS.Parser[field.parser+''];
+                                            if(parser) {
+                                                data = parser.call(this, data);
                                             }
                                             // Safety measure
                                             if(data === undefined) {
@@ -1131,8 +1147,7 @@ parseTextData : function(oRequest, oFullResponse) {
  * @param oFullResponse {Object} The full XML response from the live database.
  * @return {Object} Parsed response object with the following properties<br>
  *     - results (Array) Array of parsed data results<br>
- *     - error (Boolean) True if there was an error<br>
- *     - totalRecords (Number) Total number of records (if available)
+ *     - error (Boolean) True if there was an error
  */
 parseXMLData : function(oRequest, oFullResponse) {
     var bError = false,
@@ -1141,12 +1156,7 @@ parseXMLData : function(oRequest, oFullResponse) {
         xmlList = null,
         metaNode      = schema.metaNode,
         metaLocators  = schema.metaFields || {},
-        totRecLocator = schema.totalRecords, // Back compat
         i,k,loc,v;
-
-    if (totRecLocator && !metaLocators.totalRecords) {
-        metaLocators.totalRecords = totRecLocator;
-    }
 
     // In case oFullResponse is something funky
     try {
@@ -1234,8 +1244,11 @@ parseXMLData : function(oRequest, oFullResponse) {
                 if(!field.parser && field.converter) {
                     field.parser = field.converter;
                 }
-                if(field.parser) {
-                    data = field.parser.call(this, data);
+                var parser = (typeof field.parser === 'function') ?
+                    field.parser :
+                    DS.Parser[field.parser+''];
+                if(parser) {
+                    data = parser.call(this, data);
                 }
                 // Safety measure
                 if(data === undefined) {
@@ -1263,8 +1276,7 @@ parseXMLData : function(oRequest, oFullResponse) {
  * @param oFullResponse {Object} The full JSON from the live database.
  * @return {Object} Parsed response object with the following properties<br>
  *     - results (Array) Array of parsed data results<br>
- *     - error (Boolean) True if there was an error<br>
- *     - totalRecords (Number) Total number of records (if available)
+ *     - error (Boolean) True if there was an error
  */
 parseJSONData : function(oRequest, oFullResponse) {
     var oParsedResponse = {results:[],meta:{}};
@@ -1341,10 +1353,14 @@ parseJSONData : function(oRequest, oFullResponse) {
         if (!bError) {
             // Step 2. Parse out field data if identified
             if(schema.fields) {
+                var field;
                 // Build the field parser map and location paths
                 for (i = fields.length - 1; i >= 0; --i) {
-                    key    = fields[i].key || fields[i];
-                    parser = fields[i].parser || fields[i].converter;
+                    field = fields[i];
+                    key    = field.key || field;
+                    parser = ((typeof field.parser === 'function') ?
+                        field.parser :
+                        DS.Parser[field.parser+'']) || field.converter;
                     path   = buildPath(key);
     
                     if (parser) {
@@ -1388,12 +1404,6 @@ parseJSONData : function(oRequest, oFullResponse) {
                 results = resultsList;
             }
 
-            // Step 3. Pull meta fields from oFullResponse if identified
-            if (schema.totalRecords && !metaFields.totalRecords) {
-                // for backward compatibility
-                metaFields.totalRecords = schema.totalRecords;
-            }
-
             for (key in metaFields) {
                 if (lang.hasOwnProperty(metaFields,key)) {
                     path = buildPath(metaFields[key]);
@@ -1427,8 +1437,7 @@ parseJSONData : function(oRequest, oFullResponse) {
  * @param oFullResponse {Object} The full HTML element reference from the live database.
  * @return {Object} Parsed response object with the following properties<br>
  *     - results (Array) Array of parsed data results<br>
- *     - error (Boolean) True if there was an error<br>
- *     - totalRecords (Number) Total number of records (if available)
+ *     - error (Boolean) True if there was an error
  */
 parseHTMLTableData : function(oRequest, oFullResponse) {
     var bError = false;
@@ -1454,8 +1463,11 @@ parseHTMLTableData : function(oRequest, oFullResponse) {
                 if(!field.parser && field.converter) {
                     field.parser = field.converter;
                 }
-                if(field.parser) {
-                    data = field.parser.call(this, data);
+                var parser = (typeof field.parser === 'function') ?
+                    field.parser :
+                    DS.Parser[field.parser+''];
+                if(parser) {
+                    data = parser.call(this, data);
                 }
                 // Safety measure
                 if(data === undefined) {
@@ -2099,7 +2111,8 @@ makeConnection : function(oRequest, oCallback, oCaller) {
                 message:DS.ERROR_DATAINVALID});
 
         // Backward compatibility
-        if((this.liveData.lastIndexOf("?") !== this.liveData.length-1) &&
+        if(lang.isString(this.liveData) && lang.isString(oRequest) &&
+            (this.liveData.lastIndexOf("?") !== this.liveData.length-1) &&
             (oRequest.indexOf("?") !== 0)){
         }
 

@@ -510,6 +510,19 @@ _initBdThEl : function(elTh, oColumn) {
     elTh.innerHTML = sLabel;
 },
 
+/**
+ * Initializes ScrollingDataTable TBODY element for data
+ *
+ * @method _initTbodyEl
+ * @param elTable {HTMLElement} TABLE element into which to create TBODY .
+ * @private
+ */
+_initTbodyEl : function(elTable) {
+    SDT.superclass._initTbodyEl.call(this, elTable);
+    
+    // Bug 2105534 - Safari gap
+    elTable.style.marginTop = "-"+this._elTbody.offsetTop+"px";
+},
 
 
 
