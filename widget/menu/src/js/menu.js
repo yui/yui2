@@ -12,6 +12,7 @@
 		_DIV_LOWERCASE = "div",
 		_ID = "id",
 		_SELECT = "SELECT",
+		_XY = "xy",
 		_Y = "y",
 		_UL_UPPERCASE = "UL",
 		_UL_LOWERCASE = "ul",
@@ -185,7 +186,7 @@ var Dom = YAHOO.util.Dom,
 		key: _CONSTRAIN_TO_VIEWPORT, 
 		value: true, 
 		validator: Lang.isBoolean, 
-		supercedes: [_IFRAME,"x",_Y,"xy"]
+		supercedes: [_IFRAME,"x",_Y,_XY]
 	}, 
 
 	PREVENT_CONTEXT_OVERLAP_CONFIG =  {
@@ -2827,6 +2828,53 @@ _onBeforeShow: function (p_sType, p_aArgs) {
             }                
 
         }
+
+    }
+
+
+
+    var bDynamicPos = (this.cfg.getProperty(_POSITION) == _DYNAMIC),
+    	oParent = this.parent,
+    	nAvailableHeight,
+        nMinScrollHeight,
+        nViewportHeight;
+
+
+    if (!oParent && bDynamicPos) {
+
+        this.cfg.refireEvent(_XY);
+   
+    }
+
+
+    function clearScrollHeight() {
+    
+    	this._setScrollHeight(this.cfg.setProperty(_MAX_HEIGHT));
+        this.hideEvent.unsubscribe(clearScrollHeight);
+    
+    }
+
+
+    if (!(this instanceof YAHOO.widget.MenuBar) && bDynamicPos && !oParent) {
+
+		nViewportHeight = Dom.getViewportHeight();
+	
+		if (this.element.offsetHeight >= nViewportHeight) {
+
+			nAvailableHeight = (nViewportHeight - (Overlay.VIEWPORT_OFFSET * 2));
+			nMinScrollHeight = this.cfg.getProperty(_MIN_SCROLL_HEIGHT);
+
+			if (nAvailableHeight < nMinScrollHeight) {
+
+				nAvailableHeight = nMinScrollHeight;
+			
+			}
+
+			this._setScrollHeight(nAvailableHeight);
+
+			this.hideEvent.subscribe(clearScrollHeight);
+
+		}
 
     }
 
