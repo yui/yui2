@@ -1278,6 +1278,12 @@ MenuItem.prototype = {
             if (oMenu) {
 
 				oMenu.cfg.setProperty(_PREVENT_CONTEXT_OVERLAP, true);
+				
+				if (oConfig.getProperty(_URL) !== _HASH) {
+
+					oConfig.setProperty(_URL, (_HASH + oMenu.id));
+
+				}
 
                 addClassNameForState.call(this, _HAS_SUBMENU);
 
