@@ -36,6 +36,10 @@
 		_KEYDOWN = "keydown",
 		_KEYUP = "keyup",
 		_KEYPRESS = "keypress",
+		_FOCUS = "focus",
+		_FOCUSIN = "focusin",
+		_BLUR = "blur",
+		_FOCUSOUT = "focusout",
 		_CLICK_TO_HIDE = "clicktohide",
 		_POSITION = "position", 
 		_DYNAMIC = "dynamic",
@@ -95,7 +99,11 @@
             "mouseout": "mouseOutEvent",
             "keydown": "keyDownEvent",
             "keyup": "keyUpEvent",
-            "keypress": "keyPressEvent"
+            "keypress": "keyPressEvent",
+            "focus": "focusEvent",
+            "focusin": "focusEvent",
+            "blur": "blurEvent",
+            "focusout": "blurEvent"
         },
     
     
@@ -333,7 +341,7 @@
         */
         function onMenuFocus(p_sType, p_aArgs) {
     
-            var oItem = p_aArgs[0];
+            var oItem = p_aArgs[1];
     
             if (oItem) {
     
@@ -504,14 +512,14 @@
                         
                         if (YAHOO.env.ua.ie) {
                         
-							Event.on(oDoc, "focusin", onDOMEvent, this, true);
-							Event.on(oDoc, "focusout", onDOMEvent, this, true);
+							Event.on(oDoc, _FOCUSIN, onDOMEvent, this, true);
+							Event.on(oDoc, _FOCUSOUT, onDOMEvent, this, true);
     
     					}
     					else {
     					
-    						oDoc.addEventListener("focus", onDOMEvent, true);
-    						oDoc.addEventListener("blur", onDOMEvent, true);
+    						oDoc.addEventListener(_FOCUS, onDOMEvent, true);
+    						oDoc.addEventListener(_BLUR, onDOMEvent, true);
     					
     					}
     
