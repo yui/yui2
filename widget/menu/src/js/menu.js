@@ -83,6 +83,18 @@
         _BLUR = "blur",
         _ITEM_ADDED = "itemAdded",
         _ITEM_REMOVED = "itemRemoved",
+		_MOUSEOVER_EVENT = "mouseOverEvent",
+		_MOUSEOUT_EVENT = "mouseOutEvent",
+		_MOUSEDOWN_EVENT = "mouseDownEvent",
+		_MOUSEUP_EVENT = "mouseUpEvent",
+		_CLICK_EVENT = "clickEvent",
+		_KEYPRESS_EVENT = "keyPressEvent",
+		_KEYDOWN_EVENT = "keyDownEvent",
+		_KEYUP_EVENT = "keyUpEvent",
+		_FOCUS_EVENT = "focusEvent",
+		_BLUR_EVENT = "blurEvent",
+		_ITEM_ADDED_EVENT = "itemAddedEvent",
+		_ITEM_REMOVED_EVENT = "itemRemovedEvent",
         _HIDDEN = "hidden",
         _YUI_MENU_SHADOW = "yui-menu-shadow",
         _YUI_MENU_SHADOW_VISIBLE = _YUI_MENU_SHADOW + "-visible",
@@ -164,159 +176,140 @@ var Dom = YAHOO.util.Dom,
     
     m_oShadowTemplate,
 
-    /**
-    * Constant representing the name of the Menu's events
-    * @property EVENT_TYPES
-    * @private
-    * @final
-    * @type Object
-    */
-    EVENT_TYPES = {
+	EVENT_TYPES = [
     
-        "MOUSE_OVER": _MOUSEOVER,
-        "MOUSE_OUT": _MOUSEOUT,
-        "MOUSE_DOWN": _MOUSEDOWN,
-        "MOUSE_UP": _MOUSEUP,
-        "CLICK": _CLICK,
-        "KEY_PRESS": _KEYPRESS,
-        "KEY_DOWN": _KEYDOWN,
-        "KEY_UP": _KEYUP,
-        "FOCUS": _FOCUS,
-        "BLUR": _BLUR,
-        "ITEM_ADDED": _ITEM_ADDED,
-        "ITEM_REMOVED": _ITEM_REMOVED
-    
-    },
+		[_MOUSEOVER_EVENT, _MOUSEOVER],
+		[_MOUSEOUT_EVENT, _MOUSEOUT],
+		[_MOUSEDOWN_EVENT, _MOUSEDOWN],
+		[_MOUSEUP_EVENT, _MOUSEUP],
+		[_CLICK_EVENT, _CLICK],
+		[_KEYPRESS_EVENT, _KEYPRESS],
+		[_KEYDOWN_EVENT, _KEYDOWN],
+		[_KEYUP_EVENT, _KEYUP],
+		[_FOCUS_EVENT, _FOCUS],
+		[_BLUR_EVENT, _BLUR],
+		[_ITEM_ADDED_EVENT, _ITEM_ADDED],
+		[_ITEM_REMOVED_EVENT, _ITEM_REMOVED]
 
+	],
 
-    /**
-    * Constant representing the Menu's configuration properties
-    * @property DEFAULT_CONFIG
-    * @private
-    * @final
-    * @type Object
-    */
-    DEFAULT_CONFIG = {
+	VISIBLE_CONFIG =  { 
+		key: _VISIBLE, 
+		value: false, 
+		validator: Lang.isBoolean
+	}, 
 
-        "VISIBLE": { 
-            key: _VISIBLE, 
-            value: false, 
-            validator: Lang.isBoolean
-        }, 
-    
-        "CONSTRAIN_TO_VIEWPORT": {
-            key: _CONSTRAIN_TO_VIEWPORT, 
-            value: true, 
-            validator: Lang.isBoolean, 
-            supercedes: [_IFRAME,"x",_Y,"xy"]
-        }, 
+	CONSTRAIN_TO_VIEWPORT_CONFIG =  {
+		key: _CONSTRAIN_TO_VIEWPORT, 
+		value: true, 
+		validator: Lang.isBoolean, 
+		supercedes: [_IFRAME,"x",_Y,"xy"]
+	}, 
 
-		"PREVENT_CONTEXT_OVERLAP": {
-			key: _PREVENT_CONTEXT_OVERLAP,
-			value: true,
-			validator: Lang.isBoolean,  
-			supercedes: [_CONSTRAIN_TO_VIEWPORT]
-		},
-    
-        "POSITION": { 
-            key: _POSITION, 
-            value: _DYNAMIC, 
-            validator: checkPosition, 
-            supercedes: [_VISIBLE, _IFRAME]
-        }, 
-    
-        "SUBMENU_ALIGNMENT": { 
-            key: _SUBMENU_ALIGNMENT, 
-            value: ["tl","tr"]
-        },
-    
-        "AUTO_SUBMENU_DISPLAY": { 
-            key: _AUTO_SUBMENU_DISPLAY, 
-            value: true, 
-            validator: Lang.isBoolean,
-            suppressEvent: true
-        }, 
-    
-        "SHOW_DELAY": { 
-            key: _SHOW_DELAY, 
-            value: 250, 
-            validator: Lang.isNumber, 
-            suppressEvent: true
-        }, 
-    
-        "HIDE_DELAY": { 
-            key: _HIDE_DELAY, 
-            value: 0, 
-            validator: Lang.isNumber, 
-            suppressEvent: true
-        }, 
-    
-        "SUBMENU_HIDE_DELAY": { 
-            key: _SUBMENU_HIDE_DELAY, 
-            value: 250, 
-            validator: Lang.isNumber,
-            suppressEvent: true
-        }, 
-    
-        "CLICK_TO_HIDE": { 
-            key: _CLICK_TO_HIDE, 
-            value: true, 
-            validator: Lang.isBoolean,
-            suppressEvent: true
-        },
-    
-        "CONTAINER": { 
-            key: _CONTAINER,
-            suppressEvent: true
-        }, 
+	PREVENT_CONTEXT_OVERLAP_CONFIG =  {
+		key: _PREVENT_CONTEXT_OVERLAP,
+		value: true,
+		validator: Lang.isBoolean,  
+		supercedes: [_CONSTRAIN_TO_VIEWPORT]
+	},
 
-        "SCROLL_INCREMENT": { 
-            key: _SCROLL_INCREMENT, 
-            value: 1, 
-            validator: Lang.isNumber,
-            supercedes: [_MAX_HEIGHT],
-            suppressEvent: true
-        },
+	POSITION_CONFIG =  { 
+		key: _POSITION, 
+		value: _DYNAMIC, 
+		validator: checkPosition, 
+		supercedes: [_VISIBLE, _IFRAME]
+	}, 
 
-        "MIN_SCROLL_HEIGHT": { 
-            key: _MIN_SCROLL_HEIGHT, 
-            value: 90, 
-            validator: Lang.isNumber,
-            supercedes: [_MAX_HEIGHT],
-            suppressEvent: true
-        },    
-    
-        "MAX_HEIGHT": { 
-            key: _MAX_HEIGHT, 
-            value: 0, 
-            validator: Lang.isNumber,
-            supercedes: [_IFRAME],
-            suppressEvent: true
-        }, 
-    
-        "CLASS_NAME": { 
-            key: _CLASSNAME, 
-            value: null, 
-            validator: Lang.isString,
-            suppressEvent: true
-        }, 
-    
-        "DISABLED": { 
-            key: _DISABLED, 
-            value: false, 
-            validator: Lang.isBoolean,
-            suppressEvent: true
-        },
-        
-        "SHADOW": { 
-            key: _SHADOW, 
-            value: true, 
-            validator: Lang.isBoolean,
-            suppressEvent: true,
-            supercedes: [_VISIBLE]
-        }        
-    
-    };
+	SUBMENU_ALIGNMENT_CONFIG =  { 
+		key: _SUBMENU_ALIGNMENT, 
+		value: ["tl","tr"]
+	},
+
+	AUTO_SUBMENU_DISPLAY_CONFIG =  { 
+		key: _AUTO_SUBMENU_DISPLAY, 
+		value: true, 
+		validator: Lang.isBoolean,
+		suppressEvent: true
+	}, 
+
+	SHOW_DELAY_CONFIG =  { 
+		key: _SHOW_DELAY, 
+		value: 250, 
+		validator: Lang.isNumber, 
+		suppressEvent: true
+	}, 
+
+	HIDE_DELAY_CONFIG =  { 
+		key: _HIDE_DELAY, 
+		value: 0, 
+		validator: Lang.isNumber, 
+		suppressEvent: true
+	}, 
+
+	SUBMENU_HIDE_DELAY_CONFIG =  { 
+		key: _SUBMENU_HIDE_DELAY, 
+		value: 250, 
+		validator: Lang.isNumber,
+		suppressEvent: true
+	}, 
+
+	CLICK_TO_HIDE_CONFIG =  { 
+		key: _CLICK_TO_HIDE, 
+		value: true, 
+		validator: Lang.isBoolean,
+		suppressEvent: true
+	},
+
+	CONTAINER_CONFIG =  { 
+		key: _CONTAINER,
+		suppressEvent: true
+	}, 
+
+	SCROLL_INCREMENT_CONFIG =  { 
+		key: _SCROLL_INCREMENT, 
+		value: 1, 
+		validator: Lang.isNumber,
+		supercedes: [_MAX_HEIGHT],
+		suppressEvent: true
+	},
+
+	MIN_SCROLL_HEIGHT_CONFIG =  { 
+		key: _MIN_SCROLL_HEIGHT, 
+		value: 90, 
+		validator: Lang.isNumber,
+		supercedes: [_MAX_HEIGHT],
+		suppressEvent: true
+	},    
+
+	MAX_HEIGHT_CONFIG =  { 
+		key: _MAX_HEIGHT, 
+		value: 0, 
+		validator: Lang.isNumber,
+		supercedes: [_IFRAME],
+		suppressEvent: true
+	}, 
+
+	CLASS_NAME_CONFIG =  { 
+		key: _CLASSNAME, 
+		value: null, 
+		validator: Lang.isString,
+		suppressEvent: true
+	}, 
+
+	DISABLED_CONFIG =  { 
+		key: _DISABLED, 
+		value: false, 
+		validator: Lang.isBoolean,
+		suppressEvent: true
+	},
+	
+	SHADOW_CONFIG =  { 
+		key: _SHADOW, 
+		value: true, 
+		validator: Lang.isBoolean,
+		suppressEvent: true,
+		supercedes: [_VISIBLE]
+	};
 
 
 
@@ -547,7 +540,6 @@ srcElement: null,
 * @description Fires when the mouse has entered the menu.  Passes back 
 * the DOM Event object as an argument.
 */
-mouseOverEvent: null,
 
 
 /**
@@ -556,7 +548,6 @@ mouseOverEvent: null,
 * Event object as an argument.
 * @type YAHOO.util.CustomEvent
 */
-mouseOutEvent: null,
 
 
 /**
@@ -565,7 +556,6 @@ mouseOutEvent: null,
 * DOM Event object as an argument.
 * @type YAHOO.util.CustomEvent
 */
-mouseDownEvent: null,
 
 
 /**
@@ -574,7 +564,6 @@ mouseDownEvent: null,
 * over the menu.  Passes back the DOM Event object as an argument.
 * @type YAHOO.util.CustomEvent
 */
-mouseUpEvent: null,
 
 
 /**
@@ -583,7 +572,6 @@ mouseUpEvent: null,
 * DOM Event object as an argument.
 * @type YAHOO.util.CustomEvent
 */
-clickEvent: null,
 
 
 /**
@@ -592,7 +580,6 @@ clickEvent: null,
 * menu's items has focus.  Passes back the DOM Event object as an argument.
 * @type YAHOO.util.CustomEvent
 */
-keyPressEvent: null,
 
 
 /**
@@ -601,7 +588,6 @@ keyPressEvent: null,
 * has focus.  Passes back the DOM Event object as an argument.
 * @type YAHOO.util.CustomEvent
 */
-keyDownEvent: null,
 
 
 /**
@@ -610,7 +596,6 @@ keyDownEvent: null,
 * has focus.  Passes back the DOM Event object as an argument.
 * @type YAHOO.util.CustomEvent
 */
-keyUpEvent: null,
 
 
 /**
@@ -618,7 +603,6 @@ keyUpEvent: null,
 * @description Fires when an item is added to the menu.
 * @type YAHOO.util.CustomEvent
 */
-itemAddedEvent: null,
 
 
 /**
@@ -626,7 +610,6 @@ itemAddedEvent: null,
 * @description Fires when an item is removed to the menu.
 * @type YAHOO.util.CustomEvent
 */
-itemRemovedEvent: null,
 
 
 /**
@@ -4136,43 +4119,22 @@ initEvents: function () {
 
     // Create custom events
 
-    var SIGNATURE = CustomEvent.LIST;
+	var i = EVENT_TYPES.length - 1,
+		aEventData,
+		oCustomEvent;
 
-    this.mouseOverEvent = this.createEvent(EVENT_TYPES.MOUSE_OVER);
-    this.mouseOverEvent.signature = SIGNATURE;
 
-    this.mouseOutEvent = this.createEvent(EVENT_TYPES.MOUSE_OUT);
-    this.mouseOutEvent.signature = SIGNATURE;
-    
-    this.mouseDownEvent = this.createEvent(EVENT_TYPES.MOUSE_DOWN);
-    this.mouseDownEvent.signature = SIGNATURE;
+	do {
 
-    this.mouseUpEvent = this.createEvent(EVENT_TYPES.MOUSE_UP);
-    this.mouseUpEvent.signature = SIGNATURE;
-    
-    this.clickEvent = this.createEvent(EVENT_TYPES.CLICK);
-    this.clickEvent.signature = SIGNATURE;
-    
-    this.keyPressEvent = this.createEvent(EVENT_TYPES.KEY_PRESS);
-    this.keyPressEvent.signature = SIGNATURE;
-    
-    this.keyDownEvent = this.createEvent(EVENT_TYPES.KEY_DOWN);
-    this.keyDownEvent.signature = SIGNATURE;
-    
-    this.keyUpEvent = this.createEvent(EVENT_TYPES.KEY_UP);
-    this.keyUpEvent.signature = SIGNATURE;
-    
-    this.focusEvent = this.createEvent(EVENT_TYPES.FOCUS);
-    this.focusEvent.signature = SIGNATURE;
-    
-    this.blurEvent = this.createEvent(EVENT_TYPES.BLUR);
-    this.blurEvent.signature = SIGNATURE;
-    
-    this.itemAddedEvent = this.createEvent(EVENT_TYPES.ITEM_ADDED);
-    this.itemAddedEvent.signature = SIGNATURE;
-    
-    this.itemRemovedEvent = this.createEvent(EVENT_TYPES.ITEM_REMOVED);
-    this.itemRemovedEvent.signature = SIGNATURE;
+		aEventData = EVENT_TYPES[i];
+
+		oCustomEvent = this.createEvent(aEventData[1]);
+		oCustomEvent.signature = CustomEvent.LIST;
+		
+		this[aEventData[0]] = oCustomEvent;
+
+	}
+	while (i--);
 
 },
 
@@ -5024,12 +4986,12 @@ initDefaultConfig: function () {
     * @type Boolean
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.VISIBLE.key, 
+        VISIBLE_CONFIG.key, 
         {
             handler: this.configVisible, 
-            value: DEFAULT_CONFIG.VISIBLE.value, 
-            validator: DEFAULT_CONFIG.VISIBLE.validator
-         }
+            value: VISIBLE_CONFIG.value, 
+            validator: VISIBLE_CONFIG.validator
+        }
      );
 
 
@@ -5048,12 +5010,12 @@ initDefaultConfig: function () {
     * @type Boolean
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.key, 
+        CONSTRAIN_TO_VIEWPORT_CONFIG.key, 
         {
             handler: this.configConstrainToViewport, 
-            value: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.value, 
-            validator: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.validator, 
-            supercedes: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.supercedes 
+            value: CONSTRAIN_TO_VIEWPORT_CONFIG.value, 
+            validator: CONSTRAIN_TO_VIEWPORT_CONFIG.validator, 
+            supercedes: CONSTRAIN_TO_VIEWPORT_CONFIG.supercedes 
         } 
     );
 
@@ -5066,11 +5028,11 @@ initDefaultConfig: function () {
 	* @type Boolean
 	* @default false
 	*/
-	oConfig.addProperty(DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.key, {
+	oConfig.addProperty(PREVENT_CONTEXT_OVERLAP_CONFIG.key, {
 
-		value: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.value, 
-		validator: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.validator, 
-		supercedes: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.supercedes
+		value: PREVENT_CONTEXT_OVERLAP_CONFIG.value, 
+		validator: PREVENT_CONTEXT_OVERLAP_CONFIG.validator, 
+		supercedes: PREVENT_CONTEXT_OVERLAP_CONFIG.supercedes
 
 	});
 
@@ -5087,12 +5049,12 @@ initDefaultConfig: function () {
     * @type String
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.POSITION.key, 
+        POSITION_CONFIG.key, 
         {
             handler: this.configPosition,
-            value: DEFAULT_CONFIG.POSITION.value, 
-            validator: DEFAULT_CONFIG.POSITION.validator,
-            supercedes: DEFAULT_CONFIG.POSITION.supercedes
+            value: POSITION_CONFIG.value, 
+            validator: POSITION_CONFIG.validator,
+            supercedes: POSITION_CONFIG.supercedes
         }
     );
 
@@ -5107,10 +5069,10 @@ initDefaultConfig: function () {
     * @type Array
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.SUBMENU_ALIGNMENT.key, 
+        SUBMENU_ALIGNMENT_CONFIG.key, 
         { 
-            value: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.value,
-            suppressEvent: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.suppressEvent
+            value: SUBMENU_ALIGNMENT_CONFIG.value,
+            suppressEvent: SUBMENU_ALIGNMENT_CONFIG.suppressEvent
         }
     );
 
@@ -5123,11 +5085,11 @@ initDefaultConfig: function () {
     * @type Boolean
     */
 	oConfig.addProperty(
-	   DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.key, 
+	   AUTO_SUBMENU_DISPLAY_CONFIG.key, 
 	   { 
-	       value: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.value, 
-	       validator: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.validator,
-	       suppressEvent: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.suppressEvent
+	       value: AUTO_SUBMENU_DISPLAY_CONFIG.value, 
+	       validator: AUTO_SUBMENU_DISPLAY_CONFIG.validator,
+	       suppressEvent: AUTO_SUBMENU_DISPLAY_CONFIG.suppressEvent
        } 
     );
 
@@ -5143,11 +5105,11 @@ initDefaultConfig: function () {
     * @type Number
     */
 	oConfig.addProperty(
-	   DEFAULT_CONFIG.SHOW_DELAY.key, 
+	   SHOW_DELAY_CONFIG.key, 
 	   { 
-	       value: DEFAULT_CONFIG.SHOW_DELAY.value, 
-	       validator: DEFAULT_CONFIG.SHOW_DELAY.validator,
-	       suppressEvent: DEFAULT_CONFIG.SHOW_DELAY.suppressEvent
+	       value: SHOW_DELAY_CONFIG.value, 
+	       validator: SHOW_DELAY_CONFIG.validator,
+	       suppressEvent: SHOW_DELAY_CONFIG.suppressEvent
        } 
     );
 
@@ -5162,12 +5124,12 @@ initDefaultConfig: function () {
     * @type Number
     */
 	oConfig.addProperty(
-	   DEFAULT_CONFIG.HIDE_DELAY.key, 
+	   HIDE_DELAY_CONFIG.key, 
 	   { 
 	       handler: this.configHideDelay,
-	       value: DEFAULT_CONFIG.HIDE_DELAY.value, 
-	       validator: DEFAULT_CONFIG.HIDE_DELAY.validator, 
-	       suppressEvent: DEFAULT_CONFIG.HIDE_DELAY.suppressEvent
+	       value: HIDE_DELAY_CONFIG.value, 
+	       validator: HIDE_DELAY_CONFIG.validator, 
+	       suppressEvent: HIDE_DELAY_CONFIG.suppressEvent
        } 
     );
 
@@ -5184,11 +5146,11 @@ initDefaultConfig: function () {
     * @type Number
     */
 	oConfig.addProperty(
-	   DEFAULT_CONFIG.SUBMENU_HIDE_DELAY.key, 
+	   SUBMENU_HIDE_DELAY_CONFIG.key, 
 	   { 
-	       value: DEFAULT_CONFIG.SUBMENU_HIDE_DELAY.value, 
-	       validator: DEFAULT_CONFIG.SUBMENU_HIDE_DELAY.validator,
-	       suppressEvent: DEFAULT_CONFIG.SUBMENU_HIDE_DELAY.suppressEvent
+	       value: SUBMENU_HIDE_DELAY_CONFIG.value, 
+	       validator: SUBMENU_HIDE_DELAY_CONFIG.validator,
+	       suppressEvent: SUBMENU_HIDE_DELAY_CONFIG.suppressEvent
        } 
     );
 
@@ -5203,11 +5165,11 @@ initDefaultConfig: function () {
     * @type Boolean
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.CLICK_TO_HIDE.key,
+        CLICK_TO_HIDE_CONFIG.key,
         {
-            value: DEFAULT_CONFIG.CLICK_TO_HIDE.value,
-            validator: DEFAULT_CONFIG.CLICK_TO_HIDE.validator,
-            suppressEvent: DEFAULT_CONFIG.CLICK_TO_HIDE.suppressEvent
+            value: CLICK_TO_HIDE_CONFIG.value,
+            validator: CLICK_TO_HIDE_CONFIG.validator,
+            suppressEvent: CLICK_TO_HIDE_CONFIG.suppressEvent
         }
     );
 
@@ -5222,11 +5184,11 @@ initDefaultConfig: function () {
 	* @default document.body
 	*/
 	oConfig.addProperty(
-	   DEFAULT_CONFIG.CONTAINER.key, 
+	   CONTAINER_CONFIG.key, 
 	   { 
 	       handler: this.configContainer,
 	       value: document.body,
-           suppressEvent: DEFAULT_CONFIG.CONTAINER.suppressEvent
+           suppressEvent: CONTAINER_CONFIG.suppressEvent
        } 
    );
 
@@ -5241,12 +5203,12 @@ initDefaultConfig: function () {
     * @type Number
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.SCROLL_INCREMENT.key, 
+        SCROLL_INCREMENT_CONFIG.key, 
         { 
-            value: DEFAULT_CONFIG.SCROLL_INCREMENT.value, 
-            validator: DEFAULT_CONFIG.SCROLL_INCREMENT.validator,
-            supercedes: DEFAULT_CONFIG.SCROLL_INCREMENT.supercedes,
-            suppressEvent: DEFAULT_CONFIG.SCROLL_INCREMENT.suppressEvent
+            value: SCROLL_INCREMENT_CONFIG.value, 
+            validator: SCROLL_INCREMENT_CONFIG.validator,
+            supercedes: SCROLL_INCREMENT_CONFIG.supercedes,
+            suppressEvent: SCROLL_INCREMENT_CONFIG.suppressEvent
         }
     );
 
@@ -5260,12 +5222,12 @@ initDefaultConfig: function () {
     * @type Number
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.key, 
+        MIN_SCROLL_HEIGHT_CONFIG.key, 
         { 
-            value: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.value, 
-            validator: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.validator,
-            supercedes: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.supercedes,
-            suppressEvent: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.suppressEvent
+            value: MIN_SCROLL_HEIGHT_CONFIG.value, 
+            validator: MIN_SCROLL_HEIGHT_CONFIG.validator,
+            supercedes: MIN_SCROLL_HEIGHT_CONFIG.supercedes,
+            suppressEvent: MIN_SCROLL_HEIGHT_CONFIG.suppressEvent
         }
     );
 
@@ -5281,13 +5243,13 @@ initDefaultConfig: function () {
     * @type Number
     */
     oConfig.addProperty(
-       DEFAULT_CONFIG.MAX_HEIGHT.key, 
+       MAX_HEIGHT_CONFIG.key, 
        {
             handler: this.configMaxHeight,
-            value: DEFAULT_CONFIG.MAX_HEIGHT.value,
-            validator: DEFAULT_CONFIG.MAX_HEIGHT.validator,
-            suppressEvent: DEFAULT_CONFIG.MAX_HEIGHT.suppressEvent,
-            supercedes: DEFAULT_CONFIG.MAX_HEIGHT.supercedes            
+            value: MAX_HEIGHT_CONFIG.value,
+            validator: MAX_HEIGHT_CONFIG.validator,
+            suppressEvent: MAX_HEIGHT_CONFIG.suppressEvent,
+            supercedes: MAX_HEIGHT_CONFIG.supercedes            
        } 
     );
 
@@ -5303,12 +5265,12 @@ initDefaultConfig: function () {
     * @type String
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.CLASS_NAME.key, 
+        CLASS_NAME_CONFIG.key, 
         { 
             handler: this.configClassName,
-            value: DEFAULT_CONFIG.CLASS_NAME.value, 
-            validator: DEFAULT_CONFIG.CLASS_NAME.validator,
-            supercedes: DEFAULT_CONFIG.CLASS_NAME.supercedes      
+            value: CLASS_NAME_CONFIG.value, 
+            validator: CLASS_NAME_CONFIG.validator,
+            supercedes: CLASS_NAME_CONFIG.supercedes      
         }
     );
 
@@ -5324,12 +5286,12 @@ initDefaultConfig: function () {
     * @type Boolean
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.DISABLED.key, 
+        DISABLED_CONFIG.key, 
         { 
             handler: this.configDisabled,
-            value: DEFAULT_CONFIG.DISABLED.value, 
-            validator: DEFAULT_CONFIG.DISABLED.validator,
-            suppressEvent: DEFAULT_CONFIG.DISABLED.suppressEvent
+            value: DISABLED_CONFIG.value, 
+            validator: DISABLED_CONFIG.validator,
+            suppressEvent: DISABLED_CONFIG.suppressEvent
         }
     );
 
@@ -5341,11 +5303,11 @@ initDefaultConfig: function () {
     * @type Boolean
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.SHADOW.key, 
+        SHADOW_CONFIG.key, 
         { 
             handler: this.configShadow,
-            value: DEFAULT_CONFIG.SHADOW.value, 
-            validator: DEFAULT_CONFIG.SHADOW.validator
+            value: SHADOW_CONFIG.value, 
+            validator: SHADOW_CONFIG.validator
         }
     );
 
