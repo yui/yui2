@@ -37,6 +37,7 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 
 
 var Event = YAHOO.util.Event,
+	UA = YAHOO.env.ua,
     ContextMenu = YAHOO.widget.ContextMenu,
 
 
@@ -51,7 +52,7 @@ var Event = YAHOO.util.Event,
     EVENT_TYPES = {
 
         "TRIGGER_CONTEXT_MENU": "triggerContextMenu",
-        "CONTEXT_MENU": (YAHOO.env.ua.opera ? _MOUSEDOWN : "contextmenu"),
+        "CONTEXT_MENU": (UA.opera ? _MOUSEDOWN : "contextmenu"),
         "CLICK": "click"
 
     },
@@ -64,13 +65,9 @@ var Event = YAHOO.util.Event,
     * @final
     * @type Object
     */
-    DEFAULT_CONFIG = {
-    
-        "TRIGGER": { 
-            key: "trigger",
-            suppressEvent: true
-        }
-    
+    TRIGGER_CONFIG = { 
+		key: "trigger",
+		suppressEvent: true
     };
 
 
@@ -258,7 +255,7 @@ _removeEventHandlers: function() {
 
         Event.removeListener(oTrigger, EVENT_TYPES.CONTEXT_MENU, this._onTriggerContextMenu);    
         
-        if (YAHOO.env.ua.opera) {
+        if (UA.opera) {
         
             Event.removeListener(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick);
     
@@ -405,10 +402,10 @@ initDefaultConfig: function() {
     * @type String|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
     * level-one-html.html#ID-58190037">HTMLElement</a>|Array
     */
-    this.cfg.addProperty(DEFAULT_CONFIG.TRIGGER.key, 
+    this.cfg.addProperty(TRIGGER_CONFIG.key, 
         {
             handler: this.configTrigger, 
-            suppressEvent: DEFAULT_CONFIG.TRIGGER.suppressEvent 
+            suppressEvent: TRIGGER_CONFIG.suppressEvent 
         }
     );
 
@@ -481,7 +478,7 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
             Opera to prevent default browser behaviors.
         */
 
-        if (YAHOO.env.ua.opera) {
+        if (UA.opera) {
         
             Event.on(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick, this, true);
 

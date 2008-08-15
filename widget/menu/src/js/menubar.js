@@ -70,35 +70,24 @@ function checkPosition(p_sPosition) {
 var Event = YAHOO.util.Event,
     MenuBar = YAHOO.widget.MenuBar,
 
-    /**
-    * Constant representing the MenuBar's configuration properties
-    * @property DEFAULT_CONFIG
-    * @private
-    * @final
-    * @type Object
-    */
-    DEFAULT_CONFIG = {
-    
-        "POSITION": { 
-            key: "position", 
-            value: _STATIC, 
-            validator: checkPosition, 
-            supercedes: [_VISIBLE] 
-        }, 
-    
-        "SUBMENU_ALIGNMENT": { 
-            key: "submenualignment", 
-            value: ["tl","bl"]
-        },
-    
-        "AUTO_SUBMENU_DISPLAY": { 
-            key: _AUTO_SUBMENU_DISPLAY, 
-            value: false, 
-            validator: Lang.isBoolean,
-            suppressEvent: true
-        }
-    
-    };
+    POSITION_CONFIG =  { 
+		key: "position", 
+		value: _STATIC, 
+		validator: checkPosition, 
+		supercedes: [_VISIBLE] 
+	}, 
+
+	SUBMENU_ALIGNMENT_CONFIG =  { 
+		key: "submenualignment", 
+		value: ["tl","bl"]
+	},
+
+	AUTO_SUBMENU_DISPLAY_CONFIG =  { 
+		key: _AUTO_SUBMENU_DISPLAY, 
+		value: false, 
+		validator: Lang.isBoolean,
+		suppressEvent: true
+	};
 
 
 
@@ -426,12 +415,12 @@ initDefaultConfig: function() {
     * @type String
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.POSITION.key, 
+        POSITION_CONFIG.key, 
         {
             handler: this.configPosition, 
-            value: DEFAULT_CONFIG.POSITION.value, 
-            validator: DEFAULT_CONFIG.POSITION.validator,
-            supercedes: DEFAULT_CONFIG.POSITION.supercedes
+            value: POSITION_CONFIG.value, 
+            validator: POSITION_CONFIG.validator,
+            supercedes: POSITION_CONFIG.supercedes
         }
     );
 
@@ -449,10 +438,10 @@ initDefaultConfig: function() {
     * @type Array
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.SUBMENU_ALIGNMENT.key, 
+        SUBMENU_ALIGNMENT_CONFIG.key, 
         {
-            value: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.value,
-            suppressEvent: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.suppressEvent
+            value: SUBMENU_ALIGNMENT_CONFIG.value,
+            suppressEvent: SUBMENU_ALIGNMENT_CONFIG.suppressEvent
         }
     );
 
@@ -470,11 +459,11 @@ initDefaultConfig: function() {
     * @type Boolean
     */
 	oConfig.addProperty(
-	   DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.key, 
+	   AUTO_SUBMENU_DISPLAY_CONFIG.key, 
 	   {
-	       value: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.value, 
-	       validator: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.validator,
-	       suppressEvent: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.suppressEvent
+	       value: AUTO_SUBMENU_DISPLAY_CONFIG.value, 
+	       validator: AUTO_SUBMENU_DISPLAY_CONFIG.validator,
+	       suppressEvent: AUTO_SUBMENU_DISPLAY_CONFIG.suppressEvent
        } 
     );
 
