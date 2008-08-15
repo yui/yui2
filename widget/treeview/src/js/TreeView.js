@@ -1,3 +1,9 @@
+(function () {
+	var Dom = YAHOO.util.Dom,
+		Event = YAHOO.util.Event,
+		Lang = YAHOO.lang,
+		Widget = YAHOO.widget;
+
 /**
  * The treeview widget is a generic tree building tool.
  * @module treeview
@@ -14,13 +20,21 @@
  * @uses YAHOO.util.EventProvider
  * @constructor
  * @param {string|HTMLElement} id The id of the element, or the element
+ * @param {Array}  (optional) oConfig An array containing the definition of the tree
  * itself that the tree will be inserted into.
  */
-YAHOO.widget.TreeView = function(id) {
+YAHOO.widget.TreeView = function(id, oConfig) {
     if (id) { this.init(id); }
+	if (Lang.isArray(oConfig)) {
+		this.buildTreeFromObject(oConfig);
+	} else if (Lang.trim(this._el.innerHTML)) {
+		this.buildTreeFromMarkup(id);
+	}
 };
 
-YAHOO.widget.TreeView.prototype = {
+var TV = Widget.TreeView;
+
+TV.prototype = {
 
     /**
      * The id of tree container element
@@ -85,13 +99,23 @@ YAHOO.widget.TreeView.prototype = {
     maxAnim: 2,
 
     /**
+     * Stores the timer used to check for double clicks
+     * @property _dblClickTimer
+     * @type window.timer object
+     * @private
+     */
+    _dblClickTimer: null,
+	
+
+
+    /**
      * Sets up the animation for expanding children
      * @method setExpandAnim
      * @param {string} type the type of animation (acceptable values defined 
      * in YAHOO.widget.TVAnim)
      */
     setExpandAnim: function(type) {
-        this._expandAnim = (YAHOO.widget.TVAnim.isValid(type)) ? type : null;
+        this._expandAnim = (Widget.TVAnim.isValid(type)) ? type : null;
     },
 
     /**
@@ -101,7 +125,7 @@ YAHOO.widget.TreeView.prototype = {
      * YAHOO.widget.TVAnim)
      */
     setCollapseAnim: function(type) {
-        this._collapseAnim = (YAHOO.widget.TVAnim.isValid(type)) ? type : null;
+        this._collapseAnim = (Widget.TVAnim.isValid(type)) ? type : null;
     },
 
     /**
@@ -118,7 +142,7 @@ YAHOO.widget.TreeView.prototype = {
         if (this._expandAnim && this._animCount < this.maxAnim) {
             // this.locked = true;
             var tree = this;
-            var a = YAHOO.widget.TVAnim.getAnim(this._expandAnim, el, 
+            var a = Widget.TVAnim.getAnim(this._expandAnim, el, 
                             function() { tree.expandComplete(node); });
             if (a) { 
                 ++this._animCount;
@@ -149,7 +173,7 @@ YAHOO.widget.TreeView.prototype = {
         if (this._collapseAnim && this._animCount < this.maxAnim) {
             // this.locked = true;
             var tree = this;
-            var a = YAHOO.widget.TVAnim.getAnim(this._collapseAnim, el, 
+            var a = Widget.TVAnim.getAnim(this._collapseAnim, el, 
                             function() { tree.collapseComplete(node); });
             if (a) { 
                 ++this._animCount;
@@ -201,15 +225,10 @@ YAHOO.widget.TreeView.prototype = {
      * @private
      */
     init: function(id) {
+		this._el = Dom.get(id);
+		this.id = Dom.generateId(this._el,"yui-tv-auto-id-");
 
-        this.id = id;
-
-        if ("string" !== typeof id) {
-            this._el = id;
-            this.id = this.generateId(id);
-        }
-
-        /**
+    /**
          * When animation is enabled, this event fires when the animation
          * starts
          * @event animStart
@@ -265,15 +284,50 @@ YAHOO.widget.TreeView.prototype = {
          */
         this.createEvent("expandComplete", this);
 
+    /**
+         * Fires when the Enter key is pressed and the node has no href property set
+         * @event enterKeyPressed
+         * @type CustomEvent
+         * @param {YAHOO.widget.Node} node the node that has the focus
+         */
+        this.createEvent("enterKeyPressed", this);
+		
+    /**
+         * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a Click
+         * @event clickEvent
+         * @type CustomEvent
+         * @param {YAHOO.widget.Node} node the node that was clicked
+         */
+        this.createEvent("clickEvent", this);
+
+	/**
+         * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a double Click
+         * @event dblClickEvent
+         * @type CustomEvent
+         * @param {YAHOO.widget.Node} node the node that was double clicked
+         */
+        this.createEvent("dblClickEvent", this);
+		
+	/**
+         * Custom event that is fired when the text node label is clicked. 
+         *  The node clicked is  provided as an argument
+         *
+         * @event labelClick
+         * @type CustomEvent
+         * @param {YAHOO.widget.Node} node the node clicked
+         */
+		this.createEvent("labelClick", this);
+
+
         this._nodes = [];
 
         // store a global reference
-        YAHOO.widget.TreeView.trees[this.id] = this;
+        TV.trees[this.id] = this;
 
         // Set up the root node
-        this.root = new YAHOO.widget.RootNode(this);
+        this.root = new Widget.RootNode(this);
 
-        var LW = YAHOO.widget.LogWriter;
+        var LW = Widget.LogWriter;
 
         this.logger = (LW) ? new LW(this.toString()) : YAHOO;
 
@@ -287,25 +341,360 @@ YAHOO.widget.TreeView.prototype = {
         //var Event = YAHOO.util.Event;
         //Event.on(this.id, 
     //},
-
+ /**
+     * Builds the TreeView from an object.
+     * @method buildTreeFromObject
+     * @param  oConfig {Array}  array containing a full description of the tree
+     * 
+     */
+	buildTreeFromObject: function (oConfig) {
+		var log = this.logger.log;
+		log('Building tree from object');
+		var build = function (parent, oConfig) {
+			var i, item, node, children, type, NodeType, ThisType;
+			for (i = 0; i < oConfig.length; i++) {
+				item = oConfig[i];
+				if (Lang.isString(item)) {
+					node = new Widget.TextNode(item, parent);
+				} else if (Lang.isObject(item)) {
+					children = item.children;
+					delete item.children;
+					type = item.type || 'text';
+					delete item.type;
+					switch (type.toLowerCase()) {
+						case 'text':
+							node = new Widget.TextNode(item, parent);
+							break;
+						case 'menu':
+							node = new Widget.MenuNode(item, parent);
+							break;
+						case 'html':
+							node = new Widget.HTMLNode(item, parent);
+							break;
+						default:
+							NodeType = Widget[type];
+							if (Lang.isObject(NodeType)) {
+								for (ThisType = NodeType; ThisType && ThisType !== Widget.Node; ThisType = ThisType.superclass.constructor) {}
+								if (ThisType) {
+									node = new NodeType(item, parent);
+								} else {
+									log('Invalid type in node definition: ' + type,'error');
+								}
+							} else {
+								log('Invalid type in node definition: ' + type,'error');
+							}
+					}
+					if (children) {
+						build(node,children);
+					}
+				} else {
+					log('Invalid node definition','error');
+				}
+			}
+		};
+							
+					
+		build(this.root,oConfig);
+	},
+/**
+     * Builds the TreeView from existing markup.   Markup should consist of &lt;UL&gt; or &lt;OL&gt; elements, possibly nested.  
+     * Depending what the &lt;LI&gt; elements contain the following will be created: <ul>
+     * 	         <li>plain text:  a regular TextNode</li>
+     * 	         <li>an (un-)ordered list: a nested branch</li>
+     * 	         <li>anything else: an HTMLNode</li></ul>
+     * Only the first  outermost (un-)ordered list in the markup will be parsed.
+     * Tree will be fully collapsed
+     *  HTMLNodes have hasIcon set to true if the markup for that node has a className called hasIcon.
+     * @method buildTreeFromMarkup
+     * @parm {string|HTMLElement} id the id of the element that contains the markup
+     * @private
+     */
+	buildTreeFromMarkup: function (id) {
+		this.logger.log('Building tree from existing markup');
+		var build = function (parent,markup) {
+			var el, node, child, text;
+			for (el = Dom.getFirstChild(markup); el; el = Dom.getNextSibling(el)) {
+				if (el.nodeType == 1) {
+					switch (el.tagName.toUpperCase()) {
+						case 'LI':
+							for (child = el.firstChild; child; child = child.nextSibling) {
+								if (child.nodeType == 3) {
+									text = Lang.trim(child.nodeValue);
+									if (text.length) {
+										node = new Widget.TextNode(text, parent, false);
+									}
+								} else {
+									switch (child.tagName.toUpperCase()) {
+										case 'UL':
+										case 'OL':
+											build(node,child);
+											break;
+										case 'A':
+											node = new Widget.TextNode({
+												label:child.innerHTML,
+												href: child.href,
+												target:child.target,
+												title:child.title ||child.alt
+											},parent,false);
+											break;
+										default:
+											node = new Widget.HTMLNode(child.parentNode.innerHTML, parent, false, Dom.removeClass(child,'hasIcon'));
+											break;
+									}
+								}
+							}
+							break;
+						case 'UL':
+						case 'OL':
+							this.logger.log('ULs or OLs can only contain LI elements, not other UL or OL.  This will not work in some browsers','error');
+							build(node, el);
+							break;
+					}
+				}
+			}
+		
+		};
+		var markup = Dom.getChildrenBy(Dom.get(id),function (el) { 
+			var tag = el.tagName.toUpperCase();
+			return  tag == 'UL' || tag == 'OL';
+		});
+		if (markup.length) {
+			build(this.root, markup[0]);
+		} else {
+			this.logger.log('Markup contains no UL or OL elements','warn');
+		}
+	},
     /**
      * Renders the tree boilerplate and visible nodes
-     * @method draw
+     * @method render
      */
-    draw: function() {
+    render: function() {
         var html = this.root.getHtml();
         this.getEl().innerHTML = html;
         this.firstDraw = false;
-    },
+		var getTarget = function (ev) {
+			var target = Event.getTarget(ev); 
+			if (target.tagName.toUpperCase() != 'TD') { target = Dom.getAncestorByTagName(target,'td'); }
+			if (Lang.isNull(target)) { return null; }
+			if (target.className.length === 0) {
+				target = target.previousSibling;
+				if (Lang.isNull(target)) { return null; }
+			}
+			return target;
+		};
+		Event.on(
+			this.getEl(),
+			'click',
+			function (ev) {
+				var self = this,
+					el = Event.getTarget(ev),
+					node = this.getNodeByElement(el);
+					
+				var toggle = function () {
+					if (node) {
+						if (node.expanded) {
+							node.collapse();
+						} else {
+							node.expand();
+						}
+						node.focus();
+					}
+				};
+				
+				if (node && Dom.hasClass(el, node.labelStyle)) {
+					if (node.firesLabelClick) {
+						node.logger.log("onLabelClick " + node.label);
+						this.fireEvent('labelClick',node);
+					}
+					if (this._nodeEditing(node)) { return; }
+				}
+				
+				var depthCell = /ygtv(blank)?depthcell/gi;
+				if (depthCell.test(el.className) || depthCell.test(el.parentNode.className)) { return;}
+					
+				if (Dom.hasClass(el,TV.TRIGGERS_CLICK_EVENT) || Dom.getAncestorByClassName(el,TV.TRIGGERS_CLICK_EVENT)) { 
+					if (this._dblClickTimer) {
+						window.clearTimeout(this._dblClickTimer);
+						this._dblClickTimer = null;
+					} else {
+						this._dblClickTimer = window.setTimeout(function () {
+							self._dblClickTimer = null;
+							toggle();
+							self.fireEvent('clickEvent'); 
+						},700);
+					}
+				} else {
+					toggle();
+				}
+			},
+			this,
+			true
+		);
+		Event.on(
+			this.getEl(),
+			'dblclick',
+			function (ev) {
+				var el = Event.getTarget(ev);
+				if (Dom.hasClass(el,TV.TRIGGERS_CLICK_EVENT) || Dom.getAncestorByClassName(el,TV.TRIGGERS_CLICK_EVENT)) { 
+					this.fireEvent('dblClickEvent'); 
+					if (this._dblClickTimer) {
+						window.clearTimeout(this._dblClickTimer);
+						this._dblClickTimer = null;
+					}
+				}
+			},
+			this,
+			true
+		);
+		Event.on(
+			this.getEl(),
+			'mouseover',
+			function (ev) {
+				var target = getTarget(ev);
+				if (target) {
+					target.className = target.className.replace(/ygtv([lt])([mp])/gi,'ygtv$1$2h');
+				}
+			}
+		);
+		Event.on(
+			this.getEl(),
+			'mouseout',
+			function (ev) {
+				var target = getTarget(ev);
+				if (target) {
+					target.className = target.className.replace(/ygtv([lt])([mp])h/gi,'ygtv$1$2');
+				}
+			}
+		);
+		Event.on(
+			this.getEl(),
+			'keydown',
+			function (ev) {
+				var target = Event.getTarget(ev),
+					node = this.getNodeByElement(target),
+					KEY = YAHOO.util.KeyListener.KEY;
 
-    /**
+				switch(ev.keyCode) {
+					case KEY.UP:
+						this.logger.log('UP');
+						do {
+							if (node.previousSibling) {
+								node = node.previousSibling;
+							} else {
+								node = node.parent;
+							}
+						} while (node && node.focus());
+						break;
+					case KEY.DOWN:
+						this.logger.log('DOWN');
+						do {
+							if (node.nextSibling) {
+								node = node.nextSibling;
+							} else {
+								node.expand();
+								node = (node.children.length || null) && node.children[0];
+							}
+						} while (node && node.focus());
+						break;
+					case KEY.LEFT:
+						this.logger.log('LEFT');
+						do {
+							if (node.parent) {
+								node = node.parent;
+							} else {
+								node = node.previousSibling;
+							}
+						} while (node && node.focus());
+						break;
+					case KEY.RIGHT:
+						this.logger.log('RIGHT');
+						do {
+							node.expand();
+							if (node.children.length) {
+								node = node.children[0];
+							} else {
+								node = node.nextSibling;
+							}
+						} while (node && node.focus());
+						break;
+					case KEY.ENTER:
+						this.logger.log('ENTER: ' + node.href);
+						if (node.href) {
+							if (node.target) {
+								window.open(node.href,node.target);
+							} else {
+								window.location(node.href);
+							}
+						} else {
+							this.fireEvent('enterKeyPressed',node);
+						}
+						break;
+					case KEY.HOME:
+						this.logger.log('HOME');
+						node = this.getRoot();
+						if (node.children.length) {node = node.children[0];}
+						node.focus();
+						break;
+					case KEY.END:
+						this.logger.log('END');
+						node = this.getRoot();
+						if (node.children.length) { node = node.children[node.children.length -1];}
+						node.focus();
+						break;
+					// case KEY.PAGE_UP:
+						// this.logger.log('PAGE_UP');
+						// break;
+					// case KEY.PAGE_DOWN:
+						// this.logger.log('PAGE_DOWN');
+						// break;
+					case 107:
+						if (ev.shiftKey) {
+							this.logger.log('Shift-PLUS');
+							node.parent.expandAll();
+						} else {
+							this.logger.log('PLUS');
+							node.expand();
+						}
+						break;
+					case 109:
+						if (ev.shiftKey) {
+							this.logger.log('Shift-MINUS');
+							node.parent.collapseAll();
+						} else {
+							this.logger.log('MINUS');
+							node.collapse();
+						}
+						break;
+					default:
+						break;
+				}
+			},
+			this,
+			true
+		);
+    },
+	
+  /**
+     * placeholder for the in-line editing plug-in
+     * @method _nodeEditing
+     * @param node {YAHOO.widget.Node} node to be edited
+     * @private
+     */
+	_nodeEditing: function(node) {},
+  /**
+     * placeholder for the in-line editing plug-in destroy method
+     * @method _destroyEditor
+     * @private
+     */
+		_destroyEditor: function () {},
+  /**
      * Returns the tree's host element
      * @method getEl
      * @return {HTMLElement} the host element
      */
     getEl: function() {
         if (! this._el) {
-            this._el = document.getElementById(this.id);
+            this._el = Dom.get(this.id);
         }
         return this._el;
     },
@@ -388,10 +777,12 @@ YAHOO.widget.TreeView.prototype = {
      */
     getNodeByProperty: function(property, value) {
         for (var i in this._nodes) {
-            var n = this._nodes[i];
-            if (n.data && value == n.data[property]) {
-                return n;
-            }
+			if (this._nodes.hasOwnProperty(i)) {
+	            var n = this._nodes[i];
+	            if (n.data && value == n.data[property]) {
+	                return n;
+	            }
+			}
         }
 
         return null;
@@ -408,10 +799,12 @@ YAHOO.widget.TreeView.prototype = {
     getNodesByProperty: function(property, value) {
         var values = [];
         for (var i in this._nodes) {
-            var n = this._nodes[i];
-            if (n.data && value == n.data[property]) {
-                values.push(n);
-            }
+			if (this._nodes.hasOwnProperty(i)) {
+	            var n = this._nodes[i];
+	            if (n.data && value == n.data[property]) {
+	                values.push(n);
+	            }
+			}
         }
 
         return (values.length) ? values : null;
@@ -510,7 +903,7 @@ YAHOO.widget.TreeView.prototype = {
             if (this._collapseAnim) {
                 this.subscribe("animComplete", 
                         this._removeChildren_animComplete, this, true);
-                YAHOO.widget.Node.prototype.collapse.call(node);
+                Widget.Node.prototype.collapse.call(node);
                 return;
             }
 
@@ -523,7 +916,7 @@ YAHOO.widget.TreeView.prototype = {
         }
 
         if (node.isRoot()) {
-            YAHOO.widget.Node.prototype.expand.call(node);
+            Widget.Node.prototype.expand.call(node);
         }
 
         node.childrenRendered = false;
@@ -587,6 +980,31 @@ YAHOO.widget.TreeView.prototype = {
         delete this._nodes[node.index];
     },
 
+	/**
+	* Nulls out the entire TreeView instance and related objects, removes attached
+	* event listeners, and clears out DOM elements inside the container. After
+	* calling this method, the instance reference should be expliclitly nulled by
+	* implementer, as in myDataTable = null. Use with caution!
+	*
+	* @method destroy
+	*/
+	destroy : function() {
+		this._destroyEditor();
+		var el = this.getEl();
+		Event.removeListener(el,'click');
+		Event.removeListener(el,'dblclick');
+		Event.removeListener(el,'mouseover');
+		Event.removeListener(el,'mouseout');
+		Event.removeListener(el,'keydown');
+		for (var i = 0 ; i < this._nodes.length; i++) {
+			var node = this._nodes[i];
+			if (node && node.destroy) {node.destroy(); }
+		}
+		el.parentNode.removeChild(el);
+	},
+		
+			
+
 
     /**
      * TreeView instance toString
@@ -598,19 +1016,23 @@ YAHOO.widget.TreeView.prototype = {
     },
 
     /**
-     * Generates an unique id for an element if it doesn't yet have one
-     * @method generateId
-     * @private
+     * Count of nodes in tree
+     * @method getNodeCount
+     * @return {int} number of nodes in the tree
      */
-    generateId: function(el) {
-        var id = el.id;
+    getNodeCount: function() {
+        return this.getRoot().getNodeCount();
+    },
 
-        if (!id) {
-            id = "yui-tv-auto-id-" + YAHOO.widget.TreeView.counter;
-            ++YAHOO.widget.TreeView.counter;
-        }
-
-        return id;
+    /**
+     * Returns an object which could be used to rebuild the tree.
+     * It can be passed to the tree constructor to reproduce the same tree.
+     * It will return false if any node loads dynamically, regardless of whether it is loaded or not.
+     * @method getTreeDefinition
+     * @return {Object | false}  definition of the tree or false if any node is defined as dynamic
+     */
+    getTreeDefinition: function() {
+        return this.getRoot().getNodeDefinition();
     },
 
     /**
@@ -631,7 +1053,19 @@ YAHOO.widget.TreeView.prototype = {
 
 };
 
-YAHOO.augment(YAHOO.widget.TreeView, YAHOO.util.EventProvider);
+/* Backwards compatibility aliases */
+var PROT = TV.prototype;
+ /**
+     * Renders the tree boilerplate and visible nodes
+     *  Alias for render
+     * @method draw
+     * @deprecated Use render instead
+     */
+PROT.draw = PROT.render;
+
+/* end backwards compatibility aliases */
+
+YAHOO.augment(TV, YAHOO.util.EventProvider);
 
 /**
  * Running count of all nodes created in all trees.  This is 
@@ -641,7 +1075,7 @@ YAHOO.augment(YAHOO.widget.TreeView, YAHOO.util.EventProvider);
  * @type int
  * @static
  */
-YAHOO.widget.TreeView.nodeCount = 0;
+TV.nodeCount = 0;
 
 /**
  * Global cache of tree instances
@@ -650,15 +1084,7 @@ YAHOO.widget.TreeView.nodeCount = 0;
  * @static
  * @private
  */
-YAHOO.widget.TreeView.trees = [];
-
-/**
- * Counter for generating a new unique element id
- * @property YAHOO.widget.TreeView.counter
- * @static
- * @private
- */
-YAHOO.widget.TreeView.counter = 0;
+TV.trees = [];
 
 /**
  * Global method for getting a tree by its id.  Used in the generated
@@ -668,8 +1094,8 @@ YAHOO.widget.TreeView.counter = 0;
  * @return {TreeView} the tree instance requested, null if not found.
  * @static
  */
-YAHOO.widget.TreeView.getTree = function(treeId) {
-    var t = YAHOO.widget.TreeView.trees[treeId];
+TV.getTree = function(treeId) {
+    var t = TV.trees[treeId];
     return (t) ? t : null;
 };
 
@@ -683,8 +1109,8 @@ YAHOO.widget.TreeView.getTree = function(treeId) {
  * @return {Node} the node instance requested, null if not found
  * @static
  */
-YAHOO.widget.TreeView.getNode = function(treeId, nodeIndex) {
-    var t = YAHOO.widget.TreeView.getTree(treeId);
+TV.getNode = function(treeId, nodeIndex) {
+    var t = TV.getTree(treeId);
     return (t) ? t.getNodeByIndex(nodeIndex) : null;
 };
 
@@ -696,13 +1122,10 @@ YAHOO.widget.TreeView.getNode = function(treeId, nodeIndex) {
  * @param {function} fn the callback to invoke
  * @static
  */
-YAHOO.widget.TreeView.addHandler = function (el, sType, fn) {
-    if (el.addEventListener) {
-        el.addEventListener(sType, fn, false);
-    } else if (el.attachEvent) {
-        el.attachEvent("on" + sType, fn);
-    }
+TV.addHandler = function (el, sType, fn) {
+	Event.addListener(el, sType, fn);
 };
+
 
 /**
  * Remove a DOM event
@@ -713,13 +1136,34 @@ YAHOO.widget.TreeView.addHandler = function (el, sType, fn) {
  * @static
  */
 
-YAHOO.widget.TreeView.removeHandler = function (el, sType, fn) {
-    if (el.removeEventListener) {
-        el.removeEventListener(sType, fn, false);
-    } else if (el.detachEvent) {
-        el.detachEvent("on" + sType, fn);
-    }
+TV.removeHandler = 	function (el, sType, fn) {
+	Event.removeListener(el, sType, fn);
 };
+
+/**
+     * Class name assigned to elements that trigger click and double-click events.
+     * It is not meant to have any specific style, it is just the way to signal that the element can receive clicks or double clicks.
+     *
+     * @property TreeView.TRIGGERS_CLICK_EVENT
+     * @type String
+     * @static
+     * @final
+     * @default "ygtv-triggers-click"
+
+	*/ 
+TV.TRIGGERS_CLICK_EVENT = 'ygtv-triggers-click';
+
+/**
+     * Class name assigned to elements that have the focus
+     *
+     * @property TreeView.FOCUS_CLASS_NAME
+     * @type String
+     * @static
+     * @final
+     * @default "ygtvfocus"
+
+	*/ 
+TV.FOCUS_CLASS_NAME = 'ygtvfocus';
 
 /**
  * Attempts to preload the images defined in the styles used to draw the tree by
@@ -729,7 +1173,7 @@ YAHOO.widget.TreeView.removeHandler = function (el, sType, fn) {
  * images to preload, default is ygtv
  * @static
  */
-YAHOO.widget.TreeView.preload = function(e, prefix) {
+TV.preload = function(e, prefix) {
     prefix = prefix || "ygtv";
 
     YAHOO.log("Preloading images: " + prefix, "info", "TreeView");
@@ -756,11 +1200,10 @@ YAHOO.widget.TreeView.preload = function(e, prefix) {
 
     document.body.appendChild(f);
 
-    YAHOO.widget.TreeView.removeHandler(window, 
-                "load", YAHOO.widget.TreeView.preload);
+    TV.removeHandler(window, 
+                "load", TV.preload);
 
 };
 
-YAHOO.widget.TreeView.addHandler(window, 
-                "load", YAHOO.widget.TreeView.preload);
-
+TV.addHandler(window,"load", TV.preload);
+})();

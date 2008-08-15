@@ -6,45 +6,34 @@
  * @extends YAHOO.widget.TextNode
  * @param oData {object} a string or object containing the data that will
  * be used to render this node.
- * Valid properties: 
- * <dl>
- *   <dt>label</dt>
- *   <dd>The text for the node's label</dd>
- *   <dt>title</dt>
- *   <dd>The title attribute for the label anchor</dd>
- *   <dt>title</dt>
- *   <dd>The title attribute for the label anchor</dd>
- *   <dt>href</dt>
- *   <dd>The href for the node's label.  By default it is set to
- *   expand/collapse the node.</dd>
- *   <dt>target</dt>
- *   <dd>The target attribute for the label anchor</dd>
- *   <dt>style</dt>
- *   <dd>A CSS class to apply to the label anchor</dd>
- * </dl>
- * All other attributes are made available in noderef.data, which
+ * Providing a string is the same as providing an object with a single property named label.
+ * All values in the oData will be used to set equally named properties in the node
+ * as long as the node does have such properties, they are not undefined, private or functions.
+ * All attributes are made available in noderef.data, which
  * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
  * can be used to retreive a node by one of the attributes.
  * @param oParent {YAHOO.widget.Node} this node's parent node
- * @param expanded {boolean} the initial expanded/collapsed state
+ * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
  * @constructor
  */
 YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
-	if (oData) { 
-		this.init(oData, oParent, expanded);
-		this.setUpLabel(oData);
-	}
+	YAHOO.widget.TextNode.superclass.constructor.call(this,oData,oParent,expanded);
 
-    /*
+   /*
      * Menus usually allow only one branch to be open at a time.
      */
 	this.multiExpand = false;
 
-    this.logger     = new YAHOO.widget.LogWriter(this.toString());
-
 };
 
 YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
+
+    /**
+     * The node type
+     * @property _type
+     * @private
+     */
+    _type: "MenuNode",
 
     toString: function() { 
         return "MenuNode (" + this.index + ") " + this.label;

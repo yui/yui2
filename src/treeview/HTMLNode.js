@@ -1,3 +1,8 @@
+(function () {
+	var Dom = YAHOO.util.Dom,
+		Lang = YAHOO.lang,
+		Event = YAHOO.util.Event;
+
 /**
  * This implementation takes either a string or object for the
  * oData argument.  If is it a string, we will use it for the display
@@ -10,21 +15,20 @@
  * @constructor
  * @param oData {object} a string or object containing the data that will
  * be used to render this node.  
- * Valid configuration properties: 
- * <dl>
- *   <dt>html</dt>
- *   <dd>The html content for the node</dd>
- * </dl>
+ * Providing a string is the same as providing an object with a single property named html.
+ * All values in the oData will be used to set equally named properties in the node
+ * as long as the node does have such properties, they are not undefined, private or functions.
  * All other attributes are made available in noderef.data, which
  * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
  * can be used to retreive a node by one of the attributes.
  * @param oParent {YAHOO.widget.Node} this node's parent node
- * @param expanded {boolean} the initial expanded/collapsed state
+ * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
  * @param hasIcon {boolean} specifies whether or not leaf nodes should
  * be rendered with or without a horizontal line line icon. If the icon
  * is not displayed, the content fills the space it would have occupied.
  * This option operates independently of the leaf node presentation logic
  * for dynamic nodes.
+ * (deprecated; use oData.hasIcon) 
  */
 YAHOO.widget.HTMLNode = function(oData, oParent, expanded, hasIcon) {
     if (oData) { 
@@ -43,12 +47,6 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
      */
     contentStyle: "ygtvhtml",
 
-    /**
-     * The generated id that will contain the data passed in by the implementer.
-     * @property contentElId
-     * @type string
-     */
-    contentElId: null,
 
     /**
      * The HTML content to use for this node's display
@@ -56,6 +54,13 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
      * @type string
      */
     html: null,
+	
+/**
+     * The node type
+     * @property _type
+     * @private
+     */
+    _type: "HTMLNode",
 
     /**
      * Sets up the node label
@@ -67,8 +72,8 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     initContent: function(oData, hasIcon) { 
         this.setHtml(oData);
         this.contentElId = "ygtvcontentel" + this.index;
-        this.hasIcon = hasIcon;
-
+		if (!Lang.isUndefined(hasIcon)) { this.hasIcon  = hasIcon; }
+		
         this.logger = new YAHOO.widget.LogWriter(this.toString());
     },
 
@@ -99,50 +104,27 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     },
 
     // overrides YAHOO.widget.Node
-    getNodeHtml: function() { 
-        this.logger.log("Generating html");
-        var sb = [];
-
-        sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
-        sb[sb.length] = '<tr>';
-        
-        for (var i=0;i<this.depth;++i) {
-            //sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&#160;</td>';
-            sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';
-        }
-
-        if (this.hasIcon) {
-            sb[sb.length] = '<td';
-            sb[sb.length] = ' id="' + this.getToggleElId() + '"';
-            sb[sb.length] = ' class="' + this.getStyle() + '"';
-            sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '"';
-            if (this.hasChildren(true)) {
-                sb[sb.length] = ' onmouseover="this.className=';
-                sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
-                sb[sb.length] = this.tree.id + '\',' + this.index +  ').getHoverStyle()"';
-                sb[sb.length] = ' onmouseout="this.className=';
-                sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
-                sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
-            }
-            //sb[sb.length] = '>&#160;</td>';
-            sb[sb.length] = '><div class="ygtvspacer"></div></td>';
-        }
-
-        sb[sb.length] = '<td';
-        sb[sb.length] = ' id="' + this.contentElId + '"';
-        sb[sb.length] = ' class="' + this.contentStyle + '"';
-        sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
-        sb[sb.length] = ' >';
-        sb[sb.length] = this.html;
-        sb[sb.length] = '</td>';
-        sb[sb.length] = '</tr>';
-        sb[sb.length] = '</table>';
-
-        return sb.join("");
+    getContentHtml: function() { 
+        return this.html;
     },
+	
+	  /**
+     * Returns an object which could be used to build a tree out of this node and its children.
+     * It can be passed to the tree constructor to reproduce this node as a tree.
+     * It will return false if any node loads dynamically, regardless of whether it is loaded or not.
+     * @method getNodeDefinition
+     * @return {Object | false}  definition of the tree or false if any node is defined as dynamic
+     */
+    getNodeDefinition: function() {
+		var def = YAHOO.widget.HTMLNode.superclass.getNodeDefinition.call(this);
+		if (def === false) { return false; }
+		def.html = this.html;
+		return def;
+	
+	},
 
     toString: function() { 
         return "HTMLNode (" + this.index + ")";
     }
-
 });
+})();
