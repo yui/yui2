@@ -1923,6 +1923,18 @@ MenuItem.prototype = {
             }
 
 
+            // Remove the element from the parent node
+
+            oParentNode = oEl.parentNode;
+
+            if (oParentNode) {
+
+                oParentNode.removeChild(oEl);
+
+                this.destroyEvent.fire();
+
+            }
+
 
             // Remove CustomEvent listeners
 
@@ -1939,21 +1951,6 @@ MenuItem.prototype = {
             
             
             this.cfg.configChangedEvent.unsubscribeAll();
-
-
-            // Remove the element from the parent node
-
-            oParentNode = oEl.parentNode;
-
-            if (oParentNode) {
-
-                oParentNode.removeChild(oEl);
-
-                this.destroyEvent.fire();
-
-            }
-
-            this.destroyEvent.unsubscribeAll();
 
         }
 
