@@ -441,7 +441,7 @@ var L = YAHOO.lang,
      * @return {boolean} the result
      */
     isFunction: function(o) {
-        return !!(typeof o === 'function' && o.apply);
+        return typeof o === 'function';
     },
         
     /**
@@ -1975,7 +1975,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         'treeview': {
             'type': 'js',
             'path': 'treeview/treeview-min.js',
-            'requires': ['event'],
+            'requires': ['event', 'dom'],
             'skinnable': true
         },
 

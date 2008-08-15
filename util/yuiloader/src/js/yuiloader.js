@@ -323,7 +323,7 @@
         'treeview': {
             'type': 'js',
             'path': 'treeview/treeview-min.js',
-            'requires': ['event'],
+            'requires': ['event', 'dom'],
             'skinnable': true
         },
 
