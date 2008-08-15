@@ -1702,6 +1702,7 @@ _onMouseOver: function (p_sType, p_aArgs) {
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
         oTarget = Event.getTarget(oEvent),
+        oParent = this.parent,
         oRoot = this.getRoot(),
         oSubmenuHideDelayTimer = this._submenuHideDelayTimer,
         oParentMenu,
@@ -1737,13 +1738,13 @@ _onMouseOver: function (p_sType, p_aArgs) {
 			this.clearActiveItem();
 	
 	
-			if (this.parent && oSubmenuHideDelayTimer) {
+			if (oParent && oSubmenuHideDelayTimer) {
 	
 				oSubmenuHideDelayTimer.cancel();
 	
-				this.parent.cfg.setProperty(_SELECTED, true);
+				oParent.cfg.setProperty(_SELECTED, true);
 	
-				oParentMenu = this.parent.parent;
+				oParentMenu = oParent.parent;
 	
 				oParentMenu._bHandledMouseOutEvent = true;
 				oParentMenu._bHandledMouseOverEvent = false;
@@ -2108,6 +2109,7 @@ _onKeyDown: function (p_sType, p_aArgs) {
 
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
+        oParent = this.parent,
         oSubmenu,
         oItemCfg,
         oParentItem,
@@ -2147,7 +2149,6 @@ _onKeyDown: function (p_sType, p_aArgs) {
     if (oItem && !oItem.cfg.getProperty(_DISABLED)) {
 
         oItemCfg = oItem.cfg;
-        oParentItem = this.parent;
 
         switch(oEvent.keyCode) {
     
@@ -2311,9 +2312,9 @@ _onKeyDown: function (p_sType, p_aArgs) {
     
             case 37:    // Left arrow
     
-                if (oParentItem) {
+                if (oParent) {
     
-                    oParentMenu = oParentItem.parent;
+                    oParentMenu = oParent.parent;
     
                     if (oParentMenu instanceof YAHOO.widget.MenuBar) {
     
@@ -2343,7 +2344,7 @@ _onKeyDown: function (p_sType, p_aArgs) {
     
                         this.hide();
     
-                        oParentItem.focus();
+                        oParent.focus();
                     
                     }
     
@@ -2367,9 +2368,9 @@ _onKeyDown: function (p_sType, p_aArgs) {
         
             this.hide();
 
-            if (this.parent) {
+            if (oParent) {
 
-                this.parent.focus();
+                oParent.focus();
             
             }
 
@@ -2765,6 +2766,8 @@ _onBeforeShow: function (p_sType, p_aArgs) {
     var nOptions,
         n,
         oSrcElement,
+        oParent = this.parent,
+        oParentMenu,
         oContainer = this.cfg.getProperty(_CONTAINER);
 
 
@@ -2779,22 +2782,26 @@ _onBeforeShow: function (p_sType, p_aArgs) {
 
         if (this.itemData) {
 
-            if (this.parent && this.parent.parent && 
-                this.parent.parent.srcElement && 
-                this.parent.parent.srcElement.tagName.toUpperCase() == 
-                _SELECT) {
-
-                nOptions = this.itemData.length;
-    
-                for(n=0; n<nOptions; n++) {
-
-                    if (this.itemData[n].tagName) {
-
-                        this.addItem((new this.ITEM_TYPE(this.itemData[n])));
-    
-                    }
-    
-                }
+            if (oParent) {
+            
+            	oParentMenu = oParent.parent;
+            
+				if (oParentMenu && oParentMenu.srcElement && 
+					oParentMenu.srcElement.tagName.toUpperCase() == _SELECT) {
+	
+					nOptions = this.itemData.length;
+		
+					for (n=0; n < nOptions; n++) {
+	
+						if (this.itemData[n].tagName) {
+	
+							this.addItem((new this.ITEM_TYPE(this.itemData[n])));
+		
+						}
+		
+					}
+	
+				}
             
             }
             else {
@@ -2833,9 +2840,9 @@ _onBeforeShow: function (p_sType, p_aArgs) {
         }
         else {
 
-            if (this.parent) {
+            if (oParent) {
 
-                this.render(this.parent.element);     
+                this.render(oParent.element);     
 
             }
             else {

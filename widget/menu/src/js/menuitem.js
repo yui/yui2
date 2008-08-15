@@ -732,6 +732,7 @@ MenuItem.prototype = {
 
         var oSrcEl = this.srcElement,
             oConfig = this.cfg,
+            oParent = this.parent,
             oNode,
             aOptions,
             nOptions,
@@ -741,13 +742,11 @@ MenuItem.prototype = {
 
         if (oSrcEl.childNodes.length > 0) {
 
-            if (this.parent.lazyLoad && this.parent.srcElement && 
-                this.parent.srcElement.tagName.toUpperCase() == _SELECT) {
+            if (oParent.lazyLoad && oParent.srcElement && 
+                oParent.srcElement.tagName.toUpperCase() == _SELECT) {
 
-                oConfig.setProperty(
-                        _SUBMENU, 
-                        { id: Dom.generateId(), itemdata: oSrcEl.childNodes }
-                    );
+                oConfig.setProperty(_SUBMENU, 
+                        { id: Dom.generateId(), itemdata: oSrcEl.childNodes });
 
             }
             else {
@@ -1232,7 +1231,8 @@ MenuItem.prototype = {
 
         var oSubmenu = p_aArgs[0],
             oConfig = this.cfg,
-            bLazyLoad = this.parent && this.parent.lazyLoad,
+            oParent = this.parent,
+            bLazyLoad = oParent && oParent.lazyLoad,
             oMenu,
             sSubmenuId,
             oSubmenuConfig;
@@ -1660,7 +1660,8 @@ MenuItem.prototype = {
     */
     getNextEnabledSibling: function () {
 
-        var nGroupIndex,
+        var oParent = this.parent,
+        	nGroupIndex,
             aItemGroups,
             oNextItem,
             nNextGroupIndex,
@@ -1673,11 +1674,11 @@ MenuItem.prototype = {
 
         }
 
-        if (this.parent instanceof Menu) {
+        if (oParent instanceof Menu) {
 
             nGroupIndex = this.groupIndex;
     
-            aItemGroups = this.parent.getItemGroups();
+            aItemGroups = oParent.getItemGroups();
     
             if (this.index < (aItemGroups[nGroupIndex].length - 1)) {
     
@@ -1724,7 +1725,8 @@ MenuItem.prototype = {
     */
     getPreviousEnabledSibling: function () {
 
-        var nGroupIndex,
+        var oParent = this.parent,
+        	nGroupIndex,
             aItemGroups,
             oPreviousItem,
             nPreviousGroupIndex,
@@ -1744,16 +1746,15 @@ MenuItem.prototype = {
 
         }
 
-       if (this.parent instanceof Menu) {
+       if (oParent instanceof Menu) {
 
             nGroupIndex = this.groupIndex;
-            aItemGroups = this.parent.getItemGroups();
+            aItemGroups = oParent.getItemGroups();
 
     
             if (this.index > getFirstItemIndex(aItemGroups[nGroupIndex], 0)) {
     
-                oPreviousItem = getPreviousArrayItem(aItemGroups[nGroupIndex], 
-                        (this.index-1));
+                oPreviousItem = getPreviousArrayItem(aItemGroups[nGroupIndex], (this.index-1));
     
             }
             else {
