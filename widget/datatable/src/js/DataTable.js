@@ -9952,55 +9952,49 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
 },
 
 /**
+ * Hook to update oPayload before consumption.
+ *  
+ * @method handleDataReturnPayload
+ * @param oRequest {MIXED} Original generated request.
+ * @param oResponse {Object} Response object.
+ * @param oPayload {MIXED} State values.
+ * @return oPayload {MIXED} State values.
+ */
+handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
+    return oPayload;
+},
+
+/**
  * Updates the DataTable with state data sent in an onDataReturn* payload.
  *  
- * @method _handleDataReturnPayload
+ * @method handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
  * @param oResponse {Object} Response object.
  * @param oPayload {MIXED} State values
- * @private
  */
 _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
+    oPayload = this.handleDataReturnPayload(oRequest, oResponse, oPayload);
     if(oPayload) {
-        // Update with any pagination information
+        // Update pagination
         var oPaginator = this.get('paginator');
         if (oPaginator) {
-            if(this.get("dynamicData")) {
-                var totalRecords = oPaginator.get('totalRecords');
-
-                // Meta field trumps locally known value
-                if (oResponse.meta.totalRecords !== undefined) {
-                    totalRecords = parseInt(oResponse.meta.totalRecords,10) | 0;
-                }
-                // Manual override by implementer
-                else if (oPayload.totalRecords !== undefined) {
-                    totalRecords = parseInt(oPayload.totalRecords,10) | 0;
-                }
-
-                // Safety net to increase totalRecords if RecordSet is larger
-                // than assigned totalRecords
-                totalRecords = Math.max(totalRecords, this._oRecordSet.getLength());
-                if (oPaginator.get('totalRecords') !== totalRecords) {
-                    oPaginator.set('totalRecords',totalRecords);
-                }
+            // Update totalRecords
+            if (lang.isNumber(oPayload.totalRecords)) {
+                oPaginator.set('totalRecords',oPayload.totalRecords);
             }
-            else {
-                oPaginator.set('totalRecords',this._oRecordSet.getLength());
-            }
-
-            // Set the core paginator values in preparation for each render
+            // Update core paginator values
             if (lang.isObject(oPayload.pagination)) {
                 oPaginator.set('rowsPerPage',oPayload.pagination.rowsPerPage);
                 oPaginator.set('recordOffset',oPayload.pagination.recordOffset);
             }
         }
 
-        // Update with any sorting information
+        // Update sorting
         if (oPayload.sortedBy) {
             // Set the sorting values in preparation for refresh
             this.set('sortedBy', oPayload.sortedBy);
         }
-        // Backwards compatibility
+        // Backwards compatibility for sorting
         else if (oPayload.sorting) {
             // Set the sorting values in preparation for refresh
             this.set('sortedBy', oPayload.sorting);
