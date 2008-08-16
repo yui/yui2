@@ -55,7 +55,7 @@ Changes:
 --------
 + Removed the rounded corners for IE 6 Quirks Mode and Strict Mode and IE 7 Quirks Mode.
 
-+ Changed the keyboard shortcut used to display the Menu for Button's of type "menu" to the down
++ Changed the keyboard shortcut used to display the Menu for Button's of type "split" to the down
   arrow key.
 
 
