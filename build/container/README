@@ -1,5 +1,20 @@
 Container Release Notes
 
+*** version 2.6.0 PR 1 ***
+
+Added the following features:
+-----------------------------
+
++ Added a new "preventcontextoverlap" configuration property used to manage whether or not an 
+  Overlay instance should overlap its context element (defined using the "context" configuration 
+  property) when the "constraintoviewport" configuration property is set to "true".
+
+
+*** version 2.5.2 ***
+
++ No change.
+
+
 *** version 2.5.1 ***
 
 Fixed the following bugs:

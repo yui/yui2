@@ -679,7 +679,6 @@
     YAHOO.lang.augmentProto(Config, YAHOO.util.EventProvider);
 
 }());
-
 (function () {
 
     /**
@@ -1826,7 +1825,6 @@
     YAHOO.lang.augmentProto(Module, YAHOO.util.EventProvider);
 
 }());
-
 (function () {
 
     /**
@@ -1943,7 +1941,15 @@
                 value: (YAHOO.env.ua.ie == 6 ? true : false), 
                 validator: Lang.isBoolean, 
                 supercedes: ["zindex"] 
+            },
+            
+            "PREVENT_CONTEXT_OVERLAP": {
+            	key: "preventcontextoverlap",
+            	value: false,
+                validator: Lang.isBoolean,  
+				supercedes: ["constraintoviewport"]
             }
+            
         };
 
     /**
@@ -2353,6 +2359,23 @@
                 supercedes: DEFAULT_CONFIG.IFRAME.supercedes
 
             });
+
+            /**
+            * @config preventcontextoverlap
+            * @description Boolean indicating whether or not the Overlay should overlap its 
+            * context element (defined using the "context" configuration property) when the 
+            * "constraintoviewport" configuration property is set to "true".
+            * @type Boolean
+            * @default false
+            */
+            this.cfg.addProperty(DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.key, {
+
+                value: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.value, 
+                validator: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.validator, 
+                supercedes: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.supercedes
+
+            });
+
         },
 
         /**
@@ -3124,11 +3147,343 @@
         */
         enforceConstraints: function (type, args, obj) {
             var pos = args[0];
+            
             var cXY = this.getConstrainedXY(pos[0], pos[1]);
             this.cfg.setProperty("x", cXY[0], true);
             this.cfg.setProperty("y", cXY[1], true);
             this.cfg.setProperty("xy", cXY, true);
         },
+
+
+        /**
+         * Given x coordinate value, returns the calculated x coordinate required to 
+         * position the Overlay if it is to be constrained to the viewport, based on the 
+         * current element size, viewport dimensions and scroll values.
+         *
+         * @param {Number} x The X coordinate value to be constrained
+         * @return {Number} The constrained x coordinate
+         */		
+		getConstrainedX: function (x) {
+
+            var oOverlay = this,
+            	oOverlayEl = oOverlay.element,
+                nOverlayOffsetWidth = oOverlayEl.offsetWidth,
+
+            	nViewportOffset = Overlay.VIEWPORT_OFFSET,
+                viewPortWidth = Dom.getViewportWidth(),
+                scrollX = Dom.getDocumentScrollLeft(),
+
+				bCanConstrain = (nOverlayOffsetWidth + nViewportOffset < viewPortWidth),
+
+				aContext = this.cfg.getProperty("context"),
+				oContextEl,
+				nContextElX,
+				nContextElWidth,
+
+				bFlipped = false,
+
+				nLeftRegionWidth,
+				nRightRegionWidth,
+
+				leftConstraint,
+				rightConstraint,
+
+				xNew = x,
+
+				oOverlapPositions = {
+
+					"tltr": true,
+					"blbr": true,
+					"brbl": true,
+					"trtl": true
+				
+				};
+
+
+			var flipHorizontal = function () {
+			
+				var nNewX;
+			
+				if ((oOverlay.cfg.getProperty("x") - scrollX) > nContextElX) {
+					nNewX = (nContextElX - nOverlayOffsetWidth);
+				}
+				else {
+					nNewX = (nContextElX + nContextElWidth);
+				}
+				
+	
+				oOverlay.cfg.setProperty("x", (nNewX + scrollX), true);
+	
+				return nNewX;
+	
+			};
+
+
+
+			/*
+				 Uses the context element's position to calculate the availble width 
+				 to the right and left of it to display its corresponding Overlay.
+			*/
+
+			var getDisplayRegionWidth = function () {
+
+				// The Overlay is to the right of the context element
+
+				if ((oOverlay.cfg.getProperty("x") - scrollX) > nContextElX) {
+					return (nRightRegionWidth - nViewportOffset);
+				}
+				else {	// The Overlay is to the left of the context element
+					return (nLeftRegionWidth - nViewportOffset);
+				}
+			
+			};
+	
+
+			/*
+				Positions the Overlay to the left or right of the context element so that it remains 
+				inside the viewport.
+			*/
+	
+			var setHorizontalPosition = function () {
+			
+				var nDisplayRegionWidth = getDisplayRegionWidth(),
+					fnReturnVal;
+
+				if (nOverlayOffsetWidth > nDisplayRegionWidth) {
+		
+					if (bFlipped) {
+		
+						/*
+							 All possible positions and values have been 
+							 tried, but none were successful, so fall back 
+							 to the original size and position.
+						*/
+	
+						flipHorizontal();
+						
+					}
+					else {
+		
+						flipHorizontal();
+
+						bFlipped = true;
+		
+						fnReturnVal = setHorizontalPosition();
+		
+					}
+				
+				}
+		
+				return fnReturnVal;
+			
+			};
+
+
+			if (oOverlapPositions[(aContext[1] + aContext[2])] && 
+				this.cfg.getProperty("preventcontextoverlap")) {
+
+				if (bCanConstrain) {
+
+					oContextEl = aContext[0];
+					nContextElX = Dom.getX(oContextEl) - scrollX;
+					nContextElWidth = oContextEl.offsetWidth;
+					nLeftRegionWidth = nContextElX;
+					nRightRegionWidth = (viewPortWidth - (nContextElX + nContextElWidth));
+	
+					setHorizontalPosition();
+
+				}
+				
+				xNew = this.cfg.getProperty("x");
+			
+			}
+			else {
+
+				if (bCanConstrain) {
+	
+					leftConstraint = scrollX + nViewportOffset;
+					rightConstraint = 
+						scrollX + viewPortWidth - nOverlayOffsetWidth - nViewportOffset;
+	
+					if (x < leftConstraint) {
+						xNew = leftConstraint;
+					} else if (x > rightConstraint) {
+						xNew = rightConstraint;
+					}
+				} else {
+					xNew = nViewportOffset + scrollX;
+				}
+            
+            }
+
+            return xNew;
+		
+		},
+
+
+        /**
+         * Given y coordinate value, returns the calculated y coordinate required to 
+         * position the Overlay if it is to be constrained to the viewport, based on the 
+         * current element size, viewport dimensions and scroll values.
+         *
+         * @param {Number} y The Y coordinate value to be constrained
+         * @return {Number} The constrained y coordinate
+         */		
+		getConstrainedY: function (y) {
+
+            var oOverlay = this,
+            	oOverlayEl = oOverlay.element,
+                nOverlayOffsetHeight = oOverlayEl.offsetHeight,
+            
+            	nViewportOffset = Overlay.VIEWPORT_OFFSET,
+                viewPortHeight = Dom.getViewportHeight(),
+                scrollY = Dom.getDocumentScrollTop(),
+
+				bCanConstrain = (nOverlayOffsetHeight + nViewportOffset < viewPortHeight),
+
+				aContext = this.cfg.getProperty("context"),
+				oContextEl,
+				nContextElY,
+				nContextElHeight,
+
+				bFlipped = false,
+
+				nTopRegionHeight,
+				nBottomRegionHeight,
+
+				topConstraint,
+				bottomConstraint,
+
+            	yNew = y,
+            	
+				oOverlapPositions = {
+					"trbr": true,
+					"tlbl": true,
+					"bltl": true,
+					"brtr": true
+				};
+
+
+			var flipVertical = function () {
+
+				var nNewY;
+			
+				// The Overlay is below the context element, flip it above
+				if ((oOverlay.cfg.getProperty("y") - scrollY) > nContextElY) { 
+					nNewY = (nContextElY - nOverlayOffsetHeight);
+				}
+				else {	// The Overlay is above the context element, flip it below
+					nNewY = (nContextElY + nContextElHeight);
+				}
+	
+				oOverlay.cfg.setProperty("y", (nNewY + scrollY), true);
+				
+				return nNewY;
+			
+			};
+
+
+			/*
+				 Uses the context element's position to calculate the availble height 
+				 above and below it to display its corresponding Overlay.
+			*/
+
+			var getDisplayRegionHeight = function () {
+
+				// The Overlay is below the context element
+				if ((oOverlay.cfg.getProperty("y") - scrollY) > nContextElY) {
+					return (nBottomRegionHeight - nViewportOffset);				
+				}
+				else {	// The Overlay is above the context element
+					return (nTopRegionHeight - nViewportOffset);				
+				}
+		
+			};
+
+
+			/*
+				Trys to place the Overlay in the best possible position (either above or 
+				below its corresponding context element).
+			*/
+		
+			var setVerticalPosition = function () {
+		
+				var nDisplayRegionHeight = getDisplayRegionHeight(),
+					fnReturnVal;
+					
+
+				if (nOverlayOffsetHeight > nDisplayRegionHeight) {
+				   
+					if (bFlipped) {
+		
+						/*
+							 All possible positions and values for the 
+							 "maxheight" configuration property have been 
+							 tried, but none were successful, so fall back 
+							 to the original size and position.
+						*/
+	
+						flipVertical();
+						
+					}
+					else {
+		
+						flipVertical();
+
+						bFlipped = true;
+		
+						fnReturnVal = setVerticalPosition();
+		
+					}
+				
+				}
+		
+				return fnReturnVal;
+		
+			};
+
+
+			if (oOverlapPositions[(aContext[1] + aContext[2])] && 
+					 this.cfg.getProperty("preventcontextoverlap")) {
+
+				if (bCanConstrain) {
+
+					oContextEl = aContext[0];
+					nContextElHeight = oContextEl.offsetHeight;
+					nContextElY = (Dom.getY(oContextEl) - scrollY);
+	
+					nTopRegionHeight = nContextElY;
+					nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
+	
+					setVerticalPosition();
+				
+				}
+
+				yNew = oOverlay.cfg.getProperty("y");
+
+			}
+			else {
+
+				if (bCanConstrain) {
+	
+					topConstraint = scrollY + nViewportOffset;
+					bottomConstraint = 
+						scrollY + viewPortHeight - nOverlayOffsetHeight - nViewportOffset;
+	
+					if (y < topConstraint) {
+						yNew  = topConstraint;
+					} else if (y  > bottomConstraint) {
+						yNew  = bottomConstraint;
+					}
+				} else {
+					yNew = nViewportOffset + scrollY;
+				}
+
+			}
+
+            return yNew;
+		},
+
 
         /**
          * Given x, y coordinate values, returns the calculated coordinates required to 
@@ -3140,48 +3495,9 @@
          * @return {Array} The constrained x and y coordinates at index 0 and 1 respectively;
          */
         getConstrainedXY: function(x, y) {
-
-            var nViewportOffset = Overlay.VIEWPORT_OFFSET,
-                viewPortWidth = Dom.getViewportWidth(),
-                viewPortHeight = Dom.getViewportHeight(),
-                offsetHeight = this.element.offsetHeight,
-                offsetWidth = this.element.offsetWidth,
-                scrollX = Dom.getDocumentScrollLeft(),
-                scrollY = Dom.getDocumentScrollTop();
-
-            var xNew = x;
-            var yNew = y;
-
-            if (offsetWidth + nViewportOffset < viewPortWidth) {
-
-                var leftConstraint = scrollX + nViewportOffset;
-                var rightConstraint = scrollX + viewPortWidth - offsetWidth - nViewportOffset;
-
-                if (x < leftConstraint) {
-                    xNew = leftConstraint;
-                } else if (x > rightConstraint) {
-                    xNew = rightConstraint;
-                }
-            } else {
-                xNew = nViewportOffset + scrollX;
-            }
-
-            if (offsetHeight + nViewportOffset < viewPortHeight) {
-
-                var topConstraint = scrollY + nViewportOffset;
-                var bottomConstraint = scrollY + viewPortHeight - offsetHeight - nViewportOffset;
-
-                if (y < topConstraint) {
-                    yNew  = topConstraint;
-                } else if (y  > bottomConstraint) {
-                    yNew  = bottomConstraint;
-                }
-            } else {
-                yNew = nViewportOffset + scrollY;
-            }
-
-            return [xNew, yNew];
+			return [this.getConstrainedX(x), this.getConstrainedY(y)];
         },
+
 
         /**
         * Centers the container in the viewport.
@@ -3352,7 +3668,6 @@
 
     });
 }());
-
 (function () {
     
     /**
@@ -3857,7 +4172,6 @@
     };
 
 }());
-
 (function () {
 
     /**
@@ -4249,5 +4563,4 @@
     YAHOO.lang.augmentProto(ContainerEffect, YAHOO.util.EventProvider);
 
 })();
-
 YAHOO.register("containercore", YAHOO.widget.Module, {version: "@VERSION@", build: "@BUILD@"});
