@@ -3,7 +3,6 @@
 
 (function () {
 
-
 /**
 * Creates an item for a menu.
 * 
@@ -47,126 +46,190 @@ var Dom = YAHOO.util.Dom,
     Menu = YAHOO.widget.Menu,
     MenuItem = YAHOO.widget.MenuItem,
     CustomEvent = YAHOO.util.CustomEvent,
+    UA = YAHOO.env.ua,
     Lang = YAHOO.lang,
 
-    m_oMenuItemTemplate,
+	// Private string constants
 
-    /**
-    * Constant representing the name of the MenuItem's events
-    * @property EVENT_TYPES
-    * @private
-    * @final
-    * @type Object
-    */
-    EVENT_TYPES = {
-    
-        "MOUSE_OVER": "mouseover",
-        "MOUSE_OUT": "mouseout",
-        "MOUSE_DOWN": "mousedown",
-        "MOUSE_UP": "mouseup",
-        "CLICK": "click",
-        "KEY_PRESS": "keypress",
-        "KEY_DOWN": "keydown",
-        "KEY_UP": "keyup",
-        "ITEM_ADDED": "itemAdded",
-        "ITEM_REMOVED": "itemRemoved",
-        "FOCUS": "focus",
-        "BLUR": "blur",
-        "DESTROY": "destroy"
-    
-    },
+	_TEXT = "text",
+	_HASH = "#",
+	_HYPHEN = "-",
+	_HELP_TEXT = "helptext",
+	_URL = "url",
+	_TARGET = "target",
+	_EMPHASIS = "emphasis",
+	_STRONG_EMPHASIS = "strongemphasis",
+	_CHECKED = "checked",
+	_SUBMENU = "submenu",
+	_DISABLED = "disabled",
+	_SELECTED = "selected",
+	_HAS_SUBMENU = "hassubmenu",
+	_CHECKED_DISABLED = "checked-disabled",
+	_HAS_SUBMENU_DISABLED = "hassubmenu-disabled",
+	_HAS_SUBMENU_SELECTED = "hassubmenu-selected",
+	_CHECKED_SELECTED = "checked-selected",
+	_ONCLICK = "onclick",
+	_CLASSNAME = "classname",
+	_EMPTY_STRING = "",
+	_OPTION = "OPTION",
+	_OPTGROUP = "OPTGROUP",
+	_LI_UPPERCASE = "LI",
+	_LI_LOWERCASE = "li",
+	_HREF = "href",
+	_ANCHOR_TEMPLATE = "<a href=\"#\"></a>",
+	_SELECT = "SELECT",
+	_DIV = "DIV",
+	_START_HELP_TEXT = "<em class=\"helptext\">",
+	_START_EM = "<em>",
+	_END_EM = "</em>",
+	_START_STRONG = "<strong>",
+	_END_STRONG = "</strong>",
+	_PREVENT_CONTEXT_OVERLAP = "preventcontextoverlap",
+	_OBJ = "obj",
+	_SCOPE = "scope",
+	_NONE = "none",
+	_VISIBLE = "visible",
+	_SPACE = " ",
+	_MENUITEM = "MenuItem",
 
-    /**
-    * Constant representing the MenuItem's configuration properties
-    * @property DEFAULT_CONFIG
-    * @private
-    * @final
-    * @type Object
-    */
-    DEFAULT_CONFIG = {
+    EVENT_TYPES = [
     
-        "TEXT": { 
-            key: "text", 
-            value: "", 
-            validator: Lang.isString, 
-            suppressEvent: true 
-        }, 
+        ["mouseOverEvent", "mouseover"],
+        ["mouseOutEvent", "mouseout"],
+        ["mouseDownEvent", "mousedown"],
+        ["mouseUpEvent", "mouseup"],
+        ["clickEvent", "click"],
+        ["keyPressEvent", "keypress"],
+        ["keyDownEvent", "keydown"],
+        ["keyUpEvent", "keyup"],
+        ["focusEvent", "focus"],
+        ["blurEvent", "blur"],
+        ["destroyEvent", "destroy"]
     
-        "HELP_TEXT": { 
-            key: "helptext",
-            supercedes: ["text"], 
-            suppressEvent: true 
-        },
-    
-        "URL": { 
-            key: "url", 
-            value: "#", 
-            suppressEvent: true 
-        }, 
-    
-        "TARGET": { 
-            key: "target", 
-            suppressEvent: true 
-        }, 
-    
-        "EMPHASIS": { 
-            key: "emphasis", 
-            value: false, 
-            validator: Lang.isBoolean, 
-            suppressEvent: true, 
-            supercedes: ["text"]
-        }, 
-    
-        "STRONG_EMPHASIS": { 
-            key: "strongemphasis", 
-            value: false, 
-            validator: Lang.isBoolean, 
-            suppressEvent: true,
-            supercedes: ["text"]
-        },
-    
-        "CHECKED": { 
-            key: "checked", 
-            value: false, 
-            validator: Lang.isBoolean, 
-            suppressEvent: true, 
-            supercedes: ["disabled", "selected"]
-        }, 
+    ],
 
-        "SUBMENU": { 
-            key: "submenu",
-            suppressEvent: true,
-            supercedes: ["disabled", "selected"]
-        },
+	TEXT_CONFIG = { 
+		key: _TEXT, 
+		value: _EMPTY_STRING, 
+		validator: Lang.isString, 
+		suppressEvent: true 
+	}, 
+
+	HELP_TEXT_CONFIG = { 
+		key: _HELP_TEXT,
+		supercedes: [_TEXT], 
+		suppressEvent: true 
+	},
+
+	URL_CONFIG = { 
+		key: _URL, 
+		value: _HASH, 
+		suppressEvent: true 
+	}, 
+
+	TARGET_CONFIG = { 
+		key: _TARGET, 
+		suppressEvent: true 
+	}, 
+
+	EMPHASIS_CONFIG = { 
+		key: _EMPHASIS, 
+		value: false, 
+		validator: Lang.isBoolean, 
+		suppressEvent: true, 
+		supercedes: [_TEXT]
+	}, 
+
+	STRONG_EMPHASIS_CONFIG = { 
+		key: _STRONG_EMPHASIS, 
+		value: false, 
+		validator: Lang.isBoolean, 
+		suppressEvent: true,
+		supercedes: [_TEXT]
+	},
+
+	CHECKED_CONFIG = { 
+		key: _CHECKED, 
+		value: false, 
+		validator: Lang.isBoolean, 
+		suppressEvent: true, 
+		supercedes: [_DISABLED, _SELECTED]
+	}, 
+
+	SUBMENU_CONFIG = { 
+		key: _SUBMENU,
+		suppressEvent: true,
+		supercedes: [_DISABLED, _SELECTED]
+	},
+
+	DISABLED_CONFIG = { 
+		key: _DISABLED, 
+		value: false, 
+		validator: Lang.isBoolean, 
+		suppressEvent: true,
+		supercedes: [_TEXT, _SELECTED]
+	},
+
+	SELECTED_CONFIG = { 
+		key: _SELECTED, 
+		value: false, 
+		validator: Lang.isBoolean, 
+		suppressEvent: true
+	},
+
+	ONCLICK_CONFIG = { 
+		key: _ONCLICK,
+		suppressEvent: true
+	},
+
+	CLASS_NAME_CONFIG = { 
+		key: _CLASSNAME, 
+		value: null, 
+		validator: Lang.isString,
+		suppressEvent: true
+	},
     
-        "DISABLED": { 
-            key: "disabled", 
-            value: false, 
-            validator: Lang.isBoolean, 
-            suppressEvent: true,
-            supercedes: ["text", "selected"]
-        },
+    CLASS_NAMES = {},
     
-        "SELECTED": { 
-            key: "selected", 
-            value: false, 
-            validator: Lang.isBoolean, 
-            suppressEvent: true
-        },
-    
-        "ONCLICK": { 
-            key: "onclick",
-            suppressEvent: true
-        },
-    
-        "CLASS_NAME": { 
-            key: "classname", 
-            value: null, 
-            validator: Lang.isString,
-            suppressEvent: true
-        }
-    
-    };
+    m_oMenuItemTemplate;
+
+
+var getClassNameForState = function (prefix, state) {
+
+	var oClassNames = CLASS_NAMES[prefix];
+	
+	if (!oClassNames) {
+		CLASS_NAMES[prefix] = {};
+		oClassNames = CLASS_NAMES[prefix];
+	}
+
+
+	var sClassName = oClassNames[state];
+
+	if (!sClassName) {
+		sClassName = prefix + _HYPHEN + state;
+		oClassNames[state] = sClassName;
+	}
+
+	return sClassName;
+	
+};
+
+
+var addClassNameForState = function (state) {
+
+	Dom.addClass(this.element, getClassNameForState(this.CSS_CLASS_NAME, state));
+	Dom.addClass(this._oAnchor, getClassNameForState(this.CSS_LABEL_CLASS_NAME, state));
+
+};
+
+
+var removeClassNameForState = function (state) {
+
+	Dom.removeClass(this.element, getClassNameForState(this.CSS_CLASS_NAME, state));
+	Dom.removeClass(this._oAnchor, getClassNameForState(this.CSS_LABEL_CLASS_NAME, state));
+
+};
 
 
 MenuItem.prototype = {
@@ -375,7 +438,6 @@ MenuItem.prototype = {
     * element is removed from its parent <code>&#60;ul&#62;</code> element.
     * @type YAHOO.util.CustomEvent
     */
-    destroyEvent: null,
 
 
     /**
@@ -384,7 +446,6 @@ MenuItem.prototype = {
     * back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
-    mouseOverEvent: null,
 
 
     /**
@@ -393,7 +454,6 @@ MenuItem.prototype = {
     * the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
-    mouseOutEvent: null,
 
 
     /**
@@ -402,7 +462,6 @@ MenuItem.prototype = {
     * back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
-    mouseDownEvent: null,
 
 
     /**
@@ -411,7 +470,6 @@ MenuItem.prototype = {
     * is over the menu item.  Passes back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
-    mouseUpEvent: null,
 
 
     /**
@@ -420,7 +478,6 @@ MenuItem.prototype = {
     * back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
-    clickEvent: null,
 
 
     /**
@@ -429,7 +486,6 @@ MenuItem.prototype = {
     * menu item has focus.  Passes back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
-    keyPressEvent: null,
 
 
     /**
@@ -438,7 +494,6 @@ MenuItem.prototype = {
     * focus.  Passes back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
-    keyDownEvent: null,
 
 
     /**
@@ -447,7 +502,6 @@ MenuItem.prototype = {
     * focus.  Passes back the DOM Event object as an argument.
     * @type YAHOO.util.CustomEvent
     */
-    keyUpEvent: null,
 
 
     /**
@@ -455,7 +509,6 @@ MenuItem.prototype = {
     * @description Fires when the menu item receives focus.
     * @type YAHOO.util.CustomEvent
     */
-    focusEvent: null,
 
 
     /**
@@ -463,7 +516,6 @@ MenuItem.prototype = {
     * @description Fires when the menu item loses the input focus.
     * @type YAHOO.util.CustomEvent
     */
-    blurEvent: null,
 
 
     /**
@@ -502,32 +554,34 @@ MenuItem.prototype = {
 
         this.initDefaultConfig();
 
-        var SIGNATURE = CustomEvent.LIST,
-            oConfig = this.cfg,
-            sURL = "#",
+        var oConfig = this.cfg,
+            sURL = _HASH,
+            oCustomEvent,
+			aEventData,
             oAnchor,
             sTarget,
             sText,
-            sId;
+            sId,
+            i;
 
 
         if (Lang.isString(p_oObject)) {
 
             this._createRootNodeStructure();
 
-            oConfig.queueProperty("text", p_oObject);
+            oConfig.queueProperty(_TEXT, p_oObject);
 
         }
         else if (p_oObject && p_oObject.tagName) {
 
             switch(p_oObject.tagName.toUpperCase()) {
 
-                case "OPTION":
+                case _OPTION:
 
                     this._createRootNodeStructure();
 
-                    oConfig.queueProperty("text", p_oObject.text);
-                    oConfig.queueProperty("disabled", p_oObject.disabled);
+                    oConfig.queueProperty(_TEXT, p_oObject.text);
+                    oConfig.queueProperty(_DISABLED, p_oObject.disabled);
 
                     this.value = p_oObject.value;
 
@@ -535,12 +589,12 @@ MenuItem.prototype = {
 
                 break;
 
-                case "OPTGROUP":
+                case _OPTGROUP:
 
                     this._createRootNodeStructure();
 
-                    oConfig.queueProperty("text", p_oObject.label);
-                    oConfig.queueProperty("disabled", p_oObject.disabled);
+                    oConfig.queueProperty(_TEXT, p_oObject.label);
+                    oConfig.queueProperty(_DISABLED, p_oObject.disabled);
 
                     this.srcElement = p_oObject;
 
@@ -548,7 +602,7 @@ MenuItem.prototype = {
 
                 break;
 
-                case "LI":
+                case _LI_UPPERCASE:
 
                     // Get the anchor node (if it exists)
                     
@@ -559,8 +613,8 @@ MenuItem.prototype = {
 
                     if (oAnchor) {
 
-                        sURL = oAnchor.getAttribute("href", 2);
-                        sTarget = oAnchor.getAttribute("target");
+                        sURL = oAnchor.getAttribute(_HREF, 2);
+                        sTarget = oAnchor.getAttribute(_TARGET);
 
                         sText = oAnchor.innerHTML;
 
@@ -576,9 +630,9 @@ MenuItem.prototype = {
                         element's DOM
                     */ 
 
-                    oConfig.setProperty("text", sText, true);
-                    oConfig.setProperty("url", sURL, true);
-                    oConfig.setProperty("target", sTarget, true);
+                    oConfig.setProperty(_TEXT, sText, true);
+                    oConfig.setProperty(_URL, sURL, true);
+                    oConfig.setProperty(_TARGET, sTarget, true);
 
                     this._initSubTree();
 
@@ -608,40 +662,20 @@ MenuItem.prototype = {
             Dom.addClass(this._oAnchor, this.CSS_LABEL_CLASS_NAME);
 
 
-            // Create custom events
+			i = EVENT_TYPES.length - 1;
 
-            this.mouseOverEvent = this.createEvent(EVENT_TYPES.MOUSE_OVER);
-            this.mouseOverEvent.signature = SIGNATURE;
+			do {
 
-            this.mouseOutEvent = this.createEvent(EVENT_TYPES.MOUSE_OUT);
-            this.mouseOutEvent.signature = SIGNATURE;
+				aEventData = EVENT_TYPES[i];
 
-            this.mouseDownEvent = this.createEvent(EVENT_TYPES.MOUSE_DOWN);
-            this.mouseDownEvent.signature = SIGNATURE;
+				oCustomEvent = this.createEvent(aEventData[1]);
+				oCustomEvent.signature = CustomEvent.LIST;
+				
+				this[aEventData[0]] = oCustomEvent;
 
-            this.mouseUpEvent = this.createEvent(EVENT_TYPES.MOUSE_UP);
-            this.mouseUpEvent.signature = SIGNATURE;
+			}
+			while (i--);
 
-            this.clickEvent = this.createEvent(EVENT_TYPES.CLICK);
-            this.clickEvent.signature = SIGNATURE;
-
-            this.keyPressEvent = this.createEvent(EVENT_TYPES.KEY_PRESS);
-            this.keyPressEvent.signature = SIGNATURE;
-
-            this.keyDownEvent = this.createEvent(EVENT_TYPES.KEY_DOWN);
-            this.keyDownEvent.signature = SIGNATURE;
-
-            this.keyUpEvent = this.createEvent(EVENT_TYPES.KEY_UP);
-            this.keyUpEvent.signature = SIGNATURE;
-
-            this.focusEvent = this.createEvent(EVENT_TYPES.FOCUS);
-            this.focusEvent.signature = SIGNATURE;
-
-            this.blurEvent = this.createEvent(EVENT_TYPES.BLUR);
-            this.blurEvent.signature = SIGNATURE;
-
-            this.destroyEvent = this.createEvent(EVENT_TYPES.DESTROY);
-            this.destroyEvent.signature = SIGNATURE;
 
             if (p_oConfig) {
     
@@ -659,7 +693,6 @@ MenuItem.prototype = {
 
     // Private methods
 
-
     /**
     * @method _createRootNodeStructure
     * @description Creates the core DOM structure for the menu item.
@@ -672,8 +705,8 @@ MenuItem.prototype = {
 
         if (!m_oMenuItemTemplate) {
 
-            m_oMenuItemTemplate = document.createElement("li");
-            m_oMenuItemTemplate.innerHTML = "<a href=\"#\"></a>";
+            m_oMenuItemTemplate = document.createElement(_LI_LOWERCASE);
+            m_oMenuItemTemplate.innerHTML = _ANCHOR_TEMPLATE;
 
         }
 
@@ -709,10 +742,10 @@ MenuItem.prototype = {
         if (oSrcEl.childNodes.length > 0) {
 
             if (this.parent.lazyLoad && this.parent.srcElement && 
-                this.parent.srcElement.tagName.toUpperCase() == "SELECT") {
+                this.parent.srcElement.tagName.toUpperCase() == _SELECT) {
 
                 oConfig.setProperty(
-                        "submenu", 
+                        _SUBMENU, 
                         { id: Dom.generateId(), itemdata: oSrcEl.childNodes }
                     );
 
@@ -728,13 +761,13 @@ MenuItem.prototype = {
     
                         switch(oNode.tagName.toUpperCase()) {
                 
-                            case "DIV":
+                            case _DIV:
                 
-                                oConfig.setProperty("submenu", oNode);
+                                oConfig.setProperty(_SUBMENU, oNode);
                 
                             break;
          
-                            case "OPTION":
+                            case _OPTION:
         
                                 aOptions[aOptions.length] = oNode;
         
@@ -754,7 +787,7 @@ MenuItem.prototype = {
     
                     oMenu = new this.SUBMENU_TYPE(Dom.generateId());
                     
-                    oConfig.setProperty("submenu", oMenu);
+                    oConfig.setProperty(_SUBMENU, oMenu);
     
                     for(n=0; n<nOptions; n++) {
         
@@ -790,10 +823,10 @@ MenuItem.prototype = {
         var sText = p_aArgs[0],
             oConfig = this.cfg,
             oAnchor = this._oAnchor,
-            sHelpText = oConfig.getProperty("helptext"),
-            sHelpTextHTML = "",
-            sEmphasisStartTag = "",
-            sEmphasisEndTag = "";
+            sHelpText = oConfig.getProperty(_HELP_TEXT),
+            sHelpTextHTML = _EMPTY_STRING,
+            sEmphasisStartTag = _EMPTY_STRING,
+            sEmphasisEndTag = _EMPTY_STRING;
 
 
         if (sText) {
@@ -801,29 +834,28 @@ MenuItem.prototype = {
 
             if (sHelpText) {
                     
-                sHelpTextHTML = "<em class=\"helptext\">" + sHelpText + "</em>";
+                sHelpTextHTML = _START_HELP_TEXT + sHelpText + _END_EM;
             
             }
 
 
-            if (oConfig.getProperty("emphasis")) {
+            if (oConfig.getProperty(_EMPHASIS)) {
 
-                sEmphasisStartTag = "<em>";
-                sEmphasisEndTag = "</em>";
+                sEmphasisStartTag = _START_EM;
+                sEmphasisEndTag = _END_EM;
 
             }
 
 
-            if (oConfig.getProperty("strongemphasis")) {
+            if (oConfig.getProperty(_STRONG_EMPHASIS)) {
 
-                sEmphasisStartTag = "<strong>";
-                sEmphasisEndTag = "</strong>";
+                sEmphasisStartTag = _START_STRONG;
+                sEmphasisEndTag = _END_STRONG;
             
             }
 
 
-            oAnchor.innerHTML = (sEmphasisStartTag + sText + 
-                sEmphasisEndTag + sHelpTextHTML);
+            oAnchor.innerHTML = (sEmphasisStartTag + sText + sEmphasisEndTag + sHelpTextHTML);
 
         }
 
@@ -842,7 +874,7 @@ MenuItem.prototype = {
     */    
     configHelpText: function (p_sType, p_aArgs, p_oItem) {
 
-        this.cfg.refireEvent("text");
+        this.cfg.refireEvent(_TEXT);
 
     },
 
@@ -863,19 +895,19 @@ MenuItem.prototype = {
 
         if (!sURL) {
 
-            sURL = "#";
+            sURL = _HASH;
 
         }
 
         var oAnchor = this._oAnchor;
 
-        if (YAHOO.env.ua.opera) {
+        if (UA.opera) {
 
-            oAnchor.removeAttribute("href");
+            oAnchor.removeAttribute(_HREF);
         
         }
 
-        oAnchor.setAttribute("href", sURL);
+        oAnchor.setAttribute(_HREF, sURL);
 
     },
 
@@ -897,12 +929,12 @@ MenuItem.prototype = {
 
         if (sTarget && sTarget.length > 0) {
 
-            oAnchor.setAttribute("target", sTarget);
+            oAnchor.setAttribute(_TARGET, sTarget);
 
         }
         else {
 
-            oAnchor.removeAttribute("target");
+            oAnchor.removeAttribute(_TARGET);
         
         }
 
@@ -925,14 +957,14 @@ MenuItem.prototype = {
             oConfig = this.cfg;
 
 
-        if (bEmphasis && oConfig.getProperty("strongemphasis")) {
+        if (bEmphasis && oConfig.getProperty(_STRONG_EMPHASIS)) {
 
-            oConfig.setProperty("strongemphasis", false);
+            oConfig.setProperty(_STRONG_EMPHASIS, false);
 
         }
 
 
-        oConfig.refireEvent("text");
+        oConfig.refireEvent(_TEXT);
 
     },
 
@@ -953,13 +985,13 @@ MenuItem.prototype = {
             oConfig = this.cfg;
 
 
-        if (bStrongEmphasis && oConfig.getProperty("emphasis")) {
+        if (bStrongEmphasis && oConfig.getProperty(_EMPHASIS)) {
 
-            oConfig.setProperty("emphasis", false);
+            oConfig.setProperty(_EMPHASIS, false);
 
         }
 
-        oConfig.refireEvent("text");
+        oConfig.refireEvent(_TEXT);
 
     },
 
@@ -977,41 +1009,33 @@ MenuItem.prototype = {
     configChecked: function (p_sType, p_aArgs, p_oItem) {
 
         var bChecked = p_aArgs[0],
-            oElement = this.element,
-            oAnchor = this._oAnchor,
-            oConfig = this.cfg,
-            sState = "-checked",
-            sClassName = this.CSS_CLASS_NAME + sState,
-            sLabelClassName = this.CSS_LABEL_CLASS_NAME + sState;
+            oConfig = this.cfg;
 
 
         if (bChecked) {
 
-            Dom.addClass(oElement, sClassName);
-            Dom.addClass(oAnchor, sLabelClassName);
+            addClassNameForState.call(this, _CHECKED);
 
         }
         else {
 
-            Dom.removeClass(oElement, sClassName);
-            Dom.removeClass(oAnchor, sLabelClassName);
-        
+            removeClassNameForState.call(this, _CHECKED);
         }
 
 
-        oConfig.refireEvent("text");
+        oConfig.refireEvent(_TEXT);
 
 
-        if (oConfig.getProperty("disabled")) {
+        if (oConfig.getProperty(_DISABLED)) {
 
-            oConfig.refireEvent("disabled");
+            oConfig.refireEvent(_DISABLED);
 
         }
 
 
-        if (oConfig.getProperty("selected")) {
+        if (oConfig.getProperty(_SELECTED)) {
 
-            oConfig.refireEvent("selected");
+            oConfig.refireEvent(_SELECTED);
 
         }
 
@@ -1033,67 +1057,51 @@ MenuItem.prototype = {
 
         var bDisabled = p_aArgs[0],
             oConfig = this.cfg,
-            oSubmenu = oConfig.getProperty("submenu"),
-            bChecked = oConfig.getProperty("checked"),
-            oElement = this.element,
-            oAnchor = this._oAnchor,
-            sState = "-disabled",
-            sCheckedState = "-checked" + sState,
-            sSubmenuState = "-hassubmenu" + sState,
-            sClassName = this.CSS_CLASS_NAME + sState,
-            sLabelClassName = this.CSS_LABEL_CLASS_NAME + sState,
-            sCheckedClassName = this.CSS_CLASS_NAME + sCheckedState,
-            sLabelCheckedClassName = this.CSS_LABEL_CLASS_NAME + sCheckedState,
-            sSubmenuClassName = this.CSS_CLASS_NAME + sSubmenuState,
-            sLabelSubmenuClassName = this.CSS_LABEL_CLASS_NAME + sSubmenuState;
+            oSubmenu = oConfig.getProperty(_SUBMENU),
+            bChecked = oConfig.getProperty(_CHECKED);
 
 
         if (bDisabled) {
 
-            if (oConfig.getProperty("selected")) {
+            if (oConfig.getProperty(_SELECTED)) {
 
-                oConfig.setProperty("selected", false);
+                oConfig.setProperty(_SELECTED, false);
 
             }
 
-            Dom.addClass(oElement, sClassName);
-            Dom.addClass(oAnchor, sLabelClassName);
+
+			addClassNameForState.call(this, _DISABLED);
 
 
             if (oSubmenu) {
 
-                Dom.addClass(oElement, sSubmenuClassName);
-                Dom.addClass(oAnchor, sLabelSubmenuClassName);
+				addClassNameForState.call(this, _HAS_SUBMENU_DISABLED);
             
             }
             
 
             if (bChecked) {
 
-                Dom.addClass(oElement, sCheckedClassName);
-                Dom.addClass(oAnchor, sLabelCheckedClassName);
+				addClassNameForState.call(this, _CHECKED_DISABLED);
 
             }
 
         }
         else {
 
-            Dom.removeClass(oElement, sClassName);
-            Dom.removeClass(oAnchor, sLabelClassName);
+			removeClassNameForState.call(this, _DISABLED);
 
 
             if (oSubmenu) {
 
-                Dom.removeClass(oElement, sSubmenuClassName);
-                Dom.removeClass(oAnchor, sLabelSubmenuClassName);
+				removeClassNameForState.call(this, _HAS_SUBMENU_DISABLED);
             
             }
             
 
             if (bChecked) {
 
-                Dom.removeClass(oElement, sCheckedClassName);
-                Dom.removeClass(oAnchor, sLabelCheckedClassName);
+				removeClassNameForState.call(this, _CHECKED_DISABLED);
 
             }
 
@@ -1115,76 +1123,61 @@ MenuItem.prototype = {
     configSelected: function (p_sType, p_aArgs, p_oItem) {
 
         var oConfig = this.cfg,
+        	oAnchor = this._oAnchor,
+        	
             bSelected = p_aArgs[0],
-            oElement = this.element,
-            oAnchor = this._oAnchor,
-            bChecked = oConfig.getProperty("checked"),
-            oSubmenu = oConfig.getProperty("submenu"),
-            sState = "-selected",
-            sCheckedState = "-checked" + sState,
-            sSubmenuState = "-hassubmenu" + sState,
-            sClassName = this.CSS_CLASS_NAME + sState,
-            sLabelClassName = this.CSS_LABEL_CLASS_NAME + sState,
-            sCheckedClassName = this.CSS_CLASS_NAME + sCheckedState,
-            sLabelCheckedClassName = this.CSS_LABEL_CLASS_NAME + sCheckedState,
-            sSubmenuClassName = this.CSS_CLASS_NAME + sSubmenuState,
-            sLabelSubmenuClassName = this.CSS_LABEL_CLASS_NAME + sSubmenuState;
+            bChecked = oConfig.getProperty(_CHECKED),
+            oSubmenu = oConfig.getProperty(_SUBMENU);
 
 
-        if (YAHOO.env.ua.opera) {
+        if (UA.opera) {
 
             oAnchor.blur();
         
         }
 
 
-        if (bSelected && !oConfig.getProperty("disabled")) {
+        if (bSelected && !oConfig.getProperty(_DISABLED)) {
 
-            Dom.addClass(oElement, sClassName);
-            Dom.addClass(oAnchor, sLabelClassName);
+			addClassNameForState.call(this, _SELECTED);
 
 
             if (oSubmenu) {
 
-                Dom.addClass(oElement, sSubmenuClassName);
-                Dom.addClass(oAnchor, sLabelSubmenuClassName);
+				addClassNameForState.call(this, _HAS_SUBMENU_SELECTED);
             
             }
 
 
             if (bChecked) {
 
-                Dom.addClass(oElement, sCheckedClassName);
-                Dom.addClass(oAnchor, sLabelCheckedClassName);
+				addClassNameForState.call(this, _CHECKED_SELECTED);
 
             }
 
         }
         else {
 
-            Dom.removeClass(oElement, sClassName);
-            Dom.removeClass(oAnchor, sLabelClassName);
+			removeClassNameForState.call(this, _SELECTED);
 
 
             if (oSubmenu) {
 
-                Dom.removeClass(oElement, sSubmenuClassName);
-                Dom.removeClass(oAnchor, sLabelSubmenuClassName);
+				removeClassNameForState.call(this, _HAS_SUBMENU_SELECTED);
             
             }
 
-        
+
             if (bChecked) {
 
-                Dom.removeClass(oElement, sCheckedClassName);
-                Dom.removeClass(oAnchor, sLabelCheckedClassName);
+				removeClassNameForState.call(this, _CHECKED_SELECTED);
 
             }
 
         }
 
 
-        if (this.hasFocus() && YAHOO.env.ua.opera) {
+        if (this.hasFocus() && UA.opera) {
         
             oAnchor.focus();
         
@@ -1239,12 +1232,7 @@ MenuItem.prototype = {
 
         var oSubmenu = p_aArgs[0],
             oConfig = this.cfg,
-            oElement = this.element,
-            oAnchor = this._oAnchor,
             bLazyLoad = this.parent && this.parent.lazyLoad,
-            sState = "-hassubmenu",
-            sClassName = this.CSS_CLASS_NAME + sState,
-            sLabelClassName = this.CSS_LABEL_CLASS_NAME + sState,
             oMenu,
             sSubmenuId,
             oSubmenuConfig;
@@ -1259,8 +1247,7 @@ MenuItem.prototype = {
                 oMenu.lazyLoad = bLazyLoad;
 
             }
-            else if (typeof oSubmenu == "object" && oSubmenu.id && 
-                !oSubmenu.nodeType) {
+            else if (Lang.isObject(oSubmenu) && oSubmenu.id && !oSubmenu.nodeType) {
 
                 sSubmenuId = oSubmenu.id;
                 oSubmenuConfig = oSubmenu;
@@ -1273,30 +1260,39 @@ MenuItem.prototype = {
 
                 // Set the value of the property to the Menu instance
 
-                oConfig.setProperty("submenu", oMenu, true);
+                oConfig.setProperty(_SUBMENU, oMenu, true);
 
             }
             else {
 
-                oMenu = new this.SUBMENU_TYPE(oSubmenu,
-                                { lazyload: bLazyLoad, parent: this });
+                oMenu = new this.SUBMENU_TYPE(oSubmenu, { lazyload: bLazyLoad, parent: this });
 
 
                 // Set the value of the property to the Menu instance
                 
-                oConfig.setProperty("submenu", oMenu, true);
+                oConfig.setProperty(_SUBMENU, oMenu, true);
 
             }
 
 
             if (oMenu) {
 
-                Dom.addClass(oElement, sClassName);
-                Dom.addClass(oAnchor, sLabelClassName);
+				oMenu.cfg.setProperty(_PREVENT_CONTEXT_OVERLAP, true);
+
+                addClassNameForState.call(this, _HAS_SUBMENU);
+
+
+				if (oConfig.getProperty(_URL) !== _HASH) {
+				
+					oConfig.setProperty(_URL, (_HASH + oMenu.id));
+				
+				}
+
 
                 this._oSubmenu = oMenu;
 
-                if (YAHOO.env.ua.opera) {
+
+                if (UA.opera) {
                 
                     oMenu.beforeHideEvent.subscribe(this._onSubmenuBeforeHide);               
                 
@@ -1307,8 +1303,7 @@ MenuItem.prototype = {
         }
         else {
 
-            Dom.removeClass(oElement, sClassName);
-            Dom.removeClass(oAnchor, sLabelClassName);
+			removeClassNameForState.call(this, _HAS_SUBMENU);
 
             if (this._oSubmenu) {
 
@@ -1319,16 +1314,16 @@ MenuItem.prototype = {
         }
 
 
-        if (oConfig.getProperty("disabled")) {
+        if (oConfig.getProperty(_DISABLED)) {
 
-            oConfig.refireEvent("disabled");
+            oConfig.refireEvent(_DISABLED);
 
         }
 
 
-        if (oConfig.getProperty("selected")) {
+        if (oConfig.getProperty(_SELECTED)) {
 
-            oConfig.refireEvent("selected");
+            oConfig.refireEvent(_SELECTED);
 
         }
 
@@ -1354,8 +1349,7 @@ MenuItem.prototype = {
             already been specified.
         */
 
-        if (this._oOnclickAttributeValue && 
-            (this._oOnclickAttributeValue != oObject)) {
+        if (this._oOnclickAttributeValue && (this._oOnclickAttributeValue != oObject)) {
 
             this.clickEvent.unsubscribe(this._oOnclickAttributeValue.fn, 
                                 this._oOnclickAttributeValue.obj);
@@ -1365,12 +1359,12 @@ MenuItem.prototype = {
         }
 
 
-        if (!this._oOnclickAttributeValue && typeof oObject == "object" && 
-            typeof oObject.fn == "function") {
+        if (!this._oOnclickAttributeValue && Lang.isObject(oObject) && 
+            Lang.isFunction(oObject.fn)) {
             
             this.clickEvent.subscribe(oObject.fn, 
-                ((!YAHOO.lang.isUndefined(oObject.obj)) ? oObject.obj : this), 
-                oObject.scope);
+                ((_OBJ in oObject) ? oObject.obj : this), 
+                ((_SCOPE in oObject) ? oObject.scope : null) );
 
             this._oOnclickAttributeValue = oObject;
 
@@ -1429,12 +1423,12 @@ MenuItem.prototype = {
         * @type String
         */
         oConfig.addProperty(
-            DEFAULT_CONFIG.TEXT.key, 
+            TEXT_CONFIG.key, 
             { 
                 handler: this.configText, 
-                value: DEFAULT_CONFIG.TEXT.value, 
-                validator: DEFAULT_CONFIG.TEXT.validator, 
-                suppressEvent: DEFAULT_CONFIG.TEXT.suppressEvent 
+                value: TEXT_CONFIG.value, 
+                validator: TEXT_CONFIG.validator, 
+                suppressEvent: TEXT_CONFIG.suppressEvent 
             }
         );
         
@@ -1452,11 +1446,11 @@ MenuItem.prototype = {
         * HTMLElement</a>
         */
         oConfig.addProperty(
-            DEFAULT_CONFIG.HELP_TEXT.key,
+            HELP_TEXT_CONFIG.key,
             {
                 handler: this.configHelpText, 
-                supercedes: DEFAULT_CONFIG.HELP_TEXT.supercedes,
-                suppressEvent: DEFAULT_CONFIG.HELP_TEXT.suppressEvent 
+                supercedes: HELP_TEXT_CONFIG.supercedes,
+                suppressEvent: HELP_TEXT_CONFIG.suppressEvent 
             }
         );
 
@@ -1470,11 +1464,11 @@ MenuItem.prototype = {
         * @type String
         */        
         oConfig.addProperty(
-            DEFAULT_CONFIG.URL.key, 
+            URL_CONFIG.key, 
             {
                 handler: this.configURL, 
-                value: DEFAULT_CONFIG.URL.value, 
-                suppressEvent: DEFAULT_CONFIG.URL.suppressEvent
+                value: URL_CONFIG.value, 
+                suppressEvent: URL_CONFIG.suppressEvent
             }
         );
 
@@ -1491,10 +1485,10 @@ MenuItem.prototype = {
         * @type String
         */        
         oConfig.addProperty(
-            DEFAULT_CONFIG.TARGET.key, 
+            TARGET_CONFIG.key, 
             {
                 handler: this.configTarget, 
-                suppressEvent: DEFAULT_CONFIG.TARGET.suppressEvent
+                suppressEvent: TARGET_CONFIG.suppressEvent
             }
         );
 
@@ -1503,20 +1497,20 @@ MenuItem.prototype = {
         * @config emphasis
         * @description Boolean indicating if the text of the menu item will be 
         * rendered with emphasis.
-        * @deprecated Use "text" configuration property to add emphasis.  
+        * @deprecated Use the "text" configuration property to add emphasis.  
         * For example: <code>oMenuItem.cfg.setProperty("text", "&#60;em&#62;Some 
         * Text&#60;/em&#62;");</code>
         * @default false
         * @type Boolean
         */
         oConfig.addProperty(
-            DEFAULT_CONFIG.EMPHASIS.key, 
+            EMPHASIS_CONFIG.key, 
             { 
                 handler: this.configEmphasis, 
-                value: DEFAULT_CONFIG.EMPHASIS.value, 
-                validator: DEFAULT_CONFIG.EMPHASIS.validator, 
-                suppressEvent: DEFAULT_CONFIG.EMPHASIS.suppressEvent,
-                supercedes: DEFAULT_CONFIG.EMPHASIS.supercedes
+                value: EMPHASIS_CONFIG.value, 
+                validator: EMPHASIS_CONFIG.validator, 
+                suppressEvent: EMPHASIS_CONFIG.suppressEvent,
+                supercedes: EMPHASIS_CONFIG.supercedes
             }
         );
 
@@ -1525,20 +1519,20 @@ MenuItem.prototype = {
         * @config strongemphasis
         * @description Boolean indicating if the text of the menu item will be 
         * rendered with strong emphasis.
-        * @deprecated Use "text" configuration property to add strong emphasis.  
+        * @deprecated Use the "text" configuration property to add strong emphasis.  
         * For example: <code>oMenuItem.cfg.setProperty("text", "&#60;strong&#62; 
         * Some Text&#60;/strong&#62;");</code>
         * @default false
         * @type Boolean
         */
         oConfig.addProperty(
-            DEFAULT_CONFIG.STRONG_EMPHASIS.key,
+            STRONG_EMPHASIS_CONFIG.key,
             {
                 handler: this.configStrongEmphasis,
-                value: DEFAULT_CONFIG.STRONG_EMPHASIS.value,
-                validator: DEFAULT_CONFIG.STRONG_EMPHASIS.validator,
-                suppressEvent: DEFAULT_CONFIG.STRONG_EMPHASIS.suppressEvent,
-                supercedes: DEFAULT_CONFIG.STRONG_EMPHASIS.supercedes
+                value: STRONG_EMPHASIS_CONFIG.value,
+                validator: STRONG_EMPHASIS_CONFIG.validator,
+                suppressEvent: STRONG_EMPHASIS_CONFIG.suppressEvent,
+                supercedes: STRONG_EMPHASIS_CONFIG.supercedes
             }
         );
 
@@ -1551,13 +1545,13 @@ MenuItem.prototype = {
         * @type Boolean
         */
         oConfig.addProperty(
-            DEFAULT_CONFIG.CHECKED.key, 
+            CHECKED_CONFIG.key, 
             {
                 handler: this.configChecked, 
-                value: DEFAULT_CONFIG.CHECKED.value, 
-                validator: DEFAULT_CONFIG.CHECKED.validator, 
-                suppressEvent: DEFAULT_CONFIG.CHECKED.suppressEvent,
-                supercedes: DEFAULT_CONFIG.CHECKED.supercedes
+                value: CHECKED_CONFIG.value, 
+                validator: CHECKED_CONFIG.validator, 
+                suppressEvent: CHECKED_CONFIG.suppressEvent,
+                supercedes: CHECKED_CONFIG.supercedes
             } 
         );
 
@@ -1571,12 +1565,12 @@ MenuItem.prototype = {
         * @type Boolean
         */
         oConfig.addProperty(
-            DEFAULT_CONFIG.DISABLED.key,
+            DISABLED_CONFIG.key,
             {
                 handler: this.configDisabled,
-                value: DEFAULT_CONFIG.DISABLED.value,
-                validator: DEFAULT_CONFIG.DISABLED.validator,
-                suppressEvent: DEFAULT_CONFIG.DISABLED.suppressEvent
+                value: DISABLED_CONFIG.value,
+                validator: DISABLED_CONFIG.validator,
+                suppressEvent: DISABLED_CONFIG.suppressEvent
             }
         );
 
@@ -1589,12 +1583,12 @@ MenuItem.prototype = {
         * @type Boolean
         */
         oConfig.addProperty(
-            DEFAULT_CONFIG.SELECTED.key,
+            SELECTED_CONFIG.key,
             {
                 handler: this.configSelected,
-                value: DEFAULT_CONFIG.SELECTED.value,
-                validator: DEFAULT_CONFIG.SELECTED.validator,
-                suppressEvent: DEFAULT_CONFIG.SELECTED.suppressEvent
+                value: SELECTED_CONFIG.value,
+                validator: SELECTED_CONFIG.validator,
+                suppressEvent: SELECTED_CONFIG.suppressEvent
             }
         );
 
@@ -1616,11 +1610,11 @@ MenuItem.prototype = {
         * HTMLElement</a>
         */
         oConfig.addProperty(
-            DEFAULT_CONFIG.SUBMENU.key, 
+            SUBMENU_CONFIG.key, 
             {
                 handler: this.configSubmenu, 
-                supercedes: DEFAULT_CONFIG.SUBMENU.supercedes,
-                suppressEvent: DEFAULT_CONFIG.SUBMENU.suppressEvent
+                supercedes: SUBMENU_CONFIG.supercedes,
+                suppressEvent: SUBMENU_CONFIG.suppressEvent
             }
         );
 
@@ -1638,10 +1632,10 @@ MenuItem.prototype = {
         * @default null
         */
         oConfig.addProperty(
-            DEFAULT_CONFIG.ONCLICK.key, 
+            ONCLICK_CONFIG.key, 
             {
                 handler: this.configOnClick, 
-                suppressEvent: DEFAULT_CONFIG.ONCLICK.suppressEvent 
+                suppressEvent: ONCLICK_CONFIG.suppressEvent 
             }
         );
 
@@ -1656,12 +1650,12 @@ MenuItem.prototype = {
         * @type String
         */
         oConfig.addProperty(
-            DEFAULT_CONFIG.CLASS_NAME.key, 
+            CLASS_NAME_CONFIG.key, 
             { 
                 handler: this.configClassName,
-                value: DEFAULT_CONFIG.CLASS_NAME.value, 
-                validator: DEFAULT_CONFIG.CLASS_NAME.validator,
-                suppressEvent: DEFAULT_CONFIG.CLASS_NAME.suppressEvent 
+                value: CLASS_NAME_CONFIG.value, 
+                validator: CLASS_NAME_CONFIG.validator,
+                suppressEvent: CLASS_NAME_CONFIG.suppressEvent 
             }
         );
 
@@ -1679,12 +1673,12 @@ MenuItem.prototype = {
             aItemGroups,
             oNextItem,
             nNextGroupIndex,
-            aNextGroup;
+            aNextGroup,
+            returnVal;
 
         function getNextArrayItem(p_aArray, p_nStartIndex) {
 
-            return p_aArray[p_nStartIndex] || 
-                getNextArrayItem(p_aArray, (p_nStartIndex+1));
+            return p_aArray[p_nStartIndex] || getNextArrayItem(p_aArray, (p_nStartIndex+1));
 
         }
 
@@ -1721,11 +1715,13 @@ MenuItem.prototype = {
     
             }
     
-            return (oNextItem.cfg.getProperty("disabled") || 
-                oNextItem.element.style.display == "none") ? 
+            returnVal = (oNextItem.cfg.getProperty(_DISABLED) || 
+                oNextItem.element.style.display == _NONE) ? 
                 oNextItem.getNextEnabledSibling() : oNextItem;
 
         }
+        
+        return returnVal;
 
     },
 
@@ -1741,12 +1737,12 @@ MenuItem.prototype = {
             aItemGroups,
             oPreviousItem,
             nPreviousGroupIndex,
-            aPreviousGroup;
+            aPreviousGroup,
+            returnVal;
 
         function getPreviousArrayItem(p_aArray, p_nStartIndex) {
 
-            return p_aArray[p_nStartIndex] ||  
-                getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
+            return p_aArray[p_nStartIndex] || getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
 
         }
 
@@ -1790,11 +1786,13 @@ MenuItem.prototype = {
     
             }
 
-            return (oPreviousItem.cfg.getProperty("disabled") || 
-                oPreviousItem.element.style.display == "none") ? 
+            returnVal = (oPreviousItem.cfg.getProperty(_DISABLED) || 
+                oPreviousItem.element.style.display == _NONE) ? 
                 oPreviousItem.getPreviousEnabledSibling() : oPreviousItem;
 
         }
+        
+        return returnVal;
 
     },
 
@@ -1808,29 +1806,26 @@ MenuItem.prototype = {
 
         var oParent = this.parent,
             oAnchor = this._oAnchor,
-            oActiveItem = oParent.activeItem,
-            me = this;
+            oActiveItem = oParent.activeItem;
 
 
         function setFocus() {
 
             try {
 
-                if (YAHOO.env.ua.ie && !document.hasFocus()) {
+                if (!(UA.ie && !document.hasFocus())) {
                 
-                    return;
+					if (oActiveItem) {
+		
+						oActiveItem.blurEvent.fire();
+		
+					}
+	
+					oAnchor.focus();
+					
+					this.focusEvent.fire();
                 
                 }
-
-                if (oActiveItem) {
-    
-                    oActiveItem.blurEvent.fire();
-    
-                }
-
-                oAnchor.focus();
-                
-                me.focusEvent.fire();
 
             }
             catch(e) {
@@ -1840,9 +1835,8 @@ MenuItem.prototype = {
         }
 
 
-        if (!this.cfg.getProperty("disabled") && oParent && 
-            oParent.cfg.getProperty("visible") && 
-            this.element.style.display != "none") {
+        if (!this.cfg.getProperty(_DISABLED) && oParent && oParent.cfg.getProperty(_VISIBLE) && 
+            this.element.style.display != _NONE) {
 
 
             /*
@@ -1851,7 +1845,7 @@ MenuItem.prototype = {
                 position and focus the menu.
             */
 
-            window.setTimeout(setFocus, 0);
+            Lang.later(0, this, setFocus);
 
         }
 
@@ -1867,18 +1861,14 @@ MenuItem.prototype = {
 
         var oParent = this.parent;
 
-        if (!this.cfg.getProperty("disabled") && oParent && 
-            oParent.cfg.getProperty("visible")) {
+        if (!this.cfg.getProperty(_DISABLED) && oParent && oParent.cfg.getProperty(_VISIBLE)) {
 
-
-            var me = this;
-            
-            window.setTimeout(function () {
+            Lang.later(0, this, function () {
 
                 try {
     
-                    me._oAnchor.blur();
-                    me.blurEvent.fire();    
+                    this._oAnchor.blur();
+                    this.blurEvent.fire();    
 
                 } 
                 catch (e) {
@@ -1914,35 +1904,23 @@ MenuItem.prototype = {
 
         var oEl = this.element,
             oSubmenu,
-            oParentNode;
+            oParentNode,
+            aEventData,
+            i;
+
 
         if (oEl) {
 
 
             // If the item has a submenu, destroy it first
 
-            oSubmenu = this.cfg.getProperty("submenu");
+            oSubmenu = this.cfg.getProperty(_SUBMENU);
 
             if (oSubmenu) {
             
                 oSubmenu.destroy();
             
             }
-
-
-            // Remove CustomEvent listeners
-    
-            this.mouseOverEvent.unsubscribeAll();
-            this.mouseOutEvent.unsubscribeAll();
-            this.mouseDownEvent.unsubscribeAll();
-            this.mouseUpEvent.unsubscribeAll();
-            this.clickEvent.unsubscribeAll();
-            this.keyPressEvent.unsubscribeAll();
-            this.keyDownEvent.unsubscribeAll();
-            this.keyUpEvent.unsubscribeAll();
-            this.focusEvent.unsubscribeAll();
-            this.blurEvent.unsubscribeAll();
-            this.cfg.configChangedEvent.unsubscribeAll();
 
 
             // Remove the element from the parent node
@@ -1957,7 +1935,22 @@ MenuItem.prototype = {
 
             }
 
-            this.destroyEvent.unsubscribeAll();
+
+            // Remove CustomEvent listeners
+
+			i = EVENT_TYPES.length - 1;
+
+			do {
+
+				aEventData = EVENT_TYPES[i];
+				
+				this[aEventData[0]].unsubscribeAll();
+
+			}
+			while (i--);
+            
+            
+            this.cfg.configChangedEvent.unsubscribeAll();
 
         }
 
@@ -1971,12 +1964,12 @@ MenuItem.prototype = {
     */
     toString: function () {
 
-        var sReturnVal = "MenuItem",
+        var sReturnVal = _MENUITEM,
             sId = this.id;
 
         if (sId) {
     
-            sReturnVal += (" " + sId);
+            sReturnVal += (_SPACE + sId);
         
         }
 

@@ -1,5 +1,18 @@
 (function () {
 
+	var Lang = YAHOO.lang,
+
+		// String constants
+	
+		_STATIC = "static",
+		_DYNAMIC_STATIC = "dynamic," + _STATIC,
+		_DISABLED = "disabled",
+		_SELECTED = "selected",
+		_AUTO_SUBMENU_DISPLAY = "autosubmenudisplay",
+		_SUBMENU = "submenu",
+		_VISIBLE = "visible",
+		_SPACE = " ",
+		_MENUBAR = "MenuBar";
 
 /**
 * Horizontal collection of items, each of which can contain a submenu.
@@ -26,8 +39,7 @@
 */
 YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 
-    YAHOO.widget.MenuBar.superclass.constructor.call(this, 
-        p_oElement, p_oConfig);
+    YAHOO.widget.MenuBar.superclass.constructor.call(this, p_oElement, p_oConfig);
 
 };
 
@@ -42,11 +54,15 @@ YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 */
 function checkPosition(p_sPosition) {
 
-    if (typeof p_sPosition == "string") {
+	var returnVal = false;
 
-        return ("dynamic,static".indexOf((p_sPosition.toLowerCase())) != -1);
+    if (Lang.isString(p_sPosition)) {
+
+        returnVal = (_DYNAMIC_STATIC.indexOf((p_sPosition.toLowerCase())) != -1);
 
     }
+    
+    return returnVal;
 
 }
 
@@ -54,40 +70,28 @@ function checkPosition(p_sPosition) {
 var Event = YAHOO.util.Event,
     MenuBar = YAHOO.widget.MenuBar,
 
-    /**
-    * Constant representing the MenuBar's configuration properties
-    * @property DEFAULT_CONFIG
-    * @private
-    * @final
-    * @type Object
-    */
-    DEFAULT_CONFIG = {
-    
-        "POSITION": { 
-            key: "position", 
-            value: "static", 
-            validator: checkPosition, 
-            supercedes: ["visible"] 
-        }, 
-    
-        "SUBMENU_ALIGNMENT": { 
-            key: "submenualignment", 
-            value: ["tl","bl"],
-            suppressEvent: true 
-        },
-    
-        "AUTO_SUBMENU_DISPLAY": { 
-            key: "autosubmenudisplay", 
-            value: false, 
-            validator: YAHOO.lang.isBoolean,
-            suppressEvent: true
-        }
-    
-    };
+    POSITION_CONFIG =  { 
+		key: "position", 
+		value: _STATIC, 
+		validator: checkPosition, 
+		supercedes: [_VISIBLE] 
+	}, 
+
+	SUBMENU_ALIGNMENT_CONFIG =  { 
+		key: "submenualignment", 
+		value: ["tl","bl"]
+	},
+
+	AUTO_SUBMENU_DISPLAY_CONFIG =  { 
+		key: _AUTO_SUBMENU_DISPLAY, 
+		value: false, 
+		validator: Lang.isBoolean,
+		suppressEvent: true
+	};
 
 
 
-YAHOO.lang.extend(MenuBar, YAHOO.widget.Menu, {
+Lang.extend(MenuBar, YAHOO.widget.Menu, {
 
 /**
 * @method init
@@ -176,7 +180,7 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
         oNextItem;
 
 
-    if(oItem && !oItem.cfg.getProperty("disabled")) {
+    if(oItem && !oItem.cfg.getProperty(_DISABLED)) {
 
         oItemCfg = oItem.cfg;
 
@@ -185,10 +189,9 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
             case 37:    // Left arrow
             case 39:    // Right arrow
     
-                if(oItem == this.activeItem && 
-                    !oItemCfg.getProperty("selected")) {
+                if(oItem == this.activeItem && !oItemCfg.getProperty(_SELECTED)) {
     
-                    oItemCfg.setProperty("selected", true);
+                    oItemCfg.setProperty(_SELECTED, true);
     
                 }
                 else {
@@ -201,12 +204,12 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
     
                         this.clearActiveItem();
     
-                        oNextItem.cfg.setProperty("selected", true);
+                        oNextItem.cfg.setProperty(_SELECTED, true);
     
     
-                        if(this.cfg.getProperty("autosubmenudisplay")) {
+                        if(this.cfg.getProperty(_AUTO_SUBMENU_DISPLAY)) {
                         
-                            oSubmenu = oNextItem.cfg.getProperty("submenu");
+                            oSubmenu = oNextItem.cfg.getProperty(_SUBMENU);
                             
                             if(oSubmenu) {
                         
@@ -232,16 +235,16 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
     
                     this.clearActiveItem();
     
-                    oItemCfg.setProperty("selected", true);
+                    oItemCfg.setProperty(_SELECTED, true);
                     oItem.focus();
                 
                 }
     
-                oSubmenu = oItemCfg.getProperty("submenu");
+                oSubmenu = oItemCfg.getProperty(_SUBMENU);
     
                 if(oSubmenu) {
     
-                    if(oSubmenu.cfg.getProperty("visible")) {
+                    if(oSubmenu.cfg.getProperty(_VISIBLE)) {
     
                         oSubmenu.setInitialSelection();
                         oSubmenu.setInitialFocus();
@@ -266,9 +269,9 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
 
     if(oEvent.keyCode == 27 && this.activeItem) { // Esc key
 
-        oSubmenu = this.activeItem.cfg.getProperty("submenu");
+        oSubmenu = this.activeItem.cfg.getProperty(_SUBMENU);
 
-        if(oSubmenu && oSubmenu.cfg.getProperty("visible")) {
+        if(oSubmenu && oSubmenu.cfg.getProperty(_VISIBLE)) {
         
             oSubmenu.hide();
             this.activeItem.focus();
@@ -276,7 +279,7 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
         }
         else {
 
-            this.activeItem.cfg.setProperty("selected", false);
+            this.activeItem.cfg.setProperty(_SELECTED, false);
             this.activeItem.blur();
     
         }
@@ -310,7 +313,7 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
         oSubmenu;
     
 
-    if(oItem && !oItem.cfg.getProperty("disabled")) {
+    if(oItem && !oItem.cfg.getProperty(_DISABLED)) {
 
         oEvent = p_aArgs[0];
         oTarget = Event.getTarget(oEvent);
@@ -327,17 +330,17 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
         }
 
     
-        oItem.cfg.setProperty("selected", true);
+        oItem.cfg.setProperty(_SELECTED, true);
     
 
         // Show the submenu for the item
     
-        oSubmenu = oItem.cfg.getProperty("submenu");
+        oSubmenu = oItem.cfg.getProperty(_SUBMENU);
 
 
         if(oSubmenu) {
         
-            if(oSubmenu.cfg.getProperty("visible")) {
+            if(oSubmenu.cfg.getProperty(_VISIBLE)) {
             
                 oSubmenu.hide();
             
@@ -366,12 +369,12 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 */
 toString: function() {
 
-    var sReturnVal = "MenuBar",
+    var sReturnVal = _MENUBAR,
         sId = this.id;
 
     if(sId) {
 
-        sReturnVal += (" " + sId);
+        sReturnVal += (_SPACE + sId);
     
     }
 
@@ -412,12 +415,12 @@ initDefaultConfig: function() {
     * @type String
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.POSITION.key, 
+        POSITION_CONFIG.key, 
         {
             handler: this.configPosition, 
-            value: DEFAULT_CONFIG.POSITION.value, 
-            validator: DEFAULT_CONFIG.POSITION.validator,
-            supercedes: DEFAULT_CONFIG.POSITION.supercedes
+            value: POSITION_CONFIG.value, 
+            validator: POSITION_CONFIG.validator,
+            supercedes: POSITION_CONFIG.supercedes
         }
     );
 
@@ -435,10 +438,10 @@ initDefaultConfig: function() {
     * @type Array
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.SUBMENU_ALIGNMENT.key, 
+        SUBMENU_ALIGNMENT_CONFIG.key, 
         {
-            value: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.value,
-            suppressEvent: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.suppressEvent
+            value: SUBMENU_ALIGNMENT_CONFIG.value,
+            suppressEvent: SUBMENU_ALIGNMENT_CONFIG.suppressEvent
         }
     );
 
@@ -456,11 +459,11 @@ initDefaultConfig: function() {
     * @type Boolean
     */
 	oConfig.addProperty(
-	   DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.key, 
+	   AUTO_SUBMENU_DISPLAY_CONFIG.key, 
 	   {
-	       value: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.value, 
-	       validator: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.validator,
-	       suppressEvent: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.suppressEvent
+	       value: AUTO_SUBMENU_DISPLAY_CONFIG.value, 
+	       validator: AUTO_SUBMENU_DISPLAY_CONFIG.validator,
+	       suppressEvent: AUTO_SUBMENU_DISPLAY_CONFIG.suppressEvent
        } 
     );
 

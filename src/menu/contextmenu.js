@@ -1,5 +1,9 @@
 (function () {
 
+	var _XY = "xy",
+		_MOUSEDOWN = "mousedown",
+		_CONTEXTMENU = "ContextMenu",
+		_SPACE = " ";
 
 /**
 * Creates a list of options or commands which are made visible in response to 
@@ -27,13 +31,13 @@
 */
 YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 
-    YAHOO.widget.ContextMenu.superclass.constructor.call(this, 
-            p_oElement, p_oConfig);
+    YAHOO.widget.ContextMenu.superclass.constructor.call(this, p_oElement, p_oConfig);
 
 };
 
 
 var Event = YAHOO.util.Event,
+	UA = YAHOO.env.ua,
     ContextMenu = YAHOO.widget.ContextMenu,
 
 
@@ -48,7 +52,7 @@ var Event = YAHOO.util.Event,
     EVENT_TYPES = {
 
         "TRIGGER_CONTEXT_MENU": "triggerContextMenu",
-        "CONTEXT_MENU": (YAHOO.env.ua.opera ? "mousedown" : "contextmenu"),
+        "CONTEXT_MENU": (UA.opera ? _MOUSEDOWN : "contextmenu"),
         "CLICK": "click"
 
     },
@@ -61,13 +65,9 @@ var Event = YAHOO.util.Event,
     * @final
     * @type Object
     */
-    DEFAULT_CONFIG = {
-    
-        "TRIGGER": { 
-            key: "trigger",
-            suppressEvent: true
-        }
-    
+    TRIGGER_CONFIG = { 
+		key: "trigger",
+		suppressEvent: true
     };
 
 
@@ -82,7 +82,7 @@ var Event = YAHOO.util.Event,
 */
 function position(p_sType, p_aArgs, p_aPos) {
 
-    this.cfg.setProperty("xy", p_aPos);
+    this.cfg.setProperty(_XY, p_aPos);
     
     this.beforeShowEvent.unsubscribe(position, p_aPos);
 
@@ -181,12 +181,13 @@ init: function(p_oElement, p_oConfig) {
     this.beforeInitEvent.fire(ContextMenu);
 
 
-    if(p_oConfig) {
+    if (p_oConfig) {
 
         this.cfg.applyConfig(p_oConfig, true);
 
     }
     
+    this.hideEvent.subscribe(this._clearContextEventTarget);
     
     this.initEvent.fire(ContextMenu);
     
@@ -203,8 +204,7 @@ initEvents: function() {
 
     // Create custom events
 
-    this.triggerContextMenuEvent = 
-        this.createEvent(EVENT_TYPES.TRIGGER_CONTEXT_MENU);
+    this.triggerContextMenuEvent = this.createEvent(EVENT_TYPES.TRIGGER_CONTEXT_MENU);
 
     this.triggerContextMenuEvent.signature = YAHOO.util.CustomEvent.LIST;
 
@@ -225,6 +225,17 @@ cancel: function() {
 
 // Private methods
 
+/**
+* @method _clearContextEventTarget
+* @description Resets the contextEventTarget property to null when the ContextMenu is hidden.
+* @private
+*/
+_clearContextEventTarget: function () {
+
+	this.contextEventTarget = null;
+
+},
+
 
 /**
 * @method _removeEventHandlers
@@ -242,13 +253,11 @@ _removeEventHandlers: function() {
 
     if (oTrigger) {
 
-        Event.removeListener(oTrigger, EVENT_TYPES.CONTEXT_MENU, 
-            this._onTriggerContextMenu);    
+        Event.removeListener(oTrigger, EVENT_TYPES.CONTEXT_MENU, this._onTriggerContextMenu);    
         
-        if(YAHOO.env.ua.opera) {
+        if (UA.opera) {
         
-            Event.removeListener(oTrigger, EVENT_TYPES.CLICK, 
-                this._onTriggerClick);
+            Event.removeListener(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick);
     
         }
 
@@ -274,7 +283,7 @@ _removeEventHandlers: function() {
 */
 _onTriggerClick: function(p_oEvent, p_oMenu) {
 
-    if(p_oEvent.ctrlKey) {
+    if (p_oEvent.ctrlKey) {
     
         Event.stopEvent(p_oEvent);
 
@@ -295,60 +304,56 @@ _onTriggerClick: function(p_oEvent, p_oMenu) {
 */
 _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 
-    if (p_oEvent.type == "mousedown" && !p_oEvent.ctrlKey) {
-
-        return;
-
-    }
-
-
     var aXY;
 
+    if (!(p_oEvent.type == _MOUSEDOWN && !p_oEvent.ctrlKey)) {
 
-    /*
-        Prevent the browser's default context menu from appearing and 
-        stop the propagation of the "contextmenu" event so that 
-        other ContextMenu instances are not displayed.
-    */
-
-    Event.stopEvent(p_oEvent);
-
-
-    this.contextEventTarget = Event.getTarget(p_oEvent);
-
-    this.triggerContextMenuEvent.fire(p_oEvent);
-
-
-    // Hide any other Menu instances that might be visible
-
-    YAHOO.widget.MenuManager.hideVisible();
-    
-
-
-    if(!this._bCancelled) {
-
-        // Position and display the context menu
-
-        aXY = Event.getXY(p_oEvent);
-
-
-        if (!YAHOO.util.Dom.inDocument(this.element)) {
-
-            this.beforeShowEvent.subscribe(position, aXY);
-
-        }
-        else {
-
-            this.cfg.setProperty("xy", aXY);
-        
-        }
-
-
-        this.show();
+		/*
+			Prevent the browser's default context menu from appearing and 
+			stop the propagation of the "contextmenu" event so that 
+			other ContextMenu instances are not displayed.
+		*/
+	
+		Event.stopEvent(p_oEvent);
+	
+	
+		this.contextEventTarget = Event.getTarget(p_oEvent);
+	
+		this.triggerContextMenuEvent.fire(p_oEvent);
+	
+	
+		// Hide any other Menu instances that might be visible
+	
+		YAHOO.widget.MenuManager.hideVisible();
+		
+	
+	
+		if (!this._bCancelled) {
+	
+			// Position and display the context menu
+	
+			aXY = Event.getXY(p_oEvent);
+	
+	
+			if (!YAHOO.util.Dom.inDocument(this.element)) {
+	
+				this.beforeShowEvent.subscribe(position, aXY);
+	
+			}
+			else {
+	
+				this.cfg.setProperty(_XY, aXY);
+			
+			}
+	
+	
+			this.show();
+	
+		}
+	
+		this._bCancelled = false;
 
     }
-
-    this._bCancelled = false;
 
 },
 
@@ -364,12 +369,12 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 */
 toString: function() {
 
-    var sReturnVal = "ContextMenu",
+    var sReturnVal = _CONTEXTMENU,
         sId = this.id;
 
-    if(sId) {
+    if (sId) {
 
-        sReturnVal += (" " + sId);
+        sReturnVal += (_SPACE + sId);
     
     }
 
@@ -397,10 +402,10 @@ initDefaultConfig: function() {
     * @type String|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
     * level-one-html.html#ID-58190037">HTMLElement</a>|Array
     */
-    this.cfg.addProperty(DEFAULT_CONFIG.TRIGGER.key, 
+    this.cfg.addProperty(TRIGGER_CONFIG.key, 
         {
             handler: this.configTrigger, 
-            suppressEvent: DEFAULT_CONFIG.TRIGGER.suppressEvent 
+            suppressEvent: TRIGGER_CONFIG.suppressEvent 
         }
     );
 
@@ -444,14 +449,14 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
     
     var oTrigger = p_aArgs[0];
 
-    if(oTrigger) {
+    if (oTrigger) {
 
         /*
             If there is a current "trigger" - remove the event handlers 
             from that element(s) before assigning new ones
         */
 
-        if(this._oTrigger) {
+        if (this._oTrigger) {
         
             this._removeEventHandlers();
 
@@ -465,8 +470,7 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
             support the "contextmenu" event
         */ 
   
-        Event.on(oTrigger, EVENT_TYPES.CONTEXT_MENU, 
-            this._onTriggerContextMenu, this, true);
+        Event.on(oTrigger, EVENT_TYPES.CONTEXT_MENU, this._onTriggerContextMenu, this, true);
 
 
         /*
@@ -474,10 +478,9 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
             Opera to prevent default browser behaviors.
         */
 
-        if(YAHOO.env.ua.opera) {
+        if (UA.opera) {
         
-            Event.on(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick, 
-                this, true);
+            Event.on(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick, this, true);
 
         }
 
