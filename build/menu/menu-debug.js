@@ -5892,11 +5892,10 @@ initDefaultConfig: function () {
 
 	/**
 	* @config preventcontextoverlap
-	* @description Boolean indicating whether or not the Overlay should overlap its 
-	* context element (defined using the "context" configuration property) when the 
-	* "constraintoviewport" configuration property is set to "true".
+	* @description Boolean indicating whether or not a submenu should overlap its parent MenuItem 
+	* when the "constraintoviewport" configuration property is set to "true".
 	* @type Boolean
-	* @default false
+	* @default true
 	*/
 	oConfig.addProperty(PREVENT_CONTEXT_OVERLAP_CONFIG.key, {
 
