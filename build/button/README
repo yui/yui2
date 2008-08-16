@@ -1,3 +1,79 @@
+*** version 2.6.0 Preview 1 ***
+
+Fixed the following bugs:
+-------------------------
+
++ Returning false in an inline "submit" event handler for a form will now prevent the form
+  from being submitted when the form contains Button instances.
+  
++ Pressing the enter key to submit a form containing Button instances will no longer 
+  trigger a beep sound in Internet Explorer.
+
++ The Button widget no longer logs errors when strict error reporting is enabled in FireFox.
+
++ Button instances are now automatically clicked when their corresponding <label> is clicked.
+
++ The name and value of selected MenuItems in submenus of a Button's Menu are now part of their
+  parent form's data when the form is submitted.
+
++ For Button's of type "menu" and "split" created using an existing <SELECT> element: The name and 
+  value of the pre-selected MenuItem in a Button's Menu are now part of their parent form's data 
+  when the form is submitted.
+	
++ The "appendTo" event now correctly fires when the "container" attribute is set to a 
+  node reference.
+
++ Simple forms with two fields: a Button of type "submit" and a text field will no longer 
+  be submitted twice when the enter key is pressed.
+
++ Submitting a form by pressing the enter key will now result in a Button's "click" event 
+  handlers getting called.
+
++ Buttons of type "menu" and "split" now consistently display their Menus in Opera.
+
++ Button no longer logs a warning when a Button is created without an id.
+
+  
+
+Added the following features:
+-----------------------------
+
++ Added a new "menumaxheight" attribute used to set the "maxheight" configuration property of a 
+  Button's Menu.
+
++ Added a new "menuminscrollheight" attribute used to set the "minscrollheight" configuration 
+  property of a Button's Menu.
+
++ Added a "menualignment" attribute attribute used to control how a Menu is aligned to its 
+  corresponding Button.
+
++ Added a "hoveroption" CSS class that is applied when the user hovers the mouse over the "option" 
+  section of a split button.
+
+
+Changes:
+--------
++ Removed the rounded corners for IE 6 Quirks Mode and Strict Mode and IE 7 Quirks Mode.
+
++ Changed the keyboard shortcut used to display the Menu for Button's of type "menu" to the down
+  arrow key.
+
+
+*** Version 2.5.2 ***
+
+Fixed the following bugs:
+-------------------------
+
++ Button instances no longer flicker in Firefox 3 when their "label" attributed is updated.
+
++ Scrolled Menus of Buttons whose type attribute is set to "menu" or "split" no longer appear 
+  on top of their corresponding Button instance.
+
++ The keyboard shortcut responsible for triggering the display of the Menu for Button instances of
+  type "split" will no longer trigger the display of the browser's default context menu in Opera.
+
+
+
 *** Version 2.5.1 ***
 
 + No changes.
