@@ -12,7 +12,7 @@ Fixed the following bugs:
 + MenuItem instances of submenus that open to the left of their parent MenuItem will now 
   highlight in response to the "mouseover" event in Firefox 2.
   
-+ The Menu library no longer logs errors when scrict error reporting is enabled in FireFox.
++ The Menu library no longer logs errors when strict error reporting is enabled in FireFox.
 
 + Submenus will no longer hide in IE 7 when moving the mouse from an item in a MenuBar to 
   its corresponding submenu.
