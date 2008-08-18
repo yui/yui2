@@ -71,6 +71,7 @@
 		_BLOCK = "block",
 		_VISIBILITY = "visibility",
 		_ABSOLUTE = "absolute",
+		_ZINDEX = "zindex",
 		_YUI_MENU_BODY_SCROLLED = "yui-menu-body-scrolled",
 		_NON_BREAKING_SPACE = "&#32;",
 		_SPACE = " ",
@@ -3140,8 +3141,7 @@ _onShow: function (p_sType, p_aArgs) {
 
         var oTarget;
 
-        if (p_oEvent.type == _MOUSEDOWN || (p_oEvent.type == _KEYDOWN && 
-            p_oEvent.keyCode == 27)) {
+        if (p_oEvent.type == _MOUSEDOWN || (p_oEvent.type == _KEYDOWN && p_oEvent.keyCode == 27)) {
 
             /*  
                 Set the "autosubmenudisplay" to "false" if the user
@@ -3150,8 +3150,7 @@ _onShow: function (p_sType, p_aArgs) {
 
             oTarget = Event.getTarget(p_oEvent);
 
-            if (oTarget != oParentMenu.element || 
-                !Dom.isAncestor(oParentMenu.element, oTarget)) {
+            if (oTarget != oParentMenu.element || !Dom.isAncestor(oParentMenu.element, oTarget)) {
 
                 oParentMenu.cfg.setProperty(_AUTO_SUBMENU_DISPLAY, false);
 
@@ -3219,13 +3218,8 @@ _onShow: function (p_sType, p_aArgs) {
 
 
 		aAlignment = oParentMenu.cfg.getProperty(_SUBMENU_ALIGNMENT);
-	
-	
-		if (!this.cfg.getProperty(_CONTEXT)) {
 		
-			this.cfg.setProperty(_CONTEXT, [oParent.element, aAlignment[0], aAlignment[1]]);
-	
-		}
+		this.cfg.setProperty(_CONTEXT, [oParent.element, aAlignment[0], aAlignment[1]]);
 		
 		this.align();		
 
@@ -3310,7 +3304,7 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         
         case _SUBMENU_ALIGNMENT:
 
-			if (this instanceof this.parent.parent.constructor) {
+			if (!(this.parent.parent instanceof YAHOO.widget.MenuBar)) {
 		
 				p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
 		
@@ -3373,8 +3367,9 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
         
         oLI;
 
+
 	
-	if (this instanceof oParentMenu.constructor) {
+	if (!(oParentMenu instanceof YAHOO.widget.MenuBar)) {
 
 		oConfig[_SUBMENU_ALIGNMENT] = oParentCfg.getProperty(_SUBMENU_ALIGNMENT);
 
@@ -3565,6 +3560,19 @@ configPosition: function (p_sType, p_aArgs, p_oMenu) {
         Dom.setStyle(oElement, _VISIBILITY, _HIDDEN);
     
     }
+
+  	 
+     if (sCSSPosition == _ABSOLUTE) { 	 
+  	 
+         nZIndex = oCfg.getProperty(_ZINDEX);
+  	 
+         if (!nZIndex || nZIndex === 0) { 	 
+  	 
+             oCfg.setProperty(_ZINDEX, 1); 	 
+  	 
+         } 	 
+  	 
+     }
 
 },
 
