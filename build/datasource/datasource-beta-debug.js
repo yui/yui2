@@ -1658,6 +1658,7 @@ util.LocalDataSource = function(oLiveData, oConfigs) {
     }
     else if(oLiveData.nodeName && (oLiveData.nodeName.toLowerCase() == "table")) { // table
         this.responseType = DS.TYPE_HTMLTABLE;
+        oLiveData = oLiveData.cloneNode(true);
     }    
     else if(YAHOO.lang.isObject(oLiveData)) { // json
         this.responseType = DS.TYPE_JSON;
