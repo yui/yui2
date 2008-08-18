@@ -3,7 +3,7 @@
     display: -moz-inline-box; /* Gecko */
     display: inline-block; /* IE, Opera and Safari */
     vertical-align: text-bottom;
-
+    
 }
 
 .yui-button .first-child {

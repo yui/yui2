@@ -1502,7 +1502,7 @@
             if (oForm) {
         
                 Event.on(oForm, "reset", this._onFormReset, null, this);
-                Event.on(oForm, "submit", this.createHiddenFields, null, this);
+                Event.on(oForm, "submit", this._onFormSubmit, null, this);
         
                 oSrcElement = this.get("srcelement");
         
@@ -3596,7 +3596,7 @@
 
 
 			/**
-			* @config minscrollheight
+			* @attribute minscrollheight
 			* @description Number defining the minimum threshold for the "menumaxheight" 
 			* configuration attribute.  When set this attribute is automatically applied 
 			* to all submenus.
@@ -4213,7 +4213,7 @@
     
                 YAHOO.log("No value specified for the button group's \"id\"" +
                     " attribute. Setting button group id to \"" + sId + "\".",
-                    "warn");
+                    "info");
     
             }
     
