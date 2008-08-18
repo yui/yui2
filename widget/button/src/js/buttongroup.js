@@ -49,7 +49,7 @@
     
                 YAHOO.log("No value specified for the button group's \"id\"" +
                     " attribute. Setting button group id to \"" + sId + "\".",
-                    "warn");
+                    "info");
     
             }
     
