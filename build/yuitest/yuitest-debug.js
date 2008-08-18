@@ -220,13 +220,7 @@ YAHOO.namespace("tool");
 // TestRunner object
 //-----------------------------------------------------------------------------
 
-/**
- * Runs test suites and test cases, providing events to allowing for the
- * interpretation of test results.
- * @namespace YAHOO.tool
- * @class TestRunner
- * @static
- */
+
 YAHOO.tool.TestRunner = (function(){
 
     /**
@@ -318,6 +312,13 @@ YAHOO.tool.TestRunner = (function(){
         }       
     };
 
+    /**
+     * Runs test suites and test cases, providing events to allowing for the
+     * interpretation of test results.
+     * @namespace YAHOO.tool
+     * @class TestRunner
+     * @static
+     */
     function TestRunner(){
     
         //inherit from EventProvider
@@ -328,6 +329,7 @@ YAHOO.tool.TestRunner = (function(){
          * @type YAHOO.tool.TestSuite
          * @property masterSuite
          * @private
+         * @static
          */
         this.masterSuite /*:YAHOO.tool.TestSuite*/ = new YAHOO.tool.TestSuite("YUI Test Results");        
 
@@ -336,6 +338,7 @@ YAHOO.tool.TestRunner = (function(){
          * @type TestNode
          * @private
          * @property _cur
+         * @static
          */
         this._cur = null;
         
@@ -344,6 +347,7 @@ YAHOO.tool.TestRunner = (function(){
          * @type TestNode
          * @private
          * @property _root
+         * @static
          */
         this._root = null;
         
@@ -515,6 +519,7 @@ YAHOO.tool.TestRunner = (function(){
          * @return {Void}
          * @method _handleTestObjectComplete
          * @private
+         * @static
          */
         _handleTestObjectComplete : function (node /*:TestNode*/) /*:Void*/ {
             if (YAHOO.lang.isObject(node.testObject)){
@@ -806,7 +811,7 @@ YAHOO.tool.TestRunner = (function(){
         // Protected Methods
         //-------------------------------------------------------------------------   
     
-        /*
+        /**
          * Fires events for the TestRunner. This overrides the default fireEvent()
          * method from EventProvider to add the type property to the data that is
          * passed through on each event call.
