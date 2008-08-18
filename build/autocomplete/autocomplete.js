@@ -830,7 +830,7 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 YAHOO.widget.AutoComplete.prototype.handleResponse = function(sQuery, oResponse, oPayload) {
-    if((this instanceof YAHOO.widget.AutoComplete) && this._sId) {
+    if((this instanceof YAHOO.widget.AutoComplete) && this._sName) {
         this._populateList(sQuery, oResponse, oPayload);
     }
 };
