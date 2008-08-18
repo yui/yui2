@@ -1,3 +1,61 @@
+*** version 2.6.0 Preview 1 ***
+
+Fixed the following bugs:
+-------------------------
+
++ Setting the "submenualignment" configuration property for a MenuBar instance will no longer 
+  result in the value being automatically propagated across all submenus.
+
++ Setting a MenuItem instance's "disabled" configuration property to "true" inside the scope of 
+  a "click" event listener registered via the "onclick" configuration property will no longer 
+  prevent the "click" event of the MenuItem instance's parent Menu instance from firing.
+  
++ MenuItem instances of submenus that open to the left of their parent MenuItem will now 
+  highlight in response to the "mouseover" event in Firefox 2.
+  
++ The Menu library no longer logs errors when strict error reporting is enabled in FireFox.
+
++ Submenus will no longer hide in IE 7 when moving the mouse from an item in a MenuBar to 
+  its corresponding submenu.
+
++ MenuItem instances placed in groups are now properly removed and destroyed when the 
+  "clearContent" method of their parent Menu instance is called.
+
++ The "monitorresize" configuration property now propagates to submenus.
+
++ The "contextEventTarget" property of ContextMenu instances is set now set to null when the 
+  instance is hidden.
+  
++ Updated the "maxheight" configuration property so that it will only scroll the body of a Menu if 
+  its content is composed of MenuItem instances.
+
++ Updated the implementation of Menu's "constraintoviewport" configuration property so that 
+  submenus will automatically scroll and reposition themselves to remain inside the boundaries of 
+  the viewport regardless of the default value supplied to the "submenualignment" 
+  configuration property.
+
+
+Added the following features:
+-----------------------------
+
++ Added a new "preventcontextoverlap" configuration property that is used to manage whether or not 
+  a submenu should overlap its parent MenuItem when the "constraintoviewport" configuration 
+  property is set to "true".
+
++ Added a new "shadow" configuration property.  The "shadow" configuration property should be 
+  set via the constructor and cannot be changed.  Previously a Menu's shadow was created via the 
+  public "onRender" method.  This method has been removed.
+
+
+Changes:
+--------
+
++ The "url" configuration property for MenuItem instances with a submenu will now be set to 
+  "#[submenu_id]" if the "url" property is not otherwise specified by the user. 
+
++ Dynamically positioned submenus now have a default z-index of 1.
+
+
 *** version 2.5.2 ***
 
 Fixed the following bugs:
