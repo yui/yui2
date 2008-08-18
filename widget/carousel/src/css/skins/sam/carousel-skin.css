@@ -4,13 +4,13 @@
 }
 
 .yui-skin-sam .yui-carousel-nav {
-    background: url(../../../img/sprite.png) repeat-x 0 0;
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
     padding: 3px;
     text-align: right;
 }
 
 .yui-skin-sam .yui-carousel-button {
-    background: url(../../../img/sprite.png) no-repeat 0 -600px;
+    background: url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -600px;
     float: right;
     height: 19px;
     margin: 5px;
@@ -96,7 +96,7 @@
 }
 
 .yui-skin-sam .yui-carousel-pages li a {
-    background: url(../../../img/sprite.png) no-repeat 0 -650px;
+    background: url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -650px;
     display: block;
     height: 9px;
     margin: 10px 0 0 5px;
