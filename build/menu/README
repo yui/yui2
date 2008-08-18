@@ -3,7 +3,8 @@
 Fixed the following bugs:
 -------------------------
 
-+ The "submenualignment" configuration property now only propagates to submenus of the same type.
++ Setting the "submenualignment" configuration property for a MenuBar instance will no longer 
+  result in the value being automatically propagated across all submenus.
 
 + Setting a MenuItem instance's "disabled" configuration property to "true" inside the scope of 
   a "click" event listener registered via the "onclick" configuration property will no longer 
@@ -52,7 +53,7 @@ Changes:
 + The "url" configuration property for MenuItem instances with a submenu will now be set to 
   "#[submenu_id]" if the "url" property is not otherwise specified by the user. 
 
-+ The default value of the "zindex" configuration property is now 0.
++ Dynamically positioned submenus now have a default z-index of 1.
 
 
 *** version 2.5.2 ***
