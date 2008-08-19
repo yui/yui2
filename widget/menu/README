@@ -22,9 +22,6 @@ Fixed the following bugs:
   "clearContent" method of their parent Menu instance is called.
 
 + The "monitorresize" configuration property now propagates to submenus.
-
-+ The "contextEventTarget" property of ContextMenu instances is set now set to null when the 
-  instance is hidden.
   
 + Updated the "maxheight" configuration property so that it will only scroll the body of a Menu if 
   its content is composed of MenuItem instances.
