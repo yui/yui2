@@ -8326,8 +8326,6 @@ init: function(p_oElement, p_oConfig) {
 
     }
     
-    this.hideEvent.subscribe(this._clearContextEventTarget);
-    
     this.initEvent.fire(ContextMenu);
     
 },
@@ -8363,17 +8361,6 @@ cancel: function() {
 
 
 // Private methods
-
-/**
-* @method _clearContextEventTarget
-* @description Resets the contextEventTarget property to null when the ContextMenu is hidden.
-* @private
-*/
-_clearContextEventTarget: function () {
-
-	this.contextEventTarget = null;
-
-},
 
 
 /**
