@@ -4240,7 +4240,7 @@ getTdEl : function(cell) {
 
         if(lang.isString(cell.columnKey) && lang.isString(cell.recordId)) {
             oRecord = this.getRecord(cell.recordId);
-            var oColumn = this.getColumnBy(cell.columnKey);
+            var oColumn = this.getColumn(cell.columnKey);
             if(oColumn) {
                 nColKeyIndex = oColumn.getKeyIndex();
             }
@@ -9979,10 +9979,15 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
         var oPaginator = this.get('paginator');
         if (oPaginator) {
             // Update totalRecords
-            if (lang.isNumber(oPayload.totalRecords)) {
-                oPaginator.set('totalRecords',oPayload.totalRecords);
+            if(this.get("dynamicData")) {
+                if (lang.isNumber(oPayload.totalRecords)) {
+                    oPaginator.set('totalRecords',oPayload.totalRecords);
+                }
             }
-            // Update core paginator values
+            else {
+                oPaginator.set('totalRecords',this._oRecordSet.getLength());
+            }
+            // Update other paginator values
             if (lang.isObject(oPayload.pagination)) {
                 oPaginator.set('rowsPerPage',oPayload.pagination.rowsPerPage);
                 oPaginator.set('recordOffset',oPayload.pagination.recordOffset);

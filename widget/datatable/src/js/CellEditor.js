@@ -426,7 +426,8 @@ attach : function(oDataTable, elCell) {
                 
                 // Validate Record
                 this.record = oDataTable.getRecord(elCell);
-                this.value = this.record.getData(this.column.getKey()) || this.defaultValue;
+                var value = this.record.getData(this.column.getKey());
+                this.value = (value !== undefined) ? value : this.defaultValue;
                 
                 return true;
             }            
@@ -1476,7 +1477,7 @@ move : function() {
  * @method resetForm
  */
 resetForm : function() {
-    this.textbox.value = this.value;
+    this.textbox.value = lang.isValue(this.value) ? this.value.toString() : "";
 },
 
 /**
