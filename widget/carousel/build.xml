@@ -10,12 +10,13 @@
     
     <property file="${buildfile.dir}/build.properties" />
 
-    <import file="${builddir}/buildproperties.xml" description="Shared Build Properties - tools, build paths etc." />
-    <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
+    <import file="${builddir}/buildproperties.xml"
+            description="Shared Build Properties - tools, build paths etc." />
+    <import file="${builddir}/targetlib.xml"
+            description="Component Build Targets" />
 
     <target name="examples" description="Component Specific Over-ride">
         <echo>DOES NOT DO ANYTHING CURRENTLY</echo>
     </target>
 
 </project>
-
