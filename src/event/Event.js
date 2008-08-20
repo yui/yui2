@@ -631,13 +631,7 @@ YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
              * @private
              */
             useLegacyEvent: function(el, sType) {
-                if (this.webkit && ("click"==sType || "dblclick"==sType)) {
-                    var v = parseInt(this.webkit, 10);
-                    if (!isNaN(v) && v<418) {
-                        return true;
-                    }
-                }
-                return false;
+return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType));
             },
                     
             /**
