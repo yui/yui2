@@ -10,6 +10,7 @@
 <script type="text/javascript" src="../build/event/event-min.js"></script>
 <script type="text/javascript" src="../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest.js"></script>
+<script type="text/javascript" src="../build/datasource/datasource-beta.js"></script>
 <script type="text/javascript" src="../build/autocomplete/autocomplete.js"></script>
 
 </head>
@@ -128,20 +129,11 @@
             ac = null;
         },
 
-        testGetListItems: function() {
+        testGetListEl: function() {
             var ac = this.createInstance();
             ac.sendQuery("a");
-            var els = ac.getListItems();
-            Assert.areSame(10, els.length, "Expected 10 items");
-            for(var i=0; i<els.length; i++) {
-                Assert.areSame("li", els[i].tagName.toLowerCase(), "Expected an LI element");
-            }
-            
-            ac.maxResultsDisplayed = 5;
-            ac.sendQuery("a");
-            var els = ac.getListItems();
-            Assert.areSame(5, els.length, "Expected 5 items");
-
+            var el = ac.getListEl();
+            Assert.areSame(el.tagName.toLowerCase(), "ul", "Expected UL element");
             ac = null;
         }
     };
