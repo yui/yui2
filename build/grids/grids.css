@@ -1,6 +1,7 @@
 /*
 	Note: Throughout this file, the *property (star-property) filter is used 
-    to give a value to IE that other browsers do not see.	
+    to give a value to IE that other browsers do not see. _property is only seen 
+    by IE7, so the combo of *prop and _prop can target between IE6 and IE7.
 */
 
 /*

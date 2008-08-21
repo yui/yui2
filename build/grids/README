@@ -1,5 +1,9 @@
 YUI Library - Grids - Release Notes
 
+Version 2.6.0
+
+  * Removed extraneous "s" typo per Bugzilla #1826435 and SF #1921958
+
 Version 2.5.1
 
   * Added more specific selectors to allow nesting on "yui-gd" grids 
