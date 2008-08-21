@@ -24,96 +24,113 @@
 <script type="text/javascript" src="../build/event/event.js"></script>
 <script type="text/javascript" src="../build/logger/logger.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest.js"></script>
+<script type="text/javascript" src="../build/get/get.js"></script>
 <script type="text/javascript" src="../build/json/json.js"></script>
 <script type="text/javascript" src="../build/datasource/datasource-beta-debug.js"></script>
+
+<!-- for cloneobject method -->
+<script type="text/javascript" src="../build/element/element-beta.js"></script>
+<script type="text/javascript" src="../build/datatable/datatable-beta.js"></script>
 <script type="text/javascript">
 
 (function() {
+var Dom=YAHOO.util.Dom,
+    Assert=YAHOO.util.Assert,
+    ObjectAssert=YAHOO.util.ObjectAssert,
+    ArrayAssert=YAHOO.util.ArrayAssert,
+    DateAssert=YAHOO.util.DateAssert,
+    UserAction=YAHOO.util.UserAction,
+    TestCase = YAHOO.tool.TestCase,
+    TestLogger = YAHOO.tool.TestLogger,
+    TestRunner = YAHOO.tool.TestRunner,
+    TestSuite = YAHOO.tool.TestSuite,
+    lang = YAHOO.lang,
 
-    var Dom=YAHOO.util.Dom,
-        Assert=YAHOO.util.Assert,
-        ObjectAssert=YAHOO.util.ObjectAssert,
-        ArrayAssert=YAHOO.util.ArrayAssert,
-        DateAssert=YAHOO.util.DateAssert,
-        UserAction=YAHOO.util.UserAction,
-        TestCase = YAHOO.tool.TestCase,
-        TestLogger = YAHOO.tool.TestLogger,
-        TestRunner = YAHOO.tool.TestRunner,
-        TestSuite = YAHOO.tool.TestSuite,
-        lang = YAHOO.lang,
-
-        DataSource = YAHOO.util.DataSource;
-
-
-    // Create utility function for pass-by-ref + reuse errors
-    var cloneObject = function(o) {
-        if (lang.isArray(o)) {
-            var a = [];
-            for (var i=0,l=o.length;i<l;i++) {
-                a[i] = cloneObject(o[i]);
-            }
-            return a;
-        } else if (typeof o === 'object' && o) {
-            var c = {};
-            for (var x in o) {
-                if (lang.hasOwnProperty(o, x)) {
-                    c[x] = cloneObject(o[x]);
-                }
-            }
-            return c;
-        }
-        else {
-            return o;
-        }
-    }
-
+    DS = YAHOO.util.DataSourceBase,
+    LocalDS = YAHOO.util.LocalDataSource,
+    XHRDS = YAHOO.util.XHRDataSource,
+    ScriptNodeDS = YAHOO.util.ScriptNodeDataSource,
+    DataSource = YAHOO.util.DataSource,
+    
+    // Returns object clones
+    cloneObject = YAHOO.widget.DataTable._cloneObject,
+        
+    // Define test data and schemas
+    dataSimpleArray = ["a","b","c","d"],
+    
+    dataComplexArray = [["1a","1b","1c","1d"],["2a","2b","2c","2d"],["3a","3b","3c","3d"]],
+    
+    dataObjectsArray = [{a:"1a",b:"1b",c:"1c"}, {a:"2a",b:"2b",c:"2c"}, {a:"3a",b:"3b",c:"3c"}],
+    schemaArray = {
+        fields: ["a","b","c"]
+    },
+    
+    dataJSON = {topa:"a",topb: {b:"b"},nested: dataObjectsArray},
+    schemaJSON = {
+        resultsList: "nested",
+        fields: ["a","b","c"]
+    },
+        
+    dataFunction = function(data) {
+        return data;
+    },
+        
+        
+    // Define shared tearDown
+    tearDown = function() {
+        //TODO: implement destroy() 
+        this.ds = null;
+    };
+     
+        
     /**
      *
      *
-     * Base DataSource test case.
+     * DataSourceBase simple array test case.
      *
      *
      */
-    function DataSourceTestCase(template) {
-        DataSourceTestCase.superclass.constructor.call(this, template);
-        this.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-    };
-    YAHOO.lang.extend(DataSourceTestCase, TestCase);
-
-    DataSourceTestCase.prototype.setUp = function() {
-    };
-
-    DataSourceTestCase.prototype.tearDown = function() {
-    };
-
-    DataSourceTestCase.prototype.createInstance = function(oConfigs) {
-        ds =  new DataSource((cloneObject(this.data)||["a","b","c"]), oConfigs);
-        ds.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-        ds.responseSchema = {
-            fields: ["a","b","c"]
-        };
-        return ds;
-    };
-
-    /**
-     *
-     *
-     * Base DataSource test template. Sets up values for a DataSource instance.
-     *
-     *
-     */
-    var datasourceTemplate = {
-        name: "DataSource Test",
+    var SimpleArrayTestCase = new TestCase({
+        name : "DataSourceBase Simple Array Test Case",
+        
+        setUp : function() {
+            this.ds = new LocalDS(dataSimpleArray);
+        },
+        
+        tearDown : tearDown,
         
         testConstruction: function() {
-            var ds = this.createInstance();
-            Assert.isObject(ds, "Failed to create instance");
-            Assert.isInstanceOf(DataSource, ds, "Failed to create instance");
-            ds = null;
-        }
-    };
-    var datasourceTest = new DataSourceTestCase(datasourceTemplate);
+            Assert.isObject(this.ds, "Failed to create instance");
+            Assert.isInstanceOf(DS, this.ds, "Failed to create instance");
+            Assert.areSame(dataSimpleArray, this.ds.liveData, "Unexpected live data");
+        },
+        
+        testSendRequest: function() {
+            var oCallback = {
+                success: function(oRequest, oResponse, oPayload) {
+                    Assert.areSame(dataSimpleArray, oResponse.results, "Success handler: Unexpected response to " + oRequest);               
+                },
+                failure: function(oRequest, oResponse, oPayload) {
+                    Assert.areSame(dataSimpleArray, oResponse.results, "Failure handler: Unexpected response to " + oRequest);
+                },
+            };
+            
+            var nId = this.ds.sendRequest(undefined,oCallback)
+            Assert.isNumber(nId, "Unexpected return to undefined request");
 
+            nId = this.ds.sendRequest(null,oCallback)
+            Assert.isNumber(nId, "Unexpected return to null request");
+
+            nId = this.ds.sendRequest({},oCallback)
+            Assert.isNumber(nId, "Unexpected return to object request");
+        },
+
+        testParseResponse: function() {
+            var oParsedResponse = this.ds.parseArrayData(null,dataSimpleArray);
+            Assert.areSame(dataSimpleArray, oParsedResponse.results, "Unexpected parsed data");
+        }
+    });
+    
     /**
      *
      *
@@ -122,63 +139,71 @@
      *
      */
 
-    var dsComplexArrayTemplate = YAHOO.lang.merge(datasourceTemplate, {
+    /*var dsComplexArrayTemplate = YAHOO.lang.merge(datasourceTemplate, {
         name:"Complex Array Test",
         data:[{a:"1a",b:"1b",c:"1c"}, {a:"2a",b:"2b",c:"2c"}, {a:"3a",b:"3b",c:"3c"}]
     });
-    var dsComplexArrayTest = new DataSourceTestCase(dsComplexArrayTemplate);
+    var dsComplexArrayTest = new DataSourceTestCase(dsComplexArrayTemplate);*/
 
     /**
      *
      *
-     * Tests DataSource Cache.
+     * Tests DataSourceBase Cache.
      *
      *
      */
-    var dsCacheTemplate = {
+    var CacheTestCase = new TestCase({
         name: "Cache Test",
         
         testDefault: function() {
-            var ds = this.createInstance();
-            Assert.areSame(null, ds._aCache, "Failed to NOT init cache (default)");
-            ds = null;
+            this.ds = new LocalDS(dataSimpleArray);
+            Assert.areSame(null, this.ds._aCache, "Failed to NOT init cache (default)");
+            this.ds.sendRequest("a", {
+                success: function() {
+                    Assert.areSame(null, this.ds._aCache, "Failed to still NOT init cache (default)");
+                },
+                scope: this
+            });
         },
 
         testViaConfig: function() {
-            var ds = this.createInstance({maxCacheEntries:5});
-            Assert.areSame(null, ds._aCache, "Cache should not be initialized yet");   
+            this.ds = new LocalDS(dataSimpleArray, {maxCacheEntries:5});
+            Assert.areSame(null, this.ds._aCache, "Cache should not be initialized yet");   
             
-            ds.sendRequest("a", function() {
-                Assert.areSame(true, YAHOO.lang.isArray(ds._aCache), "Failed to init cache (via constructor)");       
-                Assert.areSame(1, ds._aCache.length, "Cache should have one item");
+            this.ds.sendRequest("a", {
+                success: function() {
+                    Assert.areSame(true, YAHOO.lang.isArray(this.ds._aCache), "Failed to init cache (via constructor)");       
+                    Assert.areSame(1, this.ds._aCache.length, "Cache should have one item");
                                       
-                ds.flushCache();
-                Assert.areSame(0, ds._aCache.length, "Cache should be empty");
-        
-                ds = null;                    
+                    this.ds.flushCache();
+                    Assert.areSame(0, this.ds._aCache.length, "Cache should be empty");
+                },
+                scope: this
             });
-
         },
         
         testViaProperty: function() {
-            var ds = this.createInstance();
-            ds.maxCacheEntries = 5;
-            ds.sendRequest("a", function() {
-                Assert.areSame(true, YAHOO.lang.isArray(ds._aCache), "Failed to init cache (via property)");
-                Assert.areSame(1, ds._aCache.length, "Cache should have one item");
-                
-                ds.maxCacheEntries = 0;
-                Assert.areSame(1, ds._aCache.length, "Cache should still have one item");
-                
-                ds.sendRequest("a", function() {
-                    Assert.areSame(null, ds._aCache, "Cache should be destroyed");            
-                
-                    ds = null; 
-                });
+            this.ds = new LocalDS(dataSimpleArray);
+            this.ds.maxCacheEntries = 5;
+            this.ds.sendRequest("a", {
+                success: function() {
+                    Assert.areSame(true, YAHOO.lang.isArray(this.ds._aCache), "Failed to init cache (via property)");
+                    Assert.areSame(1, this.ds._aCache.length, "Cache should have one item");
+                    
+                    this.ds.maxCacheEntries = 0;
+                    Assert.areSame(1, this.ds._aCache.length, "Cache should still have one item");
+                    
+                    this.ds.sendRequest("a", {
+                        success: function() {
+                            Assert.areSame(null, this.ds._aCache, "Cache should be destroyed");            
+                        },
+                        scope: this
+                    });
+                },
+                scope: this
             });
         }
-    };
-    var dsCacheTest = new DataSourceTestCase(dsCacheTemplate);
+    });
 
     /**
      *
@@ -188,11 +213,11 @@
      *
      */
 
-    var dsXHRTemplate = YAHOO.lang.merge(datasourceTemplate, {
+    /*var dsXHRTemplate = YAHOO.lang.merge(datasourceTemplate, {
         name:"XHR Test",
         data:"path/to/proxy"
     });
-    var dsXHRTest = new DataSourceTestCase(dsXHRTemplate);
+    var dsXHRTest = new DataSourceTestCase(dsXHRTemplate);*/
 
     /**
      *
@@ -202,7 +227,7 @@
      *
      */
 
-    var dsParseJSONTemplate = YAHOO.lang.merge(datasourceTemplate, {
+    /*var dsParseJSONTemplate = YAHOO.lang.merge(datasourceTemplate, {
         name:"Parse JSON Test",
         data: {"ResultSet":{
                 "totalResultsAvailable":506,
@@ -264,7 +289,7 @@
         }
         
     });
-    var dsParseJSONTest = new DataSourceTestCase(dsParseJSONTemplate);
+    var dsParseJSONTest = new DataSourceTestCase(dsParseJSONTemplate);*/
 
     /**
      *
@@ -273,7 +298,7 @@
      *
      *
      */
-    var dsStaticMethodsTemplate = {
+    /*var dsStaticMethodsTemplate = {
         name:"Static Methods Test",
         data:["a","b","c"],
         
@@ -282,10 +307,10 @@
             var ds = this.createInstance();
             var myNumber = 1;
 
-            number = YAHOO.util.DataSource.parseNumber("1");
+            number = DataSource.parseNumber("1");
             Assert.areSame(number, myNumber, "Incorrect number from String.");
 
-            number = YAHOO.util.DataSource.parseNumber(1);
+            number = DataSource.parseNumber(1);
             Assert.areSame(number, myNumber, "Incorrect number from Number.");
 
             ds = null;
@@ -296,19 +321,19 @@
             var ds = this.createInstance();
             var myDate = new Date(2001,0,14); // January 14, 2001
 
-            date = YAHOO.util.DataSource.parseDate("1/14/2001");
+            date = DataSource.parseDate("1/14/2001");
             DateAssert.datesAreEqual(date, myDate, "Incorrect date from String.");
 
-            date = YAHOO.util.DataSource.parseDate(myDate);
+            date = DataSource.parseDate(myDate);
             DateAssert.datesAreEqual(date, myDate, "Incorrect date from Date");
             
-            date = YAHOO.util.DataSource.parseDate(979459200000);
+            date = DataSource.parseDate(979459200000);
             DateAssert.datesAreEqual(date, myDate, "Incorrect date from Number.");
             
             ds = null;
         }
     };
-    var dsStaticMethodsTest = new DataSourceTestCase(dsStaticMethodsTemplate);
+    var dsStaticMethodsTest = new DataSourceTestCase(dsStaticMethodsTemplate);*/
 
     /**
      *
@@ -317,7 +342,7 @@
      *
      *
      */
-    function DataUtilTestCase(template) {
+    /*function DataUtilTestCase(template) {
         DataUtilTestCase.superclass.constructor.call(this, template);
     };
     YAHOO.lang.extend(DataUtilTestCase, TestCase);
@@ -326,7 +351,7 @@
     };
 
     DataUtilTestCase.prototype.tearDown = function() {
-    };
+    };*/
 
     /**
      *
@@ -335,7 +360,7 @@
      *
      *
      */
-    var dataNumberTemplate = {
+   /*var dataNumberTemplate = {
         name:"Util Number Test",
 
         testFormat: function() {
@@ -398,7 +423,7 @@
 
         }
     };
-    var dataNumberTest = new DataUtilTestCase(dataNumberTemplate);
+    var dataNumberTest = new DataUtilTestCase(dataNumberTemplate);*/
 
     /**
      *
@@ -412,13 +437,8 @@
         logger.hideCategory('info');
 
         var datasourcesuite = new TestSuite("DataSource Test Suite");
-        datasourcesuite.add(datasourceTest);
-        datasourcesuite.add(dsCacheTest);
-        datasourcesuite.add(dsComplexArrayTest);
-        datasourcesuite.add(dsStaticMethodsTest);
-        datasourcesuite.add(dsXHRTest);
-        datasourcesuite.add(dsParseJSONTest);
-        datasourcesuite.add(dataNumberTest);
+        datasourcesuite.add(SimpleArrayTestCase);
+        datasourcesuite.add(CacheTestCase);
 
         TestRunner.add(datasourcesuite);
 
