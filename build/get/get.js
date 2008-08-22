@@ -389,7 +389,7 @@ YAHOO.util.Get = function() {
             n.onreadystatechange = function() {
                 var rs = this.readyState;
                 if ("loaded" === rs || "complete" === rs) {
-                    this.onreadystatechange = null;
+                    n.onreadystatechange = null;
                     f(id, url);
                 }
             };

@@ -396,7 +396,7 @@ YAHOO.util.Get = function() {
                 var rs = this.readyState;
                 if ("loaded" === rs || "complete" === rs) {
                     YAHOO.log(id + " onload " + url, "info", "Get");
-                    this.onreadystatechange = null;
+                    n.onreadystatechange = null;
                     f(id, url);
                 }
             };
