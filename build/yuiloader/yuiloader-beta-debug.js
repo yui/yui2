@@ -1369,7 +1369,7 @@ YAHOO.util.Get = function() {
             n.onreadystatechange = function() {
                 var rs = this.readyState;
                 if ("loaded" === rs || "complete" === rs) {
-                    this.onreadystatechange = null;
+                    n.onreadystatechange = null;
                     f(id, url);
                 }
             };
@@ -2604,7 +2604,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
          * @param o optional options object
          */
         calculate: function(o) {
-            if (this.dirty) {
+            if (o || this.dirty) {
                 this._config(o);
                 this._setup();
                 this._explode();

@@ -952,7 +952,7 @@
          * @param o optional options object
          */
         calculate: function(o) {
-            if (this.dirty) {
+            if (o || this.dirty) {
                 this._config(o);
                 this._setup();
                 this._explode();

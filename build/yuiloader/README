@@ -2,6 +2,7 @@ yuiloader - Release Notes
 
 2.6.0
  * autocomplete requires datasource
+ * insert() config always used if provided
 
 2.5.2
   * uploader requires element
