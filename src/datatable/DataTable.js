@@ -7,8 +7,7 @@ var lang   = YAHOO.lang,
     
     Dom    = util.Dom,
     Ev     = util.Event,
-    DS     = util.DataSourceBase,
-    Pag    = widget.Paginator;
+    DS     = util.DataSourceBase;
 
 /**
  * The DataTable widget provides a progressively enhanced DHTML control for
@@ -1263,7 +1262,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("paginator", {
         value : null,
         validator : function (val) {
-            return val === null || val instanceof Pag;
+            return val === null || val instanceof widget.Paginator;
         },
         method : function () { this._updatePaginator.apply(this,arguments); }
     });
@@ -3181,28 +3180,30 @@ _onRenderChainEnd : function() {
     // to subscribe after the constructor
     var oSelf = this;
     setTimeout(function() {
-        // Init event
-        if(oSelf._bInit) {
-            oSelf._bInit = false;
-            oSelf.fireEvent("initEvent");
+        if((oSelf instanceof DT) && oSelf._sId) {        
+            // Init event
+            if(oSelf._bInit) {
+                oSelf._bInit = false;
+                oSelf.fireEvent("initEvent");
+            }
+    
+            // Render event
+            oSelf.fireEvent("renderEvent");
+            /*if(YAHOO.example.Performance.trialStart) {
+                YAHOO.log((new Date()).getTime() - YAHOO.example.Performance.trialStart.getTime() + " ms", "time");
+                YAHOO.example.Performance.trialStart = null;
+            }*/
+            // Backward compatibility
+            oSelf.fireEvent("refreshEvent");
+            YAHOO.log("DataTable rendered", "info", oSelf.toString());
+    
+            // Post-render routine
+            oSelf.validateColumnWidths();
+    
+            // Post-render event
+            oSelf.fireEvent("postRenderEvent");
+            YAHOO.log("Post-render routine executed", "info", oSelf.toString());
         }
-
-        // Render event
-        oSelf.fireEvent("renderEvent");
-        /*if(YAHOO.example.Performance.trialStart) {
-            YAHOO.log((new Date()).getTime() - YAHOO.example.Performance.trialStart.getTime() + " ms", "time");
-            YAHOO.example.Performance.trialStart = null;
-        }*/
-        // Backward compatibility
-        oSelf.fireEvent("refreshEvent");
-        YAHOO.log("DataTable rendered", "info", oSelf.toString());
-
-        // Post-render routine
-        oSelf.validateColumnWidths();
-
-        // Post-render event
-        oSelf.fireEvent("postRenderEvent");
-        YAHOO.log("Post-render routine executed", "info", oSelf.toString());
     }, 0);
 },
 
@@ -4202,6 +4203,7 @@ getPreviousTrEl : function(row) {
  * @return {HTMLElement} Reference to TD liner element.
  */
 getTdLinerEl : function(cell) {
+//TODO: TD els no longer get assigned IDs
     var elCell = this.getTdEl(cell);
     return elCell.firstChild || null;
 },
@@ -4215,6 +4217,7 @@ getTdLinerEl : function(cell) {
  * @return {HTMLElement} Reference to TD element.
  */
 getTdEl : function(cell) {
+//TODO: TD els no longer get assigned IDs
     var elCell;
     var el = Dom.get(cell);
 
@@ -5094,6 +5097,7 @@ getRecord : function(row) {
  * @return {YAHOO.widget.Column} Column instance.
  */
 getColumn : function(column) {
+//TODO: TD els no longer get assigned DOM IDs
     var oColumn = this._oColumnSet.getColumn(column);
 
     if(!oColumn) {
@@ -6295,7 +6299,7 @@ addRow : function(oData, index) {
             if (oPaginator) {     
                 // Update the paginator's totalRecords
                 var totalRecords = oPaginator.get('totalRecords');
-                if (totalRecords !== Pag.VALUE_UNLIMITED) {
+                if (totalRecords !== widget.Paginator.VALUE_UNLIMITED) {
                     oPaginator.set('totalRecords',totalRecords + 1);
                 }
 
@@ -6375,7 +6379,7 @@ addRows : function(aData, index) {
             if (oPaginator) {
                 // Update the paginator's totalRecords
                 var totalRecords = oPaginator.get('totalRecords');
-                if (totalRecords !== Pag.VALUE_UNLIMITED) {
+                if (totalRecords !== widget.Paginator.VALUE_UNLIMITED) {
                     oPaginator.set('totalRecords',totalRecords + aRecords.length);
                 }
     
@@ -6558,7 +6562,7 @@ deleteRow : function(row) {
                 if (oPaginator) {
                     // Update the paginator's totalRecords
                     var totalRecords = oPaginator.get('totalRecords');
-                    if (totalRecords !== Pag.VALUE_UNLIMITED) {
+                    if (totalRecords !== widget.Paginator.VALUE_UNLIMITED) {
                         oPaginator.set('totalRecords',totalRecords - 1);
                     }
     
@@ -6664,7 +6668,7 @@ deleteRows : function(row, count) {
                 if (oPaginator) {
                     // Update the paginator's totalRecords
                     var totalRecords = oPaginator.get('totalRecords');
-                    if (totalRecords !== Pag.VALUE_UNLIMITED) {
+                    if (totalRecords !== widget.Paginator.VALUE_UNLIMITED) {
                         oPaginator.set('totalRecords',totalRecords - 1);
                     }
     
