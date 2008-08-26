@@ -2965,7 +2965,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                 // }
 
                 // external css files should be sorted below yui css
-                if (mm.ext && mm.type == 'css' && (!other.ext)) {
+                if (mm.ext && mm.type == 'css' && !other.ext && other.type == 'css') {
                     return true;
                 }
 
