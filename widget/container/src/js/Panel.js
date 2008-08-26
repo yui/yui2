@@ -18,12 +18,12 @@
     };
 
     var Lang = YAHOO.lang,
-        DD = YAHOO.util.DD,
-        Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event,
+        Util = YAHOO.util,
+        Dom = Util.Dom,
+        Event = Util.Event,
+        CustomEvent = Util.CustomEvent,
+        Config = Util.Config,
         Overlay = YAHOO.widget.Overlay,
-        CustomEvent = YAHOO.util.CustomEvent,
-        Config = YAHOO.util.Config,
         Panel = YAHOO.widget.Panel,
 
         m_oMaskTemplate,
@@ -59,9 +59,9 @@
                 supercedes: ["visible"] 
             },
 
-            "DRAGGABLE": { 
+            "DRAGGABLE": {
                 key: "draggable", 
-                value: (DD ? true : false), 
+                value: (Util.DD ? true : false), 
                 validator: Lang.isBoolean, 
                 supercedes: ["visible"]  
             },
@@ -322,23 +322,23 @@
             */
             this.showMaskEvent = this.createEvent(EVENT_TYPES.SHOW_MASK);
             this.showMaskEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired after the modality mask is hidden
             * @event hideMaskEvent
             */
             this.hideMaskEvent = this.createEvent(EVENT_TYPES.HIDE_MASK);
             this.hideMaskEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent when the Panel is dragged
             * @event dragEvent
             */
             this.dragEvent = this.createEvent(EVENT_TYPES.DRAG);
             this.dragEvent.signature = SIGNATURE;
-        
+
         },
-        
+
         /**
         * Initializes the class's configurable properties which can be changed 
         * using the Panel's Config object (cfg).
@@ -384,11 +384,11 @@
             * @type Boolean
             * @default true
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.DRAGGABLE.key, { 
-                handler: this.configDraggable, 
-                value: DEFAULT_CONFIG.DRAGGABLE.value, 
-                validator: DEFAULT_CONFIG.DRAGGABLE.validator, 
-                supercedes: DEFAULT_CONFIG.DRAGGABLE.supercedes 
+            this.cfg.addProperty(DEFAULT_CONFIG.DRAGGABLE.key, {
+                handler: this.configDraggable,
+                value: (Util.DD) ? true : false,
+                validator: DEFAULT_CONFIG.DRAGGABLE.validator,
+                supercedes: DEFAULT_CONFIG.DRAGGABLE.supercedes
             });
 
             /**
@@ -528,7 +528,7 @@
             var val = args[0];
 
             if (val) {
-                if (!DD) {
+                if (!Util.DD) {
                     YAHOO.log("DD dependency not met.", "error");
                     this.cfg.setProperty("draggable", false);
                     return;
@@ -721,28 +721,28 @@
                     this.unsubscribe("hide", this.hideMask);
 
                     Overlay.windowResizeEvent.unsubscribe(this.sizeMask, this);
-                    
+
                     this._hasModalityEventListeners = false;
                 }
             }
         },
-        
+
         /**
         * Removes the modality mask.
         * @method removeMask
         */
         removeMask: function () {
-        
+
             var oMask = this.mask,
                 oParentNode;
-        
+
             if (oMask) {
                 /*
                     Hide the mask before destroying it to ensure that DOM
                     event handlers on focusable elements get removed.
                 */
                 this.hideMask();
-                
+
                 oParentNode = oMask.parentNode;
                 if (oParentNode) {
                     oParentNode.removeChild(oMask);
@@ -946,13 +946,13 @@
 
             if (this.header) {
 
-                if (!DD) {
+                if (!Util.DD) {
                     YAHOO.log("DD dependency not met.", "error");
                     return;
                 }
 
                 var bDragOnly = (this.cfg.getProperty("dragonly") === true);
-                this.dd = new DD(this.element.id, this.id, {dragOnly: bDragOnly});
+                this.dd = new Util.DD(this.element.id, this.id, {dragOnly: bDragOnly});
 
                 if (!this.header.id) {
                     this.header.id = this.id + "_h";
@@ -1153,19 +1153,12 @@
         * @method destroy
         */
         destroy: function () {
-        
             Overlay.windowResizeEvent.unsubscribe(this.sizeMask, this);
-            
             this.removeMask();
-        
             if (this.close) {
-            
                 Event.purgeElement(this.close);
-        
             }
-        
             Panel.superclass.destroy.call(this);  
-        
         },
         
         /**

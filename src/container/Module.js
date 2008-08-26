@@ -1032,13 +1032,6 @@
             this.cfg = null;
 
             this.destroyEvent.fire();
-        
-            for (e in this) {
-                if (e instanceof CustomEvent) {
-                    e.unsubscribeAll();
-                }
-            }
-
         },
 
         /**

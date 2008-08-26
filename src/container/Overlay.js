@@ -226,21 +226,31 @@
     * @param {DOMEvent} e The DOM scroll event
     */
     Overlay.windowScrollHandler = function (e) {
+        var t = Event.getTarget(e);
 
-        if (YAHOO.env.ua.ie) {
+        // - Webkit (Safari 2/3) and Opera 9.2x bubble scroll events from elements to window
+        // - FF2/3 and IE6/7, Opera 9.5x don't bubble scroll events from elements to window
+        // - IE doesn't recognize scroll registered on the document.
+        //
+        // Also, when document view is scrolled, IE doesn't provide a target, 
+        // rest of the browsers set target to window.document, apart from opera 
+        // which sets target to window.
+        if (!t || t === window || t === window.document) {
+            if (YAHOO.env.ua.ie) {
 
-            if (! window.scrollEnd) {
-                window.scrollEnd = -1;
+                if (! window.scrollEnd) {
+                    window.scrollEnd = -1;
+                }
+
+                clearTimeout(window.scrollEnd);
+        
+                window.scrollEnd = setTimeout(function () { 
+                    Overlay.windowScrollEvent.fire(); 
+                }, 1);
+        
+            } else {
+                Overlay.windowScrollEvent.fire();
             }
-
-            clearTimeout(window.scrollEnd);
-    
-            window.scrollEnd = setTimeout(function () { 
-                Overlay.windowScrollEvent.fire(); 
-            }, 1);
-    
-        } else {
-            Overlay.windowScrollEvent.fire();
         }
     };
 
@@ -279,7 +289,6 @@
     if (Overlay._initialized === null) {
         Event.on(window, "scroll", Overlay.windowScrollHandler);
         Event.on(window, "resize", Overlay.windowResizeHandler);
-    
         Overlay._initialized = true;
     }
 
@@ -303,8 +312,8 @@
                  Note that we don't pass the user config in here yet because we
                  only want it executed once, at the lowest subclass level
             */
-    
-            Overlay.superclass.init.call(this, el/*, userConfig*/);  
+
+            Overlay.superclass.init.call(this, el/*, userConfig*/);
 
             this.beforeInitEvent.fire(Overlay);
             
@@ -569,10 +578,7 @@
         * @method hideMacGeckoScrollbars
         */
         hideMacGeckoScrollbars: function () {
-    
-            Dom.removeClass(this.element, "show-scrollbars");
-            Dom.addClass(this.element, "hide-scrollbars");
-    
+            Dom.replaceClass(this.element, "show-scrollbars", "hide-scrollbars");
         },
 
         /**
@@ -582,10 +588,7 @@
         * @method showMacGeckoScrollbars
         */
         showMacGeckoScrollbars: function () {
-    
-            Dom.removeClass(this.element, "hide-scrollbars");
-            Dom.addClass(this.element, "show-scrollbars");
-    
+            Dom.replaceClass(this.element, "hide-scrollbars", "show-scrollbars");
         },
 
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
@@ -1054,7 +1057,6 @@
                             doesn't modify the opacity of any transparent 
                             elements that may be on top of it (like a shadow).
                         */
-
                         if (YAHOO.env.ua.ie) {
                             m_oIFrameTemplate.style.filter = "alpha(opacity=0)";
                             /*
@@ -1767,10 +1769,10 @@
 
             function isOverlayElement(p_oElement) {
 
-                var oOverlay = Dom.hasClass(p_oElement, Overlay.CSS_OVERLAY),
+                var isOverlay = Dom.hasClass(p_oElement, Overlay.CSS_OVERLAY),
                     Panel = YAHOO.widget.Panel;
 
-                if (oOverlay && !Dom.isAncestor(oElement, oOverlay)) {
+                if (isOverlay && !Dom.isAncestor(oElement, p_oElement)) {
                     if (Panel && Dom.hasClass(p_oElement, Panel.CSS_PANEL)) {
                         aOverlays[aOverlays.length] = p_oElement.parentNode;
                     } else {

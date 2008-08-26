@@ -21,14 +21,12 @@
     * @param {class} Optional. The animation class to instantiate. Defaults to 
     * YAHOO.util.Anim. Other options include YAHOO.util.Motion.
     */
-    YAHOO.widget.ContainerEffect = 
-    
-        function (overlay, attrIn, attrOut, targetElement, animClass) {
-    
+    YAHOO.widget.ContainerEffect = function (overlay, attrIn, attrOut, targetElement, animClass) {
+
         if (!animClass) {
             animClass = YAHOO.util.Anim;
         }
-        
+
         /**
         * The overlay to animate
         * @property overlay
@@ -69,7 +67,6 @@
 
     var Dom = YAHOO.util.Dom,
         CustomEvent = YAHOO.util.CustomEvent,
-        Easing = YAHOO.util.Easing,
         ContainerEffect = YAHOO.widget.ContainerEffect;
 
 
@@ -84,19 +81,18 @@
     */
     ContainerEffect.FADE = function (overlay, dur) {
 
-        var fin = {
-            attributes: {opacity:{from:0, to:1}},
-            duration: dur,
-            method: Easing.easeIn
-        };
-
-        var fout = {
-            attributes: {opacity:{to:0}},
-            duration: dur,
-            method: Easing.easeOut
-        };
-
-        var fade = new ContainerEffect(overlay, fin, fout, overlay.element);
+        var Easing = YAHOO.util.Easing,
+            fin = {
+                attributes: {opacity:{from:0, to:1}},
+                duration: dur,
+                method: Easing.easeIn
+            },
+            fout = {
+                attributes: {opacity:{to:0}},
+                duration: dur,
+                method: Easing.easeOut
+            },
+            fade = new ContainerEffect(overlay, fin, fout, overlay.element);
 
         fade.handleUnderlayStart = function() {
             var underlay = this.overlay.underlay;
@@ -115,7 +111,7 @@
             }
         };
 
-        fade.handleStartAnimateIn = function (type,args,obj) {
+        fade.handleStartAnimateIn = function (type, args, obj) {
             Dom.addClass(obj.overlay.element, "hide-select");
 
             if (!obj.overlay.underlay) {
@@ -175,33 +171,32 @@
     * @return {YAHOO.widget.ContainerEffect} The configured ContainerEffect object
     */
     ContainerEffect.SLIDE = function (overlay, dur) {
-    
-        var x = overlay.cfg.getProperty("x") || Dom.getX(overlay.element),
-    
+        var Easing = YAHOO.util.Easing,
+
+            x = overlay.cfg.getProperty("x") || Dom.getX(overlay.element),
             y = overlay.cfg.getProperty("y") || Dom.getY(overlay.element),
-    
             clientWidth = Dom.getClientWidth(),
-    
             offsetWidth = overlay.element.offsetWidth,
-    
-            slide = new ContainerEffect(overlay, 
-            
-            { attributes: { points: { to: [x, y] } },
+
+            sin =  { 
+                attributes: { points: { to: [x, y] } },
                 duration: dur,
-                method: Easing.easeIn },
-    
-            { attributes: { points: { to: [(clientWidth + 25), y] } },
+                method: Easing.easeIn 
+            },
+
+            sout = {
+                attributes: { points: { to: [(clientWidth + 25), y] } },
                 duration: dur,
-                method: Easing.easeOut },
-    
-            overlay.element, YAHOO.util.Motion);
-        
-        
+                method: Easing.easeOut 
+            },
+
+            slide = new ContainerEffect(overlay, sin, sout, overlay.element, YAHOO.util.Motion);
+
         slide.handleStartAnimateIn = function (type,args,obj) {
             obj.overlay.element.style.left = ((-25) - offsetWidth) + "px";
             obj.overlay.element.style.top  = y + "px";
         };
-        
+
         slide.handleTweenAnimateIn = function (type, args, obj) {
         
             var pos = Dom.getXY(obj.overlay.element),
@@ -252,13 +247,13 @@
             obj.overlay.cfg.setProperty("xy", [x, y]);
             obj.animateOutCompleteEvent.fire();
         };
-        
+
         slide.init();
         return slide;
     };
-    
+
     ContainerEffect.prototype = {
-    
+
         /**
         * Initializes the animation classes and events.
         * @method init
@@ -307,7 +302,7 @@
             this.beforeAnimateInEvent.fire();
             this.animIn.animate();
         },
-        
+
         /**
         * Triggers the out-animation.
         * @method animateOut
@@ -316,7 +311,7 @@
             this.beforeAnimateOutEvent.fire();
             this.animOut.animate();
         },
-        
+
         /**
         * The default onStart handler for the in-animation.
         * @method handleStartAnimateIn
@@ -325,7 +320,7 @@
         * @param {Object} obj The scope object
         */
         handleStartAnimateIn: function (type, args, obj) { },
-    
+
         /**
         * The default onTween handler for the in-animation.
         * @method handleTweenAnimateIn
@@ -334,7 +329,7 @@
         * @param {Object} obj The scope object
         */
         handleTweenAnimateIn: function (type, args, obj) { },
-    
+
         /**
         * The default onComplete handler for the in-animation.
         * @method handleCompleteAnimateIn
@@ -343,7 +338,7 @@
         * @param {Object} obj The scope object
         */
         handleCompleteAnimateIn: function (type, args, obj) { },
-        
+
         /**
         * The default onStart handler for the out-animation.
         * @method handleStartAnimateOut
@@ -352,7 +347,7 @@
         * @param {Object} obj The scope object
         */
         handleStartAnimateOut: function (type, args, obj) { },
-    
+
         /**
         * The default onTween handler for the out-animation.
         * @method handleTweenAnimateOut
@@ -361,7 +356,7 @@
         * @param {Object} obj The scope object
         */
         handleTweenAnimateOut: function (type, args, obj) { },
-    
+
         /**
         * The default onComplete handler for the out-animation.
         * @method handleCompleteAnimateOut
@@ -383,7 +378,6 @@
             }
             return output;
         }
-    
     };
 
     YAHOO.lang.augmentProto(ContainerEffect, YAHOO.util.EventProvider);

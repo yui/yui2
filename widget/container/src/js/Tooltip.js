@@ -612,6 +612,7 @@
         * and offset of the Tooltip.
         * @method doShow
         * @param {DOMEvent} e The current DOM event
+        * @param {HTMLElement} context The current context element
         * @return {Number} The process ID of the timeout function associated 
         * with doShow
         */

@@ -194,16 +194,19 @@
         getConfig: function () {
         
             var cfg = {},
+                currCfg = this.config,
                 prop,
                 property;
                 
-            for (prop in this.config) {
-                property = this.config[prop];
-                if (property && property.event) {
-                    cfg[prop] = property.value;
+            for (prop in currCfg) {
+                if (Lang.hasOwnProperty(currCfg, prop)) {
+                    property = currCfg[prop];
+                    if (property && property.event) {
+                        cfg[prop] = property.value;
+                    }
                 }
             }
-            
+
             return cfg;
         },
         
@@ -479,11 +482,13 @@
         * @method refresh
         */
         refresh: function () {
-        
+
             var prop;
-        
+
             for (prop in this.config) {
-                this.refireEvent(prop);
+                if (Lang.hasOwnProperty(this.config, prop)) {
+                    this.refireEvent(prop);
+                }
             }
         },
         
@@ -679,6 +684,7 @@
     YAHOO.lang.augmentProto(Config, YAHOO.util.EventProvider);
 
 }());
+
 (function () {
 
     /**
@@ -1713,13 +1719,6 @@
             this.cfg = null;
 
             this.destroyEvent.fire();
-        
-            for (e in this) {
-                if (e instanceof CustomEvent) {
-                    e.unsubscribeAll();
-                }
-            }
-
         },
 
         /**
@@ -1825,6 +1824,7 @@
     YAHOO.lang.augmentProto(Module, YAHOO.util.EventProvider);
 
 }());
+
 (function () {
 
     /**
@@ -2053,21 +2053,31 @@
     * @param {DOMEvent} e The DOM scroll event
     */
     Overlay.windowScrollHandler = function (e) {
+        var t = Event.getTarget(e);
 
-        if (YAHOO.env.ua.ie) {
+        // - Webkit (Safari 2/3) and Opera 9.2x bubble scroll events from elements to window
+        // - FF2/3 and IE6/7, Opera 9.5x don't bubble scroll events from elements to window
+        // - IE doesn't recognize scroll registered on the document.
+        //
+        // Also, when document view is scrolled, IE doesn't provide a target, 
+        // rest of the browsers set target to window.document, apart from opera 
+        // which sets target to window.
+        if (!t || t === window || t === window.document) {
+            if (YAHOO.env.ua.ie) {
 
-            if (! window.scrollEnd) {
-                window.scrollEnd = -1;
+                if (! window.scrollEnd) {
+                    window.scrollEnd = -1;
+                }
+
+                clearTimeout(window.scrollEnd);
+        
+                window.scrollEnd = setTimeout(function () { 
+                    Overlay.windowScrollEvent.fire(); 
+                }, 1);
+        
+            } else {
+                Overlay.windowScrollEvent.fire();
             }
-
-            clearTimeout(window.scrollEnd);
-    
-            window.scrollEnd = setTimeout(function () { 
-                Overlay.windowScrollEvent.fire(); 
-            }, 1);
-    
-        } else {
-            Overlay.windowScrollEvent.fire();
         }
     };
 
@@ -2106,7 +2116,6 @@
     if (Overlay._initialized === null) {
         Event.on(window, "scroll", Overlay.windowScrollHandler);
         Event.on(window, "resize", Overlay.windowResizeHandler);
-    
         Overlay._initialized = true;
     }
 
@@ -2130,8 +2139,8 @@
                  Note that we don't pass the user config in here yet because we
                  only want it executed once, at the lowest subclass level
             */
-    
-            Overlay.superclass.init.call(this, el/*, userConfig*/);  
+
+            Overlay.superclass.init.call(this, el/*, userConfig*/);
 
             this.beforeInitEvent.fire(Overlay);
             
@@ -2396,10 +2405,7 @@
         * @method hideMacGeckoScrollbars
         */
         hideMacGeckoScrollbars: function () {
-    
-            Dom.removeClass(this.element, "show-scrollbars");
-            Dom.addClass(this.element, "hide-scrollbars");
-    
+            Dom.replaceClass(this.element, "show-scrollbars", "hide-scrollbars");
         },
 
         /**
@@ -2409,10 +2415,7 @@
         * @method showMacGeckoScrollbars
         */
         showMacGeckoScrollbars: function () {
-    
-            Dom.removeClass(this.element, "hide-scrollbars");
-            Dom.addClass(this.element, "show-scrollbars");
-    
+            Dom.replaceClass(this.element, "hide-scrollbars", "show-scrollbars");
         },
 
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
@@ -2881,7 +2884,6 @@
                             doesn't modify the opacity of any transparent 
                             elements that may be on top of it (like a shadow).
                         */
-
                         if (YAHOO.env.ua.ie) {
                             m_oIFrameTemplate.style.filter = "alpha(opacity=0)";
                             /*
@@ -3594,10 +3596,10 @@
 
             function isOverlayElement(p_oElement) {
 
-                var oOverlay = Dom.hasClass(p_oElement, Overlay.CSS_OVERLAY),
+                var isOverlay = Dom.hasClass(p_oElement, Overlay.CSS_OVERLAY),
                     Panel = YAHOO.widget.Panel;
 
-                if (oOverlay && !Dom.isAncestor(oElement, oOverlay)) {
+                if (isOverlay && !Dom.isAncestor(oElement, p_oElement)) {
                     if (Panel && Dom.hasClass(p_oElement, Panel.CSS_PANEL)) {
                         aOverlays[aOverlays.length] = p_oElement.parentNode;
                     } else {
@@ -3668,6 +3670,7 @@
 
     });
 }());
+
 (function () {
     
     /**
@@ -4172,6 +4175,7 @@
     };
 
 }());
+
 (function () {
 
     /**
@@ -4786,6 +4790,7 @@
         * and offset of the Tooltip.
         * @method doShow
         * @param {DOMEvent} e The current DOM event
+        * @param {HTMLElement} context The current context element
         * @return {Number} The process ID of the timeout function associated 
         * with doShow
         */
@@ -4996,6 +5001,7 @@
     });
 
 }());
+
 (function () {
 
     /**
@@ -5016,12 +5022,12 @@
     };
 
     var Lang = YAHOO.lang,
-        DD = YAHOO.util.DD,
-        Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event,
+        Util = YAHOO.util,
+        Dom = Util.Dom,
+        Event = Util.Event,
+        CustomEvent = Util.CustomEvent,
+        Config = Util.Config,
         Overlay = YAHOO.widget.Overlay,
-        CustomEvent = YAHOO.util.CustomEvent,
-        Config = YAHOO.util.Config,
         Panel = YAHOO.widget.Panel,
 
         m_oMaskTemplate,
@@ -5057,9 +5063,9 @@
                 supercedes: ["visible"] 
             },
 
-            "DRAGGABLE": { 
+            "DRAGGABLE": {
                 key: "draggable", 
-                value: (DD ? true : false), 
+                value: (Util.DD ? true : false), 
                 validator: Lang.isBoolean, 
                 supercedes: ["visible"]  
             },
@@ -5320,23 +5326,23 @@
             */
             this.showMaskEvent = this.createEvent(EVENT_TYPES.SHOW_MASK);
             this.showMaskEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired after the modality mask is hidden
             * @event hideMaskEvent
             */
             this.hideMaskEvent = this.createEvent(EVENT_TYPES.HIDE_MASK);
             this.hideMaskEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent when the Panel is dragged
             * @event dragEvent
             */
             this.dragEvent = this.createEvent(EVENT_TYPES.DRAG);
             this.dragEvent.signature = SIGNATURE;
-        
+
         },
-        
+
         /**
         * Initializes the class's configurable properties which can be changed 
         * using the Panel's Config object (cfg).
@@ -5382,11 +5388,11 @@
             * @type Boolean
             * @default true
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.DRAGGABLE.key, { 
-                handler: this.configDraggable, 
-                value: DEFAULT_CONFIG.DRAGGABLE.value, 
-                validator: DEFAULT_CONFIG.DRAGGABLE.validator, 
-                supercedes: DEFAULT_CONFIG.DRAGGABLE.supercedes 
+            this.cfg.addProperty(DEFAULT_CONFIG.DRAGGABLE.key, {
+                handler: this.configDraggable,
+                value: (Util.DD) ? true : false,
+                validator: DEFAULT_CONFIG.DRAGGABLE.validator,
+                supercedes: DEFAULT_CONFIG.DRAGGABLE.supercedes
             });
 
             /**
@@ -5526,7 +5532,7 @@
             var val = args[0];
 
             if (val) {
-                if (!DD) {
+                if (!Util.DD) {
                     YAHOO.log("DD dependency not met.", "error");
                     this.cfg.setProperty("draggable", false);
                     return;
@@ -5719,28 +5725,28 @@
                     this.unsubscribe("hide", this.hideMask);
 
                     Overlay.windowResizeEvent.unsubscribe(this.sizeMask, this);
-                    
+
                     this._hasModalityEventListeners = false;
                 }
             }
         },
-        
+
         /**
         * Removes the modality mask.
         * @method removeMask
         */
         removeMask: function () {
-        
+
             var oMask = this.mask,
                 oParentNode;
-        
+
             if (oMask) {
                 /*
                     Hide the mask before destroying it to ensure that DOM
                     event handlers on focusable elements get removed.
                 */
                 this.hideMask();
-                
+
                 oParentNode = oMask.parentNode;
                 if (oParentNode) {
                     oParentNode.removeChild(oMask);
@@ -5944,13 +5950,13 @@
 
             if (this.header) {
 
-                if (!DD) {
+                if (!Util.DD) {
                     YAHOO.log("DD dependency not met.", "error");
                     return;
                 }
 
                 var bDragOnly = (this.cfg.getProperty("dragonly") === true);
-                this.dd = new DD(this.element.id, this.id, {dragOnly: bDragOnly});
+                this.dd = new Util.DD(this.element.id, this.id, {dragOnly: bDragOnly});
 
                 if (!this.header.id) {
                     this.header.id = this.id + "_h";
@@ -6151,19 +6157,12 @@
         * @method destroy
         */
         destroy: function () {
-        
             Overlay.windowResizeEvent.unsubscribe(this.sizeMask, this);
-            
             this.removeMask();
-        
             if (this.close) {
-            
                 Event.purgeElement(this.close);
-        
             }
-        
             Panel.superclass.destroy.call(this);  
-        
         },
         
         /**
@@ -6178,6 +6177,7 @@
     });
 
 }());
+
 (function () {
 
     /**
@@ -6215,26 +6215,23 @@
         CustomEvent = YAHOO.util.CustomEvent,
         Dom = YAHOO.util.Dom,
         KeyListener = YAHOO.util.KeyListener,
-        Connect = YAHOO.util.Connect,
         Dialog = YAHOO.widget.Dialog,
         Lang = YAHOO.lang,
 
         /**
-        * Constant representing the name of the Dialog's events
-        * @property EVENT_TYPES
-        * @private
-        * @final
-        * @type Object
-        */
+         * Constant representing the name of the Dialog's events
+         * @property EVENT_TYPES
+         * @private
+         * @final
+         * @type Object
+         */
         EVENT_TYPES = {
-        
             "BEFORE_SUBMIT": "beforeSubmit",
             "SUBMIT": "submit",
             "MANUAL_SUBMIT": "manualSubmit",
             "ASYNC_SUBMIT": "asyncSubmit",
             "FORM_SUBMIT": "formSubmit",
             "CANCEL": "cancel"
-        
         },
 
         /**
@@ -6248,12 +6245,12 @@
 
             "POST_METHOD": { 
                 key: "postmethod", 
-                value: "async" 
+                value: "async"
             },
 
             "BUTTONS": { 
                 key: "buttons", 
-                value: "none" 
+                value: "none"
             },
 
             "HIDEAFTERSUBMIT" : {
@@ -6298,7 +6295,7 @@
             }
         }
     }
-    
+
     YAHOO.extend(Dialog, YAHOO.widget.Panel, { 
 
         /**
@@ -6531,22 +6528,22 @@
             */
 
             Dialog.superclass.init.call(this, el/*, userConfig*/); 
-        
+
             this.beforeInitEvent.fire(Dialog);
-        
+
             Dom.addClass(this.element, Dialog.CSS_DIALOG);
-        
+
             this.cfg.setProperty("visible", false);
-        
+
             if (userConfig) {
                 this.cfg.applyConfig(userConfig, true);
             }
-        
+
             this.showEvent.subscribe(this.focusFirst, this, true);
             this.beforeHideEvent.subscribe(this.blurButtons, this, true);
 
             this.subscribe("changeBody", this.registerForm);
-        
+
             this.initEvent.fire(Dialog);
         },
         
@@ -6565,8 +6562,9 @@
         * @method doSubmit
         */
         doSubmit: function () {
-    
-            var oForm = this.form,
+
+            var Connect = YAHOO.util.Connect,
+                oForm = this.form,
                 bUseFileUpload = false,
                 bUseSecureFileUpload = false,
                 aElements,
@@ -6575,55 +6573,46 @@
                 sMethod;
 
             switch (this.cfg.getProperty("postmethod")) {
-    
-            case "async":
+                case "async":
+                    aElements = oForm.elements;
+                    nElements = aElements.length;
 
-                aElements = oForm.elements;
-                nElements = aElements.length;
-
-                if (nElements > 0) {
-                    i = nElements - 1;
-                    do {
-                        if (aElements[i].type == "file") {
-                            bUseFileUpload = true;
-                            break;
+                    if (nElements > 0) {
+                        i = nElements - 1;
+                        do {
+                            if (aElements[i].type == "file") {
+                                bUseFileUpload = true;
+                                break;
+                            }
                         }
+                        while(i--);
                     }
-                    while(i--);
-                }
 
-                if (bUseFileUpload && YAHOO.env.ua.ie && this.isSecure) {
-                    bUseSecureFileUpload = true;
-                }
+                    if (bUseFileUpload && YAHOO.env.ua.ie && this.isSecure) {
+                        bUseSecureFileUpload = true;
+                    }
 
-                sMethod = (oForm.getAttribute("method") || "POST").toUpperCase();
+                    sMethod = (oForm.getAttribute("method") || "POST").toUpperCase();
 
-                Connect.setForm(oForm, bUseFileUpload, bUseSecureFileUpload);
-                Connect.asyncRequest(sMethod, oForm.getAttribute("action"), this.callback);
+                    Connect.setForm(oForm, bUseFileUpload, bUseSecureFileUpload);
+                    Connect.asyncRequest(sMethod, oForm.getAttribute("action"), this.callback);
 
-                this.asyncSubmitEvent.fire();
+                    this.asyncSubmitEvent.fire();
 
-                break;
+                    break;
 
-            case "form":
+                case "form":
+                    oForm.submit();
+                    this.formSubmitEvent.fire();
+                    break;
 
-                oForm.submit();
-                this.formSubmitEvent.fire();
-
-                break;
-
-            case "none":
-            case "manual":
-
-                this.manualSubmitEvent.fire();
-
-                break;
-    
+                case "none":
+                case "manual":
+                    this.manualSubmitEvent.fire();
+                    break;
             }
-    
         },
-        
-        
+
         /**
         * Prepares the Dialog's internal FORM object, creating one if one is
         * not currently present.
@@ -6720,7 +6709,7 @@
                 }
             }
         },
-        
+
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
         
         /**
@@ -6737,11 +6726,11 @@
         */
         configClose: function (type, args, obj) {
             var val = args[0];
-        
+
             function doCancel(e, obj) {
                 obj.cancel();
             }
-        
+
             if (val) {
                 if (! this.close) {
                     this.close = document.createElement("div");
@@ -6783,70 +6772,53 @@
                 i;
 
             removeButtonEventHandlers.call(this);
-            
+
             this._aButtons = null;
 
             if (Lang.isArray(aButtons)) {
-
                 oSpan = document.createElement("span");
                 oSpan.className = "button-group";
-
                 nButtons = aButtons.length;
 
                 this._aButtons = [];
-        
+
                 for (i = 0; i < nButtons; i++) {
-
                     oButton = aButtons[i];
-
                     if (Button) {
-
-                        oYUIButton = new Button({ label: oButton.text, 
-                                            container: oSpan });
-
+                        oYUIButton = new Button({ label: oButton.text, container: oSpan });
                         oButtonEl = oYUIButton.get("element");
 
                         if (oButton.isDefault) {
-
                             oYUIButton.addClass("default");
-
                             this.defaultHtmlButton = oButtonEl;
-
                         }
-    
                         if (Lang.isFunction(oButton.handler)) {
-    
                             oYUIButton.set("onclick", { fn: oButton.handler, 
                                 obj: this, scope: this });
-            
-                        }
-                        else if (Lang.isObject(oButton.handler) && 
+                        } else if (Lang.isObject(oButton.handler) && 
                             Lang.isFunction(oButton.handler.fn)) {
 
                             oYUIButton.set("onclick", { fn: oButton.handler.fn, 
                                 obj: ((!Lang.isUndefined(oButton.handler.obj)) ? 
                                 oButton.handler.obj : this), 
                                 scope: (oButton.handler.scope || this) });
-    
                         }
-
                         this._aButtons[this._aButtons.length] = oYUIButton;
-
                     }
                     else {
-        
+
                         oButtonEl = document.createElement("button");
                         oButtonEl.setAttribute("type", "button");
-            
+
                         if (oButton.isDefault) {
                             oButtonEl.className = "default";
                             this.defaultHtmlButton = oButtonEl;
                         }
-    
+
                         oButtonEl.innerHTML = oButton.text;
-    
+
                         if (Lang.isFunction(oButton.handler)) {
-    
+
                             Event.on(oButtonEl, "click", oButton.handler, 
                                 this, true);
             
@@ -6866,7 +6838,6 @@
                         this._aButtons[this._aButtons.length] = oButtonEl;
                         
                     }
-
                     oButton.htmlButton = oButtonEl;
         
                     if (i === 0) {
@@ -6889,25 +6860,18 @@
                     oInnerElement.appendChild(oFooter);
                 
                 }
-
                 this.buttonSpan = oSpan;
 
             } else { // Do cleanup
-
                 oSpan = this.buttonSpan;
                 oFooter = this.footer;
-
                 if (oSpan && oFooter) {
-
                     oFooter.removeChild(oSpan);
-
                     this.buttonSpan = null;
                     this.firstButton = null;
                     this.lastButton = null;
                     this.defaultHtmlButton = null;
-
                 }
-
             }
 
             this.cfg.refireEvent("iframe");
@@ -6938,7 +6902,7 @@
         * @method focusFirst
         */
         focusFirst: function (type, args, obj) {
-    
+
             var oElement = this.firstFormElement,
                 oEvent;
 
@@ -7241,26 +7205,21 @@
                 n;    
     
             function isFormElement(p_oElement) {
-            
                 var sTag = p_oElement.tagName.toUpperCase();
-                
                 return ((sTag == "INPUT" || sTag == "TEXTAREA" || 
                         sTag == "SELECT") && p_oElement.name == sName);
-    
             }
-    
-    
+
             if (oForm) {
         
                 aElements = oForm.elements;
                 nTotalElements = aElements.length;
                 oData = {};
-    
-        
+
                 for (i = 0; i < nTotalElements; i++) {
         
                     sName = aElements[i].name;
-        
+
                     /*
                         Using "Dom.getElementsBy" to safeguard user from JS 
                         errors that result from giving a form field (or set of 
@@ -7271,7 +7230,7 @@
                         discovered that it won't return a collection of fields 
                         in Gecko.
                     */
-        
+
                     oElement = Dom.getElementsBy(isFormElement, "*", oForm);
                     nElements = oElement.length;
         
@@ -7443,6 +7402,7 @@
     });
 
 }());
+
 (function () {
 
     /**
@@ -7761,6 +7721,7 @@
     });
 
 }());
+
 (function () {
 
     /**
@@ -7784,14 +7745,12 @@
     * @param {class} Optional. The animation class to instantiate. Defaults to 
     * YAHOO.util.Anim. Other options include YAHOO.util.Motion.
     */
-    YAHOO.widget.ContainerEffect = 
-    
-        function (overlay, attrIn, attrOut, targetElement, animClass) {
-    
+    YAHOO.widget.ContainerEffect = function (overlay, attrIn, attrOut, targetElement, animClass) {
+
         if (!animClass) {
             animClass = YAHOO.util.Anim;
         }
-        
+
         /**
         * The overlay to animate
         * @property overlay
@@ -7832,7 +7791,6 @@
 
     var Dom = YAHOO.util.Dom,
         CustomEvent = YAHOO.util.CustomEvent,
-        Easing = YAHOO.util.Easing,
         ContainerEffect = YAHOO.widget.ContainerEffect;
 
 
@@ -7847,19 +7805,18 @@
     */
     ContainerEffect.FADE = function (overlay, dur) {
 
-        var fin = {
-            attributes: {opacity:{from:0, to:1}},
-            duration: dur,
-            method: Easing.easeIn
-        };
-
-        var fout = {
-            attributes: {opacity:{to:0}},
-            duration: dur,
-            method: Easing.easeOut
-        };
-
-        var fade = new ContainerEffect(overlay, fin, fout, overlay.element);
+        var Easing = YAHOO.util.Easing,
+            fin = {
+                attributes: {opacity:{from:0, to:1}},
+                duration: dur,
+                method: Easing.easeIn
+            },
+            fout = {
+                attributes: {opacity:{to:0}},
+                duration: dur,
+                method: Easing.easeOut
+            },
+            fade = new ContainerEffect(overlay, fin, fout, overlay.element);
 
         fade.handleUnderlayStart = function() {
             var underlay = this.overlay.underlay;
@@ -7878,7 +7835,7 @@
             }
         };
 
-        fade.handleStartAnimateIn = function (type,args,obj) {
+        fade.handleStartAnimateIn = function (type, args, obj) {
             Dom.addClass(obj.overlay.element, "hide-select");
 
             if (!obj.overlay.underlay) {
@@ -7938,33 +7895,32 @@
     * @return {YAHOO.widget.ContainerEffect} The configured ContainerEffect object
     */
     ContainerEffect.SLIDE = function (overlay, dur) {
-    
-        var x = overlay.cfg.getProperty("x") || Dom.getX(overlay.element),
-    
+        var Easing = YAHOO.util.Easing,
+
+            x = overlay.cfg.getProperty("x") || Dom.getX(overlay.element),
             y = overlay.cfg.getProperty("y") || Dom.getY(overlay.element),
-    
             clientWidth = Dom.getClientWidth(),
-    
             offsetWidth = overlay.element.offsetWidth,
-    
-            slide = new ContainerEffect(overlay, 
-            
-            { attributes: { points: { to: [x, y] } },
+
+            sin =  { 
+                attributes: { points: { to: [x, y] } },
                 duration: dur,
-                method: Easing.easeIn },
-    
-            { attributes: { points: { to: [(clientWidth + 25), y] } },
+                method: Easing.easeIn 
+            },
+
+            sout = {
+                attributes: { points: { to: [(clientWidth + 25), y] } },
                 duration: dur,
-                method: Easing.easeOut },
-    
-            overlay.element, YAHOO.util.Motion);
-        
-        
+                method: Easing.easeOut 
+            },
+
+            slide = new ContainerEffect(overlay, sin, sout, overlay.element, YAHOO.util.Motion);
+
         slide.handleStartAnimateIn = function (type,args,obj) {
             obj.overlay.element.style.left = ((-25) - offsetWidth) + "px";
             obj.overlay.element.style.top  = y + "px";
         };
-        
+
         slide.handleTweenAnimateIn = function (type, args, obj) {
         
             var pos = Dom.getXY(obj.overlay.element),
@@ -8015,13 +7971,13 @@
             obj.overlay.cfg.setProperty("xy", [x, y]);
             obj.animateOutCompleteEvent.fire();
         };
-        
+
         slide.init();
         return slide;
     };
-    
+
     ContainerEffect.prototype = {
-    
+
         /**
         * Initializes the animation classes and events.
         * @method init
@@ -8070,7 +8026,7 @@
             this.beforeAnimateInEvent.fire();
             this.animIn.animate();
         },
-        
+
         /**
         * Triggers the out-animation.
         * @method animateOut
@@ -8079,7 +8035,7 @@
             this.beforeAnimateOutEvent.fire();
             this.animOut.animate();
         },
-        
+
         /**
         * The default onStart handler for the in-animation.
         * @method handleStartAnimateIn
@@ -8088,7 +8044,7 @@
         * @param {Object} obj The scope object
         */
         handleStartAnimateIn: function (type, args, obj) { },
-    
+
         /**
         * The default onTween handler for the in-animation.
         * @method handleTweenAnimateIn
@@ -8097,7 +8053,7 @@
         * @param {Object} obj The scope object
         */
         handleTweenAnimateIn: function (type, args, obj) { },
-    
+
         /**
         * The default onComplete handler for the in-animation.
         * @method handleCompleteAnimateIn
@@ -8106,7 +8062,7 @@
         * @param {Object} obj The scope object
         */
         handleCompleteAnimateIn: function (type, args, obj) { },
-        
+
         /**
         * The default onStart handler for the out-animation.
         * @method handleStartAnimateOut
@@ -8115,7 +8071,7 @@
         * @param {Object} obj The scope object
         */
         handleStartAnimateOut: function (type, args, obj) { },
-    
+
         /**
         * The default onTween handler for the out-animation.
         * @method handleTweenAnimateOut
@@ -8124,7 +8080,7 @@
         * @param {Object} obj The scope object
         */
         handleTweenAnimateOut: function (type, args, obj) { },
-    
+
         /**
         * The default onComplete handler for the out-animation.
         * @method handleCompleteAnimateOut
@@ -8146,10 +8102,10 @@
             }
             return output;
         }
-    
     };
 
     YAHOO.lang.augmentProto(ContainerEffect, YAHOO.util.EventProvider);
 
 })();
+
 YAHOO.register("container", YAHOO.widget.Module, {version: "@VERSION@", build: "@BUILD@"});

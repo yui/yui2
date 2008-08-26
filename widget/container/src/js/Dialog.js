@@ -35,26 +35,23 @@
         CustomEvent = YAHOO.util.CustomEvent,
         Dom = YAHOO.util.Dom,
         KeyListener = YAHOO.util.KeyListener,
-        Connect = YAHOO.util.Connect,
         Dialog = YAHOO.widget.Dialog,
         Lang = YAHOO.lang,
 
         /**
-        * Constant representing the name of the Dialog's events
-        * @property EVENT_TYPES
-        * @private
-        * @final
-        * @type Object
-        */
+         * Constant representing the name of the Dialog's events
+         * @property EVENT_TYPES
+         * @private
+         * @final
+         * @type Object
+         */
         EVENT_TYPES = {
-        
             "BEFORE_SUBMIT": "beforeSubmit",
             "SUBMIT": "submit",
             "MANUAL_SUBMIT": "manualSubmit",
             "ASYNC_SUBMIT": "asyncSubmit",
             "FORM_SUBMIT": "formSubmit",
             "CANCEL": "cancel"
-        
         },
 
         /**
@@ -68,12 +65,12 @@
 
             "POST_METHOD": { 
                 key: "postmethod", 
-                value: "async" 
+                value: "async"
             },
 
             "BUTTONS": { 
                 key: "buttons", 
-                value: "none" 
+                value: "none"
             },
 
             "HIDEAFTERSUBMIT" : {
@@ -118,7 +115,7 @@
             }
         }
     }
-    
+
     YAHOO.extend(Dialog, YAHOO.widget.Panel, { 
 
         /**
@@ -351,22 +348,22 @@
             */
 
             Dialog.superclass.init.call(this, el/*, userConfig*/); 
-        
+
             this.beforeInitEvent.fire(Dialog);
-        
+
             Dom.addClass(this.element, Dialog.CSS_DIALOG);
-        
+
             this.cfg.setProperty("visible", false);
-        
+
             if (userConfig) {
                 this.cfg.applyConfig(userConfig, true);
             }
-        
+
             this.showEvent.subscribe(this.focusFirst, this, true);
             this.beforeHideEvent.subscribe(this.blurButtons, this, true);
 
             this.subscribe("changeBody", this.registerForm);
-        
+
             this.initEvent.fire(Dialog);
         },
         
@@ -385,8 +382,9 @@
         * @method doSubmit
         */
         doSubmit: function () {
-    
-            var oForm = this.form,
+
+            var Connect = YAHOO.util.Connect,
+                oForm = this.form,
                 bUseFileUpload = false,
                 bUseSecureFileUpload = false,
                 aElements,
@@ -395,55 +393,46 @@
                 sMethod;
 
             switch (this.cfg.getProperty("postmethod")) {
-    
-            case "async":
+                case "async":
+                    aElements = oForm.elements;
+                    nElements = aElements.length;
 
-                aElements = oForm.elements;
-                nElements = aElements.length;
-
-                if (nElements > 0) {
-                    i = nElements - 1;
-                    do {
-                        if (aElements[i].type == "file") {
-                            bUseFileUpload = true;
-                            break;
+                    if (nElements > 0) {
+                        i = nElements - 1;
+                        do {
+                            if (aElements[i].type == "file") {
+                                bUseFileUpload = true;
+                                break;
+                            }
                         }
+                        while(i--);
                     }
-                    while(i--);
-                }
 
-                if (bUseFileUpload && YAHOO.env.ua.ie && this.isSecure) {
-                    bUseSecureFileUpload = true;
-                }
+                    if (bUseFileUpload && YAHOO.env.ua.ie && this.isSecure) {
+                        bUseSecureFileUpload = true;
+                    }
 
-                sMethod = (oForm.getAttribute("method") || "POST").toUpperCase();
+                    sMethod = (oForm.getAttribute("method") || "POST").toUpperCase();
 
-                Connect.setForm(oForm, bUseFileUpload, bUseSecureFileUpload);
-                Connect.asyncRequest(sMethod, oForm.getAttribute("action"), this.callback);
+                    Connect.setForm(oForm, bUseFileUpload, bUseSecureFileUpload);
+                    Connect.asyncRequest(sMethod, oForm.getAttribute("action"), this.callback);
 
-                this.asyncSubmitEvent.fire();
+                    this.asyncSubmitEvent.fire();
 
-                break;
+                    break;
 
-            case "form":
+                case "form":
+                    oForm.submit();
+                    this.formSubmitEvent.fire();
+                    break;
 
-                oForm.submit();
-                this.formSubmitEvent.fire();
-
-                break;
-
-            case "none":
-            case "manual":
-
-                this.manualSubmitEvent.fire();
-
-                break;
-    
+                case "none":
+                case "manual":
+                    this.manualSubmitEvent.fire();
+                    break;
             }
-    
         },
-        
-        
+
         /**
         * Prepares the Dialog's internal FORM object, creating one if one is
         * not currently present.
@@ -540,7 +529,7 @@
                 }
             }
         },
-        
+
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
         
         /**
@@ -557,11 +546,11 @@
         */
         configClose: function (type, args, obj) {
             var val = args[0];
-        
+
             function doCancel(e, obj) {
                 obj.cancel();
             }
-        
+
             if (val) {
                 if (! this.close) {
                     this.close = document.createElement("div");
@@ -603,70 +592,53 @@
                 i;
 
             removeButtonEventHandlers.call(this);
-            
+
             this._aButtons = null;
 
             if (Lang.isArray(aButtons)) {
-
                 oSpan = document.createElement("span");
                 oSpan.className = "button-group";
-
                 nButtons = aButtons.length;
 
                 this._aButtons = [];
-        
+
                 for (i = 0; i < nButtons; i++) {
-
                     oButton = aButtons[i];
-
                     if (Button) {
-
-                        oYUIButton = new Button({ label: oButton.text, 
-                                            container: oSpan });
-
+                        oYUIButton = new Button({ label: oButton.text, container: oSpan });
                         oButtonEl = oYUIButton.get("element");
 
                         if (oButton.isDefault) {
-
                             oYUIButton.addClass("default");
-
                             this.defaultHtmlButton = oButtonEl;
-
                         }
-    
                         if (Lang.isFunction(oButton.handler)) {
-    
                             oYUIButton.set("onclick", { fn: oButton.handler, 
                                 obj: this, scope: this });
-            
-                        }
-                        else if (Lang.isObject(oButton.handler) && 
+                        } else if (Lang.isObject(oButton.handler) && 
                             Lang.isFunction(oButton.handler.fn)) {
 
                             oYUIButton.set("onclick", { fn: oButton.handler.fn, 
                                 obj: ((!Lang.isUndefined(oButton.handler.obj)) ? 
                                 oButton.handler.obj : this), 
                                 scope: (oButton.handler.scope || this) });
-    
                         }
-
                         this._aButtons[this._aButtons.length] = oYUIButton;
-
                     }
                     else {
-        
+
                         oButtonEl = document.createElement("button");
                         oButtonEl.setAttribute("type", "button");
-            
+
                         if (oButton.isDefault) {
                             oButtonEl.className = "default";
                             this.defaultHtmlButton = oButtonEl;
                         }
-    
+
                         oButtonEl.innerHTML = oButton.text;
-    
+
                         if (Lang.isFunction(oButton.handler)) {
-    
+
                             Event.on(oButtonEl, "click", oButton.handler, 
                                 this, true);
             
@@ -686,7 +658,6 @@
                         this._aButtons[this._aButtons.length] = oButtonEl;
                         
                     }
-
                     oButton.htmlButton = oButtonEl;
         
                     if (i === 0) {
@@ -709,25 +680,18 @@
                     oInnerElement.appendChild(oFooter);
                 
                 }
-
                 this.buttonSpan = oSpan;
 
             } else { // Do cleanup
-
                 oSpan = this.buttonSpan;
                 oFooter = this.footer;
-
                 if (oSpan && oFooter) {
-
                     oFooter.removeChild(oSpan);
-
                     this.buttonSpan = null;
                     this.firstButton = null;
                     this.lastButton = null;
                     this.defaultHtmlButton = null;
-
                 }
-
             }
 
             this.cfg.refireEvent("iframe");
@@ -758,7 +722,7 @@
         * @method focusFirst
         */
         focusFirst: function (type, args, obj) {
-    
+
             var oElement = this.firstFormElement,
                 oEvent;
 
@@ -1061,26 +1025,21 @@
                 n;    
     
             function isFormElement(p_oElement) {
-            
                 var sTag = p_oElement.tagName.toUpperCase();
-                
                 return ((sTag == "INPUT" || sTag == "TEXTAREA" || 
                         sTag == "SELECT") && p_oElement.name == sName);
-    
             }
-    
-    
+
             if (oForm) {
         
                 aElements = oForm.elements;
                 nTotalElements = aElements.length;
                 oData = {};
-    
-        
+
                 for (i = 0; i < nTotalElements; i++) {
         
                     sName = aElements[i].name;
-        
+
                     /*
                         Using "Dom.getElementsBy" to safeguard user from JS 
                         errors that result from giving a form field (or set of 
@@ -1091,7 +1050,7 @@
                         discovered that it won't return a collection of fields 
                         in Gecko.
                     */
-        
+
                     oElement = Dom.getElementsBy(isFormElement, "*", oForm);
                     nElements = oElement.length;
         
