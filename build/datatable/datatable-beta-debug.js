@@ -845,6 +845,15 @@ YAHOO.widget.Column.prototype = {
     _elThLiner : null,
 
     /**
+     * The DOM reference to the associated TH element's label SPAN element.
+     *
+     * @property _elThLabel
+     * @type HTMLElement
+     * @private
+     */
+    _elThLabel : null,
+
+    /**
      * The DOM reference to the associated resizerelement (if any).
      *
      * @property _elResizer
@@ -1191,7 +1200,7 @@ YAHOO.widget.Column.prototype = {
     },
 
     /**
-     * Returns DOM reference to the key TH's liner DIV element. Introduced since
+     * Returns DOM reference to the TH's liner DIV element. Introduced since
      * resizeable Columns may have an extra resizer liner, making the DIV liner
      * not reliably the TH element's first child.               
      *
@@ -1201,7 +1210,7 @@ YAHOO.widget.Column.prototype = {
     getThLinerEl : function() {
         return this._elThLiner;
     },
-
+    
     /**
      * Returns DOM reference to the resizer element, or null.
      *
@@ -2513,20 +2522,16 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     if(!this._oRecordSet) {
     }
 
+    // Initialize Attributes
+    DT.superclass.constructor.call(this, elContainer, this.configs);
+
     // Initialize DOM elements
     var okDom = this._initDomElements(elContainer);
     if(!okDom) {
         YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
         return;
     }
-        
-    ////////////////////////////////////////////////////////////////////////////
-    // Set up Attributes
-
-    // Call Element's constructor after DOM elements are created
-    // but *before* table is populated with data
-    DT.superclass.constructor.call(this, this._elContainer, this.configs);
-    
+            
     // Show message as soon as config is available
     this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
     
@@ -3215,7 +3220,7 @@ lang.augmentObject(DT, {
             var sHref = oSelf.getId() + "-sort-" + oColumn.getSanitizedKey() + "-" + sSortDir;
             
             // Generate a dynamic TITLE for sort status
-            var sTitle = "Click to sort " + sSortDir;
+            var sTitle = (sSortDir === "descending") ? oSelf.get("MSG_SORTDESC") : oSelf.get("MSG_SORTASC");
             
             // Format the element
             elCellLabel.innerHTML = "<a href=\"" + sHref + "\" title=\"" + sTitle + "\" class=\"" + DT.CLASS_SORTABLE + "\">" + sLabel + "</a>";
@@ -3561,12 +3566,15 @@ initAttributes : function(oConfigs) {
     * @attribute summary
     * @description Value for the SUMMARY attribute.
     * @type String
+    * @default ""    
     */
     this.setAttributeConfig("summary", {
-        value: null,
+        value: "",
         validator: lang.isString,
         method: function(sSummary) {
-            this._elThead.parentNode.summary = sSummary;
+            if(this._elTable) {
+                this._elTable.summary = sSummary;
+            }
         }
     });
 
@@ -3629,6 +3637,9 @@ initAttributes : function(oConfigs) {
         method: function(oNewSortedBy) {
             // Stash the previous value
             var oOldSortedBy = this.get("sortedBy");
+            
+            // Workaround for bug 1827195
+            this._configs.sortedBy.value = oNewSortedBy;
 
             // Remove ASC/DESC from TH
             var oOldColumn,
@@ -3636,55 +3647,59 @@ initAttributes : function(oConfigs) {
                 oNewColumn,
                 nNewColumnKeyIndex;
                 
-            if(oOldSortedBy && oOldSortedBy.key && oOldSortedBy.dir) {
-                oOldColumn = this._oColumnSet.getColumn(oOldSortedBy.key);
-                nOldColumnKeyIndex = oOldColumn.getKeyIndex();
+            if(this._elThead) {
+                if(oOldSortedBy && oOldSortedBy.key && oOldSortedBy.dir) {
+                    oOldColumn = this._oColumnSet.getColumn(oOldSortedBy.key);
+                    nOldColumnKeyIndex = oOldColumn.getKeyIndex();
+                    
+                    // Remove previous UI from THEAD
+                    var elOldTh = oOldColumn.getThEl();
+                    Dom.removeClass(elOldTh, oOldSortedBy.dir);
+                    DT.formatTheadCell(oOldColumn.getThLinerEl().firstChild, oOldColumn, this, oNewSortedBy);
+                }
+                if(oNewSortedBy) {
+                    oNewColumn = (oNewSortedBy.column) ? oNewSortedBy.column : this._oColumnSet.getColumn(oNewSortedBy.key);
+                    nNewColumnKeyIndex = oNewColumn.getKeyIndex();
+    
+                    // Update THEAD with new UI
+                    var elNewTh = oNewColumn.getThEl();
+                    // Backward compatibility
+                    if(oNewSortedBy.dir && ((oNewSortedBy.dir == "asc") ||  (oNewSortedBy.dir == "desc"))) {
+                        var newClass = (oNewSortedBy.dir == "desc") ?
+                                DT.CLASS_DESC :
+                                DT.CLASS_ASC;
+                        Dom.addClass(elNewTh, newClass);
+                    }
+                    else {
+                         var sortClass = oNewSortedBy.dir || DT.CLASS_ASC;
+                         Dom.addClass(elNewTh, sortClass);
+                    }
+    
+                    // HACK: Bug 1827195, workaround for bug 1969954.
+                    // Since this method runs before the value is set,
+                    // the formatTheadCell() function doesn't have access to the new
+                    // value yet so I'm going to pass in the new value explicitly.    
+                    DT.formatTheadCell(oNewColumn.getThLinerEl().firstChild, oNewColumn, this, oNewSortedBy);  // Bug 1827195
+                }
+            }
+          
+            if(this._elTbody) {
+                // Update TBODY UI
+                this._elTbody.style.display = "none";
+                var allRows = this._elTbody.rows,
+                    allCells;
+                for(var i=allRows.length-1; i>-1; i--) {
+                    allCells = allRows[i].childNodes;
+                    if(allCells[nOldColumnKeyIndex]) {
+                        Dom.removeClass(allCells[nOldColumnKeyIndex], oOldSortedBy.dir);
+                    }
+                    if(allCells[nNewColumnKeyIndex]) {
+                        Dom.addClass(allCells[nNewColumnKeyIndex], oNewSortedBy.dir);
+                    }
+                }
+                this._elTbody.style.display = "";
+            }
                 
-                // Remove previous UI from THEAD
-                var elOldTh = oOldColumn.getThEl();
-                Dom.removeClass(elOldTh, oOldSortedBy.dir);
-                DT.formatTheadCell(oOldColumn.getThLinerEl().firstChild, oOldColumn, this, oNewSortedBy);
-            }
-            if(oNewSortedBy) {
-                oNewColumn = (oNewSortedBy.column) ? oNewSortedBy.column : this._oColumnSet.getColumn(oNewSortedBy.key);
-                nNewColumnKeyIndex = oNewColumn.getKeyIndex();
-
-                // Update THEAD with new UI
-                var elNewTh = oNewColumn.getThEl();
-                // Backward compatibility
-                if(oNewSortedBy.dir && ((oNewSortedBy.dir == "asc") ||  (oNewSortedBy.dir == "desc"))) {
-                    var newClass = (oNewSortedBy.dir == "desc") ?
-                            DT.CLASS_DESC :
-                            DT.CLASS_ASC;
-                    Dom.addClass(elNewTh, newClass);
-                }
-                else {
-                     var sortClass = oNewSortedBy.dir || DT.CLASS_ASC;
-                     Dom.addClass(elNewTh, sortClass);
-                }
-
-                // HACK: Bug 1827195, workaround for bug 1969954.
-                // Since this method runs before the value is set,
-                // the formatTheadCell() function doesn't have access to the new
-                // value yet so I'm going to pass in the new value explicitly.    
-                DT.formatTheadCell(oNewColumn.getThLinerEl().firstChild, oNewColumn, this, oNewSortedBy);  // Bug 1827195
-            }
-            
-            // Update TBODY UI
-            this._elTbody.style.display = "none";
-            var allRows = this._elTbody.rows,
-                allCells;
-            for(var i=allRows.length-1; i>-1; i--) {
-                allCells = allRows[i].childNodes;
-                if(allCells[nOldColumnKeyIndex]) {
-                    Dom.removeClass(allCells[nOldColumnKeyIndex], oOldSortedBy.dir);
-                }
-                if(allCells[nNewColumnKeyIndex]) {
-                    Dom.addClass(allCells[nNewColumnKeyIndex], oNewSortedBy.dir);
-                }
-            }
-            this._elTbody.style.display = "";
-            
             this._clearTrTemplateEl();
         }
     });
@@ -3712,41 +3727,14 @@ initAttributes : function(oConfigs) {
         value: null,
         validator: lang.isString,
         method: function(sCaption) {
-            // Create CAPTION element
-            if(!this._elCaption) { 
-                this._elCaption = this._elTable.createCaption();
+            if(this._elTable) {
+                // Create CAPTION element
+                if(!this._elCaption) { 
+                    this._elCaption = this._elTable.createCaption();
+                }
+                // Set CAPTION value
+                this._elCaption.innerHTML = sCaption;
             }
-            // Set CAPTION value
-            this._elCaption.innerHTML = sCaption;
-        }
-    });
-
-    /**
-    * @attribute width
-    * @description Table width for scrollable tables
-    * @type String
-    */
-    this.setAttributeConfig("width", {
-        value: null,
-        validator: lang.isString,
-        method: function(oParam) {
-            //TODO: repurpose?
-            //this._elTheadContainer.style.width = oParam;
-            //this._elTbodyContainer.style.width = oParam;            
-        }
-    });
-
-    /**
-    * @attribute height
-    * @description Table height for scrollable tables
-    * @type String
-    */
-    this.setAttributeConfig("height", {
-        value: null,
-        validator: lang.isString,
-        method: function(oParam) {
-            //TODO: repurpose?
-            //this._elTbodyContainer.style.height = oParam;        
         }
     });
 
@@ -3762,11 +3750,13 @@ initAttributes : function(oConfigs) {
         value: false,
         validator: lang.isBoolean,
         method: function(oParam) {
-            if(oParam) {
-                this._initDraggableColumns();
-            }
-            else {
-                this._destroyDraggableColumns();
+            if(this._elThead) {
+                if(oParam) {
+                    this._initDraggableColumns();
+                }
+                else {
+                    this._destroyDraggableColumns();
+                }
             }
         }
     });
@@ -3918,6 +3908,46 @@ initAttributes : function(oConfigs) {
          validator: lang.isString 	 
      }); 	 
 
+    /**
+     * @attribute MSG_SORTASC 
+     * @description Message to display in tooltip to sort Column in ascending order.
+     * @type String 	 
+     * @default "Click to sort ascending" 	 
+     */ 	 
+     this.setAttributeConfig("MSG_SORTASC", { 	 
+         value: "Click to sort ascending", 	 
+         validator: lang.isString,
+         method: function(sParam) {
+            if(this._elThead) {
+                for(var i=0, allKeys=this.getColumnSet().keys, len=allKeys.length; i<len; i++) {
+                    if(allKeys[i].sortable && this.getColumnSortDir(allKeys[i]) === DT.CLASS_ASC) {
+                        allKeys[i]._elThLabel.firstChild.title = sParam;
+                    }
+                }
+            }      
+         }
+     });
+
+    /**
+     * @attribute MSG_SORTDESC 
+     * @description Message to display in tooltip to sort Column in descending order.
+     * @type String 	 
+     * @default "Click to sort descending" 	 
+     */ 	 
+     this.setAttributeConfig("MSG_SORTDESC", { 	 
+         value: "Click to sort descending", 	 
+         validator: lang.isString,
+         method: function(sParam) {
+            if(this._elThead) {
+                for(var i=0, allKeys=this.getColumnSet().keys, len=allKeys.length; i<len; i++) {
+                    if(allKeys[i].sortable && this.getColumnSortDir(allKeys[i]) === DT.CLASS_DESC) {
+                        allKeys[i]._elThLabel.firstChild.title = sParam;
+                    }
+                }
+            }               
+         }
+     });
+     
     /**
      * Currency symbol/prefix used by the default 'currency' column formatter.
      * @attribute currencySymbol
@@ -4541,7 +4571,17 @@ _initTableEl : function(elContainer) {
         this._destroyTableEl();
     
         // Create TABLE
-        this._elTable = elContainer.appendChild(document.createElement("table"));   
+        this._elTable = elContainer.appendChild(document.createElement("table"));  
+         
+        // Set SUMMARY attribute
+        this._elTable.summary = this.get("summary");
+        
+        // Create CAPTION element
+        if(!this._elCaption) { 
+            this._elCaption = this._elTable.createCaption();
+        }
+        // Set CAPTION value
+        this._elCaption.innerHTML = this.get("caption");
     } 
 },
 
@@ -4794,6 +4834,7 @@ _initThEl : function(elTh, oColumn) {
     }
 
     DT.formatTheadCell(elThLabel, oColumn, this);
+    oColumn._elThLabel = elThLabel;
 },
 
 /**
@@ -7579,7 +7620,7 @@ getColumnById : function(column) {
  *
  * @method getColumnSortDir
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @return {String} DataTable.widget.CLASS_ASC or DataTable.widget.CLASS_DESC.
+ * @return {String} YAHOO.widget.DataTable.CLASS_ASC or YAHOO.widget.DataTableCLASS_DESC.
  */
 getColumnSortDir : function(oColumn) {
     // Backward compatibility
@@ -13588,20 +13629,7 @@ lang.augmentObject(SDT, {
      * @final
      * @default "yui-dt-bd"
      */
-    CLASS_BODY : "yui-dt-bd",
-
-    /**
-     * Column filler color set in constructor due to Attribute chicken and egg
-     * problem. Can be customized via COLOR_COLUMFILLER in initial config or
-     * via myDataTable.set().
-     *
-     * @property DataTable.COLOR_COLUMNFILLER
-     * @type String
-     * @static
-     * @final
-     * @default "#F2F2F2"
-     */
-    COLOR_COLUMNFILLER : "#F2F2F2"
+    CLASS_BODY : "yui-dt-bd"
 });
 
 lang.extend(SDT, DT, {
@@ -13710,10 +13738,12 @@ initAttributes : function(oConfigs) {
         value: null,
         validator: lang.isString,
         method: function(oParam) {
-            this._elHdContainer.style.width = oParam;
-            this._elBdContainer.style.width = oParam;            
-            this._syncScrollX();      
-            this._syncScrollOverhang();
+            if(this._elHdContainer && this._elBdContainer) {
+                this._elHdContainer.style.width = oParam;
+                this._elBdContainer.style.width = oParam;            
+                this._syncScrollX();      
+                this._syncScrollOverhang();
+            }
         }
     });
 
@@ -13727,10 +13757,12 @@ initAttributes : function(oConfigs) {
         value: null,
         validator: lang.isString,
         method: function(oParam) {
-            this._elBdContainer.style.height = oParam;    
-            this._syncScrollX();   
-            this._syncScrollY();
-            this._syncScrollOverhang();
+            if(this._elHdContainer && this._elBdContainer) {
+                this._elBdContainer.style.height = oParam;    
+                this._syncScrollX();   
+                this._syncScrollY();
+                this._syncScrollOverhang();
+            }
         }
     });
 
@@ -13873,17 +13905,21 @@ _initContainerEl : function(elContainer) {
         Dom.addClass(elContainer, DT.CLASS_SCROLLABLE);
         
         // Container for header TABLE
-        var elHdContainer = elContainer.appendChild(document.createElement("div"));
-        // Since Attribute is not available at this point in the constructor
-        elHdContainer.style.backgroundColor = this.get("COLOR_COLUMNFILLER") || SDT.COLOR_COLUMNFILLER;
+        var elHdContainer = document.createElement("div");
+        elHdContainer.style.width = this.get("width") || "";
+        elHdContainer.style.backgroundColor = this.get("COLOR_COLUMNFILLER");
         Dom.addClass(elHdContainer, SDT.CLASS_HEADER);
         this._elHdContainer = elHdContainer;
+        elContainer.appendChild(elHdContainer);
     
         // Container for body TABLE
-        var elBdContainer = elContainer.appendChild(document.createElement("div"));
+        var elBdContainer = document.createElement("div");
+        elBdContainer.style.width = this.get("width") || "";
+        elBdContainer.style.height = this.get("height") || "";
         Dom.addClass(elBdContainer, SDT.CLASS_BODY);
         Ev.addListener(elBdContainer, "scroll", this._onScroll, this); // to sync horiz scroll headers
         this._elBdContainer = elBdContainer;
+        elContainer.appendChild(elBdContainer);
     }
 },
 

@@ -682,6 +682,15 @@ YAHOO.widget.Column.prototype = {
     _elThLiner : null,
 
     /**
+     * The DOM reference to the associated TH element's label SPAN element.
+     *
+     * @property _elThLabel
+     * @type HTMLElement
+     * @private
+     */
+    _elThLabel : null,
+
+    /**
      * The DOM reference to the associated resizerelement (if any).
      *
      * @property _elResizer
@@ -1028,7 +1037,7 @@ YAHOO.widget.Column.prototype = {
     },
 
     /**
-     * Returns DOM reference to the key TH's liner DIV element. Introduced since
+     * Returns DOM reference to the TH's liner DIV element. Introduced since
      * resizeable Columns may have an extra resizer liner, making the DIV liner
      * not reliably the TH element's first child.               
      *
@@ -1038,7 +1047,7 @@ YAHOO.widget.Column.prototype = {
     getThLinerEl : function() {
         return this._elThLiner;
     },
-
+    
     /**
      * Returns DOM reference to the resizer element, or null.
      *

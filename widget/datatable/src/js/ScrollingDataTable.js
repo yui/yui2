@@ -68,20 +68,7 @@ lang.augmentObject(SDT, {
      * @final
      * @default "yui-dt-bd"
      */
-    CLASS_BODY : "yui-dt-bd",
-
-    /**
-     * Column filler color set in constructor due to Attribute chicken and egg
-     * problem. Can be customized via COLOR_COLUMFILLER in initial config or
-     * via myDataTable.set().
-     *
-     * @property DataTable.COLOR_COLUMNFILLER
-     * @type String
-     * @static
-     * @final
-     * @default "#F2F2F2"
-     */
-    COLOR_COLUMNFILLER : "#F2F2F2"
+    CLASS_BODY : "yui-dt-bd"
 });
 
 lang.extend(SDT, DT, {
@@ -190,10 +177,12 @@ initAttributes : function(oConfigs) {
         value: null,
         validator: lang.isString,
         method: function(oParam) {
-            this._elHdContainer.style.width = oParam;
-            this._elBdContainer.style.width = oParam;            
-            this._syncScrollX();      
-            this._syncScrollOverhang();
+            if(this._elHdContainer && this._elBdContainer) {
+                this._elHdContainer.style.width = oParam;
+                this._elBdContainer.style.width = oParam;            
+                this._syncScrollX();      
+                this._syncScrollOverhang();
+            }
         }
     });
 
@@ -207,10 +196,12 @@ initAttributes : function(oConfigs) {
         value: null,
         validator: lang.isString,
         method: function(oParam) {
-            this._elBdContainer.style.height = oParam;    
-            this._syncScrollX();   
-            this._syncScrollY();
-            this._syncScrollOverhang();
+            if(this._elHdContainer && this._elBdContainer) {
+                this._elBdContainer.style.height = oParam;    
+                this._syncScrollX();   
+                this._syncScrollY();
+                this._syncScrollOverhang();
+            }
         }
     });
 
@@ -353,17 +344,21 @@ _initContainerEl : function(elContainer) {
         Dom.addClass(elContainer, DT.CLASS_SCROLLABLE);
         
         // Container for header TABLE
-        var elHdContainer = elContainer.appendChild(document.createElement("div"));
-        // Since Attribute is not available at this point in the constructor
-        elHdContainer.style.backgroundColor = this.get("COLOR_COLUMNFILLER") || SDT.COLOR_COLUMNFILLER;
+        var elHdContainer = document.createElement("div");
+        elHdContainer.style.width = this.get("width") || "";
+        elHdContainer.style.backgroundColor = this.get("COLOR_COLUMNFILLER");
         Dom.addClass(elHdContainer, SDT.CLASS_HEADER);
         this._elHdContainer = elHdContainer;
+        elContainer.appendChild(elHdContainer);
     
         // Container for body TABLE
-        var elBdContainer = elContainer.appendChild(document.createElement("div"));
+        var elBdContainer = document.createElement("div");
+        elBdContainer.style.width = this.get("width") || "";
+        elBdContainer.style.height = this.get("height") || "";
         Dom.addClass(elBdContainer, SDT.CLASS_BODY);
         Ev.addListener(elBdContainer, "scroll", this._onScroll, this); // to sync horiz scroll headers
         this._elBdContainer = elBdContainer;
+        elContainer.appendChild(elBdContainer);
     }
 },
 
