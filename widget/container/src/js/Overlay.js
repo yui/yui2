@@ -425,29 +425,33 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.XY.key, {
-            
                 handler: this.configXY, 
                 suppressEvent: DEFAULT_CONFIG.XY.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.XY.supercedes
-            
             });
-    
+
             /**
+            * <p>
             * The array of context arguments for context-sensitive positioning.  
-            * The format is: [id or element, element corner, context corner]. 
+            * The format of the array is: [contextElementOrId, overlayCorner, contextCorner],
+            * where "contextElementOrId" is a reference to the context element to which the overlay should
+            * be aligned (or it's id). The corner parameters are one of the following string values: 
+            * "tr" (top right), "tl" (top left), "br" (bottom right), or "bl" (bottom left) and define 
+            * which corners of the overlay and context element should be aligned.
+            * </p>
+            * <p>
             * For example, setting this property to ["img1", "tl", "bl"] would 
-            * align the Overlay's top left corner to the context element's 
-            * bottom left corner.
+            * align the Overlay's top left corner to the bottom left corner of the
+            * context element with id "img1".
+            * </p>
             * @config context
             * @type Array
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.CONTEXT.key, {
-            
                 handler: this.configContext, 
                 suppressEvent: DEFAULT_CONFIG.CONTEXT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.CONTEXT.supercedes
-            
             });
 
             /**
@@ -458,12 +462,10 @@
             * @default false
             */
             this.cfg.addProperty(DEFAULT_CONFIG.FIXED_CENTER.key, {
-            
                 handler: this.configFixedCenter,
                 value: DEFAULT_CONFIG.FIXED_CENTER.value, 
                 validator: DEFAULT_CONFIG.FIXED_CENTER.validator, 
                 supercedes: DEFAULT_CONFIG.FIXED_CENTER.supercedes
-            
             });
     
             /**
@@ -473,11 +475,9 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.WIDTH.key, {
-
                 handler: this.configWidth, 
                 suppressEvent: DEFAULT_CONFIG.WIDTH.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.WIDTH.supercedes
-
             });
 
             /**
@@ -487,11 +487,9 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.HEIGHT.key, {
-
                 handler: this.configHeight, 
                 suppressEvent: DEFAULT_CONFIG.HEIGHT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.HEIGHT.supercedes
-            
             });
             
             /**
@@ -501,10 +499,8 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.ZINDEX.key, {
-
                 handler: this.configzIndex,
                 value: DEFAULT_CONFIG.ZINDEX.value
-
             });
 
             /**

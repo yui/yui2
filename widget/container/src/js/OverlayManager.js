@@ -234,18 +234,17 @@
         * object passed back by the event utility (Event).
         */
         _onOverlayElementFocus: function (p_oEvent) {
-        
+
             var oTarget = Event.getTarget(p_oEvent),
                 oClose = this.close;
-            
+
             if (oClose && (oTarget == oClose || Dom.isAncestor(oClose, oTarget))) {
                 this.blur();
             } else {
                 this.focus();
             }
         },
-        
-        
+
         /**
         * @method _onOverlayDestroy
         * @description "destroy" event handler for the Overlay.
@@ -260,7 +259,7 @@
         _onOverlayDestroy: function (p_sType, p_aArgs, p_oOverlay) {
             this.remove(p_oOverlay);
         },
-        
+
         /**
         * Registers an Overlay or an array of Overlays with the manager. Upon 
         * registration, the Overlay receives functions for focus and blur, 
@@ -272,7 +271,7 @@
         * @return {Boolean} True if any Overlays are registered.
         */
         register: function (overlay) {
-        
+
             var mgr = this,
                 zIndex,
                 regcount,
@@ -401,6 +400,7 @@
 
             var aOverlays = this.overlays,
                 nOverlays = aOverlays.length,
+                found = null,
                 i;
 
             if (nOverlays > 0) {
@@ -409,7 +409,8 @@
                 if (overlay instanceof Overlay) {
                     do {
                         if (aOverlays[i] == overlay) {
-                            return aOverlays[i];
+                            found = aOverlays[i];
+                            break;
                         }
                     }
                     while(i--);
@@ -417,13 +418,15 @@
                 } else if (typeof overlay == "string") {
                     do {
                         if (aOverlays[i].id == overlay) {
-                            return aOverlays[i];
+                            found = aOverlays[i];
+                            break;
                         }
                     }
                     while(i--);
                 }
-                return null;
             }
+
+            return found;
         },
         
         /**

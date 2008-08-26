@@ -2252,29 +2252,33 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.XY.key, {
-            
                 handler: this.configXY, 
                 suppressEvent: DEFAULT_CONFIG.XY.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.XY.supercedes
-            
             });
-    
+
             /**
+            * <p>
             * The array of context arguments for context-sensitive positioning.  
-            * The format is: [id or element, element corner, context corner]. 
+            * The format of the array is: [contextElementOrId, overlayCorner, contextCorner],
+            * where "contextElementOrId" is a reference to the context element to which the overlay should
+            * be aligned (or it's id). The corner parameters are one of the following string values: 
+            * "tr" (top right), "tl" (top left), "br" (bottom right), or "bl" (bottom left) and define 
+            * which corners of the overlay and context element should be aligned.
+            * </p>
+            * <p>
             * For example, setting this property to ["img1", "tl", "bl"] would 
-            * align the Overlay's top left corner to the context element's 
-            * bottom left corner.
+            * align the Overlay's top left corner to the bottom left corner of the
+            * context element with id "img1".
+            * </p>
             * @config context
             * @type Array
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.CONTEXT.key, {
-            
                 handler: this.configContext, 
                 suppressEvent: DEFAULT_CONFIG.CONTEXT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.CONTEXT.supercedes
-            
             });
 
             /**
@@ -2285,12 +2289,10 @@
             * @default false
             */
             this.cfg.addProperty(DEFAULT_CONFIG.FIXED_CENTER.key, {
-            
                 handler: this.configFixedCenter,
                 value: DEFAULT_CONFIG.FIXED_CENTER.value, 
                 validator: DEFAULT_CONFIG.FIXED_CENTER.validator, 
                 supercedes: DEFAULT_CONFIG.FIXED_CENTER.supercedes
-            
             });
     
             /**
@@ -2300,11 +2302,9 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.WIDTH.key, {
-
                 handler: this.configWidth, 
                 suppressEvent: DEFAULT_CONFIG.WIDTH.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.WIDTH.supercedes
-
             });
 
             /**
@@ -2314,11 +2314,9 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.HEIGHT.key, {
-
                 handler: this.configHeight, 
                 suppressEvent: DEFAULT_CONFIG.HEIGHT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.HEIGHT.supercedes
-            
             });
             
             /**
@@ -2328,10 +2326,8 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.ZINDEX.key, {
-
                 handler: this.configzIndex,
                 value: DEFAULT_CONFIG.ZINDEX.value
-
             });
 
             /**
@@ -3907,18 +3903,17 @@
         * object passed back by the event utility (Event).
         */
         _onOverlayElementFocus: function (p_oEvent) {
-        
+
             var oTarget = Event.getTarget(p_oEvent),
                 oClose = this.close;
-            
+
             if (oClose && (oTarget == oClose || Dom.isAncestor(oClose, oTarget))) {
                 this.blur();
             } else {
                 this.focus();
             }
         },
-        
-        
+
         /**
         * @method _onOverlayDestroy
         * @description "destroy" event handler for the Overlay.
@@ -3933,7 +3928,7 @@
         _onOverlayDestroy: function (p_sType, p_aArgs, p_oOverlay) {
             this.remove(p_oOverlay);
         },
-        
+
         /**
         * Registers an Overlay or an array of Overlays with the manager. Upon 
         * registration, the Overlay receives functions for focus and blur, 
@@ -3945,7 +3940,7 @@
         * @return {Boolean} True if any Overlays are registered.
         */
         register: function (overlay) {
-        
+
             var mgr = this,
                 zIndex,
                 regcount,
@@ -4074,6 +4069,7 @@
 
             var aOverlays = this.overlays,
                 nOverlays = aOverlays.length,
+                found = null,
                 i;
 
             if (nOverlays > 0) {
@@ -4082,7 +4078,8 @@
                 if (overlay instanceof Overlay) {
                     do {
                         if (aOverlays[i] == overlay) {
-                            return aOverlays[i];
+                            found = aOverlays[i];
+                            break;
                         }
                     }
                     while(i--);
@@ -4090,13 +4087,15 @@
                 } else if (typeof overlay == "string") {
                     do {
                         if (aOverlays[i].id == overlay) {
-                            return aOverlays[i];
+                            found = aOverlays[i];
+                            break;
                         }
                     }
                     while(i--);
                 }
-                return null;
             }
+
+            return found;
         },
         
         /**
