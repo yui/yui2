@@ -114,6 +114,7 @@ version: 2.5.2
 
 .ygtvfocus {
 	background-color: #c0e0e0;
+	border: none;
 }
 .ygtvfocus .ygtvlabel, .ygtvfocus .ygtvlabel:link, .ygtvfocus .ygtvlabel:visited, .ygtvfocus .ygtvlabel:hover {
 	background-color: #c0e0e0;
@@ -143,6 +144,7 @@ version: 2.5.2
 	display:none;
 	overflow:hidden;
 	margin:auto;
+	z-index:9000;
 }
 
 .ygtv-edit-TextNode  {

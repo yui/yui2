@@ -25,7 +25,10 @@
  */
 YAHOO.widget.TreeView = function(id, oConfig) {
     if (id) { this.init(id); }
-	if (Lang.isArray(oConfig)) {
+	if (oConfig) {
+		if (!Lang.isArray(oConfig)) {
+			oConfig = [oConfig];
+		}
 		this.buildTreeFromObject(oConfig);
 	} else if (Lang.trim(this._el.innerHTML)) {
 		this.buildTreeFromMarkup(id);
@@ -520,7 +523,7 @@ TV.prototype = {
 						this._dblClickTimer = window.setTimeout(function () {
 							self._dblClickTimer = null;
 							toggle();
-							self.fireEvent('clickEvent'); 
+							self.fireEvent('clickEvent', node); 
 						},700);
 					}
 				} else {
@@ -536,7 +539,7 @@ TV.prototype = {
 			function (ev) {
 				var el = Event.getTarget(ev);
 				if (Dom.hasClass(el,TV.TRIGGERS_CLICK_EVENT) || Dom.getAncestorByClassName(el,TV.TRIGGERS_CLICK_EVENT)) { 
-					this.fireEvent('dblClickEvent'); 
+					this.fireEvent('dblClickEvent', this.getNodeByElement(el)); 
 					if (this._dblClickTimer) {
 						window.clearTimeout(this._dblClickTimer);
 						this._dblClickTimer = null;

@@ -444,7 +444,7 @@ YAHOO.widget.Node.prototype = {
      */
     getSiblings: function() {
 		var sib =  this.parent.children.slice(0);
-		for (var i=0;sib[i] != this && i < sib.length;i++) {}
+		for (var i=0;i < sib.length && sib[i] != this;i++) {}
 		sib.splice(i,1);
 		if (sib.length) { return sib; }
 		return null;
@@ -1129,7 +1129,7 @@ YAHOO.widget.Node.prototype = {
 				this._focusedItem = null;
 			}
 			
-			while (el = self._focusHighlightedItems.shift()) {  // yes, it is meant as an assignment, really
+			while ((el = self._focusHighlightedItems.shift())) {  // yes, it is meant as an assignment, really
 				Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
 			}
 		};
@@ -1181,7 +1181,7 @@ YAHOO.widget.Node.prototype = {
      */
     getNodeDefinition: function() {
 	
-		if (this.isDynamic()) return false;
+		if (this.isDynamic()) { return false; }
 		
 		var def, defs = this.data, children = []; 
 		

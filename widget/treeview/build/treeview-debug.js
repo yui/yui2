@@ -25,7 +25,10 @@
  */
 YAHOO.widget.TreeView = function(id, oConfig) {
     if (id) { this.init(id); }
-	if (Lang.isArray(oConfig)) {
+	if (oConfig) {
+		if (!Lang.isArray(oConfig)) {
+			oConfig = [oConfig];
+		}
 		this.buildTreeFromObject(oConfig);
 	} else if (Lang.trim(this._el.innerHTML)) {
 		this.buildTreeFromMarkup(id);
@@ -520,7 +523,7 @@ TV.prototype = {
 						this._dblClickTimer = window.setTimeout(function () {
 							self._dblClickTimer = null;
 							toggle();
-							self.fireEvent('clickEvent'); 
+							self.fireEvent('clickEvent', node); 
 						},700);
 					}
 				} else {
@@ -536,7 +539,7 @@ TV.prototype = {
 			function (ev) {
 				var el = Event.getTarget(ev);
 				if (Dom.hasClass(el,TV.TRIGGERS_CLICK_EVENT) || Dom.getAncestorByClassName(el,TV.TRIGGERS_CLICK_EVENT)) { 
-					this.fireEvent('dblClickEvent'); 
+					this.fireEvent('dblClickEvent', this.getNodeByElement(el)); 
 					if (this._dblClickTimer) {
 						window.clearTimeout(this._dblClickTimer);
 						this._dblClickTimer = null;
@@ -1653,7 +1656,7 @@ YAHOO.widget.Node.prototype = {
      */
     getSiblings: function() {
 		var sib =  this.parent.children.slice(0);
-		for (var i=0;sib[i] != this && i < sib.length;i++) {}
+		for (var i=0;i < sib.length && sib[i] != this;i++) {}
 		sib.splice(i,1);
 		if (sib.length) { return sib; }
 		return null;
@@ -2338,7 +2341,7 @@ YAHOO.widget.Node.prototype = {
 				this._focusedItem = null;
 			}
 			
-			while (el = self._focusHighlightedItems.shift()) {  // yes, it is meant as an assignment, really
+			while ((el = self._focusHighlightedItems.shift())) {  // yes, it is meant as an assignment, really
 				Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
 			}
 		};
@@ -2390,7 +2393,7 @@ YAHOO.widget.Node.prototype = {
      */
     getNodeDefinition: function() {
 	
-		if (this.isDynamic()) return false;
+		if (this.isDynamic()) { return false; }
 		
 		var def, defs = this.data, children = []; 
 		
