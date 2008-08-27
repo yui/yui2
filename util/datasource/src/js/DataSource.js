@@ -1177,6 +1177,83 @@ parseTextData : function(oRequest, oFullResponse) {
             
 },
 
+
+/**
+ * Overridable method parses XML data for one result into an object literal.
+ *
+ * @method parseXMLResult
+ * @param result {XML} XML for one result.
+ * @return {Object} Object literal of data for one result.
+ */
+parseXMLResult : function(result) {
+    var oResult = {},
+        schema = this.responseSchema;
+        
+    try {
+        // Loop through each data field in each result using the schema
+        for(var m = schema.fields.length-1; m >= 0 ; m--) {
+            var field = schema.fields[m];
+            var key = (lang.isValue(field.key)) ? field.key : field;
+            var data = null;
+            // Values may be held in an attribute...
+            var xmlAttr = result.attributes.getNamedItem(key);
+            if(xmlAttr) {
+                data = xmlAttr.value;
+            }
+            // ...or in a node
+            else {
+                var xmlNode = result.getElementsByTagName(key);
+                if(xmlNode && xmlNode.item(0) && xmlNode.item(0)) {
+                    data = xmlNode.item(0).firstChild.nodeValue;
+                    var item = xmlNode.item(0);
+                    // For IE, then DOM...
+                    data = (item.text) ? item.text : (item.textContent) ? item.textContent : null;
+                    // ...then fallback, but check for multiple child nodes
+                    if(!data) {
+                        var datapieces = [];
+                        for(var j=0, len=item.childNodes.length; j<len; j++) {
+                            if(item.childNodes[j].nodeValue) {
+                                datapieces[datapieces.length] = item.childNodes[j].nodeValue;
+                            }
+                        }
+                        if(datapieces.length > 0) {
+                            data = datapieces.join("");
+                        }
+                    }
+                }
+            }
+            // Safety net
+            if(data === null) {
+                   data = "";
+            }
+            // Backward compatibility
+            if(!field.parser && field.converter) {
+                field.parser = field.converter;
+                YAHOO.log("The field property converter has been deprecated" +
+                        " in favor of parser", "warn", this.toString());
+            }
+            var parser = (typeof field.parser === 'function') ?
+                field.parser :
+                DS.Parser[field.parser+''];
+            if(parser) {
+                data = parser.call(this, data);
+            }
+            // Safety measure
+            if(data === undefined) {
+                data = null;
+            }
+            oResult[key] = data;
+        }
+    }
+    catch(e) {
+        YAHOO.log("Error while parsing XML result: " + e.message);
+    }
+
+    return oResult;
+},
+
+
+
 /**
  * Overridable method parses XML data into a response object.
  *
@@ -1241,62 +1318,7 @@ parseXMLData : function(oRequest, oFullResponse) {
     else {
         oParsedResponse.results = [];
         for(i = xmlList.length-1; i >= 0 ; --i) {
-            var result = xmlList.item(i);
-            var oResult = {};
-            // Loop through each data field in each result using the schema
-            for(var m = schema.fields.length-1; m >= 0 ; m--) {
-                var field = schema.fields[m];
-                var key = (lang.isValue(field.key)) ? field.key : field;
-                var data = null;
-                // Values may be held in an attribute...
-                var xmlAttr = result.attributes.getNamedItem(key);
-                if(xmlAttr) {
-                    data = xmlAttr.value;
-                }
-                // ...or in a node
-                else {
-                    var xmlNode = result.getElementsByTagName(key);
-                    if(xmlNode && xmlNode.item(0) && xmlNode.item(0)) {
-                        data = xmlNode.item(0).firstChild.nodeValue;
-                        var item = xmlNode.item(0);
-                        // For IE, then DOM...
-                        data = (item.text) ? item.text : (item.textContent) ? item.textContent : null;
-                        // ...then fallback, but check for multiple child nodes
-                        if(!data) {
-                            var datapieces = [];
-                            for(var j=0, len=item.childNodes.length; j<len; j++) {
-                                if(item.childNodes[j].nodeValue) {
-                                    datapieces[datapieces.length] = item.childNodes[j].nodeValue;
-                                }
-                            }
-                            if(datapieces.length > 0) {
-                                data = datapieces.join("");
-                            }
-                        }
-                    }
-                }
-                // Safety net
-                if(data === null) {
-                       data = "";
-                }
-                // Backward compatibility
-                if(!field.parser && field.converter) {
-                    field.parser = field.converter;
-                    YAHOO.log("The field property converter has been deprecated" +
-                            " in favor of parser", "warn", this.toString());
-                }
-                var parser = (typeof field.parser === 'function') ?
-                    field.parser :
-                    DS.Parser[field.parser+''];
-                if(parser) {
-                    data = parser.call(this, data);
-                }
-                // Safety measure
-                if(data === undefined) {
-                    data = null;
-                }
-                oResult[key] = data;
-            }
+            var oResult = this.parseXMLResult(xmlList.item(i));
             // Capture each array of values into an array of results
             oParsedResponse.results[i] = oResult;
         }
