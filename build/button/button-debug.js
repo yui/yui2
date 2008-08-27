@@ -2891,7 +2891,7 @@
                 bCheckable = (sType == "checkbox" || sType == "radio");
         
         
-                if (bCheckable || (m_oSubmitTrigger == this)) {
+                if ((bCheckable && this.get("checked")) || (m_oSubmitTrigger == this)) {
                 
                     YAHOO.log("Creating hidden field.", "info", this.toString());
         

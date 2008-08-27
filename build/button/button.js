@@ -2870,7 +2870,7 @@
                 bCheckable = (sType == "checkbox" || sType == "radio");
         
         
-                if (bCheckable || (m_oSubmitTrigger == this)) {
+                if ((bCheckable && this.get("checked")) || (m_oSubmitTrigger == this)) {
                 
         
                     oButtonField = createInputElement((bCheckable ? sType : "hidden"),
