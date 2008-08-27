@@ -865,7 +865,7 @@ YAHOO.widget.Calendar.prototype = {
 		/**
 		* The month/year representing the current visible Calendar date (mm/yyyy)
 		* @config pagedate
-		* @type String
+		* @type String | Date
 		* @default today's date
 		*/
 		this.cfg.addProperty(defCfg.PAGEDATE.key, { value:new Date(), handler:this.configPageDate } );
@@ -908,7 +908,7 @@ YAHOO.widget.Calendar.prototype = {
 		/**
 		* The minimum selectable date in the current Calendar (mm/dd/yyyy)
 		* @config mindate
-		* @type String
+		* @type String | Date
 		* @default null
 		*/
 		this.cfg.addProperty(defCfg.MINDATE.key, { value:defCfg.MINDATE.value, handler:this.configMinDate } );
@@ -916,7 +916,7 @@ YAHOO.widget.Calendar.prototype = {
 		/**
 		* The maximum selectable date in the current Calendar (mm/dd/yyyy)
 		* @config maxdate
-		* @type String
+		* @type String | Date
 		* @default null
 		*/
 		this.cfg.addProperty(defCfg.MAXDATE.key, { value:defCfg.MAXDATE.value, handler:this.configMaxDate } );
