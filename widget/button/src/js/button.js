@@ -1043,8 +1043,13 @@
                                 this.CHECKBOX_DEFAULT_TITLE;
                 
                 }
+
+
+        		if (!this._hasDefaultTitle) {
         
-                this.set("title", sTitle);
+                	this.set("title", sTitle);
+                
+                }
         
             }
         
@@ -2357,23 +2362,27 @@
         
             case "radio":
             case "checkbox":
+
+				if (!this._hasDefaultTitle) {
     
-                if (this.get("checked")) {
-                    
-                    sTitle = (sType == "radio") ? 
-                                this.RADIO_CHECKED_TITLE : 
-                                this.CHECKBOX_CHECKED_TITLE;
+					if (this.get("checked")) {
+						
+						sTitle = (sType == "radio") ? 
+									this.RADIO_CHECKED_TITLE : 
+									this.CHECKBOX_CHECKED_TITLE;
+					
+					}
+					else {
+					
+						sTitle = (sType == "radio") ? 
+									this.RADIO_DEFAULT_TITLE : 
+									this.CHECKBOX_DEFAULT_TITLE;
+					
+					}
+					
+					this.set("title", sTitle);
                 
                 }
-                else {
-                
-                    sTitle = (sType == "radio") ? 
-                                this.RADIO_DEFAULT_TITLE : 
-                                this.CHECKBOX_DEFAULT_TITLE;
-                
-                }
-                
-                this.set("title", sTitle);
     
                 break;
     
@@ -3158,6 +3167,12 @@
 
             this._button = oButton;
 
+            /*
+				Capture if the button has a value for the title attribute.  If so, we won't 
+				override it for type of "checkbox" or "radio".
+            */
+            
+            this._hasDefaultTitle = (p_oAttributes.title && p_oAttributes.title.length > 0);
 
             YAHOO.widget.Button.superclass.init.call(this, p_oElement, p_oAttributes);
 
