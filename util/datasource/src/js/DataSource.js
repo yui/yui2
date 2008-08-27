@@ -1400,7 +1400,7 @@ parseJSONData : function(oRequest, oFullResponse) {
             if(schema.fields) {
                 var field;
                 // Build the field parser map and location paths
-                for (i = fields.length - 1; i >= 0; --i) {
+                for (i=0, len=fields.length; i<len; i++) {
                     field = fields[i];
                     key    = field.key || field;
                     parser = ((typeof field.parser === 'function') ?
@@ -1428,7 +1428,8 @@ parseJSONData : function(oRequest, oFullResponse) {
                     for (i = resultsList.length - 1; i >= 0; --i) {
                         var r = resultsList[i], rec = {};
                         for (j = simpleFields.length - 1; j >= 0; --j) {
-                            rec[simpleFields[j]] = r[simpleFields[j]];
+                            // Bug 1777850: data might be held in an array
+                            rec[simpleFields[j]] = r[simpleFields[j]] || r[j];
                         }
 
                         for (j = fieldPaths.length - 1; j >= 0; --j) {
