@@ -3727,13 +3727,16 @@ initAttributes : function(oConfigs) {
         value: null,
         validator: lang.isString,
         method: function(sCaption) {
-            if(this._elTable) {
+            if(this._elTable && sCaption) {
                 // Create CAPTION element
                 if(!this._elCaption) { 
                     this._elCaption = this._elTable.createCaption();
                 }
                 // Set CAPTION value
                 this._elCaption.innerHTML = sCaption;
+            }
+            else if(this._elCaption) {
+                this._elCaption.parentNode.removeChild(this._elCaption);
             }
         }
     });
@@ -4551,6 +4554,7 @@ _destroyTableEl : function() {
     if(elTable) {
         Ev.purgeElement(elTable, true);
         elTable.parentNode.removeChild(elTable);
+        this._elCaption = null;
         this._elColgroup = null;
         this._elThead = null;
         this._elTbody = null;
@@ -4577,11 +4581,13 @@ _initTableEl : function(elContainer) {
         this._elTable.summary = this.get("summary");
         
         // Create CAPTION element
-        if(!this._elCaption) { 
-            this._elCaption = this._elTable.createCaption();
+        if(this.get("caption")) {
+            if(!this._elCaption) { 
+                this._elCaption = this._elTable.createCaption();
+            }
+            // Set CAPTION value
+            this._elCaption.innerHTML = this.get("caption");
         }
-        // Set CAPTION value
-        this._elCaption.innerHTML = this.get("caption");
     } 
 },
 
@@ -7086,7 +7092,7 @@ render : function() {
     this._oChainRender.stop();
     YAHOO.log("DataTable rendering...", "info", this.toString());
 
-    var i, j, k, l, len, allRecords;
+    var i, j, k, len, allRecords;
 
     var oPaginator = this.get('paginator');
     // Paginator is enabled, show a subset of Records and update Paginator UI
@@ -7110,8 +7116,14 @@ render : function() {
     // Table has rows
     if(nRecordsLength > 0) {        
         // So you don't see the borders in random places
-        this._unsetFirstRow();
-        this._unsetLastRow();
+        //this._unsetFirstRow();
+        //this._unsetLastRow();
+        
+        elTbody.style.display = "none";
+        while(elTbody.lastChild) {
+            elTbody.removeChild(elTbody.lastChild);
+        }
+        elTbody.style.display = "";
 
         // Set up the loop Chain to render rows
         this._oChainRender.add({
@@ -7129,9 +7141,6 @@ render : function() {
                         elRow = elRow || this._addTrEl(allRecords[i]);
                         nextSibling = elTbody.childNodes[i] || null;
                         elTbody.insertBefore(elRow, nextSibling);
-                        if(elTbody.rows.length > nRecordsLength) {
-                            elTbody.removeChild(elTbody.lastChild);
-                        }
                     }
                     elTbody.style.display = "";
                     
