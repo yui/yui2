@@ -1382,6 +1382,9 @@ parseJSONData : function(oRequest, oFullResponse) {
                         }
                     }
                 }
+                else {
+                    YAHOO.log("Invalid locator: " + needle, "error", this.toString());
+                }
             }
             return path;
         };
