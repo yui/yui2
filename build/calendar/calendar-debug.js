@@ -1829,7 +1829,7 @@ YAHOO.widget.Calendar.prototype = {
 	* @param {Calendar} cal	A reference to the calendar passed by the Event utility
 	*/
 	doSelectCell : function(e, cal) {
-		var cell,index,d,date;
+		var cell, d, date, index;
 
 		var target = YAHOO.util.Event.getTarget(e);
 		var tagName = target.tagName.toLowerCase();
@@ -1857,34 +1857,38 @@ YAHOO.widget.Calendar.prototype = {
 		cell = target;
 
 		if (YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_SELECTABLE)) {
-			index = cell.id.split("cell")[1];
-			d = cal.cellDates[index];
-			date = YAHOO.widget.DateMath.getDate(d[0],d[1]-1,d[2]);
+			index = cal.getIndexFromId(cell.id);
+			if (index > -1) {
+				d = cal.cellDates[index];
+				if (d) {
+					date = YAHOO.widget.DateMath.getDate(d[0],d[1]-1,d[2]);
+				
+					var link;
 		
-			var link;
-
-			cal.logger.log("Selecting cell " + index + " via click", "info");
-			if (cal.Options.MULTI_SELECT) {
-				link = cell.getElementsByTagName("a")[0];
-				if (link) {
-					link.blur();
+					cal.logger.log("Selecting cell " + index + " via click", "info");
+					if (cal.Options.MULTI_SELECT) {
+						link = cell.getElementsByTagName("a")[0];
+						if (link) {
+							link.blur();
+						}
+		
+						var cellDate = cal.cellDates[index];
+						var cellDateIndex = cal._indexOfSelectedFieldArray(cellDate);
+		
+						if (cellDateIndex > -1) {	
+							cal.deselectCell(index);
+						} else {
+							cal.selectCell(index);
+						}	
+			
+					} else {
+						link = cell.getElementsByTagName("a")[0];
+						if (link) {
+							link.blur();
+						}
+						cal.selectCell(index);
+					}
 				}
-
-				var cellDate = cal.cellDates[index];
-				var cellDateIndex = cal._indexOfSelectedFieldArray(cellDate);
-
-				if (cellDateIndex > -1) {	
-					cal.deselectCell(index);
-				} else {
-					cal.selectCell(index);
-				}	
-	
-			} else {
-				link = cell.getElementsByTagName("a")[0];
-				if (link) {
-					link.blur();
-				}
-				cal.selectCell(index);
 			}
 		}
 	},
@@ -3200,7 +3204,7 @@ YAHOO.widget.Calendar.prototype = {
 	*/
 	getDateByCellId : function(id) {
 		var date = this.getDateFieldsByCellId(id);
-		return YAHOO.widget.DateMath.getDate(date[0],date[1]-1,date[2]);
+		return (date) ? YAHOO.widget.DateMath.getDate(date[0],date[1]-1,date[2]) : null;
 	},
 	
 	/**
@@ -3210,11 +3214,10 @@ YAHOO.widget.Calendar.prototype = {
 	* @return {Array}	The array of Date fields for the specified Calendar cell
 	*/
 	getDateFieldsByCellId : function(id) {
-		id = id.toLowerCase().split("_cell")[1];
-		id = parseInt(id, 10);
-		return this.cellDates[id];
+		id = this.getIndexFromId(id);
+		return (id > -1) ? this.cellDates[id] : null;
 	},
-	
+
 	/**
 	 * Find the Calendar's cell index for a given date.
 	 * If the date is not found, the method returns -1.
@@ -3247,6 +3250,24 @@ YAHOO.widget.Calendar.prototype = {
 				}
 			}
 		}
+		return idx;
+	},
+
+	/**
+	 * Given the id used to mark each Calendar cell, this method
+	 * extracts the index number from the id.
+	 * 
+	 * @param {String} strId The cell id
+	 * @return {Number} The index of the cell
+	 */
+	getIndexFromId : function(strId) {
+		var idx = -1,
+			li = strId.lastIndexOf("_cell");
+
+		if (li > -1) {
+			idx = parseInt(strId.substring(li + 5), 10);
+		}
+
 		return idx;
 	},
 	
