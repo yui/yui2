@@ -536,6 +536,10 @@ if (!YAHOO.util.Event) {
             25: 9      // SHIFT-TAB (Safari provides a different key code in
                        // this case, even though the shiftKey modifier is set)
         };
+        
+        // String constants used by the addFocusListener and removeFocusListener methods
+        var _FOCUS = YAHOO.env.ua.ie ? "focusin" : "focus";
+        var _BLUR = YAHOO.env.ua.ie ? "focusout" : "blur";      
 
         return {
 
@@ -837,10 +841,11 @@ if (!YAHOO.util.Event) {
                 }
             },
 
+
             /**
              * Appends an event handler
              *
-             * @method addListener
+             * @method _addListener
              *
              * @param {String|HTMLElement|Array|NodeList} el An id, an element 
              *  reference, or a collection of ids and/or elements to assign the 
@@ -853,16 +858,18 @@ if (!YAHOO.util.Event) {
              *                             the execution scope of the listener. If an
              *                             object, this object becomes the execution
              *                             scope.
+             * @param {boolen}      capture capture or bubble phase
              * @return {Boolean} True if the action was successful or defered,
              *                        false if one or more of the elements 
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
+             * @private
              * @static
              */
-            addListener: function(el, sType, fn, obj, override) {
+            _addListener: function(el, sType, fn, obj, override, bCapture) {
 
                 if (!fn || !fn.call) {
-YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
+                    YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
                     return false;
                 }
 
@@ -973,7 +980,7 @@ YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
 
                 } else {
                     try {
-                        this._simpleAdd(el, sType, wrappedFn, false);
+                        this._simpleAdd(el, sType, wrappedFn, bCapture);
                     } catch(ex) {
                         // handle an error trying to attach an event.  If it fails
                         // we need to clean up the cache
@@ -985,6 +992,126 @@ YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
 
                 return true;
                 
+            },
+
+
+            /**
+             * Appends an event handler
+             *
+             * @method addListener
+             *
+             * @param {String|HTMLElement|Array|NodeList} el An id, an element 
+             *  reference, or a collection of ids and/or elements to assign the 
+             *  listener to.
+             * @param {String}   sType     The type of event to append
+             * @param {Function} fn        The method the event invokes
+             * @param {Object}   obj    An arbitrary object that will be 
+             *                             passed as a parameter to the handler
+             * @param {Boolean|object}  override  If true, the obj passed in becomes
+             *                             the execution scope of the listener. If an
+             *                             object, this object becomes the execution
+             *                             scope.
+             * @return {Boolean} True if the action was successful or defered,
+             *                        false if one or more of the elements 
+             *                        could not have the listener attached,
+             *                        or if the operation throws an exception.
+             * @static
+             */
+            addListener: function (el, sType, fn, obj, override) {
+                return this._addListener(el, sType, fn, obj, override, false);
+            },
+
+            /**
+             * Appends a focus event handler.  (The focusin event is used for Internet Explorer, 
+             * the focus, capture-event for Opera, WebKit.)
+             *
+             * @method addFocusListener
+             *
+             * @param {String|HTMLElement|Array|NodeList} el An id, an element 
+             *  reference, or a collection of ids and/or elements to assign the 
+             *  listener to.
+             * @param {Function} fn        The method the event invokes
+             * @param {Object}   obj    An arbitrary object that will be 
+             *                             passed as a parameter to the handler
+             * @param {Boolean|object}  override  If true, the obj passed in becomes
+             *                             the execution scope of the listener. If an
+             *                             object, this object becomes the execution
+             *                             scope.
+             * @return {Boolean} True if the action was successful or defered,
+             *                        false if one or more of the elements 
+             *                        could not have the listener attached,
+             *                        or if the operation throws an exception.
+             * @static
+             */
+            addFocusListener: function (el, fn, obj, override) {
+                return this._addListener(el, _FOCUS, fn, obj, override, true);
+            },          
+
+
+            /**
+             * Removes a focus event listener
+             *
+             * @method removeListener
+             *
+             * @param {String|HTMLElement|Array|NodeList} el An id, an element 
+             *  reference, or a collection of ids and/or elements to remove
+             *  the listener from.
+             * @param {Function} fn the method the event invokes.  If fn is
+             *  undefined, then all event handlers for the type of event are 
+             *  removed.
+             * @return {boolean} true if the unbind was successful, false 
+             *  otherwise.
+             * @static
+             */
+            removeFocusListener: function (el, fn) { 
+                return this.removeListener(el, _FOCUS, fn);
+            },
+
+            /**
+             * Appends a blur event handler.  (The focusout event is used for Internet Explorer, 
+             * the focusout, capture-event for Opera, WebKit.)
+             *
+             * @method addBlurListener
+             *
+             * @param {String|HTMLElement|Array|NodeList} el An id, an element 
+             *  reference, or a collection of ids and/or elements to assign the 
+             *  listener to.
+             * @param {Function} fn        The method the event invokes
+             * @param {Object}   obj    An arbitrary object that will be 
+             *                             passed as a parameter to the handler
+             * @param {Boolean|object}  override  If true, the obj passed in becomes
+             *                             the execution scope of the listener. If an
+             *                             object, this object becomes the execution
+             *                             scope.
+             * @return {Boolean} True if the action was successful or defered,
+             *                        false if one or more of the elements 
+             *                        could not have the listener attached,
+             *                        or if the operation throws an exception.
+             * @static
+             */
+            addBlurListener: function (el, fn, obj, override) {
+                return this._addListener(el, _BLUR, fn, obj, override, true);
+            },          
+
+            /**
+             * Removes a blur event listener
+             *
+             * @method removeListener
+             *
+             * @param {String|HTMLElement|Array|NodeList} el An id, an element 
+             *  reference, or a collection of ids and/or elements to remove
+             *  the listener from.
+             * @param {Function} fn the method the event invokes.  If fn is
+             *  undefined, then all event handlers for the type of event are 
+             *  removed.
+             * @return {boolean} true if the unbind was successful, false 
+             *  otherwise.
+             * @static
+             */
+            removeBlurListener: function (el, fn) { 
+            
+                return this.removeListener(el, _BLUR, fn);
+            
             },
 
             /**
@@ -1887,6 +2014,23 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
          */
         EU.on = EU.addListener;
 
+        /**
+         * YAHOO.util.Event.onFocus is an alias for addFocusListener
+         * @method on
+         * @see addFocusListener
+         * @static
+         */
+        EU.onFocus = EU.addFocusListener;
+
+        /**
+         * YAHOO.util.Event.onBlur is an alias for addBlurListener
+         * @method onBlur
+         * @see addBlurListener
+         * @static
+         */     
+        EU.onBlur = EU.addBlurListener;
+
+
 /*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller */
 
         // Internet Explorer: use the readyState of a defered script.
@@ -2165,6 +2309,10 @@ YAHOO.log(p_type + "event fired before it was created.");
 
 };
 
+//@TODO optimize
+//@TODO use event utility, lang abstractions
+//@TODO replace
+
 /**
 * KeyListener is a utility that provides an easy interface for listening for
 * keydown/keyup events fired against DOM elements.
@@ -2343,21 +2491,21 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 };
 
 /**
-* Constant representing the DOM "keydown" event.
-* @property YAHOO.util.KeyListener.KEYDOWN
-* @static
-* @final
-* @type String
-*/
+ * Constant representing the DOM "keydown" event.
+ * @property YAHOO.util.KeyListener.KEYDOWN
+ * @static
+ * @final
+ * @type String
+ */
 YAHOO.util.KeyListener.KEYDOWN = "keydown";
 
 /**
-* Constant representing the DOM "keyup" event.
-* @property YAHOO.util.KeyListener.KEYUP
-* @static
-* @final
-* @type String
-*/
+ * Constant representing the DOM "keyup" event.
+ * @property YAHOO.util.KeyListener.KEYUP
+ * @static
+ * @final
+ * @type String
+ */
 YAHOO.util.KeyListener.KEYUP = "keyup";
 
 /**
