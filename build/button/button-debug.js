@@ -1262,15 +1262,12 @@
 			
 				}
 				else if (Menu && Lang.isArray(p_oMenu)) {
+
+					oMenu = new Menu(Dom.generateId(), { lazyload: bLazyLoad, itemdata: p_oMenu });
+						
+					this._menu = oMenu;
 			
-					this.on("appendTo", function () {
-			
-						oMenu = new Menu(Dom.generateId(), { lazyload: bLazyLoad, 
-							itemdata: p_oMenu });
-			
-						initMenu.call(this);
-			
-					});
+					this.on("appendTo", initMenu);
 			
 				}
 				else if (Lang.isString(p_oMenu)) {
