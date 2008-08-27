@@ -22,9 +22,9 @@ Paginator.ui.PageLinks = function (p) {
     p.createEvent('pageLinksChange');
 
     p.subscribe('recordOffsetChange',this.update,this,true);
+    p.subscribe('rowsPerPageChange',this.update,this,true);
+    p.subscribe('totalRecordsChange',this.update,this,true);
     p.subscribe('pageLinksChange',   this.rebuild,this,true);
-    p.subscribe('totalRecordsChange',this.rebuild,this,true);
-    p.subscribe('rowsPerPageChange', this.rebuild,this,true);
     p.subscribe('pageLinkClassChange', this.rebuild,this,true);
     p.subscribe('currentPageClassChange', this.rebuild,this,true);
     p.subscribe('destroy',this.destroy,this,true);

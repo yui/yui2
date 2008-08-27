@@ -20,8 +20,8 @@ Paginator.ui.LastPageLink = function (p) {
     p.createEvent('lastPageLinkClassChange');
 
     p.subscribe('recordOffsetChange',this.update,this,true);
+    p.subscribe('rowsPerPageChange',this.update,this,true);
     p.subscribe('totalRecordsChange',this.update,this,true);
-    p.subscribe('rowsPerPageChange', this.update,this,true);
     p.subscribe('destroy',this.destroy,this,true);
 
     // TODO: make this work

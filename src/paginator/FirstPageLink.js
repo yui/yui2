@@ -20,6 +20,8 @@ Paginator.ui.FirstPageLink = function (p) {
     p.createEvent('firstPageLinkClassChange');
 
     p.subscribe('recordOffsetChange',this.update,this,true);
+    p.subscribe('rowsPerPageChange',this.update,this,true);
+    p.subscribe('totalRecordsChange',this.update,this,true);
     p.subscribe('destroy',this.destroy,this,true);
 
     // TODO: make this work

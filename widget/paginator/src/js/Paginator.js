@@ -123,7 +123,30 @@ YAHOO.widget.Paginator.prototype = {
      */
     _containers : [],
 
+    /**
+     * Flag used to indicate multiple attributes are being updated via setState
+     * @property _batch
+     * @type boolean
+     * @protected
+     */
+    _batch : false,
 
+    /**
+     * Used by setState to indicate when a page change has occurred
+     * @property _pageChanged
+     * @type boolean
+     * @protected
+     */
+    _pageChanged : false,
+
+    /**
+     * Temporary state cache used by setState to keep track of the previous
+     * state for eventual pageChange event firing
+     * @property _state
+     * @type Object
+     * @protected
+     */
+    _state : null,
 
 
     // Instance methods
@@ -366,6 +389,13 @@ YAHOO.widget.Paginator.prototype = {
         this.createEvent('changeRequest');
 
         /**
+         * Event fired when attribute changes have resulted in the calculated
+         * current page changing.
+         * @event pageChange
+         */
+        this.createEvent('pageChange');
+
+        /**
          * Event that fires before the destroy event.
          * @event beforeDestroy
          */
@@ -377,9 +407,99 @@ YAHOO.widget.Paginator.prototype = {
          */
         this.createEvent('destroy');
 
+        this._selfSubscribe();
+    },
+
+    /**
+     * Subscribes to instance attribute change events to automate certain
+     * behaviors.
+     * @method _selfSubscribe
+     * @protected
+     */
+    _selfSubscribe : function () {
         // Listen for changes to totalRecords and alwaysVisible 
         this.subscribe('totalRecordsChange',this.updateVisibility,this,true);
         this.subscribe('alwaysVisibleChange',this.updateVisibility,this,true);
+
+        // Fire the pageChange event when appropriate
+        this.subscribe('totalRecordsChange',this._handleStateChange,this,true);
+        this.subscribe('recordOffsetChange',this._handleStateChange,this,true);
+        this.subscribe('rowsPerPageChange',this._handleStateChange,this,true);
+
+        // Update recordOffset when totalRecords is reduced below
+        this.subscribe('totalRecordsChange',this._syncRecordOffset,this,true);
+    },
+
+    /**
+     * Sets recordOffset to the starting index of the previous page when
+     * totalRecords is reduced below the current recordOffset.
+     * @method _syncRecordOffset
+     * @param e {Event} totalRecordsChange event
+     * @protected
+     */
+    _syncRecordOffset : function (e) {
+        var v = e.newValue,rpp,state;
+        if (e.prevValue !== v) {
+            if (v !== YAHOO.widget.Paginator.VALUE_UNLIMITED) {
+                rpp = this.get('rowsPerPage');
+
+                if (rpp && this.get('recordOffset') >= v) {
+                    state = this.getState({
+                        totalRecords : e.prevValue,
+                        recordOffset : this.get('recordOffset')
+                    });
+
+                    this.set('recordOffset', state.before.recordOffset);
+                    this._firePageChange(state);
+                }
+            }
+        }
+    },
+
+    /**
+     * Fires the pageChange event when the state attributes have changed in
+     * such a way as to locate the current recordOffset on a new page.
+     * @method _handleStateChange
+     * @param e {Event} the attribute change event
+     * @protected
+     */
+    _handleStateChange : function (e) {
+        if (e.prevValue !== e.newValue) {
+            var change = this._state || {},
+                state;
+
+            change[e.type.replace(/Change$/,'')] = e.prevValue;
+            state = this.getState(change);
+
+            if (state.page !== state.before.page) {
+                if (this._batch) {
+                    this._pageChanged = true;
+                } else {
+                    this._firePageChange(state);
+                }
+            }
+        }
+    },
+
+    /**
+     * Fires a pageChange event in the form of a standard attribute change
+     * event with additional properties prevState and newState.
+     * @method _firePageChange
+     * @param state {Object} the result of getState(oldState)
+     * @protected
+     */
+    _firePageChange : function (state) {
+        if (YAHOO.lang.isObject(state)) {
+            var current = state.before;
+            delete state.before;
+            this.fireEvent('pageChange',{
+                type      : 'pageChange',
+                prevValue : state.page,
+                newValue  : current.page,
+                prevState : state,
+                newState  : current
+            });
+        }
     },
 
     /**
@@ -764,57 +884,63 @@ YAHOO.widget.Paginator.prototype = {
      */
     getState : function (changes) {
         var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
-            L         = YAHOO.lang;
+            l         = YAHOO.lang,
+            M = Math, min = M.min, max = M.max, floor = M.floor, ceil = M.ceil,
+            currentState, state, offset;
 
-        var currentState = {
+        function normalizeOffset(offset,total,rpp) {
+            if (offset < 0) {
+                return 0;
+            }
+            if (total === UNLIMITED || total > offset) {
+                return offset - (offset % rpp);
+            }
+            return total - (total % rpp || rpp);
+        }
+
+        currentState = {
             paginator    : this,
-            page         : this.getCurrentPage(),
             totalRecords : this.get('totalRecords'),
-            recordOffset : this.get('recordOffset'),
             rowsPerPage  : this.get('rowsPerPage'),
             records      : this.getPageRecords()
         };
+        currentState.recordOffset = normalizeOffset(
+                                        this.get('recordOffset'),
+                                        currentState.totalRecords,
+                                        currentState.rowsPerPage);
+        currentState.page = ceil(currentState.recordOffset /
+                                 currentState.rowsPerPage) + 1;
 
         if (!changes) {
             return currentState;
         }
 
-        var newOffset = currentState.recordOffset;
-        var state = {
+        state = {
             paginator    : this,
             before       : currentState,
 
             rowsPerPage  : changes.rowsPerPage || currentState.rowsPerPage,
-            totalRecords : (L.isNumber(changes.totalRecords) ?
-                                Math.max(changes.totalRecords,UNLIMITED) :
+            totalRecords : (l.isNumber(changes.totalRecords) ?
+                                max(changes.totalRecords,UNLIMITED) :
                                 currentState.totalRecords)
         };
 
         if (state.totalRecords === 0) {
-            newOffset  = 0;
-            state.page = 0;
+            state.recordOffset =
+            state.page         = 0;
         } else {
-            if (!L.isNumber(changes.recordOffset) &&
-                 L.isNumber(changes.page)) {
-                newOffset = (changes.page - 1) * state.rowsPerPage;
-                if (state.totalRecords === UNLIMITED) {
-                    state.page = changes.page;
-                } else {
-                    // Limit values by totalRecords and rowsPerPage
-                    state.page = Math.min(
-                                    changes.page,
-                                    Math.ceil(state.totalRecords / state.rowsPerPage));
-                    newOffset  = Math.min(newOffset, state.totalRecords - 1);
-                }
-            } else {
-                newOffset  = Math.min(newOffset,state.totalRecords - 1);
-                state.page = Math.floor(newOffset/state.rowsPerPage) + 1;
-            }
-        }
+            offset = l.isNumber(changes.page) ?
+                        (changes.page - 1) * state.rowsPerPage :
+                        l.isNumber(changes.recordOffset) ?
+                            changes.recordOffset :
+                            currentState.recordOffset;
 
-        // Jump offset to top of page
-        state.recordOffset = state.recordOffset ||
-                             newOffset - (newOffset % state.rowsPerPage);
+            state.recordOffset = normalizeOffset(offset,
+                                    state.totalRecords,
+                                    state.rowsPerPage);
+
+            state.page = ceil(state.recordOffset / state.rowsPerPage) + 1;
+        }
 
         state.records = [ state.recordOffset,
                           state.recordOffset + state.rowsPerPage - 1 ];
@@ -827,6 +953,34 @@ YAHOO.widget.Paginator.prototype = {
         }
 
         return state;
+    },
+
+    /**
+     * Convenience method to facilitate setting multiple attributes in batch
+     * and fire only a single pageChange event (if appropriate)
+     * @method setState
+     * @param state {Object} Object literal of attribute:value pairs to set
+     */
+    setState : function (state) {
+        if (YAHOO.lang.isObject(state)) {
+            this._batch = true;
+            this._pageChanged = false;
+            this._state = this.getState({});
+            for (var k in state) {
+                if (state.hasOwnProperty(k)) {
+                    this.set(k,state[k]);
+                }
+            }
+            this._batch = false;
+            
+            if (this._pageChanged) {
+                this._pageChanged = false;
+                // Get a full state representation for before and after
+                state = this.getState(this._state);
+
+                this._firePageChange(this._state);
+            }
+        }
     }
 };
 
