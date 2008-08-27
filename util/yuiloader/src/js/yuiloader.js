@@ -146,7 +146,7 @@
             'type': 'js',
             'path': 'datatable/datatable-beta-min.js',
             'requires': ['element', 'datasource'],
-            'optional': ['calendar', 'dragdrop'],
+            'optional': ['calendar', 'dragdrop', 'paginator'],
             'skinnable': true
         },
 
@@ -246,6 +246,13 @@
             'type': 'js',
             'path': 'menu/menu-min.js',
             'requires': ['containercore'],
+            'skinnable': true
+        },
+
+        'paginator': {
+            'type': 'js',
+            'path': 'paginator/paginator-min.js',
+            'requires': ['element'],
             'skinnable': true
         },
 
