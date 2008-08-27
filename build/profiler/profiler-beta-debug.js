@@ -354,7 +354,7 @@ YAHOO.tool.Profiler = {
     
         //get the object
         if (YAHOO.lang.isObject(this._container[name])){            
-            object = this._container[name];    
+            var object = this._container[name];    
         
             for (var prop in object) {
                 if (typeof object[prop] == "function"){

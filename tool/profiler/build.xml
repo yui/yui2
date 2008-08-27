@@ -15,17 +15,6 @@
     <import file="${builddir}/buildproperties.xml" description="Shared Build Properties - tools, build paths etc." />
     <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
 
-    <target name="examples" description="Component Specific Over-ride">
-        <copy todir="${srcdir}/examples/${component}" preservelastmodified="true">
-            <fileset dir="${component.basedir}/examples">
-                <include name="**/*.*"/>
-                <!--
-                <include name="**/assets/*"/>
-                -->
-            </fileset>
-        </copy>
-    </target>
-
     <target name="cvscommit" description="CVS Commit">
         <input message="Please enter cvs comment:" 
                addproperty="cvs.msg" defaultvalue="AutoBuild" />
