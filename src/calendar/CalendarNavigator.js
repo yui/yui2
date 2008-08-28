@@ -824,21 +824,28 @@ YAHOO.widget.CalendarNavigator.prototype = {
 			this.setYear(this._getYearFromUI());
 
 			var cal = this.cal;
-			var nav = this;
-			
-			function update() {
-				cal.setYear(nav.getYear());
-				cal.setMonth(nav.getMonth());
-				cal.render();
-			}
+
 			// Artificial delay, just to help the user see something changed
 			var delay = YAHOO.widget.CalendarNavigator.UPDATE_DELAY;
 			if (delay > 0) {
-				window.setTimeout(update, delay);
+				var nav = this;
+				window.setTimeout(function(){ nav._update(cal); }, delay);
 			} else {
-				update();
+				this._update(cal);
 			}
 		}
+	},
+
+	/**
+	 * Updates the Calendar rendered state, based on the state of the CalendarNavigator
+	 * @method _update
+	 * @param cal The Calendar instance to update
+	 * @protected
+	 */
+	_update : function(cal) {
+		cal.setYear(this.getYear());
+		cal.setMonth(this.getMonth());
+		cal.render();
 	},
 
 	/**
@@ -929,7 +936,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 				el = this.yearEl;
 				try {
 					this.yearEl.select();
-				} catch (err) {
+				} catch (selErr) {
 					// Ignore;
 				}
 			} else if (f == "month") {
@@ -940,7 +947,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		if (el && YAHOO.lang.isFunction(el.focus)) {
 			try {
 				el.focus();
-			} catch (err) {
+			} catch (focusErr) {
 				// TODO: Fall back if focus fails?
 			}
 		}
