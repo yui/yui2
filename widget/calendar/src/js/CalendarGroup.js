@@ -532,126 +532,126 @@ CalendarGroup.prototype = {
 		* Fired before a selection is made
 		* @event beforeSelectEvent
 		*/
-		this.beforeSelectEvent = new CE(defEvents.BEFORE_SELECT);
-		this.beforeSelectEvent.subscribe = sub; this.beforeSelectEvent.unsubscribe = unsub;
+		me.beforeSelectEvent = new CE(defEvents.BEFORE_SELECT);
+		me.beforeSelectEvent.subscribe = sub; me.beforeSelectEvent.unsubscribe = unsub;
 	
 		/**
 		* Fired when a selection is made
 		* @event selectEvent
 		* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].
 		*/
-		this.selectEvent = new CE(defEvents.SELECT); 
-		this.selectEvent.subscribe = sub; this.selectEvent.unsubscribe = unsub;
+		me.selectEvent = new CE(defEvents.SELECT); 
+		me.selectEvent.subscribe = sub; me.selectEvent.unsubscribe = unsub;
 	
 		/**
 		* Fired before a selection is made
 		* @event beforeDeselectEvent
 		*/
-		this.beforeDeselectEvent = new CE(defEvents.BEFORE_DESELECT); 
-		this.beforeDeselectEvent.subscribe = sub; this.beforeDeselectEvent.unsubscribe = unsub;
+		me.beforeDeselectEvent = new CE(defEvents.BEFORE_DESELECT); 
+		me.beforeDeselectEvent.subscribe = sub; me.beforeDeselectEvent.unsubscribe = unsub;
 	
 		/**
 		* Fired when a selection is made
 		* @event deselectEvent
 		* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].
 		*/
-		this.deselectEvent = new CE(defEvents.DESELECT); 
-		this.deselectEvent.subscribe = sub; this.deselectEvent.unsubscribe = unsub;
+		me.deselectEvent = new CE(defEvents.DESELECT); 
+		me.deselectEvent.subscribe = sub; me.deselectEvent.unsubscribe = unsub;
 		
 		/**
 		* Fired when the Calendar page is changed
 		* @event changePageEvent
 		*/
-		this.changePageEvent = new CE(defEvents.CHANGE_PAGE); 
-		this.changePageEvent.subscribe = sub; this.changePageEvent.unsubscribe = unsub;
+		me.changePageEvent = new CE(defEvents.CHANGE_PAGE); 
+		me.changePageEvent.subscribe = sub; me.changePageEvent.unsubscribe = unsub;
 	
 		/**
 		* Fired before the Calendar is rendered
 		* @event beforeRenderEvent
 		*/
-		this.beforeRenderEvent = new CE(defEvents.BEFORE_RENDER);
-		this.beforeRenderEvent.subscribe = sub; this.beforeRenderEvent.unsubscribe = unsub;
+		me.beforeRenderEvent = new CE(defEvents.BEFORE_RENDER);
+		me.beforeRenderEvent.subscribe = sub; me.beforeRenderEvent.unsubscribe = unsub;
 	
 		/**
 		* Fired when the Calendar is rendered
 		* @event renderEvent
 		*/
-		this.renderEvent = new CE(defEvents.RENDER);
-		this.renderEvent.subscribe = sub; this.renderEvent.unsubscribe = unsub;
+		me.renderEvent = new CE(defEvents.RENDER);
+		me.renderEvent.subscribe = sub; me.renderEvent.unsubscribe = unsub;
 	
 		/**
 		* Fired when the Calendar is reset
 		* @event resetEvent
 		*/
-		this.resetEvent = new CE(defEvents.RESET); 
-		this.resetEvent.subscribe = sub; this.resetEvent.unsubscribe = unsub;
+		me.resetEvent = new CE(defEvents.RESET); 
+		me.resetEvent.subscribe = sub; me.resetEvent.unsubscribe = unsub;
 	
 		/**
 		* Fired when the Calendar is cleared
 		* @event clearEvent
 		*/
-		this.clearEvent = new CE(defEvents.CLEAR);
-		this.clearEvent.subscribe = sub; this.clearEvent.unsubscribe = unsub;
+		me.clearEvent = new CE(defEvents.CLEAR);
+		me.clearEvent.subscribe = sub; me.clearEvent.unsubscribe = unsub;
 	
 		/**
 		* Fired just before the CalendarGroup is to be shown
 		* @event beforeShowEvent
 		*/
-		this.beforeShowEvent = new CE(defEvents.BEFORE_SHOW);
+		me.beforeShowEvent = new CE(defEvents.BEFORE_SHOW);
 	
 		/**
 		* Fired after the CalendarGroup is shown
 		* @event showEvent
 		*/
-		this.showEvent = new CE(defEvents.SHOW);
+		me.showEvent = new CE(defEvents.SHOW);
 	
 		/**
 		* Fired just before the CalendarGroup is to be hidden
 		* @event beforeHideEvent
 		*/
-		this.beforeHideEvent = new CE(defEvents.BEFORE_HIDE);
+		me.beforeHideEvent = new CE(defEvents.BEFORE_HIDE);
 	
 		/**
 		* Fired after the CalendarGroup is hidden
 		* @event hideEvent
 		*/
-		this.hideEvent = new CE(defEvents.HIDE);
+		me.hideEvent = new CE(defEvents.HIDE);
 
 		/**
 		* Fired just before the CalendarNavigator is to be shown
 		* @event beforeShowNavEvent
 		*/
-		this.beforeShowNavEvent = new CE(defEvents.BEFORE_SHOW_NAV);
+		me.beforeShowNavEvent = new CE(defEvents.BEFORE_SHOW_NAV);
 	
 		/**
 		* Fired after the CalendarNavigator is shown
 		* @event showNavEvent
 		*/
-		this.showNavEvent = new CE(defEvents.SHOW_NAV);
+		me.showNavEvent = new CE(defEvents.SHOW_NAV);
 	
 		/**
 		* Fired just before the CalendarNavigator is to be hidden
 		* @event beforeHideNavEvent
 		*/
-		this.beforeHideNavEvent = new CE(defEvents.BEFORE_HIDE_NAV);
-	
+		me.beforeHideNavEvent = new CE(defEvents.BEFORE_HIDE_NAV);
+
 		/**
 		* Fired after the CalendarNavigator is hidden
 		* @event hideNavEvent
 		*/
-		this.hideNavEvent = new CE(defEvents.HIDE_NAV);
+		me.hideNavEvent = new CE(defEvents.HIDE_NAV);
 
 		/**
 		* Fired just before the CalendarNavigator is to be rendered
 		* @event beforeRenderNavEvent
 		*/
-		this.beforeRenderNavEvent = new CE(defEvents.BEFORE_RENDER_NAV);
+		me.beforeRenderNavEvent = new CE(defEvents.BEFORE_RENDER_NAV);
 
 		/**
 		* Fired after the CalendarNavigator is rendered
 		* @event renderNavEvent
 		*/
-		this.renderNavEvent = new CE(defEvents.RENDER_NAV);
+		me.renderNavEvent = new CE(defEvents.RENDER_NAV);
 	},
 	
 	/**
@@ -1230,7 +1230,7 @@ CalendarGroup.prototype = {
 
 /**
 * CSS class representing the container for the calendar
-* @property CalendarGroup.CSS_CONTAINER
+* @property YAHOO.widget.CalendarGroup.CSS_CONTAINER
 * @static
 * @final
 * @type String
@@ -1239,7 +1239,7 @@ CalendarGroup.CSS_CONTAINER = "yui-calcontainer";
 
 /**
 * CSS class representing the container for the calendar
-* @property CalendarGroup.CSS_MULTI_UP
+* @property YAHOO.widget.CalendarGroup.CSS_MULTI_UP
 * @static
 * @final
 * @type String
@@ -1248,7 +1248,7 @@ CalendarGroup.CSS_MULTI_UP = "multi";
 
 /**
 * CSS class representing the title for the 2-up calendar
-* @property CalendarGroup.CSS_2UPTITLE
+* @property YAHOO.widget.CalendarGroup.CSS_2UPTITLE
 * @static
 * @final
 * @type String
@@ -1257,7 +1257,7 @@ CalendarGroup.CSS_2UPTITLE = "title";
 
 /**
 * CSS class representing the close icon for the 2-up calendar
-* @property CalendarGroup.CSS_2UPCLOSE
+* @property YAHOO.widget.CalendarGroup.CSS_2UPCLOSE
 * @static
 * @final
 * @deprecated	Along with Calendar.IMG_ROOT and NAV_ARROW_LEFT, NAV_ARROW_RIGHT configuration properties.
@@ -1302,7 +1302,7 @@ YAHOO.widget.CalendarGroup = CalendarGroup;
 
 /**
 * @class YAHOO.widget.Calendar2up
-* @extends CalendarGroup
+* @extends YAHOO.widget.CalendarGroup
 * @deprecated The old Calendar2up class is no longer necessary, since CalendarGroup renders in a 2up view by default.
 */
 YAHOO.widget.Calendar2up = function(id, containerId, config) {

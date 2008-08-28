@@ -36,7 +36,7 @@
 *	</xmp>
 * or:
 *   <xmp>
-*       var containerDiv = Dom.get("calContainer");
+*       var containerDiv = YAHOO.util.Dom.get("calContainer");
 *		var c = new YAHOO.widget.Calendar(containerDiv, configOptions);
 *	</xmp>
 * </p>
