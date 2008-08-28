@@ -5589,9 +5589,9 @@ _onRenderChainEnd : function() {
             // Post-render event
             oSelf.fireEvent("postRenderEvent");
             
-            if(YAHOO.example.Performance.trialStart) {
+            /*if(YAHOO.example.Performance.trialStart) {
                 YAHOO.example.Performance.trialStart = null;
-            }
+            }*/
             
         }
     }, 0);
@@ -6980,7 +6980,7 @@ initializeTable : function() {
  * @method render
  */
 render : function() {
-YAHOO.example.Performance.trialStart = new Date();
+//YAHOO.example.Performance.trialStart = new Date();
 
     this._oChainRender.stop();
 
