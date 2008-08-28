@@ -36,10 +36,6 @@
 		_KEYDOWN = "keydown",
 		_KEYUP = "keyup",
 		_KEYPRESS = "keypress",
-		_FOCUS = "focus",
-		_FOCUSIN = "focusin",
-		_BLUR = "blur",
-		_FOCUSOUT = "focusout",
 		_CLICK_TO_HIDE = "clicktohide",
 		_POSITION = "position", 
 		_DYNAMIC = "dynamic",
@@ -509,19 +505,9 @@
                         Event.on(oDoc, _KEYDOWN, onDOMEvent, this, true);
                         Event.on(oDoc, _KEYUP, onDOMEvent, this, true);
                         Event.on(oDoc, _KEYPRESS, onDOMEvent, this, true);
-                        
-                        if (YAHOO.env.ua.ie) {
-                        
-							Event.on(oDoc, _FOCUSIN, onDOMEvent, this, true);
-							Event.on(oDoc, _FOCUSOUT, onDOMEvent, this, true);
     
-    					}
-    					else {
-    					
-    						oDoc.addEventListener(_FOCUS, onDOMEvent, true);
-    						oDoc.addEventListener(_BLUR, onDOMEvent, true);
-    					
-    					}
+						Event.onFocus(oDoc, onDOMEvent, this, true);
+						Event.onBlur(oDoc, onDOMEvent, this, true);						
     
                         m_bInitializedEventHandlers = true;
                         
