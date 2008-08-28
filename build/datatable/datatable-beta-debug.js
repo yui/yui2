@@ -160,6 +160,7 @@ YAHOO.util.Chain.prototype = {
     }
 };
 YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1604,6 +1605,7 @@ if(YAHOO.util.DD) {
  * @deprecated Pass configs directly to CellEditor constructor. 
  */
 
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -2440,6 +2442,7 @@ YAHOO.widget.Record.prototype = {
 };
 
 })();
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -5678,12 +5681,12 @@ _onRenderChainEnd : function() {
     
             // Post-render event
             oSelf.fireEvent("postRenderEvent");
-            /*
-            if(YAHOO.example.Performance.trialStart) {
+            
+            /*if(YAHOO.example.Performance.trialStart) {
                 YAHOO.log((new Date()).getTime() - YAHOO.example.Performance.trialStart.getTime() + " ms", "time");
                 YAHOO.example.Performance.trialStart = null;
-            }
-            */
+            }*/
+            
             YAHOO.log("Post-render routine executed", "info", oSelf.toString());
         }
     }, 0);
@@ -13565,6 +13568,7 @@ DT.editTextarea = function() {};
 DT.editTextbox= function() {};
 
 })();
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -14228,12 +14232,121 @@ validateColumnWidths : function(oColumn) {
         if(oColumn && lang.isNumber(oColumn.getKeyIndex())) {
             this._validateColumnWidth(oColumn, elRow.childNodes[oColumn.getKeyIndex()]);
         }
-        else {
-            // Iterate through all Columns
-            for(var i=0; i<allKeysLength; i++) {
-               this._validateColumnWidth(allKeys[i], elRow.childNodes[i]);
+        //////OPTION 1
+        // Iterate through all Columns but adjust widths in a single pass
+        /*else {
+            var elTd, todos = [], i, len;
+            // Iterate through all Columns and make the changes in one pass
+            for(i=0; i<allKeysLength; i++) {
+               //this._validateColumnWidth(allKeys[i], elRow.childNodes[i]);
+               
+                oColumn = allKeys[i];
+                elTd = elRow.childNodes[i];
+                // Only Columns without widths that are not hidden
+                if(!oColumn.width && !oColumn.hidden) {
+                    var elTh = oColumn.getThEl();
+                    // Unset a calculated auto-width
+                    if(oColumn._calculatedWidth) {
+                        this._setColumnWidth(oColumn, "auto", "visible");
+                    }
+                    // Compare auto-widths
+                    if(elTh.offsetWidth !== elTd.offsetWidth) {
+                        var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
+                                oColumn.getThLinerEl() : elTd.firstChild;               
+                
+                        // Grab the wider liner width, unless the minWidth is wider
+                        var newWidth = Math.max(0,
+                            (elWider.offsetWidth -(parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) - (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0)),
+                            oColumn.minWidth);
+                            
+                        var sOverflow = 'visible';
+                        
+                        // Now validate against maxAutoWidth
+                        if((oColumn.maxAutoWidth > 0) && (newWidth > oColumn.maxAutoWidth)) {
+                            newWidth = oColumn.maxAutoWidth;
+                            sOverflow = "hidden";
+                        }
+                
+                        todos[todos.length] = [oColumn, newWidth, sOverflow];
+                    }
+                }
             }
+            
+            this._elTbody.style.display = "none";
+            var thisTodo;
+            for(i=0, len=todos.length; i<len; i++) {
+                thisTodo = todos[i];
+                // Set to the wider auto-width
+                this._setColumnWidth(thisTodo[0], thisTodo[1]+"px", thisTodo[2]);
+                thisTodo[0]._calculatedWidth = thisTodo[1];
+            }
+            this._elTbody.style.display = "";
+        }*/
+        
+        
+        /////////OPTION 2
+        // Iterate through all Columns to unset calculated widths in one pass
+        else {
+            var elTd, todos = [], thisTodo, i, len;
+            for(i=0; i<allKeysLength; i++) {
+                oColumn = allKeys[i];
+                // Only Columns without widths that are not hidden, unset a calculated auto-width
+                if(!oColumn.width && !oColumn.hidden && oColumn._calculatedWidth) {
+                    todos[todos.length] = oColumn;      
+                }
+            }
+            
+            this._elTbody.style.display = "none";
+            for(i=0, len=todos.length; i<len; i++) {
+                this._setColumnWidth(todos[i], "auto", "visible");
+            }
+            this._elTbody.style.display = "";
+            
+            todos = [];
+
+            // Iterate through all Columns and make the store the adjustments to make in one pass
+            for(i=0; i<allKeysLength; i++) {
+               //this._validateColumnWidth(allKeys[i], elRow.childNodes[i]);
+               
+                oColumn = allKeys[i];
+                elTd = elRow.childNodes[i];
+                // Only Columns without widths that are not hidden
+                if(!oColumn.width && !oColumn.hidden) {
+                    var elTh = oColumn.getThEl();
+
+                    // Compare auto-widths
+                    if(elTh.offsetWidth !== elTd.offsetWidth) {
+                        var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
+                                oColumn.getThLinerEl() : elTd.firstChild;               
+                
+                        // Grab the wider liner width, unless the minWidth is wider
+                        var newWidth = Math.max(0,
+                            (elWider.offsetWidth -(parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) - (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0)),
+                            oColumn.minWidth);
+                            
+                        var sOverflow = 'visible';
+                        
+                        // Now validate against maxAutoWidth
+                        if((oColumn.maxAutoWidth > 0) && (newWidth > oColumn.maxAutoWidth)) {
+                            newWidth = oColumn.maxAutoWidth;
+                            sOverflow = "hidden";
+                        }
+                
+                        todos[todos.length] = [oColumn, newWidth, sOverflow];
+                    }
+                }
+            }
+            
+            this._elTbody.style.display = "none";
+            for(i=0, len=todos.length; i<len; i++) {
+                thisTodo = todos[i];
+                // Set to the wider auto-width
+                this._setColumnWidth(thisTodo[0], thisTodo[1]+"px", thisTodo[2]);
+                thisTodo[0]._calculatedWidth = thisTodo[1];
+            }
+            this._elTbody.style.display = "";
         }
+
         
         // Resnap unsnapped containers
         if(sWidth) {
@@ -14725,6 +14838,7 @@ _onTheadKeydown : function(e, oSelf) {
 });
 
 })();
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -16291,4 +16405,5 @@ lang.augmentObject(CE, BCE);
 
 
 })();
+
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});

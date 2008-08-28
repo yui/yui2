@@ -3236,12 +3236,12 @@ _onRenderChainEnd : function() {
     
             // Post-render event
             oSelf.fireEvent("postRenderEvent");
-            /*
-            if(YAHOO.example.Performance.trialStart) {
+            
+            /*if(YAHOO.example.Performance.trialStart) {
                 YAHOO.log((new Date()).getTime() - YAHOO.example.Performance.trialStart.getTime() + " ms", "time");
                 YAHOO.example.Performance.trialStart = null;
-            }
-            */
+            }*/
+            
             YAHOO.log("Post-render routine executed", "info", oSelf.toString());
         }
     }, 0);
