@@ -160,7 +160,6 @@ YAHOO.util.Chain.prototype = {
     }
 };
 YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1605,7 +1604,6 @@ if(YAHOO.util.DD) {
  * @deprecated Pass configs directly to CellEditor constructor. 
  */
 
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -2442,7 +2440,6 @@ YAHOO.widget.Record.prototype = {
 };
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -5681,10 +5678,12 @@ _onRenderChainEnd : function() {
     
             // Post-render event
             oSelf.fireEvent("postRenderEvent");
+            /*
             if(YAHOO.example.Performance.trialStart) {
                 YAHOO.log((new Date()).getTime() - YAHOO.example.Performance.trialStart.getTime() + " ms", "time");
                 YAHOO.example.Performance.trialStart = null;
             }
+            */
             YAHOO.log("Post-render routine executed", "info", oSelf.toString());
         }
     }, 0);
@@ -6960,17 +6959,12 @@ getTrIndex : function(row) {
             // DataTable is paginated
             var oPaginator = this.get('paginator');
             if(oPaginator) {
-                // Get the first and last Record on current page
-                var startRecordIndex = 0,
-                    endRecordIndex   = 0;
-
+                // Check the record index is within the indices of the
+                // current page
                 var rng = oPaginator.getPageRecords();
-                startRecordIndex = rng[0];
-                endRecordIndex   = rng[1];
-
-                // This Record is on current page
-                if((nRecordIndex >= startRecordIndex) && (nRecordIndex <= endRecordIndex)) {
-                    return nRecordIndex - startRecordIndex;
+                if (rng && nRecordIndex >= rng[0] && nRecordIndex <= rng[1]) {
+                    // This Record is on current page
+                    return nRecordIndex - rng[0];
                 }
                 // This Record is not on current page
                 else {
@@ -9047,15 +9041,17 @@ deleteRow : function(row) {
                 var oPaginator = this.get('paginator');
                 if (oPaginator) {
                     // Update the paginator's totalRecords
-                    var totalRecords = oPaginator.get('totalRecords');
+                    var totalRecords = oPaginator.get('totalRecords'),
+                        // must capture before the totalRecords change because
+                        // Paginator shifts to previous page automatically
+                        rng = oPaginator.getPageRecords();
+
                     if (totalRecords !== widget.Paginator.VALUE_UNLIMITED) {
                         oPaginator.set('totalRecords',totalRecords - 1);
                     }
     
-                    var endRecIndex = (oPaginator.getPageRecords())[1];
-        
-                    // If the deleted record was on this or a prior page, re-render
-                    if (nRecordIndex <= endRecIndex) {
+                    // The deleted record was on this or a prior page, re-render
+                    if (!rng || nRecordIndex <= rng[1]) {
                         this.render();
                     }
                     return;
@@ -9153,15 +9149,17 @@ deleteRows : function(row, count) {
                 // re-render
                 if (oPaginator) {
                     // Update the paginator's totalRecords
-                    var totalRecords = oPaginator.get('totalRecords');
+                    var totalRecords = oPaginator.get('totalRecords'),
+                        // must capture before the totalRecords change because
+                        // Paginator shifts to previous page automatically
+                        rng = oPaginator.getPageRecords();
+
                     if (totalRecords !== widget.Paginator.VALUE_UNLIMITED) {
-                        oPaginator.set('totalRecords',totalRecords - 1);
+                        oPaginator.set('totalRecords',totalRecords - aData.length);
                     }
     
-                    var endRecIndex = (oPaginator.getPageRecords())[1];
-        
-                    // If the lowest deleted record was on this or a prior page, re-render
-                    if (lowIndex <= endRecIndex) {
+                    // The records were on this or a prior page, re-render
+                    if (!rng || lowIndex <= rng[1]) {
                         this.render();
                     }
                     return;
@@ -13567,7 +13565,6 @@ DT.editTextarea = function() {};
 DT.editTextbox= function() {};
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -14728,7 +14725,6 @@ _onTheadKeydown : function(e, oSelf) {
 });
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -16295,5 +16291,4 @@ lang.augmentObject(CE, BCE);
 
 
 })();
-
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});

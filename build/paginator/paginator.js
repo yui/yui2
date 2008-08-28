@@ -226,7 +226,8 @@ YAHOO.widget.Paginator.prototype = {
             validator : function (val) {
                 var total = this.get('totalRecords');
                 if (l.isNumber(val)) {
-                    return total === UNLIMITED || total > val;
+                    return total === UNLIMITED || total > val ||
+                           (total === 0 && val === 0);
                 }
 
                 return false;
@@ -889,7 +890,7 @@ YAHOO.widget.Paginator.prototype = {
             currentState, state, offset;
 
         function normalizeOffset(offset,total,rpp) {
-            if (offset < 0) {
+            if (offset <= 0 || total === 0) {
                 return 0;
             }
             if (total === UNLIMITED || total > offset) {
@@ -945,10 +946,10 @@ YAHOO.widget.Paginator.prototype = {
         state.records = [ state.recordOffset,
                           state.recordOffset + state.rowsPerPage - 1 ];
 
+        // limit upper index to totalRecords - 1
         if (state.totalRecords !== UNLIMITED &&
-            state.recordOffset < state.totalRecords &&
+            state.recordOffset < state.totalRecords && state.records &&
             state.records[1] > state.totalRecords - 1) {
-            // limit upper index to totalRecords - 1
             state.records[1] = state.totalRecords - 1;
         }
 
@@ -1352,7 +1353,7 @@ Paginator.ui.PageLinks.prototype = {
             currentPage = p.getCurrentPage();
 
         // Replace content if there's been a change
-        if (this.current !== currentPage || e.rebuild) {
+        if (this.current !== currentPage || !currentPage || e.rebuild) {
             var labelBuilder = p.get('pageLabelBuilder'),
                 range        = Paginator.ui.PageLinks.calculateRange(
                                 currentPage,

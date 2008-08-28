@@ -193,7 +193,7 @@ Paginator.ui.PageLinks.prototype = {
             currentPage = p.getCurrentPage();
 
         // Replace content if there's been a change
-        if (this.current !== currentPage || e.rebuild) {
+        if (this.current !== currentPage || !currentPage || e.rebuild) {
             var labelBuilder = p.get('pageLabelBuilder'),
                 range        = Paginator.ui.PageLinks.calculateRange(
                                 currentPage,
