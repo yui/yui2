@@ -866,28 +866,29 @@ _syncScrollX : function() {
  * @private
  */
 _syncScrollOverhang : function() {
-    var elTbody = this._elTbody,
-        elBdContainer = this._elBdContainer,
-        aLastHeaders, len, prefix, i, elLiner, oColumn;
+    var elBdContainer = this._elBdContainer,
+        allHeaders = this._oColumnSet.headers,
+        allLastHeaders = allHeaders[allHeaders.length-1],
+        prefix = this._sId+"-fixedth-",
+        i = allLastHeaders.length-1,
+        nPadding = ((elBdContainer.scrollHeight > elBdContainer.clientHeight)) && (elBdContainer.scrollWidth > elBdContainer.clientWidth)? 18 : 1,
+        sNewBorder = nPadding + "px solid " + this.get("COLOR_COLUMNFILLER"),
+        oColumn;
         
     // Overhang should be either 1 (default) or 18px, depending on the location of the right edge of the table
-    var nPadding = 1;
     
     // Y-scrollbar is visible, which is when the overhang needs to jut out
-    if(elBdContainer.scrollHeight > elBdContainer.clientHeight) {
         // X-scrollbar is also visible, which means the right is jagged, not flush with the Column
-        nPadding = (elBdContainer.scrollWidth > elBdContainer.clientWidth)? 18 : 1;
-    }
+
     
     // Set Column header overhang
-    aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
-    len = aLastHeaders.length;
-    prefix = this._sId+"-fixedth-";
-    for(i=0; i<len; i++) {
+    this._elThead.style.display = "none";
+    for(;i>-1; --i) {
         //TODO: A better way to get all THs along the right edge
-        oColumn = this.getColumn(Dom.get(prefix+aLastHeaders[i]));
-        oColumn.getThEl().style.borderRight = nPadding + "px solid " + this.get("COLOR_COLUMNFILLER");
+        //oColumn = this.getColumn(Dom.get(prefix+allLastHeaders[i]));
+        Dom.get(prefix+allLastHeaders[i]).style.borderRight = sNewBorder;
     }
+    this._elThead.style.display = "";
 },
 
 

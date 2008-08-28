@@ -3237,10 +3237,10 @@ _onRenderChainEnd : function() {
             // Post-render event
             oSelf.fireEvent("postRenderEvent");
             
-            /*if(YAHOO.example.Performance.trialStart) {
+            if(YAHOO.example.Performance.trialStart) {
                 YAHOO.log((new Date()).getTime() - YAHOO.example.Performance.trialStart.getTime() + " ms", "time");
                 YAHOO.example.Performance.trialStart = null;
-            }*/
+            }
             
             YAHOO.log("Post-render routine executed", "info", oSelf.toString());
         }
@@ -4639,7 +4639,7 @@ initializeTable : function() {
  * @method render
  */
 render : function() {
-//YAHOO.example.Performance.trialStart = new Date();
+YAHOO.example.Performance.trialStart = new Date();
 
     this._oChainRender.stop();
     YAHOO.log("DataTable rendering...", "info", this.toString());
@@ -6830,10 +6830,10 @@ deleteRows : function(row, count) {
  * @param oColumn {YAHOO.widget.Column} (Optional) Column instance.
  */
 formatCell : function(elCell, oRecord, oColumn) {
-    if(!(oRecord instanceof YAHOO.widget.Record)) {
+    if(!oRecord) {
         oRecord = this.getRecord(elCell);
     }
-    if(!(oColumn instanceof YAHOO.widget.Column)) {
+    if(!oColumn) {
         oColumn = this.getColumn(elCell.parentNode.cellIndex);
     }
 
