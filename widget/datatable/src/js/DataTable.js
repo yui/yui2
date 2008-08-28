@@ -3227,10 +3227,6 @@ _onRenderChainEnd : function() {
     
             // Render event
             oSelf.fireEvent("renderEvent");
-            /*if(YAHOO.example.Performance.trialStart) {
-                YAHOO.log((new Date()).getTime() - YAHOO.example.Performance.trialStart.getTime() + " ms", "time");
-                YAHOO.example.Performance.trialStart = null;
-            }*/
             // Backward compatibility
             oSelf.fireEvent("refreshEvent");
             YAHOO.log("DataTable rendered", "info", oSelf.toString());
@@ -3240,6 +3236,10 @@ _onRenderChainEnd : function() {
     
             // Post-render event
             oSelf.fireEvent("postRenderEvent");
+            if(YAHOO.example.Performance.trialStart) {
+                YAHOO.log((new Date()).getTime() - YAHOO.example.Performance.trialStart.getTime() + " ms", "time");
+                YAHOO.example.Performance.trialStart = null;
+            }
             YAHOO.log("Post-render routine executed", "info", oSelf.toString());
         }
     }, 0);

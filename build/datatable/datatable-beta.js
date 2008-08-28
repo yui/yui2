@@ -5580,9 +5580,6 @@ _onRenderChainEnd : function() {
     
             // Render event
             oSelf.fireEvent("renderEvent");
-            /*if(YAHOO.example.Performance.trialStart) {
-                YAHOO.example.Performance.trialStart = null;
-            }*/
             // Backward compatibility
             oSelf.fireEvent("refreshEvent");
     
@@ -5591,6 +5588,9 @@ _onRenderChainEnd : function() {
     
             // Post-render event
             oSelf.fireEvent("postRenderEvent");
+            if(YAHOO.example.Performance.trialStart) {
+                YAHOO.example.Performance.trialStart = null;
+            }
         }
     }, 0);
 },
