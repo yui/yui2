@@ -3658,7 +3658,7 @@
 }());
 
 (function () {
-    
+
     /**
     * OverlayManager is used for maintaining the focus status of 
     * multiple Overlays.
@@ -3681,7 +3681,7 @@
         Config = YAHOO.util.Config,
         CustomEvent = YAHOO.util.CustomEvent,
         OverlayManager = YAHOO.widget.OverlayManager;
-    
+
     /**
     * The CSS class representing a focused Overlay
     * @property OverlayManager.CSS_FOCUSED
@@ -3690,29 +3690,28 @@
     * @type String
     */
     OverlayManager.CSS_FOCUSED = "focused";
-    
+
     OverlayManager.prototype = {
-    
+
         /**
         * The class's constructor function
         * @property contructor
         * @type Function
         */
         constructor: OverlayManager,
-        
+
         /**
         * The array of Overlays that are currently registered
         * @property overlays
         * @type YAHOO.widget.Overlay[]
         */
         overlays: null,
-        
+
         /**
         * Initializes the default configuration of the OverlayManager
         * @method initDefaultConfig
         */
         initDefaultConfig: function () {
-        
             /**
             * The collection of registered Overlays in use by 
             * the OverlayManager
@@ -3721,7 +3720,7 @@
             * @default null
             */
             this.cfg.addProperty("overlays", { suppressEvent: true } );
-        
+
             /**
             * The default DOM event that should be used to focus an Overlay
             * @config focusevent
@@ -3729,7 +3728,6 @@
             * @default "mousedown"
             */
             this.cfg.addProperty("focusevent", { value: "mousedown" } );
-
         },
 
         /**
@@ -3783,22 +3781,10 @@
             this.focus = function (overlay) {
                 var o = this.find(overlay);
                 if (o) {
-                    if (activeOverlay != o) {
-                        if (activeOverlay) {
-                            activeOverlay.blur();
-                        }
-                        this.bringToTop(o);
-
-                        activeOverlay = o;
-
-                        Dom.addClass(activeOverlay.element, 
-                            OverlayManager.CSS_FOCUSED);
-
-                        o.focusEvent.fire();
-                    }
+                    o.focus();
                 }
             };
-        
+
             /**
             * Removes the specified Overlay from the manager
             * @method remove
@@ -3806,8 +3792,10 @@
             * @param {String} overlay The id of the Overlay to remove
             */
             this.remove = function (overlay) {
+
                 var o = this.find(overlay), 
                         originalZ;
+
                 if (o) {
                     if (activeOverlay == o) {
                         activeOverlay = null;
@@ -3826,24 +3814,21 @@
 
                     o.hideEvent.unsubscribe(o.blur);
                     o.destroyEvent.unsubscribe(this._onOverlayDestroy, o);
+                    o.focusEvent.unsubscribe(this._onOverlayFocusHandler, o);
+                    o.blurEvent.unsubscribe(this._onOverlayBlurHandler, o);
 
                     if (!bDestroyed) {
-                        Event.removeListener(o.element, 
-                                    this.cfg.getProperty("focusevent"), 
-                                    this._onOverlayElementFocus);
-
+                        Event.removeListener(o.element, this.cfg.getProperty("focusevent"), this._onOverlayElementFocus);
                         o.cfg.setProperty("zIndex", originalZ, true);
                         o.cfg.setProperty("manager", null);
                     }
 
-                    o.focusEvent.unsubscribeAll();
-                    o.blurEvent.unsubscribeAll();
+                    /* _managed Flag for custom or existing. Don't want to remove existing */
+                    if (o.focusEvent._managed) { o.focusEvent = null; }
+                    if (o.blurEvent._managed) { o.blurEvent = null; }
 
-                    o.focusEvent = null;
-                    o.blurEvent = null;
-
-                    o.focus = null;
-                    o.blur = null;
+                    if (o.focus._managed) { o.focus = null; }
+                    if (o.blur._managed) { o.blur = null; }
                 }
             };
 
@@ -3852,37 +3837,71 @@
             * @method blurAll
             */
             this.blurAll = function () {
-    
+
                 var nOverlays = this.overlays.length,
                     i;
 
                 if (nOverlays > 0) {
                     i = nOverlays - 1;
-
                     do {
                         this.overlays[i].blur();
                     }
                     while(i--);
                 }
             };
-        
-            this._onOverlayBlur = function (p_sType, p_aArgs) {
-                activeOverlay = null;
+
+            /**
+             * Updates the state of the OverlayManager and overlay, as a result of the overlay
+             * being blurred.
+             * 
+             * @method _manageBlur
+             * @param {Overlay} overlay The overlay instance which got blurred.
+             * @protected
+             */
+            this._manageBlur = function (overlay) {
+                var changed = false;
+                if (activeOverlay == overlay) {
+                    Dom.removeClass(activeOverlay.element, OverlayManager.CSS_FOCUSED);
+                    activeOverlay = null;
+                    changed = true;
+                }
+                return changed;
             };
-        
+
+            /**
+             * Updates the state of the OverlayManager and overlay, as a result of the overlay 
+             * receiving focus.
+             *
+             * @method _manageFocus
+             * @param {Overlay} overlay The overlay instance which got focus.
+             * @protected
+             */
+            this._manageFocus = function(overlay) {
+                var changed = false;
+                if (activeOverlay != overlay) {
+                    if (activeOverlay) {
+                        activeOverlay.blur();
+                    }
+                    activeOverlay = overlay;
+                    this.bringToTop(activeOverlay);
+                    Dom.addClass(activeOverlay.element, OverlayManager.CSS_FOCUSED);
+                    changed = true;
+                }
+                return changed;
+            };
+
             var overlays = this.cfg.getProperty("overlays");
-        
+
             if (! this.overlays) {
                 this.overlays = [];
             }
-        
+
             if (overlays) {
                 this.register(overlays);
                 this.overlays.sort(this.compareZIndexDesc);
             }
         },
-        
-        
+
         /**
         * @method _onOverlayElementFocus
         * @description Event handler for the DOM event that is used to focus 
@@ -3912,11 +3931,148 @@
         * that was fired.
         * @param {Array} p_aArgs Array of arguments sent when the event 
         * was fired.
-        * @param {Overlay} p_oOverlay Object representing the menu that 
+        * @param {Overlay} p_oOverlay Object representing the overlay that 
         * fired the event.
         */
         _onOverlayDestroy: function (p_sType, p_aArgs, p_oOverlay) {
             this.remove(p_oOverlay);
+        },
+
+        /**
+        * @method _onOverlayFocusHandler
+        *
+        * focusEvent Handler, used to delegate to _manageFocus with the 
+        * correct arguments.
+        *
+        * @private
+        * @param {String} p_sType String representing the name of the event  
+        * that was fired.
+        * @param {Array} p_aArgs Array of arguments sent when the event 
+        * was fired.
+        * @param {Overlay} p_oOverlay Object representing the overlay that 
+        * fired the event.
+        */
+        _onOverlayFocusHandler: function(p_sType, p_aArgs, p_oOverlay) {
+            this._manageFocus(p_oOverlay);
+        },
+
+        /**
+        * @method _onOverlayBlurHandler
+        *
+        * blurEvent Handler, used to delegate to _manageBlur with the 
+        * correct arguments.
+        *
+        * @private
+        * @param {String} p_sType String representing the name of the event  
+        * that was fired.
+        * @param {Array} p_aArgs Array of arguments sent when the event 
+        * was fired.
+        * @param {Overlay} p_oOverlay Object representing the overlay that 
+        * fired the event.
+        */
+        _onOverlayBlurHandler: function(p_sType, p_aArgs, p_oOverlay) {
+            this._manageBlur(p_oOverlay);
+        },
+
+        /**
+         * Subscribes to the Overlay based instance focusEvent, to allow the OverlayManager to
+         * monitor focus state.
+         * 
+         * If the instance already has a focusEvent (e.g. Menu), OverlayManager will subscribe 
+         * to the existing focusEvent, however if a focusEvent or focus method does not exist
+         * on the instance, the _bindFocus method will add them, and the focus method will 
+         * update the OverlayManager's state directly.
+         * 
+         * @method _bindFocus
+         * @param {Overlay} overlay The overlay for which focus needs to be managed
+         * @protected
+         */
+        _bindFocus : function(overlay) {
+            var mgr = this;
+
+            if (!overlay.focusEvent) {
+                overlay.focusEvent = overlay.createEvent("focus");
+                overlay.focusEvent.signature = CustomEvent.LIST;
+                overlay.focusEvent._managed = true;
+            } else {
+                overlay.focusEvent.subscribe(mgr._onOverlayFocusHandler, overlay, mgr);
+            }
+
+            if (!overlay.focus) {
+                Event.on(overlay.element, mgr.cfg.getProperty("focusevent"), mgr._onOverlayElementFocus, null, overlay);
+                overlay.focus = function () {
+                    if (mgr._manageFocus(this)) {
+                        this.focusEvent.fire();
+                    }
+                };
+                overlay.focus._managed = true;
+            }
+        },
+
+        /**
+         * Subscribes to the Overlay based instance's blurEvent to allow the OverlayManager to
+         * monitor blur state.
+         *
+         * If the instance already has a blurEvent (e.g. Menu), OverlayManager will subscribe 
+         * to the existing blurEvent, however if a blurEvent or blur method does not exist
+         * on the instance, the _bindBlur method will add them, and the blur method 
+         * update the OverlayManager's state directly.
+         *
+         * @method _bindBlur
+         * @param {Overlay} overlay The overlay for which blur needs to be managed
+         * @protected
+         */
+        _bindBlur : function(overlay) {
+            var mgr = this;
+
+            if (!overlay.blurEvent) {
+                overlay.blurEvent = overlay.createEvent("blur");
+                overlay.blurEvent.signature = CustomEvent.LIST;
+                overlay.focusEvent._managed = true;
+            } else {
+                overlay.blurEvent.subscribe(mgr._onOverlayBlurHandler, overlay, mgr);
+            }
+
+            if (!overlay.blur) {
+                overlay.blur = function () {
+                    if (mgr._manageBlur(this)) {
+                        this.blurEvent.fire();
+                    }
+                };
+                overlay.blur._managed = true;
+            }
+
+            overlay.hideEvent.subscribe(overlay.blur);
+        },
+
+        /**
+         * Subscribes to the Overlay based instance's destroyEvent, to allow the Overlay
+         * to be removed for the OverlayManager when destroyed.
+         * 
+         * @method _bindDestroy
+         * @param {Overlay} overlay The overlay instance being managed
+         * @protected
+         */
+        _bindDestroy : function(overlay) {
+            var mgr = this;
+            overlay.destroyEvent.subscribe(mgr._onOverlayDestroy, overlay, mgr);
+        },
+
+        /**
+         * Ensures the zIndex configuration property on the managed overlay based instance
+         * is set to the computed zIndex value from the DOM (with "auto" translating to 0).
+         *
+         * @method _syncZIndex
+         * @param {Overlay} overlay The overlay instance being managed
+         * @protected
+         */
+        _syncZIndex : function(overlay) {
+            var zIndex = Dom.getStyle(overlay.element, "zIndex");
+            if (!isNaN(zIndex)) {
+                overlay.cfg.setProperty("zIndex", parseInt(zIndex, 10));
+            } else {
+                overlay.cfg.setProperty("zIndex", 0);
+            }
         },
 
         /**
@@ -3927,75 +4083,38 @@
         * @param {Overlay} overlay  An Overlay to register with the manager.
         * @param {Overlay[]} overlay  An array of Overlays to register with 
         * the manager.
-        * @return {Boolean} True if any Overlays are registered.
+        * @return {boolean} true if any Overlays are registered.
         */
         register: function (overlay) {
 
-            var mgr = this,
-                zIndex,
-                regcount,
+            var zIndex,
+                registered = false,
                 i,
-                nOverlays;
-        
+                n;
+
             if (overlay instanceof Overlay) {
 
                 overlay.cfg.addProperty("manager", { value: this } );
 
-                overlay.focusEvent = overlay.createEvent("focus");
-                overlay.focusEvent.signature = CustomEvent.LIST;
-
-                overlay.blurEvent = overlay.createEvent("blur");
-                overlay.blurEvent.signature = CustomEvent.LIST;
-        
-                overlay.focus = function () {
-                    mgr.focus(this);
-                };
-        
-                overlay.blur = function () {
-                    if (mgr.getActive() == this) {
-                        Dom.removeClass(this.element, OverlayManager.CSS_FOCUSED);
-                        this.blurEvent.fire();
-                    }
-                };
-        
-                overlay.blurEvent.subscribe(mgr._onOverlayBlur);
-                overlay.hideEvent.subscribe(overlay.blur);
-                
-                overlay.destroyEvent.subscribe(this._onOverlayDestroy, overlay, this);
-        
-                Event.on(overlay.element, this.cfg.getProperty("focusevent"), 
-                            this._onOverlayElementFocus, null, overlay);
-        
-                zIndex = Dom.getStyle(overlay.element, "zIndex");
-
-                if (!isNaN(zIndex)) {
-                    overlay.cfg.setProperty("zIndex", parseInt(zIndex, 10));
-                } else {
-                    overlay.cfg.setProperty("zIndex", 0);
-                }
+                this._bindFocus(overlay);
+                this._bindBlur(overlay);
+                this._bindDestroy(overlay);
+                this._syncZIndex(overlay);
 
                 this.overlays.push(overlay);
                 this.bringToTop(overlay);
 
-                return true;
+                registered = true;
 
             } else if (overlay instanceof Array) {
 
-                regcount = 0;
-                nOverlays = overlay.length;
-
-                for (i = 0; i < nOverlays; i++) {
-                    if (this.register(overlay[i])) {
-                        regcount++;
-                    }
+                for (i = 0, n = overlay.length; i < n; i++) {
+                    registered = this.register(overlay[i]) || registered;
                 }
 
-                if (regcount > 0) {
-                    return true;
-                }
-            } else {
-                return false;
             }
+
+            return registered;
         },
 
         /**
@@ -4057,37 +4176,26 @@
         */
         find: function (overlay) {
 
-            var aOverlays = this.overlays,
-                nOverlays = aOverlays.length,
+            var isInstance = overlay instanceof Overlay,
+                overlays = this.overlays,
+                n = overlays.length,
                 found = null,
+                o,
                 i;
 
-            if (nOverlays > 0) {
-                i = nOverlays - 1;
-
-                if (overlay instanceof Overlay) {
-                    do {
-                        if (aOverlays[i] == overlay) {
-                            found = aOverlays[i];
-                            break;
-                        }
+            if (isInstance || typeof overlay == "string") {
+                for (i = n-1; i >= 0; i--) {
+                    o = overlays[i];
+                    if ((isInstance && (o === overlay)) || (o.id == overlay)) {
+                        found = o;
+                        break;
                     }
-                    while(i--);
-
-                } else if (typeof overlay == "string") {
-                    do {
-                        if (aOverlays[i].id == overlay) {
-                            found = aOverlays[i];
-                            break;
-                        }
-                    }
-                    while(i--);
                 }
             }
 
             return found;
         },
-        
+
         /**
         * Used for sorting the manager's Overlays by z-index.
         * @method compareZIndexDesc
@@ -4114,23 +4222,18 @@
                 return 0;
             }
         },
-        
+
         /**
         * Shows all Overlays in the manager.
         * @method showAll
         */
         showAll: function () {
-        
-            var aOverlays = this.overlays,
-                nOverlays = aOverlays.length,
+            var overlays = this.overlays,
+                n = overlays.length,
                 i;
 
-            if (nOverlays > 0) {
-                i = nOverlays - 1;
-                do {
-                    aOverlays[i].show();
-                }
-                while(i--);
+            for (i = n - 1; i >= 0; i--) {
+                overlays[i].show();
             }
         },
 
@@ -4139,17 +4242,12 @@
         * @method hideAll
         */
         hideAll: function () {
-        
-            var aOverlays = this.overlays,
-                nOverlays = aOverlays.length,
+            var overlays = this.overlays,
+                n = overlays.length,
                 i;
 
-            if (nOverlays > 0) {
-                i = nOverlays - 1;
-                do {
-                    aOverlays[i].hide();
-                }
-                while(i--);
+            for (i = n - 1; i >= 0; i--) {
+                overlays[i].hide();
             }
         },
 
@@ -4162,7 +4260,6 @@
             return "OverlayManager";
         }
     };
-
 }());
 
 (function () {
