@@ -804,16 +804,16 @@ YAHOO.widget.Record.prototype = {
     },
 
     /**
-     * Returns data for the Record for a key if given, or the entire object
+     * Returns data for the Record for a field if given, or the entire object
      * literal otherwise.
      *
      * @method getData
-     * @param sKey {String} (Optional) The key to retrieve a single data value.
+     * @param sField {String} (Optional) The field from which to retrieve data value.
      * @return Object
      */
-    getData : function(sKey) {
-        if(lang.isString(sKey)) {
-            return this._oData[sKey];
+    getData : function(sField) {
+        if(lang.isString(sField)) {
+            return this._oData[sField];
         }
         else {
             return this._oData;

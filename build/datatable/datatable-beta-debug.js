@@ -686,6 +686,11 @@ YAHOO.widget.Column = function(oConfigs) {
         this.key = "yui-dt-col" + YAHOO.widget.Column._nCount;
     }
     
+    // Assign a field if not found, defaults to key
+    if(!YAHOO.lang.isValue(this.field)) {
+        this.field = this.key;
+    }
+
     // Increment counter
     YAHOO.widget.Column._nCount++;
 
@@ -896,12 +901,20 @@ YAHOO.widget.Column.prototype = {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Associated database field, or null.
+     * Unique name, required.
      *
      * @property key
      * @type String
      */
     key : null,
+
+    /**
+     * Associated database field, or null.
+     *
+     * @property field
+     * @type String
+     */
+    field : null,
 
     /**
      * Text or HTML for display as Column's label in the TH element.
@@ -1031,6 +1044,13 @@ YAHOO.widget.Column.prototype = {
      * @default null
      */
     /**
+     * Custom field to sort on.
+     *
+     * @property sortOptions.field
+     * @type String
+     * @default null
+     */
+    /**
      * Custom sort handler.
      *
      * @property sortOptions.sortFunction
@@ -1093,6 +1113,7 @@ YAHOO.widget.Column.prototype = {
         oDefinition.className = this.className;
         oDefinition.editor = this.editor;
         oDefinition.editorOptions = this.editorOptions; //TODO: deprecated
+        oDefinition.field = this.field;
         oDefinition.formatter = this.formatter;
         oDefinition.hidden = this.hidden;
         oDefinition.key = this.key;
@@ -1116,6 +1137,16 @@ YAHOO.widget.Column.prototype = {
      */
     getKey : function() {
         return this.key;
+    },
+    
+    /**
+     * Returns field.
+     *
+     * @method getField
+     * @return {String} Column field.
+     */
+    getField : function() {
+        return this.field;
     },
     
     /**
@@ -2412,16 +2443,16 @@ YAHOO.widget.Record.prototype = {
     },
 
     /**
-     * Returns data for the Record for a key if given, or the entire object
+     * Returns data for the Record for a field if given, or the entire object
      * literal otherwise.
      *
      * @method getData
-     * @param sKey {String} (Optional) The key to retrieve a single data value.
+     * @param sField {String} (Optional) The field from which to retrieve data value.
      * @return Object
      */
-    getData : function(sKey) {
-        if(lang.isString(sKey)) {
-            return this._oData[sKey];
+    getData : function(sField) {
+        if(lang.isString(sField)) {
+            return this._oData[sField];
         }
         else {
             return this._oData;
@@ -3318,7 +3349,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatDropdown : function(el, oRecord, oColumn, oData) {
-        var selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.key);
+        var selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field);
         var options = (lang.isArray(oColumn.dropdownOptions)) ?
                 oColumn.dropdownOptions : null;
 
@@ -3455,8 +3486,8 @@ lang.augmentObject(DT, {
      * @static
      */
     formatText : function(el, oRecord, oColumn, oData) {
-        var value = (lang.isValue(oRecord.getData(oColumn.key))) ?
-                oRecord.getData(oColumn.key) : "";
+        var value = (lang.isValue(oRecord.getData(oColumn.field))) ?
+                oRecord.getData(oColumn.field) : "";
         //TODO: move to util function
         el.innerHTML = value.toString().replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
     },
@@ -3472,8 +3503,8 @@ lang.augmentObject(DT, {
      * @static
      */
     formatTextarea : function(el, oRecord, oColumn, oData) {
-        var value = (lang.isValue(oRecord.getData(oColumn.key))) ?
-                oRecord.getData(oColumn.key) : "";
+        var value = (lang.isValue(oRecord.getData(oColumn.field))) ?
+                oRecord.getData(oColumn.field) : "";
         var markup = "<textarea>" + value + "</textarea>";
         el.innerHTML = markup;
     },
@@ -3489,8 +3520,8 @@ lang.augmentObject(DT, {
      * @static
      */
     formatTextbox : function(el, oRecord, oColumn, oData) {
-        var value = (lang.isValue(oRecord.getData(oColumn.key))) ?
-                oRecord.getData(oColumn.key) : "";
+        var value = (lang.isValue(oRecord.getData(oColumn.field))) ?
+                oRecord.getData(oColumn.field) : "";
         var markup = "<input type=\"text\" value=\"" + value + "\">";
         el.innerHTML = markup;
     },
@@ -7732,16 +7763,17 @@ sortColumn : function(oColumn, sDir) {
             else {
                 // Sort the Records
                 if(!bSorted || sDir) {
+                    // Get the field to sort
+                    var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
                     // Is there a custom sort handler function defined?
                     var sortFnc = (oColumn.sortOptions && lang.isFunction(oColumn.sortOptions.sortFunction)) ?
-                            
                             // Custom sort function
                             oColumn.sortOptions.sortFunction :
         
                             // Default sort function
                             function(a, b, desc) {
-                                YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
-                                var sorted = YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
+                                YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
+                                var sorted = YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
                                 if(sorted === 0) {
                                     return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
                                 }
@@ -9283,8 +9315,8 @@ formatCell : function(elCell, oRecord, oColumn) {
     }
 
     if(oRecord && oColumn) {
-        var sKey = oColumn.key;
-        var oData = oRecord.getData(sKey);
+        var sField = oColumn.field;
+        var oData = oRecord.getData(sField);
 
         var fnFormatter = typeof oColumn.formatter === 'function' ?
                           oColumn.formatter :
@@ -9301,7 +9333,7 @@ formatCell : function(elCell, oRecord, oColumn) {
                                 "" : oData.toString();
         }
 
-        this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:sKey, el:elCell});
+        this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:oColumn.key, el:elCell});
     }
     else {
         YAHOO.log("Could not format cell " + elCell, "error", this.toString());

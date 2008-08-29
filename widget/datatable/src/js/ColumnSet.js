@@ -523,6 +523,11 @@ YAHOO.widget.Column = function(oConfigs) {
         this.key = "yui-dt-col" + YAHOO.widget.Column._nCount;
     }
     
+    // Assign a field if not found, defaults to key
+    if(!YAHOO.lang.isValue(this.field)) {
+        this.field = this.key;
+    }
+
     // Increment counter
     YAHOO.widget.Column._nCount++;
 
@@ -733,12 +738,20 @@ YAHOO.widget.Column.prototype = {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Associated database field, or null.
+     * Unique name, required.
      *
      * @property key
      * @type String
      */
     key : null,
+
+    /**
+     * Associated database field, or null.
+     *
+     * @property field
+     * @type String
+     */
+    field : null,
 
     /**
      * Text or HTML for display as Column's label in the TH element.
@@ -868,6 +881,13 @@ YAHOO.widget.Column.prototype = {
      * @default null
      */
     /**
+     * Custom field to sort on.
+     *
+     * @property sortOptions.field
+     * @type String
+     * @default null
+     */
+    /**
      * Custom sort handler.
      *
      * @property sortOptions.sortFunction
@@ -930,6 +950,7 @@ YAHOO.widget.Column.prototype = {
         oDefinition.className = this.className;
         oDefinition.editor = this.editor;
         oDefinition.editorOptions = this.editorOptions; //TODO: deprecated
+        oDefinition.field = this.field;
         oDefinition.formatter = this.formatter;
         oDefinition.hidden = this.hidden;
         oDefinition.key = this.key;
@@ -953,6 +974,16 @@ YAHOO.widget.Column.prototype = {
      */
     getKey : function() {
         return this.key;
+    },
+    
+    /**
+     * Returns field.
+     *
+     * @method getField
+     * @return {String} Column field.
+     */
+    getField : function() {
+        return this.field;
     },
     
     /**
