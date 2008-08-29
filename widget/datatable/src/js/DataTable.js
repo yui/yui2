@@ -4125,37 +4125,25 @@ getMsgTdEl : function() {
  * @return {HTMLElement} Reference to TR element, or null.
  */
 getTrEl : function(row) {
-    var allRows = this._elTbody.rows;
-
     // By Record
     if(row instanceof YAHOO.widget.Record) {
-        var nTrIndex = this.getTrIndex(row);
-            if(nTrIndex !== null) {
-                return allRows[nTrIndex];
-            }
-            // Not a valid Record
-            else {
-                return null;
-            }
+        return document.getElementById(row.getId());
     }
     // By page row index
     else if(lang.isNumber(row)) {
+        var allRows = this._elTbody.rows;
         return ((row > -1) && (row < allRows.length)) ? allRows[row] : null;
     }
     // By ID string or element reference
     else {
-        var elRow;
-        var el = Dom.get(row);
+        var elRow = (lang.isString(row)) ? document.getElementById(row) : row;
 
         // Validate HTML element
-        if(el && (el.ownerDocument == document)) {
+        if(elRow && (elRow.ownerDocument == document)) {
             // Validate TR element
-            if(el.nodeName.toLowerCase() != "tr") {
+            if(elRow.nodeName.toLowerCase() != "tr") {
                 // Traverse up the DOM to find the corresponding TR element
-                elRow = Dom.getAncestorByTagName(el,"tr");
-            }
-            else {
-                elRow = el;
+                elRow = Dom.getAncestorByTagName(elRow,"tr");
             }
 
             // Make sure the TR is in this TBODY
