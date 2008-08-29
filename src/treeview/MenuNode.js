@@ -11,7 +11,7 @@
  * as long as the node does have such properties, they are not undefined, private or functions.
  * All attributes are made available in noderef.data, which
  * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
- * can be used to retreive a node by one of the attributes.
+ * can be used to retrieve a node by one of the attributes.
  * @param oParent {YAHOO.widget.Node} this node's parent node
  * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
  * @constructor
@@ -32,11 +32,8 @@ YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
      * The node type
      * @property _type
      * @private
+    * @default "MenuNode"
      */
-    _type: "MenuNode",
-
-    toString: function() { 
-        return "MenuNode (" + this.index + ") " + this.label;
-    }
+    _type: "MenuNode"
 
 });

@@ -7,10 +7,22 @@
 
 	/**
 	 * An object to store information used for in-line editing
-	 * for all Nodes of all TreeViews
+	 * for all Nodes of all TreeViews. It contains:
+	 * <ul>
+	* <li>active {boolean}, whether there is an active cell editor </li>
+	* <li>whoHasIt {YAHOO.widget.TreeView} TreeView instance that is currently using the editor</li>
+	* <li>nodeType {string} value of static Node._type property, allows reuse of input element if node is of the same type.</li>
+	* <li>editorPanel {HTMLelement (&lt;div&gt;)} element holding the in-line editor</li>
+	* <li>inputContainer {HTMLelement (&lt;div&gt;)} element which will hold the type-specific input element(s) to be filled by the fillEditorContainer method</li>
+	* <li>buttonsContainer {HTMLelement (&lt;div&gt;)} element which holds the &lt;button&gt; elements for Ok/Cancel.  If you don't want any of the buttons, hide it via CSS styles, don't destroy it</li>
+	* <li>node {YAHOO.widget.Node} reference to the Node being edited</li>
+	* <li>saveOnEnter {boolean}, whether the Enter key should be accepted as a Save command (Esc. is always taken as Cancel), disable for multi-line input elements </li>
+	* </ul>
+	*  Editors are free to use this object to store additional data.
 	 * @property _editorData
 	 * @private
 	 * @static
+	 * @for YAHOO.widget.TreeView
 	 */
 	TV._editorData = {
 		active:false,
@@ -30,6 +42,7 @@
 	* @method _nodeEditing
 	* @param node {YAHOO.widget.Node} the node to be edited
 	* @return {Boolean} true to indicate that the node is editable and prevent any further bubbling of the click.
+	 * @for YAHOO.widget.TreeView
 	*/
 	
 	
@@ -114,6 +127,7 @@
 	* @method _closeEditor
 	* @param save {Boolean} true if the edited value is to be saved, false if discarded
 	* @private
+	 * @for YAHOO.widget.TreeView
 	*/
 	
 	TVproto._closeEditor = function (save) {
@@ -134,6 +148,7 @@
 	*  Entry point for TreeView's destroy method to destroy whatever the editing plug-in has created
 	* @method _destroyEditor
 	* @private
+	 * @for YAHOO.widget.TreeView
 	*/
 	TVproto._destroyEditor = function() {
 		var ed = TV._editorData;
@@ -149,23 +164,25 @@
 	
 	var Nproto = YAHOO.widget.Node.prototype;
 	
-	/** Placeholder for a function that should provide the inline node label editor
-	 *   Leaving it set to null will indicate that this node type is not editable
-	 * Should be overridden by nodes that provide inline editing
+	/** Placeholder for a function that should provide the inline node label editor.
+	 *   Leaving it set to null will indicate that this node type is not editable.
+	 * It should be overridden by nodes that provide inline editing.
 	 *  The Node-specific editing element (input box, textarea or whatever) should be inserted into editorData.inputContainer.
 	 * @method fillEditorContainer
 	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
 	 * @return void
+	 * @for YAHOO.widget.Node
 	 */
 	Nproto.fillEditorContainer = null;
 
 	
 	/**
 	* Node-specific destroy function to empty the contents of the inline editor panel
-	* This function is worst case that will purge all possible events and remove the contents
-	* Method purgeElement is somewhat costly so if it can be avoided, it is better to do so.
+	* This function is the worst case alternative that will purge all possible events and remove the editor contents
+	* Method Event.purgeElement is somewhat costly so if it can be replaced by specifc Event.removeListeners, it is better to do so.
 	* @method destroyEditorContents
 	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @for YAHOO.widget.Node
 	 */
 	Nproto.destroyEditorContents = function (editorData) {
 		// In the worst case, if the input editor (such as the Calendar) has no destroy method
@@ -175,10 +192,11 @@
 	};
 
 	/**
-	* Returns the value entered into the editor
+	* Returns the value entered into the editor.
 	* Should be overridden by each node type
 	* @method getEditorValue
 	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @for YAHOO.widget.Node
 	 * @return {mixed} usually some suitable value to display in the Node
 	 */
 	Nproto.getEditorValue = function (editorData) {
@@ -191,6 +209,7 @@
 	* Signals if the label is editable.  Ignored on TextNodes with href set.
 	* @property editable
 	* @type boolean
+	 * @for YAHOO.widget.TextNode
 	*/
 	TNproto.editable = false;
 
@@ -200,6 +219,7 @@
 	 * @method fillEditorContainer
 	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
 	 * @return void
+	 * @for YAHOO.widget.TextNode
 	 */
 	TNproto.fillEditorContainer = function (editorData) {
 	
@@ -228,6 +248,7 @@
 	* @method getEditorValue
 	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
 	 * @return {string} entered data
+	 * @for YAHOO.widget.TextNode
 	 */
 	TNproto.getEditorValue = function (editorData) {
 		return editorData.inputElement.value;
@@ -239,6 +260,7 @@
 	* Since we didn't set any event listeners on this inline editor, it is more efficient to avoid the generic method in Node
 	* @method destroyEditorContents
 	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @for YAHOO.widget.TextNode
 	 */
 	TNproto.destroyEditorContents = function (editorData) {
 		editorData.inputContainer.innerHTML = '';

@@ -5,9 +5,9 @@
 /**
  * The default node presentation.  The first parameter should be
  * either a string that will be used as the node's label, or an object
- * that has at least a string propery called label.  By default, the clicking the
+ * that has at least a string property called label.  By default,  clicking the
  * label will toggle the expanded/collapsed state of the node.  By
- * changing the href property of the instance, this behavior can be
+ * setting the href property of the instance, this behavior can be
  * changed so that the label will go to the specified href.
  * @namespace YAHOO.widget
  * @class TextNode
@@ -20,7 +20,7 @@
  * as long as the node does have such properties, they are not undefined, private or functions.
  * All attributes are made available in noderef.data, which
  * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
- * can be used to retreive a node by one of the attributes.
+ * can be used to retrieve a node by one of the attributes.
  * @param oParent {YAHOO.widget.Node} this node's parent node
  * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
  */
@@ -83,6 +83,8 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      * The node type
      * @property _type
      * @private
+     * @type string
+     * @default "TextNode"
      */
     _type: "TextNode",
 
@@ -136,23 +138,25 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
   /**
      * Returns an object which could be used to build a tree out of this node and its children.
      * It can be passed to the tree constructor to reproduce this node as a tree.
-     * It will return false if any node loads dynamically, regardless of whether it is loaded or not.
+     * It will return false if the node or any descendant loads dynamically, regardless of whether it is loaded or not.
      * @method getNodeDefinition
-     * @return {Object | false}  definition of the tree or false if any node is defined as dynamic
+     * @return {Object | false}  definition of the tree or false if this node or any descendant is defined as dynamic
      */
     getNodeDefinition: function() {
 		var def = YAHOO.widget.TextNode.superclass.getNodeDefinition.call(this);
 		if (def === false) { return false; }
+
+		// Node specific properties
 		def.label = this.label;
-		
 		if (this.labelStyle != 'ygtvlabel') { def.style = this.labelStyle; }
 		if (this.title) { def.title = this.title ; }
+
 		return def;
 	
 	},
 
     toString: function() { 
-        return "TextNode (" + this.index + ") " + this.label;
+        return YAHOO.widget.TextNode.superclass.toString.call(this) + ": " + this.label;
     }
 });
 })();

@@ -6,7 +6,7 @@
 		
 /**
  * A Date-specific implementation that differs from TextNode in that it uses 
- * YAHOO.widget.Calendar as an inline editor, if available
+ * YAHOO.widget.Calendar as an in-line editor, if available
  * If Calendar is not available, it behaves as a plain TextNode.
  * @namespace YAHOO.widget
  * @class DateNode
@@ -15,10 +15,10 @@
  * be used to render this node.
  * Providing a string is the same as providing an object with a single property named label.
  * All values in the oData will be used to set equally named properties in the node
- * as long as the node does have such properties, they are not undefined, private or functions.
+ * as long as the node does have such properties, they are not undefined, private nor functions.
  * All attributes are made available in noderef.data, which
  * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
- * can be used to retreive a node by one of the attributes.
+ * can be used to retrieve a node by one of the attributes.
  * @param oParent {YAHOO.widget.Node} this node's parent node
  * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
  * @constructor
@@ -32,13 +32,15 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
     /**
      * The node type
      * @property _type
+     * @type string
      * @private
+     * @default  "DateNode"
      */
     _type: "DateNode",
 	
 	/**
 	* Configuration object for the Calendar editor, if used.
-	* See http://developer.yahoo.com/yui/calendar/#internationalization
+	* See <a href="http://developer.yahoo.com/yui/calendar/#internationalization">http://developer.yahoo.com/yui/calendar/#internationalization</a>
 	* @property calendarConfig
 	*/
 	calendarConfig: null,
@@ -56,7 +58,8 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 		var cal, container = editorData.inputContainer;
 		
 		if (Lang.isUndefined(Calendar)) {
-			YAHOO.widget.DateNode.superclass.fillEditorContainer.call(this, container);
+			Dom.replaceClass(editorData.editorPanel,'ygtv-edit-DateNode','ygtv-edit-TextNode');
+			YAHOO.widget.DateNode.superclass.fillEditorContainer.call(this, editorData);
 			return;
 		}
 			
@@ -106,12 +109,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 		dd[cal.cfg.getProperty('MDY_MONTH_POSITION') -1] = date.getMonth() + 1;
 		dd[cal.cfg.getProperty('MDY_YEAR_POSITION') -1] = date.getFullYear();
 		return dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
-	},
-
-
-    toString: function() { 
-        return "DateNode (" + this.index + ") " + this.label;
-    }
+	}
 
 });
 })();

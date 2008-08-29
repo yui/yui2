@@ -11,8 +11,10 @@
  * @param oData {object} a string or object containing the data that will
  * be used to render this node, and any custom attributes that should be
  * stored with the node (which is available in noderef.data).
+ * All values in oData will be used to set equally named properties in the node
+ * as long as the node does have such properties, they are not undefined, private or functions.
  * @param oParent {Node} this node's parent node
- * @param expanded {boolean} the initial expanded/collapsed state
+ * @param expanded {boolean} the initial expanded/collapsed state (deprecated, use oData.expanded)
  * @constructor
  */
 YAHOO.widget.Node = function(oData, oParent, expanded) {
@@ -223,7 +225,9 @@ YAHOO.widget.Node.prototype = {
      * The node type
      * @property _type
      * @private
-     */
+     * @type string
+     * @default "Node"
+*/
     _type: "Node",
 
     /*
@@ -568,10 +572,9 @@ YAHOO.widget.Node.prototype = {
     },
     */
 
-    /**
-     * Hides this nodes children (creating them if necessary), changes the
+  /**
+     * Hides this nodes children (creating them if necessary), changes the toggle style.
      * @method collapse
-     * toggle style.
      */
     collapse: function() {
         // Only collapse if currently expanded
@@ -1102,7 +1105,7 @@ YAHOO.widget.Node.prototype = {
      * @return {string} string representation of the node
      */
     toString: function() {
-        return "Node (" + this.index + ")";
+        return this._type + " (" + this.index + ")";
     },
 	/**
 	* array of items that had the focus set on them
@@ -1175,9 +1178,9 @@ YAHOO.widget.Node.prototype = {
 	  /**
      * Returns an object which could be used to build a tree out of this node and its children.
      * It can be passed to the tree constructor to reproduce this node as a tree.
-     * It will return false if any node loads dynamically, regardless of whether it is loaded or not.
+     * It will return false if the node or any children loads dynamically, regardless of whether it is loaded or not.
      * @method getNodeDefinition
-     * @return {Object | false}  definition of the tree or false if any node is defined as dynamic
+     * @return {Object | false}  definition of the tree or false if the node or any children is defined as dynamic
      */
     getNodeDefinition: function() {
 	

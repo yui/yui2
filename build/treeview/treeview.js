@@ -1197,8 +1197,10 @@ TV.addHandler(window,"load", TV.preload);
  * @param oData {object} a string or object containing the data that will
  * be used to render this node, and any custom attributes that should be
  * stored with the node (which is available in noderef.data).
+ * All values in oData will be used to set equally named properties in the node
+ * as long as the node does have such properties, they are not undefined, private or functions.
  * @param oParent {Node} this node's parent node
- * @param expanded {boolean} the initial expanded/collapsed state
+ * @param expanded {boolean} the initial expanded/collapsed state (deprecated, use oData.expanded)
  * @constructor
  */
 YAHOO.widget.Node = function(oData, oParent, expanded) {
@@ -1409,7 +1411,9 @@ YAHOO.widget.Node.prototype = {
      * The node type
      * @property _type
      * @private
-     */
+     * @type string
+     * @default "Node"
+*/
     _type: "Node",
 
     /*
@@ -1748,10 +1752,9 @@ YAHOO.widget.Node.prototype = {
     },
     */
 
-    /**
-     * Hides this nodes children (creating them if necessary), changes the
+  /**
+     * Hides this nodes children (creating them if necessary), changes the toggle style.
      * @method collapse
-     * toggle style.
      */
     collapse: function() {
         // Only collapse if currently expanded
@@ -2259,7 +2262,7 @@ YAHOO.widget.Node.prototype = {
      * @return {string} string representation of the node
      */
     toString: function() {
-        return "Node (" + this.index + ")";
+        return this._type + " (" + this.index + ")";
     },
 	/**
 	* array of items that had the focus set on them
@@ -2332,9 +2335,9 @@ YAHOO.widget.Node.prototype = {
 	  /**
      * Returns an object which could be used to build a tree out of this node and its children.
      * It can be passed to the tree constructor to reproduce this node as a tree.
-     * It will return false if any node loads dynamically, regardless of whether it is loaded or not.
+     * It will return false if the node or any children loads dynamically, regardless of whether it is loaded or not.
      * @method getNodeDefinition
-     * @return {Object | false}  definition of the tree or false if any node is defined as dynamic
+     * @return {Object | false}  definition of the tree or false if the node or any children is defined as dynamic
      */
     getNodeDefinition: function() {
 	
@@ -2366,6 +2369,90 @@ YAHOO.widget.Node.prototype = {
 
 YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
 })();
+/**
+ * A custom YAHOO.widget.Node that handles the unique nature of 
+ * the virtual, presentationless root node.
+ * @namespace YAHOO.widget
+ * @class RootNode
+ * @extends YAHOO.widget.Node
+ * @param oTree {YAHOO.widget.TreeView} The tree instance this node belongs to
+ * @constructor
+ */
+YAHOO.widget.RootNode = function(oTree) {
+	// Initialize the node with null params.  The root node is a
+	// special case where the node has no presentation.  So we have
+	// to alter the standard properties a bit.
+	this.init(null, null, true);
+	
+	/*
+	 * For the root node, we get the tree reference from as a param
+	 * to the constructor instead of from the parent element.
+	 */
+	this.tree = oTree;
+};
+
+YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
+    
+   /**
+     * The node type
+     * @property _type
+      * @type string
+     * @private
+     * @default "RootNode"
+     */
+    _type: "RootNode",
+	
+    // overrides YAHOO.widget.Node
+    getNodeHtml: function() { 
+        return ""; 
+    },
+
+    toString: function() { 
+        return this._type;
+    },
+
+    loadComplete: function() { 
+        this.tree.draw();
+    },
+	
+   /**
+     * Count of nodes in tree.  
+    * It overrides Nodes.getNodeCount because the root node should not be counted.
+     * @method getNodeCount
+     * @return {int} number of nodes in the tree
+     */
+    getNodeCount: function() {
+		for (var i = 0, count = 0;i< this.children.length;i++) {
+			count += this.children[i].getNodeCount();
+		}
+        return count;
+    },
+
+  /**
+     * Returns an object which could be used to build a tree out of this node and its children.
+     * It can be passed to the tree constructor to reproduce this node as a tree.
+     * Since the RootNode is automatically created by treeView, 
+     * its own definition is excluded from the returned node definition
+     * which only contains its children.
+     * @method getNodeDefinition
+     * @return {Object | false}  definition of the tree or false if any child node is defined as dynamic
+     */
+    getNodeDefinition: function() {
+		
+		for (var def, defs = [], i = 0; i < this.children.length;i++) {
+			def = this.children[i].getNodeDefinition();
+			if (def === false) { return false;}
+			defs.push(def);
+		}
+		return defs;
+    },
+
+    collapse: function() {},
+    expand: function() {},
+	getSiblings: function() { return null; },
+	focus: function () {}
+
+});
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Lang = YAHOO.lang,
@@ -2373,9 +2460,9 @@ YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
 /**
  * The default node presentation.  The first parameter should be
  * either a string that will be used as the node's label, or an object
- * that has at least a string propery called label.  By default, the clicking the
+ * that has at least a string property called label.  By default,  clicking the
  * label will toggle the expanded/collapsed state of the node.  By
- * changing the href property of the instance, this behavior can be
+ * setting the href property of the instance, this behavior can be
  * changed so that the label will go to the specified href.
  * @namespace YAHOO.widget
  * @class TextNode
@@ -2388,7 +2475,7 @@ YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
  * as long as the node does have such properties, they are not undefined, private or functions.
  * All attributes are made available in noderef.data, which
  * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
- * can be used to retreive a node by one of the attributes.
+ * can be used to retrieve a node by one of the attributes.
  * @param oParent {YAHOO.widget.Node} this node's parent node
  * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
  */
@@ -2450,6 +2537,8 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      * The node type
      * @property _type
      * @private
+     * @type string
+     * @default "TextNode"
      */
     _type: "TextNode",
 
@@ -2503,104 +2592,65 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
   /**
      * Returns an object which could be used to build a tree out of this node and its children.
      * It can be passed to the tree constructor to reproduce this node as a tree.
-     * It will return false if any node loads dynamically, regardless of whether it is loaded or not.
+     * It will return false if the node or any descendant loads dynamically, regardless of whether it is loaded or not.
      * @method getNodeDefinition
-     * @return {Object | false}  definition of the tree or false if any node is defined as dynamic
+     * @return {Object | false}  definition of the tree or false if this node or any descendant is defined as dynamic
      */
     getNodeDefinition: function() {
 		var def = YAHOO.widget.TextNode.superclass.getNodeDefinition.call(this);
 		if (def === false) { return false; }
+
+		// Node specific properties
 		def.label = this.label;
-		
 		if (this.labelStyle != 'ygtvlabel') { def.style = this.labelStyle; }
 		if (this.title) { def.title = this.title ; }
+
 		return def;
 	
 	},
 
     toString: function() { 
-        return "TextNode (" + this.index + ") " + this.label;
+        return YAHOO.widget.TextNode.superclass.toString.call(this) + ": " + this.label;
     }
 });
 })();
 /**
- * A custom YAHOO.widget.Node that handles the unique nature of 
- * the virtual, presentationless root node.
+ * A menu-specific implementation that differs from TextNode in that only 
+ * one sibling can be expanded at a time.
  * @namespace YAHOO.widget
- * @class RootNode
- * @extends YAHOO.widget.Node
- * @param oTree {YAHOO.widget.TreeView} The tree instance this node belongs to
+ * @class MenuNode
+ * @extends YAHOO.widget.TextNode
+ * @param oData {object} a string or object containing the data that will
+ * be used to render this node.
+ * Providing a string is the same as providing an object with a single property named label.
+ * All values in the oData will be used to set equally named properties in the node
+ * as long as the node does have such properties, they are not undefined, private or functions.
+ * All attributes are made available in noderef.data, which
+ * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
+ * can be used to retrieve a node by one of the attributes.
+ * @param oParent {YAHOO.widget.Node} this node's parent node
+ * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
  * @constructor
  */
-YAHOO.widget.RootNode = function(oTree) {
-	// Initialize the node with null params.  The root node is a
-	// special case where the node has no presentation.  So we have
-	// to alter the standard properties a bit.
-	this.init(null, null, true);
-	
-	/*
-	 * For the root node, we get the tree reference from as a param
-	 * to the constructor instead of from the parent element.
-	 */
-	this.tree = oTree;
+YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
+	YAHOO.widget.TextNode.superclass.constructor.call(this,oData,oParent,expanded);
+
+   /*
+     * Menus usually allow only one branch to be open at a time.
+     */
+	this.multiExpand = false;
+
 };
 
-YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
-    
-	    /**
+YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
+
+    /**
      * The node type
      * @property _type
      * @private
+    * @default "MenuNode"
      */
-    _type: "RootNode",
-	
-    // overrides YAHOO.widget.Node
-    getNodeHtml: function() { 
-        return ""; 
-    },
-
-    toString: function() { 
-        return "RootNode";
-    },
-
-    loadComplete: function() { 
-        this.tree.draw();
-    },
-	
-   /**
-     * Count of nodes in tree.  
-    * It overrides Nodes.getNodeCount because the root node should not be counted.
-     * @method getNodeCount
-     * @return {int} number of nodes in the tree
-     */
-    getNodeCount: function() {
-		for (var i = 0, count = 0;i< this.children.length;i++) {
-			count += this.children[i].getNodeCount();
-		}
-        return count;
-    },
-
-  /**
-     * Returns an object which could be used to build a tree out of this node and its children.
-     * It can be passed to the tree constructor to reproduce this node as a tree.
-     * It will return false if any node loads dynamically, regardless of whether it is loaded or not.
-     * @method getNodeDefinition
-     * @return {Object | false}  definition of the tree or false if any node is defined as dynamic
-     */
-    getNodeDefinition: function() {
-		
-		for (var def, defs = [], i = 0; i < this.children.length;i++) {
-			def = this.children[i].getNodeDefinition();
-			if (def === false) { return false;}
-			defs.push(def);
-		}
-		return defs;
-    },
-
-    collapse: function() {},
-    expand: function() {},
-	getSiblings: function() { return null; },
-	focus: function () {}
+    _type: "MenuNode"
 
 });
 (function () {
@@ -2610,9 +2660,9 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
 
 /**
  * This implementation takes either a string or object for the
- * oData argument.  If is it a string, we will use it for the display
+ * oData argument.  If is it a string, it will use it for the display
  * of this node (and it can contain any html code).  If the parameter
- * is an object, we look for a parameter called "html" that will be
+ * is an object,it looks for a parameter called "html" that will be
  * used for this node's display.
  * @namespace YAHOO.widget
  * @class HTMLNode
@@ -2625,11 +2675,11 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
  * as long as the node does have such properties, they are not undefined, private or functions.
  * All other attributes are made available in noderef.data, which
  * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
- * can be used to retreive a node by one of the attributes.
+ * can be used to retrieve a node by one of the attributes.
  * @param oParent {YAHOO.widget.Node} this node's parent node
  * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
  * @param hasIcon {boolean} specifies whether or not leaf nodes should
- * be rendered with or without a horizontal line line icon. If the icon
+ * be rendered with or without a horizontal line line and/or toggle icon. If the icon
  * is not displayed, the content fills the space it would have occupied.
  * This option operates independently of the leaf node presentation logic
  * for dynamic nodes.
@@ -2664,6 +2714,8 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
      * The node type
      * @property _type
      * @private
+     * @type string
+     * @default "HTMLNode"
      */
     _type: "HTMLNode",
 
@@ -2725,55 +2777,9 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
 		def.html = this.html;
 		return def;
 	
-	},
-
-    toString: function() { 
-        return "HTMLNode (" + this.index + ")";
-    }
+	}
 });
 })();
-/**
- * A menu-specific implementation that differs from TextNode in that only 
- * one sibling can be expanded at a time.
- * @namespace YAHOO.widget
- * @class MenuNode
- * @extends YAHOO.widget.TextNode
- * @param oData {object} a string or object containing the data that will
- * be used to render this node.
- * Providing a string is the same as providing an object with a single property named label.
- * All values in the oData will be used to set equally named properties in the node
- * as long as the node does have such properties, they are not undefined, private or functions.
- * All attributes are made available in noderef.data, which
- * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
- * can be used to retreive a node by one of the attributes.
- * @param oParent {YAHOO.widget.Node} this node's parent node
- * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
- * @constructor
- */
-YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
-	YAHOO.widget.TextNode.superclass.constructor.call(this,oData,oParent,expanded);
-
-   /*
-     * Menus usually allow only one branch to be open at a time.
-     */
-	this.multiExpand = false;
-
-};
-
-YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
-
-    /**
-     * The node type
-     * @property _type
-     * @private
-     */
-    _type: "MenuNode",
-
-    toString: function() { 
-        return "MenuNode (" + this.index + ") " + this.label;
-    }
-
-});
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Lang = YAHOO.lang,
@@ -2782,7 +2788,7 @@ YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
 		
 /**
  * A Date-specific implementation that differs from TextNode in that it uses 
- * YAHOO.widget.Calendar as an inline editor, if available
+ * YAHOO.widget.Calendar as an in-line editor, if available
  * If Calendar is not available, it behaves as a plain TextNode.
  * @namespace YAHOO.widget
  * @class DateNode
@@ -2791,10 +2797,10 @@ YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
  * be used to render this node.
  * Providing a string is the same as providing an object with a single property named label.
  * All values in the oData will be used to set equally named properties in the node
- * as long as the node does have such properties, they are not undefined, private or functions.
+ * as long as the node does have such properties, they are not undefined, private nor functions.
  * All attributes are made available in noderef.data, which
  * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
- * can be used to retreive a node by one of the attributes.
+ * can be used to retrieve a node by one of the attributes.
  * @param oParent {YAHOO.widget.Node} this node's parent node
  * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
  * @constructor
@@ -2808,13 +2814,15 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
     /**
      * The node type
      * @property _type
+     * @type string
      * @private
+     * @default  "DateNode"
      */
     _type: "DateNode",
 	
 	/**
 	* Configuration object for the Calendar editor, if used.
-	* See http://developer.yahoo.com/yui/calendar/#internationalization
+	* See <a href="http://developer.yahoo.com/yui/calendar/#internationalization">http://developer.yahoo.com/yui/calendar/#internationalization</a>
 	* @property calendarConfig
 	*/
 	calendarConfig: null,
@@ -2832,7 +2840,8 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 		var cal, container = editorData.inputContainer;
 		
 		if (Lang.isUndefined(Calendar)) {
-			YAHOO.widget.DateNode.superclass.fillEditorContainer.call(this, container);
+			Dom.replaceClass(editorData.editorPanel,'ygtv-edit-DateNode','ygtv-edit-TextNode');
+			YAHOO.widget.DateNode.superclass.fillEditorContainer.call(this, editorData);
 			return;
 		}
 			
@@ -2882,12 +2891,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 		dd[cal.cfg.getProperty('MDY_MONTH_POSITION') -1] = date.getMonth() + 1;
 		dd[cal.cfg.getProperty('MDY_YEAR_POSITION') -1] = date.getFullYear();
 		return dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
-	},
-
-
-    toString: function() { 
-        return "DateNode (" + this.index + ") " + this.label;
-    }
+	}
 
 });
 })();
@@ -2900,10 +2904,22 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 
 	/**
 	 * An object to store information used for in-line editing
-	 * for all Nodes of all TreeViews
+	 * for all Nodes of all TreeViews. It contains:
+	 * <ul>
+	* <li>active {boolean}, whether there is an active cell editor </li>
+	* <li>whoHasIt {YAHOO.widget.TreeView} TreeView instance that is currently using the editor</li>
+	* <li>nodeType {string} value of static Node._type property, allows reuse of input element if node is of the same type.</li>
+	* <li>editorPanel {HTMLelement (&lt;div&gt;)} element holding the in-line editor</li>
+	* <li>inputContainer {HTMLelement (&lt;div&gt;)} element which will hold the type-specific input element(s) to be filled by the fillEditorContainer method</li>
+	* <li>buttonsContainer {HTMLelement (&lt;div&gt;)} element which holds the &lt;button&gt; elements for Ok/Cancel.  If you don't want any of the buttons, hide it via CSS styles, don't destroy it</li>
+	* <li>node {YAHOO.widget.Node} reference to the Node being edited</li>
+	* <li>saveOnEnter {boolean}, whether the Enter key should be accepted as a Save command (Esc. is always taken as Cancel), disable for multi-line input elements </li>
+	* </ul>
+	*  Editors are free to use this object to store additional data.
 	 * @property _editorData
 	 * @private
 	 * @static
+	 * @for YAHOO.widget.TreeView
 	 */
 	TV._editorData = {
 		active:false,
@@ -2923,6 +2939,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	* @method _nodeEditing
 	* @param node {YAHOO.widget.Node} the node to be edited
 	* @return {Boolean} true to indicate that the node is editable and prevent any further bubbling of the click.
+	 * @for YAHOO.widget.TreeView
 	*/
 	
 	
@@ -3002,6 +3019,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	* @method _closeEditor
 	* @param save {Boolean} true if the edited value is to be saved, false if discarded
 	* @private
+	 * @for YAHOO.widget.TreeView
 	*/
 	
 	TVproto._closeEditor = function (save) {
@@ -3022,6 +3040,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	*  Entry point for TreeView's destroy method to destroy whatever the editing plug-in has created
 	* @method _destroyEditor
 	* @private
+	 * @for YAHOO.widget.TreeView
 	*/
 	TVproto._destroyEditor = function() {
 		var ed = TV._editorData;
@@ -3037,23 +3056,25 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	
 	var Nproto = YAHOO.widget.Node.prototype;
 	
-	/** Placeholder for a function that should provide the inline node label editor
-	 *   Leaving it set to null will indicate that this node type is not editable
-	 * Should be overridden by nodes that provide inline editing
+	/** Placeholder for a function that should provide the inline node label editor.
+	 *   Leaving it set to null will indicate that this node type is not editable.
+	 * It should be overridden by nodes that provide inline editing.
 	 *  The Node-specific editing element (input box, textarea or whatever) should be inserted into editorData.inputContainer.
 	 * @method fillEditorContainer
 	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
 	 * @return void
+	 * @for YAHOO.widget.Node
 	 */
 	Nproto.fillEditorContainer = null;
 
 	
 	/**
 	* Node-specific destroy function to empty the contents of the inline editor panel
-	* This function is worst case that will purge all possible events and remove the contents
-	* Method purgeElement is somewhat costly so if it can be avoided, it is better to do so.
+	* This function is the worst case alternative that will purge all possible events and remove the editor contents
+	* Method Event.purgeElement is somewhat costly so if it can be replaced by specifc Event.removeListeners, it is better to do so.
 	* @method destroyEditorContents
 	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @for YAHOO.widget.Node
 	 */
 	Nproto.destroyEditorContents = function (editorData) {
 		// In the worst case, if the input editor (such as the Calendar) has no destroy method
@@ -3063,10 +3084,11 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	};
 
 	/**
-	* Returns the value entered into the editor
+	* Returns the value entered into the editor.
 	* Should be overridden by each node type
 	* @method getEditorValue
 	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @for YAHOO.widget.Node
 	 * @return {mixed} usually some suitable value to display in the Node
 	 */
 	Nproto.getEditorValue = function (editorData) {
@@ -3079,6 +3101,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	* Signals if the label is editable.  Ignored on TextNodes with href set.
 	* @property editable
 	* @type boolean
+	 * @for YAHOO.widget.TextNode
 	*/
 	TNproto.editable = false;
 
@@ -3088,6 +3111,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	 * @method fillEditorContainer
 	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
 	 * @return void
+	 * @for YAHOO.widget.TextNode
 	 */
 	TNproto.fillEditorContainer = function (editorData) {
 	
@@ -3116,6 +3140,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	* @method getEditorValue
 	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
 	 * @return {string} entered data
+	 * @for YAHOO.widget.TextNode
 	 */
 	TNproto.getEditorValue = function (editorData) {
 		return editorData.inputElement.value;
@@ -3127,179 +3152,10 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	* Since we didn't set any event listeners on this inline editor, it is more efficient to avoid the generic method in Node
 	* @method destroyEditorContents
 	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @for YAHOO.widget.TextNode
 	 */
 	TNproto.destroyEditorContents = function (editorData) {
 		editorData.inputContainer.innerHTML = '';
 	};
 })();
-/**
- * A static factory class for tree view expand/collapse animations
- * @class TVAnim
- * @static
- */
-YAHOO.widget.TVAnim = function() {
-    return {
-        /**
-         * Constant for the fade in animation
-         * @property FADE_IN
-         * @type string
-         * @static
-         */
-        FADE_IN: "TVFadeIn",
-
-        /**
-         * Constant for the fade out animation
-         * @property FADE_OUT
-         * @type string
-         * @static
-         */
-        FADE_OUT: "TVFadeOut",
-
-        /**
-         * Returns a ygAnim instance of the given type
-         * @method getAnim
-         * @param type {string} the type of animation
-         * @param el {HTMLElement} the element to element (probably the children div)
-         * @param callback {function} function to invoke when the animation is done.
-         * @return {YAHOO.util.Animation} the animation instance
-         * @static
-         */
-        getAnim: function(type, el, callback) {
-            if (YAHOO.widget[type]) {
-                return new YAHOO.widget[type](el, callback);
-            } else {
-                return null;
-            }
-        },
-
-        /**
-         * Returns true if the specified animation class is available
-         * @method isValid
-         * @param type {string} the type of animation
-         * @return {boolean} true if valid, false if not
-         * @static
-         */
-        isValid: function(type) {
-            return (YAHOO.widget[type]);
-        }
-    };
-} ();
-/**
- * A 1/2 second fade-in animation.
- * @class TVFadeIn
- * @constructor
- * @param el {HTMLElement} the element to animate
- * @param callback {function} function to invoke when the animation is finished
- */
-YAHOO.widget.TVFadeIn = function(el, callback) {
-    /**
-     * The element to animate
-     * @property el
-     * @type HTMLElement
-     */
-    this.el = el;
-
-    /**
-     * the callback to invoke when the animation is complete
-     * @property callback
-     * @type function
-     */
-    this.callback = callback;
-
-};
-
-YAHOO.widget.TVFadeIn.prototype = {
-    /**
-     * Performs the animation
-     * @method animate
-     */
-    animate: function() {
-        var tvanim = this;
-
-        var s = this.el.style;
-        s.opacity = 0.1;
-        s.filter = "alpha(opacity=10)";
-        s.display = "";
-
-        var dur = 0.4; 
-        var a = new YAHOO.util.Anim(this.el, {opacity: {from: 0.1, to: 1, unit:""}}, dur);
-        a.onComplete.subscribe( function() { tvanim.onComplete(); } );
-        a.animate();
-    },
-
-    /**
-     * Clean up and invoke callback
-     * @method onComplete
-     */
-    onComplete: function() {
-        this.callback();
-    },
-
-    /**
-     * toString
-     * @method toString
-     * @return {string} the string representation of the instance
-     */
-    toString: function() {
-        return "TVFadeIn";
-    }
-};
-/**
- * A 1/2 second fade out animation.
- * @class TVFadeOut
- * @constructor
- * @param el {HTMLElement} the element to animate
- * @param callback {Function} function to invoke when the animation is finished
- */
-YAHOO.widget.TVFadeOut = function(el, callback) {
-    /**
-     * The element to animate
-     * @property el
-     * @type HTMLElement
-     */
-    this.el = el;
-
-    /**
-     * the callback to invoke when the animation is complete
-     * @property callback
-     * @type function
-     */
-    this.callback = callback;
-
-};
-
-YAHOO.widget.TVFadeOut.prototype = {
-    /**
-     * Performs the animation
-     * @method animate
-     */
-    animate: function() {
-        var tvanim = this;
-        var dur = 0.4;
-        var a = new YAHOO.util.Anim(this.el, {opacity: {from: 1, to: 0.1, unit:""}}, dur);
-        a.onComplete.subscribe( function() { tvanim.onComplete(); } );
-        a.animate();
-    },
-
-    /**
-     * Clean up and invoke callback
-     * @method onComplete
-     */
-    onComplete: function() {
-        var s = this.el.style;
-        s.display = "none";
-        // s.opacity = 1;
-        s.filter = "alpha(opacity=100)";
-        this.callback();
-    },
-
-    /**
-     * toString
-     * @method toString
-     * @return {string} the string representation of the instance
-     */
-    toString: function() {
-        return "TVFadeOut";
-    }
-};
 YAHOO.register("treeview", YAHOO.widget.TreeView, {version: "@VERSION@", build: "@BUILD@"});
