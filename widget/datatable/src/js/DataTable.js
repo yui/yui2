@@ -2926,23 +2926,26 @@ _addTrEl : function (oRecord) {
  * @private
  */
 _updateTrEl : function(elTr, oRecord) {
-    // Hide the row to prevent constant reflows
-    elTr.style.display = 'none';
-    
-    // Update TD elements with new data
-    var allTds = elTr.childNodes,
-        elTd;
-    for(var i=0,len=allTds.length; i<len; ++i) {
-        elTd = allTds[i];
-        elTr.id = oRecord.getId(); // Needed for Record association and tracking of FIRST/LAST
+    var ok = this.formatRow(elTr, oRecord);
+    if(ok) {
+        // Hide the row to prevent constant reflows
+        elTr.style.display = 'none';
         
-        // Set the cell content
-        this.formatCell(allTds[i].firstChild, oRecord, this._oColumnSet.keys[i]);
+        // Update TD elements with new data
+        var allTds = elTr.childNodes,
+            elTd;
+        for(var i=0,len=allTds.length; i<len; ++i) {
+            elTd = allTds[i];
+            
+            // Set the cell content
+            this.formatCell(allTds[i].firstChild, oRecord, this._oColumnSet.keys[i]);
+        }
+        
+        // Redisplay the row for reflow
+        elTr.style.display = '';
     }
     
-    // Redisplay the row for reflow
-    elTr.style.display = '';
-
+    elTr.id = oRecord.getId(); // Needed for Record association and tracking of FIRST/LAST
     return elTr;
 },
 
@@ -6305,6 +6308,21 @@ unhighlightColumn : function(column) {
 
 
 // ROW FUNCTIONS
+
+/**
+ * Gives implementers access to the TR element and the associated Record. Returns
+ * true to continue formatting each TD element within the TR. Returns false to 
+ * cancel cell formatting.  
+ *
+ * @method formatRow
+ * @param elTr {HTMLElement} The TR element.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @return {Boolean} True to continue formatting child TD elements, false to 
+ * cancel formatting of child TD elements.  
+ */
+formatRow : function(elTr, oRecord) {
+    return true;
+},
 
 /**
  * Adds one new Record of data into the RecordSet at the index if given,
