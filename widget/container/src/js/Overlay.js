@@ -29,6 +29,9 @@
         Config = YAHOO.util.Config,
         Overlay = YAHOO.widget.Overlay,
 
+        _SUBSCRIBE = "subscribe",
+        _UNSUBSCRIBE = "unsubscribe",
+
         m_oIFrameTemplate,
 
         /**
@@ -117,10 +120,10 @@
             },
             
             "PREVENT_CONTEXT_OVERLAP": {
-            	key: "preventcontextoverlap",
-            	value: false,
+                key: "preventcontextoverlap",
+                value: false,
                 validator: Lang.isBoolean,  
-				supercedes: ["constraintoviewport"]
+                supercedes: ["constraintoviewport"]
             }
             
         };
@@ -292,6 +295,42 @@
         Overlay._initialized = true;
     }
 
+    /**
+     * Internal map of special event types, which are provided
+     * by the instance. It maps the event type to the custom event 
+     * instance. Contains entries for the "windowScroll", "windowResize" and
+     * "textResize" static container events.
+     *
+     * @property YAHOO.widget.Overlay._TRIGGER_MAP
+     * @type Object
+     * @static
+     * @private
+     */
+    Overlay._TRIGGER_MAP = {
+        "windowScroll" : Overlay.windowScrollEvent,
+        "windowResize" : Overlay.windowResizeEvent,
+        "textResize"   : Module.textResizeEvent
+    };
+
+    /**
+     * Array of default event types which will trigger 
+     * context alignment. It is empty by default for Overlay,
+     * but maybe populated in future releases, so classes extending
+     * Overlay which need to define their own set of CONTEXT_TRIGGERS
+     * should concatenate Overlay.CONTEXT_TRIGGERS with their own
+     * array of values.
+     * 
+     * <xmp>
+     *     YAHOO.widget.Menu.CONTEXT_TRIGGERS = YAHOO.widget.Overlay.CONTEXT_TRIGGERS.concat(["focus"]);
+     * <xmp>
+     *
+     * @property YAHOO.widget.Overlay.CONTEXT_TRIGGERS
+     * @type Array
+     * @static
+     * 
+     */
+    Overlay.CONTEXT_TRIGGERS = [];
+
     YAHOO.extend(Overlay, Module, {
 
         /**
@@ -364,7 +403,7 @@
             */
             this.beforeMoveEvent = this.createEvent(EVENT_TYPES.BEFORE_MOVE);
             this.beforeMoveEvent.signature = SIGNATURE;
-            
+
             /**
             * CustomEvent fired after the Overlay is moved.
             * @event moveEvent
@@ -373,7 +412,7 @@
             */
             this.moveEvent = this.createEvent(EVENT_TYPES.MOVE);
             this.moveEvent.signature = SIGNATURE;
-        
+
         },
         
         /**
@@ -432,18 +471,47 @@
 
             /**
             * <p>
-            * The array of context arguments for context-sensitive positioning.  
-            * The format of the array is: [contextElementOrId, overlayCorner, contextCorner],
-            * where "contextElementOrId" is a reference to the context element to which the overlay should
-            * be aligned (or it's id). The corner parameters are one of the following string values: 
-            * "tr" (top right), "tl" (top left), "br" (bottom right), or "bl" (bottom left) and define 
-            * which corners of the overlay and context element should be aligned.
+            * The array of context arguments for context-sensitive positioning. 
+            * </p>
+            *
+            * <p>
+            * The format of the array is: <code>[contextElementOrId, overlayCorner, contextCorner, arrayOfTriggerEvents (optional)]</code>, the
+            * the 4 array elements described in detail below:
+            * </p>
+            *
+            * <dl>
+            * <dt>contextElementOrId &#60;String|HTMLElement&#62;</dt>
+            * <dd>A reference to the context element to which the overlay should be aligned (or it's id).</dd>
+            * <dt>overlayCorner &#60;String&#62;</dt>
+            * <dd>The corner of the overlay which is to be used for alignment. This corner will be aligned to the 
+            * corner of the context element defined by the "contextCorner" entry which follows. Supported string values are: 
+            * "tr" (top right), "tl" (top left), "br" (bottom right), or "bl" (bottom left).</dd>
+            * <dt>contextCorner &#60;String&#62;</dt>
+            * <dd>The corner of the context element which is to be used for alignment. Supported string values are the same ones listed for the "overlayCorner" entry above.</dd>
+            * <dt>arrayOfTriggerEvents (optional) &#60;Array[String|CustomEvent]&#62;</dt>
+            * <dd>
+            * <p>
+            * By default, context alignment is a one time operation, aligning the Overlay to the context element when context configuration property is set, or when the <a href="#method_align">align</a> 
+            * method is invoked. However, you can use the optional "arrayOfTriggerEvents" entry to define the list of events which should force the overlay to re-align itself with the context element. 
+            * This is useful in situations where the layout of the document may change, resulting in the context element's position being modified.
             * </p>
             * <p>
-            * For example, setting this property to ["img1", "tl", "bl"] would 
+            * The array can contain either event type strings for events the instance publishes (e.g. "beforeShow") or CustomEvent instances. Additionally the following
+            * 3 static container event types are also currently supported : <code>"windowResize", "windowScroll", "textResize"</code> (defined in <a href="#property__TRIGGER_MAP">_TRIGGER_MAP</a> private property).
+            * </p>
+            * </dd>
+            * </dl>
+            *
+            * <p>
+            * For example, setting this property to <code>["img1", "tl", "bl"]</code> will 
             * align the Overlay's top left corner to the bottom left corner of the
             * context element with id "img1".
             * </p>
+            * <p>
+            * Adding the optional trigger values: <code>["img1", "tl", "bl", ["beforeShow", "windowResize"]]</code>,
+            * will re-align the overlay position, whenever the "beforeShow" or "windowResize" events are fired.
+            * </p>
+            *
             * @config context
             * @type Array
             * @default null
@@ -816,7 +884,7 @@
             Dom.setStyle(el, "width", width);
             this.cfg.refireEvent("iframe");
         },
-        
+
         /**
         * The default event handler fired when the "zIndex" property is changed.
         * @method configzIndex
@@ -1185,8 +1253,9 @@
         },
 
          /**
-        * The default event handler fired when the "context" property 
+        * The default event handler fired when the "context" property
         * is changed.
+        * 
         * @method configContext
         * @param {String} type The CustomEvent type (usually the property name)
         * @param {Object[]} args The CustomEvent arguments. For configuration 
@@ -1195,28 +1264,114 @@
         * this will usually equal the owner.
         */
         configContext: function (type, args, obj) {
-    
+
             var contextArgs = args[0],
                 contextEl,
                 elementMagnetCorner,
-                contextMagnetCorner;
+                contextMagnetCorner,
+                triggers,
+                constr = this.constructor;
 
             if (contextArgs) {
+
                 contextEl = contextArgs[0];
                 elementMagnetCorner = contextArgs[1];
                 contextMagnetCorner = contextArgs[2];
-                
+                triggers = contextArgs[3];
+
+                if (constr && constr.CONTEXT_TRIGGERS && constr.CONTEXT_TRIGGERS.length > 0) {
+                    triggers = (triggers || []).concat(constr.CONTEXT_TRIGGERS);
+                }
+
                 if (contextEl) {
                     if (typeof contextEl == "string") {
-                        this.cfg.setProperty("context", 
-                            [document.getElementById(contextEl), 
-                                elementMagnetCorner, contextMagnetCorner], 
+                        this.cfg.setProperty("context", [
+                                document.getElementById(contextEl), 
+                                elementMagnetCorner,
+                                contextMagnetCorner,
+                                triggers ],
                                 true);
                     }
-                    
+
                     if (elementMagnetCorner && contextMagnetCorner) {
                         this.align(elementMagnetCorner, contextMagnetCorner);
                     }
+
+                    if (this._contextTriggers) {
+                        // Unsubscribe Old Set
+                        this._processTriggers(this._contextTriggers, _UNSUBSCRIBE, this._alignOnTrigger);
+                    }
+
+                    if (triggers) {
+                        // Subscribe New Set
+                        this._processTriggers(triggers, _SUBSCRIBE, this._alignOnTrigger);
+                        this._contextTriggers = triggers;
+                    }
+                }
+            }
+        },
+
+        /**
+         * Custom Event handler for context alignment triggers. Invokes the align method
+         * 
+         * @method _alignOnTrigger
+         * @protected
+         * 
+         * @param {String} type The event type (not used by the default implementation)
+         * @param {Any[]} args The array of arguments for the trigger event (not used by the default implementation)
+         */
+        _alignOnTrigger: function(type, args) {
+            this.align();
+        },
+
+        /**
+         * Helper method to locate the custom event instance for the event name string
+         * passed in. As a convenience measure, any custom events passed in are returned.
+         *
+         * @method _findTriggerCE
+         * @private
+         *
+         * @param {String|CustomEvent} t Either a CustomEvent, or event type (e.g. "windowScroll") for which a 
+         * custom event instance needs to be looked up from the Overlay._TRIGGER_MAP.
+         */
+        _findTriggerCE : function(t) {
+            var tce = null;
+            if (t instanceof CustomEvent) {
+                tce = t;
+            } else if (Overlay._TRIGGER_MAP[t]) {
+                tce = Overlay._TRIGGER_MAP[t];
+            }
+            return tce;
+        },
+
+        /**
+         * Utility method that subscribes or unsubscribes the given 
+         * function from the list of trigger events provided.
+         *
+         * @method _processTriggers
+         * @protected 
+         *
+         * @param {Array[String|CustomEvent]} triggers An array of either CustomEvents, event type strings 
+         * (e.g. "beforeShow", "windowScroll") to/from which the provided function should be 
+         * subscribed/unsubscribed respectively.
+         *
+         * @param {String} mode Either "subscribe" or "unsubscribe", specifying whether or not
+         * we are subscribing or unsubscribing trigger listeners
+         * 
+         * @param {Function} fn The function to be subscribed/unsubscribed to/from the trigger event.
+         * Context is always set to the overlay instance, and no additional object argument 
+         * get passed to the subscribed function.
+         */
+        _processTriggers : function(triggers, mode, fn) {
+            var t, tce;
+
+            for (var i = 0, l = triggers.length; i < l; ++i) {
+                t = triggers[i];
+                tce = this._findTriggerCE(t);
+                if (tce) {
+                    tce[mode](fn, this, true);
+                } else {
+                    this[mode](t, fn);
                 }
             }
         },
@@ -1334,162 +1489,162 @@
          * @param {Number} x The X coordinate value to be constrained
          * @return {Number} The constrained x coordinate
          */		
-		getConstrainedX: function (x) {
+        getConstrainedX: function (x) {
 
             var oOverlay = this,
-            	oOverlayEl = oOverlay.element,
+                oOverlayEl = oOverlay.element,
                 nOverlayOffsetWidth = oOverlayEl.offsetWidth,
 
-            	nViewportOffset = Overlay.VIEWPORT_OFFSET,
+                nViewportOffset = Overlay.VIEWPORT_OFFSET,
                 viewPortWidth = Dom.getViewportWidth(),
                 scrollX = Dom.getDocumentScrollLeft(),
 
-				bCanConstrain = (nOverlayOffsetWidth + nViewportOffset < viewPortWidth),
+                bCanConstrain = (nOverlayOffsetWidth + nViewportOffset < viewPortWidth),
 
-				aContext = this.cfg.getProperty("context"),
-				oContextEl,
-				nContextElX,
-				nContextElWidth,
+                aContext = this.cfg.getProperty("context"),
+                oContextEl,
+                nContextElX,
+                nContextElWidth,
 
-				bFlipped = false,
+                bFlipped = false,
 
-				nLeftRegionWidth,
-				nRightRegionWidth,
+                nLeftRegionWidth,
+                nRightRegionWidth,
 
-				leftConstraint,
-				rightConstraint,
+                leftConstraint,
+                rightConstraint,
 
-				xNew = x,
+                xNew = x,
 
-				oOverlapPositions = {
+                oOverlapPositions = {
 
-					"tltr": true,
-					"blbr": true,
-					"brbl": true,
-					"trtl": true
-				
-				};
-
-
-			var flipHorizontal = function () {
-			
-				var nNewX;
-			
-				if ((oOverlay.cfg.getProperty("x") - scrollX) > nContextElX) {
-					nNewX = (nContextElX - nOverlayOffsetWidth);
-				}
-				else {
-					nNewX = (nContextElX + nContextElWidth);
-				}
-				
-	
-				oOverlay.cfg.setProperty("x", (nNewX + scrollX), true);
-	
-				return nNewX;
-	
-			};
+                    "tltr": true,
+                    "blbr": true,
+                    "brbl": true,
+                    "trtl": true
+                
+                };
 
 
-
-			/*
-				 Uses the context element's position to calculate the availble width 
-				 to the right and left of it to display its corresponding Overlay.
-			*/
-
-			var getDisplayRegionWidth = function () {
-
-				// The Overlay is to the right of the context element
-
-				if ((oOverlay.cfg.getProperty("x") - scrollX) > nContextElX) {
-					return (nRightRegionWidth - nViewportOffset);
-				}
-				else {	// The Overlay is to the left of the context element
-					return (nLeftRegionWidth - nViewportOffset);
-				}
-			
-			};
-	
-
-			/*
-				Positions the Overlay to the left or right of the context element so that it remains 
-				inside the viewport.
-			*/
-	
-			var setHorizontalPosition = function () {
-			
-				var nDisplayRegionWidth = getDisplayRegionWidth(),
-					fnReturnVal;
-
-				if (nOverlayOffsetWidth > nDisplayRegionWidth) {
-		
-					if (bFlipped) {
-		
-						/*
-							 All possible positions and values have been 
-							 tried, but none were successful, so fall back 
-							 to the original size and position.
-						*/
-	
-						flipHorizontal();
-						
-					}
-					else {
-		
-						flipHorizontal();
-
-						bFlipped = true;
-		
-						fnReturnVal = setHorizontalPosition();
-		
-					}
-				
-				}
-		
-				return fnReturnVal;
-			
-			};
+            var flipHorizontal = function () {
+            
+                var nNewX;
+            
+                if ((oOverlay.cfg.getProperty("x") - scrollX) > nContextElX) {
+                    nNewX = (nContextElX - nOverlayOffsetWidth);
+                }
+                else {
+                    nNewX = (nContextElX + nContextElWidth);
+                }
+                
+    
+                oOverlay.cfg.setProperty("x", (nNewX + scrollX), true);
+    
+                return nNewX;
+    
+            };
 
 
-			if (oOverlapPositions[(aContext[1] + aContext[2])] && 
-				this.cfg.getProperty("preventcontextoverlap")) {
 
-				if (bCanConstrain) {
+            /*
+                 Uses the context element's position to calculate the availble width 
+                 to the right and left of it to display its corresponding Overlay.
+            */
 
-					oContextEl = aContext[0];
-					nContextElX = Dom.getX(oContextEl) - scrollX;
-					nContextElWidth = oContextEl.offsetWidth;
-					nLeftRegionWidth = nContextElX;
-					nRightRegionWidth = (viewPortWidth - (nContextElX + nContextElWidth));
-	
-					setHorizontalPosition();
+            var getDisplayRegionWidth = function () {
 
-				}
-				
-				xNew = this.cfg.getProperty("x");
-			
-			}
-			else {
+                // The Overlay is to the right of the context element
 
-				if (bCanConstrain) {
-	
-					leftConstraint = scrollX + nViewportOffset;
-					rightConstraint = 
-						scrollX + viewPortWidth - nOverlayOffsetWidth - nViewportOffset;
-	
-					if (x < leftConstraint) {
-						xNew = leftConstraint;
-					} else if (x > rightConstraint) {
-						xNew = rightConstraint;
-					}
-				} else {
-					xNew = nViewportOffset + scrollX;
-				}
+                if ((oOverlay.cfg.getProperty("x") - scrollX) > nContextElX) {
+                    return (nRightRegionWidth - nViewportOffset);
+                }
+                else {	// The Overlay is to the left of the context element
+                    return (nLeftRegionWidth - nViewportOffset);
+                }
+            
+            };
+    
+
+            /*
+                Positions the Overlay to the left or right of the context element so that it remains 
+                inside the viewport.
+            */
+    
+            var setHorizontalPosition = function () {
+            
+                var nDisplayRegionWidth = getDisplayRegionWidth(),
+                    fnReturnVal;
+
+                if (nOverlayOffsetWidth > nDisplayRegionWidth) {
+        
+                    if (bFlipped) {
+        
+                        /*
+                             All possible positions and values have been 
+                             tried, but none were successful, so fall back 
+                             to the original size and position.
+                        */
+    
+                        flipHorizontal();
+                        
+                    }
+                    else {
+        
+                        flipHorizontal();
+
+                        bFlipped = true;
+        
+                        fnReturnVal = setHorizontalPosition();
+        
+                    }
+                
+                }
+        
+                return fnReturnVal;
+            
+            };
+
+
+            if (oOverlapPositions[(aContext[1] + aContext[2])] && 
+                this.cfg.getProperty("preventcontextoverlap")) {
+
+                if (bCanConstrain) {
+
+                    oContextEl = aContext[0];
+                    nContextElX = Dom.getX(oContextEl) - scrollX;
+                    nContextElWidth = oContextEl.offsetWidth;
+                    nLeftRegionWidth = nContextElX;
+                    nRightRegionWidth = (viewPortWidth - (nContextElX + nContextElWidth));
+    
+                    setHorizontalPosition();
+
+                }
+                
+                xNew = this.cfg.getProperty("x");
+            
+            }
+            else {
+
+                if (bCanConstrain) {
+    
+                    leftConstraint = scrollX + nViewportOffset;
+                    rightConstraint = 
+                        scrollX + viewPortWidth - nOverlayOffsetWidth - nViewportOffset;
+    
+                    if (x < leftConstraint) {
+                        xNew = leftConstraint;
+                    } else if (x > rightConstraint) {
+                        xNew = rightConstraint;
+                    }
+                } else {
+                    xNew = nViewportOffset + scrollX;
+                }
             
             }
 
             return xNew;
-		
-		},
+        
+        },
 
 
         /**
@@ -1500,160 +1655,160 @@
          * @param {Number} y The Y coordinate value to be constrained
          * @return {Number} The constrained y coordinate
          */		
-		getConstrainedY: function (y) {
+        getConstrainedY: function (y) {
 
             var oOverlay = this,
-            	oOverlayEl = oOverlay.element,
+                oOverlayEl = oOverlay.element,
                 nOverlayOffsetHeight = oOverlayEl.offsetHeight,
             
-            	nViewportOffset = Overlay.VIEWPORT_OFFSET,
+                nViewportOffset = Overlay.VIEWPORT_OFFSET,
                 viewPortHeight = Dom.getViewportHeight(),
                 scrollY = Dom.getDocumentScrollTop(),
 
-				bCanConstrain = (nOverlayOffsetHeight + nViewportOffset < viewPortHeight),
+                bCanConstrain = (nOverlayOffsetHeight + nViewportOffset < viewPortHeight),
 
-				aContext = this.cfg.getProperty("context"),
-				oContextEl,
-				nContextElY,
-				nContextElHeight,
+                aContext = this.cfg.getProperty("context"),
+                oContextEl,
+                nContextElY,
+                nContextElHeight,
 
-				bFlipped = false,
+                bFlipped = false,
 
-				nTopRegionHeight,
-				nBottomRegionHeight,
+                nTopRegionHeight,
+                nBottomRegionHeight,
 
-				topConstraint,
-				bottomConstraint,
+                topConstraint,
+                bottomConstraint,
 
-            	yNew = y,
-            	
-				oOverlapPositions = {
-					"trbr": true,
-					"tlbl": true,
-					"bltl": true,
-					"brtr": true
-				};
-
-
-			var flipVertical = function () {
-
-				var nNewY;
-			
-				// The Overlay is below the context element, flip it above
-				if ((oOverlay.cfg.getProperty("y") - scrollY) > nContextElY) { 
-					nNewY = (nContextElY - nOverlayOffsetHeight);
-				}
-				else {	// The Overlay is above the context element, flip it below
-					nNewY = (nContextElY + nContextElHeight);
-				}
-	
-				oOverlay.cfg.setProperty("y", (nNewY + scrollY), true);
-				
-				return nNewY;
-			
-			};
+                yNew = y,
+                
+                oOverlapPositions = {
+                    "trbr": true,
+                    "tlbl": true,
+                    "bltl": true,
+                    "brtr": true
+                };
 
 
-			/*
-				 Uses the context element's position to calculate the availble height 
-				 above and below it to display its corresponding Overlay.
-			*/
+            var flipVertical = function () {
 
-			var getDisplayRegionHeight = function () {
-
-				// The Overlay is below the context element
-				if ((oOverlay.cfg.getProperty("y") - scrollY) > nContextElY) {
-					return (nBottomRegionHeight - nViewportOffset);				
-				}
-				else {	// The Overlay is above the context element
-					return (nTopRegionHeight - nViewportOffset);				
-				}
-		
-			};
-
-
-			/*
-				Trys to place the Overlay in the best possible position (either above or 
-				below its corresponding context element).
-			*/
-		
-			var setVerticalPosition = function () {
-		
-				var nDisplayRegionHeight = getDisplayRegionHeight(),
-					fnReturnVal;
-					
-
-				if (nOverlayOffsetHeight > nDisplayRegionHeight) {
-				   
-					if (bFlipped) {
-		
-						/*
-							 All possible positions and values for the 
-							 "maxheight" configuration property have been 
-							 tried, but none were successful, so fall back 
-							 to the original size and position.
-						*/
-	
-						flipVertical();
-						
-					}
-					else {
-		
-						flipVertical();
-
-						bFlipped = true;
-		
-						fnReturnVal = setVerticalPosition();
-		
-					}
-				
-				}
-		
-				return fnReturnVal;
-		
-			};
+                var nNewY;
+            
+                // The Overlay is below the context element, flip it above
+                if ((oOverlay.cfg.getProperty("y") - scrollY) > nContextElY) { 
+                    nNewY = (nContextElY - nOverlayOffsetHeight);
+                }
+                else {	// The Overlay is above the context element, flip it below
+                    nNewY = (nContextElY + nContextElHeight);
+                }
+    
+                oOverlay.cfg.setProperty("y", (nNewY + scrollY), true);
+                
+                return nNewY;
+            
+            };
 
 
-			if (oOverlapPositions[(aContext[1] + aContext[2])] && 
-					 this.cfg.getProperty("preventcontextoverlap")) {
+            /*
+                 Uses the context element's position to calculate the availble height 
+                 above and below it to display its corresponding Overlay.
+            */
 
-				if (bCanConstrain) {
+            var getDisplayRegionHeight = function () {
 
-					oContextEl = aContext[0];
-					nContextElHeight = oContextEl.offsetHeight;
-					nContextElY = (Dom.getY(oContextEl) - scrollY);
-	
-					nTopRegionHeight = nContextElY;
-					nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
-	
-					setVerticalPosition();
-				
-				}
+                // The Overlay is below the context element
+                if ((oOverlay.cfg.getProperty("y") - scrollY) > nContextElY) {
+                    return (nBottomRegionHeight - nViewportOffset);				
+                }
+                else {	// The Overlay is above the context element
+                    return (nTopRegionHeight - nViewportOffset);				
+                }
+        
+            };
 
-				yNew = oOverlay.cfg.getProperty("y");
 
-			}
-			else {
+            /*
+                Trys to place the Overlay in the best possible position (either above or 
+                below its corresponding context element).
+            */
+        
+            var setVerticalPosition = function () {
+        
+                var nDisplayRegionHeight = getDisplayRegionHeight(),
+                    fnReturnVal;
+                    
 
-				if (bCanConstrain) {
-	
-					topConstraint = scrollY + nViewportOffset;
-					bottomConstraint = 
-						scrollY + viewPortHeight - nOverlayOffsetHeight - nViewportOffset;
-	
-					if (y < topConstraint) {
-						yNew  = topConstraint;
-					} else if (y  > bottomConstraint) {
-						yNew  = bottomConstraint;
-					}
-				} else {
-					yNew = nViewportOffset + scrollY;
-				}
+                if (nOverlayOffsetHeight > nDisplayRegionHeight) {
+                   
+                    if (bFlipped) {
+        
+                        /*
+                             All possible positions and values for the 
+                             "maxheight" configuration property have been 
+                             tried, but none were successful, so fall back 
+                             to the original size and position.
+                        */
+    
+                        flipVertical();
+                        
+                    }
+                    else {
+        
+                        flipVertical();
 
-			}
+                        bFlipped = true;
+        
+                        fnReturnVal = setVerticalPosition();
+        
+                    }
+                
+                }
+        
+                return fnReturnVal;
+        
+            };
+
+
+            if (oOverlapPositions[(aContext[1] + aContext[2])] && 
+                     this.cfg.getProperty("preventcontextoverlap")) {
+
+                if (bCanConstrain) {
+
+                    oContextEl = aContext[0];
+                    nContextElHeight = oContextEl.offsetHeight;
+                    nContextElY = (Dom.getY(oContextEl) - scrollY);
+    
+                    nTopRegionHeight = nContextElY;
+                    nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
+    
+                    setVerticalPosition();
+                
+                }
+
+                yNew = oOverlay.cfg.getProperty("y");
+
+            }
+            else {
+
+                if (bCanConstrain) {
+    
+                    topConstraint = scrollY + nViewportOffset;
+                    bottomConstraint = 
+                        scrollY + viewPortHeight - nOverlayOffsetHeight - nViewportOffset;
+    
+                    if (y < topConstraint) {
+                        yNew  = topConstraint;
+                    } else if (y  > bottomConstraint) {
+                        yNew  = bottomConstraint;
+                    }
+                } else {
+                    yNew = nViewportOffset + scrollY;
+                }
+
+            }
 
             return yNew;
-		},
+        },
 
 
         /**
@@ -1666,7 +1821,7 @@
          * @return {Array} The constrained x and y coordinates at index 0 and 1 respectively;
          */
         getConstrainedXY: function(x, y) {
-			return [this.getConstrainedX(x), this.getConstrainedY(y)];
+            return [this.getConstrainedX(x), this.getConstrainedY(y)];
         },
 
 
