@@ -23,6 +23,20 @@
         JS          = YAHOO.lang;
 
     /**
+     * The widget name.
+     * @private
+     * @static
+     */
+    var WidgetName = "Carousel";
+
+    /**
+     * The internal table of Carousel instances.
+     * @private
+     * @static
+     */
+    var instances = {};
+
+    /**
      * The Carousel widget.
      *
      * @class Carousel
@@ -36,23 +50,9 @@
         YAHOO.log("Component creation", WidgetName);
 
         YAHOO.widget.Carousel.superclass.constructor.call(this, el, cfg);
-    }
+    };
 
     Carousel = YAHOO.widget.Carousel;
-
-    /**
-     * The widget name.
-     * @private
-     * @static
-     */
-    var WidgetName = "Carousel";
-
-    /**
-     * The internal table of Carousel instances.
-     * @private
-     * @static
-     */
-    var instances = {};
 
     /*
      * Custom events of the Carousel component
@@ -240,6 +240,809 @@
      */
     var stopAutoPlayEvent = "stopAutoPlay";
 
+    /*
+     * Private helper functions used by the Carousel component
+     */
+
+    /**
+     * Automatically scroll the contents of the Carousel.
+     * @method autoScroll
+     * @private
+     */
+    function autoScroll() {
+        var currIndex = this._firstItem,
+            index;
+
+        if (currIndex >= this.get("numItems") - 1) {
+            if (this.get("isCircular")) {
+                index = 0;
+            } else {
+                this.stopAutoPlay();
+            }
+        } else {
+            index = currIndex + this.get("numVisible");
+        }
+        this.scrollTo.call(this, index);
+    }
+
+    /**
+     * Create an element, set its class name and optionally install the element
+     * to its parent.
+     * @method createElement
+     * @param el {String} The element to be created
+     * @param attrs {Object} Configuration of parent, class and id attributes.
+     * If the content is specified, it is inserted after creation of the
+     * element. The content can also be an HTML element in which case it would
+     * be appended as a child node of the created element.
+     * @private
+     */
+    function createElement(el, attrs) {
+        var newEl = document.createElement(el);
+
+        if (attrs.className) {
+            Dom.addClass(newEl, attrs.className);
+        }
+
+        if (attrs.parent) {
+            attrs.parent.appendChild(newEl);
+        }
+
+        if (attrs.id) {
+            newEl.setAttribute("id", attrs.id);
+        }
+
+        if (attrs.content) {
+            if (attrs.content.nodeName) {
+                newEl.appendChild(attrs.content);
+            } else {
+                newEl.innerHTML = attrs.content;
+            }
+        }
+
+        return newEl;
+    }
+
+    /**
+     * Get the computed style of an element.
+     *
+     * @method getStyle
+     * @param el {HTMLElement} The element for which the style needs to be
+     * returned.
+     * @param style {String} The style attribute
+     * @param type {String} "int", "float", etc. (defaults to int)
+     * @private
+     */
+    function getStyle(el, style, type) {
+        var value;
+
+        function getStyleIntVal(el, style) {
+            var val;
+
+            val = parseInt(Dom.getStyle(el, style), 10);
+            return JS.isNumber(val) ? val : 0;
+        }
+
+        function getStyleFloatVal(el, style) {
+            var val;
+
+            val = parseFloat(Dom.getStyle(el, style));
+            return JS.isNumber(val) ? val : 0;
+        }
+
+        if (typeof type == "undefined") {
+            type = "int";
+        }
+
+        switch (style) {
+        case "height":
+            value = el.offsetHeight;
+            if (value > 0) {
+                value += getStyleIntVal(el, "marginTop")        +
+                        getStyleIntVal(el, "marginBottom");
+            } else {
+                value = getStyleFloatVal(el, "height")          +
+                        getStyleIntVal(el, "marginTop")         +
+                        getStyleIntVal(el, "marginBottom")      +
+                        getStyleIntVal(el, "borderTopWidth")    +
+                        getStyleIntVal(el, "borderBottomWidth") +
+                        getStyleIntVal(el, "paddingTop")        +
+                        getStyleIntVal(el, "paddingBottom");
+            }
+            break;
+        case "width":
+            value = el.offsetWidth;
+            if (value > 0) {
+                value += getStyleIntVal(el, "marginLeft")       +
+                        getStyleIntVal(el, "marginRight");
+            } else {
+                value = getStyleFloatVal(el, "width")           +
+                        getStyleIntVal(el, "marginLeft")        +
+                        getStyleIntVal(el, "marginRight")       +
+                        getStyleIntVal(el, "borderLeftWidth")   +
+                        getStyleIntVal(el, "borderRightWidth")  +
+                        getStyleIntVal(el, "paddingLeft")       +
+                        getStyleIntVal(el, "paddingRight");
+            }
+            break;
+        default:
+            if (type == "int") {
+                value = getStyleIntVal(el, style);
+                // XXX: Safari returns a large negative number for margin-right
+                if (style == "marginRight" && YAHOO.env.ua.webkit) {
+                    value = value < 0 ? 0 : value;
+                }
+            } else if (type == "float") {
+                value = getStyleFloatVal(el, style);
+            } else {
+                value = Dom.getStyle(el, style);
+            }
+            break;
+        }
+
+        return value;
+    }
+    
+    /**
+     * Compute and return the height or width of a single Carousel item
+     * depending upon the orientation.
+     *
+     * @method getCarouselItemSize
+     * @param which {String} "height" or "width" to be returned.  If this is
+     * passed explicitly, the calculated size is not cached.
+     * @private
+     */
+    function getCarouselItemSize(which) {
+        var child,
+            size     = 0,
+            vertical = false;
+
+        if (this._itemsTable.numItems === 0) {
+            return 0;
+        }
+
+        if (typeof which == "undefined") {
+            if (this._itemsTable.size > 0) {
+                return this._itemsTable.size;
+            }
+        }
+
+        child = Dom.get(this._itemsTable.items[0].id);
+        
+        if (typeof which == "undefined") {
+            vertical = this.get("isVertical");
+        } else {
+            vertical = which == "height";
+        }
+        
+        if (vertical) {
+            size = getStyle(child, "height");
+        } else {
+            size = getStyle(child, "width");
+        }
+
+        if (typeof which == "undefined") {
+            this._itemsTable.size = size; // save the size for later
+        }
+        
+        return size;
+    }
+
+    /**
+     * Return the scrolling offset size given the number of elements to
+     * scroll.
+     *
+     * @method getScrollOffset
+     * @param delta {Number} The delta number of elements to scroll by.
+     * @private
+     */
+    function getScrollOffset(delta) {
+        var itemSize = 0,
+            size     = 0;
+
+        itemSize = getCarouselItemSize.call(this);
+        size     = itemSize * delta;
+
+        // XXX: really, when the orientation is vertical, the scrolling
+        // is not exactly the number of elements into element size.
+        if (this.get("isVertical")) {
+            size -= delta;
+        }
+
+        return size;
+    }
+
+    /**
+     * The "click" handler for the item.
+     *
+     * @method itemClickHandler
+     * @param {Event} ev The event object
+     * @param {Object} obj The context object
+     * @private
+     */
+    function itemClickHandler(ev, obj) {
+        var container = obj.get("element"),
+            el,
+            item,
+            target = YAHOO.util.Event.getTarget(ev);
+        
+        while (target && target != container && target.id != obj._carouselEl) {
+            el = target.nodeName;
+            if (el.toUpperCase() == obj.CONFIG.ITEM_TAG_NAME) {
+                break;
+            }
+            target = target.parentNode;
+        }
+
+        if ((item = obj.getItemPositionById(target.id)) >= 0) {
+            obj.set("selectedItem", obj._getSelectedItem(item));
+        }
+    }
+
+    /**
+     * The keyboard event handler for Carousel.
+     *
+     * @method keyboardEventHandler
+     * @param ev {Event} The event that is being handled.
+     * @param o {Object} The current object instance.
+     * @private
+     */
+    function keyboardEventHandler(ev, o) {
+        var key      = Event.getCharCode(ev),
+            prevent  = false,
+            position = 0;
+
+        if (o._isAnimationInProgress) {
+            return;         // do not mess while animation is in progress
+        }
+        
+        switch (key) {
+        case 0x25:          // left arrow
+        case 0x26:          // up arrow
+            position = o.get("selectedItem");
+            o.set("selectedItem",
+                    o._getSelectedItem(position - o.get("scrollIncrement")));
+            prevent = true;
+            break;
+        case 0x27:          // right arrow
+        case 0x28:          // down arrow
+            position = o.get("selectedItem");
+            o.set("selectedItem",
+                    o._getSelectedItem(position + o.get("scrollIncrement")));
+            prevent = true;
+            break;
+        case 0x21:          // page-up
+            o.scrollPageBackward();
+            prevent = true;
+            break;
+        case 0x22:          // page-down
+            o.scrollPageForward();
+            prevent = true;
+            break;
+        }
+
+        if (prevent) {
+            Event.preventDefault(ev);
+        }
+    }
+
+    /**
+     * The load the required set of items that are needed for display.
+     *
+     * @method loadItems
+     * @private
+     */
+    function loadItems() {
+        var first      = this.get("firstVisible"),
+            last       = 0,
+            numItems   = this.get("numItems"),
+            numVisible = this.get("numVisible"),
+            reveal     = this.get("revealAmount");
+
+        last = first + numVisible - 1 + (reveal ? 1 : 0);
+        last = last > numItems - 1 ? numItems - 1 : last;
+        
+        if (!this.getItem(first) || !this.getItem(last)) {
+            this.fireEvent(loadItemsEvent, {
+                    ev: loadItemsEvent,
+                    first: first, last: last,
+                    num: last - first
+            });
+        }
+    }
+    
+    /**
+     * The "click" handler for the pager navigation.
+     *
+     * @method pagerClickHandler
+     * @param {Event} ev The event object
+     * @param {Object} obj The context object
+     * @private
+     */
+    function pagerClickHandler(ev, obj) {
+        var match,
+            target = Event.getTarget(ev),
+            val;
+
+        val = target.href || target.value;
+        if (val && (match = val.match(/.*?-(\d+)$/))) {
+            if (match.length == 2) {
+                obj.scrollTo((match[1] - 1) * obj.get("numVisible"));
+                Event.preventDefault(ev);
+            }
+        }
+    }
+
+    /**
+     * Scroll the Carousel by a page backward.
+     *
+     * @method scrollPageBackward
+     * @param {Event} ev The event object
+     * @param {Object} obj The context object
+     * @private
+     */
+    function scrollPageBackward(ev, obj) {
+        obj.scrollPageBackward();
+        Event.preventDefault(ev);
+    }
+
+    /**
+     * Scroll the Carousel by a page forward.
+     *
+     * @method scrollPageForward
+     * @param {Event} ev The event object
+     * @param {Object} obj The context object
+     * @private
+     */
+    function scrollPageForward(ev, obj) {
+        obj.scrollPageForward();
+        Event.preventDefault(ev);
+    }
+
+    /**
+     * Set the container size.
+     *
+     * @method setContainerSize
+     * @param clip {HTMLElement} The clip container element.
+     * @param attr {String} Either set the height or width.
+     * @private
+     */
+    function setContainerSize(clip, attr) {
+        var isVertical, size;
+
+        isVertical = this.get("isVertical");
+        if (isVertical) {
+            return;             // no need to set the height for container
+        }
+        clip       = clip || this._clipEl;
+        attr       = attr || (isVertical ? "height" : "width");
+        size       = parseFloat(Dom.getStyle(clip, attr), 10);
+
+        size = JS.isNumber(size) ? size : 0;
+
+        size += getStyle(clip, "marginLeft")   +
+                getStyle(clip, "marginRight")  +
+                getStyle(clip, "paddingLeft")  +
+                getStyle(clip, "paddingRight") +
+                getStyle(clip, "borderLeft")   +
+                getStyle(clip, "borderRight");
+        
+        this.setStyle(attr, size + "px");
+    }
+    
+    /**
+     * Set the clip container size (based on the new numVisible value).
+     *
+     * @method setClipContainerSize
+     * @param clip {HTMLElement} The clip container element.
+     * @param num {Number} optional The number of items per page.
+     * @private
+     */
+    function setClipContainerSize(clip, num) {
+        var attr, currVal, isVertical, itemSize, reveal, size, which;
+
+        isVertical = this.get("isVertical");
+        reveal     = this.get("revealAmount");
+        which      = isVertical ? "height" : "width";
+        attr       = isVertical ? "top" : "left";
+        clip       = clip || this._clipEl;
+        num        = num  || this.get("numVisible");
+        itemSize   = getCarouselItemSize.call(this, which);
+        size       = itemSize * num;
+
+        this._recomputeSize = (size === 0); // bleh!
+        if (this._recomputeSize) {
+            return;             // no use going further, bail out!
+        }
+        
+        if (!clip) {
+            return;
+        }
+
+        if (reveal > 0) {
+            reveal = itemSize * (reveal / 100) * 2;
+            size += reveal;
+            // XXX: its quite unusual to set the Carousel's initial offset here
+            currVal = parseFloat(Dom.getStyle(this._carouselEl, attr));
+            currVal = JS.isNumber(currVal) ? currVal : 0;
+            Dom.setStyle(this._carouselEl, attr, currVal + (reveal/2) + "px");
+        }
+
+        if (isVertical) {
+            size += getStyle(this._carouselEl, "marginTop")     +
+                    getStyle(this._carouselEl, "marginBottom")  +
+                    getStyle(this._carouselEl, "paddingTop")    +
+                    getStyle(this._carouselEl, "paddingBottom") +
+                    getStyle(this._carouselEl, "borderTop")     +
+                    getStyle(this._carouselEl, "borderBottom");
+            // XXX: for vertical Carousel
+            Dom.setStyle(clip, which, (size - (num - 1)) + "px");
+        } else {
+            size += getStyle(this._carouselEl, "marginLeft")    +
+                    getStyle(this._carouselEl, "marginRight")   +
+                    getStyle(this._carouselEl, "paddingLeft")   +
+                    getStyle(this._carouselEl, "paddingRight")  +
+                    getStyle(this._carouselEl, "borderLeft")    +
+                    getStyle(this._carouselEl, "borderRight");
+            Dom.setStyle(clip, which, size + "px");
+        }
+
+        setContainerSize.call(this, clip); // adjust the container size too
+    }
+
+    /**
+     * The "click" handler for the Carousel container.  This function sets
+     * the focus on the Carousel.
+     *
+     * @method setFocusHandler
+     * @param {Event} ev The event object
+     * @param {Object} obj The context object
+     * @private
+     */
+    function setFocusHandler(ev, obj) {
+        if (obj && obj.focus) {
+            obj.focus();
+        }
+    }
+
+    /**
+     * Set the selected item.
+     *
+     * @method setItemSelection
+     * @param {Number} newposition The index of the new position
+     * @private
+     */
+    function setItemSelection(newposition) {
+        var cssClass   = this.CLASSES,
+            el,
+            firstItem  = this._firstItem,
+            numItems   = this.get("numItems"),
+            numVisible = this.get("numVisible"),
+            position   = this.get("selectedItem"),
+            sentinel   = firstItem + numVisible - 1;
+        
+        if (position >= 0 && position < numItems) {
+            el = Dom.get(this._itemsTable.items[position].id);
+            if (el) {
+                Dom.removeClass(el, cssClass.SELECTED_ITEM);
+            }
+        }
+        
+        if (JS.isNumber(newposition)) {
+            newposition = parseInt(newposition, 10);
+            newposition = JS.isNumber(newposition) ? newposition : 0;
+        } else {
+            newposition = firstItem;
+        }
+
+        if (JS.isUndefined(this._itemsTable.items[newposition])) {
+            this.scrollTo(newposition); // still loading the item
+        }
+
+        if (!JS.isUndefined(this._itemsTable.items[newposition])) {
+            el = Dom.get(this._itemsTable.items[newposition].id);
+            if (el) {
+                Dom.addClass(el, cssClass.SELECTED_ITEM);
+            }
+        }
+
+        if (newposition < firstItem || newposition > sentinel) {
+            // out of focus
+            this.scrollTo(newposition);
+        }
+    }
+
+    /**
+     * Setup/Create the Carousel navigation element (if needed).
+     *
+     * @method setupCarouselNavigation
+     * @private
+     */
+    function setupCarouselNavigation() {
+        var cfg, cssClass, nav, navContainer, nextButton, pageEl, prevButton;
+
+        cssClass = this.CLASSES;
+        
+        navContainer = Dom.getElementsByClassName(cssClass.NAVIGATION, "DIV",
+                this.get("element"));
+        
+        if (navContainer.length === 0) {
+            navContainer = createElement("DIV",
+                    { className: cssClass.NAVIGATION });
+            this.insertBefore(navContainer,
+                    Dom.getFirstChild(this.get("element")));
+        } else {
+            navContainer = navContainer[0];
+        }
+
+        this._pages.el = createElement("UL",
+                { className:cssClass.PAGE_NAV });
+        navContainer.appendChild(this._pages.el);
+        
+        nav = this.get("navigation");
+        if (nav.prev) {
+            navContainer.appendChild(nav.prev);
+        } else {
+            // TODO: separate method for creating a navigation button
+            prevButton = createElement("SPAN",
+                    { className: cssClass.BUTTON + cssClass.FIRST_BUTTON });
+            prevButton.innerHTML = "<input type=\"button\" " +
+                    "value=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\" " +
+                    "name=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\">";
+            navContainer.appendChild(prevButton);
+            cfg = { prev: prevButton };
+        }
+        
+        if (nav.next) {
+            navContainer.appendChild(nav.next);
+        } else {
+            // TODO: separate method for creating a navigation button
+            nextButton = createElement("SPAN",
+                    { className: cssClass.BUTTON });
+            nextButton.innerHTML = "<input type=\"button\" " +
+                    "value=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\" " +
+                    "name=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\">";
+            navContainer.appendChild(nextButton);
+            if (cfg) {
+                cfg.next = nextButton;
+            } else {
+                cfg = { next: nextButton };
+            }
+        }
+
+        if (cfg) {
+            this.set("navigation", cfg);
+        }
+        
+        return navContainer;
+    }
+    
+    /**
+     * Set the tabindex for our Carousel.
+     * 
+     * @method setTabIndex
+     * @private
+     */
+    function setTabIndex() {        
+        if (!this._isTabIndexSet) {            
+            if (!this._carouselEl.getAttribute("tabindex")) {
+                this._carouselEl.setAttribute("tabindex", 0);
+                this._isTabIndexSet = true;
+            }
+        }
+    }
+
+    /**
+     * Fire custom events for enabling/disabling navigation elements.
+     *
+     * @method syncNavigation
+     * @private
+     */
+    function syncNavigation() {
+        var attach   = false,
+            cssClass = this.CLASSES,
+            navigation,
+            sentinel;
+
+        navigation = this.get("navigation");
+        sentinel   = this._firstItem + this.get("numVisible");
+        
+        if (navigation.prev) {
+            if (this._firstItem === 0) {
+                if (!this.get("isCircular")) {
+                    Event.removeListener(navigation.prev, "click",
+                            scrollPageBackward);
+                    Dom.addClass(navigation.prev, cssClass.FIRST_DISABLED);
+                    this._prevEnabled = false;
+                } else {
+                    attach = !this._prevEnabled;
+                }
+            } else {
+                attach = !this._prevEnabled;
+            }
+            
+            if (attach) {
+                Event.on(navigation.prev, "click", scrollPageBackward, this);
+                Dom.removeClass(navigation.prev, cssClass.FIRST_DISABLED);
+                this._prevEnabled = true;
+            }
+        }
+
+        attach = false;
+        if (navigation.next) {
+            if (sentinel >= this.get("numItems")) {
+                if (!this.get("isCircular")) {
+                    Event.removeListener(navigation.next, "click",
+                            scrollPageForward);
+                    Dom.addClass(navigation.next, cssClass.DISABLED);
+                    this._nextEnabled = false;
+                } else {
+                    attach = !this._nextEnabled;
+                }
+            } else {
+                attach = !this._nextEnabled;
+            }
+            
+            if (attach) {
+                Event.on(navigation.next, "click", scrollPageForward, this);
+                Dom.removeClass(navigation.next, cssClass.DISABLED);
+                this._nextEnabled = true;
+            }
+        }
+        
+        this.fireEvent(navigationStateChangeEvent,
+                { next: this._nextEnabled, prev: this._prevEnabled });
+    }
+
+    /**
+     * Synchronize and redraw the Pager UI if necessary.
+     *
+     * @method syncPagerUI
+     * @private
+     */
+    function syncPagerUI(page) {
+        var i,
+            markup     = "",
+            numPages,
+            numVisible = this.get("numVisible");
+
+        page     = page || 0;
+        numPages = Math.ceil(this.get("numItems") / numVisible);
+
+        this._pages.num = numPages;
+        this._pages.cur = page;
+
+        if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
+            markup = "<form><select>";
+        } else {
+            markup = "";
+        }
+        
+        for (i = 0; i < numPages; i++) {
+            if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
+                markup += "<option value=\"#yui-carousel-page-" + (i+1)    +
+                        "\" " + "id=\"#yui-carousel-page-" + (i+1) + "\" " +
+                        (i == page ? " selected" : "") + "\">"             +
+                        this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
+                        "</option>";
+            } else {
+                markup += "<li" + (i === 0 ? " class=\"first\">" : ">")    +
+                        "<a href=\"#page-" + (i+1) + "\" "                 +
+                        (i == page ? " class=\"selected\"" : "") + "><em>" +
+                        this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
+                        "</em></a></li>";
+            }
+        }
+
+        if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
+            markup += "</select></form>";
+        }
+        
+        this._pages.el.innerHTML = markup;
+        markup = null;
+    }
+
+    /**
+     * Fire custom events for synchronizing the DOM.
+     *
+     * @method syncUI
+     * @param {Object} o The item that needs to be added or removed
+     * @private
+     */
+    function syncUI(o) {
+        var el, i, item, num, oel, pos, sibling;
+        
+        if (!JS.isObject(o)) {
+            return;
+        }
+        
+        setTabIndex.call(this);
+
+        switch (o.ev) {
+        case itemAddedEvent:
+            pos  = JS.isUndefined(o.pos) ? this._itemsTable.numItems-1 : o.pos;
+            item = this._itemsTable.items[pos];
+            oel  = Dom.get(item.id);
+            if (!oel) {
+                el = this._createCarouselItem({
+                        className : item.className,
+                        content   : item.item,
+                        id        : item.id
+                });
+                if (JS.isUndefined(o.pos)) {
+                    if ((oel = this._itemsTable.loading[pos])) {
+                        this._carouselEl.replaceChild(el, oel);
+                    } else {
+                        this._carouselEl.appendChild(el);
+                    }
+                } else {
+                    sibling = Dom.get(this._itemsTable.items[o.pos + 1].id);
+                    if (sibling) {
+                        this._carouselEl.insertBefore(el, sibling);
+                    } else {
+                        YAHOO.log("Unable to find sibling","error",WidgetName);
+                    }
+                }
+            } else {
+                if (JS.isUndefined(o.pos)) {
+                    if (!Dom.isAncestor(this._carouselEl, oel)) {
+                        this._carouselEl.appendChild(oel);
+                    }
+                } else {
+                    if (!Dom.isAncestor(this._carouselEl, oel)) {
+                        this._carouselEl.insertBefore(oel,
+                                Dom.get(this._itemsTable.items[o.pos + 1].id));
+                    }
+                }
+            }
+
+            if (this._recomputeSize) {
+                setClipContainerSize.call(this);
+            }
+            break;            
+        case itemRemovedEvent:
+            num  = this.get("numItems");
+            item = o.item;
+            pos  = o.pos;
+
+            if (item && (el = Dom.get(item.id))) {
+                if (el && Dom.isAncestor(this._carouselEl, el)) {
+                    Event.purgeElement(el, true);
+                    this._carouselEl.removeChild(el);
+                }
+
+                if (this.get("selectedItem") == pos) {
+                    pos = pos >= num ? num - 1 : pos;
+                    this.set("selectedItem", pos);
+                }
+            } else {
+                YAHOO.log("Unable to find item", "warn", WidgetName);
+            }
+            break;
+        case loadItemsEvent:
+            for (i = o.first; i <= o.last; i++) {
+                el = this._createCarouselItem({
+                        content : this.CONFIG.ITEM_LOADING,
+                        id      : Dom.generateId()
+                });
+                if (el) {
+                    if (this._itemsTable.items[o.last + 1]) {
+                        sibling = Dom.get(this._itemsTable.items[o.last+1].id);
+                        if (sibling) {
+                            this._carouselEl.insertBefore(el, sibling);
+                        } else {
+                            YAHOO.log("Unable to find sibling", "error",
+                                    WidgetName);
+                        }
+                    } else {
+                        this._carouselEl.appendChild(el);
+                    }
+                }
+                this._itemsTable.loading[i] = el;
+            }
+            break;
+        }
+    }
+    
     /*
      * Static members and methods of the Carousel component
      */
@@ -1805,805 +2608,5 @@
         
     });
 
-    /*
-     * Private helper functions used by the Carousel component
-     */
-
-    /**
-     * Automatically scroll the contents of the Carousel.
-     * @method autoScroll
-     * @private
-     */
-    function autoScroll() {
-        var currIndex = this._firstItem;
-
-        if (currIndex >= this.get("numItems") - 1) {
-            if (this.get("isCircular")) {
-                index = 0;
-            } else {
-                this.stopAutoPlay();
-            }
-        } else {
-            index = currIndex + this.get("numVisible");
-        }
-        this.scrollTo.call(this, index);
-    }
-
-    /**
-     * Create an element, set its class name and optionally install the element
-     * to its parent.
-     * @method createElement
-     * @param el {String} The element to be created
-     * @param attrs {Object} Configuration of parent, class and id attributes.
-     * If the content is specified, it is inserted after creation of the
-     * element. The content can also be an HTML element in which case it would
-     * be appended as a child node of the created element.
-     * @private
-     */
-    function createElement(el, attrs) {
-        var newEl = document.createElement(el);
-
-        if (attrs.className) {
-            Dom.addClass(newEl, attrs.className);
-        }
-
-        if (attrs.parent) {
-            attrs.parent.appendChild(newEl);
-        }
-
-        if (attrs.id) {
-            newEl.setAttribute("id", attrs.id);
-        }
-
-        if (attrs.content) {
-            if (attrs.content.nodeName) {
-                newEl.appendChild(attrs.content);
-            } else {
-                newEl.innerHTML = attrs.content;
-            }
-        }
-
-        return newEl;
-    }
-
-    /**
-     * Compute and return the height or width of a single Carousel item
-     * depending upon the orientation.
-     *
-     * @method getCarouselItemSize
-     * @param which {String} "height" or "width" to be returned.  If this is
-     * passed explicitly, the calculated size is not cached.
-     * @private
-     */
-    function getCarouselItemSize(which) {
-        var child,
-            size     = 0,
-            vertical = false;
-
-        if (this._itemsTable.numItems == 0) {
-            return 0;
-        }
-
-        if (typeof which === "undefined") {
-            if (this._itemsTable.size > 0) {
-                return this._itemsTable.size;
-            }
-        }
-
-        child = Dom.get(this._itemsTable.items[0].id);
-        
-        if (typeof which === "undefined") {
-            vertical = this.get("isVertical");
-        } else {
-            vertical = which == "height";
-        }
-        
-        if (vertical) {
-            size = getStyle(child, "height");
-        } else {
-            size = getStyle(child, "width");
-        }
-
-        if (typeof which === "undefined") {
-            this._itemsTable.size = size; // save the size for later
-        }
-        
-        return size;
-    }
-
-    /**
-     * Return the scrolling offset size given the number of elements to
-     * scroll.
-     *
-     * @method getScrollOffset
-     * @param delta {Number} The delta number of elements to scroll by.
-     * @private
-     */
-    function getScrollOffset(delta) {
-        var itemSize = 0,
-            size     = 0;
-
-        itemSize = getCarouselItemSize.call(this);
-        size     = itemSize * delta;
-
-        // XXX: really, when the orientation is vertical, the scrolling
-        // is not exactly the number of elements into element size.
-        if (this.get("isVertical")) {
-            size -= delta;
-        }
-
-        return size;
-    }
-
-    /**
-     * Get the computed style of an element.
-     *
-     * @method getStyle
-     * @param el {HTMLElement} The element for which the style needs to be
-     * returned.
-     * @param style {String} The style attribute
-     * @param type {String} "int", "float", etc. (defaults to int)
-     * @private
-     */
-    function getStyle(el, style, type) {
-        var value;
-
-        function getStyleIntVal(el, style) {
-            var val;
-
-            val = parseInt(Dom.getStyle(el, style), 10);
-            return JS.isNumber(val) ? val : 0;
-        }
-
-        function getStyleFloatVal(el, style) {
-            var val;
-
-            val = parseFloat(Dom.getStyle(el, style));
-            return JS.isNumber(val) ? val : 0;
-        }
-
-        if (typeof type === "undefined") {
-            type = "int";
-        }
-
-        switch (style) {
-        case "height":
-            value = el.offsetHeight;
-            if (value > 0) {
-                value += getStyleIntVal(el, "marginTop")        +
-                        getStyleIntVal(el, "marginBottom");
-            } else {
-                value = getStyleFloatVal(el, "height")          +
-                        getStyleIntVal(el, "marginTop")         +
-                        getStyleIntVal(el, "marginBottom")      +
-                        getStyleIntVal(el, "borderTopWidth")    +
-                        getStyleIntVal(el, "borderBottomWidth") +
-                        getStyleIntVal(el, "paddingTop")        +
-                        getStyleIntVal(el, "paddingBottom");
-            }
-            break;
-        case "width":
-            value = el.offsetWidth;
-            if (value > 0) {
-                value += getStyleIntVal(el, "marginLeft")       +
-                        getStyleIntVal(el, "marginRight");
-            } else {
-                value = getStyleFloatVal(el, "width")           +
-                        getStyleIntVal(el, "marginLeft")        +
-                        getStyleIntVal(el, "marginRight")       +
-                        getStyleIntVal(el, "borderLeftWidth")   +
-                        getStyleIntVal(el, "borderRightWidth")  +
-                        getStyleIntVal(el, "paddingLeft")       +
-                        getStyleIntVal(el, "paddingRight");
-            }
-            break;
-        default:
-            if (type == "int") {
-                value = getStyleIntVal(el, style);
-                // XXX: Safari returns a large negative number for margin-right
-                if (style == "marginRight" && YAHOO.env.ua.webkit) {
-                    value = value < 0 ? 0 : value;
-                }
-            } else if (type == "float") {
-                value = getStyleFloatVal(el, style);
-            } else {
-                value = Dom.getStyle(el, style);
-            }
-            break;
-        }
-
-        return value;
-    }
-    
-    /**
-     * The "click" handler for the item.
-     *
-     * @method itemClickHandler
-     * @param {Event} ev The event object
-     * @param {Object} obj The context object
-     * @private
-     */
-    function itemClickHandler(ev, obj) {
-        var container = obj.get("element"),
-            el,
-            item,
-            target = YAHOO.util.Event.getTarget(ev);
-        
-        while (target && target != container && target.id != obj._carouselEl) {
-            el = target.nodeName;
-            if (el.toUpperCase() == obj.CONFIG.ITEM_TAG_NAME) {
-                break;
-            }
-            target = target.parentNode;
-        }
-
-        if ((item = obj.getItemPositionById(target.id)) >= 0) {
-            obj.set("selectedItem", obj._getSelectedItem(item));
-        }
-    }
-
-    /**
-     * The keyboard event handler for Carousel.
-     *
-     * @method keyboardEventHandler
-     * @param ev {Event} The event that is being handled.
-     * @param o {Object} The current object instance.
-     * @private
-     */
-    function keyboardEventHandler(ev, o) {
-        var key      = Event.getCharCode(ev),
-            prevent  = false,
-            position = 0;
-
-        if (o._isAnimationInProgress) {
-            return;         // do not mess while animation is in progress
-        }
-        
-        switch (key) {
-        case 0x25:          // left arrow
-        case 0x26:          // up arrow
-            position = o.get("selectedItem");
-            o.set("selectedItem",
-                    o._getSelectedItem(position - o.get("scrollIncrement")));
-            prevent = true;
-            break;
-        case 0x27:          // right arrow
-        case 0x28:          // down arrow
-            position = o.get("selectedItem");
-            o.set("selectedItem",
-                    o._getSelectedItem(position + o.get("scrollIncrement")));
-            prevent = true;
-            break;
-        case 0x21:          // page-up
-            o.scrollPageBackward();
-            prevent = true;
-            break;
-        case 0x22:          // page-down
-            o.scrollPageForward();
-            prevent = true;
-            break;
-        }
-
-        if (prevent) {
-            Event.preventDefault(ev);
-        }
-    }
-
-    /**
-     * The load the required set of items that are needed for display.
-     *
-     * @method loadItems
-     * @private
-     */
-    function loadItems() {
-        var first      = this.get("firstVisible"),
-            last       = 0,
-            numItems   = this.get("numItems"),
-            numVisible = this.get("numVisible"),
-            reveal     = this.get("revealAmount");
-
-        last = first + numVisible - 1 + (reveal ? 1 : 0);
-        last = last > numItems - 1 ? numItems - 1 : last;
-        
-        if (!this.getItem(first) || !this.getItem(last)) {
-            this.fireEvent(loadItemsEvent, {
-                    ev: loadItemsEvent,
-                    first: first, last: last,
-                    num: last - first
-            });
-        }
-    }
-    
-    /**
-     * The "click" handler for the pager navigation.
-     *
-     * @method pagerClickHandler
-     * @param {Event} ev The event object
-     * @param {Object} obj The context object
-     * @private
-     */
-    function pagerClickHandler(ev, obj) {
-        var match,
-            target = Event.getTarget(ev),
-            val;
-
-        val = target.href || target.value;
-        if (val && (match = val.match(/.*?-(\d+)$/))) {
-            if (match.length == 2) {
-                obj.scrollTo((match[1] - 1) * obj.get("numVisible"));
-                Event.preventDefault(ev);
-            }
-        }
-    }
-
-    /**
-     * Scroll the Carousel by a page backward.
-     *
-     * @method scrollPageBackward
-     * @param {Event} ev The event object
-     * @param {Object} obj The context object
-     * @private
-     */
-    function scrollPageBackward(ev, obj) {
-        obj.scrollPageBackward();
-        Event.preventDefault(ev);
-    }
-
-    /**
-     * Scroll the Carousel by a page forward.
-     *
-     * @method scrollPageForward
-     * @param {Event} ev The event object
-     * @param {Object} obj The context object
-     * @private
-     */
-    function scrollPageForward(ev, obj) {
-        obj.scrollPageForward();
-        Event.preventDefault(ev);
-    }
-
-    /**
-     * Set the clip container size (based on the new numVisible value).
-     *
-     * @method setClipContainerSize
-     * @param clip {HTMLElement} The clip container element.
-     * @param num {Number} optional The number of items per page.
-     * @private
-     */
-    function setClipContainerSize(clip, num) {
-        var attr, currVal, isVertical, itemSize, reveal, size, which;
-
-        isVertical = this.get("isVertical");
-        reveal     = this.get("revealAmount");
-        which      = isVertical ? "height" : "width";
-        attr       = isVertical ? "top" : "left";
-        clip       = clip || this._clipEl;
-        num        = num  || this.get("numVisible");
-        itemSize   = getCarouselItemSize.call(this, which);
-        size       = itemSize * num;
-
-        this._recomputeSize = (size == 0); // bleh!
-        if (this._recomputeSize) {
-            return;             // no use going further, bail out!
-        }
-        
-        if (!clip) {
-            return;
-        }
-
-        if (reveal > 0) {
-            reveal = itemSize * (reveal / 100) * 2;
-            size += reveal;
-            // XXX: its quite unusual to set the Carousel's initial offset here
-            currVal = parseFloat(Dom.getStyle(this._carouselEl, attr));
-            currVal = JS.isNumber(currVal) ? currVal : 0;
-            Dom.setStyle(this._carouselEl, attr, currVal + (reveal/2) + "px");
-        }
-
-        if (isVertical) {
-            size += getStyle(this._carouselEl, "marginTop")     +
-                    getStyle(this._carouselEl, "marginBottom")  +
-                    getStyle(this._carouselEl, "paddingTop")    +
-                    getStyle(this._carouselEl, "paddingBottom") +
-                    getStyle(this._carouselEl, "borderTop")     +
-                    getStyle(this._carouselEl, "borderBottom");
-            // XXX: for vertical Carousel
-            Dom.setStyle(clip, which, (size - (num - 1)) + "px");
-        } else {
-            size += getStyle(this._carouselEl, "marginLeft")    +
-                    getStyle(this._carouselEl, "marginRight")   +
-                    getStyle(this._carouselEl, "paddingLeft")   +
-                    getStyle(this._carouselEl, "paddingRight")  +
-                    getStyle(this._carouselEl, "borderLeft")    +
-                    getStyle(this._carouselEl, "borderRight");
-            Dom.setStyle(clip, which, size + "px");
-        }
-
-        setContainerSize.call(this, clip); // adjust the container size too
-    }
-
-    /**
-     * Set the container size.
-     *
-     * @method setContainerSize
-     * @param clip {HTMLElement} The clip container element.
-     * @param attr {String} Either set the height or width.
-     * @private
-     */
-    function setContainerSize(clip, attr) {
-        var isVertical, size;
-
-        isVertical = this.get("isVertical");
-        if (isVertical) {
-            return;             // no need to set the height for container
-        }
-        clip       = clip || this._clipEl;
-        attr       = attr || (isVertical ? "height" : "width");
-        size       = parseFloat(Dom.getStyle(clip, attr), 10);
-
-        size = JS.isNumber(size) ? size : 0;
-
-        size += getStyle(clip, "marginLeft")   +
-                getStyle(clip, "marginRight")  +
-                getStyle(clip, "paddingLeft")  +
-                getStyle(clip, "paddingRight") +
-                getStyle(clip, "borderLeft")   +
-                getStyle(clip, "borderRight");
-        
-        this.setStyle(attr, size + "px");
-    }
-    
-    /**
-     * The "click" handler for the Carousel container.  This function sets
-     * the focus on the Carousel.
-     *
-     * @method setFocusHandler
-     * @param {Event} ev The event object
-     * @param {Object} obj The context object
-     * @private
-     */
-    function setFocusHandler(ev, obj) {
-        if (obj && obj.focus) {
-            obj.focus();
-        }
-    }
-
-    /**
-     * Set the selected item.
-     *
-     * @method setItemSelection
-     * @param {Number} newposition The index of the new position
-     * @private
-     */
-    function setItemSelection(newposition) {
-        var cssClass   = this.CLASSES,
-            el,
-            firstItem  = this._firstItem,
-            numItems   = this.get("numItems"),
-            numVisible = this.get("numVisible"),
-            position   = this.get("selectedItem"),
-            sentinel   = firstItem + numVisible - 1;
-        
-        if (position >= 0 && position < numItems) {
-            el = Dom.get(this._itemsTable.items[position].id);
-            if (el) {
-                Dom.removeClass(el, cssClass.SELECTED_ITEM);
-            }
-        }
-        
-        if (JS.isNumber(newposition)) {
-            newposition = parseInt(newposition, 10);
-            newposition = JS.isNumber(newposition) ? newposition : 0;
-        } else {
-            newposition = firstItem;
-        }
-
-        if (JS.isUndefined(this._itemsTable.items[newposition])) {
-            this.scrollTo(newposition); // still loading the item
-        }
-
-        el = Dom.get(this._itemsTable.items[newposition].id);
-        if (el) {
-            Dom.addClass(el, cssClass.SELECTED_ITEM);
-        }
-
-        if (newposition < firstItem || newposition > sentinel) {
-            // out of focus
-            this.scrollTo(newposition);
-        }
-    }
-
-    /**
-     * Setup/Create the Carousel navigation element (if needed).
-     *
-     * @method setupCarouselNavigation
-     * @private
-     */
-    function setupCarouselNavigation() {
-        var cfg, cssClass, navContainer, nextButton, pageEl, prevButton;
-
-        cssClass = this.CLASSES;
-        
-        navContainer = Dom.getElementsByClassName(cssClass.NAVIGATION, "DIV",
-                this.get("element"));
-        
-        if (navContainer.length == 0) {
-            navContainer = createElement("DIV",
-                    { className: cssClass.NAVIGATION });
-            this.insertBefore(navContainer,
-                    Dom.getFirstChild(this.get("element")));
-        } else {
-            navContainer = navContainer[0];
-        }
-
-        this._pages.el = createElement("UL",
-                { className:cssClass.PAGE_NAV });
-        navContainer.appendChild(this._pages.el);
-        
-        nav = this.get("navigation");
-        if (nav.prev) {
-            navContainer.appendChild(nav.prev);
-        } else {
-            // TODO: separate method for creating a navigation button
-            prevButton = createElement("SPAN",
-                    { className: cssClass.BUTTON + cssClass.FIRST_BUTTON });
-            prevButton.innerHTML = "<input type=\"button\" " +
-                    "value=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\" " +
-                    "name=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\">";
-            navContainer.appendChild(prevButton);
-            cfg = { prev: prevButton };
-        }
-        
-        if (nav.next) {
-            navContainer.appendChild(nav.next);
-        } else {
-            // TODO: separate method for creating a navigation button
-            nextButton = createElement("SPAN",
-                    { className: cssClass.BUTTON });
-            nextButton.innerHTML = "<input type=\"button\" " +
-                    "value=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\" " +
-                    "name=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\">";
-            navContainer.appendChild(nextButton);
-            if (cfg) {
-                cfg.next = nextButton;
-            } else {
-                cfg = { next: nextButton };
-            }
-        }
-
-        if (cfg) {
-            this.set("navigation", cfg);
-        }
-        
-        return navContainer;
-    }
-    
-    /**
-     * Set the tabindex for our Carousel.
-     * 
-     * @method setTabIndex
-     * @private
-     */
-    function setTabIndex() {        
-        if (!this._isTabIndexSet) {            
-            if (!this._carouselEl.getAttribute("tabindex")) {
-                this._carouselEl.setAttribute("tabindex", 0);
-                this._isTabIndexSet = true;
-            }
-        }
-    }
-
-    /**
-     * Fire custom events for enabling/disabling navigation elements.
-     *
-     * @method syncNavigation
-     * @private
-     */
-    function syncNavigation() {
-        var attach   = false,
-            cssClass = this.CLASSES,
-            navigation,
-            sentinel;
-
-        navigation = this.get("navigation");
-        sentinel   = this._firstItem + this.get("numVisible");
-        
-        if (navigation.prev) {
-            if (this._firstItem == 0) {
-                if (!this.get("isCircular")) {
-                    Event.removeListener(navigation.prev, "click",
-                            scrollPageBackward);
-                    Dom.addClass(navigation.prev, cssClass.FIRST_DISABLED);
-                    this._prevEnabled = false;
-                } else {
-                    attach = !this._prevEnabled;
-                }
-            } else {
-                attach = !this._prevEnabled;
-            }
-            
-            if (attach) {
-                Event.on(navigation.prev, "click", scrollPageBackward, this);
-                Dom.removeClass(navigation.prev, cssClass.FIRST_DISABLED);
-                this._prevEnabled = true;
-            }
-        }
-
-        attach = false;
-        if (navigation.next) {
-            if (sentinel >= this.get("numItems")) {
-                if (!this.get("isCircular")) {
-                    Event.removeListener(navigation.next, "click",
-                            scrollPageForward);
-                    Dom.addClass(navigation.next, cssClass.DISABLED);
-                    this._nextEnabled = false;
-                } else {
-                    attach = !this._nextEnabled;
-                }
-            } else {
-                attach = !this._nextEnabled;
-            }
-            
-            if (attach) {
-                Event.on(navigation.next, "click", scrollPageForward, this);
-                Dom.removeClass(navigation.next, cssClass.DISABLED);
-                this._nextEnabled = true;
-            }
-        }
-        
-        this.fireEvent(navigationStateChangeEvent,
-                { next: this._nextEnabled, prev: this._prevEnabled });
-    }
-
-    /**
-     * Synchronize and redraw the Pager UI if necessary.
-     *
-     * @method syncPagerUI
-     * @private
-     */
-    function syncPagerUI(page) {
-        var i,
-            markup     = "",
-            numPages,
-            numVisible = this.get("numVisible");
-
-        page     = page || 0;
-        numPages = Math.ceil(this.get("numItems") / numVisible);
-
-        this._pages.num = numPages;
-        this._pages.cur = page;
-
-        if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
-            markup = "<form><select>";
-        } else {
-            markup = "";
-        }
-        
-        for (i = 0; i < numPages; i++) {
-            if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
-                markup += "<option value=\"#yui-carousel-page-" + (i+1)    +
-                        "\" " + "id=\"#yui-carousel-page-" + (i+1) + "\" " +
-                        (i == page ? " selected" : "") + "\">"             +
-                        this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
-                        "</option>";
-            } else {
-                markup += "<li" + (i == 0 ? " class=\"first\">" : ">")     +
-                        "<a href=\"#page-" + (i+1) + "\" "                 +
-                        (i == page ? " class=\"selected\"" : "") + "><em>" +
-                        this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
-                        "</em></a></li>";
-            }
-        }
-
-        if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
-            markup += "</select></form>";
-        }
-        
-        this._pages.el.innerHTML = markup;
-        markup = null;
-    }
-
-    /**
-     * Fire custom events for synchronizing the DOM.
-     *
-     * @method syncUI
-     * @param {Object} o The item that needs to be added or removed
-     * @private
-     */
-    function syncUI(o) {
-        var el, i, item, num, oel, pos, sibling;
-        
-        if (!JS.isObject(o)) {
-            return;
-        }
-        
-        setTabIndex.call(this);
-
-        switch (o.ev) {
-        case itemAddedEvent:
-            pos  = JS.isUndefined(o.pos) ? this._itemsTable.numItems-1 : o.pos;
-            item = this._itemsTable.items[pos];
-            oel  = Dom.get(item.id);
-            if (!oel) {
-                el = this._createCarouselItem({
-                        className : item.className,
-                        content   : item.item,
-                        id        : item.id
-                });
-                if (JS.isUndefined(o.pos)) {
-                    if ((oel = this._itemsTable.loading[pos])) {
-                        this._carouselEl.replaceChild(el, oel);
-                    } else {
-                        this._carouselEl.appendChild(el);
-                    }
-                } else {
-                    sibling = Dom.get(this._itemsTable.items[o.pos + 1].id);
-                    if (sibling) {
-                        this._carouselEl.insertBefore(el, sibling);
-                    } else {
-                        YAHOO.log("Unable to find sibling","error",WidgetName);
-                    }
-                }
-            } else {
-                if (JS.isUndefined(o.pos)) {
-                    if (!Dom.isAncestor(this._carouselEl, oel)) {
-                        this._carouselEl.appendChild(obj.el);
-                    }
-                } else {
-                    if (!Dom.isAncestor(this._carouselEl, oel)) {
-                        this._carouselEl.insertBefore(oel,
-                                Dom.get(this._itemsTable.items[o.pos + 1].id));
-                    }
-                }
-            }
-
-            if (this._recomputeSize) {
-                setClipContainerSize.call(this);
-            }
-            break;            
-        case itemRemovedEvent:
-            num  = this.get("numItems");
-            item = o.item;
-            pos  = o.pos;
-
-            if (item && (el = Dom.get(item.id))) {
-                if (el && Dom.isAncestor(this._carouselEl, el)) {
-                    Event.purgeElement(el, true);
-                    this._carouselEl.removeChild(el);
-                }
-
-                if (this.get("selectedItem") == pos) {
-                    pos = pos >= num ? num - 1 : pos;
-                    this.set("selectedItem", pos);
-                }
-            } else {
-                YAHOO.log("Unable to find item", "warn", WidgetName);
-            }
-            break;
-        case loadItemsEvent:
-            for (i = o.first; i <= o.last; i++) {
-                el = this._createCarouselItem({
-                        content : this.CONFIG.ITEM_LOADING,
-                        id      : Dom.generateId()
-                });
-                if (el) {
-                    if (this._itemsTable.items[o.last + 1]) {
-                        sibling = Dom.get(this._itemsTable.items[o.last+1].id);
-                        if (sibling) {
-                            this._carouselEl.insertBefore(el, sibling);
-                        } else {
-                            YAHOO.log("Unable to find sibling", "error",
-                                    WidgetName);
-                        }
-                    } else {
-                        this._carouselEl.appendChild(el);
-                    }
-                }
-                this._itemsTable.loading[i] = el;
-            }
-            break;
-        }
-    }
-    
 })();
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
