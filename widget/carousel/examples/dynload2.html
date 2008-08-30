@@ -142,10 +142,11 @@
                     // item has the reference to the Carousel's item
                     var el, item = carousel.getItem(index);
 
+                    console.log(carousel.get("selectedItem"));
                     if (item && item.id &&
                         (el = YAHOO.util.Dom.get(item.id))) {
-                    spotlight.innerHTML = "<img src=\"" +
-                        getLargeImage(el) + "\">";
+                        spotlight.innerHTML = "<img src=\"" +
+                            getLargeImage(el) + "\">";
                     }
                 });
             });
