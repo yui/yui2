@@ -12,7 +12,8 @@ version: 2.5.2
     margin-bottom:0; border:none;
 }
 
-.ygtvitem td {
+/*.ygtvitem td {*/
+.ygtvrow > td {
     border: none; padding: 0;
 }
 

@@ -19,12 +19,11 @@
 	* <li>saveOnEnter {boolean}, whether the Enter key should be accepted as a Save command (Esc. is always taken as Cancel), disable for multi-line input elements </li>
 	* </ul>
 	*  Editors are free to use this object to store additional data.
-	 * @property _editorData
-	 * @private
+	 * @property editorData
 	 * @static
 	 * @for YAHOO.widget.TreeView
 	 */
-	TV._editorData = {
+	TV.editorData = {
 		active:false,
 		whoHasIt:null, // which TreeView has it
 		nodeType:null,
@@ -48,7 +47,7 @@
 	
 	TVproto._nodeEditing = function (node) {
 		if (node.fillEditorContainer && node.editable && Lang.isNull(node.href)) {
-			var ed, topLeft, buttons, button, editorData = TV._editorData;
+			var ed, topLeft, buttons, button, editorData = TV.editorData;
 			editorData.active = true;
 			editorData.whoHasIt = this;
 			if (!editorData.nodeType) {
@@ -66,7 +65,7 @@
 				Event.on(buttons, 'click', function (ev) {
 					this.logger.log('click on editor');
 					var target = Event.getTarget(ev);
-					var node = TV._editorData.node;
+					var node = TV.editorData.node;
 					if (Dom.hasClass(target,'ygtvok')) {
 						node.logger.log('ygtvok');
 						Event.stopEvent(ev);
@@ -83,7 +82,7 @@
 				Dom.addClass(editorData.inputContainer,'ygtv-input');
 				
 				Event.on(ed,'keydown',function (ev) {
-					var editorData = TV._editorData,
+					var editorData = TV.editorData,
 						KEY = YAHOO.util.KeyListener.KEY;
 					switch (ev.keyCode) {
 						case KEY.ENTER:
@@ -131,13 +130,10 @@
 	*/
 	
 	TVproto._closeEditor = function (save) {
-		var ed = TV._editorData, 
+		var ed = TV.editorData, 
 			node = ed.node;
 		if (save) { 
-			var value = ed.node.getEditorValue(ed); 
-			node.label = value;
-			node.data.label = value;
-			node.getLabelEl().innerHTML = value;
+			ed.node.saveEditorValue(ed); 
 		}
 		Dom.setStyle(ed.editorPanel,'display','none');	
 		ed.active = false;
@@ -151,7 +147,7 @@
 	 * @for YAHOO.widget.TreeView
 	*/
 	TVproto._destroyEditor = function() {
-		var ed = TV._editorData;
+		var ed = TV.editorData;
 		if (ed && ed.nodeType && (!ed.active || ed.whoHasIt === this)) {
 			Event.removeListener(ed.editorPanel,'keydown');
 			Event.removeListener(ed.buttonContainer,'click');
@@ -164,12 +160,21 @@
 	
 	var Nproto = YAHOO.widget.Node.prototype;
 	
+	/**
+	* Signals if the label is editable.  (Ignored on TextNodes with href set.)
+	* @property editable
+	* @type boolean
+         * @for YAHOO.widget.Node
+	*/
+	Nproto.editable = false;
+
+
 	/** Placeholder for a function that should provide the inline node label editor.
 	 *   Leaving it set to null will indicate that this node type is not editable.
 	 * It should be overridden by nodes that provide inline editing.
 	 *  The Node-specific editing element (input box, textarea or whatever) should be inserted into editorData.inputContainer.
 	 * @method fillEditorContainer
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @return void
 	 * @for YAHOO.widget.Node
 	 */
@@ -181,7 +186,7 @@
 	* This function is the worst case alternative that will purge all possible events and remove the editor contents
 	* Method Event.purgeElement is somewhat costly so if it can be replaced by specifc Event.removeListeners, it is better to do so.
 	* @method destroyEditorContents
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @for YAHOO.widget.Node
 	 */
 	Nproto.destroyEditorContents = function (editorData) {
@@ -192,32 +197,23 @@
 	};
 
 	/**
-	* Returns the value entered into the editor.
+	* Saves the value entered into the editor.
 	* Should be overridden by each node type
-	* @method getEditorValue
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	* @method saveEditorValue
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @for YAHOO.widget.Node
-	 * @return {mixed} usually some suitable value to display in the Node
 	 */
-	Nproto.getEditorValue = function (editorData) {
-		return null;
+	Nproto.saveEditorValue = function (editorData) {
 	};
 	
 	var TNproto = YAHOO.widget.TextNode.prototype;
 	
-	/**
-	* Signals if the label is editable.  Ignored on TextNodes with href set.
-	* @property editable
-	* @type boolean
-	 * @for YAHOO.widget.TextNode
-	*/
-	TNproto.editable = false;
 
 
 	/** 
 	 *  Places an &lt;input&gt;  textbox in the input container and loads the label text into it
 	 * @method fillEditorContainer
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @return void
 	 * @for YAHOO.widget.TextNode
 	 */
@@ -243,15 +239,17 @@
 	};
 	
 	/**
-	* Returns the value entered into the editor
-	* Overrides Node.getEditorValue
-	* @method getEditorValue
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
-	 * @return {string} entered data
+	* Saves the value entered in the editor into the TextNode label property and displays it
+	* Overrides Node.saveEditorValue
+	* @method saveEditorValue
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @for YAHOO.widget.TextNode
 	 */
-	TNproto.getEditorValue = function (editorData) {
-		return editorData.inputElement.value;
+	TNproto.saveEditorValue = function (editorData) {
+		var node = editorData.node, value = editorData.inputElement.value;
+		node.label = value;
+		node.data.label = value;
+		node.getLabelEl().innerHTML = value;
 	};
 
 	/**
@@ -259,7 +257,7 @@
 	* Overrides Node.destroyEditorContent
 	* Since we didn't set any event listeners on this inline editor, it is more efficient to avoid the generic method in Node
 	* @method destroyEditorContents
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @for YAHOO.widget.TextNode
 	 */
 	TNproto.destroyEditorContents = function (editorData) {

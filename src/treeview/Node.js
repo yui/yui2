@@ -742,10 +742,10 @@ YAHOO.widget.Node.prototype = {
         for (var i=0;i<this.children.length;++i) {
             var c = this.children[i];
             if (c.isDynamic()) {
-                alert("Not supported (lazy load + expand all)");
+                this.logger.log("Not supported (lazy load + expand all)");
                 break;
             } else if (! c.multiExpand) {
-                alert("Not supported (no multi-expand + expand all)");
+                this.logger.log("Not supported (no multi-expand + expand all)");
                 break;
             } else {
                 c.expand();
@@ -1046,7 +1046,7 @@ YAHOO.widget.Node.prototype = {
         var sb = [];
 
         sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0" class="ygtvdepth' + this.depth + '">';
-        sb[sb.length] = '<tr>';
+        sb[sb.length] = '<tr class="ygtvrow">';
         
         for (var i=0;i<this.depth;++i) {
             sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';

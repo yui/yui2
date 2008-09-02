@@ -50,7 +50,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	/** 
 	 *  If YAHOO.widget.Calendar is available, it will pop up a Calendar to enter a new date.  Otherwise, it falls back to a plain &lt;input&gt;  textbox
 	 * @method fillEditorContainer
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @return void
 	 */
 	fillEditorContainer: function (editorData) {
@@ -92,23 +92,29 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 		cal.oDomContainer.focus();
 	},
 	/**
-	* Returns the date entered into the editor
-	* Overrides Node.getEditorValue
-	* @method getEditorValue
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
-	 * @return {string} clicked date as a string formatted according to calendarConfig
+	* Saves the date entered in the editor into the DateNode label property and displays it.
+	* Overrides Node.saveEditorValue
+	* @method saveEditorValue
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 */
-	getEditorValue: function (editorData) {
+	saveEditorValue: function (editorData) {
+		var node = editorData.node, value;
 		if (Lang.isUndefined(Calendar)) {
-			return editorData.inputElement.value;
+			value = editorData.inputElement.value;
+		} else {
+			var cal = editorData.inputObject,
+				date = cal.getSelectedDates()[0],
+				dd = [];
+				
+			dd[cal.cfg.getProperty('MDY_DAY_POSITION') -1] = date.getDate();
+			dd[cal.cfg.getProperty('MDY_MONTH_POSITION') -1] = date.getMonth() + 1;
+			dd[cal.cfg.getProperty('MDY_YEAR_POSITION') -1] = date.getFullYear();
+			value = dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
 		}
-		var cal = editorData.inputObject;
-		var date = cal.getSelectedDates()[0];
-		var dd = [];
-		dd[cal.cfg.getProperty('MDY_DAY_POSITION') -1] = date.getDate();
-		dd[cal.cfg.getProperty('MDY_MONTH_POSITION') -1] = date.getMonth() + 1;
-		dd[cal.cfg.getProperty('MDY_YEAR_POSITION') -1] = date.getFullYear();
-		return dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
+
+		node.label = value;
+		node.data.label = value;
+		node.getLabelEl().innerHTML = value;
 	}
 
 });

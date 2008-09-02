@@ -19,9 +19,9 @@
  * @class TreeView
  * @uses YAHOO.util.EventProvider
  * @constructor
- * @param {string|HTMLElement} id The id of the element, or the element
- * @param {Array}  (optional) oConfig An array containing the definition of the tree
- * itself that the tree will be inserted into.
+ * @param {string|HTMLElement} id The id of the element, or the element itself that the tree will be inserted into.  Existing markup in this element, if valid, will be used to build the tree
+ * @param {Array|object|string}  oConfig (optional)  An array containing the definition of the tree.  Objects will be converted to arrays of one element.  A string will produce a single TextNode
+ * 
  */
 YAHOO.widget.TreeView = function(id, oConfig) {
     if (id) { this.init(id); }
@@ -50,6 +50,7 @@ TV.prototype = {
      * The host element for this tree
      * @property _el
      * @private
+     * @type HTMLelement
      */
     _el: null,
 
@@ -299,7 +300,8 @@ TV.prototype = {
          * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a Click
          * @event clickEvent
          * @type CustomEvent
-         * @param {YAHOO.widget.Node} node the node that was clicked
+         * @param oArgs.event  {HTMLEvent} The event object
+         * @param oArgs.node {YAHOO.widget.Node} node the node that was clicked
          */
         this.createEvent("clickEvent", this);
 
@@ -307,7 +309,8 @@ TV.prototype = {
          * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a double Click
          * @event dblClickEvent
          * @type CustomEvent
-         * @param {YAHOO.widget.Node} node the node that was double clicked
+         * @param oArgs.event  {HTMLEvent} The event object
+         * @param oArgs.node {YAHOO.widget.Node} node the node that was clicked
          */
         this.createEvent("dblClickEvent", this);
 		
@@ -318,6 +321,7 @@ TV.prototype = {
          * @event labelClick
          * @type CustomEvent
          * @param {YAHOO.widget.Node} node the node clicked
+	* @deprecated use clickEvent or dblClickEvent
          */
 		this.createEvent("labelClick", this);
 
@@ -345,14 +349,13 @@ TV.prototype = {
         //Event.on(this.id, 
     //},
  /**
-     * Builds the TreeView from an object.
+     * Builds the TreeView from an object.  This is the method called by the constructor to build the tree when it has a second argument.
      * @method buildTreeFromObject
      * @param  oConfig {Array}  array containing a full description of the tree
      * 
      */
 	buildTreeFromObject: function (oConfig) {
-		var log = this.logger.log;
-		log('Building tree from object');
+		this.logger.log('Building tree from object');
 		var build = function (parent, oConfig) {
 			var i, item, node, children, type, NodeType, ThisType;
 			for (i = 0; i < oConfig.length; i++) {
@@ -381,17 +384,17 @@ TV.prototype = {
 								if (ThisType) {
 									node = new NodeType(item, parent);
 								} else {
-									log('Invalid type in node definition: ' + type,'error');
+									this.logger.log('Invalid type in node definition: ' + type,'error');
 								}
 							} else {
-								log('Invalid type in node definition: ' + type,'error');
+								this.logger.log('Invalid type in node definition: ' + type,'error');
 							}
 					}
 					if (children) {
 						build(node,children);
 					}
 				} else {
-					log('Invalid node definition','error');
+					this.logger.log('Invalid node definition','error');
 				}
 			}
 		};
@@ -405,12 +408,11 @@ TV.prototype = {
      * 	         <li>plain text:  a regular TextNode</li>
      * 	         <li>an (un-)ordered list: a nested branch</li>
      * 	         <li>anything else: an HTMLNode</li></ul>
-     * Only the first  outermost (un-)ordered list in the markup will be parsed.
-     * Tree will be fully collapsed
+     * Only the first  outermost (un-)ordered list in the markup and its children will be parsed.
+     * Tree will be fully collapsed.
      *  HTMLNodes have hasIcon set to true if the markup for that node has a className called hasIcon.
      * @method buildTreeFromMarkup
-     * @parm {string|HTMLElement} id the id of the element that contains the markup
-     * @private
+     * @param {string|HTMLElement} id the id of the element that contains the markup or a reference to it.
      */
 	buildTreeFromMarkup: function (id) {
 		this.logger.log('Building tree from existing markup');
@@ -514,7 +516,6 @@ TV.prototype = {
 				
 				var depthCell = /ygtv(blank)?depthcell/gi;
 				if (depthCell.test(el.className) || depthCell.test(el.parentNode.className)) { return;}
-					
 				if (Dom.hasClass(el,TV.TRIGGERS_CLICK_EVENT) || Dom.getAncestorByClassName(el,TV.TRIGGERS_CLICK_EVENT)) { 
 					if (this._dblClickTimer) {
 						window.clearTimeout(this._dblClickTimer);
@@ -523,8 +524,8 @@ TV.prototype = {
 						this._dblClickTimer = window.setTimeout(function () {
 							self._dblClickTimer = null;
 							toggle();
-							self.fireEvent('clickEvent', node); 
-						},700);
+							self.fireEvent('clickEvent', {event:ev,node:node}); 
+						}, 200);
 					}
 				} else {
 					toggle();
@@ -539,7 +540,7 @@ TV.prototype = {
 			function (ev) {
 				var el = Event.getTarget(ev);
 				if (Dom.hasClass(el,TV.TRIGGERS_CLICK_EVENT) || Dom.getAncestorByClassName(el,TV.TRIGGERS_CLICK_EVENT)) { 
-					this.fireEvent('dblClickEvent', this.getNodeByElement(el)); 
+					this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(el)}); 
 					if (this._dblClickTimer) {
 						window.clearTimeout(this._dblClickTimer);
 						this._dblClickTimer = null;
@@ -1059,7 +1060,7 @@ TV.prototype = {
 /* Backwards compatibility aliases */
 var PROT = TV.prototype;
  /**
-     * Renders the tree boilerplate and visible nodes
+     * Renders the tree boilerplate and visible nodes.
      *  Alias for render
      * @method draw
      * @deprecated Use render instead
@@ -1117,31 +1118,6 @@ TV.getNode = function(treeId, nodeIndex) {
     return (t) ? t.getNodeByIndex(nodeIndex) : null;
 };
 
-/**
- * Add a DOM event
- * @method YAHOO.widget.TreeView.addHandler
- * @param el the elment to bind the handler to
- * @param {string} sType the type of event handler
- * @param {function} fn the callback to invoke
- * @static
- */
-TV.addHandler = function (el, sType, fn) {
-	Event.addListener(el, sType, fn);
-};
-
-
-/**
- * Remove a DOM event
- * @method YAHOO.widget.TreeView.removeHandler
- * @param el the elment to bind the handler to
- * @param {string} sType the type of event handler
- * @param {function} fn the callback to invoke
- * @static
- */
-
-TV.removeHandler = 	function (el, sType, fn) {
-	Event.removeListener(el, sType, fn);
-};
 
 /**
      * Class name assigned to elements that trigger click and double-click events.
@@ -1203,12 +1179,11 @@ TV.preload = function(e, prefix) {
 
     document.body.appendChild(f);
 
-    TV.removeHandler(window, 
-                "load", TV.preload);
+    Event.removeListener(window, "load", TV.preload);
 
 };
 
-TV.addHandler(window,"load", TV.preload);
+Event.addListener(window,"load", TV.preload);
 })();
 (function () {
 	var Dom = YAHOO.util.Dom,
@@ -1954,10 +1929,10 @@ YAHOO.widget.Node.prototype = {
         for (var i=0;i<this.children.length;++i) {
             var c = this.children[i];
             if (c.isDynamic()) {
-                alert("Not supported (lazy load + expand all)");
+                this.logger.log("Not supported (lazy load + expand all)");
                 break;
             } else if (! c.multiExpand) {
-                alert("Not supported (no multi-expand + expand all)");
+                this.logger.log("Not supported (no multi-expand + expand all)");
                 break;
             } else {
                 c.expand();
@@ -2258,7 +2233,7 @@ YAHOO.widget.Node.prototype = {
         var sb = [];
 
         sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0" class="ygtvdepth' + this.depth + '">';
-        sb[sb.length] = '<tr>';
+        sb[sb.length] = '<tr class="ygtvrow">';
         
         for (var i=0;i<this.depth;++i) {
             sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';
@@ -2889,7 +2864,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	/** 
 	 *  If YAHOO.widget.Calendar is available, it will pop up a Calendar to enter a new date.  Otherwise, it falls back to a plain &lt;input&gt;  textbox
 	 * @method fillEditorContainer
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @return void
 	 */
 	fillEditorContainer: function (editorData) {
@@ -2931,23 +2906,29 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 		cal.oDomContainer.focus();
 	},
 	/**
-	* Returns the date entered into the editor
-	* Overrides Node.getEditorValue
-	* @method getEditorValue
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
-	 * @return {string} clicked date as a string formatted according to calendarConfig
+	* Saves the date entered in the editor into the DateNode label property and displays it.
+	* Overrides Node.saveEditorValue
+	* @method saveEditorValue
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 */
-	getEditorValue: function (editorData) {
+	saveEditorValue: function (editorData) {
+		var node = editorData.node, value;
 		if (Lang.isUndefined(Calendar)) {
-			return editorData.inputElement.value;
+			value = editorData.inputElement.value;
+		} else {
+			var cal = editorData.inputObject,
+				date = cal.getSelectedDates()[0],
+				dd = [];
+				
+			dd[cal.cfg.getProperty('MDY_DAY_POSITION') -1] = date.getDate();
+			dd[cal.cfg.getProperty('MDY_MONTH_POSITION') -1] = date.getMonth() + 1;
+			dd[cal.cfg.getProperty('MDY_YEAR_POSITION') -1] = date.getFullYear();
+			value = dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
 		}
-		var cal = editorData.inputObject;
-		var date = cal.getSelectedDates()[0];
-		var dd = [];
-		dd[cal.cfg.getProperty('MDY_DAY_POSITION') -1] = date.getDate();
-		dd[cal.cfg.getProperty('MDY_MONTH_POSITION') -1] = date.getMonth() + 1;
-		dd[cal.cfg.getProperty('MDY_YEAR_POSITION') -1] = date.getFullYear();
-		return dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
+
+		node.label = value;
+		node.data.label = value;
+		node.getLabelEl().innerHTML = value;
 	}
 
 });
@@ -2973,12 +2954,11 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	* <li>saveOnEnter {boolean}, whether the Enter key should be accepted as a Save command (Esc. is always taken as Cancel), disable for multi-line input elements </li>
 	* </ul>
 	*  Editors are free to use this object to store additional data.
-	 * @property _editorData
-	 * @private
+	 * @property editorData
 	 * @static
 	 * @for YAHOO.widget.TreeView
 	 */
-	TV._editorData = {
+	TV.editorData = {
 		active:false,
 		whoHasIt:null, // which TreeView has it
 		nodeType:null,
@@ -3002,7 +2982,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	
 	TVproto._nodeEditing = function (node) {
 		if (node.fillEditorContainer && node.editable && Lang.isNull(node.href)) {
-			var ed, topLeft, buttons, button, editorData = TV._editorData;
+			var ed, topLeft, buttons, button, editorData = TV.editorData;
 			editorData.active = true;
 			editorData.whoHasIt = this;
 			if (!editorData.nodeType) {
@@ -3020,7 +3000,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 				Event.on(buttons, 'click', function (ev) {
 					this.logger.log('click on editor');
 					var target = Event.getTarget(ev);
-					var node = TV._editorData.node;
+					var node = TV.editorData.node;
 					if (Dom.hasClass(target,'ygtvok')) {
 						node.logger.log('ygtvok');
 						Event.stopEvent(ev);
@@ -3037,7 +3017,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 				Dom.addClass(editorData.inputContainer,'ygtv-input');
 				
 				Event.on(ed,'keydown',function (ev) {
-					var editorData = TV._editorData,
+					var editorData = TV.editorData,
 						KEY = YAHOO.util.KeyListener.KEY;
 					switch (ev.keyCode) {
 						case KEY.ENTER:
@@ -3085,13 +3065,10 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	*/
 	
 	TVproto._closeEditor = function (save) {
-		var ed = TV._editorData, 
+		var ed = TV.editorData, 
 			node = ed.node;
 		if (save) { 
-			var value = ed.node.getEditorValue(ed); 
-			node.label = value;
-			node.data.label = value;
-			node.getLabelEl().innerHTML = value;
+			ed.node.saveEditorValue(ed); 
 		}
 		Dom.setStyle(ed.editorPanel,'display','none');	
 		ed.active = false;
@@ -3105,7 +3082,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	 * @for YAHOO.widget.TreeView
 	*/
 	TVproto._destroyEditor = function() {
-		var ed = TV._editorData;
+		var ed = TV.editorData;
 		if (ed && ed.nodeType && (!ed.active || ed.whoHasIt === this)) {
 			Event.removeListener(ed.editorPanel,'keydown');
 			Event.removeListener(ed.buttonContainer,'click');
@@ -3118,12 +3095,21 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	
 	var Nproto = YAHOO.widget.Node.prototype;
 	
+	/**
+	* Signals if the label is editable.  (Ignored on TextNodes with href set.)
+	* @property editable
+	* @type boolean
+         * @for YAHOO.widget.Node
+	*/
+	Nproto.editable = false;
+
+
 	/** Placeholder for a function that should provide the inline node label editor.
 	 *   Leaving it set to null will indicate that this node type is not editable.
 	 * It should be overridden by nodes that provide inline editing.
 	 *  The Node-specific editing element (input box, textarea or whatever) should be inserted into editorData.inputContainer.
 	 * @method fillEditorContainer
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @return void
 	 * @for YAHOO.widget.Node
 	 */
@@ -3135,7 +3121,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	* This function is the worst case alternative that will purge all possible events and remove the editor contents
 	* Method Event.purgeElement is somewhat costly so if it can be replaced by specifc Event.removeListeners, it is better to do so.
 	* @method destroyEditorContents
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @for YAHOO.widget.Node
 	 */
 	Nproto.destroyEditorContents = function (editorData) {
@@ -3146,32 +3132,23 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	};
 
 	/**
-	* Returns the value entered into the editor.
+	* Saves the value entered into the editor.
 	* Should be overridden by each node type
-	* @method getEditorValue
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	* @method saveEditorValue
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @for YAHOO.widget.Node
-	 * @return {mixed} usually some suitable value to display in the Node
 	 */
-	Nproto.getEditorValue = function (editorData) {
-		return null;
+	Nproto.saveEditorValue = function (editorData) {
 	};
 	
 	var TNproto = YAHOO.widget.TextNode.prototype;
 	
-	/**
-	* Signals if the label is editable.  Ignored on TextNodes with href set.
-	* @property editable
-	* @type boolean
-	 * @for YAHOO.widget.TextNode
-	*/
-	TNproto.editable = false;
 
 
 	/** 
 	 *  Places an &lt;input&gt;  textbox in the input container and loads the label text into it
 	 * @method fillEditorContainer
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @return void
 	 * @for YAHOO.widget.TextNode
 	 */
@@ -3197,15 +3174,17 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	};
 	
 	/**
-	* Returns the value entered into the editor
-	* Overrides Node.getEditorValue
-	* @method getEditorValue
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
-	 * @return {string} entered data
+	* Saves the value entered in the editor into the TextNode label property and displays it
+	* Overrides Node.saveEditorValue
+	* @method saveEditorValue
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @for YAHOO.widget.TextNode
 	 */
-	TNproto.getEditorValue = function (editorData) {
-		return editorData.inputElement.value;
+	TNproto.saveEditorValue = function (editorData) {
+		var node = editorData.node, value = editorData.inputElement.value;
+		node.label = value;
+		node.data.label = value;
+		node.getLabelEl().innerHTML = value;
 	};
 
 	/**
@@ -3213,7 +3192,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	* Overrides Node.destroyEditorContent
 	* Since we didn't set any event listeners on this inline editor, it is more efficient to avoid the generic method in Node
 	* @method destroyEditorContents
-	 * @param editorData {YAHOO.widget.TreeView._editorData}  a shortcut to the static object holding editing information
+	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 * @for YAHOO.widget.TextNode
 	 */
 	TNproto.destroyEditorContents = function (editorData) {
