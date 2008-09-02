@@ -19,9 +19,9 @@
  * @class TreeView
  * @uses YAHOO.util.EventProvider
  * @constructor
- * @param {string|HTMLElement} id The id of the element, or the element
- * @param {Array}  (optional) oConfig An array containing the definition of the tree
- * itself that the tree will be inserted into.
+ * @param {string|HTMLElement} id The id of the element, or the element itself that the tree will be inserted into.  Existing markup in this element, if valid, will be used to build the tree
+ * @param {Array|object|string}  oConfig (optional)  An array containing the definition of the tree.  Objects will be converted to arrays of one element.  A string will produce a single TextNode
+ * 
  */
 YAHOO.widget.TreeView = function(id, oConfig) {
     if (id) { this.init(id); }
@@ -50,6 +50,7 @@ TV.prototype = {
      * The host element for this tree
      * @property _el
      * @private
+     * @type HTMLelement
      */
     _el: null,
 
@@ -299,7 +300,8 @@ TV.prototype = {
          * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a Click
          * @event clickEvent
          * @type CustomEvent
-         * @param {YAHOO.widget.Node} node the node that was clicked
+         * @param oArgs.event  {HTMLEvent} The event object
+         * @param oArgs.node {YAHOO.widget.Node} node the node that was clicked
          */
         this.createEvent("clickEvent", this);
 
@@ -307,7 +309,8 @@ TV.prototype = {
          * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a double Click
          * @event dblClickEvent
          * @type CustomEvent
-         * @param {YAHOO.widget.Node} node the node that was double clicked
+         * @param oArgs.event  {HTMLEvent} The event object
+         * @param oArgs.node {YAHOO.widget.Node} node the node that was clicked
          */
         this.createEvent("dblClickEvent", this);
 		
@@ -318,6 +321,7 @@ TV.prototype = {
          * @event labelClick
          * @type CustomEvent
          * @param {YAHOO.widget.Node} node the node clicked
+	* @deprecated use clickEvent or dblClickEvent
          */
 		this.createEvent("labelClick", this);
 
@@ -345,14 +349,13 @@ TV.prototype = {
         //Event.on(this.id, 
     //},
  /**
-     * Builds the TreeView from an object.
+     * Builds the TreeView from an object.  This is the method called by the constructor to build the tree when it has a second argument.
      * @method buildTreeFromObject
      * @param  oConfig {Array}  array containing a full description of the tree
      * 
      */
 	buildTreeFromObject: function (oConfig) {
-		var log = this.logger.log;
-		log('Building tree from object');
+		this.logger.log('Building tree from object');
 		var build = function (parent, oConfig) {
 			var i, item, node, children, type, NodeType, ThisType;
 			for (i = 0; i < oConfig.length; i++) {
@@ -381,17 +384,17 @@ TV.prototype = {
 								if (ThisType) {
 									node = new NodeType(item, parent);
 								} else {
-									log('Invalid type in node definition: ' + type,'error');
+									this.logger.log('Invalid type in node definition: ' + type,'error');
 								}
 							} else {
-								log('Invalid type in node definition: ' + type,'error');
+								this.logger.log('Invalid type in node definition: ' + type,'error');
 							}
 					}
 					if (children) {
 						build(node,children);
 					}
 				} else {
-					log('Invalid node definition','error');
+					this.logger.log('Invalid node definition','error');
 				}
 			}
 		};
@@ -405,12 +408,11 @@ TV.prototype = {
      * 	         <li>plain text:  a regular TextNode</li>
      * 	         <li>an (un-)ordered list: a nested branch</li>
      * 	         <li>anything else: an HTMLNode</li></ul>
-     * Only the first  outermost (un-)ordered list in the markup will be parsed.
-     * Tree will be fully collapsed
+     * Only the first  outermost (un-)ordered list in the markup and its children will be parsed.
+     * Tree will be fully collapsed.
      *  HTMLNodes have hasIcon set to true if the markup for that node has a className called hasIcon.
      * @method buildTreeFromMarkup
-     * @parm {string|HTMLElement} id the id of the element that contains the markup
-     * @private
+     * @param {string|HTMLElement} id the id of the element that contains the markup or a reference to it.
      */
 	buildTreeFromMarkup: function (id) {
 		this.logger.log('Building tree from existing markup');
@@ -514,7 +516,6 @@ TV.prototype = {
 				
 				var depthCell = /ygtv(blank)?depthcell/gi;
 				if (depthCell.test(el.className) || depthCell.test(el.parentNode.className)) { return;}
-					
 				if (Dom.hasClass(el,TV.TRIGGERS_CLICK_EVENT) || Dom.getAncestorByClassName(el,TV.TRIGGERS_CLICK_EVENT)) { 
 					if (this._dblClickTimer) {
 						window.clearTimeout(this._dblClickTimer);
@@ -523,8 +524,8 @@ TV.prototype = {
 						this._dblClickTimer = window.setTimeout(function () {
 							self._dblClickTimer = null;
 							toggle();
-							self.fireEvent('clickEvent', node); 
-						},700);
+							self.fireEvent('clickEvent', {event:ev,node:node}); 
+						}, 200);
 					}
 				} else {
 					toggle();
@@ -539,7 +540,7 @@ TV.prototype = {
 			function (ev) {
 				var el = Event.getTarget(ev);
 				if (Dom.hasClass(el,TV.TRIGGERS_CLICK_EVENT) || Dom.getAncestorByClassName(el,TV.TRIGGERS_CLICK_EVENT)) { 
-					this.fireEvent('dblClickEvent', this.getNodeByElement(el)); 
+					this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(el)}); 
 					if (this._dblClickTimer) {
 						window.clearTimeout(this._dblClickTimer);
 						this._dblClickTimer = null;
@@ -1059,7 +1060,7 @@ TV.prototype = {
 /* Backwards compatibility aliases */
 var PROT = TV.prototype;
  /**
-     * Renders the tree boilerplate and visible nodes
+     * Renders the tree boilerplate and visible nodes.
      *  Alias for render
      * @method draw
      * @deprecated Use render instead
@@ -1117,31 +1118,6 @@ TV.getNode = function(treeId, nodeIndex) {
     return (t) ? t.getNodeByIndex(nodeIndex) : null;
 };
 
-/**
- * Add a DOM event
- * @method YAHOO.widget.TreeView.addHandler
- * @param el the elment to bind the handler to
- * @param {string} sType the type of event handler
- * @param {function} fn the callback to invoke
- * @static
- */
-TV.addHandler = function (el, sType, fn) {
-	Event.addListener(el, sType, fn);
-};
-
-
-/**
- * Remove a DOM event
- * @method YAHOO.widget.TreeView.removeHandler
- * @param el the elment to bind the handler to
- * @param {string} sType the type of event handler
- * @param {function} fn the callback to invoke
- * @static
- */
-
-TV.removeHandler = 	function (el, sType, fn) {
-	Event.removeListener(el, sType, fn);
-};
 
 /**
      * Class name assigned to elements that trigger click and double-click events.
@@ -1203,10 +1179,9 @@ TV.preload = function(e, prefix) {
 
     document.body.appendChild(f);
 
-    TV.removeHandler(window, 
-                "load", TV.preload);
+    Event.removeListener(window, "load", TV.preload);
 
 };
 
-TV.addHandler(window,"load", TV.preload);
+Event.addListener(window,"load", TV.preload);
 })();

@@ -22,10 +22,12 @@ YAHOO.widget.RootNode = function(oTree) {
 
 YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
     
-	    /**
+   /**
      * The node type
      * @property _type
+      * @type string
      * @private
+     * @default "RootNode"
      */
     _type: "RootNode",
 	
@@ -35,7 +37,7 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
     },
 
     toString: function() { 
-        return "RootNode";
+        return this._type;
     },
 
     loadComplete: function() { 
@@ -58,9 +60,11 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
   /**
      * Returns an object which could be used to build a tree out of this node and its children.
      * It can be passed to the tree constructor to reproduce this node as a tree.
-     * It will return false if any node loads dynamically, regardless of whether it is loaded or not.
+     * Since the RootNode is automatically created by treeView, 
+     * its own definition is excluded from the returned node definition
+     * which only contains its children.
      * @method getNodeDefinition
-     * @return {Object | false}  definition of the tree or false if any node is defined as dynamic
+     * @return {Object | false}  definition of the tree or false if any child node is defined as dynamic
      */
     getNodeDefinition: function() {
 		

@@ -5,9 +5,9 @@
 
 /**
  * This implementation takes either a string or object for the
- * oData argument.  If is it a string, we will use it for the display
+ * oData argument.  If is it a string, it will use it for the display
  * of this node (and it can contain any html code).  If the parameter
- * is an object, we look for a parameter called "html" that will be
+ * is an object,it looks for a parameter called "html" that will be
  * used for this node's display.
  * @namespace YAHOO.widget
  * @class HTMLNode
@@ -20,11 +20,11 @@
  * as long as the node does have such properties, they are not undefined, private or functions.
  * All other attributes are made available in noderef.data, which
  * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
- * can be used to retreive a node by one of the attributes.
+ * can be used to retrieve a node by one of the attributes.
  * @param oParent {YAHOO.widget.Node} this node's parent node
  * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
  * @param hasIcon {boolean} specifies whether or not leaf nodes should
- * be rendered with or without a horizontal line line icon. If the icon
+ * be rendered with or without a horizontal line line and/or toggle icon. If the icon
  * is not displayed, the content fills the space it would have occupied.
  * This option operates independently of the leaf node presentation logic
  * for dynamic nodes.
@@ -59,6 +59,8 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
      * The node type
      * @property _type
      * @private
+     * @type string
+     * @default "HTMLNode"
      */
     _type: "HTMLNode",
 
@@ -121,10 +123,6 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
 		def.html = this.html;
 		return def;
 	
-	},
-
-    toString: function() { 
-        return "HTMLNode (" + this.index + ")";
-    }
+	}
 });
 })();
