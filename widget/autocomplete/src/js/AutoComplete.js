@@ -776,11 +776,6 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
             bMatchCase = (oDS.queryMatchCase || oAC.queryMatchCase), // backward compat
             bMatchContains = (oDS.queryMatchContains || oAC.queryMatchContains); // backward compat
             
-        // Ignore case
-        if(!bMatchCase) {
-            sQuery = sQuery.toLowerCase();
-        }
-
         // Loop through each result object...
         for(var i = allResults.length-1; i >= 0; i--) {
             var oResult = allResults[i];
@@ -808,9 +803,10 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
             }
             
             if(YAHOO.lang.isString(sResult)) {
+                
                 var sKeyIndex = (bMatchCase) ?
-                encodeURIComponent(sResult).indexOf(sQuery):
-                encodeURIComponent(sResult).toLowerCase().indexOf(sQuery);
+                sResult.indexOf(decodeURIComponent(sQuery)) :
+                sResult.toLowerCase().indexOf(decodeURIComponent(sQuery).toLowerCase());
 
                 // A STARTSWITH match is when the query is found at the beginning of the key string...
                 if((!bMatchContains && (sKeyIndex === 0)) ||
@@ -1904,6 +1900,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
  */
 YAHOO.widget.AutoComplete.prototype._clearSelection = function() {
     var sValue = this._elTextbox.value;
+    //TODO: need to check against all delimChars?
     var sChar = (this.delimChar) ? this.delimChar[0] : null;
     var nIndex = (sChar) ? sValue.lastIndexOf(sChar, sValue.length-2) : -1;
     if(nIndex > -1) {
