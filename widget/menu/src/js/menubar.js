@@ -12,6 +12,7 @@
 		_SUBMENU = "submenu",
 		_VISIBLE = "visible",
 		_SPACE = " ",
+		_SUBMENU_TOGGLE_REGION = "submenutoggleregion",
 		_MENUBAR = "MenuBar";
 
 /**
@@ -87,6 +88,12 @@ var Event = YAHOO.util.Event,
 		value: false, 
 		validator: Lang.isBoolean,
 		suppressEvent: true
+	},
+	
+	SUBMENU_TOGGLE_REGION_CONFIG = {
+		key: _SUBMENU_TOGGLE_REGION, 
+		value: false, 
+		validator: Lang.isBoolean
 	};
 
 
@@ -156,6 +163,16 @@ init: function(p_oElement, p_oConfig) {
 */
 CSS_CLASS_NAME: "yuimenubar",
 
+
+/**
+* @property SUBMENU_TOGGLE_REGION_WIDTH
+* @description Width (in pixels) of the area of a MenuBarItem that when pressed will toggle the
+* display of the MenuBarItem's submenu.
+* @default 20
+* @final
+* @type Number
+*/
+SUBMENU_TOGGLE_REGION_WIDTH: 20,
 
 
 // Protected event handlers
@@ -306,11 +323,31 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
     MenuBar.superclass._onClick.call(this, p_sType, p_aArgs, p_oMenuBar);
 
     var oItem = p_aArgs[1],
+        bReturnVal = true,
+    	oItemEl,
         oEvent,
         oTarget,
         oActiveItem,
         oConfig,
-        oSubmenu;
+        oSubmenu,
+        nMenuItemX,
+        nToggleRegion;
+
+
+	var toggleSubmenuDisplay = function () {
+
+		if(oSubmenu.cfg.getProperty(_VISIBLE)) {
+		
+			oSubmenu.hide();
+		
+		}
+		else {
+		
+			oSubmenu.show();                    
+		
+		}
+	
+	};
     
 
     if(oItem && !oItem.cfg.getProperty(_DISABLED)) {
@@ -339,15 +376,31 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 
 
         if(oSubmenu) {
+
+			oItemEl = oItem.element;
+			nMenuItemX = YAHOO.util.Dom.getX(oItemEl);
+			nToggleRegion = nMenuItemX + (oItemEl.offsetWidth - this.SUBMENU_TOGGLE_REGION_WIDTH);
+
+			if (oConfig.getProperty(_SUBMENU_TOGGLE_REGION)) {
+
+				if (Event.getPageX(oEvent) > nToggleRegion) {
+
+					toggleSubmenuDisplay();
+
+					Event.preventDefault(oEvent);
+
+					/*
+						 Return false so that other click event handlers are not called when the 
+						 user clicks inside the toggle region.
+					*/
+					bReturnVal = false;
+				
+				}
         
-            if(oSubmenu.cfg.getProperty(_VISIBLE)) {
-            
-                oSubmenu.hide();
-            
-            }
-            else {
-            
-                oSubmenu.show();                    
+        	}
+			else {
+
+				toggleSubmenuDisplay();
             
             }
         
@@ -355,11 +408,26 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
     
     }
 
+
+	return bReturnVal;
+
 },
 
 
 
 // Public methods
+
+configSubmenuToggle: function (p_sType, p_aArgs) {
+
+	var bSubmenuToggle = p_aArgs[0];
+	
+	if (bSubmenuToggle) {
+	
+		this.cfg.setProperty(_AUTO_SUBMENU_DISPLAY, false);
+	
+	}
+
+},
 
 
 /**
@@ -464,6 +532,28 @@ initDefaultConfig: function() {
 	       value: AUTO_SUBMENU_DISPLAY_CONFIG.value, 
 	       validator: AUTO_SUBMENU_DISPLAY_CONFIG.validator,
 	       suppressEvent: AUTO_SUBMENU_DISPLAY_CONFIG.suppressEvent
+       } 
+    );
+
+
+    /**
+    * @config submenutoggleregion
+    * @description Boolean indicating if only a specific region of a MenuBarItem should toggle the 
+    * display of a submenu.  The default width of the region is determined by the value of the
+    * SUBMENU_TOGGLE_REGION_WIDTH property.  If set to true, the autosubmenudisplay 
+    * configuration property will be set to false, and any click event listeners will not be 
+    * called when the user clicks inside the submenu toggle region of a MenuBarItem.  If the 
+    * user clicks outside of the submenu toggle region, the MenuBarItem will maintain its 
+    * standard behavior.
+    * @default false
+    * @type Boolean
+    */
+	oConfig.addProperty(
+	   SUBMENU_TOGGLE_REGION_CONFIG.key, 
+	   {
+	       value: SUBMENU_TOGGLE_REGION_CONFIG.value, 
+	       validator: SUBMENU_TOGGLE_REGION_CONFIG.validator,
+	       handler: this.configSubmenuToggle
        } 
     );
 
