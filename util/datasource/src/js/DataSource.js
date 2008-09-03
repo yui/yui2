@@ -1441,7 +1441,7 @@ parseJSONData : function(oRequest, oFullResponse) {
                         if (path.length > 1) {
                             fieldPaths[fieldPaths.length] = {key:key,path:path};
                         } else {
-                            simpleFields[simpleFields.length] = key;
+                            simpleFields[simpleFields.length] = {key:key,path:path[0]};
                         }
                     } else {
                         YAHOO.log("Invalid key syntax: " + key,"warn",this.toString());
@@ -1454,7 +1454,9 @@ parseJSONData : function(oRequest, oFullResponse) {
                         var r = resultsList[i], rec = {};
                         for (j = simpleFields.length - 1; j >= 0; --j) {
                             // Bug 1777850: data might be held in an array
-                            rec[simpleFields[j]] = r[simpleFields[j]] || r[j];
+                            rec[simpleFields[j].key] =
+                                    (r[simpleFields[j].path] !== undefined) ?
+                                    r[simpleFields[j].path] : r[j];
                         }
 
                         for (j = fieldPaths.length - 1; j >= 0; --j) {
