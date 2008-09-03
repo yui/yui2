@@ -845,8 +845,19 @@
     
         },
 
-        _autoFillHeight : function(el) {
-            Panel.superclass._autoFillHeight.apply(this, arguments);
+        /**
+         * The default custom event handler executed when the Panel's height is changed, 
+         * if the autofillheight property has been set.
+         *
+         * @method _autoFillOnHeightChange
+         * @protected
+         * @param {String} type The event type
+         * @param {Array} args The array of arguments passed to event subscribers
+         * @param {HTMLElement} el The header, body or footer element which is to be resized to fill
+         * out the containers height
+         */
+        _autoFillOnHeightChange : function(type, args, el) {
+            Panel.superclass._autoFillOnHeightChange.apply(this, arguments);
             if (bIEQuirks) {
                 this.sizeUnderlay();
             }

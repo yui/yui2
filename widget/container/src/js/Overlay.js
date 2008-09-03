@@ -105,7 +105,7 @@
                 key: "autofillheight",
                 supressEvent: true,
                 supercedes: ["height"],
-                value:null
+                value:"body"
             },
 
             "ZINDEX": { 
@@ -903,30 +903,31 @@
         },
 
         /**
-        * The default event handler fired when the "autofillheight" property is changed.
-        * @method configAutoFillHeight
-        *
-        * @param {String} type The CustomEvent type (usually the property name)
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
-        * handlers, args[0] will equal the newly applied value for the property.
-        * @param {Object} obj The scope object. For configuration handlers, 
-        * this will usually equal the owner.
-        */
+         * The default event handler fired when the "autofillheight" property is changed.
+         * @method configAutoFillHeight
+         *
+         * @param {String} type The CustomEvent type (usually the property name)
+         * @param {Object[]} args The CustomEvent arguments. For configuration 
+         * handlers, args[0] will equal the newly applied value for the property.
+         * @param {Object} obj The scope object. For configuration handlers, 
+         * this will usually equal the owner.
+         */
         configAutoFillHeight: function (type, args, obj) {
             var fillEl = args[0],
                 currEl = this.cfg.getProperty("autofillheight");
 
-            this.cfg.unsubscribeFromConfigEvent("height", this._autoFillHeight);
-            Module.textResizeEvent.unsubscribe("height", this._autoFillHeight);
+            this.cfg.unsubscribeFromConfigEvent("height", this._autoFillOnHeightChange);
+            Module.textResizeEvent.unsubscribe("height", this._autoFillOnHeightChange);
 
-            if (currEl && fillEl !== currEl) {
+            if (currEl && fillEl !== currEl && this[currEl]) {
                 Dom.setStyle(this[currEl], "height", "");
             }
 
             if (fillEl) {
                 fillEl = Lang.trim(fillEl.toLowerCase());
-                this.cfg.subscribeToConfigEvent("height", this._autoFillHeight, this[fillEl], this);
-                Module.textResizeEvent.subscribe(this._autoFillHeight, this[fillEl], this);
+
+                this.cfg.subscribeToConfigEvent("height", this._autoFillOnHeightChange, this[fillEl], this);
+                Module.textResizeEvent.subscribe(this._autoFillOnHeightChange, this[fillEl], this);
 
                 this.cfg.setProperty("autofillheight", fillEl, true);
             }
@@ -945,7 +946,7 @@
 
             var width = args[0],
                 el = this.element;
-    
+
             Dom.setStyle(el, "width", width);
             this.cfg.refireEvent("iframe");
         },
@@ -1952,12 +1953,11 @@
                 me.cfg.refireEvent("iframe");
                 me.cfg.refireEvent("context");
             }, 0);
-    
         },
 
         /**
-         * Determines the content box height of the given element (height of the element, without padding or borders) in pixels
-         * 
+         * Determines the content box height of the given element (height of the element, without padding or borders) in pixels.
+         *
          * @method _getComputedHeight
          * @private
          * @param {HTMLElement} el The element for which the content height needs to be determined
@@ -2000,45 +2000,85 @@
             return (!val) || (Lang.isString(val) && Overlay.STD_MOD_RE.test(val));
         },
 
-        _autoFillHeight : function(type, args, el) {
+        /**
+         * The default custom event handler executed when the overlay's height is changed, 
+         * if the autofillheight property has been set.
+         *
+         * @method _autoFillOnHeightChange
+         * @protected
+         * @param {String} type The event type
+         * @param {Array} args The array of arguments passed to event subscribers
+         * @param {HTMLElement} el The header, body or footer element which is to be resized to fill
+         * out the containers height
+         */
+        _autoFillOnHeightChange : function(type, args, el) {
+            this.fillHeight(el);
+        },
+
+        /**
+         * <p>
+         * Sets the height on the provided header, body or footer element to 
+         * fill out the height of the container. It determines the height of the 
+         * containers content box, based on it's configured height value, and 
+         * sets the height of the autofillheight element to fill out any 
+         * space remaining after the other standard module element heights 
+         * have been accounted for.
+         * </p>
+         * <p><strong>NOTE:</strong> This method is not designed to work if an explicit 
+         * height has not been set on the container, since for an "auto" height container, 
+         * the heights of the header/body/footer will drive the height of the container.</p>
+         *
+         * @method fillHeight
+         * @param {HTMLElement} el The element which should be resized to fill out the height
+         * of the container element.
+         */
+        fillHeight : function(el) {
             if (el) {
                 var container = this.innerElement || this.element,
                     containerEls = [this.header, this.body, this.footer],
                     containerEl,
-                    total = this._getComputedHeight(container),
+                    total = 0,
                     filled = 0,
-                    remaining = 0;
-
-                if (UA.ie) {
-                    // height is really min-height, so need to set it 
-                    // to 0, to allow height to be reduced
-                    Dom.setStyle(el, 'height', 0 + 'px');
-                }
-
-                // Fallback, if we can't get computed value for content height
-                if (total === null) {
-                    Dom.addClass(container, "yui-override-padding");
-                    total = container.clientHeight; // Content, No Border, 0 Padding (set by yui-override-padding)
-                    Dom.removeClass(container, "yui-override-padding");
-                }
+                    remaining = 0,
+                    validEl = false;
 
                 for (var i = 0, l = containerEls.length; i < l; i++) {
                     containerEl = containerEls[i];
-                    if (containerEl && el !== containerEl) {
-                        filled += containerEl.offsetHeight;
+                    if (containerEl) {
+                        if (el !== containerEl) {
+                            filled += containerEl.offsetHeight;
+                        } else {
+                            validEl = true;
+                        }
                     }
                 }
 
-                remaining = total - filled;
+                if (validEl) {
 
-                Dom.setStyle(el, "height", remaining + "px");
+                    if (UA.ie || UA.opera) {
+                        // Need to set height to 0, to allow height to be reduced
+                        Dom.setStyle(el, 'height', 0 + 'px');
+                    }
 
-                // Adjust for el padding and border
-                if (el.offsetHeight != remaining) {
-                    remaining = remaining - (el.offsetHeight - remaining);
+                    total = this._getComputedHeight(container);
+
+                    // Fallback, if we can't get computed value for content height
+                    if (total === null) {
+                        Dom.addClass(container, "yui-override-padding");
+                        total = container.clientHeight; // Content, No Border, 0 Padding (set by yui-override-padding)
+                        Dom.removeClass(container, "yui-override-padding");
+                    }
+    
+                    remaining = total - filled;
+    
+                    Dom.setStyle(el, "height", remaining + "px");
+    
+                    // Re-adjust height if required, to account for el padding and border
+                    if (el.offsetHeight != remaining) {
+                        remaining = remaining - (el.offsetHeight - remaining);
+                    }
+                    Dom.setStyle(el, "height", remaining + "px");
                 }
-
-                Dom.setStyle(el, "height", remaining + "px");
             }
         },
 
@@ -2131,7 +2171,7 @@
             Overlay.windowScrollEvent.unsubscribe(
                 this.doCenterOnDOMEvent, this);
 
-            Module.textResizeEvent.unsubscribe(this._autoFillHeight);
+            Module.textResizeEvent.unsubscribe(this._autoFillOnHeightChange);
 
             Overlay.superclass.destroy.call(this);
         },
