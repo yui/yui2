@@ -325,6 +325,16 @@ YAHOO.widget.AutoComplete.prototype.queryDelay = 0.2;
 YAHOO.widget.AutoComplete.prototype.typeAheadDelay = 0.5;
 
 /**
+ * When IME usage is detected, AutoComplete will switch to querying the input
+ * value at the given interval rather than per key event.
+ *
+ * @property queryInterval
+ * @type Number
+ * @default 500
+ */
+YAHOO.widget.AutoComplete.prototype.queryInterval = 500;
+
+/**
  * Class name of a highlighted item within results container.
  *
  * @property highlightClassName
@@ -1486,9 +1496,6 @@ YAHOO.widget.AutoComplete.prototype._initContainerEl = function() {
         elContent.className = "yui-ac-content";
         elContent.style.display = "none";
 
-        //YAHOO.util.Event.addListener(elContent,"mouseover",this._onItemMouseover,this);
-        //YAHOO.util.Event.addListener(elContent,"mouseout",this._onItemMouseout,this);
-        //YAHOO.util.Event.addListener(elContent,"click",this._onItemMouseclick,this);
         this._elContent = this._elContainer.appendChild(elContent);
 
         var elHeader = document.createElement("div");
@@ -1536,81 +1543,31 @@ YAHOO.widget.AutoComplete.prototype._initListEl = function() {
         this._elList = elBody.appendChild(elList);
     }
     
-    
-    
-    
-    
-    /*if(!this._aListItemEls) {
-        while(this._aListItemEls.length < nListLength) {
-        
-        }
-    }
-    else {
-        this._aListItemEls = [];
-    }
-
-
-
-    this._aListItemEls = [];
-    while(this._elBody.hasChildNodes()) {
-        var oldListItems = this.getListItems();
-        if(oldListItems) {
-            for(var oldi = oldListItems.length-1; oldi >= 0; oldi--) {
-                oldListItems[oldi] = null;
-            }
-        }
-        this._elBody.innerHTML = "";
-    }
-
-    var elList = document.createElement("ul");
-    oList = this._elBody.appendChild(oList);
-    for(var i=0; i<this.maxResultsDisplayed; i++) {
-        var elListItem = document.createElement("li");
-        elListItem = oList.appendChild(elListItem);
-        this._aListItemEls[i] = elListItem;
-        this._initListItemEl(elListItem, i);
-    }
-    //this._maxResultsDisplayed = this.maxResultsDisplayed;*/
 };
 
 /**
- * Initializes each &lt;li&gt; element in the container list.
+ * Enables interval detection for IME support.
  *
- * @method _initListItemEl
- * @param elListItem {HTMLElement} The &lt;li&gt; DOM element.
- * @param nItemIndex {Number} The index of the element.
+ * @method _enableIntervalDetection
+ * @re 
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._initListItemEl = function(elListItem, nItemIndex) {
-    /*var oSelf = this;
-    elListItem.style.display = "none";
-    elListItem._nItemIndex = nItemIndex;
-
-    elListItem.mouseover = elListItem.mouseout = elListItem.onclick = null;
-    YAHOO.util.Event.addListener(elListItem,"mouseover",oSelf._onItemMouseover,oSelf);
-    YAHOO.util.Event.addListener(elListItem,"mouseout",oSelf._onItemMouseout,oSelf);
-    YAHOO.util.Event.addListener(elListItem,"click",oSelf._onItemMouseclick,oSelf);*/
-};
-
-/**
- * Enables interval detection for  Korean IME support.
- *
- * @method _onIMEDetected
- * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
- * @private
- */
-YAHOO.widget.AutoComplete.prototype._onIMEDetected = function(oSelf) {
-    oSelf._enableIntervalDetection();
+YAHOO.widget.AutoComplete.prototype._enableIntervalDetection = function() {
+    var oSelf = this;
+    if(!oSelf._queryInterval && oSelf.queryInterval) {
+        oSelf._queryInterval = setInterval(function() { oSelf._onInterval(); }, oSelf.queryInterval);
+        YAHOO.log("Interval set", "info", this.toString());
+    }
 };
 
 /**
  * Enables query triggers based on text input detection by intervals (rather
  * than by key events).
  *
- * @method _enableIntervalDetection
+ * @method _onInterval
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._enableIntervalDetection = function() {
+YAHOO.widget.AutoComplete.prototype._onInterval = function() {
     var currValue = this._elTextbox.value;
     var lastValue = this._sLastTextboxValue;
     if(currValue != lastValue) {
@@ -1619,20 +1576,20 @@ YAHOO.widget.AutoComplete.prototype._enableIntervalDetection = function() {
     }
 };
 
-
 /**
  * Cancels text input detection by intervals.
  *
- * @method _cancelIntervalDetection
+ * @method _clearInterval
  * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._cancelIntervalDetection = function(oSelf) {
-    if(oSelf._queryInterval) {
-        clearInterval(oSelf._queryInterval);
+YAHOO.widget.AutoComplete.prototype._clearInterval = function() {
+    if(this._queryInterval) {
+        clearInterval(this._queryInterval);
+        this._queryInterval = null;
+        YAHOO.log("Interval cleared", "info", this.toString());
     }
 };
-
 
 /**
  * Whether or not key is functional or should be ignored. Note that the right
@@ -1647,7 +1604,7 @@ YAHOO.widget.AutoComplete.prototype._cancelIntervalDetection = function(oSelf) {
 YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
     if((nKeyCode == 9) || (nKeyCode == 13)  || // tab, enter
             (nKeyCode == 16) || (nKeyCode == 17) || // shift, ctl
-            (nKeyCode >= 18 && nKeyCode <= 20) || // alt,pause/break,caps lock
+            (nKeyCode >= 18 && nKeyCode <= 20) || // alt, pause/break,caps lock
             (nKeyCode == 27) || // esc
             (nKeyCode >= 33 && nKeyCode <= 35) || // page up,page down,end
             /*(nKeyCode >= 36 && nKeyCode <= 38) || // home,left,up
@@ -2254,7 +2211,7 @@ YAHOO.widget.AutoComplete.prototype._selectItem = function(elListItem) {
     this._bItemSelected = true;
     this._updateValue(elListItem);
     this._sPastSelections = this._elTextbox.value;
-    this._cancelIntervalDetection(this);
+    this._clearInterval();
     this.itemSelectEvent.fire(this, elListItem, elListItem._oResultData);
     YAHOO.log("Item selected: " + YAHOO.lang.dump(elListItem._oResultData), "info", this.toString());
     this._toggleContainer(false);
@@ -2656,6 +2613,10 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
             YAHOO.log("Textbox keyed", "info", oSelf.toString());
             break;
     }
+
+    if(nKeyCode === 18){
+        oSelf._enableIntervalDetection();
+    }    
     oSelf._nKeyCode = nKeyCode;
 };
 
@@ -2710,7 +2671,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
         //TODO: (?) limit only to non-IE, non-Mac-FF for Korean IME support (bug 811948)
         // Korean IME detected
         else if(nKeyCode == 229) {
-            oSelf._queryInterval = setInterval(function() { oSelf._onIMEDetected(oSelf); },500);
+            oSelf._enableIntervalDetection();
         }
 };
 
@@ -2729,7 +2690,8 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     oSelf._initProps();
 
     // Filter out chars that don't trigger queries
-    if(oSelf._isIgnoreKey(v.keyCode)) {
+    var nKeyCode = v.keyCode;
+    if(oSelf._isIgnoreKey(nKeyCode)) {
         return;
     }
 
@@ -2810,7 +2772,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
         if(oSelf._bContainerOpen) {
             oSelf._toggleContainer(false);
         }
-        oSelf._cancelIntervalDetection(oSelf);
+        oSelf._clearInterval();
         oSelf._bFocused = false;
         if(oSelf._sInitInputValue !== oSelf._elTextbox.value) {
             oSelf.textboxChangeEvent.fire(oSelf);
