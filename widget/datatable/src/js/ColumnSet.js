@@ -840,6 +840,24 @@ YAHOO.widget.Column.prototype = {
      * @type String || HTMLFunction
      */
     formatter : null,
+    
+    /**
+     * Config passed to YAHOO.util.Number.format() by the 'currency' Column formatter.
+     *
+     * @property currencyOptions
+     * @type Object
+     * @default null
+     */
+    currencyOptions : null,
+
+    /**
+     * Config passed to YAHOO.util.Date.format() by the 'date' Column formatter.
+     *
+     * @property dateOptions
+     * @type Object
+     * @default null
+     */
+    dateOptions : null,
 
     /**
      * A CellEditor instance, otherwise Column is not editable.     

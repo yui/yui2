@@ -840,12 +840,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatCurrency : function(el, oRecord, oColumn, oData) {
-        el.innerHTML = util.Number.format(oData, {
-                prefix: this.get("currencySymbol"),
-                decimalPlaces:2,
-                decimalSeparator:".",
-                thousandsSeparator:","
-            });
+        el.innerHTML = util.Number.format(oData, oColumn.currencyOptions || this.get("currencyOptions"));
     },
 
     /**
@@ -859,7 +854,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatDate : function(el, oRecord, oColumn, oData) {
-        el.innerHTML = util.Date.format(oData, {format:"MM/DD/YYYY"});
+        el.innerHTML = util.Date.format(oData, oColumn.dateOptions || this.get("dateOptions"));
     },
 
     /**
@@ -1521,13 +1516,37 @@ initAttributes : function(oConfigs) {
      });
      
     /**
-     * Currency symbol/prefix used by the default 'currency' column formatter.
      * @attribute currencySymbol
-     * @type String
-     * @default "$"
+     * @deprecated
      */
     this.setAttributeConfig("currencySymbol", {
-        value: "$"
+        value: "$",
+        validator: lang.isString
+    });
+    
+    /**
+     * Default config passed to YAHOO.util.Number.format() by the 'currency' Column formatter.
+     * @attribute currencyOptions
+     * @type Object
+     * @default {prefix: $, decimalPlaces:2, decimalSeparator:".", thousandsSeparator:","}
+     */
+    this.setAttributeConfig("currencyOptions", {
+        value: {
+            prefix: this.get("currencySymbol"), // TODO: deprecate
+            decimalPlaces:2,
+            decimalSeparator:".",
+            thousandsSeparator:","
+        }
+    });
+    
+    /**
+     * Default config passed to YAHOO.util.Date.format() by the 'currency' Column formatter.
+     * @attribute dateOptions
+     * @type Object
+     * @default {format:"MM/DD/YYYY"}
+     */
+    this.setAttributeConfig("dateOptions", {
+        value: {format:"MM/DD/YYYY"}
     });
 },
 
