@@ -10,6 +10,16 @@
  * @title Carousel Widget
  *----------------------------------------------------------------------------
  */
+/**
+ * The Carousel widget.
+ *
+ * @class Carousel
+ * @extends YAHOO.util.Element
+ * @constructor
+ * @param el {HTMLElement | String} The HTML element that represents the
+ * the container that houses the Carousel.
+ * @param cfg {Object} (optional) The configuration values
+ */
 (function () {
 
     /*
@@ -36,16 +46,6 @@
      */
     var instances = {};
 
-    /**
-     * The Carousel widget.
-     *
-     * @class Carousel
-     * @extends YAHOO.util.Element
-     * @constructor
-     * @param el {HTMLElement | String} The HTML element that represents the
-     * the container that houses the Carousel.
-     * @param cfg {Object} (optional) The configuration values
-     */
     YAHOO.widget.Carousel = function (el, cfg) {
         YAHOO.log("Component creation", WidgetName);
 
