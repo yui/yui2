@@ -9,7 +9,7 @@
 <script type="text/javascript" src="../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../build/event/event.js"></script>
 <script type="text/javascript" src="../build/dom/dom.js"></script> 
-<script type="text/javascript" src="../build/element/element-beta-min.js"></script> 
+<script type="text/javascript" src="../build/element/element-beta-debug.js"></script> 
 <script type="text/javascript" src="../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest.js"></script>
 
@@ -30,7 +30,19 @@
     Y.Event.onDOMReady(function() {
         var logger = new YAHOO.tool.TestLogger(null, { height: '80%' });
 
-        var foo = new Y.Element('foo');
+        Y.Element.prototype.initAttributes = function() {
+            this.setAttributeConfig('foo', {
+                validator: YAHOO.lang.isString 
+            });
+
+            this.setAttributeConfig('href', {
+                validator: YAHOO.lang.isString
+            });
+        };
+
+        var foo = new Y.Element('foo', { foo: 2 });
+        var bar = new Y.Element('bar', { href: 2 });
+
         var elFoo = document.getElementById('foo');
 
         suite.add( new tool.TestCase({
@@ -80,7 +92,46 @@
                 foo.on('foo', handler);
                 foo.fireEvent('foo');
                 YAHOO.util.Assert.isTrue(pass, 'foo handler failed to be called');
-            }
+          },
+
+            test_attribute: function() {
+                foo.setAttributeConfig('fontname', {
+                    value: 'tahoma',
+                    method: function(val) {
+                        foo.setStyle('font-family', val);
+                    }
+                });
+
+                foo.set('fontname', 'tahoma');
+                YAHOO.util.Assert.areEqual(Y.Dom.getStyle('foo', 'font-family'), 'tahoma', 'attribConfig');
+                foo.set('fontname', 'verdana');
+                foo.resetValue('fontname');
+            },
+
+            test_validator: function() {
+                YAHOO.util.Assert.areEqual(undefined, foo.get('foo'), 'foo.get("foo")');
+                YAHOO.util.Assert.areEqual('', bar.get('href'), 'bar.get("href")');
+
+                foo.setAttributeConfig('foobar', {
+                    validator: YAHOO.lang.isString 
+                });
+
+                foo.set('foobar', 3);
+                YAHOO.util.Assert.areEqual(undefined, foo.get('foobar'), 'foo.get("foobar")');
+
+                bar.set('href', 3);
+                YAHOO.util.Assert.areEqual('', bar.get('href'), 'bar.get("href")');
+
+                bar.set('href', 'http://yahoo.com');
+                YAHOO.util.Assert.areEqual('http://yahoo.com', bar.get('href'), 'bar.set("href")');
+            },            
+
+            test_dom_event: function() {
+                foo.on('click', function(e) { alert('click'); });
+                var baz = new Y.Element('baz');
+                baz.on('click', function(e) { alert('click'); });
+            },
+
         })); 
         tool.TestRunner.add(suite);
 
@@ -99,6 +150,7 @@
 <body class="yui-skin-sam">
     <div id="doc">
         <div id="foo">foo</div>
+        <a id="bar">foo</a>
     </div>
 </body>
 </html>
