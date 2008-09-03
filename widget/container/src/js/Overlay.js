@@ -27,6 +27,7 @@
         Event = YAHOO.util.Event,
         Dom = YAHOO.util.Dom,
         Config = YAHOO.util.Config,
+        UA = YAHOO.env.ua,
         Overlay = YAHOO.widget.Overlay,
 
         _SUBSCRIBE = "subscribe",
@@ -100,6 +101,13 @@
                 supercedes: ["context", "fixedcenter", "iframe"] 
             },
 
+            "AUTO_FILL_HEIGHT" : {
+                key: "autofillheight",
+                supressEvent: true,
+                supercedes: ["height"],
+                value:null
+            },
+
             "ZINDEX": { 
                 key: "zindex", 
                 value: null 
@@ -114,7 +122,7 @@
 
             "IFRAME": { 
                 key: "iframe", 
-                value: (YAHOO.env.ua.ie == 6 ? true : false), 
+                value: (UA.ie == 6 ? true : false), 
                 validator: Lang.isBoolean, 
                 supercedes: ["zindex"] 
             },
@@ -209,6 +217,16 @@
     Overlay.CSS_OVERLAY = "yui-overlay";
 
     /**
+     * Constant representing the names of the standard module elements
+     * used in the overlay.
+     * @property YAHOO.widget.Overlay.STD_MOD_RE
+     * @static
+     * @final
+     * @type RegExp
+     */
+    Overlay.STD_MOD_RE = /^\s*?(body|footer|header)\s*?$/i;
+
+    /**
     * A singleton CustomEvent used for reacting to the DOM event for 
     * window scroll
     * @event YAHOO.widget.Overlay.windowScrollEvent
@@ -239,7 +257,7 @@
         // rest of the browsers set target to window.document, apart from opera 
         // which sets target to window.
         if (!t || t === window || t === window.document) {
-            if (YAHOO.env.ua.ie) {
+            if (UA.ie) {
 
                 if (! window.scrollEnd) {
                     window.scrollEnd = -1;
@@ -265,7 +283,7 @@
     */
     Overlay.windowResizeHandler = function (e) {
 
-        if (YAHOO.env.ua.ie) {
+        if (UA.ie) {
             if (! window.resizeEnd) {
                 window.resizeEnd = -1;
             }
@@ -362,7 +380,7 @@
                 this.cfg.applyConfig(userConfig, true);
             }
 
-            if (this.platform == "mac" && YAHOO.env.ua.gecko) {
+            if (this.platform == "mac" && UA.gecko) {
 
                 if (! Config.alreadySubscribed(this.showEvent,
                     this.showMacGeckoScrollbars, this)) {
@@ -423,8 +441,9 @@
         initDefaultConfig: function () {
     
             Overlay.superclass.initDefaultConfig.call(this);
-            
-            
+
+            var cfg = this.cfg;
+
             // Add overlay config properties //
             
             /**
@@ -433,7 +452,7 @@
             * @type Number
             * @default null
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.X.key, { 
+            cfg.addProperty(DEFAULT_CONFIG.X.key, { 
     
                 handler: this.configX, 
                 validator: DEFAULT_CONFIG.X.validator, 
@@ -448,7 +467,7 @@
             * @type Number
             * @default null
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.Y.key, {
+            cfg.addProperty(DEFAULT_CONFIG.Y.key, {
 
                 handler: this.configY, 
                 validator: DEFAULT_CONFIG.Y.validator, 
@@ -463,7 +482,7 @@
             * @type Number[]
             * @default null
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.XY.key, {
+            cfg.addProperty(DEFAULT_CONFIG.XY.key, {
                 handler: this.configXY, 
                 suppressEvent: DEFAULT_CONFIG.XY.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.XY.supercedes
@@ -516,7 +535,7 @@
             * @type Array
             * @default null
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.CONTEXT.key, {
+            cfg.addProperty(DEFAULT_CONFIG.CONTEXT.key, {
                 handler: this.configContext, 
                 suppressEvent: DEFAULT_CONFIG.CONTEXT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.CONTEXT.supercedes
@@ -529,7 +548,7 @@
             * @type Boolean
             * @default false
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.FIXED_CENTER.key, {
+            cfg.addProperty(DEFAULT_CONFIG.FIXED_CENTER.key, {
                 handler: this.configFixedCenter,
                 value: DEFAULT_CONFIG.FIXED_CENTER.value, 
                 validator: DEFAULT_CONFIG.FIXED_CENTER.validator, 
@@ -542,7 +561,7 @@
             * @type String
             * @default null
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.WIDTH.key, {
+            cfg.addProperty(DEFAULT_CONFIG.WIDTH.key, {
                 handler: this.configWidth, 
                 suppressEvent: DEFAULT_CONFIG.WIDTH.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.WIDTH.supercedes
@@ -554,19 +573,35 @@
             * @type String
             * @default null
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.HEIGHT.key, {
+            cfg.addProperty(DEFAULT_CONFIG.HEIGHT.key, {
                 handler: this.configHeight, 
                 suppressEvent: DEFAULT_CONFIG.HEIGHT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.HEIGHT.supercedes
             });
-            
+
+            /**
+            * Standard module element which should auto fill out the height of the Overlay if the height config property is set.
+            * Supported values are "header", "body", "footer".
+            *
+            * @config autofillheight
+            * @type String
+            * @default null
+            */
+            cfg.addProperty(DEFAULT_CONFIG.AUTO_FILL_HEIGHT.key, {
+                handler: this.configAutoFillHeight, 
+                value : DEFAULT_CONFIG.AUTO_FILL_HEIGHT.value,
+                validator : this._validateAutoFill,
+                suppressEvent: DEFAULT_CONFIG.AUTO_FILL_HEIGHT.suppressEvent, 
+                supercedes: DEFAULT_CONFIG.AUTO_FILL_HEIGHT.supercedes
+            });
+
             /**
             * CSS z-index of the Overlay.
             * @config zIndex
             * @type Number
             * @default null
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.ZINDEX.key, {
+            cfg.addProperty(DEFAULT_CONFIG.ZINDEX.key, {
                 handler: this.configzIndex,
                 value: DEFAULT_CONFIG.ZINDEX.value
             });
@@ -578,7 +613,7 @@
             * @type Boolean
             * @default false
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.key, {
+            cfg.addProperty(DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.key, {
 
                 handler: this.configConstrainToViewport, 
                 value: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.value, 
@@ -597,7 +632,7 @@
             * @type Boolean
             * @default true for IE6 and below, false for all other browsers.
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.IFRAME.key, {
+            cfg.addProperty(DEFAULT_CONFIG.IFRAME.key, {
 
                 handler: this.configIframe, 
                 value: DEFAULT_CONFIG.IFRAME.value, 
@@ -614,7 +649,7 @@
             * @type Boolean
             * @default false
             */
-            this.cfg.addProperty(DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.key, {
+            cfg.addProperty(DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.key, {
 
                 value: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.value, 
                 validator: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.validator, 
@@ -673,7 +708,7 @@
                 currentVis = Dom.getStyle(this.element, "visibility"),
                 effect = this.cfg.getProperty("effect"),
                 effectInstances = [],
-                isMacGecko = (this.platform == "mac" && YAHOO.env.ua.gecko),
+                isMacGecko = (this.platform == "mac" && UA.gecko),
                 alreadySubscribed = Config.alreadySubscribed,
                 eff, ei, e, i, j, k, h,
                 nEffects,
@@ -865,6 +900,36 @@
 
             Dom.setStyle(el, "height", height);
             this.cfg.refireEvent("iframe");
+        },
+
+        /**
+        * The default event handler fired when the "autofillheight" property is changed.
+        * @method configAutoFillHeight
+        *
+        * @param {String} type The CustomEvent type (usually the property name)
+        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * handlers, args[0] will equal the newly applied value for the property.
+        * @param {Object} obj The scope object. For configuration handlers, 
+        * this will usually equal the owner.
+        */
+        configAutoFillHeight: function (type, args, obj) {
+            var fillEl = args[0],
+                currEl = this.cfg.getProperty("autofillheight");
+
+            this.cfg.unsubscribeFromConfigEvent("height", this._autoFillHeight);
+            Module.textResizeEvent.unsubscribe("height", this._autoFillHeight);
+
+            if (currEl && fillEl !== currEl) {
+                Dom.setStyle(this[currEl], "height", "");
+            }
+
+            if (fillEl) {
+                fillEl = Lang.trim(fillEl.toLowerCase());
+                this.cfg.subscribeToConfigEvent("height", this._autoFillHeight, this[fillEl], this);
+                Module.textResizeEvent.subscribe(this._autoFillHeight, this[fillEl], this);
+
+                this.cfg.setProperty("autofillheight", fillEl, true);
+            }
         },
 
         /**
@@ -1121,7 +1186,7 @@
                             doesn't modify the opacity of any transparent 
                             elements that may be on top of it (like a shadow).
                         */
-                        if (YAHOO.env.ua.ie) {
+                        if (UA.ie) {
                             m_oIFrameTemplate.style.filter = "alpha(opacity=0)";
                             /*
                                  Need to set the "frameBorder" property to 0 
@@ -1824,7 +1889,6 @@
             return [this.getConstrainedX(x), this.getConstrainedY(y)];
         },
 
-
         /**
         * Centers the container in the viewport.
         * @method center
@@ -1889,6 +1953,93 @@
                 me.cfg.refireEvent("context");
             }, 0);
     
+        },
+
+        /**
+         * Determines the content box height of the given element (height of the element, without padding or borders) in pixels
+         * 
+         * @method _getComputedHeight
+         * @private
+         * @param {HTMLElement} el The element for which the content height needs to be determined
+         * @return {Number} The content box height of the given element, or null if it could not be determined.
+         */
+        _getComputedHeight : (function() {
+
+            if (document.defaultView && document.defaultView.getComputedStyle) {
+                return function(el) {
+                    var height = null;
+                    if (el.ownerDocument && el.ownerDocument.defaultView) {
+                        var computed = el.ownerDocument.defaultView.getComputedStyle(el, '');
+                        if (computed) {
+                            height = parseInt(computed.height, 10);
+                        }
+                    }
+                    return (Lang.isNumber(height)) ? height : null;
+                };
+            } else {
+                return function(el) {
+                    var height = null;
+                    if (el.style.pixelHeight) {
+                        height = el.style.pixelHeight;
+                    }
+                    return (Lang.isNumber(height)) ? height : null;
+                };
+            }
+        })(),
+
+        /**
+         * autofillheight validator. Verifies that the autofill value is either null 
+         * or one of the strings : "body", "header" or "footer".
+         *
+         * @method _validateAutoFillHeight
+         * @protected
+         * @param {String} val
+         * @return true, if valid, false otherwise
+         */
+        _validateAutoFillHeight : function(val) {
+            return (!val) || (Lang.isString(val) && Overlay.STD_MOD_RE.test(val));
+        },
+
+        _autoFillHeight : function(type, args, el) {
+            if (el) {
+                var container = this.innerElement || this.element,
+                    containerEls = [this.header, this.body, this.footer],
+                    containerEl,
+                    total = this._getComputedHeight(container),
+                    filled = 0,
+                    remaining = 0;
+
+                if (UA.ie) {
+                    // height is really min-height, so need to set it 
+                    // to 0, to allow height to be reduced
+                    Dom.setStyle(el, 'height', 0 + 'px');
+                }
+
+                // Fallback, if we can't get computed value for content height
+                if (total === null) {
+                    Dom.addClass(container, "yui-override-padding");
+                    total = container.clientHeight; // Content, No Border, 0 Padding (set by yui-override-padding)
+                    Dom.removeClass(container, "yui-override-padding");
+                }
+
+                for (var i = 0, l = containerEls.length; i < l; i++) {
+                    containerEl = containerEls[i];
+                    if (containerEl && el !== containerEl) {
+                        filled += containerEl.offsetHeight;
+                    }
+                }
+
+                remaining = total - filled;
+
+                Dom.setStyle(el, "height", remaining + "px");
+
+                // Adjust for el padding and border
+                if (el.offsetHeight != remaining) {
+                    remaining = remaining - (el.offsetHeight - remaining);
+                }
+
+                Dom.setStyle(el, "height", remaining + "px");
+            }
         },
 
         /**
@@ -1973,16 +2124,18 @@
             }
 
             this.iframe = null;
-        
+
             Overlay.windowResizeEvent.unsubscribe(
                 this.doCenterOnDOMEvent, this);
     
             Overlay.windowScrollEvent.unsubscribe(
                 this.doCenterOnDOMEvent, this);
-        
+
+            Module.textResizeEvent.unsubscribe(this._autoFillHeight);
+
             Overlay.superclass.destroy.call(this);
         },
-        
+
         /**
         * Returns a String representation of the object.
         * @method toString
