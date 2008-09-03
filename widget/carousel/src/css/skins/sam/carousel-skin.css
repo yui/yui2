@@ -22,11 +22,11 @@
     background-position: 0 -800px;
 }
 
-.yui-skin-sam .yui-carousel-button.disabled {
+.yui-skin-sam .yui-carousel-button.yui-disabled {
     background-position: 0 -2000px;
 }
 
-.yui-skin-sam .yui-carousel-vertical-container .yui-carousel-button.disabled {
+.yui-skin-sam .yui-carousel-vertical-container .yui-carousel-button.yui-disabled {
     background-position: 0 -2100px;
 }
 
@@ -40,22 +40,22 @@
     padding: 0 0 0 50px;
 }
 
-.yui-skin-sam span.first {
+.yui-skin-sam span.yui-first {
     background-position: 0px -550px;
     margin-left: -100px;
     margin-right: 50px;
     *margin: 5px 5px 5px -90px;
 }
 
-.yui-skin-sam .yui-carousel-vertical-container span.first {
+.yui-skin-sam .yui-carousel-vertical-container span.yui-first {
     background-position: 0px -750px;
 }
 
-.yui-skin-sam span.first-disabled {
+.yui-skin-sam span.yui-first-disabled {
     background-position: 0 -1950px;
 }
 
-.yui-skin-sam .yui-carousel-vertical-container span.first-disabled {
+.yui-skin-sam .yui-carousel-vertical-container span.yui-first-disabled {
     background-position: 0 -2050px;
 }
 

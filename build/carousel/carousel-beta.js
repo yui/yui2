@@ -783,7 +783,7 @@
         } else {
             // TODO: separate method for creating a navigation button
             prevButton = createElement("SPAN",
-                    { className: cssClass.BUTTON + cssClass.FIRST_BUTTON });
+                    { className: cssClass.BUTTON + cssClass.FIRST_NAV });
             prevButton.innerHTML = "<input type=\"button\" " +
                     "value=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\" " +
                     "name=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\">";
@@ -850,7 +850,7 @@
                 if (!this.get("isCircular")) {
                     Event.removeListener(navigation.prev, "click",
                             scrollPageBackward);
-                    Dom.addClass(navigation.prev, cssClass.FIRST_DISABLED);
+                    Dom.addClass(navigation.prev, cssClass.FIRST_NAV_DISABLED);
                     this._prevEnabled = false;
                 } else {
                     attach = !this._prevEnabled;
@@ -861,7 +861,7 @@
             
             if (attach) {
                 Event.on(navigation.prev, "click", scrollPageBackward, this);
-                Dom.removeClass(navigation.prev, cssClass.FIRST_DISABLED);
+                Dom.removeClass(navigation.prev, cssClass.FIRST_NAV_DISABLED);
                 this._prevEnabled = true;
             }
         }
@@ -1196,23 +1196,23 @@
              * @property DISABLED
              * @default "disabled"
              */
-            DISABLED: "disabled",
+            DISABLED: "yui-disabled",
             
             /**
              * The class name of the first Carousel navigation button.
              *
-             * @property FIRST_BUTTON
-             * @default " first"
+             * @property FIRST_NAV
+             * @default " yui-first"
              */
-            FIRST_BUTTON: " first",
+            FIRST_NAV: " yui-first",
             
             /**
              * The class name of a first disabled navigation button.
              *
-             * @property FIRST_DISABLED
-             * @default "first-disabled"
+             * @property FIRST_NAV_DISABLED
+             * @default "yui-first-disabled"
              */
-            FIRST_DISABLED: "first-disabled",
+            FIRST_NAV_DISABLED: "yui-first-disabled",
 
             /**
              * The class name of a horizontally oriented Carousel.
