@@ -56,6 +56,7 @@
 		_MIN_SCROLL_HEIGHT = "minscrollheight",
 		_CLASSNAME = "classname",
 		_SHADOW = "shadow",
+		_KEEP_OPEN = "keepopen",
 		_HD = "hd",
 		_HAS_TITLE = "hastitle",
 		_CONTEXT = "context",
@@ -293,6 +294,12 @@ var Dom = YAHOO.util.Dom,
 		validator: Lang.isBoolean,
 		suppressEvent: true,
 		supercedes: [_VISIBLE]
+	},
+	
+	KEEP_OPEN_CONFIG = {
+		key: _KEEP_OPEN, 
+		value: false, 
+		validator: Lang.isBoolean
 	};
 
 
@@ -2077,7 +2084,7 @@ _onClick: function (p_sType, p_aArgs) {
 			}
 	
 	
-			if (!oSubmenu) {
+			if (!oSubmenu && !this.cfg.getProperty(_KEEP_OPEN)) {
 	
 				hide.call(this);
 	
@@ -5359,6 +5366,21 @@ initDefaultConfig: function () {
             handler: this.configShadow,
             value: SHADOW_CONFIG.value, 
             validator: SHADOW_CONFIG.validator
+        }
+    );
+
+
+    /**
+    * @config keepopen
+    * @description Boolean indicating if the menu should remain open when clicked.
+    * @default flase
+    * @type Boolean
+    */
+    oConfig.addProperty(
+        KEEP_OPEN_CONFIG.key, 
+        { 
+            value: KEEP_OPEN_CONFIG.value, 
+            validator: KEEP_OPEN_CONFIG.validator
         }
     );
 
