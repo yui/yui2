@@ -1333,6 +1333,20 @@ initAttributes : function(oConfigs) {
      }); 	 
 
     /**
+    * @attribute formatRow
+    * @description A function that accepts a TR element and its associated Record
+    * for custom formatting. The function must return TRUE in order to automatically
+    * continue formatting of child TD elements, else TD elements will not be
+    * automatically formatted.
+    * @type function
+    * @default null
+    */
+    this.setAttributeConfig("formatRow", {
+        value: null,
+        validator: lang.isFunction
+    });
+
+    /**
     * @attribute generateRequest
     * @description A function that converts an object literal of desired DataTable
     * states into a request value which is then passed to the DataSource's
@@ -2926,7 +2940,7 @@ _addTrEl : function (oRecord) {
  * @private
  */
 _updateTrEl : function(elTr, oRecord) {
-    var ok = this.formatRow(elTr, oRecord);
+    var ok = this.get("formatRow") ? this.get("formatRow")(elTr, oRecord) : true;
     if(ok) {
         // Hide the row to prevent constant reflows
         elTr.style.display = 'none';
@@ -6308,21 +6322,6 @@ unhighlightColumn : function(column) {
 
 
 // ROW FUNCTIONS
-
-/**
- * Gives implementers access to the TR element and the associated Record. Returns
- * true to continue formatting each TD element within the TR. Returns false to 
- * cancel cell formatting.  
- *
- * @method formatRow
- * @param elTr {HTMLElement} The TR element.
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @return {Boolean} True to continue formatting child TD elements, false to 
- * cancel formatting of child TD elements.  
- */
-formatRow : function(elTr, oRecord) {
-    return true;
-},
 
 /**
  * Adds one new Record of data into the RecordSet at the index if given,
