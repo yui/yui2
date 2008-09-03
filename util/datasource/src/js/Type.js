@@ -41,6 +41,7 @@
         }
 
         if(YAHOO.lang.isNumber(nData)) {
+            var bNegative = (nData < 0);
             var sOutput = nData + "";
             var sDecimalSeparator = (oConfig.decimalSeparator) ? oConfig.decimalSeparator : ".";
             var nDotIndex;
@@ -79,7 +80,7 @@
                 var nCount = -1;
                 for (var i=nDotIndex; i>0; i--) {
                     nCount++;
-                    if ((nCount%3 === 0) && (i !== nDotIndex)) {
+                    if ((nCount%3 === 0) && (i !== nDotIndex) && (!bNegative || (i > 1))) {
                         sNewOutput = sThousandsSeparator + sNewOutput;
                     }
                     sNewOutput = sOutput.charAt(i-1) + sNewOutput;
