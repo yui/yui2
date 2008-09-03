@@ -1717,10 +1717,20 @@ _onMouseOver: function (p_sType, p_aArgs) {
 			this._nCurrentMouseX = 0;
 	
 			Event.on(this.element, _MOUSEMOVE, this._onMouseMove, this, true);
+
+
+			/*
+				If the mouse is moving from the submenu back to its corresponding menu item, 
+				don't hide the submenu or clear the active MenuItem.
+			*/
+
+			if (!(oItem && Dom.isAncestor(oItem.element, Event.getRelatedTarget(oEvent)))) {
+
+				this.clearActiveItem();
+
+			}
 	
-			this.clearActiveItem();
-	
-	
+
 			if (this.parent && oSubmenuHideDelayTimer) {
 	
 				oSubmenuHideDelayTimer.cancel();
@@ -4763,6 +4773,7 @@ clearActiveItem: function (p_bBlur) {
         oConfig.setProperty(_SELECTED, false);
 
         oSubmenu = oConfig.getProperty(_SUBMENU);
+
 
         if (oSubmenu) {
 
