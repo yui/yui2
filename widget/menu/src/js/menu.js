@@ -2838,7 +2838,8 @@ _onBeforeShow: function (p_sType, p_aArgs) {
     	oParent = this.parent,
     	nAvailableHeight,
         nMinScrollHeight,
-        nViewportHeight;
+        nViewportHeight,
+		aAlignment;
 
 
     if (!oParent && bDynamicPos) {
@@ -2878,6 +2879,16 @@ _onBeforeShow: function (p_sType, p_aArgs) {
 		}
 
     }
+	 
+
+	if (oParent) {
+
+		aAlignment = oParent.parent.cfg.getProperty(_SUBMENU_ALIGNMENT);
+		
+		this.cfg.setProperty(_CONTEXT, [oParent.element, aAlignment[0], aAlignment[1]]);
+		this.align();
+	
+	}
 
 },
 
@@ -3133,8 +3144,7 @@ _onShow: function (p_sType, p_aArgs) {
         oParentMenu,
 		oElement,
 		nOffsetWidth,
-		sWidth,
-		aAlignment;        
+		sWidth;        
 
 
     function disableAutoSubmenuDisplay(p_oEvent) {
@@ -3215,13 +3225,6 @@ _onShow: function (p_sType, p_aArgs) {
 			this.hideEvent.subscribe(onSubmenuHide, sWidth);
 		
 		}
-
-
-		aAlignment = oParentMenu.cfg.getProperty(_SUBMENU_ALIGNMENT);
-		
-		this.cfg.setProperty(_CONTEXT, [oParent.element, aAlignment[0], aAlignment[1]]);
-		
-		this.align();		
 
     }
 
