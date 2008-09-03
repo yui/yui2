@@ -473,6 +473,15 @@ YAHOO.widget.AutoComplete.prototype.useIFrame = false;
 YAHOO.widget.AutoComplete.prototype.useShadow = false;
 
 /**
+ * Whether or not the input field should be updated with selections.
+ *
+ * @property supressInputUpdate
+ * @type Boolean
+ * @default false
+ */
+YAHOO.widget.AutoComplete.prototype.suppressInputUpdate = false;
+
+/**
  * Whether to enable backwardCompatMode for implementations that use the pre-2.6.0 API.
  *
  * @property backwardCompatMode
@@ -2166,38 +2175,40 @@ YAHOO.widget.AutoComplete.prototype._togglePrehighlight = function(elNewListItem
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._updateValue = function(elListItem) {
-    var elTextbox = this._elTextbox;
-    var sDelimChar = (this.delimChar) ? (this.delimChar[0] || this.delimChar) : null;
-    var sResultMatch = elListItem._sResultMatch;
-
-    // Calculate the new value
-    var sNewValue = "";
-    if(sDelimChar) {
-        // Preserve selections from past queries
-        sNewValue = this._sPastSelections;
-        // Add new selection plus delimiter
-        sNewValue += sResultMatch + sDelimChar;
-        if(sDelimChar != " ") {
-            sNewValue += " ";
-        }
-    }
-    else { 
-        sNewValue = sResultMatch;
-    }
+    if(!this.suppressInputUpdate) {    
+        var elTextbox = this._elTextbox;
+        var sDelimChar = (this.delimChar) ? (this.delimChar[0] || this.delimChar) : null;
+        var sResultMatch = elListItem._sResultMatch;
     
-    // Update input field
-    elTextbox.value = sNewValue;
-
-    // Scroll to bottom of textarea if necessary
-    if(elTextbox.type == "textarea") {
-        elTextbox.scrollTop = elTextbox.scrollHeight;
+        // Calculate the new value
+        var sNewValue = "";
+        if(sDelimChar) {
+            // Preserve selections from past queries
+            sNewValue = this._sPastSelections;
+            // Add new selection plus delimiter
+            sNewValue += sResultMatch + sDelimChar;
+            if(sDelimChar != " ") {
+                sNewValue += " ";
+            }
+        }
+        else { 
+            sNewValue = sResultMatch;
+        }
+        
+        // Update input field
+        elTextbox.value = sNewValue;
+    
+        // Scroll to bottom of textarea if necessary
+        if(elTextbox.type == "textarea") {
+            elTextbox.scrollTop = elTextbox.scrollHeight;
+        }
+    
+        // Move cursor to end
+        var end = elTextbox.value.length;
+        this._selectText(elTextbox,end,end);
+    
+        this._elCurListItem = elListItem;
     }
-
-    // Move cursor to end
-    var end = elTextbox.value.length;
-    this._selectText(elTextbox,end,end);
-
-    this._elCurListItem = elListItem;
 };
 
 /**
