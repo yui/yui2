@@ -310,3 +310,7 @@ PLEASE NOTE:
     border-top-color:#333;
     border-left-color:#333;
 }
+
+.yui-override-padding {
+    padding:0 !important;
+}

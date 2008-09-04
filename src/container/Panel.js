@@ -25,6 +25,9 @@
         Config = Util.Config,
         Overlay = YAHOO.widget.Overlay,
         Panel = YAHOO.widget.Panel,
+        UA = YAHOO.env.ua,
+
+        bIEQuirks = (UA.ie == 6 || (UA.ie == 7 && document.compatMode == "BackCompat")),
 
         m_oMaskTemplate,
         m_oUnderlayTemplate,
@@ -567,9 +570,7 @@
         */
         configUnderlay: function (type, args, obj) {
 
-            var UA = YAHOO.env.ua,
-                bMacGecko = (this.platform == "mac" && UA.gecko),
-                bIEQuirks = (UA.ie == 6 || (UA.ie == 7 && document.compatMode == "BackCompat")),
+            var bMacGecko = (this.platform == "mac" && UA.gecko),
                 sUnderlay = args[0].toLowerCase(),
                 oUnderlay = this.underlay,
                 oElement = this.element;
@@ -604,7 +605,8 @@
                     if (bIEQuirks) {
                         this.sizeUnderlay();
                         this.cfg.subscribeToConfigEvent("width", this.sizeUnderlay);
-                        this.cfg.subscribeToConfigEvent("height",this.sizeUnderlay);
+                        this.cfg.subscribeToConfigEvent("height", this.sizeUnderlay);
+
                         this.changeContentEvent.subscribe(this.sizeUnderlay);
                         YAHOO.widget.Module.textResizeEvent.subscribe(this.sizeUnderlay, this, true);
                     }
@@ -796,7 +798,6 @@
                             this.destroyEvent.subscribe(listener.disable, 
                                 listener, true);
                         }
-
                     }
 
                 } else {
@@ -843,7 +844,25 @@
             this.cfg.refireEvent("iframe");
     
         },
-        
+
+        /**
+         * The default custom event handler executed when the Panel's height is changed, 
+         * if the autofillheight property has been set.
+         *
+         * @method _autoFillOnHeightChange
+         * @protected
+         * @param {String} type The event type
+         * @param {Array} args The array of arguments passed to event subscribers
+         * @param {HTMLElement} el The header, body or footer element which is to be resized to fill
+         * out the containers height
+         */
+        _autoFillOnHeightChange : function(type, args, el) {
+            Panel.superclass._autoFillOnHeightChange.apply(this, arguments);
+            if (bIEQuirks) {
+                this.sizeUnderlay();
+            }
+        },
+
         /**
         * The default event handler fired when the "width" property is changed.
         * @method configWidth

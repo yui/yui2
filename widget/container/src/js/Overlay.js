@@ -2016,6 +2016,25 @@
         },
 
         /**
+         * Returns the sub-pixel height of the el, using getBoundingClientRect, if available,
+         * otherwise returns the offsetHeight
+         * @method _getPreciseHeight
+         * @private
+         * @param {HTMLElement} el
+         * @return {Float} The sub-pixel height if supported by the browser, else the rounded height.
+         */
+        _getPreciseHeight : function(el) {
+            var height = el.offsetHeight;
+
+            if (el.getBoundingClientRect) {
+                var rect = el.getBoundingClientRect();
+                height = rect.bottom - rect.top;
+            }
+
+            return height;
+        },
+
+        /**
          * <p>
          * Sets the height on the provided header, body or footer element to 
          * fill out the height of the container. It determines the height of the 
@@ -2046,7 +2065,7 @@
                     containerEl = containerEls[i];
                     if (containerEl) {
                         if (el !== containerEl) {
-                            filled += containerEl.offsetHeight;
+                            filled += this._getPreciseHeight(containerEl);
                         } else {
                             validEl = true;
                         }
