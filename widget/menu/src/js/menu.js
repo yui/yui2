@@ -734,7 +734,7 @@ init: function (p_oElement, p_oConfig) {
         this.beforeRenderEvent.subscribe(this._onBeforeRender);
         this.renderEvent.subscribe(this._onRender);
         this.beforeShowEvent.subscribe(this._onBeforeShow);
-        this.hideEvent.subscribe(this.positionOffScreen);
+        this.hideEvent.subscribe(this._onHide);
         this.showEvent.subscribe(this._onShow);
         this.beforeHideEvent.subscribe(this._onBeforeHide);
         this.mouseOverEvent.subscribe(this._onMouseOver);
@@ -742,6 +742,7 @@ init: function (p_oElement, p_oConfig) {
         this.clickEvent.subscribe(this._onClick);
         this.keyDownEvent.subscribe(this._onKeyDown);
         this.keyPressEvent.subscribe(this._onKeyPress);
+        this.blurEvent.subscribe(this._onBlur);
         
 
         if (UA.gecko || UA.webkit) {
@@ -1796,9 +1797,11 @@ _onMouseOver: function (p_sType, p_aArgs) {
 			oItemCfg.setProperty(_SELECTED, true);
 	
 	
-			if (this.hasFocus()) {
+			if (this.hasFocus() || oRoot._hasFocus) {
 			
 				oItem.focus();
+				
+				oRoot._hasFocus = false;
 			
 			}
 	
@@ -2437,6 +2440,22 @@ _onKeyPress: function (p_sType, p_aArgs) {
 
 },
 
+
+/**
+* @method _onBlur
+* @description "blur" event handler for a Menu instance.
+* @protected
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+*/
+_onBlur: function (p_sType, p_aArgs) {
+        
+	if (this._hasFocus) {
+		this._hasFocus = false;
+	}
+
+},
 
 /**
 * @method _onYChange
@@ -3162,6 +3181,25 @@ getConstrainedY: function (y) {
 
 
 /**
+* @method _onHide
+* @description "hide" event handler for the menu.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+*/
+_onHide: function (p_sType, p_aArgs) {
+
+	if (this.cfg.getProperty(_POSITION) === _DYNAMIC) {
+	
+		this.positionOffScreen();
+	
+	}
+
+},
+
+
+/**
 * @method _onShow
 * @description "show" event handler for the menu.
 * @private
@@ -3273,8 +3311,10 @@ _onShow: function (p_sType, p_aArgs) {
 _onBeforeHide: function (p_sType, p_aArgs) {
 
     var oActiveItem = this.activeItem,
+        oRoot = this.getRoot(),
         oConfig,
         oSubmenu;
+
 
     if (oActiveItem) {
 
@@ -3292,9 +3332,24 @@ _onBeforeHide: function (p_sType, p_aArgs) {
 
     }
 
-    if (this.getRoot() == this) {
 
-        this.blur();
+	/*
+		Focus can get lost in IE when the mouse is moving from a submenu back to its parent Menu.  
+		For this reason, it is necessary to maintain the focused state in a private property 
+		so that the _onMouseOver event handler is able to determined whether or not to set focus
+		to MenuItems as the user is moving the mouse.
+	*/ 
+
+	if (UA.ie && this.cfg.getProperty(_POSITION) === _DYNAMIC && this.parent) {
+
+		oRoot._hasFocus = this.hasFocus();
+	
+	}
+
+
+    if (oRoot == this) {
+
+        oRoot.blur();
     
     }
 
@@ -4788,6 +4843,8 @@ clearActiveItem: function (p_bBlur) {
         if (p_bBlur) {
 
             oActiveItem.blur();
+            
+            this.getRoot()._hasFocus = true;
         
         }
 
@@ -4802,7 +4859,7 @@ clearActiveItem: function (p_bBlur) {
 
         }
 
-        this.activeItem = null;            
+        this.activeItem = null;  
 
     }
 
