@@ -1538,6 +1538,12 @@ _execHideDelay: function () {
     
         if (oRoot.activeItem) {
 
+			if (oRoot.hasFocus()) {
+
+				oRoot.activeItem.focus();
+			
+			}
+			
             oRoot.clearActiveItem();
 
         }
@@ -2291,10 +2297,14 @@ _onKeyDown: function (p_sType, p_aArgs) {
                             if (oSubmenu) {
     
                                 oSubmenu.show();
+                                oSubmenu.setInitialFocus();
                             
                             }
+                            else {
     
-                            oNextItem.focus();
+                            	oNextItem.focus();
+                            
+                            }
                         
                         }
                     
@@ -2332,10 +2342,14 @@ _onKeyDown: function (p_sType, p_aArgs) {
                             if (oSubmenu) {
                             
                                 oSubmenu.show();
+								oSubmenu.setInitialFocus();                                
                             
                             }
+                            else {
     
-                            oNextItem.focus();
+                            	oNextItem.focus();
+                            
+                            }
                         
                         } 
                     

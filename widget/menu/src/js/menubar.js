@@ -222,21 +222,18 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
                         this.clearActiveItem();
     
                         oNextItem.cfg.setProperty(_SELECTED, true);
-    
-    
-                        if(this.cfg.getProperty(_AUTO_SUBMENU_DISPLAY)) {
                         
-                            oSubmenu = oNextItem.cfg.getProperty(_SUBMENU);
-                            
-                            if(oSubmenu) {
-                        
-                                oSubmenu.show();
-                            
-                            }
-                
-                        }           
-    
-                        oNextItem.focus();
+						oSubmenu = oNextItem.cfg.getProperty(_SUBMENU);
+						
+						if(oSubmenu) {
+					
+							oSubmenu.show();
+							oSubmenu.setInitialFocus();
+						
+						}
+						else {
+							oNextItem.focus();  
+						}
     
                     }
     
@@ -270,6 +267,7 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
                     else {
     
                         oSubmenu.show();
+                        oSubmenu.setInitialFocus();
                     
                     }
     
