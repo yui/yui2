@@ -40,16 +40,18 @@ YAHOO.util.Element.prototype = {
      * Wrapper for HTMLElement method.
      * @method appendChild
      * @param {YAHOO.util.Element || HTMLElement} child The element to append. 
+     * @return {HTMLElement} The appended DOM element. 
      */
     appendChild: function(child) {
         child = child.get ? child.get('element') : child;
-        this.get('element').appendChild(child);
+        return this.get('element').appendChild(child);
     },
     
     /**
      * Wrapper for HTMLElement method.
      * @method getElementsByTagName
      * @param {String} tag The tagName to collect
+     * @return {HTMLCollection} A collection of DOM elements. 
      */
     getElementsByTagName: function(tag) {
         return this.get('element').getElementsByTagName(tag);
@@ -70,23 +72,24 @@ YAHOO.util.Element.prototype = {
      * @param {HTMLElement} element The HTMLElement to insert
      * @param {HTMLElement} before The HTMLElement to insert
      * the element before.
+     * @return {HTMLElement} The inserted DOM element. 
      */
     insertBefore: function(element, before) {
         element = element.get ? element.get('element') : element;
         before = (before && before.get) ? before.get('element') : before;
         
-        this.get('element').insertBefore(element, before);
+        return this.get('element').insertBefore(element, before);
     },
     
     /**
      * Wrapper for HTMLElement method.
      * @method removeChild
      * @param {HTMLElement} child The HTMLElement to remove
+     * @return {HTMLElement} The removed DOM element. 
      */
     removeChild: function(child) {
         child = child.get ? child.get('element') : child;
-        this.get('element').removeChild(child);
-        return true;
+        return this.get('element').removeChild(child);
     },
     
     /**
@@ -94,6 +97,7 @@ YAHOO.util.Element.prototype = {
      * @method replaceChild
      * @param {HTMLElement} newNode The HTMLElement to insert
      * @param {HTMLElement} oldNode The HTMLElement to replace
+     * @return {HTMLElement} The replaced DOM element. 
      */
     replaceChild: function(newNode, oldNode) {
         newNode = newNode.get ? newNode.get('element') : newNode;
@@ -121,12 +125,11 @@ YAHOO.util.Element.prototype = {
      * @param {Object} scope The object to use for the scope of the handler 
      */
     addListener: function(type, fn, obj, scope) {
-        var el = this.get('element');
+        var el = this.get('element') || this.get('id');
         scope = scope || this;
         
-        el = this.get('id') || el;
         var self = this; 
-        if (!this._events[type]) { // create on the fly
+        if (el && !this._events[type]) { // create on the fly
             if ( this.DOM_EVENTS[type] ) {
                 YAHOO.util.Event.addListener(el, type, function(e) {
                     if (e.srcElement && !e.target) { // supplement IE with target
@@ -137,9 +140,11 @@ YAHOO.util.Element.prototype = {
             }
             
             this.createEvent(type, this);
+        } else if (!el) {
+            YAHOO.log('addListener failed; el ' + el + ' is not a valid element', 'error', 'Element');
         }
         
-        YAHOO.util.EventProvider.prototype.subscribe.apply(this, arguments); // notify via customEvent
+        return YAHOO.util.EventProvider.prototype.subscribe.apply(this, arguments); // notify via customEvent
     },
     
     
@@ -151,7 +156,9 @@ YAHOO.util.Element.prototype = {
      * @param {Any} obj A variable to pass to the handler
      * @param {Object} scope The object to use for the scope of the handler 
      */
-    on: function() { this.addListener.apply(this, arguments); },
+    on: function() {
+        return this.addListener.apply(this, arguments);
+    },
     
     /**
      * Alias for addListener
@@ -161,7 +168,9 @@ YAHOO.util.Element.prototype = {
      * @param {Any} obj A variable to pass to the handler
      * @param {Object} scope The object to use for the scope of the handler 
      */
-    subscribe: function() { this.addListener.apply(this, arguments); },
+    subscribe: function() {
+        return this.addListener.apply(this, arguments);
+    },
     
     /**
      * Remove an event listener
@@ -170,7 +179,7 @@ YAHOO.util.Element.prototype = {
      * @param {Function} fn The function call when the event fires
      */
     removeListener: function(type, fn) {
-        this.unsubscribe.apply(this, arguments);
+        return this.unsubscribe.apply(this, arguments);
     },
     
     /**
@@ -266,6 +275,7 @@ YAHOO.util.Element.prototype = {
      * @method appendTo
      * @param {HTMLElement | Element} parentNode The node to append to
      * @param {HTMLElement | Element} before An optional node to insert before
+     * @return {HTMLElement} The appended DOM element. 
      */
     appendTo: function(parent, before) {
         parent = (parent.get) ?  parent.get('element') : Dom.get(parent);
@@ -306,6 +316,8 @@ YAHOO.util.Element.prototype = {
             type: 'appendTo',
             target: parent
         });
+
+        return element;
     },
     
     get: function(key) {
@@ -414,10 +426,6 @@ var _initElement = function(el, attr) {
     };
 
     var isReady = false;  // to determine when to init HTMLElement and content
-
-    if (YAHOO.lang.isString(el) ) { // defer until available/ready
-        _registerHTMLAttr.call(this, 'id', { value: attr.element });
-    }
 
     if (Dom.get(el)) {
         isReady = true;

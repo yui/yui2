@@ -154,11 +154,12 @@ YAHOO.util.Attribute.prototype = {
      */
     configure: function(map, init) {
         map = map || {};
+
         this._written = false; // reset writeOnce
         this._initialConfig = this._initialConfig || {};
         
         for (var key in map) {
-            if ( key && YAHOO.lang.hasOwnProperty(map, key) ) {
+            if ( map.hasOwnProperty(key) ) {
                 this[key] = map[key];
                 if (init) {
                     this._initialConfig[key] = map[key];
