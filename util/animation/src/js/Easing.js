@@ -34,7 +34,7 @@ YAHOO.util.Easing = {
     },
     
     /**
-     * Begins slowly and accelerates towards end. (quadratic)
+     * Begins slowly and accelerates towards end.
      * @method easeIn
      * @param {Number} t Time value used to compute current value
      * @param {Number} b Starting value
@@ -47,7 +47,7 @@ YAHOO.util.Easing = {
     },
 
     /**
-     * Begins quickly and decelerates towards end.  (quadratic)
+     * Begins quickly and decelerates towards end.
      * @method easeOut
      * @param {Number} t Time value used to compute current value
      * @param {Number} b Starting value
@@ -60,7 +60,7 @@ YAHOO.util.Easing = {
     },
     
     /**
-     * Begins slowly and decelerates towards end. (quadratic)
+     * Begins slowly and decelerates towards end.
      * @method easeBoth
      * @param {Number} t Time value used to compute current value
      * @param {Number} b Starting value
@@ -77,7 +77,7 @@ YAHOO.util.Easing = {
     },
     
     /**
-     * Begins slowly and accelerates towards end. (quartic)
+     * Begins slowly and accelerates towards end.
      * @method easeInStrong
      * @param {Number} t Time value used to compute current value
      * @param {Number} b Starting value
@@ -90,7 +90,7 @@ YAHOO.util.Easing = {
     },
     
     /**
-     * Begins quickly and decelerates towards end.  (quartic)
+     * Begins quickly and decelerates towards end.
      * @method easeOutStrong
      * @param {Number} t Time value used to compute current value
      * @param {Number} b Starting value
@@ -103,7 +103,7 @@ YAHOO.util.Easing = {
     },
     
     /**
-     * Begins slowly and decelerates towards end. (quartic)
+     * Begins slowly and decelerates towards end.
      * @method easeBothStrong
      * @param {Number} t Time value used to compute current value
      * @param {Number} b Starting value

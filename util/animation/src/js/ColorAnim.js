@@ -27,6 +27,7 @@
     
     ColorAnim.NAME = 'ColorAnim';
 
+    ColorAnim.DEFAULT_BGCOLOR = '#fff';
     // shorthand
     var Y = YAHOO.util;
     YAHOO.extend(ColorAnim, Y.Anim);
@@ -69,19 +70,19 @@
 
     proto.getAttribute = function(attr) {
         var el = this.getEl();
-        if (  this.patterns.color.test(attr) ) {
+        if (this.patterns.color.test(attr) ) {
             var val = YAHOO.util.Dom.getStyle(el, attr);
             
+            var that = this;
             if (this.patterns.transparent.test(val)) { // bgcolor default
-                var parent = el.parentNode; // try and get from an ancestor
-                val = Y.Dom.getStyle(parent, attr);
-            
-                while (parent && this.patterns.transparent.test(val)) {
-                    parent = parent.parentNode;
+                var parent = YAHOO.util.Dom.getAncestorBy(el, function(node) {
+                    return !that.patterns.transparent.test(val);
+                });
+
+                if (parent) {
                     val = Y.Dom.getStyle(parent, attr);
-                    if (parent.tagName.toUpperCase() == 'HTML') {
-                        val = '#fff';
-                    }
+                } else {
+                    val = ColorAnim.DEFAULT_BGCOLOR;
                 }
             }
         } else {
