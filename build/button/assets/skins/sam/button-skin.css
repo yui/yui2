@@ -45,7 +45,8 @@
         Necessary to get Button's of type "link" to be the correct 
         height in IE.
     */
-    *line-height: 2;
+    *line-height: 1.875;
+	*padding-bottom: 1px;
 
 }
 

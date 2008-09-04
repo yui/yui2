@@ -32,14 +32,11 @@
 		_MOUSEOUT = "mouseout",
 		_MOUSEDOWN = "mousedown",
 		_MOUSEUP = "mouseup",
+		_FOCUS = YAHOO.env.ua.ie ? "focusin" : "focus",		
 		_CLICK = "click",
 		_KEYDOWN = "keydown",
 		_KEYUP = "keyup",
 		_KEYPRESS = "keypress",
-		_FOCUS = "focus",
-		_FOCUSIN = "focusin",
-		_BLUR = "blur",
-		_FOCUSOUT = "focusout",
 		_CLICK_TO_HIDE = "clicktohide",
 		_POSITION = "position", 
 		_DYNAMIC = "dynamic",
@@ -105,6 +102,11 @@
             "blur": "blurEvent",
             "focusout": "blurEvent"
         },
+
+
+    	// The element in the DOM that currently has focus
+    
+		m_oFocusedElement = null,
     
     
         m_oFocusedMenuItem = null;
@@ -305,7 +307,12 @@
                 } 
     
             }
-    
+            else if (p_oEvent.type == _FOCUS) {
+            
+            	m_oFocusedElement = oTarget;
+            
+            }
+            
         }
     
     
@@ -367,6 +374,58 @@
     
         }
     
+
+        /**
+        * @method onMenuHide
+        * @description "hide" event handler for a Menu instance.
+        * @private
+        * @param {String} p_sType String representing the name of the event  
+        * that was fired.
+        * @param {Array} p_aArgs Array of arguments sent when the event 
+        * was fired.
+		* @param <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+		* level-one-html.html#ID-58190037">p_oFocusedElement</a> The HTML element that had focus
+		* prior to the Menu being made visible
+        */    
+    	function onMenuHide(p_sType, p_aArgs, p_oFocusedElement) {
+
+			/*
+				Restore focus to the element in the DOM that had focus prior to the Menu 
+				being made visible
+			*/
+
+			p_oFocusedElement.focus();
+			
+    		this.hideEvent.unsubscribe(onMenuHide, p_oFocusedElement);
+    	
+    	}
+    
+
+        /**
+        * @method onMenuShow
+        * @description "show" event handler for a MenuItem instance.
+        * @private
+        * @param {String} p_sType String representing the name of the event  
+        * that was fired.
+        * @param {Array} p_aArgs Array of arguments sent when the event 
+        * was fired.
+        */    	
+    	function onMenuShow(p_sType, p_aArgs) {
+
+			/*
+				Dynamically positioned, root Menus focus themselves when visible, and will then, 
+				when hidden, restore focus to the UI control that had focus before the Menu was 
+				made visible
+			*/ 
+
+			if (this === this.getRoot() && this.cfg.getProperty(_POSITION) === _DYNAMIC) {
+    	
+				this.hideEvent.subscribe(onMenuHide, m_oFocusedElement);
+				this.focus();
+			
+			}
+    	
+    	}    
     
     
         /**
@@ -503,19 +562,9 @@
                         Event.on(oDoc, _KEYDOWN, onDOMEvent, this, true);
                         Event.on(oDoc, _KEYUP, onDOMEvent, this, true);
                         Event.on(oDoc, _KEYPRESS, onDOMEvent, this, true);
-                        
-                        if (YAHOO.env.ua.ie) {
-                        
-							Event.on(oDoc, _FOCUSIN, onDOMEvent, this, true);
-							Event.on(oDoc, _FOCUSOUT, onDOMEvent, this, true);
     
-    					}
-    					else {
-    					
-    						oDoc.addEventListener(_FOCUS, onDOMEvent, true);
-    						oDoc.addEventListener(_BLUR, onDOMEvent, true);
-    					
-    					}
+						Event.onFocus(oDoc, onDOMEvent, this, true);
+						Event.onBlur(oDoc, onDOMEvent, this, true);						
     
                         m_bInitializedEventHandlers = true;
                         
@@ -527,6 +576,7 @@
                     p_oMenu.itemAddedEvent.subscribe(onItemAdded);
                     p_oMenu.focusEvent.subscribe(onMenuFocus);
                     p_oMenu.blurEvent.subscribe(onMenuBlur);
+                    p_oMenu.showEvent.subscribe(onMenuShow);
         
         
                 }
@@ -885,6 +935,7 @@
 		_MIN_SCROLL_HEIGHT = "minscrollheight",
 		_CLASSNAME = "classname",
 		_SHADOW = "shadow",
+		_KEEP_OPEN = "keepopen",
 		_HD = "hd",
 		_HAS_TITLE = "hastitle",
 		_CONTEXT = "context",
@@ -1122,6 +1173,12 @@ var Dom = YAHOO.util.Dom,
 		validator: Lang.isBoolean,
 		suppressEvent: true,
 		supercedes: [_VISIBLE]
+	},
+	
+	KEEP_OPEN_CONFIG = {
+		key: _KEEP_OPEN, 
+		value: false, 
+		validator: Lang.isBoolean
 	};
 
 
@@ -1553,7 +1610,7 @@ init: function (p_oElement, p_oConfig) {
         this.beforeRenderEvent.subscribe(this._onBeforeRender);
         this.renderEvent.subscribe(this._onRender);
         this.beforeShowEvent.subscribe(this._onBeforeShow);
-        this.hideEvent.subscribe(this.positionOffScreen);
+        this.hideEvent.subscribe(this._onHide);
         this.showEvent.subscribe(this._onShow);
         this.beforeHideEvent.subscribe(this._onBeforeHide);
         this.mouseOverEvent.subscribe(this._onMouseOver);
@@ -1561,6 +1618,7 @@ init: function (p_oElement, p_oConfig) {
         this.clickEvent.subscribe(this._onClick);
         this.keyDownEvent.subscribe(this._onKeyDown);
         this.keyPressEvent.subscribe(this._onKeyPress);
+        this.blurEvent.subscribe(this._onBlur);
         
 
         if (UA.gecko || UA.webkit) {
@@ -2336,6 +2394,12 @@ _execHideDelay: function () {
     
         if (oRoot.activeItem) {
 
+			if (oRoot.hasFocus()) {
+
+				oRoot.activeItem.focus();
+			
+			}
+			
             oRoot.clearActiveItem();
 
         }
@@ -2522,10 +2586,20 @@ _onMouseOver: function (p_sType, p_aArgs) {
 			this._nCurrentMouseX = 0;
 	
 			Event.on(this.element, _MOUSEMOVE, this._onMouseMove, this, true);
+
+
+			/*
+				If the mouse is moving from the submenu back to its corresponding menu item, 
+				don't hide the submenu or clear the active MenuItem.
+			*/
+
+			if (!(oItem && Dom.isAncestor(oItem.element, Event.getRelatedTarget(oEvent)))) {
+
+				this.clearActiveItem();
+
+			}
 	
-			this.clearActiveItem();
-	
-	
+
 			if (this.parent && oSubmenuHideDelayTimer) {
 	
 				oSubmenuHideDelayTimer.cancel();
@@ -2578,9 +2652,11 @@ _onMouseOver: function (p_sType, p_aArgs) {
 			oItemCfg.setProperty(_SELECTED, true);
 	
 	
-			if (this.hasFocus()) {
+			if (this.hasFocus() || oRoot._hasFocus) {
 			
 				oItem.focus();
+				
+				oRoot._hasFocus = false;
 			
 			}
 	
@@ -2872,7 +2948,7 @@ _onClick: function (p_sType, p_aArgs) {
 			}
 	
 	
-			if (!oSubmenu) {
+			if (!oSubmenu && !this.cfg.getProperty(_KEEP_OPEN)) {
 	
 				hide.call(this);
 	
@@ -3079,10 +3155,14 @@ _onKeyDown: function (p_sType, p_aArgs) {
                             if (oSubmenu) {
     
                                 oSubmenu.show();
+                                oSubmenu.setInitialFocus();
                             
                             }
+                            else {
     
-                            oNextItem.focus();
+                            	oNextItem.focus();
+                            
+                            }
                         
                         }
                     
@@ -3120,10 +3200,14 @@ _onKeyDown: function (p_sType, p_aArgs) {
                             if (oSubmenu) {
                             
                                 oSubmenu.show();
+								oSubmenu.setInitialFocus();                                
                             
                             }
+                            else {
     
-                            oNextItem.focus();
+                            	oNextItem.focus();
+                            
+                            }
                         
                         } 
                     
@@ -3211,6 +3295,22 @@ _onKeyPress: function (p_sType, p_aArgs) {
 
 },
 
+
+/**
+* @method _onBlur
+* @description "blur" event handler for a Menu instance.
+* @protected
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+*/
+_onBlur: function (p_sType, p_aArgs) {
+        
+	if (this._hasFocus) {
+		this._hasFocus = false;
+	}
+
+},
 
 /**
 * @method _onYChange
@@ -3643,7 +3743,8 @@ _onBeforeShow: function (p_sType, p_aArgs) {
     	oParent = this.parent,
     	nAvailableHeight,
         nMinScrollHeight,
-        nViewportHeight;
+        nViewportHeight,
+		aAlignment;
 
 
     if (!oParent && bDynamicPos) {
@@ -3683,6 +3784,16 @@ _onBeforeShow: function (p_sType, p_aArgs) {
 		}
 
     }
+	 
+
+	if (oParent) {
+
+		aAlignment = oParent.parent.cfg.getProperty(_SUBMENU_ALIGNMENT);
+		
+		this.cfg.setProperty(_CONTEXT, [oParent.element, aAlignment[0], aAlignment[1]]);
+		this.align();
+	
+	}
 
 },
 
@@ -3925,6 +4036,25 @@ getConstrainedY: function (y) {
 
 
 /**
+* @method _onHide
+* @description "hide" event handler for the menu.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+*/
+_onHide: function (p_sType, p_aArgs) {
+
+	if (this.cfg.getProperty(_POSITION) === _DYNAMIC) {
+	
+		this.positionOffScreen();
+	
+	}
+
+},
+
+
+/**
 * @method _onShow
 * @description "show" event handler for the menu.
 * @private
@@ -3938,8 +4068,7 @@ _onShow: function (p_sType, p_aArgs) {
         oParentMenu,
 		oElement,
 		nOffsetWidth,
-		sWidth,
-		aAlignment;        
+		sWidth;        
 
 
     function disableAutoSubmenuDisplay(p_oEvent) {
@@ -4021,13 +4150,6 @@ _onShow: function (p_sType, p_aArgs) {
 		
 		}
 
-
-		aAlignment = oParentMenu.cfg.getProperty(_SUBMENU_ALIGNMENT);
-		
-		this.cfg.setProperty(_CONTEXT, [oParent.element, aAlignment[0], aAlignment[1]]);
-		
-		this.align();		
-
     }
 
 },
@@ -4044,8 +4166,10 @@ _onShow: function (p_sType, p_aArgs) {
 _onBeforeHide: function (p_sType, p_aArgs) {
 
     var oActiveItem = this.activeItem,
+        oRoot = this.getRoot(),
         oConfig,
         oSubmenu;
+
 
     if (oActiveItem) {
 
@@ -4063,9 +4187,24 @@ _onBeforeHide: function (p_sType, p_aArgs) {
 
     }
 
-    if (this.getRoot() == this) {
 
-        this.blur();
+	/*
+		Focus can get lost in IE when the mouse is moving from a submenu back to its parent Menu.  
+		For this reason, it is necessary to maintain the focused state in a private property 
+		so that the _onMouseOver event handler is able to determined whether or not to set focus
+		to MenuItems as the user is moving the mouse.
+	*/ 
+
+	if (UA.ie && this.cfg.getProperty(_POSITION) === _DYNAMIC && this.parent) {
+
+		oRoot._hasFocus = this.hasFocus();
+	
+	}
+
+
+    if (oRoot == this) {
+
+        oRoot.blur();
     
     }
 
@@ -5554,6 +5693,8 @@ clearActiveItem: function (p_bBlur) {
         if (p_bBlur) {
 
             oActiveItem.blur();
+            
+            this.getRoot()._hasFocus = true;
         
         }
 
@@ -5561,13 +5702,14 @@ clearActiveItem: function (p_bBlur) {
 
         oSubmenu = oConfig.getProperty(_SUBMENU);
 
+
         if (oSubmenu) {
 
             oSubmenu.hide();
 
         }
 
-        this.activeItem = null;            
+        this.activeItem = null;  
 
     }
 
@@ -6145,6 +6287,21 @@ initDefaultConfig: function () {
             handler: this.configShadow,
             value: SHADOW_CONFIG.value, 
             validator: SHADOW_CONFIG.validator
+        }
+    );
+
+
+    /**
+    * @config keepopen
+    * @description Boolean indicating if the menu should remain open when clicked.
+    * @default flase
+    * @type Boolean
+    */
+    oConfig.addProperty(
+        KEEP_OPEN_CONFIG.key, 
+        { 
+            value: KEEP_OPEN_CONFIG.value, 
+            validator: KEEP_OPEN_CONFIG.validator
         }
     );
 
@@ -7437,7 +7594,7 @@ MenuItem.prototype = {
                 addClassNameForState.call(this, _HAS_SUBMENU);
 
 
-				if (oConfig.getProperty(_URL) !== _HASH) {
+				if (oConfig.getProperty(_URL) === _HASH) {
 				
 					oConfig.setProperty(_URL, (_HASH + oMenu.id));
 				
@@ -8663,6 +8820,7 @@ YAHOO.widget.ContextMenuItem = YAHOO.widget.MenuItem;
 		_SUBMENU = "submenu",
 		_VISIBLE = "visible",
 		_SPACE = " ",
+		_SUBMENU_TOGGLE_REGION = "submenutoggleregion",
 		_MENUBAR = "MenuBar";
 
 /**
@@ -8738,6 +8896,12 @@ var Event = YAHOO.util.Event,
 		value: false, 
 		validator: Lang.isBoolean,
 		suppressEvent: true
+	},
+	
+	SUBMENU_TOGGLE_REGION_CONFIG = {
+		key: _SUBMENU_TOGGLE_REGION, 
+		value: false, 
+		validator: Lang.isBoolean
 	};
 
 
@@ -8808,6 +8972,16 @@ init: function(p_oElement, p_oConfig) {
 CSS_CLASS_NAME: "yuimenubar",
 
 
+/**
+* @property SUBMENU_TOGGLE_REGION_WIDTH
+* @description Width (in pixels) of the area of a MenuBarItem that when pressed will toggle the
+* display of the MenuBarItem's submenu.
+* @default 20
+* @final
+* @type Number
+*/
+SUBMENU_TOGGLE_REGION_WIDTH: 20,
+
 
 // Protected event handlers
 
@@ -8856,21 +9030,18 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
                         this.clearActiveItem();
     
                         oNextItem.cfg.setProperty(_SELECTED, true);
-    
-    
-                        if(this.cfg.getProperty(_AUTO_SUBMENU_DISPLAY)) {
                         
-                            oSubmenu = oNextItem.cfg.getProperty(_SUBMENU);
-                            
-                            if(oSubmenu) {
-                        
-                                oSubmenu.show();
-                            
-                            }
-                
-                        }           
-    
-                        oNextItem.focus();
+						oSubmenu = oNextItem.cfg.getProperty(_SUBMENU);
+						
+						if(oSubmenu) {
+					
+							oSubmenu.show();
+							oSubmenu.setInitialFocus();
+						
+						}
+						else {
+							oNextItem.focus();  
+						}
     
                     }
     
@@ -8904,6 +9075,7 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
                     else {
     
                         oSubmenu.show();
+                        oSubmenu.setInitialFocus();
                     
                     }
     
@@ -8957,11 +9129,31 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
     MenuBar.superclass._onClick.call(this, p_sType, p_aArgs, p_oMenuBar);
 
     var oItem = p_aArgs[1],
+        bReturnVal = true,
+    	oItemEl,
         oEvent,
         oTarget,
         oActiveItem,
         oConfig,
-        oSubmenu;
+        oSubmenu,
+        nMenuItemX,
+        nToggleRegion;
+
+
+	var toggleSubmenuDisplay = function () {
+
+		if(oSubmenu.cfg.getProperty(_VISIBLE)) {
+		
+			oSubmenu.hide();
+		
+		}
+		else {
+		
+			oSubmenu.show();                    
+		
+		}
+	
+	};
     
 
     if(oItem && !oItem.cfg.getProperty(_DISABLED)) {
@@ -8990,15 +9182,31 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 
 
         if(oSubmenu) {
+
+			oItemEl = oItem.element;
+			nMenuItemX = YAHOO.util.Dom.getX(oItemEl);
+			nToggleRegion = nMenuItemX + (oItemEl.offsetWidth - this.SUBMENU_TOGGLE_REGION_WIDTH);
+
+			if (oConfig.getProperty(_SUBMENU_TOGGLE_REGION)) {
+
+				if (Event.getPageX(oEvent) > nToggleRegion) {
+
+					toggleSubmenuDisplay();
+
+					Event.preventDefault(oEvent);
+
+					/*
+						 Return false so that other click event handlers are not called when the 
+						 user clicks inside the toggle region.
+					*/
+					bReturnVal = false;
+				
+				}
         
-            if(oSubmenu.cfg.getProperty(_VISIBLE)) {
-            
-                oSubmenu.hide();
-            
-            }
-            else {
-            
-                oSubmenu.show();                    
+        	}
+			else {
+
+				toggleSubmenuDisplay();
             
             }
         
@@ -9006,11 +9214,26 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
     
     }
 
+
+	return bReturnVal;
+
 },
 
 
 
 // Public methods
+
+configSubmenuToggle: function (p_sType, p_aArgs) {
+
+	var bSubmenuToggle = p_aArgs[0];
+	
+	if (bSubmenuToggle) {
+	
+		this.cfg.setProperty(_AUTO_SUBMENU_DISPLAY, false);
+	
+	}
+
+},
 
 
 /**
@@ -9115,6 +9338,28 @@ initDefaultConfig: function() {
 	       value: AUTO_SUBMENU_DISPLAY_CONFIG.value, 
 	       validator: AUTO_SUBMENU_DISPLAY_CONFIG.validator,
 	       suppressEvent: AUTO_SUBMENU_DISPLAY_CONFIG.suppressEvent
+       } 
+    );
+
+
+    /**
+    * @config submenutoggleregion
+    * @description Boolean indicating if only a specific region of a MenuBarItem should toggle the 
+    * display of a submenu.  The default width of the region is determined by the value of the
+    * SUBMENU_TOGGLE_REGION_WIDTH property.  If set to true, the autosubmenudisplay 
+    * configuration property will be set to false, and any click event listeners will not be 
+    * called when the user clicks inside the submenu toggle region of a MenuBarItem.  If the 
+    * user clicks outside of the submenu toggle region, the MenuBarItem will maintain its 
+    * standard behavior.
+    * @default false
+    * @type Boolean
+    */
+	oConfig.addProperty(
+	   SUBMENU_TOGGLE_REGION_CONFIG.key, 
+	   {
+	       value: SUBMENU_TOGGLE_REGION_CONFIG.value, 
+	       validator: SUBMENU_TOGGLE_REGION_CONFIG.validator,
+	       handler: this.configSubmenuToggle
        } 
     );
 

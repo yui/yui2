@@ -760,7 +760,7 @@
         * @type String
         */
         SPLITBUTTON_OPTION_VISIBLE_TITLE: 
-            "Menu expanded.  Press Esc or Ctrl + Shift + M to hide the menu.",
+            "Menu expanded.  Press Esc to hide the menu.",
         
         
         /**
@@ -1022,8 +1022,13 @@
                                 this.CHECKBOX_DEFAULT_TITLE;
                 
                 }
+
+
+        		if (!this._hasDefaultTitle) {
         
-                this.set("title", sTitle);
+                	this.set("title", sTitle);
+                
+                }
         
             }
         
@@ -1873,8 +1878,6 @@
         		}
 
                 this.on("mouseout", this._onMouseOut);
-                this.on("mousedown", this._onMouseDown);
-                this.on("mouseup", this._onMouseUp);
         
                 this._hasMouseEventHandlers = true;
         
@@ -2026,7 +2029,8 @@
         */
         _onMouseDown: function (p_oEvent) {
         
-            var sType;
+            var sType,
+            	bReturnVal = true;
         
         
             function onMouseUp() {
@@ -2055,6 +2059,7 @@
                     if (Event.getPageX(p_oEvent) > this._nOptionRegionX) {
                         
                         this.fireEvent("option", p_oEvent);
+						bReturnVal = false;
         
                     }
                     else {
@@ -2102,6 +2107,8 @@
         
             }
             
+            return bReturnVal;
+            
         },
         
         
@@ -2115,7 +2122,8 @@
         _onMouseUp: function (p_oEvent) {
         
             var sType = this.get("type"),
-            	oHideMenuTimer = this._hideMenuTimer;
+            	oHideMenuTimer = this._hideMenuTimer,
+            	bReturnVal = true;
         
         
             if (oHideMenuTimer) {
@@ -2135,11 +2143,20 @@
             this._activationButtonPressed = false;
             
         
-            if (this.get("type") != "menu") {
+            if (sType != "menu") {
         
                 this.removeStateCSSClasses("active");
             
             }
+
+                
+			if (sType == "split" && Event.getPageX(p_oEvent) > this._nOptionRegionX) {
+				
+				bReturnVal = false;
+
+			}
+
+			return bReturnVal;
             
         },
         
@@ -2336,23 +2353,27 @@
         
             case "radio":
             case "checkbox":
+
+				if (!this._hasDefaultTitle) {
     
-                if (this.get("checked")) {
-                    
-                    sTitle = (sType == "radio") ? 
-                                this.RADIO_CHECKED_TITLE : 
-                                this.CHECKBOX_CHECKED_TITLE;
+					if (this.get("checked")) {
+						
+						sTitle = (sType == "radio") ? 
+									this.RADIO_CHECKED_TITLE : 
+									this.CHECKBOX_CHECKED_TITLE;
+					
+					}
+					else {
+					
+						sTitle = (sType == "radio") ? 
+									this.RADIO_DEFAULT_TITLE : 
+									this.CHECKBOX_DEFAULT_TITLE;
+					
+					}
+					
+					this.set("title", sTitle);
                 
                 }
-                else {
-                
-                    sTitle = (sType == "radio") ? 
-                                this.RADIO_DEFAULT_TITLE : 
-                                this.CHECKBOX_DEFAULT_TITLE;
-                
-                }
-                
-                this.set("title", sTitle);
     
                 break;
     
@@ -2422,6 +2443,28 @@
         	return bReturnVal;
         
         },
+        
+        
+        /**
+        * @method _onDblClick
+        * @description "dblclick" event handler for the button.
+        * @protected
+        * @param {Event} p_oEvent Object representing the DOM event object  
+        * passed back by the event utility (YAHOO.util.Event).
+        */
+        _onDblClick: function (p_oEvent) {
+        
+            var bReturnVal = true;
+    
+			if (this.get("type") == "split" && Event.getPageX(p_oEvent) > this._nOptionRegionX) {
+
+				bReturnVal = false;
+			
+			}
+        
+        	return bReturnVal;
+        
+        },        
         
         
         /**
@@ -3135,6 +3178,12 @@
 
             this._button = oButton;
 
+            /*
+				Capture if the button has a value for the title attribute.  If so, we won't 
+				override it for type of "checkbox" or "radio".
+            */
+            
+            this._hasDefaultTitle = (p_oAttributes.title && p_oAttributes.title.length > 0);
 
             YAHOO.widget.Button.superclass.init.call(this, p_oElement, p_oAttributes);
 
@@ -3185,8 +3234,11 @@
         
             Event.on(this._button, "focus", this._onFocus, null, this);
             this.on("mouseover", this._onMouseOver);
+			this.on("mousedown", this._onMouseDown);
+			this.on("mouseup", this._onMouseUp);
             this.on("click", this._onClick);
-            
+            this.on("dblclick", this._onDblClick);
+
             if (oLabel) {
             
 				this.on("appendTo", setLabel);     
