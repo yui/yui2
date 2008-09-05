@@ -2556,18 +2556,14 @@ YAHOO.widget.AutoComplete.prototype._onContainerResize = function(v,oSelf) {
 YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
     var nKeyCode = v.keyCode;
 
-    // Clear timeouts
-    /*if(oSelf._nDelayID != -1) {
-        clearTimeout(oSelf._nDelayID);
-    }*/
+    // Clear timeout
     if(oSelf._nTypeAheadDelayID != -1) {
         clearTimeout(oSelf._nTypeAheadDelayID);
     }
     
     switch (nKeyCode) {
         case 9: // tab
-            //if((navigator.userAgent.toLowerCase().indexOf("mac") == -1)) {
-            if((navigator.userAgent.toLowerCase().indexOf("mac") == -1) || (YAHOO.env.ua.webkit>420)) {
+            if(!YAHOO.env.ua.opera && (navigator.userAgent.toLowerCase().indexOf("mac") == -1) || (YAHOO.env.ua.webkit>420)) {
                 // select an item or clear out
                 if(oSelf._elCurListItem) {
                     if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
@@ -2583,8 +2579,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
             }
             break;
         case 13: // enter
-            //if((navigator.userAgent.toLowerCase().indexOf("mac") == -1)) {
-            if((navigator.userAgent.toLowerCase().indexOf("mac") == -1) || (YAHOO.env.ua.webkit>420)) {
+            if(!YAHOO.env.ua.opera && (navigator.userAgent.toLowerCase().indexOf("mac") == -1) || (YAHOO.env.ua.webkit>420)) {
                 if(oSelf._elCurListItem) {
                     if(oSelf._nKeyCode != nKeyCode) {
                         if(oSelf._bContainerOpen) {
@@ -2641,37 +2636,33 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
 YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
     var nKeyCode = v.keyCode;
 
-        //Expose only to Mac browsers, where stopEvent is ineffective on keydown events (bug 790337)
-        //if((navigator.userAgent.toLowerCase().indexOf("mac") != -1)) {
-        
-        //Expose only to non SF3 (bug 1978549) Mac browsers, where stopEvent is ineffective on keydown events (bug 790337)
-        if((navigator.userAgent.toLowerCase().indexOf("mac") != -1) && (YAHOO.env.ua.webkit < 420)) {
+        // Expose only to non SF3 (bug 1978549) Mac browsers (bug 790337) and  Opera browsers (bug 583531),
+        // where stopEvent is ineffective on keydown events 
+        if(YAHOO.env.ua.opera || (navigator.userAgent.toLowerCase().indexOf("mac") != -1) && (YAHOO.env.ua.webkit < 420)) {
             switch (nKeyCode) {
             case 9: // tab
                 // select an item or clear out
-                if(oSelf._elCurListItem) {
-                    if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
-                        if(oSelf._bContainerOpen) {
-                            YAHOO.util.Event.stopEvent(v);
-                        }
+                if(oSelf._bContainerOpen) {
+                    if(oSelf.delimChar) {
+                        YAHOO.util.Event.stopEvent(v);
                     }
-                    oSelf._selectItem(oSelf._elCurListItem);
-                }
-                else {
-                    oSelf._toggleContainer(false);
+                    if(oSelf._elCurListItem) {
+                        oSelf._selectItem(oSelf._elCurListItem);
+                    }
+                    else {
+                        oSelf._toggleContainer(false);
+                    }
                 }
                 break;
             case 13: // enter
-                if(oSelf._elCurListItem) {
-                    if(oSelf._nKeyCode != nKeyCode) {
-                        if(oSelf._bContainerOpen) {
-                            YAHOO.util.Event.stopEvent(v);
-                        }
+                if(oSelf._bContainerOpen) {
+                    YAHOO.util.Event.stopEvent(v);
+                    if(oSelf._elCurListItem) {
+                        oSelf._selectItem(oSelf._elCurListItem);
                     }
-                    oSelf._selectItem(oSelf._elCurListItem);
-                }
-                else {
-                    oSelf._toggleContainer(false);
+                    else {
+                        oSelf._toggleContainer(false);
+                    }
                 }
                 break;
             default:

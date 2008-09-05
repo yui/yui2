@@ -37,6 +37,8 @@ typeAheadDelay of default 0.5.
 matching algorithm.
 
 * The dataRequestEvent now passes along the request as well as the query string.
+ 
+* The style list-style:none has been set in the default CSS.
 
 
 *** version 2.5.2 ***
