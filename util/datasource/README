@@ -8,6 +8,7 @@ Implementers should access this value of using a metaField.
 * XML parsing has been updated for support of CDATA sections and long text values
 split into multiple nodes.
 * Now passing oCallback object to doBeforeCallback() and doBeforeParseData() methods.
+* YAHOO.util.Date now supports strftime formatting.
 
 **** version 2.5.2 ****
 
