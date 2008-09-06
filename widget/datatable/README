@@ -66,6 +66,7 @@ returns true by default, and returns false to cancel showing the cell editor.
    - getHdContainerEl() method (ScrollingDataTable only)
    - getHdTableEl() method (ScrollingDataTable only)
    - updateCell() method
+   - currencyOptions, dateOptions, and numberOptions Attributes for default formatting
 
 * Column changes:
    - minWidth default value now null.
@@ -76,6 +77,7 @@ returns true by default, and returns false to cancel showing the cell editor.
    - Resizeable Columns now create an additional resizer liner DIV element between
    the TH element and the liner DIV element. Implementers are advised to access the 
    liner DIV elements via Column.getThLinerEl() rather than TH.firstChild.
+   - currencyOptions, dateOptions, and numberOptions properties for robust per-Column formatting
  
 * In the markup, the primary data TBODY is (once again) before the message TBODY element.
  

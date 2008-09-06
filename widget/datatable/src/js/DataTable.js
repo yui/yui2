@@ -854,7 +854,8 @@ lang.augmentObject(DT, {
      * @static
      */
     formatDate : function(el, oRecord, oColumn, oData) {
-        el.innerHTML = util.Date.format(oData, oColumn.dateOptions || this.get("dateOptions"));
+        var oConfig = oColumn.dateOptions || this.get("dateOptions");
+        el.innerHTML = util.Date.format(oData, oConfig, oConfig.locale);
     },
 
     /**
@@ -968,12 +969,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatNumber : function(el, oRecord, oColumn, oData) {
-        if(lang.isNumber(oData)) {
-            el.innerHTML = oData;
-        }
-        else {
-            el.innerHTML = lang.isValue(oData) ? oData : "";
-        }
+        el.innerHTML = util.Number.format(oData, oColumn.numberOptions || this.get("numberOptions"));
     },
 
     /**
@@ -1540,14 +1536,28 @@ initAttributes : function(oConfigs) {
     });
     
     /**
-     * Default config passed to YAHOO.util.Date.format() by the 'currency' Column formatter.
+     * Default config passed to YAHOO.util.Date.format() by the 'date' Column formatter.
      * @attribute dateOptions
      * @type Object
-     * @default {format:"MM/DD/YYYY"}
+     * @default {format:"%m/%d/%Y", locale:"en"}
      */
     this.setAttributeConfig("dateOptions", {
-        value: {format:"MM/DD/YYYY"}
+        value: {format:"%m/%d/%Y", locale:"en"}
     });
+    
+    /**
+     * Default config passed to YAHOO.util.Number.format() by the 'number' Column formatter.
+     * @attribute numberOptions
+     * @type Object
+     * @default {decimalPlaces:0, thousandsSeparator:","}
+     */
+    this.setAttributeConfig("numberOptions", {
+        value: {
+            decimalPlaces:0,
+            thousandsSeparator:","
+        }
+    });
+
 },
 
 /////////////////////////////////////////////////////////////////////////////
