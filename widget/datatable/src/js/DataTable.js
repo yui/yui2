@@ -824,9 +824,9 @@ lang.augmentObject(DT, {
      */
     formatCheckbox : function(el, oRecord, oColumn, oData) {
         var bChecked = oData;
-        bChecked = (bChecked) ? " checked" : "";
+        bChecked = (bChecked) ? " checked=\"checked\"" : "";
         el.innerHTML = "<input type=\"checkbox\"" + bChecked +
-                " class=\"" + DT.CLASS_CHECKBOX + "\">";
+                " class=\"" + DT.CLASS_CHECKBOX + "\" />";
     },
 
     /**
@@ -984,10 +984,10 @@ lang.augmentObject(DT, {
      */
     formatRadio : function(el, oRecord, oColumn, oData) {
         var bChecked = oData;
-        bChecked = (bChecked) ? " checked" : "";
+        bChecked = (bChecked) ? " checked=\"checked\"" : "";
         el.innerHTML = "<input type=\"radio\"" + bChecked +
                 " name=\"col-" + oColumn.getSanitizedKey() + "-radio\"" +
-                " class=\"" + DT.CLASS_RADIO+ "\">";
+                " class=\"" + DT.CLASS_RADIO+ "\" />";
     },
 
     /**
@@ -1037,7 +1037,7 @@ lang.augmentObject(DT, {
     formatTextbox : function(el, oRecord, oColumn, oData) {
         var value = (lang.isValue(oRecord.getData(oColumn.field))) ?
                 oRecord.getData(oColumn.field) : "";
-        var markup = "<input type=\"text\" value=\"" + value + "\">";
+        var markup = "<input type=\"text\" value=\"" + value + "\" />";
         el.innerHTML = markup;
     },
 

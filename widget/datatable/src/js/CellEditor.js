@@ -767,7 +767,7 @@ renderForm : function() {
             checkboxId = this.getId() + "-chk" + j;
             this.container.innerHTML += "<input type=\"checkbox\"" +
                     " id=\"" + checkboxId + "\"" + // Needed for label
-                    " value=\"" + checkboxValue + "\">";
+                    " value=\"" + checkboxValue + "\" />";
             
             // Create the labels in an IE-friendly way
             elLabel = this.container.appendChild(document.createElement("label"));
@@ -1175,7 +1175,7 @@ renderForm : function() {
             this.container.innerHTML += "<input type=\"radio\"" +
                     " name=\"" + this.getId() + "\"" +
                     " value=\"" + radioValue + "\"" +
-                    " id=\"" +  radioId + "\">"; // Needed for label
+                    " id=\"" +  radioId + "\" />"; // Needed for label
             
             // Create the labels in an IE-friendly way
             elLabel = this.container.appendChild(document.createElement("label"));
