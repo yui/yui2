@@ -90,7 +90,9 @@ elements, not on liner DIV elements.
  
 * Added bottom border to last TR element in ScrollingDataTables.
  
-* Paginator extracted to standalone class and optional dependency
+* Paginator extracted to standalone class and optional dependency.
+ 
+* The default CSS styles for captions have been updated.
 
 
 
