@@ -1896,7 +1896,7 @@ _repaintGecko : (ua.gecko) ?
 _repaintOpera : (ua.opera) ? 
     function() {
         if(ua.opera) {
-            document.body.style += '';
+            document.documentElement.style += '';
         }
     } : function() {} ,
 
