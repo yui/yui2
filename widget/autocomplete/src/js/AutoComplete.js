@@ -84,7 +84,9 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
         if(oDataSource._aDeprecatedSchema) {
             var aDeprecatedSchema = oDataSource._aDeprecatedSchema;
             if(YAHOO.lang.isArray(aDeprecatedSchema)) {
-                if(oDataSource.responseType === YAHOO.util.DataSourceBase.TYPE_JSON) {
+                
+                if((oDataSource.responseType === YAHOO.util.DataSourceBase.TYPE_JSON) || 
+                (oDataSource.responseType === YAHOO.util.DataSourceBase.TYPE_UNKNOWN)) { // Used to default to unknown
                     // Store the resultsList
                     schema.resultsList = aDeprecatedSchema[0];
                     // Store the key
@@ -1485,6 +1487,7 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelperEls = function() {
         elIFrame.style.width = 0;
         elIFrame.style.height = 0;
         elIFrame.tabIndex = -1;
+        elIFrame.style.padding = 0;
         this._elIFrame = this._elContainer.appendChild(elIFrame);
     }
 };
@@ -1975,26 +1978,30 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
     var height = this._elContent.offsetHeight + "px";
 
     if(this.useIFrame && this._elIFrame) {
+    var elIFrame = this._elIFrame;
         if(bShow) {
-            this._elIFrame.style.width = width;
-            this._elIFrame.style.height = height;
+            elIFrame.style.width = width;
+            elIFrame.style.height = height;
+            elIFrame.style.padding = "";
             YAHOO.log("Iframe expanded", "info", this.toString());
         }
         else {
-            this._elIFrame.style.width = 0;
-            this._elIFrame.style.height = 0;
+            elIFrame.style.width = 0;
+            elIFrame.style.height = 0;
+            elIFrame.style.padding = 0;
             YAHOO.log("Iframe collapsed", "info", this.toString());
         }
     }
     if(this.useShadow && this._elShadow) {
+    var elShadow = this._elShadow;
         if(bShow) {
-            this._elShadow.style.width = width;
-            this._elShadow.style.height = height;
+            elShadow.style.width = width;
+            elShadow.style.height = height;
             YAHOO.log("Shadow expanded", "info", this.toString());
         }
         else {
-            this._elShadow.style.width = 0;
-            this._elShadow.style.height = 0;
+            elShadow.style.width = 0;
+            elShadow.style.height = 0;
             YAHOO.log("Shadow collapsed", "info", this.toString());
         }
     }
