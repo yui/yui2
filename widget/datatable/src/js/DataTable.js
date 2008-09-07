@@ -6228,16 +6228,7 @@ getSelectedColumns : function(oColumn) {
 highlightColumn : function(column) {
     var oColumn = this.getColumn(column);
     // Only bottom-level Columns can get highlighted
-    if(oColumn && (oColumn.getKeyIndex() !== null)) {
-        /*// Make sure previous row is unhighlighted
-        var sId = oColumn.getSanitizedKey();
-        var sLastId = this._sLastHighlightedColumnId;
-        if(sLastId && (sLastId !== sId)) {
-            this.unhighlightColumn(this.getColumn(sLastId));
-        }*/
-
-        //this._sLastHighlightedColumnId = sId;
-            
+    if(oColumn && (oColumn.getKeyIndex() !== null)) {            
         // Update head cell
         var elTh = oColumn.getThEl();
         Dom.addClass(elTh,DT.CLASS_HIGHLIGHTED);
@@ -6254,9 +6245,12 @@ highlightColumn : function(column) {
             },
             scope: this,
             iterations:allRows.length,
-            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
+            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()},
+            timeout: -1
         });
-        oChainRender.run();       
+        this._elTbody.style.display = "none";
+        oChainRender.run(); 
+        this._elTbody.style.display = "";      
             
         this.fireEvent("columnHighlightEvent",{column:oColumn});
         YAHOO.log("Column \"" + oColumn.key + "\" highlighed", "info", this.toString());
@@ -6295,9 +6289,12 @@ unhighlightColumn : function(column) {
             },
             scope: this,
             iterations:allRows.length,
-            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
+            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()},
+            timeout: -1
         });
-        oChainRender.run();       
+        this._elTbody.style.display = "none";
+        oChainRender.run();  
+        this._elTbody.style.display = "";     
             
         this.fireEvent("columnUnhighlightEvent",{column:oColumn});
         YAHOO.log("Column \"" + oColumn.key + "\" unhighlighted", "info", this.toString());
