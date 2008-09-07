@@ -10,16 +10,6 @@
  * @title Carousel Widget
  *----------------------------------------------------------------------------
  */
-/**
- * The Carousel widget.
- *
- * @class Carousel
- * @extends YAHOO.util.Element
- * @constructor
- * @param el {HTMLElement | String} The HTML element that represents the
- * the container that houses the Carousel.
- * @param cfg {Object} (optional) The configuration values
- */
 (function () {
 
     /*
@@ -46,6 +36,16 @@
      */
     var instances = {};
 
+    /**
+     * The Carousel widget.
+     *
+     * @class Carousel
+     * @extends YAHOO.util.Element
+     * @constructor
+     * @param el {HTMLElement | String} The HTML element that represents the
+     * the container that houses the Carousel.
+     * @param cfg {Object} (optional) The configuration values
+     */
     YAHOO.widget.Carousel = function (el, cfg) {
         YAHOO.log("Component creation", WidgetName);
 
@@ -699,8 +699,12 @@
      * @private
      */
     function setFocusHandler(ev, obj) {
-        if (obj && obj.focus) {
-            obj.focus();
+        var target = Event.getTarget(ev);
+
+        if (target.nodeName != "SELECT") { // this has a different handler
+            if (obj && obj.focus) {
+                obj.focus();
+            }
         }
     }
 
@@ -921,7 +925,7 @@
             if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
                 markup += "<option value=\"#yui-carousel-page-" + (i+1)    +
                         "\" " + "id=\"#yui-carousel-page-" + (i+1) + "\" " +
-                        (i == page ? " selected" : "") + "\">"             +
+                        (i == page ? " selected" : "") + ">"               +
                         this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
                         "</option>";
             } else {
@@ -2077,6 +2081,8 @@
             if (this.get("autoPlay") > 0) {
                 this.startAutoPlay();
             }
+
+            this.focus();       // bring back the focus to the container
         },
 
         /**
