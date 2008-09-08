@@ -34,7 +34,6 @@ Selector.prototype = {
      * @type object
      */
     attrAliases: {
-        'for': 'htmlFor'
     },
 
     /**
@@ -255,17 +254,18 @@ var query = function(selector, root, firstOnly, deDupe) {
 
     // use id shortcut when possible
     if (id) {
-        if (id === token.id) { // only one target
-            nodes = [Selector.document.getElementById(id)] || root;
-        } else { // reset root to id node if passes
-            node = Selector.document.getElementById(id);
-            if (root === Selector.document || contains(node, root)) {
-                if ( node && rTestNode(node, null, idToken) ) {
+        node = Selector.document.getElementById(id);
+
+        if (node && (root.nodeName == '#document' || contains(node, root))) {
+            if ( rTestNode(node, null, idToken) ) {
+                if (idToken === token) {
+                    nodes = [node]; // simple selector
+                } else {
                     root = node; // start from here
                 }
-            } else {
-                return result;
             }
+        } else {
+            return result;
         }
     }
 
@@ -276,6 +276,7 @@ var query = function(selector, root, firstOnly, deDupe) {
     if (nodes.length) {
         result = rFilter(nodes, token, firstOnly, deDupe); 
     }
+
     clearParentCache();
     return result;
 };
@@ -542,7 +543,8 @@ var getIdTokenIndex = function(tokens) {
 
 var patterns = {
     tag: /^((?:-?[_a-z]+[\w-]*)|\*)/i,
-    attributes: /^\[([a-z]+\w*)+([~\|\^\$\*!=]=?)?['"]?([^'"\]]*)['"]?\]*/i,
+    attributes: /^\[([a-z]+\w*)+([~\|\^\$\*!=]=?)?['"]?([^\]]*?)['"]?\]/i,
+    //attributes: /^\[([a-z]+\w*)+([~\|\^\$\*!=]=?)?['"]?([^'"\]]*)['"]?\]*/i,
     pseudos: /^:([-\w]+)(?:\(['"]?(.+)['"]?\))*/i,
     combinator: /^\s*([>+~]|\s)\s*/
 };
@@ -644,12 +646,14 @@ var replaceShorthand = function(selector) {
     return selector;
 };
 
-if (YAHOO.env.ua.ie) { // rewrite class for IE (others use getAttribute('class')
-    Selector.prototype.attrAliases['class'] = 'className';
-}
-
 Selector = new Selector();
 Selector.patterns = patterns;
 Y.Selector = Selector;
+
+if (YAHOO.env.ua.ie) { // rewrite class for IE (others use getAttribute('class')
+    Y.Selector.attrAliases['class'] = 'className';
+    Y.Selector.attrAliases['for'] = 'htmlFor';
+}
+
 })();
 YAHOO.register("selector", YAHOO.util.Selector, {version: "@VERSION@", build: "@BUILD@"});
