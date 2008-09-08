@@ -27,19 +27,110 @@ var Dom = YAHOO.util.Dom,
         YAHOO.widget.Editor.superclass.constructor.call(this, el, attrs);
     };
 
-    /**
-    * @private
-    * @method _cleanClassName
-    * @description Makes a useable classname from dynamic data, by dropping it to lowercase and replacing spaces with -'s.
-    * @param {String} str The classname to clean up
-    * @return {String}
-    */
-    function _cleanClassName(str) {
-        return str.replace(/ /g, '-').toLowerCase();
-    }
-
-
     YAHOO.extend(YAHOO.widget.Editor, YAHOO.widget.SimpleEditor, {
+        /**
+        * @private
+        * @property _undoCache
+        * @description An Array hash of the Undo Levels.
+        * @type Array
+        */
+        _undoCache: null,
+        /**
+        * @private
+        * @property _undoLevel
+        * @description The index of the current undo state.
+        * @type Number
+        */
+        _undoLevel: null,    
+        /**
+        * @private
+        * @method _hasUndoLevel
+        * @description Checks to see if we have an undo level available
+        * @return Boolean
+        */
+        _hasUndoLevel: function() {
+            return (this._undoCache.length && this._undoLevel);
+        },
+        /**
+        * @private
+        * @method _undoNodeChange
+        * @description nodeChange listener for undo processing
+        */
+        _undoNodeChange: function() {
+            var undo_button = this.toolbar.getButtonByValue('undo'),
+                redo_button = this.toolbar.getButtonByValue('redo');
+            if (undo_button && redo_button) {
+                if (this._hasUndoLevel()) {
+                    this.toolbar.enableButton(undo_button);
+                }
+                if (this._undoLevel < this._undoCache.length) {
+                    this.toolbar.enableButton(redo_button);
+                }
+            }
+        },
+        /**
+        * @private
+        * @method _checkUndo
+        * @description Prunes the undo cache when it reaches the maxUndo config
+        */
+        _checkUndo: function() {
+            var len = this._undoCache.length,
+            tmp = [];
+            if (len >= this.get('maxUndo')) {
+                YAHOO.log('Undo cache too large (' + len + '), pruning..', 'info', 'SimpleEditor');
+                for (var i = (len - this.get('maxUndo')); i < len; i++) {
+                    tmp.push(this._undoCache[i]);
+                }
+                this._undoCache = tmp;
+            }
+        },
+        /**
+        * @private
+        * @method _putUndo
+        * @description Puts the content of the Editor into the _undoCache.
+        * //TODO Convert the hash to a series of TEXTAREAS to store state in.
+        * @param {String} str The content of the Editor
+        */
+        _putUndo: function(str) {
+            this._undoCache.push(str);
+        },
+        /**
+        * @private
+        * @method _getUndo
+        * @description Get's a level from the undo cache.
+        * @param {Number} index The index of the undo level we want to get.
+        * @return {String}
+        */
+        _getUndo: function(index) {
+            return this._undoCache[index];
+        },
+        /**
+        * @private
+        * @method _storeUndo
+        * @description Method to call when you want to store an undo state. Currently called from nodeChange and _handleKeyUp
+        */
+        _storeUndo: function() {
+            if (this._lastCommand === 'undo' || this._lastCommand === 'redo') {
+                return false;
+            }
+            if (!this._undoCache) {
+                this._undoCache = [];
+            }
+            this._checkUndo();
+            var str = this.getEditorHTML();
+            var last = this._undoCache[this._undoCache.length - 1];
+            if (last) {
+                if (str !== last) {
+                    YAHOO.log('Storing Undo', 'info', 'SimpleEditor');
+                    this._putUndo(str);
+                }
+            } else {
+                YAHOO.log('Storing Undo', 'info', 'SimpleEditor');
+                this._putUndo(str);
+            }
+            this._undoLevel = this._undoCache.length;
+            this._undoNodeChange();
+        },    
         /**
         * @property STR_BEFORE_EDITOR
         * @description The accessibility string for the element before the iFrame
@@ -222,6 +313,14 @@ var Dom = YAHOO.util.Dom,
                         ]
                     },
                     { type: 'separator' },
+                    { group: 'undoredo', label: 'Undo/Redo',
+                        buttons: [
+                            { type: 'push', label: 'Undo', value: 'undo', disabled: true },
+                            { type: 'push', label: 'Redo', value: 'redo', disabled: true }
+                            
+                        ]
+                    },
+                    { type: 'separator' },
                     { group: 'alignment', label: 'Alignment',
                         buttons: [
                             { type: 'push', label: 'Align Left CTRL + SHIFT + [', value: 'justifyleft' },
@@ -247,10 +346,9 @@ var Dom = YAHOO.util.Dom,
                         ]
                     },
                     { type: 'separator' },
-                    { group: 'indentlist', label: 'Indenting and Lists',
+                    
+                    { group: 'indentlist2', label: 'Indenting and Lists',
                         buttons: [
-                            //{ type: 'push', label: 'Indent', value: 'indent', disabled: true },
-                            //{ type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
                             { type: 'push', label: 'Indent', value: 'indent' },
                             { type: 'push', label: 'Outdent', value: 'outdent' },
                             { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
@@ -447,18 +545,27 @@ var Dom = YAHOO.util.Dom,
                 action = null,
                 exec = false;
 
-            if (ev.shiftKey && ev.ctrlKey) {
-                doExec = true;
-            }
             switch (ev.keyCode) {
-                case 219: //Left
-                    action = 'justifyleft';
+                //case 219: //Left
+                case this._keyMap.JUSTIFY_LEFT.key: //Left
+                    if (this._checkKey(this._keyMap.JUSTIFY_LEFT, ev)) {
+                        action = 'justifyleft';
+                        doExec = true;
+                    }
                     break;
-                case 220: //Center
-                    action = 'justifycenter';
+                //case 220: //Center
+                case this._keyMap.JUSTIFY_CENTER.key:
+                    if (this._checkKey(this._keyMap.JUSTIFY_CENTER, ev)) {
+                        action = 'justifycenter';
+                        doExec = true;
+                    }
                     break;
                 case 221: //Right
-                    action = 'justifyright';
+                case this._keyMap.JUSTIFY_RIGHT.key:
+                    if (this._checkKey(this._keyMap.JUSTIFY_RIGHT, ev)) {
+                        action = 'justifyright';
+                        doExec = true;
+                    }
                     break;
             }
             if (doExec && action) {
@@ -548,7 +655,7 @@ var Dom = YAHOO.util.Dom,
                     }
                 }
                 var body = null;
-                if (this._windows.createlink.body) {
+                if (this._windows.createlink && this._windows.createlink.body) {
                     body = this._windows.createlink.body;
                 } else {
                     body = this._renderCreateLinkWindow();
@@ -900,7 +1007,6 @@ var Dom = YAHOO.util.Dom,
                     return false;
                 }
             }
-            this._setBusy();
             this.on('afterExecCommand', function() {
                 var el = this.currentElement[0],
                     body = null,
@@ -965,7 +1071,7 @@ var Dom = YAHOO.util.Dom,
                     oheight = el._height;
                     owidth = el._width;
                 }
-                if (this._windows.insertimage.body) {
+                if (this._windows.insertimage && this._windows.insertimage.body) {
                     body = this._windows.insertimage.body;
                     this._defaultImageToolbar.resetAllButtons();
                 } else {
@@ -1201,7 +1307,7 @@ var Dom = YAHOO.util.Dom,
             });
 
             var fireShowEvent = function() {
-                panel.bringToTop();
+                //panel.bringToTop();
             };
             panel.showEvent.subscribe(fireShowEvent, this, true);
             panel.renderEvent.subscribe(function() {
@@ -1239,7 +1345,7 @@ var Dom = YAHOO.util.Dom,
             window.setTimeout(function() {
                 self.toolbar.set('disabled', true); //Disable the toolbar when an editor window is open..
             }, 10);
-            Event.on(document, 'keypress', this._closeWindow, this, true);
+            Event.on(document, 'keydown', this._closeWindow, this, true);
             
             if (this.currentWindow) {
                 this.closeWindow();
@@ -1361,13 +1467,15 @@ var Dom = YAHOO.util.Dom,
             } catch (e) {}
 
 
-            var iTop = elXY[1] + parseInt(this.get('height'), 10);
-            var iLeft = elXY[0] + parseInt(this.get('width'), 10);
-            if (newXY[1] > iTop) {
-                newXY[1] = iTop;
-            }
-            if (newXY[0] > iLeft) {
-                newXY[0] = (iLeft / 2);
+            if (this.get('autoHeight') === false) {
+                var iTop = elXY[1] + parseInt(this.get('height'), 10);
+                var iLeft = elXY[0] + parseInt(this.get('width'), 10);
+                if (newXY[1] > iTop) {
+                    newXY[1] = iTop;
+                }
+                if (newXY[0] > iLeft) {
+                    newXY[0] = (iLeft / 2);
+                }
             }
             
             //Convert negative numbers to positive so we can get the difference in distance
@@ -1438,7 +1546,8 @@ var Dom = YAHOO.util.Dom,
         * @param {Event} ev The keypress Event that we are trapping
         */
         _closeWindow: function(ev) {
-            if ((ev.charCode == 87) && ev.shiftKey && ev.ctrlKey) {
+            //if ((ev.charCode == 87) && ev.shiftKey && ev.ctrlKey) {
+            if (this._checkKey(this._keyMap.CLOSE_WINDOW, ev)) {            
                 if (this.currentWindow) {
                     this.closeWindow();
                 }
@@ -1461,9 +1570,53 @@ var Dom = YAHOO.util.Dom,
             this.toolbar.set('disabled', false); //enable the toolbar now that the window is closed
             this.toolbar.resetAllButtons();
             this._focusWindow();
-            Event.removeListener(document, 'keypress', this._closeWindow);
+            Event.removeListener(document, 'keydown', this._closeWindow);
         },
+
         /* {{{  Command Overrides - These commands are only over written when we are using the advanced version */
+        
+        /**
+        * @method cmd_undo
+        * @description Pulls an item from the Undo stack and updates the Editor
+        * @param value Value passed from the execCommand method
+        */
+        cmd_undo: function(value) {
+            if (this._hasUndoLevel()) {
+                if (!this._undoLevel) {
+                    this._undoLevel = this._undoCache.length;
+                }
+                this._undoLevel = (this._undoLevel - 1);
+                if (this._undoCache[this._undoLevel]) {
+                    var html = this._getUndo(this._undoLevel);
+                    this.setEditorHTML(html);
+                } else {
+                    this._undoLevel = null;
+                    this.toolbar.disableButton('undo');
+                }
+            }
+            return [false];
+        },
+
+        /**
+        * @method cmd_redo
+        * @description Pulls an item from the Undo stack and updates the Editor
+        * @param value Value passed from the execCommand method
+        */
+        cmd_redo: function(value) {
+            this._undoLevel = this._undoLevel + 1;
+            if (this._undoLevel >= this._undoCache.length) {
+                this._undoLevel = this._undoCache.length;
+            }
+            YAHOO.log(this._undoLevel + ' :: ' + this._undoCache.length, 'warn', 'SimpleEditor');
+            if (this._undoCache[this._undoLevel]) {
+                var html = this._getUndo(this._undoLevel);
+                this.setEditorHTML(html);
+            } else {
+                this.toolbar.disableButton('redo');
+            }
+            return [false];
+        },       
+        
         /**
         * @method cmd_heading
         * @param value Value passed from the execCommand method

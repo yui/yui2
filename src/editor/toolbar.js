@@ -103,28 +103,26 @@ var Dom = YAHOO.util.Dom,
          
     };
 
-    /**
-    * @method _addMenuClasses
-    * @private
-    * @description This method is called from Menu's renderEvent to add a few more classes to the menu items
-    * @param {String} ev The event that fired.
-    * @param {Array} na Array of event information.
-    * @param {Object} o Button config object. 
-    */
-
-    function _addMenuClasses(ev, na, o) {
-        Dom.addClass(this.element, 'yui-toolbar-' + o.get('value') + '-menu');
-        if (Dom.hasClass(o._button.parentNode.parentNode, 'yui-toolbar-select')) {
-            Dom.addClass(this.element, 'yui-toolbar-select-menu');
-        }
-        var items = this.getItems();
-        for (var i = 0; i < items.length; i++) {
-            Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-').toLowerCase() : items[i]._oText.nodeValue.replace(/ /g, '-').toLowerCase()));
-            Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-') : items[i]._oText.nodeValue.replace(/ /g, '-')));
-        }
-    }
-
     YAHOO.extend(YAHOO.widget.Toolbar, YAHOO.util.Element, {
+        /**
+        * @method _addMenuClasses
+        * @private
+        * @description This method is called from Menu's renderEvent to add a few more classes to the menu items
+        * @param {String} ev The event that fired.
+        * @param {Array} na Array of event information.
+        * @param {Object} o Button config object. 
+        */
+        _addMenuClasses: function(ev, na, o) {
+            Dom.addClass(this.element, 'yui-toolbar-' + o.get('value') + '-menu');
+            if (Dom.hasClass(o._button.parentNode.parentNode, 'yui-toolbar-select')) {
+                Dom.addClass(this.element, 'yui-toolbar-select-menu');
+            }
+            var items = this.getItems();
+            for (var i = 0; i < items.length; i++) {
+                Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-').toLowerCase() : items[i]._oText.nodeValue.replace(/ /g, '-').toLowerCase()));
+                Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-') : items[i]._oText.nodeValue.replace(/ /g, '-')));
+            }
+        },
         /** 
         * @property buttonType
         * @description The default button to use
@@ -969,29 +967,32 @@ var Dom = YAHOO.util.Dom,
 
                         var self = this;
                         //Hijack the mousedown event in the menu and make it fire a button click..
-                        if (tmp.getMenu().mouseDownEvent) {
-                            tmp.getMenu().mouseDownEvent.subscribe(function(ev, args) {
-                                YAHOO.log('mouseDownEvent', 'warn', 'Toolbar');
-                                var oMenu = args[1];
-                                YAHOO.util.Event.stopEvent(args[0]);
-                                tmp._onMenuClick(args[0], tmp);
-                                if (!oButton.menucmd) {
-                                    oButton.menucmd = oButton.value;
-                                }
-                                oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
-                                self._buttonClick.call(self, args[1], oButton);
-                                tmp._hideMenu();
-                                return false;
-                            });
-                            tmp.getMenu().clickEvent.subscribe(function(ev, args) {
-                                YAHOO.log('clickEvent', 'warn', 'Toolbar');
-                                YAHOO.util.Event.stopEvent(args[0]);
-                            });
-                            tmp.getMenu().mouseUpEvent.subscribe(function(ev, args) {
-                                YAHOO.log('mouseUpEvent', 'warn', 'Toolbar');
-                                YAHOO.util.Event.stopEvent(args[0]);
-                            });
-                        }
+                        tmp.on('appendTo', function() {
+                            var tmp = this;
+                            if (tmp.getMenu() && tmp.getMenu().mouseDownEvent) {
+                                tmp.getMenu().mouseDownEvent.subscribe(function(ev, args) {
+                                    YAHOO.log('mouseDownEvent', 'warn', 'Toolbar');
+                                    var oMenu = args[1];
+                                    YAHOO.util.Event.stopEvent(args[0]);
+                                    tmp._onMenuClick(args[0], tmp);
+                                    if (!oButton.menucmd) {
+                                        oButton.menucmd = oButton.value;
+                                    }
+                                    oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
+                                    self._buttonClick.call(self, args[1], oButton);
+                                    tmp._hideMenu();
+                                    return false;
+                                });
+                                tmp.getMenu().clickEvent.subscribe(function(ev, args) {
+                                    YAHOO.log('clickEvent', 'warn', 'Toolbar');
+                                    YAHOO.util.Event.stopEvent(args[0]);
+                                });
+                                tmp.getMenu().mouseUpEvent.subscribe(function(ev, args) {
+                                    YAHOO.log('mouseUpEvent', 'warn', 'Toolbar');
+                                    YAHOO.util.Event.stopEvent(args[0]);
+                                });
+                            }
+                        });
                         
                     }
                 } else {
@@ -1034,8 +1035,8 @@ var Dom = YAHOO.util.Dom,
                     if (Lang.isArray(oButton.menu)) {
                         YAHOO.log('Button type is (' + oButton.type + '), doing extra renderer work.', 'info', 'Toolbar');
                         var menu = tmp.getMenu();
-                        if (menu.renderEvent) {
-                            menu.renderEvent.subscribe(_addMenuClasses, tmp);
+                        if (menu && menu.renderEvent) {
+                            menu.renderEvent.subscribe(this._addMenuClasses, tmp);
                             if (oButton.renderer) {
                                 menu.renderEvent.subscribe(oButton.renderer, tmp);
                             }
