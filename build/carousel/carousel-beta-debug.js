@@ -726,6 +726,7 @@
             el = Dom.get(this._itemsTable.items[position].id);
             if (el) {
                 Dom.removeClass(el, cssClass.SELECTED_ITEM);
+                el.setAttribute("tabindex", -1);
             }
         }
         
@@ -744,6 +745,7 @@
             el = Dom.get(this._itemsTable.items[newposition].id);
             if (el) {
                 Dom.addClass(el, cssClass.SELECTED_ITEM);
+                el.setAttribute("tabindex", 0);
             }
         }
 
@@ -818,21 +820,6 @@
         return navContainer;
     }
     
-    /**
-     * Set the tabindex for our Carousel.
-     * 
-     * @method setTabIndex
-     * @private
-     */
-    function setTabIndex() {        
-        if (!this._isTabIndexSet) {            
-            if (!this._carouselEl.getAttribute("tabindex")) {
-                this._carouselEl.setAttribute("tabindex", 0);
-                this._isTabIndexSet = true;
-            }
-        }
-    }
-
     /**
      * Fire custom events for enabling/disabling navigation elements.
      *
@@ -957,8 +944,6 @@
             return;
         }
         
-        setTabIndex.call(this);
-
         switch (o.ev) {
         case itemAddedEvent:
             pos  = JS.isUndefined(o.pos) ? this._itemsTable.numItems-1 : o.pos;
@@ -1097,14 +1082,6 @@
          * @private
          */
         _isAnimationInProgress: false,
-
-        /**
-         * Whether tabindex has been set?
-         *
-         * @property _isTabIndexSet
-         * @private
-         */
-        _isTabIndexSet: false,
 
         /**
          * The table of items in the Carousel.
@@ -1920,8 +1897,6 @@
                 return false;
             }
         
-            setTabIndex.call(this);
-
             // Make sure at least one item is selected
             this.set("selectedItem", this.get("firstVisible"));
 
