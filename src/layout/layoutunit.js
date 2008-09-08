@@ -653,6 +653,69 @@
             }
             return this.get('parent');
         },
+		/**
+        * @property loadHandler
+        * @description Callback method for the YUI Connection Manager used for load the body using AJAX
+        * @type Object
+        */
+		loadHandler: {
+            success: function(o) {
+				this.body.innerHTML = o.responseText;
+				this.resize (true);
+            },
+            failure: function(o) {
+            }
+        },
+		/**
+        * @property dataConnection
+        * @description YUI Connection Manager handler
+        * @type Object
+        */
+		dataConnection: null,
+		/**
+        * @private
+        * @property _loading
+        * @description During the loading process this variable will be true
+        * @type Number
+        */
+        _loading: false,
+		/**
+        * @method loadContent
+        * @description Loading the content of the unit using the connection manager
+        * @return {object} YUI Connection Manager handler
+        */
+        loadContent: function() {
+			// load dynamic content unless already loading or loaded and caching
+			if (YAHOO.util.Connect && this.get('dataSrc') && !this._loading && !this.get('dataLoaded')) {
+		        this._loading = true; 
+		        Dom.addClass(this.body, this.LOADING_CLASSNAME);
+				this.dataConnection = YAHOO.util.Connect.asyncRequest(
+		            this.get('loadMethod'),
+		            this.get('dataSrc'), 
+		            {
+		                success: function(o) {
+		                    this.loadHandler.success.call(this, o);
+		                    this.set('dataLoaded', true);
+		                    this.dataConnection = null;
+		                    Dom.removeClass(this.body, this.LOADING_CLASSNAME);
+							this._loading = false;
+							this.fireEvent('load');
+		                },
+		                failure: function(o) {
+		                    this.loadHandler.failure.call(this, o);
+		                    this.dataConnection = null;
+		                    Dom.removeClass(this.body, this.LOADING_CLASSNAME);
+		                    this._loading = false;
+							this.fireEvent('loadError', { error: o });
+		                },
+		                scope: this,
+		                timeout: this.get('dataTimeout')
+		            }
+		        );
+				return this.dataConnection;
+	        }
+			return false;
+        },
         /**
         * @private
         * @method init
@@ -1108,6 +1171,10 @@
                     }
                     var c = Dom.getElementsByClassName('close', 'div', this.header)[0];
                     if (close) {
+                        //Force some header text if there isn't any
+                        if (!this.get('header')) {
+                            this.set('header', '&nbsp;');
+                        }
                         if (!c) {
                             c = document.createElement('div');
                             c.className = 'close';
@@ -1141,6 +1208,10 @@
                     }
                     var c = Dom.getElementsByClassName('collapse', 'div', this.header)[0];
                     if (collapse) {
+                        //Force some header text if there isn't any
+                        if (!this.get('header')) {
+                            this.set('header', '&nbsp;');
+                        }
                         if (!c) {
                             c = document.createElement('div');
                             this.header.appendChild(c);
@@ -1161,7 +1232,7 @@
             */
 
             this.setAttributeConfig('scroll', {
-                value: attr.scroll || false,
+                value: (((attr.scroll === true) || (attr.scroll === false) || (attr.scroll === null)) ? attr.scroll : false),
                 method: function(scroll) {
                     if ((scroll === false) && !this._collapsed) { //Removing scroll bar
                         if (this.body) {
@@ -1206,7 +1277,7 @@
                 validator: YAHOO.lang.isBoolean,
                 method: function(u) {
                     if (this._resize) {
-                        this._resize.set('useShim', u)
+                        this._resize.set('useShim', u);
                     }
                 }
             });
@@ -1262,7 +1333,8 @@
                                 height: this.get('height'),
                                 width: this.get('width'),
                                 setSize: false,
-                                useShim: this.get('useShim')
+                                useShim: this.get('useShim'),
+                                wrap: false
                             });
                             
                             this._resize._handles[handle].innerHTML = '<div class="yui-layout-resize-knob"></div>';
@@ -1303,6 +1375,44 @@
                     }
                 }
             });
+			/**
+	         * The unit data source, used for loading content dynamically.
+	         * @attribute dataSrc
+	         * @type String
+	         */
+	        this.setAttributeConfig('dataSrc', {
+	            value: attr.dataSrc
+	        });
+	        /**
+	         * The method to use for the data request.
+	         * @attribute loadMethod
+	         * @type String
+	         * @default "GET"
+	         */
+	        this.setAttributeConfig('loadMethod', {
+	            value: attr.loadMethod || 'GET',
+	            validator: YAHOO.lang.isString
+	        });	
+	        /**
+	         * Whether or not any data has been loaded from the server.
+	         * @attribute dataLoaded
+	         * @type Boolean
+	         */        
+	        this.setAttributeConfig('dataLoaded', {
+	            value: false,
+	            validator: YAHOO.lang.isBoolean,
+	            writeOnce: true
+	        });
+	        /**
+	         * Number if milliseconds before aborting and calling failure handler.
+	         * @attribute dataTimeout
+	         * @type Number
+	         * @default null
+	         */
+	        this.setAttributeConfig('dataTimeout', {
+	            value: attr.dataTimeout || null,
+	            validator: YAHOO.lang.isNumber
+	        });
         },
         /**
         * @private
@@ -1437,6 +1547,16 @@
     /**
     * @event beforeExpand
     * @description Fired before the unit is exanded. If you return false, the collapse is cancelled.
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
+    * @event load
+    * @description Fired when data is loaded via the dataSrc config.
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
+    * @event loadError
+    * @description Fired when an error occurs loading data via the dataSrc config. Error message is passed as argument to this event.
     * @type YAHOO.util.CustomEvent
     */
     });
