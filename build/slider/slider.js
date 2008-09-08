@@ -509,7 +509,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
     },
 
     onMouseUp: function() {
-        if (!this.isLocked() && !this.moveComplete) {
+        if (this.backgroundEnabled && !this.isLocked() && !this.moveComplete) {
             this.endMove();
         }
     },
@@ -980,10 +980,12 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @private
      */
     b4MouseDown: function(e) {
-        if (this.backgroundEnabled) {
-            this.thumb.autoOffset();
-            this.thumb.resetConstraints();
+        if (!this.backgroundEnabled) {
+            return false;
         }
+
+        this.thumb.autoOffset();
+        this.thumb.resetConstraints();
     },
 
     /**
@@ -995,14 +997,15 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         // this.resetConstraints(true);
         // this.thumb.resetConstraints(true);
 
-        if (! this.isLocked() && this.backgroundEnabled) {
-            var x = YAHOO.util.Event.getPageX(e);
-            var y = YAHOO.util.Event.getPageY(e);
-
-            this.focus();
-            this.moveThumb(x, y);
+        if (!this.backgroundEnabled || this.isLocked()) {
+            return false;
         }
-        
+
+        var x = YAHOO.util.Event.getPageX(e);
+        var y = YAHOO.util.Event.getPageY(e);
+
+        this.focus();
+        this.moveThumb(x, y);
     },
 
     /**
@@ -1011,7 +1014,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @private
      */
     onDrag: function(e) {
-        if (! this.isLocked() && this.backgroundEnabled) {
+        if (this.backgroundEnabled && !this.isLocked()) {
             var x = YAHOO.util.Event.getPageX(e);
             var y = YAHOO.util.Event.getPageY(e);
             this.moveThumb(x, y, true, true);

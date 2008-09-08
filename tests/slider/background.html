@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>Test Page</title>
+    <link type="text/css" rel="stylesheet" href="/assets/dpSyntaxHighlighter.css">
+    <link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.5.2/build/logger/assets/skins/sam/logger.css">
+    <style type="text/css">
+        .h_bg {
+            background: url(http://developer.yahoo.com/yui/examples/slider/assets/bg-h.gif) no-repeat 5px 0;
+            height: 28px;
+            position: relative;
+            width: 228px;
+        }
+        .h_t {
+            position: absolute;
+            top: 4px;
+        }
+    </style>
+</head>
+<body class="yui-skin-sam">
+<div id="log"></div>
+<div class="markup">
+<div id="bg1" class="h_bg"><div id="t1" class="h_t"><img src="http://developer.yahoo.com/yui/examples/slider/assets/thumb-n.gif" alt="slider thumb"></div></div>
+</div>
+
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/dragdrop/dragdrop.js"></script>
+<script type="text/javascript" src="../../build/slider/slider.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/animation/animation.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/logger/logger.js"></script>
+<script type="text/javascript">
+YAHOO.util.Event.onDOMReady(function () {
+
+var log = new YAHOO.widget.LogReader('log',{ newestOnTop: false }),
+    s1,
+    startCount = 1,
+    endCount = 1;
+
+var s1 = YAHOO.widget.Slider.getHorizSlider('bg1','t1',0,200);
+s1.backgroundEnabled = false;
+
+s1.subscribe('slideStart', function () {
+    YAHOO.log('slideStart: ' + (startCount++));
+});
+
+s1.subscribe('slideEnd', function () {
+    YAHOO.log('slideEnd: ' + (endCount++));
+});
+
+});
+</script>
+<script type="text/javascript" src="/assets/dpSyntaxHighlighter.js" ></script>
+<script type="text/javascript" src="/assets/dpSyntaxHighlightExample.js"></script>
+</body>
+</html>
