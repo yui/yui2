@@ -928,7 +928,7 @@
                         "</option>";
             } else {
                 markup += "<li" + (i === 0 ? " class=\"first\">" : ">")    +
-                        "<a href=\"#page-" + (i+1) + "\" "                 +
+                        "<a href=\"#page-" + (i+1) + "\" tabindex=\"0\" "  +
                         (i == page ? " class=\"selected\"" : "") + "><em>" +
                         this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
                         "</em></a></li>";
