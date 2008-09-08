@@ -78,6 +78,8 @@
 		}
 
 		tree.draw();
+
+
 	}
 
 	var callback = null;
@@ -104,6 +106,7 @@
                 nodes.push(tmpNode);
 				buildRandomTextBranch(tmpNode);
 			}
+
 		}
 	}
 

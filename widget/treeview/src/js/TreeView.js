@@ -103,13 +103,20 @@ TV.prototype = {
     maxAnim: 2,
 
     /**
+     * Whether there is any subscriber to dblClickEvent
+     * @property _hasDblClickSubscriber
+     * @type boolean
+     * @private
+     */
+    _hasDblClickSubscriber: false,
+	
+    /**
      * Stores the timer used to check for double clicks
      * @property _dblClickTimer
      * @type window.timer object
      * @private
      */
     _dblClickTimer: null,
-	
 
 
     /**
@@ -289,7 +296,7 @@ TV.prototype = {
         this.createEvent("expandComplete", this);
 
     /**
-         * Fires when the Enter key is pressed and the node has no href property set
+         * Fires when the Enter key is pressed on a node that has the focus
          * @event enterKeyPressed
          * @type CustomEvent
          * @param {YAHOO.widget.Node} node the node that has the focus
@@ -339,6 +346,10 @@ TV.prototype = {
         this.logger = (LW) ? new LW(this.toString()) : YAHOO;
 
         this.logger.log("tree init: " + this.id);
+		
+		this.__yui_events.dblClickEvent.subscribeEvent.subscribe(function() {
+			this._hasDblClickSubscriber = true;
+		});
 
         // YAHOO.util.Event.onContentReady(this.id, this.handleAvailable, this, true);
         // YAHOO.util.Event.on(this.id, "click", this.handleClick, this, true);
@@ -443,7 +454,7 @@ TV.prototype = {
 											},parent,false);
 											break;
 										default:
-											node = new Widget.HTMLNode(child.parentNode.innerHTML, parent, false, Dom.removeClass(child,'hasIcon'));
+											node = new Widget.HTMLNode(child.parentNode.innerHTML, parent, false, true);
 											break;
 									}
 								}
@@ -506,40 +517,53 @@ TV.prototype = {
 					}
 				};
 				
-				if (node && Dom.hasClass(el, node.labelStyle)) {
-					if (node.firesLabelClick) {
-						node.logger.log("onLabelClick " + node.label);
-						this.fireEvent('labelClick',node);
-					}
-					if (this._nodeEditing(node)) { return; }
+				if (node && Dom.hasClass(el, node.labelStyle) || Dom.getAncestorByClassName(el,node.labelStyle)) {
+					node.logger.log("onLabelClick " + node.label);
+					this.fireEvent('labelClick',node);
 				}
-				
-				var depthCell = /ygtv(blank)?depthcell/gi;
-				if (depthCell.test(el.className) || depthCell.test(el.parentNode.className)) { return;}
-				if (Dom.hasClass(el,TV.TRIGGERS_CLICK_EVENT) || Dom.getAncestorByClassName(el,TV.TRIGGERS_CLICK_EVENT)) { 
-					if (this._dblClickTimer) {
-						window.clearTimeout(this._dblClickTimer);
-						this._dblClickTimer = null;
+				while (el && !Dom.hasClass(el.parentNode,'ygtvrow')) {
+					el = Dom.getAncestorByTagName(el,'td');
+				}
+				if (el) {
+					// If it is a spacer cell, do nothing
+					if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
+					//  If it is a toggle cell, toggle
+					if (/ygtv[tl][mp]h?/.test(el.className)) {
+						toggle();
 					} else {
-						this._dblClickTimer = window.setTimeout(function () {
-							self._dblClickTimer = null;
-							toggle();
-							self.fireEvent('clickEvent', {event:ev,node:node}); 
-						}, 200);
+						if (this._dblClickTimer) {
+							window.clearTimeout(this._dblClickTimer);
+							this._dblClickTimer = null;
+						} else {
+							if (this._hasDblClickSubscriber) {
+								this._dblClickTimer = window.setTimeout(function () {
+									self._dblClickTimer = null;
+									toggle();
+									self.fireEvent('clickEvent', {event:ev,node:node}); 
+								}, 200);
+							} else {
+								toggle();
+								self.fireEvent('clickEvent', {event:ev,node:node}); 
+							}
+						}
 					}
-				} else {
-					toggle();
 				}
 			},
 			this,
 			true
 		);
+		
 		Event.on(
 			this.getEl(),
 			'dblclick',
 			function (ev) {
+				if (!this._hasDblClickSubscriber) { return; }
 				var el = Event.getTarget(ev);
-				if (Dom.hasClass(el,TV.TRIGGERS_CLICK_EVENT) || Dom.getAncestorByClassName(el,TV.TRIGGERS_CLICK_EVENT)) { 
+				while (!Dom.hasClass(el.parentNode,'ygtvrow')) {
+					el = Dom.getAncestorByTagName(el,'td');
+				}
+				if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
+				if (!(/ygtv[tl][mp]h?/.test(el.className))) {
 					this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(el)}); 
 					if (this._dblClickTimer) {
 						window.clearTimeout(this._dblClickTimer);
@@ -576,53 +600,62 @@ TV.prototype = {
 			function (ev) {
 				var target = Event.getTarget(ev),
 					node = this.getNodeByElement(target),
+					newNode = node,
 					KEY = YAHOO.util.KeyListener.KEY;
 
 				switch(ev.keyCode) {
 					case KEY.UP:
 						this.logger.log('UP');
 						do {
-							if (node.previousSibling) {
-								node = node.previousSibling;
+							if (newNode.previousSibling) {
+								newNode = newNode.previousSibling;
 							} else {
-								node = node.parent;
+								newNode = newNode.parent;
 							}
-						} while (node && node.focus());
+						} while (newNode && !newNode.focus());
+						if (!newNode) { node.focus(); }
+						Event.preventDefault(ev);
 						break;
 					case KEY.DOWN:
 						this.logger.log('DOWN');
 						do {
-							if (node.nextSibling) {
-								node = node.nextSibling;
+							if (newNode.nextSibling) {
+								newNode = newNode.nextSibling;
 							} else {
-								node.expand();
-								node = (node.children.length || null) && node.children[0];
+								newNode.expand();
+								newNode = (newNode.children.length || null) && newNode.children[0];
 							}
-						} while (node && node.focus());
+						} while (newNode && !newNode.focus());
+						if (!newNode) { node.focus(); }
+						Event.preventDefault(ev);
 						break;
 					case KEY.LEFT:
 						this.logger.log('LEFT');
 						do {
-							if (node.parent) {
-								node = node.parent;
+							if (newNode.parent) {
+								newNode = newNode.parent;
 							} else {
-								node = node.previousSibling;
+								newNode = newNode.previousSibling;
 							}
-						} while (node && node.focus());
+						} while (newNode && !newNode.focus());
+						if (!newNode) { node.focus(); }
+						Event.preventDefault(ev);
 						break;
 					case KEY.RIGHT:
 						this.logger.log('RIGHT');
 						do {
-							node.expand();
-							if (node.children.length) {
-								node = node.children[0];
+							newNode.expand();
+							if (newNode.children.length) {
+								newNode = newNode.children[0];
 							} else {
-								node = node.nextSibling;
+								newNode = newNode.nextSibling;
 							}
-						} while (node && node.focus());
+						} while (newNode && !newNode.focus());
+						if (!newNode) { node.focus(); }
+						Event.preventDefault(ev);
 						break;
 					case KEY.ENTER:
-						this.logger.log('ENTER: ' + node.href);
+						this.logger.log('ENTER: ' + newNode.href);
 						if (node.href) {
 							if (node.target) {
 								window.open(node.href,node.target);
@@ -630,20 +663,24 @@ TV.prototype = {
 								window.location(node.href);
 							}
 						} else {
-							this.fireEvent('enterKeyPressed',node);
+							node.toggle();
 						}
+						this.fireEvent('enterKeyPressed',node);
+						Event.preventDefault(ev);
 						break;
 					case KEY.HOME:
 						this.logger.log('HOME');
-						node = this.getRoot();
-						if (node.children.length) {node = node.children[0];}
-						node.focus();
+						newNode = this.getRoot();
+						if (newNode.children.length) {newNode = newNode.children[0];}
+						if (!newNode.focus()) { node.focus(); }
+						Event.preventDefault(ev);
 						break;
 					case KEY.END:
 						this.logger.log('END');
-						node = this.getRoot();
-						if (node.children.length) { node = node.children[node.children.length -1];}
-						node.focus();
+						newNode = newNode.parent.children;
+						newNode = newNode[newNode.length -1];
+						if (!newNode.focus()) { node.focus(); }
+						Event.preventDefault(ev);
 						break;
 					// case KEY.PAGE_UP:
 						// this.logger.log('PAGE_UP');
@@ -651,7 +688,7 @@ TV.prototype = {
 					// case KEY.PAGE_DOWN:
 						// this.logger.log('PAGE_DOWN');
 						// break;
-					case 107:
+					case 107:  // plus key
 						if (ev.shiftKey) {
 							this.logger.log('Shift-PLUS');
 							node.parent.expandAll();
@@ -660,7 +697,7 @@ TV.prototype = {
 							node.expand();
 						}
 						break;
-					case 109:
+					case 109: // minus key
 						if (ev.shiftKey) {
 							this.logger.log('Shift-MINUS');
 							node.parent.collapseAll();
@@ -678,19 +715,6 @@ TV.prototype = {
 		);
     },
 	
-  /**
-     * placeholder for the in-line editing plug-in
-     * @method _nodeEditing
-     * @param node {YAHOO.widget.Node} node to be edited
-     * @private
-     */
-	_nodeEditing: function(node) {},
-  /**
-     * placeholder for the in-line editing plug-in destroy method
-     * @method _destroyEditor
-     * @private
-     */
-		_destroyEditor: function () {},
   /**
      * Returns the tree's host element
      * @method getEl
@@ -993,7 +1017,9 @@ TV.prototype = {
 	* @method destroy
 	*/
 	destroy : function() {
-		this._destroyEditor();
+		// Since the label editor can be separated from the main TreeView control
+		// the destroy method for it might not be there.
+		if (this._destroyEditor) { this._destroyEditor(); }
 		var el = this.getEl();
 		Event.removeListener(el,'click');
 		Event.removeListener(el,'dblclick');
@@ -1118,19 +1144,6 @@ TV.getNode = function(treeId, nodeIndex) {
     return (t) ? t.getNodeByIndex(nodeIndex) : null;
 };
 
-
-/**
-     * Class name assigned to elements that trigger click and double-click events.
-     * It is not meant to have any specific style, it is just the way to signal that the element can receive clicks or double clicks.
-     *
-     * @property TreeView.TRIGGERS_CLICK_EVENT
-     * @type String
-     * @static
-     * @final
-     * @default "ygtv-triggers-click"
-
-	*/ 
-TV.TRIGGERS_CLICK_EVENT = 'ygtv-triggers-click';
 
 /**
      * Class name assigned to elements that have the focus

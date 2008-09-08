@@ -16,6 +16,10 @@ version: 2.5.2
 .ygtvrow > td {
     border: none; padding: 0;
 }
+.ygtvrow > td  > a {
+	text-decoration:none;
+}
+
 
 /* first or middle sibling, no children */
 .ygtvtn {
@@ -120,6 +124,11 @@ version: 2.5.2
 .ygtvfocus .ygtvlabel, .ygtvfocus .ygtvlabel:link, .ygtvfocus .ygtvlabel:visited, .ygtvfocus .ygtvlabel:hover {
 	background-color: #c0e0e0;
 }
+
+.ygtvfocus > a {
+	outline-style:none;
+}
+
 .ygtvok {
     width:18px; height:22px; 
     background: url(treeview-sprite.gif) 0 -8800px no-repeat; 

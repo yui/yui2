@@ -197,16 +197,6 @@ YAHOO.widget.Node.prototype = {
      */
     isLeaf: false,
 
- /**
-     * To make the firing of event labelClick avaiable to nodes other than
-     * TextNodes, which are the only ones that currently fire it.
-     * If true, the node files it
-     * @property firesLabelClick
-     * @type boolean
-     * @default false
-     */
-    firesLabelClick: false,
-	
 /**
      * The CSS class for the html content container.  Defaults to ygtvhtml, but 
      * can be overridden to provide a custom presentation for a specific node.
@@ -251,6 +241,7 @@ YAHOO.widget.Node.prototype = {
         this.children   = [];
         this.index      = YAHOO.widget.TreeView.nodeCount;
         ++YAHOO.widget.TreeView.nodeCount;
+		this.contentElId = "ygtvcontentel" + this.index;
 		
 		if (Lang.isObject(oData)) {
 			for (var property in oData) {
@@ -544,6 +535,15 @@ YAHOO.widget.Node.prototype = {
     getToggleEl: function() {
         return Dom.get(this.getToggleElId());
     },
+    /**
+	* Returns the outer html element for this node's content
+	* @method getContentEl
+	* @return {HTMLElement} the element
+	*/
+    getContentEl: function() { 
+        return Dom.get(this.contentElId);
+    },
+
 
     /*
      * Returns the element that is being used for this node's spacer.
@@ -690,7 +690,7 @@ YAHOO.widget.Node.prototype = {
         if (this.hasIcon) {
             var el = this.getToggleEl();
             if (el) {
-                el.className = this.getStyle();
+                el.className = el.className.replace(/ygtv(([tl][pmn]h?)|(loading))/,this.getStyle());
             }
         }
     },
@@ -1056,12 +1056,12 @@ YAHOO.widget.Node.prototype = {
             sb[sb.length] = '<td'; 
             sb[sb.length] = ' id="' + this.getToggleElId() + '"';
             sb[sb.length] = ' class="' + this.getStyle() + '"';
-            sb[sb.length] = '><a href="#" class="ygtvspacer"></a></td>';
+            sb[sb.length] = '><a href="#" class="ygtvspacer">&nbsp;</a></td>';
         }
 
         sb[sb.length] = '<td';
-        if (this.contentElId) { sb[sb.length] = ' id="' + this.contentElId + '"'; }
-        sb[sb.length] = ' class="' + this.contentStyle  +  ' ' + YAHOO.widget.TreeView.TRIGGERS_CLICK_EVENT + ' ygtvcontent" ';
+        sb[sb.length] = ' id="' + this.contentElId + '"'; 
+        sb[sb.length] = ' class="' + this.contentStyle  + ' ygtvcontent" ';
         sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
         sb[sb.length] = ' >';
 		sb[sb.length] = this.getContentHtml();
@@ -1118,18 +1118,20 @@ YAHOO.widget.Node.prototype = {
 	_focusedItem: null,
 	/**
 	* Sets the focus on the node element.
-	* This method is meant to be overriden by each node type to set the focus on whatever element is suitable
-	* A plain Node has no content other than the toggle icon so it is the only thing it can focus on.
+	* It will only be able to set the focus on nodes that have anchor elements in it.  
+	* Toggle or branch icons have anchors and can be focused on.  
+	* If will fail in nodes that have no anchor
 	* @method focus
+	* @return {boolean} success
 	*/
 	focus: function () {
 		var focused = false, self = this;
 
 		var removeListeners = function () {
 			var el;
-			if (this._focusedItem) {
-				Event.removeListener(this._focusedItem,'blur');
-				this._focusedItem = null;
+			if (self._focusedItem) {
+				Event.removeListener(self._focusedItem,'blur');
+				self._focusedItem = null;
 			}
 			
 			while ((el = self._focusHighlightedItems.shift())) {  // yes, it is meant as an assignment, really
@@ -1137,33 +1139,33 @@ YAHOO.widget.Node.prototype = {
 			}
 		};
 		removeListeners();
-				
+
 		Dom.getElementsBy  ( 
 			function (el) {
-				return /\bygtv([tl][pmn]h?)|(content)\b/gi.test(el.className);
+				return /ygtv(([tl][pmn]h?)|(content))/.test(el.className);
 			} ,
 			'td' , 
 			this.getEl().firstChild , 
 			function (el) {
-				
 				Dom.addClass(el, YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
-				self._focusHighlightedItems.push(el);
 				if (!focused) { 
 					var aEl = el.getElementsByTagName('a');
 					if (aEl.length) {
 						aEl = aEl[0];
 						aEl.focus();
-						this._focusedItem = aEl;
+						self._focusedItem = aEl;
 						Event.on(aEl,'blur',removeListeners);
 						focused = true;
 					}
 				}
+				self._focusHighlightedItems.push(el);
 			}
 		);
-		return !focused;
+		if (!focused) { removeListeners(); }
+		return focused;
 	},
 
-	    /**
+  /**
      * Count of nodes in tree
      * @method getNodeCount
      * @return {int} number of nodes in the tree

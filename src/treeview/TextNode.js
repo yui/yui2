@@ -70,15 +70,6 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      */
     title: null,
 	
-
-	
-/**
-     * Override for Node.prototype.firesLabelClick to enable firing ot labelClick on this type of node
-     * @property firesLabelClick
-     * @type boolean
-     * @default true
-     */
-    firesLabelClick: true,
 /**
      * The node type
      * @property _type

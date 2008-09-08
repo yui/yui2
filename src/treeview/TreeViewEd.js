@@ -46,7 +46,7 @@
 	
 	
 	TVproto._nodeEditing = function (node) {
-		if (node.fillEditorContainer && node.editable && Lang.isNull(node.href)) {
+		if (node.fillEditorContainer && node.editable) {
 			var ed, topLeft, buttons, button, editorData = TV.editorData;
 			editorData.active = true;
 			editorData.whoHasIt = this;
@@ -110,7 +110,7 @@
 				Dom.removeClass(ed,'ygtv-edit-' + editorData.nodeType);
 			}
 			Dom.addClass(ed,' ygtv-edit-' + node._type);
-			topLeft = Dom.getXY(node.getLabelEl());
+			topLeft = Dom.getXY(node.getContentEl());
 			Dom.setStyle(ed,'left',topLeft[0] + 'px');
 			Dom.setStyle(ed,'top',topLeft[1] + 'px');
 			Dom.setStyle(ed,'display','block');
@@ -118,6 +118,22 @@
 			node.fillEditorContainer(editorData);
 
 			return true;  // If inline editor available, don't do anything else.
+		}
+	};
+	
+	/**
+	* Method to be associated with an event (clickEvent, dblClickEvent or enterKeyPressed) to pop up the contents editor
+	*  It calls the corresponding node editNode method.
+	* @method onEventEditNode
+	* @param oArgs {object} Object passed as arguments to TreeView event listeners
+	 * @for YAHOO.widget.TreeView
+	*/
+
+	TVproto.onEventEditNode = function (oArgs) {
+		if (oArgs instanceof YAHOO.widget.Node) {
+			oArgs.editNode();
+		} else if (oArgs.node instanceof YAHOO.widget.Node) {
+			oArgs.node.editNode();
 		}
 	};
 	
@@ -167,6 +183,18 @@
          * @for YAHOO.widget.Node
 	*/
 	Nproto.editable = false;
+	
+	/**
+	* pops up the contents editor, if there is one and the node is declared editable
+	* @method editNode
+	 * @for YAHOO.widget.Node
+	*/
+	
+	Nproto.editNode = function () {
+		this.tree._nodeEditing(this);
+	};
+	
+	
 
 
 	/** Placeholder for a function that should provide the inline node label editor.
