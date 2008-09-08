@@ -40,15 +40,15 @@ var editor = null;
     Event.onDOMReady(function() {
         editor = new YAHOO.widget.Editor('editor', {
             dompath: true,
+            nodeChangeDelay: false,
             animate: true
         });
         editor.render();
 
         var logger = new Tool.TestLogger(null, { height: '80%' });
-        editor.on('editorContentLoaded', function() { //We have to wait until the Element renders before we can test it..
+        editor.on('windowRender', function() { //We have to wait until the all windows render before we can start testing it..
             Suite.add( new Tool.TestCase({
                 name: 'YAHOO.widget.Editor',
-
                 test_render: function() {
                     Assert.areEqual(Dom.get('editor_container'), editor.get('element_cont').get('element'), 'Could not find Editors container');
                     Assert.areEqual(Dom.get('editor_toolbar'), editor.toolbar.get('element'), 'Could not find Editors Toolbar');
@@ -70,11 +70,12 @@ var editor = null;
                 },
                 test_regex: function() {
                     editor.setEditorHTML(Dom.get('testRegEx').innerHTML);
-                    var e_data = editor.cleanHTML();
-                    var real_data = editor.filter_all_rgb(Dom.get('testRegEx2').innerHTML);
-
+                    //editor._getDoc().body.innerHTML = Dom.get('testRegEx').innerHTML;
+                    var e_data = (editor.cleanHTML()).toLowerCase();
+                    var real_data = editor.filter_all_rgb(Dom.get('testRegEx2').innerHTML.toLowerCase());
                     Assert.areEqual(real_data, e_data, 'Regex save routine failed');
                 },
+                
                 test_blank_image: function() {
                     editor.toolbar.resetAllButtons();
                     var picURL = editor.get('blankimage');
@@ -109,16 +110,21 @@ var editor = null;
                     editor.toolbar.resetAllButtons();
                 },
                 test_selected_element: function() {
+                    
                     editor.setEditorHTML('<em id="test">This is a test element</em>');
-                    YAHOO.util.UserAction.click(editor._getDoc().getElementById('test'));
+                    editor._selectNode(editor._getDoc().getElementById('test'));
+                    
                     Assert.areEqual(editor._getDoc().getElementById('test'), editor._getSelectedElement(), 'Selected Element is not em#test');
                     Assert.areEqual(true, editor.toolbar.getButtonByValue('italic').hasClass('yui-button-selected'), 'Italic button is not selected');
                     editor.toolbar.resetAllButtons();
+                    
                 },
                 test_dom_path: function() {
                     editor.setEditorHTML('<p>This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</p><p>This is a test. This is a test. <em style="font-family: Comic Sans MS">This is a test. <strong id="test">This is a test.</strong> This is a test.</em> This is a test. This is a test. This is a test.</p><p>This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</p>');
-                    YAHOO.util.UserAction.click(editor._getDoc().getElementById('test'));
-                    Assert.areEqual('<span title="body">body</span> &lt; <span title="p">p</span> &lt; <span title="em">em</span> &lt; <span title="strong#test">strong#tes...</span>', editor.dompath.innerHTML, 'Dom path is not correct..');
+                    editor._selectNode(editor._getDoc().getElementById('test'));
+                    //Editor timing is out here, force a DomPath write..
+                    editor._writeDomPath();
+                    Assert.areEqual('<span title="body">body</span> &lt; <span title="p">p</span> &lt; <span title="em">em</span> &lt; <span title="strong#test">strong#tes...</span>', editor.dompath.innerHTML.toLowerCase(), 'Dom path is not correct..');
                     Assert.areEqual(true, editor.toolbar.getButtonByValue('bold').hasClass('yui-button-selected'), 'Bold button is not selected');
                     Assert.areEqual(true, editor.toolbar.getButtonByValue('italic').hasClass('yui-button-selected'), 'Italic button is not selected');
                     editor.toolbar.resetAllButtons();
@@ -129,6 +135,14 @@ var editor = null;
                     editor.toolbar.getButtonByValue('hiddenelements').fireEvent('mousedown', { ev: 'mousedown' });
                     Assert.areEqual(false, Dom.hasClass(editor._getDoc().body, 'yui-hidden'), 'hidden class is on the body');
                 },
+                test_event_before_mouseup: function() {
+                    var event = false;
+                    editor.on('beforeEditorMouseUp', function() {
+                        event = true;
+                    });
+                    YAHOO.util.UserAction.mouseup(editor._getDoc().body);
+                    Assert.areEqual(true, event, 'BeforeMouseUP Event failed to Fired');
+                },
                 test_event_mouseup: function() {
                     var event = false;
                     editor.on('editorMouseUp', function() {
@@ -136,6 +150,14 @@ var editor = null;
                     });
                     YAHOO.util.UserAction.mouseup(editor._getDoc().body);
                     Assert.areEqual(true, event, 'MouseUP Event failed to Fired');
+                },
+                test_event_before_mousedown: function() {
+                    var event = false;
+                    editor.on('beforeEditorMouseDown', function() {
+                        event = true;
+                    });
+                    YAHOO.util.UserAction.mousedown(editor._getDoc().body);
+                    Assert.areEqual(true, event, 'BeforeMouseDown Event failed to Fired');
                 },
                 test_event_mousedown: function() {
                     var event = false;
@@ -145,6 +167,30 @@ var editor = null;
                     YAHOO.util.UserAction.mousedown(editor._getDoc().body);
                     Assert.areEqual(true, event, 'MouseDown Event failed to Fired');
                 },
+                test_event_before_click: function() {
+                    var event = false;
+                    editor.on('beforeEditorClick', function() {
+                        event = true;
+                    });
+                    YAHOO.util.UserAction.click(editor._getDoc().body);
+                    Assert.areEqual(true, event, 'BeforeClick Event failed to Fired');
+                },
+                test_event_click: function() {
+                    var event = false;
+                    editor.on('editorClick', function() {
+                        event = true;
+                    });
+                    YAHOO.util.UserAction.click(editor._getDoc().body);
+                    Assert.areEqual(true, event, 'Click Event failed to Fired');
+                },
+                test_event_before_double_click: function() {
+                    var event = false;
+                    editor.on('beforeEditorDoubleClick', function() {
+                        event = true;
+                    });
+                    YAHOO.util.UserAction.dblclick(editor._getDoc().body);
+                    Assert.areEqual(true, event, 'BeforeDoubleClick Event failed to Fired');
+                },
                 test_event_double_click: function() {
                     var event = false;
                     editor.on('editorDoubleClick', function() {
@@ -152,6 +198,14 @@ var editor = null;
                     });
                     YAHOO.util.UserAction.dblclick(editor._getDoc().body);
                     Assert.areEqual(true, event, 'DoubleClick Event failed to Fired');
+                },
+                test_event_before_keyup: function() {
+                    var event = false;
+                    editor.on('beforeEditorKeyUp', function() {
+                        event = true;
+                    });
+                    YAHOO.util.UserAction.keyup(editor._getDoc().body);
+                    Assert.areEqual(true, event, 'beforeKeyUp Event failed to Fired');
                 },
                 test_event_keyup: function() {
                     var event = false;
@@ -161,6 +215,14 @@ var editor = null;
                     YAHOO.util.UserAction.keyup(editor._getDoc().body);
                     Assert.areEqual(true, event, 'KeyUp Event failed to Fired');
                 },
+                test_event_before_keydown: function() {
+                    var event = false;
+                    editor.on('beforeEditorKeyDown', function() {
+                        event = true;
+                    });
+                    YAHOO.util.UserAction.keydown(editor._getDoc().body);
+                    Assert.areEqual(true, event, 'BeforeKeyDown Event failed to Fired');
+                },
                 test_event_keydown: function() {
                     var event = false;
                     editor.on('editorKeyDown', function() {
@@ -168,6 +230,14 @@ var editor = null;
                     });
                     YAHOO.util.UserAction.keydown(editor._getDoc().body);
                     Assert.areEqual(true, event, 'KeyDown Event failed to Fired');
+                },
+                test_event_before_keypress: function() {
+                    var event = false;
+                    editor.on('beforeEditorKeyPress', function() {
+                        event = true;
+                    });
+                    YAHOO.util.UserAction.keypress(editor._getDoc().body);
+                    Assert.areEqual(true, event, 'BeforeKeyPress Event failed to Fired');
                 },
                 test_event_keypress: function() {
                     var event = false;
@@ -186,7 +256,7 @@ var editor = null;
                     editor.toolbar.getButtonByValue('createlink').fireEvent('mousedown', { ev: 'mousedown' });
 
                     Assert.isInstanceOf(YAHOO.widget.EditorWindow, editor.currentWindow, 'Editor Window Failed to Open');
-                    Dom.get('createlink_url').value = 'www.yahoo.com';
+                    Dom.get(editor.get('id') + '_createlink_url').value = 'http:/'+'/www.yahoo.com';
 
                     editor.closeWindow();
                     Assert.areEqual(null, editor.currentWindow, 'Editor Window Failed to Close');
@@ -202,7 +272,24 @@ var editor = null;
                     editor.setEditorHTML(t_data);
                     var e_data = editor.getEditorHTML();
                     Assert.areEqual(t_data, e_data, 'Editor data is different than text area');
-                }
+                },
+                test_undo: function() {
+                    var one = '<p>This is a test.</p>',
+                        two = '<p>This is a test.</p><p>This is another test</p>';
+                    editor._undoLevel = 0;
+                    editor._undoCache = [];
+                    editor.setEditorHTML(one);
+                    editor.nodeChange();
+                    editor.setEditorHTML(two);
+                    editor.nodeChange();
+                    Assert.areEqual(2, editor._undoLevel, 'Editor undo level is not high enough');
+                    editor.execCommand('undo');
+                    editor.execCommand('undo');
+                    Assert.areEqual(one, editor.getEditorHTML(), 'Editor undo level did not undo');
+                    editor.execCommand('redo');
+                    Assert.areEqual(two, editor.getEditorHTML(), 'Editor undo level did not redo');
+
+                },
             })); 
             Tool.TestRunner.add(Suite);
 
