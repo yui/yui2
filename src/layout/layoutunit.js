@@ -71,6 +71,13 @@
         */
         STR_EXPAND: 'Click to expand this pane.',
         /**
+	    * The class name applied to dynamic tabs while loading.
+	    * @property LOADING_CLASSNAME
+	    * @type String
+	    * @default "disabled"
+	    */
+	    LOADING_CLASSNAME: 'loading',
+        /**
         * @property browser
         * @description A modified version of the YAHOO.env.ua object
         * @type Object
