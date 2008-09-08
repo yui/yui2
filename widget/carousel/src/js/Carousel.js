@@ -1387,9 +1387,9 @@
              * The next navigation button name/text.
              *
              * @property NEXT_BUTTON_TEXT
-             * @default "Next"
+             * @default "Next Page"
              */
-            NEXT_BUTTON_TEXT: "Next",
+            NEXT_BUTTON_TEXT: "Next Page",
             
             /**
              * The prefix text for the pager in case the UI is a drop-down.
@@ -1403,9 +1403,9 @@
              * The previous navigation button name/text.
              *
              * @property PREVIOUS_BUTTON_TEXT
-             * @default "Previous"
+             * @default "Previous Page"
              */
-            PREVIOUS_BUTTON_TEXT: "Previous"
+            PREVIOUS_BUTTON_TEXT: "Previous Page"
             
         },
 
