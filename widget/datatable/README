@@ -20,6 +20,8 @@ have been made:
    and will block the DataTable UI (via new DataTable methods disable() and
    undisable()) until the callback function is executed to finish the transaction.
    - The CellEditor's "Save" and "Cancel" buttons now have configurable labels.
+   - CellEditor validator functions, including the built-in function YAHOO.widget.DataTable.validateNumber
+   must return undefined for invalid values.
    
 * Pagination and sorting have been reworked to better support dynamically driven
 DataTables. As a result, the following important changes have been made:
