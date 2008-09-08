@@ -439,14 +439,14 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
         if (this.thumb._isRegion) {
             if (this.deferredSetRegionValue) {
-                this.setRegionValue.apply(this, this.deferredSetRegionValue, true);
+                this.setRegionValue.apply(this, this.deferredSetRegionValue);
                 this.deferredSetRegionValue = null;
             } else {
                 this.setRegionValue(0, 0, true, true, true);
             }
         } else {
             if (this.deferredSetValue) {
-                this.setValue.apply(this, this.deferredSetValue, true);
+                this.setValue.apply(this, this.deferredSetValue);
                 this.deferredSetValue = null;
             } else {
                 this.setValue(0, true, true, true);
