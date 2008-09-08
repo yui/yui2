@@ -12,12 +12,27 @@
  */
 (function () {
 
+    /**
+     * The Carousel widget.
+     *
+     * @class Carousel
+     * @extends YAHOO.util.Element
+     * @constructor
+     * @param el {HTMLElement | String} The HTML element that represents the
+     * the container that houses the Carousel.
+     * @param cfg {Object} (optional) The configuration values
+     */
+    YAHOO.widget.Carousel = function (el, cfg) {
+
+        YAHOO.widget.Carousel.superclass.constructor.call(this, el, cfg);
+    };
+
     /*
      * Private variables of the Carousel component
      */
 
     /* Some abbreviations to avoid lengthy typing and lookups. */
-    var Carousel,
+    var Carousel    = YAHOO.widget.Carousel,
         Dom         = YAHOO.util.Dom,
         Event       = YAHOO.util.Event,
         JS          = YAHOO.lang;
@@ -35,23 +50,6 @@
      * @static
      */
     var instances = {};
-
-    /**
-     * The Carousel widget.
-     *
-     * @class Carousel
-     * @extends YAHOO.util.Element
-     * @constructor
-     * @param el {HTMLElement | String} The HTML element that represents the
-     * the container that houses the Carousel.
-     * @param cfg {Object} (optional) The configuration values
-     */
-    YAHOO.widget.Carousel = function (el, cfg) {
-
-        YAHOO.widget.Carousel.superclass.constructor.call(this, el, cfg);
-    };
-
-    Carousel = YAHOO.widget.Carousel;
 
     /*
      * Custom events of the Carousel component
@@ -1384,9 +1382,9 @@
              * The next navigation button name/text.
              *
              * @property NEXT_BUTTON_TEXT
-             * @default "Next"
+             * @default "Next Page"
              */
-            NEXT_BUTTON_TEXT: "Next",
+            NEXT_BUTTON_TEXT: "Next Page",
             
             /**
              * The prefix text for the pager in case the UI is a drop-down.
@@ -1400,9 +1398,9 @@
              * The previous navigation button name/text.
              *
              * @property PREVIOUS_BUTTON_TEXT
-             * @default "Previous"
+             * @default "Previous Page"
              */
-            PREVIOUS_BUTTON_TEXT: "Previous"
+            PREVIOUS_BUTTON_TEXT: "Previous Page"
             
         },
 
