@@ -1061,7 +1061,7 @@ lang.augmentObject(DT, {
         }
         else {
             YAHOO.log("Could not validate data " + lang.dump(oData) + " to type Number", "warn", this.toString());
-            return null;
+            return undefined;
         }
     }
 });
@@ -3313,7 +3313,7 @@ _onDocumentClick : function(e, oSelf) {
         // the editorBlurEvent needs to get fired by the lower-level DOM click
         // handlers below rather than by the TABLE click handler directly.
         if(oSelf._oCellEditor) {
-            var elContainer = oSelf._oCellEditor.container;
+            var elContainer = oSelf._oCellEditor.getContainerEl();
             // Only if the click was not within the CellEditor container
             if(!Dom.isAncestor(elContainer, elTarget) &&
                     (elContainer.id !== elTarget.id)) {
