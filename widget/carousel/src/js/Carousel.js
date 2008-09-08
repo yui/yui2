@@ -12,12 +12,28 @@
  */
 (function () {
 
+    /**
+     * The Carousel widget.
+     *
+     * @class Carousel
+     * @extends YAHOO.util.Element
+     * @constructor
+     * @param el {HTMLElement | String} The HTML element that represents the
+     * the container that houses the Carousel.
+     * @param cfg {Object} (optional) The configuration values
+     */
+    YAHOO.widget.Carousel = function (el, cfg) {
+        YAHOO.log("Component creation", WidgetName);
+
+        YAHOO.widget.Carousel.superclass.constructor.call(this, el, cfg);
+    };
+
     /*
      * Private variables of the Carousel component
      */
 
     /* Some abbreviations to avoid lengthy typing and lookups. */
-    var Carousel,
+    var Carousel    = YAHOO.widget.Carousel,
         Dom         = YAHOO.util.Dom,
         Event       = YAHOO.util.Event,
         JS          = YAHOO.lang;
@@ -35,24 +51,6 @@
      * @static
      */
     var instances = {};
-
-    /**
-     * The Carousel widget.
-     *
-     * @class Carousel
-     * @extends YAHOO.util.Element
-     * @constructor
-     * @param el {HTMLElement | String} The HTML element that represents the
-     * the container that houses the Carousel.
-     * @param cfg {Object} (optional) The configuration values
-     */
-    YAHOO.widget.Carousel = function (el, cfg) {
-        YAHOO.log("Component creation", WidgetName);
-
-        YAHOO.widget.Carousel.superclass.constructor.call(this, el, cfg);
-    };
-
-    Carousel = YAHOO.widget.Carousel;
 
     /*
      * Custom events of the Carousel component
