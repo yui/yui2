@@ -746,6 +746,7 @@
             if (el) {
                 Dom.addClass(el, cssClass.SELECTED_ITEM);
                 el.setAttribute("tabindex", 0);
+                el.focus();
             }
         }
 
@@ -1509,7 +1510,15 @@
          * @public
          */
         focus: function () {
-            this._carouselEl.focus();
+            var selected = this.getItem(this.get("selectedItem"));
+
+            if (selected && selected.id) {
+                selected = Dom.get(selected.id);
+                if (selected) {
+                    selected.focus();
+                }
+            }
+
             this.fireEvent(focusEvent);
         },
 
