@@ -442,6 +442,8 @@ render : function() {
     if(!this.disableBtns) {
         this.renderBtns();
     }
+    
+    this.doAfterRender();
 },
 
 /**
@@ -660,6 +662,16 @@ renderForm : function() {
 },
 
 /**
+ * Access to add additional event listeners.
+ *
+ * @method doAfterRender
+ */
+doAfterRender : function() {
+    // To be implemented by subclass
+},
+
+
+/**
  * After rendering form, if disabledBtns is set to true, then sets up a mechanism
  * to save input without them. 
  *
@@ -711,12 +723,14 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor is shown.
  *
  * @event showEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.
  */
 
 /**
  * Fired when a CellEditor has a keydown.
  *
  * @event keydownEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  * @param oArgs.event {HTMLEvent} The event object.
  */
 
@@ -724,6 +738,7 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor input is reverted due to invalid data.
  *
  * @event invalidDataEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  * @param oArgs.newData {Object} New data value from form input field.
  * @param oArgs.oldData {Object} Old data value.
  */
@@ -732,6 +747,7 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor input is reverted due to asyncSubmitter failure.
  *
  * @event revertEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  * @param oArgs.newData {Object} New data value from form input field.
  * @param oArgs.oldData {Object} Old data value.
  */
@@ -740,6 +756,7 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor input is saved.
  *
  * @event saveEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  * @param oArgs.newData {Object} New data value from form input field.
  * @param oArgs.oldData {Object} Old data value.
  */
@@ -748,12 +765,14 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor input is canceled.
  *
  * @event cancelEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  */
 
 /**
  * Fired when a CellEditor has a blur event.
  *
  * @event blurEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  */
 
 
