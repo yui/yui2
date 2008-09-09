@@ -1282,7 +1282,7 @@ MenuItem.prototype = {
                 addClassNameForState.call(this, _HAS_SUBMENU);
 
 
-				if (oConfig.getProperty(_URL) !== _HASH) {
+				if (oConfig.getProperty(_URL) === _HASH) {
 				
 					oConfig.setProperty(_URL, (_HASH + oMenu.id));
 				

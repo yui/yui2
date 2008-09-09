@@ -56,6 +56,7 @@
 		_MIN_SCROLL_HEIGHT = "minscrollheight",
 		_CLASSNAME = "classname",
 		_SHADOW = "shadow",
+		_KEEP_OPEN = "keepopen",
 		_HD = "hd",
 		_HAS_TITLE = "hastitle",
 		_CONTEXT = "context",
@@ -293,6 +294,12 @@ var Dom = YAHOO.util.Dom,
 		validator: Lang.isBoolean,
 		suppressEvent: true,
 		supercedes: [_VISIBLE]
+	},
+	
+	KEEP_OPEN_CONFIG = {
+		key: _KEEP_OPEN, 
+		value: false, 
+		validator: Lang.isBoolean
 	};
 
 
@@ -727,7 +734,7 @@ init: function (p_oElement, p_oConfig) {
         this.beforeRenderEvent.subscribe(this._onBeforeRender);
         this.renderEvent.subscribe(this._onRender);
         this.beforeShowEvent.subscribe(this._onBeforeShow);
-        this.hideEvent.subscribe(this.positionOffScreen);
+        this.hideEvent.subscribe(this._onHide);
         this.showEvent.subscribe(this._onShow);
         this.beforeHideEvent.subscribe(this._onBeforeHide);
         this.mouseOverEvent.subscribe(this._onMouseOver);
@@ -735,6 +742,7 @@ init: function (p_oElement, p_oConfig) {
         this.clickEvent.subscribe(this._onClick);
         this.keyDownEvent.subscribe(this._onKeyDown);
         this.keyPressEvent.subscribe(this._onKeyPress);
+        this.blurEvent.subscribe(this._onBlur);
         
 
         if (UA.gecko || UA.webkit) {
@@ -1531,6 +1539,12 @@ _execHideDelay: function () {
     
         if (oRoot.activeItem) {
 
+			if (oRoot.hasFocus()) {
+
+				oRoot.activeItem.focus();
+			
+			}
+			
             oRoot.clearActiveItem();
 
         }
@@ -1717,10 +1731,20 @@ _onMouseOver: function (p_sType, p_aArgs) {
 			this._nCurrentMouseX = 0;
 	
 			Event.on(this.element, _MOUSEMOVE, this._onMouseMove, this, true);
+
+
+			/*
+				If the mouse is moving from the submenu back to its corresponding menu item, 
+				don't hide the submenu or clear the active MenuItem.
+			*/
+
+			if (!(oItem && Dom.isAncestor(oItem.element, Event.getRelatedTarget(oEvent)))) {
+
+				this.clearActiveItem();
+
+			}
 	
-			this.clearActiveItem();
-	
-	
+
 			if (this.parent && oSubmenuHideDelayTimer) {
 	
 				oSubmenuHideDelayTimer.cancel();
@@ -1773,9 +1797,11 @@ _onMouseOver: function (p_sType, p_aArgs) {
 			oItemCfg.setProperty(_SELECTED, true);
 	
 	
-			if (this.hasFocus()) {
+			if (this.hasFocus() || oRoot._hasFocus) {
 			
 				oItem.focus();
+				
+				oRoot._hasFocus = false;
 			
 			}
 	
@@ -2067,7 +2093,7 @@ _onClick: function (p_sType, p_aArgs) {
 			}
 	
 	
-			if (!oSubmenu) {
+			if (!oSubmenu && !this.cfg.getProperty(_KEEP_OPEN)) {
 	
 				hide.call(this);
 	
@@ -2274,10 +2300,14 @@ _onKeyDown: function (p_sType, p_aArgs) {
                             if (oSubmenu) {
     
                                 oSubmenu.show();
+                                oSubmenu.setInitialFocus();
                             
                             }
+                            else {
     
-                            oNextItem.focus();
+                            	oNextItem.focus();
+                            
+                            }
                         
                         }
                     
@@ -2315,10 +2345,14 @@ _onKeyDown: function (p_sType, p_aArgs) {
                             if (oSubmenu) {
                             
                                 oSubmenu.show();
+								oSubmenu.setInitialFocus();                                
                             
                             }
+                            else {
     
-                            oNextItem.focus();
+                            	oNextItem.focus();
+                            
+                            }
                         
                         } 
                     
@@ -2406,6 +2440,22 @@ _onKeyPress: function (p_sType, p_aArgs) {
 
 },
 
+
+/**
+* @method _onBlur
+* @description "blur" event handler for a Menu instance.
+* @protected
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+*/
+_onBlur: function (p_sType, p_aArgs) {
+        
+	if (this._hasFocus) {
+		this._hasFocus = false;
+	}
+
+},
 
 /**
 * @method _onYChange
@@ -2838,7 +2888,8 @@ _onBeforeShow: function (p_sType, p_aArgs) {
     	oParent = this.parent,
     	nAvailableHeight,
         nMinScrollHeight,
-        nViewportHeight;
+        nViewportHeight,
+		aAlignment;
 
 
     if (!oParent && bDynamicPos) {
@@ -2878,6 +2929,16 @@ _onBeforeShow: function (p_sType, p_aArgs) {
 		}
 
     }
+	 
+
+	if (oParent) {
+
+		aAlignment = oParent.parent.cfg.getProperty(_SUBMENU_ALIGNMENT);
+		
+		this.cfg.setProperty(_CONTEXT, [oParent.element, aAlignment[0], aAlignment[1]]);
+		this.align();
+	
+	}
 
 },
 
@@ -2900,7 +2961,7 @@ getConstrainedY: function (y) {
 
 		},
 
-		bPotentialContextOverlap = oOverlapPositions[aContext[1] + aContext[2]],
+		bPotentialContextOverlap = (aContext && oOverlapPositions[aContext[1] + aContext[2]]),
 	
 		oMenuEl = oMenu.element,
 		nMenuOffsetHeight = oMenuEl.offsetHeight,
@@ -3078,7 +3139,7 @@ getConstrainedY: function (y) {
 
 
 
-	if (bPotentialContextOverlap && oMenu.cfg.getProperty(_PREVENT_CONTEXT_OVERLAP)) {
+	if (oMenu.cfg.getProperty(_PREVENT_CONTEXT_OVERLAP) && bPotentialContextOverlap) {
 
 		if (bCanConstrain) {
 
@@ -3120,6 +3181,25 @@ getConstrainedY: function (y) {
 
 
 /**
+* @method _onHide
+* @description "hide" event handler for the menu.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+*/
+_onHide: function (p_sType, p_aArgs) {
+
+	if (this.cfg.getProperty(_POSITION) === _DYNAMIC) {
+	
+		this.positionOffScreen();
+	
+	}
+
+},
+
+
+/**
 * @method _onShow
 * @description "show" event handler for the menu.
 * @private
@@ -3133,8 +3213,7 @@ _onShow: function (p_sType, p_aArgs) {
         oParentMenu,
 		oElement,
 		nOffsetWidth,
-		sWidth,
-		aAlignment;        
+		sWidth;        
 
 
     function disableAutoSubmenuDisplay(p_oEvent) {
@@ -3216,13 +3295,6 @@ _onShow: function (p_sType, p_aArgs) {
 		
 		}
 
-
-		aAlignment = oParentMenu.cfg.getProperty(_SUBMENU_ALIGNMENT);
-		
-		this.cfg.setProperty(_CONTEXT, [oParent.element, aAlignment[0], aAlignment[1]]);
-		
-		this.align();		
-
     }
 
 },
@@ -3239,8 +3311,10 @@ _onShow: function (p_sType, p_aArgs) {
 _onBeforeHide: function (p_sType, p_aArgs) {
 
     var oActiveItem = this.activeItem,
+        oRoot = this.getRoot(),
         oConfig,
         oSubmenu;
+
 
     if (oActiveItem) {
 
@@ -3258,9 +3332,24 @@ _onBeforeHide: function (p_sType, p_aArgs) {
 
     }
 
-    if (this.getRoot() == this) {
 
-        this.blur();
+	/*
+		Focus can get lost in IE when the mouse is moving from a submenu back to its parent Menu.  
+		For this reason, it is necessary to maintain the focused state in a private property 
+		so that the _onMouseOver event handler is able to determined whether or not to set focus
+		to MenuItems as the user is moving the mouse.
+	*/ 
+
+	if (UA.ie && this.cfg.getProperty(_POSITION) === _DYNAMIC && this.parent) {
+
+		oRoot._hasFocus = this.hasFocus();
+	
+	}
+
+
+    if (oRoot == this) {
+
+        oRoot.blur();
     
     }
 
@@ -4754,6 +4843,8 @@ clearActiveItem: function (p_bBlur) {
         if (p_bBlur) {
 
             oActiveItem.blur();
+            
+            this.getRoot()._hasFocus = true;
         
         }
 
@@ -4761,13 +4852,14 @@ clearActiveItem: function (p_bBlur) {
 
         oSubmenu = oConfig.getProperty(_SUBMENU);
 
+
         if (oSubmenu) {
 
             oSubmenu.hide();
 
         }
 
-        this.activeItem = null;            
+        this.activeItem = null;  
 
     }
 
@@ -5345,6 +5437,21 @@ initDefaultConfig: function () {
             handler: this.configShadow,
             value: SHADOW_CONFIG.value, 
             validator: SHADOW_CONFIG.validator
+        }
+    );
+
+
+    /**
+    * @config keepopen
+    * @description Boolean indicating if the menu should remain open when clicked.
+    * @default flase
+    * @type Boolean
+    */
+    oConfig.addProperty(
+        KEEP_OPEN_CONFIG.key, 
+        { 
+            value: KEEP_OPEN_CONFIG.value, 
+            validator: KEEP_OPEN_CONFIG.validator
         }
     );
 
