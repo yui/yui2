@@ -188,8 +188,7 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute height
-    * @description Table height for scrollable tables. Note: When setting width
-    * and height at runtime, please set height first.    
+    * @description Table body height for scrollable tables, not including headers.
     * @type String
     */
     this.setAttributeConfig("height", {
