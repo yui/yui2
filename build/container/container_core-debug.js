@@ -684,7 +684,6 @@
     YAHOO.lang.augmentProto(Config, YAHOO.util.EventProvider);
 
 }());
-
 (function () {
 
     /**
@@ -1824,7 +1823,6 @@
     YAHOO.lang.augmentProto(Module, YAHOO.util.EventProvider);
 
 }());
-
 (function () {
 
     /**
@@ -3498,8 +3496,8 @@
             };
 
 
-            if (oOverlapPositions[(aContext[1] + aContext[2])] && 
-                this.cfg.getProperty("preventcontextoverlap")) {
+            if (this.cfg.getProperty("preventcontextoverlap") && aContext && 
+				oOverlapPositions[(aContext[1] + aContext[2])]) {
 
                 if (bCanConstrain) {
 
@@ -3662,8 +3660,8 @@
             };
 
 
-            if (oOverlapPositions[(aContext[1] + aContext[2])] && 
-                     this.cfg.getProperty("preventcontextoverlap")) {
+            if (this.cfg.getProperty("preventcontextoverlap") && aContext && 
+            	oOverlapPositions[(aContext[1] + aContext[2])]) {
 
                 if (bCanConstrain) {
 
@@ -4033,7 +4031,6 @@
 
     });
 }());
-
 (function () {
 
     /**
@@ -4638,7 +4635,6 @@
         }
     };
 }());
-
 (function () {
 
     /**
@@ -5024,5 +5020,4 @@
     YAHOO.lang.augmentProto(ContainerEffect, YAHOO.util.EventProvider);
 
 })();
-
 YAHOO.register("containercore", YAHOO.widget.Module, {version: "@VERSION@", build: "@BUILD@"});

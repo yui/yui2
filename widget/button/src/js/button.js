@@ -1587,7 +1587,8 @@
 					"brtr": true
 				},
 
-				bPotentialContextOverlap = oOverlapPositions[aMenuAlignment[0] + aMenuAlignment[1]];
+				bPotentialContextOverlap = (aMenuAlignment && 
+					oOverlapPositions[aMenuAlignment[0] + aMenuAlignment[1]]);
 
 
             if (Menu && oMenu && (oMenu instanceof Menu)) {
@@ -1754,8 +1755,8 @@
 
 
 
-					if (bPotentialContextOverlap && 
-							oMenu.cfg.getProperty("preventcontextoverlap")) {
+					if (oMenu.cfg.getProperty("preventcontextoverlap") && 
+						bPotentialContextOverlap) {
 
 						if (bCanConstrain) {
 		

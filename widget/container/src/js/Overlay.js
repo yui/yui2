@@ -1671,8 +1671,8 @@
             };
 
 
-            if (oOverlapPositions[(aContext[1] + aContext[2])] && 
-                this.cfg.getProperty("preventcontextoverlap")) {
+            if (this.cfg.getProperty("preventcontextoverlap") && aContext && 
+				oOverlapPositions[(aContext[1] + aContext[2])]) {
 
                 if (bCanConstrain) {
 
@@ -1835,8 +1835,8 @@
             };
 
 
-            if (oOverlapPositions[(aContext[1] + aContext[2])] && 
-                     this.cfg.getProperty("preventcontextoverlap")) {
+            if (this.cfg.getProperty("preventcontextoverlap") && aContext && 
+            	oOverlapPositions[(aContext[1] + aContext[2])]) {
 
                 if (bCanConstrain) {
 

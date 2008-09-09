@@ -781,7 +781,7 @@
         * @type String
         */
         SPLITBUTTON_OPTION_VISIBLE_TITLE: 
-            "Menu expanded.  Press Esc or Ctrl + Shift + M to hide the menu.",
+            "Menu expanded.  Press Esc to hide the menu.",
         
         
         /**
@@ -1043,8 +1043,13 @@
                                 this.CHECKBOX_DEFAULT_TITLE;
                 
                 }
+
+
+        		if (!this._hasDefaultTitle) {
         
-                this.set("title", sTitle);
+                	this.set("title", sTitle);
+                
+                }
         
             }
         
@@ -1262,15 +1267,12 @@
 			
 				}
 				else if (Menu && Lang.isArray(p_oMenu)) {
+
+					oMenu = new Menu(Dom.generateId(), { lazyload: bLazyLoad, itemdata: p_oMenu });
+						
+					this._menu = oMenu;
 			
-					this.on("appendTo", function () {
-			
-						oMenu = new Menu(Dom.generateId(), { lazyload: bLazyLoad, 
-							itemdata: p_oMenu });
-			
-						initMenu.call(this);
-			
-					});
+					this.on("appendTo", initMenu);
 			
 				}
 				else if (Lang.isString(p_oMenu)) {
@@ -1585,7 +1587,8 @@
 					"brtr": true
 				},
 
-				bPotentialContextOverlap = oOverlapPositions[aMenuAlignment[0] + aMenuAlignment[1]];
+				bPotentialContextOverlap = (aMenuAlignment && 
+					oOverlapPositions[aMenuAlignment[0] + aMenuAlignment[1]]);
 
 
             if (Menu && oMenu && (oMenu instanceof Menu)) {
@@ -1752,8 +1755,8 @@
 
 
 
-					if (bPotentialContextOverlap && 
-							oMenu.cfg.getProperty("preventcontextoverlap")) {
+					if (oMenu.cfg.getProperty("preventcontextoverlap") && 
+						bPotentialContextOverlap) {
 
 						if (bCanConstrain) {
 		
@@ -1897,8 +1900,6 @@
         		}
 
                 this.on("mouseout", this._onMouseOut);
-                this.on("mousedown", this._onMouseDown);
-                this.on("mouseup", this._onMouseUp);
         
                 this._hasMouseEventHandlers = true;
         
@@ -2050,7 +2051,8 @@
         */
         _onMouseDown: function (p_oEvent) {
         
-            var sType;
+            var sType,
+            	bReturnVal = true;
         
         
             function onMouseUp() {
@@ -2079,6 +2081,7 @@
                     if (Event.getPageX(p_oEvent) > this._nOptionRegionX) {
                         
                         this.fireEvent("option", p_oEvent);
+						bReturnVal = false;
         
                     }
                     else {
@@ -2126,6 +2129,8 @@
         
             }
             
+            return bReturnVal;
+            
         },
         
         
@@ -2139,7 +2144,8 @@
         _onMouseUp: function (p_oEvent) {
         
             var sType = this.get("type"),
-            	oHideMenuTimer = this._hideMenuTimer;
+            	oHideMenuTimer = this._hideMenuTimer,
+            	bReturnVal = true;
         
         
             if (oHideMenuTimer) {
@@ -2159,11 +2165,20 @@
             this._activationButtonPressed = false;
             
         
-            if (this.get("type") != "menu") {
+            if (sType != "menu") {
         
                 this.removeStateCSSClasses("active");
             
             }
+
+                
+			if (sType == "split" && Event.getPageX(p_oEvent) > this._nOptionRegionX) {
+				
+				bReturnVal = false;
+
+			}
+
+			return bReturnVal;
             
         },
         
@@ -2360,23 +2375,27 @@
         
             case "radio":
             case "checkbox":
+
+				if (!this._hasDefaultTitle) {
     
-                if (this.get("checked")) {
-                    
-                    sTitle = (sType == "radio") ? 
-                                this.RADIO_CHECKED_TITLE : 
-                                this.CHECKBOX_CHECKED_TITLE;
+					if (this.get("checked")) {
+						
+						sTitle = (sType == "radio") ? 
+									this.RADIO_CHECKED_TITLE : 
+									this.CHECKBOX_CHECKED_TITLE;
+					
+					}
+					else {
+					
+						sTitle = (sType == "radio") ? 
+									this.RADIO_DEFAULT_TITLE : 
+									this.CHECKBOX_DEFAULT_TITLE;
+					
+					}
+					
+					this.set("title", sTitle);
                 
                 }
-                else {
-                
-                    sTitle = (sType == "radio") ? 
-                                this.RADIO_DEFAULT_TITLE : 
-                                this.CHECKBOX_DEFAULT_TITLE;
-                
-                }
-                
-                this.set("title", sTitle);
     
                 break;
     
@@ -2446,6 +2465,28 @@
         	return bReturnVal;
         
         },
+        
+        
+        /**
+        * @method _onDblClick
+        * @description "dblclick" event handler for the button.
+        * @protected
+        * @param {Event} p_oEvent Object representing the DOM event object  
+        * passed back by the event utility (YAHOO.util.Event).
+        */
+        _onDblClick: function (p_oEvent) {
+        
+            var bReturnVal = true;
+    
+			if (this.get("type") == "split" && Event.getPageX(p_oEvent) > this._nOptionRegionX) {
+
+				bReturnVal = false;
+			
+			}
+        
+        	return bReturnVal;
+        
+        },        
         
         
         /**
@@ -2894,7 +2935,7 @@
                 bCheckable = (sType == "checkbox" || sType == "radio");
         
         
-                if (bCheckable || (m_oSubmitTrigger == this)) {
+                if ((bCheckable && this.get("checked")) || (m_oSubmitTrigger == this)) {
                 
                     YAHOO.log("Creating hidden field.", "info", this.toString());
         
@@ -3161,6 +3202,12 @@
 
             this._button = oButton;
 
+            /*
+				Capture if the button has a value for the title attribute.  If so, we won't 
+				override it for type of "checkbox" or "radio".
+            */
+            
+            this._hasDefaultTitle = (p_oAttributes.title && p_oAttributes.title.length > 0);
 
             YAHOO.widget.Button.superclass.init.call(this, p_oElement, p_oAttributes);
 
@@ -3211,8 +3258,11 @@
         
             Event.on(this._button, "focus", this._onFocus, null, this);
             this.on("mouseover", this._onMouseOver);
+			this.on("mousedown", this._onMouseDown);
+			this.on("mouseup", this._onMouseUp);
             this.on("click", this._onClick);
-            
+            this.on("dblclick", this._onDblClick);
+
             if (oLabel) {
             
 				this.on("appendTo", setLabel);     

@@ -3816,7 +3816,7 @@ getConstrainedY: function (y) {
 
 		},
 
-		bPotentialContextOverlap = oOverlapPositions[aContext[1] + aContext[2]],
+		bPotentialContextOverlap = (aContext && oOverlapPositions[aContext[1] + aContext[2]]),
 	
 		oMenuEl = oMenu.element,
 		nMenuOffsetHeight = oMenuEl.offsetHeight,
@@ -3994,7 +3994,7 @@ getConstrainedY: function (y) {
 
 
 
-	if (bPotentialContextOverlap && oMenu.cfg.getProperty(_PREVENT_CONTEXT_OVERLAP)) {
+	if (oMenu.cfg.getProperty(_PREVENT_CONTEXT_OVERLAP) && bPotentialContextOverlap) {
 
 		if (bCanConstrain) {
 
