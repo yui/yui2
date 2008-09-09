@@ -902,7 +902,7 @@ _syncScrollOverhang : function() {
     }
     
     // Set Column header overhang
-    var aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1],
+    var aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1] || [],
         len = aLastHeaders.length,
         prefix = this._sId+"-fixedth-";
     elThead.style.display = "none";

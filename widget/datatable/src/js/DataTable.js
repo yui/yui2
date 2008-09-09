@@ -2373,12 +2373,12 @@ _initTheadEl : function(elTable) {
         }
 
         // Set FIRST/LAST on edge TH elements using the values in ColumnSet headers array
-        var aFirstHeaders = oColumnSet.headers[0];
-        var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
+        var aFirstHeaders = oColumnSet.headers[0] || [];
         for(i=0; i<aFirstHeaders.length; i++) {
             //TODO: A better way to get th cell
             Dom.addClass(Dom.get(this._sId+"-th-"+aFirstHeaders[i]), DT.CLASS_FIRST);
         }
+        var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1] || [];
         for(i=0; i<aLastHeaders.length; i++) {
             //TODO: A better way to get th cell
             Dom.addClass(Dom.get(this._sId+"-th-"+aLastHeaders[i]), DT.CLASS_LAST);
