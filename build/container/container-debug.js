@@ -7257,7 +7257,8 @@
         * this will usually equal the owner.
         */
         configClose: function (type, args, obj) {
-            var val = args[0];
+            var val = args[0],
+                strings = this.cfg.getProperty("strings");
 
             function doCancel(e, obj) {
                 obj.cancel();
@@ -7268,7 +7269,7 @@
                     this.close = document.createElement("div");
                     Dom.addClass(this.close, "container-close");
         
-                    this.close.innerHTML = "&#160;";
+                    this.close.innerHTML = (strings && strings.close) ? strings.close : "&#160;";
                     this.innerElement.appendChild(this.close);
                     Event.on(this.close, "click", doCancel, this);
                 } else {
