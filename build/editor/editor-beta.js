@@ -2273,6 +2273,10 @@ var Dom = YAHOO.util.Dom,
         * @type {Object/Mixed}
         */
         _keyMap: {
+            SELECT_ALL: {
+                key: 65, //A key
+                mods: ['ctrl']
+            },
             CLOSE_WINDOW: {
                 key: 87, //W key
                 mods: ['shift', 'ctrl']
@@ -2354,7 +2358,7 @@ var Dom = YAHOO.util.Dom,
         * @description The default CSS used in the config for 'css'. This way you can add to the config like this: { css: YAHOO.widget.SimpleEditor.prototype._defaultCSS + 'ADD MYY CSS HERE' }
         * @type String
         */
-        _defaultCSS: 'html { height: 95%; } body { padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a { color: blue; text-decoration: underline; cursor: text; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; } body.ptags.webkit div { margin: 11px 0; }',
+        _defaultCSS: 'html { height: 95%; } body { padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a, a:visited, a:hover { color: blue !important; text-decoration: underline !important; cursor: text !important; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; } body.ptags.webkit div { margin: 11px 0; }',
         /**
         * @property _defaultToolbar
         * @private
@@ -2629,7 +2633,7 @@ var Dom = YAHOO.util.Dom,
             }
             ifrmDom.setAttribute('src', isrc);
             var ifrm = new YAHOO.util.Element(ifrmDom);
-            //ifrm.setStyle('zIndex', '-1');
+            ifrm.setStyle('visibility', 'hidden');
             return ifrm;
         },
         /**
@@ -2981,6 +2985,7 @@ var Dom = YAHOO.util.Dom,
                 this._initEditorEvents();
                 this.toolbar.set('disabled', false);
             }
+
             this.fireEvent('editorContentLoaded', { type: 'editorLoaded', target: this });
             if (this.get('dompath')) {
                 var self = this;
@@ -3093,6 +3098,7 @@ var Dom = YAHOO.util.Dom,
                 //This keeps Firefox 2 from writing the iframe to history preserving the back buttons functionality
                 this.get('iframe').get('element').src = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
             }
+            this.get('iframe').setStyle('visibility', '');
             if (check) {
                 this._checkLoaded();
             }            
@@ -3172,6 +3178,7 @@ var Dom = YAHOO.util.Dom,
                     //check = false;
                 }
                 if (this.browser.gecko) {
+                    /*
                     if (range.startContainer) {
                         check = false;
                         if (range.startContainer.nodeType === 3) {
@@ -3185,6 +3192,7 @@ var Dom = YAHOO.util.Dom,
                             this.currentEvent = null;
                         }
                     }
+                    */
                 }
                 if (check) {
                     if (sel.anchorNode && (sel.anchorNode.nodeType == 3)) {
@@ -3220,9 +3228,9 @@ var Dom = YAHOO.util.Dom,
                         case 'click':
                         case 'mousedown':
                         case 'mouseup':
-                            //Removed this in 2.6.0
-                            //TODO is this still needed?
-                            //elm = Event.getTarget(this.currentEvent);
+                            if (this.browser.webkit) {
+                                elm = Event.getTarget(this.currentEvent);
+                            }
                             break;
                         default:
                             //Do nothing
@@ -3234,6 +3242,8 @@ var Dom = YAHOO.util.Dom,
                 //TODO is this still needed?
                 //elm = this.currentElement[0];
             }
+
+
             if (this.browser.opera || this.browser.webkit) {
                 if (this.currentEvent && !elm) {
                     elm = YAHOO.util.Event.getTarget(this.currentEvent);
@@ -3612,6 +3622,11 @@ var Dom = YAHOO.util.Dom,
             }
             this._setCurrentEvent(ev);
             switch (ev.keyCode) {
+                case this._keyMap.SELECT_ALL.key:
+                    if (this._checkKey(this._keyMap.SELECT_ALL, ev)) {
+                        this.nodeChange();
+                    }
+                    break;
                 case 37: //Left Arrow
                 case 38: //Up Arrow
                 case 39: //Right Arrow
@@ -5036,9 +5051,10 @@ var Dom = YAHOO.util.Dom,
                     img = YAHOO.util.Dom.getStyle(div, 'background-image');
                     img = img.replace('url(', '').replace(')', '').replace(/"/g, '');
                     //Adobe AIR Code
-                    img = img.replace('app:/', '');                    
+                    img = img.replace('app:/', '');             
                     this.set('blankimage', img);
                     this._blankImageLoaded = true;
+                    div.parentNode.removeChild(div);
                     YAHOO.widget.EditorInfo.blankImage = img;
                 }
             } else {
@@ -6590,6 +6606,15 @@ var Dom = YAHOO.util.Dom,
         * @return {Boolean}
         */
         destroy: function() {
+            if (this.resize) {
+                this.resize.destroy();
+            }
+            if (this.dd) {
+                this.dd.unreg();
+            }
+            if (this.get('panel')) {
+                this.get('panel').destroy();
+            }
             this.saveHTML();
             this.toolbar.destroy();
             this.setStyle('visibility', 'visible');
@@ -6600,12 +6625,6 @@ var Dom = YAHOO.util.Dom,
             this.get('element_cont').get('parentNode').replaceChild(textArea, this.get('element_cont').get('element'));
             this.get('element_cont').get('element').innerHTML = '';
             this.set('handleSubmit', false); //Remove the submit handler
-            //Brutal Object Destroy
-            for (var i in this) {
-                if (Lang.hasOwnProperty(this, i)) {
-                    this[i] = null;
-                }
-            }
             return true;
         },        
         /**
@@ -7224,15 +7243,14 @@ var Dom = YAHOO.util.Dom,
             };
 
             YAHOO.widget.Editor.superclass.init.call(this, p_oElement, p_oAttributes);
-
-            this.on('afterRender', function() {
-                var self = this;
-                //Render the panel in another thread and delay it a little..
-                window.setTimeout(function() {
-                    self._renderPanel.call(self);
-                }, 800);
-            }, this, true);
-            
+        },
+        _render: function() {
+            YAHOO.widget.Editor.superclass._render.apply(this, arguments);
+            var self = this;
+            //Render the panel in another thread and delay it a little..
+            window.setTimeout(function() {
+                self._renderPanel.call(self);
+            }, 800);
         },
         /**
         * @method initAttributes
@@ -8626,6 +8644,48 @@ var Dom = YAHOO.util.Dom,
                 value = false;
             }
             return [exec, 'outdent', value];
+        },
+        /**
+        * @method cmd_justify
+        * @param dir The direction to justify
+        * @description This is a factory method for the justify family of commands.
+        */
+        cmd_justify: function(dir) {
+            if (this.browser.ie) {
+                if (this._hasSelection()) {
+                    this._createCurrentElement('span');
+                    this._swapEl(this.currentElement[0], 'div', function(el) {
+                        el.style.textAlign = dir;
+                    });
+                    
+                    return [false];
+                }
+            }
+            return [true, 'justify' + dir, ''];
+        },
+        /**
+        * @method cmd_justifycenter
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('justifycenter') is used.
+        */
+        cmd_justifycenter: function() {
+            return [this.cmd_justify('center')];
+        },
+        /**
+        * @method cmd_justifyleft
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('justifyleft') is used.
+        */
+        cmd_justifyleft: function() {
+            return [this.cmd_justify('left')];
+        },
+        /**
+        * @method cmd_justifyright
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('justifyright') is used.
+        */
+        cmd_justifyright: function() {
+            return [this.cmd_justify('right')];
         },
         /* }}}*/        
         /**

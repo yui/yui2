@@ -77,7 +77,7 @@ var Dom = YAHOO.util.Dom,
             var len = this._undoCache.length,
             tmp = [];
             if (len >= this.get('maxUndo')) {
-                YAHOO.log('Undo cache too large (' + len + '), pruning..', 'info', 'SimpleEditor');
+                //YAHOO.log('Undo cache too large (' + len + '), pruning..', 'info', 'SimpleEditor');
                 for (var i = (len - this.get('maxUndo')); i < len; i++) {
                     tmp.push(this._undoCache[i]);
                 }
@@ -121,11 +121,11 @@ var Dom = YAHOO.util.Dom,
             var last = this._undoCache[this._undoCache.length - 1];
             if (last) {
                 if (str !== last) {
-                    YAHOO.log('Storing Undo', 'info', 'SimpleEditor');
+                    //YAHOO.log('Storing Undo', 'info', 'SimpleEditor');
                     this._putUndo(str);
                 }
             } else {
-                YAHOO.log('Storing Undo', 'info', 'SimpleEditor');
+                //YAHOO.log('Storing Undo', 'info', 'SimpleEditor');
                 this._putUndo(str);
             }
             this._undoLevel = this._undoCache.length;
@@ -409,15 +409,14 @@ var Dom = YAHOO.util.Dom,
             };
 
             YAHOO.widget.Editor.superclass.init.call(this, p_oElement, p_oAttributes);
-
-            this.on('afterRender', function() {
-                var self = this;
-                //Render the panel in another thread and delay it a little..
-                window.setTimeout(function() {
-                    self._renderPanel.call(self);
-                }, 800);
-            }, this, true);
-            
+        },
+        _render: function() {
+            YAHOO.widget.Editor.superclass._render.apply(this, arguments);
+            var self = this;
+            //Render the panel in another thread and delay it a little..
+            window.setTimeout(function() {
+                self._renderPanel.call(self);
+            }, 800);
         },
         /**
         * @method initAttributes
@@ -1828,6 +1827,48 @@ var Dom = YAHOO.util.Dom,
                 value = false;
             }
             return [exec, 'outdent', value];
+        },
+        /**
+        * @method cmd_justify
+        * @param dir The direction to justify
+        * @description This is a factory method for the justify family of commands.
+        */
+        cmd_justify: function(dir) {
+            if (this.browser.ie) {
+                if (this._hasSelection()) {
+                    this._createCurrentElement('span');
+                    this._swapEl(this.currentElement[0], 'div', function(el) {
+                        el.style.textAlign = dir;
+                    });
+                    
+                    return [false];
+                }
+            }
+            return [true, 'justify' + dir, ''];
+        },
+        /**
+        * @method cmd_justifycenter
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('justifycenter') is used.
+        */
+        cmd_justifycenter: function() {
+            return [this.cmd_justify('center')];
+        },
+        /**
+        * @method cmd_justifyleft
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('justifyleft') is used.
+        */
+        cmd_justifyleft: function() {
+            return [this.cmd_justify('left')];
+        },
+        /**
+        * @method cmd_justifyright
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('justifyright') is used.
+        */
+        cmd_justifyright: function() {
+            return [this.cmd_justify('right')];
         },
         /* }}}*/        
         /**
