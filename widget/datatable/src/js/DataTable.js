@@ -5265,6 +5265,7 @@ getColumnSortDir : function(oColumn) {
  * @return {Boolean} Return true to continue sorting Column.
  */
 doBeforeSortColumn : function(oColumn, sSortDir) {
+    this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
     return true;
 },
 
@@ -5322,7 +5323,6 @@ sortColumn : function(oColumn, sDir) {
                     argument : oState, // Pass along the new state to the callback
                     scope : this
                 };
-                this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
                 this._oDataSource.sendRequest(request, callback);            
             }
             // Client-side sort
@@ -7123,6 +7123,19 @@ renderPaginator : function () {
 },
 
 /**
+ * Overridable method gives implementers a hook to show loading message before
+ * changing Paginator value.
+ *
+ * @method doBeforePaginatorChange
+ * @param oPaginatorState {Object} An object literal describing the proposed pagination state.
+ * @return {Boolean} Return true to continue changing Paginator value.
+ */
+doBeforePaginatorChange : function(oPaginatorState) {
+    this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
+    return true;
+},
+
+/**
  * Responds to new Pagination states. By default, updates the UI to reflect the
  * new state. If "dynamicData" is true, sends a request to the DataSource
  * for data for the given state, using the request from "generateRequest". 
@@ -7131,35 +7144,41 @@ renderPaginator : function () {
  * @param oPaginatorState {Object} An object literal describing the proposed pagination state.
  */
 onPaginatorChangeRequest : function (oPaginatorState) {
-    // Server-side pagination
-    if(this.get("dynamicData")) {
-        // Get the current state
-        var oState = this.getState();
-        
-        // Update pagination values
-        oState.pagination = oPaginatorState;
-
-        // Get the request for the new state
-        var request = this.get("generateRequest")(oState, this);
-        
-        // Get the new data from the server
-        var callback = {
-            success : this.onDataReturnSetRows,
-            failure : this.onDataReturnSetRows,
-            argument : oState, // Pass along the new state to the callback
-            scope : this
-        };
-        this._oDataSource.sendRequest(request, callback);
+    var ok = this.doBeforePaginatorChange(oPaginatorState);
+    if(ok) {
+        // Server-side pagination
+        if(this.get("dynamicData")) {
+            // Get the current state
+            var oState = this.getState();
+            
+            // Update pagination values
+            oState.pagination = oPaginatorState;
+    
+            // Get the request for the new state
+            var request = this.get("generateRequest")(oState, this);
+            
+            // Get the new data from the server
+            var callback = {
+                success : this.onDataReturnSetRows,
+                failure : this.onDataReturnSetRows,
+                argument : oState, // Pass along the new state to the callback
+                scope : this
+            };
+            this._oDataSource.sendRequest(request, callback);
+        }
+        // Client-side pagination
+        else {
+            // Set the core pagination values silently (the second param)
+            // to avoid looping back through the changeRequest mechanism
+            oPaginatorState.paginator.setStartIndex(oPaginatorState.recordOffset,true);
+            oPaginatorState.paginator.setRowsPerPage(oPaginatorState.rowsPerPage,true);
+    
+            // Update the UI
+            this.render();
+        }
     }
-    // Client-side pagination
     else {
-        // Set the core pagination values silently (the second param)
-        // to avoid looping back through the changeRequest mechanism
-        oPaginatorState.paginator.setStartIndex(oPaginatorState.recordOffset,true);
-        oPaginatorState.paginator.setRowsPerPage(oPaginatorState.rowsPerPage,true);
-
-        // Update the UI
-        this.render();
+        YAHOO.log("Could not change Paginator value \"" + oPaginatorState + "\"", "warn", this.toString());
     }
 },
 
