@@ -203,6 +203,9 @@ YAHOO.widget.ColumnSet.prototype = {
                         if(oColumn.sortable && (child.sortable === undefined)) {
                             child.sortable = oColumn.sortable;
                         }
+                        if(oColumn.hidden) {
+                            child.hidden = true;
+                        }
                         if(oColumn.width && (child.width === undefined)) {
                             child.width = oColumn.width;
                         }
