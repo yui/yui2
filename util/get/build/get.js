@@ -179,6 +179,20 @@ YAHOO.util.Get = function() {
     };
 
     /**
+     * Timeout detected
+     * @method _timeout
+     * @param id {string} the id of the request
+     * @private
+     */
+    var _timeout = function(id) {
+        var q = queues[id];
+        if (q.onTimeout) {
+            var sc=q.context || q;
+            q.onTimeout.call(sc, _returnData(q));
+        }
+    };
+
+    /**
      * Loads the next item for a given request
      * @method _next
      * @param id {string} the id of the request
@@ -187,6 +201,11 @@ YAHOO.util.Get = function() {
      */
     var _next = function(id, loaded) {
         var q = queues[id];
+
+        if (q.timer) {
+            // Y.log('cancel timer');
+            q.timer.cancel();
+        }
 
         if (q.aborted) {
             var msg = "transaction " + id + " was aborted";
@@ -243,6 +262,11 @@ YAHOO.util.Get = function() {
             return _next(id);
         }
 
+
+        if (q.timeout) {
+            // Y.log('create timer');
+            q.timer = lang.later(q.timeout, q, _timeout, id);
+        }
 
         if (q.type === "script") {
             n = _scriptNode(url, w, q.charset);
@@ -562,6 +586,25 @@ YAHOO.util.Get = function() {
          * <dt>
          * </dl>
          * </dd>
+         * <dt>onTimeout</dt>
+         * <dd>
+         * callback to execute when a timeout occurs.
+         * The callback receives an object back with the following
+         * data:
+         * <dl>
+         * <dt>win</dt>
+         * <dd>the window the script(s) were inserted into</dd>
+         * <dt>data</dt>
+         * <dd>the data object passed in when the request was made</dd>
+         * <dt>nodes</dt>
+         * <dd>An array containing references to the nodes that were
+         * inserted</dd>
+         * <dt>purge</dt>
+         * <dd>A function that, when executed, will remove the nodes
+         * that were inserted</dd>
+         * <dt>
+         * </dl>
+         * </dd>
          * <dt>scope</dt>
          * <dd>the execution context for the callbacks</dd>
          * <dt>win</dt>
@@ -591,6 +634,8 @@ YAHOO.util.Get = function() {
          * </dl>
          * <dt>charset</dt>
          * <dd>Node charset, default utf-8</dd>
+         * <dt>timeout</dt>
+         * <dd>Number of milliseconds to wait before aborting and firing the timeout event</dd>
          * <pre>
          * // assumes yahoo, dom, and event are already on the page
          * &nbsp;&nbsp;YAHOO.util.Get.script(
@@ -605,6 +650,7 @@ YAHOO.util.Get = function() {
          * &nbsp;&nbsp;&nbsp;&nbsp;onFailure: function(o) &#123;
          * &nbsp;&nbsp;&nbsp;&nbsp;&#125;,
          * &nbsp;&nbsp;&nbsp;&nbsp;data: "foo",
+         * &nbsp;&nbsp;&nbsp;&nbsp;timeout: 10000, // 10 second timeout
          * &nbsp;&nbsp;&nbsp;&nbsp;scope: YAHOO,
          * &nbsp;&nbsp;&nbsp;&nbsp;// win: otherframe // target another window/frame
          * &nbsp;&nbsp;&nbsp;&nbsp;autopurge: true // allow the utility to choose when to remove the nodes

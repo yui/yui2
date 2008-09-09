@@ -121,7 +121,7 @@ YAHOO.util.Event.on(window, "load", function() {
     YAHOO.log("css2 executed");
 
     var o = YAHOO.util.Get.script([
-            "../../build/yahoo-dom-event/yahoo-dom-event.js",
+            "../../build/ahoo-dom-event/yahoo-dom-event.js",
             //"../../build/yahoo/yahoo.js",
             //"../../build/dom/dom.js",
             //"../../build/event/event.js",
@@ -150,7 +150,12 @@ YAHOO.util.Event.on(window, "load", function() {
             varName: ["YAHOO.util.Event", "YAHOO.util.DDProxy"],
             scope: YAHOO,
             charset: "ascii",
-            autopurge: true
+            autopurge: true,
+            onTimeout: function(o) {
+                YAHOO.log('Timeout');
+            },
+            timeout: 2000
+
             //,sandbox: {
                 //reference: "YAHOO"
             //}

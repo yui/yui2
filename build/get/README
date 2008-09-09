@@ -2,6 +2,7 @@ get - Release Notes
 
 2.6.0
     * Fixed IE memory leak
+    * Added timeout support
 
 2.5.2
     * No change
