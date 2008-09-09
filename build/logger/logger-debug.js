@@ -453,9 +453,11 @@ YAHOO.widget.LogReader.prototype = {
      */
     pause : function() {
         this.isPaused = true;
-        this._btnPause.value = "Resume";
         this._timeout = null;
         this.logReaderEnabled = false;
+        if (this._btnPause) {
+            this._btnPause.value = "Resume";
+        }
     },
 
     /**
@@ -466,9 +468,11 @@ YAHOO.widget.LogReader.prototype = {
      */
     resume : function() {
         this.isPaused = false;
-        this._btnPause.value = "Pause";
         this.logReaderEnabled = true;
         this._printBuffer();
+        if (this._btnPause) {
+            this._btnPause.value = "Pause";
+        }
     },
 
     /**

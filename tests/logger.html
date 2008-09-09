@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>YUI Logger Tests</title>
-<link type="text/css" rel="stylesheet" href="../build/logger/assets/logger.css" />
+<link type="text/css" rel="stylesheet" href="../build/logger/assets/skins/sam/logger.css" />
 <link type="text/css" rel="stylesheet" href="../build/yuitest/assets/testlogger.css" />
 
 <script type="text/javascript" src="../build/yahoo/yahoo-min.js"></script>
@@ -10,7 +10,7 @@
 <script type="text/javascript" src="../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest.js"></script>
 </head>
-<body>
+<body class="yui-skin-sam">
 <h1>Logger Tests</h1>
 <p><input type="button" value="Run Tests" id="btnRun" disabled="true" /></p>
 
@@ -123,6 +123,36 @@
         loggersuite.add(loggerTest);
         loggersuite.add(logreaderTest);
         loggersuite.add(logwriterTest);
+        loggersuite.add(new TestCase({
+            name : "LogReader test cont.",
+            setUp : function () {
+                this.full = new LogReader();
+                this.noFooter = new LogReader(null, {
+                    footerEnabled: false
+                });
+            },
+            tearDown: function () {
+                delete this.full;
+                delete this.noFooter;
+            },
+            testPauseResume : function () {
+                try {
+                    this.full.pause();
+                    this.full.resume();
+                }
+                catch (e) {
+                    Assert.fail(e);
+                }
+
+                try {
+                    this.noFooter.pause();
+                    this.noFooter.resume();
+                }
+                catch (e) {
+                    Assert.fail(e);
+                }
+            }
+        }));
         
         TestRunner.add(loggersuite);
 
