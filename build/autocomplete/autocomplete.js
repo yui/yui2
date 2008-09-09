@@ -481,9 +481,9 @@ YAHOO.widget.AutoComplete.prototype.suppressInputUpdate = false;
  *
  * @property backwardCompatMode
  * @type Boolean
- * @default false
+ * @default true
  */
-YAHOO.widget.AutoComplete.prototype.backwardCompatMode = false;
+YAHOO.widget.AutoComplete.prototype.backwardCompatMode = true;
 
 /////////////////////////////////////////////////////////////////////////////
 //
