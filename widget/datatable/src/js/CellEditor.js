@@ -427,7 +427,7 @@ render : function() {
     
     // Handle ESC key
     Ev.addListener(elContainer, "keydown", function(e, oSelf) {
-        // ESC hides Cell Editor
+        // ESC cancels Cell Editor
         if((e.keyCode == 27)) {
             oSelf.cancel();
             ///oSelf.focusTbodyEl();
@@ -660,6 +660,16 @@ renderForm : function() {
 },
 
 /**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    // To be implemented by subclass
+},
+
+/**
  * Resets CellEditor UI to initial state.
  *
  * @method resetForm
@@ -854,10 +864,29 @@ renderForm : function() {
             allCheckboxes[allCheckboxes.length] = this.getContainerEl().childNodes[j*2];
         }
         this.checkboxes = allCheckboxes;
+
+        if(this.disableBtns) {
+            this.handleDisabledBtns();
+        }
     }
     else {
         YAHOO.log("Could not find checkboxOptions", "error", this.toString());
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.getContainerEl(), "click", function(v){
+        if(Ev.getTarget(v).tagName.toLowerCase() === "input") {
+            // Save on blur
+            this.save();
+        }
+    }, this, true);
 },
 
 /**
@@ -993,19 +1022,27 @@ renderForm : function() {
         
         this.calendar = calendar;
 
-        /*TODO save on select
         if(this.disableBtns) {
-            Ev.addListener(elDropdown, "blur", function(v){
-                // Save on "blur"
-                this.save();
-            }, this, true);        
+            this.handleDisabledBtns();
         }
-        */
     }
     else {
         YAHOO.log("Could not find YUI Calendar", "error", this.toString());
     }
     
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    this.calendar.selectEvent.subscribe(function(v){
+        // Save on select
+        this.save();
+    }, this, true);
 },
 
 /**
@@ -1126,13 +1163,23 @@ renderForm : function() {
             elOption = elDropdown.appendChild(elOption);
         }
         
-        // Save on blur
         if(this.disableBtns) {
-            Ev.addListener(elDropdown, "change", function(v){
-                this.save();
-            }, this, true);        
+            this.handleDisabledBtns();
         }
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.dropdown, "change", function(v){
+        // Save on change
+        this.save();
+    }, this, true);        
 },
 
 /**
@@ -1238,6 +1285,7 @@ radioOptions : null,
 renderForm : function() {
     if(lang.isArray(this.radioOptions)) {
         var radioOption, radioValue, radioId, elLabel;
+        
         // Create the radio buttons in an IE-friendly way
         for(var i=0, len=this.radioOptions.length; i<len; i++) {
             radioOption = this.radioOptions[i];
@@ -1265,26 +1313,28 @@ renderForm : function() {
         }
         this.radios = allRadios;
 
-        // Save on enter, save on click
         if(this.disableBtns) {
-            // Bug: 1802582 Set up a listener on each textbox to track on keypress
-            // since SF/OP can't preventDefault on keydown
-            //Ev.addListener(this.getContainerEl(), "keypress", function(v){
-            //    if((v.keyCode === 13)) {
-            //        this.save();
-            //    }
-            //}, this, true);
-            
-            Ev.addListener(this.getContainerEl(), "click", function(v){
-                if(Ev.getTarget(v).tagName.toLowerCase() === "input") {
-                    this.save();
-                }
-            }, this, true);
+            this.handleDisabledBtns();
         }
     }
     else {
         YAHOO.log("Could not find radioOptions", "error", this.toString());
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.getContainerEl(), "click", function(v){
+        if(Ev.getTarget(v).tagName.toLowerCase() === "input") {
+            // Save on blur
+            this.save();
+        }
+    }, this, true);
 },
 
 /**
@@ -1393,13 +1443,22 @@ renderForm : function() {
     var elTextarea = this.getContainerEl().appendChild(document.createElement("textarea"));
     this.textarea = elTextarea;
 
-    // Save on blur
     if(this.disableBtns) {
-        Ev.addListener(elTextarea, "blur", function(v){
-            // Save on "blur"
-            this.save();
-        }, this, true);        
+        this.handleDisabledBtns();
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.textarea, "blur", function(v){
+        // Save on blur
+        this.save();
+    }, this, true);        
 },
 
 /**
@@ -1514,7 +1573,7 @@ renderForm : function() {
     elTextbox.type = "text";
     this.textbox = elTextbox;
 
-    // Save on enter
+    // Save on enter by default
     // Bug: 1802582 Set up a listener on each textbox to track on keypress
     // since SF/OP can't preventDefault on keydown
     Ev.addListener(elTextbox, "keypress", function(v){
@@ -1525,12 +1584,22 @@ renderForm : function() {
         }
     }, this, true);
 
-    // Save on blur
     if(this.disableBtns) {
-        Ev.addListener(elTextbox, "blur", function(v){
-            this.save();
-        }, this, true);
+        this.handleDisabledBtns();
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.textbox, "blur", function(v){
+        // Save on blur
+        this.save();
+    }, this, true);
 },
 
 /**
