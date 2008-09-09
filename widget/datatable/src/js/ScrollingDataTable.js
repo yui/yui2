@@ -363,6 +363,28 @@ _initContainerEl : function(elContainer) {
 },
 
 /**
+ * Creates HTML markup CAPTION element.
+ *
+ * @method _initCaptionEl
+ * @param sCaption {String} Text for caption.
+ * @private
+ */
+_initCaptionEl : function(sCaption) {
+    // Not yet supported
+    /*if(this._elHdTable && sCaption) {
+        // Create CAPTION element
+        if(!this._elCaption) { 
+            this._elCaption = this._elHdTable.createCaption();
+        }
+        // Set CAPTION value
+        this._elCaption.innerHTML = sCaption;
+    }
+    else if(this._elCaption) {
+        this._elCaption.parentNode.removeChild(this._elCaption);
+    }*/
+},
+
+/**
  * Destroy's the DataTable head TABLE element, if available.
  *
  * @method _destroyHdTableEl

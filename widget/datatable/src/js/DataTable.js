@@ -1266,24 +1266,15 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute caption
-    * @description Value for the CAPTION element.
+    * @description Value for the CAPTION element. NB: Not supported in
+    * ScrollingDataTable.    
     * @type String
     */
     this.setAttributeConfig("caption", {
         value: null,
         validator: lang.isString,
         method: function(sCaption) {
-            if(this._elTable && sCaption) {
-                // Create CAPTION element
-                if(!this._elCaption) { 
-                    this._elCaption = this._elTable.createCaption();
-                }
-                // Set CAPTION value
-                this._elCaption.innerHTML = sCaption;
-            }
-            else if(this._elCaption) {
-                this._elCaption.parentNode.removeChild(this._elCaption);
-            }
+            this._initCaptionEl(sCaption);
         }
     });
 
@@ -2160,6 +2151,27 @@ _destroyTableEl : function() {
 },
 
 /**
+ * Creates HTML markup CAPTION element.
+ *
+ * @method _initCaptionEl
+ * @param sCaption {String} Text for caption.
+ * @private
+ */
+_initCaptionEl : function(sCaption) {
+    if(this._elTable && sCaption) {
+        // Create CAPTION element
+        if(!this._elCaption) { 
+            this._elCaption = this._elTable.createCaption();
+        }
+        // Set CAPTION value
+        this._elCaption.innerHTML = sCaption;
+    }
+    else if(this._elCaption) {
+        this._elCaption.parentNode.removeChild(this._elCaption);
+    }
+},
+
+/**
  * Creates HTML markup for TABLE, COLGROUP, THEAD and TBODY elements in outer
  * container element.
  *
@@ -2180,11 +2192,7 @@ _initTableEl : function(elContainer) {
         
         // Create CAPTION element
         if(this.get("caption")) {
-            if(!this._elCaption) { 
-                this._elCaption = this._elTable.createCaption();
-            }
-            // Set CAPTION value
-            this._elCaption.innerHTML = this.get("caption");
+            this._initCaptionEl(this.get("caption"));
         }
     } 
 },
