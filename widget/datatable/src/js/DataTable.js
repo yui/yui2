@@ -1887,7 +1887,8 @@ _repaintGecko : (ua.gecko) ?
 _repaintOpera : (ua.opera) ? 
     function() {
         if(ua.opera) {
-            document.documentElement.style += '';
+            document.documentElement.className += " ";
+            document.documentElement.className.trim();
         }
     } : function() {} ,
 
