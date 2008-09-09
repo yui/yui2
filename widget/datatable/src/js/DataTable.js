@@ -6885,7 +6885,7 @@ formatCell : function(elCell, oRecord, oColumn) {
             elCell.innerHTML = oData === undefined ||
                                oData === null ||
                                (typeof oData === 'number' && isNaN(oData)) ?
-                                "" : oData.toString();
+                                "&#160;" : oData.toString();
         }
 
         this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:oColumn.key, el:elCell});
