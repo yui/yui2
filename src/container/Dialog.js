@@ -390,9 +390,10 @@
                 aElements,
                 nElements,
                 i,
-                sMethod;
+                formAttrs;
 
             switch (this.cfg.getProperty("postmethod")) {
+
                 case "async":
                     aElements = oForm.elements;
                     nElements = aElements.length;
@@ -412,10 +413,10 @@
                         bUseSecureFileUpload = true;
                     }
 
-                    sMethod = (oForm.getAttribute("method") || "POST").toUpperCase();
+                    formAttrs = this._getFormAttributes(oForm);
 
                     Connect.setForm(oForm, bUseFileUpload, bUseSecureFileUpload);
-                    Connect.asyncRequest(sMethod, oForm.getAttribute("action"), this.callback);
+                    Connect.asyncRequest(formAttrs.method, formAttrs.action, this.callback);
 
                     this.asyncSubmitEvent.fire();
 
@@ -431,6 +432,48 @@
                     this.manualSubmitEvent.fire();
                     break;
             }
+        },
+
+        /**
+         * Retrieves important attributes (currently method and action) from
+         * the form element, accounting for any elements which may have the same name 
+         * as the attributes. Defaults to "POST" and "" for method and action respectively
+         * if the attribute cannot be retrieved.
+         *
+         * @method _getFormAttributes
+         * @protected
+         * @param {HTMLFormElement} oForm The HTML Form element from which to retrieve the attributes
+         * @return {Object} Object literal, with method and action String properties.
+         */
+        _getFormAttributes : function(oForm){
+            var attrs = {
+                method : null,
+                action : null
+            };
+
+            if (oForm) {
+                if (oForm.getAttributeNode) {
+                    var action = oForm.getAttributeNode("action");
+                    var method = oForm.getAttributeNode("method");
+
+                    if (action) {
+                        attrs.action = action.value;
+                    }
+
+                    if (method) {
+                        attrs.method = method.value;
+                    }
+
+                } else {
+                    attrs.action = oForm.getAttribute("action");
+                    attrs.method = oForm.getAttribute("method");
+                }
+            }
+
+            attrs.method = (Lang.isString(attrs.method) ? attrs.method : "POST").toUpperCase();
+            attrs.action = Lang.isString(attrs.action) ? attrs.action : "";
+
+            return attrs;
         },
 
         /**
@@ -453,7 +496,7 @@
                     return;
                 } else {
                     Event.purgeElement(this.form);
-                    this.form = null;                
+                    this.form = null;
                 }
             }
 
@@ -484,10 +527,10 @@
                     }
                     return null;
                 }();
-            
+
                 this.lastFormElement = function () {
                     var f, el, nElements = form.elements.length;
-                    
+
                     for (f = nElements - 1; f >= 0; f--) {
                         el = form.elements[f];
                         if (el.focus && !el.disabled && el.type != "hidden") {
@@ -496,7 +539,7 @@
                     }
                     return null;
                 }();
-            
+
                 if (this.cfg.getProperty("modal")) {
                     firstElement = this.firstFormElement || this.firstButton;
                     if (firstElement) {
@@ -504,22 +547,22 @@
                             { shift: true, keys: 9 }, 
                             { fn: me.focusLast, scope: me, 
                             correctScope: true });
-    
+
                         this.showEvent.subscribe(this.preventBackTab.enable, 
                             this.preventBackTab, true);
-    
+
                         this.hideEvent.subscribe(this.preventBackTab.disable, 
                             this.preventBackTab, true);
                     }
-            
+
                     lastElement = this.lastButton || this.lastFormElement;
-    
+
                     if (lastElement) {
                         this.preventTabOut = new KeyListener(lastElement, 
                             { shift: false, keys: 9 }, 
                             { fn: me.focusFirst, scope: me, 
                             correctScope: true });
-    
+
                         this.showEvent.subscribe(this.preventTabOut.enable, 
                             this.preventTabOut, true);
     
@@ -531,7 +574,7 @@
         },
 
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
-        
+
         /**
         * The default event handler fired when the "close" property is 
         * changed. The method controls the appending or hiding of the close
@@ -556,7 +599,7 @@
                 if (! this.close) {
                     this.close = document.createElement("div");
                     Dom.addClass(this.close, "container-close");
-        
+
                     this.close.innerHTML = (strings && strings.close) ? strings.close : "&#160;";
                     this.innerElement.appendChild(this.close);
                     Event.on(this.close, "click", doCancel, this);
@@ -569,7 +612,7 @@
                 }
             }
         },
-        
+
         /**
         * The default event handler for the "buttons" configuration property
         * @method configButtons
@@ -580,7 +623,7 @@
         * this will usually equal the owner.
         */
         configButtons: function (type, args, obj) {
-    
+
             var Button = YAHOO.widget.Button,
                 aButtons = args[0],
                 oInnerElement = this.innerElement,
