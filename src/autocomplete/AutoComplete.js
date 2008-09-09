@@ -84,7 +84,9 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
         if(oDataSource._aDeprecatedSchema) {
             var aDeprecatedSchema = oDataSource._aDeprecatedSchema;
             if(YAHOO.lang.isArray(aDeprecatedSchema)) {
-                if(oDataSource.responseType === YAHOO.util.DataSourceBase.TYPE_JSON) {
+                
+                if((oDataSource.responseType === YAHOO.util.DataSourceBase.TYPE_JSON) || 
+                (oDataSource.responseType === YAHOO.util.DataSourceBase.TYPE_UNKNOWN)) { // Used to default to unknown
                     // Store the resultsList
                     schema.resultsList = aDeprecatedSchema[0];
                     // Store the key
@@ -325,6 +327,16 @@ YAHOO.widget.AutoComplete.prototype.queryDelay = 0.2;
 YAHOO.widget.AutoComplete.prototype.typeAheadDelay = 0.5;
 
 /**
+ * When IME usage is detected, AutoComplete will switch to querying the input
+ * value at the given interval rather than per key event.
+ *
+ * @property queryInterval
+ * @type Number
+ * @default 500
+ */
+YAHOO.widget.AutoComplete.prototype.queryInterval = 500;
+
+/**
  * Class name of a highlighted item within results container.
  *
  * @property highlightClassName
@@ -461,6 +473,15 @@ YAHOO.widget.AutoComplete.prototype.useIFrame = false;
  * @default false
  */
 YAHOO.widget.AutoComplete.prototype.useShadow = false;
+
+/**
+ * Whether or not the input field should be updated with selections.
+ *
+ * @property supressInputUpdate
+ * @type Boolean
+ * @default false
+ */
+YAHOO.widget.AutoComplete.prototype.suppressInputUpdate = false;
 
 /**
  * Whether to enable backwardCompatMode for implementations that use the pre-2.6.0 API.
@@ -776,11 +797,6 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
             bMatchCase = (oDS.queryMatchCase || oAC.queryMatchCase), // backward compat
             bMatchContains = (oDS.queryMatchContains || oAC.queryMatchContains); // backward compat
             
-        // Ignore case
-        if(!bMatchCase) {
-            sQuery = sQuery.toLowerCase();
-        }
-
         // Loop through each result object...
         for(var i = allResults.length-1; i >= 0; i--) {
             var oResult = allResults[i];
@@ -808,9 +824,10 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
             }
             
             if(YAHOO.lang.isString(sResult)) {
+                
                 var sKeyIndex = (bMatchCase) ?
-                encodeURIComponent(sResult).indexOf(sQuery):
-                encodeURIComponent(sResult).toLowerCase().indexOf(sQuery);
+                sResult.indexOf(decodeURIComponent(sQuery)) :
+                sResult.toLowerCase().indexOf(decodeURIComponent(sQuery).toLowerCase());
 
                 // A STARTSWITH match is when the query is found at the beginning of the key string...
                 if((!bMatchContains && (sKeyIndex === 0)) ||
@@ -1470,6 +1487,7 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelperEls = function() {
         elIFrame.style.width = 0;
         elIFrame.style.height = 0;
         elIFrame.tabIndex = -1;
+        elIFrame.style.padding = 0;
         this._elIFrame = this._elContainer.appendChild(elIFrame);
     }
 };
@@ -1490,9 +1508,6 @@ YAHOO.widget.AutoComplete.prototype._initContainerEl = function() {
         elContent.className = "yui-ac-content";
         elContent.style.display = "none";
 
-        //YAHOO.util.Event.addListener(elContent,"mouseover",this._onItemMouseover,this);
-        //YAHOO.util.Event.addListener(elContent,"mouseout",this._onItemMouseout,this);
-        //YAHOO.util.Event.addListener(elContent,"click",this._onItemMouseclick,this);
         this._elContent = this._elContainer.appendChild(elContent);
 
         var elHeader = document.createElement("div");
@@ -1540,81 +1555,31 @@ YAHOO.widget.AutoComplete.prototype._initListEl = function() {
         this._elList = elBody.appendChild(elList);
     }
     
-    
-    
-    
-    
-    /*if(!this._aListItemEls) {
-        while(this._aListItemEls.length < nListLength) {
-        
-        }
-    }
-    else {
-        this._aListItemEls = [];
-    }
-
-
-
-    this._aListItemEls = [];
-    while(this._elBody.hasChildNodes()) {
-        var oldListItems = this.getListItems();
-        if(oldListItems) {
-            for(var oldi = oldListItems.length-1; oldi >= 0; oldi--) {
-                oldListItems[oldi] = null;
-            }
-        }
-        this._elBody.innerHTML = "";
-    }
-
-    var elList = document.createElement("ul");
-    oList = this._elBody.appendChild(oList);
-    for(var i=0; i<this.maxResultsDisplayed; i++) {
-        var elListItem = document.createElement("li");
-        elListItem = oList.appendChild(elListItem);
-        this._aListItemEls[i] = elListItem;
-        this._initListItemEl(elListItem, i);
-    }
-    //this._maxResultsDisplayed = this.maxResultsDisplayed;*/
 };
 
 /**
- * Initializes each &lt;li&gt; element in the container list.
+ * Enables interval detection for IME support.
  *
- * @method _initListItemEl
- * @param elListItem {HTMLElement} The &lt;li&gt; DOM element.
- * @param nItemIndex {Number} The index of the element.
+ * @method _enableIntervalDetection
+ * @re 
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._initListItemEl = function(elListItem, nItemIndex) {
-    /*var oSelf = this;
-    elListItem.style.display = "none";
-    elListItem._nItemIndex = nItemIndex;
-
-    elListItem.mouseover = elListItem.mouseout = elListItem.onclick = null;
-    YAHOO.util.Event.addListener(elListItem,"mouseover",oSelf._onItemMouseover,oSelf);
-    YAHOO.util.Event.addListener(elListItem,"mouseout",oSelf._onItemMouseout,oSelf);
-    YAHOO.util.Event.addListener(elListItem,"click",oSelf._onItemMouseclick,oSelf);*/
-};
-
-/**
- * Enables interval detection for  Korean IME support.
- *
- * @method _onIMEDetected
- * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
- * @private
- */
-YAHOO.widget.AutoComplete.prototype._onIMEDetected = function(oSelf) {
-    oSelf._enableIntervalDetection();
+YAHOO.widget.AutoComplete.prototype._enableIntervalDetection = function() {
+    var oSelf = this;
+    if(!oSelf._queryInterval && oSelf.queryInterval) {
+        oSelf._queryInterval = setInterval(function() { oSelf._onInterval(); }, oSelf.queryInterval);
+        YAHOO.log("Interval set", "info", this.toString());
+    }
 };
 
 /**
  * Enables query triggers based on text input detection by intervals (rather
  * than by key events).
  *
- * @method _enableIntervalDetection
+ * @method _onInterval
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._enableIntervalDetection = function() {
+YAHOO.widget.AutoComplete.prototype._onInterval = function() {
     var currValue = this._elTextbox.value;
     var lastValue = this._sLastTextboxValue;
     if(currValue != lastValue) {
@@ -1623,20 +1588,20 @@ YAHOO.widget.AutoComplete.prototype._enableIntervalDetection = function() {
     }
 };
 
-
 /**
  * Cancels text input detection by intervals.
  *
- * @method _cancelIntervalDetection
+ * @method _clearInterval
  * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._cancelIntervalDetection = function(oSelf) {
-    if(oSelf._queryInterval) {
-        clearInterval(oSelf._queryInterval);
+YAHOO.widget.AutoComplete.prototype._clearInterval = function() {
+    if(this._queryInterval) {
+        clearInterval(this._queryInterval);
+        this._queryInterval = null;
+        YAHOO.log("Interval cleared", "info", this.toString());
     }
 };
-
 
 /**
  * Whether or not key is functional or should be ignored. Note that the right
@@ -1651,7 +1616,7 @@ YAHOO.widget.AutoComplete.prototype._cancelIntervalDetection = function(oSelf) {
 YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
     if((nKeyCode == 9) || (nKeyCode == 13)  || // tab, enter
             (nKeyCode == 16) || (nKeyCode == 17) || // shift, ctl
-            (nKeyCode >= 18 && nKeyCode <= 20) || // alt,pause/break,caps lock
+            (nKeyCode >= 18 && nKeyCode <= 20) || // alt, pause/break,caps lock
             (nKeyCode == 27) || // esc
             (nKeyCode >= 33 && nKeyCode <= 35) || // page up,page down,end
             /*(nKeyCode >= 36 && nKeyCode <= 38) || // home,left,up
@@ -1904,6 +1869,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
  */
 YAHOO.widget.AutoComplete.prototype._clearSelection = function() {
     var sValue = this._elTextbox.value;
+    //TODO: need to check against all delimChars?
     var sChar = (this.delimChar) ? this.delimChar[0] : null;
     var nIndex = (sChar) ? sValue.lastIndexOf(sChar, sValue.length-2) : -1;
     if(nIndex > -1) {
@@ -2012,26 +1978,30 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
     var height = this._elContent.offsetHeight + "px";
 
     if(this.useIFrame && this._elIFrame) {
+    var elIFrame = this._elIFrame;
         if(bShow) {
-            this._elIFrame.style.width = width;
-            this._elIFrame.style.height = height;
+            elIFrame.style.width = width;
+            elIFrame.style.height = height;
+            elIFrame.style.padding = "";
             YAHOO.log("Iframe expanded", "info", this.toString());
         }
         else {
-            this._elIFrame.style.width = 0;
-            this._elIFrame.style.height = 0;
+            elIFrame.style.width = 0;
+            elIFrame.style.height = 0;
+            elIFrame.style.padding = 0;
             YAHOO.log("Iframe collapsed", "info", this.toString());
         }
     }
     if(this.useShadow && this._elShadow) {
+    var elShadow = this._elShadow;
         if(bShow) {
-            this._elShadow.style.width = width;
-            this._elShadow.style.height = height;
+            elShadow.style.width = width;
+            elShadow.style.height = height;
             YAHOO.log("Shadow expanded", "info", this.toString());
         }
         else {
-            this._elShadow.style.width = 0;
-            this._elShadow.style.height = 0;
+            elShadow.style.width = 0;
+            elShadow.style.height = 0;
             YAHOO.log("Shadow collapsed", "info", this.toString());
         }
     }
@@ -2212,38 +2182,40 @@ YAHOO.widget.AutoComplete.prototype._togglePrehighlight = function(elNewListItem
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._updateValue = function(elListItem) {
-    var elTextbox = this._elTextbox;
-    var sDelimChar = (this.delimChar) ? (this.delimChar[0] || this.delimChar) : null;
-    var sResultMatch = elListItem._sResultMatch;
-
-    // Calculate the new value
-    var sNewValue = "";
-    if(sDelimChar) {
-        // Preserve selections from past queries
-        sNewValue = this._sPastSelections;
-        // Add new selection plus delimiter
-        sNewValue += sResultMatch + sDelimChar;
-        if(sDelimChar != " ") {
-            sNewValue += " ";
-        }
-    }
-    else { 
-        sNewValue = sResultMatch;
-    }
+    if(!this.suppressInputUpdate) {    
+        var elTextbox = this._elTextbox;
+        var sDelimChar = (this.delimChar) ? (this.delimChar[0] || this.delimChar) : null;
+        var sResultMatch = elListItem._sResultMatch;
     
-    // Update input field
-    elTextbox.value = sNewValue;
-
-    // Scroll to bottom of textarea if necessary
-    if(elTextbox.type == "textarea") {
-        elTextbox.scrollTop = elTextbox.scrollHeight;
+        // Calculate the new value
+        var sNewValue = "";
+        if(sDelimChar) {
+            // Preserve selections from past queries
+            sNewValue = this._sPastSelections;
+            // Add new selection plus delimiter
+            sNewValue += sResultMatch + sDelimChar;
+            if(sDelimChar != " ") {
+                sNewValue += " ";
+            }
+        }
+        else { 
+            sNewValue = sResultMatch;
+        }
+        
+        // Update input field
+        elTextbox.value = sNewValue;
+    
+        // Scroll to bottom of textarea if necessary
+        if(elTextbox.type == "textarea") {
+            elTextbox.scrollTop = elTextbox.scrollHeight;
+        }
+    
+        // Move cursor to end
+        var end = elTextbox.value.length;
+        this._selectText(elTextbox,end,end);
+    
+        this._elCurListItem = elListItem;
     }
-
-    // Move cursor to end
-    var end = elTextbox.value.length;
-    this._selectText(elTextbox,end,end);
-
-    this._elCurListItem = elListItem;
 };
 
 /**
@@ -2257,7 +2229,7 @@ YAHOO.widget.AutoComplete.prototype._selectItem = function(elListItem) {
     this._bItemSelected = true;
     this._updateValue(elListItem);
     this._sPastSelections = this._elTextbox.value;
-    this._cancelIntervalDetection(this);
+    this._clearInterval();
     this.itemSelectEvent.fire(this, elListItem, elListItem._oResultData);
     YAHOO.log("Item selected: " + YAHOO.lang.dump(elListItem._oResultData), "info", this.toString());
     this._toggleContainer(false);
@@ -2591,18 +2563,14 @@ YAHOO.widget.AutoComplete.prototype._onContainerResize = function(v,oSelf) {
 YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
     var nKeyCode = v.keyCode;
 
-    // Clear timeouts
-    /*if(oSelf._nDelayID != -1) {
-        clearTimeout(oSelf._nDelayID);
-    }*/
+    // Clear timeout
     if(oSelf._nTypeAheadDelayID != -1) {
         clearTimeout(oSelf._nTypeAheadDelayID);
     }
     
     switch (nKeyCode) {
         case 9: // tab
-            //if((navigator.userAgent.toLowerCase().indexOf("mac") == -1)) {
-            if((navigator.userAgent.toLowerCase().indexOf("mac") == -1) || (YAHOO.env.ua.webkit>420)) {
+            if(!YAHOO.env.ua.opera && (navigator.userAgent.toLowerCase().indexOf("mac") == -1) || (YAHOO.env.ua.webkit>420)) {
                 // select an item or clear out
                 if(oSelf._elCurListItem) {
                     if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
@@ -2618,8 +2586,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
             }
             break;
         case 13: // enter
-            //if((navigator.userAgent.toLowerCase().indexOf("mac") == -1)) {
-            if((navigator.userAgent.toLowerCase().indexOf("mac") == -1) || (YAHOO.env.ua.webkit>420)) {
+            if(!YAHOO.env.ua.opera && (navigator.userAgent.toLowerCase().indexOf("mac") == -1) || (YAHOO.env.ua.webkit>420)) {
                 if(oSelf._elCurListItem) {
                     if(oSelf._nKeyCode != nKeyCode) {
                         if(oSelf._bContainerOpen) {
@@ -2659,6 +2626,10 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
             YAHOO.log("Textbox keyed", "info", oSelf.toString());
             break;
     }
+
+    if(nKeyCode === 18){
+        oSelf._enableIntervalDetection();
+    }    
     oSelf._nKeyCode = nKeyCode;
 };
 
@@ -2672,37 +2643,33 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
 YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
     var nKeyCode = v.keyCode;
 
-        //Expose only to Mac browsers, where stopEvent is ineffective on keydown events (bug 790337)
-        //if((navigator.userAgent.toLowerCase().indexOf("mac") != -1)) {
-        
-        //Expose only to non SF3 (bug 1978549) Mac browsers, where stopEvent is ineffective on keydown events (bug 790337)
-        if((navigator.userAgent.toLowerCase().indexOf("mac") != -1) && (YAHOO.env.ua.webkit < 420)) {
+        // Expose only to non SF3 (bug 1978549) Mac browsers (bug 790337) and  Opera browsers (bug 583531),
+        // where stopEvent is ineffective on keydown events 
+        if(YAHOO.env.ua.opera || (navigator.userAgent.toLowerCase().indexOf("mac") != -1) && (YAHOO.env.ua.webkit < 420)) {
             switch (nKeyCode) {
             case 9: // tab
                 // select an item or clear out
-                if(oSelf._elCurListItem) {
-                    if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
-                        if(oSelf._bContainerOpen) {
-                            YAHOO.util.Event.stopEvent(v);
-                        }
+                if(oSelf._bContainerOpen) {
+                    if(oSelf.delimChar) {
+                        YAHOO.util.Event.stopEvent(v);
                     }
-                    oSelf._selectItem(oSelf._elCurListItem);
-                }
-                else {
-                    oSelf._toggleContainer(false);
+                    if(oSelf._elCurListItem) {
+                        oSelf._selectItem(oSelf._elCurListItem);
+                    }
+                    else {
+                        oSelf._toggleContainer(false);
+                    }
                 }
                 break;
             case 13: // enter
-                if(oSelf._elCurListItem) {
-                    if(oSelf._nKeyCode != nKeyCode) {
-                        if(oSelf._bContainerOpen) {
-                            YAHOO.util.Event.stopEvent(v);
-                        }
+                if(oSelf._bContainerOpen) {
+                    YAHOO.util.Event.stopEvent(v);
+                    if(oSelf._elCurListItem) {
+                        oSelf._selectItem(oSelf._elCurListItem);
                     }
-                    oSelf._selectItem(oSelf._elCurListItem);
-                }
-                else {
-                    oSelf._toggleContainer(false);
+                    else {
+                        oSelf._toggleContainer(false);
+                    }
                 }
                 break;
             default:
@@ -2713,7 +2680,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
         //TODO: (?) limit only to non-IE, non-Mac-FF for Korean IME support (bug 811948)
         // Korean IME detected
         else if(nKeyCode == 229) {
-            oSelf._queryInterval = setInterval(function() { oSelf._onIMEDetected(oSelf); },500);
+            oSelf._enableIntervalDetection();
         }
 };
 
@@ -2732,7 +2699,8 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     oSelf._initProps();
 
     // Filter out chars that don't trigger queries
-    if(oSelf._isIgnoreKey(v.keyCode)) {
+    var nKeyCode = v.keyCode;
+    if(oSelf._isIgnoreKey(nKeyCode)) {
         return;
     }
 
@@ -2813,7 +2781,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
         if(oSelf._bContainerOpen) {
             oSelf._toggleContainer(false);
         }
-        oSelf._cancelIntervalDetection(oSelf);
+        oSelf._clearInterval();
         oSelf._bFocused = false;
         if(oSelf._sInitInputValue !== oSelf._elTextbox.value) {
             oSelf.textboxChangeEvent.fire(oSelf);

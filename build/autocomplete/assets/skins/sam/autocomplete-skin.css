@@ -23,6 +23,12 @@
     position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity: 0.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;
 }
 
+/* styles for container iframe */
+.yui-skin-sam .yui-ac iframe {
+    opacity:0;filter: alpha(opacity=0);
+    padding-right:.3em; padding-bottom:.3em; /* padding to match the margin of the shadow above */
+}
+
 /* styles for results list */
 .yui-skin-sam .yui-ac-content ul{
     margin:0;padding:0;width:100%;
@@ -30,7 +36,7 @@
 
 /* styles for result item */
 .yui-skin-sam .yui-ac-content li {
-    margin:0;padding:2px 5px;cursor:default;white-space:nowrap;
+    margin:0;padding:2px 5px;cursor:default;white-space:nowrap;list-style:none;
     zoom:1; /* For IE to trigger mouse events on LI */
 }
 
