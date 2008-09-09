@@ -52,6 +52,8 @@
 
 .yui-calcontainer .close-icon {
 	position:absolute;
+	overflow:hidden;
+	text-indent:-10000em;
 	right:3px;
 	top:3px;
 	border:none;
@@ -81,6 +83,8 @@
 
 .yui-calendar .calnavleft {
 	position:absolute;
+	overflow:hidden;
+	text-indent:-10000em;
 	cursor:pointer;
 	top:2px;
 	bottom:0;
@@ -93,6 +97,8 @@
 
 .yui-calendar .calnavright {
 	position:absolute;
+	overflow:hidden;
+	text-indent:-10000em;
 	cursor:pointer;
 	top:2px;
 	bottom:0;

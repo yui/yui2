@@ -2,6 +2,8 @@
 
 	var Dom = YAHOO.util.Dom,
 		DateMath = YAHOO.widget.DateMath,
+		Event = YAHOO.util.Event,
+		Lang = YAHOO.lang,
 		Calendar = YAHOO.widget.Calendar;
 
 /**
@@ -485,6 +487,27 @@ CalendarGroup.prototype = {
 		* @default null
 		*/
 		cfg.addProperty(DEF_CFG.NAV.key, { value:DEF_CFG.NAV.value, handler:this.configNavigator } );
+
+		/**
+		 * The map of UI strings which the CalendarGroup UI uses.
+		 *
+		 * @config strings
+		 * @type {Object}
+		 * @default An object with the properties shown below:
+		 *     <dl>
+		 *         <dt>previousMonth</dt><dd><em>String</em> : The string to use for the "Previous Month" navigation UI. Defaults to "Previous Month".</dd>
+		 *         <dt>nextMonth</dt><dd><em>String</em> : The string to use for the "Next Month" navigation UI. Defaults to "Next Month".</dd>
+		 *         <dt>close</dt><dd><em>String</em> : The string to use for the close button label. Defaults to "Close".</dd>
+		 *     </dl>
+		 */
+		cfg.addProperty(DEF_CFG.STRINGS.key, { 
+			value:DEF_CFG.STRINGS.value, 
+			handler:this.configStrings, 
+			validator: function(val) {
+				return Lang.isObject(val);
+			},
+			supercedes: DEF_CFG.STRINGS.supercedes
+		});
 	},
 
 	/**
@@ -564,7 +587,7 @@ CalendarGroup.prototype = {
 		*/
 		me.changePageEvent = new CE(defEvents.CHANGE_PAGE); 
 		me.changePageEvent.subscribe = sub; me.changePageEvent.unsubscribe = unsub;
-	
+
 		/**
 		* Fired before the Calendar is rendered
 		* @event beforeRenderEvent
@@ -592,7 +615,7 @@ CalendarGroup.prototype = {
 		*/
 		me.clearEvent = new CE(defEvents.CLEAR);
 		me.clearEvent.subscribe = sub; me.clearEvent.unsubscribe = unsub;
-	
+
 		/**
 		* Fired just before the CalendarGroup is to be shown
 		* @event beforeShowEvent
@@ -652,6 +675,23 @@ CalendarGroup.prototype = {
 		* @event renderNavEvent
 		*/
 		me.renderNavEvent = new CE(defEvents.RENDER_NAV);
+
+		/**
+		* Fired just before the CalendarGroup is to be destroyed
+		* @event beforeDestroyEvent
+		*/
+		me.beforeDestroyEvent = new CE(defEvents.BEFORE_DESTROY);
+
+		/**
+		* Fired after the CalendarGroup is destroyed. This event should be used
+		* for notification only. When this event is fired, important CalendarGroup instance
+		* properties, dom references and event listeners have already been 
+		* removed/dereferenced, and hence the CalendarGroup instance is not in a usable 
+		* state.
+		*
+		* @event destroyEvent
+		*/
+		me.destroyEvent = new CE(defEvents.DESTROY);
 	},
 	
 	/**
@@ -970,7 +1010,7 @@ CalendarGroup.prototype = {
 			cal.reset();
 		}
 	},
-	
+
 	/**
 	* Clears the selected dates in the current calendar widget and sets the calendar
 	* to the current month and year.
@@ -981,8 +1021,12 @@ CalendarGroup.prototype = {
 			var cal = this.pages[p];
 			cal.clear();
 		}
+
+		this.cfg.setProperty(DEF_CFG.SELECTED.key, []);
+		this.cfg.setProperty(DEF_CFG.PAGEDATE.key, new Date(this.pages[0].today.getTime()));
+		this.render();
 	},
-	
+
 	/**
 	* Navigates to the next month page in the calendar widget.
 	* @method nextMonth
@@ -1225,6 +1269,51 @@ CalendarGroup.prototype = {
 	*/
 	toString : function() {
 		return "CalendarGroup " + this.id;
+	},
+
+	/**
+	 * Destroys the CalendarGroup instance. The method will remove references
+	 * to HTML elements, remove any event listeners added by the CalendarGroup.
+	 * 
+	 * It will also destroy the Config and CalendarNavigator instances created by the 
+	 * CalendarGroup and the individual Calendar instances created for each page.
+	 *
+	 * @method destroy
+	 */
+	destroy : function() {
+
+		if (this.beforeDestroyEvent.fire()) {
+
+			var cal = this;
+	
+			// Child objects
+			if (cal.navigator) {
+				cal.navigator.destroy();
+			}
+	
+			if (cal.cfg) {
+				cal.cfg.destroy();
+			}
+	
+			// DOM event listeners
+			Event.purgeElement(cal.oDomContainer, true);
+	
+			// Generated markup/DOM - Not removing the container DIV since we didn't create it.
+			Dom.removeClass(cal.oDomContainer, CalendarGroup.CSS_CONTAINER);
+			Dom.removeClass(cal.oDomContainer, CalendarGroup.CSS_MULTI_UP);
+			
+			for (var i = 0, l = cal.pages.length; i < l; i++) {
+				cal.pages[i].destroy();
+				cal.pages[i] = null;
+			}
+	
+			cal.oDomContainer.innerHTML = "";
+	
+			// JS-to-DOM references
+			cal.oDomContainer = null;
+	
+			this.destroyEvent.fire();
+		}
 	}
 };
 
@@ -1285,6 +1374,7 @@ YAHOO.lang.augmentProto(CalendarGroup, Calendar, "buildDayLabel",
 												 "configTitle",
 												 "configClose",
 												 "configIframe",
+												 "configStrings",
 												 "configNavigator",
 												 "createTitleBar",
 												 "createCloseButton",

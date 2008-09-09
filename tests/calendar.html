@@ -760,20 +760,46 @@
 				cal = null;
 			},
 
-			testClickPageNav: function() {
-				var cal = this.createInstance({pagedate:"5/2007"});
+			testClickPreviousPageNav: function() {
+
+				var testCase = this;
+
+				// May
+				var cal = testCase.createInstance({pagedate:"5/2007"});
 
 				var prevPage = Dom.getElementsByClassName(cal.Style.CSS_NAV_LEFT, "a", cal.oDomContainer);
-				UserAction.mousedown(prevPage[0]);
 
-				DateAssert.datesAreEqual(new Date(2007, 3, 1), this.getCfgProperty(cal, "pagedate"), "Click on previous page not correct");
+				UserAction.click(prevPage[0]);
 
-				var nextPage = Dom.getElementsByClassName(cal.Style.CSS_NAV_RIGHT, "a", cal.oDomContainer);
-				UserAction.mousedown(nextPage[0]);
+				testCase.wait(function(){
+					// April
+					DateAssert.datesAreEqual(new Date(2007, 3, 1), testCase.getCfgProperty(cal, "pagedate"), "Click on previous page not correct");
+					cal = null;
+				}, 0);
+			},
 
-				DateAssert.datesAreEqual(new Date(2007, 4, 1), this.getCfgProperty(cal, "pagedate"), "Click on next page not correct");
+			testClickNextPageNav: function() {
+				var testCase = this;
 
-				cal = null;
+				// May
+				var cal = testCase.createInstance({pagedate:"5/2007"});
+
+				var prevPage = Dom.getElementsByClassName(cal.Style.CSS_NAV_LEFT, "a", cal.oDomContainer);
+
+				// April
+				UserAction.click(prevPage[0]);
+
+				testCase.wait(function() {
+					var nextPage = Dom.getElementsByClassName(cal.Style.CSS_NAV_RIGHT, "a", cal.oDomContainer);
+
+					UserAction.click(nextPage[0]);
+					testCase.wait(function() {
+
+						// Back to May
+						DateAssert.datesAreEqual(new Date(2007, 4, 1), this.getCfgProperty(cal, "pagedate"), "Click on next page not correct");
+					}, 0);
+
+				}, 0);
 			},
 
 			testRenderers : function() {
@@ -940,13 +966,16 @@
 									 e.BEFORE_RENDER, e.RENDER, e.CHANGE_PAGE, 
 									 e.BEFORE_RENDER, e.RENDER, e.CHANGE_PAGE, 
 									 e.BEFORE_RENDER, e.RENDER, e.CLEAR, 
-									 e.BEFORE_RENDER, e.RENDER, e.CLEAR, 
-									 e.BEFORE_RENDER, e.RENDER, e.RESET, 
+									 e.BEFORE_RENDER, e.RENDER, e.CLEAR,
+									 e.BEFORE_RENDER, e.RENDER, // CalendarGroup.render() called after clear
+									 e.BEFORE_RENDER, e.RENDER, // CalendarGroup.render() called after clear
 									 e.BEFORE_RENDER, e.RENDER, e.RESET,
-									 e.BEFORE_RENDER, e.RENDER, 
+									 e.BEFORE_RENDER, e.RENDER, e.RESET,
+									 e.BEFORE_RENDER, e.RENDER,
 									 e.BEFORE_RENDER, e.RENDER,
 									 e.BEFORE_HIDE, e.HIDE,
-									 e.BEFORE_SHOW, e.SHOW ];
+									 e.BEFORE_SHOW, e.SHOW,
+                                     e.BEFORE_DESTROY, e.DESTROY];
 				} else {
 					expectedEvts = [ e.BEFORE_SELECT, e.SELECT,
 									 e.BEFORE_DESELECT, e.DESELECT,
@@ -955,7 +984,8 @@
 									 e.BEFORE_RENDER, e.RENDER, e.RESET,
 									 e.BEFORE_RENDER, e.RENDER,
 									 e.BEFORE_HIDE, e.HIDE,
-									 e.BEFORE_SHOW, e.SHOW ];
+									 e.BEFORE_SHOW, e.SHOW,
+                                     e.BEFORE_DESTROY, e.DESTROY ];
 				}
 
 				function monitor(type, args, obj) {
@@ -977,6 +1007,8 @@
 				cal.beforeHideEvent.subscribe(monitor);
 				cal.showEvent.subscribe(monitor);
 				cal.beforeShowEvent.subscribe(monitor);
+				cal.beforeDestroyEvent.subscribe(monitor);
+				cal.destroyEvent.subscribe(monitor);
 
 				cal.select("4/1/2007");   	// beforeSelect, select
 				cal.deselect("4/1/2007"); 	// beforeDeselect, deselect
@@ -984,14 +1016,15 @@
 				cal.clear();				// beforeRender, render, clear 		(monitor is registered after default listener which calls cal.render())
 				cal.reset();				// beforeRender, render, reset 		(monitor is registered after default listener which calls cal.render())
 				cal.render();				// beforeRender, render
-				cal.hide();                 // beforeHide, Hide
-				cal.show();                 // beforeShow, Show
+				cal.hide();                 // beforeHide, hide
+				cal.show();                 // beforeShow, show
+				cal.destroy();              // beforeDestroy, destroy
 
 				ArrayAssert.itemsAreEqual(expectedEvts, actualEvts, "Unexpected event order");
 
-				cal = null;				
+				cal = null;
 			},
-			
+
 			testGetIndex : function() {
 				var c = this.createInstance({pagedate:"10/2007"});
 

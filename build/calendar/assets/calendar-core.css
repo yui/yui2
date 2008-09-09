@@ -51,6 +51,8 @@
 .yui-calcontainer .close-icon {
 	position:absolute;
 	z-index:1;
+	text-indent:-10000em;
+	overflow:hidden;
 }
 
 /* CALENDAR TABLE */
@@ -62,12 +64,16 @@
 .yui-calendar .calnavleft {
 	position:absolute;
 	z-index:1;
+	text-indent:-10000em;
+	overflow:hidden;
 }
 
 /* NAVBAR RIGHT ARROW CONTAINER */
 .yui-calendar .calnavright {
 	position:absolute;
 	z-index:1;
+	text-indent:-10000em;
+	overflow:hidden;
 }
 
 /* NAVBAR TEXT CONTAINER */

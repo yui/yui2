@@ -12,14 +12,19 @@
     * @param {Object} owner The owner Object to which this Config Object belongs
     */
     YAHOO.util.Config = function (owner) {
+
         if (owner) {
             this.init(owner);
         }
+
+
     };
+
 
     var Lang = YAHOO.lang,
         CustomEvent = YAHOO.util.CustomEvent,
         Config = YAHOO.util.Config;
+
 
     /**
      * Constant representing the CustomEvent type for the config changed event.
@@ -29,7 +34,7 @@
      * @final
      */
     Config.CONFIG_CHANGED_EVENT = "configChanged";
-
+    
     /**
      * Constant representing the boolean type string
      * @property YAHOO.util.Config.BOOLEAN_TYPE
@@ -38,16 +43,16 @@
      * @final
      */
     Config.BOOLEAN_TYPE = "boolean";
-
+    
     Config.prototype = {
-
+     
         /**
         * Object reference to the owner of this Config Object
         * @property owner
         * @type Object
         */
         owner: null,
-
+        
         /**
         * Boolean flag that specifies whether a queue is currently 
         * being executed
@@ -55,7 +60,7 @@
         * @type Boolean
         */
         queueInProgress: false,
-
+        
         /**
         * Maintains the local collection of configuration property objects and 
         * their specified values
@@ -74,7 +79,7 @@
         * @type Object
         */ 
         initialConfig: null,
-
+        
         /**
         * Maintains the local, normalized CustomEvent queue
         * @property eventQueue
@@ -82,14 +87,14 @@
         * @type Object
         */ 
         eventQueue: null,
-
+        
         /**
         * Custom Event, notifying subscribers when Config properties are set 
         * (setProperty is called without the silent flag
         * @event configChangedEvent
         */
         configChangedEvent: null,
-
+    
         /**
         * Initializes the configuration Object and all of its local members.
         * @method init
@@ -176,7 +181,7 @@
             }
             
         },
-
+        
         /**
         * Returns a key-value configuration map of the values currently set in  
         * the Config Object.
@@ -224,16 +229,16 @@
         * @return {Boolean} True is the property was reset, false if not
         */
         resetProperty: function (key) {
-
+    
             key = key.toLowerCase();
-
+        
             var property = this.config[key];
-
+    
             if (property && property.event) {
-
+    
                 if (this.initialConfig[key] && 
                     !Lang.isUndefined(this.initialConfig[key])) {
-
+    
                     this.setProperty(key, this.initialConfig[key]);
 
                     return true;
@@ -1283,7 +1288,16 @@ Calendar._DEFAULT_CONFIG = {
 	MY_LABEL_YEAR_POSITION:{key:"my_label_year_position", value:2},
 	MY_LABEL_MONTH_SUFFIX:{key:"my_label_month_suffix", value:" "},
 	MY_LABEL_YEAR_SUFFIX:{key:"my_label_year_suffix", value:""},
-	NAV: {key:"navigator", value: null}
+	NAV: {key:"navigator", value: null},
+	STRINGS : { 
+		key:"strings",
+		value: {
+			previousMonth : "Previous Month",
+			nextMonth : "Next Month",
+			close: "Close"
+		},
+		supercedes : ["close", "title"]
+	}
 };
 
 var DEF_CFG = Calendar._DEFAULT_CONFIG;
@@ -1304,6 +1318,8 @@ Calendar._EVENT_TYPES = {
 	CHANGE_PAGE : "changePage",
 	BEFORE_RENDER : "beforeRender",
 	RENDER : "render",
+	BEFORE_DESTROY : "beforeDestroy",
+	DESTROY : "destroy",
 	RESET : "reset",
 	CLEAR : "clear",
 	BEFORE_HIDE : "beforeHide",
@@ -1734,37 +1750,54 @@ Calendar.prototype = {
 		* @event renderEvent
 		*/
 		cal.renderEvent = new CE(defEvents.RENDER);
-	
+
+		/**
+		* Fired just before the Calendar is to be destroyed
+		* @event beforeDestroyEvent
+		*/
+		cal.beforeDestroyEvent = new CE(defEvents.BEFORE_DESTROY);
+
+		/**
+		* Fired after the Calendar is destroyed. This event should be used
+		* for notification only. When this event is fired, important Calendar instance
+		* properties, dom references and event listeners have already been 
+		* removed/dereferenced, and hence the Calendar instance is not in a usable 
+		* state.
+		*
+		* @event destroyEvent
+		*/
+		cal.destroyEvent = new CE(defEvents.DESTROY);
+
 		/**
 		* Fired when the Calendar is reset
 		* @event resetEvent
 		*/
 		cal.resetEvent = new CE(defEvents.RESET);
-	
+
 		/**
 		* Fired when the Calendar is cleared
 		* @event clearEvent
 		*/
 		cal.clearEvent = new CE(defEvents.CLEAR);
-	
+
 		/**
 		* Fired just before the Calendar is to be shown
 		* @event beforeShowEvent
 		*/
 		cal.beforeShowEvent = new CE(defEvents.BEFORE_SHOW);
-	
+
 		/**
 		* Fired after the Calendar is shown
 		* @event showEvent
 		*/
 		cal.showEvent = new CE(defEvents.SHOW);
-	
+
 		/**
 		* Fired just before the Calendar is to be hidden
 		* @event beforeHideEvent
 		*/
 		cal.beforeHideEvent = new CE(defEvents.BEFORE_HIDE);
-	
+
 		/**
 		* Fired after the Calendar is hidden
 		* @event hideEvent
@@ -1816,13 +1849,47 @@ Calendar.prototype = {
 		cal.resetEvent.subscribe(cal.onReset, this, true);
 		cal.clearEvent.subscribe(cal.onClear, this, true);
 	},
-	
+
 	/**
-	* The default event function that is attached to a date link within a calendar cell
-	* when the calendar is rendered.
+	* The default event handler for clicks on the "Previous Month" navigation UI
+	*
+	* @method doPreviousMonthNav
+	* @param {DOMEvent} e	The DOM event
+	* @param {Calendar} cal	A reference to the calendar
+	*/
+	doPreviousMonthNav : function(e, cal) {
+		Event.preventDefault(e);
+		// previousMonth invoked in a timeout, to allow
+		// event to bubble up, with correct target. Calling
+		// previousMonth, will call render which will remove 
+		// HTML which generated the event, resulting in an 
+		// invalid event target in certain browsers.
+		setTimeout(function() {
+			cal.previousMonth();
+		}, 0);
+	},
+
+	/**
+	 * The default event handler for clicks on the "Next Month" navigation UI
+	 *
+	 * @method doNextMonthNav
+	 * @param {DOMEvent} e	The DOM event
+	 * @param {Calendar} cal	A reference to the calendar
+	 */
+	doNextMonthNav : function(e, cal) {
+		Event.preventDefault(e);
+		setTimeout(function() {
+			cal.nextMonth();
+		}, 0);
+	},
+
+	/**
+	* The default event handler for date cell selection. Currently attached to 
+	* the Calendar's bounding box, referenced by it's <a href="#property_oDomContainer">oDomContainer</a> property.
+	*
 	* @method doSelectCell
-	* @param {DOMEvent} e	The event
-	* @param {Calendar} cal	A reference to the calendar passed by the Event utility
+	* @param {DOMEvent} e	The DOM event
+	* @param {Calendar} cal	A reference to the calendar
 	*/
 	doSelectCell : function(e, cal) {
 		var cell, d, date, index;
@@ -1831,16 +1898,16 @@ Calendar.prototype = {
 			tagName = target.tagName.toLowerCase(),
 			defSelector = false;
 
-		while (tagName != "td" && ! Dom.hasClass(target, cal.Style.CSS_CELL_SELECTABLE)) {
+		while (tagName != "td" && !Dom.hasClass(target, cal.Style.CSS_CELL_SELECTABLE)) {
 
 			if (!defSelector && tagName == "a" && Dom.hasClass(target, cal.Style.CSS_CELL_SELECTOR)) {
-				defSelector = true;	
+				defSelector = true;
 			}
 
 			target = target.parentNode;
 			tagName = target.tagName.toLowerCase();
-			// TODO: No need to go all the way up to html.
-			if (tagName == "html") {
+
+			if (target == this.oDomContainer || tagName == "html") {
 				return;
 			}
 		}
@@ -1860,22 +1927,22 @@ Calendar.prototype = {
 					date = DateMath.getDate(d[0],d[1]-1,d[2]);
 				
 					var link;
-		
+
 					if (cal.Options.MULTI_SELECT) {
 						link = cell.getElementsByTagName("a")[0];
 						if (link) {
 							link.blur();
 						}
-		
+
 						var cellDate = cal.cellDates[index];
 						var cellDateIndex = cal._indexOfSelectedFieldArray(cellDate);
-		
+
 						if (cellDateIndex > -1) {	
 							cal.deselectCell(index);
 						} else {
 							cal.selectCell(index);
 						}	
-			
+
 					} else {
 						link = cell.getElementsByTagName("a")[0];
 						if (link) {
@@ -2314,6 +2381,36 @@ Calendar.prototype = {
 		* @default null
 		*/
 		cfg.addProperty(DEF_CFG.NAV.key, { value:DEF_CFG.NAV.value, handler:this.configNavigator } );
+
+		/**
+		 * The map of UI strings which the Calendar UI uses.
+		 *
+		 * @config strings
+		 * @type {Object}
+		 * @default An object with the properties shown below:
+		 *     <dl>
+		 *         <dt>previousMonth</dt><dd><em>String</em> : The string to use for the "Previous Month" navigation UI. Defaults to "Previous Month".</dd>
+		 *         <dt>nextMonth</dt><dd><em>String</em> : The string to use for the "Next Month" navigation UI. Defaults to "Next Month".</dd>
+		 *         <dt>close</dt><dd><em>String</em> : The string to use for the close button label. Defaults to "Close".</dd>
+		 *     </dl>
+		 */
+		cfg.addProperty(DEF_CFG.STRINGS.key, { 
+			value:DEF_CFG.STRINGS.value,
+			handler:this.configStrings,
+			validator: function(val) {
+				return Lang.isObject(val);
+			},
+			supercedes:DEF_CFG.STRINGS.supercedes
+		});
+	},
+
+	/**
+	* The default handler for the "strings" property
+	* @method configStrings
+	*/
+	configStrings : function(type, args, obj) {
+		var val = Lang.merge(DEF_CFG.STRINGS.value, args[0]);
+		this.cfg.setProperty(DEF_CFG.STRINGS.key, val, true);
 	},
 
 	/**
@@ -2668,7 +2765,9 @@ Calendar.prototype = {
 	createCloseButton : function() {
 		var cssClose = YAHOO.widget.CalendarGroup.CSS_2UPCLOSE,
 			DEPR_CLOSE_PATH = "us/my/bn/x_d.gif",
-			lnk = Dom.getElementsByClassName("link-close", "a", this.oDomContainer)[0];
+			lnk = Dom.getElementsByClassName("link-close", "a", this.oDomContainer)[0],
+			strings = this.cfg.getProperty(DEF_CFG.STRINGS.key),
+			closeStr = (strings && strings.close) ? strings.close : "";
 
 		if (!lnk) {
 			lnk = document.createElement("a");
@@ -2687,10 +2786,10 @@ Calendar.prototype = {
 			img.className = cssClose;
 			lnk.appendChild(img);
 		} else {
-			lnk.innerHTML = '<span class="' + cssClose + ' ' + this.Style.CSS_CLOSE + '"></span>';
+			lnk.innerHTML = '<span class="' + cssClose + ' ' + this.Style.CSS_CLOSE + '">' + closeStr + '</span>';
 		}
 		this.oDomContainer.appendChild(lnk);
-	
+
 		return lnk;
 	},
 	
@@ -2715,10 +2814,15 @@ Calendar.prototype = {
 	*/
 	renderHeader : function(html) {
 
+
 		var colSpan = 7,
 			DEPR_NAV_LEFT = "us/tr/callt.gif",
 			DEPR_NAV_RIGHT = "us/tr/calrt.gif",
-			cfg = this.cfg;	
+			cfg = this.cfg,
+			strings= cfg.getProperty(DEF_CFG.STRINGS.key),
+			// Using short circuited assingment results in FF JS warnings (slowing down browser when strict JS warnings are enabled), hence using longer version
+			prevStr = (strings && strings.previousMonth) ?  strings.previousMonth : "",
+			nextStr = (strings && strings.nextMonth) ? strings.nextMonth : "";
 
 		if (cfg.getProperty(DEF_CFG.SHOW_WEEK_HEADER.key)) {
 			colSpan += 1;
@@ -2754,7 +2858,7 @@ Calendar.prototype = {
 				leftArrow = Calendar.IMG_ROOT + DEPR_NAV_LEFT;
 			}
 			var leftStyle = (leftArrow === null) ? "" : ' style="background-image:url(' + leftArrow + ')"';
-			html[html.length] = '<a class="' + this.Style.CSS_NAV_LEFT + '"' + leftStyle + ' >&#160;</a>';
+			html[html.length] = '<a class="' + this.Style.CSS_NAV_LEFT + '"' + leftStyle + ' href="#">' + prevStr + '</a>';
 		}
 
 		var lbl = this.buildMonthLabel();
@@ -2770,7 +2874,7 @@ Calendar.prototype = {
 				rightArrow = Calendar.IMG_ROOT + DEPR_NAV_RIGHT;
 			}
 			var rightStyle = (rightArrow === null) ? "" : ' style="background-image:url(' + rightArrow + ')"';
-			html[html.length] = '<a class="' + this.Style.CSS_NAV_RIGHT + '"' + rightStyle + ' >&#160;</a>';
+			html[html.length] = '<a class="' + this.Style.CSS_NAV_RIGHT + '"' + rightStyle + ' href="#">' + nextStr + '</a>';
 		}
 
 		html[html.length] =	'</div>\n</th>\n</tr>';
@@ -2953,7 +3057,7 @@ Calendar.prototype = {
 
 									if (workingDate.getTime() >= d1.getTime() && workingDate.getTime() <= d2.getTime()) {
 										renderer = rArray[2];
-	
+
 										if (workingDate.getTime()==d2.getTime()) { 
 											this.renderStack.splice(s,1);
 										}
@@ -3068,7 +3172,7 @@ Calendar.prototype = {
 		Event.purgeElement(this.oDomContainer, true);
 
 		var html = [];
-	
+
 		html[html.length] = '<table cellSpacing="0" class="' + this.Style.CSS_CALENDAR + ' y' + workingDate.getFullYear() + '" id="' + this.id + '">';
 		html = this.renderHeader(html);
 		html = this.renderBody(workingDate, html);
@@ -3083,7 +3187,7 @@ Calendar.prototype = {
 		this.cfg.refireEvent(DEF_CFG.TITLE.key);
 		this.cfg.refireEvent(DEF_CFG.CLOSE.key);
 		this.cfg.refireEvent(DEF_CFG.IFRAME.key);
-	
+
 		this.renderEvent.fire();
 	},
 
@@ -3095,19 +3199,19 @@ Calendar.prototype = {
 		var root = this.oDomContainer,
 			cal = this.parent || this,
 			anchor = "a",
-			mousedown = "mousedown";
+			click = "click";
 
 		var linkLeft = Dom.getElementsByClassName(this.Style.CSS_NAV_LEFT, anchor, root),
 			linkRight = Dom.getElementsByClassName(this.Style.CSS_NAV_RIGHT, anchor, root);
 
 		if (linkLeft && linkLeft.length > 0) {
 			this.linkLeft = linkLeft[0];
-			Event.addListener(this.linkLeft, mousedown, cal.previousMonth, cal, true);
+			Event.addListener(this.linkLeft, click, this.doPreviousMonthNav, cal, true);
 		}
 
 		if (linkRight && linkRight.length > 0) {
 			this.linkRight = linkRight[0];
-			Event.addListener(this.linkRight, mousedown, cal.nextMonth, cal, true);
+			Event.addListener(this.linkRight, click, this.doNextMonthNav, cal, true);
 		}
 
 		if (cal.cfg.getProperty("navigator") !== null) {
@@ -3961,19 +4065,19 @@ Calendar.prototype = {
 	onChangePage : function() {
 		this.render();
 	},
-	
+
 	/**
 	* Event executed when the calendar widget is rendered.
 	* @deprecated Event handlers for this event should be susbcribed to renderEvent.
 	*/
 	onRender : function() { },
-	
+
 	/**
 	* Event executed when the calendar widget is reset to its original state.
 	* @deprecated Event handlers for this event should be susbcribed to resetEvemt.
 	*/
 	onReset : function() { this.render(); },
-	
+
 	/**
 	* Event executed when the calendar widget is completely cleared to the current month with no selections.
 	* @deprecated Event handlers for this event should be susbcribed to clearEvent.
@@ -4284,6 +4388,44 @@ Calendar.prototype = {
 	*/
 	toString : function() {
 		return "Calendar " + this.id;
+	},
+
+	/**
+	 * Destroys the Calendar instance. The method will remove references
+	 * to HTML elements, remove any event listeners added by the Calendar,
+	 * and destroy the Config and CalendarNavigator instances it has created.
+	 *
+	 * @method destroy
+	 */
+	destroy : function() {
+
+		if (this.beforeDestroyEvent.fire()) {
+			var cal = this;
+
+			// Child objects
+			if (cal.navigator) {
+				cal.navigator.destroy();
+			}
+
+			if (cal.cfg) {
+				cal.cfg.destroy();
+			}
+
+			// DOM event listeners
+			Event.purgeElement(cal.oDomContainer, true);
+
+			// Generated markup/DOM - Not removing the container DIV since we didn't create it.
+			Dom.removeClass(cal.oDomContainer, "withtitle");
+			Dom.removeClass(cal.oDomContainer, cal.Style.CSS_CONTAINER);
+			Dom.removeClass(cal.oDomContainer, cal.Style.CSS_SINGLE);
+			cal.oDomContainer.innerHTML = "";
+
+			// JS-to-DOM references
+			cal.oDomContainer = null;
+			cal.cells = null;
+
+			this.destroyEvent.fire();
+		}
 	}
 };
 
@@ -4305,6 +4447,8 @@ YAHOO.widget.Cal_Core = YAHOO.widget.Calendar;
 
 	var Dom = YAHOO.util.Dom,
 		DateMath = YAHOO.widget.DateMath,
+		Event = YAHOO.util.Event,
+		Lang = YAHOO.lang,
 		Calendar = YAHOO.widget.Calendar;
 
 /**
@@ -4785,6 +4929,27 @@ CalendarGroup.prototype = {
 		* @default null
 		*/
 		cfg.addProperty(DEF_CFG.NAV.key, { value:DEF_CFG.NAV.value, handler:this.configNavigator } );
+
+		/**
+		 * The map of UI strings which the CalendarGroup UI uses.
+		 *
+		 * @config strings
+		 * @type {Object}
+		 * @default An object with the properties shown below:
+		 *     <dl>
+		 *         <dt>previousMonth</dt><dd><em>String</em> : The string to use for the "Previous Month" navigation UI. Defaults to "Previous Month".</dd>
+		 *         <dt>nextMonth</dt><dd><em>String</em> : The string to use for the "Next Month" navigation UI. Defaults to "Next Month".</dd>
+		 *         <dt>close</dt><dd><em>String</em> : The string to use for the close button label. Defaults to "Close".</dd>
+		 *     </dl>
+		 */
+		cfg.addProperty(DEF_CFG.STRINGS.key, { 
+			value:DEF_CFG.STRINGS.value, 
+			handler:this.configStrings, 
+			validator: function(val) {
+				return Lang.isObject(val);
+			},
+			supercedes: DEF_CFG.STRINGS.supercedes
+		});
 	},
 
 	/**
@@ -4864,7 +5029,7 @@ CalendarGroup.prototype = {
 		*/
 		me.changePageEvent = new CE(defEvents.CHANGE_PAGE); 
 		me.changePageEvent.subscribe = sub; me.changePageEvent.unsubscribe = unsub;
-	
+
 		/**
 		* Fired before the Calendar is rendered
 		* @event beforeRenderEvent
@@ -4892,7 +5057,7 @@ CalendarGroup.prototype = {
 		*/
 		me.clearEvent = new CE(defEvents.CLEAR);
 		me.clearEvent.subscribe = sub; me.clearEvent.unsubscribe = unsub;
-	
+
 		/**
 		* Fired just before the CalendarGroup is to be shown
 		* @event beforeShowEvent
@@ -4952,6 +5117,23 @@ CalendarGroup.prototype = {
 		* @event renderNavEvent
 		*/
 		me.renderNavEvent = new CE(defEvents.RENDER_NAV);
+
+		/**
+		* Fired just before the CalendarGroup is to be destroyed
+		* @event beforeDestroyEvent
+		*/
+		me.beforeDestroyEvent = new CE(defEvents.BEFORE_DESTROY);
+
+		/**
+		* Fired after the CalendarGroup is destroyed. This event should be used
+		* for notification only. When this event is fired, important CalendarGroup instance
+		* properties, dom references and event listeners have already been 
+		* removed/dereferenced, and hence the CalendarGroup instance is not in a usable 
+		* state.
+		*
+		* @event destroyEvent
+		*/
+		me.destroyEvent = new CE(defEvents.DESTROY);
 	},
 	
 	/**
@@ -5270,7 +5452,7 @@ CalendarGroup.prototype = {
 			cal.reset();
 		}
 	},
-	
+
 	/**
 	* Clears the selected dates in the current calendar widget and sets the calendar
 	* to the current month and year.
@@ -5281,8 +5463,12 @@ CalendarGroup.prototype = {
 			var cal = this.pages[p];
 			cal.clear();
 		}
+
+		this.cfg.setProperty(DEF_CFG.SELECTED.key, []);
+		this.cfg.setProperty(DEF_CFG.PAGEDATE.key, new Date(this.pages[0].today.getTime()));
+		this.render();
 	},
-	
+
 	/**
 	* Navigates to the next month page in the calendar widget.
 	* @method nextMonth
@@ -5525,6 +5711,51 @@ CalendarGroup.prototype = {
 	*/
 	toString : function() {
 		return "CalendarGroup " + this.id;
+	},
+
+	/**
+	 * Destroys the CalendarGroup instance. The method will remove references
+	 * to HTML elements, remove any event listeners added by the CalendarGroup.
+	 * 
+	 * It will also destroy the Config and CalendarNavigator instances created by the 
+	 * CalendarGroup and the individual Calendar instances created for each page.
+	 *
+	 * @method destroy
+	 */
+	destroy : function() {
+
+		if (this.beforeDestroyEvent.fire()) {
+
+			var cal = this;
+	
+			// Child objects
+			if (cal.navigator) {
+				cal.navigator.destroy();
+			}
+	
+			if (cal.cfg) {
+				cal.cfg.destroy();
+			}
+	
+			// DOM event listeners
+			Event.purgeElement(cal.oDomContainer, true);
+	
+			// Generated markup/DOM - Not removing the container DIV since we didn't create it.
+			Dom.removeClass(cal.oDomContainer, CalendarGroup.CSS_CONTAINER);
+			Dom.removeClass(cal.oDomContainer, CalendarGroup.CSS_MULTI_UP);
+			
+			for (var i = 0, l = cal.pages.length; i < l; i++) {
+				cal.pages[i].destroy();
+				cal.pages[i] = null;
+			}
+	
+			cal.oDomContainer.innerHTML = "";
+	
+			// JS-to-DOM references
+			cal.oDomContainer = null;
+	
+			this.destroyEvent.fire();
+		}
 	}
 };
 
@@ -5585,6 +5816,7 @@ YAHOO.lang.augmentProto(CalendarGroup, Calendar, "buildDayLabel",
 												 "configTitle",
 												 "configClose",
 												 "configIframe",
+												 "configStrings",
 												 "configNavigator",
 												 "createTitleBar",
 												 "createCloseButton",
