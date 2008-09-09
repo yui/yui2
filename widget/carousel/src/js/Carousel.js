@@ -784,8 +784,8 @@
         navContainer.appendChild(this._pages.el);
         
         nav = this.get("navigation");
-        if (nav.prev) {
-            navContainer.appendChild(nav.prev);
+        if (nav.prev && nav.prev.length > 0) {
+            navContainer.appendChild(nav.prev[0]);
         } else {
             // TODO: separate method for creating a navigation button
             prevButton = createElement("SPAN",
@@ -794,11 +794,11 @@
                     "value=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\" " +
                     "name=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\">";
             navContainer.appendChild(prevButton);
-            cfg = { prev: prevButton };
+            cfg = { prev: [prevButton] };
         }
         
-        if (nav.next) {
-            navContainer.appendChild(nav.next);
+        if (nav.next && nav.next.length > 0) {
+            navContainer.appendChild(nav.next[0]);
         } else {
             // TODO: separate method for creating a navigation button
             nextButton = createElement("SPAN",
@@ -808,9 +808,9 @@
                     "name=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\">";
             navContainer.appendChild(nextButton);
             if (cfg) {
-                cfg.next = nextButton;
+                cfg.next = [nextButton];
             } else {
-                cfg = { next: nextButton };
+                cfg = { next: [nextButton] };
             }
         }
 
@@ -2290,25 +2290,35 @@
          * @protected
          */
         _parseCarouselNavigation: function (parent) {
-            var cfg, cssClass = this.CLASSES, el, rv = false;
+            var cfg, cssClass = this.CLASSES, el, i, nav, rv = false;
 
-            el = Dom.getElementsByClassName(cssClass.PREV_PAGE, "*", parent);
-            if (el.length > 0) {
-                YAHOO.log("Found Carousel previous page navigation - " +
-                      el[0] + (el[0].id ? " (#" + el[0].id + ")" : ""),
-                      WidgetName);
-                cfg = { prev: el[0] };
+            nav = Dom.getElementsByClassName(cssClass.PREV_PAGE, "*", parent);
+            if (nav.length > 0) {
+                for (i in nav) {
+                    if (nav.hasOwnProperty(i)) {
+                        el = nav[i];
+                        YAHOO.log("Found Carousel previous page navigation - " +
+                                el + (el.id ? " (#" + el.id + ")" : ""),
+                                WidgetName);
+                    }
+                }
+                cfg = { prev: nav };
             }
 
-            el = Dom.getElementsByClassName(cssClass.NEXT_PAGE, "*", parent);
-            if (el.length > 0) {
-                YAHOO.log("Found Carousel next page navigation - " +
-                      el[0] + (el[0].id ? " (#" + el[0].id + ")" : ""),
-                      WidgetName);
+            nav = Dom.getElementsByClassName(cssClass.NEXT_PAGE, "*", parent);
+            if (nav.length > 0) {
+                for (i in nav) {
+                    if (nav.hasOwnProperty(i)) {
+                        el = nav[i];
+                        YAHOO.log("Found Carousel next page navigation - " +
+                                el + (el.id ? " (#" + el.id + ")" : ""),
+                                WidgetName);
+                    }
+                }
                 if (cfg) {
-                    cfg.next = el[0];
+                    cfg.next = nav;
                 } else {
-                    cfg = { next: el[0] };
+                    cfg = { next: nav };
                 }
             }
 
@@ -2508,17 +2518,38 @@
          * @protected
          */
         _validateNavigation : function (cfg) {
+            var i;
+
             if (!JS.isObject(cfg)) {
                 return false;
             }
-            if (cfg.prev && !(JS.isString(cfg.prev) ||
-                    JS.isString(cfg.prev.nodeName))) {
-                return false;
+
+            if (cfg.prev) {
+                if (!JS.isArray(cfg.prev)) {
+                    return false;
+                }
+                for (i in cfg.prev) {
+                    if (cfg.prev.hasOwnProperty(i)) {
+                        if (!JS.isString(cfg.prev[i].nodeName)) {
+                            return false;
+                        }
+                    }
+                }
             }
-            if (cfg.next && !(JS.isString(cfg.next) ||
-                    JS.isString(cfg.next.nodeName))) {
-                return false;
+
+            if (cfg.next) {
+                if (!JS.isArray(cfg.next)) {
+                    return false;
+                }
+                for (i in cfg.next) {
+                    if (cfg.next.hasOwnProperty(i)) {
+                        if (!JS.isString(cfg.next[i].nodeName)) {
+                            return false;
+                        }
+                    }
+                }
             }
+
             return true;
         },
 
