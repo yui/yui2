@@ -364,6 +364,7 @@ suite.add(new TestCase({
             timeout : 3000
         };
 
+        //TODO: create the form in testbed and destroy it in tearDown
         frm.foo.value = "bar";
 
         frm["c0[]"][0].checked =
@@ -511,6 +512,8 @@ suite.add(new TestCase({
         delete this.response;
     },
 
+    // TODO: add test using post to iframe (server responds with text/plain
+    // JSON) then compare the parsed content.
     test_setForm_basic_GET : function () {
         var io = YAHOO.util.Connect,
             t  = this;
