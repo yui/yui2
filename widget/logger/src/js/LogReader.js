@@ -23,7 +23,9 @@ YAHOO.widget.LogReader = function(elContainer, oConfigs) {
     // Parse config vars here
     if (oConfigs && (oConfigs.constructor == Object)) {
         for(var param in oConfigs) {
-            this[param] = oConfigs[param];
+            if (oConfigs.hasOwnProperty(param)) {
+                this[param] = oConfigs[param];
+            }
         }
     }
 

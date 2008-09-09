@@ -53,7 +53,7 @@ YAHOO.widget.LogWriter.prototype.log = function(sMsg, sCategory) {
  * @return {String} The LogWriter source.
  */
 YAHOO.widget.LogWriter.prototype.getSource = function() {
-    return this._sSource;
+    return this._source;
 };
 
 /**
@@ -68,7 +68,7 @@ YAHOO.widget.LogWriter.prototype.setSource = function(sSource) {
         return;
     }
     else {
-        this._sSource = sSource;
+        this._source = sSource;
     }
 };
 
