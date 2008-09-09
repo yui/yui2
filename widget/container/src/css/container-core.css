@@ -148,11 +148,13 @@ PLEASE NOTE:
 */
 
 .yui-tt-shadow {
-
     position: absolute;
-
 }
 
 .yui-override-padding {
     padding:0 !important;
+}
+
+.yui-panel-container .container-close {
+    text-indent:-10000em;
 }

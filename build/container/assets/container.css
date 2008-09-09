@@ -227,6 +227,7 @@ PLEASE NOTE:
     background:url(close12_1.gif) no-repeat;
     cursor:pointer;
     visibility:inherit;
+    text-indent:-10000em;
 }
 
 .yui-panel .ft {

@@ -5560,6 +5560,15 @@
                 key: "keylisteners",
                 suppressEvent: true,
                 supercedes: ["visible"]
+            },
+
+            "STRINGS" : {
+                key: "strings",
+                supercedes: ["close"],
+                validator: Lang.isObject,
+                value: {
+                    close: "Close"
+                }
             }
         };
 
@@ -5783,9 +5792,9 @@
         */
         initEvents: function () {
             Panel.superclass.initEvents.call(this);
-        
+
             var SIGNATURE = CustomEvent.LIST;
-        
+
             /**
             * CustomEvent fired after the modality mask is shown
             * @event showMaskEvent
@@ -5816,9 +5825,9 @@
         */
         initDefaultConfig: function () {
             Panel.superclass.initDefaultConfig.call(this);
-        
+
             // Add panel config properties //
-        
+
             /**
             * True if the Panel should display a "close" button
             * @config close
@@ -5831,7 +5840,7 @@
                 validator: DEFAULT_CONFIG.CLOSE.validator, 
                 supercedes: DEFAULT_CONFIG.CLOSE.supercedes 
             });
-        
+
             /**
             * Boolean specifying if the Panel should be draggable.  The default 
             * value is "true" if the Drag and Drop utility is included, 
@@ -5920,7 +5929,7 @@
                 validator: DEFAULT_CONFIG.MODAL.validator, 
                 supercedes: DEFAULT_CONFIG.MODAL.supercedes 
             });
-        
+
             /**
             * A KeyListener (or array of KeyListeners) that will be enabled 
             * when the Panel is shown, and disabled when the Panel is hidden.
@@ -5933,9 +5942,25 @@
                 suppressEvent: DEFAULT_CONFIG.KEY_LISTENERS.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.KEY_LISTENERS.supercedes 
             });
-        
+
+            /**
+            * UI Strings used by the Panel
+            * 
+            * @config strings
+            * @type Object
+            * @default An object literal with the properties shown below:
+            *     <dl>
+            *         <dt>close</dt><dd><em>String</em> : The string to use for the close icon. Defaults to "Close".</dd>
+            *     </dl>
+            */
+            this.cfg.addProperty(DEFAULT_CONFIG.STRINGS.key, { 
+                value:DEFAULT_CONFIG.STRINGS.value,
+                handler:this.configStrings,
+                validator:DEFAULT_CONFIG.STRINGS.validator,
+                supercedes:DEFAULT_CONFIG.STRINGS.supercedes
+            });
         },
-        
+
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
         
         /**
@@ -5952,24 +5977,27 @@
         configClose: function (type, args, obj) {
 
             var val = args[0],
-                oClose = this.close;
-        
+                oClose = this.close,
+                strings = this.cfg.getProperty("strings");
+
             function doHide(e, obj) {
                 obj.hide();
             }
-        
+
             if (val) {
                 if (!oClose) {
+
                     if (!m_oCloseIconTemplate) {
                         m_oCloseIconTemplate = document.createElement("span");
-                        m_oCloseIconTemplate.innerHTML = "&#160;";
                         m_oCloseIconTemplate.className = "container-close";
                     }
 
                     oClose = m_oCloseIconTemplate.cloneNode(true);
                     this.innerElement.appendChild(oClose);
+                    oClose.innerHTML = (strings && strings.close)? strings.close : "&#160;";
+
                     Event.on(oClose, "click", doHide, this);
-                    
+
                     this.close = oClose;
 
                 } else {
@@ -6292,7 +6320,16 @@
             }
 
         },
-        
+
+        /**
+        * The default handler for the "strings" property
+        * @method configStrings
+        */
+        configStrings : function(type, args, obj) {
+            var val = Lang.merge(DEFAULT_CONFIG.STRINGS.value, args[0]);
+            this.cfg.setProperty(DEFAULT_CONFIG.STRINGS.key, val, true);
+        },
+
         /**
         * The default event handler fired when the "height" property is changed.
         * @method configHeight
@@ -6303,13 +6340,11 @@
         * this will usually equal the owner.
         */
         configHeight: function (type, args, obj) {
-    
             var height = args[0],
                 el = this.innerElement;
-    
+
             Dom.setStyle(el, "height", height);
             this.cfg.refireEvent("iframe");
-    
         },
 
         /**
@@ -6560,8 +6595,8 @@
         hideMask: function () {
             if (this.cfg.getProperty("modal") && this.mask) {
                 this.mask.style.display = "none";
-                this.hideMaskEvent.fire();
                 Dom.removeClass(document.body, "masked");
+                this.hideMaskEvent.fire();
             }
         },
 
@@ -6585,6 +6620,21 @@
         */
         sizeMask: function () {
             if (this.mask) {
+
+                // Shrink mask first, so it doesn't affect the document size.
+                var mask = this.mask,
+                    viewWidth = Dom.getViewportWidth(),
+                    viewHeight = Dom.getViewportHeight();
+
+                if (this.mask.offsetHeight > viewHeight) {
+                    this.mask.style.height = viewHeight + "px";
+                }
+
+                if (this.mask.offsetWidth > viewWidth) {
+                    this.mask.style.width = viewWidth + "px";
+                }
+
+                // Then size it to the document
                 this.mask.style.height = Dom.getDocumentHeight() + "px";
                 this.mask.style.width = Dom.getDocumentWidth() + "px";
             }
