@@ -2515,7 +2515,6 @@ var xPad=function (x, pad, r)
         A: function (d, l) { return l.A[d.getDay()]; },
         b: function (d, l) { return l.b[d.getMonth()]; },
         B: function (d, l) { return l.B[d.getMonth()]; },
-        c: 'toLocaleString',
         C: function (d) { return xPad(parseInt(d.getFullYear()/100, 10), 0); },
         d: ['getDate', '0'],
         e: ['getDate', ' '],
@@ -2542,10 +2541,13 @@ var xPad=function (x, pad, r)
                 var doy = parseInt(ms/60000/60/24, 10)+1;
                 return xPad(doy, 0, 100);
             },
+        k: ['getHours', ' '],
+        l: function (d) { var I=d.getHours()%12; return xPad(I===0?12:I, ' '); },
         m: function (d) { return xPad(d.getMonth()+1, 0); },
         M: ['getMinutes', '0'],
         p: function (d, l) { return l.p[d.getHours() >= 12 ? 1 : 0 ]; },
         P: function (d, l) { return l.P[d.getHours() >= 12 ? 1 : 0 ]; },
+        s: function (d, l) { return parseInt(d.getTime()/1000, 10); },
         S: ['getSeconds', '0'],
         u: function (d) { var dow = d.getDay(); return dow===0?7:dow; },
         U: function (d) {
@@ -2596,14 +2598,16 @@ var xPad=function (x, pad, r)
     aggregates: {
         c: 'locale',
         D: '%m/%d/%y',
+        F: '%Y-%m-%d',
         h: '%b',
         n: '\n',
-        r: '%I:%M:%S %p',
+        r: 'locale',
         R: '%H:%M',
         t: '\t',
         T: '%H:%M:%S',
         x: 'locale',
         X: 'locale'
+        //'+': '%a %b %e %T %Z %Y'
     },
 
      /**
@@ -2632,12 +2636,15 @@ var xPad=function (x, pad, r)
      *  @arg \%d - day of the month as a decimal number (range 01 to 31)
      *  @arg \%D - same as %m/%d/%y
      *  @arg \%e - day of the month as a decimal number, a single digit is preceded by a space (range ' 1' to '31')
+     *  @arg \%F - same as %Y-%m-%d (ISO 8601 date format)
      *  @arg \%g - like %G, but without the century
      *  @arg \%G - The 4-digit year corresponding to the ISO week number
      *  @arg \%h - same as %b
      *  @arg \%H - hour as a decimal number using a 24-hour clock (range 00 to 23)
      *  @arg \%I - hour as a decimal number using a 12-hour clock (range 01 to 12)
      *  @arg \%j - day of the year as a decimal number (range 001 to 366)
+     *  @arg \%k - hour as a decimal number using a 24-hour clock (range 0 to 23); single digits are preceded by a blank. (See also %H.)
+     *  @arg \%l - hour as a decimal number using a 12-hour clock (range 1 to 12); single digits are preceded by a blank. (See also %I.) 
      *  @arg \%m - month as a decimal number (range 01 to 12)
      *  @arg \%M - minute as a decimal number
      *  @arg \%n - newline character
@@ -2645,6 +2652,7 @@ var xPad=function (x, pad, r)
      *  @arg \%P - like %p, but lower case
      *  @arg \%r - time in a.m. and p.m. notation equal to %I:%M:%S %p
      *  @arg \%R - time in 24 hour notation equal to %H:%M
+     *  @arg \%s - number of seconds since the Epoch, ie, since 1970-01-01 00:00:00 UTC
      *  @arg \%S - second as a decimal number
      *  @arg \%t - tab character
      *  @arg \%T - current time, equal to %H:%M:%S
@@ -2723,12 +2731,12 @@ var xPad=function (x, pad, r)
         };
 
         // First replace aggregates (run in a loop because an agg may be made up of other aggs)
-        while(format.match(/%[cDhnrRtTxX]/)) {
-            format = format.replace(/%([cDhnrRtTxX])/g, replace_aggs);
+        while(format.match(/%[cDFhnrRtTxX]/)) {
+            format = format.replace(/%([cDFhnrRtTxX])/g, replace_aggs);
         }
 
         // Now replace formats (do not run in a loop otherwise %%a will be replace with the value of %a)
-        var str = format.replace(/%([aAbBCdegGHIjmMpPSuUVwWyYzZ%])/g, replace_formats);
+        var str = format.replace(/%([aAbBCdegGHIjklmMpPsSuUVwWyYzZ%])/g, replace_formats);
 
         replace_aggs = replace_formats = undefined;
 
@@ -2805,9 +2813,7 @@ var xPad=function (x, pad, r)
  *   mardi, 22 avril == 2008-04-22
  * </pre>
  */
- YAHOO.util.DateLocale = {};
-
- YAHOO.util.DateLocale['en'] = YAHOO.lang.merge(YAHOO.util.DateLocale, {
+ YAHOO.util.DateLocale = {
         a: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
         A: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         b: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -2815,17 +2821,23 @@ var xPad=function (x, pad, r)
         c: '%a %d %b %Y %T %Z',
         p: ['AM', 'PM'],
         P: ['am', 'pm'],
+        r: '%I:%M:%S %p',
         x: '%d/%m/%y',
         X: '%T'
- });
+ };
+
+ YAHOO.util.DateLocale['en'] = YAHOO.lang.merge(YAHOO.util.DateLocale, {});
 
  YAHOO.util.DateLocale['en-US'] = YAHOO.lang.merge(YAHOO.util.DateLocale['en'], {
-        c: '%a %b %e %T %Y',
-        x: '%D'
+        c: '%a %d %b %Y %I:%M:%S %p %Z',
+        x: '%m/%d/%Y',
+        X: '%I:%M:%S %p'
  });
 
- YAHOO.util.DateLocale['en-GB'] = YAHOO.lang.merge(YAHOO.util.DateLocale['en']);
- YAHOO.util.DateLocale['en-AU'] = YAHOO.lang.merge(YAHOO.util.DateLocale['en-GB']);
+ YAHOO.util.DateLocale['en-GB'] = YAHOO.lang.merge(YAHOO.util.DateLocale['en'], {
+        r: '%l:%M:%S %P %Z'
+ });
+ YAHOO.util.DateLocale['en-AU'] = YAHOO.lang.merge(YAHOO.util.DateLocale['en']);
 
 })();
 
