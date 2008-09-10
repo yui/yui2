@@ -15,6 +15,13 @@
 	    * 2099035 - [SF 2027048] keyDown event does not fire in IE after ena...
 	    * 2189912 - [SF 2093253] Editor used in HTTPS page will provoke Secu...
         * 1655240 - [SF 1851177] Text Align not working correctly in IE
+	    * 1984727 - [SF 1986820 ] Clicking bulleted list before typing create...
+	    * 2108127 - [SF 2027073 ] IE7: editor list items misaligned when text...
+
+    * Safari
+
+	    * 1972354 - [SF 1978372 ] Safari/IE list creation quirk
+	    * 1972367 - [SF 1978350 ] Safari 3.1 issue with lists
 
     * All
         * 1508375 - [SF 1791252, 1964709] Have Undo, Redo functions in Editor  
@@ -37,6 +44,11 @@
         * 2015947 - [SF 1998524] Alignment Code doesn't generate
         * 2118761 - [SF 2035187] Custom Editor body CSS only applies to visited links
         * 2118723 - [SF 2034544] Image Options Dialog Box needs fixing
+        * 2036613 - [SF 2007145] Removing underline not working in IE6/7, FF3
+        * 2065013 - [SF 2015601] Text in some controls is not vertically centered
+	    * 1918278 - [SF 1955931 ] font color (background color) doesn't work ...
+	    * 1972427 - [SF 1954095 ] Bulleting
+
 
 
 

@@ -1333,6 +1333,9 @@ var Dom = YAHOO.util.Dom,
             if (doEvent) {
                 var fireNextEvent = true,
                     retValue = false;
+                    
+                info.isSelected = this.isSelected(info.id);
+
                 if (info.value) {
                     YAHOO.log('fireEvent::' + info.value + 'Click', 'info', 'Toolbar');
                     retValue = this.fireEvent(info.value + 'Click', { type: info.value + 'Click', target: this.get('element'), button: info });

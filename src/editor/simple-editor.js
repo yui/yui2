@@ -1152,7 +1152,6 @@ var Dom = YAHOO.util.Dom,
                     }
                }
             }
-            //console.log(elm);
             
             if (this.currentEvent !== null) {
                 try {
@@ -1561,6 +1560,7 @@ var Dom = YAHOO.util.Dom,
                         this.nodeChange();
                     }
                     break;
+                case 32: //Space Bar
                 case 37: //Left Arrow
                 case 38: //Up Arrow
                 case 39: //Right Arrow
@@ -1774,9 +1774,12 @@ var Dom = YAHOO.util.Dom,
                             }
                         }
                         if (this.browser.webkit) {
-                            doExec = true;
-                            action = 'insertparagraph';
-                            Event.stopEvent(ev);
+                            tar = this._getSelectedElement();
+                            if (!this._hasParent(tar, 'li')) {
+                                doExec = true;
+                                action = 'insertparagraph';
+                                Event.stopEvent(ev);
+                            }
                         }
                     } else {
                         if (this.browser.ie) {
@@ -1820,22 +1823,11 @@ var Dom = YAHOO.util.Dom,
                 if (ev.keyCode && (ev.keyCode == 13)) {
                     if (this._hasParent(this._getSelectedElement(), 'li')) {
                         var tar = this._hasParent(this._getSelectedElement(), 'li');
-                        var li = this._getDoc().createElement('li');
-                        li.innerHTML = '<span class="yui-non">&nbsp;</span>&nbsp;';
-                        if (tar.nextSibling) {
-                            tar.parentNode.insertBefore(li, tar.nextSibling);
-                        } else {
-                            tar.parentNode.appendChild(li);
+                        if (tar.previousSibling) {
+                            if (tar.firstChild && (tar.firstChild.length == 1)) {
+                                this._selectNode(tar);
+                            }
                         }
-                        this.currentElement[0] = li;
-                        this._selectNode(li.firstChild);
-                        if (!this.browser.webkit3) {
-                            tar.parentNode.style.display = 'list-item';
-                            setTimeout(function() {
-                                tar.parentNode.style.display = 'block';
-                            }, 1);
-                        }
-                        Event.stopEvent(ev);
                     }
                 }
             }
@@ -1862,14 +1854,7 @@ var Dom = YAHOO.util.Dom,
                                 range.select();
                             }
                             if (this.browser.webkit) {
-                                if (!this.browser.webkit3) {
-                                    par.style.display = 'list-item';
-                                    par.parentNode.style.display = 'list-item';
-                                    setTimeout(function() {
-                                        par.style.display = 'block';
-                                        par.parentNode.style.display = 'block';
-                                    }, 1);
-                                }
+                                this._selectNode(testLi.firstChild);
                             }
                             Event.stopEvent(ev);
                         }
@@ -2014,6 +1999,7 @@ var Dom = YAHOO.util.Dom,
                     var _ex = {};
                     if (this._lastButton) {
                         _ex[this._lastButton.id] = true;
+                        //this._lastButton = null;
                     }
                     if (!this._isElement(el, 'body')) {
                         if (fn_button) {
@@ -2125,6 +2111,9 @@ var Dom = YAHOO.util.Dom,
                     var img_button = this.toolbar.getButtonByValue('insertimage');
                     if (img_button && this.currentWindow && (this.currentWindow.name == 'insertimage')) {
                         this.toolbar.disableButton(img_button);
+                    }
+                    if (this._lastButton && this._lastButton.isSelected) {
+                        this.toolbar.deselectButton(this._lastButton.id);
                     }
                     this._undoNodeChange();
                 }
@@ -3248,9 +3237,7 @@ var Dom = YAHOO.util.Dom,
             }
         
             this.toolbar.set('disabled', true); //Disable the toolbar when the prompt is showing
-            YAHOO.log('HERE 1', 'warn', 'DAV');
             this.on('afterExecCommand', function() {
-                YAHOO.log('HERE AEC', 'warn', 'DAV');
                 var el = this.currentElement[0],
                     src = 'http://';
                 if (!el) {
@@ -3540,6 +3527,25 @@ var Dom = YAHOO.util.Dom,
     /* {{{  Command Overrides */
 
         /**
+        * @method cmd_underline
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('underline') is used.
+        */
+        cmd_underline: function(value) {
+            if (!this.browser.webkit) {
+                var el = this._getSelectedElement();
+                if (el && this._isElement(el, 'span')) {
+                    if (el.style.textDecoration == 'underline') {
+                        el.style.textDecoration = 'none';
+                    } else {
+                        el.style.textDecoration = 'underline';
+                    }
+                    return [false];
+                }
+            }
+            return [true];
+        },
+        /**
         * @method cmd_backcolor
         * @param value Value passed from the execCommand method
         * @description This is an execCommand override method. It is called from execCommand when the execCommand('backcolor') is used.
@@ -3734,8 +3740,10 @@ var Dom = YAHOO.util.Dom,
             * The issue with this workaround is that when applied to a set of text
             * that has BR's in it, Safari may or may not pick up the individual items as
             * list items. This is fixed in WebKit (Safari 3)
+            * 2.6.0: Seems there are still some issues with List Creation and Safari 3, reverting to previously working Safari 2.x code
             */
-            if ((this.browser.webkit && !this._getDoc().queryCommandEnabled(action))) {
+            //if ((this.browser.webkit && !this._getDoc().queryCommandEnabled(action))) {
+            if (this.browser.webkit) {
                 if (this._isElement(selEl, 'li') && this._isElement(selEl.parentNode, tag)) {
                     YAHOO.log('We already have a list, undo it', 'info', 'SimpleEditor');
                     el = selEl.parentNode;
@@ -3816,11 +3824,23 @@ var Dom = YAHOO.util.Dom,
                                 html += '<li>' + t[ie] + '</li>';
                             }
                         } else {
-                            html = '<li>' + this._getRange().text + '</li>';
+                            var txt = this._getRange().text;
+                            if (txt === '') {
+                                html = '<li id="new_list_item">' + txt + '</li>';
+                            } else {
+                                html = '<li>' + txt + '</li>';
+                            }
                         }
                     }
-
                     this._getRange().pasteHTML('<' + tag + '>' + html + '</' + tag + '>');
+                    var new_item = this._getDoc().getElementById('new_list_item');
+                    if (new_item) {
+                        var range = this._getDoc().body.createTextRange();
+                        range.moveToElementText(new_item);
+                        range.collapse(false);
+                        range.select();                       
+                        new_item.id = '';
+                    }
                     exec = false;
                 }
             }
