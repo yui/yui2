@@ -741,7 +741,7 @@ YAHOO.widget.FlashAdapter.removeProxyFunction = function(funcName)
  *
  * @namespace YAHOO.widget
  * @class Chart
- * @uses YAHOO.util.FlashAdapter
+ * @uses YAHOO.widget.FlashAdapter
  * @constructor
  * @param type {String} The char type. May be "line", "column", "bar", or "pie"
  * @param containerId {HTMLElement} Container element for the Flash Player instance.
@@ -1502,7 +1502,7 @@ YAHOO.lang.extend(YAHOO.widget.PieChart, YAHOO.widget.Chart,
  *
  * @namespace YAHOO.widget
  * @class CartesianChart
- * @uses YAHOO.widget.Charts
+ * @uses YAHOO.widget.Chart
  * @constructor
  * @param type {String} The char type. May be "line", "column", or "bar"
  * @param containerId {HTMLElement} Container element for the Flash Player instance.
@@ -2053,7 +2053,9 @@ YAHOO.lang.extend(YAHOO.widget.CategoryAxis, YAHOO.widget.Axis,
 });
 
 /**
- * Series class for the YUI Charts widget.
+ * Functionality common to most series. Generally, a <code>Series</code> 
+ * object shouldn't be instantiated directly. Instead, a subclass with a 
+ * concrete implementation should be used.
  *
  * @namespace YAHOO.widget
  * @class Series
@@ -2081,10 +2083,14 @@ YAHOO.widget.Series.prototype =
 };
 
 /**
- * CartesianSeries class for the YUI Charts widget.
+ * Functionality common to most series appearing in cartesian charts.
+ * Generally, a <code>CartesianSeries</code> object shouldn't be
+ * instantiated directly. Instead, a subclass with a concrete implementation
+ * should be used.
  *
  * @namespace YAHOO.widget
  * @class CartesianSeries
+ * @uses YAHOO.widget.Series
  * @constructor
  */
 YAHOO.widget.CartesianSeries = function() 
@@ -2116,6 +2122,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianSeries, YAHOO.widget.Series,
  *
  * @namespace YAHOO.widget
  * @class ColumnSeries
+ * @uses YAHOO.widget.CartesianSeries
  * @constructor
  */
 YAHOO.widget.ColumnSeries = function() 
@@ -2133,6 +2140,7 @@ YAHOO.lang.extend(YAHOO.widget.ColumnSeries, YAHOO.widget.CartesianSeries,
  *
  * @namespace YAHOO.widget
  * @class LineSeries
+ * @uses YAHOO.widget.CartesianSeries
  * @constructor
  */
 YAHOO.widget.LineSeries = function() 
@@ -2151,6 +2159,7 @@ YAHOO.lang.extend(YAHOO.widget.LineSeries, YAHOO.widget.CartesianSeries,
  *
  * @namespace YAHOO.widget
  * @class BarSeries
+ * @uses YAHOO.widget.CartesianSeries
  * @constructor
  */
 YAHOO.widget.BarSeries = function() 
@@ -2169,6 +2178,7 @@ YAHOO.lang.extend(YAHOO.widget.BarSeries, YAHOO.widget.CartesianSeries,
  *
  * @namespace YAHOO.widget
  * @class PieSeries
+ * @uses YAHOO.widget.Series
  * @constructor
  */
 YAHOO.widget.PieSeries = function() 
@@ -2211,6 +2221,7 @@ YAHOO.lang.extend(YAHOO.widget.PieSeries, YAHOO.widget.Series,
  *
  * @namespace YAHOO.widget
  * @class StackedBarSeries
+ * @uses YAHOO.widget.CartesianSeries
  * @constructor
  */
 YAHOO.widget.StackedBarSeries = function() 
@@ -2228,6 +2239,7 @@ YAHOO.lang.extend(YAHOO.widget.StackedBarSeries, YAHOO.widget.CartesianSeries,
  *
  * @namespace YAHOO.widget
  * @class StackedColumnSeries
+ * @uses YAHOO.widget.CartesianSeries
  * @constructor
  */
 YAHOO.widget.StackedColumnSeries = function() 
