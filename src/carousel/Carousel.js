@@ -450,80 +450,6 @@
     }
 
     /**
-     * The "click" handler for the item.
-     *
-     * @method itemClickHandler
-     * @param {Event} ev The event object
-     * @param {Object} obj The context object
-     * @private
-     */
-    function itemClickHandler(ev, obj) {
-        var container = obj.get("element"),
-            el,
-            item,
-            target = YAHOO.util.Event.getTarget(ev);
-        
-        while (target && target != container && target.id != obj._carouselEl) {
-            el = target.nodeName;
-            if (el.toUpperCase() == obj.CONFIG.ITEM_TAG_NAME) {
-                break;
-            }
-            target = target.parentNode;
-        }
-
-        if ((item = obj.getItemPositionById(target.id)) >= 0) {
-            obj.set("selectedItem", obj._getSelectedItem(item));
-        }
-    }
-
-    /**
-     * The keyboard event handler for Carousel.
-     *
-     * @method keyboardEventHandler
-     * @param ev {Event} The event that is being handled.
-     * @param o {Object} The current object instance.
-     * @private
-     */
-    function keyboardEventHandler(ev, o) {
-        var key      = Event.getCharCode(ev),
-            prevent  = false,
-            position = 0;
-
-        if (o._isAnimationInProgress) {
-            return;         // do not mess while animation is in progress
-        }
-        
-        switch (key) {
-        case 0x25:          // left arrow
-        case 0x26:          // up arrow
-            position = o.get("selectedItem");
-            o.set("selectedItem",
-                    o._getSelectedItem(position - o.get("scrollIncrement")));
-            prevent = true;
-            break;
-        case 0x27:          // right arrow
-        case 0x28:          // down arrow
-            position = o.get("selectedItem");
-            o.set("selectedItem",
-                    o._getSelectedItem(position + o.get("scrollIncrement")));
-            prevent = true;
-            break;
-        case 0x21:          // page-up
-            o.scrollPageBackward();
-            prevent = true;
-            break;
-        case 0x22:          // page-down
-            o.scrollPageForward();
-            prevent = true;
-            break;
-        }
-
-        if (prevent) {
-            Event.preventDefault(ev);
-        }
-    }
-
-    /**
      * The load the required set of items that are needed for display.
      *
      * @method loadItems
@@ -545,28 +471,6 @@
                     first: first, last: last,
                     num: last - first
             });
-        }
-    }
-    
-    /**
-     * The "click" handler for the pager navigation.
-     *
-     * @method pagerClickHandler
-     * @param {Event} ev The event object
-     * @param {Object} obj The context object
-     * @private
-     */
-    function pagerClickHandler(ev, obj) {
-        var match,
-            target = Event.getTarget(ev),
-            val;
-
-        val = target.href || target.value;
-        if (val && (match = val.match(/.*?-(\d+)$/))) {
-            if (match.length == 2) {
-                obj.scrollTo((match[1] - 1) * obj.get("numVisible"));
-                Event.preventDefault(ev);
-            }
         }
     }
 
@@ -594,97 +498,6 @@
     function scrollPageForward(ev, obj) {
         obj.scrollPageForward();
         Event.preventDefault(ev);
-    }
-
-    /**
-     * Set the container size.
-     *
-     * @method setContainerSize
-     * @param clip {HTMLElement} The clip container element.
-     * @param attr {String} Either set the height or width.
-     * @private
-     */
-    function setContainerSize(clip, attr) {
-        var isVertical, size;
-
-        isVertical = this.get("isVertical");
-        if (isVertical) {
-            return;             // no need to set the height for container
-        }
-        clip       = clip || this._clipEl;
-        attr       = attr || (isVertical ? "height" : "width");
-        size       = parseFloat(Dom.getStyle(clip, attr), 10);
-
-        size = JS.isNumber(size) ? size : 0;
-
-        size += getStyle(clip, "marginLeft")   +
-                getStyle(clip, "marginRight")  +
-                getStyle(clip, "paddingLeft")  +
-                getStyle(clip, "paddingRight") +
-                getStyle(clip, "borderLeft")   +
-                getStyle(clip, "borderRight");
-        
-        this.setStyle(attr, size + "px");
-    }
-    
-    /**
-     * Set the clip container size (based on the new numVisible value).
-     *
-     * @method setClipContainerSize
-     * @param clip {HTMLElement} The clip container element.
-     * @param num {Number} optional The number of items per page.
-     * @private
-     */
-    function setClipContainerSize(clip, num) {
-        var attr, currVal, isVertical, itemSize, reveal, size, which;
-
-        isVertical = this.get("isVertical");
-        reveal     = this.get("revealAmount");
-        which      = isVertical ? "height" : "width";
-        attr       = isVertical ? "top" : "left";
-        clip       = clip || this._clipEl;
-        num        = num  || this.get("numVisible");
-        itemSize   = getCarouselItemSize.call(this, which);
-        size       = itemSize * num;
-
-        this._recomputeSize = (size === 0); // bleh!
-        if (this._recomputeSize) {
-            return;             // no use going further, bail out!
-        }
-        
-        if (!clip) {
-            return;
-        }
-
-        if (reveal > 0) {
-            reveal = itemSize * (reveal / 100) * 2;
-            size += reveal;
-            // XXX: its quite unusual to set the Carousel's initial offset here
-            currVal = parseFloat(Dom.getStyle(this._carouselEl, attr));
-            currVal = JS.isNumber(currVal) ? currVal : 0;
-            Dom.setStyle(this._carouselEl, attr, currVal + (reveal/2) + "px");
-        }
-
-        if (isVertical) {
-            size += getStyle(this._carouselEl, "marginTop")     +
-                    getStyle(this._carouselEl, "marginBottom")  +
-                    getStyle(this._carouselEl, "paddingTop")    +
-                    getStyle(this._carouselEl, "paddingBottom") +
-                    getStyle(this._carouselEl, "borderTop")     +
-                    getStyle(this._carouselEl, "borderBottom");
-            // XXX: for vertical Carousel
-            Dom.setStyle(clip, which, (size - (num - 1)) + "px");
-        } else {
-            size += getStyle(this._carouselEl, "marginLeft")    +
-                    getStyle(this._carouselEl, "marginRight")   +
-                    getStyle(this._carouselEl, "paddingLeft")   +
-                    getStyle(this._carouselEl, "paddingRight")  +
-                    getStyle(this._carouselEl, "borderLeft")    +
-                    getStyle(this._carouselEl, "borderRight");
-            Dom.setStyle(clip, which, size + "px");
-        }
-
-        setContainerSize.call(this, clip); // adjust the container size too
     }
 
     /**
@@ -755,71 +568,6 @@
             this.scrollTo(newposition);
         }
     }
-
-    /**
-     * Setup/Create the Carousel navigation element (if needed).
-     *
-     * @method setupCarouselNavigation
-     * @private
-     */
-    function setupCarouselNavigation() {
-        var cfg, cssClass, nav, navContainer, nextButton, pageEl, prevButton;
-
-        cssClass = this.CLASSES;
-        
-        navContainer = Dom.getElementsByClassName(cssClass.NAVIGATION, "DIV",
-                this.get("element"));
-        
-        if (navContainer.length === 0) {
-            navContainer = createElement("DIV",
-                    { className: cssClass.NAVIGATION });
-            this.insertBefore(navContainer,
-                    Dom.getFirstChild(this.get("element")));
-        } else {
-            navContainer = navContainer[0];
-        }
-
-        this._pages.el = createElement("UL",
-                { className:cssClass.PAGE_NAV });
-        navContainer.appendChild(this._pages.el);
-        
-        nav = this.get("navigation");
-        if (nav.prev && nav.prev.length > 0) {
-            navContainer.appendChild(nav.prev[0]);
-        } else {
-            // TODO: separate method for creating a navigation button
-            prevButton = createElement("SPAN",
-                    { className: cssClass.BUTTON + cssClass.FIRST_NAV });
-            prevButton.innerHTML = "<input type=\"button\" " +
-                    "value=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\" " +
-                    "name=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\">";
-            navContainer.appendChild(prevButton);
-            cfg = { prev: [prevButton] };
-        }
-        
-        if (nav.next && nav.next.length > 0) {
-            navContainer.appendChild(nav.next[0]);
-        } else {
-            // TODO: separate method for creating a navigation button
-            nextButton = createElement("SPAN",
-                    { className: cssClass.BUTTON });
-            nextButton.innerHTML = "<input type=\"button\" " +
-                    "value=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\" " +
-                    "name=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\">";
-            navContainer.appendChild(nextButton);
-            if (cfg) {
-                cfg.next = [nextButton];
-            } else {
-                cfg = { next: [nextButton] };
-            }
-        }
-
-        if (cfg) {
-            this.set("navigation", cfg);
-        }
-        
-        return navContainer;
-    }
     
     /**
      * Fire custom events for enabling/disabling navigation elements.
@@ -884,54 +632,6 @@
     }
 
     /**
-     * Synchronize and redraw the Pager UI if necessary.
-     *
-     * @method syncPagerUI
-     * @private
-     */
-    function syncPagerUI(page) {
-        var i,
-            markup     = "",
-            numPages,
-            numVisible = this.get("numVisible");
-
-        page     = page || 0;
-        numPages = Math.ceil(this.get("numItems") / numVisible);
-
-        this._pages.num = numPages;
-        this._pages.cur = page;
-
-        if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
-            markup = "<form><select>";
-        } else {
-            markup = "";
-        }
-        
-        for (i = 0; i < numPages; i++) {
-            if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
-                markup += "<option value=\"#yui-carousel-page-" + (i+1)    +
-                        "\" " + "id=\"#yui-carousel-page-" + (i+1) + "\" " +
-                        (i == page ? " selected" : "") + ">"               +
-                        this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
-                        "</option>";
-            } else {
-                markup += "<li" + (i === 0 ? " class=\"first\">" : ">")    +
-                        "<a href=\"#page-" + (i+1) + "\" tabindex=\"0\" "  +
-                        (i == page ? " class=\"selected\"" : "") + "><em>" +
-                        this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
-                        "</em></a></li>";
-            }
-        }
-
-        if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
-            markup += "</select></form>";
-        }
-        
-        this._pages.el.innerHTML = markup;
-        markup = null;
-    }
-
-    /**
      * Fire custom events for synchronizing the DOM.
      *
      * @method syncUI
@@ -984,7 +684,7 @@
             }
 
             if (this._recomputeSize) {
-                setClipContainerSize.call(this);
+                this._setClipContainerSize();
             }
             break;            
         case itemRemovedEvent:
@@ -1590,7 +1290,7 @@
             }
             
             this._parseCarouselNavigation(el);
-            this._navEl = setupCarouselNavigation.call(this);
+            this._navEl = this._setupCarouselNavigation();
 
             instances[elId] = this;
 
@@ -1762,7 +1462,7 @@
          * @public
          */
         initEvents: function () {
-            this.on.call(this, "keydown", keyboardEventHandler, this);
+            this.on("keydown", this._keyboardEventHandler);
             
             this.subscribe(afterScrollEvent, syncNavigation);
             
@@ -1776,19 +1476,19 @@
             
             this.subscribe(loadItemsEvent, syncUI);
             
-            this.subscribe(pageChangeEvent, syncPagerUI);
+            this.subscribe(pageChangeEvent, this._syncPagerUI);
 
             this.subscribe(renderEvent, syncNavigation);
-            this.subscribe(renderEvent, syncPagerUI);
+            this.subscribe(renderEvent, this._syncPagerUI);
 
             // Handle set focus
             this.on("click", setFocusHandler, this);
 
             // Handle item selection on mouse click
-            this.on("click", itemClickHandler, this);
+            this.on("click", this._itemClickHandler);
 
             // Handle page navigation
-            this.on("click", pagerClickHandler, this);
+            this.on("click", this._pagerClickHandler);
         },
 
         /**
@@ -1880,7 +1580,7 @@
             if (appendTo) {
                 this.appendChild(this._clipEl);
                 this.appendTo(appendTo);
-                setClipContainerSize.call(this);
+                this._setClipContainerSize();
             } else {
                 if (!Dom.inDocument(this.get("element"))) {
                     YAHOO.log("Nothing to render. The container should be " +
@@ -1911,7 +1611,7 @@
 
             // By now, the navigation would have been rendered, so calculate
             // the container height now.
-            setContainerSize.call(this);
+            this._setContainerSize();
 
             this.fireEvent(renderEvent);
 
@@ -2164,7 +1864,7 @@
          */
         _createCarouselClip: function () {
             var el = createElement("DIV", { className: this.CLASSES.CONTENT });
-            setClipContainerSize.call(this, el);
+            this._setClipContainerSize(el);
             
             return el;
         },
@@ -2212,6 +1912,98 @@
             }
             
             return val;
+        },
+
+        /**
+         * The "click" handler for the item.
+         *
+         * @method _itemClickHandler
+         * @param {Event} ev The event object
+         * @protected
+         */
+        _itemClickHandler: function (ev) {
+            var container = this.get("element"),
+                el,
+                item,
+                target = YAHOO.util.Event.getTarget(ev);
+            
+            while (target && target != container &&
+                   target.id != this._carouselEl) {
+                el = target.nodeName;
+                if (el.toUpperCase() == this.CONFIG.ITEM_TAG_NAME) {
+                    break;
+                }
+                target = target.parentNode;
+            }
+
+            if ((item = this.getItemPositionById(target.id)) >= 0) {
+                this.set("selectedItem", this._getSelectedItem(item));
+            }
+        },
+
+        /**
+         * The keyboard event handler for Carousel.
+         *
+         * @method _keyboardEventHandler
+         * @param ev {Event} The event that is being handled.
+         * @protected
+         */
+        _keyboardEventHandler: function (ev) {
+            var key      = Event.getCharCode(ev),
+                prevent  = false,
+                position = 0;
+
+            if (this._isAnimationInProgress) {
+                return;         // do not mess while animation is in progress
+            }
+            
+            switch (key) {
+            case 0x25:          // left arrow
+            case 0x26:          // up arrow
+                position = this.get("selectedItem")-this.get("scrollIncrement");
+                this.set("selectedItem", this._getSelectedItem(position));
+                prevent = true;
+                break;
+            case 0x27:          // right arrow
+            case 0x28:          // down arrow
+                position = this.get("selectedItem")+this.get("scrollIncrement");
+                this.set("selectedItem", this._getSelectedItem(position));
+                prevent = true;
+                break;
+            case 0x21:          // page-up
+                this.scrollPageBackward();
+                prevent = true;
+                break;
+            case 0x22:          // page-down
+                this.scrollPageForward();
+                prevent = true;
+                break;
+            }
+
+            if (prevent) {
+                Event.preventDefault(ev);
+            }
+        },
+        
+        /**
+         * The "click" handler for the pager navigation.
+         *
+         * @method _pagerClickHandler
+         * @param {Event} ev The event object
+         * @protected
+         */
+        _pagerClickHandler: function (ev) {
+            var match,
+                target = Event.getTarget(ev),
+                val;
+
+            val = target.href || target.value;
+            if (val && (match = val.match(/.*?-(\d+)$/))) {
+                if (match.length == 2) {
+                    this.scrollTo((match[1] - 1) * this.get("numVisible"));
+                    Event.preventDefault(ev);
+                }
+            }
         },
         
         /**
@@ -2331,6 +2123,163 @@
         },
 
         /**
+         * Setup/Create the Carousel navigation element (if needed).
+         *
+         * @method _setupCarouselNavigation
+         * @protected
+         */
+        _setupCarouselNavigation: function () {
+            var cfg, cssClass, nav, navContainer, nextButton, pageEl,
+                prevButton;
+
+            cssClass = this.CLASSES;
+            
+            navContainer = Dom.getElementsByClassName(cssClass.NAVIGATION,
+                    "DIV", this.get("element"));
+            
+            if (navContainer.length === 0) {
+                navContainer = createElement("DIV",
+                        { className: cssClass.NAVIGATION });
+                this.insertBefore(navContainer,
+                        Dom.getFirstChild(this.get("element")));
+            } else {
+                navContainer = navContainer[0];
+            }
+
+            this._pages.el = createElement("UL",
+                    { className:cssClass.PAGE_NAV });
+            navContainer.appendChild(this._pages.el);
+            
+            nav = this.get("navigation");
+            if (nav.prev && nav.prev.length > 0) {
+                navContainer.appendChild(nav.prev[0]);
+            } else {
+                // TODO: separate method for creating a navigation button
+                prevButton = createElement("SPAN",
+                        { className: cssClass.BUTTON + cssClass.FIRST_NAV });
+                prevButton.innerHTML = "<input type=\"button\" " +
+                        "value=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\" " +
+                        "name=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\">";
+                navContainer.appendChild(prevButton);
+                cfg = { prev: [prevButton] };
+            }
+            
+            if (nav.next && nav.next.length > 0) {
+                navContainer.appendChild(nav.next[0]);
+            } else {
+                // TODO: separate method for creating a navigation button
+                nextButton = createElement("SPAN",
+                        { className: cssClass.BUTTON });
+                nextButton.innerHTML = "<input type=\"button\" " +
+                        "value=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\" " +
+                        "name=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\">";
+                navContainer.appendChild(nextButton);
+                if (cfg) {
+                    cfg.next = [nextButton];
+                } else {
+                    cfg = { next: [nextButton] };
+                }
+            }
+
+            if (cfg) {
+                this.set("navigation", cfg);
+            }
+            
+            return navContainer;
+        },
+        
+        /**
+         * Set the clip container size (based on the new numVisible value).
+         *
+         * @method _setClipContainerSize
+         * @param clip {HTMLElement} The clip container element.
+         * @param num {Number} optional The number of items per page.
+         * @protected
+         */
+        _setClipContainerSize: function (clip, num) {
+            var attr, currVal, isVertical, itemSize, reveal, size, which;
+
+            isVertical = this.get("isVertical");
+            reveal     = this.get("revealAmount");
+            which      = isVertical ? "height" : "width";
+            attr       = isVertical ? "top" : "left";
+            clip       = clip || this._clipEl;
+            num        = num  || this.get("numVisible");
+            itemSize   = getCarouselItemSize.call(this, which);
+            size       = itemSize * num;
+
+            this._recomputeSize = (size === 0); // bleh!
+            if (this._recomputeSize) {
+                return;             // no use going further, bail out!
+            }
+            
+            if (!clip) {
+                return;
+            }
+
+            if (reveal > 0) {
+                reveal = itemSize * (reveal / 100) * 2;
+                size += reveal;
+                // XXX: set the Carousel's initial offset somwehere
+                currVal = parseFloat(Dom.getStyle(this._carouselEl, attr));
+                currVal = JS.isNumber(currVal) ? currVal : 0;
+                Dom.setStyle(this._carouselEl, attr, currVal+(reveal/2)+"px");
+            }
+
+            if (isVertical) {
+                size += getStyle(this._carouselEl, "marginTop")     +
+                        getStyle(this._carouselEl, "marginBottom")  +
+                        getStyle(this._carouselEl, "paddingTop")    +
+                        getStyle(this._carouselEl, "paddingBottom") +
+                        getStyle(this._carouselEl, "borderTop")     +
+                        getStyle(this._carouselEl, "borderBottom");
+                // XXX: for vertical Carousel
+                Dom.setStyle(clip, which, (size - (num - 1)) + "px");
+            } else {
+                size += getStyle(this._carouselEl, "marginLeft")    +
+                        getStyle(this._carouselEl, "marginRight")   +
+                        getStyle(this._carouselEl, "paddingLeft")   +
+                        getStyle(this._carouselEl, "paddingRight")  +
+                        getStyle(this._carouselEl, "borderLeft")    +
+                        getStyle(this._carouselEl, "borderRight");
+                Dom.setStyle(clip, which, size + "px");
+            }
+
+            this._setContainerSize(clip); // adjust the container size too
+        },
+
+        /**
+         * Set the container size.
+         *
+         * @method _setContainerSize
+         * @param clip {HTMLElement} The clip container element.
+         * @param attr {String} Either set the height or width.
+         * @protected
+         */
+        _setContainerSize: function (clip, attr) {
+            var isVertical, size;
+
+            isVertical = this.get("isVertical");
+            if (isVertical) {
+                return;             // no need to set the height for container
+            }
+            clip       = clip || this._clipEl;
+            attr       = attr || (isVertical ? "height" : "width");
+            size       = parseFloat(Dom.getStyle(clip, attr), 10);
+
+            size = JS.isNumber(size) ? size : 0;
+
+            size += getStyle(clip, "marginLeft")   +
+                    getStyle(clip, "marginRight")  +
+                    getStyle(clip, "paddingLeft")  +
+                    getStyle(clip, "paddingRight") +
+                    getStyle(clip, "borderLeft")   +
+                    getStyle(clip, "borderRight");
+            
+            this.setStyle(attr, size + "px");
+        },
+
+        /**
          * Set the value for the Carousel's first visible item.
          *
          * @method _setFirstVisible
@@ -2374,7 +2323,7 @@
          */
         _setNumVisible: function (val) {
             if (val > 1 && val < this.get("numItems")) {
-                setClipContainerSize.call(this, this._clipEl, val);
+                this._setClipContainerSize(this._clipEl, val);
             } else {
                 val = this.get("numVisible");
             }
@@ -2445,7 +2394,7 @@
             if (val >= 0 && val <= 100) {
                 val = parseInt(val, 10);
                 val = JS.isNumber(val) ? val : 0;
-                setClipContainerSize.call(this);
+                this._setClipContainerSize();
             } else {
                 val = this.get("revealAmount");
             }
@@ -2462,6 +2411,54 @@
         _setSelectedItem: function (val) {
             this._selectedItem = val;
             this.fireEvent(itemSelectedEvent, val);
+        },
+
+        /**
+         * Synchronize and redraw the Pager UI if necessary.
+         *
+         * @method _syncPagerUI
+         * @protected
+         */
+        _syncPagerUI: function (page) {
+            var i,
+                markup     = "",
+                numPages,
+                numVisible = this.get("numVisible");
+
+            page     = page || 0;
+            numPages = Math.ceil(this.get("numItems") / numVisible);
+
+            this._pages.num = numPages;
+            this._pages.cur = page;
+
+            if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
+                markup = "<form><select>";
+            } else {
+                markup = "";
+            }
+            
+            for (i = 0; i < numPages; i++) {
+                if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
+                    markup += "<option value=\"#yui-carousel-page-" + (i+1)    +
+                            "\" " + "id=\"#yui-carousel-page-" + (i+1) + "\" " +
+                            (i == page ? " selected" : "") + ">"               +
+                            this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
+                            "</option>";
+                } else {
+                    markup += "<li" + (i === 0 ? " class=\"first\">" : ">")    +
+                            "<a href=\"#page-" + (i+1) + "\" tabindex=\"0\" "  +
+                            (i == page ? " class=\"selected\"" : "") + "><em>" +
+                            this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
+                            "</em></a></li>";
+                }
+            }
+
+            if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
+                markup += "</select></form>";
+            }
+            
+            this._pages.el.innerHTML = markup;
+            markup = null;
         },
 
         /**
