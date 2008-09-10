@@ -582,7 +582,8 @@ YAHOO.widget.LogReader.prototype = {
             msg.className += ' yui-log-verbose';
         }
 
-        msg.innerHTML = YAHOO.lang.substitute(entryFormat, info);
+        // Bug 2061169: Workaround for YAHOO.lang.substitute()
+        msg.innerHTML = entryFormat.replace(/\{(\w+)\}/g, function (x, placeholder) { return (placeholder in info) ? info[placeholder] : ''; });
 
         return msg;
     },
