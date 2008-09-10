@@ -157,7 +157,7 @@
     color: #fff;
 }
 
-/* YUI Button Disabled state */
+/* Dialog YUI Button disabled state */
 .yui-skin-sam .yui-dialog .ft span.yui-button-disabled {
     background-position:0pt -1500px;
     border-color:#ccc;

@@ -6780,8 +6780,8 @@
                 value: "async"
             },
 
-            "BUTTONS": { 
-                key: "buttons", 
+            "BUTTONS": {
+                key: "buttons",
                 value: "none"
             },
 
@@ -7193,18 +7193,12 @@
         * not currently present.
         * @method registerForm
         */
-        registerForm: function () {
-    
-            var form = this.element.getElementsByTagName("form")[0],
-                me = this,
-                firstElement,
-                lastElement;
+        registerForm: function() {
 
+            var form = this.element.getElementsByTagName("form")[0];
 
             if (this.form) {
-                if (this.form == form && 
-                    Dom.isAncestor(this.element, this.form)) {
-    
+                if (this.form == form && Dom.isAncestor(this.element, this.form)) {
                     return;
                 } else {
                     Event.purgeElement(this.form);
@@ -7215,78 +7209,122 @@
             if (!form) {
                 form = document.createElement("form");
                 form.name = "frm_" + this.id;
-
                 this.body.appendChild(form);
             }
 
             if (form) {
                 this.form = form;
+                Event.on(form, "submit", this._submitHandler, this, true);
 
-                Event.on(form, "submit", function (e) {
-                    Event.stopEvent(e);
-                    this.submit();
-                    this.form.blur();
-                }, this, true);
-
-                this.firstFormElement = function () {
-                    var f, el, nElements = form.elements.length;
-
-                    for (f = 0; f < nElements; f++) {
-                        el = form.elements[f];
-                        if (el.focus && !el.disabled && el.type != "hidden") {
-                            return el;
-                        }
-                    }
-                    return null;
-                }();
-
-                this.lastFormElement = function () {
-                    var f, el, nElements = form.elements.length;
-
-                    for (f = nElements - 1; f >= 0; f--) {
-                        el = form.elements[f];
-                        if (el.focus && !el.disabled && el.type != "hidden") {
-                            return el;
-                        }
-                    }
-                    return null;
-                }();
+                this._setFirstLastElements();
 
                 if (this.cfg.getProperty("modal")) {
-                    firstElement = this.firstFormElement || this.firstButton;
-                    if (firstElement) {
-                        this.preventBackTab = new KeyListener(firstElement, 
-                            { shift: true, keys: 9 }, 
-                            { fn: me.focusLast, scope: me, 
-                            correctScope: true });
+                    this._setTabLoop();
+                }
+            }
+        },
 
-                        this.showEvent.subscribe(this.preventBackTab.enable, 
-                            this.preventBackTab, true);
+        /**
+         * Internal handler for the form submit event
+         *
+         * @method _submitHandler
+         * @protected
+         * @param {DOMEvent} e The DOM Event object
+         */
+        _submitHandler : function(e) {
+            Event.stopEvent(e);
+            this.submit();
+            this.form.blur();
+        },
 
-                        this.hideEvent.subscribe(this.preventBackTab.disable, 
-                            this.preventBackTab, true);
-                    }
+        /**
+         * Configure tab and shift-tab keyboard event handlers, 
+         * to loop between first and last form element, or buttons in
+         * the Dialog.
+         * 
+         * @method _setTabLoop
+         * @protected
+         */
+        _setTabLoop : function() {
 
-                    lastElement = this.lastButton || this.lastFormElement;
+            var firstElement = this.firstFormElement || this.firstButton;
+            var lastElement = this.lastButton || this.lastFormElement,
+                backTab = this.preventBackTab, tab = this.preventTabOut;
 
-                    if (lastElement) {
-                        this.preventTabOut = new KeyListener(lastElement, 
-                            { shift: false, keys: 9 }, 
-                            { fn: me.focusFirst, scope: me, 
-                            correctScope: true });
+            if (backTab) {
+                backTab.disable();
+                this.showEvent.unsubscribe(backTab.enable, backTab);
+                this.hideEvent.unsubscribe(backTab.disable, backTab);
+                backTab = this.preventBackTab = null;
+            }
 
-                        this.showEvent.subscribe(this.preventTabOut.enable, 
-                            this.preventTabOut, true);
+            if (tab) {
+                tab.disable();
+                this.showEvent.unsubscribe(tab.enable, tab);
+                this.hideEvent.unsubscribe(tab.disable,tab);
+                tab = this.preventTabOut = null;
+            }
+
+            if (firstElement) {
+                this.preventBackTab = new KeyListener(firstElement, 
+                    {shift:true, keys:9},
+                    {fn:this.focusLast, scope:this, correctScope:true}
+                );
+
+                backTab = this.preventBackTab;
+
+                this.showEvent.subscribe(backTab.enable, backTab, true);
+                this.hideEvent.subscribe(backTab.disable,backTab, true);
+            }
+
+            if (lastElement) {
+                this.preventTabOut = new KeyListener(lastElement, 
+                    {shift:false, keys:9}, 
+                    {fn:this.focusFirst, scope:this, correctScope:true}
+                );
+
+                tab = this.preventTabOut;
+
+                this.showEvent.subscribe(tab.enable, tab, true);
+                this.hideEvent.subscribe(tab.disable,tab, true);
+            }
+        },
+
+        /**
+         * Configures instance properties, pointing to the 
+         * first and last form elements in the Dialog's form.
+         * 
+         * @protected
+         * @method _setFirstLastElements
+         */
+        _setFirstLastElements : function() {
+
+            this.firstFormElement = null;
+            this.lastFormElement = null;
+ 
+            if (this.form) {
+                var form = this.form,
+                    f, el, nElements = form.elements.length;
     
-                        this.hideEvent.subscribe(this.preventTabOut.disable, 
-                            this.preventTabOut, true);
+                for (f = 0; f < nElements; f++) {
+                    el = form.elements[f];
+                    if (el.focus && !el.disabled && el.type != "hidden") {
+                        this.firstFormElement = el;
+                        break;
+                    }
+                }
+
+                for (f = nElements - 1; f >= 0; f--) {
+                    el = form.elements[f];
+                    if (el.focus && !el.disabled && el.type != "hidden") {
+                        this.lastFormElement = el;
+                        break;
                     }
                 }
             }
         },
 
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
-
         /**
         * The default event handler fired when the "close" property is 
         * changed. The method controls the appending or hiding of the close
@@ -7440,6 +7478,10 @@
 
                 this.buttonSpan = oSpan;
 
+                if (this.cfg.getProperty("modal")) {
+                    this._setTabLoop();
+                }
+
             } else { // Do cleanup
                 oSpan = this.buttonSpan;
                 oFooter = this.footer;
@@ -7501,7 +7543,7 @@
                 }
 
             } else {
-                this.focusDefaultButton();
+                this.focusFirstButton();
             }
         },
 
