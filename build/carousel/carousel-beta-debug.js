@@ -1515,6 +1515,42 @@
         },
 
         /**
+         * Return the ITEM_TAG_NAME at index or null if the index is not found.
+         *
+         * @method getElementForItem
+         * @param index {Number} The index of the item to be returned
+         * @return {Element} Return the item at index or null if not found
+         * @public
+         */
+        getElementForItem: function (index) {
+            if (index < 0 || index >= this.get("numItems")) {
+                YAHOO.log("Index out of bounds", "error", WidgetName);
+                return null;
+            }
+
+            // TODO: may be cache the item
+            return this._itemsTable.numItems > index ?
+                    Dom.get(this._itemsTable.items[index].id) : null;
+        },
+
+        /**
+         * Return the ITEM_TAG_NAME for all items in the Carousel.
+         *
+         * @method getElementForItems
+         * @return {Array} Return all the items
+         * @public
+         */
+        getElementForItems: function () {
+            var els = [], i;
+
+            for (i = 0; i < this._itemsTable.numItems; i++) {
+                els.push(this.getElementForItem(i));
+            }
+
+            return els;
+        },
+
+        /**
          * Return the item at index or null if the index is not found.
          *
          * @method getItem
@@ -1536,7 +1572,7 @@
          * Return all items as an array.
          *
          * @method getItems
-         * @return {Object} Return all items in the Carousel
+         * @return {Array} Return all items in the Carousel
          * @public
          */
         getItems: function (index) {
