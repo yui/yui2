@@ -157,6 +157,20 @@
     color: #fff;
 }
 
+/* Dialog YUI Button disabled state */
+.yui-skin-sam .yui-dialog .ft span.yui-button-disabled {
+    background-position:0pt -1500px;
+    border-color:#ccc;
+}
+
+.yui-skin-sam .yui-dialog .ft span.yui-button-disabled .first-child {
+    border-color:#ccc;
+}
+
+.yui-skin-sam .yui-dialog .ft span.yui-button-disabled button {
+    color:#a6a6a6;
+}
+
 /* SimpleDialog icon styles */
 .yui-skin-sam .yui-simple-dialog .bd .yui-icon {
     background: url(../../../img/sprite.png) no-repeat 0 0;
