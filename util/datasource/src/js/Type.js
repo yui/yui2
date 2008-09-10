@@ -321,7 +321,18 @@ var xPad=function (x, pad, r)
         }
 
         var format = oConfig.format || "%m/%d/%Y";
-            
+
+        // Be backwards compatible, support strings that are
+        // exactly equal to YYYY/MM/DD, DD/MM/YYYY and MM/DD/YYYY
+        if(format === 'YYYY/MM/DD') {
+            format = '%Y/%m/%d';
+        } else if(format === 'DD/MM/YYYY') {
+            format = '%d/%m/%Y';
+        } else if(format === 'MM/DD/YYYY') {
+            format = '%m/%d/%Y';
+        }
+        // end backwards compatibility block
+ 
         sLocale = sLocale || "en";
 
         // Make sure we have a definition for the requested locale, or default to en.
