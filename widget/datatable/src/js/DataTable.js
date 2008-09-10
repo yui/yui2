@@ -3757,7 +3757,7 @@ _onTbodyKeydown : function(e, oSelf) {
  * @private
  */
 _onTableKeypress : function(e, oSelf) {
-    if(ua.webkit) {
+    if(ua.opera || (navigator.userAgent.toLowerCase().indexOf("mac") !== -1) && (ua.webkit < 420)) {
         var nKey = Ev.getCharCode(e);
         // arrow down
         if(nKey == 40) {
