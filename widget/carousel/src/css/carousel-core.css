@@ -66,3 +66,7 @@
     content: "";
     display: block;
 }
+
+.yui-carousel-button-focus {
+    outline: 1px dotted #000;
+}
