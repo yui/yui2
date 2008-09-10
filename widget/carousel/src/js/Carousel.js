@@ -450,80 +450,6 @@
     }
 
     /**
-     * The "click" handler for the item.
-     *
-     * @method itemClickHandler
-     * @param {Event} ev The event object
-     * @param {Object} obj The context object
-     * @private
-     */
-    function itemClickHandler(ev, obj) {
-        var container = obj.get("element"),
-            el,
-            item,
-            target = YAHOO.util.Event.getTarget(ev);
-        
-        while (target && target != container && target.id != obj._carouselEl) {
-            el = target.nodeName;
-            if (el.toUpperCase() == obj.CONFIG.ITEM_TAG_NAME) {
-                break;
-            }
-            target = target.parentNode;
-        }
-
-        if ((item = obj.getItemPositionById(target.id)) >= 0) {
-            obj.set("selectedItem", obj._getSelectedItem(item));
-        }
-    }
-
-    /**
-     * The keyboard event handler for Carousel.
-     *
-     * @method keyboardEventHandler
-     * @param ev {Event} The event that is being handled.
-     * @param o {Object} The current object instance.
-     * @private
-     */
-    function keyboardEventHandler(ev, o) {
-        var key      = Event.getCharCode(ev),
-            prevent  = false,
-            position = 0;
-
-        if (o._isAnimationInProgress) {
-            return;         // do not mess while animation is in progress
-        }
-        
-        switch (key) {
-        case 0x25:          // left arrow
-        case 0x26:          // up arrow
-            position = o.get("selectedItem");
-            o.set("selectedItem",
-                    o._getSelectedItem(position - o.get("scrollIncrement")));
-            prevent = true;
-            break;
-        case 0x27:          // right arrow
-        case 0x28:          // down arrow
-            position = o.get("selectedItem");
-            o.set("selectedItem",
-                    o._getSelectedItem(position + o.get("scrollIncrement")));
-            prevent = true;
-            break;
-        case 0x21:          // page-up
-            o.scrollPageBackward();
-            prevent = true;
-            break;
-        case 0x22:          // page-down
-            o.scrollPageForward();
-            prevent = true;
-            break;
-        }
-
-        if (prevent) {
-            Event.preventDefault(ev);
-        }
-    }
-
-    /**
      * The load the required set of items that are needed for display.
      *
      * @method loadItems
@@ -545,28 +471,6 @@
                     first: first, last: last,
                     num: last - first
             });
-        }
-    }
-    
-    /**
-     * The "click" handler for the pager navigation.
-     *
-     * @method pagerClickHandler
-     * @param {Event} ev The event object
-     * @param {Object} obj The context object
-     * @private
-     */
-    function pagerClickHandler(ev, obj) {
-        var match,
-            target = Event.getTarget(ev),
-            val;
-
-        val = target.href || target.value;
-        if (val && (match = val.match(/.*?-(\d+)$/))) {
-            if (match.length == 2) {
-                obj.scrollTo((match[1] - 1) * obj.get("numVisible"));
-                Event.preventDefault(ev);
-            }
         }
     }
 
@@ -1762,7 +1666,7 @@
          * @public
          */
         initEvents: function () {
-            this.on.call(this, "keydown", keyboardEventHandler, this);
+            this.on("keydown", this._keyboardEventHandler);
             
             this.subscribe(afterScrollEvent, syncNavigation);
             
@@ -1785,10 +1689,10 @@
             this.on("click", setFocusHandler, this);
 
             // Handle item selection on mouse click
-            this.on("click", itemClickHandler, this);
+            this.on("click", this._itemClickHandler);
 
             // Handle page navigation
-            this.on("click", pagerClickHandler, this);
+            this.on("click", this._pagerClickHandler);
         },
 
         /**
@@ -2212,6 +2116,98 @@
             }
             
             return val;
+        },
+
+        /**
+         * The "click" handler for the item.
+         *
+         * @method _itemClickHandler
+         * @param {Event} ev The event object
+         * @protected
+         */
+        _itemClickHandler: function (ev) {
+            var container = this.get("element"),
+                el,
+                item,
+                target = YAHOO.util.Event.getTarget(ev);
+            
+            while (target && target != container &&
+                   target.id != this._carouselEl) {
+                el = target.nodeName;
+                if (el.toUpperCase() == this.CONFIG.ITEM_TAG_NAME) {
+                    break;
+                }
+                target = target.parentNode;
+            }
+
+            if ((item = this.getItemPositionById(target.id)) >= 0) {
+                this.set("selectedItem", this._getSelectedItem(item));
+            }
+        },
+
+        /**
+         * The keyboard event handler for Carousel.
+         *
+         * @method _keyboardEventHandler
+         * @param ev {Event} The event that is being handled.
+         * @protected
+         */
+        _keyboardEventHandler: function (ev) {
+            var key      = Event.getCharCode(ev),
+                prevent  = false,
+                position = 0;
+
+            if (this._isAnimationInProgress) {
+                return;         // do not mess while animation is in progress
+            }
+            
+            switch (key) {
+            case 0x25:          // left arrow
+            case 0x26:          // up arrow
+                position = this.get("selectedItem")-this.get("scrollIncrement");
+                this.set("selectedItem", this._getSelectedItem(position));
+                prevent = true;
+                break;
+            case 0x27:          // right arrow
+            case 0x28:          // down arrow
+                position = this.get("selectedItem")+this.get("scrollIncrement");
+                this.set("selectedItem", this._getSelectedItem(position));
+                prevent = true;
+                break;
+            case 0x21:          // page-up
+                this.scrollPageBackward();
+                prevent = true;
+                break;
+            case 0x22:          // page-down
+                this.scrollPageForward();
+                prevent = true;
+                break;
+            }
+
+            if (prevent) {
+                Event.preventDefault(ev);
+            }
+        },
+        
+        /**
+         * The "click" handler for the pager navigation.
+         *
+         * @method _pagerClickHandler
+         * @param {Event} ev The event object
+         * @protected
+         */
+        _pagerClickHandler: function (ev) {
+            var match,
+                target = Event.getTarget(ev),
+                val;
+
+            val = target.href || target.value;
+            if (val && (match = val.match(/.*?-(\d+)$/))) {
+                if (match.length == 2) {
+                    this.scrollTo((match[1] - 1) * this.get("numVisible"));
+                    Event.preventDefault(ev);
+                }
+            }
         },
         
         /**
