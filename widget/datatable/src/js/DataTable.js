@@ -4462,7 +4462,9 @@ getBelowTdEl : function(cell) {
 },
 
 /**
- * Returns DOM reference to a TH liner element.
+ * Returns DOM reference to a TH liner element. Needed to normalize for resizeable 
+ * Columns, which have an additional resizer liner DIV element between the TH
+ * element and the liner DIV element. 
  *
  * @method getThLinerEl
  * @param theadCell {YAHOO.widget.Column | HTMLElement | String} Column instance,
