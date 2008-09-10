@@ -69,7 +69,8 @@
 	.yui-b{_position:static;}
 	#yui-main .yui-b{position:static;}
 
-	#yui-main {width:100%;}
+	#yui-main,
+	.yui-g .yui-u .yui-g {width:100%;}
 		
 	.yui-t1 #yui-main,
 	.yui-t2 #yui-main,
