@@ -404,7 +404,13 @@ getContainerEl : function() {
  */
 destroy : function() {
     this.unsubscribeAll();
-    this.getColumn().editor = null;
+    
+    // Column is late-binding in attach()
+    var oColumn = this.getColumn();
+    if(oColumn) {
+        this.getColumn().editor = null;
+    }
+    
     var elContainer = this.getContainerEl();
     Ev.purgeElement(elContainer, true);
     elContainer.parentNode.removeChild(elContainer);

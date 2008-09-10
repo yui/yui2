@@ -552,17 +552,6 @@ lang.augmentObject(DT, {
      */
     CLASS_RADIO : "yui-dt-radio",
 
-    /**
-     * Class name assigned to temporary elements.
-     *
-     * @property DataTable.CLASS_TMP
-     * @type String
-     * @static
-     * @final
-     * @default "yui-dt-tmp"
-     */
-    CLASS_TMP : "yui-dt-tmp",
-
     /////////////////////////////////////////////////////////////////////////
     //
     // Private static properties
@@ -4880,10 +4869,12 @@ destroy : function() {
     this._destroyColumnHelpers();
     
     // Destroy all CellEditors
+    var oCellEditor;
     for(var i=0, len=this._oColumnSet.flat.length; i<len; i++) {
-        if(this._oColumnSet.flat[i]._oCellEditor) {
-            this._oColumnSet.flat[i]._oCellEditor.destroy();
-            this._oColumnSet.flat[i]._oCellEditor = null;
+        oCellEditor = this._oColumnSet.flat[i].editor;
+        if(oCellEditor && oCellEditor.destroy) {
+            oCellEditor.destroy();
+            this._oColumnSet.flat[i].editor = null;
         }
     }
 

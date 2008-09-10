@@ -245,14 +245,9 @@ _initDomElements : function(elContainer) {
             // Primary TBODY
             this._initTbodyEl(this._elTable);
             // Message TBODY
-            this._initMsgTbodyEl(this._elTable);
-            
-            // Tmp elements for auto-width calculation
-            this._initTmpEls();
+            this._initMsgTbodyEl(this._elTable);            
         }
     }
-    ///if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody ||
-            ///!this._elHdTable || !this._elBdColgroup || !this._elBdThead) {
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody ||
             !this._elHdTable || !this._elBdThead) {
         YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
@@ -262,55 +257,6 @@ _initDomElements : function(elContainer) {
         return true;
     }
 },
-
-/**
- * Destroy's tmp els used for auto-width calculation.
- *
- * @method _destroyTmpEls
- * @private
- */
-_destroyTmpEls : function() {
-    var elTmpContainer = this._elTmpContainer;
-    if(elTmpContainer) {
-        elTmpContainer.parentNode.removeChild(elTmpContainer);
-        
-        this._elTmpContainer = null;
-        this._elTmpTable = null;
-    }
-},
-
-/**
- * Resets tmp els back to initial state.
- *
- * @method _resetTmpEls
- * @private
- */
-_resetTmpEls : function() {
-    var elTmpTable = this._elTmpTable;
-    if(elTmpTable) {
-        elTmpTable.removeChild(elTmpTable.firstChild); // THEAD
-        elTmpTable.removeChild(elTmpTable.firstChild); // TBODY
-    }
-},
-
-/**
- * Initializes tmp els for auto-width calculation
- *
- * @method _initTmpEls
- * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
- * @private
- */
-_initTmpEls : function() {
-    this._destroyTmpEls();
-
-    // Attach tmp container as first child of body
-    var elTmpContainer = document.createElement('div');
-    elTmpContainer.className = DT.CLASS_DATATABLE + ' ' + DT.CLASS_TMP;
-    var elTmpTable = elTmpContainer.appendChild(document.createElement('table'));
-    this._elTmpTable = elTmpTable;
-    this._elTmpContainer = document.body.insertBefore(elTmpContainer, document.body.firstChild);
-},
-
 
 /**
  * Destroy's the DataTable outer and inner container elements, if available.
