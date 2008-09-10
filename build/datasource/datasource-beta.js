@@ -2468,9 +2468,8 @@ var xPad=function(x, pad, r)
         H: ['getHours', '0'],
         I: function(d) { var I=d.getHours()%12; return xPad(I===0?12:I, 0); },
         j: function(d) {
-                var ms = d - new Date('' + d.getFullYear() + '/1/1 GMT');
-                ms += d.getTimezoneOffset()*60000;
-                var doy = parseInt(ms/60000/60/24, 10);
+                var ms = d - new Date('' + d.getFullYear() + '/1/1');
+                var doy = parseInt(ms/60000/60/24, 10)+1;
                 return xPad(doy, 0, 100);
             },
         m: function(d) { return xPad(d.getMonth()+1, 0); },
@@ -2659,12 +2658,12 @@ var xPad=function(x, pad, r)
         };
 
         // First replace aggregates (run in a loop because an agg may be made up of other aggs)
-        while(format.match(/%[cDhnrRtTxXzZ]/)) {
-            format = format.replace(/%([cDhnrRtTxXzZ])/g, replace_aggs);
+        while(format.match(/%[cDhnrRtTxX]/)) {
+            format = format.replace(/%([cDhnrRtTxX])/g, replace_aggs);
         }
 
         // Now replace formats (do not run in a loop otherwise %%a will be replace with the value of %a)
-        var str = format.replace(/%([aAbBCdegGHIjmMpPSuUVwWyY%])/g, replace_formats);
+        var str = format.replace(/%([aAbBCdegGHIjmMpPSuUVwWyYzZ%])/g, replace_formats);
 
         replace_aggs = replace_formats = undefined;
 
@@ -2672,9 +2671,6 @@ var xPad=function(x, pad, r)
     }
  };
  
- Dt.aggregates.z = Dt.formats.z(new Date());
- Dt.aggregates.Z = Dt.formats.Z(new Date());
-
  YAHOO.namespace("YAHOO.util");
  YAHOO.util.Date = Dt;
 
@@ -2708,8 +2704,8 @@ var xPad=function(x, pad, r)
  *      YAHOO.lang.extend(YAHOO.util.DateLocale['fr'], YAHOO.util.DateLocale, {
  *          a: ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'],
  *          A: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
- *          b: ['jan', 'fÃ©v', 'mar', 'avr', 'mai', 'jun', 'jui', 'aoÃ»', 'sep', 'oct', 'nov', 'dÃ©c'],
- *          B: ['janvier', 'fÃ©vrier', 'mars', 'avril', 'mai', 'juin', 'juillet', 'aoÃ»t', 'septembre', 'octobre', 'novembre', 'dÃ©cembre'],
+ *          b: ['jan', 'fév', 'mar', 'avr', 'mai', 'jun', 'jui', 'aoû', 'sep', 'oct', 'nov', 'déc'],
+ *          B: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
  *          c: '%a %d %b %Y %T %Z',
  *          p: ['', ''],
  *          P: ['', ''],
