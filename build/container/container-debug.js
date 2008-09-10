@@ -7352,14 +7352,17 @@
             this._aButtons = null;
 
             if (Lang.isArray(aButtons)) {
+
                 oSpan = document.createElement("span");
                 oSpan.className = "button-group";
                 nButtons = aButtons.length;
 
                 this._aButtons = [];
+                this.defaultHtmlButton = null;
 
                 for (i = 0; i < nButtons; i++) {
                     oButton = aButtons[i];
+
                     if (Button) {
                         oYUIButton = new Button({ label: oButton.text, container: oSpan });
                         oButtonEl = oYUIButton.get("element");
@@ -7368,20 +7371,28 @@
                             oYUIButton.addClass("default");
                             this.defaultHtmlButton = oButtonEl;
                         }
-                        if (Lang.isFunction(oButton.handler)) {
-                            oYUIButton.set("onclick", { fn: oButton.handler, 
-                                obj: this, scope: this });
-                        } else if (Lang.isObject(oButton.handler) && 
-                            Lang.isFunction(oButton.handler.fn)) {
 
-                            oYUIButton.set("onclick", { fn: oButton.handler.fn, 
-                                obj: ((!Lang.isUndefined(oButton.handler.obj)) ? 
-                                oButton.handler.obj : this), 
-                                scope: (oButton.handler.scope || this) });
+                        if (Lang.isFunction(oButton.handler)) {
+
+                            oYUIButton.set("onclick", { 
+                                fn: oButton.handler, 
+                                obj: this, 
+                                scope: this 
+                            });
+
+                        } else if (Lang.isObject(oButton.handler) && Lang.isFunction(oButton.handler.fn)) {
+
+                            oYUIButton.set("onclick", { 
+                                fn: oButton.handler.fn, 
+                                obj: ((!Lang.isUndefined(oButton.handler.obj)) ? oButton.handler.obj : this), 
+                                scope: (oButton.handler.scope || this) 
+                            });
+
                         }
+
                         this._aButtons[this._aButtons.length] = oYUIButton;
-                    }
-                    else {
+
+                    } else {
 
                         oButtonEl = document.createElement("button");
                         oButtonEl.setAttribute("type", "button");
@@ -7394,48 +7405,39 @@
                         oButtonEl.innerHTML = oButton.text;
 
                         if (Lang.isFunction(oButton.handler)) {
-
-                            Event.on(oButtonEl, "click", oButton.handler, 
-                                this, true);
-            
-                        }
-                        else if (Lang.isObject(oButton.handler) && 
+                            Event.on(oButtonEl, "click", oButton.handler, this, true);
+                        } else if (Lang.isObject(oButton.handler) && 
                             Lang.isFunction(oButton.handler.fn)) {
     
-                            Event.on(oButtonEl, "click", oButton.handler.fn, 
-                                ((!Lang.isUndefined(oButton.handler.obj)) ? 
-                                oButton.handler.obj : this), 
+                            Event.on(oButtonEl, "click", 
+                                oButton.handler.fn, 
+                                ((!Lang.isUndefined(oButton.handler.obj)) ? oButton.handler.obj : this), 
                                 (oButton.handler.scope || this));
-    
                         }
-            
+
                         oSpan.appendChild(oButtonEl);
-                        
                         this._aButtons[this._aButtons.length] = oButtonEl;
-                        
                     }
+
                     oButton.htmlButton = oButtonEl;
-        
+
                     if (i === 0) {
                         this.firstButton = oButtonEl;
                     }
-        
+
                     if (i == (nButtons - 1)) {
                         this.lastButton = oButtonEl;
                     }
-        
                 }
-        
+
                 this.setFooter(oSpan);
 
                 oFooter = this.footer;
-                
-                if (Dom.inDocument(this.element) && 
-                    !Dom.isAncestor(oInnerElement, oFooter)) {
-    
+
+                if (Dom.inDocument(this.element) && !Dom.isAncestor(oInnerElement, oFooter)) {
                     oInnerElement.appendChild(oFooter);
-                
                 }
+
                 this.buttonSpan = oSpan;
 
             } else { // Do cleanup
@@ -7465,12 +7467,9 @@
         * @return {Array}
         */
         getButtons: function () {
-            var aButtons = this._aButtons;
-            if (aButtons) {
-                return aButtons;
-            }
+            return this._aButtons || null;
         },
-        
+
         /**
         * Sets focus to the first element in the Dialog's form or the first 
         * button defined via the "buttons" configuration property. Called 
@@ -7505,25 +7504,25 @@
                 this.focusDefaultButton();
             }
         },
-        
+
         /**
         * Sets focus to the last element in the Dialog's form or the last 
         * button defined via the "buttons" configuration property.
         * @method focusLast
         */
         focusLast: function (type, args, obj) {
-    
+
             var aButtons = this.cfg.getProperty("buttons"),
                 oElement = this.lastFormElement,
                 oEvent;
-    
+
             if (args) {
                 oEvent = args[1];
                 if (oEvent) {
                     Event.stopEvent(oEvent);
                 }
             }
-            
+
             if (aButtons && Lang.isArray(aButtons)) {
                 this.focusLastButton();
             } else {
@@ -7541,7 +7540,28 @@
                 }
             }
         },
-        
+
+        /**
+         * Helper method to normalize button references. It either returns the 
+         * YUI Button instance for the given element if found,
+         * or the passes back the HTMLElement reference if a corresponding YUI Button
+         * reference is not found or YAHOO.widget.Button does not exist on the page.
+         *
+         * @method _getButton
+         * @private
+         * @param {HTMLElement} button
+         * @return {YAHOO.widget.Button|HTMLElement}
+         */
+        _getButton : function(button) {
+            var Button = YAHOO.widget.Button;
+
+            if (Button && button.nodeName && button.id) {
+                button = Button.getButton(button.id) || button;
+            }
+
+            return button;
+        },
+
         /**
         * Sets the focus to the button that is designated as the default via 
         * the "buttons" configuration property. By default, this method is 
@@ -7549,24 +7569,20 @@
         * @method focusDefaultButton
         */
         focusDefaultButton: function () {
-        
-            var oElement = this.defaultHtmlButton;
-        
-            if (oElement) {
-
+            var button = this._getButton(this.defaultHtmlButton);
+            if (button) {
                 /*
                     Place the call to the "focus" method inside a try/catch
                     block to prevent IE from throwing JavaScript errors if
                     the element is disabled or hidden.
                 */
                 try {
-                    oElement.focus();
+                    button.focus();
                 } catch(oException) {
                 }
-
             }
         },
-        
+
         /**
         * Blurs all the buttons defined via the "buttons" 
         * configuration property.
@@ -7581,20 +7597,13 @@
                 i;
 
             if (aButtons && Lang.isArray(aButtons)) {
-            
                 nButtons = aButtons.length;
-                
                 if (nButtons > 0) {
-                
                     i = (nButtons - 1);
-                    
                     do {
                         oButton = aButtons[i];
-                        
                         if (oButton) {
-
-                            oElement = oButton.htmlButton;
-
+                            oElement = this._getButton(oButton.htmlButton);
                             if (oElement) {
                                 /*
                                     Place the call to the "blur" method inside  
@@ -7608,71 +7617,62 @@
                                 }
                             }
                         }
-                    
                     } while(i--);
                 }
             }
         },
-        
+
         /**
         * Sets the focus to the first button created via the "buttons"
         * configuration property.
         * @method focusFirstButton
         */
         focusFirstButton: function () {
-    
+
             var aButtons = this.cfg.getProperty("buttons"),
                 oButton,
                 oElement;
 
             if (aButtons && Lang.isArray(aButtons)) {
-
                 oButton = aButtons[0];
-
                 if (oButton) {
-
-                    oElement = oButton.htmlButton;
-                    
+                    oElement = this._getButton(oButton.htmlButton);
                     if (oElement) {
-
                         /*
                             Place the call to the "focus" method inside a 
                             try/catch block to prevent IE from throwing 
                             JavaScript errors if the element is disabled 
                             or hidden.
                         */
-    
                         try {
                             oElement.focus();
-                        }
-                        catch(oException) {
+                        } catch(oException) {
+                            // ignore
                         }
                     }
                 }
             }
         },
-        
+
         /**
         * Sets the focus to the last button created via the "buttons" 
         * configuration property.
         * @method focusLastButton
         */
         focusLastButton: function () {
-    
+
             var aButtons = this.cfg.getProperty("buttons"),
                 nButtons,
                 oButton,
                 oElement;
 
             if (aButtons && Lang.isArray(aButtons)) {
-
                 nButtons = aButtons.length;
-                
                 if (nButtons > 0) {
                     oButton = aButtons[(nButtons - 1)];
-                    
+
                     if (oButton) {
-                        oElement = oButton.htmlButton;
+                        oElement = this._getButton(oButton.htmlButton);
                         if (oElement) {
                             /*
                                 Place the call to the "focus" method inside a 
@@ -7684,13 +7684,14 @@
                             try {
                                 oElement.focus();
                             } catch(oException) {
+                                // Ignore
                             }
                         }
                     }
                 }
             }
         },
-        
+
         /**
         * The default event handler for the "postmethod" configuration property
         * @method configPostMethod
@@ -7704,7 +7705,7 @@
         configPostMethod: function (type, args, obj) {
             this.registerForm();
         },
-        
+
         // END BUILT-IN PROPERTY EVENT HANDLERS //
         
         /**
@@ -7760,7 +7761,7 @@
         * current form.
         */
         getData: function () {
-        
+
             var oForm = this.form,
                 aElements,
                 nTotalElements,
@@ -7787,13 +7788,12 @@
             }
 
             if (oForm) {
-        
+
                 aElements = oForm.elements;
                 nTotalElements = aElements.length;
                 oData = {};
 
                 for (i = 0; i < nTotalElements; i++) {
-        
                     sName = aElements[i].name;
 
                     /*
@@ -7809,148 +7809,93 @@
 
                     oElement = Dom.getElementsBy(isFormElement, "*", oForm);
                     nElements = oElement.length;
-        
+
                     if (nElements > 0) {
-        
                         if (nElements == 1) {
-        
                             oElement = oElement[0];
-        
+
                             sType = oElement.type;
                             sTagName = oElement.tagName.toUpperCase();
-        
+
                             switch (sTagName) {
-        
-                            case "INPUT":
-    
-                                if (sType == "checkbox") {
-    
-                                    oData[sName] = oElement.checked;
-    
-                                }
-                                else if (sType != "radio") {
-    
+                                case "INPUT":
+                                    if (sType == "checkbox") {
+                                        oData[sName] = oElement.checked;
+                                    } else if (sType != "radio") {
+                                        oData[sName] = oElement.value;
+                                    }
+                                    break;
+
+                                case "TEXTAREA":
                                     oData[sName] = oElement.value;
+                                    break;
     
-                                }
+                                case "SELECT":
+                                    aOptions = oElement.options;
+                                    nOptions = aOptions.length;
+                                    aValues = [];
     
-                                break;
+                                    for (n = 0; n < nOptions; n++) {
+                                        oOption = aOptions[n];
     
-                            case "TEXTAREA":
-    
-                                oData[sName] = oElement.value;
-    
-                                break;
-    
-                            case "SELECT":
-    
-                                aOptions = oElement.options;
-                                nOptions = aOptions.length;
-                                aValues = [];
-    
-                                for (n = 0; n < nOptions; n++) {
-    
-                                    oOption = aOptions[n];
-    
-                                    if (oOption.selected) {
-    
-                                        sValue = oOption.value;
-    
-                                        if (!sValue || sValue === "") {
-    
-                                            sValue = oOption.text;
-    
+                                        if (oOption.selected) {
+                                            sValue = oOption.value;
+                                            if (!sValue || sValue === "") {
+                                                sValue = oOption.text;
+                                            }
+                                            aValues[aValues.length] = sValue;
                                         }
-    
-                                        aValues[aValues.length] = sValue;
-    
                                     }
-    
-                                }
-    
-                                oData[sName] = aValues;
-    
-                                break;
-        
+                                    oData[sName] = aValues;
+                                    break;
                             }
         
-        
-                        }
-                        else {
-        
+                        } else {
                             sType = oElement[0].type;
-        
                             switch (sType) {
-        
-                            case "radio":
-    
-                                for (n = 0; n < nElements; n++) {
-    
-                                    oRadio = oElement[n];
-    
-                                    if (oRadio.checked) {
-    
-                                        oData[sName] = oRadio.value;
-                                        break;
-    
+                                case "radio":
+                                    for (n = 0; n < nElements; n++) {
+                                        oRadio = oElement[n];
+                                        if (oRadio.checked) {
+                                            oData[sName] = oRadio.value;
+                                            break;
+                                        }
                                     }
-    
-                                }
-    
-                                break;
-    
-                            case "checkbox":
-    
-                                aValues = [];
-    
-                                for (n = 0; n < nElements; n++) {
-    
-                                    oCheckbox = oElement[n];
-    
-                                    if (oCheckbox.checked) {
-    
-                                        aValues[aValues.length] = 
-                                            oCheckbox.value;
-    
-                                    }
-    
-                                }
-    
-                                oData[sName] = aValues;
-    
-                                break;
+                                    break;
         
+                                case "checkbox":
+                                    aValues = [];
+                                    for (n = 0; n < nElements; n++) {
+                                        oCheckbox = oElement[n];
+                                        if (oCheckbox.checked) {
+                                            aValues[aValues.length] =  oCheckbox.value;
+                                        }
+                                    }
+                                    oData[sName] = aValues;
+                                    break;
                             }
-        
                         }
-        
                     }
-        
                 }
-        
             }
-        
-        
+
             return oData;
-        
         },
-        
+
         /**
         * Removes the Panel element from the DOM and sets all child elements 
         * to null.
         * @method destroy
         */
         destroy: function () {
-        
             removeButtonEventHandlers.call(this);
-            
+
             this._aButtons = null;
 
             var aForms = this.element.getElementsByTagName("form"),
                 oForm;
-            
-            if (aForms.length > 0) {
 
+            if (aForms.length > 0) {
                 oForm = aForms[0];
 
                 if (oForm) {
@@ -7961,11 +7906,9 @@
                     this.form = null;
                 }
             }
-        
-            Dialog.superclass.destroy.call(this);  
-        
+            Dialog.superclass.destroy.call(this);
         },
-        
+
         /**
         * Returns a string representation of the object.
         * @method toString
