@@ -2072,14 +2072,15 @@
          * @protected
          */
         _pagerClickHandler: function (ev) {
-            var match,
-                target = Event.getTarget(ev),
-                val;
+            var pos, target, val;
 
+            target = Event.getTarget(ev);
             val = target.href || target.value;
-            if (val && (match = val.match(/.*?-(\d+)$/))) {
-                if (match.length == 2) {
-                    this.scrollTo((match[1] - 1) * this.get("numVisible"));
+            if (val) {
+                pos = val.lastIndexOf("#");
+                if (pos != -1) {
+                    val = this.getItemPositionById(val.substring(pos + 1));
+                    this.scrollTo(val);
                     Event.preventDefault(ev);
                 }
             }
@@ -2532,7 +2533,8 @@
          * @protected
          */
         _syncPagerUI: function (page) {
-            var i,
+            var a,
+                i,
                 markup     = "",
                 numPages,
                 numVisible = this.get("numVisible");
@@ -2550,15 +2552,15 @@
             }
             
             for (i = 0; i < numPages; i++) {
+                a = this._itemsTable.items[i * numVisible].id;
                 if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
-                    markup += "<option value=\"#yui-carousel-page-" + (i+1)    +
-                            "\" " + "id=\"#yui-carousel-page-" + (i+1) + "\" " +
-                            (i == page ? " selected" : "") + ">"               +
-                            this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
+                    markup += "<option value=\"#" + a + "\" "            +
+                            (i == page ? " selected" : "") + ">"         +
+                            this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1) +
                             "</option>";
                 } else {
                     markup += "<li" + (i === 0 ? " class=\"first\">" : ">")    +
-                            "<a href=\"#page-" + (i+1) + "\" tabindex=\"0\" "  +
+                            "<a href=\"#" + a + "\" tabindex=\"0\" "           +
                             (i == page ? " class=\"selected\"" : "") + "><em>" +
                             this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
                             "</em></a></li>";
