@@ -109,9 +109,9 @@
 /****************************************************************************/
 /****************************************************************************/
 
-(function() {
+(function () {
 
-var xPad=function(x, pad, r)
+var xPad=function (x, pad, r)
 {
     if(typeof r === 'undefined')
     {
@@ -133,19 +133,17 @@ var xPad=function(x, pad, r)
  * @static
  */
  var Dt = {
-    _locales: { },
-
     formats: {
-        a: function(d, l) { return l.a[d.getDay()]; },
-        A: function(d, l) { return l.A[d.getDay()]; },
-        b: function(d, l) { return l.b[d.getMonth()]; },
-        B: function(d, l) { return l.B[d.getMonth()]; },
+        a: function (d, l) { return l.a[d.getDay()]; },
+        A: function (d, l) { return l.A[d.getDay()]; },
+        b: function (d, l) { return l.b[d.getMonth()]; },
+        B: function (d, l) { return l.B[d.getMonth()]; },
         c: 'toLocaleString',
-        C: function(d) { return xPad(parseInt(d.getFullYear()/100, 10), 0); },
+        C: function (d) { return xPad(parseInt(d.getFullYear()/100, 10), 0); },
         d: ['getDate', '0'],
         e: ['getDate', ' '],
-        g: function(d) { return xPad(parseInt(Dt.formats.G(d)%100, 10), 0); },
-        G: function(d) {
+        g: function (d) { return xPad(parseInt(Dt.formats.G(d)%100, 10), 0); },
+        G: function (d) {
                 var y = d.getFullYear();
                 var V = parseInt(Dt.formats.V(d), 10);
                 var W = parseInt(Dt.formats.W(d), 10);
@@ -159,25 +157,27 @@ var xPad=function(x, pad, r)
                 return y;
             },
         H: ['getHours', '0'],
-        I: function(d) { var I=d.getHours()%12; return xPad(I===0?12:I, 0); },
-        j: function(d) {
-                var ms = d - new Date('' + d.getFullYear() + '/1/1');
+        I: function (d) { var I=d.getHours()%12; return xPad(I===0?12:I, 0); },
+        j: function (d) {
+                var gmd_1 = new Date('' + d.getFullYear() + '/1/1 GMT');
+                var gmdate = new Date('' + d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + ' GMT');
+                var ms = gmdate - gmd_1;
                 var doy = parseInt(ms/60000/60/24, 10)+1;
                 return xPad(doy, 0, 100);
             },
-        m: function(d) { return xPad(d.getMonth()+1, 0); },
+        m: function (d) { return xPad(d.getMonth()+1, 0); },
         M: ['getMinutes', '0'],
-        p: function(d, l) { return l.p[d.getHours() >= 12 ? 1 : 0 ]; },
-        P: function(d, l) { return l.P[d.getHours() >= 12 ? 1 : 0 ]; },
+        p: function (d, l) { return l.p[d.getHours() >= 12 ? 1 : 0 ]; },
+        P: function (d, l) { return l.P[d.getHours() >= 12 ? 1 : 0 ]; },
         S: ['getSeconds', '0'],
-        u: function(d) { var dow = d.getDay(); return dow===0?7:dow; },
-        U: function(d) {
+        u: function (d) { var dow = d.getDay(); return dow===0?7:dow; },
+        U: function (d) {
                 var doy = parseInt(Dt.formats.j(d), 10);
                 var rdow = 6-d.getDay();
                 var woy = parseInt((doy+rdow)/7, 10);
                 return xPad(woy, 0);
             },
-        V: function(d) {
+        V: function (d) {
                 var woy = parseInt(Dt.formats.W(d), 10);
                 var dow1_1 = (new Date('' + d.getFullYear() + '/1/1')).getDay();
                 // First week is 01 and not 00 as in the case of %U and %W,
@@ -198,22 +198,22 @@ var xPad=function(x, pad, r)
                 return xPad(idow, 0);
             },
         w: 'getDay',
-        W: function(d) {
+        W: function (d) {
                 var doy = parseInt(Dt.formats.j(d), 10);
                 var rdow = 7-Dt.formats.u(d);
                 var woy = parseInt((doy+rdow)/7, 10);
                 return xPad(woy, 0, 10);
             },
-        y: function(d) { return xPad(d.getFullYear()%100, 0); },
+        y: function (d) { return xPad(d.getFullYear()%100, 0); },
         Y: 'getFullYear',
-        z: function(d) {
+        z: function (d) {
                 var o = d.getTimezoneOffset();
                 var H = xPad(parseInt(Math.abs(o/60), 10), 0);
                 var M = xPad(o%60, 0);
                 return (o>0?'-':'+') + H + M;
             },
-        Z: function(d) { return d.toString().replace(/^.*\(([^)]+)\)$/, '$1'); },
-        '%': function(d) { return '%'; }
+        Z: function (d) { return d.toString().replace(/^.*\(([^)]+)\)$/, '$1'); },
+        '%': function (d) { return '%'; }
     },
 
     aggregates: {
@@ -305,7 +305,7 @@ var xPad=function(x, pad, r)
      * @return {String} Formatted date for display.
      * @sa YAHOO.util.DateLocale
      */
-    format : function(oDate, oConfig, sLocale) {
+    format : function (oDate, oConfig, sLocale) {
         oConfig = oConfig || {};
         
         if(!(oDate instanceof Date)) {
@@ -317,27 +317,22 @@ var xPad=function(x, pad, r)
         sLocale = sLocale || "en";
 
         // Make sure we have a definition for the requested locale, or default to en.
-        if(!(sLocale in Dt._locales)) {
-            if(sLocale in YAHOO.util.DateLocale) {
-                Dt._locales[sLocale] = new YAHOO.util.DateLocale[sLocale]();
-            } else if(sLocale.replace(/-[a-zA-Z]+$/, '') in Dt._locales) {
+        if(!(sLocale in YAHOO.util.DateLocale)) {
+            if(sLocale.replace(/-[a-zA-Z]+$/, '') in YAHOO.util.DateLocale) {
                 sLocale = sLocale.replace(/-[a-zA-Z]+$/, '');
-            } else if(sLocale.replace(/-[a-zA-Z]+$/, '') in YAHOO.util.DateLocale) {
-                sLocale = sLocale.replace(/-[a-zA-Z]+$/, '');
-                Dt._locales[sLocale] = new YAHOO.util.DateLocale[sLocale]();
             } else {
                 sLocale = "en";
             }
         }
 
-        var aLocale = Dt._locales[sLocale];
+        var aLocale = YAHOO.util.DateLocale[sLocale];
 
-        var replace_aggs = function(m0, m1) {
+        var replace_aggs = function (m0, m1) {
             var f = Dt.aggregates[m1];
             return (f === 'locale' ? aLocale[m1] : f);
         };
 
-        var replace_formats = function(m0, m1) {
+        var replace_formats = function (m0, m1) {
             var f = Dt.formats[m1];
             if(typeof f === 'string') {             // string => built in date function
                 return oDate[f]();
@@ -381,8 +376,8 @@ var xPad=function(x, pad, r)
  *  <li>Find an existing locale that matches closely with your needs</li>
  *  <li>Use this as your base class.  Use YAHOO.util.DateLocale if nothing
  *   matches.</li>
- *  <li>Create your own class as an extension of the base class and add your
- *   own localisations where needed.
+ *  <li>Create your own class as an extension of the base class using
+ *   YAHOO.lang.merge, and add your own localisations where needed.
  * </ol>
  * See the YAHOO.util.DateLocale['en-US'] and YAHOO.util.DateLocale['en-GB']
  * classes which extend YAHOO.util.DateLocale['en'].
@@ -393,8 +388,7 @@ var xPad=function(x, pad, r)
  *  <li>For French french, we have no existing similar locale, so use
  *   YAHOO.util.DateLocale as the base, and extend it:
  *   <pre>
- *      YAHOO.util.DateLocale['fr'] = function() {};
- *      YAHOO.lang.extend(YAHOO.util.DateLocale['fr'], YAHOO.util.DateLocale, {
+ *      YAHOO.util.DateLocale['fr'] = YAHOO.lang.merge(YAHOO.util.DateLocale, {
  *          a: ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'],
  *          A: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
  *          b: ['jan', 'fév', 'mar', 'avr', 'mai', 'jun', 'jui', 'aoû', 'sep', 'oct', 'nov', 'déc'],
@@ -409,8 +403,7 @@ var xPad=function(x, pad, r)
  *  </li>
  *  <li>For Canadian french, we start with French french and change the meaning of \%x:
  *   <pre>
- *      YAHOO.util.DateLocale['fr-CA'] = function() {};
- *      YAHOO.lang.extend(YAHOO.util.DateLocale['fr-CA'], YAHOO.util.DateLocale['fr'], {
+ *      YAHOO.util.DateLocale['fr-CA'] = YAHOO.lang.merge(YAHOO.util.DateLocale['fr'], {
  *          x: '%Y-%m-%d'
  *      });
  *   </pre>
@@ -435,10 +428,9 @@ var xPad=function(x, pad, r)
  *   mardi, 22 avril == 2008-04-22
  * </pre>
  */
- YAHOO.util.DateLocale = function() {};
+ YAHOO.util.DateLocale = {};
 
- YAHOO.util.DateLocale['en'] = function() {};
- YAHOO.lang.extend(YAHOO.util.DateLocale['en'], YAHOO.util.DateLocale, {
+ YAHOO.util.DateLocale['en'] = YAHOO.lang.merge(YAHOO.util.DateLocale, {
         a: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
         A: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         b: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -450,22 +442,12 @@ var xPad=function(x, pad, r)
         X: '%T'
  });
 
- YAHOO.util.DateLocale['en-US'] = function() {};
- YAHOO.lang.extend(YAHOO.util.DateLocale['en-US'], YAHOO.util.DateLocale['en'], {
+ YAHOO.util.DateLocale['en-US'] = YAHOO.lang.merge(YAHOO.util.DateLocale['en'], {
         c: '%a %b %e %T %Y',
         x: '%D'
  });
 
- YAHOO.util.DateLocale['en-GB'] = function() {};
- YAHOO.lang.extend(YAHOO.util.DateLocale['en-GB'], YAHOO.util.DateLocale['en']);
-
- YAHOO.util.DateLocale['en-AU'] = function() {};
- YAHOO.lang.extend(YAHOO.util.DateLocale['en-AU'], YAHOO.util.DateLocale['en-GB']);
-
- for(var l in YAHOO.util.DateLocale) {
-    if(YAHOO.util.DateLocale[l] && YAHOO.util.DateLocale[l].superclass) {
-        Dt._locales[l] = new YAHOO.util.DateLocale[l]();
-    }
- }
+ YAHOO.util.DateLocale['en-GB'] = YAHOO.lang.merge(YAHOO.util.DateLocale['en']);
+ YAHOO.util.DateLocale['en-AU'] = YAHOO.lang.merge(YAHOO.util.DateLocale['en-GB']);
 
 })();
