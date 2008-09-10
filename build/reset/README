@@ -1,5 +1,9 @@
 YUI Library - Reset - Release Notes
 
+Version 2.6.0 
+
+  * Added del,ins{text-decoration:none;} per SF-1957908
+
 Version 2.5.2
 
   * No changes.
