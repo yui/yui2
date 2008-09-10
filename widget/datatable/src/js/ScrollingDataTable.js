@@ -576,6 +576,8 @@ _initTbodyEl : function(elTable) {
  */
 _focusEl : function(el) {
     el = el || this._elTbody;
+    var oSelf = this;
+    this._storeScrollPositions();
     // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
     // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
     // strange unexpected things as the user clicks on buttons and other controls.
@@ -585,6 +587,7 @@ _focusEl : function(el) {
         setTimeout(function() {
             try {
                 el.focus();
+                oSelf._restoreScrollPositions();
             }
             catch(e) {
             }

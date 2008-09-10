@@ -430,7 +430,6 @@ render : function() {
         // ESC cancels Cell Editor
         if((e.keyCode == 27)) {
             oSelf.cancel();
-            ///oSelf.focusTbodyEl();
         }
         // Pass through event
         oSelf.fireEvent("keydownEvent", {editor:this, event:e});
