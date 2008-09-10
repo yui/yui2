@@ -1875,6 +1875,14 @@ Calendar.prototype = {
 		// invalid event target in certain browsers.
 		setTimeout(function() {
 			cal.previousMonth();
+			var navs = Dom.getElementsByClassName(cal.Style.CSS_NAV_LEFT, "a", cal.oDomContainer);
+			if (navs && navs[0]) {
+				try {
+					navs[0].focus();
+				} catch (e) {
+					// ignore
+				}
+			}
 		}, 0);
 	},
 
@@ -1889,6 +1897,14 @@ Calendar.prototype = {
 		Event.preventDefault(e);
 		setTimeout(function() {
 			cal.nextMonth();
+			var navs = Dom.getElementsByClassName(cal.Style.CSS_NAV_RIGHT, "a", cal.oDomContainer);
+			if (navs && navs[0]) {
+				try {
+					navs[0].focus();
+				} catch (e) {
+					// ignore
+				}
+			}
 		}, 0);
 	},
 
@@ -2705,7 +2721,7 @@ Calendar.prototype = {
 			CSS_CELL_HIGHLIGHT4 : defStyle.CSS_CELL_HIGHLIGHT4
 		};
 	},
-	
+
 	/**
 	* Builds the date label that will be displayed in the calendar header or
 	* footer, depending on configuration.
@@ -2713,9 +2729,21 @@ Calendar.prototype = {
 	* @return	{String}	The formatted calendar month label
 	*/
 	buildMonthLabel : function() {
-		var pageDate = this.cfg.getProperty(DEF_CFG.PAGEDATE.key),
-			monthLabel  = this.Locale.LOCALE_MONTHS[pageDate.getMonth()] + this.Locale.MY_LABEL_MONTH_SUFFIX,
-			yearLabel = pageDate.getFullYear() + this.Locale.MY_LABEL_YEAR_SUFFIX;
+		return this._buildMonthLabel(this.cfg.getProperty(DEF_CFG.PAGEDATE.key));
+	},
+
+    /**
+     * Helper method, to format a Month Year string, given a JavaScript Date, based on the 
+     * Calendar localization settings
+     * 
+     * @method _buildMonthLabel
+     * @private
+     * @param {Date} date
+     * @return {String} Formated month, year string
+     */
+	_buildMonthLabel : function(date) {
+		var	monthLabel  = this.Locale.LOCALE_MONTHS[date.getMonth()] + this.Locale.MY_LABEL_MONTH_SUFFIX,
+			yearLabel = date.getFullYear() + this.Locale.MY_LABEL_YEAR_SUFFIX;
 
 		if (this.Locale.MY_LABEL_MONTH_POSITION == 2 || this.Locale.MY_LABEL_YEAR_POSITION == 1) {
 			return yearLabel + monthLabel;
@@ -2830,10 +2858,11 @@ Calendar.prototype = {
 			DEPR_NAV_LEFT = "us/tr/callt.gif",
 			DEPR_NAV_RIGHT = "us/tr/calrt.gif",
 			cfg = this.cfg,
+			pageDate = cfg.getProperty(DEF_CFG.PAGEDATE.key),
 			strings= cfg.getProperty(DEF_CFG.STRINGS.key),
-			// Using short circuited assingment results in FF JS warnings (slowing down browser when strict JS warnings are enabled), hence using longer version
 			prevStr = (strings && strings.previousMonth) ?  strings.previousMonth : "",
-			nextStr = (strings && strings.nextMonth) ? strings.nextMonth : "";
+			nextStr = (strings && strings.nextMonth) ? strings.nextMonth : "",
+            monthLabel;
 
 		if (cfg.getProperty(DEF_CFG.SHOW_WEEK_HEADER.key)) {
 			colSpan += 1;
@@ -2863,13 +2892,15 @@ Calendar.prototype = {
 		}
 
 		if (renderLeft) {
+			monthLabel  = this._buildMonthLabel(DateMath.subtract(pageDate, DateMath.MONTH, 1));
+
 			var leftArrow = cfg.getProperty(DEF_CFG.NAV_ARROW_LEFT.key);
 			// Check for deprecated customization - If someone set IMG_ROOT, but didn't set NAV_ARROW_LEFT, then set NAV_ARROW_LEFT to the old deprecated value
 			if (leftArrow === null && Calendar.IMG_ROOT !== null) {
 				leftArrow = Calendar.IMG_ROOT + DEPR_NAV_LEFT;
 			}
 			var leftStyle = (leftArrow === null) ? "" : ' style="background-image:url(' + leftArrow + ')"';
-			html[html.length] = '<a class="' + this.Style.CSS_NAV_LEFT + '"' + leftStyle + ' href="#">' + prevStr + '</a>';
+			html[html.length] = '<a class="' + this.Style.CSS_NAV_LEFT + '"' + leftStyle + ' href="#">' + prevStr + ' (' + monthLabel + ')' + '</a>';
 		}
 
 		var lbl = this.buildMonthLabel();
@@ -2880,12 +2911,14 @@ Calendar.prototype = {
 		html[html.length] = lbl;
 
 		if (renderRight) {
+			monthLabel  = this._buildMonthLabel(DateMath.add(pageDate, DateMath.MONTH, 1));
+
 			var rightArrow = cfg.getProperty(DEF_CFG.NAV_ARROW_RIGHT.key);
 			if (rightArrow === null && Calendar.IMG_ROOT !== null) {
 				rightArrow = Calendar.IMG_ROOT + DEPR_NAV_RIGHT;
 			}
 			var rightStyle = (rightArrow === null) ? "" : ' style="background-image:url(' + rightArrow + ')"';
-			html[html.length] = '<a class="' + this.Style.CSS_NAV_RIGHT + '"' + rightStyle + ' href="#">' + nextStr + '</a>';
+			html[html.length] = '<a class="' + this.Style.CSS_NAV_RIGHT + '"' + rightStyle + ' href="#">' + nextStr + ' (' + monthLabel + ')' + '</a>';
 		}
 
 		html[html.length] =	'</div>\n</th>\n</tr>';
