@@ -12,6 +12,8 @@
  */
 (function () {
 
+    var WidgetName;             // forward declaration
+
     /**
      * The Carousel widget.
      *
@@ -43,7 +45,7 @@
      * @private
      * @static
      */
-    var WidgetName = "Carousel";
+    WidgetName = "Carousel";
 
     /**
      * The internal table of Carousel instances.
@@ -578,6 +580,7 @@
     function syncNavigation() {
         var attach   = false,
             cssClass = this.CLASSES,
+            i,
             navigation,
             sentinel;
 
@@ -590,6 +593,9 @@
                     Event.removeListener(navigation.prev, "click",
                             scrollPageBackward);
                     Dom.addClass(navigation.prev, cssClass.FIRST_NAV_DISABLED);
+                    for (i = 0; i < this._navBtns.prev.length; i++) {
+                        this._navBtns.prev[i].setAttribute("disabled", "true");
+                    }
                     this._prevEnabled = false;
                 } else {
                     attach = !this._prevEnabled;
@@ -601,6 +607,9 @@
             if (attach) {
                 Event.on(navigation.prev, "click", scrollPageBackward, this);
                 Dom.removeClass(navigation.prev, cssClass.FIRST_NAV_DISABLED);
+                for (i = 0; i < this._navBtns.prev.length; i++) {
+                    this._navBtns.prev[i].removeAttribute("disabled");
+                }
                 this._prevEnabled = true;
             }
         }
@@ -612,6 +621,9 @@
                     Event.removeListener(navigation.next, "click",
                             scrollPageForward);
                     Dom.addClass(navigation.next, cssClass.DISABLED);
+                    for (i = 0; i < this._navBtns.next.length; i++) {
+                        this._navBtns.next[i].setAttribute("disabled", "true");
+                    }
                     this._nextEnabled = false;
                 } else {
                     attach = !this._nextEnabled;
@@ -623,6 +635,9 @@
             if (attach) {
                 Event.on(navigation.next, "click", scrollPageForward, this);
                 Dom.removeClass(navigation.next, cssClass.DISABLED);
+                for (i = 0; i < this._navBtns.next.length; i++) {
+                    this._navBtns.next[i].removeAttribute("disabled");
+                }
                 this._nextEnabled = true;
             }
         }
@@ -795,6 +810,14 @@
          * @private
          */
         _itemsTable: null,
+
+        /**
+         * The Carousel navigation buttons.
+         *
+         * @property _navBtns
+         * @private
+         */
+        _navBtns: {},
 
         /**
          * The Carousel navigation.
@@ -2094,7 +2117,7 @@
          * @protected
          */
         _parseCarouselNavigation: function (parent) {
-            var cfg, cssClass = this.CLASSES, el, i, nav, rv = false;
+            var cfg, cssClass = this.CLASSES, el, i, j, nav, rv = false;
 
             nav = Dom.getElementsByClassName(cssClass.PREV_PAGE, "*", parent);
             if (nav.length > 0) {
@@ -2104,6 +2127,23 @@
                         YAHOO.log("Found Carousel previous page navigation - " +
                                 el + (el.id ? " (#" + el.id + ")" : ""),
                                 WidgetName);
+                        if (el.nodeName == "INPUT" ||
+                            el.nodeName == "BUTTON") {
+                            if (typeof this._navBtns.prev == "undefined") {
+                                this._navBtns.prev = [];
+                            }
+                            this._navBtns.prev.push(el);
+                        } else {
+                            j = el.getElementsByTagName("INPUT");
+                            if (JS.isArray(j) && j.length > 0) {
+                                this._navBtns.prev.push(j[0]);
+                            } else {
+                                j = el.getElementsByTagName("BUTTON");
+                                if (JS.isArray(j) && j.length > 0) {
+                                    this._navBtns.prev.push(j[0]);
+                                }
+                            }
+                        }
                     }
                 }
                 cfg = { prev: nav };
@@ -2117,6 +2157,23 @@
                         YAHOO.log("Found Carousel next page navigation - " +
                                 el + (el.id ? " (#" + el.id + ")" : ""),
                                 WidgetName);
+                        if (el.nodeName == "INPUT" ||
+                            el.nodeName == "BUTTON") {
+                            if (typeof this._navBtns.next == "undefined") {
+                                this._navBtns.next = [];
+                            }
+                            this._navBtns.next.push(el);
+                        } else {
+                            j = el.getElementsByTagName("INPUT");
+                            if (JS.isArray(j) && j.length > 0) {
+                                this._navBtns.next.push(j[0]);
+                            } else {
+                                j = el.getElementsByTagName("BUTTON");
+                                if (JS.isArray(j) && j.length > 0) {
+                                    this._navBtns.next.push(j[0]);
+                                }
+                            }
+                        }
                     }
                 }
                 if (cfg) {
@@ -2141,7 +2198,7 @@
          * @protected
          */
         _setupCarouselNavigation: function () {
-            var cfg, cssClass, nav, navContainer, nextButton, pageEl,
+            var btn, cfg, cssClass, nav, navContainer, nextButton, pageEl,
                 prevButton;
 
             cssClass = this.CLASSES;
@@ -2169,10 +2226,14 @@
                 // TODO: separate method for creating a navigation button
                 prevButton = createElement("SPAN",
                         { className: cssClass.BUTTON + cssClass.FIRST_NAV });
+                btn = Dom.generateId();
                 prevButton.innerHTML = "<input type=\"button\" " +
+                        "id=\"" + btn + "\" " +
                         "value=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\" " +
                         "name=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\">";
                 navContainer.appendChild(prevButton);
+                btn = Dom.get(btn);
+                this._navBtns.prev = [btn];
                 cfg = { prev: [prevButton] };
             }
             
@@ -2182,10 +2243,14 @@
                 // TODO: separate method for creating a navigation button
                 nextButton = createElement("SPAN",
                         { className: cssClass.BUTTON });
+                btn = Dom.generateId();
                 nextButton.innerHTML = "<input type=\"button\" " +
+                        "id=\"" + btn + "\" " +
                         "value=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\" " +
                         "name=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\">";
                 navContainer.appendChild(nextButton);
+                btn = Dom.get(btn);
+                this._navBtns.next = [btn];
                 if (cfg) {
                     cfg.next = [nextButton];
                 } else {
