@@ -5923,12 +5923,18 @@ var Dom = YAHOO.util.Dom,
         */
         cmd_fontsize: function(value) {
             var el = null;
-            if (this.currentElement && (this.currentElement.length > 0) && (!this._hasSelection())) {
+            if (this.currentElement && (this.currentElement.length > 0) && (!this._hasSelection()) && (!this.get('insert'))) {
                 YAHOO.util.Dom.setStyle(this.currentElement, 'fontSize', value);
             } else if (!this._isElement(this._getSelectedElement(), 'body')) {
                 el = this._getSelectedElement();
                 YAHOO.util.Dom.setStyle(el, 'fontSize', value);
-                this._selectNode(el);
+                if (this.get('insert') && this.browser.ie) {
+                    var r = this._getRange();
+                    r.collapse(false);
+                    r.select();
+                } else {
+                    this._selectNode(el);
+                }
             } else {
                 if (this.get('insert') && !this._hasSelection()) {
                     el = this._createInsertElement({ fontSize: value });
