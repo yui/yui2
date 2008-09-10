@@ -23,7 +23,9 @@ YAHOO.widget.LogReader = function(elContainer, oConfigs) {
     // Parse config vars here
     if (oConfigs && (oConfigs.constructor == Object)) {
         for(var param in oConfigs) {
-            this[param] = oConfigs[param];
+            if (oConfigs.hasOwnProperty(param)) {
+                this[param] = oConfigs[param];
+            }
         }
     }
 
@@ -299,9 +301,11 @@ YAHOO.widget.LogReader.prototype = {
      */
     pause : function() {
         this.isPaused = true;
-        this._btnPause.value = "Resume";
         this._timeout = null;
         this.logReaderEnabled = false;
+        if (this._btnPause) {
+            this._btnPause.value = "Resume";
+        }
     },
 
     /**
@@ -312,9 +316,11 @@ YAHOO.widget.LogReader.prototype = {
      */
     resume : function() {
         this.isPaused = false;
-        this._btnPause.value = "Pause";
         this.logReaderEnabled = true;
         this._printBuffer();
+        if (this._btnPause) {
+            this._btnPause.value = "Pause";
+        }
     },
 
     /**
@@ -576,7 +582,8 @@ YAHOO.widget.LogReader.prototype = {
             msg.className += ' yui-log-verbose';
         }
 
-        msg.innerHTML = YAHOO.lang.substitute(entryFormat, info);
+        // Bug 2061169: Workaround for YAHOO.lang.substitute()
+        msg.innerHTML = entryFormat.replace(/\{(\w+)\}/g, function (x, placeholder) { return (placeholder in info) ? info[placeholder] : ''; });
 
         return msg;
     },

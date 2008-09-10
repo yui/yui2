@@ -4,10 +4,10 @@
 <link type="text/css" rel="stylesheet" href="../build/logger/assets/skins/sam/logger.css" />
 <link type="text/css" rel="stylesheet" href="../build/yuitest/assets/testlogger.css" />
 
-<script type="text/javascript" src="../build/yahoo/yahoo-min.js"></script>
-<script type="text/javascript" src="../build/dom/dom-min.js"></script>
-<script type="text/javascript" src="../build/event/event-min.js"></script>
-<script type="text/javascript" src="../build/logger/logger-min.js"></script>
+<script type="text/javascript" src="../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../build/dom/dom.js"></script>
+<script type="text/javascript" src="../build/event/event.js"></script>
+<script type="text/javascript" src="../build/logger/logger.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest.js"></script>
 </head>
 <body class="yui-skin-sam">
@@ -153,6 +153,23 @@
                 }
             }
         }));
+
+        // for bug 1987607
+        loggersuite.add(new TestCase({
+            name : "Console logging test",
+            testConsoleLog : function () {
+                if (!YAHOO.env.ua.ie) {
+                    YAHOO.widget.Logger.enableBrowserConsole();
+                    YAHOO.log("Console logging info entry","info");
+                    YAHOO.log("Console logging warn entry","warn");
+                    YAHOO.log("Console logging error entry","error");
+                    YAHOO.widget.Logger.disableBrowserConsole();
+
+                    YAHOO.log("CHECK CONSOLE FOR MESSAGES","warn","TestLogger");
+                }
+            }
+        }));
+
         
         TestRunner.add(loggersuite);
 

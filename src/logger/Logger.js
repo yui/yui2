@@ -433,6 +433,11 @@ if(!YAHOO.widget.Logger) {
                 elapsedTime + "ms): " +
                 oEntry.source + ": ";
 
+            // for bug 1987607
+            if (YAHOO.env.ua.webkit) {
+                output += oEntry.msg;
+            }
+
             console.log(output, oEntry.msg);
         }
     };
