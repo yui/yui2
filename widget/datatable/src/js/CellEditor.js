@@ -1604,21 +1604,9 @@ renderForm : function() {
     }, this, true);
 
     if(this.disableBtns) {
+        // By default this is no-op since enter saves by default
         this.handleDisabledBtns();
     }
-},
-
-/**
- * After rendering form, if disabledBtns is set to true, then sets up a mechanism
- * to save input without them. 
- *
- * @method handleDisabledBtns
- */
-handleDisabledBtns : function() {
-    Ev.addListener(this.textbox, "blur", function(v){
-        // Save on blur
-        this.save();
-    }, this, true);
 },
 
 /**

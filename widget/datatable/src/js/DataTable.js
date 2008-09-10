@@ -4675,6 +4675,16 @@ initializeTable : function() {
 },
 
 /**
+ * Internal wrapper calls run() on render Chain instance.
+ *
+ * @method _runRenderChain
+ * @private 
+ */
+_runRenderChain : function() {
+    this._oChainRender.run();
+},
+
+/**
  * Renders the view with existing Records from the RecordSet while
  * maintaining sort, pagination, and selection states. For performance, reuses
  * existing DOM elements when possible while deleting extraneous elements.
@@ -4823,7 +4833,7 @@ render : function() {
             timeout: (loopN > 0) ? 0 : -1
         });
     }
-    this._oChainRender.run();
+    this._runRenderChain();
 },
 
 /**
@@ -5866,7 +5876,7 @@ removeColumn : function(oColumn) {
                         scope: this,
                         timeout: (loopN > 0) ? 0 : -1
                     });
-                    this._oChainRender.run(); 
+                    this._runRenderChain();
                 }
         
                 this.fireEvent("columnRemoveEvent",{column:oColumn});
@@ -5976,7 +5986,7 @@ insertColumn : function(oColumn, index) {
                 scope: this,
                 timeout: (loopN > 0) ? 0 : -1
             });
-            this._oChainRender.run(); 
+            this._runRenderChain(); 
             return oNewColumn;
         }
 
@@ -6108,7 +6118,7 @@ reorderColumn : function(oColumn, index) {
                         scope: this,
                         timeout: (loopN > 0) ? 0 : -1
                     });
-                    this._oChainRender.run(); 
+                    this._runRenderChain();
                 }
         
                 this.fireEvent("columnReorderEvent",{column:oNewColumn});
@@ -6153,7 +6163,7 @@ selectColumn : function(oColumn) {
                 iterations: allRows.length,
                 argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
             });
-            oChainRender.run();       
+            this._runRenderChain();       
             
             this.fireEvent("columnSelectEvent",{column:oColumn});
             YAHOO.log("Column \"" + oColumn.key + "\" selected", "info", this.toString());
@@ -6197,7 +6207,7 @@ unselectColumn : function(oColumn) {
                 iterations:allRows.length,
                 argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
             });
-            oChainRender.run();       
+            this._runRenderChain();       
             
             this.fireEvent("columnUnselectEvent",{column:oColumn});
             YAHOO.log("Column \"" + oColumn.key + "\" unselected", "info", this.toString());
@@ -6258,7 +6268,7 @@ highlightColumn : function(column) {
             timeout: -1
         });
         this._elTbody.style.display = "none";
-        oChainRender.run(); 
+        this._runRenderChain();
         this._elTbody.style.display = "";      
             
         this.fireEvent("columnHighlightEvent",{column:oColumn});
@@ -6302,7 +6312,7 @@ unhighlightColumn : function(column) {
             timeout: -1
         });
         this._elTbody.style.display = "none";
-        oChainRender.run();  
+        this._runRenderChain();
         this._elTbody.style.display = "";     
             
         this.fireEvent("columnUnhighlightEvent",{column:oColumn});
@@ -6431,7 +6441,7 @@ addRow : function(oData, index) {
                         scope: this,
                         timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
                     });
-                    this._oChainRender.run();
+                    this._runRenderChain();
                     return;
                 }
             }            
@@ -6526,7 +6536,7 @@ addRows : function(aData, index) {
                     scope: this,
                     timeout: -1 // Needs to run immediately after the DOM insertions above
                 });
-                this._oChainRender.run();
+                this._runRenderChain();
                 this.hideTableMessage();                
                 return;
             }            
@@ -6595,7 +6605,7 @@ updateRow : function(row, oData) {
             scope: this,
             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
         });
-        this._oChainRender.run();
+        this._runRenderChain();
     }
     else {
         this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
@@ -6688,7 +6698,7 @@ deleteRow : function(row) {
                             scope: this,
                             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
                         });
-                        this._oChainRender.run();
+                        this._runRenderChain();
                         return;
                     }
                 }
@@ -6804,7 +6814,7 @@ deleteRows : function(row, count) {
                             scope: this,
                             timeout: -1 // Needs to run immediately after the DOM deletions above
                         });
-                        this._oChainRender.run();
+                        this._runRenderChain();
                         return;
                     }
                 }
@@ -6940,7 +6950,7 @@ updateCell : function(oRecord, oColumn, oData) {
                 scope: this,
                 timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
             });
-            this._oChainRender.run();
+            this._runRenderChain();
         }
         else {
             this.fireEvent("cellUpdateEvent", {record:oRecord, column: oColumn, oldData:oldData});
