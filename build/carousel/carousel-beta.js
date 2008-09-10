@@ -918,6 +918,14 @@
             FIRST_NAV_DISABLED: "yui-first-disabled",
 
             /**
+             * The class name of the Carousel navigation button that has focus.
+             *
+             * @property FOCUSSED_BUTTON
+             * @default "yui-carousel-button-focus"
+             */
+            FOCUSSED_BUTTON: "yui-carousel-button-focus",
+            
+            /**
              * The class name of a horizontally oriented Carousel.
              *
              * @property HORIZONTAL
@@ -1473,6 +1481,8 @@
          * @public
          */
         initEvents: function () {
+            var cssClass = this.CLASSES;
+
             this.on("keydown", this._keyboardEventHandler);
             
             this.subscribe(afterScrollEvent, syncNavigation);
@@ -1500,6 +1510,24 @@
 
             // Handle page navigation
             this.on("click", this._pagerClickHandler);
+
+            // Restore the focus on the navigation buttons
+            Event.onFocus(this.get("element"), function (ev) {
+                var target = Event.getTarget(ev);
+
+                if (target.nodeName.toUpperCase() == "INPUT" &&
+                    Dom.hasClass(target.parentNode, cssClass.BUTTON)) {
+                    Dom.addClass(target.parentNode, cssClass.FOCUSSED_BUTTON);
+                }
+            });
+            Event.onBlur(this.get("element"), function (ev) {
+                var target = Event.getTarget(ev);
+
+                if (target.nodeName.toUpperCase() == "INPUT" &&
+                    Dom.hasClass(target.parentNode, cssClass.BUTTON)) {
+                    Dom.removeClass(target.parentNode,cssClass.FOCUSSED_BUTTON);
+                }
+            });
         },
 
         /**
