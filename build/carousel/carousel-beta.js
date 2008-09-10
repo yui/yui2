@@ -1484,6 +1484,7 @@
          *
          * @method getItem
          * @param index {Number} The index of the item to be returned
+         * @return {Object} Return the item at index or null if not found
          * @public
          */
         getItem: function (index) {
@@ -1493,6 +1494,17 @@
 
             return this._itemsTable.numItems > index ?
                     this._itemsTable.items[index] : null;
+        },
+
+        /**
+         * Return all items as an array.
+         *
+         * @method getItems
+         * @return {Object} Return all items in the Carousel
+         * @public
+         */
+        getItems: function (index) {
+            return this._itemsTable.items;
         },
 
         /**
