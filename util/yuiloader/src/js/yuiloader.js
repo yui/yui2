@@ -33,7 +33,14 @@
          * @static
          */
         info: {
-    'base': 'http://yui.yahooapis.com/2.6.0/build/',
+
+    // 'root': '2.5.2/build/',
+    // 'base': 'http://yui.yahooapis.com/2.5.2/build/',
+
+    'root': '@VERSION@/build/',
+    'base': 'http://yui.yahooapis.com/@VERSION@/build/',
+
+    'comboBase': 'http://yui.yahooapis.com/combo?',
 
     'skin': {
         'defaultSkin': 'sam',
@@ -485,6 +492,13 @@
         this.onProgress = null;
 
         /**
+         * Callback that will be executed if a timeout occurs
+         * @method onTimeout
+         * @type function
+         */
+        this.onTimeout = null;
+
+        /**
          * The execution scope for all callbacks
          * @property scope
          * @default this
@@ -530,6 +544,41 @@
          * @default http://yui.yahooapis.com/[YUI VERSION]/build/
          */
         this.base = YUI.info.base;
+
+        /**
+         * Base path for the combo service
+         * @property comboBase
+         * @type string
+         * @default http://yui.yahooapis.com/combo?
+         */
+        this.comboBase = YUI.info.comboBase;
+
+        /**
+         * If configured, YUI JS resources will use the combo
+         * handler
+         * @property combine
+         * @type boolean
+         * @default true if a base dir isn't in the config
+         */
+        this.combine = (!('base' in o));
+
+        /**
+         * Root path to prepend to module path for the combo
+         * service
+         * @property root
+         * @type string
+         * @default [YUI VERSION]/build/
+         */
+        this.root = YUI.info.root;
+
+        /**
+         * Timeout value in milliseconds.  If set, this value will be used by
+         * the get utility.  the timeout event will fire if
+         * a timeout occurs.
+         * @property timeout
+         * @type int
+         */
+        this.timeout = 0;
 
         /**
          * A list of modules that should not be loaded, even if
@@ -989,19 +1038,22 @@
 
             // Create skin modules
             for (name in info) {
-                var m = info[name];
-                if (m && m.skinnable) {
-                    // Y.log("skinning: " + name);
-                    var o=this.skin.overrides, smod;
-                    if (o && o[name]) {
-                        for (i=0; i<o[name].length; i=i+1) {
-                            smod = this._addSkin(o[name][i], name);
-                        }
-                    } else {
-                        smod = this._addSkin(this.skin.defaultSkin, name);
-                    }
 
-                    m.requires.push(smod);
+                if (lang.hasOwnProperty(info, name)) {
+                    var m = info[name];
+                    if (m && m.skinnable) {
+                        // Y.log("skinning: " + name);
+                        var o=this.skin.overrides, smod;
+                        if (o && o[name]) {
+                            for (i=0; i<o[name].length; i=i+1) {
+                                smod = this._addSkin(o[name][i], name);
+                            }
+                        } else {
+                            smod = this._addSkin(this.skin.defaultSkin, name);
+                        }
+
+                        m.requires.push(smod);
+                    }
                 }
 
             }
@@ -1055,13 +1107,15 @@
             var r=this.required, i, mod;
 
             for (i in r) {
-                mod = this.moduleInfo[i];
-                if (mod) {
+                if (lang.hasOwnProperty(r, i)) {
+                    mod = this.moduleInfo[i];
+                    if (mod) {
 
-                    var req = this.getRequires(mod);
+                        var req = this.getRequires(mod);
 
-                    if (req) {
-                        YUI.ObjectUtil.appendArray(r, req);
+                        if (req) {
+                            YUI.ObjectUtil.appendArray(r, req);
+                        }
                     }
                 }
             }
@@ -1126,15 +1180,18 @@
          * @private
          */
         _rollup: function() {
-            var i, j, m, s, rollups={}, r=this.required, roll;
+            var i, j, m, s, rollups={}, r=this.required, roll,
+                info = this.moduleInfo;
 
             // find and cache rollup modules
             if (this.dirty || !this.rollups) {
-                for (i in this.moduleInfo) {
-                    m = this.moduleInfo[i];
-                    //if (m && m.rollup && m.supersedes) {
-                    if (m && m.rollup) {
-                        rollups[i] = m;
+                for (i in info) {
+                    if (lang.hasOwnProperty(info, i)) {
+                        m = info[i];
+                        //if (m && m.rollup && m.supersedes) {
+                        if (m && m.rollup) {
+                            rollups[i] = m;
+                        }
                     }
                 }
 
@@ -1150,7 +1207,7 @@
 
                     // there can be only one
                     if (!r[i] && !this.loaded[i]) {
-                        m =this.moduleInfo[i]; s = m.supersedes; roll=false;
+                        m =info[i]; s = m.supersedes; roll=false;
 
                         if (!m.rollup) {
                             continue;
@@ -1161,12 +1218,14 @@
                         // Y.log('skin? ' + i + ": " + skin);
                         if (skin) {
                             for (j in r) {
-                                if (i !== j && this.parseSkin(j)) {
-                                    c++;
-                                    roll = (c >= m.rollup);
-                                    if (roll) {
-                                        // Y.log("skin rollup " + lang.dump(r));
-                                        break;
+                                if (lang.hasOwnProperty(r, j)) {
+                                    if (i !== j && this.parseSkin(j)) {
+                                        c++;
+                                        roll = (c >= m.rollup);
+                                        if (roll) {
+                                            // Y.log("skin rollup " + lang.dump(r));
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -1239,11 +1298,14 @@
                             var skin_pre = this.SKIN_PREFIX + skinDef.skin;
                             //YAHOO.log("skin_pre: " + skin_pre);
                             for (j in r) {
-                                m = this.moduleInfo[j];
-                                var ext = m && m.ext;
-                                if (!ext && j !== i && j.indexOf(skin_pre) > -1) {
-                                    // Y.log ("removing component skin: " + j);
-                                    delete r[j];
+
+                                if (lang.hasOwnProperty(r, j)) {
+                                    m = this.moduleInfo[j];
+                                    var ext = m && m.ext;
+                                    if (!ext && j !== i && j.indexOf(skin_pre) > -1) {
+                                        // Y.log ("removing component skin: " + j);
+                                        delete r[j];
+                                    }
                                 }
                             }
                         }
@@ -1262,6 +1324,31 @@
                 }
             }
         },
+
+        _onFailure: function(msg) {
+            YAHOO.log('Failure', 'info', 'loader');
+
+            var f = this.onFailure;
+            if (f) {
+                f.call(this.scope, {
+                    msg: 'failure: ' + msg,
+                    data: this.data,
+                    success: false
+                });
+            }
+        },
+
+        _onTimeout: function() {
+            YAHOO.log('Timeout', 'info', 'loader');
+            var f = this.onTimeout;
+            if (f) {
+                f.call(this.scope, {
+                    msg: 'timeout',
+                    data: this.data,
+                    success: false
+                });
+            }
+        },
         
         /**
          * Sorts the dependency tree.  The last step of calculate()
@@ -1276,13 +1363,19 @@
             // returns true if b is not loaded, and is required
             // directly or by means of modules it supersedes.
             var requires = function(aa, bb) {
-                if (loaded[bb]) {
+
+                var mm=info[aa];
+
+                if (loaded[bb] || !mm) {
                     return false;
                 }
 
-                var ii, mm=info[aa], rr=mm && mm.expanded, 
-                    after = mm && mm.after, other=info[bb],
-                    optional = mm && mm.optional;
+                var ii, 
+                    rr = mm.expanded, 
+                    after = mm.after, 
+                    other = info[bb],
+                    optional = mm.optional;
+
 
                 // check if this module requires the other directly
                 if (rr && YUI.ArrayUtil.indexOf(rr, bb) > -1) {
@@ -1330,7 +1423,9 @@
             // get the required items out of the obj into an array so we
             // can sort
             for (var i in this.required) {
-                s.push(i);
+                if (lang.hasOwnProperty(this.required, i)) {
+                    s.push(i);
+                }
             }
 
             // pointer to the first unsorted item
@@ -1398,6 +1493,98 @@
             lang.dump(o, 1);
         },
 
+        _combine: function() {
+
+                this._combining = []; 
+
+                var self = this,
+                    s=this.sorted,
+                    len = s.length,
+                    js = this.comboBase,
+                    css = this.comboBase,
+                    target, 
+                    startLen = js.length,
+                    i, m;
+
+                for (i=0; i<len; i=i+1) {
+                    m = this.moduleInfo[s[i]];
+
+                    if (m && !m.ext) {
+
+                        target = this.root + m.path;
+
+                        // if (i < len-1) {
+                        target += '&';
+                        // }
+
+                        if (m.type == 'js') {
+                            js += target;
+                        } else {
+                            css += target;
+                        }
+
+                        // YAHOO.log(target);
+                        this._combining.push(s[i]);
+                    }
+                }
+
+                if (this._combining.length) {
+
+YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
+
+                    var callback=function(o) {
+                        // YAHOO.log('Combo complete: ' + o.data, "info", "loader");
+                        this._combineComplete = true;
+
+                        var c=this._combining, len=c.length, i, m;
+                        for (i=0; i<len; i=i+1) {
+                            this.inserted[c[i]] = true;
+                        }
+
+                        this.loadNext(o.data);
+                    }, 
+                    
+                    loadScript = function() {
+                        // YAHOO.log('combining js: ' + js);
+                        if (js.length > startLen) {
+                            YAHOO.util.Get.script(this._filter(js), {
+                                data: this._loading,
+                                onSuccess: callback,
+                                onFailure: this._onFailure,
+                                onTimeout: this._onTimeout,
+                                insertBefore: this.insertBefore,
+                                charset: this.charset,
+                                timeout: this.timeout,
+                                scope: self 
+                            });
+                        }
+                    };
+
+                    // load the css first
+                    // YAHOO.log('combining css: ' + css);
+                    if (css.length > startLen) {
+                        YAHOO.util.Get.css(this._filter(css), {
+                            data: this._loading,
+                            onSuccess: loadScript,
+                            onFailure: this._onFailure,
+                            onTimeout: this._onTimeout,
+                            insertBefore: this.insertBefore,
+                            charset: this.charset,
+                            timeout: this.timeout,
+                            scope: self 
+                        });
+                    } else {
+                        loadScript();
+                    }
+
+                    return;
+
+                } else {
+                    this._combineComplete = true;
+                    this.loadNext(this._loading);
+                }
+        }, 
+
         /**
          * inserts the requested modules and their dependencies.  
          * <code>type</code> can be "js" or "css".  Both script and 
@@ -1430,6 +1617,11 @@
             // set a flag to indicate the load has started
             this._loading = true;
 
+            // flag to indicate we are done with the combo service
+            // and any additional files will need to be loaded
+            // individually
+            this._combineComplete = false;
+
             // keep the loadType (js, css or undefined) cached
             this.loadType = type;
 
@@ -1438,7 +1630,7 @@
 
         },
 
-        /*
+        /**
          * Interns the script for the requested modules.  The callback is
          * provided a reference to the sandboxed YAHOO object.  This only
          * applies to the script: css can not be sandboxed; css will be
@@ -1506,10 +1698,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
 
                 // undefined modules cause a failure
                 if (!m) {
-                    this.onFailure.call(this.scope, {
-                            msg: "undefined module " + m,
-                            data: this.data
-                        });
+                    this._onFailure("undefined module " + m);
                     for (var j=0;j<this._xhr.length;j=j+1) {
                         this._xhr[j].abort();
                     }
@@ -1570,10 +1759,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                                         data: this.data
                                     });
                             } else {
-                                this.onFailure.call(this.scope, {
-                                        msg: this.varName + " reference failure",
-                                        data: this.data
-                                    });
+                                this._onFailure.call(this.varName + " reference failure");
                             }
                         }
                     },
@@ -1614,6 +1800,10 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
             // are actively loading something
             if (!this._loading) {
                 return;
+            }
+
+            if (this.combine && (!this._combineComplete)) {
+                return this._combine();
             }
 
             if (mname) {
@@ -1695,8 +1885,11 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                     fn(url, {
                         data: s[i],
                         onSuccess: c,
+                        onFailure: this._onFailure,
+                        onTimeout: this._onTimeout,
                         insertBefore: this.insertBefore,
                         charset: this.charset,
+                        timeout: this.timeout,
                         varName: m.varName,
                         scope: self 
                     });
@@ -1737,6 +1930,17 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
         },
 
         /**
+         * Applies filter
+         * method _filter
+         * @return {string} the filtered string
+         * @private
+         */
+        _filter: function(str) {
+            var f = this.filter;
+            return (f) ?  str.replace(new RegExp(f.searchExp), f.replaceStr) : str;
+        },
+
+        /**
          * Generates the full url for a module
          * method _url
          * @param path {string} the path fragment
@@ -1747,16 +1951,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
             
             var u = this.base || "", f=this.filter;
             u = u + path;
-
-            if (f) {
-                // YAHOO.log("filter: " + f + ", " + f.searchExp + 
-                // ", " + f.replaceStr);
-                u = u.replace(new RegExp(f.searchExp), f.replaceStr);
-            }
-
-            // YAHOO.log(u);
-
-            return u;
+            return this._filter(u);
         }
 
     };

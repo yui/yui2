@@ -1,13 +1,16 @@
 yuiloader - Release Notes
 
 2.6.0
- * autocomplete requires datasource
- * insert() config always used if provided
+ * Autocomplete requires datasource.
+ * Config always used if provided to insert().
+ * Added timeout support.
+ * Added combo handler support, which is on by default 'base' isn't changed
+   from the default.
 
 2.5.2
-  * uploader requires element
-  * editer supersedes simpleditor
-  * optional dependencies are sorted correctly when present even when
+  * uploader requires element.
+  * editer supersedes simpleditor.
+  * Optional dependencies are sorted correctly when present even when
     loadOptional is not specified.
 
 2.5.1
