@@ -1,18 +1,28 @@
 .yui-carousel {
-    margin: 5px 0;
-    overflow: hidden;
-    padding: 0;
-    position: relative;
     visibility: hidden;
-    width: 32000px;
-    z-index: 1;
+    overflow: hidden;
+    position: relative;
 }
 
 .yui-carousel.yui-carousel-visible {
     visibility: visible;
 }
 
-.yui-carousel li {
+.yui-carousel-content {
+    overflow: hidden;
+    position: relative;
+}
+
+.yui-carousel-element {
+    margin: 5px 0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    width: 32000px;
+    z-index: 1;
+}
+
+.yui-carousel-element li {
     border: 1px solid #ccc;
     float: left;
     list-style: none;
@@ -33,24 +43,9 @@
     width: auto;
 }
 
-.yui-carousel-vertical li {
+.yui-carousel-vertical .yui-carousel-element li {
     display: block;
     float: none;
-}
-
-.yui-carousel-container {
-    visibility: hidden;
-    overflow: hidden;
-    position: relative;
-}
-
-.yui-carousel-container.yui-carousel-visible {
-    visibility: visible;
-}
-
-.yui-carousel-content {
-    overflow: hidden;
-    position: relative;
 }
 
 .yui-log .carousel {

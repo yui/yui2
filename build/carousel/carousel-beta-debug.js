@@ -882,6 +882,14 @@
              * @default "yui-carousel"
              */
             CAROUSEL: "yui-carousel",
+            
+            /**
+             * The class name of the container of the items in the Carousel.
+             *
+             * @property CAROUSEL_EL
+             * @default "yui-carousel-element"
+             */
+            CAROUSEL_EL: "yui-carousel-element",
 
             /**
              * The class name of the Carousel's container element.
@@ -1680,6 +1688,8 @@
                 cssClass = this.CLASSES,
                 size;
             
+            this.addClass(cssClass.CAROUSEL);
+            
             if (!this._clipEl) {
                 this._clipEl = this._createCarouselClip();
                 this._clipEl.appendChild(this._carouselEl);
@@ -1703,9 +1713,9 @@
                 size = getCarouselItemSize.call(this);
                 size = size < config.MIN_WIDTH ? config.MIN_WIDTH : size;
                 this.setStyle("width",  size + "px");
-                this.addClass(cssClass.VERTICAL_CONTAINER);
+                this.addClass(cssClass.VERTICAL);
             } else {
-                this.addClass(cssClass.CONTAINER);
+                this.addClass(cssClass.HORIZONTAL);
             }
 
             if (this.get("numItems") < 1) {
@@ -1886,7 +1896,6 @@
             
             if (this.fireEvent(beforeShowEvent) !== false) {
                 this.addClass(cssClass.VISIBLE);
-                Dom.addClass(this._carouselEl, cssClass.VISIBLE);
                 this.fireEvent(showEvent);
             }
         },
@@ -1952,13 +1961,13 @@
             var cssClass = this.CLASSES;
             
             var el = createElement("DIV", {
-                    className : cssClass.CONTAINER,
+                    className : cssClass.CAROUSEL,
                     id        : elId
             });
             
             if (!this._carouselEl) {
                 this._carouselEl = createElement(this.CONFIG.TAG_NAME,
-                        { className: cssClass.CAROUSEL });
+                        { className: cssClass.CAROUSEL_EL });
             }
 
             return el;
@@ -2126,20 +2135,17 @@
          * @protected
          */
         _parseCarousel: function (parent) {
-            var child, cssClass, found, hasClass, node;
+            var child, cssClass, found, node;
 
             cssClass = this.CLASSES;
             found    = false;
-            
+
             for (child = parent.firstChild; child; child = child.nextSibling) {
                 if (child.nodeType == 1) {
                     node = child.nodeName;
-                    if (node.toUpperCase() == this.CONFIG.TAG_NAME ||
-                        (hasClass = Dom.hasClass(child, cssClass.CAROUSEL))) {
+                    if (node.toUpperCase() == this.CONFIG.TAG_NAME) {
                         this._carouselEl = child;
-                        if (!hasClass) {
-                            Dom.addClass(this._carouselEl, cssClass.CAROUSEL);
-                        }
+                        Dom.addClass(this._carouselEl,this.CLASSES.CAROUSEL_EL);
                         YAHOO.log("Found Carousel - " + node +
                                 (child.id ? " (#" + child.id + ")" : ""),
                                 WidgetName);
@@ -2299,6 +2305,8 @@
                 // TODO: separate method for creating a navigation button
                 prevButton = createElement("SPAN",
                         { className: cssClass.BUTTON + cssClass.FIRST_NAV });
+                // XXX: for IE 6.x
+                Dom.setStyle(prevButton, "visibility", "visible");
                 btn = Dom.generateId();
                 prevButton.innerHTML = "<input type=\"button\" " +
                         "id=\"" + btn + "\" " +
@@ -2316,6 +2324,8 @@
                 // TODO: separate method for creating a navigation button
                 nextButton = createElement("SPAN",
                         { className: cssClass.BUTTON });
+                // XXX: for IE 6.x
+                Dom.setStyle(nextButton, "visibility", "visible");
                 btn = Dom.generateId();
                 nextButton.innerHTML = "<input type=\"button\" " +
                         "id=\"" + btn + "\" " +
@@ -2353,7 +2363,12 @@
             reveal     = this.get("revealAmount");
             which      = isVertical ? "height" : "width";
             attr       = isVertical ? "top" : "left";
+
             clip       = clip || this._clipEl;
+            if (!clip) {
+                return;
+            }
+            
             num        = num  || this.get("numVisible");
             itemSize   = getCarouselItemSize.call(this, which);
             size       = itemSize * num;
@@ -2361,10 +2376,6 @@
             this._recomputeSize = (size === 0); // bleh!
             if (this._recomputeSize) {
                 return;             // no use going further, bail out!
-            }
-            
-            if (!clip) {
-                return;
             }
 
             if (reveal > 0) {
@@ -2522,11 +2533,9 @@
             var cssClass = this.CLASSES;
             
             if (val) {
-                Dom.replaceClass(this._carouselEl, cssClass.HORIZONTAL,
-                        cssClass.VERTICAL);
+                this.replaceClass(cssClass.HORIZONTAL, cssClass.VERTICAL);
             } else {
-                Dom.replaceClass(this._carouselEl, cssClass.VERTICAL,
-                        cssClass.HORIZONTAL);
+                this.replaceClass(cssClass.VERTICAL, cssClass.HORIZONTAL);
             }
             this._itemsTable.size = 0; // invalidate our size computation cache
             return val;
