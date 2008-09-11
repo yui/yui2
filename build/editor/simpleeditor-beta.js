@@ -5120,32 +5120,33 @@ var Dom = YAHOO.util.Dom,
         * @param {Object} ev The Form Submit Event
         */
         _handleFormSubmit: function(ev) {
-            Event.stopEvent(ev);
-
             this.saveHTML();
+
             var form = this.get('element').form,
                 tar = this._formButtonClicked || false;
 
             Event.removeListener(form, 'submit', this._handleFormSubmit);
             if (YAHOO.env.ua.ie) {
-                form.fireEvent("onsubmit");
+                //form.fireEvent("onsubmit");
                 if (tar && !tar.disabled) {
                     tar.click();
                 }
             } else {  // Gecko, Opera, and Safari
                 if (tar && !tar.disabled) {
                     tar.click();
-                } else {
-                    var oEvent = document.createEvent("HTMLEvents");
-                    oEvent.initEvent("submit", true, true);
-                    form.dispatchEvent(oEvent);
-                    if (YAHOO.env.ua.webkit) {
-                        if (YAHOO.lang.isFunction(form.submit)) {
-                            form.submit();
-                        }
+                }
+                var oEvent = document.createEvent("HTMLEvents");
+                oEvent.initEvent("submit", true, true);
+                form.dispatchEvent(oEvent);
+                if (YAHOO.env.ua.webkit) {
+                    if (YAHOO.lang.isFunction(form.submit)) {
+                        form.submit();
                     }
                 }
             }
+            //2.6.0
+            //Removed this, not need since removing Safari 2.x
+            //Event.stopEvent(ev);
         },
         /**
         * @private

@@ -59,7 +59,8 @@
 }
 
 /* Remove the shadows from the menus in the toolbar - Menu.css override */
-.yui-skin-sam .yui-editor-container .visible .yui-menu-shadow, .yui-skin-sam .yui-editor-panel .visible .yui-menu-shadow {
+.yui-skin-sam .yui-editor-container .visible .yui-menu-shadow,
+.yui-skin-sam .yui-editor-panel .visible .yui-menu-shadow {
     display: none;
 }
 
@@ -129,12 +130,16 @@
     padding-left: 35px;
     height: 20px;
     text-decoration: none;
-    font-size: 12px;
+    font-size: 0px;
     line-height: 2;
     display: block;
     color: #000;
     overflow: hidden;
     white-space: nowrap;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton a,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-select a {
+    font-size: 12px;
 }
 /* Set the height of the buttons and pad them on the left for the icon */
 .yui-skin-sam .yui-toolbar-container .yui-push-button .first-child,
@@ -230,6 +235,10 @@
 /* Set the background color of all menu containers */
 .yui-skin-sam .yui-toolbar-container .yui-button-menu {
     background-color: #fff;
+}
+/* Adding this style to Menu's allows the scrolled menu to work in IE */
+.yui-skin-sam .yui-toolbar-container .yui-button-menu .yui-menu-body-scrolled {
+    position: relative;
 }
 /* Set the background of all menu items that are selected */
 .yui-skin-sam div.yuimenu li.selected {
