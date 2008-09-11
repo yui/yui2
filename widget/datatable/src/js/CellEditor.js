@@ -21,9 +21,7 @@ var lang   = YAHOO.lang,
  * @class BaseCellEditor
  * @uses YAHOO.util.EventProvider 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
+ * @param sType {String} Type indicator, to map to YAHOO.widget.DataTable.Editors.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.BaseCellEditor = function(sType, oConfigs) {
@@ -805,9 +803,6 @@ lang.augmentProto(BCE, util.EventProvider);
  * @class CheckboxCellEditor
  * @extends YAHOO.widget.BaseCellEditor
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.CheckboxCellEditor = function(oConfigs) {
@@ -981,9 +976,6 @@ lang.augmentObject(widget.CheckboxCellEditor, BCE);
  * @class DateCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.DateCellEditor = function(oConfigs) {
@@ -1124,7 +1116,6 @@ lang.augmentObject(widget.DateCellEditor, BCE);
  * @class DropdownCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.DropdownCellEditor = function(oConfigs) {
@@ -1259,9 +1250,6 @@ lang.augmentObject(widget.DropdownCellEditor, BCE);
  * @class RadioCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.RadioCellEditor = function(oConfigs) {
@@ -1425,9 +1413,6 @@ lang.augmentObject(widget.RadioCellEditor, BCE);
  * @class TextareaCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.TextareaCellEditor = function(oConfigs) {
@@ -1549,9 +1534,6 @@ lang.augmentObject(widget.TextareaCellEditor, BCE);
  * @class TextboxCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.TextboxCellEditor = function(oConfigs) {
@@ -1695,8 +1677,7 @@ DT.Editors = {
  * @class CellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
- * @param sType {String} Editor type.
+ * @param sType {String} Type indicator, to map to YAHOO.widget.DataTable.Editors.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.CellEditor = function(sType, oConfigs) {
