@@ -199,5 +199,5 @@ YAHOO.extend(YAHOO.widget.DataStore, YAHOO.widget.FlashAdapter,
 });
 
 
-YAHOO.widget.DataStore.SWFURL = "DataStore.swf";
+YAHOO.widget.DataStore.SWFURL = "datastore.swf";
 YAHOO.register("datastore", YAHOO.widget.DataStore, {version: "2.6"});
