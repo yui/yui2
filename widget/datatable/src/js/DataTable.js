@@ -729,53 +729,6 @@ lang.augmentObject(DT, {
     },
 
     /**
-     * Outputs markup into the given TH based on given Column.
-     *
-     * @method DataTable.formatTheadCell
-     * @param elCellLabel {HTMLElement} The label SPAN element within the TH liner,
-     * not the liner DIV element.     
-     * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
-     * @static
-     */
-    formatTheadCell : function(elCellLabel, oColumn, oSelf, oNewSortedBy) {
-        var sKey = oColumn.getKey();
-        var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;
-
-        // Add accessibility link for sortable Columns
-        if(oColumn.sortable) {
-            // Calculate the direction
-            var sSortClass = oSelf.getColumnSortDir(oColumn);
-            var sSortDir = (sSortClass === DT.CLASS_DESC) ? "descending" : "ascending";
-
-            // HACK: Bug 1827195, workaround for bug 1969954
-            // Attribute has not yet been set
-            if(oNewSortedBy === null) {
-                // Force the Column's default sort direction
-                sSortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultDir && (oColumn.sortOptions.defaultDir === DT.CLASS_DESC)) ?
-                    "descending" : "ascending";
-
-            }
-            else if(oNewSortedBy && (oColumn.key === oNewSortedBy.key)) {
-                sSortDir = (oNewSortedBy.dir === DT.CLASS_DESC) ? "ascending" : "descending";
-            }
-
-            // Generate a unique HREF for visited status
-            var sHref = oSelf.getId() + "-sort-" + oColumn.getSanitizedKey() + "-" + sSortDir;
-            
-            // Generate a dynamic TITLE for sort status
-            var sTitle = (sSortDir === "descending") ? oSelf.get("MSG_SORTDESC") : oSelf.get("MSG_SORTASC");
-            
-            // Format the element
-            elCellLabel.innerHTML = "<a href=\"" + sHref + "\" title=\"" + sTitle + "\" class=\"" + DT.CLASS_SORTABLE + "\">" + sLabel + "</a>";
-        }
-        // Just display the label for non-sortable Columns
-        else {
-            elCellLabel.innerHTML = sLabel;
-        }
-    },
-
-    /**
      * Formats a BUTTON element.
      *
      * @method DataTable.formatButton
@@ -1209,7 +1162,7 @@ initAttributes : function(oConfigs) {
                     // Remove previous UI from THEAD
                     var elOldTh = oOldColumn.getThEl();
                     Dom.removeClass(elOldTh, oOldSortedBy.dir);
-                    DT.formatTheadCell(oOldColumn.getThLinerEl().firstChild, oOldColumn, this, oNewSortedBy);
+                    this.formatTheadCell(oOldColumn.getThLinerEl().firstChild, oOldColumn, oNewSortedBy);
                 }
                 if(oNewSortedBy) {
                     oNewColumn = (oNewSortedBy.column) ? oNewSortedBy.column : this._oColumnSet.getColumn(oNewSortedBy.key);
@@ -1228,12 +1181,7 @@ initAttributes : function(oConfigs) {
                          var sortClass = oNewSortedBy.dir || DT.CLASS_ASC;
                          Dom.addClass(elNewTh, sortClass);
                     }
-    
-                    // HACK: Bug 1827195, workaround for bug 1969954.
-                    // Since this method runs before the value is set,
-                    // the formatTheadCell() function doesn't have access to the new
-                    // value yet so I'm going to pass in the new value explicitly.    
-                    DT.formatTheadCell(oNewColumn.getThLinerEl().firstChild, oNewColumn, this, oNewSortedBy);  // Bug 1827195
+                    this.formatTheadCell(oNewColumn.getThLinerEl().firstChild, oNewColumn, oNewSortedBy);
                 }
             }
           
@@ -2454,8 +2402,53 @@ _initThEl : function(elTh, oColumn) {
         this._setColumnWidthDynStyles(oColumn, nWidth + 'px', 'hidden');
     }
 
-    DT.formatTheadCell(elThLabel, oColumn, this);
+    this.formatTheadCell(elThLabel, oColumn, this.get("sortedBy"));
     oColumn._elThLabel = elThLabel;
+},
+
+/**
+ * Outputs markup into the given TH based on given Column.
+ *
+ * @method DataTable.formatTheadCell
+ * @param elCellLabel {HTMLElement} The label SPAN element within the TH liner,
+ * not the liner DIV element.     
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oSortedBy {Object} Sort state object literal.
+*/
+formatTheadCell : function(elCellLabel, oColumn, oSortedBy) {
+    var sKey = oColumn.getKey();
+    var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;
+
+    // Add accessibility link for sortable Columns
+    if(oColumn.sortable) {
+        // Calculate the direction
+        var sSortClass = this.getColumnSortDir(oColumn);
+        var sSortDir = (sSortClass === DT.CLASS_DESC) ? "descending" : "ascending";
+
+        // This is the sorted Column
+        if(oSortedBy && (oColumn.key === oSortedBy.key)) {
+            sSortDir = (oSortedBy.dir === DT.CLASS_DESC) ? "ascending" : "descending";
+        }
+        // Use the Column's default sort direction
+        //else {
+            //sSortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultDir && (oColumn.sortOptions.defaultDir === DT.CLASS_DESC)) ?
+                //"descending" : "ascending";
+
+        //}
+
+        // Generate a unique HREF for visited status
+        var sHref = this.getId() + "-sort-" + oColumn.getSanitizedKey() + "-" + sSortDir;
+        
+        // Generate a dynamic TITLE for sort status
+        var sTitle = (sSortDir === "descending") ? this.get("MSG_SORTDESC") : this.get("MSG_SORTASC");
+        
+        // Format the element
+        elCellLabel.innerHTML = "<a href=\"" + sHref + "\" title=\"" + sTitle + "\" class=\"" + DT.CLASS_SORTABLE + "\">" + sLabel + "</a>";
+    }
+    // Just display the label for non-sortable Columns
+    else {
+        elCellLabel.innerHTML = sLabel;
+    }
 },
 
 /**
@@ -11176,6 +11169,12 @@ DT.prototype.onPaginatorChange = DT.prototype.onPaginatorChangeRequest;
 // Deprecated static APIs
 //
 /////////////////////////////////////////////////////////////////////////////
+/**
+ * @method DataTable.formatTheadCell
+ * @deprecated  Use formatTheadCell.
+ */
+DT.formatTheadCell = function() {};
+
 /**
  * @method DataTable.editCheckbox
  * @deprecated  Use YAHOO.widget.CheckboxCellEditor.

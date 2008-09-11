@@ -50,6 +50,9 @@ Attributes, to be set via the initial config or myDataTable.set():
     - MSG_LOADING
     - COLOR_COLUMNFILLER (ScrollingDataTable)
     
+* The formatTheadCell() method been changed from static a static method to an
+instance method with an update to its argument signature.
+
 * The initEvent will fire when rows are rendered from an initialized state, 
 and the renderEvent will always fire when rows are rendered, and also when the 
 underlying DOM incrementally changes (such as incrementally adding or deleting
