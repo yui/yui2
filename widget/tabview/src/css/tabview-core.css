@@ -46,7 +46,15 @@
     zoom:1;
 }
 
-.yui-navset .yui-content { zoom:1; }
+.yui-navset .yui-content {
+    zoom:1;
+}
+
+.yui-navset .yui-content:after {
+    content:'';
+    display:block;
+    clear:both;
+}
 
 .yui-navset .yui-nav li,
 .yui-navset .yui-navset-top .yui-nav li, /* in case nested */
