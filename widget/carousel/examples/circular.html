@@ -31,10 +31,9 @@
                 YAHOO.util.Event.onDOMReady(function (ev) {
                     var myLogReader = new YAHOO.widget.LogReader(),
                         carousel    = new YAHOO.widget.Carousel("container", {
-                            isCircular: true
+                            isCircular: true, numVisible: 1
                         });
 
-                    carousel.set("numVisible", 1); // display one at a time
                     carousel.render(); // get ready for rendering the widget
                     carousel.show();   // display the widget
                 });

@@ -1354,6 +1354,7 @@
          * creating the Carousel.
          */
         initAttributes: function (attrs) {
+            attrs = attrs || {};
             Carousel.superclass.initAttributes.call(this, attrs);
 
             /**
@@ -1376,7 +1377,7 @@
             this.setAttributeConfig("firstVisible", {
                     method    : this._setFirstVisible,
                     validator : this._validateFirstVisible,
-                    value     : this.CONFIG.FIRST_VISIBLE
+                    value     : attrs.firstVisible || this.CONFIG.FIRST_VISIBLE
             });
 
             /**
@@ -1389,7 +1390,7 @@
             this.setAttributeConfig("numVisible", {
                     method    : this._setNumVisible,
                     validator : this._validateNumVisible,
-                    value     : this.CONFIG.NUM_VISIBLE
+                    value     : attrs.numVisible || this.CONFIG.NUM_VISIBLE
             });
 
             /**
@@ -1406,12 +1407,12 @@
             /**
              * @attribute scrollIncrement
              * @description The number of items to scroll by for arrow keys.
-             * @default 3
+             * @default 1
              * @type Number
              */
             this.setAttributeConfig("scrollIncrement", {
                     validator : this._validateScrollIncrement,
-                    value     : 1
+                    value     : attrs.scrollIncrement || 1
             });
 
             /**
@@ -1436,7 +1437,7 @@
             this.setAttributeConfig("revealAmount", {
                     method    : this._setRevealAmount,
                     validator : this._validateRevealAmount,
-                    value     : 0
+                    value     : attrs.revealAmount || 0
             });
 
             /**
@@ -1448,7 +1449,7 @@
              */
             this.setAttributeConfig("isCircular", {
                     validator : JS.isBoolean,
-                    value     : false
+                    value     : attrs.isCircular || false
             });
 
             /**
@@ -1460,7 +1461,7 @@
             this.setAttributeConfig("isVertical", {
                     method    : this._setOrientation,
                     validator : JS.isBoolean,
-                    value     : false
+                    value     : attrs.isVertical || false
             });
 
             /**
@@ -1474,7 +1475,8 @@
             this.setAttributeConfig("navigation", {
                     method    : this._setNavigation,
                     validator : this._validateNavigation,
-                    value     : { prev: null, next: null, page: null }
+                    value     : attrs.navigation || {
+                                        prev: null, next: null, page: null }
             });
 
             /**
@@ -1488,7 +1490,7 @@
              */
             this.setAttributeConfig("animation", {
                     validator : this._validateAnimation,
-                    value     : { speed: 0, effect: null }
+                    value     : attrs.animation || { speed: 0, effect: null }
             });
 
             /**
@@ -1499,7 +1501,7 @@
              */
             this.setAttributeConfig("autoPlay", {
                     validator : JS.isNumber,
-                    value     : 0
+                    value     : attrs.autoPlay || 0
             });
         },
 
