@@ -464,6 +464,7 @@ package com.yahoo.astra.animation
 			this._startTime = getTimer();
 			this._active = true;
 			this.dispatchEvent(new AnimationEvent(AnimationEvent.START, this._startParameters));
+			this.dispatchEvent(new AnimationEvent(AnimationEvent.UPDATE, this._startParameters));
 		}
 		
 		/**
