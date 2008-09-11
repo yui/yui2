@@ -17,8 +17,6 @@ the new customizeable YAHOO.widget.AutoComplete method generateRequest:
 * The YAHOO.widget.DS_XHR property responseStripAfter has been deprecated in favor
 of the new customizeable YAHOO.util.DataSource method doBeforeParseData.
 
-* The default request sent to the DataSource no longer starts with "?".
-
 * Now always fires either dataReturnEvent or dataErrorEvent upon a DataSource
 response, whether container opens or not due to instance losing focus. 
 

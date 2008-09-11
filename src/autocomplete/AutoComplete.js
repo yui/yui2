@@ -484,13 +484,27 @@ YAHOO.widget.AutoComplete.prototype.useShadow = false;
 YAHOO.widget.AutoComplete.prototype.suppressInputUpdate = false;
 
 /**
- * Whether to enable backwardCompatMode for implementations that use the pre-2.6.0 API.
+ * For backward compatibility to pre-2.6.0 formatResults() signatures, setting
+ * resultsTypeList to true will take each object literal result returned by
+ * DataSource and flatten into an array.  
  *
- * @property backwardCompatMode
+ * @property resultTypeList
  * @type Boolean
  * @default true
  */
-YAHOO.widget.AutoComplete.prototype.backwardCompatMode = true;
+YAHOO.widget.AutoComplete.prototype.resultTypeList = true;
+
+/**
+ * For XHR DataSources, automatically inserts a "?" between the server URI and 
+ * the "query" param/value pair. To prevent this behavior, implementers should
+ * set this value to false. To more fully customize the query syntax, implementers
+ * should override the generateRequest() method. 
+ *
+ * @property queryQuestionMark
+ * @type Boolean
+ * @default true
+ */
+YAHOO.widget.AutoComplete.prototype.queryQuestionMark = true;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -688,7 +702,7 @@ YAHOO.widget.AutoComplete.prototype.generateRequest = function(sQuery) {
     if(dataType === YAHOO.util.DataSourceBase.TYPE_XHR) {
         // By default, XHR GET requests look like "{scriptURI}?{scriptQueryParam}={sQuery}&{scriptQueryAppend}"
         if(!this.dataSource.connMethodPost) {
-            sQuery = (this.backwardCompatMode ? "?" : "") + (this.dataSource.scriptQueryParam || "query") + "=" + sQuery + 
+            sQuery = (this.queryQuestionMark ? "?" : "") + (this.dataSource.scriptQueryParam || "query") + "=" + sQuery + 
                 (this.dataSource.scriptQueryAppend ? ("&" + this.dataSource.scriptQueryAppend) : "");        
         }
         // By default, XHR POST bodies are sent to the {scriptURI} like "{scriptQueryParam}={sQuery}&{scriptQueryAppend}"
@@ -1787,10 +1801,10 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
                     oResult = allResults[i];
                     
                     // Backward compatibility
-                    if(this.backwardCompatMode) {
+                    if(this.resultTypeList) {
                         // Results need to be converted back to an array
                         var aResult = [];
-                        // Match key is always first
+                        // Match key is first
                         aResult[0] = (YAHOO.lang.isString(oResult)) ? oResult : oResult[sMatchKey] || oResult[this.key];
                         // Add additional data to the result array
                         var fields = this.dataSource.responseSchema.fields;
@@ -1801,7 +1815,14 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
                         }
                         // No specific fields defined, so pass along entire data object
                         else {
-                            aResult[1] = oResult;
+                            // Already an array
+                            if(YAHOO.lang.isArray(oResult)) {
+                                aResult = oResult;
+                            }
+                            // Object
+                            else {
+                                aResult[1] = oResult;
+                            }
                         }
                         oResult = aResult;
                     }
