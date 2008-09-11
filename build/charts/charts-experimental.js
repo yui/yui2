@@ -1138,85 +1138,88 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	_loadDataHandler: function(request, response, error)
 	{
-		if(error)
+		if(this._swf)
 		{
-		}
-		else
-		{
-			var i;
-			if(this._seriesLabelFunctions)
+			if(error)
 			{
-				var count = this._seriesLabelFunctions.length;
-				for(i = 0; i < count; i++)
-				{
-					YAHOO.widget.FlashAdapter.removeProxyFunction(this._seriesLabelFunctions[i]);
-				}
-				this._seriesLabelFunction = null;
-			}
-			this._seriesLabelFunctions = [];
-			
-			//make a copy of the series definitions so that we aren't
-			//editing them directly.
-			var dataProvider = [];	
-			var seriesCount = 0;
-			var currentSeries = null;
-			if(this._seriesDefs !== null)
-			{
-				seriesCount = this._seriesDefs.length;
-				for(i = 0; i < seriesCount; i++)
-				{
-					currentSeries = this._seriesDefs[i];
-					var clonedSeries = {};
-					for(var prop in currentSeries)
-					{
-						if(YAHOO.lang.hasOwnProperty(currentSeries, prop))
-						{
-							if(prop == "style")
-							{
-								if(currentSeries.style !== null)
-								{
-									clonedSeries.style = YAHOO.lang.JSON.stringify(currentSeries.style);
-								}
-							}
-							
-							else if(prop == "labelFunction")
-							{
-								if(currentSeries.labelFunction !== null &&
-									typeof currentSeries.labelFunction == "function")
-								{
-									clonedSeries.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(currentSeries.labelFunction);
-									this._seriesLabelFunctions.push(clonedSeries.labelFunction);
-								}
-							}
-							
-							else
-							{
-								clonedSeries[prop] = currentSeries[prop];
-							}
-						}
-					}
-					dataProvider.push(clonedSeries);
-				}
-			}
-			
-			if(seriesCount > 0)
-			{
-				for(i = 0; i < seriesCount; i++)
-				{
-					currentSeries = dataProvider[i];
-					if(!currentSeries.type)
-					{
-						currentSeries.type = this._type;
-					}
-					currentSeries.dataProvider = response.results;
-				}
 			}
 			else
 			{
-				var series = {type: this._type, dataProvider: response.results};
-				dataProvider.push(series);
+				var i;
+				if(this._seriesLabelFunctions)
+				{
+					var count = this._seriesLabelFunctions.length;
+					for(i = 0; i < count; i++)
+					{
+						YAHOO.widget.FlashAdapter.removeProxyFunction(this._seriesLabelFunctions[i]);
+					}
+					this._seriesLabelFunction = null;
+				}
+				this._seriesLabelFunctions = [];
+
+				//make a copy of the series definitions so that we aren't
+				//editing them directly.
+				var dataProvider = [];	
+				var seriesCount = 0;
+				var currentSeries = null;
+				if(this._seriesDefs !== null)
+				{
+					seriesCount = this._seriesDefs.length;
+					for(i = 0; i < seriesCount; i++)
+					{
+						currentSeries = this._seriesDefs[i];
+						var clonedSeries = {};
+						for(var prop in currentSeries)
+						{
+							if(YAHOO.lang.hasOwnProperty(currentSeries, prop))
+							{
+								if(prop == "style")
+								{
+									if(currentSeries.style !== null)
+									{
+										clonedSeries.style = YAHOO.lang.JSON.stringify(currentSeries.style);
+									}
+								}
+
+								else if(prop == "labelFunction")
+								{
+									if(currentSeries.labelFunction !== null &&
+										typeof currentSeries.labelFunction == "function")
+									{
+										clonedSeries.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(currentSeries.labelFunction);
+										this._seriesLabelFunctions.push(clonedSeries.labelFunction);
+									}
+								}
+
+								else
+								{
+									clonedSeries[prop] = currentSeries[prop];
+								}
+							}
+						}
+						dataProvider.push(clonedSeries);
+					}
+				}
+
+				if(seriesCount > 0)
+				{
+					for(i = 0; i < seriesCount; i++)
+					{
+						currentSeries = dataProvider[i];
+						if(!currentSeries.type)
+						{
+							currentSeries.type = this._type;
+						}
+						currentSeries.dataProvider = response.results;
+					}
+				}
+				else
+				{
+					var series = {type: this._type, dataProvider: response.results};
+					dataProvider.push(series);
+				}
+				this._swf.setDataProvider(dataProvider);
 			}
-			this._swf.setDataProvider(dataProvider);
 		}
 	},
 
