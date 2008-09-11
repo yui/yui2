@@ -928,7 +928,7 @@ lang.augmentObject(DT, {
         var bChecked = oData;
         bChecked = (bChecked) ? " checked=\"checked\"" : "";
         el.innerHTML = "<input type=\"radio\"" + bChecked +
-                " name=\"col-" + oColumn.getSanitizedKey() + "-radio\"" +
+                " name=\""+this.getId()+"-col-" + oColumn.getSanitizedKey() + "\"" +
                 " class=\"" + DT.CLASS_RADIO+ "\" />";
     },
 
@@ -1915,7 +1915,7 @@ _initColumnSet : function(aColumnDefs) {
         // uregister CellEditor Custom Events
         for(i=0, len=this._oColumnSet.keys.length; i<len; i++) {
             oColumn = this._oColumnSet.keys[i];
-            DT._oDynStyles["."+this.getId()+"-col"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
+            DT._oDynStyles["."+this.getId()+"-col-"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
             if(oColumn.editor) {
                 oColumn.editor.unsubscribeAll();
             }
@@ -2369,7 +2369,7 @@ _initTheadEl : function(elTable) {
  * @private
  */
 _initThEl : function(elTh, oColumn) {
-    elTh.id = this._sId+"-th-" + oColumn.getSanitizedKey(); // Needed for accessibility, getColumn by TH, and ColumnDD
+    elTh.id = this.getId() + "-th-" + oColumn.getSanitizedKey(); // Needed for accessibility, getColumn by TH, and ColumnDD
     elTh.innerHTML = "";
     elTh.rowSpan = oColumn.getRowspan();
     elTh.colSpan = oColumn.getColspan();
@@ -2803,7 +2803,7 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
     }
     
     // Hook for setting width with via dynamic style uses key since ID is too disposable
-    allClasses[allClasses.length] = this.getId() + "-" +oColumn.getSanitizedKey();
+    allClasses[allClasses.length] = this.getId() + "-col-" +oColumn.getSanitizedKey();
 
     // Column key - minus any chars other than "A-Z", "a-z", "0-9", "_", "-", ".", or ":"
     allClasses[allClasses.length] = "yui-dt-col-" +oColumn.getSanitizedKey();
@@ -5506,7 +5506,7 @@ _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
     // We have a STYLE node to update
     if(s) {
         // Use unique classname for this Column instance as a hook for resizing
-        var sClassname = "." + this.getId() + "-" + oColumn.getSanitizedKey() + " ." + DT.CLASS_LINER;
+        var sClassname = "." + this.getId() + "-col-" + oColumn.getSanitizedKey() + " ." + DT.CLASS_LINER;
         
         // Hide for performance
         if(this._elTbody) {
