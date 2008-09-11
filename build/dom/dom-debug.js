@@ -670,7 +670,7 @@
          * @return {Int} The height of the actual document (which includes the body and its margin).
          */
         getDocumentHeight: function() {
-            var scrollHeight = (document.compatMode != 'CSS1Compat') ? document.documentElement.body.scrollHeight : document.documentElement.scrollHeight;
+            var scrollHeight = (document.compatMode != 'CSS1Compat') ? document.body.scrollHeight : document.documentElement.scrollHeight;
 
             var h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
             YAHOO.log('getDocumentHeight returning ' + h, 'info', 'Dom');
@@ -683,7 +683,7 @@
          * @return {Int} The width of the actual document (which includes the body and its margin).
          */
         getDocumentWidth: function() {
-            var scrollWidth = (document.compatMode != 'CSS1Compat') ? document.documentElement.body.scrollWidth : document.documentElement.scrollWidth;
+            var scrollWidth = (document.compatMode != 'CSS1Compat') ? document.body.scrollWidth : document.documentElement.scrollWidth;
             var w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
             YAHOO.log('getDocumentWidth returning ' + w, 'info', 'Dom');
             return w;
@@ -1070,13 +1070,8 @@
                 while ( parentNode.tagName && !patterns.ROOT_TAG.test(parentNode.tagName) ) 
                 {
                     if (parentNode.scrollTop || parentNode.scrollLeft) {
-                        // work around opera inline/table scrollLeft/Top bug (false reports offset as scroll)
-                        if (!patterns.OP_SCROLL.test(Y.Dom.getStyle(parentNode, 'display'))) { 
-                            if (!isOpera || Y.Dom.getStyle(parentNode, 'overflow') !== 'visible') { // opera inline-block misreports when visible
-                                pos[0] -= parentNode.scrollLeft;
-                                pos[1] -= parentNode.scrollTop;
-                            }
-                        }
+                        pos[0] -= parentNode.scrollLeft;
+                        pos[1] -= parentNode.scrollTop;
                     }
                     
                     parentNode = parentNode.parentNode; 
