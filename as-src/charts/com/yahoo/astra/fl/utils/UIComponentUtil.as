@@ -74,6 +74,8 @@ package com.yahoo.astra.fl.utils
 		/**
 		 * Gets the class of an object. If the object is a DisplayObject,
 		 * may retrieve the class from the containing app domain.
+		 * 
+		 * @param target		A Class or a fully qualified class name (String).
 		 */
 		public static function getClassDefinition(target:Object):Class
 		{
@@ -106,6 +108,9 @@ package com.yahoo.astra.fl.utils
 		 * Works like getStyleValue() on UIComponent, except it makes component
 		 * and shared styles available globally rather than just in the component's
 		 * class.
+		 * 
+		 * @param target		the component for which to retrieve the style value
+		 * @param styleName		the name of the style to retrieve
 		 */
 		public static function getStyleValue(target:UIComponent, styleName:String):Object
 		{
