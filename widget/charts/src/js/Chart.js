@@ -13,7 +13,7 @@
  *
  * @namespace YAHOO.widget
  * @class Chart
- * @uses YAHOO.util.FlashAdapter
+ * @uses YAHOO.widget.FlashAdapter
  * @constructor
  * @param type {String} The char type. May be "line", "column", "bar", or "pie"
  * @param containerId {HTMLElement} Container element for the Flash Player instance.

@@ -3,7 +3,7 @@
  *
  * @namespace YAHOO.widget
  * @class CartesianChart
- * @uses YAHOO.widget.Charts
+ * @uses YAHOO.widget.Chart
  * @constructor
  * @param type {String} The char type. May be "line", "column", or "bar"
  * @param containerId {HTMLElement} Container element for the Flash Player instance.
