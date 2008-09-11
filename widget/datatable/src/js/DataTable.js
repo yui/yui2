@@ -1031,6 +1031,23 @@ lang.augmentObject(DT, {
     },
 
     /**
+     * Default cell formatter
+     *
+     * @method DataTable.formatDefault
+     * @param el {HTMLElement} The element to format with markup.
+     * @param oRecord {YAHOO.widget.Record} Record instance.
+     * @param oColumn {YAHOO.widget.Column} Column instance.
+     * @param oData {Object} (Optional) Data value for the cell.
+     * @static
+     */
+    formatDefault : function(el, oRecord, oColumn, oData) {
+        el.innerHTML = oData === undefined ||
+                       oData === null ||
+                       (typeof oData === 'number' && isNaN(oData)) ?
+                       "&#160;" : oData.toString();
+    },
+
+    /**
      * Validates data value to type Number, doing type conversion as
      * necessary. A valid Number value is return, else null is returned
      * if input value does not validate.
@@ -1074,7 +1091,9 @@ DT.Formatter = {
     radio    : DT.formatRadio,
     text     : DT.formatText,
     textarea : DT.formatTextarea,
-    textbox  : DT.formatTextbox
+    textbox  : DT.formatTextbox,
+
+    defaultFormatter : DT.formatDefault
 };
 
 lang.extend(DT, util.Element, {
@@ -6887,17 +6906,15 @@ formatCell : function(elCell, oRecord, oColumn) {
 
         var fnFormatter = typeof oColumn.formatter === 'function' ?
                           oColumn.formatter :
-                          DT.Formatter[oColumn.formatter+''];
+                          DT.Formatter[oColumn.formatter+''] ||
+                          DT.Formatter.defaultFormatter;
 
         // Apply special formatter
         if(fnFormatter) {
             fnFormatter.call(this, elCell, oRecord, oColumn, oData);
         }
         else {
-            elCell.innerHTML = oData === undefined ||
-                               oData === null ||
-                               (typeof oData === 'number' && isNaN(oData)) ?
-                                "&#160;" : oData.toString();
+            elCell.innerHTML = oData;
         }
 
         this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:oColumn.key, el:elCell});

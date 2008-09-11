@@ -552,17 +552,6 @@ lang.augmentObject(DT, {
      */
     CLASS_RADIO : "yui-dt-radio",
 
-    /**
-     * Class name assigned to temporary elements.
-     *
-     * @property DataTable.CLASS_TMP
-     * @type String
-     * @static
-     * @final
-     * @default "yui-dt-tmp"
-     */
-    CLASS_TMP : "yui-dt-tmp",
-
     /////////////////////////////////////////////////////////////////////////
     //
     // Private static properties
@@ -824,9 +813,9 @@ lang.augmentObject(DT, {
      */
     formatCheckbox : function(el, oRecord, oColumn, oData) {
         var bChecked = oData;
-        bChecked = (bChecked) ? " checked" : "";
+        bChecked = (bChecked) ? " checked=\"checked\"" : "";
         el.innerHTML = "<input type=\"checkbox\"" + bChecked +
-                " class=\"" + DT.CLASS_CHECKBOX + "\">";
+                " class=\"" + DT.CLASS_CHECKBOX + "\" />";
     },
 
     /**
@@ -840,12 +829,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatCurrency : function(el, oRecord, oColumn, oData) {
-        el.innerHTML = util.Number.format(oData, {
-                prefix: this.get("currencySymbol"),
-                decimalPlaces:2,
-                decimalSeparator:".",
-                thousandsSeparator:","
-            });
+        el.innerHTML = util.Number.format(oData, oColumn.currencyOptions || this.get("currencyOptions"));
     },
 
     /**
@@ -859,7 +843,8 @@ lang.augmentObject(DT, {
      * @static
      */
     formatDate : function(el, oRecord, oColumn, oData) {
-        el.innerHTML = util.Date.format(oData, {format:"MM/DD/YYYY"});
+        var oConfig = oColumn.dateOptions || this.get("dateOptions");
+        el.innerHTML = util.Date.format(oData, oConfig, oConfig.locale);
     },
 
     /**
@@ -973,12 +958,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatNumber : function(el, oRecord, oColumn, oData) {
-        if(lang.isNumber(oData)) {
-            el.innerHTML = oData;
-        }
-        else {
-            el.innerHTML = lang.isValue(oData) ? oData : "";
-        }
+        el.innerHTML = util.Number.format(oData, oColumn.numberOptions || this.get("numberOptions"));
     },
 
     /**
@@ -993,10 +973,10 @@ lang.augmentObject(DT, {
      */
     formatRadio : function(el, oRecord, oColumn, oData) {
         var bChecked = oData;
-        bChecked = (bChecked) ? " checked" : "";
+        bChecked = (bChecked) ? " checked=\"checked\"" : "";
         el.innerHTML = "<input type=\"radio\"" + bChecked +
                 " name=\"col-" + oColumn.getSanitizedKey() + "-radio\"" +
-                " class=\"" + DT.CLASS_RADIO+ "\">";
+                " class=\"" + DT.CLASS_RADIO+ "\" />";
     },
 
     /**
@@ -1046,8 +1026,25 @@ lang.augmentObject(DT, {
     formatTextbox : function(el, oRecord, oColumn, oData) {
         var value = (lang.isValue(oRecord.getData(oColumn.field))) ?
                 oRecord.getData(oColumn.field) : "";
-        var markup = "<input type=\"text\" value=\"" + value + "\">";
+        var markup = "<input type=\"text\" value=\"" + value + "\" />";
         el.innerHTML = markup;
+    },
+
+    /**
+     * Default cell formatter
+     *
+     * @method DataTable.formatDefault
+     * @param el {HTMLElement} The element to format with markup.
+     * @param oRecord {YAHOO.widget.Record} Record instance.
+     * @param oColumn {YAHOO.widget.Column} Column instance.
+     * @param oData {Object} (Optional) Data value for the cell.
+     * @static
+     */
+    formatDefault : function(el, oRecord, oColumn, oData) {
+        el.innerHTML = oData === undefined ||
+                       oData === null ||
+                       (typeof oData === 'number' && isNaN(oData)) ?
+                       "&#160;" : oData.toString();
     },
 
     /**
@@ -1070,7 +1067,7 @@ lang.augmentObject(DT, {
         }
         else {
             YAHOO.log("Could not validate data " + lang.dump(oData) + " to type Number", "warn", this.toString());
-            return null;
+            return undefined;
         }
     }
 });
@@ -1094,7 +1091,9 @@ DT.Formatter = {
     radio    : DT.formatRadio,
     text     : DT.formatText,
     textarea : DT.formatTextarea,
-    textbox  : DT.formatTextbox
+    textbox  : DT.formatTextbox,
+
+    defaultFormatter : DT.formatDefault
 };
 
 lang.extend(DT, util.Element, {
@@ -1275,24 +1274,15 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute caption
-    * @description Value for the CAPTION element.
+    * @description Value for the CAPTION element. NB: Not supported in
+    * ScrollingDataTable.    
     * @type String
     */
     this.setAttributeConfig("caption", {
         value: null,
         validator: lang.isString,
         method: function(sCaption) {
-            if(this._elTable && sCaption) {
-                // Create CAPTION element
-                if(!this._elCaption) { 
-                    this._elCaption = this._elTable.createCaption();
-                }
-                // Set CAPTION value
-                this._elCaption.innerHTML = sCaption;
-            }
-            else if(this._elCaption) {
-                this._elCaption.parentNode.removeChild(this._elCaption);
-            }
+            this._initCaptionEl(sCaption);
         }
     });
 
@@ -1331,6 +1321,20 @@ initAttributes : function(oConfigs) {
          value: 0, 	 
          validator: lang.isNumber 	 
      }); 	 
+
+    /**
+    * @attribute formatRow
+    * @description A function that accepts a TR element and its associated Record
+    * for custom formatting. The function must return TRUE in order to automatically
+    * continue formatting of child TD elements, else TD elements will not be
+    * automatically formatted.
+    * @type function
+    * @default null
+    */
+    this.setAttributeConfig("formatRow", {
+        value: null,
+        validator: lang.isFunction
+    });
 
     /**
     * @attribute generateRequest
@@ -1507,14 +1511,52 @@ initAttributes : function(oConfigs) {
      });
      
     /**
-     * Currency symbol/prefix used by the default 'currency' column formatter.
      * @attribute currencySymbol
-     * @type String
-     * @default "$"
+     * @deprecated
      */
     this.setAttributeConfig("currencySymbol", {
-        value: "$"
+        value: "$",
+        validator: lang.isString
     });
+    
+    /**
+     * Default config passed to YAHOO.util.Number.format() by the 'currency' Column formatter.
+     * @attribute currencyOptions
+     * @type Object
+     * @default {prefix: $, decimalPlaces:2, decimalSeparator:".", thousandsSeparator:","}
+     */
+    this.setAttributeConfig("currencyOptions", {
+        value: {
+            prefix: this.get("currencySymbol"), // TODO: deprecate
+            decimalPlaces:2,
+            decimalSeparator:".",
+            thousandsSeparator:","
+        }
+    });
+    
+    /**
+     * Default config passed to YAHOO.util.Date.format() by the 'date' Column formatter.
+     * @attribute dateOptions
+     * @type Object
+     * @default {format:"%m/%d/%Y", locale:"en"}
+     */
+    this.setAttributeConfig("dateOptions", {
+        value: {format:"%m/%d/%Y", locale:"en"}
+    });
+    
+    /**
+     * Default config passed to YAHOO.util.Number.format() by the 'number' Column formatter.
+     * @attribute numberOptions
+     * @type Object
+     * @default {decimalPlaces:0, thousandsSeparator:","}
+     */
+    this.setAttributeConfig("numberOptions", {
+        value: {
+            decimalPlaces:0,
+            thousandsSeparator:","
+        }
+    });
+
 },
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1853,7 +1895,8 @@ _repaintGecko : (ua.gecko) ?
 _repaintOpera : (ua.opera) ? 
     function() {
         if(ua.opera) {
-            document.body.style += '';
+            document.documentElement.className += " ";
+            document.documentElement.className.trim();
         }
     } : function() {} ,
 
@@ -2117,6 +2160,27 @@ _destroyTableEl : function() {
 },
 
 /**
+ * Creates HTML markup CAPTION element.
+ *
+ * @method _initCaptionEl
+ * @param sCaption {String} Text for caption.
+ * @private
+ */
+_initCaptionEl : function(sCaption) {
+    if(this._elTable && sCaption) {
+        // Create CAPTION element
+        if(!this._elCaption) { 
+            this._elCaption = this._elTable.createCaption();
+        }
+        // Set CAPTION value
+        this._elCaption.innerHTML = sCaption;
+    }
+    else if(this._elCaption) {
+        this._elCaption.parentNode.removeChild(this._elCaption);
+    }
+},
+
+/**
  * Creates HTML markup for TABLE, COLGROUP, THEAD and TBODY elements in outer
  * container element.
  *
@@ -2137,11 +2201,7 @@ _initTableEl : function(elContainer) {
         
         // Create CAPTION element
         if(this.get("caption")) {
-            if(!this._elCaption) { 
-                this._elCaption = this._elTable.createCaption();
-            }
-            // Set CAPTION value
-            this._elCaption.innerHTML = this.get("caption");
+            this._initCaptionEl(this.get("caption"));
         }
     } 
 },
@@ -2322,12 +2382,12 @@ _initTheadEl : function(elTable) {
         }
 
         // Set FIRST/LAST on edge TH elements using the values in ColumnSet headers array
-        var aFirstHeaders = oColumnSet.headers[0];
-        var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
+        var aFirstHeaders = oColumnSet.headers[0] || [];
         for(i=0; i<aFirstHeaders.length; i++) {
             //TODO: A better way to get th cell
             Dom.addClass(Dom.get(this._sId+"-th-"+aFirstHeaders[i]), DT.CLASS_FIRST);
         }
+        var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1] || [];
         for(i=0; i<aLastHeaders.length; i++) {
             //TODO: A better way to get th cell
             Dom.addClass(Dom.get(this._sId+"-th-"+aLastHeaders[i]), DT.CLASS_LAST);
@@ -2926,23 +2986,26 @@ _addTrEl : function (oRecord) {
  * @private
  */
 _updateTrEl : function(elTr, oRecord) {
-    // Hide the row to prevent constant reflows
-    elTr.style.display = 'none';
-    
-    // Update TD elements with new data
-    var allTds = elTr.childNodes,
-        elTd;
-    for(var i=0,len=allTds.length; i<len; ++i) {
-        elTd = allTds[i];
-        elTr.id = oRecord.getId(); // Needed for Record association and tracking of FIRST/LAST
+    var ok = this.get("formatRow") ? this.get("formatRow")(elTr, oRecord) : true;
+    if(ok) {
+        // Hide the row to prevent constant reflows
+        elTr.style.display = 'none';
         
-        // Set the cell content
-        this.formatCell(allTds[i].firstChild, oRecord, this._oColumnSet.keys[i]);
+        // Update TD elements with new data
+        var allTds = elTr.childNodes,
+            elTd;
+        for(var i=0,len=allTds.length; i<len; ++i) {
+            elTd = allTds[i];
+            
+            // Set the cell content
+            this.formatCell(allTds[i].firstChild, oRecord, this._oColumnSet.keys[i]);
+        }
+        
+        // Redisplay the row for reflow
+        elTr.style.display = '';
     }
     
-    // Redisplay the row for reflow
-    elTr.style.display = '';
-
+    elTr.id = oRecord.getId(); // Needed for Record association and tracking of FIRST/LAST
     return elTr;
 },
 
@@ -3267,7 +3330,7 @@ _onDocumentClick : function(e, oSelf) {
         // the editorBlurEvent needs to get fired by the lower-level DOM click
         // handlers below rather than by the TABLE click handler directly.
         if(oSelf._oCellEditor) {
-            var elContainer = oSelf._oCellEditor.container;
+            var elContainer = oSelf._oCellEditor.getContainerEl();
             // Only if the click was not within the CellEditor container
             if(!Dom.isAncestor(elContainer, elTarget) &&
                     (elContainer.id !== elTarget.id)) {
@@ -3713,7 +3776,7 @@ _onTbodyKeydown : function(e, oSelf) {
  * @private
  */
 _onTableKeypress : function(e, oSelf) {
-    if(ua.webkit) {
+    if(ua.opera || (navigator.userAgent.toLowerCase().indexOf("mac") !== -1) && (ua.webkit < 420)) {
         var nKey = Ev.getCharCode(e);
         // arrow down
         if(nKey == 40) {
@@ -4125,37 +4188,25 @@ getMsgTdEl : function() {
  * @return {HTMLElement} Reference to TR element, or null.
  */
 getTrEl : function(row) {
-    var allRows = this._elTbody.rows;
-
     // By Record
     if(row instanceof YAHOO.widget.Record) {
-        var nTrIndex = this.getTrIndex(row);
-            if(nTrIndex !== null) {
-                return allRows[nTrIndex];
-            }
-            // Not a valid Record
-            else {
-                return null;
-            }
+        return document.getElementById(row.getId());
     }
     // By page row index
     else if(lang.isNumber(row)) {
+        var allRows = this._elTbody.rows;
         return ((row > -1) && (row < allRows.length)) ? allRows[row] : null;
     }
     // By ID string or element reference
     else {
-        var elRow;
-        var el = Dom.get(row);
+        var elRow = (lang.isString(row)) ? document.getElementById(row) : row;
 
         // Validate HTML element
-        if(el && (el.ownerDocument == document)) {
+        if(elRow && (elRow.ownerDocument == document)) {
             // Validate TR element
-            if(el.nodeName.toLowerCase() != "tr") {
+            if(elRow.nodeName.toLowerCase() != "tr") {
                 // Traverse up the DOM to find the corresponding TR element
-                elRow = Dom.getAncestorByTagName(el,"tr");
-            }
-            else {
-                elRow = el;
+                elRow = Dom.getAncestorByTagName(elRow,"tr");
             }
 
             // Make sure the TR is in this TBODY
@@ -4430,7 +4481,9 @@ getBelowTdEl : function(cell) {
 },
 
 /**
- * Returns DOM reference to a TH liner element.
+ * Returns DOM reference to a TH liner element. Needed to normalize for resizeable 
+ * Columns, which have an additional resizer liner DIV element between the TH
+ * element and the liner DIV element. 
  *
  * @method getThLinerEl
  * @param theadCell {YAHOO.widget.Column | HTMLElement | String} Column instance,
@@ -4632,6 +4685,16 @@ initializeTable : function() {
 },
 
 /**
+ * Internal wrapper calls run() on render Chain instance.
+ *
+ * @method _runRenderChain
+ * @private 
+ */
+_runRenderChain : function() {
+    this._oChainRender.run();
+},
+
+/**
  * Renders the view with existing Records from the RecordSet while
  * maintaining sort, pagination, and selection states. For performance, reuses
  * existing DOM elements when possible while deleting extraneous elements.
@@ -4780,7 +4843,7 @@ render : function() {
             timeout: (loopN > 0) ? 0 : -1
         });
     }
-    this._oChainRender.run();
+    this._runRenderChain();
 },
 
 /**
@@ -4827,10 +4890,12 @@ destroy : function() {
     this._destroyColumnHelpers();
     
     // Destroy all CellEditors
+    var oCellEditor;
     for(var i=0, len=this._oColumnSet.flat.length; i<len; i++) {
-        if(this._oColumnSet.flat[i]._oCellEditor) {
-            this._oColumnSet.flat[i]._oCellEditor.destroy();
-            this._oColumnSet.flat[i]._oCellEditor = null;
+        oCellEditor = this._oColumnSet.flat[i].editor;
+        if(oCellEditor && oCellEditor.destroy) {
+            oCellEditor.destroy();
+            this._oColumnSet.flat[i].editor = null;
         }
     }
 
@@ -5223,6 +5288,7 @@ getColumnSortDir : function(oColumn) {
  * @return {Boolean} Return true to continue sorting Column.
  */
 doBeforeSortColumn : function(oColumn, sSortDir) {
+    this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
     return true;
 },
 
@@ -5280,7 +5346,6 @@ sortColumn : function(oColumn, sDir) {
                     argument : oState, // Pass along the new state to the callback
                     scope : this
                 };
-                this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
                 this._oDataSource.sendRequest(request, callback);            
             }
             // Client-side sort
@@ -5823,7 +5888,7 @@ removeColumn : function(oColumn) {
                         scope: this,
                         timeout: (loopN > 0) ? 0 : -1
                     });
-                    this._oChainRender.run(); 
+                    this._runRenderChain();
                 }
         
                 this.fireEvent("columnRemoveEvent",{column:oColumn});
@@ -5933,7 +5998,7 @@ insertColumn : function(oColumn, index) {
                 scope: this,
                 timeout: (loopN > 0) ? 0 : -1
             });
-            this._oChainRender.run(); 
+            this._runRenderChain(); 
             return oNewColumn;
         }
 
@@ -6065,7 +6130,7 @@ reorderColumn : function(oColumn, index) {
                         scope: this,
                         timeout: (loopN > 0) ? 0 : -1
                     });
-                    this._oChainRender.run(); 
+                    this._runRenderChain();
                 }
         
                 this.fireEvent("columnReorderEvent",{column:oNewColumn});
@@ -6110,7 +6175,7 @@ selectColumn : function(oColumn) {
                 iterations: allRows.length,
                 argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
             });
-            oChainRender.run();       
+            this._runRenderChain();       
             
             this.fireEvent("columnSelectEvent",{column:oColumn});
             YAHOO.log("Column \"" + oColumn.key + "\" selected", "info", this.toString());
@@ -6154,7 +6219,7 @@ unselectColumn : function(oColumn) {
                 iterations:allRows.length,
                 argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
             });
-            oChainRender.run();       
+            this._runRenderChain();       
             
             this.fireEvent("columnUnselectEvent",{column:oColumn});
             YAHOO.log("Column \"" + oColumn.key + "\" unselected", "info", this.toString());
@@ -6194,16 +6259,7 @@ getSelectedColumns : function(oColumn) {
 highlightColumn : function(column) {
     var oColumn = this.getColumn(column);
     // Only bottom-level Columns can get highlighted
-    if(oColumn && (oColumn.getKeyIndex() !== null)) {
-        /*// Make sure previous row is unhighlighted
-        var sId = oColumn.getSanitizedKey();
-        var sLastId = this._sLastHighlightedColumnId;
-        if(sLastId && (sLastId !== sId)) {
-            this.unhighlightColumn(this.getColumn(sLastId));
-        }*/
-
-        //this._sLastHighlightedColumnId = sId;
-            
+    if(oColumn && (oColumn.getKeyIndex() !== null)) {            
         // Update head cell
         var elTh = oColumn.getThEl();
         Dom.addClass(elTh,DT.CLASS_HIGHLIGHTED);
@@ -6220,9 +6276,12 @@ highlightColumn : function(column) {
             },
             scope: this,
             iterations:allRows.length,
-            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
+            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()},
+            timeout: -1
         });
-        oChainRender.run();       
+        this._elTbody.style.display = "none";
+        this._runRenderChain();
+        this._elTbody.style.display = "";      
             
         this.fireEvent("columnHighlightEvent",{column:oColumn});
         YAHOO.log("Column \"" + oColumn.key + "\" highlighed", "info", this.toString());
@@ -6261,9 +6320,12 @@ unhighlightColumn : function(column) {
             },
             scope: this,
             iterations:allRows.length,
-            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
+            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()},
+            timeout: -1
         });
-        oChainRender.run();       
+        this._elTbody.style.display = "none";
+        this._runRenderChain();
+        this._elTbody.style.display = "";     
             
         this.fireEvent("columnUnhighlightEvent",{column:oColumn});
         YAHOO.log("Column \"" + oColumn.key + "\" unhighlighted", "info", this.toString());
@@ -6391,7 +6453,7 @@ addRow : function(oData, index) {
                         scope: this,
                         timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
                     });
-                    this._oChainRender.run();
+                    this._runRenderChain();
                     return;
                 }
             }            
@@ -6486,7 +6548,7 @@ addRows : function(aData, index) {
                     scope: this,
                     timeout: -1 // Needs to run immediately after the DOM insertions above
                 });
-                this._oChainRender.run();
+                this._runRenderChain();
                 this.hideTableMessage();                
                 return;
             }            
@@ -6555,7 +6617,7 @@ updateRow : function(row, oData) {
             scope: this,
             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
         });
-        this._oChainRender.run();
+        this._runRenderChain();
     }
     else {
         this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
@@ -6648,7 +6710,7 @@ deleteRow : function(row) {
                             scope: this,
                             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
                         });
-                        this._oChainRender.run();
+                        this._runRenderChain();
                         return;
                     }
                 }
@@ -6764,7 +6826,7 @@ deleteRows : function(row, count) {
                             scope: this,
                             timeout: -1 // Needs to run immediately after the DOM deletions above
                         });
-                        this._oChainRender.run();
+                        this._runRenderChain();
                         return;
                     }
                 }
@@ -6844,17 +6906,15 @@ formatCell : function(elCell, oRecord, oColumn) {
 
         var fnFormatter = typeof oColumn.formatter === 'function' ?
                           oColumn.formatter :
-                          DT.Formatter[oColumn.formatter+''];
+                          DT.Formatter[oColumn.formatter+''] ||
+                          DT.Formatter.defaultFormatter;
 
         // Apply special formatter
         if(fnFormatter) {
             fnFormatter.call(this, elCell, oRecord, oColumn, oData);
         }
         else {
-            elCell.innerHTML = oData === undefined ||
-                               oData === null ||
-                               (typeof oData === 'number' && isNaN(oData)) ?
-                                "" : oData.toString();
+            elCell.innerHTML = oData;
         }
 
         this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:oColumn.key, el:elCell});
@@ -6900,7 +6960,7 @@ updateCell : function(oRecord, oColumn, oData) {
                 scope: this,
                 timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
             });
-            this._oChainRender.run();
+            this._runRenderChain();
         }
         else {
             this.fireEvent("cellUpdateEvent", {record:oRecord, column: oColumn, oldData:oldData});
@@ -7084,6 +7144,19 @@ renderPaginator : function () {
 },
 
 /**
+ * Overridable method gives implementers a hook to show loading message before
+ * changing Paginator value.
+ *
+ * @method doBeforePaginatorChange
+ * @param oPaginatorState {Object} An object literal describing the proposed pagination state.
+ * @return {Boolean} Return true to continue changing Paginator value.
+ */
+doBeforePaginatorChange : function(oPaginatorState) {
+    this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
+    return true;
+},
+
+/**
  * Responds to new Pagination states. By default, updates the UI to reflect the
  * new state. If "dynamicData" is true, sends a request to the DataSource
  * for data for the given state, using the request from "generateRequest". 
@@ -7092,35 +7165,41 @@ renderPaginator : function () {
  * @param oPaginatorState {Object} An object literal describing the proposed pagination state.
  */
 onPaginatorChangeRequest : function (oPaginatorState) {
-    // Server-side pagination
-    if(this.get("dynamicData")) {
-        // Get the current state
-        var oState = this.getState();
-        
-        // Update pagination values
-        oState.pagination = oPaginatorState;
-
-        // Get the request for the new state
-        var request = this.get("generateRequest")(oState, this);
-        
-        // Get the new data from the server
-        var callback = {
-            success : this.onDataReturnSetRows,
-            failure : this.onDataReturnSetRows,
-            argument : oState, // Pass along the new state to the callback
-            scope : this
-        };
-        this._oDataSource.sendRequest(request, callback);
+    var ok = this.doBeforePaginatorChange(oPaginatorState);
+    if(ok) {
+        // Server-side pagination
+        if(this.get("dynamicData")) {
+            // Get the current state
+            var oState = this.getState();
+            
+            // Update pagination values
+            oState.pagination = oPaginatorState;
+    
+            // Get the request for the new state
+            var request = this.get("generateRequest")(oState, this);
+            
+            // Get the new data from the server
+            var callback = {
+                success : this.onDataReturnSetRows,
+                failure : this.onDataReturnSetRows,
+                argument : oState, // Pass along the new state to the callback
+                scope : this
+            };
+            this._oDataSource.sendRequest(request, callback);
+        }
+        // Client-side pagination
+        else {
+            // Set the core pagination values silently (the second param)
+            // to avoid looping back through the changeRequest mechanism
+            oPaginatorState.paginator.setStartIndex(oPaginatorState.recordOffset,true);
+            oPaginatorState.paginator.setRowsPerPage(oPaginatorState.rowsPerPage,true);
+    
+            // Update the UI
+            this.render();
+        }
     }
-    // Client-side pagination
     else {
-        // Set the core pagination values silently (the second param)
-        // to avoid looping back through the changeRequest mechanism
-        oPaginatorState.paginator.setStartIndex(oPaginatorState.recordOffset,true);
-        oPaginatorState.paginator.setRowsPerPage(oPaginatorState.rowsPerPage,true);
-
-        // Update the UI
-        this.render();
+        YAHOO.log("Could not change Paginator value \"" + oPaginatorState + "\"", "warn", this.toString());
     }
 },
 
