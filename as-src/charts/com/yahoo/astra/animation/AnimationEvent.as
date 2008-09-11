@@ -138,7 +138,7 @@ package com.yahoo.astra.animation
 	//--------------------------------------
 	
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
 		override public function clone():Event
 		{
