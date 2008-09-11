@@ -371,7 +371,12 @@ YAHOO.widget.FlashAdapter = function(swfURL, containerID, attributes)
 	 * Fires when the SWF is initialized and communication is possible.
 	 * @event contentReady
 	 */
-	this.createEvent("contentReady");
+	//Fix for iframe cross-domain issue with FF2x 
+	try
+	{
+		this.createEvent("contentReady");
+	}
+	catch(e){}
 };
 
 YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
