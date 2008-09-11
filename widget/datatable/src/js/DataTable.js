@@ -5293,7 +5293,9 @@ doBeforeSortColumn : function(oColumn, sSortDir) {
 },
 
 /**
- * Sorts given Column.
+ * Sorts given Column. If "dynamicData" is true, current selections are purged before
+ * a request is sent to the DataSource for data for the new state (using the
+ * request returned by "generateRequest()").
  *
  * @method sortColumn
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -5338,6 +5340,10 @@ sortColumn : function(oColumn, sDir) {
                 
                 // Get the request for the new state
                 var request = this.get("generateRequest")(oState, this);
+
+                // Purge selections
+                this.unselectAllRows();
+                this.unselectAllCells();
 
                 // Send request for new data
                 var callback = {
@@ -7158,8 +7164,9 @@ doBeforePaginatorChange : function(oPaginatorState) {
 
 /**
  * Responds to new Pagination states. By default, updates the UI to reflect the
- * new state. If "dynamicData" is true, sends a request to the DataSource
- * for data for the given state, using the request from "generateRequest". 
+ * new state. If "dynamicData" is true, current selections are purged before
+ * a request is sent to the DataSource for data for the new state (using the
+ * request returned by "generateRequest()").
  *  
  * @method onPaginatorChangeRequest
  * @param oPaginatorState {Object} An object literal describing the proposed pagination state.
@@ -7177,6 +7184,10 @@ onPaginatorChangeRequest : function (oPaginatorState) {
     
             // Get the request for the new state
             var request = this.get("generateRequest")(oState, this);
+            
+            // Purge selections
+            this.unselectAllRows();
+            this.unselectAllCells();
             
             // Get the new data from the server
             var callback = {
@@ -8930,10 +8941,13 @@ unselectRow : function(row) {
  */
 unselectAllRows : function() {
     // Remove all rows from tracker
-    var tracker = this._aSelections || [];
+    var tracker = this._aSelections || [],
+        recId,
+        removed = [];
     for(var j=tracker.length-1; j>-1; j--) {
        if(lang.isString(tracker[j])){
-            tracker.splice(j,1);
+            recId = tracker.splice(j,1);
+            removed[removed.length] = this.getRecord(lang.isArray(recId) ? recId[0] : recId);
         }
     }
 
@@ -8943,10 +8957,7 @@ unselectAllRows : function() {
     // Update UI
     this._unselectAllTrEls();
 
-    //TODO: send an array of [{el:el,record:record}]
-    //TODO: or convert this to an unselectRows method
-    //TODO: that takes an array of rows or unselects all if none given
-    this.fireEvent("unselectAllRowsEvent");
+    this.fireEvent("unselectAllRowsEvent", {records: removed});
     YAHOO.log("Unselected all rows", "info", this.toString());
 },
 
@@ -9068,7 +9079,7 @@ unselectCell : function(cell) {
  *
  * @method unselectAllCells
  */
-unselectAllCells: function() {
+unselectAllCells : function() {
     // Remove all cells from tracker
     var tracker = this._aSelections || [];
     for(var j=tracker.length-1; j>-1; j--) {
@@ -9083,8 +9094,7 @@ unselectAllCells: function() {
     // Update UI
     this._unselectAllTdEls();
 
-    //TODO: send data
-    //TODO: or fire individual cellUnselectEvent
+    //TODO: send data to custom event handler
     this.fireEvent("unselectAllCellsEvent");
     YAHOO.log("Unselected all cells", "info", this.toString());
 },
