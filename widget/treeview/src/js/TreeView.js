@@ -319,7 +319,13 @@ TV.prototype = {
          * @param oArgs.event  {HTMLEvent} The event object
          * @param oArgs.node {YAHOO.widget.Node} node the node that was clicked
          */
-        this.createEvent("dblClickEvent", this);
+		var self = this;
+        this.createEvent("dblClickEvent", {
+			scope:this,
+			onSubscribeCallback: function() {
+				self._hasDblClickSubscriber = true;
+			}
+		});
 		
 	/**
          * Custom event that is fired when the text node label is clicked. 
@@ -347,10 +353,6 @@ TV.prototype = {
 
         this.logger.log("tree init: " + this.id);
 		
-		this.__yui_events.dblClickEvent.subscribeEvent.subscribe(function() {
-			this._hasDblClickSubscriber = true;
-		});
-
         // YAHOO.util.Event.onContentReady(this.id, this.handleAvailable, this, true);
         // YAHOO.util.Event.on(this.id, "click", this.handleClick, this, true);
     },

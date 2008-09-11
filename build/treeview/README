@@ -1,7 +1,12 @@
 TreeView - Release Notes
 
 2.6.0
-  * Satyam update
+  * Keyboard Nav
+  * Delegated event listeners
+  * Double-click event
+  * DateNode
+  * Editable node labels
+  * API update to mirror other widgets
 
 2.5.2
   * Made CSS adjustments to work with base.css

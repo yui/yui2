@@ -113,6 +113,11 @@ version: 2.5.2
     margin-left:2px;
     text-decoration: none;
     background-color: white; /* workaround for IE font smoothing bug */
+	cursor:pointer;
+}
+
+.ygtvcontent {
+	cursor:default;
 }
 
 .ygtvspacer { height: 22px; width: 12px; }
