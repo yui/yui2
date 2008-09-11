@@ -111,7 +111,7 @@
             (function () {
                 var myLogReader, carousel;
                 
-                YAHOO.util.Event.on(window, "load", function (ev) {
+                YAHOO.util.Event.onDOMReady(function (ev) {
                     var myLogReader = new YAHOO.widget.LogReader(),
                         carousel    = new YAHOO.widget.Carousel("container", {
                             animation: { speed: 0.5 }
@@ -563,7 +563,7 @@
                 animation effect.
             </p>
 <textarea rows="8" cols="110" readonly>
-YAHOO.util.Event.on(window, "load", function (ev) {
+YAHOO.util.Event.onDOMReady(function (ev) {
   var carousel = new YAHOO.widget.Carousel("container", {
     animation: { speed: 0.5 }
   });
@@ -579,7 +579,7 @@ YAHOO.util.Event.on(window, "load", function (ev) {
 (function () {
   var myLogReader, carousel;
   
-  YAHOO.util.Event.on(window, "load", function (ev) {
+  YAHOO.util.Event.onDOMReady(function (ev) {
     var myLogReader = new YAHOO.widget.LogReader(),
         carousel    = new YAHOO.widget.Carousel("container", {
           animation: { speed: 0.5 }

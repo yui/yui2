@@ -223,7 +223,7 @@
                 Carousel is rendered.
             </p>
 <textarea rows="8" cols="110" readonly>
-YAHOO.util.Event.on(window, "load", function (ev) {
+YAHOO.util.Event.onDOMReady(function (ev) {
   var carousel = new YAHOO.widget.Carousel("container");
   carousel.render(); // get ready for rendering the widget
   carousel.show();   // display the widget
@@ -287,7 +287,7 @@ function getImage(parent) {
     return "";
   }
   
-  YAHOO.util.Event.on(window, "load", function (ev) {
+  YAHOO.util.Event.onDOMReady(function (ev) {
     var myLogReader = new YAHOO.widget.LogReader(),
         spotlight   = YAHOO.util.Dom.get("spotlight"),
         carousel    = new YAHOO.widget.Carousel("container");
