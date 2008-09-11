@@ -34,11 +34,11 @@
          */
         info: {
 
-    'root': '2.5.2/build/',
-    'base': 'http://yui.yahooapis.com/2.5.2/build/',
+    // 'root': '2.5.2/build/',
+    // 'base': 'http://yui.yahooapis.com/2.5.2/build/',
 
-    // 'root': '@VERSION@/build/',
-    // 'base': 'http://yui.yahooapis.com/@VERSION@/build/',
+    'root': '@VERSION@/build/',
+    'base': 'http://yui.yahooapis.com/@VERSION@/build/',
 
     'comboBase': 'http://yui.yahooapis.com/combo?',
 
