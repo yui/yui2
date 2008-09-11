@@ -279,6 +279,7 @@
     function createElement(el, attrs) {
         var newEl = document.createElement(el);
 
+        attrs = attrs || {};
         if (attrs.className) {
             Dom.addClass(newEl, attrs.className);
         }
@@ -902,25 +903,33 @@
              * The class name of a disabled navigation button.
              *
              * @property DISABLED
-             * @default "disabled"
+             * @default "yui-carousel-button-disabled"
              */
-            DISABLED: "yui-disabled",
+            DISABLED: "yui-carousel-button-disabled",
             
             /**
              * The class name of the first Carousel navigation button.
              *
              * @property FIRST_NAV
-             * @default " yui-first"
+             * @default " yui-carousel-first-button"
              */
-            FIRST_NAV: " yui-first",
+            FIRST_NAV: " yui-carousel-first-button",
             
             /**
              * The class name of a first disabled navigation button.
              *
              * @property FIRST_NAV_DISABLED
-             * @default "yui-first-disabled"
+             * @default "yui-carousel-first-button-disabled"
              */
-            FIRST_NAV_DISABLED: "yui-first-disabled",
+            FIRST_NAV_DISABLED: "yui-carousel-first-button-disabled",
+            
+            /**
+             * The class name of a first page element.
+             *
+             * @property FIRST_PAGE
+             * @default "yui-carousel-nav-first-page"
+             */
+            FIRST_PAGE: "yui-carousel-nav-first-page",
 
             /**
              * The class name of the Carousel navigation button that has focus.
@@ -957,14 +966,6 @@
             NEXT_PAGE: "yui-carousel-next",
 
             /**
-             * The class name for the navigation element container for pages.
-             *
-             * @property PAGE_NAV
-             * @default "yui-carousel-pages"
-             */
-            PAGE_NAV: "yui-carousel-pages",
-
-            /**
              * The class name for the navigation container for prev/next.
              *
              * @property NAV_CONTAINER
@@ -986,9 +987,17 @@
              * The class name of the selected item.
              *
              * @property SELECTED_ITEM
-             * @default "yui-selected"
+             * @default "yui-carousel-item-selected"
              */
-            SELECTED_ITEM: "yui-carousel-selected",
+            SELECTED_ITEM: "yui-carousel-item-selected",
+
+            /**
+             * The class name of the selected paging navigation.
+             *
+             * @property SELECTED_NAV
+             * @default "yui-carousel-nav-page-selected"
+             */
+            SELECTED_NAV: "yui-carousel-nav-page-selected",
 
             /**
              * The class name of a vertically oriented Carousel.
@@ -2280,8 +2289,7 @@
                 navContainer = navContainer[0];
             }
 
-            this._pages.el = createElement("UL",
-                    { className:cssClass.PAGE_NAV });
+            this._pages.el = createElement("UL");
             navContainer.appendChild(this._pages.el);
             
             nav = this.get("navigation");
@@ -2563,6 +2571,7 @@
          */
         _syncPagerUI: function (page) {
             var a,
+                cssClass = this.CLASSES,
                 i,
                 markup     = "",
                 numPages,
@@ -2588,9 +2597,10 @@
                             this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1) +
                             "</option>";
                 } else {
-                    markup += "<li" + (i === 0 ? " class=\"first\">" : ">")    +
-                            "<a href=\"#" + a + "\" tabindex=\"0\" "           +
-                            (i == page ? " class=\"selected\"" : "") + "><em>" +
+                    markup += "<li class=\""                                   +
+                            (i === 0 ? cssClass.FIRST_PAGE : "")               +
+                            (i == page ? " " + cssClass.SELECTED_NAV : "")     +
+                            "\"><a href=\"#" + a + "\" tabindex=\"0\"><em>"    +
                             this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
                             "</em></a></li>";
                 }
