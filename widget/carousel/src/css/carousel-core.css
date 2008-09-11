@@ -22,7 +22,7 @@
     text-align: center;
 }
 
-.yui-carousel .yui-carousel-selected {
+.yui-carousel .yui-carousel-item-selected {
     border: 1px dashed #000;
     margin: 1px;
 }
