@@ -1149,12 +1149,15 @@
                     css = this.comboBase,
                     target, 
                     startLen = js.length,
-                    i, m;
+                    i, m, type = this.loadType;
+
+                YAHOO.log('type ' + type);
 
                 for (i=0; i<len; i=i+1) {
+
                     m = this.moduleInfo[s[i]];
 
-                    if (m && !m.ext) {
+                    if (m && !m.ext && (!type || type === m.type)) {
 
                         target = this.root + m.path;
 
@@ -1179,7 +1182,7 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
 
                     var callback=function(o) {
                         // YAHOO.log('Combo complete: ' + o.data, "info", "loader");
-                        this._combineComplete = true;
+                        // this._combineComplete = true;
 
                         var c=this._combining, len=c.length, i, m;
                         for (i=0; i<len; i=i+1) {
@@ -1192,14 +1195,14 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
                     loadScript = function() {
                         // YAHOO.log('combining js: ' + js);
                         if (js.length > startLen) {
-                            YAHOO.util.Get.script(this._filter(js), {
-                                data: this._loading,
+                            YAHOO.util.Get.script(self._filter(js), {
+                                data: self._loading,
                                 onSuccess: callback,
-                                onFailure: this._onFailure,
-                                onTimeout: this._onTimeout,
-                                insertBefore: this.insertBefore,
-                                charset: this.charset,
-                                timeout: this.timeout,
+                                onFailure: self._onFailure,
+                                onTimeout: self._onTimeout,
+                                insertBefore: self.insertBefore,
+                                charset: self.charset,
+                                timeout: self.timeout,
                                 scope: self 
                             });
                         }
@@ -1225,7 +1228,7 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
                     return;
 
                 } else {
-                    this._combineComplete = true;
+                    // this._combineComplete = true;
                     this.loadNext(this._loading);
                 }
         }, 
@@ -1248,6 +1251,22 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
             // build the dependency list
             this.calculate(o);
 
+
+            // set a flag to indicate the load has started
+            this._loading = true;
+
+            // flag to indicate we are done with the combo service
+            // and any additional files will need to be loaded
+            // individually
+            // this._combineComplete = false;
+
+            // keep the loadType (js, css or undefined) cached
+            this.loadType = type;
+
+            if (this.combine) {
+                return this._combine();
+            }
+
             if (!type) {
                 // Y.log("trying to load css first");
                 var self = this;
@@ -1259,16 +1278,6 @@ YAHOO.log('Attempting to combine: ' + this._combining, "info", "loader");
                 return;
             }
 
-            // set a flag to indicate the load has started
-            this._loading = true;
-
-            // flag to indicate we are done with the combo service
-            // and any additional files will need to be loaded
-            // individually
-            this._combineComplete = false;
-
-            // keep the loadType (js, css or undefined) cached
-            this.loadType = type;
 
             // start the load
             this.loadNext();
@@ -1447,9 +1456,6 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                 return;
             }
 
-            if (this.combine && (!this._combineComplete)) {
-                return this._combine();
-            }
 
             if (mname) {
 
