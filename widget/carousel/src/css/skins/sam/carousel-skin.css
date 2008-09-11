@@ -1,5 +1,5 @@
-.yui-skin-sam .yui-carousel-container,
-.yui-skin-sam .yui-carousel-vertical-container {
+.yui-skin-sam .yui-carousel,
+.yui-skin-sam .yui-carousel-vertical {
     border: 1px solid #808080;
 }
 
@@ -18,16 +18,15 @@
     width: 40px;
 }
 
-.yui-skin-sam .yui-carousel-vertical-container .yui-carousel-button {
+.yui-skin-sam .yui-carousel-vertical .yui-carousel-button {
     background-position: 0 -800px;
 }
 
-.yui-skin-sam .yui-carousel-button.yui-carousel-button-disabled {
+.yui-skin-sam .yui-carousel-button-disabled {
     background-position: 0 -2000px;
 }
 
-.yui-skin-sam .yui-carousel-vertical-container
-        .yui-carousel-button.yui-carousel-button-disabled {
+.yui-skin-sam .yui-carousel-vertical .yui-carousel-button-disabled {
     background-position: 0 -2100px;
 }
 
@@ -48,8 +47,7 @@
     *margin: 5px 5px 5px -90px;
 }
 
-.yui-skin-sam .yui-carousel-vertical-container
-        span.yui-carousel-first-button {
+.yui-skin-sam .yui-carousel-vertical span.yui-carousel-first-button {
     background-position: 0px -750px;
 }
 
@@ -57,8 +55,7 @@
     background-position: 0 -1950px;
 }
 
-.yui-skin-sam .yui-carousel-vertical-container
-        span.yui-carousel-first-button-disabled {
+.yui-skin-sam .yui-carousel-vertical span.yui-carousel-first-button-disabled {
     background-position: 0 -2050px;
 }
 
@@ -67,7 +64,7 @@
     margin: 0;
     margin-left: -220px;
     margin-right: 100px;
-    *margin-left: -170px;
+    *margin-left: -160px;
     *margin-right: 0;
     padding: 0;
 }
@@ -78,8 +75,8 @@
     top: 4px;
 }
 
-.yui-skin-sam .yui-carousel-vertical-container .yui-carousel-nav ul,
-.yui-skin-sam .yui-carousel-vertical-container .yui-carousel-nav select {
+.yui-skin-sam .yui-carousel-vertical .yui-carousel-nav ul,
+.yui-skin-sam .yui-carousel-vertical .yui-carousel-nav select {
     float: none;
     margin: 0;
 }

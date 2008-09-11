@@ -30,11 +30,11 @@
                 width: 240px;
             }
 
-            .yui-carousel li {
+            .yui-carousel-element li {
                 opacity: 0.6;
             }
 
-            .yui-carousel .yui-carousel-selected {
+            .yui-carousel-element .yui-carousel-item-selected {
                 opacity: 1;
             }
         </style>
@@ -58,7 +58,7 @@
                     return "";
                 }
                 
-                YAHOO.util.Event.on(window, "load", function (ev) {
+                YAHOO.util.Event.onDOMReady(function (ev) {
                     var el, item,
                         myLogReader = new YAHOO.widget.LogReader(),
                         spotlight   = YAHOO.util.Dom.get("spotlight"),
@@ -210,7 +210,7 @@
                 items.
             </p>
 <textarea rows="3" cols="110" readonly>
-.yui-carousel li {
+.yui-carousel-element li {
     height: 75px;
 }
 </textarea>
