@@ -205,7 +205,8 @@
          * @type boolean
          * @default true if a base dir isn't in the config
          */
-        this.combine = (!('base' in o));
+        this.combine = (o && !('base' in o));
+
 
         /**
          * Root path to prepend to module path for the combo

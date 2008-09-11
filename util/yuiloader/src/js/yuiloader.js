@@ -562,6 +562,7 @@
          */
         this.combine = (o && !('base' in o));
 
+
         /**
          * Root path to prepend to module path for the combo
          * service
