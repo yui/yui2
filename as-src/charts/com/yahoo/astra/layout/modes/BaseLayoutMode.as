@@ -3,7 +3,6 @@ package com.yahoo.astra.layout.modes
 	import com.yahoo.astra.layout.events.LayoutEvent;
 	
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
 	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
 
@@ -201,7 +200,15 @@ package com.yahoo.astra.layout.modes
 		/**
 		 * @inheritDoc
 		 */
-		public function layoutChildren(target:DisplayObjectContainer, bounds:Rectangle):Rectangle
+		public function hasClient(target:DisplayObject):Boolean
+		{
+			return this.clients.indexOf(target) >= 0;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function layoutObjects(displayObjects:Array, bounds:Rectangle):Rectangle
 		{
 			//to be overridden
 			throw new Error("Method BaseLayoutMode.layoutChildren() must be overridden!");
@@ -217,13 +224,13 @@ package com.yahoo.astra.layout.modes
 		 * Ensures that every child of the target has a configuration and creates a list of children
 		 * that are included in the layout.
 		 */
-		protected function configureChildren(target:DisplayObjectContainer):Array
+		protected function configureChildren(targets:Array):Array
 		{	
 			var childrenInLayout:Array = [];
-			var childCount:int = target.numChildren;
+			var childCount:int = targets.length;
 			for(var i:int = 0; i < childCount; i++)
 			{
-				var child:DisplayObject = target.getChildAt(i);
+				var child:DisplayObject = DisplayObject(targets[i]);
 				
 				var index:int = this.clients.indexOf(child);
 				if(index < 0)

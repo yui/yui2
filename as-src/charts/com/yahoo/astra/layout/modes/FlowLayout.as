@@ -191,9 +191,9 @@ package com.yahoo.astra.layout.modes
 		/**
 		 * @inheritDoc
 		 */
-		override public function layoutChildren(target:DisplayObjectContainer, bounds:Rectangle):Rectangle
+		override public function layoutObjects(displayObjects:Array, bounds:Rectangle):Rectangle
 		{
-			var childrenInLayout:Array = this.configureChildren(target);
+			var childrenInLayout:Array = this.configureChildren(displayObjects);
 			
 			if(this.direction == "vertical")
 			{

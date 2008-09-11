@@ -248,9 +248,9 @@ package com.yahoo.astra.layout.modes
 		/**
 		 * @inheritDoc
 		 */
-		override public function layoutChildren(target:DisplayObjectContainer, bounds:Rectangle):Rectangle
+		override public function layoutObjects(displayObjects:Array, bounds:Rectangle):Rectangle
 		{
-			var childrenInLayout:Array = this.configureChildren(target);
+			var childrenInLayout:Array = this.configureChildren(displayObjects);
 			
 			//determine the available horizontal space
 			var hSpaceForChildren:Number = bounds.width - this.paddingLeft - this.paddingRight;
@@ -332,7 +332,6 @@ package com.yahoo.astra.layout.modes
 				child.y = yPosition;
 				
 				DisplayObjectUtil.align(child, new Rectangle(child.x, child.y, maxXPosition, child.height), this.horizontalAlign, null);
-				 
 				yPosition += child.height + this.verticalGap;
 			}
 			

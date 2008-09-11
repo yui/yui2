@@ -1,6 +1,5 @@
 package com.yahoo.astra.layout.modes
 {
-	import flash.display.DisplayObjectContainer;
 	import flash.events.IEventDispatcher;
 	import flash.geom.Rectangle;
 	
@@ -18,19 +17,20 @@ package com.yahoo.astra.layout.modes
 	//--------------------------------------
 	
 		/**
-		 * Children of the target DisplayObjectContainer will be positioned and sized
-		 * based on a specified rectangle. There is no requirement that the children
-		 * remain entirely within that rectangle.
+		 * The DisplayObjects in the input parameter will be positioned and sized
+		 * based on a specified rectangle. There is no requirement that the
+		 * display objects remain entirely within the rectangle.
 		 * 
 		 * <p>Returns the actual rectangular region in which the laid out
 		 * children will appear. This may be larger or smaller than the
 		 * suggested rectangle. This returned value is expected to be used by
-		 * container components to determine if scrollbars are needed.</p>
+		 * container components to determine if scrollbars or other navigation
+		 * controls are needed.</p>
 		 * 
-		 * @param target		The DisplayObjectContainer whose children will be laid out.
-		 * @param bounds		The rectangular region in which the children should be laid out.
-		 * @return				The actual region in which the children are contained.
+		 * @param displayObjects	An Array of DisplayObjects to be laid out.
+		 * @param bounds			The rectangular region in which the display objects should be placed.
+		 * @return					The actual region in which the display objects are contained.
 		 */
-		function layoutChildren(target:DisplayObjectContainer, bounds:Rectangle):Rectangle;
+		function layoutObjects(displayObjects:Array, bounds:Rectangle):Rectangle;
 	}
 }

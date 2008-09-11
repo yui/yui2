@@ -384,9 +384,15 @@ package com.yahoo.astra.layout
 			var bounds:Rectangle = new Rectangle();
 			if(this.layoutMode)
 			{
+				var children:Array = [];
+				var childCount:int = this.numChildren;
+				for(var i:int = 0; i < childCount; i++)
+				{
+					children.push(this.getChildAt(i));
+				}
 				//width and height return the explicit values if available
 				//otherwise they return the content width and height values
-				bounds = this.layoutMode.layoutChildren(this, new Rectangle(0, 0, this.width, this.height));
+				bounds = this.layoutMode.layoutObjects(children, new Rectangle(0, 0, this.width, this.height));
 			}
 			
 			this._contentWidth = bounds.x + bounds.width;

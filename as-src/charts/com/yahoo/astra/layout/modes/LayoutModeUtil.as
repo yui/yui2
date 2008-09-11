@@ -18,6 +18,8 @@ package com.yahoo.astra.layout.modes
 	
 		/**
 		 * Calculates the rectangular bounds occupied by the target's children.
+		 * 
+		 * @param children		The set of children to use to calculate the maximum bounds
 		 */
 		public static function calculateChildBounds(children:Array):Rectangle
 		{

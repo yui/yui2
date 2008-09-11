@@ -40,7 +40,7 @@ package com.yahoo.astra.layout.events
 	//--------------------------------------
 	
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
 		override public function clone():Event
 		{

@@ -4,7 +4,6 @@ package com.yahoo.astra.layout.modes
 	import com.yahoo.astra.utils.DisplayObjectUtil;
 	
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
 	import flash.geom.Rectangle;
 
 	/**
@@ -159,7 +158,7 @@ package com.yahoo.astra.layout.modes
 		/**
 		 * @inheritDoc
 		 */
-		override public function layoutChildren(target:DisplayObjectContainer, bounds:Rectangle):Rectangle
+		override public function layoutObjects(displayObjects:Array, bounds:Rectangle):Rectangle
 		{
 			const START_X:Number = bounds.x + this.paddingLeft;
 			const START_Y:Number = bounds.y + this.paddingTop;
@@ -417,7 +416,7 @@ package com.yahoo.astra.layout.modes
 				child = DisplayObject(bottomChildren[i]);
 				maxWidth = Math.max(maxWidth, child.width);
 			}
-			totalWidth += maxWidth;
+			totalWidth = Math.max(maxWidth, totalWidth);
 			return totalWidth;
 		}
 		
@@ -446,15 +445,16 @@ package com.yahoo.astra.layout.modes
 				totalHeight += child.height;
 			}
 			
+			var centerTotalHeight:Number = 0;
 			var centerChildren:Array = this.getChildrenByConstraint(BorderConstraints.CENTER, true);
 			childCount = centerChildren.length;
 			for(i = 0; i < childCount; i++)
 			{
 				child = DisplayObject(centerChildren[i]);
-				totalHeight += child.height;
+				centerTotalHeight += child.height;
 			}
 			
-			var maxHeight:Number = 0;
+			var maxHeight:Number = centerTotalHeight;
 			var rightChildren:Array = this.getChildrenByConstraint(BorderConstraints.RIGHT, true);
 			childCount = rightChildren.length;
 			for(i = 0; i < childCount; i++)

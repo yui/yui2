@@ -4,7 +4,6 @@ package com.yahoo.astra.layout.modes
 	import com.yahoo.astra.utils.DisplayObjectUtil;
 	
 	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
 	import flash.geom.Rectangle;
 
 	/**
@@ -253,15 +252,15 @@ package com.yahoo.astra.layout.modes
 		/**
 		 * @inheritDoc
 		 */
-		override public function layoutChildren(target:DisplayObjectContainer, bounds:Rectangle):Rectangle
+		override public function layoutObjects(displayObjects:Array, bounds:Rectangle):Rectangle
 		{
-			var childrenInLayout:Array = this.configureChildren(target);
+			var childrenInLayout:Array = this.configureChildren(displayObjects);
 			
 			this.maxChildWidth = this.maxChildHeight = 0;
-			var childCount:int = target.numChildren;
+			var childCount:int = displayObjects.length;
 			for(var i:int = 0; i < childCount; i++)
 			{
-				var child:DisplayObject = target.getChildAt(i);
+				var child:DisplayObject = DisplayObject(displayObjects[i]);
 				this.maxChildWidth = Math.max(this.maxChildWidth, child.width);
 				this.maxChildHeight = Math.max(this.maxChildHeight, child.height);
 			}

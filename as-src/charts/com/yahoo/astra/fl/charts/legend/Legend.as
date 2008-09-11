@@ -276,12 +276,8 @@ package com.yahoo.astra.fl.charts.legend
 			var layout:BoxLayout = new BoxLayout();
 			layout.verticalGap = layout.horizontalGap = gap;
 			layout.direction = direction;
-			if(this.background)
-			{
-				layout.addClient(this.background, {includeInLayout: false});
-			}
 			layout.paddingTop = layout.paddingRight = layout.paddingBottom = layout.paddingLeft = contentPadding
-			var bounds:Rectangle = layout.layoutChildren(this, new Rectangle(0, 0, this.width, this.height));
+			var bounds:Rectangle = layout.layoutObjects(this.legendItems, new Rectangle(0, 0, this.width, this.height));
 			
 			this._width = bounds.width;
 			this._height = bounds.height;
