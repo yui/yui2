@@ -9,6 +9,10 @@
     margin:0 0 0.5em; /* vertical tabs */
 }
 
+.yui-navset .yui-content .yui-hidden {
+    display:none;
+}
+
 /* default width for side tabs */
 .yui-navset .yui-navset-left .yui-nav,
 .yui-navset .yui-navset-right .yui-nav,
