@@ -1164,6 +1164,7 @@ dropdown : null,
  */
 renderForm : function() {
     var elDropdown = this.getContainerEl().appendChild(document.createElement("select"));
+    elDropdown.style.zoom = 1;
     this.dropdown = elDropdown;
     
     if(lang.isArray(this.dropdownOptions)) {
