@@ -717,6 +717,7 @@
                 if (this.get("selectedItem") == pos) {
                     pos = pos >= num ? num - 1 : pos;
                     this.set("selectedItem", pos);
+                    this.refresh("selectedItem", true);
                 }
             } else {
                 YAHOO.log("Unable to find item", "warn", WidgetName);
@@ -1728,6 +1729,7 @@
         
             // Make sure at least one item is selected
             this.set("selectedItem", this.get("firstVisible"));
+            this.refresh("selectedItem", true);
 
             // By now, the navigation would have been rendered, so calculate
             // the container height now.
@@ -2057,6 +2059,8 @@
 
             if ((item = this.getItemPositionById(target.id)) >= 0) {
                 this.set("selectedItem", this._getSelectedItem(item));
+                // XXX: strangely the value didn't propagate through
+                this.refresh("selectedItem", true);
             }
         },
 
@@ -2098,6 +2102,8 @@
                 prevent = true;
                 break;
             }
+
+            this.refresh("selectedItem", true);
 
             if (prevent) {
                 Event.preventDefault(ev);
