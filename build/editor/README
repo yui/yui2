@@ -5,6 +5,7 @@
     * Firefox
 	    * 1776202 - FF:rich text formatting (italize) lost when color is sele...
 	    * 1886390 - [SF 1946017 ] Unable to delete text when editor opens (Fi...
+	    * 2030281 - [SF 2002911] Problem with Header styling in Firefox 	
 
     * Internet Explorer
 	    * 1842631 - [SF 1869619] Image Modification Dialog
@@ -15,13 +16,13 @@
 	    * 2099035 - [SF 2027048] keyDown event does not fire in IE after ena...
 	    * 2189912 - [SF 2093253] Editor used in HTTPS page will provoke Secu...
         * 1655240 - [SF 1851177] Text Align not working correctly in IE
-	    * 1984727 - [SF 1986820 ] Clicking bulleted list before typing create...
-	    * 2108127 - [SF 2027073 ] IE7: editor list items misaligned when text...
+	    * 1984727 - [SF 1986820] Clicking bulleted list before typing create...
+	    * 2108127 - [SF 2027073] IE7: editor list items misaligned when text...
+	    * 1918222 - [SF 1956586] Fontsize is not updating when nodechange in IE
 
     * Safari
-
-	    * 1972354 - [SF 1978372 ] Safari/IE list creation quirk
-	    * 1972367 - [SF 1978350 ] Safari 3.1 issue with lists
+	    * 1972354 - [SF 1978372] Safari/IE list creation quirk
+	    * 1972367 - [SF 1978350] Safari 3.1 issue with lists
 
     * All
         * 1508375 - [SF 1791252, 1964709] Have Undo, Redo functions in Editor  
@@ -46,10 +47,10 @@
         * 2118723 - [SF 2034544] Image Options Dialog Box needs fixing
         * 2036613 - [SF 2007145] Removing underline not working in IE6/7, FF3
         * 2065013 - [SF 2015601] Text in some controls is not vertically centered
-	    * 1918278 - [SF 1955931 ] font color (background color) doesn't work ...
-	    * 1972427 - [SF 1954095 ] Bulleting
-
-
+	    * 1918278 - [SF 1955931] font color (background color) doesn't work ...
+	    * 1972427 - [SF 1954095] Bulleting
+        * 1839224 - [SF 1925337] editor indent/outdent inconsistent behavior
+	    * 2006092 - [SF 1996074] Indent changes the font to Arial
 
 
 **** version 2.5.2 ***

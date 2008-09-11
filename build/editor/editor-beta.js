@@ -2188,6 +2188,9 @@ var Dom = YAHOO.util.Dom,
                 Lang.augmentObject(config, this._resizeConfig); //Break the config reference
                 this.resize = new YAHOO.util.Resize(this.get('element_cont').get('element'), config);
                 this.resize.on('resize', function(args) {
+                    var anim = this.get('animate');
+                    this.set('animate', false);
+                    this.set('width', args.width + 'px');
                     var h = args.height,
                         th = (this.toolbar.get('element').clientHeight + 2),
                         dh = 0;
@@ -2195,9 +2198,9 @@ var Dom = YAHOO.util.Dom,
                         dh = (this.dompath.clientHeight + 1); //It has a 1px top border..
                     }
                     var newH = (h - th - dh);
-                    this.set('width', args.width + 'px');
                     this.set('height', newH + 'px');
                     this.get('element_cont').setStyle('height', '');
+                    this.set('animate', anim);
                 }, this, true);
             }
         },
@@ -5010,6 +5013,7 @@ var Dom = YAHOO.util.Dom,
             /**
             * @config resize
             * @description Set this to true to make the Editor Resizable with YAHOO.util.Resize. The default config is available: myEditor._resizeConfig
+            * Animation will be ignored while performing this resize to allow for the dynamic change in size of the toolbar.
             * @type Boolean
             */
             this.setAttributeConfig('resize', {
@@ -5265,7 +5269,7 @@ var Dom = YAHOO.util.Dom,
                     this.toolbar.enableButton('createlink');
                 }
             }
-            if (this._isElement(elm, 'blockquote')) {
+            if (this._hasParent(elm, 'blockquote')) {
                 this.toolbar.selectButton('indent');
                 this.toolbar.disableButton('indent');
                 this.toolbar.enableButton('outdent');
@@ -6111,7 +6115,9 @@ var Dom = YAHOO.util.Dom,
                 
                 for (var i = 0; i < _tmp.length; i++) {
                     if ((YAHOO.util.Dom.getStyle(_tmp[i], 'font-family') == 'yui-tmp') || (_tmp[i].face && (_tmp[i].face == 'yui-tmp'))) {
-                        el = _elCreate(_tmp[i].tagName, tagStyle);
+                        //TODO Why is this here?!?
+                        //el = _elCreate(_tmp[i].tagName, tagStyle);
+                        el = _elCreate(tagName, tagStyle);
                         el.innerHTML = _tmp[i].innerHTML;
                         if (this._isElement(_tmp[i], 'ol') || (this._isElement(_tmp[i], 'ul'))) {
                             var fc = _tmp[i].getElementsByTagName('li')[0];
@@ -7214,8 +7220,8 @@ var Dom = YAHOO.util.Dom,
                     
                     { group: 'indentlist2', label: 'Indenting and Lists',
                         buttons: [
-                            { type: 'push', label: 'Indent', value: 'indent' },
-                            { type: 'push', label: 'Outdent', value: 'outdent' },
+                            { type: 'push', label: 'Indent', value: 'indent', disabled: true },
+                            { type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
                             { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
                             { type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist' }
                         ]
@@ -7380,16 +7386,14 @@ var Dom = YAHOO.util.Dom,
         * @description The Toolbar items that should be disabled if there is no selection present in the editor.
         * @type Array
         */
-        //_disabled: [ 'createlink', 'forecolor', 'backcolor', 'fontname', 'fontsize', 'superscript', 'subscript', 'removeformat', 'heading', 'indent' ],
-        _disabled: [ 'createlink', 'forecolor', 'backcolor', 'fontname', 'fontsize', 'superscript', 'subscript', 'removeformat', 'heading' ],
+        _disabled: [ 'createlink', 'forecolor', 'backcolor', 'fontname', 'fontsize', 'superscript', 'subscript', 'removeformat', 'heading', 'indent' ],
         /**
         * @private
         * @property _alwaysDisabled
         * @description The Toolbar items that should ALWAYS be disabled event if there is a selection present in the editor.
         * @type Object
         */
-        //_alwaysDisabled: { 'outdent': true },
-        _alwaysDisabled: { },
+        _alwaysDisabled: { 'outdent': true },
         /**
         * @private
         * @property _alwaysEnabled
@@ -8630,13 +8634,20 @@ var Dom = YAHOO.util.Dom,
                     selEl.appendChild(_bq);
                     this._selectNode(_bq);
                 } else {
+                    _bq = this._getDoc().createElement('blockquote');
+                    var html = this._getRange().htmlText;
+                    _bq.innerHTML = html;
                     this._createCurrentElement('blockquote');
+                    /*
                     for (var i = 0; i < this.currentElement.length; i++) {
                         _bq = this._getDoc().createElement('blockquote');
                         _bq.innerHTML = this.currentElement[i].innerHTML;
                         this.currentElement[i].parentNode.replaceChild(_bq, this.currentElement[i]);
                         this.currentElement[i] = _bq;
                     }
+                    */
+                    this.currentElement[0].parentNode.replaceChild(_bq, this.currentElement[0]);
+                    this.currentElement[0] = _bq;
                     this._selectNode(this.currentElement[0]);
                 }
                 exec = false;

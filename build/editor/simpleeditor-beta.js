@@ -2188,6 +2188,9 @@ var Dom = YAHOO.util.Dom,
                 Lang.augmentObject(config, this._resizeConfig); //Break the config reference
                 this.resize = new YAHOO.util.Resize(this.get('element_cont').get('element'), config);
                 this.resize.on('resize', function(args) {
+                    var anim = this.get('animate');
+                    this.set('animate', false);
+                    this.set('width', args.width + 'px');
                     var h = args.height,
                         th = (this.toolbar.get('element').clientHeight + 2),
                         dh = 0;
@@ -2195,9 +2198,9 @@ var Dom = YAHOO.util.Dom,
                         dh = (this.dompath.clientHeight + 1); //It has a 1px top border..
                     }
                     var newH = (h - th - dh);
-                    this.set('width', args.width + 'px');
                     this.set('height', newH + 'px');
                     this.get('element_cont').setStyle('height', '');
+                    this.set('animate', anim);
                 }, this, true);
             }
         },
@@ -5010,6 +5013,7 @@ var Dom = YAHOO.util.Dom,
             /**
             * @config resize
             * @description Set this to true to make the Editor Resizable with YAHOO.util.Resize. The default config is available: myEditor._resizeConfig
+            * Animation will be ignored while performing this resize to allow for the dynamic change in size of the toolbar.
             * @type Boolean
             */
             this.setAttributeConfig('resize', {
@@ -5265,7 +5269,7 @@ var Dom = YAHOO.util.Dom,
                     this.toolbar.enableButton('createlink');
                 }
             }
-            if (this._isElement(elm, 'blockquote')) {
+            if (this._hasParent(elm, 'blockquote')) {
                 this.toolbar.selectButton('indent');
                 this.toolbar.disableButton('indent');
                 this.toolbar.enableButton('outdent');
@@ -6111,7 +6115,9 @@ var Dom = YAHOO.util.Dom,
                 
                 for (var i = 0; i < _tmp.length; i++) {
                     if ((YAHOO.util.Dom.getStyle(_tmp[i], 'font-family') == 'yui-tmp') || (_tmp[i].face && (_tmp[i].face == 'yui-tmp'))) {
-                        el = _elCreate(_tmp[i].tagName, tagStyle);
+                        //TODO Why is this here?!?
+                        //el = _elCreate(_tmp[i].tagName, tagStyle);
+                        el = _elCreate(tagName, tagStyle);
                         el.innerHTML = _tmp[i].innerHTML;
                         if (this._isElement(_tmp[i], 'ol') || (this._isElement(_tmp[i], 'ul'))) {
                             var fc = _tmp[i].getElementsByTagName('li')[0];

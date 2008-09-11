@@ -349,8 +349,8 @@ var Dom = YAHOO.util.Dom,
                     
                     { group: 'indentlist2', label: 'Indenting and Lists',
                         buttons: [
-                            { type: 'push', label: 'Indent', value: 'indent' },
-                            { type: 'push', label: 'Outdent', value: 'outdent' },
+                            { type: 'push', label: 'Indent', value: 'indent', disabled: true },
+                            { type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
                             { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
                             { type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist' }
                         ]
@@ -515,16 +515,14 @@ var Dom = YAHOO.util.Dom,
         * @description The Toolbar items that should be disabled if there is no selection present in the editor.
         * @type Array
         */
-        //_disabled: [ 'createlink', 'forecolor', 'backcolor', 'fontname', 'fontsize', 'superscript', 'subscript', 'removeformat', 'heading', 'indent' ],
-        _disabled: [ 'createlink', 'forecolor', 'backcolor', 'fontname', 'fontsize', 'superscript', 'subscript', 'removeformat', 'heading' ],
+        _disabled: [ 'createlink', 'forecolor', 'backcolor', 'fontname', 'fontsize', 'superscript', 'subscript', 'removeformat', 'heading', 'indent' ],
         /**
         * @private
         * @property _alwaysDisabled
         * @description The Toolbar items that should ALWAYS be disabled event if there is a selection present in the editor.
         * @type Object
         */
-        //_alwaysDisabled: { 'outdent': true },
-        _alwaysDisabled: { },
+        _alwaysDisabled: { 'outdent': true },
         /**
         * @private
         * @property _alwaysEnabled
@@ -1781,13 +1779,20 @@ var Dom = YAHOO.util.Dom,
                     selEl.appendChild(_bq);
                     this._selectNode(_bq);
                 } else {
+                    _bq = this._getDoc().createElement('blockquote');
+                    var html = this._getRange().htmlText;
+                    _bq.innerHTML = html;
                     this._createCurrentElement('blockquote');
+                    /*
                     for (var i = 0; i < this.currentElement.length; i++) {
                         _bq = this._getDoc().createElement('blockquote');
                         _bq.innerHTML = this.currentElement[i].innerHTML;
                         this.currentElement[i].parentNode.replaceChild(_bq, this.currentElement[i]);
                         this.currentElement[i] = _bq;
                     }
+                    */
+                    this.currentElement[0].parentNode.replaceChild(_bq, this.currentElement[0]);
+                    this.currentElement[0] = _bq;
                     this._selectNode(this.currentElement[0]);
                 }
                 exec = false;
