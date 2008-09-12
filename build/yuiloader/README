@@ -8,8 +8,9 @@ yuiloader - Release Notes
  * Added combo handler support, which is off by default.  Set
    'combine' to true to use it.
  * Filters are applied to new modules that have a 'fullpath' attribute.
- * resize, editor, simpleeditor, layout, datasource, datatable out of beta
- * Added datastore
+ * resize, editor, simpleeditor, layout, datasource, datatable,
+   cookie, profiler, yuiloader out of beta.
+ * Added datastore.
 
 2.5.2
   * uploader requires element.

@@ -138,7 +138,7 @@
 
         'cookie': {
             'type': 'js',
-            'path': 'cookie/cookie-beta-min.js',
+            'path': 'cookie/cookie-min.js',
             'requires': ['yahoo']
         },
 
@@ -271,7 +271,7 @@
 
         'profiler': {
             'type': 'js',
-            'path': 'profiler/profiler-beta-min.js',
+            'path': 'profiler/profiler-min.js',
             'requires': ['yahoo']
         },
 
@@ -374,7 +374,7 @@
 
         'yuiloader': {
             'type': 'js',
-            'path': 'yuiloader/yuiloader-beta-min.js',
+            'path': 'yuiloader/yuiloader-min.js',
             'supersedes': ['yahoo', 'get']
         },
 

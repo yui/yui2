@@ -1836,7 +1836,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'cookie': {
             'type': 'js',
-            'path': 'cookie/cookie-beta-min.js',
+            'path': 'cookie/cookie-min.js',
             'requires': ['yahoo']
         },
 
@@ -1969,7 +1969,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'profiler': {
             'type': 'js',
-            'path': 'profiler/profiler-beta-min.js',
+            'path': 'profiler/profiler-min.js',
             'requires': ['yahoo']
         },
 
@@ -2072,7 +2072,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'yuiloader': {
             'type': 'js',
-            'path': 'yuiloader/yuiloader-beta-min.js',
+            'path': 'yuiloader/yuiloader-min.js',
             'supersedes': ['yahoo', 'get']
         },
 
