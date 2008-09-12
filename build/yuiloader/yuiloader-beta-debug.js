@@ -1842,7 +1842,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'datasource': {
             'type': 'js',
-            'path': 'datasource/datasource-beta-min.js',
+            'path': 'datasource/datasource-min.js',
             'requires': ['event'],
             'optional': ['connection']
         },
@@ -1855,7 +1855,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'datatable': {
             'type': 'js',
-            'path': 'datatable/datatable-beta-min.js',
+            'path': 'datatable/datatable-min.js',
             'requires': ['element', 'datasource'],
             'optional': ['calendar', 'dragdrop', 'paginator'],
             'skinnable': true
