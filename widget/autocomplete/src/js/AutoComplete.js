@@ -24,8 +24,7 @@ YAHOO.widget.DS_XHR.TYPE_JSON = YAHOO.util.DataSourceBase.TYPE_JSON;
 YAHOO.widget.DS_XHR.TYPE_XML = YAHOO.util.DataSourceBase.TYPE_XML;
 YAHOO.widget.DS_XHR.TYPE_FLAT = YAHOO.util.DataSourceBase.TYPE_TEXT;
 
-// TODO:
-// widget.DS_ScriptNode.scriptCallbackParam
+// TODO: widget.DS_ScriptNode.scriptCallbackParam
 
 
 
