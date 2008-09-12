@@ -599,17 +599,17 @@
 			// upHTMLText:String - HTML text of the link iwhen unpressed
 			// hoverHTMLText:String - HTML text of the link when hovering over it
 			// downHTMLText:String - HTML text of the link when pressed down 
-		 	ExternalInterface.addCallback("showAsLink", showAsLink);
+		 	// ExternalInterface.addCallback("showAsLink", showAsLink);
 		 	
 		 	// Show UI as a button
 		 	// buttonUpSkin:String - URL of the image of the button when unpressed
 		 	// buttonHoverSkin:String - URL of the image of the button when hovering
 		 	// buttonDownSkin:String - URL of the image of the button when pressed
-		 	ExternalInterface.addCallback("showAsButton", showAsButton);
+		 	// ExternalInterface.addCallback("showAsButton", showAsButton);
 		 	
 		 	// Show no UI, but allow transparency, to overlay other UIs.
 		 	
-		 	ExternalInterface.addCallback("showAsTransparent", showAsTransparent);
+		 	// ExternalInterface.addCallback("showAsTransparent", showAsTransparent);
 		 	
 			ExternalInterface.addCallback("removeFile", removeFile);
 
