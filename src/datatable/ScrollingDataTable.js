@@ -36,7 +36,6 @@ widget.ScrollingDataTable = function(elContainer,aColumnDefs,oDataSource,oConfig
 
     // Once per instance
     this.subscribe("columnShowEvent", this._onColumnChange);
-    this.subscribe("editorSaveEvent", this._onColumnChange);
 };
 
 var SDT = widget.ScrollingDataTable;
@@ -188,8 +187,7 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute height
-    * @description Table height for scrollable tables. Note: When setting width
-    * and height at runtime, please set height first.    
+    * @description Table body height for scrollable tables, not including headers.
     * @type String
     */
     this.setAttributeConfig("height", {
@@ -247,14 +245,9 @@ _initDomElements : function(elContainer) {
             // Primary TBODY
             this._initTbodyEl(this._elTable);
             // Message TBODY
-            this._initMsgTbodyEl(this._elTable);
-            
-            // Tmp elements for auto-width calculation
-            this._initTmpEls();
+            this._initMsgTbodyEl(this._elTable);            
         }
     }
-    ///if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody ||
-            ///!this._elHdTable || !this._elBdColgroup || !this._elBdThead) {
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody ||
             !this._elHdTable || !this._elBdThead) {
         YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
@@ -264,55 +257,6 @@ _initDomElements : function(elContainer) {
         return true;
     }
 },
-
-/**
- * Destroy's tmp els used for auto-width calculation.
- *
- * @method _destroyTmpEls
- * @private
- */
-_destroyTmpEls : function() {
-    var elTmpContainer = this._elTmpContainer;
-    if(elTmpContainer) {
-        elTmpContainer.parentNode.removeChild(elTmpContainer);
-        
-        this._elTmpContainer = null;
-        this._elTmpTable = null;
-    }
-},
-
-/**
- * Resets tmp els back to initial state.
- *
- * @method _resetTmpEls
- * @private
- */
-_resetTmpEls : function() {
-    var elTmpTable = this._elTmpTable;
-    if(elTmpTable) {
-        elTmpTable.removeChild(elTmpTable.firstChild); // THEAD
-        elTmpTable.removeChild(elTmpTable.firstChild); // TBODY
-    }
-},
-
-/**
- * Initializes tmp els for auto-width calculation
- *
- * @method _initTmpEls
- * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
- * @private
- */
-_initTmpEls : function() {
-    this._destroyTmpEls();
-
-    // Attach tmp container as first child of body
-    var elTmpContainer = document.createElement('div');
-    elTmpContainer.className = DT.CLASS_DATATABLE + ' ' + DT.CLASS_TMP;
-    var elTmpTable = elTmpContainer.appendChild(document.createElement('table'));
-    this._elTmpTable = elTmpTable;
-    this._elTmpContainer = document.body.insertBefore(elTmpContainer, document.body.firstChild);
-},
-
 
 /**
  * Destroy's the DataTable outer and inner container elements, if available.
@@ -360,6 +304,28 @@ _initContainerEl : function(elContainer) {
         this._elBdContainer = elBdContainer;
         elContainer.appendChild(elBdContainer);
     }
+},
+
+/**
+ * Creates HTML markup CAPTION element.
+ *
+ * @method _initCaptionEl
+ * @param sCaption {String} Text for caption.
+ * @private
+ */
+_initCaptionEl : function(sCaption) {
+    // Not yet supported
+    /*if(this._elHdTable && sCaption) {
+        // Create CAPTION element
+        if(!this._elCaption) { 
+            this._elCaption = this._elHdTable.createCaption();
+        }
+        // Set CAPTION value
+        this._elCaption.innerHTML = sCaption;
+    }
+    else if(this._elCaption) {
+        this._elCaption.parentNode.removeChild(this._elCaption);
+    }*/
 },
 
 /**
@@ -499,7 +465,7 @@ _initBdThEl : function(elTh, oColumn) {
         elTh.abbr = oColumn.abbr;
     }
 
-    ///TODO: strip links and form elements
+    // TODO: strip links and form elements
     var sKey = oColumn.getKey();
     var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;
     elTh.innerHTML = sLabel;
@@ -556,6 +522,8 @@ _initTbodyEl : function(elTable) {
  */
 _focusEl : function(el) {
     el = el || this._elTbody;
+    var oSelf = this;
+    this._storeScrollPositions();
     // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
     // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
     // strange unexpected things as the user clicks on buttons and other controls.
@@ -565,6 +533,7 @@ _focusEl : function(el) {
         setTimeout(function() {
             try {
                 el.focus();
+                oSelf._restoreScrollPositions();
             }
             catch(e) {
             }
@@ -590,7 +559,45 @@ _focusEl : function(el) {
 
 
 
+/**
+ * Internal wrapper calls run() on render Chain instance.
+ *
+ * @method _runRenderChain
+ * @private 
+ */
+_runRenderChain : function() {
+    this._storeScrollPositions();
+    this._oChainRender.run();
+},
 
+/**
+ * Stores scroll positions so they can be restored after a render. 
+ *
+ * @method _storeScrollPositions
+ * @private 
+ */
+ _storeScrollPositions : function() {
+    this._nScrollTop = this._elBdContainer.scrollTop;
+    this._nScrollLeft = this._elBdContainer.scrollLeft;
+},
+
+/**
+ * Restores scroll positions to stored value. 
+ *
+ * @method _retoreScrollPositions
+ * @private 
+ */
+ _restoreScrollPositions : function() {
+    // Reset scroll positions
+    if(this._nScrollTop) {
+        this._elBdContainer.scrollTop = this._nScrollTop;
+        this._nScrollTop = null;
+    } 
+    if(this._nScrollLeft) {
+        this._elBdContainer.scrollLeft = this._nScrollLeft;
+        this._nScrollLeft = null;
+    } 
+},
 
 /**
  * Helper function calculates and sets a validated width for a Column in a ScrollingDataTable.
@@ -648,6 +655,12 @@ validateColumnWidths : function(oColumn) {
     var allKeys   = this._oColumnSet.keys,
         allKeysLength = allKeys.length,
         elRow     = this.getFirstTrEl();
+
+    // Reset overhang for IE
+    if(ua.ie) {
+        this._setOverhangValue(1);
+    }
+
     if(allKeys && elRow && (elRow.childNodes.length === allKeysLength)) {
         // Temporarily unsnap container since it causes inaccurate calculations
         var sWidth = this.get("width");
@@ -661,59 +674,6 @@ validateColumnWidths : function(oColumn) {
         if(oColumn && lang.isNumber(oColumn.getKeyIndex())) {
             this._validateColumnWidth(oColumn, elRow.childNodes[oColumn.getKeyIndex()]);
         }
-        //////OPTION 1
-        // Iterate through all Columns but adjust widths in a single pass
-        /*else {
-            var elTd, todos = [], i, len;
-            // Iterate through all Columns and make the changes in one pass
-            for(i=0; i<allKeysLength; i++) {
-               //this._validateColumnWidth(allKeys[i], elRow.childNodes[i]);
-               
-                oColumn = allKeys[i];
-                elTd = elRow.childNodes[i];
-                // Only Columns without widths that are not hidden
-                if(!oColumn.width && !oColumn.hidden) {
-                    var elTh = oColumn.getThEl();
-                    // Unset a calculated auto-width
-                    if(oColumn._calculatedWidth) {
-                        this._setColumnWidth(oColumn, "auto", "visible");
-                    }
-                    // Compare auto-widths
-                    if(elTh.offsetWidth !== elTd.offsetWidth) {
-                        var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
-                                oColumn.getThLinerEl() : elTd.firstChild;               
-                
-                        // Grab the wider liner width, unless the minWidth is wider
-                        var newWidth = Math.max(0,
-                            (elWider.offsetWidth -(parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) - (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0)),
-                            oColumn.minWidth);
-                            
-                        var sOverflow = 'visible';
-                        
-                        // Now validate against maxAutoWidth
-                        if((oColumn.maxAutoWidth > 0) && (newWidth > oColumn.maxAutoWidth)) {
-                            newWidth = oColumn.maxAutoWidth;
-                            sOverflow = "hidden";
-                        }
-                
-                        todos[todos.length] = [oColumn, newWidth, sOverflow];
-                    }
-                }
-            }
-            
-            this._elTbody.style.display = "none";
-            var thisTodo;
-            for(i=0, len=todos.length; i<len; i++) {
-                thisTodo = todos[i];
-                // Set to the wider auto-width
-                this._setColumnWidth(thisTodo[0], thisTodo[1]+"px", thisTodo[2]);
-                thisTodo[0]._calculatedWidth = thisTodo[1];
-            }
-            this._elTbody.style.display = "";
-        }*/
-        
-        
-        /////////OPTION 2
         // Iterate through all Columns to unset calculated widths in one pass
         else {
             var elTd, todos = [], thisTodo, i, len;
@@ -735,8 +695,6 @@ validateColumnWidths : function(oColumn) {
 
             // Iterate through all Columns and make the store the adjustments to make in one pass
             for(i=0; i<allKeysLength; i++) {
-               //this._validateColumnWidth(allKeys[i], elRow.childNodes[i]);
-               
                 oColumn = allKeys[i];
                 elTd = elRow.childNodes[i];
                 // Only Columns without widths that are not hidden
@@ -775,8 +733,7 @@ validateColumnWidths : function(oColumn) {
             }
             this._elTbody.style.display = "";
         }
-
-        
+    
         // Resnap unsnapped containers
         if(sWidth) {
             this._elHdContainer.style.width = sWidth;
@@ -785,6 +742,7 @@ validateColumnWidths : function(oColumn) {
     }
     
     this._syncScroll();
+    this._restoreScrollPositions();
 },
 
 /**
@@ -860,15 +818,13 @@ _syncScrollX : function() {
 },
 
 /**
- * Adds/removes Column header overhang.
+ * Adds/removes Column header overhang as necesary.
  *
  * @method _syncScrollOverhang
  * @private
  */
 _syncScrollOverhang : function() {
-    var elThead = this._elThead,
-        elBdContainer = this._elBdContainer,
-        
+    var elBdContainer = this._elBdContainer,
         // Overhang should be either 1 (default) or 18px, depending on the location of the right edge of the table
         nPadding = 1;
     
@@ -879,18 +835,29 @@ _syncScrollOverhang : function() {
         nPadding = 18;
     }
     
-    // Set Column header overhang
-    var aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1],
-        len = aLastHeaders.length,
-        prefix = this._sId+"-fixedth-";
-    elThead.style.display = "none";
-    for(var i=0; i<len; i++) {
-        Dom.get(prefix+aLastHeaders[i]).style.borderRight = nPadding + "px solid " + this.get("COLOR_COLUMNFILLER");
-    }
-    elThead.style.display = "";
+    this._setOverhangValue(nPadding);
+    
 },
 
+/**
+ * Sets Column header overhang to given width.
+ *
+ * @method _setOverhangValue
+ * @param nBorderWidth {Number} Value of new border for overhang. 
+ * @private
+ */
+_setOverhangValue : function(nBorderWidth) {
+    var aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1] || [],
+        len = aLastHeaders.length,
+        sPrefix = this._sId+"-fixedth-",
+        sValue = nBorderWidth + "px solid " + this.get("COLOR_COLUMNFILLER");
 
+    this._elThead.style.display = "none";
+    for(var i=0; i<len; i++) {
+        Dom.get(sPrefix+aLastHeaders[i]).style.borderRight = sValue;
+    }
+    this._elThead.style.display = "";
+},
 
 
 
@@ -1155,6 +1122,7 @@ _onColumnChange : function(oArg) {
     // Figure out which Column changed
     var oColumn = (oArg.column) ? oArg.column :
             (oArg.editor) ? oArg.editor.column : null;
+    this._storeScrollPositions();
     this.validateColumnWidths(oColumn);
 },
 
@@ -1227,7 +1195,7 @@ _onTheadKeydown : function(e, oSelf) {
                 return;
             case "input":
             case "textarea":
-                // TODO
+                // TODO: implement textareaKeyEvent
                 break;
             case "thead":
                 bKeepBubbling = oSelf.fireEvent("theadKeyEvent",{target:elTarget,event:e});

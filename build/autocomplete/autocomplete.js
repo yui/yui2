@@ -24,8 +24,7 @@ YAHOO.widget.DS_XHR.TYPE_JSON = YAHOO.util.DataSourceBase.TYPE_JSON;
 YAHOO.widget.DS_XHR.TYPE_XML = YAHOO.util.DataSourceBase.TYPE_XML;
 YAHOO.widget.DS_XHR.TYPE_FLAT = YAHOO.util.DataSourceBase.TYPE_TEXT;
 
-// TODO:
-// widget.DS_ScriptNode.scriptCallbackParam
+// TODO: widget.DS_ScriptNode.scriptCallbackParam
 
 
 
@@ -488,7 +487,7 @@ YAHOO.widget.AutoComplete.prototype.suppressInputUpdate = false;
 YAHOO.widget.AutoComplete.prototype.resultTypeList = true;
 
 /**
- * For XHR DataSources, automatically inserts a "?" between the server URI and 
+ * For XHR DataSources, AutoComplete will automatically insert a "?" between the server URI and 
  * the "query" param/value pair. To prevent this behavior, implementers should
  * set this value to false. To more fully customize the query syntax, implementers
  * should override the generateRequest() method. 

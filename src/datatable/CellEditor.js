@@ -21,14 +21,12 @@ var lang   = YAHOO.lang,
  * @class BaseCellEditor
  * @uses YAHOO.util.EventProvider 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
+ * @param sType {String} Type indicator, to map to YAHOO.widget.DataTable.Editors.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.BaseCellEditor = function(sType, oConfigs) {
     this._sId = this._sId || "yui-ceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.type = sType;
+    this._sType = sType;
     
     // Validate inputs
     this._initConfigs(oConfigs); 
@@ -56,6 +54,7 @@ lang.augmentObject(BCE, {
  * @type Number
  * @static
  * @default 0
+ * @private 
  */
 _nCount : 0,
 
@@ -86,6 +85,83 @@ BCE.prototype = {
  * @private
  */
 _sId : null,
+
+/**
+ * Editor type.
+ *
+ * @property _sType
+ * @type String
+ * @private
+ */
+_sType : null,
+
+/**
+ * DataTable instance.
+ *
+ * @property _oDataTable
+ * @type YAHOO.widget.DataTable
+ * @private 
+ */
+_oDataTable : null,
+
+/**
+ * Column instance.
+ *
+ * @property _oColumn
+ * @type YAHOO.widget.Column
+ * @default null
+ */
+_oColumn : null,
+
+/**
+ * Record instance.
+ *
+ * @property _oRecord
+ * @type YAHOO.widget.Record
+ * @default null
+ * @private 
+ */
+_oRecord : null,
+
+/**
+ * TD element.
+ *
+ * @property _elTd
+ * @type HTMLElement
+ * @default null
+ * @private
+ */
+_elTd : null,
+
+/**
+ * Container for inline editor.
+ *
+ * @property _elContainer
+ * @type HTMLElement
+ * @private 
+ */
+_elContainer : null,
+
+/**
+ * Reference to Cancel button, if available.
+ *
+ * @property _elCancelBtn
+ * @type HTMLElement
+ * @default null
+ * @private 
+ */
+_elCancelBtn : null,
+
+/**
+ * Reference to Save button, if available.
+ *
+ * @property _elSaveBtn
+ * @type HTMLElement
+ * @default null
+ * @private 
+ */
+_elSaveBtn : null,
+
 
 
 
@@ -164,59 +240,7 @@ _initEvents : function() {
 asyncSubmitter : null,
 
 /**
- * DataTable instance.
- *
- * @property dataTable
- * @type YAHOO.widget.DataTable
- */
-dataTable : null,
-
-/**
- * TD element.
- *
- * @property cell
- * @type HTMLElement
- * @default null
- */
-cell : null,
-
-/**
- * Editor type.
- *
- * @property type
- * @type String
- * @private
- */
-type : null,
-
-/**
- * Column instance.
- *
- * @property column
- * @type YAHOO.widget.Column
- * @default null
- */
-column : null,
-
-/**
- * Record instance.
- *
- * @property record
- * @type YAHOO.widget.Record
- * @default null
- */
-record : null,
-
-/**
- * Container for inline editor.
- *
- * @property container
- * @type HTMLElement
- */
-container : null,
-
-/**
- * Original value.
+ * Current value.
  *
  * @property value
  * @type MIXED
@@ -224,7 +248,8 @@ container : null,
 value : null,
 
 /**
- * Default value for the cell.
+ * Default value in case Record data is undefined. NB: Null values will not trigger
+ * the default value.
  *
  * @property defaultValue
  * @type MIXED
@@ -233,7 +258,9 @@ value : null,
 defaultValue : null,
 
 /**
- * Validator for input data.
+ * Validator function for input data, called from the DataTable instance scope,
+ * receives the arguments (inputValue, currentValue, editorInstance) and returns
+ * either the validated (or type-converted) value or undefined.
  *
  * @property validator
  * @type HTMLFunction
@@ -276,24 +303,6 @@ LABEL_CANCEL : "Cancel",
  */
 disableBtns : false,
 
-/**
- * Reference to Save button, if available.
- *
- * @property btnSave
- * @type HTMLElement
- * @default null
- */
-btnSave : null,
-
-/**
- * Reference to Cancel button, if available.
- *
- * @property btnCancel
- * @type HTMLElement
- * @default null
- */
-btnCancel : null,
-
 
 
 
@@ -328,6 +337,63 @@ getId : function() {
 },
 
 /**
+ * Returns reference to associated DataTable instance.
+ *
+ * @method getDataTable
+ * @return {YAHOO.widget.DataTable} DataTable instance.
+ */
+
+getDataTable : function() {
+    return this._oDataTable;
+},
+
+/**
+ * Returns reference to associated Column instance.
+ *
+ * @method getColumn
+ * @return {YAHOO.widget.Column} Column instance.
+ */
+
+getColumn : function() {
+    return this._oColumn;
+},
+
+/**
+ * Returns reference to associated Record instance.
+ *
+ * @method getRecord
+ * @return {YAHOO.widget.Record} Record instance.
+ */
+
+getRecord : function() {
+    return this._oRecord;
+},
+
+
+
+/**
+ * Returns reference to associated TD element.
+ *
+ * @method getTdEl
+ * @return {HTMLElement} TD element.
+ */
+
+getTdEl : function() {
+    return this._elTd;
+},
+
+/**
+ * Returns container element.
+ *
+ * @method getContainerEl
+ * @return {HTMLElement} Reference to container element.
+ */
+
+getContainerEl : function() {
+    return this._elContainer;
+},
+
+/**
  * Nulls out the entire CellEditor instance and related objects, removes attached
  * event listeners, and clears out DOM elements inside the container, removes
  * container from the DOM.
@@ -336,8 +402,14 @@ getId : function() {
  */
 destroy : function() {
     this.unsubscribeAll();
-    this.column.editor = null;
-    var elContainer = this.container;
+    
+    // Column is late-binding in attach()
+    var oColumn = this.getColumn();
+    if(oColumn) {
+        this.getColumn().editor = null;
+    }
+    
+    var elContainer = this.getContainerEl();
     Ev.purgeElement(elContainer, true);
     elContainer.parentNode.removeChild(elContainer);
 },
@@ -355,14 +427,13 @@ render : function() {
     elContainer.tabIndex = 0;
     elContainer.className = DT.CLASS_EDITOR;
     document.body.insertBefore(elContainer, document.body.firstChild);
-    this.container = elContainer;
+    this._elContainer = elContainer;
     
     // Handle ESC key
     Ev.addListener(elContainer, "keydown", function(e, oSelf) {
-        // ESC hides Cell Editor
+        // ESC cancels Cell Editor
         if((e.keyCode == 27)) {
             oSelf.cancel();
-            ///oSelf.focusTbodyEl();
         }
         // Pass through event
         oSelf.fireEvent("keydownEvent", {editor:this, event:e});
@@ -374,6 +445,8 @@ render : function() {
     if(!this.disableBtns) {
         this.renderBtns();
     }
+    
+    this.doAfterRender();
 },
 
 /**
@@ -383,7 +456,7 @@ render : function() {
  */
 renderBtns : function() {
     // Buttons
-    var elBtnsDiv = this.container.appendChild(document.createElement("div"));
+    var elBtnsDiv = this.getContainerEl().appendChild(document.createElement("div"));
     elBtnsDiv.className = DT.CLASS_BUTTON;
 
     // Save button
@@ -393,7 +466,7 @@ renderBtns : function() {
     Ev.addListener(elSaveBtn, "click", function(oArgs) {
         this.save();
     }, this, true);
-    this.btnSave = elSaveBtn;
+    this._elSaveBtn = elSaveBtn;
 
     // Cancel button
     var elCancelBtn = elBtnsDiv.appendChild(document.createElement("button"));
@@ -401,35 +474,39 @@ renderBtns : function() {
     Ev.addListener(elCancelBtn, "click", function(oArgs) {
         this.cancel();
     }, this, true);
-    this.btnCancel = elCancelBtn;
+    this._elCancelBtn = elCancelBtn;
 },
 
 /**
  * Attach CellEditor for a new interaction.
  *
  * @method attach
+ * @param oDataTable {YAHOO.widget.DataTable} Associated DataTable instance.
+ * @param elCell {HTMLElement} Cell to edit.  
  */
 attach : function(oDataTable, elCell) {
     // Validate 
     if(oDataTable instanceof YAHOO.widget.DataTable) {
-        this.dataTable = oDataTable;
+        this._oDataTable = oDataTable;
         
         // Validate cell
         elCell = oDataTable.getTdEl(elCell);
         if(elCell) {
-            this.cell = elCell;
+            this._elTd = elCell;
 
             // Validate Column
             var oColumn = oDataTable.getColumn(elCell);
             if(oColumn) {
-                this.column = oColumn;
+                this._oColumn = oColumn;
                 
                 // Validate Record
-                this.record = oDataTable.getRecord(elCell);
-                var value = this.record.getData(this.column.getKey());
-                this.value = (value !== undefined) ? value : this.defaultValue;
-                
-                return true;
+                var oRecord = oDataTable.getRecord(elCell);
+                if(oRecord) {
+                    this._oRecord = oRecord;
+                    var value = oRecord.getData(this.getColumn().getKey());
+                    this.value = (value !== undefined) ? value : this.defaultValue;
+                    return true;
+                }
             }            
         }
     }
@@ -444,23 +521,23 @@ attach : function(oDataTable, elCell) {
  */
 move : function() {
     // Move Editor
-    var elContainer = this.container,
-        elCell = this.cell,
-        x = Dom.getX(elCell),
-        y = Dom.getY(elCell);
+    var elContainer = this.getContainerEl(),
+        elTd = this.getTdEl(),
+        x = Dom.getX(elTd),
+        y = Dom.getY(elTd);
 
     //TODO: remove scrolling logic
     // SF doesn't get xy for cells in scrolling table
     // when tbody display is set to block
     if(isNaN(x) || isNaN(y)) {
-        var elTbody = this.dataTable.getTbodyEl();
-        x = elCell.offsetLeft + // cell pos relative to table
+        var elTbody = this.getDataTable().getTbodyEl();
+        x = elTd.offsetLeft + // cell pos relative to table
                 Dom.getX(elTbody.parentNode) - // plus table pos relative to document
                 elTbody.scrollLeft; // minus tbody scroll
-        y = elCell.offsetTop + // cell pos relative to table
+        y = elTd.offsetTop + // cell pos relative to table
                 Dom.getY(elTbody.parentNode) - // plus table pos relative to document
                 elTbody.scrollTop + // minus tbody scroll
-                this.dataTable.getTheadEl().offsetHeight; // account for fixed THEAD cells
+                this.getDataTable().getTheadEl().offsetHeight; // account for fixed THEAD cells
     }
 
     elContainer.style.left = x + "px";
@@ -475,7 +552,7 @@ move : function() {
 show : function() {
     this.resetForm();
     this.isActive = true;
-    this.container.style.display = "";
+    this.getContainerEl().style.display = "";
     this.focus();
     this.fireEvent("showEvent", {editor:this});
     YAHOO.log("CellEditor shown", "info", this.toString()); 
@@ -513,8 +590,8 @@ save : function() {
     
     // Validate new value
     if(this.validator) {
-        validValue = this.validator.call(this.dataTable, inputValue, this.value, this);
-        if(validValue === null ) {
+        validValue = this.validator.call(this.getDataTable(), inputValue, this.value, this);
+        if(validValue === undefined ) {
             this.resetForm();
             this.fireEvent("invalidDataEvent",
                     {editor:this, oldData:this.value, newData:inputValue});
@@ -530,12 +607,12 @@ save : function() {
         if(bSuccess) {
             // Update new value
             oSelf.value = oNewValue;
-            oSelf.dataTable.updateCell(oSelf.record, oSelf.column, oNewValue);
+            oSelf.getDataTable().updateCell(oSelf.getRecord(), oSelf.getColumn(), oNewValue);
             
             // Hide CellEditor
-            oSelf.container.style.display = "none";
+            oSelf.getContainerEl().style.display = "none";
             oSelf.isActive = false;
-            oSelf.dataTable._oCellEditor =  null;
+            oSelf.getDataTable()._oCellEditor =  null;
             
             oSelf.fireEvent("saveEvent",
                     {editor:oSelf, oldData:oOrigValue, newData:oSelf.value});
@@ -567,9 +644,9 @@ save : function() {
  */
 cancel : function() {
     if(this.isActive) {
-        this.container.style.display = "none";
+        this.getContainerEl().style.display = "none";
         this.isActive = false;
-        this.dataTable._oCellEditor =  null;
+        this.getDataTable._oCellEditor =  null;
         this.fireEvent("cancelEvent", {editor:this});
         YAHOO.log("CellEditor canceled", "info", this.toString());
     }
@@ -584,6 +661,26 @@ cancel : function() {
  * @method renderForm
  */
 renderForm : function() {
+    // To be implemented by subclass
+},
+
+/**
+ * Access to add additional event listeners.
+ *
+ * @method doAfterRender
+ */
+doAfterRender : function() {
+    // To be implemented by subclass
+},
+
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
     // To be implemented by subclass
 },
 
@@ -629,12 +726,14 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor is shown.
  *
  * @event showEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.
  */
 
 /**
  * Fired when a CellEditor has a keydown.
  *
  * @event keydownEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  * @param oArgs.event {HTMLEvent} The event object.
  */
 
@@ -642,6 +741,7 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor input is reverted due to invalid data.
  *
  * @event invalidDataEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  * @param oArgs.newData {Object} New data value from form input field.
  * @param oArgs.oldData {Object} Old data value.
  */
@@ -650,6 +750,7 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor input is reverted due to asyncSubmitter failure.
  *
  * @event revertEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  * @param oArgs.newData {Object} New data value from form input field.
  * @param oArgs.oldData {Object} Old data value.
  */
@@ -658,6 +759,7 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor input is saved.
  *
  * @event saveEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  * @param oArgs.newData {Object} New data value from form input field.
  * @param oArgs.oldData {Object} Old data value.
  */
@@ -666,12 +768,14 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor input is canceled.
  *
  * @event cancelEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  */
 
 /**
  * Fired when a CellEditor has a blur event.
  *
  * @event blurEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  */
 
 
@@ -699,9 +803,6 @@ lang.augmentProto(BCE, util.EventProvider);
  * @class CheckboxCellEditor
  * @extends YAHOO.widget.BaseCellEditor
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.CheckboxCellEditor = function(oConfigs) {
@@ -765,12 +866,12 @@ renderForm : function() {
                     checkboxOption.value : checkboxOption;
 
             checkboxId = this.getId() + "-chk" + j;
-            this.container.innerHTML += "<input type=\"checkbox\"" +
+            this.getContainerEl().innerHTML += "<input type=\"checkbox\"" +
                     " id=\"" + checkboxId + "\"" + // Needed for label
-                    " value=\"" + checkboxValue + "\">";
+                    " value=\"" + checkboxValue + "\" />";
             
             // Create the labels in an IE-friendly way
-            elLabel = this.container.appendChild(document.createElement("label"));
+            elLabel = this.getContainerEl().appendChild(document.createElement("label"));
             elLabel.htmlFor = checkboxId;
             elLabel.innerHTML = lang.isValue(checkboxOption.label) ?
                     checkboxOption.label : checkboxOption;
@@ -779,13 +880,32 @@ renderForm : function() {
         // Store the reference to the checkbox elements
         var allCheckboxes = [];
         for(j=0; j<len; j++) {
-            allCheckboxes[allCheckboxes.length] = this.container.childNodes[j*2];
+            allCheckboxes[allCheckboxes.length] = this.getContainerEl().childNodes[j*2];
         }
         this.checkboxes = allCheckboxes;
+
+        if(this.disableBtns) {
+            this.handleDisabledBtns();
+        }
     }
     else {
         YAHOO.log("Could not find checkboxOptions", "error", this.toString());
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.getContainerEl(), "click", function(v){
+        if(Ev.getTarget(v).tagName.toLowerCase() === "input") {
+            // Save on blur
+            this.save();
+        }
+    }, this, true);
 },
 
 /**
@@ -856,9 +976,6 @@ lang.augmentObject(widget.CheckboxCellEditor, BCE);
  * @class DateCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.DateCellEditor = function(oConfigs) {
@@ -906,7 +1023,7 @@ defaultValue : new Date(),
 renderForm : function() {
     // Calendar widget
     if(YAHOO.widget.Calendar) {
-        var calContainer = this.container.appendChild(document.createElement("div"));
+        var calContainer = this.getContainerEl().appendChild(document.createElement("div"));
         calContainer.id = this.getId() + "-dateContainer"; // Needed for Calendar constructor
         var calendar =
                 new YAHOO.widget.Calendar(this.getId() + "-date",
@@ -915,25 +1032,33 @@ renderForm : function() {
         calContainer.style.cssFloat = "none";
 
         if(ua.ie) {
-            var calFloatClearer = this.container.appendChild(document.createElement("br"));
+            var calFloatClearer = this.getContainerEl().appendChild(document.createElement("br"));
             calFloatClearer.style.clear = "both";
         }
         
         this.calendar = calendar;
 
-        /*TODO save on select
         if(this.disableBtns) {
-            Ev.addListener(elDropdown, "blur", function(v){
-                // Save on "blur"
-                this.save();
-            }, this, true);        
+            this.handleDisabledBtns();
         }
-        */
     }
     else {
         YAHOO.log("Could not find YUI Calendar", "error", this.toString());
     }
     
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    this.calendar.selectEvent.subscribe(function(v){
+        // Save on select
+        this.save();
+    }, this, true);
 },
 
 /**
@@ -991,7 +1116,6 @@ lang.augmentObject(widget.DateCellEditor, BCE);
  * @class DropdownCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.DropdownCellEditor = function(oConfigs) {
@@ -1039,7 +1163,8 @@ dropdown : null,
  * @method renderForm
  */
 renderForm : function() {
-    var elDropdown = this.container.appendChild(document.createElement("select"));
+    var elDropdown = this.getContainerEl().appendChild(document.createElement("select"));
+    elDropdown.style.zoom = 1;
     this.dropdown = elDropdown;
     
     if(lang.isArray(this.dropdownOptions)) {
@@ -1054,13 +1179,23 @@ renderForm : function() {
             elOption = elDropdown.appendChild(elOption);
         }
         
-        // Save on blur
         if(this.disableBtns) {
-            Ev.addListener(elDropdown, "change", function(v){
-                this.save();
-            }, this, true);        
+            this.handleDisabledBtns();
         }
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.dropdown, "change", function(v){
+        // Save on change
+        this.save();
+    }, this, true);        
 },
 
 /**
@@ -1082,7 +1217,7 @@ resetForm : function() {
  * @method focus
  */
 focus : function() {
-    this.dataTable._focusEl(this.dropdown);
+    this.getDataTable()._focusEl(this.dropdown);
 },
 
 /**
@@ -1116,9 +1251,6 @@ lang.augmentObject(widget.DropdownCellEditor, BCE);
  * @class RadioCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.RadioCellEditor = function(oConfigs) {
@@ -1166,19 +1298,20 @@ radioOptions : null,
 renderForm : function() {
     if(lang.isArray(this.radioOptions)) {
         var radioOption, radioValue, radioId, elLabel;
+        
         // Create the radio buttons in an IE-friendly way
         for(var i=0, len=this.radioOptions.length; i<len; i++) {
             radioOption = this.radioOptions[i];
             radioValue = lang.isValue(radioOption.value) ?
                     radioOption.value : radioOption;
             radioId = this.getId() + "-radio" + i;
-            this.container.innerHTML += "<input type=\"radio\"" +
+            this.getContainerEl().innerHTML += "<input type=\"radio\"" +
                     " name=\"" + this.getId() + "\"" +
                     " value=\"" + radioValue + "\"" +
-                    " id=\"" +  radioId + "\">"; // Needed for label
+                    " id=\"" +  radioId + "\" />"; // Needed for label
             
             // Create the labels in an IE-friendly way
-            elLabel = this.container.appendChild(document.createElement("label"));
+            elLabel = this.getContainerEl().appendChild(document.createElement("label"));
             elLabel.htmlFor = radioId;
             elLabel.innerHTML = (lang.isValue(radioOption.label)) ?
                     radioOption.label : radioOption;
@@ -1188,31 +1321,33 @@ renderForm : function() {
         var allRadios = [],
             elRadio;
         for(var j=0; j<len; j++) {
-            elRadio = this.container.childNodes[j*2];
+            elRadio = this.getContainerEl().childNodes[j*2];
             allRadios[allRadios.length] = elRadio;
         }
         this.radios = allRadios;
 
-        // Save on enter, save on click
         if(this.disableBtns) {
-            // Bug: 1802582 Set up a listener on each textbox to track on keypress
-            // since SF/OP can't preventDefault on keydown
-            //Ev.addListener(this.container, "keypress", function(v){
-            //    if((v.keyCode === 13)) {
-            //        this.save();
-            //    }
-            //}, this, true);
-            
-            Ev.addListener(this.container, "click", function(v){
-                if(Ev.getTarget(v).tagName.toLowerCase() === "input") {
-                    this.save();
-                }
-            }, this, true);
+            this.handleDisabledBtns();
         }
     }
     else {
         YAHOO.log("Could not find radioOptions", "error", this.toString());
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.getContainerEl(), "click", function(v){
+        if(Ev.getTarget(v).tagName.toLowerCase() === "input") {
+            // Save on blur
+            this.save();
+        }
+    }, this, true);
 },
 
 /**
@@ -1279,9 +1414,6 @@ lang.augmentObject(widget.RadioCellEditor, BCE);
  * @class TextareaCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.TextareaCellEditor = function(oConfigs) {
@@ -1318,16 +1450,25 @@ textarea : null,
  * @method renderForm
  */
 renderForm : function() {
-    var elTextarea = this.container.appendChild(document.createElement("textarea"));
+    var elTextarea = this.getContainerEl().appendChild(document.createElement("textarea"));
     this.textarea = elTextarea;
 
-    // Save on blur
     if(this.disableBtns) {
-        Ev.addListener(elTextarea, "blur", function(v){
-            // Save on "blur"
-            this.save();
-        }, this, true);        
+        this.handleDisabledBtns();
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.textarea, "blur", function(v){
+        // Save on blur
+        this.save();
+    }, this, true);        
 },
 
 /**
@@ -1336,7 +1477,7 @@ renderForm : function() {
  * @method move
  */
 move : function() {
-    this.textarea.style.width = this.cell.offsetWidth + "px";
+    this.textarea.style.width = this.getTdEl().offsetWidth + "px";
     this.textarea.style.height = "3em";
     YAHOO.widget.TextareaCellEditor.superclass.move.call(this);
 },
@@ -1394,9 +1535,6 @@ lang.augmentObject(widget.TextareaCellEditor, BCE);
  * @class TextboxCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.TextboxCellEditor = function(oConfigs) {
@@ -1434,15 +1572,15 @@ renderForm : function() {
     var elTextbox;
     // Bug 1802582: SF3/Mac needs a form element wrapping the input
     if(ua.webkit>420) {
-        elTextbox = this.container.appendChild(document.createElement("form")).appendChild(document.createElement("input"));
+        elTextbox = this.getContainerEl().appendChild(document.createElement("form")).appendChild(document.createElement("input"));
     }
     else {
-        elTextbox = this.container.appendChild(document.createElement("input"));
+        elTextbox = this.getContainerEl().appendChild(document.createElement("input"));
     }
     elTextbox.type = "text";
     this.textbox = elTextbox;
 
-    // Save on enter
+    // Save on enter by default
     // Bug: 1802582 Set up a listener on each textbox to track on keypress
     // since SF/OP can't preventDefault on keydown
     Ev.addListener(elTextbox, "keypress", function(v){
@@ -1453,11 +1591,9 @@ renderForm : function() {
         }
     }, this, true);
 
-    // Save on blur
     if(this.disableBtns) {
-        Ev.addListener(elTextbox, "blur", function(v){
-            this.save();
-        }, this, true);
+        // By default this is no-op since enter saves by default
+        this.handleDisabledBtns();
     }
 },
 
@@ -1467,7 +1603,7 @@ renderForm : function() {
  * @method move
  */
 move : function() {
-    this.textbox.style.width = this.cell.offsetWidth + "px";
+    this.textbox.style.width = this.getTdEl().offsetWidth + "px";
     YAHOO.widget.TextboxCellEditor.superclass.move.call(this);
 },
 
@@ -1542,8 +1678,7 @@ DT.Editors = {
  * @class CellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
- * @param sType {String} Editor type.
+ * @param sType {String} Type indicator, to map to YAHOO.widget.DataTable.Editors.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.CellEditor = function(sType, oConfigs) {

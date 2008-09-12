@@ -6,7 +6,16 @@
     border:1px solid #7F7F7F;
 }
 .yui-skin-sam .yui-dt thead {border-spacing:0;} /* for safari bug */
-.yui-skin-sam .yui-dt caption {padding-bottom:1em;text-align:left;}
+
+.yui-skin-sam .yui-dt caption {
+    color:#000000;
+    font-size:85%;
+    font-weight:normal;
+    font-style:italic;
+    line-height:1;
+    padding:1em 0pt;
+    text-align:center;
+}
 
 .yui-skin-sam .yui-dt th {
     background:#D8D8DA url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */

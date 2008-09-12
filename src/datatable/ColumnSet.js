@@ -203,6 +203,9 @@ YAHOO.widget.ColumnSet.prototype = {
                         if(oColumn.sortable && (child.sortable === undefined)) {
                             child.sortable = oColumn.sortable;
                         }
+                        if(oColumn.hidden) {
+                            child.hidden = true;
+                        }
                         if(oColumn.width && (child.width === undefined)) {
                             child.width = oColumn.width;
                         }
@@ -840,6 +843,24 @@ YAHOO.widget.Column.prototype = {
      * @type String || HTMLFunction
      */
     formatter : null,
+    
+    /**
+     * Config passed to YAHOO.util.Number.format() by the 'currency' Column formatter.
+     *
+     * @property currencyOptions
+     * @type Object
+     * @default null
+     */
+    currencyOptions : null,
+
+    /**
+     * Config passed to YAHOO.util.Date.format() by the 'date' Column formatter.
+     *
+     * @property dateOptions
+     * @type Object
+     * @default null
+     */
+    dateOptions : null,
 
     /**
      * A CellEditor instance, otherwise Column is not editable.     

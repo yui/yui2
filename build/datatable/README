@@ -20,6 +20,8 @@ have been made:
    and will block the DataTable UI (via new DataTable methods disable() and
    undisable()) until the callback function is executed to finish the transaction.
    - The CellEditor's "Save" and "Cancel" buttons now have configurable labels.
+   - CellEditor validator functions, including the built-in function YAHOO.widget.DataTable.validateNumber
+   must return undefined for invalid values.
    
 * Pagination and sorting have been reworked to better support dynamically driven
 DataTables. As a result, the following important changes have been made:
@@ -48,6 +50,9 @@ Attributes, to be set via the initial config or myDataTable.set():
     - MSG_LOADING
     - COLOR_COLUMNFILLER (ScrollingDataTable)
     
+* The formatTheadCell() method been changed from static a static method to an
+instance method with an update to its argument signature.
+
 * The initEvent will fire when rows are rendered from an initialized state, 
 and the renderEvent will always fire when rows are rendered, and also when the 
 underlying DOM incrementally changes (such as incrementally adding or deleting
@@ -66,6 +71,7 @@ returns true by default, and returns false to cancel showing the cell editor.
    - getHdContainerEl() method (ScrollingDataTable only)
    - getHdTableEl() method (ScrollingDataTable only)
    - updateCell() method
+   - currencyOptions, dateOptions, and numberOptions Attributes for default formatting
 
 * Column changes:
    - minWidth default value now null.
@@ -76,6 +82,7 @@ returns true by default, and returns false to cancel showing the cell editor.
    - Resizeable Columns now create an additional resizer liner DIV element between
    the TH element and the liner DIV element. Implementers are advised to access the 
    liner DIV elements via Column.getThLinerEl() rather than TH.firstChild.
+   - currencyOptions, dateOptions, and numberOptions properties for robust per-Column formatting
  
 * In the markup, the primary data TBODY is (once again) before the message TBODY element.
  
@@ -88,7 +95,9 @@ elements, not on liner DIV elements.
  
 * Added bottom border to last TR element in ScrollingDataTables.
  
-* Paginator extracted to standalone class and optional dependency
+* Paginator extracted to standalone class and optional dependency.
+ 
+* The default CSS styles for captions have been updated.
 
 
 

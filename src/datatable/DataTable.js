@@ -684,6 +684,23 @@ lang.augmentObject(DT, {
     },
 
     /**
+     * Destroys shared Column drag target.
+     *
+     * @method DataTable._destroyColumnDragTargetEl
+     * @private
+     * @static 
+     */
+    _destroyColumnDragTargetEl : function() {
+        if(DT._elColumnDragTarget) {
+            var el = DT._elColumnDragTarget;
+            YAHOO.util.Event.purgeElement(el);
+            el.parentNode.removeChild(el);
+            DT._elColumnDragTarget = null;
+            
+        }
+    },
+
+    /**
      * Creates HTML markup for shared Column drag target.
      *
      * @method DataTable._initColumnDragTargetEl
@@ -707,6 +724,23 @@ lang.augmentObject(DT, {
     },
 
     /**
+     * Destroys shared Column resizer proxy.
+     *
+     * @method DataTable._destroyColumnResizerProxyEl
+     * @return {HTMLElement} Reference to Column resizer proxy.
+     * @private 
+     * @static 
+     */
+    _destroyColumnResizerProxyEl : function() {
+        if(DT._elColumnResizerProxy) {
+            var el = DT._elColumnResizerProxy;
+            YAHOO.util.Event.purgeElement(el);
+            el.parentNode.removeChild(el);
+            DT._elColumnResizerProxy = null;
+        }
+    },
+
+    /**
      * Creates HTML markup for shared Column resizer proxy.
      *
      * @method DataTable._initColumnResizerProxyEl
@@ -726,53 +760,6 @@ lang.augmentObject(DT, {
             DT._elColumnResizerProxy = elColumnResizerProxy;
         }
         return DT._elColumnResizerProxy;
-    },
-
-    /**
-     * Outputs markup into the given TH based on given Column.
-     *
-     * @method DataTable.formatTheadCell
-     * @param elCellLabel {HTMLElement} The label SPAN element within the TH liner,
-     * not the liner DIV element.     
-     * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
-     * @static
-     */
-    formatTheadCell : function(elCellLabel, oColumn, oSelf, oNewSortedBy) {
-        var sKey = oColumn.getKey();
-        var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;
-
-        // Add accessibility link for sortable Columns
-        if(oColumn.sortable) {
-            // Calculate the direction
-            var sSortClass = oSelf.getColumnSortDir(oColumn);
-            var sSortDir = (sSortClass === DT.CLASS_DESC) ? "descending" : "ascending";
-
-            // HACK: Bug 1827195, workaround for bug 1969954
-            // Attribute has not yet been set
-            if(oNewSortedBy === null) {
-                // Force the Column's default sort direction
-                sSortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultDir && (oColumn.sortOptions.defaultDir === DT.CLASS_DESC)) ?
-                    "descending" : "ascending";
-
-            }
-            else if(oNewSortedBy && (oColumn.key === oNewSortedBy.key)) {
-                sSortDir = (oNewSortedBy.dir === DT.CLASS_DESC) ? "ascending" : "descending";
-            }
-
-            // Generate a unique HREF for visited status
-            var sHref = oSelf.getId() + "-sort-" + oColumn.getSanitizedKey() + "-" + sSortDir;
-            
-            // Generate a dynamic TITLE for sort status
-            var sTitle = (sSortDir === "descending") ? oSelf.get("MSG_SORTDESC") : oSelf.get("MSG_SORTASC");
-            
-            // Format the element
-            elCellLabel.innerHTML = "<a href=\"" + sHref + "\" title=\"" + sTitle + "\" class=\"" + DT.CLASS_SORTABLE + "\">" + sLabel + "</a>";
-        }
-        // Just display the label for non-sortable Columns
-        else {
-            elCellLabel.innerHTML = sLabel;
-        }
     },
 
     /**
@@ -975,7 +962,7 @@ lang.augmentObject(DT, {
         var bChecked = oData;
         bChecked = (bChecked) ? " checked=\"checked\"" : "";
         el.innerHTML = "<input type=\"radio\"" + bChecked +
-                " name=\"col-" + oColumn.getSanitizedKey() + "-radio\"" +
+                " name=\""+this.getId()+"-col-" + oColumn.getSanitizedKey() + "\"" +
                 " class=\"" + DT.CLASS_RADIO+ "\" />";
     },
 
@@ -1209,7 +1196,7 @@ initAttributes : function(oConfigs) {
                     // Remove previous UI from THEAD
                     var elOldTh = oOldColumn.getThEl();
                     Dom.removeClass(elOldTh, oOldSortedBy.dir);
-                    DT.formatTheadCell(oOldColumn.getThLinerEl().firstChild, oOldColumn, this, oNewSortedBy);
+                    this.formatTheadCell(oOldColumn.getThLinerEl().firstChild, oOldColumn, oNewSortedBy);
                 }
                 if(oNewSortedBy) {
                     oNewColumn = (oNewSortedBy.column) ? oNewSortedBy.column : this._oColumnSet.getColumn(oNewSortedBy.key);
@@ -1228,12 +1215,7 @@ initAttributes : function(oConfigs) {
                          var sortClass = oNewSortedBy.dir || DT.CLASS_ASC;
                          Dom.addClass(elNewTh, sortClass);
                     }
-    
-                    // HACK: Bug 1827195, workaround for bug 1969954.
-                    // Since this method runs before the value is set,
-                    // the formatTheadCell() function doesn't have access to the new
-                    // value yet so I'm going to pass in the new value explicitly.    
-                    DT.formatTheadCell(oNewColumn.getThLinerEl().firstChild, oNewColumn, this, oNewSortedBy);  // Bug 1827195
+                    this.formatTheadCell(oNewColumn.getThLinerEl().firstChild, oNewColumn, oNewSortedBy);
                 }
             }
           
@@ -1527,7 +1509,7 @@ initAttributes : function(oConfigs) {
      */
     this.setAttributeConfig("currencyOptions", {
         value: {
-            prefix: this.get("currencySymbol"), // TODO: deprecate
+            prefix: this.get("currencySymbol"), // TODO: deprecate currencySymbol
             decimalPlaces:2,
             decimalSeparator:".",
             thousandsSeparator:","
@@ -1967,7 +1949,7 @@ _initColumnSet : function(aColumnDefs) {
         // uregister CellEditor Custom Events
         for(i=0, len=this._oColumnSet.keys.length; i<len; i++) {
             oColumn = this._oColumnSet.keys[i];
-            DT._oDynStyles["."+this.getId()+"-col"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
+            DT._oDynStyles["."+this.getId()+"-col-"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
             if(oColumn.editor) {
                 oColumn.editor.unsubscribeAll();
             }
@@ -2022,7 +2004,7 @@ _initDataSource : function(oDataSource) {
         var tmpTable = null;
         var tmpContainer = this._elContainer;
         var i=0;
-        ///TODO: this will break if re-initing DS at runtime for SDT
+        //TODO: this will break if re-initing DS at runtime for SDT
         // Peek in container child nodes to see if TABLE already exists
         if(tmpContainer.hasChildNodes()) {
             var tmpChildren = tmpContainer.childNodes;
@@ -2337,7 +2319,7 @@ _initTheadEl : function(elTable) {
         // Destroy previous
         this._destroyTheadEl();
     
-        ///TODO: append to DOM later
+        //TODO: append to DOM later for performance
         var elThead = (this._elColgroup) ?
             elTable.insertBefore(document.createElement("thead"), this._elColgroup.nextSibling) :
             elTable.appendChild(document.createElement("thead"));
@@ -2384,13 +2366,11 @@ _initTheadEl : function(elTable) {
         // Set FIRST/LAST on edge TH elements using the values in ColumnSet headers array
         var aFirstHeaders = oColumnSet.headers[0] || [];
         for(i=0; i<aFirstHeaders.length; i++) {
-            //TODO: A better way to get th cell
-            Dom.addClass(Dom.get(this._sId+"-th-"+aFirstHeaders[i]), DT.CLASS_FIRST);
+            Dom.addClass(Dom.get(this.getId() +"-th-"+aFirstHeaders[i]), DT.CLASS_FIRST);
         }
         var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1] || [];
         for(i=0; i<aLastHeaders.length; i++) {
-            //TODO: A better way to get th cell
-            Dom.addClass(Dom.get(this._sId+"-th-"+aLastHeaders[i]), DT.CLASS_LAST);
+            Dom.addClass(Dom.get(this.getId() +"-th-"+aLastHeaders[i]), DT.CLASS_LAST);
         }
         
         YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
@@ -2421,7 +2401,7 @@ _initTheadEl : function(elTable) {
  * @private
  */
 _initThEl : function(elTh, oColumn) {
-    elTh.id = this._sId+"-th-" + oColumn.getSanitizedKey(); // Needed for accessibility, getColumn by TH, and ColumnDD
+    elTh.id = this.getId() + "-th-" + oColumn.getSanitizedKey(); // Needed for accessibility, getColumn by TH, and ColumnDD
     elTh.innerHTML = "";
     elTh.rowSpan = oColumn.getRowspan();
     elTh.colSpan = oColumn.getColspan();
@@ -2454,8 +2434,47 @@ _initThEl : function(elTh, oColumn) {
         this._setColumnWidthDynStyles(oColumn, nWidth + 'px', 'hidden');
     }
 
-    DT.formatTheadCell(elThLabel, oColumn, this);
+    this.formatTheadCell(elThLabel, oColumn, this.get("sortedBy"));
     oColumn._elThLabel = elThLabel;
+},
+
+/**
+ * Outputs markup into the given TH based on given Column.
+ *
+ * @method DataTable.formatTheadCell
+ * @param elCellLabel {HTMLElement} The label SPAN element within the TH liner,
+ * not the liner DIV element.     
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oSortedBy {Object} Sort state object literal.
+*/
+formatTheadCell : function(elCellLabel, oColumn, oSortedBy) {
+    var sKey = oColumn.getKey();
+    var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;
+
+    // Add accessibility link for sortable Columns
+    if(oColumn.sortable) {
+        // Calculate the direction
+        var sSortClass = this.getColumnSortDir(oColumn, oSortedBy);
+        var bDesc = (sSortClass === DT.CLASS_DESC);
+
+        // This is the sorted Column
+        if(oSortedBy && (oColumn.key === oSortedBy.key)) {
+            bDesc = !(oSortedBy.dir === DT.CLASS_DESC);
+        }
+
+        // Generate a unique HREF for visited status
+        var sHref = this.getId() + "-href-" + oColumn.getSanitizedKey();
+        
+        // Generate a dynamic TITLE for sort status
+        var sTitle = (bDesc) ? this.get("MSG_SORTDESC") : this.get("MSG_SORTASC");
+        
+        // Format the element
+        elCellLabel.innerHTML = "<a href=\"" + sHref + "\" title=\"" + sTitle + "\" class=\"" + DT.CLASS_SORTABLE + "\">" + sLabel + "</a>";
+    }
+    // Just display the label for non-sortable Columns
+    else {
+        elCellLabel.innerHTML = sLabel;
+    }
 },
 
 /**
@@ -2718,7 +2737,7 @@ _initEvents : function () {
 _initColumnSort : function() {
     this.subscribe("theadCellClickEvent", this.onEventSortColumn); 	 
 
-    // HACK: Convert sortedBy values for backward compatibility
+    // Backward compatibility
     var oSortedBy = this.get("sortedBy");
     if(oSortedBy) {
         if(oSortedBy.dir == "desc") {
@@ -2810,7 +2829,7 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
     }
     
     // Hook for setting width with via dynamic style uses key since ID is too disposable
-    allClasses[allClasses.length] = this.getId() + "-" +oColumn.getSanitizedKey();
+    allClasses[allClasses.length] = this.getId() + "-col-" +oColumn.getSanitizedKey();
 
     // Column key - minus any chars other than "A-Z", "a-z", "0-9", "_", "-", ".", or ":"
     allClasses[allClasses.length] = "yui-dt-col-" +oColumn.getSanitizedKey();
@@ -2866,9 +2885,6 @@ _clearTrTemplateEl : function () {
  * @private 
  */
 _getTrTemplateEl : function (oRecord, index) {
-    //TODO: Template must be nulled or updated with the following actions:
-    // showColumn, hideColumn, setColumnWidth, insertColumn, removeColumn, selectColumn, sortColumn
-
     // Template is already available
     if(this._elTrTemplate) {
         return this._elTrTemplate;
@@ -3688,7 +3704,7 @@ _onTheadKeydown : function(e, oSelf) {
                 return;
             case "input":
             case "textarea":
-                // TODO
+                // TODO: implement textareaKeyEvent
                 break;
             case "thead":
                 bKeepBubbling = oSelf.fireEvent("theadKeyEvent",{target:elTarget,event:e});
@@ -4289,12 +4305,11 @@ getPreviousTrEl : function(row) {
  * Returns DOM reference to a TD liner element.
  *
  * @method getTdLinerEl
- * @param cell {HTMLElement | String | Object} DOM element reference or string ID, or
+ * @param cell {HTMLElement | Object} TD element or child of a TD element, or
  * object literal of syntax {record:oRecord, column:oColumn}.
  * @return {HTMLElement} Reference to TD liner element.
  */
 getTdLinerEl : function(cell) {
-//TODO: TD els no longer get assigned IDs
     var elCell = this.getTdEl(cell);
     return elCell.firstChild || null;
 },
@@ -4303,12 +4318,11 @@ getTdLinerEl : function(cell) {
  * Returns DOM reference to a TD element.
  *
  * @method getTdEl
- * @param cell {HTMLElement | String | Object} DOM element reference or string ID, or
+ * @param cell {HTMLElement | String | Object} TD element or child of a TD element, or
  * object literal of syntax {record:oRecord, column:oColumn}.
  * @return {HTMLElement} Reference to TD element.
  */
 getTdEl : function(cell) {
-//TODO: TD els no longer get assigned IDs
     var elCell;
     var el = Dom.get(cell);
 
@@ -4884,7 +4898,9 @@ destroy : function() {
 
     this._oChainRender.stop();
     
-    //TODO: destroy static resizer proxy and column proxy?
+    // Destroy static resizer proxy and column proxy
+    DT._destroyColumnDragTargetEl();
+    DT._destroyColumnResizerProxyEl();
     
     // Destroy ColumnDD and ColumnResizers
     this._destroyColumnHelpers();
@@ -5195,12 +5211,11 @@ getRecord : function(row) {
  * getting Columns by Column ID string, please use the method getColumnById().
  *
  * @method getColumn
- * @param column {HTMLElement | String | Number} DOM reference or ID string to a
- * TH/TD element (or child of a TH/TD element), a Column key, or a ColumnSet key index.
+ * @param column {HTMLElement | String | Number} TH/TD element (or child of a
+ * TH/TD element), a Column key, or a ColumnSet key index.
  * @return {YAHOO.widget.Column} Column instance.
  */
 getColumn : function(column) {
-//TODO: TD els no longer get assigned DOM IDs
     var oColumn = this._oColumnSet.getColumn(column);
 
     if(!oColumn) {
@@ -5246,9 +5261,10 @@ getColumnById : function(column) {
  *
  * @method getColumnSortDir
  * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oSortedBy {Object} (optional) Specify the state, or use current state. 
  * @return {String} YAHOO.widget.DataTable.CLASS_ASC or YAHOO.widget.DataTableCLASS_DESC.
  */
-getColumnSortDir : function(oColumn) {
+getColumnSortDir : function(oColumn, oSortedBy) {
     // Backward compatibility
     if(oColumn.sortOptions && oColumn.sortOptions.defaultOrder) {
         if(oColumn.sortOptions.defaultOrder == "asc") {
@@ -5264,7 +5280,7 @@ getColumnSortDir : function(oColumn) {
 
     // Is the Column currently sorted?
     var bSorted = false;
-    var oSortedBy = this.get("sortedBy");
+    oSortedBy = oSortedBy || this.get("sortedBy");
     if(oSortedBy && (oSortedBy.key === oColumn.key)) {
         bSorted = true;
         if(oSortedBy.dir) {
@@ -5293,7 +5309,9 @@ doBeforeSortColumn : function(oColumn, sSortDir) {
 },
 
 /**
- * Sorts given Column.
+ * Sorts given Column. If "dynamicData" is true, current selections are purged before
+ * a request is sent to the DataSource for data for the new state (using the
+ * request returned by "generateRequest()").
  *
  * @method sortColumn
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -5338,6 +5356,10 @@ sortColumn : function(oColumn, sDir) {
                 
                 // Get the request for the new state
                 var request = this.get("generateRequest")(oState, this);
+
+                // Purge selections
+                this.unselectAllRows();
+                this.unselectAllCells();
 
                 // Send request for new data
                 var callback = {
@@ -5458,8 +5480,6 @@ setColumnWidth : function(oColumn, nWidth) {
  * @private
  */
 _setColumnWidth : function(oColumn, sWidth, sOverflow) {
-///TODO: blow away the tr template for fallback cases
-//YAHOO.log("start _sColumnWidth","time");
     if(oColumn && (oColumn.getKeyIndex() !== null)) {
         sOverflow = sOverflow || (((sWidth === '') || (sWidth === 'auto')) ? 'visible' : 'hidden');
     
@@ -5475,7 +5495,6 @@ _setColumnWidth : function(oColumn, sWidth, sOverflow) {
     else {
         YAHOO.log("Could not set width of unknown Column " + oColumn + " to " + sWidth, "warn", this.toString());
     }
-    //YAHOO.log("end _sColumnWidth","time");
 },
 
 /**
@@ -5492,7 +5511,6 @@ _setColumnWidth : function(oColumn, sWidth, sOverflow) {
  * @private
  */
 _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
-//YAHOO.log("start _setColumnWidthDynStyles","time");
     var s = DT._elDynStyleNode,
         rule;
     
@@ -5507,7 +5525,7 @@ _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
     // We have a STYLE node to update
     if(s) {
         // Use unique classname for this Column instance as a hook for resizing
-        var sClassname = "." + this.getId() + "-" + oColumn.getSanitizedKey() + " ." + DT.CLASS_LINER;
+        var sClassname = "." + this.getId() + "-col-" + oColumn.getSanitizedKey() + " ." + DT.CLASS_LINER;
         
         // Hide for performance
         if(this._elTbody) {
@@ -5541,7 +5559,6 @@ _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
             this._elTbody.style.display = '';
         }
     }
-//YAHOO.log("end _setColumnWidthDynStyles","time");
     
     // That was not a success, we must call the fallback routine
     if(!rule) {
@@ -5561,8 +5578,7 @@ _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
  * @private
  */
 _setColumnWidthDynFunction : function(oColumn, sWidth, sOverflow) {
-//YAHOO.log("start _setColumnWidthDynFunction","time");
-    ///TODO: why is this here?
+    // TODO: why is this here?
     if(sWidth == 'auto') {
         sWidth = ''; 
     }
@@ -5618,13 +5634,10 @@ _setColumnWidthDynFunction : function(oColumn, sWidth, sOverflow) {
     // Get the function to execute
     var resizerFn = this._aDynFunctions[rowslen];
 
-    ///TODO: Hide TBODY for performance?
+    // TODO: Hide TBODY for performance in _setColumnWidthDynFunction?
     if (resizerFn) {
-        ///this._elTbody.style.display = 'none';
         resizerFn.call(this,oColumn,sWidth,sOverflow);
-        ///this._elTbody.style.display = '';
     }
-//YAHOO.log("end _setColumnWidthDynFunction","time");
 },
 
 /**
@@ -5999,11 +6012,11 @@ insertColumn : function(oColumn, index) {
                 timeout: (loopN > 0) ? 0 : -1
             });
             this._runRenderChain(); 
-            return oNewColumn;
         }
 
         this.fireEvent("columnInsertEvent",{column:oColumn,index:index});
         YAHOO.log("Column \"" + oColumn.key + "\" inserted into index " + index, "info", this.toString());
+        return oNewColumn;
     }
 },
 
@@ -6175,7 +6188,12 @@ selectColumn : function(oColumn) {
                 iterations: allRows.length,
                 argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
             });
-            this._runRenderChain();       
+
+            this._clearTrTemplateEl();
+            
+            this._elTbody.style.display = "none";
+            this._runRenderChain();
+            this._elTbody.style.display = "";      
             
             this.fireEvent("columnSelectEvent",{column:oColumn});
             YAHOO.log("Column \"" + oColumn.key + "\" selected", "info", this.toString());
@@ -6219,7 +6237,12 @@ unselectColumn : function(oColumn) {
                 iterations:allRows.length,
                 argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
             });
-            this._runRenderChain();       
+            
+            this._clearTrTemplateEl();
+
+            this._elTbody.style.display = "none";
+            this._runRenderChain();
+            this._elTbody.style.display = "";      
             
             this.fireEvent("columnUnselectEvent",{column:oColumn});
             YAHOO.log("Column \"" + oColumn.key + "\" unselected", "info", this.toString());
@@ -7158,8 +7181,9 @@ doBeforePaginatorChange : function(oPaginatorState) {
 
 /**
  * Responds to new Pagination states. By default, updates the UI to reflect the
- * new state. If "dynamicData" is true, sends a request to the DataSource
- * for data for the given state, using the request from "generateRequest". 
+ * new state. If "dynamicData" is true, current selections are purged before
+ * a request is sent to the DataSource for data for the new state (using the
+ * request returned by "generateRequest()").
  *  
  * @method onPaginatorChangeRequest
  * @param oPaginatorState {Object} An object literal describing the proposed pagination state.
@@ -7177,6 +7201,10 @@ onPaginatorChangeRequest : function (oPaginatorState) {
     
             // Get the request for the new state
             var request = this.get("generateRequest")(oState, this);
+            
+            // Purge selections
+            this.unselectAllRows();
+            this.unselectAllCells();
             
             // Get the new data from the server
             var callback = {
@@ -8930,10 +8958,13 @@ unselectRow : function(row) {
  */
 unselectAllRows : function() {
     // Remove all rows from tracker
-    var tracker = this._aSelections || [];
+    var tracker = this._aSelections || [],
+        recId,
+        removed = [];
     for(var j=tracker.length-1; j>-1; j--) {
        if(lang.isString(tracker[j])){
-            tracker.splice(j,1);
+            recId = tracker.splice(j,1);
+            removed[removed.length] = this.getRecord(lang.isArray(recId) ? recId[0] : recId);
         }
     }
 
@@ -8943,10 +8974,7 @@ unselectAllRows : function() {
     // Update UI
     this._unselectAllTrEls();
 
-    //TODO: send an array of [{el:el,record:record}]
-    //TODO: or convert this to an unselectRows method
-    //TODO: that takes an array of rows or unselects all if none given
-    this.fireEvent("unselectAllRowsEvent");
+    this.fireEvent("unselectAllRowsEvent", {records: removed});
     YAHOO.log("Unselected all rows", "info", this.toString());
 },
 
@@ -8980,9 +9008,7 @@ getSelectedTdEls : function() {
  * to DataTable page element or RecordSet index.
  */
 selectCell : function(cell) {
-/*TODO:
-accept {record}
-*/
+//TODO: accept {record} in selectCell()
     var elCell = this.getTdEl(cell);
 
     if(elCell) {
@@ -9068,7 +9094,7 @@ unselectCell : function(cell) {
  *
  * @method unselectAllCells
  */
-unselectAllCells: function() {
+unselectAllCells : function() {
     // Remove all cells from tracker
     var tracker = this._aSelections || [];
     for(var j=tracker.length-1; j>-1; j--) {
@@ -9083,8 +9109,7 @@ unselectAllCells: function() {
     // Update UI
     this._unselectAllTdEls();
 
-    //TODO: send data
-    //TODO: or fire individual cellUnselectEvent
+    //TODO: send data to unselectAllCellsEvent handler
     this.fireEvent("unselectAllCellsEvent");
     YAHOO.log("Unselected all cells", "info", this.toString());
 },
@@ -10235,13 +10260,13 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @event tableBlurEvent
      */
 
-    /*TODO
+    /*TODO implement theadBlurEvent
      * Fired when the DataTable THEAD element has a blur event.
      *
      * @event theadBlurEvent
      */
 
-    /*TODO
+    /*TODO: implement tbodyBlurEvent
      * Fired when the DataTable TBODY element has a blur event.
      *
      * @event tbodyBlurEvent
@@ -11166,6 +11191,12 @@ DT.prototype.onPaginatorChange = DT.prototype.onPaginatorChangeRequest;
 // Deprecated static APIs
 //
 /////////////////////////////////////////////////////////////////////////////
+/**
+ * @method DataTable.formatTheadCell
+ * @deprecated  Use formatTheadCell.
+ */
+DT.formatTheadCell = function() {};
+
 /**
  * @method DataTable.editCheckbox
  * @deprecated  Use YAHOO.widget.CheckboxCellEditor.

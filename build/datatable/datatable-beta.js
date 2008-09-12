@@ -365,6 +365,9 @@ YAHOO.widget.ColumnSet.prototype = {
                         if(oColumn.sortable && (child.sortable === undefined)) {
                             child.sortable = oColumn.sortable;
                         }
+                        if(oColumn.hidden) {
+                            child.hidden = true;
+                        }
                         if(oColumn.width && (child.width === undefined)) {
                             child.width = oColumn.width;
                         }
@@ -969,6 +972,24 @@ YAHOO.widget.Column.prototype = {
      * @type String || HTMLFunction
      */
     formatter : null,
+    
+    /**
+     * Config passed to YAHOO.util.Number.format() by the 'currency' Column formatter.
+     *
+     * @property currencyOptions
+     * @type Object
+     * @default null
+     */
+    currencyOptions : null,
+
+    /**
+     * Config passed to YAHOO.util.Date.format() by the 'date' Column formatter.
+     *
+     * @property dateOptions
+     * @type Object
+     * @default null
+     */
+    dateOptions : null,
 
     /**
      * A CellEditor instance, otherwise Column is not editable.     
@@ -2946,17 +2967,6 @@ lang.augmentObject(DT, {
      */
     CLASS_RADIO : "yui-dt-radio",
 
-    /**
-     * Class name assigned to temporary elements.
-     *
-     * @property DataTable.CLASS_TMP
-     * @type String
-     * @static
-     * @final
-     * @default "yui-dt-tmp"
-     */
-    CLASS_TMP : "yui-dt-tmp",
-
     /////////////////////////////////////////////////////////////////////////
     //
     // Private static properties
@@ -3089,6 +3099,23 @@ lang.augmentObject(DT, {
     },
 
     /**
+     * Destroys shared Column drag target.
+     *
+     * @method DataTable._destroyColumnDragTargetEl
+     * @private
+     * @static 
+     */
+    _destroyColumnDragTargetEl : function() {
+        if(DT._elColumnDragTarget) {
+            var el = DT._elColumnDragTarget;
+            YAHOO.util.Event.purgeElement(el);
+            el.parentNode.removeChild(el);
+            DT._elColumnDragTarget = null;
+            
+        }
+    },
+
+    /**
      * Creates HTML markup for shared Column drag target.
      *
      * @method DataTable._initColumnDragTargetEl
@@ -3112,6 +3139,23 @@ lang.augmentObject(DT, {
     },
 
     /**
+     * Destroys shared Column resizer proxy.
+     *
+     * @method DataTable._destroyColumnResizerProxyEl
+     * @return {HTMLElement} Reference to Column resizer proxy.
+     * @private 
+     * @static 
+     */
+    _destroyColumnResizerProxyEl : function() {
+        if(DT._elColumnResizerProxy) {
+            var el = DT._elColumnResizerProxy;
+            YAHOO.util.Event.purgeElement(el);
+            el.parentNode.removeChild(el);
+            DT._elColumnResizerProxy = null;
+        }
+    },
+
+    /**
      * Creates HTML markup for shared Column resizer proxy.
      *
      * @method DataTable._initColumnResizerProxyEl
@@ -3131,53 +3175,6 @@ lang.augmentObject(DT, {
             DT._elColumnResizerProxy = elColumnResizerProxy;
         }
         return DT._elColumnResizerProxy;
-    },
-
-    /**
-     * Outputs markup into the given TH based on given Column.
-     *
-     * @method DataTable.formatTheadCell
-     * @param elCellLabel {HTMLElement} The label SPAN element within the TH liner,
-     * not the liner DIV element.     
-     * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
-     * @static
-     */
-    formatTheadCell : function(elCellLabel, oColumn, oSelf, oNewSortedBy) {
-        var sKey = oColumn.getKey();
-        var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;
-
-        // Add accessibility link for sortable Columns
-        if(oColumn.sortable) {
-            // Calculate the direction
-            var sSortClass = oSelf.getColumnSortDir(oColumn);
-            var sSortDir = (sSortClass === DT.CLASS_DESC) ? "descending" : "ascending";
-
-            // HACK: Bug 1827195, workaround for bug 1969954
-            // Attribute has not yet been set
-            if(oNewSortedBy === null) {
-                // Force the Column's default sort direction
-                sSortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultDir && (oColumn.sortOptions.defaultDir === DT.CLASS_DESC)) ?
-                    "descending" : "ascending";
-
-            }
-            else if(oNewSortedBy && (oColumn.key === oNewSortedBy.key)) {
-                sSortDir = (oNewSortedBy.dir === DT.CLASS_DESC) ? "ascending" : "descending";
-            }
-
-            // Generate a unique HREF for visited status
-            var sHref = oSelf.getId() + "-sort-" + oColumn.getSanitizedKey() + "-" + sSortDir;
-            
-            // Generate a dynamic TITLE for sort status
-            var sTitle = (sSortDir === "descending") ? oSelf.get("MSG_SORTDESC") : oSelf.get("MSG_SORTASC");
-            
-            // Format the element
-            elCellLabel.innerHTML = "<a href=\"" + sHref + "\" title=\"" + sTitle + "\" class=\"" + DT.CLASS_SORTABLE + "\">" + sLabel + "</a>";
-        }
-        // Just display the label for non-sortable Columns
-        else {
-            elCellLabel.innerHTML = sLabel;
-        }
     },
 
     /**
@@ -3218,9 +3215,9 @@ lang.augmentObject(DT, {
      */
     formatCheckbox : function(el, oRecord, oColumn, oData) {
         var bChecked = oData;
-        bChecked = (bChecked) ? " checked" : "";
+        bChecked = (bChecked) ? " checked=\"checked\"" : "";
         el.innerHTML = "<input type=\"checkbox\"" + bChecked +
-                " class=\"" + DT.CLASS_CHECKBOX + "\">";
+                " class=\"" + DT.CLASS_CHECKBOX + "\" />";
     },
 
     /**
@@ -3234,12 +3231,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatCurrency : function(el, oRecord, oColumn, oData) {
-        el.innerHTML = util.Number.format(oData, {
-                prefix: this.get("currencySymbol"),
-                decimalPlaces:2,
-                decimalSeparator:".",
-                thousandsSeparator:","
-            });
+        el.innerHTML = util.Number.format(oData, oColumn.currencyOptions || this.get("currencyOptions"));
     },
 
     /**
@@ -3253,7 +3245,8 @@ lang.augmentObject(DT, {
      * @static
      */
     formatDate : function(el, oRecord, oColumn, oData) {
-        el.innerHTML = util.Date.format(oData, {format:"MM/DD/YYYY"});
+        var oConfig = oColumn.dateOptions || this.get("dateOptions");
+        el.innerHTML = util.Date.format(oData, oConfig, oConfig.locale);
     },
 
     /**
@@ -3367,12 +3360,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatNumber : function(el, oRecord, oColumn, oData) {
-        if(lang.isNumber(oData)) {
-            el.innerHTML = oData;
-        }
-        else {
-            el.innerHTML = lang.isValue(oData) ? oData : "";
-        }
+        el.innerHTML = util.Number.format(oData, oColumn.numberOptions || this.get("numberOptions"));
     },
 
     /**
@@ -3387,10 +3375,10 @@ lang.augmentObject(DT, {
      */
     formatRadio : function(el, oRecord, oColumn, oData) {
         var bChecked = oData;
-        bChecked = (bChecked) ? " checked" : "";
+        bChecked = (bChecked) ? " checked=\"checked\"" : "";
         el.innerHTML = "<input type=\"radio\"" + bChecked +
-                " name=\"col-" + oColumn.getSanitizedKey() + "-radio\"" +
-                " class=\"" + DT.CLASS_RADIO+ "\">";
+                " name=\""+this.getId()+"-col-" + oColumn.getSanitizedKey() + "\"" +
+                " class=\"" + DT.CLASS_RADIO+ "\" />";
     },
 
     /**
@@ -3440,8 +3428,25 @@ lang.augmentObject(DT, {
     formatTextbox : function(el, oRecord, oColumn, oData) {
         var value = (lang.isValue(oRecord.getData(oColumn.field))) ?
                 oRecord.getData(oColumn.field) : "";
-        var markup = "<input type=\"text\" value=\"" + value + "\">";
+        var markup = "<input type=\"text\" value=\"" + value + "\" />";
         el.innerHTML = markup;
+    },
+
+    /**
+     * Default cell formatter
+     *
+     * @method DataTable.formatDefault
+     * @param el {HTMLElement} The element to format with markup.
+     * @param oRecord {YAHOO.widget.Record} Record instance.
+     * @param oColumn {YAHOO.widget.Column} Column instance.
+     * @param oData {Object} (Optional) Data value for the cell.
+     * @static
+     */
+    formatDefault : function(el, oRecord, oColumn, oData) {
+        el.innerHTML = oData === undefined ||
+                       oData === null ||
+                       (typeof oData === 'number' && isNaN(oData)) ?
+                       "&#160;" : oData.toString();
     },
 
     /**
@@ -3463,7 +3468,7 @@ lang.augmentObject(DT, {
             return number;
         }
         else {
-            return null;
+            return undefined;
         }
     }
 });
@@ -3487,7 +3492,9 @@ DT.Formatter = {
     radio    : DT.formatRadio,
     text     : DT.formatText,
     textarea : DT.formatTextarea,
-    textbox  : DT.formatTextbox
+    textbox  : DT.formatTextbox,
+
+    defaultFormatter : DT.formatDefault
 };
 
 lang.extend(DT, util.Element, {
@@ -3603,7 +3610,7 @@ initAttributes : function(oConfigs) {
                     // Remove previous UI from THEAD
                     var elOldTh = oOldColumn.getThEl();
                     Dom.removeClass(elOldTh, oOldSortedBy.dir);
-                    DT.formatTheadCell(oOldColumn.getThLinerEl().firstChild, oOldColumn, this, oNewSortedBy);
+                    this.formatTheadCell(oOldColumn.getThLinerEl().firstChild, oOldColumn, oNewSortedBy);
                 }
                 if(oNewSortedBy) {
                     oNewColumn = (oNewSortedBy.column) ? oNewSortedBy.column : this._oColumnSet.getColumn(oNewSortedBy.key);
@@ -3622,12 +3629,7 @@ initAttributes : function(oConfigs) {
                          var sortClass = oNewSortedBy.dir || DT.CLASS_ASC;
                          Dom.addClass(elNewTh, sortClass);
                     }
-    
-                    // HACK: Bug 1827195, workaround for bug 1969954.
-                    // Since this method runs before the value is set,
-                    // the formatTheadCell() function doesn't have access to the new
-                    // value yet so I'm going to pass in the new value explicitly.    
-                    DT.formatTheadCell(oNewColumn.getThLinerEl().firstChild, oNewColumn, this, oNewSortedBy);  // Bug 1827195
+                    this.formatTheadCell(oNewColumn.getThLinerEl().firstChild, oNewColumn, oNewSortedBy);
                 }
             }
           
@@ -3668,24 +3670,15 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute caption
-    * @description Value for the CAPTION element.
+    * @description Value for the CAPTION element. NB: Not supported in
+    * ScrollingDataTable.    
     * @type String
     */
     this.setAttributeConfig("caption", {
         value: null,
         validator: lang.isString,
         method: function(sCaption) {
-            if(this._elTable && sCaption) {
-                // Create CAPTION element
-                if(!this._elCaption) { 
-                    this._elCaption = this._elTable.createCaption();
-                }
-                // Set CAPTION value
-                this._elCaption.innerHTML = sCaption;
-            }
-            else if(this._elCaption) {
-                this._elCaption.parentNode.removeChild(this._elCaption);
-            }
+            this._initCaptionEl(sCaption);
         }
     });
 
@@ -3724,6 +3717,20 @@ initAttributes : function(oConfigs) {
          value: 0, 	 
          validator: lang.isNumber 	 
      }); 	 
+
+    /**
+    * @attribute formatRow
+    * @description A function that accepts a TR element and its associated Record
+    * for custom formatting. The function must return TRUE in order to automatically
+    * continue formatting of child TD elements, else TD elements will not be
+    * automatically formatted.
+    * @type function
+    * @default null
+    */
+    this.setAttributeConfig("formatRow", {
+        value: null,
+        validator: lang.isFunction
+    });
 
     /**
     * @attribute generateRequest
@@ -3900,14 +3907,52 @@ initAttributes : function(oConfigs) {
      });
      
     /**
-     * Currency symbol/prefix used by the default 'currency' column formatter.
      * @attribute currencySymbol
-     * @type String
-     * @default "$"
+     * @deprecated
      */
     this.setAttributeConfig("currencySymbol", {
-        value: "$"
+        value: "$",
+        validator: lang.isString
     });
+    
+    /**
+     * Default config passed to YAHOO.util.Number.format() by the 'currency' Column formatter.
+     * @attribute currencyOptions
+     * @type Object
+     * @default {prefix: $, decimalPlaces:2, decimalSeparator:".", thousandsSeparator:","}
+     */
+    this.setAttributeConfig("currencyOptions", {
+        value: {
+            prefix: this.get("currencySymbol"), // TODO: deprecate currencySymbol
+            decimalPlaces:2,
+            decimalSeparator:".",
+            thousandsSeparator:","
+        }
+    });
+    
+    /**
+     * Default config passed to YAHOO.util.Date.format() by the 'date' Column formatter.
+     * @attribute dateOptions
+     * @type Object
+     * @default {format:"%m/%d/%Y", locale:"en"}
+     */
+    this.setAttributeConfig("dateOptions", {
+        value: {format:"%m/%d/%Y", locale:"en"}
+    });
+    
+    /**
+     * Default config passed to YAHOO.util.Number.format() by the 'number' Column formatter.
+     * @attribute numberOptions
+     * @type Object
+     * @default {decimalPlaces:0, thousandsSeparator:","}
+     */
+    this.setAttributeConfig("numberOptions", {
+        value: {
+            decimalPlaces:0,
+            thousandsSeparator:","
+        }
+    });
+
 },
 
 /////////////////////////////////////////////////////////////////////////////
@@ -4246,7 +4291,8 @@ _repaintGecko : (ua.gecko) ?
 _repaintOpera : (ua.opera) ? 
     function() {
         if(ua.opera) {
-            document.body.style += '';
+            document.documentElement.className += " ";
+            document.documentElement.className.trim();
         }
     } : function() {} ,
 
@@ -4317,7 +4363,7 @@ _initColumnSet : function(aColumnDefs) {
         // uregister CellEditor Custom Events
         for(i=0, len=this._oColumnSet.keys.length; i<len; i++) {
             oColumn = this._oColumnSet.keys[i];
-            DT._oDynStyles["."+this.getId()+"-col"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
+            DT._oDynStyles["."+this.getId()+"-col-"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
             if(oColumn.editor) {
                 oColumn.editor.unsubscribeAll();
             }
@@ -4369,7 +4415,7 @@ _initDataSource : function(oDataSource) {
         var tmpTable = null;
         var tmpContainer = this._elContainer;
         var i=0;
-        ///TODO: this will break if re-initing DS at runtime for SDT
+        //TODO: this will break if re-initing DS at runtime for SDT
         // Peek in container child nodes to see if TABLE already exists
         if(tmpContainer.hasChildNodes()) {
             var tmpChildren = tmpContainer.childNodes;
@@ -4504,6 +4550,27 @@ _destroyTableEl : function() {
 },
 
 /**
+ * Creates HTML markup CAPTION element.
+ *
+ * @method _initCaptionEl
+ * @param sCaption {String} Text for caption.
+ * @private
+ */
+_initCaptionEl : function(sCaption) {
+    if(this._elTable && sCaption) {
+        // Create CAPTION element
+        if(!this._elCaption) { 
+            this._elCaption = this._elTable.createCaption();
+        }
+        // Set CAPTION value
+        this._elCaption.innerHTML = sCaption;
+    }
+    else if(this._elCaption) {
+        this._elCaption.parentNode.removeChild(this._elCaption);
+    }
+},
+
+/**
  * Creates HTML markup for TABLE, COLGROUP, THEAD and TBODY elements in outer
  * container element.
  *
@@ -4524,11 +4591,7 @@ _initTableEl : function(elContainer) {
         
         // Create CAPTION element
         if(this.get("caption")) {
-            if(!this._elCaption) { 
-                this._elCaption = this._elTable.createCaption();
-            }
-            // Set CAPTION value
-            this._elCaption.innerHTML = this.get("caption");
+            this._initCaptionEl(this.get("caption"));
         }
     } 
 },
@@ -4664,7 +4727,7 @@ _initTheadEl : function(elTable) {
         // Destroy previous
         this._destroyTheadEl();
     
-        ///TODO: append to DOM later
+        //TODO: append to DOM later for performance
         var elThead = (this._elColgroup) ?
             elTable.insertBefore(document.createElement("thead"), this._elColgroup.nextSibling) :
             elTable.appendChild(document.createElement("thead"));
@@ -4709,15 +4772,13 @@ _initTheadEl : function(elTable) {
         }
 
         // Set FIRST/LAST on edge TH elements using the values in ColumnSet headers array
-        var aFirstHeaders = oColumnSet.headers[0];
-        var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
+        var aFirstHeaders = oColumnSet.headers[0] || [];
         for(i=0; i<aFirstHeaders.length; i++) {
-            //TODO: A better way to get th cell
-            Dom.addClass(Dom.get(this._sId+"-th-"+aFirstHeaders[i]), DT.CLASS_FIRST);
+            Dom.addClass(Dom.get(this.getId() +"-th-"+aFirstHeaders[i]), DT.CLASS_FIRST);
         }
+        var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1] || [];
         for(i=0; i<aLastHeaders.length; i++) {
-            //TODO: A better way to get th cell
-            Dom.addClass(Dom.get(this._sId+"-th-"+aLastHeaders[i]), DT.CLASS_LAST);
+            Dom.addClass(Dom.get(this.getId() +"-th-"+aLastHeaders[i]), DT.CLASS_LAST);
         }
         
 
@@ -4747,7 +4808,7 @@ _initTheadEl : function(elTable) {
  * @private
  */
 _initThEl : function(elTh, oColumn) {
-    elTh.id = this._sId+"-th-" + oColumn.getSanitizedKey(); // Needed for accessibility, getColumn by TH, and ColumnDD
+    elTh.id = this.getId() + "-th-" + oColumn.getSanitizedKey(); // Needed for accessibility, getColumn by TH, and ColumnDD
     elTh.innerHTML = "";
     elTh.rowSpan = oColumn.getRowspan();
     elTh.colSpan = oColumn.getColspan();
@@ -4780,8 +4841,47 @@ _initThEl : function(elTh, oColumn) {
         this._setColumnWidthDynStyles(oColumn, nWidth + 'px', 'hidden');
     }
 
-    DT.formatTheadCell(elThLabel, oColumn, this);
+    this.formatTheadCell(elThLabel, oColumn, this.get("sortedBy"));
     oColumn._elThLabel = elThLabel;
+},
+
+/**
+ * Outputs markup into the given TH based on given Column.
+ *
+ * @method DataTable.formatTheadCell
+ * @param elCellLabel {HTMLElement} The label SPAN element within the TH liner,
+ * not the liner DIV element.     
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oSortedBy {Object} Sort state object literal.
+*/
+formatTheadCell : function(elCellLabel, oColumn, oSortedBy) {
+    var sKey = oColumn.getKey();
+    var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;
+
+    // Add accessibility link for sortable Columns
+    if(oColumn.sortable) {
+        // Calculate the direction
+        var sSortClass = this.getColumnSortDir(oColumn, oSortedBy);
+        var bDesc = (sSortClass === DT.CLASS_DESC);
+
+        // This is the sorted Column
+        if(oSortedBy && (oColumn.key === oSortedBy.key)) {
+            bDesc = !(oSortedBy.dir === DT.CLASS_DESC);
+        }
+
+        // Generate a unique HREF for visited status
+        var sHref = this.getId() + "-href-" + oColumn.getSanitizedKey();
+        
+        // Generate a dynamic TITLE for sort status
+        var sTitle = (bDesc) ? this.get("MSG_SORTDESC") : this.get("MSG_SORTASC");
+        
+        // Format the element
+        elCellLabel.innerHTML = "<a href=\"" + sHref + "\" title=\"" + sTitle + "\" class=\"" + DT.CLASS_SORTABLE + "\">" + sLabel + "</a>";
+    }
+    // Just display the label for non-sortable Columns
+    else {
+        elCellLabel.innerHTML = sLabel;
+    }
 },
 
 /**
@@ -5042,7 +5142,7 @@ _initEvents : function () {
 _initColumnSort : function() {
     this.subscribe("theadCellClickEvent", this.onEventSortColumn); 	 
 
-    // HACK: Convert sortedBy values for backward compatibility
+    // Backward compatibility
     var oSortedBy = this.get("sortedBy");
     if(oSortedBy) {
         if(oSortedBy.dir == "desc") {
@@ -5134,7 +5234,7 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
     }
     
     // Hook for setting width with via dynamic style uses key since ID is too disposable
-    allClasses[allClasses.length] = this.getId() + "-" +oColumn.getSanitizedKey();
+    allClasses[allClasses.length] = this.getId() + "-col-" +oColumn.getSanitizedKey();
 
     // Column key - minus any chars other than "A-Z", "a-z", "0-9", "_", "-", ".", or ":"
     allClasses[allClasses.length] = "yui-dt-col-" +oColumn.getSanitizedKey();
@@ -5190,9 +5290,6 @@ _clearTrTemplateEl : function () {
  * @private 
  */
 _getTrTemplateEl : function (oRecord, index) {
-    //TODO: Template must be nulled or updated with the following actions:
-    // showColumn, hideColumn, setColumnWidth, insertColumn, removeColumn, selectColumn, sortColumn
-
     // Template is already available
     if(this._elTrTemplate) {
         return this._elTrTemplate;
@@ -5310,23 +5407,26 @@ _addTrEl : function (oRecord) {
  * @private
  */
 _updateTrEl : function(elTr, oRecord) {
-    // Hide the row to prevent constant reflows
-    elTr.style.display = 'none';
-    
-    // Update TD elements with new data
-    var allTds = elTr.childNodes,
-        elTd;
-    for(var i=0,len=allTds.length; i<len; ++i) {
-        elTd = allTds[i];
-        elTr.id = oRecord.getId(); // Needed for Record association and tracking of FIRST/LAST
+    var ok = this.get("formatRow") ? this.get("formatRow")(elTr, oRecord) : true;
+    if(ok) {
+        // Hide the row to prevent constant reflows
+        elTr.style.display = 'none';
         
-        // Set the cell content
-        this.formatCell(allTds[i].firstChild, oRecord, this._oColumnSet.keys[i]);
+        // Update TD elements with new data
+        var allTds = elTr.childNodes,
+            elTd;
+        for(var i=0,len=allTds.length; i<len; ++i) {
+            elTd = allTds[i];
+            
+            // Set the cell content
+            this.formatCell(allTds[i].firstChild, oRecord, this._oColumnSet.keys[i]);
+        }
+        
+        // Redisplay the row for reflow
+        elTr.style.display = '';
     }
     
-    // Redisplay the row for reflow
-    elTr.style.display = '';
-
+    elTr.id = oRecord.getId(); // Needed for Record association and tracking of FIRST/LAST
     return elTr;
 },
 
@@ -5648,7 +5748,7 @@ _onDocumentClick : function(e, oSelf) {
         // the editorBlurEvent needs to get fired by the lower-level DOM click
         // handlers below rather than by the TABLE click handler directly.
         if(oSelf._oCellEditor) {
-            var elContainer = oSelf._oCellEditor.container;
+            var elContainer = oSelf._oCellEditor.getContainerEl();
             // Only if the click was not within the CellEditor container
             if(!Dom.isAncestor(elContainer, elTarget) &&
                     (elContainer.id !== elTarget.id)) {
@@ -6006,7 +6106,7 @@ _onTheadKeydown : function(e, oSelf) {
                 return;
             case "input":
             case "textarea":
-                // TODO
+                // TODO: implement textareaKeyEvent
                 break;
             case "thead":
                 bKeepBubbling = oSelf.fireEvent("theadKeyEvent",{target:elTarget,event:e});
@@ -6094,7 +6194,7 @@ _onTbodyKeydown : function(e, oSelf) {
  * @private
  */
 _onTableKeypress : function(e, oSelf) {
-    if(ua.webkit) {
+    if(ua.opera || (navigator.userAgent.toLowerCase().indexOf("mac") !== -1) && (ua.webkit < 420)) {
         var nKey = Ev.getCharCode(e);
         // arrow down
         if(nKey == 40) {
@@ -6506,37 +6606,25 @@ getMsgTdEl : function() {
  * @return {HTMLElement} Reference to TR element, or null.
  */
 getTrEl : function(row) {
-    var allRows = this._elTbody.rows;
-
     // By Record
     if(row instanceof YAHOO.widget.Record) {
-        var nTrIndex = this.getTrIndex(row);
-            if(nTrIndex !== null) {
-                return allRows[nTrIndex];
-            }
-            // Not a valid Record
-            else {
-                return null;
-            }
+        return document.getElementById(row.getId());
     }
     // By page row index
     else if(lang.isNumber(row)) {
+        var allRows = this._elTbody.rows;
         return ((row > -1) && (row < allRows.length)) ? allRows[row] : null;
     }
     // By ID string or element reference
     else {
-        var elRow;
-        var el = Dom.get(row);
+        var elRow = (lang.isString(row)) ? document.getElementById(row) : row;
 
         // Validate HTML element
-        if(el && (el.ownerDocument == document)) {
+        if(elRow && (elRow.ownerDocument == document)) {
             // Validate TR element
-            if(el.nodeName.toLowerCase() != "tr") {
+            if(elRow.nodeName.toLowerCase() != "tr") {
                 // Traverse up the DOM to find the corresponding TR element
-                elRow = Dom.getAncestorByTagName(el,"tr");
-            }
-            else {
-                elRow = el;
+                elRow = Dom.getAncestorByTagName(elRow,"tr");
             }
 
             // Make sure the TR is in this TBODY
@@ -6617,12 +6705,11 @@ getPreviousTrEl : function(row) {
  * Returns DOM reference to a TD liner element.
  *
  * @method getTdLinerEl
- * @param cell {HTMLElement | String | Object} DOM element reference or string ID, or
+ * @param cell {HTMLElement | Object} TD element or child of a TD element, or
  * object literal of syntax {record:oRecord, column:oColumn}.
  * @return {HTMLElement} Reference to TD liner element.
  */
 getTdLinerEl : function(cell) {
-//TODO: TD els no longer get assigned IDs
     var elCell = this.getTdEl(cell);
     return elCell.firstChild || null;
 },
@@ -6631,12 +6718,11 @@ getTdLinerEl : function(cell) {
  * Returns DOM reference to a TD element.
  *
  * @method getTdEl
- * @param cell {HTMLElement | String | Object} DOM element reference or string ID, or
+ * @param cell {HTMLElement | String | Object} TD element or child of a TD element, or
  * object literal of syntax {record:oRecord, column:oColumn}.
  * @return {HTMLElement} Reference to TD element.
  */
 getTdEl : function(cell) {
-//TODO: TD els no longer get assigned IDs
     var elCell;
     var el = Dom.get(cell);
 
@@ -6803,7 +6889,9 @@ getBelowTdEl : function(cell) {
 },
 
 /**
- * Returns DOM reference to a TH liner element.
+ * Returns DOM reference to a TH liner element. Needed to normalize for resizeable 
+ * Columns, which have an additional resizer liner DIV element between the TH
+ * element and the liner DIV element. 
  *
  * @method getThLinerEl
  * @param theadCell {YAHOO.widget.Column | HTMLElement | String} Column instance,
@@ -7004,6 +7092,16 @@ initializeTable : function() {
 },
 
 /**
+ * Internal wrapper calls run() on render Chain instance.
+ *
+ * @method _runRenderChain
+ * @private 
+ */
+_runRenderChain : function() {
+    this._oChainRender.run();
+},
+
+/**
  * Renders the view with existing Records from the RecordSet while
  * maintaining sort, pagination, and selection states. For performance, reuses
  * existing DOM elements when possible while deleting extraneous elements.
@@ -7149,7 +7247,7 @@ render : function() {
             timeout: (loopN > 0) ? 0 : -1
         });
     }
-    this._oChainRender.run();
+    this._runRenderChain();
 },
 
 /**
@@ -7190,16 +7288,20 @@ destroy : function() {
 
     this._oChainRender.stop();
     
-    //TODO: destroy static resizer proxy and column proxy?
+    // Destroy static resizer proxy and column proxy
+    DT._destroyColumnDragTargetEl();
+    DT._destroyColumnResizerProxyEl();
     
     // Destroy ColumnDD and ColumnResizers
     this._destroyColumnHelpers();
     
     // Destroy all CellEditors
+    var oCellEditor;
     for(var i=0, len=this._oColumnSet.flat.length; i<len; i++) {
-        if(this._oColumnSet.flat[i]._oCellEditor) {
-            this._oColumnSet.flat[i]._oCellEditor.destroy();
-            this._oColumnSet.flat[i]._oCellEditor = null;
+        oCellEditor = this._oColumnSet.flat[i].editor;
+        if(oCellEditor && oCellEditor.destroy) {
+            oCellEditor.destroy();
+            this._oColumnSet.flat[i].editor = null;
         }
     }
 
@@ -7494,12 +7596,11 @@ getRecord : function(row) {
  * getting Columns by Column ID string, please use the method getColumnById().
  *
  * @method getColumn
- * @param column {HTMLElement | String | Number} DOM reference or ID string to a
- * TH/TD element (or child of a TH/TD element), a Column key, or a ColumnSet key index.
+ * @param column {HTMLElement | String | Number} TH/TD element (or child of a
+ * TH/TD element), a Column key, or a ColumnSet key index.
  * @return {YAHOO.widget.Column} Column instance.
  */
 getColumn : function(column) {
-//TODO: TD els no longer get assigned DOM IDs
     var oColumn = this._oColumnSet.getColumn(column);
 
     if(!oColumn) {
@@ -7544,9 +7645,10 @@ getColumnById : function(column) {
  *
  * @method getColumnSortDir
  * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oSortedBy {Object} (optional) Specify the state, or use current state. 
  * @return {String} YAHOO.widget.DataTable.CLASS_ASC or YAHOO.widget.DataTableCLASS_DESC.
  */
-getColumnSortDir : function(oColumn) {
+getColumnSortDir : function(oColumn, oSortedBy) {
     // Backward compatibility
     if(oColumn.sortOptions && oColumn.sortOptions.defaultOrder) {
         if(oColumn.sortOptions.defaultOrder == "asc") {
@@ -7562,7 +7664,7 @@ getColumnSortDir : function(oColumn) {
 
     // Is the Column currently sorted?
     var bSorted = false;
-    var oSortedBy = this.get("sortedBy");
+    oSortedBy = oSortedBy || this.get("sortedBy");
     if(oSortedBy && (oSortedBy.key === oColumn.key)) {
         bSorted = true;
         if(oSortedBy.dir) {
@@ -7586,11 +7688,14 @@ getColumnSortDir : function(oColumn) {
  * @return {Boolean} Return true to continue sorting Column.
  */
 doBeforeSortColumn : function(oColumn, sSortDir) {
+    this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
     return true;
 },
 
 /**
- * Sorts given Column.
+ * Sorts given Column. If "dynamicData" is true, current selections are purged before
+ * a request is sent to the DataSource for data for the new state (using the
+ * request returned by "generateRequest()").
  *
  * @method sortColumn
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -7636,6 +7741,10 @@ sortColumn : function(oColumn, sDir) {
                 // Get the request for the new state
                 var request = this.get("generateRequest")(oState, this);
 
+                // Purge selections
+                this.unselectAllRows();
+                this.unselectAllCells();
+
                 // Send request for new data
                 var callback = {
                     success : this.onDataReturnSetRows,
@@ -7643,7 +7752,6 @@ sortColumn : function(oColumn, sDir) {
                     argument : oState, // Pass along the new state to the callback
                     scope : this
                 };
-                this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
                 this._oDataSource.sendRequest(request, callback);            
             }
             // Client-side sort
@@ -7751,7 +7859,6 @@ setColumnWidth : function(oColumn, nWidth) {
  * @private
  */
 _setColumnWidth : function(oColumn, sWidth, sOverflow) {
-///TODO: blow away the tr template for fallback cases
     if(oColumn && (oColumn.getKeyIndex() !== null)) {
         sOverflow = sOverflow || (((sWidth === '') || (sWidth === 'auto')) ? 'visible' : 'hidden');
     
@@ -7796,7 +7903,7 @@ _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
     // We have a STYLE node to update
     if(s) {
         // Use unique classname for this Column instance as a hook for resizing
-        var sClassname = "." + this.getId() + "-" + oColumn.getSanitizedKey() + " ." + DT.CLASS_LINER;
+        var sClassname = "." + this.getId() + "-col-" + oColumn.getSanitizedKey() + " ." + DT.CLASS_LINER;
         
         // Hide for performance
         if(this._elTbody) {
@@ -7849,7 +7956,7 @@ _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
  * @private
  */
 _setColumnWidthDynFunction : function(oColumn, sWidth, sOverflow) {
-    ///TODO: why is this here?
+    // TODO: why is this here?
     if(sWidth == 'auto') {
         sWidth = ''; 
     }
@@ -7905,11 +8012,9 @@ _setColumnWidthDynFunction : function(oColumn, sWidth, sOverflow) {
     // Get the function to execute
     var resizerFn = this._aDynFunctions[rowslen];
 
-    ///TODO: Hide TBODY for performance?
+    // TODO: Hide TBODY for performance in _setColumnWidthDynFunction?
     if (resizerFn) {
-        ///this._elTbody.style.display = 'none';
         resizerFn.call(this,oColumn,sWidth,sOverflow);
-        ///this._elTbody.style.display = '';
     }
 },
 
@@ -8170,7 +8275,7 @@ removeColumn : function(oColumn) {
                         scope: this,
                         timeout: (loopN > 0) ? 0 : -1
                     });
-                    this._oChainRender.run(); 
+                    this._runRenderChain();
                 }
         
                 this.fireEvent("columnRemoveEvent",{column:oColumn});
@@ -8277,11 +8382,11 @@ insertColumn : function(oColumn, index) {
                 scope: this,
                 timeout: (loopN > 0) ? 0 : -1
             });
-            this._oChainRender.run(); 
-            return oNewColumn;
+            this._runRenderChain(); 
         }
 
         this.fireEvent("columnInsertEvent",{column:oColumn,index:index});
+        return oNewColumn;
     }
 },
 
@@ -8408,7 +8513,7 @@ reorderColumn : function(oColumn, index) {
                         scope: this,
                         timeout: (loopN > 0) ? 0 : -1
                     });
-                    this._oChainRender.run(); 
+                    this._runRenderChain();
                 }
         
                 this.fireEvent("columnReorderEvent",{column:oNewColumn});
@@ -8451,7 +8556,12 @@ selectColumn : function(oColumn) {
                 iterations: allRows.length,
                 argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
             });
-            oChainRender.run();       
+
+            this._clearTrTemplateEl();
+            
+            this._elTbody.style.display = "none";
+            this._runRenderChain();
+            this._elTbody.style.display = "";      
             
             this.fireEvent("columnSelectEvent",{column:oColumn});
         }
@@ -8493,7 +8603,12 @@ unselectColumn : function(oColumn) {
                 iterations:allRows.length,
                 argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
             });
-            oChainRender.run();       
+            
+            this._clearTrTemplateEl();
+
+            this._elTbody.style.display = "none";
+            this._runRenderChain();
+            this._elTbody.style.display = "";      
             
             this.fireEvent("columnUnselectEvent",{column:oColumn});
         }
@@ -8531,16 +8646,7 @@ getSelectedColumns : function(oColumn) {
 highlightColumn : function(column) {
     var oColumn = this.getColumn(column);
     // Only bottom-level Columns can get highlighted
-    if(oColumn && (oColumn.getKeyIndex() !== null)) {
-        /*// Make sure previous row is unhighlighted
-        var sId = oColumn.getSanitizedKey();
-        var sLastId = this._sLastHighlightedColumnId;
-        if(sLastId && (sLastId !== sId)) {
-            this.unhighlightColumn(this.getColumn(sLastId));
-        }*/
-
-        //this._sLastHighlightedColumnId = sId;
-            
+    if(oColumn && (oColumn.getKeyIndex() !== null)) {            
         // Update head cell
         var elTh = oColumn.getThEl();
         Dom.addClass(elTh,DT.CLASS_HIGHLIGHTED);
@@ -8557,9 +8663,12 @@ highlightColumn : function(column) {
             },
             scope: this,
             iterations:allRows.length,
-            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
+            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()},
+            timeout: -1
         });
-        oChainRender.run();       
+        this._elTbody.style.display = "none";
+        this._runRenderChain();
+        this._elTbody.style.display = "";      
             
         this.fireEvent("columnHighlightEvent",{column:oColumn});
     }
@@ -8596,9 +8705,12 @@ unhighlightColumn : function(column) {
             },
             scope: this,
             iterations:allRows.length,
-            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
+            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()},
+            timeout: -1
         });
-        oChainRender.run();       
+        this._elTbody.style.display = "none";
+        this._runRenderChain();
+        this._elTbody.style.display = "";     
             
         this.fireEvent("columnUnhighlightEvent",{column:oColumn});
     }
@@ -8722,7 +8834,7 @@ addRow : function(oData, index) {
                         scope: this,
                         timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
                     });
-                    this._oChainRender.run();
+                    this._runRenderChain();
                     return;
                 }
             }            
@@ -8810,7 +8922,7 @@ addRows : function(aData, index) {
                     scope: this,
                     timeout: -1 // Needs to run immediately after the DOM insertions above
                 });
-                this._oChainRender.run();
+                this._runRenderChain();
                 this.hideTableMessage();                
                 return;
             }            
@@ -8873,7 +8985,7 @@ updateRow : function(row, oData) {
             scope: this,
             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
         });
-        this._oChainRender.run();
+        this._runRenderChain();
     }
     else {
         this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
@@ -8961,7 +9073,7 @@ deleteRow : function(row) {
                             scope: this,
                             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
                         });
-                        this._oChainRender.run();
+                        this._runRenderChain();
                         return;
                     }
                 }
@@ -9073,7 +9185,7 @@ deleteRows : function(row, count) {
                             scope: this,
                             timeout: -1 // Needs to run immediately after the DOM deletions above
                         });
-                        this._oChainRender.run();
+                        this._runRenderChain();
                         return;
                     }
                 }
@@ -9152,17 +9264,15 @@ formatCell : function(elCell, oRecord, oColumn) {
 
         var fnFormatter = typeof oColumn.formatter === 'function' ?
                           oColumn.formatter :
-                          DT.Formatter[oColumn.formatter+''];
+                          DT.Formatter[oColumn.formatter+''] ||
+                          DT.Formatter.defaultFormatter;
 
         // Apply special formatter
         if(fnFormatter) {
             fnFormatter.call(this, elCell, oRecord, oColumn, oData);
         }
         else {
-            elCell.innerHTML = oData === undefined ||
-                               oData === null ||
-                               (typeof oData === 'number' && isNaN(oData)) ?
-                                "" : oData.toString();
+            elCell.innerHTML = oData;
         }
 
         this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:oColumn.key, el:elCell});
@@ -9203,7 +9313,7 @@ updateCell : function(oRecord, oColumn, oData) {
                 scope: this,
                 timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
             });
-            this._oChainRender.run();
+            this._runRenderChain();
         }
         else {
             this.fireEvent("cellUpdateEvent", {record:oRecord, column: oColumn, oldData:oldData});
@@ -9383,43 +9493,66 @@ renderPaginator : function () {
 },
 
 /**
+ * Overridable method gives implementers a hook to show loading message before
+ * changing Paginator value.
+ *
+ * @method doBeforePaginatorChange
+ * @param oPaginatorState {Object} An object literal describing the proposed pagination state.
+ * @return {Boolean} Return true to continue changing Paginator value.
+ */
+doBeforePaginatorChange : function(oPaginatorState) {
+    this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
+    return true;
+},
+
+/**
  * Responds to new Pagination states. By default, updates the UI to reflect the
- * new state. If "dynamicData" is true, sends a request to the DataSource
- * for data for the given state, using the request from "generateRequest". 
+ * new state. If "dynamicData" is true, current selections are purged before
+ * a request is sent to the DataSource for data for the new state (using the
+ * request returned by "generateRequest()").
  *  
  * @method onPaginatorChangeRequest
  * @param oPaginatorState {Object} An object literal describing the proposed pagination state.
  */
 onPaginatorChangeRequest : function (oPaginatorState) {
-    // Server-side pagination
-    if(this.get("dynamicData")) {
-        // Get the current state
-        var oState = this.getState();
-        
-        // Update pagination values
-        oState.pagination = oPaginatorState;
-
-        // Get the request for the new state
-        var request = this.get("generateRequest")(oState, this);
-        
-        // Get the new data from the server
-        var callback = {
-            success : this.onDataReturnSetRows,
-            failure : this.onDataReturnSetRows,
-            argument : oState, // Pass along the new state to the callback
-            scope : this
-        };
-        this._oDataSource.sendRequest(request, callback);
+    var ok = this.doBeforePaginatorChange(oPaginatorState);
+    if(ok) {
+        // Server-side pagination
+        if(this.get("dynamicData")) {
+            // Get the current state
+            var oState = this.getState();
+            
+            // Update pagination values
+            oState.pagination = oPaginatorState;
+    
+            // Get the request for the new state
+            var request = this.get("generateRequest")(oState, this);
+            
+            // Purge selections
+            this.unselectAllRows();
+            this.unselectAllCells();
+            
+            // Get the new data from the server
+            var callback = {
+                success : this.onDataReturnSetRows,
+                failure : this.onDataReturnSetRows,
+                argument : oState, // Pass along the new state to the callback
+                scope : this
+            };
+            this._oDataSource.sendRequest(request, callback);
+        }
+        // Client-side pagination
+        else {
+            // Set the core pagination values silently (the second param)
+            // to avoid looping back through the changeRequest mechanism
+            oPaginatorState.paginator.setStartIndex(oPaginatorState.recordOffset,true);
+            oPaginatorState.paginator.setRowsPerPage(oPaginatorState.rowsPerPage,true);
+    
+            // Update the UI
+            this.render();
+        }
     }
-    // Client-side pagination
     else {
-        // Set the core pagination values silently (the second param)
-        // to avoid looping back through the changeRequest mechanism
-        oPaginatorState.paginator.setStartIndex(oPaginatorState.recordOffset,true);
-        oPaginatorState.paginator.setRowsPerPage(oPaginatorState.rowsPerPage,true);
-
-        // Update the UI
-        this.render();
     }
 },
 
@@ -11146,10 +11279,13 @@ unselectRow : function(row) {
  */
 unselectAllRows : function() {
     // Remove all rows from tracker
-    var tracker = this._aSelections || [];
+    var tracker = this._aSelections || [],
+        recId,
+        removed = [];
     for(var j=tracker.length-1; j>-1; j--) {
        if(lang.isString(tracker[j])){
-            tracker.splice(j,1);
+            recId = tracker.splice(j,1);
+            removed[removed.length] = this.getRecord(lang.isArray(recId) ? recId[0] : recId);
         }
     }
 
@@ -11159,10 +11295,7 @@ unselectAllRows : function() {
     // Update UI
     this._unselectAllTrEls();
 
-    //TODO: send an array of [{el:el,record:record}]
-    //TODO: or convert this to an unselectRows method
-    //TODO: that takes an array of rows or unselects all if none given
-    this.fireEvent("unselectAllRowsEvent");
+    this.fireEvent("unselectAllRowsEvent", {records: removed});
 },
 
 /**
@@ -11195,9 +11328,7 @@ getSelectedTdEls : function() {
  * to DataTable page element or RecordSet index.
  */
 selectCell : function(cell) {
-/*TODO:
-accept {record}
-*/
+//TODO: accept {record} in selectCell()
     var elCell = this.getTdEl(cell);
 
     if(elCell) {
@@ -11279,7 +11410,7 @@ unselectCell : function(cell) {
  *
  * @method unselectAllCells
  */
-unselectAllCells: function() {
+unselectAllCells : function() {
     // Remove all cells from tracker
     var tracker = this._aSelections || [];
     for(var j=tracker.length-1; j>-1; j--) {
@@ -11294,8 +11425,7 @@ unselectAllCells: function() {
     // Update UI
     this._unselectAllTdEls();
 
-    //TODO: send data
-    //TODO: or fire individual cellUnselectEvent
+    //TODO: send data to unselectAllCellsEvent handler
     this.fireEvent("unselectAllCellsEvent");
 },
 
@@ -12433,13 +12563,13 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @event tableBlurEvent
      */
 
-    /*TODO
+    /*TODO implement theadBlurEvent
      * Fired when the DataTable THEAD element has a blur event.
      *
      * @event theadBlurEvent
      */
 
-    /*TODO
+    /*TODO: implement tbodyBlurEvent
      * Fired when the DataTable TBODY element has a blur event.
      *
      * @event tbodyBlurEvent
@@ -13347,6 +13477,12 @@ DT.prototype.onPaginatorChange = DT.prototype.onPaginatorChangeRequest;
 //
 /////////////////////////////////////////////////////////////////////////////
 /**
+ * @method DataTable.formatTheadCell
+ * @deprecated  Use formatTheadCell.
+ */
+DT.formatTheadCell = function() {};
+
+/**
  * @method DataTable.editCheckbox
  * @deprecated  Use YAHOO.widget.CheckboxCellEditor.
  */
@@ -13422,7 +13558,6 @@ widget.ScrollingDataTable = function(elContainer,aColumnDefs,oDataSource,oConfig
 
     // Once per instance
     this.subscribe("columnShowEvent", this._onColumnChange);
-    this.subscribe("editorSaveEvent", this._onColumnChange);
 };
 
 var SDT = widget.ScrollingDataTable;
@@ -13574,8 +13709,7 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute height
-    * @description Table height for scrollable tables. Note: When setting width
-    * and height at runtime, please set height first.    
+    * @description Table body height for scrollable tables, not including headers.
     * @type String
     */
     this.setAttributeConfig("height", {
@@ -13633,14 +13767,9 @@ _initDomElements : function(elContainer) {
             // Primary TBODY
             this._initTbodyEl(this._elTable);
             // Message TBODY
-            this._initMsgTbodyEl(this._elTable);
-            
-            // Tmp elements for auto-width calculation
-            this._initTmpEls();
+            this._initMsgTbodyEl(this._elTable);            
         }
     }
-    ///if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody ||
-            ///!this._elHdTable || !this._elBdColgroup || !this._elBdThead) {
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody ||
             !this._elHdTable || !this._elBdThead) {
         return false;
@@ -13649,55 +13778,6 @@ _initDomElements : function(elContainer) {
         return true;
     }
 },
-
-/**
- * Destroy's tmp els used for auto-width calculation.
- *
- * @method _destroyTmpEls
- * @private
- */
-_destroyTmpEls : function() {
-    var elTmpContainer = this._elTmpContainer;
-    if(elTmpContainer) {
-        elTmpContainer.parentNode.removeChild(elTmpContainer);
-        
-        this._elTmpContainer = null;
-        this._elTmpTable = null;
-    }
-},
-
-/**
- * Resets tmp els back to initial state.
- *
- * @method _resetTmpEls
- * @private
- */
-_resetTmpEls : function() {
-    var elTmpTable = this._elTmpTable;
-    if(elTmpTable) {
-        elTmpTable.removeChild(elTmpTable.firstChild); // THEAD
-        elTmpTable.removeChild(elTmpTable.firstChild); // TBODY
-    }
-},
-
-/**
- * Initializes tmp els for auto-width calculation
- *
- * @method _initTmpEls
- * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
- * @private
- */
-_initTmpEls : function() {
-    this._destroyTmpEls();
-
-    // Attach tmp container as first child of body
-    var elTmpContainer = document.createElement('div');
-    elTmpContainer.className = DT.CLASS_DATATABLE + ' ' + DT.CLASS_TMP;
-    var elTmpTable = elTmpContainer.appendChild(document.createElement('table'));
-    this._elTmpTable = elTmpTable;
-    this._elTmpContainer = document.body.insertBefore(elTmpContainer, document.body.firstChild);
-},
-
 
 /**
  * Destroy's the DataTable outer and inner container elements, if available.
@@ -13745,6 +13825,28 @@ _initContainerEl : function(elContainer) {
         this._elBdContainer = elBdContainer;
         elContainer.appendChild(elBdContainer);
     }
+},
+
+/**
+ * Creates HTML markup CAPTION element.
+ *
+ * @method _initCaptionEl
+ * @param sCaption {String} Text for caption.
+ * @private
+ */
+_initCaptionEl : function(sCaption) {
+    // Not yet supported
+    /*if(this._elHdTable && sCaption) {
+        // Create CAPTION element
+        if(!this._elCaption) { 
+            this._elCaption = this._elHdTable.createCaption();
+        }
+        // Set CAPTION value
+        this._elCaption.innerHTML = sCaption;
+    }
+    else if(this._elCaption) {
+        this._elCaption.parentNode.removeChild(this._elCaption);
+    }*/
 },
 
 /**
@@ -13883,7 +13985,7 @@ _initBdThEl : function(elTh, oColumn) {
         elTh.abbr = oColumn.abbr;
     }
 
-    ///TODO: strip links and form elements
+    // TODO: strip links and form elements
     var sKey = oColumn.getKey();
     var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;
     elTh.innerHTML = sLabel;
@@ -13940,6 +14042,8 @@ _initTbodyEl : function(elTable) {
  */
 _focusEl : function(el) {
     el = el || this._elTbody;
+    var oSelf = this;
+    this._storeScrollPositions();
     // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
     // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
     // strange unexpected things as the user clicks on buttons and other controls.
@@ -13949,6 +14053,7 @@ _focusEl : function(el) {
         setTimeout(function() {
             try {
                 el.focus();
+                oSelf._restoreScrollPositions();
             }
             catch(e) {
             }
@@ -13974,7 +14079,45 @@ _focusEl : function(el) {
 
 
 
+/**
+ * Internal wrapper calls run() on render Chain instance.
+ *
+ * @method _runRenderChain
+ * @private 
+ */
+_runRenderChain : function() {
+    this._storeScrollPositions();
+    this._oChainRender.run();
+},
 
+/**
+ * Stores scroll positions so they can be restored after a render. 
+ *
+ * @method _storeScrollPositions
+ * @private 
+ */
+ _storeScrollPositions : function() {
+    this._nScrollTop = this._elBdContainer.scrollTop;
+    this._nScrollLeft = this._elBdContainer.scrollLeft;
+},
+
+/**
+ * Restores scroll positions to stored value. 
+ *
+ * @method _retoreScrollPositions
+ * @private 
+ */
+ _restoreScrollPositions : function() {
+    // Reset scroll positions
+    if(this._nScrollTop) {
+        this._elBdContainer.scrollTop = this._nScrollTop;
+        this._nScrollTop = null;
+    } 
+    if(this._nScrollLeft) {
+        this._elBdContainer.scrollLeft = this._nScrollLeft;
+        this._nScrollLeft = null;
+    } 
+},
 
 /**
  * Helper function calculates and sets a validated width for a Column in a ScrollingDataTable.
@@ -14032,6 +14175,12 @@ validateColumnWidths : function(oColumn) {
     var allKeys   = this._oColumnSet.keys,
         allKeysLength = allKeys.length,
         elRow     = this.getFirstTrEl();
+
+    // Reset overhang for IE
+    if(ua.ie) {
+        this._setOverhangValue(1);
+    }
+
     if(allKeys && elRow && (elRow.childNodes.length === allKeysLength)) {
         // Temporarily unsnap container since it causes inaccurate calculations
         var sWidth = this.get("width");
@@ -14045,59 +14194,6 @@ validateColumnWidths : function(oColumn) {
         if(oColumn && lang.isNumber(oColumn.getKeyIndex())) {
             this._validateColumnWidth(oColumn, elRow.childNodes[oColumn.getKeyIndex()]);
         }
-        //////OPTION 1
-        // Iterate through all Columns but adjust widths in a single pass
-        /*else {
-            var elTd, todos = [], i, len;
-            // Iterate through all Columns and make the changes in one pass
-            for(i=0; i<allKeysLength; i++) {
-               //this._validateColumnWidth(allKeys[i], elRow.childNodes[i]);
-               
-                oColumn = allKeys[i];
-                elTd = elRow.childNodes[i];
-                // Only Columns without widths that are not hidden
-                if(!oColumn.width && !oColumn.hidden) {
-                    var elTh = oColumn.getThEl();
-                    // Unset a calculated auto-width
-                    if(oColumn._calculatedWidth) {
-                        this._setColumnWidth(oColumn, "auto", "visible");
-                    }
-                    // Compare auto-widths
-                    if(elTh.offsetWidth !== elTd.offsetWidth) {
-                        var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
-                                oColumn.getThLinerEl() : elTd.firstChild;               
-                
-                        // Grab the wider liner width, unless the minWidth is wider
-                        var newWidth = Math.max(0,
-                            (elWider.offsetWidth -(parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) - (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0)),
-                            oColumn.minWidth);
-                            
-                        var sOverflow = 'visible';
-                        
-                        // Now validate against maxAutoWidth
-                        if((oColumn.maxAutoWidth > 0) && (newWidth > oColumn.maxAutoWidth)) {
-                            newWidth = oColumn.maxAutoWidth;
-                            sOverflow = "hidden";
-                        }
-                
-                        todos[todos.length] = [oColumn, newWidth, sOverflow];
-                    }
-                }
-            }
-            
-            this._elTbody.style.display = "none";
-            var thisTodo;
-            for(i=0, len=todos.length; i<len; i++) {
-                thisTodo = todos[i];
-                // Set to the wider auto-width
-                this._setColumnWidth(thisTodo[0], thisTodo[1]+"px", thisTodo[2]);
-                thisTodo[0]._calculatedWidth = thisTodo[1];
-            }
-            this._elTbody.style.display = "";
-        }*/
-        
-        
-        /////////OPTION 2
         // Iterate through all Columns to unset calculated widths in one pass
         else {
             var elTd, todos = [], thisTodo, i, len;
@@ -14119,8 +14215,6 @@ validateColumnWidths : function(oColumn) {
 
             // Iterate through all Columns and make the store the adjustments to make in one pass
             for(i=0; i<allKeysLength; i++) {
-               //this._validateColumnWidth(allKeys[i], elRow.childNodes[i]);
-               
                 oColumn = allKeys[i];
                 elTd = elRow.childNodes[i];
                 // Only Columns without widths that are not hidden
@@ -14159,8 +14253,7 @@ validateColumnWidths : function(oColumn) {
             }
             this._elTbody.style.display = "";
         }
-
-        
+    
         // Resnap unsnapped containers
         if(sWidth) {
             this._elHdContainer.style.width = sWidth;
@@ -14169,6 +14262,7 @@ validateColumnWidths : function(oColumn) {
     }
     
     this._syncScroll();
+    this._restoreScrollPositions();
 },
 
 /**
@@ -14244,15 +14338,13 @@ _syncScrollX : function() {
 },
 
 /**
- * Adds/removes Column header overhang.
+ * Adds/removes Column header overhang as necesary.
  *
  * @method _syncScrollOverhang
  * @private
  */
 _syncScrollOverhang : function() {
-    var elThead = this._elThead,
-        elBdContainer = this._elBdContainer,
-        
+    var elBdContainer = this._elBdContainer,
         // Overhang should be either 1 (default) or 18px, depending on the location of the right edge of the table
         nPadding = 1;
     
@@ -14263,18 +14355,29 @@ _syncScrollOverhang : function() {
         nPadding = 18;
     }
     
-    // Set Column header overhang
-    var aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1],
-        len = aLastHeaders.length,
-        prefix = this._sId+"-fixedth-";
-    elThead.style.display = "none";
-    for(var i=0; i<len; i++) {
-        Dom.get(prefix+aLastHeaders[i]).style.borderRight = nPadding + "px solid " + this.get("COLOR_COLUMNFILLER");
-    }
-    elThead.style.display = "";
+    this._setOverhangValue(nPadding);
+    
 },
 
+/**
+ * Sets Column header overhang to given width.
+ *
+ * @method _setOverhangValue
+ * @param nBorderWidth {Number} Value of new border for overhang. 
+ * @private
+ */
+_setOverhangValue : function(nBorderWidth) {
+    var aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1] || [],
+        len = aLastHeaders.length,
+        sPrefix = this._sId+"-fixedth-",
+        sValue = nBorderWidth + "px solid " + this.get("COLOR_COLUMNFILLER");
 
+    this._elThead.style.display = "none";
+    for(var i=0; i<len; i++) {
+        Dom.get(sPrefix+aLastHeaders[i]).style.borderRight = sValue;
+    }
+    this._elThead.style.display = "";
+},
 
 
 
@@ -14535,6 +14638,7 @@ _onColumnChange : function(oArg) {
     // Figure out which Column changed
     var oColumn = (oArg.column) ? oArg.column :
             (oArg.editor) ? oArg.editor.column : null;
+    this._storeScrollPositions();
     this.validateColumnWidths(oColumn);
 },
 
@@ -14607,7 +14711,7 @@ _onTheadKeydown : function(e, oSelf) {
                 return;
             case "input":
             case "textarea":
-                // TODO
+                // TODO: implement textareaKeyEvent
                 break;
             case "thead":
                 bKeepBubbling = oSelf.fireEvent("theadKeyEvent",{target:elTarget,event:e});
@@ -14671,14 +14775,12 @@ var lang   = YAHOO.lang,
  * @class BaseCellEditor
  * @uses YAHOO.util.EventProvider 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
+ * @param sType {String} Type indicator, to map to YAHOO.widget.DataTable.Editors.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.BaseCellEditor = function(sType, oConfigs) {
     this._sId = this._sId || "yui-ceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.type = sType;
+    this._sType = sType;
     
     // Validate inputs
     this._initConfigs(oConfigs); 
@@ -14706,6 +14808,7 @@ lang.augmentObject(BCE, {
  * @type Number
  * @static
  * @default 0
+ * @private 
  */
 _nCount : 0,
 
@@ -14736,6 +14839,83 @@ BCE.prototype = {
  * @private
  */
 _sId : null,
+
+/**
+ * Editor type.
+ *
+ * @property _sType
+ * @type String
+ * @private
+ */
+_sType : null,
+
+/**
+ * DataTable instance.
+ *
+ * @property _oDataTable
+ * @type YAHOO.widget.DataTable
+ * @private 
+ */
+_oDataTable : null,
+
+/**
+ * Column instance.
+ *
+ * @property _oColumn
+ * @type YAHOO.widget.Column
+ * @default null
+ */
+_oColumn : null,
+
+/**
+ * Record instance.
+ *
+ * @property _oRecord
+ * @type YAHOO.widget.Record
+ * @default null
+ * @private 
+ */
+_oRecord : null,
+
+/**
+ * TD element.
+ *
+ * @property _elTd
+ * @type HTMLElement
+ * @default null
+ * @private
+ */
+_elTd : null,
+
+/**
+ * Container for inline editor.
+ *
+ * @property _elContainer
+ * @type HTMLElement
+ * @private 
+ */
+_elContainer : null,
+
+/**
+ * Reference to Cancel button, if available.
+ *
+ * @property _elCancelBtn
+ * @type HTMLElement
+ * @default null
+ * @private 
+ */
+_elCancelBtn : null,
+
+/**
+ * Reference to Save button, if available.
+ *
+ * @property _elSaveBtn
+ * @type HTMLElement
+ * @default null
+ * @private 
+ */
+_elSaveBtn : null,
+
 
 
 
@@ -14814,59 +14994,7 @@ _initEvents : function() {
 asyncSubmitter : null,
 
 /**
- * DataTable instance.
- *
- * @property dataTable
- * @type YAHOO.widget.DataTable
- */
-dataTable : null,
-
-/**
- * TD element.
- *
- * @property cell
- * @type HTMLElement
- * @default null
- */
-cell : null,
-
-/**
- * Editor type.
- *
- * @property type
- * @type String
- * @private
- */
-type : null,
-
-/**
- * Column instance.
- *
- * @property column
- * @type YAHOO.widget.Column
- * @default null
- */
-column : null,
-
-/**
- * Record instance.
- *
- * @property record
- * @type YAHOO.widget.Record
- * @default null
- */
-record : null,
-
-/**
- * Container for inline editor.
- *
- * @property container
- * @type HTMLElement
- */
-container : null,
-
-/**
- * Original value.
+ * Current value.
  *
  * @property value
  * @type MIXED
@@ -14874,7 +15002,8 @@ container : null,
 value : null,
 
 /**
- * Default value for the cell.
+ * Default value in case Record data is undefined. NB: Null values will not trigger
+ * the default value.
  *
  * @property defaultValue
  * @type MIXED
@@ -14883,7 +15012,9 @@ value : null,
 defaultValue : null,
 
 /**
- * Validator for input data.
+ * Validator function for input data, called from the DataTable instance scope,
+ * receives the arguments (inputValue, currentValue, editorInstance) and returns
+ * either the validated (or type-converted) value or undefined.
  *
  * @property validator
  * @type HTMLFunction
@@ -14926,24 +15057,6 @@ LABEL_CANCEL : "Cancel",
  */
 disableBtns : false,
 
-/**
- * Reference to Save button, if available.
- *
- * @property btnSave
- * @type HTMLElement
- * @default null
- */
-btnSave : null,
-
-/**
- * Reference to Cancel button, if available.
- *
- * @property btnCancel
- * @type HTMLElement
- * @default null
- */
-btnCancel : null,
-
 
 
 
@@ -14978,6 +15091,63 @@ getId : function() {
 },
 
 /**
+ * Returns reference to associated DataTable instance.
+ *
+ * @method getDataTable
+ * @return {YAHOO.widget.DataTable} DataTable instance.
+ */
+
+getDataTable : function() {
+    return this._oDataTable;
+},
+
+/**
+ * Returns reference to associated Column instance.
+ *
+ * @method getColumn
+ * @return {YAHOO.widget.Column} Column instance.
+ */
+
+getColumn : function() {
+    return this._oColumn;
+},
+
+/**
+ * Returns reference to associated Record instance.
+ *
+ * @method getRecord
+ * @return {YAHOO.widget.Record} Record instance.
+ */
+
+getRecord : function() {
+    return this._oRecord;
+},
+
+
+
+/**
+ * Returns reference to associated TD element.
+ *
+ * @method getTdEl
+ * @return {HTMLElement} TD element.
+ */
+
+getTdEl : function() {
+    return this._elTd;
+},
+
+/**
+ * Returns container element.
+ *
+ * @method getContainerEl
+ * @return {HTMLElement} Reference to container element.
+ */
+
+getContainerEl : function() {
+    return this._elContainer;
+},
+
+/**
  * Nulls out the entire CellEditor instance and related objects, removes attached
  * event listeners, and clears out DOM elements inside the container, removes
  * container from the DOM.
@@ -14986,8 +15156,14 @@ getId : function() {
  */
 destroy : function() {
     this.unsubscribeAll();
-    this.column.editor = null;
-    var elContainer = this.container;
+    
+    // Column is late-binding in attach()
+    var oColumn = this.getColumn();
+    if(oColumn) {
+        this.getColumn().editor = null;
+    }
+    
+    var elContainer = this.getContainerEl();
     Ev.purgeElement(elContainer, true);
     elContainer.parentNode.removeChild(elContainer);
 },
@@ -15005,14 +15181,13 @@ render : function() {
     elContainer.tabIndex = 0;
     elContainer.className = DT.CLASS_EDITOR;
     document.body.insertBefore(elContainer, document.body.firstChild);
-    this.container = elContainer;
+    this._elContainer = elContainer;
     
     // Handle ESC key
     Ev.addListener(elContainer, "keydown", function(e, oSelf) {
-        // ESC hides Cell Editor
+        // ESC cancels Cell Editor
         if((e.keyCode == 27)) {
             oSelf.cancel();
-            ///oSelf.focusTbodyEl();
         }
         // Pass through event
         oSelf.fireEvent("keydownEvent", {editor:this, event:e});
@@ -15024,6 +15199,8 @@ render : function() {
     if(!this.disableBtns) {
         this.renderBtns();
     }
+    
+    this.doAfterRender();
 },
 
 /**
@@ -15033,7 +15210,7 @@ render : function() {
  */
 renderBtns : function() {
     // Buttons
-    var elBtnsDiv = this.container.appendChild(document.createElement("div"));
+    var elBtnsDiv = this.getContainerEl().appendChild(document.createElement("div"));
     elBtnsDiv.className = DT.CLASS_BUTTON;
 
     // Save button
@@ -15043,7 +15220,7 @@ renderBtns : function() {
     Ev.addListener(elSaveBtn, "click", function(oArgs) {
         this.save();
     }, this, true);
-    this.btnSave = elSaveBtn;
+    this._elSaveBtn = elSaveBtn;
 
     // Cancel button
     var elCancelBtn = elBtnsDiv.appendChild(document.createElement("button"));
@@ -15051,35 +15228,39 @@ renderBtns : function() {
     Ev.addListener(elCancelBtn, "click", function(oArgs) {
         this.cancel();
     }, this, true);
-    this.btnCancel = elCancelBtn;
+    this._elCancelBtn = elCancelBtn;
 },
 
 /**
  * Attach CellEditor for a new interaction.
  *
  * @method attach
+ * @param oDataTable {YAHOO.widget.DataTable} Associated DataTable instance.
+ * @param elCell {HTMLElement} Cell to edit.  
  */
 attach : function(oDataTable, elCell) {
     // Validate 
     if(oDataTable instanceof YAHOO.widget.DataTable) {
-        this.dataTable = oDataTable;
+        this._oDataTable = oDataTable;
         
         // Validate cell
         elCell = oDataTable.getTdEl(elCell);
         if(elCell) {
-            this.cell = elCell;
+            this._elTd = elCell;
 
             // Validate Column
             var oColumn = oDataTable.getColumn(elCell);
             if(oColumn) {
-                this.column = oColumn;
+                this._oColumn = oColumn;
                 
                 // Validate Record
-                this.record = oDataTable.getRecord(elCell);
-                var value = this.record.getData(this.column.getKey());
-                this.value = (value !== undefined) ? value : this.defaultValue;
-                
-                return true;
+                var oRecord = oDataTable.getRecord(elCell);
+                if(oRecord) {
+                    this._oRecord = oRecord;
+                    var value = oRecord.getData(this.getColumn().getKey());
+                    this.value = (value !== undefined) ? value : this.defaultValue;
+                    return true;
+                }
             }            
         }
     }
@@ -15093,23 +15274,23 @@ attach : function(oDataTable, elCell) {
  */
 move : function() {
     // Move Editor
-    var elContainer = this.container,
-        elCell = this.cell,
-        x = Dom.getX(elCell),
-        y = Dom.getY(elCell);
+    var elContainer = this.getContainerEl(),
+        elTd = this.getTdEl(),
+        x = Dom.getX(elTd),
+        y = Dom.getY(elTd);
 
     //TODO: remove scrolling logic
     // SF doesn't get xy for cells in scrolling table
     // when tbody display is set to block
     if(isNaN(x) || isNaN(y)) {
-        var elTbody = this.dataTable.getTbodyEl();
-        x = elCell.offsetLeft + // cell pos relative to table
+        var elTbody = this.getDataTable().getTbodyEl();
+        x = elTd.offsetLeft + // cell pos relative to table
                 Dom.getX(elTbody.parentNode) - // plus table pos relative to document
                 elTbody.scrollLeft; // minus tbody scroll
-        y = elCell.offsetTop + // cell pos relative to table
+        y = elTd.offsetTop + // cell pos relative to table
                 Dom.getY(elTbody.parentNode) - // plus table pos relative to document
                 elTbody.scrollTop + // minus tbody scroll
-                this.dataTable.getTheadEl().offsetHeight; // account for fixed THEAD cells
+                this.getDataTable().getTheadEl().offsetHeight; // account for fixed THEAD cells
     }
 
     elContainer.style.left = x + "px";
@@ -15124,7 +15305,7 @@ move : function() {
 show : function() {
     this.resetForm();
     this.isActive = true;
-    this.container.style.display = "";
+    this.getContainerEl().style.display = "";
     this.focus();
     this.fireEvent("showEvent", {editor:this});
 },
@@ -15159,8 +15340,8 @@ save : function() {
     
     // Validate new value
     if(this.validator) {
-        validValue = this.validator.call(this.dataTable, inputValue, this.value, this);
-        if(validValue === null ) {
+        validValue = this.validator.call(this.getDataTable(), inputValue, this.value, this);
+        if(validValue === undefined ) {
             this.resetForm();
             this.fireEvent("invalidDataEvent",
                     {editor:this, oldData:this.value, newData:inputValue});
@@ -15174,12 +15355,12 @@ save : function() {
         if(bSuccess) {
             // Update new value
             oSelf.value = oNewValue;
-            oSelf.dataTable.updateCell(oSelf.record, oSelf.column, oNewValue);
+            oSelf.getDataTable().updateCell(oSelf.getRecord(), oSelf.getColumn(), oNewValue);
             
             // Hide CellEditor
-            oSelf.container.style.display = "none";
+            oSelf.getContainerEl().style.display = "none";
             oSelf.isActive = false;
-            oSelf.dataTable._oCellEditor =  null;
+            oSelf.getDataTable()._oCellEditor =  null;
             
             oSelf.fireEvent("saveEvent",
                     {editor:oSelf, oldData:oOrigValue, newData:oSelf.value});
@@ -15208,9 +15389,9 @@ save : function() {
  */
 cancel : function() {
     if(this.isActive) {
-        this.container.style.display = "none";
+        this.getContainerEl().style.display = "none";
         this.isActive = false;
-        this.dataTable._oCellEditor =  null;
+        this.getDataTable._oCellEditor =  null;
         this.fireEvent("cancelEvent", {editor:this});
     }
     else {
@@ -15223,6 +15404,26 @@ cancel : function() {
  * @method renderForm
  */
 renderForm : function() {
+    // To be implemented by subclass
+},
+
+/**
+ * Access to add additional event listeners.
+ *
+ * @method doAfterRender
+ */
+doAfterRender : function() {
+    // To be implemented by subclass
+},
+
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
     // To be implemented by subclass
 },
 
@@ -15268,12 +15469,14 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor is shown.
  *
  * @event showEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.
  */
 
 /**
  * Fired when a CellEditor has a keydown.
  *
  * @event keydownEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  * @param oArgs.event {HTMLEvent} The event object.
  */
 
@@ -15281,6 +15484,7 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor input is reverted due to invalid data.
  *
  * @event invalidDataEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  * @param oArgs.newData {Object} New data value from form input field.
  * @param oArgs.oldData {Object} Old data value.
  */
@@ -15289,6 +15493,7 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor input is reverted due to asyncSubmitter failure.
  *
  * @event revertEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  * @param oArgs.newData {Object} New data value from form input field.
  * @param oArgs.oldData {Object} Old data value.
  */
@@ -15297,6 +15502,7 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor input is saved.
  *
  * @event saveEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  * @param oArgs.newData {Object} New data value from form input field.
  * @param oArgs.oldData {Object} Old data value.
  */
@@ -15305,12 +15511,14 @@ lang.augmentProto(BCE, util.EventProvider);
  * Fired when a CellEditor input is canceled.
  *
  * @event cancelEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  */
 
 /**
  * Fired when a CellEditor has a blur event.
  *
  * @event blurEvent
+ * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance. 
  */
 
 
@@ -15338,9 +15546,6 @@ lang.augmentProto(BCE, util.EventProvider);
  * @class CheckboxCellEditor
  * @extends YAHOO.widget.BaseCellEditor
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.CheckboxCellEditor = function(oConfigs) {
@@ -15404,12 +15609,12 @@ renderForm : function() {
                     checkboxOption.value : checkboxOption;
 
             checkboxId = this.getId() + "-chk" + j;
-            this.container.innerHTML += "<input type=\"checkbox\"" +
+            this.getContainerEl().innerHTML += "<input type=\"checkbox\"" +
                     " id=\"" + checkboxId + "\"" + // Needed for label
-                    " value=\"" + checkboxValue + "\">";
+                    " value=\"" + checkboxValue + "\" />";
             
             // Create the labels in an IE-friendly way
-            elLabel = this.container.appendChild(document.createElement("label"));
+            elLabel = this.getContainerEl().appendChild(document.createElement("label"));
             elLabel.htmlFor = checkboxId;
             elLabel.innerHTML = lang.isValue(checkboxOption.label) ?
                     checkboxOption.label : checkboxOption;
@@ -15418,12 +15623,31 @@ renderForm : function() {
         // Store the reference to the checkbox elements
         var allCheckboxes = [];
         for(j=0; j<len; j++) {
-            allCheckboxes[allCheckboxes.length] = this.container.childNodes[j*2];
+            allCheckboxes[allCheckboxes.length] = this.getContainerEl().childNodes[j*2];
         }
         this.checkboxes = allCheckboxes;
+
+        if(this.disableBtns) {
+            this.handleDisabledBtns();
+        }
     }
     else {
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.getContainerEl(), "click", function(v){
+        if(Ev.getTarget(v).tagName.toLowerCase() === "input") {
+            // Save on blur
+            this.save();
+        }
+    }, this, true);
 },
 
 /**
@@ -15494,9 +15718,6 @@ lang.augmentObject(widget.CheckboxCellEditor, BCE);
  * @class DateCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.DateCellEditor = function(oConfigs) {
@@ -15544,7 +15765,7 @@ defaultValue : new Date(),
 renderForm : function() {
     // Calendar widget
     if(YAHOO.widget.Calendar) {
-        var calContainer = this.container.appendChild(document.createElement("div"));
+        var calContainer = this.getContainerEl().appendChild(document.createElement("div"));
         calContainer.id = this.getId() + "-dateContainer"; // Needed for Calendar constructor
         var calendar =
                 new YAHOO.widget.Calendar(this.getId() + "-date",
@@ -15553,24 +15774,32 @@ renderForm : function() {
         calContainer.style.cssFloat = "none";
 
         if(ua.ie) {
-            var calFloatClearer = this.container.appendChild(document.createElement("br"));
+            var calFloatClearer = this.getContainerEl().appendChild(document.createElement("br"));
             calFloatClearer.style.clear = "both";
         }
         
         this.calendar = calendar;
 
-        /*TODO save on select
         if(this.disableBtns) {
-            Ev.addListener(elDropdown, "blur", function(v){
-                // Save on "blur"
-                this.save();
-            }, this, true);        
+            this.handleDisabledBtns();
         }
-        */
     }
     else {
     }
     
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    this.calendar.selectEvent.subscribe(function(v){
+        // Save on select
+        this.save();
+    }, this, true);
 },
 
 /**
@@ -15628,7 +15857,6 @@ lang.augmentObject(widget.DateCellEditor, BCE);
  * @class DropdownCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.DropdownCellEditor = function(oConfigs) {
@@ -15676,7 +15904,8 @@ dropdown : null,
  * @method renderForm
  */
 renderForm : function() {
-    var elDropdown = this.container.appendChild(document.createElement("select"));
+    var elDropdown = this.getContainerEl().appendChild(document.createElement("select"));
+    elDropdown.style.zoom = 1;
     this.dropdown = elDropdown;
     
     if(lang.isArray(this.dropdownOptions)) {
@@ -15691,13 +15920,23 @@ renderForm : function() {
             elOption = elDropdown.appendChild(elOption);
         }
         
-        // Save on blur
         if(this.disableBtns) {
-            Ev.addListener(elDropdown, "change", function(v){
-                this.save();
-            }, this, true);        
+            this.handleDisabledBtns();
         }
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.dropdown, "change", function(v){
+        // Save on change
+        this.save();
+    }, this, true);        
 },
 
 /**
@@ -15719,7 +15958,7 @@ resetForm : function() {
  * @method focus
  */
 focus : function() {
-    this.dataTable._focusEl(this.dropdown);
+    this.getDataTable()._focusEl(this.dropdown);
 },
 
 /**
@@ -15753,9 +15992,6 @@ lang.augmentObject(widget.DropdownCellEditor, BCE);
  * @class RadioCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.RadioCellEditor = function(oConfigs) {
@@ -15803,19 +16039,20 @@ radioOptions : null,
 renderForm : function() {
     if(lang.isArray(this.radioOptions)) {
         var radioOption, radioValue, radioId, elLabel;
+        
         // Create the radio buttons in an IE-friendly way
         for(var i=0, len=this.radioOptions.length; i<len; i++) {
             radioOption = this.radioOptions[i];
             radioValue = lang.isValue(radioOption.value) ?
                     radioOption.value : radioOption;
             radioId = this.getId() + "-radio" + i;
-            this.container.innerHTML += "<input type=\"radio\"" +
+            this.getContainerEl().innerHTML += "<input type=\"radio\"" +
                     " name=\"" + this.getId() + "\"" +
                     " value=\"" + radioValue + "\"" +
-                    " id=\"" +  radioId + "\">"; // Needed for label
+                    " id=\"" +  radioId + "\" />"; // Needed for label
             
             // Create the labels in an IE-friendly way
-            elLabel = this.container.appendChild(document.createElement("label"));
+            elLabel = this.getContainerEl().appendChild(document.createElement("label"));
             elLabel.htmlFor = radioId;
             elLabel.innerHTML = (lang.isValue(radioOption.label)) ?
                     radioOption.label : radioOption;
@@ -15825,30 +16062,32 @@ renderForm : function() {
         var allRadios = [],
             elRadio;
         for(var j=0; j<len; j++) {
-            elRadio = this.container.childNodes[j*2];
+            elRadio = this.getContainerEl().childNodes[j*2];
             allRadios[allRadios.length] = elRadio;
         }
         this.radios = allRadios;
 
-        // Save on enter, save on click
         if(this.disableBtns) {
-            // Bug: 1802582 Set up a listener on each textbox to track on keypress
-            // since SF/OP can't preventDefault on keydown
-            //Ev.addListener(this.container, "keypress", function(v){
-            //    if((v.keyCode === 13)) {
-            //        this.save();
-            //    }
-            //}, this, true);
-            
-            Ev.addListener(this.container, "click", function(v){
-                if(Ev.getTarget(v).tagName.toLowerCase() === "input") {
-                    this.save();
-                }
-            }, this, true);
+            this.handleDisabledBtns();
         }
     }
     else {
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.getContainerEl(), "click", function(v){
+        if(Ev.getTarget(v).tagName.toLowerCase() === "input") {
+            // Save on blur
+            this.save();
+        }
+    }, this, true);
 },
 
 /**
@@ -15915,9 +16154,6 @@ lang.augmentObject(widget.RadioCellEditor, BCE);
  * @class TextareaCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.TextareaCellEditor = function(oConfigs) {
@@ -15954,16 +16190,25 @@ textarea : null,
  * @method renderForm
  */
 renderForm : function() {
-    var elTextarea = this.container.appendChild(document.createElement("textarea"));
+    var elTextarea = this.getContainerEl().appendChild(document.createElement("textarea"));
     this.textarea = elTextarea;
 
-    // Save on blur
     if(this.disableBtns) {
-        Ev.addListener(elTextarea, "blur", function(v){
-            // Save on "blur"
-            this.save();
-        }, this, true);        
+        this.handleDisabledBtns();
     }
+},
+
+/**
+ * After rendering form, if disabledBtns is set to true, then sets up a mechanism
+ * to save input without them. 
+ *
+ * @method handleDisabledBtns
+ */
+handleDisabledBtns : function() {
+    Ev.addListener(this.textarea, "blur", function(v){
+        // Save on blur
+        this.save();
+    }, this, true);        
 },
 
 /**
@@ -15972,7 +16217,7 @@ renderForm : function() {
  * @method move
  */
 move : function() {
-    this.textarea.style.width = this.cell.offsetWidth + "px";
+    this.textarea.style.width = this.getTdEl().offsetWidth + "px";
     this.textarea.style.height = "3em";
     YAHOO.widget.TextareaCellEditor.superclass.move.call(this);
 },
@@ -16030,9 +16275,6 @@ lang.augmentObject(widget.TextareaCellEditor, BCE);
  * @class TextboxCellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
- * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.TextboxCellEditor = function(oConfigs) {
@@ -16070,15 +16312,15 @@ renderForm : function() {
     var elTextbox;
     // Bug 1802582: SF3/Mac needs a form element wrapping the input
     if(ua.webkit>420) {
-        elTextbox = this.container.appendChild(document.createElement("form")).appendChild(document.createElement("input"));
+        elTextbox = this.getContainerEl().appendChild(document.createElement("form")).appendChild(document.createElement("input"));
     }
     else {
-        elTextbox = this.container.appendChild(document.createElement("input"));
+        elTextbox = this.getContainerEl().appendChild(document.createElement("input"));
     }
     elTextbox.type = "text";
     this.textbox = elTextbox;
 
-    // Save on enter
+    // Save on enter by default
     // Bug: 1802582 Set up a listener on each textbox to track on keypress
     // since SF/OP can't preventDefault on keydown
     Ev.addListener(elTextbox, "keypress", function(v){
@@ -16089,11 +16331,9 @@ renderForm : function() {
         }
     }, this, true);
 
-    // Save on blur
     if(this.disableBtns) {
-        Ev.addListener(elTextbox, "blur", function(v){
-            this.save();
-        }, this, true);
+        // By default this is no-op since enter saves by default
+        this.handleDisabledBtns();
     }
 },
 
@@ -16103,7 +16343,7 @@ renderForm : function() {
  * @method move
  */
 move : function() {
-    this.textbox.style.width = this.cell.offsetWidth + "px";
+    this.textbox.style.width = this.getTdEl().offsetWidth + "px";
     YAHOO.widget.TextboxCellEditor.superclass.move.call(this);
 },
 
@@ -16178,8 +16418,7 @@ DT.Editors = {
  * @class CellEditor
  * @extends YAHOO.widget.BaseCellEditor 
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
- * @param sType {String} Editor type.
+ * @param sType {String} Type indicator, to map to YAHOO.widget.DataTable.Editors.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.CellEditor = function(sType, oConfigs) {
