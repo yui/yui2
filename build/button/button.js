@@ -1076,7 +1076,7 @@
 			
 			function setMenuContainer() {
 
-				oMenu.cfg.setProperty("container", oButtonElement.parentNode);
+				oMenu.cfg.queueProperty("container", oButtonElement.parentNode);
 				
 				this.removeListener("appendTo", setMenuContainer);
 			
@@ -1099,11 +1099,11 @@
 
 					aMenuAlignment = this.get("menualignment");
 
-					oMenu.cfg.setProperty("context", 
+					oMenu.cfg.queueProperty("context", 
 									[oButtonElement, aMenuAlignment[0], aMenuAlignment[1]]);
 
-					oMenu.cfg.setProperty("preventcontextoverlap", true);
-					oMenu.cfg.setProperty("constraintoviewport", true);
+					oMenu.cfg.queueProperty("preventcontextoverlap", true);
+					oMenu.cfg.queueProperty("constraintoviewport", true);
 
 
 					if (Menu && oMenu instanceof Menu) {
@@ -1114,7 +1114,7 @@
 
 							if (oContainer) {
 
-								oMenu.cfg.setProperty("container", oContainer);
+								oMenu.cfg.queueProperty("container", oContainer);
 
 							}
 							else {
@@ -1125,8 +1125,8 @@
 
 						}
 
-						oMenu.cfg.setProperty("minscrollheight", this.get("menuminscrollheight"));
-						oMenu.cfg.setProperty("clicktohide", false);
+						oMenu.cfg.queueProperty("minscrollheight", this.get("menuminscrollheight"));
+						oMenu.cfg.queueProperty("clicktohide", false);
 
 						oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
 						oMenu.subscribe("click", this._onMenuClick, this, true);
@@ -1240,7 +1240,7 @@
 					oMenu = p_oMenu;
 					bInstance = true;
 			
-					oMenu.cfg.setProperty("visible", false);
+					oMenu.cfg.queueProperty("visible", false);
 			
 					initMenu.call(this);
 			
