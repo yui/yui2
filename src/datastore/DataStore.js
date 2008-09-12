@@ -1,28 +1,27 @@
 /**
  * Creates a store, which can be used to set and get information on a
  * user's local machine. This is similar to a browser cookie, except the 
- * allowwed store is larger and can be shared across browsers.
+ * allowed store is larger and can be shared across browsers.
  *
  * @module datastore
  * @requires yahoo, dom, event, element
- * @title DataStore Widget
+ * @title DataStore Util
  * @beta
  */
 
 /**
- * DataStore class for the YUI DataStore widget.
+ * Class for the YUI DataStore util.
  *
- * @namespace YAHOO.widget
+ * @namespace YAHOO.util
  * @class DataStore
- * @uses YAHOO.util.FlashAdapter
+ * @uses YAHOO.widget.FlashAdapter
  * @constructor
  * @param containerId {HTMLElement} Container element for the Flash Player instance.
- * @param containerId {HTMLElement} Container element for the Flash Player instance.
+ * @param attributes {Object} Properties for embedding the SWF.
  */
-YAHOO.widget.DataStore = function(containerID, attributes, swfURL)
+YAHOO.util.DataStore = function(containerID, attributes, swfURL)
 {
-	YAHOO.log ("Before FlashAdapter: " + YAHOO.widget.DataStore.SWFURL);
-	YAHOO.widget.DataStore.superclass.constructor.call(this, YAHOO.widget.DataStore.SWFURL, containerID, attributes);
+	YAHOO.util.DataStore.superclass.constructor.call(this, YAHOO.util.DataStore.SWFURL, containerID, attributes);
 	
 	/**
 	 * Fires when an error occurs
@@ -76,7 +75,7 @@ YAHOO.widget.DataStore = function(containerID, attributes, swfURL)
 	this.createEvent("openExternalDialog");
 };
 
-YAHOO.extend(YAHOO.widget.DataStore, YAHOO.widget.FlashAdapter,
+YAHOO.extend(YAHOO.util.DataStore, YAHOO.widget.FlashAdapter,
 {
 
 
@@ -119,7 +118,6 @@ YAHOO.extend(YAHOO.widget.DataStore, YAHOO.widget.FlashAdapter,
 	    */
 		getItem: function(location) 
 		{
-			YAHOO.log("returning " +this._swf.getItem(location) + " from " + location);
 			return this._swf.getItem(location);
 		} ,
 
@@ -144,7 +142,6 @@ YAHOO.extend(YAHOO.widget.DataStore, YAHOO.widget.FlashAdapter,
 	    */		
 		clear: function() 
 		{
-			//YAHOO.log("removing all");
 			return this._swf.clear();
 		} ,
 		
@@ -154,7 +151,6 @@ YAHOO.extend(YAHOO.widget.DataStore, YAHOO.widget.FlashAdapter,
 	     */		
 		calculateSize: function() 
 		{
-			//YAHOO.log("calculating size");
 			return this._swf.calculateSize();
 		} ,
 		
@@ -180,7 +176,6 @@ YAHOO.extend(YAHOO.widget.DataStore, YAHOO.widget.FlashAdapter,
 		*/		
 		setSize: function(value) 
 		{
-			//YAHOO.log("setting size");
 			return this._swf.setSize(value);
 		} ,
 		
@@ -199,5 +194,4 @@ YAHOO.extend(YAHOO.widget.DataStore, YAHOO.widget.FlashAdapter,
 });
 
 
-YAHOO.widget.DataStore.SWFURL = "datastore.swf";
-YAHOO.register("datastore", YAHOO.widget.DataStore, {version: "2.6"});
+YAHOO.util.DataStore.SWFURL = "datastore.swf";
