@@ -4379,6 +4379,10 @@
                 Event.on(overlay.element, mgr.cfg.getProperty("focusevent"), mgr._onOverlayElementFocus, null, overlay);
                 overlay.focus = function () {
                     if (mgr._manageFocus(this)) {
+                        // For Panel/Dialog
+                        if (this.cfg.getProperty("visible") && this.focusFirst) {
+                            this.focusFirst();
+                        }
                         this.focusEvent.fire();
                     }
                 };
@@ -4456,6 +4460,7 @@
         * Registers an Overlay or an array of Overlays with the manager. Upon 
         * registration, the Overlay receives functions for focus and blur, 
         * along with CustomEvents for each.
+        *
         * @method register
         * @param {Overlay} overlay  An Overlay to register with the manager.
         * @param {Overlay[]} overlay  An array of Overlays to register with 
