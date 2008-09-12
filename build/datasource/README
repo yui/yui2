@@ -2,6 +2,7 @@ DataSource Release Notes
 
 **** version 2.6.0 ****
 
+* GA release.
 * Empty responses of TYPE_FLAT no longer return empty string results.
 * Parsing of totalRecords is no longer supported as a top-leval schema value.
 Implementers should access this value of using a metaField.

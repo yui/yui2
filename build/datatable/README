@@ -2,6 +2,7 @@ DataTable Release Notes
 
 *** version 2.6.0 ***
 
+* GA release.
 * Created new subclass ScrollingDataTable. Created new classes CellEditor,
 BaseCellEditor, and associated subclasses. As a result, the following API changes
 have been made:
