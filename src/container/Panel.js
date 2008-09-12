@@ -17,11 +17,14 @@
         YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
     };
 
+    var _currentModal = null;
+
     var Lang = YAHOO.lang,
         Util = YAHOO.util,
         Dom = Util.Dom,
         Event = Util.Event,
         CustomEvent = Util.CustomEvent,
+        KeyListener = YAHOO.util.KeyListener,
         Config = Util.Config,
         Overlay = YAHOO.widget.Overlay,
         Panel = YAHOO.widget.Panel,
@@ -138,7 +141,8 @@
         "button",
         "select",
         "textarea",
-        "input"
+        "input",
+        "iframe"
     ];
 
     // Private CustomEvent listeners
@@ -221,13 +225,12 @@
         * See configuration documentation for more details.
         */
         init: function (el, userConfig) {
-    
             /*
                  Note that we don't pass the user config in here yet because 
                  we only want it executed once, at the lowest subclass level
             */
 
-            Panel.superclass.init.call(this, el/*, userConfig*/);  
+            Panel.superclass.init.call(this, el/*, userConfig*/);
 
             this.beforeInitEvent.fire(Panel);
 
@@ -243,21 +246,50 @@
             this.subscribe("hideMask", this._removeFocusHandlers);
             this.subscribe("beforeRender", createHeader);
 
+            this.subscribe("render", function() {
+                this.setFirstLastFocusable();
+                this.subscribe("changeContent", this.setFirstLastFocusable);
+            });
+
+            this.subscribe("show", this.focusFirst);
+
             this.initEvent.fire(Panel);
         },
 
         /**
-         * @method _onElementFocus 
+         * @method _onElementFocus
          * @private
-         * 
-         * "focus" event handler for a focuable element. Used to automatically 
-         * blur the element when it receives focus to ensure that a Panel 
+         *
+         * "focus" event handler for a focuable element. Used to automatically
+         * blur the element when it receives focus to ensure that a Panel
          * instance's modality is not compromised.
-         * 
+         *
          * @param {Event} e The DOM event object
          */
         _onElementFocus : function(e){
-            this.blur();
+
+            var target = Event.getTarget(e);
+
+            if (target !== this.element && !Dom.isAncestor(this.element, target) && _currentModal == this) {
+                try {
+                    if (this.firstElement) {
+                        this.firstElement.focus();
+                    } else {
+                        if (this._modalFocus) {
+                            this._modalFocus.focus();
+                        } else {
+                            this.innerElement.focus();
+                        }
+                    }
+                } catch(err){
+                    // Just in case we fail to focus
+                    try {
+                        if (target !== document && target !== document.body && target !== window) {
+                            target.blur();
+                        }
+                    } catch(err2) { }
+                }
+            }
         },
 
         /** 
@@ -267,62 +299,213 @@
          *  "showMask" event handler that adds a "focus" event handler to all
          *  focusable elements in the document to enforce a Panel instance's 
          *  modality from being compromised.
-         *  
+         *
          *  @param p_sType {String} Custom event type
          *  @param p_aArgs {Array} Custom event arguments
          */
         _addFocusHandlers: function(p_sType, p_aArgs) {
-            var me = this,
-                focus = "focus",
-                hidden = "hidden";
-
-            function isFocusable(el) {
-                // NOTE: if e.type is undefined that's fine, want to avoid perf 
-                // impact of tagName check to filter for inputs
-                if (el.type !== hidden && !Dom.isAncestor(me.element, el)) {
-                    Event.on(el, focus, me._onElementFocus);
-                    return true;
+            if (!this.firstElement) {
+                if (UA.webkit || UA.opera) {
+                    if (!this._modalFocus) {
+                        this._createHiddenFocusElement();
+                    }
+                } else {
+                    this.innerElement.tabIndex = 0;
                 }
-                return false;
             }
-
-            var focusable = Panel.FOCUSABLE,
-                l = focusable.length,
-                arr = [];
-
-            for (var i = 0; i < l; i++) {
-                arr = arr.concat(Dom.getElementsBy(isFocusable, focusable[i]));
-            }
-
-            this.focusableElements = arr;
+            this.setTabLoop(this.firstElement, this.lastElement);
+            Event.onFocus(document.documentElement, this._onElementFocus, this, true);
+            _currentModal = this;
         },
 
-        /** 
+        /**
+         * Creates a hidden focusable element, used to focus on,
+         * to enforce modality for browsers in which focus cannot
+         * be applied to the container box.
+         * 
+         * @method _createHiddenFocusElement
+         * @private
+         */
+        _createHiddenFocusElement : function() {
+            var e = document.createElement("button");
+            e.style.height = "1px";
+            e.style.width = "1px";
+            e.style.position = "absolute";
+            e.style.left = "-10000em";
+            e.style.opacity = 0;
+            e.tabIndex = "-1";
+            this.innerElement.appendChild(e);
+            this._modalFocus = e;
+        },
+
+        /**
          *  @method _removeFocusHandlers
          *  @protected
-         *  
+         *
          *  "hideMask" event handler that removes all "focus" event handlers added 
          *  by the "addFocusEventHandlers" method.
-         *  
+         *
          *  @param p_sType {String} Event type
          *  @param p_aArgs {Array} Event Arguments
          */
         _removeFocusHandlers: function(p_sType, p_aArgs) {
-            var aElements = this.focusableElements,
-                nElements = aElements.length,
-                focus = "focus";
+            Event.removeFocusListener(document.documentElement, this._onElementFocus, this);
 
-            if (aElements) {
-                for (var i = 0; i < nElements; i++) {
-                    Event.removeListener(aElements[i], focus, this._onElementFocus);
+            if (_currentModal == this) {
+                _currentModal = null;
+            }
+        },
+
+        /**
+         * Sets focus to the first element in the Panel.
+         *
+         * @method focusFirst
+         */
+        focusFirst: function (type, args, obj) {
+            var el = this.firstElement;
+
+            if (args && args[1]) {
+                Event.stopEvent(args[1]);
+            }
+
+            if (el) {
+                try {
+                    el.focus();
+                } catch(err) {
+                    // Ignore
                 }
             }
         },
 
         /**
-        * Initializes the custom events for Module which are fired 
-        * automatically at appropriate times by the Module class.
-        */
+         * Sets focus to the last element in the Panel.
+         *
+         * @method focusLast
+         */
+        focusLast: function (type, args, obj) {
+            var el = this.lastElement;
+
+            if (args && args[1]) {
+                Event.stopEvent(args[1]);
+            }
+
+            if (el) {
+                try {
+                    el.focus();
+                } catch(err) {
+                    // Ignore
+                }
+            }
+        },
+
+        /**
+         * Sets up a tab, shift-tab loop between the first and last elements
+         * provided. NOTE: Sets up the preventBackTab and preventTabOut KeyListener
+         * instance properties, which are reset everytime this method is invoked.
+         *
+         * @method setTabLoop
+         * @param {HTMLElement} firstElement
+         * @param {HTMLElement} lastElement
+         *
+         */
+        setTabLoop : function(firstElement, lastElement) {
+
+            var backTab = this.preventBackTab, tab = this.preventTabOut,
+                showEvent = this.showEvent, hideEvent = this.hideEvent;
+
+            if (backTab) {
+                backTab.disable();
+                showEvent.unsubscribe(backTab.enable, backTab);
+                hideEvent.unsubscribe(backTab.disable, backTab);
+                backTab = this.preventBackTab = null;
+            }
+
+            if (tab) {
+                tab.disable();
+                showEvent.unsubscribe(tab.enable, tab);
+                hideEvent.unsubscribe(tab.disable,tab);
+                tab = this.preventTabOut = null;
+            }
+
+            if (firstElement) {
+                this.preventBackTab = new KeyListener(firstElement, 
+                    {shift:true, keys:9},
+                    {fn:this.focusLast, scope:this, correctScope:true}
+                );
+                backTab = this.preventBackTab;
+
+                showEvent.subscribe(backTab.enable, backTab, true);
+                hideEvent.subscribe(backTab.disable,backTab, true);
+            }
+
+            if (lastElement) {
+                this.preventTabOut = new KeyListener(lastElement, 
+                    {shift:false, keys:9}, 
+                    {fn:this.focusFirst, scope:this, correctScope:true}
+                );
+                tab = this.preventTabOut;
+
+                showEvent.subscribe(tab.enable, tab, true);
+                hideEvent.subscribe(tab.disable,tab, true);
+            }
+        },
+
+        /**
+         * Returns an array of the currently focusable items which reside within
+         * Panel. The set of focusable elements the method looks for are defined
+         * in the Panel.FOCUSABLE static property
+         *
+         * @method getFocusableElements
+         * @param {HTMLElement} root element to start from.
+         */
+        getFocusableElements : function(root) {
+
+            root = root || this.innerElement;
+
+            var focusable = {};
+            for (var i = 0; i < Panel.FOCUSABLE.length; i++) {
+                focusable[Panel.FOCUSABLE[i]] = true;
+            }
+
+            function isFocusable(el) {
+                if (el.focus && el.type !== "hidden" && !el.disabled && focusable[el.tagName.toLowerCase()]) {
+                    return true;
+                }
+                return false;
+            }
+
+            // Not looking by Tag, since we want elements in DOM order
+            return Dom.getElementsBy(isFocusable, null, root);
+        },
+
+        /**
+         * Sets the firstElement and lastElement instance properties
+         * to the first and last focusable elements in the Panel.
+         *
+         * @method setFirstLastFocusable
+         */
+        setFirstLastFocusable : function() {
+
+            this.firstElement = null;
+            this.lastElement = null;
+
+            var elements = this.getFocusableElements();
+            this.focusableElements = elements;
+
+            if (elements.length > 0) {
+                this.firstElement = elements[0];
+                this.lastElement = elements[elements.length - 1];
+            }
+
+            if (this.cfg.getProperty("modal")) {
+                this.setTabLoop(this.firstElement, this.lastElement);
+            }
+        },
+
+        /**
+         * Initializes the custom events for Module which are fired 
+         * automatically at appropriate times by the Module class.
+         */
         initEvents: function () {
             Panel.superclass.initEvents.call(this);
 
@@ -348,14 +531,13 @@
             */
             this.dragEvent = this.createEvent(EVENT_TYPES.DRAG);
             this.dragEvent.signature = SIGNATURE;
-
         },
 
         /**
-        * Initializes the class's configurable properties which can be changed 
-        * using the Panel's Config object (cfg).
-        * @method initDefaultConfig
-        */
+         * Initializes the class's configurable properties which can be changed 
+         * using the Panel's Config object (cfg).
+         * @method initDefaultConfig
+         */
         initDefaultConfig: function () {
             Panel.superclass.initDefaultConfig.call(this);
 
@@ -513,23 +695,21 @@
                 oClose = this.close,
                 strings = this.cfg.getProperty("strings");
 
-            function doHide(e, obj) {
-                obj.hide();
-            }
-
             if (val) {
                 if (!oClose) {
 
                     if (!m_oCloseIconTemplate) {
-                        m_oCloseIconTemplate = document.createElement("span");
+                        m_oCloseIconTemplate = document.createElement("a");
                         m_oCloseIconTemplate.className = "container-close";
+                        m_oCloseIconTemplate.href = "#";
                     }
 
                     oClose = m_oCloseIconTemplate.cloneNode(true);
                     this.innerElement.appendChild(oClose);
-                    oClose.innerHTML = (strings && strings.close)? strings.close : "&#160;";
 
-                    Event.on(oClose, "click", doHide, this);
+                    oClose.innerHTML = (strings && strings.close) ? strings.close : "&#160;";
+
+                    Event.on(oClose, "click", this._doClose, this, true);
 
                     this.close = oClose;
 
@@ -543,6 +723,19 @@
                 }
             }
 
+        },
+
+        /**
+         * Event handler for the close icon
+         * 
+         * @method _doClose
+         * @protected
+         * 
+         * @param {DOMEvent} e
+         */
+        _doClose : function (e) {
+            Event.preventDefault(e);
+            this.hide();
         },
 
         /**

@@ -34,7 +34,6 @@
     var Event = YAHOO.util.Event,
         CustomEvent = YAHOO.util.CustomEvent,
         Dom = YAHOO.util.Dom,
-        KeyListener = YAHOO.util.KeyListener,
         Dialog = YAHOO.widget.Dialog,
         Lang = YAHOO.lang,
 
@@ -366,7 +365,7 @@
 
             this.initEvent.fire(Dialog);
         },
-        
+
         /**
         * Submits the Dialog's form depending on the value of the 
         * "postmethod" configuration property.  <strong>Please note:
@@ -503,12 +502,6 @@
             if (form) {
                 this.form = form;
                 Event.on(form, "submit", this._submitHandler, this, true);
-
-                this._setFirstLastElements();
-
-                if (this.cfg.getProperty("modal")) {
-                    this._setTabLoop();
-                }
             }
         },
 
@@ -526,85 +519,52 @@
         },
 
         /**
-         * Configure tab and shift-tab keyboard event handlers, 
-         * to loop between first and last form element, or buttons in
-         * the Dialog.
-         * 
-         * @method _setTabLoop
-         * @protected
+         * Sets up a tab, shift-tab loop between the first and last elements
+         * provided. NOTE: Sets up the preventBackTab and preventTabOut KeyListener
+         * instance properties, which are reset everytime this method is invoked.
+         *
+         * @method setTabLoop
+         * @param {HTMLElement} firstElement
+         * @param {HTMLElement} lastElement
+         *
          */
-        _setTabLoop : function() {
+        setTabLoop : function(firstElement, lastElement) {
 
-            var firstElement = this.firstFormElement || this.firstButton;
-            var lastElement = this.lastButton || this.lastFormElement,
-                backTab = this.preventBackTab, tab = this.preventTabOut;
+            firstElement = firstElement || this.firstButton;
+            lastElement = this.lastButton || lastElement;
 
-            if (backTab) {
-                backTab.disable();
-                this.showEvent.unsubscribe(backTab.enable, backTab);
-                this.hideEvent.unsubscribe(backTab.disable, backTab);
-                backTab = this.preventBackTab = null;
-            }
-
-            if (tab) {
-                tab.disable();
-                this.showEvent.unsubscribe(tab.enable, tab);
-                this.hideEvent.unsubscribe(tab.disable,tab);
-                tab = this.preventTabOut = null;
-            }
-
-            if (firstElement) {
-                this.preventBackTab = new KeyListener(firstElement, 
-                    {shift:true, keys:9},
-                    {fn:this.focusLast, scope:this, correctScope:true}
-                );
-
-                backTab = this.preventBackTab;
-
-                this.showEvent.subscribe(backTab.enable, backTab, true);
-                this.hideEvent.subscribe(backTab.disable,backTab, true);
-            }
-
-            if (lastElement) {
-                this.preventTabOut = new KeyListener(lastElement, 
-                    {shift:false, keys:9}, 
-                    {fn:this.focusFirst, scope:this, correctScope:true}
-                );
-
-                tab = this.preventTabOut;
-
-                this.showEvent.subscribe(tab.enable, tab, true);
-                this.hideEvent.subscribe(tab.disable,tab, true);
-            }
+            Dialog.superclass.setTabLoop.call(this, firstElement, lastElement);
         },
 
         /**
          * Configures instance properties, pointing to the 
-         * first and last form elements in the Dialog's form.
-         * 
-         * @protected
-         * @method _setFirstLastElements
+         * first and last focusable elements in the Dialog's form.
+         *
+         * @method setFirstLastFocusable
          */
-        _setFirstLastElements : function() {
+        setFirstLastFocusable : function() {
+
+            Dialog.superclass.setFirstLastFocusable.call(this);
+
+            var i, l, el, elements = this.focusableElements;
 
             this.firstFormElement = null;
             this.lastFormElement = null;
- 
-            if (this.form) {
-                var form = this.form,
-                    f, el, nElements = form.elements.length;
-    
-                for (f = 0; f < nElements; f++) {
-                    el = form.elements[f];
-                    if (el.focus && !el.disabled && el.type != "hidden") {
+
+            if (this.form && elements && elements.length > 0) {
+                l = elements.length;
+
+                for (i = 0; i < l; ++i) {
+                    el = elements[i];
+                    if (this.form === el.form) {
                         this.firstFormElement = el;
                         break;
                     }
                 }
 
-                for (f = nElements - 1; f >= 0; f--) {
-                    el = form.elements[f];
-                    if (el.focus && !el.disabled && el.type != "hidden") {
+                for (i = l-1; i >= 0; --i) {
+                    el = elements[i];
+                    if (this.form === el.form) {
                         this.lastFormElement = el;
                         break;
                     }
@@ -626,29 +586,20 @@
         * this will usually equal the owner.
         */
         configClose: function (type, args, obj) {
-            var val = args[0],
-                strings = this.cfg.getProperty("strings");
+            Dialog.superclass.configClose.apply(this, arguments);
+        },
 
-            function doCancel(e, obj) {
-                obj.cancel();
-            }
-
-            if (val) {
-                if (! this.close) {
-                    this.close = document.createElement("div");
-                    Dom.addClass(this.close, "container-close");
-
-                    this.close.innerHTML = (strings && strings.close) ? strings.close : "&#160;";
-                    this.innerElement.appendChild(this.close);
-                    Event.on(this.close, "click", doCancel, this);
-                } else {
-                    this.close.style.display = "block";
-                }
-            } else {
-                if (this.close) {
-                    this.close.style.display = "none";
-                }
-            }
+        /**
+         * Event handler for the close icon
+         * 
+         * @method _doClose
+         * @protected
+         * 
+         * @param {DOMEvent} e
+         */
+         _doClose : function(e) {
+            Event.preventDefault(e);
+            this.cancel();
         },
 
         /**
@@ -766,10 +717,6 @@
 
                 this.buttonSpan = oSpan;
 
-                if (this.cfg.getProperty("modal")) {
-                    this._setTabLoop();
-                }
-
             } else { // Do cleanup
                 oSpan = this.buttonSpan;
                 oFooter = this.footer;
@@ -781,6 +728,11 @@
                     this.defaultHtmlButton = null;
                 }
             }
+
+            // Everything which needs to be done if content changed
+            // TODO: Should we be firing contentChange here?
+
+            this.setFirstLastFocusable();
 
             this.cfg.refireEvent("iframe");
             this.cfg.refireEvent("underlay");
@@ -808,28 +760,18 @@
         */
         focusFirst: function (type, args, obj) {
 
-            var oElement = this.firstFormElement,
-                oEvent;
+            var el = this.firstFormElement;
 
-            if (args) {
-                oEvent = args[1];
-                if (oEvent) {
-                    Event.stopEvent(oEvent);
-                }
+            if (args && args[1]) {
+                Event.stopEvent(args[1]);
             }
 
-            if (oElement) {
-                /*
-                    Place the call to the "focus" method inside a try/catch
-                    block to prevent IE from throwing JavaScript errors if
-                    the element is disabled or hidden.
-                */
+            if (el) {
                 try {
-                    oElement.focus();
+                    el.focus();
+                } catch(oException) {
+                    // Ignore
                 }
-                catch(oException) {
-                }
-
             } else {
                 this.focusFirstButton();
             }
@@ -843,29 +785,20 @@
         focusLast: function (type, args, obj) {
 
             var aButtons = this.cfg.getProperty("buttons"),
-                oElement = this.lastFormElement,
-                oEvent;
+                el = this.lastFormElement;
 
-            if (args) {
-                oEvent = args[1];
-                if (oEvent) {
-                    Event.stopEvent(oEvent);
-                }
+            if (args && args[1]) {
+                Event.stopEvent(args[1]);
             }
 
             if (aButtons && Lang.isArray(aButtons)) {
                 this.focusLastButton();
             } else {
-                if (oElement) {
-                    /*
-                        Place the call to the "focus" method inside a try/catch
-                        block to prevent IE from throwing JavaScript errors if
-                        the element is disabled or hidden.
-                    */
-    
+                if (el) {
                     try {
-                        oElement.focus();
+                        el.focus();
                     } catch(oException) {
+                        // Ignore
                     }
                 }
             }
@@ -944,6 +877,7 @@
                                 try {
                                     oElement.blur();
                                 } catch(oException) {
+                                    // ignore
                                 }
                             }
                         }

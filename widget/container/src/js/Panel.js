@@ -17,6 +17,8 @@
         YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
     };
 
+    var _currentModal = null;
+
     var Lang = YAHOO.lang,
         Util = YAHOO.util,
         Dom = Util.Dom,
@@ -268,7 +270,7 @@
 
             var target = Event.getTarget(e);
 
-            if (target !== this.element && !Dom.isAncestor(this.element, target)) {
+            if (target !== this.element && !Dom.isAncestor(this.element, target) && _currentModal == this) {
                 try {
                     if (this.firstElement) {
                         this.firstElement.focus();
@@ -313,6 +315,7 @@
             }
             this.setTabLoop(this.firstElement, this.lastElement);
             Event.onFocus(document.documentElement, this._onElementFocus, this, true);
+            _currentModal = this;
         },
 
         /**
@@ -324,16 +327,15 @@
          * @private
          */
         _createHiddenFocusElement : function() {
-            var a = document.createElement("a");
-            a.href= "#panelFocus";
-            a.style.height = "1px";
-            a.style.width = "1px";
-            a.style.position = "absolute";
-            a.style.left = "-10000em";
-            a.style.opacity = 0;
-            a.tabIndex = "-1";
-            this.innerElement.appendChild(a);
-            this._modalFocus = a;
+            var e = document.createElement("button");
+            e.style.height = "1px";
+            e.style.width = "1px";
+            e.style.position = "absolute";
+            e.style.left = "-10000em";
+            e.style.opacity = 0;
+            e.tabIndex = "-1";
+            this.innerElement.appendChild(e);
+            this._modalFocus = e;
         },
 
         /**
@@ -348,6 +350,10 @@
          */
         _removeFocusHandlers: function(p_sType, p_aArgs) {
             Event.removeFocusListener(document.documentElement, this._onElementFocus, this);
+
+            if (_currentModal == this) {
+                _currentModal = null;
+            }
         },
 
         /**

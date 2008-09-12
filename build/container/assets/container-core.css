@@ -156,5 +156,7 @@ PLEASE NOTE:
 }
 
 .yui-panel-container .container-close {
+    overflow:hidden;
     text-indent:-10000em;
+    text-decoration:none;
 }

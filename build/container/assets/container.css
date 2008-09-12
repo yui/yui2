@@ -228,6 +228,8 @@ PLEASE NOTE:
     cursor:pointer;
     visibility:inherit;
     text-indent:-10000em;
+    overflow:hidden;
+    text-decoration:none;
 }
 
 .yui-panel .ft {
