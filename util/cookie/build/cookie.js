@@ -416,5 +416,4 @@ YAHOO.util.Cookie = {
     }    
 
 };
-
 YAHOO.register("cookie", YAHOO.util.Cookie, {version: "@VERSION@", build: "@BUILD@"});

@@ -1,8 +1,13 @@
+/**
+ * Utilities for cookie management
+ * @namespace YAHOO.util
+ * @module cookie
+ * @beta
+ */
 YAHOO.namespace("util");
 
 /**
  * Cookie utility.
- * @namespace YAHOO.util
  * @class Cookie
  * @static
  */
@@ -94,13 +99,15 @@ YAHOO.util.Cookie = {
      */
     _parseCookieHash : function (text /*:String*/) /*:Object*/ {
     
-        var hashParts /*:Array*/ = text.split("&");
-        var hashPart /*:Array*/ = null;
-        var hash /*:Object*/ = new Object();
+        var hashParts /*:Array*/ = text.split("&"),
+            hashPart /*:Array*/ = null,
+            hash /*:Object*/ = new Object();
         
-        for (var i=0, len=hashParts.length; i < len; i++){
-            hashPart = hashParts[i].split("=");
-            hash[hashPart[0]] = hashPart[1];
+        if (text.length > 0){
+            for (var i=0, len=hashParts.length; i < len; i++){
+                hashPart = hashParts[i].split("=");
+                hash[decodeURIComponent(hashPart[0])] = decodeURIComponent(hashPart[1]);
+            }
         }
         
         return hash;
@@ -109,25 +116,38 @@ YAHOO.util.Cookie = {
     /**
      * Parses a cookie string into an object representing all accessible cookies.
      * @param {String} text The cookie string to parse.
+     * @param {Boolean} decode (Optional) Indicates if the cookie values should be decoded or not. Default is true.
      * @return {Object} An object containing entries for each accessible cookie.
      * @method _parseCookieString
      * @private
      * @static
      */
-    _parseCookieString : function (text /*:String*/) /*:Object*/ {
+    _parseCookieString : function (text /*:String*/, decode /*:Boolean*/) /*:Object*/ {
     
-        var cookies /*:Object*/ = new Object();
+        var cookies /*:Object*/ = new Object();        
         
         if (YAHOO.lang.isString(text) && text.length > 0) {
+        
+            var decodeValue = (decode === false ? function(s){return s;} : decodeURIComponent);
         
             if (/[^=]+=[^=;]?(?:; [^=]+=[^=]?)?/.test(text)){            
                 var cookieParts /*:Array*/ = text.split(/;\s/g);
                 var cookieName /*:String*/ = null;
                 var cookieValue /*:String*/ = null;
+                var cookieNameValue /*:Array*/ = null;
                 
                 for (var i=0, len=cookieParts.length; i < len; i++){
-                    cookieName = decodeURIComponent(cookieParts[i].match(/([a-z]+)=/i)[1]);
-                    cookieValue = decodeURIComponent(cookieParts[i].substring(cookieName.length+1));
+                
+                    //check for normally-formatted cookie (name-value)
+                    cookieNameValue = cookieParts[i].match(/([^=]+)=/i);
+                    if (cookieNameValue instanceof Array){
+                        cookieName = decodeURIComponent(cookieNameValue[1]);
+                        cookieValue = decodeValue(cookieParts[i].substring(cookieNameValue[1].length+1));
+                    } else {
+                        //means the cookie does not have an "=", so treat it as a boolean flag
+                        cookieName = decodeURIComponent(cookieParts[i]);
+                        cookieValue = cookieName;
+                    }
                     cookies[cookieName] = cookieValue;
                 }
             }
@@ -205,7 +225,7 @@ YAHOO.util.Cookie = {
                 return converter(hash[subName]);
             }
         } else {
-            return value;
+            return null;
         }
     
     },
@@ -219,7 +239,17 @@ YAHOO.util.Cookie = {
      * @static
      */
     getSubs : function (name /*:String*/) /*:Object*/ {
-        return this.get(name, this._parseCookieHash);    
+        
+        //check cookie name
+        if (!YAHOO.lang.isString(name) || name === ""){
+            throw new TypeError("Cookie.getSubs(): Cookie name must be a non-empty string.");
+        }
+        
+        var cookies = this._parseCookieString(document.cookie, false);
+        if (YAHOO.lang.isString(cookies[name])){
+            return this._parseCookieHash(cookies[name]);
+        }
+        return null;
     },
     
     /**
@@ -247,6 +277,45 @@ YAHOO.util.Cookie = {
         
         //set cookie
         return this.set(name, "", options);
+    },
+
+    /**
+     * Removes a sub cookie with a given name.
+     * @param {String} name The name of the cookie in which the subcookie exists.
+     * @param {String} subName The name of the subcookie to remove.
+     * @param {Object} options (Optional) An object containing one or more
+     *      cookie options: path (a string), domain (a string), expires (a Date object),
+     *      and secure (true/false). This must be the same settings as the original
+     *      subcookie.
+     * @return {String} The created cookie string.
+     * @method removeSub
+     * @static
+     */
+    removeSub : function(name /*:String*/, subName /*:String*/, options /*:Object*/) /*:String*/ {
+    
+        //check cookie name
+        if (!YAHOO.lang.isString(name) || name === ""){
+            throw new TypeError("Cookie.removeSub(): Cookie name must be a non-empty string.");
+        }
+        
+        //check subcookie name
+        if (!YAHOO.lang.isString(subName) || subName === ""){
+            throw new TypeError("Cookie.removeSub(): Subcookie name must be a non-empty string.");
+        }
+        
+        //get all subcookies for this cookie
+        var subs = this.getSubs(name);
+        
+        //delete the indicated subcookie
+        if (YAHOO.lang.isObject(subs) && YAHOO.lang.hasOwnProperty(subs, subName)){
+            delete subs[subName];
+            
+            //reset the cookie
+            return this.setSubs(name, subs, options);
+        } else {
+            return "";
+        }
+        
     },
 
     /**
@@ -347,5 +416,4 @@ YAHOO.util.Cookie = {
     }    
 
 };
-
 YAHOO.register("cookie", YAHOO.util.Cookie, {version: "@VERSION@", build: "@BUILD@"});
