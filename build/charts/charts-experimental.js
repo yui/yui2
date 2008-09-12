@@ -740,6 +740,10 @@ YAHOO.widget.FlashAdapter.removeProxyFunction = function(funcName)
  * @title Charts Widget
  * @experimental
  */
+ 
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
 
 /**
  * Chart class for the YUI Charts widget.
