@@ -8,37 +8,43 @@
     <property name="srcdir" value="${env.YUI_SRC_DIR}" />
     <property name="builddir" value="${env.YUI_BUILD_DIR}" />
     
+    <!-- This is used to pull the swfobject and FlashAdapter from the Charts directory -->
+    <property name="commondir" value="${srcdir}/widget/charts/src/" />
+    
     <property file="${buildfile.dir}/build.properties" />
 
     <import file="${builddir}/buildproperties.xml" description="Shared Build Properties - tools, build paths etc." />
     <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
     
-    <property name="flashroot" value="/Applications/Adobe Flash CS3"/>
-    <property name="flexroot" value="/usr/bin/flex-compiler"/>
+    <property name="flashbin" value="C:/Program Files/Adobe/Adobe Flash CS3"/>
+    <property name="flexbin" value="C:/Program Files/Adobe/Flex Builder 3/sdks/3.0.0/bin"/>
 
-    <target name="customlocal" description="Uploader Override to Build SWF">
-    
-        <!-- build the uploader.swf -->
-        <!-- TODO: Make MXMLC a property -->
-        <exec executable="${flexroot}/mxmlc" failonerror="true">
-            <!-- Flash Platform -->
-            <arg line="-source-path+='/usr/share/yui-as3'"/>
-            
-            <!-- Core Flash CS3 Classes -->
-            <arg line="-source-path+='/usr/share/astra-as3'"/>
-            <arg line="-source-path+='/usr/share/core-as3'"/>
-            
-            <!-- Output SWF -->
-            <arg line="-output './src/swf/uploader.swf'"/>
-            
-            <!-- Document Class -->
-            <arg line="'./src/as/Uploader.as'"/>
-        </exec>
+    <target name="customlocal" description="DataStore Override to Build SWF" depends="prep-source">
         
-        <!-- copy the SWF to the build directory -->
-        <copy todir="${component.builddir}/assets">
-            <fileset dir="${component.srcdir}/swf" includes="*.swf" />
-        </copy>
+   		<!-- use the MXMLC commmand line compiler from the free Flex SDK -->
+		<exec executable="${flexbin}/mxmlc.exe" failonerror="true">
+
+			<!-- start with the classes from the SWC -->
+			<arg line="--library-path+='${component.srcdir}/as'"/>
+			<arg line="-source-path+='${commondir}/as'"/>
+			
+			<!-- specify where to output the SWF -->
+			<arg line="--output '${component.srcdir}/swf/datastore.swf'"/>
+
+			<!-- compile the main class -->
+			<arg line="'${component.srcdir}/as/DataStore.as'"/>
+		</exec>     
+
+    </target>
+    
+    <target name="prep-source">
+    	
+    	<copy todir="${component.srcdir}/js" overwrite="true">
+    		<fileset dir="${commondir}/js">
+    			<include name="swfobject.js" />
+    			<include name="FlashAdapter.js" />
+    		</fileset>
+    	</copy>
     </target>
     
     <target name="examples" description="Component Specific Over-ride">
