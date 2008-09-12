@@ -371,5 +371,4 @@ YAHOO.tool.Profiler = {
          
 
 };
-
 YAHOO.register("profiler", YAHOO.tool.Profiler, {version: "@VERSION@", build: "@BUILD@"});

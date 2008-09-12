@@ -11,3 +11,4 @@ YUI Library - Profiler - Release Notes
 2.6.0
 
   * Fixed issue with leaking global "object" variable.
+  * Out of beta
