@@ -50,7 +50,7 @@
 
 	 * 
 
-	 * @author Allen Rabinovich, Buck DeFore
+	 * @author Allen Rabinovich
 
 	 */
 
@@ -62,7 +62,7 @@
 
 	//--------------------------------------
 
-		public function Uploader(debugfield:TextField = null)
+		public function Uploader()
 
 		{
 
@@ -90,7 +90,7 @@
 
 		private var fileIDCounter:Number;
 
-		private var filesToUpload:Array; 		// for queue management
+		private var filesToUpload:Array;
 
 
 
@@ -592,9 +592,25 @@
 			super.initializeComponent();
 
 
-
+			// This function is going away
 			ExternalInterface.addCallback("browse", browse);
 
+			// Show UI as a link
+			// upHTMLText:String - HTML text of the link iwhen unpressed
+			// hoverHTMLText:String - HTML text of the link when hovering over it
+			// downHTMLText:String - HTML text of the link when pressed down 
+		 	ExternalInterface.addCallback("showAsLink", showAsLink);
+		 	
+		 	// Show UI as a button
+		 	// buttonUpSkin:String - URL of the image of the button when unpressed
+		 	// buttonHoverSkin:String - URL of the image of the button when hovering
+		 	// buttonDownSkin:String - URL of the image of the button when pressed
+		 	ExternalInterface.addCallback("showAsButton", showAsButton);
+		 	
+		 	// Show no UI, but allow transparency, to overlay other UIs.
+		 	
+		 	ExternalInterface.addCallback("showAsTransparent", showAsTransparent);
+		 	
 			ExternalInterface.addCallback("removeFile", removeFile);
 
 			ExternalInterface.addCallback("clearFileList", clearFileList);
@@ -622,16 +638,6 @@
 			filesToUpload = [];
 
 
-
-			output = new TextField();
-
-			output.border = true;
-
-			output.width = 300;
-
-			output.height = 200;
-
-			addChild(output);
 
 		}
 
@@ -844,7 +850,7 @@
 
 			else {
 
-				return false
+				return false;
 
 			}
 
@@ -860,7 +866,7 @@
 
 		private function t(newText:String):void {
 
-			if(newText) output.text = newText + "\n" + output.text;
+			trace(newText);
 
 		}
 
