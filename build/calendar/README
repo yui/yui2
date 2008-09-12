@@ -1,5 +1,24 @@
 Calendar Release Notes
 
+*** version 2.6.0 ***
+
++ Fixed incorrect cell index parsing from cell id attribute, when
+  Calendar id contained "cell".
+  
++ Added text to previous month, next month and close icons, to 
+  enhance accessibility for screen-readers.
+  
++ Fixed issue with bubbled previous month, next month click events 
+  missing target information in certain browsers (due to replaced HTML), 
+  by delaying click event handling through a setTimeout.
+  
++ Added destroy method to Calendar/CalendarGroup
+
++ Fixed incorrect clear method behavior for CalendarGroup where all
+  pages would be set to the same month.
+  
++ Refactored code to reduce minified Kweight.
+
 *** version 2.5.2 ***
 
 + CalendarGroup toDate method no longer throws javascript exception

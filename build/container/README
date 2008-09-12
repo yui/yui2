@@ -20,9 +20,10 @@ Changes:
 + We now attempt to focus the first focusable element inside a Panel,
   when it is shown (as is done with Dialog).
   
-+ A container's height configuration property can now be set and by 
-  default the body element will be resized to fill out the height of
-  the container bounding box.
++ Setting the "height" configuration property will now result in the 
+  container's body element being resized to fill out any empty 
+  vertical space. This behavior can be configured using the 
+  "autofillheight" configuration property discussed below.
 
 Added the following features:
 -----------------------------
