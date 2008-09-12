@@ -368,9 +368,12 @@
         default:
             if (type == "int") {
                 value = getStyleIntVal(el, style);
-                // XXX: Safari returns a large negative number for margin-right
+                // XXX: Safari calculates incorrect marginRight for an element
+                // which has its parent element style set to overflow: hidden
+                // https://bugs.webkit.org/show_bug.cgi?id=13343
+                // Let us assume marginLeft == marginRight
                 if (style == "marginRight" && YAHOO.env.ua.webkit) {
-                    value = value < 0 ? 0 : value;
+                    value = getStyleIntVal(el, "marginLeft");
                 }
             } else if (type == "float") {
                 value = getStyleFloatVal(el, style);
