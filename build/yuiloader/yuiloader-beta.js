@@ -2252,13 +2252,15 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         this.comboBase = YUI.info.comboBase;
 
         /**
-         * If configured, YUI JS resources will use the combo
-         * handler
+         * If configured, YUI will use the the combo handler on the
+         * Yahoo! CDN to pontentially reduce the number of http requests
+         * required.
          * @property combine
          * @type boolean
-         * @default true if a base dir isn't in the config
+         * @default false
          */
-        this.combine = (o && !('base' in o));
+        // this.combine = (o && !('base' in o));
+        this.combine = false;
 
 
         /**
@@ -3419,7 +3421,8 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                     continue;
                 }
 
-                url = m.fullpath || this._url(m.path);
+                url = m.fullpath;
+                url = (url) ? this._filter(url) : this._url(m.path);
 
                 // YAHOO.log("xhr request: " + url + ", " + i);
 
@@ -3573,10 +3576,13 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                     //YAHOO.log("attempting to load " + s[i] + ", " + this.base);
 
                     var fn=(m.type === "css") ? util.Get.css : util.Get.script,
-                        url=m.fullpath || this._url(m.path), self=this, 
+                        url = m.fullpath,
+                        self=this, 
                         c=function(o) {
                             self.loadNext(o.data);
                         };
+
+                        url = (url) ? this._filter(url) : this._url(m.path);
 
                     // safari 2.x or lower, script, and part of YUI
                     if (env.ua.webkit && env.ua.webkit < 420 && m.type === "js" && 

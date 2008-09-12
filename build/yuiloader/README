@@ -3,9 +3,11 @@ yuiloader - Release Notes
 2.6.0
  * Autocomplete requires datasource.
  * Config always used if provided to insert().
- * Added timeout support.
- * Added combo handler support, which is on by default 'base' isn't changed
-   from the default.
+ * Added timeout support, which is off by default.  Add a 'timeout'
+   config value greater than zero and an onTimeout handler to use it.
+ * Added combo handler support, which is off by default.  Set
+   'combine' to true to use it.
+ * Filters are applied to new modules that have a 'fullpath' attribute.
 
 2.5.2
   * uploader requires element.

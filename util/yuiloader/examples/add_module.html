@@ -3,7 +3,7 @@
 <head>
 <title>yui.js</title>
 
-<script type="text/javascript" src="../../build/yuiloader/yuiloader-beta.js"></script>
+<script type="text/javascript" src="../../build/yuiloader/yuiloader-beta-debug.js"></script>
 
 <script type="text/javascript">
 
@@ -39,12 +39,15 @@
                     loader.addModule({
                         name: "json",
                         type: "js",
-                        fullpath: "http://www.json.org/json.js",
+                        fullpath: "http://www.json.org/json-min.js",
                         requires: ["jsoncss"]
                         //skinnable: true
                         });
 
                     loader.require("tabview", "treeview", "json", "datatable");
+
+                    loader.filter = 'debug';
+                    loader.base = '/build/';
 
                     loader.onSuccess = function() {
                                 log("insert callback");
@@ -63,7 +66,7 @@
                                     });
                                                 
                             };
-//                    loader.insert();
+loader.insert();
 
                     log(loader.sorted);
 
