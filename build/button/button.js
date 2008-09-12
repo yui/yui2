@@ -1556,7 +1556,9 @@
 				},
 
 				bPotentialContextOverlap = (aMenuAlignment && 
-					oOverlapPositions[aMenuAlignment[0] + aMenuAlignment[1]]);
+					oOverlapPositions[aMenuAlignment[0] + aMenuAlignment[1]]),
+					
+				fnFocusMethod;
 
 
 			oMenu.cfg.setProperty("context", 
@@ -1771,9 +1773,20 @@
 			};
 
 
+
             if (Menu && oMenu && (oMenu instanceof Menu)) {
 
+				// Since Menus automatically focus themselves when made visible, temporarily 
+				// replace the focus method so that the value of the Button's "focusmenu"
+				// attribute determines if the Menu should be focus when made visible.
+
+				fnFocusMethod = oMenu.focus;
+
+				oMenu.focus = function () {};
+
                 oMenu.show();
+
+        		oMenu.focus = fnFocusMethod;
 
 
 				if (!(nMenuMaxHeight === 0 && !bPotentialContextOverlap)) {
