@@ -1097,7 +1097,7 @@
 			
 			function setMenuContainer() {
 
-				oMenu.cfg.setProperty("container", oButtonElement.parentNode);
+				oMenu.cfg.queueProperty("container", oButtonElement.parentNode);
 				
 				this.removeListener("appendTo", setMenuContainer);
 			
@@ -1106,8 +1106,7 @@
 
 			function initMenu() {
 		
-				var aMenuAlignment,
-					oContainer;
+				var oContainer;
 		
 				if (oMenu) {
 
@@ -1118,14 +1117,6 @@
 					oMenu.hideEvent.subscribe(this._onMenuHide, null, this);
 					oMenu.renderEvent.subscribe(this._onMenuRender, null, this);
 
-					aMenuAlignment = this.get("menualignment");
-
-					oMenu.cfg.setProperty("context", 
-									[oButtonElement, aMenuAlignment[0], aMenuAlignment[1]]);
-
-					oMenu.cfg.setProperty("preventcontextoverlap", true);
-					oMenu.cfg.setProperty("constraintoviewport", true);
-
 
 					if (Menu && oMenu instanceof Menu) {
 
@@ -1135,7 +1126,7 @@
 
 							if (oContainer) {
 
-								oMenu.cfg.setProperty("container", oContainer);
+								oMenu.cfg.queueProperty("container", oContainer);
 
 							}
 							else {
@@ -1146,8 +1137,8 @@
 
 						}
 
-						oMenu.cfg.setProperty("minscrollheight", this.get("menuminscrollheight"));
-						oMenu.cfg.setProperty("clicktohide", false);
+						oMenu.cfg.queueProperty("minscrollheight", this.get("menuminscrollheight"));
+						oMenu.cfg.queueProperty("clicktohide", false);
 
 						oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
 						oMenu.subscribe("click", this._onMenuClick, this, true);
@@ -1242,9 +1233,7 @@
 							if (oItem) {
 			
 								oItem.cfg.subscribeToConfigEvent("selected", 
-									this._onMenuItemSelected, 
-									oItem, 
-									this);
+									this._onMenuItemSelected, oItem, this);
 			
 							}
 			
@@ -1261,7 +1250,7 @@
 					oMenu = p_oMenu;
 					bInstance = true;
 			
-					oMenu.cfg.setProperty("visible", false);
+					oMenu.cfg.queueProperty("visible", false);
 			
 					initMenu.call(this);
 			
@@ -1591,213 +1580,219 @@
 					oOverlapPositions[aMenuAlignment[0] + aMenuAlignment[1]]);
 
 
-            if (Menu && oMenu && (oMenu instanceof Menu)) {
-        
+			oMenu.cfg.setProperty("context", 
+							[this.get("element"), aMenuAlignment[0], aMenuAlignment[1]]);
 
-				var getConstrainedY = function (y) {
+			oMenu.cfg.setProperty("preventcontextoverlap", true);
+			oMenu.cfg.setProperty("constraintoviewport", true);
+
+
+
+			var getConstrainedY = function (y) {
+			
+				var oMenuEl = oMenu.element,
+					nMenuOffsetHeight = oMenuEl.offsetHeight,
 				
-					var oMenuEl = oMenu.element,
-						nMenuOffsetHeight = oMenuEl.offsetHeight,
+					nViewportOffset = YAHOO.widget.Overlay.VIEWPORT_OFFSET,
+					viewPortHeight = Dom.getViewportHeight(),
+					scrollY = Dom.getDocumentScrollTop(),
+	
+					bCanConstrain = (nMenuOffsetHeight + nViewportOffset < viewPortHeight),
 					
-						nViewportOffset = YAHOO.widget.Overlay.VIEWPORT_OFFSET,
-						viewPortHeight = Dom.getViewportHeight(),
-						scrollY = Dom.getDocumentScrollTop(),
-		
-						bCanConstrain = (nMenuOffsetHeight + nViewportOffset < viewPortHeight),
-						
-		
-						aContext = oMenu.cfg.getProperty("context"),
-						oContextEl,
-						nContextElY,
-						nContextElHeight,
-		
-						bFlipped = false,
-		
-						nTopRegionHeight,
-						nBottomRegionHeight,
-		
-						topConstraint,
-						bottomConstraint,
-		
-						yNew = y;
-		
+	
+					aContext = oMenu.cfg.getProperty("context"),
+					oContextEl,
+					nContextElY,
+					nContextElHeight,
+	
+					bFlipped = false,
+	
+					nTopRegionHeight,
+					nBottomRegionHeight,
+	
+					topConstraint,
+					bottomConstraint,
+	
+					yNew = y;
+	
 
 
-					// Only focus the Menu if the entire Menu fits inside the viewport, otherwise
-					// focusing the Menu will cause the viewport to scroll.
+				// Only focus the Menu if the entire Menu fits inside the viewport, otherwise
+				// focusing the Menu will cause the viewport to scroll.
 
-					if (!bCanConstrain) {
-						bFocusMenu = false;
+				if (!bCanConstrain) {
+					bFocusMenu = false;
+				}
+	
+
+				var flipVertical = function () {
+	
+					var nNewY;
+				
+					// The Menu is below the context element, flip it above
+					if ((oMenu.cfg.getProperty("y") - scrollY) > nContextElY) { 
+						nNewY = (nContextElY - nMenuOffsetHeight);
+					}
+					else {	// The Menu is above the context element, flip it below
+						nNewY = (nContextElY + nContextElHeight);
 					}
 		
-
-					var flipVertical = function () {
-		
-						var nNewY;
+					oMenu.cfg.setProperty("y", (nNewY + scrollY), true);
 					
-						// The Menu is below the context element, flip it above
-						if ((oMenu.cfg.getProperty("y") - scrollY) > nContextElY) { 
-							nNewY = (nContextElY - nMenuOffsetHeight);
-						}
-						else {	// The Menu is above the context element, flip it below
-							nNewY = (nContextElY + nContextElHeight);
-						}
-			
-						oMenu.cfg.setProperty("y", (nNewY + scrollY), true);
-						
-						return nNewY;
-					
-					};
-		
-		
-					/*
-						 Uses the context element's position to calculate the availble height 
-						 above and below it to display its corresponding Menu.
-					*/
-		
-					var getDisplayRegionHeight = function () {
-		
-						// The Menu is below the context element
-						if ((oMenu.cfg.getProperty("y") - scrollY) > nContextElY) {
-							return (nBottomRegionHeight - nViewportOffset);				
-						}
-						else {	// The Menu is above the context element
-							return (nTopRegionHeight - nViewportOffset);				
-						}
-				
-					};
-		
-		
-					/*
-						Trys to place the Menu in the best possible position (either above or 
-						below its corresponding context element).
-					*/
-				
-					var setVerticalPosition = function () {
-				
-						var nDisplayRegionHeight = getDisplayRegionHeight(),
-							bMenuHasItems = (oMenu.getItems().length > 0),
-							nMenuMinScrollHeight,
-							fnReturnVal,
-							nNewY;
-
-
-						if (nMenuOffsetHeight > nDisplayRegionHeight) {
-
-							nMenuMinScrollHeight = 
-								bMenuHasItems ? 
-								oMenu.cfg.getProperty("minscrollheight") : nMenuOffsetHeight;
-
-
-							if (nDisplayRegionHeight > nMenuMinScrollHeight) {
-
-								if (bMenuHasItems) {
-
-									oMenu.cfg.setProperty("maxheight", nDisplayRegionHeight);
-									
-									// Re-align the Menu since its height has just changed
-									// as a result of the setting of the maxheight property.
-
-									if ((oMenu.cfg.getProperty("y") - scrollY) > nContextElY) { 
-										nNewY = (nContextElY + nContextElHeight);
-									}
-									else {	
-										nNewY = (nContextElY - oMenuEl.offsetHeight);
-									}
-
-									oMenu.cfg.setProperty("y", (nNewY + scrollY), true);
-
-								}
-
-							}
-							else {
-
-								oMenu.cfg.setProperty("maxheight", nMenuMaxHeight);
-
-							}
-							
-
-							if (nDisplayRegionHeight < nMenuMinScrollHeight) {
-
-								if (bFlipped) {
-					
-									/*
-										 All possible positions and values for the "maxheight" 
-										 configuration property have been tried, but none were 
-										 successful, so fall back to the original size and position.
-									*/
-				
-									flipVertical();
-									
-								}
-								else {
-					
-									flipVertical();
-			
-									bFlipped = true;
-					
-									fnReturnVal = setVerticalPosition();
-					
-								}
-								
-							}
-						
-						}
-						else {
-						
-							oMenu.cfg.setProperty("maxheight", nMenuMaxHeight);
-						
-						}
-				
-						return fnReturnVal;
-				
-					};
-
-
-
-					if (oMenu.cfg.getProperty("preventcontextoverlap") && 
-						bPotentialContextOverlap) {
-
-						if (bCanConstrain) {
-		
-							oContextEl = aContext[0];
-							nContextElHeight = oContextEl.offsetHeight;
-							nContextElY = (Dom.getY(oContextEl) - scrollY);
-			
-							nTopRegionHeight = nContextElY;
-							nBottomRegionHeight = 
-								(viewPortHeight - (nContextElY + nContextElHeight));
-			
-							setVerticalPosition();
-						
-						}
-
-						yNew = oMenu.cfg.getProperty("y");
-		
-					}
-					else {
-		
-						if (bCanConstrain) {
-
-							topConstraint = scrollY + nViewportOffset;
-							bottomConstraint = 
-								scrollY + viewPortHeight - nMenuOffsetHeight - nViewportOffset;
-			
-							if (y < topConstraint) {
-								yNew  = topConstraint;
-							} else if (y  > bottomConstraint) {
-								yNew  = bottomConstraint;
-							}
-						} else {
-							yNew = nViewportOffset + scrollY;
-						}
-		
-					}
-
-					return yNew;			
+					return nNewY;
 				
 				};
+	
+	
+				/*
+					 Uses the context element's position to calculate the availble height 
+					 above and below it to display its corresponding Menu.
+				*/
+	
+				var getDisplayRegionHeight = function () {
+	
+					// The Menu is below the context element
+					if ((oMenu.cfg.getProperty("y") - scrollY) > nContextElY) {
+						return (nBottomRegionHeight - nViewportOffset);				
+					}
+					else {	// The Menu is above the context element
+						return (nTopRegionHeight - nViewportOffset);				
+					}
+			
+				};
+	
+	
+				/*
+					Trys to place the Menu in the best possible position (either above or 
+					below its corresponding context element).
+				*/
+			
+				var setVerticalPosition = function () {
+			
+					var nDisplayRegionHeight = getDisplayRegionHeight(),
+						bMenuHasItems = (oMenu.getItems().length > 0),
+						nMenuMinScrollHeight,
+						fnReturnVal,
+						nNewY;
 
+
+					if (nMenuOffsetHeight > nDisplayRegionHeight) {
+
+						nMenuMinScrollHeight = 
+							bMenuHasItems ? 
+							oMenu.cfg.getProperty("minscrollheight") : nMenuOffsetHeight;
+
+
+						if (nDisplayRegionHeight > nMenuMinScrollHeight) {
+
+							if (bMenuHasItems) {
+
+								oMenu.cfg.setProperty("maxheight", nDisplayRegionHeight);
+								
+								// Re-align the Menu since its height has just changed
+								// as a result of the setting of the maxheight property.
+
+								if ((oMenu.cfg.getProperty("y") - scrollY) > nContextElY) { 
+									nNewY = (nContextElY + nContextElHeight);
+								}
+								else {	
+									nNewY = (nContextElY - oMenuEl.offsetHeight);
+								}
+
+								oMenu.cfg.setProperty("y", (nNewY + scrollY), true);
+
+							}
+
+						}
+						else {
+
+							oMenu.cfg.setProperty("maxheight", nMenuMaxHeight);
+
+						}
+						
+
+						if (nDisplayRegionHeight < nMenuMinScrollHeight) {
+
+							if (bFlipped) {
+				
+								/*
+									 All possible positions and values for the "maxheight" 
+									 configuration property have been tried, but none were 
+									 successful, so fall back to the original size and position.
+								*/
+			
+								flipVertical();
+								
+							}
+							else {
+				
+								flipVertical();
+		
+								bFlipped = true;
+				
+								fnReturnVal = setVerticalPosition();
+				
+							}
+							
+						}
+					
+					}
+					else {
+					
+						oMenu.cfg.setProperty("maxheight", nMenuMaxHeight);
+					
+					}
+			
+					return fnReturnVal;
+			
+				};
+
+
+
+				if (bPotentialContextOverlap) {
+
+					if (bCanConstrain) {
+	
+						oContextEl = aContext[0];
+						nContextElHeight = oContextEl.offsetHeight;
+						nContextElY = (Dom.getY(oContextEl) - scrollY);
+		
+						nTopRegionHeight = nContextElY;
+						nBottomRegionHeight = 
+							(viewPortHeight - (nContextElY + nContextElHeight));
+		
+						setVerticalPosition();
+					
+					}
+
+					yNew = oMenu.cfg.getProperty("y");
+	
+				}
+				else {
+	
+					if (bCanConstrain) {
+
+						topConstraint = scrollY + nViewportOffset;
+						bottomConstraint = 
+							scrollY + viewPortHeight - nMenuOffsetHeight - nViewportOffset;
+		
+						if (y < topConstraint) {
+							yNew  = topConstraint;
+						} else if (y  > bottomConstraint) {
+							yNew  = bottomConstraint;
+						}
+					} else {
+						yNew = nViewportOffset + scrollY;
+					}
+	
+				}
+
+				return yNew;			
+			
+			};
+
+
+            if (Menu && oMenu && (oMenu instanceof Menu)) {
 
                 oMenu.show();
 
