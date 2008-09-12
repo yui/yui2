@@ -9,6 +9,7 @@ yuiloader - Release Notes
    'combine' to true to use it.
  * Filters are applied to new modules that have a 'fullpath' attribute.
  * resize, editor, simpleeditor, layout out of beta
+ * Added datastore
 
 2.5.2
   * uploader requires element.

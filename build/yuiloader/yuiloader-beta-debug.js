@@ -1847,6 +1847,12 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'optional': ['connection']
         },
 
+        'datastore': {
+            'type': 'js',
+            'path': 'datastore/datastore-experimental-min.js',
+            'requires': ['element']
+        },
+
         'datatable': {
             'type': 'js',
             'path': 'datatable/datatable-beta-min.js',
