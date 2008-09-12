@@ -171,7 +171,7 @@
 
         'editor': {
             'type': 'js',
-            'path': 'editor/editor-beta-min.js',
+            'path': 'editor/editor-min.js',
             'requires': ['menu', 'element', 'button'],
             'optional': ['animation', 'dragdrop'],
             'supersedes': ['simpleeditor'],
@@ -235,7 +235,7 @@
 
          'layout': {
              'type': 'js',
-             'path': 'layout/layout-beta-min.js',
+             'path': 'layout/layout-min.js',
              'requires': ['dom', 'event', 'element'],
              'optional': ['animation', 'dragdrop', 'resize', 'selector'],
              'skinnable': true
@@ -298,7 +298,7 @@
 
          'resize': {
              'type': 'js',
-             'path': 'resize/resize-beta-min.js',
+             'path': 'resize/resize-min.js',
              'requires': ['dom', 'event', 'dragdrop', 'element'],
              'optional': ['animation'],
              'skinnable': true

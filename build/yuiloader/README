@@ -8,6 +8,7 @@ yuiloader - Release Notes
  * Added combo handler support, which is off by default.  Set
    'combine' to true to use it.
  * Filters are applied to new modules that have a 'fullpath' attribute.
+ * resize, editor, layout out of beta
 
 2.5.2
   * uploader requires element.

@@ -1869,7 +1869,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'editor': {
             'type': 'js',
-            'path': 'editor/editor-beta-min.js',
+            'path': 'editor/editor-min.js',
             'requires': ['menu', 'element', 'button'],
             'optional': ['animation', 'dragdrop'],
             'supersedes': ['simpleeditor'],
@@ -1933,7 +1933,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
          'layout': {
              'type': 'js',
-             'path': 'layout/layout-beta-min.js',
+             'path': 'layout/layout-min.js',
              'requires': ['dom', 'event', 'element'],
              'optional': ['animation', 'dragdrop', 'resize', 'selector'],
              'skinnable': true
@@ -1996,7 +1996,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
          'resize': {
              'type': 'js',
-             'path': 'resize/resize-beta-min.js',
+             'path': 'resize/resize-min.js',
              'requires': ['dom', 'event', 'dragdrop', 'element'],
              'optional': ['animation'],
              'skinnable': true
