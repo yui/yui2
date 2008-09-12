@@ -200,7 +200,8 @@
 	.yui-gd .yui-g .yui-u,
 	.yui-ge .yui-g .yui-u,
 	.yui-gf .yui-g .yui-u {width:49%;*width:48.1%;*margin-left:0;}
-
+	
+	.yui-g .yui-g .yui-u {width:48.1%;}/*SF 1927599 from 1.14 to 2.6.0*/
 	.yui-g .yui-gb div.first,
 	.yui-gb .yui-gb div.first {*margin-right:0;*width:32%;_width:31.7%;}
 

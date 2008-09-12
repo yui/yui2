@@ -3,7 +3,10 @@ YUI Library - Fonts - Release Notes
 Version 2.6.0
 
    * Added font reduction and face restatement for select, input, button, and textarea
-   * Comments and formatting updates
+   * Comments and formatting updates.
+   * KNOWN ISSUE: 
+     In IE8 Beta 2, user-initiated Text Size adjustment does not work because our keyword
+     filters to IE do not reach IE8. Note that Zoom works, providing users a resize option.
 
 Version 2.5.2
 

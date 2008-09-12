@@ -5,6 +5,7 @@ Version 2.6.0
   * Removed extraneous "s" typo per Bugzilla #1826435 and SF #1921958
   * Added .yui-g .yui-u .yui-g {width:100%;} so nested grids work 
     more consistently; BZ:2156128, SF:2060556
+  * Added provision for better g>g>u gutters per SF:1927599
 
 Version 2.5.1
 
