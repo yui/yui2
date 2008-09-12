@@ -367,9 +367,12 @@
         default:
             if (type == "int") {
                 value = getStyleIntVal(el, style);
-                // XXX: Safari returns a large negative number for margin-right
+                // XXX: Safari calculates incorrect marginRight for an element
+                // which has its parent element style set to overflow: hidden
+                // https://bugs.webkit.org/show_bug.cgi?id=13343
+                // Let us assume marginLeft == marginRight
                 if (style == "marginRight" && YAHOO.env.ua.webkit) {
-                    value = value < 0 ? 0 : value;
+                    value = getStyleIntVal(el, "marginLeft");
                 }
             } else if (type == "float") {
                 value = getStyleFloatVal(el, style);
@@ -715,6 +718,7 @@
                 if (this.get("selectedItem") == pos) {
                     pos = pos >= num ? num - 1 : pos;
                     this.set("selectedItem", pos);
+                    this.refresh("selectedItem", true);
                 }
             } else {
             }
@@ -1342,6 +1346,7 @@
          * creating the Carousel.
          */
         initAttributes: function (attrs) {
+            attrs = attrs || {};
             Carousel.superclass.initAttributes.call(this, attrs);
 
             /**
@@ -1364,7 +1369,7 @@
             this.setAttributeConfig("firstVisible", {
                     method    : this._setFirstVisible,
                     validator : this._validateFirstVisible,
-                    value     : this.CONFIG.FIRST_VISIBLE
+                    value     : attrs.firstVisible || this.CONFIG.FIRST_VISIBLE
             });
 
             /**
@@ -1377,7 +1382,7 @@
             this.setAttributeConfig("numVisible", {
                     method    : this._setNumVisible,
                     validator : this._validateNumVisible,
-                    value     : this.CONFIG.NUM_VISIBLE
+                    value     : attrs.numVisible || this.CONFIG.NUM_VISIBLE
             });
 
             /**
@@ -1394,12 +1399,12 @@
             /**
              * @attribute scrollIncrement
              * @description The number of items to scroll by for arrow keys.
-             * @default 3
+             * @default 1
              * @type Number
              */
             this.setAttributeConfig("scrollIncrement", {
                     validator : this._validateScrollIncrement,
-                    value     : 1
+                    value     : attrs.scrollIncrement || 1
             });
 
             /**
@@ -1424,7 +1429,7 @@
             this.setAttributeConfig("revealAmount", {
                     method    : this._setRevealAmount,
                     validator : this._validateRevealAmount,
-                    value     : 0
+                    value     : attrs.revealAmount || 0
             });
 
             /**
@@ -1436,7 +1441,7 @@
              */
             this.setAttributeConfig("isCircular", {
                     validator : JS.isBoolean,
-                    value     : false
+                    value     : attrs.isCircular || false
             });
 
             /**
@@ -1448,7 +1453,7 @@
             this.setAttributeConfig("isVertical", {
                     method    : this._setOrientation,
                     validator : JS.isBoolean,
-                    value     : false
+                    value     : attrs.isVertical || false
             });
 
             /**
@@ -1462,7 +1467,8 @@
             this.setAttributeConfig("navigation", {
                     method    : this._setNavigation,
                     validator : this._validateNavigation,
-                    value     : { prev: null, next: null, page: null }
+                    value     : attrs.navigation || {
+                                        prev: null, next: null, page: null }
             });
 
             /**
@@ -1476,7 +1482,7 @@
              */
             this.setAttributeConfig("animation", {
                     validator : this._validateAnimation,
-                    value     : { speed: 0, effect: null }
+                    value     : attrs.animation || { speed: 0, effect: null }
             });
 
             /**
@@ -1487,7 +1493,7 @@
              */
             this.setAttributeConfig("autoPlay", {
                     validator : JS.isNumber,
-                    value     : 0
+                    value     : attrs.autoPlay || 0
             });
         },
 
@@ -1706,6 +1712,7 @@
         
             // Make sure at least one item is selected
             this.set("selectedItem", this.get("firstVisible"));
+            this.refresh("selectedItem", true);
 
             // By now, the navigation would have been rendered, so calculate
             // the container height now.
@@ -2035,6 +2042,8 @@
 
             if ((item = this.getItemPositionById(target.id)) >= 0) {
                 this.set("selectedItem", this._getSelectedItem(item));
+                // XXX: strangely the value didn't propagate through
+                this.refresh("selectedItem", true);
             }
         },
 
@@ -2076,6 +2085,8 @@
                 prevent = true;
                 break;
             }
+
+            this.refresh("selectedItem", true);
 
             if (prevent) {
                 Event.preventDefault(ev);
