@@ -1475,7 +1475,7 @@ initAttributes : function(oConfigs) {
      */
     this.setAttributeConfig("currencyOptions", {
         value: {
-            prefix: this.get("currencySymbol"), // TODO: deprecate
+            prefix: this.get("currencySymbol"), // TODO: deprecate currencySymbol
             decimalPlaces:2,
             decimalSeparator:".",
             thousandsSeparator:","
@@ -1970,7 +1970,7 @@ _initDataSource : function(oDataSource) {
         var tmpTable = null;
         var tmpContainer = this._elContainer;
         var i=0;
-        ///TODO: this will break if re-initing DS at runtime for SDT
+        //TODO: this will break if re-initing DS at runtime for SDT
         // Peek in container child nodes to see if TABLE already exists
         if(tmpContainer.hasChildNodes()) {
             var tmpChildren = tmpContainer.childNodes;
@@ -2285,7 +2285,7 @@ _initTheadEl : function(elTable) {
         // Destroy previous
         this._destroyTheadEl();
     
-        ///TODO: append to DOM later
+        //TODO: append to DOM later for performance
         var elThead = (this._elColgroup) ?
             elTable.insertBefore(document.createElement("thead"), this._elColgroup.nextSibling) :
             elTable.appendChild(document.createElement("thead"));
@@ -2332,13 +2332,11 @@ _initTheadEl : function(elTable) {
         // Set FIRST/LAST on edge TH elements using the values in ColumnSet headers array
         var aFirstHeaders = oColumnSet.headers[0] || [];
         for(i=0; i<aFirstHeaders.length; i++) {
-            //TODO: A better way to get th cell
-            Dom.addClass(Dom.get(this._sId+"-th-"+aFirstHeaders[i]), DT.CLASS_FIRST);
+            Dom.addClass(Dom.get(this.getId() +"-th-"+aFirstHeaders[i]), DT.CLASS_FIRST);
         }
         var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1] || [];
         for(i=0; i<aLastHeaders.length; i++) {
-            //TODO: A better way to get th cell
-            Dom.addClass(Dom.get(this._sId+"-th-"+aLastHeaders[i]), DT.CLASS_LAST);
+            Dom.addClass(Dom.get(this.getId() +"-th-"+aLastHeaders[i]), DT.CLASS_LAST);
         }
         
         YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
@@ -2853,9 +2851,6 @@ _clearTrTemplateEl : function () {
  * @private 
  */
 _getTrTemplateEl : function (oRecord, index) {
-    //TODO: Template must be nulled or updated with the following actions:
-    // showColumn, hideColumn, setColumnWidth, insertColumn, removeColumn, selectColumn, sortColumn
-
     // Template is already available
     if(this._elTrTemplate) {
         return this._elTrTemplate;
@@ -3675,7 +3670,7 @@ _onTheadKeydown : function(e, oSelf) {
                 return;
             case "input":
             case "textarea":
-                // TODO
+                // TODO: implement textareaKeyEvent
                 break;
             case "thead":
                 bKeepBubbling = oSelf.fireEvent("theadKeyEvent",{target:elTarget,event:e});
@@ -4276,12 +4271,11 @@ getPreviousTrEl : function(row) {
  * Returns DOM reference to a TD liner element.
  *
  * @method getTdLinerEl
- * @param cell {HTMLElement | String | Object} DOM element reference or string ID, or
+ * @param cell {HTMLElement | Object} TD element or child of a TD element, or
  * object literal of syntax {record:oRecord, column:oColumn}.
  * @return {HTMLElement} Reference to TD liner element.
  */
 getTdLinerEl : function(cell) {
-//TODO: TD els no longer get assigned IDs
     var elCell = this.getTdEl(cell);
     return elCell.firstChild || null;
 },
@@ -4290,12 +4284,11 @@ getTdLinerEl : function(cell) {
  * Returns DOM reference to a TD element.
  *
  * @method getTdEl
- * @param cell {HTMLElement | String | Object} DOM element reference or string ID, or
+ * @param cell {HTMLElement | String | Object} TD element or child of a TD element, or
  * object literal of syntax {record:oRecord, column:oColumn}.
  * @return {HTMLElement} Reference to TD element.
  */
 getTdEl : function(cell) {
-//TODO: TD els no longer get assigned IDs
     var elCell;
     var el = Dom.get(cell);
 
@@ -5182,12 +5175,11 @@ getRecord : function(row) {
  * getting Columns by Column ID string, please use the method getColumnById().
  *
  * @method getColumn
- * @param column {HTMLElement | String | Number} DOM reference or ID string to a
- * TH/TD element (or child of a TH/TD element), a Column key, or a ColumnSet key index.
+ * @param column {HTMLElement | String | Number} TH/TD element (or child of a
+ * TH/TD element), a Column key, or a ColumnSet key index.
  * @return {YAHOO.widget.Column} Column instance.
  */
 getColumn : function(column) {
-//TODO: TD els no longer get assigned DOM IDs
     var oColumn = this._oColumnSet.getColumn(column);
 
     if(!oColumn) {
@@ -5452,8 +5444,6 @@ setColumnWidth : function(oColumn, nWidth) {
  * @private
  */
 _setColumnWidth : function(oColumn, sWidth, sOverflow) {
-///TODO: blow away the tr template for fallback cases
-//YAHOO.log("start _sColumnWidth","time");
     if(oColumn && (oColumn.getKeyIndex() !== null)) {
         sOverflow = sOverflow || (((sWidth === '') || (sWidth === 'auto')) ? 'visible' : 'hidden');
     
@@ -5469,7 +5459,6 @@ _setColumnWidth : function(oColumn, sWidth, sOverflow) {
     else {
         YAHOO.log("Could not set width of unknown Column " + oColumn + " to " + sWidth, "warn", this.toString());
     }
-    //YAHOO.log("end _sColumnWidth","time");
 },
 
 /**
@@ -5486,7 +5475,6 @@ _setColumnWidth : function(oColumn, sWidth, sOverflow) {
  * @private
  */
 _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
-//YAHOO.log("start _setColumnWidthDynStyles","time");
     var s = DT._elDynStyleNode,
         rule;
     
@@ -5535,7 +5523,6 @@ _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
             this._elTbody.style.display = '';
         }
     }
-//YAHOO.log("end _setColumnWidthDynStyles","time");
     
     // That was not a success, we must call the fallback routine
     if(!rule) {
@@ -5555,8 +5542,7 @@ _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
  * @private
  */
 _setColumnWidthDynFunction : function(oColumn, sWidth, sOverflow) {
-//YAHOO.log("start _setColumnWidthDynFunction","time");
-    ///TODO: why is this here?
+    // TODO: why is this here?
     if(sWidth == 'auto') {
         sWidth = ''; 
     }
@@ -5612,13 +5598,10 @@ _setColumnWidthDynFunction : function(oColumn, sWidth, sOverflow) {
     // Get the function to execute
     var resizerFn = this._aDynFunctions[rowslen];
 
-    ///TODO: Hide TBODY for performance?
+    // TODO: Hide TBODY for performance in _setColumnWidthDynFunction?
     if (resizerFn) {
-        ///this._elTbody.style.display = 'none';
         resizerFn.call(this,oColumn,sWidth,sOverflow);
-        ///this._elTbody.style.display = '';
     }
-//YAHOO.log("end _setColumnWidthDynFunction","time");
 },
 
 /**
@@ -5993,11 +5976,11 @@ insertColumn : function(oColumn, index) {
                 timeout: (loopN > 0) ? 0 : -1
             });
             this._runRenderChain(); 
-            return oNewColumn;
         }
 
         this.fireEvent("columnInsertEvent",{column:oColumn,index:index});
         YAHOO.log("Column \"" + oColumn.key + "\" inserted into index " + index, "info", this.toString());
+        return oNewColumn;
     }
 },
 
@@ -6169,7 +6152,12 @@ selectColumn : function(oColumn) {
                 iterations: allRows.length,
                 argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
             });
-            this._runRenderChain();       
+
+            this._clearTrTemplateEl();
+            
+            this._elTbody.style.display = "none";
+            this._runRenderChain();
+            this._elTbody.style.display = "";      
             
             this.fireEvent("columnSelectEvent",{column:oColumn});
             YAHOO.log("Column \"" + oColumn.key + "\" selected", "info", this.toString());
@@ -6213,7 +6201,12 @@ unselectColumn : function(oColumn) {
                 iterations:allRows.length,
                 argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
             });
-            this._runRenderChain();       
+            
+            this._clearTrTemplateEl();
+
+            this._elTbody.style.display = "none";
+            this._runRenderChain();
+            this._elTbody.style.display = "";      
             
             this.fireEvent("columnUnselectEvent",{column:oColumn});
             YAHOO.log("Column \"" + oColumn.key + "\" unselected", "info", this.toString());
@@ -8979,9 +8972,7 @@ getSelectedTdEls : function() {
  * to DataTable page element or RecordSet index.
  */
 selectCell : function(cell) {
-/*TODO:
-accept {record}
-*/
+//TODO: accept {record} in selectCell()
     var elCell = this.getTdEl(cell);
 
     if(elCell) {
@@ -9082,7 +9073,7 @@ unselectAllCells : function() {
     // Update UI
     this._unselectAllTdEls();
 
-    //TODO: send data to custom event handler
+    //TODO: send data to unselectAllCellsEvent handler
     this.fireEvent("unselectAllCellsEvent");
     YAHOO.log("Unselected all cells", "info", this.toString());
 },
@@ -10233,13 +10224,13 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @event tableBlurEvent
      */
 
-    /*TODO
+    /*TODO implement theadBlurEvent
      * Fired when the DataTable THEAD element has a blur event.
      *
      * @event theadBlurEvent
      */
 
-    /*TODO
+    /*TODO: implement tbodyBlurEvent
      * Fired when the DataTable TBODY element has a blur event.
      *
      * @event tbodyBlurEvent
