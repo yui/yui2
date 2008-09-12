@@ -26,7 +26,6 @@
 
 			<!-- start with the classes from the SWC -->
 			<arg line="--library-path+='${component.srcdir}/as'"/>
-			<arg line="-source-path+='${commondir}/as'"/>
 			
 			<!-- specify where to output the SWF -->
 			<arg line="--output '${component.srcdir}/swf/datastore.swf'"/>
@@ -43,6 +42,13 @@
     		<fileset dir="${commondir}/js">
     			<include name="swfobject.js" />
     			<include name="FlashAdapter.js" />
+    		</fileset>	
+    	</copy>
+    	<copy todir="${component.srcdir}/as/com/yahoo/yui" overwrite="true">
+    		<fileset dir="${commondir}/as/com/yahoo/yui">
+    			<include name="LoggerCategory.as" />
+    			<include name="YUIAdapter.as" />
+    			<include name="YUILogger.as" />
     		</fileset>
     	</copy>
     </target>
