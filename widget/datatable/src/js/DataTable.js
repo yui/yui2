@@ -2422,25 +2422,19 @@ formatTheadCell : function(elCellLabel, oColumn, oSortedBy) {
     // Add accessibility link for sortable Columns
     if(oColumn.sortable) {
         // Calculate the direction
-        var sSortClass = this.getColumnSortDir(oColumn);
-        var sSortDir = (sSortClass === DT.CLASS_DESC) ? "descending" : "ascending";
+        var sSortClass = this.getColumnSortDir(oColumn, oSortedBy);
+        var bDesc = (sSortClass === DT.CLASS_DESC);
 
         // This is the sorted Column
         if(oSortedBy && (oColumn.key === oSortedBy.key)) {
-            sSortDir = (oSortedBy.dir === DT.CLASS_DESC) ? "ascending" : "descending";
+            bDesc = !(oSortedBy.dir === DT.CLASS_DESC);
         }
-        // Use the Column's default sort direction
-        //else {
-            //sSortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultDir && (oColumn.sortOptions.defaultDir === DT.CLASS_DESC)) ?
-                //"descending" : "ascending";
-
-        //}
 
         // Generate a unique HREF for visited status
-        var sHref = this.getId() + "-sort-" + oColumn.getSanitizedKey() + "-" + sSortDir;
+        var sHref = this.getId() + "-href-" + oColumn.getSanitizedKey();
         
         // Generate a dynamic TITLE for sort status
-        var sTitle = (sSortDir === "descending") ? this.get("MSG_SORTDESC") : this.get("MSG_SORTASC");
+        var sTitle = (bDesc) ? this.get("MSG_SORTDESC") : this.get("MSG_SORTASC");
         
         // Format the element
         elCellLabel.innerHTML = "<a href=\"" + sHref + "\" title=\"" + sTitle + "\" class=\"" + DT.CLASS_SORTABLE + "\">" + sLabel + "</a>";
@@ -2711,7 +2705,7 @@ _initEvents : function () {
 _initColumnSort : function() {
     this.subscribe("theadCellClickEvent", this.onEventSortColumn); 	 
 
-    // HACK: Convert sortedBy values for backward compatibility
+    // Backward compatibility
     var oSortedBy = this.get("sortedBy");
     if(oSortedBy) {
         if(oSortedBy.dir == "desc") {
@@ -5239,9 +5233,10 @@ getColumnById : function(column) {
  *
  * @method getColumnSortDir
  * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oSortedBy {Object} (optional) Specify the state, or use current state. 
  * @return {String} YAHOO.widget.DataTable.CLASS_ASC or YAHOO.widget.DataTableCLASS_DESC.
  */
-getColumnSortDir : function(oColumn) {
+getColumnSortDir : function(oColumn, oSortedBy) {
     // Backward compatibility
     if(oColumn.sortOptions && oColumn.sortOptions.defaultOrder) {
         if(oColumn.sortOptions.defaultOrder == "asc") {
@@ -5257,7 +5252,7 @@ getColumnSortDir : function(oColumn) {
 
     // Is the Column currently sorted?
     var bSorted = false;
-    var oSortedBy = this.get("sortedBy");
+    oSortedBy = oSortedBy || this.get("sortedBy");
     if(oSortedBy && (oSortedBy.key === oColumn.key)) {
         bSorted = true;
         if(oSortedBy.dir) {
