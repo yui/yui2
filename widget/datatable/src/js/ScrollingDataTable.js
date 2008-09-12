@@ -465,7 +465,7 @@ _initBdThEl : function(elTh, oColumn) {
         elTh.abbr = oColumn.abbr;
     }
 
-    ///TODO: strip links and form elements
+    // TODO: strip links and form elements
     var sKey = oColumn.getKey();
     var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;
     elTh.innerHTML = sLabel;

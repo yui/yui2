@@ -684,6 +684,23 @@ lang.augmentObject(DT, {
     },
 
     /**
+     * Destroys shared Column drag target.
+     *
+     * @method DataTable._destroyColumnDragTargetEl
+     * @private
+     * @static 
+     */
+    _destroyColumnDragTargetEl : function() {
+        if(DT._elColumnDragTarget) {
+            var el = DT._elColumnDragTarget;
+            YAHOO.util.Event.purgeElement(el);
+            el.parentNode.removeChild(el);
+            DT._elColumnDragTarget = null;
+            
+        }
+    },
+
+    /**
      * Creates HTML markup for shared Column drag target.
      *
      * @method DataTable._initColumnDragTargetEl
@@ -704,6 +721,23 @@ lang.augmentObject(DT, {
             
         }
         return DT._elColumnDragTarget;
+    },
+
+    /**
+     * Destroys shared Column resizer proxy.
+     *
+     * @method DataTable._destroyColumnResizerProxyEl
+     * @return {HTMLElement} Reference to Column resizer proxy.
+     * @private 
+     * @static 
+     */
+    _destroyColumnResizerProxyEl : function() {
+        if(DT._elColumnResizerProxy) {
+            var el = DT._elColumnResizerProxy;
+            YAHOO.util.Event.purgeElement(el);
+            el.parentNode.removeChild(el);
+            DT._elColumnResizerProxy = null;
+        }
     },
 
     /**
@@ -4864,7 +4898,9 @@ destroy : function() {
 
     this._oChainRender.stop();
     
-    //TODO: destroy static resizer proxy and column proxy?
+    // Destroy static resizer proxy and column proxy
+    DT._destroyColumnDragTargetEl();
+    DT._destroyColumnResizerProxyEl();
     
     // Destroy ColumnDD and ColumnResizers
     this._destroyColumnHelpers();
