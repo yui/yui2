@@ -51,6 +51,7 @@
 	    * 1972427 - [SF 1954095] Bulleting
         * 1839224 - [SF 1925337] editor indent/outdent inconsistent behavior
 	    * 2006092 - [SF 1996074] Indent changes the font to Arial
+        * 206493 - Handle Submit Failing
 
 
 **** version 2.5.2 ***

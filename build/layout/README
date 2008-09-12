@@ -3,6 +3,7 @@
     Enhancements:
         * Added support for the new useShim config on Resize objects
         * Added support (via Caridy) for ajax content retrieval
+        * Promoted to GA Status - beta flag removed from files.
 
     Bug Fixes:
         * 1972411 - [SF 1961290 ] Conflict w/prototype.js 1.6.2.0
