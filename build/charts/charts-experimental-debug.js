@@ -741,7 +741,7 @@ YAHOO.widget.FlashAdapter.removeProxyFunction = function(funcName)
  * @module charts
  * @requires yahoo, dom, event, datasource
  * @title Charts Widget
- * @beta
+ * @experimental
  */
 
 /**
