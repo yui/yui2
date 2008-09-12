@@ -312,7 +312,7 @@
 
         'simpleeditor': {
             'type': 'js',
-            'path': 'editor/simpleeditor-beta-min.js',
+            'path': 'editor/simpleeditor-min.js',
             'requires': ['element'],
             'optional': ['containercore', 'menu', 'button', 'animation', 'dragdrop'],
             'skinnable': true,
