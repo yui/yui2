@@ -451,9 +451,9 @@ dataType : DS.TYPE_UNKNOWN,
  *
  * @property responseType
  * @type Number
- * @default YAHOO.util.DataSourceBase.TYPE_JSON
+ * @default YAHOO.util.DataSourceBase.TYPE_UNKNOWN
  */
-responseType : DS.TYPE_UNKNOWN, // changing from TYPE_UNKNOWN for backward compatibility to YAHOO.widget.DataSource
+responseType : DS.TYPE_UNKNOWN,
 
 /**
  * Response schema object literal takes a combination of the following properties:
@@ -749,7 +749,7 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
     
     // Try to sniff data type if it has not been defined
     if(this.responseType === DS.TYPE_UNKNOWN) {
-        var ctype = (oRawResponse.getResponseHeader) ? oRawResponse.getResponseHeader["Content-Type"] : null;
+        var ctype = (oRawResponse && oRawResponse.getResponseHeader) ? oRawResponse.getResponseHeader["Content-Type"] : null;
         if(ctype) {
              // xml
             if(ctype.indexOf("text/xml") > -1) {
@@ -767,10 +767,10 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
                 this.responseType = DS.TYPE_JSARRAY;
             }
              // xml
-            else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) {
+            else if(oRawResponse && oRawResponse.nodeType && oRawResponse.nodeType == 9) {
                 this.responseType = DS.TYPE_XML;
             }
-            else if(oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
+            else if(oRawResponse && oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
                 this.responseType = DS.TYPE_HTMLTABLE;
             }    
             else if(YAHOO.lang.isObject(oRawResponse)) { // json
@@ -784,14 +784,14 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
 
     switch(this.responseType) {
         case DS.TYPE_JSARRAY:
-            if(xhr && oRawResponse.responseText) {
+            if(xhr && oRawResponse && oRawResponse.responseText) {
                 oFullResponse = oRawResponse.responseText; 
             }
             oFullResponse = this.doBeforeParseData(oRequest, oFullResponse, oCallback);
             oParsedResponse = this.parseArrayData(oRequest, oFullResponse);
             break;
         case DS.TYPE_JSON:
-            if(xhr && oRawResponse.responseText) {
+            if(xhr && oRawResponse && oRawResponse.responseText) {
                 oFullResponse = oRawResponse.responseText;
             }
             try {
@@ -1704,10 +1704,10 @@ makeConnection : function(oRequest, oCallback, oCaller) {
             this.responseType = DS.TYPE_JSARRAY;
         }
          // xml
-        else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) {
+        else if(oRawResponse && oRawResponse.nodeType && oRawResponse.nodeType == 9) {
             this.responseType = DS.TYPE_XML;
         }
-        else if(oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
+        else if(oRawResponse && oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
             this.responseType = DS.TYPE_HTMLTABLE;
         }    
         else if(YAHOO.lang.isObject(oRawResponse)) { // json
