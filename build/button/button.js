@@ -1154,13 +1154,11 @@
 						if (bLazyLoad && Menu && !(oMenu instanceof Menu)) {
 		
 							/*
-								Mimic Menu's "lazyload" functionality by adding  
-								a "beforeshow" event listener that renders the 
-								Overlay instance before it is made visible by  
-								the button.
+								Mimic Menu's "lazyload" functionality by rendering the Overlay 
+								instance before it is made visible by the button.
 							*/
-		
-							oMenu.beforeShowEvent.subscribe(this._onOverlayBeforeShow, null, this);
+							
+							oMenu._bRenderBeforeShow = true;
 			
 						}
 						else if (!bLazyLoad) {
@@ -1788,7 +1786,6 @@
 
         		oMenu.focus = fnFocusMethod;
 
-
 				if (!(nMenuMaxHeight === 0 && !bPotentialContextOverlap)) {
 
 					oMenu.cfg.setProperty("maxheight", nMenuMaxHeight);
@@ -1821,6 +1818,11 @@
 
             }
             else if (Overlay && oMenu && (oMenu instanceof Overlay)) {
+
+				if (oMenu._bRenderBeforeShow) {
+		            oMenu.render(this.get("element").parentNode);
+		            oMenu._bRenderBeforeShow = false;
+				}
 
                 oMenu.show();
 				oMenu.align();
@@ -2591,26 +2593,6 @@
                 this._bOptionPressed = true;
         
             }
-        
-        },
-        
-        
-        /**
-        * @method _onOverlayBeforeShow
-        * @description "beforeshow" event handler for the 
-        * <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a> instance 
-        * serving as the button's menu.
-        * @private
-        * @param {String} p_sType String representing the name of the event  
-        * that was fired.
-        */
-        _onOverlayBeforeShow: function (p_sType) {
-        
-            var oMenu = this._menu;
-        
-            oMenu.render(this.get("element").parentNode);
-            
-            oMenu.beforeShowEvent.unsubscribe(this._onOverlayBeforeShow);
         
         },
         
