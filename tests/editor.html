@@ -17,7 +17,7 @@
 <script type="text/javascript" src="../build/container/container_core-min.js"></script>
 <script type="text/javascript" src="../build/menu/menu-min.js"></script>
 <script type="text/javascript" src="../build/button/button-min.js"></script>
-<script type="text/javascript" src="../build/editor/editor-beta.js"></script>
+<script type="text/javascript" src="../build/editor/editor.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest.js"></script>
 
 <style>
@@ -289,7 +289,7 @@ var editor = null;
                     editor.execCommand('redo');
                     Assert.areEqual(two, editor.getEditorHTML(), 'Editor undo level did not redo');
 
-                },
+                }
             })); 
             Tool.TestRunner.add(Suite);
 
