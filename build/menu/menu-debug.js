@@ -394,7 +394,15 @@
 				being made visible
 			*/
 
-			p_oFocusedElement.focus();
+			if (p_oFocusedElement.focus) {
+			
+				try {
+					p_oFocusedElement.focus();
+				}
+				catch(ex) {
+				}
+			
+			}
 			
     		this.hideEvent.unsubscribe(onMenuHide, p_oFocusedElement);
     	
