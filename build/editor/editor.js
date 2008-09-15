@@ -2136,6 +2136,7 @@ var Dom = YAHOO.util.Dom,
             if (oConfig.attributes.id) {
                 id = oConfig.attributes.id;
             } else {
+                this.DOMReady = true;
                 id = Dom.generateId(el);
             }
         }
@@ -3184,7 +3185,7 @@ var Dom = YAHOO.util.Dom,
                     //check = false;
                 }
                 if (this.browser.gecko) {
-                    /*
+                    //Added in 2.6.0
                     if (range.startContainer) {
                         check = false;
                         if (range.startContainer.nodeType === 3) {
@@ -3198,7 +3199,6 @@ var Dom = YAHOO.util.Dom,
                             this.currentEvent = null;
                         }
                     }
-                    */
                 }
                 if (check) {
                     if (sel.anchorNode && (sel.anchorNode.nodeType == 3)) {
@@ -3633,6 +3633,8 @@ var Dom = YAHOO.util.Dom,
                     }
                     break;
                 case 32: //Space Bar
+                case 35: //End
+                case 36: //Home
                 case 37: //Left Arrow
                 case 38: //Up Arrow
                 case 39: //Right Arrow
@@ -5963,11 +5965,15 @@ var Dom = YAHOO.util.Dom,
         */
         _swapEl: function(el, tagName, callback) {
             var _el = this._getDoc().createElement(tagName);
-            _el.innerHTML = el.innerHTML;
+            if (el) {
+                _el.innerHTML = el.innerHTML;
+            }
             if (typeof callback == 'function') {
                 callback.call(this, _el);
             }
-            el.parentNode.replaceChild(_el, el);
+            if (el) {
+                el.parentNode.replaceChild(_el, el);
+            }
             return _el;
         },
         /**
