@@ -394,7 +394,7 @@
 				being made visible
 			*/
 
-			if (p_oFocusedElement.focus) {
+			if (p_oFocusedElement && p_oFocusedElement.focus) {
 			
 				try {
 					p_oFocusedElement.focus();
