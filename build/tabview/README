@@ -1,5 +1,9 @@
 TabView Release Notes
 
+*** version 2.6.0 ***
+* activeIndex and activeTab sync issue fixed
+* activeIndex change events mapped to activeTab (and vice-versa)
+
 *** version 2.5.2 ***
 * no change
 

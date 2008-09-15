@@ -1,5 +1,8 @@
 Element Release Notes
 
+*** version 2.6.0 ***
+* Passing return values from DOM methods (appendChild, insertBefore, etc)
+
 *** version 2.5.2 ***
 no change
 
