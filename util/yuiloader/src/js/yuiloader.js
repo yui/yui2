@@ -329,7 +329,8 @@
             'type': 'js',
             'path': 'slider/slider-min.js',
             'requires': ['dragdrop'],
-            'optional': ['animation']
+            'optional': ['animation'],
+            'skinnable': true
         },
 
         'tabview': {

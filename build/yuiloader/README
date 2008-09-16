@@ -11,6 +11,7 @@ yuiloader - Release Notes
  * resize, editor, simpleeditor, layout, datasource, datatable,
    cookie, profiler, yuiloader out of beta.
  * Added datastore.
+ * Added slider skin.
 
 2.5.2
   * uploader requires element.
