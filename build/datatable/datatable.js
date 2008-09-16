@@ -4364,7 +4364,7 @@ _initColumnSet : function(aColumnDefs) {
         for(i=0, len=this._oColumnSet.keys.length; i<len; i++) {
             oColumn = this._oColumnSet.keys[i];
             DT._oDynStyles["."+this.getId()+"-col-"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
-            if(oColumn.editor) {
+            if(oColumn.editor && oColumn.editor.unsubscribeAll) { // Backward compatibility
                 oColumn.editor.unsubscribeAll();
             }
         }
@@ -4385,7 +4385,7 @@ _initColumnSet : function(aColumnDefs) {
     var allKeys = this._oColumnSet.keys;
     for(i=0, len=allKeys.length; i<len; i++) {
         oColumn = allKeys[i];
-        if(oColumn.editor) {
+        if(oColumn.editor && oColumn.editor.subscribe) { // Backward incompatibility
             oColumn.editor.subscribe("showEvent", this._onEditorShowEvent, this, true);
             oColumn.editor.subscribe("keydownEvent", this._onEditorKeydownEvent, this, true);
             oColumn.editor.subscribe("revertEvent", this._onEditorRevertEvent, this, true);
@@ -5748,11 +5748,21 @@ _onDocumentClick : function(e, oSelf) {
         // the editorBlurEvent needs to get fired by the lower-level DOM click
         // handlers below rather than by the TABLE click handler directly.
         if(oSelf._oCellEditor) {
-            var elContainer = oSelf._oCellEditor.getContainerEl();
-            // Only if the click was not within the CellEditor container
-            if(!Dom.isAncestor(elContainer, elTarget) &&
-                    (elContainer.id !== elTarget.id)) {
-                oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
+            if(oSelf._oCellEditor.getContainerEl) {
+                var elContainer = oSelf._oCellEditor.getContainerEl();
+                // Only if the click was not within the CellEditor container
+                if(!Dom.isAncestor(elContainer, elTarget) &&
+                        (elContainer.id !== elTarget.id)) {
+                    oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
+                }
+            }
+            // Backward Compatibility
+            else if(oSelf._oCellEditor.isActive) {
+                // Only if the click was not within the Cell Editor container
+                if(!Dom.isAncestor(oSelf._oCellEditor.container, elTarget) &&
+                        (oSelf._oCellEditor.container.id !== elTarget.id)) {
+                    oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+                }
             }
         }
     }
@@ -6156,7 +6166,12 @@ _onTbodyKeydown : function(e, oSelf) {
     }
     
     if(oSelf._oCellEditor) {
-        oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
+        if(oSelf._oCellEditor.fireEvent) {
+            oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
+        }
+        else if(oSelf._oCellEditor.isActive) {
+            oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+        }
     }
 
     var elTarget = Ev.getTarget(e);
@@ -6218,7 +6233,13 @@ _onTableKeypress : function(e, oSelf) {
 _onTheadClick : function(e, oSelf) {
     // This blurs the CellEditor
     if(oSelf._oCellEditor) {
-        oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
+        if(oSelf._oCellEditor.fireEvent) {
+            oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
+        }
+        // Backward compatibility
+        else if(oSelf._oCellEditor.isActive) {
+            oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+        }
     }
 
     var elTarget = Ev.getTarget(e);
@@ -6286,7 +6307,12 @@ _onTheadClick : function(e, oSelf) {
 _onTbodyClick : function(e, oSelf) {
     // This blurs the CellEditor
     if(oSelf._oCellEditor) {
-        oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
+        if(oSelf._oCellEditor.fireEvent) {
+            oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
+        }
+        else if(oSelf._oCellEditor.isActive) {
+            oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+        }
     }
 
     // Fire Custom Events
@@ -11695,29 +11721,182 @@ unhighlightCell : function(cell) {
  * @method showCellEditor
  * @param elCell {HTMLElement | String} Cell to edit.
  */
-showCellEditor : function(elCell) {
+showCellEditor : function(elCell, oRecord, oColumn) {
     // Get a particular CellEditor
     elCell = this.getTdEl(elCell);
     if(elCell) {
-        var oColumn = this.getColumn(elCell);
+        oColumn = this.getColumn(elCell);
         if(oColumn && oColumn.editor) {
+            var oCellEditor = this._oCellEditor;
             // Clean up active CellEditor
-            if(this._oCellEditor) {
-                this._oCellEditor.cancel();
-            }
-            // Get CellEditor
-            var oCellEditor = oColumn.editor;
-            var ok = oCellEditor.attach(this, elCell);
-            if(ok) {
-                oCellEditor.move();
-                ok = this.doBeforeShowCellEditor(oCellEditor);
-                if(ok) {
-                    oCellEditor.show();
-                    this._oCellEditor = oCellEditor;
+            if(oCellEditor) {
+                if(this._oCellEditor.cancel) {
+                    this._oCellEditor.cancel();
                 }
+                else if(oCellEditor.isActive) {
+                    this.cancelCellEditor();
+                }
+            }
+            
+            if(oColumn.editor instanceof YAHOO.widget.BaseCellEditor) {
+                // Get CellEditor
+                oCellEditor = oColumn.editor;
+                var ok = oCellEditor.attach(this, elCell);
+                if(ok) {
+                    oCellEditor.move();
+                    ok = this.doBeforeShowCellEditor(oCellEditor);
+                    if(ok) {
+                        oCellEditor.show();
+                        this._oCellEditor = oCellEditor;
+                    }
+                }
+            }
+            // Backward compatibility
+            else {
+                    if(!oRecord || !(oRecord instanceof YAHOO.widget.Record)) {
+                        oRecord = this.getRecord(elCell);
+                    }
+                    if(!oColumn || !(oColumn instanceof YAHOO.widget.Column)) {
+                        oColumn = this.getColumn(elCell);
+                    }
+                    if(oRecord && oColumn) {
+                        if(!this._oCellEditor || this._oCellEditor.container) {
+                            this._initCellEditorEl();
+                        }
+                        
+                        // Update Editor values
+                        oCellEditor = this._oCellEditor;
+                        oCellEditor.cell = elCell;
+                        oCellEditor.record = oRecord;
+                        oCellEditor.column = oColumn;
+                        oCellEditor.validator = (oColumn.editorOptions &&
+                                lang.isFunction(oColumn.editorOptions.validator)) ?
+                                oColumn.editorOptions.validator : null;
+                        oCellEditor.value = oRecord.getData(oColumn.key);
+                        oCellEditor.defaultValue = null;
+            
+                        // Move Editor
+                        var elContainer = oCellEditor.container;
+                        var x = Dom.getX(elCell);
+                        var y = Dom.getY(elCell);
+            
+                        // SF doesn't get xy for cells in scrolling table
+                        // when tbody display is set to block
+                        if(isNaN(x) || isNaN(y)) {
+                            x = elCell.offsetLeft + // cell pos relative to table
+                                    Dom.getX(this._elTbody.parentNode) - // plus table pos relative to document
+                                    this._elTbody.scrollLeft; // minus tbody scroll
+                            y = elCell.offsetTop + // cell pos relative to table
+                                    Dom.getY(this._elTbody.parentNode) - // plus table pos relative to document
+                                    this._elTbody.scrollTop + // minus tbody scroll
+                                    this._elThead.offsetHeight; // account for fixed THEAD cells
+                        }
+            
+                        elContainer.style.left = x + "px";
+                        elContainer.style.top = y + "px";
+            
+                        // Hook to customize the UI
+                        this.doBeforeShowCellEditor(this._oCellEditor);
+            
+                        //TODO: This is temporarily up here due so elements can be focused
+                        // Show Editor
+                        elContainer.style.display = "";
+            
+                        // Handle ESC key
+                        Ev.addListener(elContainer, "keydown", function(e, oSelf) {
+                            // ESC hides Cell Editor
+                            if((e.keyCode == 27)) {
+                                oSelf.cancelCellEditor();
+                                oSelf.focusTbodyEl();
+                            }
+                            else {
+                                oSelf.fireEvent("editorKeydownEvent", {editor:oSelf._oCellEditor, event:e});
+                            }
+                        }, this);
+            
+                        // Render Editor markup
+                        var fnEditor;
+                        if(lang.isString(oColumn.editor)) {
+                            switch(oColumn.editor) {
+                                case "checkbox":
+                                    fnEditor = DT.editCheckbox;
+                                    break;
+                                case "date":
+                                    fnEditor = DT.editDate;
+                                    break;
+                                case "dropdown":
+                                    fnEditor = DT.editDropdown;
+                                    break;
+                                case "radio":
+                                    fnEditor = DT.editRadio;
+                                    break;
+                                case "textarea":
+                                    fnEditor = DT.editTextarea;
+                                    break;
+                                case "textbox":
+                                    fnEditor = DT.editTextbox;
+                                    break;
+                                default:
+                                    fnEditor = null;
+                            }
+                        }
+                        else if(lang.isFunction(oColumn.editor)) {
+                            fnEditor = oColumn.editor;
+                        }
+            
+                        if(fnEditor) {
+                            // Create DOM input elements
+                            fnEditor(this._oCellEditor, this);
+            
+                            // Show Save/Cancel buttons
+                            if(!oColumn.editorOptions || !oColumn.editorOptions.disableBtns) {
+                                this.showCellEditorBtns(elContainer);
+                            }
+            
+                            oCellEditor.isActive = true;
+            
+                            //TODO: verify which args to pass
+                            this.fireEvent("editorShowEvent", {editor:oCellEditor});
+                            return;
+                        }
+                    }
+
+
+
+            
             }
         }
     }
+},
+
+/**
+ * Backward compatibility.
+ *
+ * @method _initCellEditorEl
+ * @private
+ * @deprecated 
+ */
+_initCellEditorEl : function() {
+    // Attach Cell Editor container element as first child of body
+    var elCellEditor = document.createElement("div");
+    elCellEditor.id = this._sId + "-celleditor";
+    elCellEditor.style.display = "none";
+    elCellEditor.tabIndex = 0;
+    Dom.addClass(elCellEditor, DT.CLASS_EDITOR);
+    var elFirstChild = Dom.getFirstChild(document.body);
+    if(elFirstChild) {
+        elCellEditor = Dom.insertBefore(elCellEditor, elFirstChild);
+    }
+    else {
+        elCellEditor = document.body.appendChild(elCellEditor);
+    }
+    
+    // Internal tracker of Cell Editor values
+    var oCellEditor = {};
+    oCellEditor.container = elCellEditor;
+    oCellEditor.value = null;
+    oCellEditor.isActive = false;
+    this._oCellEditor = oCellEditor;
 },
 
 /**
@@ -11738,7 +11917,44 @@ doBeforeShowCellEditor : function(oCellEditor) {
  */
 saveCellEditor : function() {
     if(this._oCellEditor) {
-        this._oCellEditor.save();
+        if(this._oCellEditor.save) {
+            this._oCellEditor.save();
+        }
+        // Backward compatibility
+        else if(this._oCellEditor.isActive) {
+            var newData = this._oCellEditor.value;
+            // Copy the data to pass to the event
+            var oldData = YAHOO.widget.DataTable._cloneObject(this._oCellEditor.record.getData(this._oCellEditor.column.key));
+    
+            // Validate input data
+            if(this._oCellEditor.validator) {
+                newData = this._oCellEditor.value = this._oCellEditor.validator.call(this, newData, oldData, this._oCellEditor);
+                if(newData === null ) {
+                    this.resetCellEditor();
+                    this.fireEvent("editorRevertEvent",
+                            {editor:this._oCellEditor, oldData:oldData, newData:newData});
+                    return;
+                }
+            }
+            // Update the Record
+            this._oRecordSet.updateRecordValue(this._oCellEditor.record, this._oCellEditor.column.key, this._oCellEditor.value);
+            // Update the UI
+            this.formatCell(this._oCellEditor.cell.firstChild);
+            
+            // Bug fix 1764044
+            this._oChainRender.add({
+                method: function() {
+                    this.validateColumnWidths();
+                },
+                scope: this
+            });
+            this._oChainRender.run();
+            // Clear out the Cell Editor
+            this.resetCellEditor();
+    
+            this.fireEvent("editorSaveEvent",
+                    {editor:this._oCellEditor, oldData:oldData, newData:newData});
+        }
     }   
 },
 
@@ -11749,7 +11965,16 @@ saveCellEditor : function() {
  */
 cancelCellEditor : function() {
     if(this._oCellEditor) {
-        this._oCellEditor.cancel();
+        if(this._oCellEditor.cancel) {
+            this._oCellEditor.cancel();
+        }
+        // Backward compatibility
+        else if(this._oCellEditor.isActive) {
+            this.resetCellEditor();
+            //TODO: preserve values for the event?
+            this.fireEvent("editorCancelEvent", {editor:this._oCellEditor});
+        }
+
     }
 },
 
@@ -11863,9 +12088,11 @@ _onEditorUnblockEvent : function(oArgs) {
 onEditorBlurEvent : function(oArgs) {
     if(oArgs.editor.disableBtns) {
         // Save on blur
-        oArgs.editor.save();
+        if(oArgs.editor.save) { // Backward incompatible
+            oArgs.editor.save();
+        }
     }      
-    else {
+    else if(oArgs.editor.cancel) { // Backward incompatible
         // Cancel on blur
         oArgs.editor.cancel();
     }      
@@ -12212,7 +12439,13 @@ onEventShowCellEditor : function(oArgs) {
  */
 onEventSaveCellEditor : function(oArgs) {
     if(this._oCellEditor) {
-        this._oCellEditor.save();
+        if(this._oCellEditor.save) {
+            this._oCellEditor.save();
+        }
+        // Backward compatibility
+        else {
+            this.saveCellEditor();
+        }
     }
 },
 
@@ -12223,7 +12456,13 @@ onEventSaveCellEditor : function(oArgs) {
  */
 onEventCancelCellEditor : function(oArgs) {
     if(this._oCellEditor) {
-        this._oCellEditor.cancel();
+        if(this._oCellEditor.cancel) {
+            this._oCellEditor.cancel();
+        }
+        // Backward compatibility
+        else {
+            this.cancelCellEditor();
+        }
     }
 },
 
@@ -13297,6 +13536,27 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
  * @deprecated Use CellEditor.renderBtns() 
  */
 showCellEditorBtns : function(elContainer) {
+    // Buttons
+    var elBtnsDiv = elContainer.appendChild(document.createElement("div"));
+    Dom.addClass(elBtnsDiv, DT.CLASS_BUTTON);
+
+    // Save button
+    var elSaveBtn = elBtnsDiv.appendChild(document.createElement("button"));
+    Dom.addClass(elSaveBtn, DT.CLASS_DEFAULT);
+    elSaveBtn.innerHTML = "OK";
+    Ev.addListener(elSaveBtn, "click", function(oArgs, oSelf) {
+        oSelf.onEventSaveCellEditor(oArgs, oSelf);
+        oSelf.focusTbodyEl();
+    }, this, true);
+
+    // Cancel button
+    var elCancelBtn = elBtnsDiv.appendChild(document.createElement("button"));
+    elCancelBtn.innerHTML = "Cancel";
+    Ev.addListener(elCancelBtn, "click", function(oArgs, oSelf) {
+        oSelf.onEventCancelCellEditor(oArgs, oSelf);
+        oSelf.focusTbodyEl();
+    }, this, true);
+
 },
 
 /**
@@ -13304,12 +13564,18 @@ showCellEditorBtns : function(elContainer) {
  * @deprecated Use destroyCellEditor 
  */
 resetCellEditor : function() {
-    return this.destroyCellEditor();    
+    var elContainer = this._oCellEditor.container;
+    elContainer.style.display = "none";
+    Ev.purgeElement(elContainer, true);
+    elContainer.innerHTML = "";
+    this._oCellEditor.value = null;
+    this._oCellEditor.isActive = false;
+
 },
 
 /**
  * @event editorUpdateEvent
- * deprecated No longer supported.     
+ * @deprecated Use CellEditor class.
  */
 
 /**
