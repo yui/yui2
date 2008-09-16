@@ -1908,9 +1908,9 @@
             },
 
             "WIDTH": { 
-                key: "width", 
-                suppressEvent: true, 
-                supercedes: ["context", "fixedcenter", "iframe"] 
+                key: "width",
+                suppressEvent: true,
+                supercedes: ["context", "fixedcenter", "iframe"]
             }, 
 
             "HEIGHT": { 
@@ -2148,26 +2148,29 @@
         "textResize"   : Module.textResizeEvent
     };
 
-    /**
-     * Array of default event types which will trigger 
-     * context alignment. It is empty by default for Overlay,
-     * but maybe populated in future releases, so classes extending
-     * Overlay which need to define their own set of CONTEXT_TRIGGERS
-     * should concatenate Overlay.CONTEXT_TRIGGERS with their own
-     * array of values.
-     * 
-     * <xmp>
-     *     YAHOO.widget.Menu.CONTEXT_TRIGGERS = YAHOO.widget.Overlay.CONTEXT_TRIGGERS.concat(["focus"]);
-     * <xmp>
-     *
-     * @property YAHOO.widget.Overlay.CONTEXT_TRIGGERS
-     * @type Array
-     * @static
-     * 
-     */
-    Overlay.CONTEXT_TRIGGERS = [];
-
     YAHOO.extend(Overlay, Module, {
+
+        /**
+         * <p>
+         * Array of default event types which will trigger
+         * context alignment for the Overlay class.
+         * </p>
+         * <p>The array is empty by default for Overlay,
+         * but maybe populated in future releases, so classes extending
+         * Overlay which need to define their own set of CONTEXT_TRIGGERS
+         * should concatenate their super class's prototype.CONTEXT_TRIGGERS 
+         * value with their own array of values.
+         * </p>
+         * <p>
+         * E.g.:
+         * <code>CustomOverlay.prototype.CONTEXT_TRIGGERS = YAHOO.widget.Overlay.prototype.CONTEXT_TRIGGERS.concat(["windowScroll"]);</code>
+         * </p>
+         * 
+         * @property CONTEXT_TRIGGERS
+         * @type Array
+         * @final
+         */
+        CONTEXT_TRIGGERS : [],
 
         /**
         * The Overlay initialization method, which is executed for Overlay and  
@@ -2182,7 +2185,7 @@
         * See configuration documentation for more details.
         */
         init: function (el, userConfig) {
-    
+
             /*
                  Note that we don't pass the user config in here yet because we
                  only want it executed once, at the lowest subclass level
@@ -2191,9 +2194,9 @@
             Overlay.superclass.init.call(this, el/*, userConfig*/);
 
             this.beforeInitEvent.fire(Overlay);
-            
+
             Dom.addClass(this.element, Overlay.CSS_OVERLAY);
-            
+
             if (userConfig) {
                 this.cfg.applyConfig(userConfig, true);
             }
@@ -2226,11 +2229,11 @@
         * @method initEvents
         */
         initEvents: function () {
-    
+
             Overlay.superclass.initEvents.call(this);
-            
+
             var SIGNATURE = CustomEvent.LIST;
-            
+
             /**
             * CustomEvent fired before the Overlay is moved.
             * @event beforeMoveEvent
@@ -2293,7 +2296,7 @@
                 supercedes: DEFAULT_CONFIG.Y.supercedes
 
             });
-    
+
             /**
             * An array with the absolute x and y positions of the Overlay
             * @config xy
@@ -3153,7 +3156,7 @@
                 elementMagnetCorner,
                 contextMagnetCorner,
                 triggers,
-                constr = this.constructor;
+                defTriggers = this.CONTEXT_TRIGGERS;
 
             if (contextArgs) {
 
@@ -3162,8 +3165,8 @@
                 contextMagnetCorner = contextArgs[2];
                 triggers = contextArgs[3];
 
-                if (constr && constr.CONTEXT_TRIGGERS && constr.CONTEXT_TRIGGERS.length > 0) {
-                    triggers = (triggers || []).concat(constr.CONTEXT_TRIGGERS);
+                if (defTriggers && defTriggers.length > 0) {
+                    triggers = (triggers || []).concat(defTriggers);
                 }
 
                 if (contextEl) {

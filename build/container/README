@@ -105,6 +105,10 @@ Fixed the following bugs:
   focus listener on the document to enforce modality, improving
   performance and scalability for modal solutions.
   
++ Files for optional component dependencies (e.g. animation, dragdrop,
+  connection) can now be included after container's js files, without
+  breaking related functionality.
+  
 *** version 2.5.2 ***
 
 + No change.
