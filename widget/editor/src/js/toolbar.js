@@ -12,6 +12,23 @@
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
     Lang = YAHOO.lang;
+    
+    var getButton = function(id) {
+        var button = id;
+        if (Lang.isString(id)) {
+            button = this.getButtonById(id);
+        }
+        if (Lang.isNumber(id)) {
+            button = this.getButtonByIndex(id);
+        }
+        if ((!(button instanceof YAHOO.widget.ToolbarButton)) && (!(button instanceof YAHOO.widget.ToolbarButtonAdvanced))) {
+            button = this.getButtonByValue(id);
+        }
+        if ((button instanceof YAHOO.widget.ToolbarButton) || (button instanceof YAHOO.widget.ToolbarButtonAdvanced)) {
+            return button;
+        }
+        return false;
+    };
 
     /**
      * Provides a rich toolbar widget based on the button and menu widgets
@@ -28,7 +45,11 @@ var Dom = YAHOO.util.Dom,
         if (Lang.isObject(arguments[0]) && !Dom.get(el).nodeType) {
             attrs = el;
         }
-        var local_attrs = (attrs || {});
+        var local_attrs = {};
+        if (attrs) {
+            Lang.augmentObject(local_attrs, attrs); //Break the config reference
+        }
+        
 
         var oConfig = {
             element: null,
@@ -61,10 +82,19 @@ var Dom = YAHOO.util.Dom,
         }
         YAHOO.log('Initing toolbar with id: ' + oConfig.element.id, 'info', 'Toolbar');
         
+        var fs = document.createElement('fieldset');
+        var lg = document.createElement('legend');
+        lg.innerHTML = 'Toolbar';
+        fs.appendChild(lg);
+        
         var cont = document.createElement('DIV');
         oConfig.attributes.cont = cont;
         Dom.addClass(cont, 'yui-toolbar-subcont');
-        oConfig.element.appendChild(cont);
+        fs.appendChild(cont);
+        oConfig.element.appendChild(fs);
+
+        oConfig.element.tabIndex = -1;
+
         
         oConfig.attributes.element = oConfig.element;
         oConfig.attributes.id = oConfig.element.id;
@@ -73,28 +103,26 @@ var Dom = YAHOO.util.Dom,
          
     };
 
-    /**
-    * @method _addMenuClasses
-    * @private
-    * @description This method is called from Menu's renderEvent to add a few more classes to the menu items
-    * @param {String} ev The event that fired.
-    * @param {Array} na Array of event information.
-    * @param {Object} o Button config object. 
-    */
-
-    function _addMenuClasses(ev, na, o) {
-        Dom.addClass(this.element, 'yui-toolbar-' + o.get('value') + '-menu');
-        if (Dom.hasClass(o._button.parentNode.parentNode, 'yui-toolbar-select')) {
-            Dom.addClass(this.element, 'yui-toolbar-select-menu');
-        }
-        var items = this.getItems();
-        for (var i = 0; i < items.length; i++) {
-            Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-').toLowerCase() : items[i]._oText.nodeValue.replace(/ /g, '-').toLowerCase()));
-            Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-') : items[i]._oText.nodeValue.replace(/ /g, '-')));
-        }
-    }
-
     YAHOO.extend(YAHOO.widget.Toolbar, YAHOO.util.Element, {
+        /**
+        * @method _addMenuClasses
+        * @private
+        * @description This method is called from Menu's renderEvent to add a few more classes to the menu items
+        * @param {String} ev The event that fired.
+        * @param {Array} na Array of event information.
+        * @param {Object} o Button config object. 
+        */
+        _addMenuClasses: function(ev, na, o) {
+            Dom.addClass(this.element, 'yui-toolbar-' + o.get('value') + '-menu');
+            if (Dom.hasClass(o._button.parentNode.parentNode, 'yui-toolbar-select')) {
+                Dom.addClass(this.element, 'yui-toolbar-select-menu');
+            }
+            var items = this.getItems();
+            for (var i = 0; i < items.length; i++) {
+                Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-').toLowerCase() : items[i]._oText.nodeValue.replace(/ /g, '-').toLowerCase()));
+                Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-') : items[i]._oText.nodeValue.replace(/ /g, '-')));
+            }
+        },
         /** 
         * @property buttonType
         * @description The default button to use
@@ -385,6 +413,7 @@ var Dom = YAHOO.util.Dom,
         */
         init: function(p_oElement, p_oAttributes) {
             YAHOO.widget.Toolbar.superclass.init.call(this, p_oElement, p_oAttributes);
+
         },
         /**
         * @method initAttributes
@@ -535,12 +564,22 @@ var Dom = YAHOO.util.Dom,
                             this._titlebar.parentNode.removeChild(this._titlebar);
                         }
                         this._titlebar = document.createElement('DIV');
+                        this._titlebar.tabIndex = '-1';
+                        Event.on(this._titlebar, 'focus', function() {
+                            this._handleFocus();
+                        }, this, true);
                         Dom.addClass(this._titlebar, this.CLASS_PREFIX + '-titlebar');
                         if (Lang.isString(titlebar)) {
                             var h2 = document.createElement('h2');
                             h2.tabIndex = '-1';
-                            h2.innerHTML = titlebar;
+                            h2.innerHTML = '<a href="#" tabIndex="0">' + titlebar + '</a>';
                             this._titlebar.appendChild(h2);
+                            Event.on(h2.firstChild, 'click', function(ev) {
+                                Event.stopEvent(ev);
+                            });
+                            Event.on([h2, h2.firstChild], 'focus', function() {
+                                this._handleFocus();
+                            }, this, true);
                         }
                         if (this.get('firstChild')) {
                             this.insertBefore(this._titlebar, this.get('firstChild'));
@@ -671,7 +710,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method addButtonGroup
         * @description Add a new button group to the toolbar. (uses addButton)
-        * @param {Object} oGroup Object literal reference to the Groups Config (contains an array of button configs)
+        * @param {Object} oGroup Object literal reference to the Groups Config (contains an array of button configs as well as the group label)
         */
         addButtonGroup: function(oGroup) {
             if (!this.get('element')) {
@@ -685,7 +724,6 @@ var Dom = YAHOO.util.Dom,
             var div = document.createElement('DIV');
             Dom.addClass(div, this.CLASS_PREFIX + '-group');
             Dom.addClass(div, this.CLASS_PREFIX + '-group-' + oGroup.group);
-            //if (oGroup.label && this.get('grouplabels')) {
             if (oGroup.label) {
                 var label = document.createElement('h3');
                 label.innerHTML = oGroup.label;
@@ -817,22 +855,9 @@ var Dom = YAHOO.util.Dom,
                 this._configs.buttons.value[this._configs.buttons.value.length] = oButton;
                 
                 var tmp = new this.buttonType(_oButton);
-                if (!tmp.buttonType) {
-                    tmp.buttonType = 'rich';
-                    tmp.checkValue = function(value) {
-                        var _menuItems = this.getMenu().getItems();
-                        if (_menuItems.length === 0) {
-                            this.getMenu()._onBeforeShow();
-                            _menuItems = this.getMenu().getItems();
-                        }
-                        for (var i = 0; i < _menuItems.length; i++) {
-                            _menuItems[i].cfg.setProperty('checked', false);
-                            if (_menuItems[i].value == value) {
-                                _menuItems[i].cfg.setProperty('checked', true);
-                            }
-                        }      
-                    };
-                }
+                tmp.get('element').tabIndex = '-1';
+                tmp.get('element').setAttribute('role', 'button');
+                tmp._selected = true;
                 
                 if (this.get('disabled')) {
                     //Toolbar is disabled, disable the new button too!
@@ -866,6 +891,7 @@ var Dom = YAHOO.util.Dom,
                     var a = document.createElement('a');
                     a.innerHTML = tmp._button.innerHTML;
                     a.href = '#';
+                    a.tabIndex = '-1';
                     Event.on(a, 'click', function(ev) {
                         Event.stopEvent(ev);
                     });
@@ -941,29 +967,32 @@ var Dom = YAHOO.util.Dom,
 
                         var self = this;
                         //Hijack the mousedown event in the menu and make it fire a button click..
-                        if (tmp.getMenu().mouseDownEvent) {
-                            tmp.getMenu().mouseDownEvent.subscribe(function(ev, args) {
-                                YAHOO.log('mouseDownEvent', 'warn', 'Toolbar');
-                                var oMenu = args[1];
-                                YAHOO.util.Event.stopEvent(args[0]);
-                                tmp._onMenuClick(args[0], tmp);
-                                if (!oButton.menucmd) {
-                                    oButton.menucmd = oButton.value;
-                                }
-                                oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
-                                self._buttonClick.call(self, args[1], oButton);
-                                tmp._hideMenu();
-                                return false;
-                            });
-                            tmp.getMenu().clickEvent.subscribe(function(ev, args) {
-                                YAHOO.log('clickEvent', 'warn', 'Toolbar');
-                                YAHOO.util.Event.stopEvent(args[0]);
-                            });
-                            tmp.getMenu().mouseUpEvent.subscribe(function(ev, args) {
-                                YAHOO.log('mouseUpEvent', 'warn', 'Toolbar');
-                                YAHOO.util.Event.stopEvent(args[0]);
-                            });
-                        }
+                        tmp.on('appendTo', function() {
+                            var tmp = this;
+                            if (tmp.getMenu() && tmp.getMenu().mouseDownEvent) {
+                                tmp.getMenu().mouseDownEvent.subscribe(function(ev, args) {
+                                    YAHOO.log('mouseDownEvent', 'warn', 'Toolbar');
+                                    var oMenu = args[1];
+                                    YAHOO.util.Event.stopEvent(args[0]);
+                                    tmp._onMenuClick(args[0], tmp);
+                                    if (!oButton.menucmd) {
+                                        oButton.menucmd = oButton.value;
+                                    }
+                                    oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
+                                    self._buttonClick.call(self, args[1], oButton);
+                                    tmp._hideMenu();
+                                    return false;
+                                });
+                                tmp.getMenu().clickEvent.subscribe(function(ev, args) {
+                                    YAHOO.log('clickEvent', 'warn', 'Toolbar');
+                                    YAHOO.util.Event.stopEvent(args[0]);
+                                });
+                                tmp.getMenu().mouseUpEvent.subscribe(function(ev, args) {
+                                    YAHOO.log('mouseUpEvent', 'warn', 'Toolbar');
+                                    YAHOO.util.Event.stopEvent(args[0]);
+                                });
+                            }
+                        });
                         
                     }
                 } else {
@@ -976,6 +1005,7 @@ var Dom = YAHOO.util.Dom,
                     });
                 }
                 if (this.browser.ie) {
+                    /*
                     //Add a couple of new events for IE
                     tmp.DOM_EVENTS.focusin = true;
                     tmp.DOM_EVENTS.focusout = true;
@@ -991,6 +1021,7 @@ var Dom = YAHOO.util.Dom,
                     tmp.on('click', function(ev) {
                         YAHOO.util.Event.stopEvent(ev);
                     }, oButton, this);
+                    */
                 }
                 if (this.browser.webkit) {
                     //This will keep the document from gaining focus and the editor from loosing it..
@@ -1004,8 +1035,8 @@ var Dom = YAHOO.util.Dom,
                     if (Lang.isArray(oButton.menu)) {
                         YAHOO.log('Button type is (' + oButton.type + '), doing extra renderer work.', 'info', 'Toolbar');
                         var menu = tmp.getMenu();
-                        if (menu.renderEvent) {
-                            menu.renderEvent.subscribe(_addMenuClasses, tmp);
+                        if (menu && menu.renderEvent) {
+                            menu.renderEvent.subscribe(this._addMenuClasses, tmp);
                             if (oButton.renderer) {
                                 menu.renderEvent.subscribe(oButton.renderer, tmp);
                             }
@@ -1188,6 +1219,8 @@ var Dom = YAHOO.util.Dom,
                 _b2 = document.createElement('a');
                 _b1.href = '#';
                 _b2.href = '#';
+                _b1.tabIndex = '-1';
+                _b2.tabIndex = '-1';
             
             //Setup the up and down arrows
             _b1.className = 'up';
@@ -1300,6 +1333,9 @@ var Dom = YAHOO.util.Dom,
             if (doEvent) {
                 var fireNextEvent = true,
                     retValue = false;
+                    
+                info.isSelected = this.isSelected(info.id);
+
                 if (info.value) {
                     YAHOO.log('fireEvent::' + info.value + 'Click', 'info', 'Toolbar');
                     retValue = this.fireEvent(info.value + 'Click', { type: info.value + 'Click', target: this.get('element'), button: info });
@@ -1341,9 +1377,74 @@ var Dom = YAHOO.util.Dom,
                         }
                     }
                 }
+                if (ev) {
+                    Event.stopEvent(ev);
+                }
             }
-            if (ev) {
-                Event.stopEvent(ev);
+        },
+        /**
+        * @private
+        * @property _keyNav
+        * @description Flag to determine if the arrow nav listeners have been attached
+        * @type Boolean
+        */
+        _keyNav: null,
+        /**
+        * @private
+        * @property _navCounter
+        * @description Internal counter for walking the buttons in the toolbar with the arrow keys
+        * @type Number
+        */
+        _navCounter: null,
+        /**
+        * @private
+        * @method _navigateButtons
+        * @description Handles the navigation/focus of toolbar buttons with the Arrow Keys
+        * @param {Event} ev The Key Event
+        */
+        _navigateButtons: function(ev) {
+            switch (ev.keyCode) {
+                case 37:
+                case 39:
+                    if (ev.keyCode == 37) {
+                        this._navCounter--;
+                    } else {
+                        this._navCounter++;
+                    }
+                    if (this._navCounter > (this._buttonList.length - 1)) {
+                        this._navCounter = 0;
+                    }
+                    if (this._navCounter < 0) {
+                        this._navCounter = (this._buttonList.length - 1);
+                    }
+                    if (this._buttonList[this._navCounter]) {
+                        var el = this._buttonList[this._navCounter].get('element');
+                        if (this.browser.ie) {
+                            el = this._buttonList[this._navCounter].get('element').getElementsByTagName('a')[0];
+                        }
+                        if (this._buttonList[this._navCounter].get('disabled')) {
+                            this._navigateButtons(ev);
+                        } else {
+                            el.focus();
+                        }
+                    }
+                    break;
+            }
+        },
+        /**
+        * @private
+        * @method _handleFocus
+        * @description Sets up the listeners for the arrow key navigation
+        */
+        _handleFocus: function() {
+            if (!this._keyNav) {
+                var ev = 'keypress';
+                if (this.browser.ie) {
+                    ev = 'keydown';
+                }
+                Event.on(this.get('element'), ev, this._navigateButtons, this, true);
+                this._keyNav = true;
+                this._navCounter = -1;
             }
         },
         /**
@@ -1355,7 +1456,7 @@ var Dom = YAHOO.util.Dom,
         getButtonById: function(id) {
             var len = this._buttonList.length;
             for (var i = 0; i < len; i++) {
-                if (this._buttonList[i].get('id') == id) {
+                if (this._buttonList[i] && this._buttonList[i].get('id') == id) {
                     return this._buttonList[i];
                 }
             }
@@ -1427,17 +1528,8 @@ var Dom = YAHOO.util.Dom,
         * @return {Boolean}
         */
         disableButton: function(id) {
-            var button = id;
-            if (Lang.isString(id)) {
-                button = this.getButtonById(id);
-            }
-            if (Lang.isNumber(id)) {
-                button = this.getButtonByIndex(id);
-            }
-            if ((!(button instanceof YAHOO.widget.ToolbarButton)) && (!(button instanceof YAHOO.widget.ToolbarButtonAdvanced))) {
-                button = this.getButtonByValue(id);
-            }
-            if ((button instanceof YAHOO.widget.ToolbarButton) || (button instanceof YAHOO.widget.ToolbarButtonAdvanced)) {
+            var button = getButton.call(this, id);
+            if (button) {
                 button.set('disabled', true);
             } else {
                 return false;
@@ -1453,17 +1545,8 @@ var Dom = YAHOO.util.Dom,
             if (this.get('disabled')) {
                 return false;
             }
-            var button = id;
-            if (Lang.isString(id)) {
-                button = this.getButtonById(id);
-            }
-            if (Lang.isNumber(id)) {
-                button = this.getButtonByIndex(id);
-            }
-            if ((!(button instanceof YAHOO.widget.ToolbarButton)) && (!(button instanceof YAHOO.widget.ToolbarButtonAdvanced))) {
-                button = this.getButtonByValue(id);
-            }
-            if ((button instanceof YAHOO.widget.ToolbarButton) || (button instanceof YAHOO.widget.ToolbarButtonAdvanced)) {
+            var button = getButton.call(this, id);
+            if (button) {
                 if (button.get('disabled')) {
                     button.set('disabled', false);
                 }
@@ -1472,42 +1555,46 @@ var Dom = YAHOO.util.Dom,
             }
         },
         /**
+        * @method isSelected
+        * @description Tells if a button is selected or not.
+        * @param {String/Number} id A button by it's id, index or value.
+        * @return {Boolean}
+        */
+        isSelected: function(id) {
+            var button = getButton.call(this, id);
+            if (button) {
+                return button._selected;
+            }
+            return false;
+        },
+        /**
         * @method selectButton
         * @description Selects a button in the toolbar.
         * @param {String/Number} id Select a button by it's id, index or value.
+        * @param {String} value If this is a Menu Button, check this item in the menu
         * @return {Boolean}
         */
         selectButton: function(id, value) {
-            var button = id;
-            if (id) {
-                if (Lang.isString(id)) {
-                    button = this.getButtonById(id);
-                }
-                if (Lang.isNumber(id)) {
-                    button = this.getButtonByIndex(id);
-                }
-                if ((!(button instanceof YAHOO.widget.ToolbarButton)) && (!(button instanceof YAHOO.widget.ToolbarButtonAdvanced))) {
-                    button = this.getButtonByValue(id);
-                }
-                if ((button instanceof YAHOO.widget.ToolbarButton) || (button instanceof YAHOO.widget.ToolbarButtonAdvanced)) {
-                    button.addClass('yui-button-selected');
-                    button.addClass('yui-button-' + button.get('value') + '-selected');
-                    if (value) {
-                        if (button.buttonType == 'rich') {
-                            var _items = button.getMenu().getItems();
-                            for (var m = 0; m < _items.length; m++) {
-                                if (_items[m].value == value) {
-                                    _items[m].cfg.setProperty('checked', true);
-                                    button.set('label', '<span class="yui-toolbar-' + button.get('value') + '-' + (value).replace(/ /g, '-').toLowerCase() + '">' + _items[m]._oText.nodeValue + '</span>');
-                                } else {
-                                    _items[m].cfg.setProperty('checked', false);
-                                }
+            var button = getButton.call(this, id);
+            if (button) {
+                button.addClass('yui-button-selected');
+                button.addClass('yui-button-' + button.get('value') + '-selected');
+                button._selected = true;
+                if (value) {
+                    if (button.buttonType == 'rich') {
+                        var _items = button.getMenu().getItems();
+                        for (var m = 0; m < _items.length; m++) {
+                            if (_items[m].value == value) {
+                                _items[m].cfg.setProperty('checked', true);
+                                button.set('label', '<span class="yui-toolbar-' + button.get('value') + '-' + (value).replace(/ /g, '-').toLowerCase() + '">' + _items[m]._oText.nodeValue + '</span>');
+                            } else {
+                                _items[m].cfg.setProperty('checked', false);
                             }
                         }
                     }
-                } else {
-                    return false;
                 }
+            } else {
+                return false;
             }
         },
         /**
@@ -1517,20 +1604,12 @@ var Dom = YAHOO.util.Dom,
         * @return {Boolean}
         */
         deselectButton: function(id) {
-            var button = id;
-            if (Lang.isString(id)) {
-                button = this.getButtonById(id);
-            }
-            if (Lang.isNumber(id)) {
-                button = this.getButtonByIndex(id);
-            }
-            if ((!(button instanceof YAHOO.widget.ToolbarButton)) && (!(button instanceof YAHOO.widget.ToolbarButtonAdvanced))) {
-                button = this.getButtonByValue(id);
-            }
-            if ((button instanceof YAHOO.widget.ToolbarButton) || (button instanceof YAHOO.widget.ToolbarButtonAdvanced)) {
+            var button = getButton.call(this, id);
+            if (button) {
                 button.removeClass('yui-button-selected');
                 button.removeClass('yui-button-' + button.get('value') + '-selected');
                 button.removeClass('yui-button-hover');
+                button._selected = false;
             } else {
                 return false;
             }
@@ -1590,17 +1669,19 @@ var Dom = YAHOO.util.Dom,
             var len = this._buttonList.length;
             for (var i = 0; i < len; i++) {
                 var _button = this._buttonList[i];
-                var disabled = _button._configs.disabled._initialConfig.value;
-                if (_ex[_button.get('id')]) {
-                    this.enableButton(_button);
-                    this.selectButton(_button);
-                } else {
-                    if (disabled) {
-                        this.disableButton(_button);
-                    } else {
+                if (_button) {
+                    var disabled = _button._configs.disabled._initialConfig.value;
+                    if (_ex[_button.get('id')]) {
                         this.enableButton(_button);
+                        this.selectButton(_button);
+                    } else {
+                        if (disabled) {
+                            this.disableButton(_button);
+                        } else {
+                            this.enableButton(_button);
+                        }
+                        this.deselectButton(_button);
                     }
-                    this.deselectButton(_button);
                 }
             }
         },
@@ -1611,30 +1692,20 @@ var Dom = YAHOO.util.Dom,
         * @return {Boolean}
         */
         destroyButton: function(id) {
-            var button = id;
-            if (Lang.isString(id)) {
-                button = this.getButtonById(id);
-            }
-            if (Lang.isNumber(id)) {
-                button = this.getButtonByIndex(id);
-            }
-            if ((!(button instanceof YAHOO.widget.ToolbarButton)) && (!(button instanceof YAHOO.widget.ToolbarButtonAdvanced))) {
-                button = this.getButtonByValue(id);
-            }
-            if ((button instanceof YAHOO.widget.ToolbarButton) || (button instanceof YAHOO.widget.ToolbarButtonAdvanced)) {
+            var button = getButton.call(this, id);
+            if (button) {
                 var thisID = button.get('id');
                 button.destroy();
 
                 var len = this._buttonList.length;
                 for (var i = 0; i < len; i++) {
-                    if (this._buttonList[i].get('id') == thisID) {
+                    if (this._buttonList[i] && this._buttonList[i].get('id') == thisID) {
                         this._buttonList[i] = null;
                     }
                 }
             } else {
                 return false;
             }
-
         },
         /**
         * @method destroy

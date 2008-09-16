@@ -193,6 +193,7 @@ var Dom = YAHOO.util.Dom,
             this._setBackgroundPosition(-(this.get('initialXY')[0]),  -(this.get('initialXY')[1]));
 
             this._resize.on('startResize', this._handleStartResizeEvent, this, true);
+            this._resize.on('endResize', this._handleEndResizeEvent, this, true);
             this._resize.on('dragEvent', this._handleDragEvent, this, true);
             this._resize.on('beforeResize', this._handleBeforeResizeEvent, this, true);
             this._resize.on('resize', this._handleResizeEvent, this, true);
@@ -205,10 +206,14 @@ var Dom = YAHOO.util.Dom,
         * @description Handles the mouseover event
         */
         _handleMouseOver: function(ev) {
+            var evType = 'keydown';
+            if (YAHOO.env.ua.gecko || YAHOO.env.ua.opera) {
+                evType = 'keypress';
+            }
             if (!this._active) {
                 this._active = true;
                 if (this.get('useKeys')) {
-                    Event.on(document, 'keypress', this._handleKeyPress, this, true);
+                    Event.on(document, evType, this._handleKeyPress, this, true);
                 }
             }
         },
@@ -218,9 +223,13 @@ var Dom = YAHOO.util.Dom,
         * @description Handles the mouseout event
         */
         _handleMouseOut: function(ev) {
+            var evType = 'keydown';
+            if (YAHOO.env.ua.gecko || YAHOO.env.ua.opera) {
+                evType = 'keypress';
+            }
             this._active = false;
             if (this.get('useKeys')) {
-                Event.removeListener(document, 'keypress', this._handleKeyPress);
+                Event.removeListener(document, evType, this._handleKeyPress);
             }
         },
 
@@ -424,9 +433,17 @@ var Dom = YAHOO.util.Dom,
         */
         _setBackgroundPosition: function(l, t) {
             //YAHOO.log('Setting the image background position of the mask to: (' + l + ', ' + t + ')', 'log', 'ImageCropper');
+            var bl = parseInt(Dom.getStyle(this._resize.get('element'), 'borderLeftWidth'), 10);
+            var bt = parseInt(Dom.getStyle(this._resize.get('element'), 'borderTopWidth'), 10);
+            if (isNaN(bl)) {
+                bl = 0;
+            }
+            if (isNaN(bt)) {
+                bt = 0;
+            }
             var mask = this._resize.getWrapEl().firstChild;
-            var pos = l + 'px ' + t + 'px';
-            mask.style.backgroundPosition = pos;
+            var pos = (l - bl) + 'px ' + (t - bt) + 'px';
+            this._resizeMaskEl.style.backgroundPosition = pos;
         },
 
         /**
@@ -444,8 +461,16 @@ var Dom = YAHOO.util.Dom,
         
         /**
         * @private
+        * @method _handleEndResizeEvent
+        * @description Handles the Resize Utilitys endResize event
+        */
+        _handleEndResizeEvent: function() {
+            this._setConstraints(true);
+        },
+        /**
+        * @private
         * @method _handleStartResizeEvent
-        * @description Handles the Resize Utilitys startResizeEvent event
+        * @description Handles the Resize Utilitys startResize event
         */
         _handleStartResizeEvent: function() {
             this._setConstraints(true);
@@ -503,7 +528,6 @@ var Dom = YAHOO.util.Dom,
             resize.dd.resetConstraints();
             var height = parseInt(resize.get('height'), 10),
                 width = parseInt(resize.get('width'), 10);
-
             if (inside) {
                 //Called from inside the resize callback
                 height = resize._cache.height;
@@ -536,7 +560,6 @@ var Dom = YAHOO.util.Dom,
             
             resize.dd.setXConstraint(left, right); 
             resize.dd.setYConstraint(top, bottom);
-
             YAHOO.log('Constraints: ' + top + ',' + right + ',' + bottom + ',' + left, 'log', 'ImageCropper');
 
             return {

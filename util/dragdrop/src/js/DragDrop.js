@@ -201,6 +201,13 @@ YAHOO.util.DragDrop.prototype = {
     dragOnly: false,
 
     /**
+     * If this flag is true, a shim will be placed over the screen/viewable area to track mouse events. Should help with dragging elements over iframes and other controls.
+     * @property useShim
+     * @type Boolean
+     */
+    useShim: false,
+
+    /**
      * Cached reference to the linked element
      * @property _domRef
      * @private
@@ -655,6 +662,7 @@ YAHOO.util.DragDrop.prototype = {
         this.maintainOffset    = (this.config.maintainOffset);
         this.primaryButtonOnly = (this.config.primaryButtonOnly !== false);
         this.dragOnly = ((this.config.dragOnly === true) ? true : false);
+        this.useShim = ((this.config.useShim === true) ? true : false);
     },
 
     /**
@@ -870,16 +878,19 @@ YAHOO.util.DragDrop.prototype = {
         this.logger.log("firing onMouseDown events");
 
         // firing the mousedown events prior to calculating positions
-        var b4Return = this.b4MouseDown(e);
+        var b4Return = this.b4MouseDown(e),
+        b4Return2 = true;
+
         if (this.events.b4MouseDown) {
-            b4Return = this.fireEvent('b4MouseDownEvent', e);
+            b4Return2 = this.fireEvent('b4MouseDownEvent', e);
         }
-        var mDownReturn = this.onMouseDown(e);
+        var mDownReturn = this.onMouseDown(e),
+            mDownReturn2 = true;
         if (this.events.mouseDown) {
-            mDownReturn = this.fireEvent('mouseDownEvent', e);
+            mDownReturn2 = this.fireEvent('mouseDownEvent', e);
         }
 
-        if ((b4Return === false) || (mDownReturn === false)) {
+        if ((b4Return === false) || (mDownReturn === false) || (b4Return2 === false) || (mDownReturn2 === false)) {
             this.logger.log('b4MouseDown or onMouseDown returned false, exiting drag');
             return;
         }

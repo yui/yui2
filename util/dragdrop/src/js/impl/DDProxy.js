@@ -100,7 +100,7 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
             if (YAHOO.env.ua.ie) {
                 //Only needed for Internet Explorer
                 var ifr = document.createElement('iframe');
-                ifr.setAttribute('src', 'about:blank');
+                ifr.setAttribute('src', 'javascript: false;');
                 ifr.setAttribute('scrolling', 'no');
                 ifr.setAttribute('frameborder', '0');
                 div.insertBefore(ifr, div.firstChild);

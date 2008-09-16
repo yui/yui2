@@ -24,9 +24,124 @@ if (!YAHOO.util.DragDropMgr) {
  */
 YAHOO.util.DragDropMgr = function() {
 
-    var Event = YAHOO.util.Event;
+    var Event = YAHOO.util.Event,
+        Dom = YAHOO.util.Dom;
 
     return {
+        /**
+        * This property is used to turn on global use of the shim element on all DragDrop instances, defaults to false for backcompat. (Use: YAHOO.util.DDM.useShim = true)
+        * @property useShim
+        * @type Boolean
+        * @static
+        */
+        useShim: false,
+        /**
+        * This property is used to determine if the shim is active over the screen, default false.
+        * @private
+        * @property _shimActive
+        * @type Boolean
+        * @static
+        */
+        _shimActive: false,
+        /**
+        * This property is used when useShim is set on a DragDrop object to store the current state of DDM.useShim so it can be reset when a drag operation is done.
+        * @private
+        * @property _shimState
+        * @type Boolean
+        * @static
+        */
+        _shimState: false,
+        /**
+        * This property is used when useShim is set to true, it will set the opacity on the shim to .5 for debugging. Use: (YAHOO.util.DDM._debugShim = true;)
+        * @private
+        * @property _debugShim
+        * @type Boolean
+        * @static
+        */
+        _debugShim: false,
+        /**
+        * This method will create a shim element (giving it the id of yui-ddm-shim), it also attaches the mousemove and mouseup listeners to it and attaches a scroll listener on the window
+        * @private
+        * @method _sizeShim
+        * @static
+        */
+        _createShim: function() {
+            YAHOO.log('Creating Shim Element', 'info', 'DragDropMgr');
+            var s = document.createElement('div');
+            s.id = 'yui-ddm-shim';
+            if (document.body.firstChild) {
+                document.body.insertBefore(s, document.body.firstChild);
+            } else {
+                document.body.appendChild(s);
+            }
+            s.style.display = 'none';
+            s.style.backgroundColor = 'red';
+            s.style.position = 'absolute';
+            s.style.zIndex = '99999';
+            Dom.setStyle(s, 'opacity', '0');
+            this._shim = s;
+            Event.on(s, "mouseup",   this.handleMouseUp, this, true);
+            Event.on(s, "mousemove", this.handleMouseMove, this, true);
+            Event.on(window, 'scroll', this._sizeShim, this, true);
+        },
+        /**
+        * This method will size the shim, called from activate and on window scroll event
+        * @private
+        * @method _sizeShim
+        * @static
+        */
+        _sizeShim: function() {
+            if (this._shimActive) {
+                YAHOO.log('Sizing Shim', 'info', 'DragDropMgr');
+                var s = this._shim;
+                s.style.height = Dom.getDocumentHeight() + 'px';
+                s.style.width = Dom.getDocumentWidth() + 'px';
+                s.style.top = '0';
+                s.style.left = '0';
+            }
+        },
+        /**
+        * This method will create the shim element if needed, then show the shim element, size the element and set the _shimActive property to true
+        * @private
+        * @method _activateShim
+        * @static
+        */
+        _activateShim: function() {
+            if (this.useShim) {
+                YAHOO.log('Activating Shim', 'info', 'DragDropMgr');
+                if (!this._shim) {
+                    this._createShim();
+                }
+                this._shimActive = true;
+                var s = this._shim,
+                    o = '0';
+                if (this._debugShim) {
+                    o = '.5';
+                }
+                Dom.setStyle(s, 'opacity', o);
+                this._sizeShim();
+                s.style.display = 'block';
+            }
+        },
+        /**
+        * This method will hide the shim element and set the _shimActive property to false
+        * @private
+        * @method _deactivateShim
+        * @static
+        */
+        _deactivateShim: function() {
+            YAHOO.log('Deactivating Shim', 'info', 'DragDropMgr');
+            this._shim.style.display = 'none';
+            this._shimActive = false;
+        },
+        /**
+        * The HTML element created to use as a shim over the document to track mouse movements
+        * @private
+        * @property _shim
+        * @type HTMLElement
+        * @static
+        */
+        _shim: null,
         /**
          * Two dimensional Array of registered DragDrop objects.  The first 
          * dimension is the DragDrop item group, the second the DragDrop 
@@ -222,7 +337,6 @@ YAHOO.util.DragDropMgr = function() {
             this.init();
 
             YAHOO.log("DragDropMgr onload", "info", "DragDropMgr");
-
             Event.on(document, "mouseup",   this.handleMouseUp, this, true);
             Event.on(document, "mousemove", this.handleMouseMove, this, true);
             Event.on(window,   "unload",    this._onUnload, this, true);
@@ -393,10 +507,13 @@ YAHOO.util.DragDropMgr = function() {
          */
         _remove: function(oDD) {
             for (var g in oDD.groups) {
-                if (g && this.ids[g][oDD.id]) {
-                    delete this.ids[g][oDD.id];
-                    //YAHOO.log("NEW LEN " + this.ids.length, "warn");
+                if (g) {
+                    var item = this.ids[g];
+                    if (item && item[oDD.id]) {
+                        delete item[oDD.id];
+                    }
                 }
+                
             }
             delete this.handleIds[oDD.id];
         },
@@ -532,6 +649,7 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         handleMouseDown: function(e, oDD) {
+            //this._activateShim();
 
             this.currentTarget = YAHOO.util.Event.getTarget(e);
 
@@ -558,7 +676,7 @@ YAHOO.util.DragDropMgr = function() {
         },
 
         /**
-         * Fired when either the drag pixel threshol or the mousedown hold 
+         * Fired when either the drag pixel threshold or the mousedown hold 
          * time threshold has been met.
          * @method startDrag
          * @param x {int} the X position of the original mousedown
@@ -566,6 +684,11 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         startDrag: function(x, y) {
+            if (this.dragCurrent.useShim) {
+                this._shimState = this.useShim;
+                this.useShim = true;
+            }
+            this._activateShim();
             YAHOO.log("firing drag start events", "info", "DragDropMgr");
             clearTimeout(this.clickTimeout);
             var dc = this.dragCurrent;
@@ -596,6 +719,7 @@ YAHOO.util.DragDropMgr = function() {
                     YAHOO.log("mouseup detected - completing drag", "info", "DragDropMgr");
                     if (this.fromTimeout) {
                         YAHOO.log('fromTimeout is true (mouse didn\'t move), call handleMouseMove so we can get the dragOver event', 'info', 'DragDropMgr');
+                        this.fromTimeout = false;
                         this.handleMouseMove(e);
                     }
                     this.fromTimeout = false;
@@ -667,6 +791,14 @@ YAHOO.util.DragDropMgr = function() {
                 }
             }
 
+            if (this._shimActive) {
+                this._deactivateShim();
+                if (this.dragCurrent.useShim) {
+                    this.useShim = this._shimState;
+                    this._shimState = false;
+                }
+            }
+
             this.dragCurrent = null;
             this.dragOvers = {};
         },
@@ -687,7 +819,7 @@ YAHOO.util.DragDropMgr = function() {
          */
         handleMouseMove: function(e) {
             //YAHOO.log("handlemousemove");
-            
+
             var dc = this.dragCurrent;
             if (dc) {
                 // YAHOO.log("no current drag obj");
@@ -1097,6 +1229,7 @@ YAHOO.log("Could not get the loc for " + oDD.id, "warn", "DragDropMgr");
             }
 
             oTarget.overlap = null;
+
 
             // Get the current location of the drag element, this is the
             // location of the mouse event less the delta that represents

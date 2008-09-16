@@ -11,6 +11,9 @@ body.yui-layout {
 
 .yui-layout-doc {
     position: relative;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
 }
 
 .yui-layout-unit {
@@ -20,7 +23,7 @@ body.yui-layout {
     margin: 0;
     float: none;
     z-index: 0;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 .yui-layout-unit-top {
@@ -62,7 +65,7 @@ body.yui-layout {
     left: 0;
     zoom: 1;
     width: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 .yui-layout div.yui-layout-bd {
     position: absolute;
@@ -70,6 +73,9 @@ body.yui-layout {
     left: 0;
     zoom: 1;
     width: 100%;
+    /*overflow: hidden;*/
+}
+.yui-layout .yui-layout-noscroll div.yui-layout-bd {
     overflow: hidden;
 }
 .yui-layout .yui-layout-scroll div.yui-layout-bd {
@@ -81,7 +87,7 @@ body.yui-layout {
     left: 0;
     width: 100%;
     zoom: 1;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 .yui-layout .yui-layout-unit div.yui-layout-hd h2 {
@@ -136,9 +142,11 @@ body.yui-layout {
     left: 0;
 }
 
+/*
 .yui-layout .yui-layout-unit .yui-content {
     overflow: hidden;
 }
 .yui-layout .yui-layout-unit .yui-layout-scroll {
     overflow: auto;
 }
+*/

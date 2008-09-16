@@ -2,7 +2,14 @@
 .yui-busy {
     cursor: wait !important;
 }
-
+.yui-toolbar-container fieldset {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+.yui-toolbar-container legend {
+    display: none;
+}
 /* Setup the container with some padding and zoom it for IE's hasLayout */
 .yui-toolbar-container .yui-toolbar-subcont {
     padding: .25em 0;
@@ -46,6 +53,11 @@
     margin: 0;
     padding: .2em;
 }
+.yui-toolbar-container .yui-toolbar-titlebar h2 a {
+    text-decoration: none;
+    color: #000;
+    cursor: default;
+}
 /* If the toolbar is grouped the draghandle needs to be bigger */
 .yui-toolbar-container.yui-toolbar-grouped span.yui-toolbar-draghandle {
     height: 40px;
@@ -54,6 +66,7 @@
 /* Float the groups so they position nicely and zoom them for IE */
 .yui-toolbar-container .yui-toolbar-group {
     float: left;
+    margin-right: .5em;
     zoom: 1;
 }
 /* Setup the :after so that compliant browsers don't loose the bounding box */
@@ -67,20 +80,23 @@
 /* Style the separators with a left border */
 .yui-toolbar-container span.yui-toolbar-separator {
     width: 2px;
+    padding: 0;
     height: 18px;
     margin: .2em 0 .2em .1em;
-    display: block;
-    clear: none;
+    display: none;
     float: left;
+
 }
 /* Set the height of a grouped separator to a little bit bigger */
 .yui-toolbar-container.yui-toolbar-grouped span.yui-toolbar-separator {
-    height: 35px;
+    height: 45px;
+    *height: 50px;
 }
 
 /* Reset the height of a separator inside of a group */
 .yui-toolbar-container.yui-toolbar-grouped .yui-toolbar-group span.yui-toolbar-separator {
     height: 18px;
+    display: block;
 }
 
 /* Kill the default styles of the list */
@@ -108,6 +124,7 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
+    font-size: 0px;
 }
 
 /* Setup the disabled state of a button */
@@ -233,6 +250,10 @@
     padding: .25em .1em;
     zoom: 1;
 }
+/* Get the caret back in Geckp */
+.yui-editor-panel .bd .gecko form {
+    overflow: auto;
+}
 
 /* Setup the :after so that compliant browsers don't loose the bounding box */
 .yui-editor-panel .bd div.yui-editor-body-cont:after { display: block; clear: both; visibility: hidden; content: '.'; height: 0;}
@@ -286,6 +307,10 @@
     float: left;
 }
 
+.yui-editor-panel .yui-toolbar-group {
+    margin-bottom: 0.75em;
+}
+
 /* Image Padding in the Property Editor */
 .yui-editor-panel .yui-toolbar-group-padding {
 }
@@ -310,11 +335,12 @@
     font-style: italic;
     display: block;
     float: left;
-    overflow:auto;
+    overflow: visible;
 }
 /* Image Height/Width original info container */
 .yui-editor-panel .height-width span.info {
     font-size: 70%;
+    margin-top: 3px;
 }
 
 /* Border Size/Type button widths */
@@ -335,8 +361,10 @@
     left: 4px;
     position: absolute;
     top: 3px;
-    *top: -5px;
+    _top: -5px;
     width: 24px;
+    text-indent: 52px;
+    font-size: 0%;
 }
 /* Border Type solid */
 .yui-editor-panel .yui-toolbar-bordertype span a span.yui-toolbar-bordertype-solid {
@@ -353,6 +381,8 @@
 /* Border Size 0 */
 .yui-editor-panel .yui-toolbar-bordersize span a span.yui-toolbar-bordersize-0 {
     *top: 0px;
+    text-indent: 0px;
+    font-size: 75%;
 }
 /* Border Size 1 */
 .yui-editor-panel .yui-toolbar-bordersize span a span.yui-toolbar-bordersize-1 {
@@ -520,4 +550,16 @@ h2.yui-editor-skipheader, h3.yui-editor-skipheader {
     font-size: 85%;
     float: left;
     width: 65%;
+}
+
+.yui-toolbar-group-undoredo,
+.yui-toolbar-group-insertitem,
+.yui-toolbar-group-indentlist {
+    *width: 62px;
+}
+.yui-toolbar-group-indentlist2 {
+    *width: 122px;
+}
+.yui-toolbar-group-alignment {
+    *width: 130px;
 }

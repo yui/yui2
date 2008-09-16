@@ -84,6 +84,7 @@ var Dom = YAHOO.util.Dom,
         oConfig.element.setAttribute('unselectable', 'on');
         oConfig.element.className = 'yui-button yui-' + oConfig.attributes.type + '-button';
         oConfig.element.innerHTML = '<span class="first-child"><a href="#">LABEL</a></span>';
+        oConfig.element.firstChild.firstChild.tabIndex = '-1';
         oConfig.attributes.id = Dom.generateId();
 
         YAHOO.widget.ToolbarButton.superclass.constructor.call(this, oConfig.element, oConfig.attributes);
@@ -279,6 +280,20 @@ var Dom = YAHOO.util.Dom,
         */        
         getMenu: function() {
             return this.get('menu');
+        },
+        /** 
+        * @method destroy
+        * @description Destroy the button
+        */        
+        destroy: function() {
+            Event.purgeElement(this.get('element'), true);
+            this.get('element').parentNode.removeChild(this.get('element'));
+            //Brutal Object Destroy
+            for (var i in this) {
+                if (Lang.hasOwnProperty(this, i)) {
+                    this[i] = null;
+                }
+            }       
         },
         /** 
         * @method fireEvent
