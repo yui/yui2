@@ -11,6 +11,7 @@
 .yui-skin-sam .yui-pg-pages,
 .yui-skin-sam .yui-pg-page {
     display: inline-block;
+    font-family: arial,helvetica,clean,sans-serif;
     padding: 3px 6px;
     zoom:1;
 }
