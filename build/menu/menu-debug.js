@@ -3800,12 +3800,14 @@ _onBeforeShow: function (p_sType, p_aArgs) {
     function clearScrollHeight() {
     
     	this._setScrollHeight(this.cfg.setProperty(_MAX_HEIGHT));
+    	
         this.hideEvent.unsubscribe(clearScrollHeight);
     
     }
 
 
-    if (!(this instanceof YAHOO.widget.MenuBar) && bDynamicPos && !oParent) {
+    if (!(this instanceof YAHOO.widget.MenuBar) && bDynamicPos && 
+    		!oParent && !this.cfg.getProperty(_CONTEXT)) {
 
 		nViewportHeight = Dom.getViewportHeight();
 	
@@ -3814,20 +3816,18 @@ _onBeforeShow: function (p_sType, p_aArgs) {
 			nAvailableHeight = (nViewportHeight - (Overlay.VIEWPORT_OFFSET * 2));
 			nMinScrollHeight = this.cfg.getProperty(_MIN_SCROLL_HEIGHT);
 
-			if (nAvailableHeight < nMinScrollHeight) {
+			if (nAvailableHeight > nMinScrollHeight) {
 
-				nAvailableHeight = nMinScrollHeight;
+				this._setScrollHeight(nAvailableHeight);
+	
+				this.hideEvent.subscribe(clearScrollHeight);
 			
 			}
-
-			this._setScrollHeight(nAvailableHeight);
-
-			this.hideEvent.subscribe(clearScrollHeight);
 
 		}
 
     }
-	 
+
 
 	if (oParent) {
 
@@ -4019,7 +4019,7 @@ getConstrainedY: function (y) {
 			}
 		
 		}
-		else {
+		else if (nMaxHeight && (nMaxHeight != nInitialMaxHeight)) {
 		
 			oMenu._setScrollHeight(nInitialMaxHeight);
 			oMenu.hideEvent.subscribe(resetMaxHeight);
@@ -4656,6 +4656,15 @@ configContainer: function (p_sType, p_aArgs, p_oMenu) {
 },
 
 
+_clearSetWidthFlag: function () {
+
+	this._widthSetForScroll = false;
+	
+	this.cfg.unsubscribeFromConfigEvent(_WIDTH, this._clearSetWidthFlag);
+
+},
+
+
 /**
 * @method _setScrollHeight
 * @description 
@@ -4665,6 +4674,8 @@ configContainer: function (p_sType, p_aArgs, p_oMenu) {
 _setScrollHeight: function (p_nScrollHeight) {
 
     var nScrollHeight = p_nScrollHeight,
+		bRefireIFrameAndShadow = false,
+		bSetWidth = false,
         oElement,
         oBody,
         oHeader,
@@ -4695,13 +4706,13 @@ _setScrollHeight: function (p_nScrollHeight) {
 			nScrollHeight = nMinScrollHeight;
 		
 		}
-	
+
 
 		Dom.setStyle(oBody, _HEIGHT, _EMPTY_STRING);
 		Dom.removeClass(oBody, _YUI_MENU_BODY_SCROLLED);
 		oBody.scrollTop = 0;
-	
-	
+
+
 		/*
 			There is a bug in gecko-based browsers where an element whose 
 			"position" property is set to "absolute" and "overflow" property is set 
@@ -4710,16 +4721,15 @@ _setScrollHeight: function (p_nScrollHeight) {
 			possible to work around this bug by specifying a value for the width 
 			property in addition to overflow.
 	
-			In IE it is also necessary to give the Menu a width when the scrollbars are 
+			In IE it is also necessary to give the Menu a width before the scrollbars are 
 			rendered to prevent the Menu from rendering with a width that is 100% of
 			the browser viewport.
 		*/
 	
-		var bSetWidth = ((UA.gecko && oParent && oParent.parent && 
+		bSetWidth = ((UA.gecko && oParent && oParent.parent && 
 			oParent.parent.cfg.getProperty(_POSITION) == _DYNAMIC) || UA.ie);
-	
-	
-		if (bSetWidth && !this.cfg.getProperty(_WIDTH)) {
+
+		if (nScrollHeight > 0 && bSetWidth && !this.cfg.getProperty(_WIDTH)) {
 	
 			nOffsetWidth = oElement.offsetWidth;
 	
@@ -4733,13 +4743,34 @@ _setScrollHeight: function (p_nScrollHeight) {
 			oElement.style.width = nOffsetWidth + _PX;
 	
 			sWidth = (nOffsetWidth - (oElement.offsetWidth - nOffsetWidth)) + _PX;
-	
+
+
+			this.cfg.unsubscribeFromConfigEvent(_WIDTH, this._clearSetWidthFlag);
+
+			YAHOO.log("Setting the \"width\" configuration property to " + sWidth + " for srolling.", 
+				"info", this.toString());
+
 			this.cfg.setProperty(_WIDTH, sWidth);
+
+
+			/*
+				Set a flag (_widthSetForScroll) to maintain some history regarding how the 
+				"width" configuration property was set.  If the "width" configuration property 
+				is set by something other than the "_setScrollHeight" method, it will be 
+				necessary to maintain that new value and not clear the width if scrolling 
+				is turned off.
+			*/
+
+			this._widthSetForScroll = true;
+
+			this.cfg.subscribeToConfigEvent(_WIDTH, this._clearSetWidthFlag);
 	
 		}
 	
 	
-		if (!oHeader && !oFooter) {
+		if (nScrollHeight > 0 && (!oHeader && !oFooter)) {
+	
+			YAHOO.log("Creating header and footer for scrolling.", "info", this.toString());
 	
 			this.setHeader(_NON_BREAKING_SPACE);
 			this.setFooter(_NON_BREAKING_SPACE);
@@ -4756,10 +4787,18 @@ _setScrollHeight: function (p_nScrollHeight) {
 		}
 	
 	
-		nHeight = (nScrollHeight - (oHeader.offsetHeight + oHeader.offsetHeight));
+		nHeight = nScrollHeight;
+	
+	
+		if (oHeader && oFooter) {
+			nHeight = (nHeight - (oHeader.offsetHeight + oFooter.offsetHeight));
+		}
 	
 	
 		if ((nHeight > 0) && (oBody.offsetHeight > nScrollHeight)) {
+
+			YAHOO.log("Setting up styles and event handlers for scrolling.", 
+				"info", this.toString());
 	
 			Dom.addClass(oBody, _YUI_MENU_BODY_SCROLLED);
 			Dom.setStyle(oBody, _HEIGHT, (nHeight + _PX));
@@ -4777,11 +4816,27 @@ _setScrollHeight: function (p_nScrollHeight) {
 	
 			this._disableScrollHeader();
 			this._enableScrollFooter();
+			
+			bRefireIFrameAndShadow = true;			
 	
 		}
 		else if (oHeader && oFooter) {
+
+			YAHOO.log("Removing styles and event handlers for scrolling.", "info", this.toString());
 	
-			if (bSetWidth) {
+
+			/*
+				Only clear the the "width" configuration property if it was set the 
+				"_setScrollHeight" method and wasn't changed by some other means after it was set.
+			*/	
+	
+			if (this._widthSetForScroll) {
+	
+				YAHOO.log("Clearing width used for scrolling.", "info", this.toString());
+
+				this._widthSetForScroll = false;
+
+				this.cfg.unsubscribeFromConfigEvent(_WIDTH, this._clearSetWidthFlag);
 	
 				this.cfg.setProperty(_WIDTH, _EMPTY_STRING);
 			
@@ -4807,11 +4862,18 @@ _setScrollHeight: function (p_nScrollHeight) {
 	
 			this.header = null;
 			this.footer = null;
+			
+			bRefireIFrameAndShadow = true;
 		
 		}
+
+
+		if (bRefireIFrameAndShadow) {
 	
-		this.cfg.refireEvent(_IFRAME);
-		this.cfg.refireEvent(_SHADOW);	
+			this.cfg.refireEvent(_IFRAME);
+			this.cfg.refireEvent(_SHADOW);
+		
+		}
 	
 	}
 
@@ -5089,7 +5151,22 @@ configShadow: function (p_sType, p_aArgs, p_oMenu) {
 
     var onBeforeShow = function () {
     
-        createShadow.call(this);
+    	if (this._shadow) {
+
+			// If called because the "shadow" event was refired - just append again and resize
+			
+			replaceShadow.call(this);
+			
+			if (UA.ie) {
+				sizeShadow.call(this);
+			}
+    	
+    	}
+    	else {
+    
+        	createShadow.call(this);
+        
+        }
 
         this.beforeShowEvent.unsubscribe(onBeforeShow);
     
