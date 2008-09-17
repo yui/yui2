@@ -13,10 +13,10 @@ version: 2.5.2
 }
 
 /*.ygtvitem td {*/
-.ygtvrow > td {
+.ygtvrow td {
     border: none; padding: 0;
 }
-.ygtvrow > td  > a {
+.ygtvrow td a {
 	text-decoration:none;
 }
 
@@ -120,7 +120,8 @@ version: 2.5.2
 	cursor:default;
 }
 
-.ygtvspacer { height: 22px; width: 12px; }
+.ygtvspacer { height: 22px; width: 12px; 
+}
 
 .ygtvfocus {
 	background-color: #c0e0e0;
@@ -130,7 +131,7 @@ version: 2.5.2
 	background-color: #c0e0e0;
 }
 
-.ygtvfocus > a {
+.ygtvfocus a {
 	outline-style:none;
 }
 
