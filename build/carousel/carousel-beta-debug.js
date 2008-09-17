@@ -545,7 +545,7 @@
             el = Dom.get(this._itemsTable.items[position].id);
             if (el) {
                 Dom.removeClass(el, cssClass.SELECTED_ITEM);
-                el.setAttribute("tabindex", -1);
+                el.tabIndex = -1;
             }
         }
         
@@ -564,7 +564,7 @@
             el = Dom.get(this._itemsTable.items[newposition].id);
             if (el) {
                 Dom.addClass(el, cssClass.SELECTED_ITEM);
-                el.setAttribute("tabindex", 0);
+                el.tabIndex = 0;
                 el.focus();
             }
         }
