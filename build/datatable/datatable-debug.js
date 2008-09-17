@@ -11904,6 +11904,16 @@ unhighlightCell : function(cell) {
 // INLINE EDITING
 
 /**
+ * Returns current CellEditor instance, or null.
+ * @method getCellEditor
+ * @return {YAHOO.widget.CellEditor} CellEditor instance.
+ */
+getCellEditor : function() {
+    return this._oCellEditor;
+},
+
+
+/**
  * Activates and shows CellEditor instance for the given cell while deactivating and
  * canceling previous CellEditor. It is baked into DataTable that only one CellEditor
  * can be active at any given time. 
