@@ -409,6 +409,10 @@
             }
         }
 
+        if (JS.isUndefined(this._itemsTable.items[0])) {
+            return 0;
+        }
+
         child = Dom.get(this._itemsTable.items[0].id);
         
         if (typeof which == "undefined") {
@@ -668,8 +672,12 @@
         switch (o.ev) {
         case itemAddedEvent:
             pos  = JS.isUndefined(o.pos) ? this._itemsTable.numItems-1 : o.pos;
-            item = this._itemsTable.items[pos];
-            oel  = Dom.get(item.id);
+            if (!JS.isUndefined(this._itemsTable.items[pos])) {
+                item = this._itemsTable.items[pos];
+                if (item && !JS.isUndefined(item.id)) {
+                    oel  = Dom.get(item.id);
+                }
+            }
             if (!oel) {
                 el = this._createCarouselItem({
                         className : item.className,
@@ -677,13 +685,18 @@
                         id        : item.id
                 });
                 if (JS.isUndefined(o.pos)) {
-                    if ((oel = this._itemsTable.loading[pos])) {
+                    if (!JS.isUndefined(this._itemsTable.loading[pos])) {
+                        oel = this._itemsTable.loading[pos];
+                    }
+                    if (oel) {
                         this._carouselEl.replaceChild(el, oel);
                     } else {
                         this._carouselEl.appendChild(el);
                     }
                 } else {
-                    sibling = Dom.get(this._itemsTable.items[o.pos + 1].id);
+                    if (!JS.isUndefined(this._itemsTable.items[o.pos + 1])) {
+                        sibling = Dom.get(this._itemsTable.items[o.pos + 1].id);
+                    }
                     if (sibling) {
                         this._carouselEl.insertBefore(el, sibling);
                     } else {
@@ -696,8 +709,10 @@
                     }
                 } else {
                     if (!Dom.isAncestor(this._carouselEl, oel)) {
-                        this._carouselEl.insertBefore(oel,
-                                Dom.get(this._itemsTable.items[o.pos + 1].id));
+                        if (!JS.isUndefined(this._itemsTable.items[o.pos+1])) {
+                            this._carouselEl.insertBefore(oel, Dom.get(
+                                    this._itemsTable.items[o.pos+1].id));
+                        }
                     }
                 }
             }
@@ -732,7 +747,7 @@
                         id      : Dom.generateId()
                 });
                 if (el) {
-                    if (this._itemsTable.items[o.last + 1]) {
+                    if (!JS.isUndefined(this._itemsTable.items[o.last + 1])) {
                         sibling = Dom.get(this._itemsTable.items[o.last+1].id);
                         if (sibling) {
                             this._carouselEl.insertBefore(el, sibling);
@@ -1569,8 +1584,13 @@
             }
 
             // TODO: may be cache the item
-            return this._itemsTable.numItems > index ?
-                    Dom.get(this._itemsTable.items[index].id) : null;
+            if (this._itemsTable.numItems > index) {
+                if (!JS.isUndefined(this._itemsTable.items[index])) {
+                    return Dom.get(this._itemsTable.items[index].id);
+                }
+            }
+
+            return null;
         },
 
         /**
@@ -1603,8 +1623,13 @@
                 return null;
             }
 
-            return this._itemsTable.numItems > index ?
-                    this._itemsTable.items[index] : null;
+            if (this._itemsTable.numItems > index) {
+                if (!JS.isUndefined(this._itemsTable.items[index])) {
+                    return this._itemsTable.items[index];
+                }
+            }
+
+            return null;
         },
 
         /**
@@ -1630,8 +1655,10 @@
             var i = 0, n = this._itemsTable.numItems;
 
             while (i < n) {
-                if (this._itemsTable.items[i].id == id) {
-                    return i;
+                if (!JS.isUndefined(this._itemsTable.items[i])) {
+                    if (this._itemsTable.items[i].id == id) {
+                        return i;
+                    }
                 }
                 i++;
             }
@@ -2583,6 +2610,9 @@
             }
             
             for (i = 0; i < numPages; i++) {
+                if (JS.isUndefined(this._itemsTable.items[i * numVisible])) {
+                    break;
+                }
                 a = this._itemsTable.items[i * numVisible].id;
                 if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
                     markup += "<option value=\"#" + a + "\" "            +
