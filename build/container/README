@@ -56,11 +56,11 @@ Fixed the following bugs:
 -------------------------
 
 + Fixed issue with tooltip iframe remaining visible in situations
-  where the page needs to be scrolled.
+  where the page was scrolled down.
   
 + Fixed OverlayManager.find to return null, if the Overlay cannot
-  be found
-  
+  be found.
+
 + OverlayManager no longer overwrites focus or blur methods on the 
   registered container, if they already exist (e.g. for Menu). Instead
   it registers focus/blur event listeners to maintain OverlayManager
@@ -109,10 +109,14 @@ Fixed the following bugs:
   connection) can now be included after container's js files, without
   breaking related functionality.
   
++ Fixed Config to remove (null out) current entry from the 
+  config queue, before invoking fireEvent for the entry, to 
+  keep it from being re-added to the end of the queue if 
+  listeners were to set a property which superceded the entry.
+
 *** version 2.5.2 ***
 
 + No change.
-
 
 *** version 2.5.1 ***
 

@@ -512,9 +512,14 @@
                     key = queueItem[0];
                     value = queueItem[1];
                     property = this.config[key];
-        
+
                     property.value = value;
-        
+
+                    // Clear out queue entry, to avoid it being 
+                    // re-added to the queue by any queueProperty/supercedes
+                    // calls which are invoked during fireEvent
+                    this.eventQueue[i] = null;
+
                     this.fireEvent(key,value);
                 }
             }
