@@ -2,11 +2,22 @@
  * The Paginator widget provides a set of controls to navigate through paged
  * data.
  *
- * @namespace YAHOO.widget
- * @class Paginator
+ * @module paginator
  * @uses YAHOO.util.EventProvider
  * @uses YAHOO.util.AttributeProvider
+ */
+
+/*
+ * Instantiate a Paginator, passing a configuration object to the contructor.
+ * The configuration object should contain the following properties:
+ * <ul>
+ *   <li>rowsPerPage : <em>n</em> (int)</li>
+ *   <li>totalRecords : <em>n</em> (int or Paginator.VALUE_UNLIMITED)</li>
+ *   <li>containers : <em>id|el|arr</em> (HTMLElement reference, its id, or an array of either)</li>
+ * </ul>
  *
+ * @namespace YAHOO.widget
+ * @class Paginator
  * @constructor
  * @param config {Object} Object literal to set instance and ui component
  * configuration.
