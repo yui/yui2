@@ -7,13 +7,13 @@
  * @uses YAHOO.util.AttributeProvider
  */
 
-/*
+/**
  * Instantiate a Paginator, passing a configuration object to the contructor.
  * The configuration object should contain the following properties:
  * <ul>
  *   <li>rowsPerPage : <em>n</em> (int)</li>
  *   <li>totalRecords : <em>n</em> (int or Paginator.VALUE_UNLIMITED)</li>
- *   <li>containers : <em>id|el|arr</em> (HTMLElement reference, its id, or an array of either)</li>
+ *   <li>containers : <em>id | el | arr</em> (HTMLElement reference, its id, or an array of either)</li>
  * </ul>
  *
  * @namespace YAHOO.widget
