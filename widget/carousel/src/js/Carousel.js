@@ -542,10 +542,12 @@
             sentinel   = firstItem + numVisible - 1;
         
         if (position >= 0 && position < numItems) {
-            el = Dom.get(this._itemsTable.items[position].id);
-            if (el) {
-                Dom.removeClass(el, cssClass.SELECTED_ITEM);
-                el.tabIndex = -1;
+            if (!JS.isUndefined(this._itemsTable.items[position])) {
+                el = Dom.get(this._itemsTable.items[position].id);
+                if (el) {
+                    Dom.removeClass(el, cssClass.SELECTED_ITEM);
+                    el.tabIndex = -1;
+                }
             }
         }
         
