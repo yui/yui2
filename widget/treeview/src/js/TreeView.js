@@ -304,7 +304,8 @@ TV.prototype = {
         this.createEvent("enterKeyPressed", this);
 		
     /**
-         * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a Click
+         * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a Click.
+	* The listener may return false to cancel toggling and focusing on the node.
          * @event clickEvent
          * @type CustomEvent
          * @param oArgs.event  {HTMLEvent} The event object
@@ -540,12 +541,14 @@ TV.prototype = {
 							if (this._hasDblClickSubscriber) {
 								this._dblClickTimer = window.setTimeout(function () {
 									self._dblClickTimer = null;
-									toggle();
-									self.fireEvent('clickEvent', {event:ev,node:node}); 
+									if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
+										toggle();
+									}
 								}, 200);
 							} else {
-								toggle();
-								self.fireEvent('clickEvent', {event:ev,node:node}); 
+								if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
+									toggle();
+								}
 							}
 						}
 					}

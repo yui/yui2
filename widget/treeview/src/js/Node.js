@@ -674,7 +674,7 @@ YAHOO.widget.Node.prototype = {
 
         if (! this.multiExpand) {
             var sibs = this.getSiblings();
-            for (var i=0; i<sibs.length; ++i) {
+            for (var i=0; sibs && i<sibs.length; ++i) {
                 if (sibs[i] != this && sibs[i].expanded) { 
                     sibs[i].collapse(); 
                 }

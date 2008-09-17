@@ -1,99 +1,59 @@
-/* first or middle sibling, no children */
 .ygtvtn {
-	width:1em; height:20px; background:none
+background:transparent none repeat scroll 0 0;
+height:20px;
+width:1em;
 }
-
-/* first or middle sibling, collapsable */
 .ygtvtm {
-	width:1em; height:20px; 
-	cursor:pointer ;
-	background: url(sprite-menu.gif) -8px 2px no-repeat; 
+background:transparent url(sprite-menu.gif) no-repeat scroll -8px 2px;
+height:20px;
+width:1em;
 }
-
-/* first or middle sibling, collapsable, hover */
 .ygtvtmh {
-	width:1em; height:20px; 
-	cursor:pointer ;
-	background: url(sprite-menu.gif) -8px -77px no-repeat; 
+background:transparent url(sprite-menu.gif) no-repeat scroll -8px -77px;
+height:20px;
+width:1em;
 }
-
-/* first or middle sibling, expandable */
 .ygtvtp {
-	width:1em; height:20px; 
-	cursor:pointer ;
-	background: url(sprite-menu.gif) -8px -315px no-repeat; 
+background:transparent url(sprite-menu.gif) no-repeat scroll -8px -315px;
+height:20px;
+width:1em;
 }
-
-/* first or middle sibling, expandable, hover */
 .ygtvtph {
-	width:1em; height:20px; 
-	cursor:pointer ;
-	background: url(sprite-menu.gif) -8px -395px no-repeat; 
+background:transparent url(sprite-menu.gif) no-repeat scroll -8px -395px;
+height:20px;
+width:1em;
 }
-
-/* last sibling, no children */
 .ygtvln {
-	width:1em; height:20px; background:none
+background:transparent none repeat scroll 0 0;
+height:20px;
+width:1em;
 }
-
-/* Last sibling, collapsable */
 .ygtvlm {
-	width:1em; height:20px; 
-	cursor:pointer ;
-	background: url(sprite-menu.gif) -8px 2px no-repeat; 
+background:transparent url(sprite-menu.gif) no-repeat scroll -8px 2px;
+height:20px;
+width:1em;
 }
-
-/* Last sibling, collapsable, hover */
 .ygtvlmh {
-	width:1em; height:20px; 
-	cursor:pointer ;
-	background: url(sprite-menu.gif) -8px -77px no-repeat; 
+background:transparent url(sprite-menu.gif) no-repeat scroll -8px -77px;
+height:20px;
+width:1em;
 }
-
-/* Last sibling, expandable */
-.ygtvlp { 
-	width:1em; height:20px; 
-	cursor:pointer ;
-	background: url(sprite-menu.gif) -8px -315px no-repeat; 
+.ygtvlp {
+background:transparent url(sprite-menu.gif) no-repeat scroll -8px -315px;
+height:20px;
+width:1em;
 }
-
-/* Last sibling, expandable, hover */
-.ygtvlph { 
-	width:1em; height:20px; cursor:pointer ;
-	background: url(sprite-menu.gif) -8px -395px no-repeat; 
+.ygtvlph {
+background:transparent url(sprite-menu.gif) no-repeat scroll -8px -395px;
+height:20px;
+width:1em;
 }
-
-/* Loading icon */
-.ygtvloading { 
-	width:1em; height:20px; 
-	background: url(treeview-loading.gif) 0 0 no-repeat; 
+.ygtvdepthcell {
+background:transparent none repeat scroll 0 0;
+height:20px;
+width:1em;
+cursor:default;
 }
-
-/* the style for the empty cells that are used for rendering the depth 
- * of the node */
-.ygtvdepthcell { width:1em; height:20px; background:none}
-
-.ygtvblankdepthcell { width:1em; height:20px; }
-
-/* the style of the div around each node */
-.ygtvitem { border: 0px solid grey; }  
-
-/* the style of the div around each node's collection of children */
-.ygtvchildren {  }  
-* html .ygtvchildren { height:2%; }  
-
-.ygtvitem  table{
-    margin-bottom:0;
+.ygtvln, .ygtvtn {
+	cursor:default;
 }
-.ygtvitem  td {
-    border:none;padding:0;
-} 
-
-/* the style of the text label in ygTextNode */
-.ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { 
-	margin-left:2px;
-	text-decoration: none;
-    background-color: white; /* workaround for IE font smoothing bug */
-}
-
-.ygtvspacer { height: 20px; width: 12px; width: 1em; }

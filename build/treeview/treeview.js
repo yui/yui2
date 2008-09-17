@@ -300,7 +300,8 @@ TV.prototype = {
         this.createEvent("enterKeyPressed", this);
 		
     /**
-         * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a Click
+         * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a Click.
+	* The listener may return false to cancel toggling and focusing on the node.
          * @event clickEvent
          * @type CustomEvent
          * @param oArgs.event  {HTMLEvent} The event object
@@ -526,12 +527,14 @@ TV.prototype = {
 							if (this._hasDblClickSubscriber) {
 								this._dblClickTimer = window.setTimeout(function () {
 									self._dblClickTimer = null;
-									toggle();
-									self.fireEvent('clickEvent', {event:ev,node:node}); 
+									if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
+										toggle();
+									}
 								}, 200);
 							} else {
-								toggle();
-								self.fireEvent('clickEvent', {event:ev,node:node}); 
+								if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
+									toggle();
+								}
 							}
 						}
 					}
@@ -1835,7 +1838,7 @@ YAHOO.widget.Node.prototype = {
 
         if (! this.multiExpand) {
             var sibs = this.getSiblings();
-            for (var i=0; i<sibs.length; ++i) {
+            for (var i=0; sibs && i<sibs.length; ++i) {
                 if (sibs[i] != this && sibs[i].expanded) { 
                     sibs[i].collapse(); 
                 }
@@ -2738,7 +2741,7 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
  * @constructor
  */
 YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
-	YAHOO.widget.TextNode.superclass.constructor.call(this,oData,oParent,expanded);
+	YAHOO.widget.MenuNode.superclass.constructor.call(this,oData,oParent,expanded);
 
    /*
      * Menus usually allow only one branch to be open at a time.
