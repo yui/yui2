@@ -2,181 +2,185 @@
 
 {
 
-	import flash.utils.Dictionary;
-
-	import flash.net.FileReference;
-
-	import flash.net.FileReferenceList;
-
-	import flash.net.URLRequest;
-
-	import flash.net.URLRequestMethod;
-
-	import flash.net.URLVariables;
-
-	import flash.net.FileFilter;
-
-	import flash.events.Event;
-
-	import flash.events.ProgressEvent;
-
-	import flash.events.HTTPStatusEvent;
-
-	import flash.events.IOErrorEvent;
-
-	import flash.events.SecurityErrorEvent;
-
+	import com.yahoo.yui.YUIAdapter;
+	
+	import flash.display.Sprite;
+	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
 	import flash.events.DataEvent;
-
+	import flash.events.Event;
+	import flash.events.HTTPStatusEvent;
+	import flash.events.IOErrorEvent;
+	import flash.events.MouseEvent;
+	import flash.events.ProgressEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.external.ExternalInterface;
-
-	import flash.text.TextField;
-
-	import flash.text.TextFieldType;
-
-	import flash.display.Sprite; 
-
-
-
-	import com.yahoo.yui.YUIAdapter; 
+	import flash.net.FileFilter;
+	import flash.net.FileReference;
+	import flash.net.FileReferenceList;
+	import flash.net.URLRequest;
+	import flash.net.URLRequestHeader;
+	import flash.net.URLVariables;
+	import flash.utils.Dictionary; 
 
 
 
-//	[SWF(backgroundColor=0xffffff)]
+	[SWF(backgroundColor=0xffffff)]
 
 	/**
-
 	 * A wrapper for the Astra Uploader components to allow them to be used by the YUI library.
-
 	 * 
-
-	 * @author Allen Rabinovich, Buck DeFore
-
+	 * @author Allen Rabinovich
 	 */
 
 	public class Uploader extends YUIAdapter {
 
 	//--------------------------------------
-
 	//  Constructor
-
 	//--------------------------------------
 
-		public function Uploader(debugfield:TextField = null)
-
+		public function Uploader()
 		{
-
 			super();
-
 		}
 
 
-
 	    //--------------------------------------------------------------------------
-
 	    //
-
 	    //  Variables
-
 	    //
-
 	    //--------------------------------------------------------------------------
+
+		private var allowMultiple:Boolean = false;
+		private var allowLog:Boolean = false;
+		private var filterArray:Array;
 
 		private var fileDataList:Object;
-
 		private var fileRefList:Object;
-
 		private var fileIDList:Dictionary;
-
 		private var fileIDCounter:Number;
-
-		private var filesToUpload:Array; 		// for queue management
-
-
+		private var filesToUpload:Array;
 
 		private var singleFile:FileReference;
-
 		private var multipleFiles:FileReferenceList;
 
-		private var output:TextField;
+		/**
+		 * Determines how many files will be uploaded simultaneously
+		 *
+		 * @langversion 3.0
+		 * @playerversion Flash 9.0.28.0
+		 */
+		public var simultaneousUploadLimit:Number = 2;
+		private var currentUploadThreads:Number = 0;
 
-
+		private var renderType:String;
+		
+		//--------------------------------------
+		//  Public Methods
+		//--------------------------------------
 
 		/**
-
-		 * Determines how many files will be uploaded simultaneously
-
-		 *
-
-		 * @langversion 3.0
-
-		 * @playerversion Flash 9.0.28.0
-
+		 * Sets the number of simultaneous file uploads possible.
+		 * The maximum is 5.
+		 * @param numberOfUploads Number of simultaneous uploads, no fewer than 1
+		 * and no larger than 5.
 		 */
+		 public function setSimUploadLimit (simUploadLimit:int) : void {
+		 	if (simUploadLimit <= 1) {
+		 		this.simultaneousUploadLimit = 1;
+		 	}
+		 	else if (simUploadLimit >= 5) {
+		 		this.simultaneousUploadLimit = 5;
+		 	}
+		 	else {
+		 		this.simultaneousUploadLimit = simUploadLimit;
+		 	}
+		 }
 
-		public var simultaneousUploadLimit:Number = 2;
-
-		
-
-		//--------------------------------------
-
-		//  Public Methods
-
-		//--------------------------------------
 
 	    /**
-
-	     *  Triggers a prompt for the user to browse their file system to select
-
-		 *  files to be uploaded.
-
+	     *  Sets a list of file type filters for the "Open File(s)" dialog.
 		 *  
+	     *  @param newFilterArray An array of sets of key-value pairs of the form
+	     *  {extensions: extensionString, description: descriptionString, macType: macTypeString [optional]}
+	     *  The extension string is a semicolon-delimited list of elements of the form "*.xxx", 
+	     *  e.g. "*.jpg;*.gif;*.png".
+	     */
+		 public function setFileFilters(newFilterArray:Array) : void {
+		 	filterArray = processFileFilterObjects(newFilterArray);
+		 	
+		 	if (allowLog) {
+		 		var logString:String = "File filters have been set to the following: \n";
+		 		for each (var ff:FileFilter in filterArray) {
+		 			logString += ff.extension + ": " + ff.description + "\n";
+		 		}
+		 		logMessage(logString);
+		 	}
+		 }
 
-	     *  @param allowMultiple Whether to allow the user to select more than
-
-	     *  one file
-
+	    /**
+	     *  Sets a flag allowing logging in Flash trace and Yahoo logger.
+		 *  
+	     *  @param allowLogging Whether to allow log messages.
 	     * 
+	     */
+		public function setAllowLogging(allowLogging:Boolean) : void {
+			this.allowLog = allowLogging;
+			logMessage("Logging has been turned " + (allowLog ? "on." : "off."));
+		}
+		
+		/**
+	     *  Sets a flag allowing multiple file selection in the "Browse" dialog.
+		 *  
+	     *  @param allowMultiple Whether to allow multiple file selection.
+	     * 
+	     */
+		public function setAllowMultipleFiles(allowMultipleFiles:Boolean) : void {
+			this.allowMultiple = allowMultipleFiles;
+			logMessage("Multiple file upload has been turned " + (allowMultiple ? "on." : "off."));		
+		}
 
+		
+	    /**
+	     *  Triggers a prompt for the user to browse their file system to select
+		 *  files to be uploaded.
+		 *  
+	     *  @param allowMultiple Whether to allow the user to select more than
+	     *  one file
+	     * 
 	     *  @param filterArray An array of filter objects, each with <code>
-
 	     *  description</code>, and <code>extensions</code> properties which
-
 		 *  determine which files the user is allowed to select
-
 	     */
 
-		public function browse(allowMultiple:Boolean = false, filterArray:Array = null):void {
+		private function browse(allowMultiple:Boolean = false, filterArray:Array = null):void {
 
 			if(!allowMultiple) {
-
-				t("Browsing for single file...")
-
+				logMessage("Browsing for a single file.")
 				singleFile = new FileReference();
-
 				singleFile.addEventListener(Event.SELECT, singleFileSelected);
 
-
-
-				if(filterArray) singleFile.browse(processFileFilterObjects(filterArray));
-
-				else singleFile.browse();
-
+				if(filterArray) {
+					singleFile.browse(filterArray);
+				}
+				else {
+					singleFile.browse();
+				}
 			}
 
 			else {
 
-				t("Browsing for one or more files...")
-
+				logMessage("Browsing for one or more files.")
 				multipleFiles = new FileReferenceList();
-
 				multipleFiles.addEventListener(Event.SELECT, multipleFilesSelected);
 
+				if(filterArray) {
+					multipleFiles.browse(filterArray);
+				} 
 
-
-				if(filterArray) multipleFiles.browse(processFileFilterObjects(filterArray));
-
-				else multipleFiles.browse();
+				else {
+					multipleFiles.browse();
+				}
 
 			}
 
@@ -185,163 +189,139 @@
 
 
 	    /**
-
 	     *  Removes the file from the set to be uploaded
-
 		 *  
-
 	     *  @param fileID The ID of the file to be removed
-
 	     */
 
 		public function removeFile(fileID:String):Object {
 
+			// TODO: Do we need to remove the item from filesToUpload also?
 
 			delete fileDataList[fileID];
-
 			delete fileRefList[fileID];
 
-
-
 			return fileDataList;
-
 		}
 
 
 
 	    /**
-
 	     *  Clears the set of files that had been selected for upload
-
 	     */
 
 		public function clearFileList():Boolean {
 
-	
+			// TODO: Remove event listeners (or weak references?)
+
 			filesToUpload = [];
-
 			fileDataList = new Object();
-
 			fileRefList = new Object();
-
 			fileIDList = new Dictionary();
-
 			fileIDCounter = 0;
 
 			return true;
-
 		}
 
 
 
 	    /**
-
 	     *  Uploads a file corresponding to a specified ID to a specified path where a script handles writing to the server.
-
 		 *  
-
 	     *  @param fileID The ID of the file to be uploaded
-
 	     *  @param url The path to the serverside script
-
 	     *  @param method The HTTP submission method. Possible values are "GET" and "POST"
-
-	     *  @param vars An object containing data to be sent along with the request
-
-	     *  @param fieldName The field name that precedes the file data in the upload POST operation. The uploadDataFieldName value must be non-null and a non-empty String.
-
+	     *  @param vars An object containing variables to be sent along with the request
+	     *  @param fieldName The field name that precedes the file data in the upload POST operation. 
+	     *  The uploadDataFieldName value must be non-null and a non-empty String.
+	     *  @param headers An object containing variables that should be set as headers in the POST request. The following header names
+	     *  cannot be used: 
+	     *  <code>
+	     *  Accept-Charset, Accept-Encoding, Accept-Ranges, Age, Allow, Allowed, Authorization, Charge-To, Connect, Connection, 
+	     *  Content-Length, Content-Location, Content-Range, Cookie, Date, Delete, ETag, Expect, Get, Head, Host, Keep-Alive, 
+	     *  Last-Modified, Location, Max-Forwards, Options, Post, Proxy-Authenticate, Proxy-Authorization, Proxy-Connection, 
+	     *  Public, Put, Range, Referer, Request-Range, Retry-After, Server, TE, Trace, Trailer, Transfer-Encoding, Upgrade, 
+	     *  URI, User-Agent, Vary, Via, Warning, WWW-Authenticate, x-flash-version.
+	     *  </code>
 	     */
 
-		public function upload(fileID:String, url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata"):void {
+		public function upload(fileID:String, url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata", headers:Object = null):void {
 
 			// null checking in the params is not working correctly
 
-			if(isEmptyString(method)) method = "GET";
+			if(isEmptyString(method)) {
+				method = "GET";
+			}
+			
+			if(isEmptyString(fieldName)) {
+				fieldName = "Filedata";
+			}
 
-			if(isEmptyString(fieldName)) fieldName = "Filedata";
-
-
-
-			var request:URLRequest = formURLRequest(url, method, vars);
-
-	
-
+			var request:URLRequest = formURLRequest(url, method, vars, headers);
 			var fr:FileReference = fileRefList[fileID];
 
 			queueForUpload(fr, request, fieldName);
-
 		}
 
 	    /**
-
 	     *  Uploads all files to a specified path where a script handles writing to the server.
-
 		 *  
-
 	     *  @param fileID The ID of the file to be uploaded
-
 	     *  @param url The path to the serverside script
-
 	     *  @param method The HTTP submission method. Possible values are "GET" and "POST"
-
 	     *  @param vars An object containing data to be sent along with the request
-
 	     *  @param fieldName The field name that precedes the file data in the upload POST operation. The uploadDataFieldName value must be non-null and a non-empty String.
-
+	     *  @param headers An object containing variables that should be set as headers in the POST request. The following header names
+	     *  cannot be used: 
+	     *  <code>
+	     *  Accept-Charset, Accept-Encoding, Accept-Ranges, Age, Allow, Allowed, Authorization, Charge-To, Connect, Connection, 
+	     *  Content-Length, Content-Location, Content-Range, Cookie, Date, Delete, ETag, Expect, Get, Head, Host, Keep-Alive, 
+	     *  Last-Modified, Location, Max-Forwards, Options, Post, Proxy-Authenticate, Proxy-Authorization, Proxy-Connection, 
+	     *  Public, Put, Range, Referer, Request-Range, Retry-After, Server, TE, Trace, Trailer, Transfer-Encoding, Upgrade, 
+	     *  URI, User-Agent, Vary, Via, Warning, WWW-Authenticate, x-flash-version.
+	     * </code>
 	     */
 
-		public function uploadAll(url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata"):void {
+		public function uploadAll(url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata", headers:Object = null):void {
 
 			// null checking in the params is not working correctly
 
-			if(isEmptyString(method)) method = "GET";
-
-			if(isEmptyString(fieldName)) fieldName = "Filedata";
-
-
-
-			var request:URLRequest = formURLRequest(url, method, vars);
-
-
+			if(isEmptyString(method)) {
+				method = "GET";
+			}
+			
+			if(isEmptyString(fieldName)) {
+				fieldName = "Filedata";
+			}
+			
+			var request:URLRequest = formURLRequest(url, method, vars, headers);
 
 			for each(var fr:FileReference in fileRefList) {
-
 				queueForUpload(fr, request, fieldName);
-
 			}
-
+			
+			processQueue();
 		}
 
 	    /**
-
 	     *  Cancels either an upload of the file corresponding to a given fileID, or in the absence of the specified fileID, all active files being uploaded.
-
 		 *  
-
 	     *  @param fileID The ID of the file to be uploaded
-
 	     */
 
 		public function cancel(fileID:String = null):void {
 
-			t("Canceling upload")
-
+			logMessage("Canceling upload");
+			
 			if (fileID == null) { // cancel all files
-
 				for each (var item:FileReference in fileRefList) {
-
 					item.cancel();
-
 				}
-
 			} 
 
 			else { // cancel specified file
-
 				var fr:FileReference = fileRefList[fileID];
-
 				fr.cancel();
-
 			}
 
 		}
@@ -349,113 +329,93 @@
 
 
 		/*
-
 			Events
-
 			-------------------------------
-
 			fileSelect - fires when the user selects one or more files (after browse is called). Passes the array of currently selected files (if prior browse calls were made and clearFileList hasn't been called, all files the user has ever selected will be returned), along with all information available about them (name, size, type, creationDate, modificationDate, creator). 
-
-
-
 			uploadStart - fires when a file starts uploading. Passes a file id for identifying the file.
-
 			uploadProgress - fires when a file upload reports progress. Passes the file id, as well as bytesUploaded and bytesTotal for the given file.
-
 			uploadComplete - fires when a file upload is completed successfully and passes the corresponding file id.
-
 			uploadCompleteData - fires when data is received from the server after upload and passes the corresponding file id and the said data.
-
 			uploadError - fires when an error occurs during download. Passes the id of the file that was being uploaded and an error type.
-			
-			uploadCancel - fires when an upload is cancelled. Passes the id of the file whose upload has been cancelled.
-
 		*/
 
-		private function uploadStart (event:Event) : void {
-
-			t("Started upload for " + fileIDList[event.target]);
-
+		private function rollOver (event:MouseEvent) : void {
+			logMessage("Mouse rolled over the uploader.");
 			var newEvent:Object = new Object();
-
+			newEvent.type = "rollOver";
+			super.dispatchEventToJavaScript(newEvent);
+		}
+		
+		private function rollOut (event:MouseEvent) : void {
+			logMessage("Mouse rolled out the uploader.");
+			var newEvent:Object = new Object();
+			newEvent.type = "rollOut";
+			super.dispatchEventToJavaScript(newEvent);
+		}
+		
+		private function click (event:MouseEvent) : void {
+			logMessage("Mouse clicked on the uploader.");
+			var newEvent:Object = new Object();
+			newEvent.type = "click";
+			super.dispatchEventToJavaScript(newEvent);
+		}
+		
+		
+		private function uploadStart (event:Event) : void {
+			logMessage("Started upload for " + fileIDList[event.target]);
+			var newEvent:Object = new Object();
 			newEvent.id = fileIDList[event.target];
-
-			newEvent.type = "uploadStart"
-
+			newEvent.type = "uploadStart";
             super.dispatchEventToJavaScript(newEvent);
-
 		}
 
 
 
 		private function uploadProgress (event:ProgressEvent) : void {
-
-			t("Progress for " + fileIDList[event.target] + ": " + event.bytesLoaded.toString() + " / " + event.bytesTotal.toString());
-
+			logMessage("Progress for " + fileIDList[event.target] + ": " + event.bytesLoaded.toString() + " / " + event.bytesTotal.toString());
 			var newEvent:Object = new Object();
-
 			newEvent.id = fileIDList[event.target];
-
 			newEvent.bytesLoaded = event.bytesLoaded;
-
 			newEvent.bytesTotal = event.bytesTotal;
-
 			newEvent.type = "uploadProgress"
-
 			super.dispatchEventToJavaScript(newEvent);
-
 		}
 
 
 
 		private function uploadComplete (event:Event) : void {
 
-			t("Upload complete for " + fileIDList[event.target]);
-
+			logMessage("Upload complete for " + fileIDList[event.target]);
 			var newEvent:Object = new Object();
-
 			newEvent.id = fileIDList[event.target];
-
 			newEvent.type = "uploadComplete"
-
 			super.dispatchEventToJavaScript(newEvent);
 
-			
-
+			this.currentUploadThreads--;
 			// get next off of queue:
-
-			if(filesToUpload.length > 0) processQueue();
-
+			if(filesToUpload.length > 0) {
+				processQueue();
+			}
 		}
 
 
 
 		private function uploadCompleteData (event:DataEvent) : void {
-
-			t("Got data back for " + fileIDList[event.target] + ": ");
-
-			t(event.data);
-
+			logMessage("Got data back for " + fileIDList[event.target] + ": ");
+			logMessage(event.data);
 			var newEvent:Object = new Object();
-
 			newEvent.id = fileIDList[event.target];
-
 			newEvent.data = event.data;
-
 			newEvent.type = "uploadCompleteData"
-
 			super.dispatchEventToJavaScript(newEvent);
-
 		}
 		
-		private function uploadCancel (event:Event) : void {
-			
-			t("Canceled upload for " + fileIDList[event.target]);
+		private function uploadCancel (event:Event) : void {			
+			logMessage("Canceled upload for " + fileIDList[event.target]);
 			var newEvent:Object = new Object();
 			newEvent.id = fileIDList[event.target];
 			newEvent.type = "uploadCancel";
 			super.dispatchEventToJavaScript(newEvent);
-			
 		}
 
 
@@ -464,41 +424,23 @@
 
 			// {} instead of new Object()? !
 
-	        var newEvent:Object = new Object();
+	        var newEvent:Object = {};
 
 			if (event is HTTPStatusEvent) {
-
 				var myev:HTTPStatusEvent = event as HTTPStatusEvent;
-
-				newEvent.type = "http";
-
 				newEvent.status = myev.status;
-
-				t("HTTP status error for " + fileIDList[event.target] + ": ");
-
+				logMessage("HTTP status error for " + fileIDList[event.target] + ": " + myev.status);
 			}
 
 			else if (event is IOErrorEvent) {
-
-				newEvent.type = "io";
-
 				newEvent.status = event.toString();
-
-				t("IO error for " + fileIDList[event.target] + ": ");
-
+				logMessage("IO error for " + fileIDList[event.target] + ": " + myev.status);
 			}
 
 			else if (event is SecurityErrorEvent) {
-
-				newEvent.type = "security";
-
 				newEvent.status = event.toString();
-
-				t("Security error for " + fileIDList[event.target] + ": ");
-
+				logMessage("Security error for " + fileIDList[event.target] + ": " + myev.status);
 			}
-
-
 
 			newEvent.type = "uploadError";
 			newEvent.id = fileIDList[event.target];
@@ -509,356 +451,303 @@
 
 			// get next off of queue:
 
-			if(filesToUpload.length > 0) processQueue();
-
-		}
-
-
-
-		// internal event handler
-
-		private function singleFileSelected(event:Event):void {
-
-			addFile(event.target as FileReference);
-
-			processSelection();
-
-		}
-
-
-
-		// internal event handler
-
-		private function multipleFilesSelected(event:Event):void {
-
-			var currentFRL:FileReferenceList = multipleFiles;
-
-			for each (var currentFR:FileReference in currentFRL.fileList) {
-
-				addFile(currentFR);
-
+			if(filesToUpload.length > 0) {
+				processQueue();
 			}
 
-			processSelection();
-
 		}
 
 
 
+		// Fired when the user selects a single file
+		private function singleFileSelected(event:Event):void {
+			addFile(event.target as FileReference);
+			processSelection();
+		}
+
+
+
+		// Fired when the user selects multiple files
+		private function multipleFilesSelected(event:Event):void {
+			var currentFRL:FileReferenceList = multipleFiles;
+			for each (var currentFR:FileReference in currentFRL.fileList) {
+				addFile(currentFR);
+			}
+			processSelection();
+		}
+
+		private function renderAsTransparent () : void {
+		 	var transparentSprite:Sprite = new Sprite();
+		 	
+		 	function transparentStageResize (evt:Event) : void {
+		 		transparentSprite.width = transparentSprite.stage.stageWidth;
+		 		transparentSprite.height = transparentSprite.stage.stageHeight;
+		 	}
+		 	
+			transparentSprite.graphics.beginFill(0xffffff, 0);
+			transparentSprite.graphics.drawRect(0,0,5,5);
+			transparentSprite.width = this.stage.stageWidth;
+			transparentSprite.height = this.stage.stageHeight;
+			transparentSprite.graphics.endFill();
+			this.stage.scaleMode = StageScaleMode.NO_SCALE;
+			this.stage.align = StageAlign.TOP_LEFT;
+			this.stage.addEventListener(Event.RESIZE, transparentStageResize);
+			transparentSprite.addEventListener(MouseEvent.CLICK, handleMouseClick);
+			transparentSprite.addEventListener(MouseEvent.CLICK, click);
+			transparentSprite.addEventListener(MouseEvent.ROLL_OVER, rollOver);
+			transparentSprite.addEventListener(MouseEvent.ROLL_OUT, rollOut);
+			transparentSprite.buttonMode = true;
+			transparentSprite.useHandCursor = true;
+			this.addChild(transparentSprite);
+		}
+		
+		private function renderAsButton (upSkin:String, hoverSkin:String, downSkin:String) : void {
+			
+		}
+		
+
+		private function handleMouseClick (evt:MouseEvent) : void {
+			logMessage("Mouse click detected, launching 'Open File' dialog.");
+			this.browse(this.allowMultiple, this.filterArray);
+		}
+
 		//--------------------------------------------------------------------------
-
 		// 
-
 		// Overridden Properties
-
 		//
-
 		//--------------------------------------------------------------------------
 
 	    /**
-
 		 *  @private
-
 		 *  Initializes the component and enables communication with JavaScript
-
 	     *
-
 	     *  @param parent A container that the PopUpManager uses to place the Menu 
-
 	     *  control in. The Menu control may not actually be parented by this object.
-
 	     * 
-
 	     *  @param xmlDataProvider The data provider for the Menu control. 
-
 	     *  @see #dataProvider 
-
 	     *  
-
 	     *  @return An instance of the Menu class. 
-
 	     *
-
 	     *  @see #popUpMenu()
-
 		 *  @see com.yahoo.astra.fl.data.XMLDataProvider
-
 	     */
 
 		override protected function initializeComponent():void {
 
-
-
 			super.initializeComponent();
+			
+			this.renderType = this.stage.loaderInfo.parameters["renderType"];
 
-
-
-			ExternalInterface.addCallback("browse", browse);
-
+			if (this.renderType == null) {
+				renderType = "transparent";
+			}
+			
+			if (renderType.toLowerCase() == "button") {
+			    // this.renderAsButton();
+			}
+			else if (renderType.toLowerCase() == "link") {
+				// this.renderAsLink();
+			}
+			else {
+				this.renderAsTransparent();
+			}
+		 	
+		 	// removeFile (fileID:String = null) 
+		 	// Removes one or all files from the upload queue
 			ExternalInterface.addCallback("removeFile", removeFile);
-
+			
+			// clearFileList (): Boolean
+			// Clears the list of files to be uploaded.
 			ExternalInterface.addCallback("clearFileList", clearFileList);
-
+			
+			// upload(fileID:String, url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata")
+			// Uploads the specified file in a specified POST variable, attaching other variables using the specified method
 			ExternalInterface.addCallback("upload", upload);
-
+			
+			// uploadAll(url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata")
+			// Uploads all files in the queue, using simultaneousUploads.
 			ExternalInterface.addCallback("uploadAll", uploadAll);
-
+			
+			// cancel (fileID:String = null) 
+			// Cancels the specified file upload; or all, if no id is specified
 			ExternalInterface.addCallback("cancel", cancel);
-
-
+			
+			// setAllowLoging (allowLogging:Boolean = false)
+			// Allows log outputs to be produced.
+			ExternalInterface.addCallback("setAllowLogging", setAllowLogging);
+			
+			ExternalInterface.addCallback("setAllowMultipleFiles", this.setAllowMultipleFiles);
+			
+			ExternalInterface.addCallback("setSimUploadLimit", this.setSimUploadLimit);
+			
+			ExternalInterface.addCallback("setFileFilters", this.setFileFilters);
 
 			fileDataList = new Object();
-
 			fileRefList = new Object();
-
 			fileIDList = new Dictionary();
-
 			singleFile = new FileReference();
-
 			multipleFiles = new FileReferenceList();
 
 			fileIDCounter = 0;
 
 			filesToUpload = [];
 
-
-
-			output = new TextField();
-
-			output.border = true;
-
-			output.width = 300;
-
-			output.height = 200;
-
-			addChild(output);
-
 		}
 
 	
 
 		//--------------------------------------
-
 		//  Private Methods
-
 		//--------------------------------------
 
 		/**
-
 		 *  @private
-
 		 *  Formats objects containing extensions of files to be filtered into formal FileFilter objects
-
 		 */	
 
 		private function processFileFilterObjects(filtersArray:Array) : Array {
 
-
+			// TODO: Should we have an 'allowedExtensions' property that the JS user accesses directly? Potential here for typos ('extension' instead of 'extensions') as well as a misunderstanding of the nature of the expected array
+			// TODO: Description not showing (testing on OS X PPC player)
 			for (var i:int = 0; i < filtersArray.length; i++) {
-
 				filtersArray[i] = new FileFilter(filtersArray[i].description, filtersArray[i].extensions, filtersArray[i].macType);
-
 			}
 
 			return filtersArray;
-
 		}
 
 		/**
-
 		 *  @private
-
 		 *  Outputs the files selected to an output panel and triggers a 'fileSelect' event.
-
 		 */	
 
 		private function processSelection():void {
 
 			var dstring:String = "";
-
-			dstring += "Files Selected: ";
+			dstring += "Files Selected: \n";
 
 			for each (var item:Object in fileDataList) {
-
-				dstring += item.name + "; ";
-
+				dstring += item.name + "\n ";
 			}
 
-			t(dstring);
+			logMessage(dstring);
 
 			var newEvent:Object = new Object();
-
 			newEvent.fileList = fileDataList;
-
 			newEvent.type = "fileSelect"
 
 			super.dispatchEventToJavaScript(newEvent);
-
 		}
 
 		
 
 		/**
-
 		 *  @private
-
 		 *  Adds a file reference object to the internal queue and assigns listeners to its events
-
 		 */	
 
 		private function addFile(fr:FileReference):void {
 
 			var fileID:String = "file" + fileIDCounter;
-
 			var fileName:String = fr.name;
-
 			var fileCDate:Date = fr.creationDate;
-
 			var fileMDate:Date = fr.modificationDate;
-
 			var fileSize:Number = fr.size;
-
 			fileIDCounter++;
-
-
 
 			fileDataList[fileID] = {id: fileID, name: fileName, cDate: fileCDate, mDate: fileMDate, size: fileSize};//, type: fileType, creator: fileCreator};
 
-
-
 			fr.addEventListener(Event.OPEN, uploadStart);
-
             fr.addEventListener(ProgressEvent.PROGRESS, uploadProgress);
-
 			fr.addEventListener(Event.COMPLETE, uploadComplete);
-
 			fr.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, uploadCompleteData);
-
 			fr.addEventListener(HTTPStatusEvent.HTTP_STATUS, uploadError);
-
 	        fr.addEventListener(IOErrorEvent.IO_ERROR, uploadError);
-
             fr.addEventListener(SecurityErrorEvent.SECURITY_ERROR, uploadError);
-
 			fr.addEventListener(Event.CANCEL,uploadCancel);
 
-
 			fileRefList[fileID] = fr;
-
 			fileIDList[fr] = fileID;
-
 		}
 
 		/**
-
 		 *  @private
-
 		 *  Queues a file for upload
-
 		 */	
-
 		private function queueForUpload(fr:FileReference, request:URLRequest, fieldName:String):void {
-
 			filesToUpload.push( {fr:fr, request:request, fieldName:fieldName });
-
-			
-
-			if(filesToUpload.length < simultaneousUploadLimit) processQueue();
-
 		}
 
 		/**
-
 		 *  @private
-
 		 *  Uploads the next file in the upload queue.
-
 		 */	
 
 		private function processQueue():void {
 
+		while (this.currentUploadThreads < this.simultaneousUploadLimit) {
 			var objToUpload:Object = filesToUpload.pop();
-
 			var fr:FileReference = objToUpload.fr;
-
 			var request:URLRequest = objToUpload.request;
-
 			var fieldName:String = objToUpload.fieldName;
 
-			
-
 			fr.upload(request,fieldName);
-
+			this.currentUploadThreads++;
+		}
 		}
 
 		/**
-
 		 *  @private
-
 		 *  Creates a URLRequest object from a url, and optionally includes an HTTP request method and additional variables to be sent
-
 		 */	
 
-		private function formURLRequest(url:String, method:String = "GET", vars:Object = null):URLRequest {
+		private function formURLRequest(url:String, method:String = "GET", vars:Object = null, headers:Object = null):URLRequest {
 
 			var request:URLRequest = new URLRequest();
-
 			request.url = url;
-
 			request.method = method;
-
 			request.data = new URLVariables();
+			
 
 			for (var itemName:String in vars) {
-
 				request.data[itemName] = vars[itemName];
-
 			}
 
-			return request;
+			var requestHeaders:Array = new Array();			
+			for (var headerName:String in headers) {
+				requestHeaders.push(new URLRequestHeader(headerName, headers[headerName]));
+			}
+			
+			request.requestHeaders = requestHeaders;
 
+			return request;
 		}
 
 		/**
-
 		 *  @private
-
 		 *  Determines whether an object is equivalent to an empty string
-
 		 */	
 
 		private function isEmptyString(toCheck:*):Boolean {
 
 			if(	toCheck == "null" ||
-
 				toCheck == "" ||
-
 				toCheck == null ) {
 
 				return true;
-
 			}
 
 			else {
-
-				return false
-
+				return false;
 			}
-
 		}
-
-		/**
-
-		 *  @private
-
-		 *  Traces text to an output panel
-
-		 */	
-
-		private function t(newText:String):void {
-
-			if(newText) output.text = newText + "\n" + output.text;
-
+		
+		private function logMessage (message:String) : void {
+			if (this.allowLog) {
+				trace(message);
+				ExternalInterface.call("YAHOO.log", message);
+			}
 		}
 
 	}
