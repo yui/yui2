@@ -74,11 +74,11 @@
                     carousel.show();   // display the widget
                     
                     // display the first selected item in the spotlight
-                    item = carousel.getItem(carousel.get("selectedItem"));
-                    if (item && item.id &&
-                        (el = YAHOO.util.Dom.get(item.id))) {
+                    item = carousel.getElementForItem(
+                            carousel.get("selectedItem"));
+                    if (item) {
                         spotlight.innerHTML = "<img src=\"" +
-                                getImage(el) + "\">";
+                                getImage(item) + "\">";
                     }
                        
                     carousel.on("itemSelected", function (index) {
@@ -224,9 +224,9 @@
                 Since we have the elements in place, we can invoke the
                 Carousel's constructor to create the widget.  The Carousel's
                 "selectedItem" property returns the index of the currently
-                selected item.  So, using that property and the getItem() API
-                we can display the image of the selected item when the
-                Carousel is rendered.
+                selected item.  So, using that property and the
+                getElementForItem() API we can display the image of the
+                selected item when the Carousel is rendered.
             </p>
 <textarea rows="8" cols="110" readonly>
 YAHOO.util.Event.onDOMReady(function (ev) {
@@ -235,20 +235,21 @@ YAHOO.util.Event.onDOMReady(function (ev) {
   carousel.show();   // display the widget
   // display the first selected item in the spotlight
   spotlight.innerHTML = "<img src=\"" +
-    getImage(carousel.getItem(carousel.get("selectedItem"))) + "\">";
+    getImage(carousel.getElementForItem(carousel.get("selectedItem"))) + "\">";
 }
 </textarea>
             <p>
                 Now, we can subscribe to the "selectedItem" event that the
                 Carousel exposes.  This event is triggered whenever an item is
                 selected and it returns the index of the selected item.  With
-                the index of the item, we can use the Carousel's getItem() API
-                to get the reference to the Carousel's item (LI in our case).
+                the index of the item, we can use the Carousel's
+                getElementForItem() API to get the reference to the Carousel's
+                item (LI in our case).
             </p>
 <textarea rows="4" cols="110" readonly>
 carousel.on("itemSelected", function (index) {
   // item has the reference to the Carousel's item
-  var item = carousel.getItem(index);
+  var item = carousel.getElementForItem(index);
 });
 </textarea>
             <p>
@@ -302,11 +303,11 @@ function getImage(parent) {
     carousel.show();
     
     spotlight.innerHTML = "<img src=\"" +
-      getImage(carousel.getItem(carousel.get("selectedItem"))) +
+      getImage(carousel.getElementForItem(carousel.get("selectedItem"))) +
       "\">";
       
     carousel.on("itemSelected", function (index) {
-      var item = carousel.getItem(index);
+      var item = carousel.getElementForItem(index);
       
       spotlight.innerHTML = "<img src=\"" + getImage(item) + "\">";
     });
