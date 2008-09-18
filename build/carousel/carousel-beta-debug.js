@@ -140,7 +140,7 @@
      * @event itemAdded
      * @description Fires when an item has been added to the Carousel.  Passes
      * back the content of the item that would be added, the index at which the
-     * item would be added, and the event itself.  See 
+     * item would be added, and the event itself.  See
      * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
@@ -151,7 +151,7 @@
      * @event itemRemoved
      * @description Fires when an item has been removed from the Carousel.
      * Passes back the content of the item that would be removed, the index
-     * from which the item would be removed, and the event itself.  See 
+     * from which the item would be removed, and the event itself.  See
      * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
@@ -385,7 +385,7 @@
 
         return value;
     }
-    
+
     /**
      * Compute and return the height or width of a single Carousel item
      * depending upon the orientation.
@@ -415,13 +415,13 @@
         }
 
         child = Dom.get(this._itemsTable.items[0].id);
-        
+
         if (typeof which == "undefined") {
             vertical = this.get("isVertical");
         } else {
             vertical = which == "height";
         }
-        
+
         if (vertical) {
             size = getStyle(child, "height");
         } else {
@@ -431,7 +431,7 @@
         if (typeof which == "undefined") {
             this._itemsTable.size = size; // save the size for later
         }
-        
+
         return size;
     }
 
@@ -474,7 +474,7 @@
 
         last = first + numVisible - 1 + (reveal ? 1 : 0);
         last = last > numItems - 1 ? numItems - 1 : last;
-        
+
         if (!this.getItem(first) || !this.getItem(last)) {
             this.fireEvent(loadItemsEvent, {
                     ev: loadItemsEvent,
@@ -519,6 +519,9 @@
      * @param {Object} obj The context object
      * @private
      */
+
+    // @REVIEW - Remove
+    /*
     function setFocusHandler(ev, obj) {
         var target = Event.getTarget(ev);
 
@@ -528,6 +531,7 @@
             }
         }
     }
+    */
 
     /**
      * Set the selected item.
@@ -537,24 +541,23 @@
      * @private
      */
     function setItemSelection(newposition) {
-        var cssClass   = this.CLASSES,
+        var cssClass      = this.CLASSES,
             el,
-            firstItem  = this._firstItem,
-            numItems   = this.get("numItems"),
-            numVisible = this.get("numVisible"),
-            position   = this.get("selectedItem"),
-            sentinel   = firstItem + numVisible - 1;
-        
+            firstItem     = this._firstItem,
+            numItems      = this.get("numItems"),
+            numVisible    = this.get("numVisible"),
+            position      = this.get("selectedItem"),
+            sentinel      = firstItem + numVisible - 1;
+
         if (position >= 0 && position < numItems) {
             if (!JS.isUndefined(this._itemsTable.items[position])) {
                 el = Dom.get(this._itemsTable.items[position].id);
                 if (el) {
                     Dom.removeClass(el, cssClass.SELECTED_ITEM);
-                    el.tabIndex = -1;
                 }
             }
         }
-        
+
         if (JS.isNumber(newposition)) {
             newposition = parseInt(newposition, 10);
             newposition = JS.isNumber(newposition) ? newposition : 0;
@@ -570,8 +573,6 @@
             el = Dom.get(this._itemsTable.items[newposition].id);
             if (el) {
                 Dom.addClass(el, cssClass.SELECTED_ITEM);
-                el.tabIndex = 0;
-                el.focus();
             }
         }
 
@@ -580,7 +581,7 @@
             this.scrollTo(newposition);
         }
     }
-    
+
     /**
      * Fire custom events for enabling/disabling navigation elements.
      *
@@ -596,7 +597,7 @@
 
         navigation = this.get("navigation");
         sentinel   = this._firstItem + this.get("numVisible");
-        
+
         if (navigation.prev) {
             if (this._firstItem === 0) {
                 if (!this.get("isCircular")) {
@@ -613,7 +614,7 @@
             } else {
                 attach = !this._prevEnabled;
             }
-            
+
             if (attach) {
                 Event.on(navigation.prev, "click", scrollPageBackward, this);
                 Dom.removeClass(navigation.prev, cssClass.FIRST_NAV_DISABLED);
@@ -641,7 +642,7 @@
             } else {
                 attach = !this._nextEnabled;
             }
-            
+
             if (attach) {
                 Event.on(navigation.next, "click", scrollPageForward, this);
                 Dom.removeClass(navigation.next, cssClass.DISABLED);
@@ -651,7 +652,7 @@
                 this._nextEnabled = true;
             }
         }
-        
+
         this.fireEvent(navigationStateChangeEvent,
                 { next: this._nextEnabled, prev: this._prevEnabled });
     }
@@ -665,11 +666,11 @@
      */
     function syncUI(o) {
         var el, i, item, num, oel, pos, sibling;
-        
+
         if (!JS.isObject(o)) {
             return;
         }
-        
+
         switch (o.ev) {
         case itemAddedEvent:
             pos  = JS.isUndefined(o.pos) ? this._itemsTable.numItems-1 : o.pos;
@@ -722,7 +723,7 @@
             if (this._recomputeSize) {
                 this._setClipContainerSize();
             }
-            break;            
+            break;
         case itemRemovedEvent:
             num  = this.get("numItems");
             item = o.item;
@@ -767,7 +768,7 @@
             break;
         }
     }
-    
+
     /*
      * Static members and methods of the Carousel component
      */
@@ -885,9 +886,9 @@
         /*
          * CSS classes used by the Carousel component
          */
-        
+
         CLASSES: {
-            
+
             /**
              * The class name of the Carousel navigation buttons.
              *
@@ -895,7 +896,7 @@
              * @default "yui-carousel-button"
              */
             BUTTON: "yui-carousel-button",
-            
+
             /**
              * The class name of the Carousel element.
              *
@@ -903,7 +904,7 @@
              * @default "yui-carousel"
              */
             CAROUSEL: "yui-carousel",
-            
+
             /**
              * The class name of the container of the items in the Carousel.
              *
@@ -927,7 +928,7 @@
              * @default "yui-carousel-content"
              */
             CONTENT: "yui-carousel-content",
-            
+
             /**
              * The class name of a disabled navigation button.
              *
@@ -935,7 +936,7 @@
              * @default "yui-carousel-button-disabled"
              */
             DISABLED: "yui-carousel-button-disabled",
-            
+
             /**
              * The class name of the first Carousel navigation button.
              *
@@ -943,7 +944,7 @@
              * @default " yui-carousel-first-button"
              */
             FIRST_NAV: " yui-carousel-first-button",
-            
+
             /**
              * The class name of a first disabled navigation button.
              *
@@ -951,7 +952,7 @@
              * @default "yui-carousel-first-button-disabled"
              */
             FIRST_NAV_DISABLED: "yui-carousel-first-button-disabled",
-            
+
             /**
              * The class name of a first page element.
              *
@@ -967,7 +968,7 @@
              * @default "yui-carousel-button-focus"
              */
             FOCUSSED_BUTTON: "yui-carousel-button-focus",
-            
+
             /**
              * The class name of a horizontally oriented Carousel.
              *
@@ -1035,7 +1036,7 @@
              * @default "yui-carousel-vertical"
              */
             VERTICAL: "yui-carousel-vertical",
-            
+
             /**
              * The class name of the (vertical) Carousel's container element.
              *
@@ -1057,7 +1058,7 @@
         /*
          * Configuration attributes for configuring the Carousel component
          */
-        
+
         CONFIG: {
 
             /**
@@ -1079,7 +1080,7 @@
                     "src=\"../../build/carousel/assets/ajax-loader.gif\" " +
                     "alt=\"Loading\" " +
                     "style=\"margin-top:-32px;position:relative;top:50%;\">",
-            
+
             /**
              * The tag name of the Carousel item.
              *
@@ -1087,7 +1088,7 @@
              * @default "LI"
              */
             ITEM_TAG_NAME: "LI",
-            
+
             /**
              * The maximum number of pager buttons allowed beyond which the UI
              * of the pager would be a drop-down of pages instead of buttons.
@@ -1096,7 +1097,7 @@
              * @default 5
              */
             MAX_PAGER_BUTTONS: 5,
-            
+
             /**
              * The minimum width of the Carousel container to support the
              * navigation buttons.
@@ -1105,7 +1106,7 @@
              * @default 99
              */
             MIN_WIDTH: 99,
-            
+
             /**
              * The number of visible items in the Carousel.
              *
@@ -1113,7 +1114,7 @@
              * @default 3
              */
             NUM_VISIBLE: 3,
-            
+
             /**
              * The tag name of the Carousel.
              *
@@ -1121,15 +1122,15 @@
              * @default "OL"
              */
             TAG_NAME: "OL"
-            
+
         },
 
         /*
          * Internationalizable strings in the Carousel component
          */
-        
+
         STRINGS: {
-            
+
             /**
              * The next navigation button name/text.
              *
@@ -1137,7 +1138,7 @@
              * @default "Next Page"
              */
             NEXT_BUTTON_TEXT: "Next Page",
-            
+
             /**
              * The prefix text for the pager in case the UI is a drop-down.
              *
@@ -1145,7 +1146,7 @@
              * @default "Go to page "
              */
             PAGER_PREFIX_TEXT: "Go to page ",
-            
+
             /**
              * The previous navigation button name/text.
              *
@@ -1153,7 +1154,7 @@
              * @default "Previous Page"
              */
             PREVIOUS_BUTTON_TEXT: "Previous Page"
-            
+
         },
 
         /*
@@ -1180,7 +1181,7 @@
             if (!item) {
                 return false;
             }
-            
+
             if (JS.isString(item) || item.nodeName) {
                 content = item.nodeName ? item.innerHTML : item;
             } else if (JS.isObject(item)) {
@@ -1189,7 +1190,7 @@
                 YAHOO.log("Invalid argument to addItem", "error", WidgetName);
                 return false;
             }
-            
+
             className = item.className || "";
             elId      = item.id ? item.id : Dom.generateId();
 
@@ -1215,7 +1216,7 @@
             if (numItems < this._itemsTable.items.length) {
                 this.set("numItems", this._itemsTable.items.length);
             }
-            
+
             this.fireEvent(itemAddedEvent, { pos: index, ev: itemAddedEvent });
 
             return true;
@@ -1265,7 +1266,7 @@
          */
         clearItems: function () {
             var n = this.get("numItems");
-            
+
             while (n > 0) {
                 this.removeItem(0);
                 n--;
@@ -1279,12 +1280,28 @@
          * @public
          */
         focus: function () {
-            var selected = this.getItem(this.get("selectedItem"));
+            var selItem              = this.getItem(this.get("selectedItem")),
+                numVisible           = this.get("numVisible"),
+                selectOnScroll       = this.get("selectOnScroll"),
+                selected             = this.getItem(selItem),
+                first                = this.get("firstVisible"),
+                last                 = first + numVisible - 1,
+                isSelectionInvisible = (selItem < first || selItem > last),
+                focusEl              = (selected && selected.id) ?
+                                       Dom.get(selected.id) : null,
+                itemsTable           = this._itemsTable;
 
-            if (selected && selected.id) {
-                selected = Dom.get(selected.id);
-                if (selected) {
-                    selected.focus();
+            if (!selectOnScroll && isSelectionInvisible) {
+                focusEl = (itemsTable && itemsTable.items &&
+                           itemsTable.items[first]) ?
+                        Dom.get(itemsTable.items[first].id) : null;
+            }
+
+            if (focusEl) {
+                try {
+                    focusEl.focus();
+                } catch (ex) {
+                    // ignore focus errors
                 }
             }
 
@@ -1303,7 +1320,7 @@
                 this.fireEvent(hideEvent);
             }
         },
-        
+
         /**
          * Initialize the Carousel.
          *
@@ -1317,13 +1334,13 @@
         init: function (el, attrs) {
             var elId  = el,     // save for a rainy day
                 parse = false;
-            
+
             if (!el) {
                 YAHOO.log(el + " is neither an HTML element, nor a string",
                         "error", WidgetName);
-                return;                
+                return;
             }
-            
+
             this._itemsTable = { loading: {}, numItems: 0, items: [], size: 0 };
             YAHOO.log("Component initialization", WidgetName);
 
@@ -1345,11 +1362,11 @@
                 el = this._createCarousel(elId);
             }
             elId = el.id;
-           
+
             Carousel.superclass.init.call(this, el, attrs);
 
             this.initEvents();
-            
+
             if (parse) {
                 this._parseCarouselItems();
             }
@@ -1357,7 +1374,7 @@
             if (!attrs || typeof attrs.isVertical == "undefined") {
                 this.set("isVertical", false);
             }
-            
+
             this._parseCarouselNavigation(el);
             this._navEl = this._setupCarouselNavigation();
 
@@ -1365,7 +1382,7 @@
 
             loadItems.call(this);
         },
-        
+
         /**
          * Initialize the configuration attributes used to create the Carousel.
          *
@@ -1399,6 +1416,18 @@
                     method    : this._setFirstVisible,
                     validator : this._validateFirstVisible,
                     value     : attrs.firstVisible || this.CONFIG.FIRST_VISIBLE
+            });
+
+            /**
+             * @attribute selectOnScroll
+             * @description Set this to true to automatically set focus to
+             * follow scrolling in the Carousel.
+             * @default true
+             * @type Boolean
+             */
+            this.setAttributeConfig("selectOnScroll", {
+                    validator : JS.isBoolean,
+                    value     : attrs.selectOnScroll || true
             });
 
             /**
@@ -1536,26 +1565,35 @@
             var cssClass = this.CLASSES;
 
             this.on("keydown", this._keyboardEventHandler);
-            
+
             this.subscribe(afterScrollEvent, syncNavigation);
-            
+            this.on(afterScrollEvent, this.focus);
+
             this.subscribe(itemAddedEvent, syncUI);
             this.subscribe(itemAddedEvent, syncNavigation);
-            
+
             this.subscribe(itemRemovedEvent, syncUI);
             this.subscribe(itemRemovedEvent, syncNavigation);
 
             this.subscribe(itemSelectedEvent, setItemSelection);
-            
+            this.on(itemSelectedEvent, this.focus);
+
             this.subscribe(loadItemsEvent, syncUI);
-            
+
             this.subscribe(pageChangeEvent, this._syncPagerUI);
 
             this.subscribe(renderEvent, syncNavigation);
             this.subscribe(renderEvent, this._syncPagerUI);
 
-            // Handle set focus
-            this.on("click", setFocusHandler, this);
+            this.on("selectedItemChange", function (ev) {
+                this._updateTabIndex(this.getElementForItem(ev.newValue));
+            });
+
+            this.on("firstVisibleChange", function (ev) {
+                if (!this.get("selectOnScroll")) {
+                    this._updateTabIndex(this.getElementForItem(ev.newValue));
+                }
+            });
 
             // Handle item selection on mouse click
             this.on("click", this._itemClickHandler);
@@ -1722,14 +1760,14 @@
             var config = this.CONFIG,
                 cssClass = this.CLASSES,
                 size;
-            
+
             this.addClass(cssClass.CAROUSEL);
-            
+
             if (!this._clipEl) {
                 this._clipEl = this._createCarouselClip();
                 this._clipEl.appendChild(this._carouselEl);
             }
-            
+
             if (appendTo) {
                 this.appendChild(this._clipEl);
                 this.appendTo(appendTo);
@@ -1743,7 +1781,7 @@
                 }
                 this.appendChild(this._clipEl);
             }
-            
+
             if (this.get("isVertical")) {
                 size = getCarouselItemSize.call(this);
                 size = size < config.MIN_WIDTH ? config.MIN_WIDTH : size;
@@ -1758,7 +1796,7 @@
                         WidgetName);
                 return false;
             }
-        
+
             // Make sure at least one item is selected
             this.set("selectedItem", this.get("firstVisible"));
             this.refresh("selectedItem", true);
@@ -1839,7 +1877,7 @@
             if (item == firstItem) {
                 return;         // nothing to do!
             }
-            
+
             if (this._isAnimationInProgress) {
                 return;         // let it take its own sweet time to complete
             }
@@ -1869,7 +1907,7 @@
             }
 
             this.fireEvent(beforePageChangeEvent, { page: page });
-            
+
             delta = firstItem - item; // yes, the delta is reverse
             this._firstItem = item;
             this.set("firstVisible", item);
@@ -1878,10 +1916,10 @@
 
             sentinel  = item + numPerPage;
             sentinel  = (sentinel > numItems - 1) ? numItems - 1 : sentinel;
-            
+
             which  = this.get("isVertical") ? "top" : "left";
             offset = getScrollOffset.call(this, delta);
-            
+
             if (animCfg.speed > 0) {
                 this._isAnimationInProgress = true;
                 if (this.get("isVertical")) {
@@ -1893,7 +1931,7 @@
                         animCfg.speed, animCfg.effect);
                 anim.onComplete.subscribe(function (ev) {
                     var first = this.get("firstVisible");
-                    
+
                     this._isAnimationInProgress = false;
                     this.fireEvent(afterScrollEvent,
                             { first: first, last: sentinel });
@@ -1913,12 +1951,16 @@
                 this.fireEvent(pageChangeEvent, newPage);
             }
 
+            if (this.get("selectOnScroll")) {
+                if (item != this._selectedItem) { // out of sync
+                    this.set("selectedItem", this._getSelectedItem(item));
+                }
+            }
+
             delete this._autoPlayTimer;
             if (this.get("autoPlay") > 0) {
                 this.startAutoPlay();
             }
-
-            this.focus();       // bring back the focus to the container
         },
 
         /**
@@ -1929,7 +1971,7 @@
          */
         show: function () {
             var cssClass = this.CLASSES;
-            
+
             if (this.fireEvent(beforeShowEvent) !== false) {
                 this.addClass(cssClass.VISIBLE);
                 this.fireEvent(showEvent);
@@ -1945,7 +1987,7 @@
         startAutoPlay: function () {
             var self  = this,
                 timer = this.get("autoPlay");
-            
+
             if (timer > 0) {
                 if (!JS.isUndefined(this._autoPlayTimer)) {
                     return;
@@ -1985,7 +2027,7 @@
         /*
          * Protected methods of the Carousel component
          */
-        
+
         /**
          * Create the Carousel.
          *
@@ -1995,12 +2037,12 @@
          */
         _createCarousel: function (elId) {
             var cssClass = this.CLASSES;
-            
+
             var el = createElement("DIV", {
                     className : cssClass.CAROUSEL,
                     id        : elId
             });
-            
+
             if (!this._carouselEl) {
                 this._carouselEl = createElement(this.CONFIG.TAG_NAME,
                         { className: cssClass.CAROUSEL_EL });
@@ -2008,7 +2050,7 @@
 
             return el;
         },
-        
+
         /**
          * Create the Carousel clip container.
          *
@@ -2018,10 +2060,10 @@
         _createCarouselClip: function () {
             var el = createElement("DIV", { className: this.CLASSES.CONTENT });
             this._setClipContainerSize(el);
-            
+
             return el;
         },
-        
+
         /**
          * Create the Carousel item.
          *
@@ -2036,7 +2078,7 @@
                     id        : obj.id
             });
         },
-        
+
         /**
          * Get the value for the selected item.
          *
@@ -2063,7 +2105,7 @@
                     val = this.get("selectedItem");
                 }
             }
-            
+
             return val;
         },
 
@@ -2079,7 +2121,7 @@
                 el,
                 item,
                 target = YAHOO.util.Event.getTarget(ev);
-            
+
             while (target && target != container &&
                    target.id != this._carouselEl) {
                 el = target.nodeName;
@@ -2111,7 +2153,7 @@
             if (this._isAnimationInProgress) {
                 return;         // do not mess while animation is in progress
             }
-            
+
             switch (key) {
             case 0x25:          // left arrow
             case 0x26:          // up arrow
@@ -2135,13 +2177,12 @@
                 break;
             }
 
-            this.refresh("selectedItem", true);
-
             if (prevent) {
+                this.refresh("selectedItem", true);
                 Event.preventDefault(ev);
             }
         },
-        
+
         /**
          * The "click" handler for the pager navigation.
          *
@@ -2163,7 +2204,7 @@
                 }
             }
         },
-        
+
         /**
          * Find the Carousel within a container. The Carousel is identified by
          * the first element that matches the carousel element tag or the
@@ -2193,10 +2234,10 @@
                     }
                 }
             }
-            
+
             return found;
         },
-        
+
         /**
          * Find the items within the Carousel and add them to the items table.
          * A Carousel item is identified by elements that matches the carousel
@@ -2226,7 +2267,7 @@
                 }
             }
         },
-        
+
         /**
          * Find the Carousel navigation within a container. The navigation
          * elements need to match the carousel navigation class names.
@@ -2322,10 +2363,10 @@
                 prevButton;
 
             cssClass = this.CLASSES;
-            
+
             navContainer = Dom.getElementsByClassName(cssClass.NAVIGATION,
                     "DIV", this.get("element"));
-            
+
             if (navContainer.length === 0) {
                 navContainer = createElement("DIV",
                         { className: cssClass.NAVIGATION });
@@ -2337,7 +2378,7 @@
 
             this._pages.el = createElement("UL");
             navContainer.appendChild(this._pages.el);
-            
+
             nav = this.get("navigation");
             if (nav.prev && nav.prev.length > 0) {
                 navContainer.appendChild(nav.prev[0]);
@@ -2357,7 +2398,7 @@
                 this._navBtns.prev = [btn];
                 cfg = { prev: [prevButton] };
             }
-            
+
             if (nav.next && nav.next.length > 0) {
                 navContainer.appendChild(nav.next[0]);
             } else {
@@ -2384,10 +2425,10 @@
             if (cfg) {
                 this.set("navigation", cfg);
             }
-            
+
             return navContainer;
         },
-        
+
         /**
          * Set the clip container size (based on the new numVisible value).
          *
@@ -2408,7 +2449,7 @@
             if (!clip) {
                 return;
             }
-            
+
             num        = num  || this.get("numVisible");
             itemSize   = getCarouselItemSize.call(this, which);
             size       = itemSize * num;
@@ -2476,7 +2517,7 @@
                     getStyle(clip, "paddingRight") +
                     getStyle(clip, "borderLeft")   +
                     getStyle(clip, "borderRight");
-            
+
             this.setStyle(attr, size + "px");
         },
 
@@ -2543,21 +2584,21 @@
          */
         _setNumItems: function (val) {
             var num = this._itemsTable.numItems;
-            
+
             if (JS.isArray(this._itemsTable.items)) {
                 if (this._itemsTable.items.length != num) { // out of sync
                     num = this._itemsTable.items.length;
                     this._itemsTable.numItems = num;
                 }
             }
-            
+
             if (val < num) {
                 while (num > val) {
                     this.removeItem(num - 1);
                     num--;
                 }
             }
-            
+
             return val;
         },
 
@@ -2571,7 +2612,7 @@
          */
         _setOrientation: function (val) {
             var cssClass = this.CLASSES;
-            
+
             if (val) {
                 this.replaceClass(cssClass.HORIZONTAL, cssClass.VERTICAL);
             } else {
@@ -2637,7 +2678,7 @@
             } else {
                 markup = "";
             }
-            
+
             for (i = 0; i < numPages; i++) {
                 if (JS.isUndefined(this._itemsTable.items[i * numVisible])) {
                     break;
@@ -2661,9 +2702,26 @@
             if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
                 markup += "</select></form>";
             }
-            
+
             this._pages.el.innerHTML = markup;
             markup = null;
+        },
+
+        /**
+         * Set the correct tab index for the Carousel items.
+         *
+         * @method _updateTabIndex
+         * @param el {Object} The element to be focussed
+         * @protected
+         */
+        _updateTabIndex: function (el) {
+            if (el) {
+                if (this._focusableItemEl) {
+                    this._focusableItemEl.tabIndex = -1;
+                }
+                this._focusableItemEl = el;
+                el.tabIndex = 0;
+            }
         },
 
         /**
@@ -2676,7 +2734,7 @@
          */
         _validateAnimation: function (cfg) {
             var rv = true;
-            
+
             if (JS.isObject(cfg)) {
                 if (cfg.speed) {
                     rv = rv && JS.isNumber(cfg.speed);
@@ -2689,7 +2747,7 @@
             } else {
                 rv = false;
             }
-            
+
             return rv;
         },
 
@@ -2703,14 +2761,14 @@
          */
         _validateFirstVisible: function (val) {
             var rv = false;
-            
+
             if (JS.isNumber(val)) {
                 rv = (val >= 0 && val < this.get("numItems"));
             }
-            
+
             return rv;
         },
-        
+
         /**
          * Validate and navigation parameters.
          *
@@ -2765,11 +2823,11 @@
          */
         _validateNumItems: function (val) {
             var rv = false;
-            
+
             if (JS.isNumber(val)) {
                 rv = val > 0;
             }
-            
+
             return rv;
         },
 
@@ -2783,11 +2841,11 @@
          */
         _validateNumVisible: function (val) {
             var rv = false;
-            
+
             if (JS.isNumber(val)) {
                 rv = val > 0 && val < this.get("numItems");
             }
-            
+
             return rv;
         },
 
@@ -2801,11 +2859,11 @@
          */
         _validateRevealAmount: function (val) {
             var rv = false;
-            
+
             if (JS.isNumber(val)) {
                 rv = val >= 0 && val < 100;
             }
-            
+
             return rv;
         },
 
@@ -2819,14 +2877,14 @@
          */
         _validateScrollIncrement: function (val) {
             var rv = false;
-            
+
             if (JS.isNumber(val)) {
                 rv = (val > 0 && val < this.get("numItems"));
             }
-            
+
             return rv;
         }
-        
+
     });
 
 })();
