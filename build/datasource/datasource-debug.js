@@ -56,6 +56,94 @@ util.DataSourceBase = function(oLiveData, oConfigs) {
     // Initialize interval tracker
     this._aIntervals = [];
 
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Custom Events
+    //
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Fired when a request is made to the local cache.
+     *
+     * @event cacheRequestEvent
+     * @param oArgs.request {Object} The request object.
+     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
+     */
+    this.createEvent("cacheRequestEvent");
+
+    /**
+     * Fired when data is retrieved from the local cache.
+     *
+     * @event cacheResponseEvent
+     * @param oArgs.request {Object} The request object.
+     * @param oArgs.response {Object} The response object.
+     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
+     * @param oArgs.tId {Number} Transaction ID.
+     */
+    this.createEvent("cacheResponseEvent");
+
+    /**
+     * Fired when a request is sent to the live data source.
+     *
+     * @event requestEvent
+     * @param oArgs.request {Object} The request object.
+     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
+     */
+    this.createEvent("requestEvent");
+
+    /**
+     * Fired when live data source sends response.
+     *
+     * @event responseEvent
+     * @param oArgs.request {Object} The request object.
+     * @param oArgs.response {Object} The raw response object.
+     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
+     */
+    this.createEvent("responseEvent");
+
+    /**
+     * Fired when response is parsed.
+     *
+     * @event responseParseEvent
+     * @param oArgs.request {Object} The request object.
+     * @param oArgs.response {Object} The parsed response object.
+     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
+     */
+    this.createEvent("responseParseEvent");
+
+    /**
+     * Fired when response is cached.
+     *
+     * @event responseCacheEvent
+     * @param oArgs.request {Object} The request object.
+     * @param oArgs.response {Object} The parsed response object.
+     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
+     */
+    this.createEvent("responseCacheEvent");
+    /**
+     * Fired when an error is encountered with the live data source.
+     *
+     * @event dataErrorEvent
+     * @param oArgs.request {Object} The request object.
+     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
+     * @param oArgs.message {String} The error message.
+     */
+    this.createEvent("dataErrorEvent");
+
+    /**
+     * Fired when the local cache is flushed.
+     *
+     * @event cacheFlushEvent
+     */
+    this.createEvent("cacheFlushEvent");
+
     var DS = util.DataSourceBase;
     this._sName = "DataSource instance" + DS._nIndex;
     DS._nIndex++;
@@ -2755,17 +2843,13 @@ var xPad=function (x, pad, r)
  * localised date strings used by YAHOO.util.Date. It is used
  * internally, but may be extended to provide new date localisations.
  *
- * @namespace YAHOO.util
- * @requires yahoo
- * @class DateLocale
- *
  * To create your own DateLocale, follow these steps:
  * <ol>
  *  <li>Find an existing locale that matches closely with your needs</li>
  *  <li>Use this as your base class.  Use YAHOO.util.DateLocale if nothing
  *   matches.</li>
  *  <li>Create your own class as an extension of the base class using
- *   YAHOO.lang.merge, and add your own localisations where needed.
+ *   YAHOO.lang.merge, and add your own localisations where needed.</li>
  * </ol>
  * See the YAHOO.util.DateLocale['en-US'] and YAHOO.util.DateLocale['en-GB']
  * classes which extend YAHOO.util.DateLocale['en'].
@@ -2815,6 +2899,9 @@ var xPad=function (x, pad, r)
  * <pre>
  *   mardi, 22 avril == 2008-04-22
  * </pre>
+ * @namespace YAHOO.util
+ * @requires yahoo
+ * @class DateLocale
  */
  YAHOO.util.DateLocale = {
         a: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
