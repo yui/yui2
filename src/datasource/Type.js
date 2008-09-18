@@ -386,6 +386,9 @@ var xPad=function (x, pad, r)
  * localised date strings used by YAHOO.util.Date. It is used
  * internally, but may be extended to provide new date localisations.
  *
+ * @namespace YAHOO.util
+ * @requires yahoo
+ * @class DateLocale
  *
  * To create your own DateLocale, follow these steps:
  * <ol>
@@ -408,8 +411,7 @@ var xPad=function (x, pad, r)
  *          a: ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'],
  *          A: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
  *          b: ['jan', 'f&eacute;v', 'mar', 'avr', 'mai', 'jun', 'jui', 'ao&ucirc;', 'sep', 'oct', 'nov', 'd&eacute;c'],
- *          B: ['janvier', 'f&eacute;vrier', 'mars', 'avril', 'mai', 'juin', 'juillet', 'ao&ucirc;t', 'septembre', 'octobre',
-'novembre', 'décembre'],
+ *          B: ['janvier', 'f&eacute;vrier', 'mars', 'avril', 'mai', 'juin', 'juillet', 'ao&ucirc;t', 'septembre', 'octobre', 'novembre', 'd&eacute;cembre'],
  *          c: '%a %d %b %Y %T %Z',
  *          p: ['', ''],
  *          P: ['', ''],
@@ -444,10 +446,6 @@ var xPad=function (x, pad, r)
  * <pre>
  *   mardi, 22 avril == 2008-04-22
  * </pre>
- *
- * @namespace YAHOO.util
- * @requires yahoo
- * @class DateLocale
  */
  YAHOO.util.DateLocale = {
         a: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
