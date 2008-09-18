@@ -83,12 +83,11 @@
                        
                     carousel.on("itemSelected", function (index) {
                         // item has the reference to the Carousel's item
-                        item = carousel.getItem(index);
+                        item = carousel.getElementForItem(index);
 
-                        if (item && item.id &&
-                            (el = YAHOO.util.Dom.get(item.id))) {
+                        if (item) {
                             spotlight.innerHTML = "<img src=\""
-                                    + getImage(el) + "\">";
+                                    + getImage(item) + "\">";
                         }
                     });
                 });
