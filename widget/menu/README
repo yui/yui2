@@ -3,12 +3,46 @@
 Fixed the following bugs:
 -------------------------
 
++ Submenus no longer appear in the top-left corner of the viewport before moving into position when 
+  initially made visible.
+
++ Submenus are no longer re-shown when the mouse moves from a submenu back to its parent MenuItem.
+
++ Focused Menus no longer lose focus when submenus are hidden and displayed.
+
++ A Menu's shadow is now rendered at the correct dimensions consistently in Internet Explorer.
+
++ Menus no longer trigger a JavaScript error if the "constraintoviewport" configuration property 
+  is set to "true", but the "context" configuration property is not set.
+
+
+Added the following features:
+-----------------------------
+
++ Added a "keepopen" configuration property to YAHOO.widget.Menu that, when set to "true", will 
+  result in a Menu remaining open when clicked.
+
++ Popup Menus now automatically focus themselves when made visible, and when hidden, restore focus 
+  to the element in the DOM that had focus prior to them being made visible.
+
++ Added a new "submenutoggleregion" configuration property to YAHOO.widget.MenuBar.  When set to 
+  "true", only clicking a specific region of a MenuBarItem will toggle the display of a submenu.  
+  The width of the toggle region is defined 
+  by YAHOO.widget.MenuBar.prototype.SUBMENU_TOGGLE_REGION_WIDTH.
+
+
+
+*** version 2.6.0 Preview 1 ***
+
+Fixed the following bugs:
+-------------------------
+
 + Setting the "submenualignment" configuration property for a MenuBar instance will no longer 
   result in the value being automatically propagated across all submenus.
 
 + Setting a MenuItem instance's "disabled" configuration property to "true" inside the scope of 
   a "click" event listener registered via the "onclick" configuration property will no longer 
-  prevent the "click" event of the MenuItem instance's parent Menu instance from firing.
+  prevent the "click" event of its parent Menu instance from firing.
   
 + MenuItem instances of submenus that open to the left of their parent MenuItem will now 
   highlight in response to the "mouseover" event in Firefox 2.

@@ -1,3 +1,21 @@
+*** version 2.6.0 ***
+
+Fixed the following bugs:
+-------------------------
+
++ The "getMenu" method no longer returns null when the "menu" attribute is set to an array of 
+  YAHOO.widget.MenuItem configuration properties.
+
++ Buttons of type "menu" and "split" will automatically reposition their menu if it is an 
+  instance of YAHOO.widget.Overlay.
+
++ Clicking on the option region of a Button of "type" split will fire the "option" event, but not
+  "mousedown," "mouseup," "click," or "dblclick".
+
++ Buttons of type "radio" and "checkbox" will not override a value provided for the title attribute.
+
+
+
 *** version 2.6.0 Preview 1 ***
 
 Fixed the following bugs:
