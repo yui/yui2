@@ -3747,50 +3747,14 @@ _onBeforeShow: function (p_sType, p_aArgs) {
 
 
 
-    var bDynamicPos = (this.cfg.getProperty(_POSITION) == _DYNAMIC),
-    	oParent = this.parent,
-    	nAvailableHeight,
-        nMinScrollHeight,
-        nViewportHeight,
+    var oParent = this.parent,
 		aAlignment;
 
 
-    if (!oParent && bDynamicPos) {
+    if (!oParent && this.cfg.getProperty(_POSITION) == _DYNAMIC) {
 
         this.cfg.refireEvent(_XY);
    
-    }
-
-
-    function clearScrollHeight() {
-    
-    	this._setScrollHeight(this.cfg.setProperty(_MAX_HEIGHT));
-    	
-        this.hideEvent.unsubscribe(clearScrollHeight);
-    
-    }
-
-
-    if (!(this instanceof YAHOO.widget.MenuBar) && bDynamicPos && 
-    		!oParent && !this.cfg.getProperty(_CONTEXT)) {
-
-		nViewportHeight = Dom.getViewportHeight();
-	
-		if (this.element.offsetHeight >= nViewportHeight) {
-
-			nAvailableHeight = (nViewportHeight - (Overlay.VIEWPORT_OFFSET * 2));
-			nMinScrollHeight = this.cfg.getProperty(_MIN_SCROLL_HEIGHT);
-
-			if (nAvailableHeight > nMinScrollHeight) {
-
-				this._setScrollHeight(nAvailableHeight);
-	
-				this.hideEvent.subscribe(clearScrollHeight);
-			
-			}
-
-		}
-
     }
 
 
@@ -3835,6 +3799,8 @@ getConstrainedY: function (y) {
 
 		bCanConstrain = 
 			(oMenu.cfg.getProperty(_MIN_SCROLL_HEIGHT) + nViewportOffset < viewPortHeight),
+
+		nAvailableHeight,
 
 		oContextEl,
 		nContextElY,
@@ -4001,7 +3967,6 @@ getConstrainedY: function (y) {
 	};
 
 
-
 	if (oMenu.cfg.getProperty(_PREVENT_CONTEXT_OVERLAP) && bPotentialContextOverlap) {
 
 		if (bCanConstrain) {
@@ -4020,6 +3985,22 @@ getConstrainedY: function (y) {
 		yNew = oMenu.cfg.getProperty(_Y);
 
 	}
+    else if (!(oMenu instanceof YAHOO.widget.MenuBar) && nMenuOffsetHeight >= viewPortHeight) {
+	
+		nAvailableHeight = (viewPortHeight - (nViewportOffset * 2));
+
+		if (nAvailableHeight > oMenu.cfg.getProperty(_MIN_SCROLL_HEIGHT)) {
+
+			oMenu._setScrollHeight(nAvailableHeight);
+			oMenu.hideEvent.subscribe(resetMaxHeight);
+
+			alignY();
+			
+			yNew = oMenu.cfg.getProperty(_Y);
+		
+		}
+
+    }	
 	else {
 
 		if (bCanConstrain) {
