@@ -3,6 +3,15 @@ DataSource Release Notes
 **** version 2.6.0 ****
 
 * GA release.
+* The DataSource class has been refactored into a DataSourceBase base class and
+the subclasses LocalDataSource, FunctionDataSource, XHRDataSource, and
+ScriptNodeDataSource. While backward compatibility of the YAHOO.util.DataSource
+constructor has been maintained, implementers should be aware that calling
+<code>new YAHOO.util.DataSource()</code> now actually returns one of these
+subclasses. Implementers can alternatively call a subclass constructor directly.
+The DataSource constructor returns one of the subclasses based on the oLiveData
+passed to it, or the dataType config value. This class-based architecture no
+longer meaningfully supports swapping data types on the fly.
 * Empty responses of TYPE_FLAT no longer return empty string results.
 * Parsing of totalRecords is no longer supported as a top-leval schema value.
 Implementers should access this value of using a metaField.

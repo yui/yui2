@@ -28,7 +28,7 @@ var lang   = YAHOO.lang,
  * @param oConfigs {object} (optional) Object literal of configuration values.
  */
 util.DataSourceBase = function(oLiveData, oConfigs) {
-    if(!oLiveData) {
+    if(oLiveData === null || oLiveData === undefined) {
         YAHOO.log("Could not instantiate DataSource due to invalid live database",
                 "error", this.toString());
         return;
@@ -527,7 +527,7 @@ liveData : null,
  *    <dt>TYPE_LOCAL</dt>
  *    <dt>TYPE_XHR</dt>
  *    <dt>TYPE_SCRIPTNODE</dt>
- *    <dt>TYPE_FUNCTION</dt>
+ *    <dt>TYPE_JSFUNCTION</dt>
  * </dl> 
  *  
  * @property dataType
@@ -1757,22 +1757,28 @@ lang.augmentProto(DS, util.EventProvider);
 util.LocalDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_LOCAL;
     
-    if(YAHOO.lang.isArray(oLiveData)) { // array
+    if(oLiveData) {
+        if(YAHOO.lang.isArray(oLiveData)) { // array
+            this.responseType = DS.TYPE_JSARRAY;
+        }
+         // xml
+        else if(oLiveData.nodeType && oLiveData.nodeType == 9) {
+            this.responseType = DS.TYPE_XML;
+        }
+        else if(oLiveData.nodeName && (oLiveData.nodeName.toLowerCase() == "table")) { // table
+            this.responseType = DS.TYPE_HTMLTABLE;
+            oLiveData = oLiveData.cloneNode(true);
+        }    
+        else if(YAHOO.lang.isString(oLiveData)) { // text
+            this.responseType = DS.TYPE_TEXT;
+        }
+        else if(YAHOO.lang.isObject(oLiveData)) { // json
+            this.responseType = DS.TYPE_JSON;
+        }
+    }
+    else {
+        oLiveData = [];
         this.responseType = DS.TYPE_JSARRAY;
-    }
-     // xml
-    else if(oLiveData.nodeType && oLiveData.nodeType == 9) {
-        this.responseType = DS.TYPE_XML;
-    }
-    else if(oLiveData.nodeName && (oLiveData.nodeName.toLowerCase() == "table")) { // table
-        this.responseType = DS.TYPE_HTMLTABLE;
-        oLiveData = oLiveData.cloneNode(true);
-    }    
-    else if(YAHOO.lang.isObject(oLiveData)) { // json
-        this.responseType = DS.TYPE_JSON;
-    }
-    else if(YAHOO.lang.isString(oLiveData)) { // text
-        this.responseType = DS.TYPE_TEXT;
     }
     
     this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
@@ -1812,7 +1818,7 @@ lang.augmentObject(util.LocalDataSource, DS);
  */
 util.FunctionDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_JSFUNCTION;
-    //this.responseType = DS.TYPE_JSARRAY;
+    oLiveData = oLiveData || function() {};
     
     this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
@@ -1901,7 +1907,7 @@ lang.augmentObject(util.FunctionDataSource, DS);
  */
 util.ScriptNodeDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_SCRIPTNODE;
-    //this.responseType = DS.TYPE_JSON;
+    oLiveData = oLiveData || "";
     
     this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
@@ -2121,6 +2127,7 @@ callbacks : []
 util.XHRDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_XHR;
     this.connMgr = this.connMgr || util.Connect;
+    oLiveData = oLiveData || "";
     
     this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
@@ -2228,7 +2235,7 @@ makeConnection : function(oRequest, oCallback, oCaller) {
     var _xhrSuccess = function(oResponse) {
         // If response ID does not match last made request ID,
         // silently fail and wait for the next response
-        if(oResponse && (this.connXhrMode == "ignoreStaleResponses") &&
+        if(oResponse && (this.asyncMode == "ignoreStaleResponses") &&
                 (oResponse.tId != oQueue.conn.tId)) {
             YAHOO.log("Ignored stale response", "warn", this.toString());
             return null;
@@ -2416,7 +2423,8 @@ lang.augmentObject(util.XHRDataSource, DS);
 /****************************************************************************/
 
 /**
- * Factory class for creating a BaseDataSource subclass instance.
+ * Factory class for creating a BaseDataSource subclass instance. The sublcass is
+ * determined by oLiveData's type, unless the dataType config is explicitly passed in.  
  *
  * @namespace YAHOO.util
  * @class YAHOO.util.DataSource
@@ -2427,16 +2435,28 @@ lang.augmentObject(util.XHRDataSource, DS);
 util.DataSource = function(oLiveData, oConfigs) {
     oConfigs = oConfigs || {};
     
-    // Point to one of the subclasses -- strings are overloaded so we should look for dataType
-    if(oConfigs.dataType == DS.TYPE_SCRIPTNODE) {
-        lang.augmentObject(util.DataSource, util.XHRDataSource);
-        return new util.XHRDataSource(oLiveData, oConfigs);            
+    // Point to one of the subclasses, first by dataType if given, then by sniffing oLiveData type.
+    var dataType = oConfigs.dataType;
+    if(dataType) {
+        if(dataType == DS.TYPE_LOCAL) {
+            lang.augmentObject(util.DataSource, util.LocalDataSource);
+            return new util.LocalDataSource(oLiveData, oConfigs);            
+        }
+        else if(dataType == DS.TYPE_XHR) {
+            lang.augmentObject(util.DataSource, util.XHRDataSource);
+            return new util.XHRDataSource(oLiveData, oConfigs);            
+        }
+        else if(dataType == DS.TYPE_SCRIPTNODE) {
+            lang.augmentObject(util.DataSource, util.ScriptNodeDataSource);
+            return new util.ScriptNodeDataSource(oLiveData, oConfigs);            
+        }
+        else if(dataType == DS.TYPE_JSFUNCTION) {
+            lang.augmentObject(util.DataSource, util.FunctionDataSource);
+            return new util.FunctionDataSource(oLiveData, oConfigs);            
+        }
     }
-    else if(oConfigs.dataType == DS.TYPE_LOCAL) {
-        lang.augmentObject(util.DataSource, util.LocalDataSource);
-        return new util.XHRDataSource(oLiveData, oConfigs);            
-    }
-    else if(YAHOO.lang.isString(oLiveData)) { // strings default to xhr
+    
+    if(YAHOO.lang.isString(oLiveData)) { // strings default to xhr
         lang.augmentObject(util.DataSource, util.XHRDataSource);
         return new util.XHRDataSource(oLiveData, oConfigs);
     }
@@ -2444,7 +2464,7 @@ util.DataSource = function(oLiveData, oConfigs) {
         lang.augmentObject(util.DataSource, util.FunctionDataSource);
         return new util.FunctionDataSource(oLiveData, oConfigs);
     }
-    else {
+    else { // ultimate default is local
         lang.augmentObject(util.DataSource, util.LocalDataSource);
         return new util.LocalDataSource(oLiveData, oConfigs);
     }
