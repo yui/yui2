@@ -1568,22 +1568,12 @@
             this.on("click", this._pagerClickHandler);
 
             // Restore the focus on the navigation buttons
-            Event.onFocus(this.get("element"), function (ev) {
-                var target = Event.getTarget(ev);
-
-                if (target.nodeName.toUpperCase() == "INPUT" &&
-                    Dom.hasClass(target.parentNode, cssClass.BUTTON)) {
-                    Dom.addClass(target.parentNode, cssClass.FOCUSSED_BUTTON);
-                }
-            });
-            Event.onBlur(this.get("element"), function (ev) {
-                var target = Event.getTarget(ev);
-
-                if (target.nodeName.toUpperCase() == "INPUT" &&
-                    Dom.hasClass(target.parentNode, cssClass.BUTTON)) {
-                    Dom.removeClass(target.parentNode,cssClass.FOCUSSED_BUTTON);
-                }
-            });
+            Event.onFocus(this.get("element"), function (ev, obj) {
+                obj._updateNavButtons(Event.getTarget(ev), true);
+            }, this);
+            Event.onBlur(this.get("element"), function (ev, obj) {
+                obj._updateNavButtons(Event.getTarget(ev), true);
+            }, this);
         },
 
         /**
@@ -2649,6 +2639,41 @@
 
             this._pages.el.innerHTML = markup;
             markup = null;
+        },
+
+        /**
+         * Set the correct class for the navigation buttons.
+         *
+         * @method _updateNavButtons
+         * @param el {Object} The target button
+         * @param setFocus {Boolean} True to set focus ring, false otherwise.
+         * @protected
+         */
+        _updateNavButtons: function (el, setFocus) {
+            var children,
+                cssClass = this.CLASSES,
+                grandParent,
+                parent   = el.parentNode;
+
+            if (!parent) {
+                return;
+            }
+            grandParent = parent.parentNode;
+
+            if (el.nodeName.toUpperCase() == "INPUT" &&
+                Dom.hasClass(parent, cssClass.BUTTON)) {
+                if (setFocus) {
+                    if (grandParent) {
+                        children = Dom.getChildren(grandParent);
+                        if (children) {
+                            Dom.removeClass(children, cssClass.FOCUSSED_BUTTON);
+                        }
+                    }
+                    Dom.addClass(parent, cssClass.FOCUSSED_BUTTON);
+                } else {
+                    Dom.removeClass(parent, cssClass.FOCUSSED_BUTTON);
+                }
+            }
         },
 
         /**
