@@ -85,7 +85,9 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
     setUpLabel: function(oData) { 
 
         if (Lang.isString(oData)) {
-            oData = { label: oData };
+            oData = { 
+                label: oData 
+            };
         } else {
             if (oData.style) {
                 this.labelStyle = oData.style;

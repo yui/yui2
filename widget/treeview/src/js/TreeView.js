@@ -511,19 +511,21 @@ TV.prototype = {
                 var self = this,
                     el = Event.getTarget(ev),
                     node = this.getNodeByElement(el);
+
+                if (!node) {
+                    return;
+                }
                     
                 var toggle = function () {
-                    if (node) {
-                        if (node.expanded) {
-                            node.collapse();
-                        } else {
-                            node.expand();
-                        }
-                        node.focus();
+                    if (node.expanded) {
+                        node.collapse();
+                    } else {
+                        node.expand();
                     }
+                    node.focus();
                 };
                 
-                if (node && (Dom.hasClass(el, node.labelStyle) || Dom.getAncestorByClassName(el,node.labelStyle))) {
+                if (Dom.hasClass(el, node.labelStyle) || Dom.getAncestorByClassName(el,node.labelStyle)) {
                     this.logger.log("onLabelClick " + node.label);
                     this.fireEvent('labelClick',node);
                 }
@@ -577,12 +579,16 @@ TV.prototype = {
                 while (!Dom.hasClass(el.parentNode,'ygtvrow')) {
                     el = Dom.getAncestorByTagName(el,'td');
                 }
-                if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
-                if (!(/ygtv[tl][mp]h?/.test(el.className))) {
-                    this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(el)}); 
-                    if (this._dblClickTimer) {
-                        window.clearTimeout(this._dblClickTimer);
-                        this._dblClickTimer = null;
+
+                if (el) {
+
+                    if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
+                    if (!(/ygtv[tl][mp]h?/.test(el.className))) {
+                        this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(el)}); 
+                        if (this._dblClickTimer) {
+                            window.clearTimeout(this._dblClickTimer);
+                            this._dblClickTimer = null;
+                        }
                     }
                 }
             },

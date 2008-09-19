@@ -725,18 +725,9 @@ YAHOO.widget.Node.prototype = {
      * Returns the hover style for the icon
      * @return {string} the css class hover state
      * @method getHoverStyle
+     * @deprecated
      */
     getHoverStyle: function() { 
-
-        
-        // handled by delegated listener
-        // var s = this.getStyle();
-        // if (this.hasChildren(true) && !this.isLoading) { 
-        //     s += "h"; 
-        // }
-        //this.getStyle();
-        // return s;
-
         return this.getStyle();
     },
 
@@ -1216,24 +1207,6 @@ YAHOO.widget.Node.prototype = {
         return defs;
     },
 
-
-    /**
-     * Returns the id for this node's toggle element
-     * @method getToggleElId
-     * @return {string} the toggel element id
-     */
-    getToggleElId: function() {
-        return "ygtvt" + this.index;
-    },
-
-    /**
-     * Returns the element that is being used for this node's toggle.
-     * @method getToggleEl
-     * @return {HTMLElement} this node's toggle html element
-     */
-    getToggleEl: function() {
-        return document.getElementById(this.getToggleElId());
-    },
 
     /**
      * Generates the link that will invoke this node's toggle method

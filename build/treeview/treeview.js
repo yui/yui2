@@ -497,19 +497,21 @@ TV.prototype = {
                 var self = this,
                     el = Event.getTarget(ev),
                     node = this.getNodeByElement(el);
+
+                if (!node) {
+                    return;
+                }
                     
                 var toggle = function () {
-                    if (node) {
-                        if (node.expanded) {
-                            node.collapse();
-                        } else {
-                            node.expand();
-                        }
-                        node.focus();
+                    if (node.expanded) {
+                        node.collapse();
+                    } else {
+                        node.expand();
                     }
+                    node.focus();
                 };
                 
-                if (node && (Dom.hasClass(el, node.labelStyle) || Dom.getAncestorByClassName(el,node.labelStyle))) {
+                if (Dom.hasClass(el, node.labelStyle) || Dom.getAncestorByClassName(el,node.labelStyle)) {
                     this.fireEvent('labelClick',node);
                 }
 
@@ -561,12 +563,16 @@ TV.prototype = {
                 while (!Dom.hasClass(el.parentNode,'ygtvrow')) {
                     el = Dom.getAncestorByTagName(el,'td');
                 }
-                if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
-                if (!(/ygtv[tl][mp]h?/.test(el.className))) {
-                    this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(el)}); 
-                    if (this._dblClickTimer) {
-                        window.clearTimeout(this._dblClickTimer);
-                        this._dblClickTimer = null;
+
+                if (el) {
+
+                    if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
+                    if (!(/ygtv[tl][mp]h?/.test(el.className))) {
+                        this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(el)}); 
+                        if (this._dblClickTimer) {
+                            window.clearTimeout(this._dblClickTimer);
+                            this._dblClickTimer = null;
+                        }
                     }
                 }
             },
@@ -1896,18 +1902,9 @@ YAHOO.widget.Node.prototype = {
      * Returns the hover style for the icon
      * @return {string} the css class hover state
      * @method getHoverStyle
+     * @deprecated
      */
     getHoverStyle: function() { 
-
-        
-        // handled by delegated listener
-        // var s = this.getStyle();
-        // if (this.hasChildren(true) && !this.isLoading) { 
-        //     s += "h"; 
-        // }
-        //this.getStyle();
-        // return s;
-
         return this.getStyle();
     },
 
@@ -2373,24 +2370,6 @@ YAHOO.widget.Node.prototype = {
 
 
     /**
-     * Returns the id for this node's toggle element
-     * @method getToggleElId
-     * @return {string} the toggel element id
-     */
-    getToggleElId: function() {
-        return "ygtvt" + this.index;
-    },
-
-    /**
-     * Returns the element that is being used for this node's toggle.
-     * @method getToggleEl
-     * @return {HTMLElement} this node's toggle html element
-     */
-    getToggleEl: function() {
-        return document.getElementById(this.getToggleElId());
-    },
-
-    /**
      * Generates the link that will invoke this node's toggle method
      * @method getToggleLink
      * @return {string} the javascript url for toggling this node
@@ -2490,7 +2469,9 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
     setUpLabel: function(oData) { 
 
         if (Lang.isString(oData)) {
-            oData = { label: oData };
+            oData = { 
+                label: oData 
+            };
         } else {
             if (oData.style) {
                 this.labelStyle = oData.style;
