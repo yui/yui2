@@ -520,10 +520,11 @@ TV.prototype = {
 					}
 				};
 				
-				if (node && Dom.hasClass(el, node.labelStyle) || Dom.getAncestorByClassName(el,node.labelStyle)) {
+				if (node && (Dom.hasClass(el, node.labelStyle) || Dom.getAncestorByClassName(el,node.labelStyle))) {
 					node.logger.log("onLabelClick " + node.label);
 					this.fireEvent('labelClick',node);
 				}
+
 				while (el && !Dom.hasClass(el.parentNode,'ygtvrow')) {
 					el = Dom.getAncestorByTagName(el,'td');
 				}

@@ -520,10 +520,11 @@ TV.prototype = {
 					}
 				};
 				
-				if (node && Dom.hasClass(el, node.labelStyle) || Dom.getAncestorByClassName(el,node.labelStyle)) {
+				if (node && (Dom.hasClass(el, node.labelStyle) || Dom.getAncestorByClassName(el,node.labelStyle))) {
 					node.logger.log("onLabelClick " + node.label);
 					this.fireEvent('labelClick',node);
 				}
+
 				while (el && !Dom.hasClass(el.parentNode,'ygtvrow')) {
 					el = Dom.getAncestorByTagName(el,'td');
 				}
@@ -2556,12 +2557,18 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      */
     getNodeDefinition: function() {
 		var def = YAHOO.widget.TextNode.superclass.getNodeDefinition.call(this);
-		if (def === false) { return false; }
+		if (def === false) { 
+            return false; 
+        }
 
 		// Node specific properties
 		def.label = this.label;
-		if (this.labelStyle != 'ygtvlabel') { def.style = this.labelStyle; }
-		if (this.title) { def.title = this.title ; }
+		if (this.labelStyle != 'ygtvlabel') { 
+            def.style = this.labelStyle; 
+        }
+		if (this.title) { 
+            def.title = this.title ; 
+        }
 
 		return def;
 	
