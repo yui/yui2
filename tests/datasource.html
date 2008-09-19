@@ -26,11 +26,11 @@
 <script type="text/javascript" src="../build/yuitest/yuitest.js"></script>
 <script type="text/javascript" src="../build/get/get.js"></script>
 <script type="text/javascript" src="../build/json/json.js"></script>
-<script type="text/javascript" src="../build/datasource/datasource-beta-debug.js"></script>
+<script type="text/javascript" src="../build/datasource/datasource-debug.js"></script>
 
 <!-- for cloneobject method -->
 <script type="text/javascript" src="../build/element/element-beta.js"></script>
-<script type="text/javascript" src="../build/datatable/datatable-beta.js"></script>
+<script type="text/javascript" src="../build/datatable/datatable.js"></script>
 <script type="text/javascript">
 
 (function() {
@@ -50,405 +50,542 @@ var Dom=YAHOO.util.Dom,
     LocalDS = YAHOO.util.LocalDataSource,
     XHRDS = YAHOO.util.XHRDataSource,
     ScriptNodeDS = YAHOO.util.ScriptNodeDataSource,
-    DataSource = YAHOO.util.DataSource,
-    
-    // Returns object clones
-    cloneObject = YAHOO.widget.DataTable._cloneObject,
-        
-    // Define test data and schemas
-    dataSimpleArray = ["a","b","c","d"],
-    
-    dataComplexArray = [["1a","1b","1c","1d"],["2a","2b","2c","2d"],["3a","3b","3c","3d"]],
-    
-    dataObjectsArray = [{a:"1a",b:"1b",c:"1c"}, {a:"2a",b:"2b",c:"2c"}, {a:"3a",b:"3b",c:"3c"}],
-    schemaArray = {
-        fields: ["a","b","c"]
-    },
-    
-    dataJSON = {topa:"a",topb: {b:"b"},nested: dataObjectsArray},
-    schemaJSON = {
-        resultsList: "nested",
-        fields: ["a","b","c"]
-    },
-        
-    dataFunction = function(data) {
-        return data;
-    },
-        
-        
-    // Define shared tearDown
-    tearDown = function() {
-        //TODO: implement destroy() 
-        this.ds = null;
-    };
-     
-        
-    /**
-     *
-     *
-     * DataSourceBase simple array test case.
-     *
-     *
-     */
-    var SimpleArrayTestCase = new TestCase({
-        name : "DataSourceBase Simple Array Test Case",
-        
-        setUp : function() {
-            this.ds = new LocalDS(dataSimpleArray);
-        },
-        
-        tearDown : tearDown,
-        
-        testConstruction: function() {
-            Assert.isObject(this.ds, "Failed to create instance");
-            Assert.isInstanceOf(DS, this.ds, "Failed to create instance");
-            Assert.areSame(dataSimpleArray, this.ds.liveData, "Unexpected live data");
-        },
-        
-        testSendRequest: function() {
-            var oCallback = {
-                success: function(oRequest, oResponse, oPayload) {
-                    Assert.areSame(dataSimpleArray, oResponse.results, "Success handler: Unexpected response to " + oRequest);               
-                },
-                failure: function(oRequest, oResponse, oPayload) {
-                    Assert.areSame(dataSimpleArray, oResponse.results, "Failure handler: Unexpected response to " + oRequest);
-                },
-            };
-            
-            var nId = this.ds.sendRequest(undefined,oCallback)
-            Assert.isNumber(nId, "Unexpected return to undefined request");
+    FunctionDS = YAHOO.util.FunctionDataSource,
+    DataSource = YAHOO.util.DataSource;   
 
-            nId = this.ds.sendRequest(null,oCallback)
-            Assert.isNumber(nId, "Unexpected return to null request");
+var XMLDocument = function(rootTagName, namespaceURL) {
+    if (!rootTagName) rootTagName = "";
+    if (!namespaceURL) namespaceURL = "";
+    
+    if (document.implementation && document.implementation.createDocument) {
+        // This is the W3C standard way to do it
+        return document.implementation.createDocument(namespaceURL,
+                                                      rootTagName, null);
+    }
+    else { // This is the IE way to do it
+        // Create an empty document as an ActiveX object
+        // If there is no root element, this is all we have to do
+        var doc = new ActiveXObject("MSXML2.DOMDocument");
 
-            nId = this.ds.sendRequest({},oCallback)
-            Assert.isNumber(nId, "Unexpected return to object request");
-        },
+        // If there is a root tag, initialize the document
+        if (rootTagName) {
+            // Look for a namespace prefix
+            var prefix = "";
+            var tagname = rootTagName;
+            var p = rootTagName.indexOf(':');
+            if (p != -1) {
+                prefix = rootTagName.substring(0, p);
+                tagname = rootTagName.substring(p+1);
+            }
 
-        testParseResponse: function() {
-            var oParsedResponse = this.ds.parseArrayData(null,dataSimpleArray);
-            Assert.areSame(dataSimpleArray, oParsedResponse.results, "Unexpected parsed data");
+            // If we have a namespace, we must have a namespace prefix
+            // If we don't have a namespace, we discard any prefix
+            if (namespaceURL) {
+                if (!prefix) prefix = "a0"; // What Firefox uses
+            }
+            else prefix = "";
+
+            // Create the root element (with optional namespace) as a
+            // string of text
+            var text = "<" + (prefix?(prefix+":"):"") +  tagname +
+                (namespaceURL
+                 ?(" xmlns:" + prefix + '="' + namespaceURL +'"')
+                 :"") +
+                "/>";
+            // And parse that text into the empty document
+            doc.loadXML(text);
         }
-    });
+        return doc;
+    }
+};        
+
+/**
+ *
+ *
+ * LocalDataSource Tests
+ *
+ *
+ */
+ var dsLocalTestCase = new TestCase({
+    name: "LocalDataSource Test Case",
     
-    /**
-     *
-     *
-     * Tests array of JS objects.
-     *
-     *
-     */
-
-    /*var dsComplexArrayTemplate = YAHOO.lang.merge(datasourceTemplate, {
-        name:"Complex Array Test",
-        data:[{a:"1a",b:"1b",c:"1c"}, {a:"2a",b:"2b",c:"2c"}, {a:"3a",b:"3b",c:"3c"}]
-    });
-    var dsComplexArrayTest = new DataSourceTestCase(dsComplexArrayTemplate);*/
-
-    /**
-     *
-     *
-     * Tests DataSourceBase Cache.
-     *
-     *
-     */
-    var CacheTestCase = new TestCase({
-        name: "Cache Test",
+    testLocalContruction: function() {
+        var data = ["a","b","c"];
+        var ds = new LocalDS(data);
+        ArrayAssert.itemsAreSame(data, ds.liveData, "Simple Array");
+        Assert.areSame(DS.TYPE_LOCAL, ds.dataType, "Simple Array");
+        Assert.areSame(DS.TYPE_JSARRAY, ds.responseType, "Simple Array");
+        delete data;
+        delete ds;
         
-        testDefault: function() {
-            this.ds = new LocalDS(dataSimpleArray);
-            Assert.areSame(null, this.ds._aCache, "Failed to NOT init cache (default)");
-            this.ds.sendRequest("a", {
-                success: function() {
-                    Assert.areSame(null, this.ds._aCache, "Failed to still NOT init cache (default)");
-                },
-                scope: this
-            });
-        },
-
-        testViaConfig: function() {
-            this.ds = new LocalDS(dataSimpleArray, {maxCacheEntries:5});
-            Assert.areSame(null, this.ds._aCache, "Cache should not be initialized yet");   
-            
-            this.ds.sendRequest("a", {
-                success: function() {
-                    Assert.areSame(true, YAHOO.lang.isArray(this.ds._aCache), "Failed to init cache (via constructor)");       
-                    Assert.areSame(1, this.ds._aCache.length, "Cache should have one item");
-                                      
-                    this.ds.flushCache();
-                    Assert.areSame(0, this.ds._aCache.length, "Cache should be empty");
-                },
-                scope: this
-            });
-        },
+        data = [["a","b","c"],["1","2","3"],["one","two","three"]];
+        ds = new LocalDS(data);
+        ArrayAssert.itemsAreSame(data, ds.liveData, "Complex Array");
+        Assert.areSame(DS.TYPE_LOCAL, ds.dataType, "Complex Array");
+        Assert.areSame(DS.TYPE_JSARRAY, ds.responseType, "Complex Array");
+        delete data;
+        delete ds;
         
-        testViaProperty: function() {
-            this.ds = new LocalDS(dataSimpleArray);
-            this.ds.maxCacheEntries = 5;
-            this.ds.sendRequest("a", {
-                success: function() {
-                    Assert.areSame(true, YAHOO.lang.isArray(this.ds._aCache), "Failed to init cache (via property)");
-                    Assert.areSame(1, this.ds._aCache.length, "Cache should have one item");
-                    
-                    this.ds.maxCacheEntries = 0;
-                    Assert.areSame(1, this.ds._aCache.length, "Cache should still have one item");
-                    
-                    this.ds.sendRequest("a", {
-                        success: function() {
-                            Assert.areSame(null, this.ds._aCache, "Cache should be destroyed");            
-                        },
-                        scope: this
-                    });
-                },
-                scope: this
+        data = [{a:"1",b:"2",c:"3"}, {a:"one",b:"two",c:"three"}, {a:"uno",b:"dos",c:"tres"}];
+        ds = new LocalDS(data);
+        ArrayAssert.itemsAreSame(data, ds.liveData, "Object Array");
+        Assert.areSame(DS.TYPE_LOCAL, ds.dataType, "Object Array");
+        Assert.areSame(DS.TYPE_JSARRAY, ds.responseType, "Object Array");
+        delete data;
+        delete ds;
+        
+        data = {items: [{a:"1",b:"2",c:"3"}, {a:"one",b:"two",c:"three"}, {a:"uno",b:"dos",c:"tres"}]};
+        ds = new LocalDS(data);
+        ObjectAssert.propertiesAreEqual(data, ds.liveData, "JSON");
+        Assert.areSame(DS.TYPE_LOCAL, ds.dataType, "JSON");
+        Assert.areSame(DS.TYPE_JSON, ds.responseType, "JSON");
+        delete data;
+        delete ds;
+        
+        data = document.createElement("table");
+        ds = new LocalDS(data);
+        Assert.areSame(data.nodeName, ds.liveData.nodeName, "HTML TABLE");
+        Assert.areSame(DS.TYPE_LOCAL, ds.dataType, "HTML TABLE");
+        Assert.areSame(DS.TYPE_HTMLTABLE, ds.responseType, "HTML TABLE");
+        delete data;
+        delete ds;
+        
+        data =new XMLDocument("myRoot");
+        ds = new LocalDS(data);
+        Assert.areSame(data.nodeType, ds.liveData.nodeType, "XML");
+        Assert.areSame(DS.TYPE_LOCAL, ds.dataType, "XML");
+        Assert.areSame(DS.TYPE_XML, ds.responseType, "XML");
+        delete data;
+        delete ds;
+        
+        data = null;
+        ds = new LocalDS(data);
+        ArrayAssert.itemsAreSame([], ds.liveData, "null");
+        Assert.areSame(DS.TYPE_LOCAL, ds.dataType, "null");
+        Assert.areSame(DS.TYPE_JSARRAY, ds.responseType, "null");
+        delete data;
+        delete ds;
+    }
+ });
+ 
+/**
+ *
+ *
+ * FunctionDataSource Tests
+ *
+ *
+ */
+ var dsFunctionTestCase = new TestCase({
+    name: "FunctionDataSource Test Case",
+    
+    testFunctionContruction: function() {
+        var data = function(query) {
+            return ["a","b","c"]
+        };
+        var ds = new FunctionDS(data);
+        Assert.isFunction(ds.liveData);
+        Assert.areSame(DS.TYPE_JSFUNCTION, ds.dataType);
+        Assert.areSame(DS.TYPE_UNKNOWN, ds.responseType);
+        delete data;
+        delete ds;
+
+        data = null;
+        ds = new FunctionDS(data);
+        Assert.isFunction(ds.liveData);
+        Assert.areSame(DS.TYPE_JSFUNCTION, ds.dataType);
+        Assert.areSame(DS.TYPE_UNKNOWN, ds.responseType);
+        delete data;
+        delete ds;
+    }
+ });
+
+/**
+ *
+ *
+ * XHRDataSource Tests
+ *
+ *
+ */
+ var dsXHRTestCase = new TestCase({
+    name: "XHRDataSource Test Case",
+    
+    testXHRContruction: function() {
+        var data = "path/to/server";
+        var ds = new XHRDS(data);
+        Assert.isString(ds.liveData);
+        Assert.areSame(DS.TYPE_XHR, ds.dataType);
+        Assert.areSame(DS.TYPE_UNKNOWN, ds.responseType);
+        delete data;
+        delete ds;
+
+        data = null;
+        ds = new XHRDS(data);
+        Assert.isString(ds.liveData);
+        Assert.areSame(DS.TYPE_XHR, ds.dataType);
+        Assert.areSame(DS.TYPE_UNKNOWN, ds.responseType);
+        delete data;
+        delete ds;
+    }
+ });
+
+/**
+ *
+ *
+ * ScriptNodeDataSource Tests
+ *
+ *
+ */
+ var dsScriptNodeTestCase = new TestCase({
+    name: "ScriptNodeDataSource Test Case",
+    
+    testScriptNodeContruction: function() {
+        var data = "path/to/server";
+        var ds = new ScriptNodeDS(data);
+        Assert.isString(ds.liveData);
+        Assert.areSame(DS.TYPE_SCRIPTNODE, ds.dataType);
+        Assert.areSame(DS.TYPE_UNKNOWN, ds.responseType);
+        delete data;
+        delete ds;
+
+        data = null;
+        ds = new ScriptNodeDS(data);
+        Assert.isString(ds.liveData);
+        Assert.areSame(DS.TYPE_SCRIPTNODE, ds.dataType);
+        Assert.areSame(DS.TYPE_UNKNOWN, ds.responseType);
+        delete data;
+        delete ds;
+    }
+ });
+
+/**
+ *
+ *
+ * DataSource Tests
+ *
+ *
+ */
+ var dsTestCase = new TestCase({
+    name: "DataSource Test Case",
+    
+    testDataSourceContruction: function() {
+        var data = ["a","b","c"];
+        var ds = new DataSource(data);
+        Assert.areSame(true, ds instanceof LocalDS);
+        delete data;
+        delete ds;
+
+        data = function(query) {
+            return ["a","b","c"]
+        };
+        ds = new DataSource(data);
+        Assert.areSame(true, ds instanceof FunctionDS);
+        delete data;
+        delete ds;
+
+        data = "path/to/server";
+        ds = new DataSource(data);
+        Assert.areSame(true, ds instanceof XHRDS);
+        delete data;
+        delete ds;
+
+        data = null;
+        ds = new DataSource(data, {dataType:DS.TYPE_LOCAL});
+        Assert.areSame(true, ds instanceof LocalDS);
+        delete data;
+        delete ds;
+
+        data = null;
+        ds = new DataSource(data, {dataType:DS.TYPE_JSFUNCTION});
+        Assert.areSame(true, ds instanceof FunctionDS);
+        delete data;
+        delete ds;
+
+        data = null;
+        ds = new DataSource(data, {dataType:DS.TYPE_XHR});
+        Assert.areSame(true, ds instanceof XHRDS);
+        delete data;
+        delete ds;
+
+        data = null;
+        ds = new DataSource(data, {dataType:DS.TYPE_SCRIPTNODE});
+        Assert.areSame(true, ds instanceof ScriptNodeDS);
+        delete data;
+        delete ds;
+    }
+ });
+ 
+ /**
+ *
+ *
+ * DataSourceBase Tests
+ *
+ *
+ */
+ var dsBaseTestCase = new TestCase({
+    name: "DataSourceBase Test Case",
+    
+    testCustomEvents: function() {
+        var data = ["a","b","c"];
+        var ds = new DS(data);
+        ObjectAssert.hasProperty("cacheFlushEvent", ds.__yui_events);
+        ObjectAssert.hasProperty("cacheRequestEvent", ds.__yui_events);
+        ObjectAssert.hasProperty("cacheResponseEvent", ds.__yui_events);
+        ObjectAssert.hasProperty("dataErrorEvent", ds.__yui_events);
+        ObjectAssert.hasProperty("requestEvent", ds.__yui_events);
+        ObjectAssert.hasProperty("responseCacheEvent", ds.__yui_events);
+        ObjectAssert.hasProperty("responseEvent", ds.__yui_events);
+        ObjectAssert.hasProperty("responseParseEvent", ds.__yui_events);
+        delete data;
+        delete ds;
+    },
+
+     testCache: function() {
+        var data = ["a","b","c"];
+        var ds = new DS(data);
+        Assert.areSame(null, ds._aCache);
+        delete data;
+        delete ds;
+        
+        data = ["a","b","c"];
+        ds = new DS(data, {maxCacheEntries:5});
+        Assert.areSame(null, ds._aCache);
+        var ds = ds;
+        ds.sendRequest("a", function() {
+            Assert.isArray(ds._aCache);       
+            Assert.areSame(1, ds._aCache.length, "Cache should have one item");
+                                  
+            ds.flushCache();
+            Assert.areSame(0, ds._aCache.length, "Cache should be empty");                   
+        });
+        delete data;
+        delete ds;
+        
+        data = ["a","b","c"];
+        ds = new DS(data);
+        ds.maxCacheEntries = 5
+        Assert.areSame(null, ds._aCache);
+        var ds = ds;
+        ds.sendRequest("a", function() {
+            Assert.isArray(ds._aCache);       
+            Assert.areSame(1, ds._aCache.length, "Cache should have one item");
+                                  
+            ds.maxCacheEntries = 0;
+            Assert.areSame(1, ds._aCache.length, "Cache should still have one item");                   
+
+            ds.sendRequest("a", function() {
+                Assert.isNull(ds._aCache, "Cache should be destroyed");            
             });
-        }
-    });
+        });
+        delete data;
+        delete ds;
+    }
+});
 
-    /**
-     *
-     *
-     * Tests XHR.
-     *
-     *
-     */
-
-    /*var dsXHRTemplate = YAHOO.lang.merge(datasourceTemplate, {
-        name:"XHR Test",
-        data:"path/to/proxy"
-    });
-    var dsXHRTest = new DataSourceTestCase(dsXHRTemplate);*/
-
-    /**
-     *
-     *
-     * Tests JSON parsing.
-     *
-     *
-     */
-
-    /*var dsParseJSONTemplate = YAHOO.lang.merge(datasourceTemplate, {
-        name:"Parse JSON Test",
-        data: {"ResultSet":{
+ /**
+ *
+ *
+ * JSON Tests
+ *
+ *
+ */
+ var dsJSONTestCase = new TestCase({
+    name: "JSON Test Case",
+    
+    testJSONParse: function() {
+        var data =  {"ResultSet":{
                 "totalResultsAvailable":506,
                 "totalResultsReturned":10,
                 "first Result Position":1,
                 "ResultSetMapUrl":"http:\/\/maps.yahoo.com\/broadband\/?q1=Sunnyvale%2C+CA+94089&tt=pizza&tp=1",
                 "Result":[
-                    {Title:"Giovannis Pizzeria",MyArray:["1127 N Lawrence Expy"],"Hy-phenated":"Sunnyvale","State":"CA","Array Index":[408,734,4221],"for":"37.397058","Longitude":"-121.996017","Nested":{"Average-Rating":"4","Total Ratings":"54","TotalReviews":"36",MyArray:["1201994139"]},"Distance":"0.62","Url":"http:\/\/local.yahoo.com\/details?id=21341983&stx=pizza&csz=Sunnyvale+CA&ed=MKz.rq160SwrCmnpe6IIB6SO8HQ4zpqeQiusehO32jPu0kFQONfQkxJV87YlenT7OdxlEDHPoHfJqkjm","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21341983&stx=pizza&csz=Sunnyvale+CA&ed=MKz.rq160SwrCmnpe6IIB6SO8HQ4zpqeQiusehO32jPu0kFQONfQkxJV87YlenT7OdxlEDHPoHfJqkjm","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Giovannis+Pizzeria&desc=4087344221&csz=Sunnyvale+CA&qty=9&cs=9&ed=MKz.rq160SwrCmnpe6IIB6SO8HQ4zpqeQiusehO32jPu0kFQONfQkxJV87YlenT7OdxlEDHPoHfJqkjm&gid1=21341983","BusinessUrl":"","BusinessClickUrl":""},
-                    {Title:"Gumbas Cafe Italian Restaurant & Pizzeria",MyArray:["176 S Murphy Ave"],"Hy-phenated":"Sunnyvale","State":"CA","Array Index":[408,737,8384],"for":"37.376442","Longitude":"-122.030102","Nested":{"Average-Rating":"4","Total Ratings":"38","TotalReviews":"26",MyArray:["1199489524"]},"Distance":"2.05","Url":"http:\/\/local.yahoo.com\/details?id=21337886&stx=pizza&csz=Sunnyvale+CA&ed=uj7cXq160SxhJq9XTxZy.yXDsYz0FRBPkLX2zpjvEH6o4FWX9XPNxDcQ6y3QcRkD8A_GfKyDEVY-","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21337886&stx=pizza&csz=Sunnyvale+CA&ed=uj7cXq160SxhJq9XTxZy.yXDsYz0FRBPkLX2zpjvEH6o4FWX9XPNxDcQ6y3QcRkD8A_GfKyDEVY-","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Gumbas+Cafe+Italian+Restaurant+%26+Pizzeria&desc=4087378384&csz=Sunnyvale+CA&qty=9&cs=9&ed=uj7cXq160SxhJq9XTxZy.yXDsYz0FRBPkLX2zpjvEH6o4FWX9XPNxDcQ6y3QcRkD8A_GfKyDEVY-&gid1=21337886","BusinessUrl":"","BusinessClickUrl":""},
-                    {Title:"Vitos Famous Pizza",MyArray:["1155 Reed Ave"],"Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),246,8800],"for":"37.367029","Longitude":"-121.997904","Nested":{"Average-Rating":"4.5","Total Ratings":"16","TotalReviews":"13",MyArray:["1195089220"]},"Distance":"2.30","Url":"http:\/\/local.yahoo.com\/details?id=21332026&stx=pizza&csz=Sunnyvale+CA&ed=N38lFq160SymmdPNQF8OuFWLoPx_i.6GZDIVFehy9mWH6xbhRaqIfTx6ts8pKvY20AnKblM-","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21332026&stx=pizza&csz=Sunnyvale+CA&ed=N38lFq160SymmdPNQF8OuFWLoPx_i.6GZDIVFehy9mWH6xbhRaqIfTx6ts8pKvY20AnKblM-","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Vitos+Famous+Pizza&desc=4082468800&csz=Sunnyvale+CA&qty=9&cs=9&ed=N38lFq160SymmdPNQF8OuFWLoPx_i.6GZDIVFehy9mWH6xbhRaqIfTx6ts8pKvY20AnKblM-&gid1=21332026","BusinessUrl":"http:\/\/vitosfamouspizza.com\/","BusinessClickUrl":"http:\/\/vitosfamouspizza.com\/"},
-                    {Title:"Domino's Pizza",MyArray:["615 Caliente Dr"],"Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408), 732,3030],"for":"37.391271","Longitude":"-122.013742","Nested":{"Average-Rating":"4","Total Ratings":"5","TotalReviews":"0",MyArray:["1195089222"]},"Distance":"0.81","Url":"http:\/\/local.yahoo.com\/details?id=21335892&stx=pizza&csz=Sunnyvale+CA&ed=8AfC_K160Sxfwh8iare3qmr9FJ3PN3F1hAEsxLQGY7jUiik2FpVQoHyE7foPhoqHownL0ORw2A--","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21335892&stx=pizza&csz=Sunnyvale+CA&ed=8AfC_K160Sxfwh8iare3qmr9FJ3PN3F1hAEsxLQGY7jUiik2FpVQoHyE7foPhoqHownL0ORw2A--","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Domino%27s+Pizza&desc=4087323030&csz=Sunnyvale+CA&qty=9&cs=9&ed=8AfC_K160Sxfwh8iare3qmr9FJ3PN3F1hAEsxLQGY7jUiik2FpVQoHyE7foPhoqHownL0ORw2A--&gid1=21335892","BusinessUrl":"http:\/\/www.dominos.com\/","BusinessClickUrl":"http:\/\/www.dominos.com\/"},
-                    {Title:"Domino's Pizza",MyArray:["992 W El Camino Real"],"Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),736,3666],"for":"37.371434","Longitude":"-122.047559","Nested":{"Average-Rating":"4","Total Ratings":"7","TotalReviews":"3",MyArray:["1127363766"]},"Distance":"2.80","Url":"http:\/\/local.yahoo.com\/details?id=21341882&stx=pizza&csz=Sunnyvale+CA&ed=q0udl6160Sx.AqTKVZbNw3XSw.U4VT.yixioJ6k.H7cOEZSOqMOl7Kf6Mc21zYe1tziGcwBKEW9HzCfs","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21341882&stx=pizza&csz=Sunnyvale+CA&ed=q0udl6160Sx.AqTKVZbNw3XSw.U4VT.yixioJ6k.H7cOEZSOqMOl7Kf6Mc21zYe1tziGcwBKEW9HzCfs","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Domino%27s+Pizza&desc=4087363666&csz=Sunnyvale+CA&qty=9&cs=9&ed=q0udl6160Sx.AqTKVZbNw3XSw.U4VT.yixioJ6k.H7cOEZSOqMOl7Kf6Mc21zYe1tziGcwBKEW9HzCfs&gid1=21341882","BusinessUrl":"http:\/\/www.dominos.com\/","BusinessClickUrl":"http:\/\/www.dominos.com\/"},
-                    {Title:"Pizza Depot",MyArray:["919 E Duane Ave"],"Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),245,7760],"for":"37.388527","Longitude":"-122.004046","Nested":{"Average-Rating":"3.5","Total Ratings":"6","TotalReviews":"5",MyArray:["1161370760"]},"Distance":"0.93","Url":"http:\/\/local.yahoo.com\/details?id=21332021&stx=pizza&csz=Sunnyvale+CA&ed=7KK7mK160SzRB7AzH1MQcGzaJtl1F1AhRiRj3iKI5XIyMK5AKtQ2d5fqhwSD1KvtPBjDptclVg--","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21332021&stx=pizza&csz=Sunnyvale+CA&ed=7KK7mK160SzRB7AzH1MQcGzaJtl1F1AhRiRj3iKI5XIyMK5AKtQ2d5fqhwSD1KvtPBjDptclVg--","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Pizza+Depot&desc=4082457760&csz=Sunnyvale+CA&qty=9&cs=9&ed=7KK7mK160SzRB7AzH1MQcGzaJtl1F1AhRiRj3iKI5XIyMK5AKtQ2d5fqhwSD1KvtPBjDptclVg--&gid1=21332021","BusinessUrl":"http:\/\/pizza-depot.com\/","BusinessClickUrl":"http:\/\/pizza-depot.com\/"},
-                    {Title:"Round Table Pizza Sunnyvale",MyArray:["665 S Bernardo Ave"],"Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),732,6670],"for":"37.372847","Longitude":"-122.056805","Nested":{"Average-Rating":"4","Total Ratings":"2","TotalReviews":"2",MyArray:["1186612286"]},"Distance":"3.05","Url":"http:\/\/local.yahoo.com\/details?id=21328190&stx=pizza&csz=Sunnyvale+CA&ed=7UuQPq160SyTLgsCywr8RVh7QMTEamkpxTk1eEvusFf6qe0s4ZWcRmYd.2M0jmVjLcEFk_Gf1v10hg--","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21328190&stx=pizza&csz=Sunnyvale+CA&ed=7UuQPq160SyTLgsCywr8RVh7QMTEamkpxTk1eEvusFf6qe0s4ZWcRmYd.2M0jmVjLcEFk_Gf1v10hg--","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Round+Table+Pizza+Sunnyvale&desc=4087326670&csz=Sunnyvale+CA&qty=9&cs=9&ed=7UuQPq160SyTLgsCywr8RVh7QMTEamkpxTk1eEvusFf6qe0s4ZWcRmYd.2M0jmVjLcEFk_Gf1v10hg--&gid1=21328190","BusinessUrl":"http:\/\/www.roundtablepizza.com\/","BusinessClickUrl":"http:\/\/www.roundtablepizza.com\/"},
-                    {Title:"Big Bite Pizza",MyArray:["109 E Fremont Ave"],"Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),481,0666],"for":"37.352338","Longitude":"-122.031861","Nested":{"Average-Rating":"4","Total Ratings":"4","TotalReviews":"2",MyArray:["1190777914"]},"Distance":"3.42","Url":"http:\/\/local.yahoo.com\/details?id=25660586&stx=pizza&csz=Sunnyvale+CA&ed=XUNURa160SwU43kPscbu1nhShMQE1ZF7Bnnh8qSivRQ4ASxOcRXUml7KMN.4QoLsYF0xn5KhnpoW","ClickUrl":"http:\/\/local.yahoo.com\/details?id=25660586&stx=pizza&csz=Sunnyvale+CA&ed=XUNURa160SwU43kPscbu1nhShMQE1ZF7Bnnh8qSivRQ4ASxOcRXUml7KMN.4QoLsYF0xn5KhnpoW","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Big+Bite+Pizza&desc=4084810666&csz=Sunnyvale+CA&qty=9&cs=9&ed=XUNURa160SwU43kPscbu1nhShMQE1ZF7Bnnh8qSivRQ4ASxOcRXUml7KMN.4QoLsYF0xn5KhnpoW&gid1=25660586","BusinessUrl":"","BusinessClickUrl":""},
-                    {Title:"Pizza Hut",MyArray:["464 N Mathilda Ave"],"Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),735,1900],"for":"37.388298","Longitude":"-122.03056","Nested":{"Average-Rating":"2.5","Total Ratings":"8","TotalReviews":"5",MyArray:["1195096424"]},"Distance":"1.49","Url":"http:\/\/local.yahoo.com\/details?id=21340811&stx=pizza&csz=Sunnyvale+CA&ed=fg.eBq160Sw0QwGltksNXPMtnWxCI0URPWb4E5ZutY7RPm_Jjd5xK395KtaeM7l1A_hYAS0FkNn4","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21340811&stx=pizza&csz=Sunnyvale+CA&ed=fg.eBq160Sw0QwGltksNXPMtnWxCI0URPWb4E5ZutY7RPm_Jjd5xK395KtaeM7l1A_hYAS0FkNn4","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Pizza+Hut&desc=4087351900&csz=Sunnyvale+CA&qty=9&cs=9&ed=fg.eBq160Sw0QwGltksNXPMtnWxCI0URPWb4E5ZutY7RPm_Jjd5xK395KtaeM7l1A_hYAS0FkNn4&gid1=21340811","BusinessUrl":"http:\/\/www.pizzahut.com\/","BusinessClickUrl":"http:\/\/www.pizzahut.com\/"},
-                    {Title:"Round Table Pizza",MyArray:["415 N Mary Ave"],"Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),733,1365],"for":"37.390247","Longitude":"-122.041498","Nested":{"Average-Rating":"2.5","Total Ratings":"5","TotalReviews":"2",MyArray:["1155195814"]},"Distance":"1.86","Url":"http:\/\/local.yahoo.com\/details?id=21329046&stx=pizza&csz=Sunnyvale+CA&ed=uyby8a160Sy9qe0i.PcxDTgLyA.E934puXrbc.yiwzLvQHghOQRbey19BpfYd2SdELp9wnqw","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21329046&stx=pizza&csz=Sunnyvale+CA&ed=uyby8a160Sy9qe0i.PcxDTgLyA.E934puXrbc.yiwzLvQHghOQRbey19BpfYd2SdELp9wnqw","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Round+Table+Pizza&desc=4087331365&csz=Sunnyvale+CA&qty=9&cs=9&ed=uyby8a160Sy9qe0i.PcxDTgLyA.E934puXrbc.yiwzLvQHghOQRbey19BpfYd2SdELp9wnqw&gid1=21329046","BusinessUrl":"http:\/\/www.roundtablepizza.com\/","BusinessClickUrl":"http:\/\/www.roundtablepizza.com\/"}
-                ]
-            }},
+                    {Title:"Giovannis Pizzeria",MyArray:["1127 N Lawrence Expy"],"Hy-phenated":"Sunnyvale","Hy-phenated2":"Mountain View","State":"CA","Array Index":[408,734,4221],"for":"37.397058","Longitude":"-121.996017","Nested":{"Average-Rating":"4","Total Ratings":"54","TotalReviews":"36",MyArray:["1201994139"]},"Distance":"0.62","Url":"http:\/\/local.yahoo.com\/details?id=21341983"},
+                    {Title:"Gumbas Cafe Italian Restaurant & Pizzeria",MyArray:["176 S Murphy Ave"],"Hy-phenated":"Sunnyvale","Hy-phenated2":"Mountain View","State":"CA","Array Index":[408,737,8384],"for":"37.376442","Longitude":"-122.030102","Nested":{"Average-Rating":"4","Total Ratings":"38","TotalReviews":"26",MyArray:["1199489524"]},"Distance":"2.05","Url":"http:\/\/local.yahoo.com\/details?id=21337886"}
+                ]}};
+        var ds = new DS(data);
+        ds.responseSchema = {
+            resultsList: "ResultSet.Result",
+            fields: ["Title","MyArray[0]","Hy-phenated",'["Hy-phenated2"]',"Array Index","for"]
+        };
+        var oCallback = {
+            success:function(oRequest, oResponse, oPayload) {
+                Assert.areSame(data.ResultSet.Result[1]["Title"], oResponse.results[1]["Title"], "Incorrect parsing of String");
+                Assert.areSame(data.ResultSet.Result[1]["MyArray"][0], oResponse.results[1]["MyArray[0]"], "Incorrect parsing of Array index");
+                Assert.areSame(data.ResultSet.Result[1]["Hy-phenated2"], oResponse.results[1]['["Hy-phenated2"]'], "Incorrect parsing of valid hyphenated identifier");
+                Assert.areSame(data.ResultSet.Result[1]["for"], oResponse.results[1]["for"], "Incorrect parsing of reserved word");
+
+                // Verify invalids didn't parse
+                Assert.isUndefined(oResponse.results[1]["Hy-phenated"], "Incorrect parsing of invalid dot syntax key with dash");
+                Assert.isUndefined(oResponse.results[1]["Array Index"], "Incorrect parsing of invalid dot syntax key with empty space");
+            },
+            scope:this
+        };
+        ds.sendRequest(null,oCallback);
+
+
+        // Nested schema
+        ds.responseSchema.fields = ["Nested.TotalReviews","Nested.Average-Rating","Nested.Total Ratings","Nested.MyArray[0]"];
+        var oCallback = {
+            success:function(oRequest, oResponse, oPayload) {
+                Assert.areSame(data.ResultSet.Result[1]["Nested"]["TotalReviews"], oResponse.results[1]["Nested.TotalReviews"], "Incorrect parsing of nested String");
+                ArrayAssert.itemsAreSame(data.ResultSet.Result[1]["Nested"]["MyArray"][0], oResponse.results[1]["Nested.MyArray[0]"], "Incorrect parsing of nested Array index");
+
+                // Verify invalids didn't parse
+                Assert.isUndefined(oResponse.results[1]["Nested.Average-Rating"], "Incorrect parsing of invalid nested key containing hyphen");
+                Assert.isUndefined(oResponse.results[1]["Nested.Total Ratings"], "Incorrect parsing of invalid dot syntax key containing empty space");
+            },
+            scope:this
+        };
+        ds.sendRequest(null,oCallback);
         
-        testSchemaSyntaxes: function() {
-            var ds = this.createInstance();
-            ds.responseType = YAHOO.util.DataSource.TYPE_JSON;
-            
-            // Simple shema
-            ds.responseSchema = {
-                resultsList: "ResultSet.Result",
-                fields: ["Title","MyArray[0]","Hy-phenated","Array Index","for"]
-            };
-            var oCallback = {
-                success:function(oRequest, oResponse, oPayload) {
-                    Assert.areSame(this.data.ResultSet.Result[9]["Title"], oResponse.results[9]["Title"], "Incorrect parsing of String");
-                    Assert.areSame(this.data.ResultSet.Result[9]["MyArray"][0], oResponse.results[9]["MyArray[0]"], "Incorrect parsing of Array index");
-                    Assert.areSame(this.data.ResultSet.Result[9]["for"], oResponse.results[9]["for"], "Incorrect parsing of reserved word");
+        delete data;
+        delete ds;
+    }
+});
 
-                    // Verify invalids didn't parse
-                    Assert.isUndefined(oResponse.results[9]["Hy-phenated"], "Incorrect parsing of invalid dot syntax key with dash");
-                    Assert.isUndefined(oResponse.results[9]["Array Index"], "Incorrect parsing of invalid dot syntax key with empty space");
-                },
-                scope:this
-            };
-            ds.sendRequest(null,oCallback);
+ /**
+ *
+ *
+ * Number Tests
+ *
+ *
+ */
+ var dsNumberTestCase = new TestCase({
+    name: "Number Test Case",
+    
+    testParse: function() {
+        var myNumber = 1;
+        var number = DS.parseNumber("1");
+        Assert.areSame(number, myNumber, "Incorrect number from String.");
 
-            // Nested schema
-            ds.responseSchema.fields = ["Nested.TotalReviews","Nested.Average-Rating","Nested.Total Ratings","Nested.MyArray[0]"];
-            var oCallback = {
-                success:function(oRequest, oResponse, oPayload) {
-                    Assert.areSame(this.data.ResultSet.Result[9]["Nested"]["TotalReviews"], oResponse.results[9]["Nested.TotalReviews"], "Incorrect parsing of nested String");
-                    ArrayAssert.itemsAreSame(this.data.ResultSet.Result[9]["Nested"]["MyArray"][0], oResponse.results[9]["Nested.MyArray[0]"], "Incorrect parsing of nested Array index");
+        number = DataSource.parseNumber(1);
+        Assert.areSame(number, myNumber, "Incorrect number from Number.");
+    },
 
-                    // Verify invalids didn't parse
-                    Assert.isUndefined(oResponse.results[9]["Nested.Average-Rating"], "Incorrect parsing of invalid nested key containing hyphen");
-                    Assert.isUndefined(oResponse.results[9]["Nested.Total Ratings"], "Incorrect parsing of invalid dot syntax key containing empty space");
-                },
-                scope:this
-            };
-            ds.sendRequest(null,oCallback);
 
-        }
+    testFormat: function() {
+        output = YAHOO.util.Number.format("1");
+        Assert.areSame("1", output, "Incorrect output from String.");
+
+        output = YAHOO.util.Number.format(1);
+        Assert.areSame("1", output, "Incorrect output from Number.");
         
-    });
-    var dsParseJSONTest = new DataSourceTestCase(dsParseJSONTemplate);*/
+        output = YAHOO.util.Number.format(0);
+        Assert.areSame("0", output, "Incorrect output from zero.");
 
-    /**
-     *
-     *
-     * Tests static methods.
-     *
-     *
-     */
-    /*var dsStaticMethodsTemplate = {
-        name:"Static Methods Test",
-        data:["a","b","c"],
+        output = YAHOO.util.Number.format(-1);
+        Assert.areSame("-1", output, "Incorrect output from negative Number.");
+
+        output = YAHOO.util.Number.format(123, {prefix:"$"});
+        Assert.areSame("$123", output, "Incorrect prefix");
+
+        output = YAHOO.util.Number.format(123, {suffix:" items"});
+        Assert.areSame("123 items", output, "Incorrect suffix");
+
+        output = YAHOO.util.Number.format(123.123, {decimalPlaces:5});
+        Assert.areSame("123.12300", output, "Incorrect decimal rounding: expected 5 places");
+
+        output = YAHOO.util.Number.format(123, {decimalPlaces:5});
+        Assert.areSame("123.00000", output, "Incorrect decimal padding: expected 5 places");
+
+        output = YAHOO.util.Number.format(123.123, {decimalPlaces:4});
+        Assert.areSame("123.1230", output, "Incorrect decimal rounding: expected 4 places");
+
+        output = YAHOO.util.Number.format(123.123, {decimalPlaces:3});
+        Assert.areSame("123.123", output, "Incorrect decimal rounding: expected 3 places");
+
+        output = YAHOO.util.Number.format(123.127, {decimalPlaces:2});
+        Assert.areSame("123.13", output, "Incorrect decimal rounding: expected rounded to 2 places");
+
+        output = YAHOO.util.Number.format(123.123, {decimalPlaces:2});
+        Assert.areSame("123.12", output, "Incorrect decimal rounding: expected 2 places");
+
+        output = YAHOO.util.Number.format(123.123, {decimalPlaces:1});
+        Assert.areSame("123.1", output, "Incorrect decimal rounding: expected 1 place");
+
+        output = YAHOO.util.Number.format(123.123, {decimalPlaces:0});
+        Assert.areSame("123", output, "Incorrect decimal rounding: expected 0 places");
+
+        output = YAHOO.util.Number.format(123.123, {decimalPlaces:-1});
+        Assert.areSame("120", output, "Incorrect decimal rounding: expected -1 places");
+
+        output = YAHOO.util.Number.format("123123123", {thousandsSeparator:","});
+        Assert.areSame("123,123,123", output, "Incorrect thousands separation");
+
+        output = YAHOO.util.Number.format("123123123.176",{
+                prefix: "&#165;",
+                decimalPlaces:2,
+                thousandsSeparator:".",
+                decimalSeparator:","
+            });
+        Assert.areSame("&#165;123.123.123,18", output, "Incorrect Yen formatting");
+    }
+});
+
+ /**
+ *
+ *
+ * Date Tests
+ *
+ *
+ */
+ var dsDateTestCase = new TestCase({
+    name: "Date Test Case",
+    
+    testParse: function() {
+        var myDate = new Date(2001,0,14); // January 14, 2001
+        var date = DataSource.parseDate("1/14/2001");
+        DateAssert.datesAreEqual(date, myDate, "Incorrect date from String.");
+
+        date = DataSource.parseDate(myDate);
+        DateAssert.datesAreEqual(date, myDate, "Incorrect date from Date");
         
-        testParseNumbers: function() {
-            var number;
-            var ds = this.createInstance();
-            var myNumber = 1;
+        date = DataSource.parseDate(979459200000);
+        DateAssert.datesAreEqual(date, myDate, "Incorrect date from Number.");
+    },
 
-            number = DataSource.parseNumber("1");
-            Assert.areSame(number, myNumber, "Incorrect number from String.");
+    testFormat: function() {
+        var myDate = new Date(2001,0,14); // January 14, 2001
+        var date = YAHOO.util.Date.format(myDate);
+        Assert.areSame("01/14/2001", date, "Incorrect default format.");
 
-            number = DataSource.parseNumber(1);
-            Assert.areSame(number, myNumber, "Incorrect number from Number.");
+        date = YAHOO.util.Date.format(myDate, {format:"%m/%d/%Y"});
+        Assert.areSame("01/14/2001", date, "Incorrect %m/%d/%Y");
+    },
+});
 
-            ds = null;
-        },
-        
-        testParseDates: function() {
-            var date;
-            var ds = this.createInstance();
-            var myDate = new Date(2001,0,14); // January 14, 2001
+/**
+ *
+ *
+ * Runs tests.
+ *
+ *
+ */
+YAHOO.util.Event.addListener(window, "load", function() {
+    var logger = new TestLogger();
+    logger.hideCategory('info');
 
-            date = DataSource.parseDate("1/14/2001");
-            DateAssert.datesAreEqual(date, myDate, "Incorrect date from String.");
+    var dsTestSuite = new TestSuite("DataSource Test Suite");
+    dsTestSuite.add(dsLocalTestCase);
+    dsTestSuite.add(dsFunctionTestCase);
+    dsTestSuite.add(dsXHRTestCase);
+    dsTestSuite.add(dsScriptNodeTestCase);
+    dsTestSuite.add(dsTestCase);
+    dsTestSuite.add(dsBaseTestCase);
+    dsTestSuite.add(dsJSONTestCase);
+    dsTestSuite.add(dsNumberTestCase);
+    dsTestSuite.add(dsDateTestCase);
 
-            date = DataSource.parseDate(myDate);
-            DateAssert.datesAreEqual(date, myDate, "Incorrect date from Date");
-            
-            date = DataSource.parseDate(979459200000);
-            DateAssert.datesAreEqual(date, myDate, "Incorrect date from Number.");
-            
-            ds = null;
-        }
-    };
-    var dsStaticMethodsTest = new DataSourceTestCase(dsStaticMethodsTemplate);*/
+    TestRunner.add(dsTestSuite);
 
-    /**
-     *
-     *
-     * Base test case for YAHOO.util.DataType APIs.
-     *
-     *
-     */
-    /*function DataUtilTestCase(template) {
-        DataUtilTestCase.superclass.constructor.call(this, template);
-    };
-    YAHOO.lang.extend(DataUtilTestCase, TestCase);
+    YAHOO.util.Event.addListener("btnRun", "click", function(){TestRunner.run();});
+    YAHOO.util.Dom.get("btnRun").disabled = false;
 
-    DataUtilTestCase.prototype.setUp = function() {
-    };
-
-    DataUtilTestCase.prototype.tearDown = function() {
-    };*/
-
-    /**
-     *
-     *
-     * Tests YAHOO.util.Number APIs.
-     *
-     *
-     */
-   /*var dataNumberTemplate = {
-        name:"Util Number Test",
-
-        testFormat: function() {
-            output = YAHOO.util.Number.format("1");
-            Assert.areSame("1", output, "Incorrect output from String.");
-
-            output = YAHOO.util.Number.format(1);
-            Assert.areSame("1", output, "Incorrect output from Number.");
-            
-            output = YAHOO.util.Number.format(0);
-            Assert.areSame("0", output, "Incorrect output from zero.");
-
-            output = YAHOO.util.Number.format(-1);
-            Assert.areSame("-1", output, "Incorrect output from negative Number.");
-
-            output = YAHOO.util.Number.format(123, {prefix:"$"});
-            Assert.areSame("$123", output, "Incorrect prefix");
-
-            output = YAHOO.util.Number.format(123, {suffix:" items"});
-            Assert.areSame("123 items", output, "Incorrect suffix");
-
-            output = YAHOO.util.Number.format(123.123, {decimalPlaces:5});
-            Assert.areSame("123.12300", output, "Incorrect decimal rounding: expected 5 places");
-
-            output = YAHOO.util.Number.format(123, {decimalPlaces:5});
-            Assert.areSame("123.00000", output, "Incorrect decimal padding: expected 5 places");
-
-            output = YAHOO.util.Number.format(123.123, {decimalPlaces:4});
-            Assert.areSame("123.1230", output, "Incorrect decimal rounding: expected 4 places");
-
-            output = YAHOO.util.Number.format(123.123, {decimalPlaces:3});
-            Assert.areSame("123.123", output, "Incorrect decimal rounding: expected 3 places");
-
-            output = YAHOO.util.Number.format(123.127, {decimalPlaces:2});
-            Assert.areSame("123.13", output, "Incorrect decimal rounding: expected rounded to 2 places");
-
-            output = YAHOO.util.Number.format(123.123, {decimalPlaces:2});
-            Assert.areSame("123.12", output, "Incorrect decimal rounding: expected 2 places");
-
-            output = YAHOO.util.Number.format(123.123, {decimalPlaces:1});
-            Assert.areSame("123.1", output, "Incorrect decimal rounding: expected 1 place");
-
-            output = YAHOO.util.Number.format(123.123, {decimalPlaces:0});
-            Assert.areSame("123", output, "Incorrect decimal rounding: expected 0 places");
-
-            output = YAHOO.util.Number.format(123.123, {decimalPlaces:-1});
-            Assert.areSame("120", output, "Incorrect decimal rounding: expected -1 places");
-
-            output = YAHOO.util.Number.format("123123123", {thousandsSeparator:","});
-            Assert.areSame("123,123,123", output, "Incorrect thousands separation");
-
-            output = YAHOO.util.Number.format("123123123.176",{
-                    prefix: "&#165;",
-                    decimalPlaces:2,
-                    thousandsSeparator:".",
-                    decimalSeparator:","
-                });
-            Assert.areSame("&#165;123.123.123,18", output, "Incorrect Yen formatting");
+    if (parent && parent != window) {
+        YAHOO.tool.TestManager.load();
+    }
+});
 
 
-        }
-    };
-    var dataNumberTest = new DataUtilTestCase(dataNumberTemplate);*/
-
-    /**
-     *
-     *
-     * Runs tests.
-     *
-     *
-     */
-    YAHOO.util.Event.addListener(window, "load", function() {
-        var logger = new TestLogger();
-        logger.hideCategory('info');
-
-        var datasourcesuite = new TestSuite("DataSource Test Suite");
-        datasourcesuite.add(SimpleArrayTestCase);
-        datasourcesuite.add(CacheTestCase);
-
-        TestRunner.add(datasourcesuite);
-
-        YAHOO.util.Event.addListener("btnRun", "click", function(){TestRunner.run();});
-        YAHOO.util.Dom.get("btnRun").disabled = false;
-
-        if (parent && parent != window) {
-            YAHOO.tool.TestManager.load();
-        }
-    });
 })();
 </script>
 </body>
