@@ -538,15 +538,16 @@
      *
      * @method setItemSelection
      * @param {Number} newposition The index of the new position
+     * @param {Number} oldposition The index of the previous position
      * @private
      */
-    function setItemSelection(newposition) {
+     function setItemSelection(newposition, oldposition) {
         var cssClass      = this.CLASSES,
             el,
             firstItem     = this._firstItem,
             numItems      = this.get("numItems"),
             numVisible    = this.get("numVisible"),
-            position      = this.get("selectedItem"),
+            position      = oldposition,
             sentinel      = firstItem + numVisible - 1;
 
         if (position >= 0 && position < numItems) {
@@ -738,7 +739,6 @@
                 if (this.get("selectedItem") == pos) {
                     pos = pos >= num ? num - 1 : pos;
                     this.set("selectedItem", pos);
-                    this.refresh("selectedItem", true);
                 }
             } else {
                 YAHOO.log("Unable to find item", "warn", WidgetName);
@@ -1575,7 +1575,6 @@
             this.subscribe(itemRemovedEvent, syncUI);
             this.subscribe(itemRemovedEvent, syncNavigation);
 
-            this.subscribe(itemSelectedEvent, setItemSelection);
             this.on(itemSelectedEvent, this.focus);
 
             this.subscribe(loadItemsEvent, syncUI);
@@ -1586,7 +1585,9 @@
             this.subscribe(renderEvent, this._syncPagerUI);
 
             this.on("selectedItemChange", function (ev) {
+                setItemSelection.call(this, ev.newValue, ev.prevValue);
                 this._updateTabIndex(this.getElementForItem(ev.newValue));
+                this.fireEvent(itemSelectedEvent, ev.newValue);
             });
 
             this.on("firstVisibleChange", function (ev) {
@@ -1799,7 +1800,6 @@
 
             // Make sure at least one item is selected
             this.set("selectedItem", this.get("firstVisible"));
-            this.refresh("selectedItem", true);
 
             // By now, the navigation would have been rendered, so calculate
             // the container height now.
@@ -2133,8 +2133,6 @@
 
             if ((item = this.getItemPositionById(target.id)) >= 0) {
                 this.set("selectedItem", this._getSelectedItem(item));
-                // XXX: strangely the value didn't propagate through
-                this.refresh("selectedItem", true);
             }
         },
 
@@ -2178,7 +2176,6 @@
             }
 
             if (prevent) {
-                this.refresh("selectedItem", true);
                 Event.preventDefault(ev);
             }
         },
@@ -2650,7 +2647,6 @@
          */
         _setSelectedItem: function (val) {
             this._selectedItem = val;
-            this.fireEvent(itemSelectedEvent, val);
         },
 
         /**
@@ -2741,7 +2737,7 @@
                 }
                 if (cfg.effect) {
                     rv = rv && JS.isFunction(cfg.effect);
-                } else {
+                } else if (!JS.isUndefined(YAHOO.util.Easing)) {
                     cfg.effect = YAHOO.util.Easing.easeOut;
                 }
             } else {
