@@ -129,8 +129,8 @@ YAHOO.util.Element.prototype = {
         scope = scope || this;
         
         var self = this; 
-        if (el && !this._events[type]) { // create on the fly
-            if ( this.DOM_EVENTS[type] ) {
+        if (!this._events[type]) { // create on the fly
+            if (el && this.DOM_EVENTS[type]) {
                 YAHOO.util.Event.addListener(el, type, function(e) {
                     if (e.srcElement && !e.target) { // supplement IE with target
                         e.target = e.srcElement;
@@ -138,10 +138,7 @@ YAHOO.util.Element.prototype = {
                     self.fireEvent(type, e);
                 }, obj, scope);
             }
-            
             this.createEvent(type, this);
-        } else if (!el) {
-            YAHOO.log('addListener failed; el ' + el + ' is not a valid element', 'error', 'Element');
         }
         
         return YAHOO.util.EventProvider.prototype.subscribe.apply(this, arguments); // notify via customEvent
@@ -427,25 +424,29 @@ var _initElement = function(el, attr) {
 
     var isReady = false;  // to determine when to init HTMLElement and content
 
-    if (Dom.get(el)) {
+    if (typeof attr.element === 'string') { // register ID for get() access
+        _registerHTMLAttr.call(this, 'id', { value: attr.element });
+    }
+
+    if (Dom.get(attr.element)) {
         isReady = true;
         _initHTMLElement.call(this, attr);
         _initContent.call(this, attr);
-    } 
+    }
 
     YAHOO.util.Event.onAvailable(attr.element, function() {
         if (!isReady) { // otherwise already done
             _initHTMLElement.call(this, attr);
         }
 
-        this.fireEvent('available', { type: 'available', target: attr.element });  
+        this.fireEvent('available', { type: 'available', target: Dom.get(attr.element) });  
     }, this, true);
     
     YAHOO.util.Event.onContentReady(attr.element, function() {
         if (!isReady) { // otherwise already done
             _initContent.call(this, attr);
         }
-        this.fireEvent('contentReady', { type: 'contentReady', target: attr.element });  
+        this.fireEvent('contentReady', { type: 'contentReady', target: Dom.get(attr.element) });  
     }, this, true);
 };
 
@@ -482,7 +483,9 @@ var _registerHTMLAttr = function(key, map) {
     map = map || {};
     map.name = key;
     map.method = map.method || function(value) {
-        el[key] = value;
+        if (el) {
+            el[key] = value;
+        }
     };
     map.value = map.value || el[key];
     this._configs[key] = new YAHOO.util.Attribute(map, this);
