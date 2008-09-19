@@ -8,8 +8,6 @@ Fixed the following bugs:
 
 + Submenus are no longer re-shown when the mouse moves from a submenu back to its parent MenuItem.
 
-+ Focused Menus no longer lose focus when submenus are hidden and displayed.
-
 + A Menu's shadow is now rendered at the correct dimensions consistently in Internet Explorer.
 
 + Menus no longer trigger a JavaScript error if the "constraintoviewport" configuration property 
@@ -84,7 +82,8 @@ Changes:
 + The "url" configuration property for MenuItem instances with a submenu will now be set to 
   "#[submenu_id]" if the "url" property is not otherwise specified by the user. 
 
-+ Dynamically positioned submenus now have a default z-index of 1.
++ Dynamically positioned submenus now have a default z-index of 1, rather than one greater than 
+  the z-index of their parent Menu.
 
 
 *** version 2.5.2 ***
