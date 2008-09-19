@@ -510,29 +510,6 @@
     }
 
     /**
-     * The "click" handler for the Carousel container.  This function sets
-     * the focus on the Carousel.
-     *
-     * @method setFocusHandler
-     * @param {Event} ev The event object
-     * @param {Object} obj The context object
-     * @private
-     */
-
-    // @REVIEW - Remove
-    /*
-    function setFocusHandler(ev, obj) {
-        var target = Event.getTarget(ev);
-
-        if (target.nodeName != "SELECT") { // this has a different handler
-            if (obj && obj.focus) {
-                obj.focus();
-            }
-        }
-    }
-    */
-
-    /**
      * Set the selected item.
      *
      * @method setItemSelection
