@@ -77,14 +77,28 @@ package
 				//check that page url is the same as the swf's url
 				
 				var currentURL:String = ExternalInterface.call("function(){return window.location.href;}");
-			    currentURL = currentURL.slice(0,currentURL.lastIndexOf("/"));
-			   	
-				var loadedURL:String = loaderInfo.loaderURL;
-				loadedURL = loadedURL.slice(0,loadedURL.lastIndexOf("/"));
-				currentURL = unescape(currentURL) ;
-				loadedURL = unescape(loadedURL) 
+				if(currentURL.indexOf("?") > -1)
+				{
+					currentURL = currentURL.slice(0,currentURL.indexOf("?"));
 				
-				if(currentURL == loadedURL )
+
+				}
+			    
+			    currentURL = currentURL.slice(0,currentURL.lastIndexOf("/"));
+			    					
+				var loadedURL:String = loaderInfo.loaderURL;
+				if(loadedURL.indexOf("?") > -1)
+				{
+					loadedURL = loadedURL.slice(0,loadedURL.indexOf("?"));
+				
+					
+				}
+				loadedURL = loadedURL.slice(0,loadedURL.lastIndexOf("/"));
+				
+				var currentURL_ESC:String = unescape(currentURL) ;
+				var loadedURL_ESC:String = unescape(loadedURL) 
+				
+				if(currentURL_ESC == loadedURL_ESC )
 				{
 					//valid
 					//later on we may add the ability to set the localPath, but for now we're
@@ -94,7 +108,9 @@ package
 				}
 				else 
 				{	
-					var evt:Object = {type: "error", message: "The domain of the page must match the SWF's domain."};
+					var evt:Object = {type: "error", message: "The domain of the page must match the SWF's domain.\nPage's URL: " +
+						currentURL + "\n" + "SWF's URL: " + loadedURL};
+						
 					dispatchEventToJavaScript(evt);
 				}
 			}
