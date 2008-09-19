@@ -6,8 +6,8 @@ Fixed the following bugs:
 + The "getMenu" method no longer returns null when the "menu" attribute is set to an array of 
   YAHOO.widget.MenuItem configuration properties.
 
-+ Buttons of type "menu" and "split" will automatically reposition their menu if it is an 
-  instance of YAHOO.widget.Overlay.
++ Buttons of type "menu" and "split" will automatically constrain the position of their menu to 
+  be inside the viewport boundaries if it is an instance of YAHOO.widget.Overlay.
 
 + Clicking on the option region of a Button of "type" split will fire the "option" event, but not
   "mousedown," "mouseup," "click," or "dblclick".
@@ -65,8 +65,8 @@ Added the following features:
 + Added a "menualignment" attribute attribute used to control how a Menu is aligned to its 
   corresponding Button.
 
-+ Added a "hoveroption" CSS class that is applied when the user hovers the mouse over the "option" 
-  section of a split button.
++ Added a "yui-split-button-hoveroption" CSS class that is applied when the user hovers the mouse 
+  over the "option" section of a split button.
 
 
 Changes:
