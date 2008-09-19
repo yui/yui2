@@ -1,7 +1,7 @@
 (function () {
-	var Dom = YAHOO.util.Dom,
-		Lang = YAHOO.lang,
-		Event = YAHOO.util.Event;
+    var Dom = YAHOO.util.Dom,
+        Lang = YAHOO.lang,
+        Event = YAHOO.util.Event;
 /**
  * The base class for all tree nodes.  The node's presentation and behavior in
  * response to mouse events is handled in Node subclasses.
@@ -72,7 +72,7 @@ YAHOO.widget.Node.prototype = {
      * @property href
      * @type string
      */
-    href: null,
+    href: YAHOO.widget.TreeView.DEFAULT_HREF,
 
     /**
      * The label href target, defaults to current window
@@ -241,17 +241,17 @@ YAHOO.widget.Node.prototype = {
         this.children   = [];
         this.index      = YAHOO.widget.TreeView.nodeCount;
         ++YAHOO.widget.TreeView.nodeCount;
-		this.contentElId = "ygtvcontentel" + this.index;
-		
-		if (Lang.isObject(oData)) {
-			for (var property in oData) {
-				if (property.charAt(0) != '_'  && oData.hasOwnProperty(property) && !Lang.isUndefined(this[property]) && !Lang.isFunction(this[property]) ) {
-					this[property] = oData[property];
-				}
-			}
-		}
-		if (!Lang.isUndefined(expanded) ) {	this.expanded  = expanded;	}
-		
+        this.contentElId = "ygtvcontentel" + this.index;
+        
+        if (Lang.isObject(oData)) {
+            for (var property in oData) {
+                if (property.charAt(0) != '_'  && oData.hasOwnProperty(property) && !Lang.isUndefined(this[property]) && !Lang.isFunction(this[property]) ) {
+                    this[property] = oData[property];
+                }
+            }
+        }
+        if (!Lang.isUndefined(expanded) ) { this.expanded  = expanded;  }
+        
         this.logger     = new YAHOO.widget.LogWriter(this.toString());
 
         /**
@@ -438,11 +438,11 @@ YAHOO.widget.Node.prototype = {
      * @return Node[]
      */
     getSiblings: function() {
-		var sib =  this.parent.children.slice(0);
-		for (var i=0;i < sib.length && sib[i] != this;i++) {}
-		sib.splice(i,1);
-		if (sib.length) { return sib; }
-		return null;
+        var sib =  this.parent.children.slice(0);
+        for (var i=0;i < sib.length && sib[i] != this;i++) {}
+        sib.splice(i,1);
+        if (sib.length) { return sib; }
+        return null;
     },
 
     /**
@@ -536,10 +536,10 @@ YAHOO.widget.Node.prototype = {
         return Dom.get(this.getToggleElId());
     },
     /**
-	* Returns the outer html element for this node's content
-	* @method getContentEl
-	* @return {HTMLElement} the element
-	*/
+    * Returns the outer html element for this node's content
+    * @method getContentEl
+    * @return {HTMLElement} the element
+    */
     getContentEl: function() { 
         return Dom.get(this.contentElId);
     },
@@ -727,11 +727,17 @@ YAHOO.widget.Node.prototype = {
      * @method getHoverStyle
      */
     getHoverStyle: function() { 
-        var s = this.getStyle();
-        if (this.hasChildren(true) && !this.isLoading) { 
-            s += "h"; 
-        }
-        return s;
+
+        
+        // handled by delegated listener
+        // var s = this.getStyle();
+        // if (this.hasChildren(true) && !this.isLoading) { 
+        //     s += "h"; 
+        // }
+        //this.getStyle();
+        // return s;
+
+        return this.getStyle();
     },
 
     /**
@@ -1064,7 +1070,7 @@ YAHOO.widget.Node.prototype = {
         sb[sb.length] = ' class="' + this.contentStyle  + ' ygtvcontent" ';
         sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
         sb[sb.length] = ' >';
-		sb[sb.length] = this.getContentHtml();
+        sb[sb.length] = this.getContentHtml();
         sb[sb.length] = '</td>';
         sb[sb.length] = '</tr>';
         sb[sb.length] = '</table>';
@@ -1072,15 +1078,15 @@ YAHOO.widget.Node.prototype = {
         return sb.join("");
 
     },
-	/**
+    /**
      * Get the markup for the contents of the node.  This is designed to be overrided so that we can
      * support different types of nodes.
      * @method getContentHtml
      * @return {string} The HTML that will render the content of this node.
      */
-	getContentHtml: function () {
-		return "";
-	},
+    getContentHtml: function () {
+        return "";
+    },
 
     /**
      * Regenerates the html for this node and its children.  To be used when the
@@ -1107,63 +1113,63 @@ YAHOO.widget.Node.prototype = {
     toString: function() {
         return this._type + " (" + this.index + ")";
     },
-	/**
-	* array of items that had the focus set on them
-	* so that they can be cleaned when focus is lost
-	* @property _focusHighlightedItems
-	* @type Array of DOM elements
-	* @private
-	*/
-	_focusHighlightedItems: [],
-	_focusedItem: null,
-	/**
-	* Sets the focus on the node element.
-	* It will only be able to set the focus on nodes that have anchor elements in it.  
-	* Toggle or branch icons have anchors and can be focused on.  
-	* If will fail in nodes that have no anchor
-	* @method focus
-	* @return {boolean} success
-	*/
-	focus: function () {
-		var focused = false, self = this;
+    /**
+    * array of items that had the focus set on them
+    * so that they can be cleaned when focus is lost
+    * @property _focusHighlightedItems
+    * @type Array of DOM elements
+    * @private
+    */
+    _focusHighlightedItems: [],
+    _focusedItem: null,
+    /**
+    * Sets the focus on the node element.
+    * It will only be able to set the focus on nodes that have anchor elements in it.  
+    * Toggle or branch icons have anchors and can be focused on.  
+    * If will fail in nodes that have no anchor
+    * @method focus
+    * @return {boolean} success
+    */
+    focus: function () {
+        var focused = false, self = this;
 
-		var removeListeners = function () {
-			var el;
-			if (self._focusedItem) {
-				Event.removeListener(self._focusedItem,'blur');
-				self._focusedItem = null;
-			}
-			
-			while ((el = self._focusHighlightedItems.shift())) {  // yes, it is meant as an assignment, really
-				Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
-			}
-		};
-		removeListeners();
+        var removeListeners = function () {
+            var el;
+            if (self._focusedItem) {
+                Event.removeListener(self._focusedItem,'blur');
+                self._focusedItem = null;
+            }
+            
+            while ((el = self._focusHighlightedItems.shift())) {  // yes, it is meant as an assignment, really
+                Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
+            }
+        };
+        removeListeners();
 
-		Dom.getElementsBy  ( 
-			function (el) {
-				return /ygtv(([tl][pmn]h?)|(content))/.test(el.className);
-			} ,
-			'td' , 
-			this.getEl().firstChild , 
-			function (el) {
-				Dom.addClass(el, YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
-				if (!focused) { 
-					var aEl = el.getElementsByTagName('a');
-					if (aEl.length) {
-						aEl = aEl[0];
-						aEl.focus();
-						self._focusedItem = aEl;
-						Event.on(aEl,'blur',removeListeners);
-						focused = true;
-					}
-				}
-				self._focusHighlightedItems.push(el);
-			}
-		);
-		if (!focused) { removeListeners(); }
-		return focused;
-	},
+        Dom.getElementsBy  ( 
+            function (el) {
+                return /ygtv(([tl][pmn]h?)|(content))/.test(el.className);
+            } ,
+            'td' , 
+            this.getEl().firstChild , 
+            function (el) {
+                Dom.addClass(el, YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
+                if (!focused) { 
+                    var aEl = el.getElementsByTagName('a');
+                    if (aEl.length) {
+                        aEl = aEl[0];
+                        aEl.focus();
+                        self._focusedItem = aEl;
+                        Event.on(aEl,'blur',removeListeners);
+                        focused = true;
+                    }
+                }
+                self._focusHighlightedItems.push(el);
+            }
+        );
+        if (!focused) { removeListeners(); }
+        return focused;
+    },
 
   /**
      * Count of nodes in tree
@@ -1171,13 +1177,13 @@ YAHOO.widget.Node.prototype = {
      * @return {int} number of nodes in the tree
      */
     getNodeCount: function() {
-		for (var i = 0, count = 0;i< this.children.length;i++) {
-			count += this.children[i].getNodeCount();
-		}
+        for (var i = 0, count = 0;i< this.children.length;i++) {
+            count += this.children[i].getNodeCount();
+        }
         return count + 1;
     },
-	
-	  /**
+    
+      /**
      * Returns an object which could be used to build a tree out of this node and its children.
      * It can be passed to the tree constructor to reproduce this node as a tree.
      * It will return false if the node or any children loads dynamically, regardless of whether it is loaded or not.
@@ -1185,29 +1191,58 @@ YAHOO.widget.Node.prototype = {
      * @return {Object | false}  definition of the tree or false if the node or any children is defined as dynamic
      */
     getNodeDefinition: function() {
-	
-		if (this.isDynamic()) { return false; }
-		
-		var def, defs = this.data, children = []; 
-		
-		
-		if (this.href) { defs.href = this.href; }
-		if (this.target != '_self') { defs.target = this.target; }
-		if (this.expanded) {defs.expanded = this.expanded; }
-		if (!this.multiExpand) { defs.multiExpand = this.multiExpand; }
-		if (!this.hasIcon) { defs.hasIcon = this.hasIcon; }
-		if (this.nowrap) { defs.nowrap = this.nowrap; }
-		defs.type = this._type;
-		
-		
-		
-		for (var i = 0; i < this.children.length;i++) {
-			def = this.children[i].getNodeDefinition();
-			if (def === false) { return false;}
-			children.push(def);
-		}
-		if (children.length) { defs.children = children; }
-		return defs;
+    
+        if (this.isDynamic()) { return false; }
+        
+        var def, defs = this.data, children = []; 
+        
+        
+        if (this.href) { defs.href = this.href; }
+        if (this.target != '_self') { defs.target = this.target; }
+        if (this.expanded) {defs.expanded = this.expanded; }
+        if (!this.multiExpand) { defs.multiExpand = this.multiExpand; }
+        if (!this.hasIcon) { defs.hasIcon = this.hasIcon; }
+        if (this.nowrap) { defs.nowrap = this.nowrap; }
+        defs.type = this._type;
+        
+        
+        
+        for (var i = 0; i < this.children.length;i++) {
+            def = this.children[i].getNodeDefinition();
+            if (def === false) { return false;}
+            children.push(def);
+        }
+        if (children.length) { defs.children = children; }
+        return defs;
+    },
+
+
+    /**
+     * Returns the id for this node's toggle element
+     * @method getToggleElId
+     * @return {string} the toggel element id
+     */
+    getToggleElId: function() {
+        return "ygtvt" + this.index;
+    },
+
+    /**
+     * Returns the element that is being used for this node's toggle.
+     * @method getToggleEl
+     * @return {HTMLElement} this node's toggle html element
+     */
+    getToggleEl: function() {
+        return document.getElementById(this.getToggleElId());
+    },
+
+    /**
+     * Generates the link that will invoke this node's toggle method
+     * @method getToggleLink
+     * @return {string} the javascript url for toggling this node
+     */
+    getToggleLink: function() {
+// return "YAHOO.widget.TreeView.getNode(\'" + this.tree.id + "\'," + this.index + ").toggle()";
+        return 'return false';
     }
 
 };

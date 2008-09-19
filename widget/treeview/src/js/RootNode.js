@@ -8,16 +8,16 @@
  * @constructor
  */
 YAHOO.widget.RootNode = function(oTree) {
-	// Initialize the node with null params.  The root node is a
-	// special case where the node has no presentation.  So we have
-	// to alter the standard properties a bit.
-	this.init(null, null, true);
-	
-	/*
-	 * For the root node, we get the tree reference from as a param
-	 * to the constructor instead of from the parent element.
-	 */
-	this.tree = oTree;
+    // Initialize the node with null params.  The root node is a
+    // special case where the node has no presentation.  So we have
+    // to alter the standard properties a bit.
+    this.init(null, null, true);
+    
+    /*
+     * For the root node, we get the tree reference from as a param
+     * to the constructor instead of from the parent element.
+     */
+    this.tree = oTree;
 };
 
 YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
@@ -30,7 +30,7 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
      * @default "RootNode"
      */
     _type: "RootNode",
-	
+    
     // overrides YAHOO.widget.Node
     getNodeHtml: function() { 
         return ""; 
@@ -43,7 +43,7 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
     loadComplete: function() { 
         this.tree.draw();
     },
-	
+    
    /**
      * Count of nodes in tree.  
     * It overrides Nodes.getNodeCount because the root node should not be counted.
@@ -51,9 +51,9 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
      * @return {int} number of nodes in the tree
      */
     getNodeCount: function() {
-		for (var i = 0, count = 0;i< this.children.length;i++) {
-			count += this.children[i].getNodeCount();
-		}
+        for (var i = 0, count = 0;i< this.children.length;i++) {
+            count += this.children[i].getNodeCount();
+        }
         return count;
     },
 
@@ -67,18 +67,18 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
      * @return {Object | false}  definition of the tree or false if any child node is defined as dynamic
      */
     getNodeDefinition: function() {
-		
-		for (var def, defs = [], i = 0; i < this.children.length;i++) {
-			def = this.children[i].getNodeDefinition();
-			if (def === false) { return false;}
-			defs.push(def);
-		}
-		return defs;
+        
+        for (var def, defs = [], i = 0; i < this.children.length;i++) {
+            def = this.children[i].getNodeDefinition();
+            if (def === false) { return false;}
+            defs.push(def);
+        }
+        return defs;
     },
 
     collapse: function() {},
     expand: function() {},
-	getSiblings: function() { return null; },
-	focus: function () {}
+    getSiblings: function() { return null; },
+    focus: function () {}
 
 });
