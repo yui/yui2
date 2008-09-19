@@ -166,7 +166,7 @@ CSS_CLASS_NAME: "yuimenubar",
 
 /**
 * @property SUBMENU_TOGGLE_REGION_WIDTH
-* @description Width (in pixels) of the area of a MenuBarItem that when pressed will toggle the
+* @description Width (in pixels) of the area of a MenuBarItem that, when pressed, will toggle the
 * display of the MenuBarItem's submenu.
 * @default 20
 * @final
@@ -415,6 +415,13 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 
 // Public methods
 
+/**
+* @method configSubmenuToggle
+* @description Event handler for when the "submenutoggleregion" configuration property of 
+* a MenuBar changes.
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event was fired.
+*/
 configSubmenuToggle: function (p_sType, p_aArgs) {
 
 	var bSubmenuToggle = p_aArgs[0];

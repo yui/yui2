@@ -486,7 +486,13 @@
     
         }
 
-    
+
+        /**
+        * @method removeItem
+        * @description Removes a MenuItem instance from the MenuManager's collection of MenuItems.
+        * @private
+        * @param {MenuItem} p_oMenuItem The MenuItem instance to be removed.
+        */    
         function removeItem(p_oMenuItem) {
 
             var sId = p_oMenuItem.id;

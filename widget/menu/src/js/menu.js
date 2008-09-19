@@ -3739,6 +3739,16 @@ configContainer: function (p_sType, p_aArgs, p_oMenu) {
 },
 
 
+/**
+* @method _clearSetWidthFlag
+* @description Change event listener for the "width" configuration property.  This listener is 
+* added when a Menu's "width" configuration property is set by the "_setScrollHeight" method, and 
+* is used to set the "_widthSetForScroll" property to "false" if the "width" configuration property 
+* is changed after it was set by the "_setScrollHeight" method.  If the "_widthSetForScroll" 
+* property is set to "false", and the "_setScrollHeight" method is in the process of tearing down 
+* scrolling functionality, it will maintain the Menu's new width rather than reseting it.
+* @private
+*/
 _clearSetWidthFlag: function () {
 
 	this._widthSetForScroll = false;
@@ -5185,7 +5195,7 @@ initDefaultConfig: function () {
 
     /*
         Change the default value for the "constraintoviewport" configuration 
-        property to "true" by re-adding the property.
+        property (inherited by YAHOO.widget.Overlay) to "true" by re-adding the property.
     */
 
     /**
@@ -5207,6 +5217,11 @@ initDefaultConfig: function () {
         } 
     );
 
+
+    /*
+        Change the default value for the "preventcontextoverlap" configuration 
+        property (inherited by YAHOO.widget.Overlay) to "true" by re-adding the property.
+    */
 
 	/**
 	* @config preventcontextoverlap

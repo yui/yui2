@@ -3403,7 +3403,7 @@
 
 
 			/**
-			* @attribute minscrollheight
+			* @attribute menuminscrollheight
 			* @description Number defining the minimum threshold for the "menumaxheight" 
 			* configuration attribute.  When set this attribute is automatically applied 
 			* to all submenus.
