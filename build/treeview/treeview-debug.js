@@ -528,7 +528,7 @@ TV.prototype = {
                     this.fireEvent('labelClick',node);
                 }
 
-                this.logger.log('ELEMENT: ' + el.className);
+                // this.logger.log('ELEMENT: ' + el.className);
 
                 var td = el;
 
