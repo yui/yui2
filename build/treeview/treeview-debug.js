@@ -408,7 +408,8 @@ TV.prototype = {
                         build(node,children);
                     }
                 } else {
-                    this.logger.log('Invalid node definition','error');
+                    // @TODO logger is not defined here in edit example.  Timing issue?
+                    this.logger && this.logger.log('Invalid node definition','error');
                 }
             }
         };
