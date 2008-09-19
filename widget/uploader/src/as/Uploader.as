@@ -4,6 +4,7 @@
 
 	import com.yahoo.yui.YUIAdapter;
 	
+	import flash.display.Loader;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -74,6 +75,12 @@
 		private var currentUploadThreads:Number = 0;
 
 		private var renderType:String;
+		
+		private var buttonSprite:Sprite = new Sprite();
+		private var buttonSkin:Loader = new Loader();
+		
+		private var buttonHeight:Number;
+		private var buttonWidth:Number;
 		
 		//--------------------------------------
 		//  Public Methods
@@ -204,7 +211,33 @@
 			return fileDataList;
 		}
 
-
+		public function enable () : void {
+			if (renderType == "button") {
+				buttonSprite.addEventListener(MouseEvent.ROLL_OVER, buttonMouseOver);
+				buttonSprite.addEventListener(MouseEvent.ROLL_OUT, buttonMouseOut);
+				buttonSprite.addEventListener(MouseEvent.MOUSE_DOWN, buttonMouseDown);
+				buttonSprite.addEventListener(MouseEvent.MOUSE_UP, buttonMouseUp);
+				buttonSprite.addEventListener(MouseEvent.CLICK, handleMouseClick);
+				buttonSkin.y = 0;
+			}
+			else {
+				buttonSprite.addEventListener(MouseEvent.CLICK, handleMouseClick);
+			}
+		}
+		
+		public function disable () : void {
+			if (renderType == "button") {
+				buttonSprite.removeEventListener(MouseEvent.ROLL_OVER, buttonMouseOver);
+				buttonSprite.removeEventListener(MouseEvent.ROLL_OUT, buttonMouseOut);
+				buttonSprite.removeEventListener(MouseEvent.MOUSE_DOWN, buttonMouseDown);
+				buttonSprite.removeEventListener(MouseEvent.MOUSE_UP, buttonMouseUp);
+				buttonSprite.removeEventListener(MouseEvent.CLICK, handleMouseClick);
+				buttonSkin.y = -3*buttonHeight;
+			}
+			else {
+				buttonSprite.removeEventListener(MouseEvent.CLICK, handleMouseClick);
+			}
+		}
 
 	    /**
 	     *  Clears the set of files that had been selected for upload
@@ -219,7 +252,9 @@
 			fileRefList = new Object();
 			fileIDList = new Dictionary();
 			fileIDCounter = 0;
-
+			
+			logMessage("The file list has been cleared.");
+			
 			return true;
 		}
 
@@ -248,6 +283,7 @@
 		public function upload(fileID:String, url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata", headers:Object = null):void {
 
 			// null checking in the params is not working correctly
+			filesToUpload = [];
 
 			if(isEmptyString(method)) {
 				method = "GET";
@@ -260,7 +296,8 @@
 			var request:URLRequest = formURLRequest(url, method, vars, headers);
 			var fr:FileReference = fileRefList[fileID];
 
-			queueForUpload(fr, request, fieldName);
+			this.currentUploadThreads++;
+			fr.upload(request,fieldName);
 		}
 
 	    /**
@@ -339,21 +376,21 @@
 			uploadError - fires when an error occurs during download. Passes the id of the file that was being uploaded and an error type.
 		*/
 
-		private function rollOver (event:MouseEvent) : void {
+		private function transparentRollOver (event:MouseEvent) : void {
 			logMessage("Mouse rolled over the uploader.");
 			var newEvent:Object = new Object();
 			newEvent.type = "rollOver";
 			super.dispatchEventToJavaScript(newEvent);
 		}
 		
-		private function rollOut (event:MouseEvent) : void {
+		private function transparentRollOut (event:MouseEvent) : void {
 			logMessage("Mouse rolled out the uploader.");
 			var newEvent:Object = new Object();
 			newEvent.type = "rollOut";
 			super.dispatchEventToJavaScript(newEvent);
 		}
 		
-		private function click (event:MouseEvent) : void {
+		private function transparentClick (event:MouseEvent) : void {
 			logMessage("Mouse clicked on the uploader.");
 			var newEvent:Object = new Object();
 			newEvent.type = "click";
@@ -434,12 +471,12 @@
 
 			else if (event is IOErrorEvent) {
 				newEvent.status = event.toString();
-				logMessage("IO error for " + fileIDList[event.target] + ": " + myev.status);
+				logMessage("IO error for " + fileIDList[event.target] + ". Likely causes are problems with Internet connection or server misconfiguration.");
 			}
 
 			else if (event is SecurityErrorEvent) {
 				newEvent.status = event.toString();
-				logMessage("Security error for " + fileIDList[event.target] + ": " + myev.status);
+				logMessage("Security error for " + fileIDList[event.target]);
 			}
 
 			newEvent.type = "uploadError";
@@ -475,34 +512,81 @@
 			}
 			processSelection();
 		}
+		
+		private function renderAsButton (buttonSkinSprite:String) : void {
+		
+			
+			buttonSkin.load(new URLRequest(buttonSkinSprite));
+			var _this:Uploader = this;
+			
+			var initLoader:Function = function (event:Event) : void {
+				buttonSprite.addChild(buttonSkin);
+				
+				buttonHeight = buttonSkin.height/4;
+				buttonWidth = buttonSkin.width;
+				
+				var buttonMask:Sprite = new Sprite();
+				buttonMask.graphics.beginFill(0x000000,1);
+				buttonMask.graphics.drawRect(0,0,buttonWidth,buttonHeight);
+				buttonMask.graphics.endFill();
+				buttonSkin.mask = buttonMask;
+				
+				buttonSprite.addEventListener(MouseEvent.ROLL_OVER, buttonMouseOver);
+				buttonSprite.addEventListener(MouseEvent.ROLL_OUT, buttonMouseOut);
+				buttonSprite.addEventListener(MouseEvent.MOUSE_DOWN, buttonMouseDown);
+				buttonSprite.addEventListener(MouseEvent.MOUSE_UP, buttonMouseUp);
+				buttonSprite.addEventListener(MouseEvent.CLICK, handleMouseClick);
+				_this.addChild(buttonSprite);	
+			}
+			
+			var errorLoader:Function = function (event:IOErrorEvent) : void {
+				renderAsTransparent();
+			}
+			
+			buttonSkin.contentLoaderInfo.addEventListener(Event.COMPLETE, initLoader);	
+			buttonSkin.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, errorLoader);
 
+		}
+
+
+		private function buttonMouseOver (event:MouseEvent) : void {
+					buttonSkin.y = -1*buttonHeight;
+		}
+				
+		private function buttonMouseOut  (event:MouseEvent) : void {
+					buttonSkin.y = 0;
+		}
+				
+		private function buttonMouseDown  (event:MouseEvent) : void {
+					buttonSkin.y = -2*buttonHeight;
+		}
+				
+		private function buttonMouseUp (event:MouseEvent) : void {
+					buttonSkin.y = 0;
+		}
+				
 		private function renderAsTransparent () : void {
-		 	var transparentSprite:Sprite = new Sprite();
 		 	
 		 	function transparentStageResize (evt:Event) : void {
-		 		transparentSprite.width = transparentSprite.stage.stageWidth;
-		 		transparentSprite.height = transparentSprite.stage.stageHeight;
+		 		buttonSprite.width = buttonSprite.stage.stageWidth;
+		 		buttonSprite.height = buttonSprite.stage.stageHeight;
 		 	}
 		 	
-			transparentSprite.graphics.beginFill(0xffffff, 0);
-			transparentSprite.graphics.drawRect(0,0,5,5);
-			transparentSprite.width = this.stage.stageWidth;
-			transparentSprite.height = this.stage.stageHeight;
-			transparentSprite.graphics.endFill();
+			buttonSprite.graphics.beginFill(0xffffff, 0);
+			buttonSprite.graphics.drawRect(0,0,5,5);
+			buttonSprite.width = this.stage.stageWidth;
+			buttonSprite.height = this.stage.stageHeight;
+			buttonSprite.graphics.endFill();
 			this.stage.scaleMode = StageScaleMode.NO_SCALE;
 			this.stage.align = StageAlign.TOP_LEFT;
 			this.stage.addEventListener(Event.RESIZE, transparentStageResize);
-			transparentSprite.addEventListener(MouseEvent.CLICK, handleMouseClick);
-			transparentSprite.addEventListener(MouseEvent.CLICK, click);
-			transparentSprite.addEventListener(MouseEvent.ROLL_OVER, rollOver);
-			transparentSprite.addEventListener(MouseEvent.ROLL_OUT, rollOut);
-			transparentSprite.buttonMode = true;
-			transparentSprite.useHandCursor = true;
-			this.addChild(transparentSprite);
-		}
-		
-		private function renderAsButton (upSkin:String, hoverSkin:String, downSkin:String) : void {
-			
+			buttonSprite.addEventListener(MouseEvent.CLICK, handleMouseClick);
+			buttonSprite.addEventListener(MouseEvent.CLICK, transparentClick);
+			buttonSprite.addEventListener(MouseEvent.ROLL_OVER, transparentRollOver);
+			buttonSprite.addEventListener(MouseEvent.ROLL_OUT, transparentRollOut);
+			buttonSprite.buttonMode = true;
+			buttonSprite.useHandCursor = true;
+			this.addChild(buttonSprite);
 		}
 		
 
@@ -536,22 +620,17 @@
 		override protected function initializeComponent():void {
 
 			super.initializeComponent();
+			var btnSkinURL:String;
+			btnSkinURL = this.stage.loaderInfo.parameters["buttonSkin"];
 			
-			this.renderType = this.stage.loaderInfo.parameters["renderType"];
-
-			if (this.renderType == null) {
-				renderType = "transparent";
-			}
-			
-			if (renderType.toLowerCase() == "button") {
-			    // this.renderAsButton();
-			}
-			else if (renderType.toLowerCase() == "link") {
-				// this.renderAsLink();
+			if (btnSkinURL != null) {
+				this.renderType = "button";
+				this.renderAsButton(btnSkinURL);
 			}
 			else {
+				this.renderType = "transparent";	
 				this.renderAsTransparent();
-			}
+			}			
 		 	
 		 	// removeFile (fileID:String = null) 
 		 	// Removes one or all files from the upload queue
@@ -582,6 +661,10 @@
 			ExternalInterface.addCallback("setSimUploadLimit", this.setSimUploadLimit);
 			
 			ExternalInterface.addCallback("setFileFilters", this.setFileFilters);
+			
+			ExternalInterface.addCallback("enable", enable);
+			
+			ExternalInterface.addCallback("disable", disable);
 
 			fileDataList = new Object();
 			fileRefList = new Object();

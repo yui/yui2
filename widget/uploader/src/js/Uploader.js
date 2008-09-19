@@ -26,10 +26,21 @@
  * @uses YAHOO.widget.FlashAdapter
  * @constructor
  * @param containerId {HTMLElement} Container element for the Flash Player instance.
- */
-YAHOO.widget.Uploader = function(containerId)
+ * @param buttonSkin {String} [optional]. If defined, the uploader is 
+ * rendered as a button. This parameter must provide the URL of a button
+ * skin sprite image. Acceptable types are: jpg, gif, png and swf. The 
+ * sprite is divided evenly into four sections along its height (e.g., if
+ * the sprite is 200 px tall, it's divided into four sections 50px each).
+ * Each section is used as a skin for a specific state of the button: top
+ * section is "up", second section is "over", third section is "down", and
+ * fourth section is "disabled". 
+ * If the parameter is not supplied, the uploader is rendered transparent,
+ * and it's the developer's responsibility to create a visible UI below it.
+  */
+YAHOO.widget.Uploader = function(containerId, buttonSkin)
 {
- 	YAHOO.widget.Uploader.superclass.constructor.call(this, YAHOO.widget.Uploader.SWFURL, containerId, {wmode:"transparent"});
+	
+ 	YAHOO.widget.Uploader.superclass.constructor.call(this, YAHOO.widget.Uploader.SWFURL, containerId, {wmode:"transparent"}, buttonSkin);
 
 	/**
 	 * Fires when an upload of a specific file has started.
@@ -259,6 +270,29 @@ YAHOO.extend(YAHOO.widget.Uploader, YAHOO.widget.FlashAdapter,
     setFileFilters : function (fileFilters) 
     {
        this._swf.setFileFilters(fileFilters);
-    }
+    },
 
+	/**
+	 * Enables the mouse events on the Uploader.
+	 * If the uploader is being rendered as a button,
+	 * then the button's skin is set to "up"
+	 * (first section of the button skin sprite).
+	 *
+	 */
+	enable : function ()
+	{
+		this._swf.enable();
+	},
+
+	/**
+	 * Disables the mouse events on the Uploader.
+	 * If the uploader is being rendered as a button,
+	 * then the button's skin is set to "disabled"
+	 * (fourth section of the button skin sprite).
+	 *
+	 */
+	disable : function () 
+	{
+		this._swf.disable();
+	}
 });

@@ -6,7 +6,7 @@
  * @class FlashAdapter
  * @uses YAHOO.util.AttributeProvider
  */
-YAHOO.widget.FlashAdapter = function(swfURL, containerID, attributes)
+YAHOO.widget.FlashAdapter = function(swfURL, containerID, attributes, buttonSkin)
 {
 	// set up the initial events and attributes stuff
 	this._queue = this._queue || [];
@@ -29,7 +29,7 @@ YAHOO.widget.FlashAdapter = function(swfURL, containerID, attributes)
 	
 	//embed the SWF file in the page
 	this._embedSWF(this._swfURL, this._containerID, attributes.id, attributes.version,
-		attributes.backgroundColor, attributes.expressInstall, attributes.wmode);
+		attributes.backgroundColor, attributes.expressInstall, attributes.wmode, buttonSkin);
 	
 	/**
 	 * Fires when the SWF is initialized and communication is possible.
@@ -141,7 +141,7 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	 * @method _embedSWF
 	 * @private
 	 */
-	_embedSWF: function(swfURL, containerID, swfID, version, backgroundColor, expressInstall, wmode)
+	_embedSWF: function(swfURL, containerID, swfID, version, backgroundColor, expressInstall, wmode, buttonSkin)
 	{
 		//standard SWFObject embed
 		var swfObj = new deconcept.SWFObject(swfURL, swfID, "100%", "100%", version, backgroundColor);
@@ -167,7 +167,9 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 
 		// set the name of the function to call when the swf has an event
 		swfObj.addVariable("eventHandler", "YAHOO.widget.FlashAdapter.eventHandler");
-
+		if (buttonSkin) {
+		swfObj.addVariable("buttonSkin", buttonSkin);
+		}
 		var container = YAHOO.util.Dom.get(containerID);
 		var result = swfObj.write(container);
 		if(result)
