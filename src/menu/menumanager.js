@@ -394,7 +394,15 @@
 				being made visible
 			*/
 
-			p_oFocusedElement.focus();
+			if (p_oFocusedElement && p_oFocusedElement.focus) {
+			
+				try {
+					p_oFocusedElement.focus();
+				}
+				catch(ex) {
+				}
+			
+			}
 			
     		this.hideEvent.unsubscribe(onMenuHide, p_oFocusedElement);
     	
@@ -478,7 +486,13 @@
     
         }
 
-    
+
+        /**
+        * @method removeItem
+        * @description Removes a MenuItem instance from the MenuManager's collection of MenuItems.
+        * @private
+        * @param {MenuItem} p_oMenuItem The MenuItem instance to be removed.
+        */    
         function removeItem(p_oMenuItem) {
 
             var sId = p_oMenuItem.id;

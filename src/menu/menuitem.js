@@ -194,6 +194,14 @@ var Dom = YAHOO.util.Dom,
     m_oMenuItemTemplate;
 
 
+/**
+* @method getClassNameForState
+* @description Returns a class name for the specified prefix and state.  If the class name does not 
+* yet exist, it is created and stored in the CLASS_NAMES object to increase performance.
+* @private
+* @param {String} prefix String representing the prefix for the class name
+* @param {String} state String representing a state - "disabled," "checked," etc.
+*/  
 var getClassNameForState = function (prefix, state) {
 
 	var oClassNames = CLASS_NAMES[prefix];
@@ -216,6 +224,13 @@ var getClassNameForState = function (prefix, state) {
 };
 
 
+/**
+* @method addClassNameForState
+* @description Applies a class name to a MenuItem instance's &#60;LI&#62; and &#60;A&#62; elements
+* that represents a MenuItem's state - "disabled," "checked," etc.
+* @private
+* @param {String} state String representing a state - "disabled," "checked," etc.
+*/  
 var addClassNameForState = function (state) {
 
 	Dom.addClass(this.element, getClassNameForState(this.CSS_CLASS_NAME, state));
@@ -223,7 +238,13 @@ var addClassNameForState = function (state) {
 
 };
 
-
+/**
+* @method removeClassNameForState
+* @description Removes a class name from a MenuItem instance's &#60;LI&#62; and &#60;A&#62; elements
+* that represents a MenuItem's state - "disabled," "checked," etc.
+* @private
+* @param {String} state String representing a state - "disabled," "checked," etc.
+*/  
 var removeClassNameForState = function (state) {
 
 	Dom.removeClass(this.element, getClassNameForState(this.CSS_CLASS_NAME, state));
