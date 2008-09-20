@@ -1,12 +1,14 @@
 TreeView - Release Notes
 
 2.6.0
-  * Keyboard Nav
-  * Delegated event listeners
-  * Double-click event
-  * DateNode
-  * Editable node labels
-  * API update to mirror other widgets
+  * Keyboard Navigation
+  * Delegated event listeners replace the inline listeners
+  * Tree serialization/deserialization
+  * Build tree from existing markup
+  * Node click and dblclick events
+  * DateNode (calendar control integration)
+  * Editable node labels (double-click to edit the label)
+  * render/destroy methods
 
 2.5.2
   * Made CSS adjustments to work with base.css

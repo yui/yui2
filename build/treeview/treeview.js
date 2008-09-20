@@ -515,7 +515,7 @@ TV.prototype = {
                     this.fireEvent('labelClick',node);
                 }
 
-
+                // hack for backward compatibility
                 var td = el;
 
                 while (td && !Dom.hasClass(td.parentNode, 'ygtvrow')) {
