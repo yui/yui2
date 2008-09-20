@@ -408,14 +408,14 @@ var XMLDocument = function(rootTagName, namespaceURL) {
         };
         var oCallback = {
             success:function(oRequest, oResponse, oPayload) {
-                Assert.areSame(data.ResultSet.Result[1]["Title"], oResponse.results[1]["Title"], "Incorrect parsing of String");
-                Assert.areSame(data.ResultSet.Result[1]["MyArray"][0], oResponse.results[1]["MyArray[0]"], "Incorrect parsing of Array index");
-                Assert.areSame(data.ResultSet.Result[1]["Hy-phenated2"], oResponse.results[1]['["Hy-phenated2"]'], "Incorrect parsing of valid hyphenated identifier");
-                Assert.areSame(data.ResultSet.Result[1]["for"], oResponse.results[1]["for"], "Incorrect parsing of reserved word");
+                Assert.areSame(data.ResultSet.Result[0]["Title"], oResponse.results[0]["Title"], "Incorrect parsing of String");
+                Assert.areSame(data.ResultSet.Result[0]["MyArray"][0], oResponse.results[0]["MyArray[0]"], "Incorrect parsing of Array index");
+                Assert.areSame(data.ResultSet.Result[0]["Hy-phenated2"], oResponse.results[0]['["Hy-phenated2"]'], "Incorrect parsing of valid hyphenated identifier");
+                Assert.areSame(data.ResultSet.Result[0]["for"], oResponse.results[0]["for"], "Incorrect parsing of reserved word");
 
                 // Verify invalids didn't parse
-                Assert.isUndefined(oResponse.results[1]["Hy-phenated"], "Incorrect parsing of invalid dot syntax key with dash");
-                Assert.isUndefined(oResponse.results[1]["Array Index"], "Incorrect parsing of invalid dot syntax key with empty space");
+                Assert.isUndefined(oResponse.results[0]["Hy-phenated"], "Incorrect parsing of invalid dot syntax key with dash");
+                Assert.isUndefined(oResponse.results[0]["Array Index"], "Incorrect parsing of invalid dot syntax key with empty space");
             },
             scope:this
         };
@@ -426,12 +426,12 @@ var XMLDocument = function(rootTagName, namespaceURL) {
         ds.responseSchema.fields = ["Nested.TotalReviews","Nested.Average-Rating","Nested.Total Ratings","Nested.MyArray[0]"];
         var oCallback = {
             success:function(oRequest, oResponse, oPayload) {
-                Assert.areSame(data.ResultSet.Result[1]["Nested"]["TotalReviews"], oResponse.results[1]["Nested.TotalReviews"], "Incorrect parsing of nested String");
-                ArrayAssert.itemsAreSame(data.ResultSet.Result[1]["Nested"]["MyArray"][0], oResponse.results[1]["Nested.MyArray[0]"], "Incorrect parsing of nested Array index");
+                Assert.areSame(data.ResultSet.Result[0]["Nested"]["TotalReviews"], oResponse.results[0]["Nested.TotalReviews"], "Incorrect parsing of nested String");
+                ArrayAssert.itemsAreSame(data.ResultSet.Result[0]["Nested"]["MyArray"][0], oResponse.results[0]["Nested.MyArray[0]"], "Incorrect parsing of nested Array index");
 
                 // Verify invalids didn't parse
-                Assert.isUndefined(oResponse.results[1]["Nested.Average-Rating"], "Incorrect parsing of invalid nested key containing hyphen");
-                Assert.isUndefined(oResponse.results[1]["Nested.Total Ratings"], "Incorrect parsing of invalid dot syntax key containing empty space");
+                Assert.isUndefined(oResponse.results[0]["Nested.Average-Rating"], "Incorrect parsing of invalid nested key containing hyphen");
+                Assert.isUndefined(oResponse.results[0]["Nested.Total Ratings"], "Incorrect parsing of invalid dot syntax key containing empty space");
             },
             scope:this
         };
