@@ -562,7 +562,6 @@ var XMLDocument = function(rootTagName, namespaceURL) {
  */
 YAHOO.util.Event.addListener(window, "load", function() {
     var logger = new TestLogger();
-    logger.hideCategory('info');
 
     var dsTestSuite = new TestSuite("DataSource Test Suite");
     dsTestSuite.add(dsLocalTestCase);
