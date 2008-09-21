@@ -611,7 +611,7 @@ YAHOO.widget.AutoComplete.prototype.getListItemData = function(elListItem) {
  * @return {Number} Index.
  */
 YAHOO.widget.AutoComplete.prototype.getListItemIndex = function(elListItem) {
-    if(elListItem._nItemIndex) {
+    if(YAHOO.lang.isNumber(elListItem._nItemIndex)) {
         return elListItem._nItemIndex;
     }
     else {
@@ -1817,6 +1817,10 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
                             // Already an array
                             if(YAHOO.lang.isArray(oResult)) {
                                 aResult = oResult;
+                            }
+                            // Simple string 
+                            else if(YAHOO.lang.isString(oResult)) {
+                                aResult = [oResult];
                             }
                             // Object
                             else {
