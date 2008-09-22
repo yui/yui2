@@ -1572,7 +1572,7 @@
                 obj._updateNavButtons(Event.getTarget(ev), true);
             }, this);
             Event.onBlur(this.get("element"), function (ev, obj) {
-                obj._updateNavButtons(Event.getTarget(ev), true);
+                obj._updateNavButtons(Event.getTarget(ev), false);
             }, this);
         },
 
