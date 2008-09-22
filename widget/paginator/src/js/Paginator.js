@@ -582,6 +582,8 @@ YAHOO.widget.Paginator.prototype = {
         if (this._containers.length) {
             this.setAttributeConfig('rendered',{value:true});
 
+            this.fireEvent('render',this.getState());
+            // For backward compatibility
             this.fireEvent('rendered',this.getState());
         }
     },
@@ -968,21 +970,38 @@ YAHOO.widget.Paginator.prototype = {
     },
 
     /**
-     * Convenience method to facilitate setting multiple attributes in batch
-     * and fire only a single pageChange event (if appropriate)
+     * Convenience method to facilitate setting state attributes rowsPerPage,
+     * totalRecords, recordOffset in batch.  Also supports calculating
+     * recordOffset from state.page if state.recordOffset is not provided.
+     * Fires only a single pageChange event, if appropriate.
      * @method setState
      * @param state {Object} Object literal of attribute:value pairs to set
      */
     setState : function (state) {
         if (YAHOO.lang.isObject(state)) {
+            // get flux state based on current state with before state as well
+            this._state = this.getState({});
+
+            // use just the state props from the input obj
+            state = YAHOO.lang.augmentObject({},state,
+                'rowsPerPage','totalRecords','recordOffset','page');
+
+            // calculate recordOffset from page if recordOffset not specified.
+            // not using lang.isNumber for support of numeric strings
+            if (state.page && state.recordOffset === undefined) {
+                state.recordOffset = (state.page - 1) *
+                    (state.rowsPerPage || this.get('rowsPerPage'));
+            }
+
             this._batch = true;
             this._pageChanged = false;
-            this._state = this.getState({});
+
             for (var k in state) {
                 if (state.hasOwnProperty(k)) {
                     this.set(k,state[k]);
                 }
             }
+
             this._batch = false;
             
             if (this._pageChanged) {
