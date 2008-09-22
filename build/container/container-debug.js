@@ -1159,8 +1159,18 @@
             });
 
             /**
+            * <p>
             * Object or array of objects representing the ContainerEffect 
             * classes that are active for animating the container.
+            * </p>
+            * <p>
+            * <strong>NOTE:</strong> Although this configuration 
+            * property is introduced at the Module level, an out of the box
+            * implementation is not shipped for the Module class so setting
+            * the proroperty on the Module class has no effect. The Overlay 
+            * class is the first class to provide out of the box ContainerEffect 
+            * support.
+            * </p>
             * @config effect
             * @type Object
             * @default null
@@ -1507,17 +1517,19 @@
         },
 
         /**
-        * Sets the Module's body content to the HTML specified, or appends the
-        * passed element to the body. If no body is present, one will be 
-        * automatically created. An empty string can be passed to the method
-        * to clear the contents of the body.
+        * Sets the Module's body content to the HTML specified. 
+        * 
+        * If no body is present, one will be automatically created. 
+        * 
+        * An empty string can be passed to the method to clear the contents of the body.
         * @method setBody
         * @param {String} bodyContent The HTML used to set the body. 
         * As a convenience, non HTMLElement objects can also be passed into 
         * the method, and will be treated as strings, with the body innerHTML
         * set to their default toString implementations.
         * <em>OR</em>
-        * @param {HTMLElement} bodyContent The HTMLElement to append to the body
+        * @param {HTMLElement} bodyContent The HTMLElement to add as the first and only
+        * child of the body element.
         * <em>OR</em>
         * @param {DocumentFragment} bodyContent The document fragment 
         * containing elements which are to be added to the body
@@ -8390,7 +8402,7 @@
             }
 
         },
-        
+
         /**
         * Fired when the "text" property is set.
         * @method configText
@@ -8418,7 +8430,32 @@
         toString: function () {
             return "SimpleDialog " + this.id;
         }
-    
+
+        /**
+        * <p>
+        * Sets the SimpleDialog's body content to the HTML specified. 
+        * If no body is present, one will be automatically created. 
+        * An empty string can be passed to the method to clear the contents of the body.
+        * </p>
+        * <p><strong>NOTE:</strong> SimpleDialog provides the <a href="#config_text">text</a>
+        * and <a href="#config_icon">icon</a> configuration properties to set the contents
+        * of it's body element in accordance with the UI design for a SimpleDialog (an 
+        * icon and message text). Calling setBody on the SimpleDialog will not enforce this 
+        * UI design constraint and will replace the entire contents of the SimpleDialog body. 
+        * It should only be used if you wish the replace the default icon/text body structure 
+        * of a SimpleDialog with your own custom markup.</p>
+        * 
+        * @method setBody
+        * @param {String} bodyContent The HTML used to set the body. 
+        * As a convenience, non HTMLElement objects can also be passed into 
+        * the method, and will be treated as strings, with the body innerHTML
+        * set to their default toString implementations.
+        * <em>OR</em>
+        * @param {HTMLElement} bodyContent The HTMLElement to add as the first and only child of the body element.
+        * <em>OR</em>
+        * @param {DocumentFragment} bodyContent The document fragment 
+        * containing elements which are to be added to the body
+        */
     });
 
 }());
