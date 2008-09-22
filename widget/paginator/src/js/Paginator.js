@@ -983,8 +983,12 @@ YAHOO.widget.Paginator.prototype = {
             this._state = this.getState({});
 
             // use just the state props from the input obj
-            state = YAHOO.lang.augmentObject({},state,
-                'rowsPerPage','totalRecords','recordOffset','page');
+            state = {
+                page         : state.page,
+                rowsPerPage  : state.rowsPerPage,
+                totalRecords : state.totalRecords,
+                recordOffset : state.recordOffset
+            };
 
             // calculate recordOffset from page if recordOffset not specified.
             // not using lang.isNumber for support of numeric strings
@@ -1006,10 +1010,8 @@ YAHOO.widget.Paginator.prototype = {
             
             if (this._pageChanged) {
                 this._pageChanged = false;
-                // Get a full state representation for before and after
-                state = this.getState(this._state);
 
-                this._firePageChange(this._state);
+                this._firePageChange(this.getState(this._state));
             }
         }
     }
