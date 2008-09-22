@@ -974,6 +974,7 @@ YAHOO.widget.Paginator.prototype = {
      * totalRecords, recordOffset in batch.  Also supports calculating
      * recordOffset from state.page if state.recordOffset is not provided.
      * Fires only a single pageChange event, if appropriate.
+     * This will not fire a changeRequest event.
      * @method setState
      * @param state {Object} Object literal of attribute:value pairs to set
      */
