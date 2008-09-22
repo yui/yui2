@@ -96,15 +96,6 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
 
     },
 
-    /**
-     * Returns the outer html element for this node's content
-     * @method getContentEl
-     * @return {HTMLElement} the element
-     */
-    getContentEl: function() { 
-        return document.getElementById(this.contentElId);
-    },
-
     // overrides YAHOO.widget.Node
     getContentHtml: function() { 
         return this.html;

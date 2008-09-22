@@ -1,7 +1,7 @@
 (function () {
-    var Dom = YAHOO.util.Dom,
-        Lang = YAHOO.lang,
-        Event = YAHOO.util.Event;
+	var Dom = YAHOO.util.Dom,
+		Lang = YAHOO.lang,
+		Event = YAHOO.util.Event;
 /**
  * The default node presentation.  The first parameter should be
  * either a string that will be used as the node's label, or an object
@@ -27,6 +27,9 @@
 YAHOO.widget.TextNode = function(oData, oParent, expanded) {
 
     if (oData) { 
+        if (Lang.isString(oData)) {
+            oData = { label: oData };
+        }
         this.init(oData, oParent, expanded);
         this.setUpLabel(oData);
     }
@@ -66,7 +69,7 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      * @type string
      */
     title: null,
-    
+	
 /**
      * The node type
      * @property _type
@@ -83,21 +86,21 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      * @param oData string containing the label, or an object with a label property
      */
     setUpLabel: function(oData) { 
-
+        
         if (Lang.isString(oData)) {
             oData = { 
                 label: oData 
             };
         } else {
-            if (oData.style) {
-                this.labelStyle = oData.style;
-            }
+        if (oData.style) {
+            this.labelStyle = oData.style;
+        }
         }
 
         this.label = oData.label;
 
         this.labelElId = "ygtvlabelel" + this.index;
-        
+		
     },
 
     /**
@@ -111,7 +114,7 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
     },
 
     // overrides YAHOO.widget.Node
-    getContentHtml: function() { 
+	getContentHtml: function() { 
         var sb = [];
         sb[sb.length] = this.href?'<a':'<span';
         sb[sb.length] = ' id="' + this.labelElId + '"';
@@ -119,10 +122,10 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
             sb[sb.length] = ' title="' + this.title + '"';
         }
         sb[sb.length] = ' class="' + this.labelStyle  + '"';
-        if (this.href) {
-            sb[sb.length] = ' href="' + this.href + '"';
-            sb[sb.length] = ' target="' + this.target + '"';
-        } 
+		if (this.href) {
+			sb[sb.length] = ' href="' + this.href + '"';
+			sb[sb.length] = ' target="' + this.target + '"';
+		} 
         sb[sb.length] = ' >';
         sb[sb.length] = this.label;
         sb[sb.length] = this.href?'</a>':'</span>';
@@ -139,23 +142,17 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      * @return {Object | false}  definition of the tree or false if this node or any descendant is defined as dynamic
      */
     getNodeDefinition: function() {
-        var def = YAHOO.widget.TextNode.superclass.getNodeDefinition.call(this);
-        if (def === false) { 
-            return false; 
-        }
+		var def = YAHOO.widget.TextNode.superclass.getNodeDefinition.call(this);
+		if (def === false) { return false; }
 
-        // Node specific properties
-        def.label = this.label;
-        if (this.labelStyle != 'ygtvlabel') { 
-            def.style = this.labelStyle; 
-        }
-        if (this.title) { 
-            def.title = this.title ; 
-        }
+		// Node specific properties
+		def.label = this.label;
+		if (this.labelStyle != 'ygtvlabel') { def.style = this.labelStyle; }
+		if (this.title) { def.title = this.title ; }
 
-        return def;
-    
-    },
+		return def;
+	
+	},
 
     toString: function() { 
         return YAHOO.widget.TextNode.superclass.toString.call(this) + ": " + this.label;
@@ -163,6 +160,7 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
 
     // deprecated
     onLabelClick: function() {
+		return false;
     }
 });
 })();
