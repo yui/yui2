@@ -1248,7 +1248,7 @@
          * @public
          */
         focus: function () {
-            var selItem              = this.getItem(this.get("selectedItem")),
+            var selItem              = this.get("selectedItem"),
                 numVisible           = this.get("numVisible"),
                 selectOnScroll       = this.get("selectOnScroll"),
                 selected             = this.getItem(selItem),
