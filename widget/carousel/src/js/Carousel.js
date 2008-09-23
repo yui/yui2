@@ -77,7 +77,7 @@
     var beforeHideEvent = "beforeHide";
 
     /**
-     * @event beforePageChangeEvent
+     * @event beforePageChange
      * @description Fires when the Carousel is about to scroll to the previous
      * or next page.  Passes back the page number of the current page.  Note
      * that the first page number is zero.  See
@@ -88,7 +88,7 @@
     var beforePageChangeEvent = "beforePageChange";
 
     /**
-     * @event beforeScrollEvent
+     * @event beforeScroll
      * @description Fires when the Carousel is about to scroll to the previous
      * or next page.  Passes back the index of the first and last visible items
      * in the Carousel and the direction (backward/forward) of the scroll.  See
@@ -191,7 +191,7 @@
     var navigationStateChangeEvent = "navigationStateChange";
 
     /**
-     * @event pageChangeEvent
+     * @event pageChange
      * @description Fires after the Carousel has scrolled to the previous or
      * next page.  Passes back the page number of the current page.  Note
      * that the first page number is zero.  See
