@@ -477,7 +477,6 @@ TV.prototype = {
     render: function() {
         var html = this.root.getHtml();
         this.getEl().innerHTML = html;
-        this.firstDraw = false;
 		var getTarget = function (ev) {
 			var target = Event.getTarget(ev); 
 			if (target.tagName.toUpperCase() != 'TD') { target = Dom.getAncestorByTagName(target,'td'); }
@@ -488,208 +487,211 @@ TV.prototype = {
 			}
 			return target;
 		};
-		Event.on(
-			this.getEl(),
-			'click',
-			function (ev) {
-				var self = this,
-					el = Event.getTarget(ev),
-					node = this.getNodeByElement(el);
-				if (!node) { return; }
-					
-				var toggle = function () {
-					if (node.expanded) {
-						node.collapse();
-					} else {
-						node.expand();
-					}
-					node.focus();
-				};
-				
-				if (Dom.hasClass(el, node.labelStyle) || Dom.getAncestorByClassName(el,node.labelStyle)) {
-					this.fireEvent('labelClick',node);
-				}
-				while (el && !Dom.hasClass(el.parentNode,'ygtvrow') && !/ygtv[tl][mp]h?h?/.test(el.className)) {
-					el = Dom.getAncestorByTagName(el,'td');
-				}
-				if (el) {
-					// If it is a spacer cell, do nothing
-					if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
-					//  If it is a toggle cell, toggle
-					if (/ygtv[tl][mp]h?h?/.test(el.className)) {
-						toggle();
-					} else {
-						if (this._dblClickTimer) {
-							window.clearTimeout(this._dblClickTimer);
-							this._dblClickTimer = null;
+		if (!this._hasEvents) {
+			Event.on(
+				this.getEl(),
+				'click',
+				function (ev) {
+					var self = this,
+						el = Event.getTarget(ev),
+						node = this.getNodeByElement(el);
+					if (!node) { return; }
+						
+					var toggle = function () {
+						if (node.expanded) {
+							node.collapse();
 						} else {
-							if (this._hasDblClickSubscriber) {
-								this._dblClickTimer = window.setTimeout(function () {
-									self._dblClickTimer = null;
+							node.expand();
+						}
+						node.focus();
+					};
+					
+					if (Dom.hasClass(el, node.labelStyle) || Dom.getAncestorByClassName(el,node.labelStyle)) {
+						this.fireEvent('labelClick',node);
+					}
+					while (el && !Dom.hasClass(el.parentNode,'ygtvrow') && !/ygtv[tl][mp]h?h?/.test(el.className)) {
+						el = Dom.getAncestorByTagName(el,'td');
+					}
+					if (el) {
+						// If it is a spacer cell, do nothing
+						if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
+						//  If it is a toggle cell, toggle
+						if (/ygtv[tl][mp]h?h?/.test(el.className)) {
+							toggle();
+						} else {
+							if (this._dblClickTimer) {
+								window.clearTimeout(this._dblClickTimer);
+								this._dblClickTimer = null;
+							} else {
+								if (this._hasDblClickSubscriber) {
+									this._dblClickTimer = window.setTimeout(function () {
+										self._dblClickTimer = null;
+										if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
+											toggle();
+										}
+									}, 200);
+								} else {
 									if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
 										toggle();
 									}
-								}, 200);
-							} else {
-								if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
-									toggle();
 								}
 							}
 						}
 					}
-				}
-			},
-			this,
-			true
-		);
-		
-		Event.on(
-			this.getEl(),
-			'dblclick',
-			function (ev) {
-				if (!this._hasDblClickSubscriber) { return; }
-				var el = Event.getTarget(ev);
-				while (!Dom.hasClass(el.parentNode,'ygtvrow')) {
-					el = Dom.getAncestorByTagName(el,'td');
-				}
-				if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
-				if (!(/ygtv[tl][mp]h?h?/.test(el.className))) {
-					this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(el)}); 
-					if (this._dblClickTimer) {
-						window.clearTimeout(this._dblClickTimer);
-						this._dblClickTimer = null;
+				},
+				this,
+				true
+			);
+			
+			Event.on(
+				this.getEl(),
+				'dblclick',
+				function (ev) {
+					if (!this._hasDblClickSubscriber) { return; }
+					var el = Event.getTarget(ev);
+					while (!Dom.hasClass(el.parentNode,'ygtvrow')) {
+						el = Dom.getAncestorByTagName(el,'td');
+					}
+					if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
+					if (!(/ygtv[tl][mp]h?h?/.test(el.className))) {
+						this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(el)}); 
+						if (this._dblClickTimer) {
+							window.clearTimeout(this._dblClickTimer);
+							this._dblClickTimer = null;
+						}
+					}
+				},
+				this,
+				true
+			);
+			Event.on(
+				this.getEl(),
+				'mouseover',
+				function (ev) {
+					var target = getTarget(ev);
+					if (target) {
+						target.className = target.className.replace(/ygtv([lt])([mp])/gi,'ygtv$1$2h');
 					}
 				}
-			},
-			this,
-			true
-		);
-		Event.on(
-			this.getEl(),
-			'mouseover',
-			function (ev) {
-				var target = getTarget(ev);
-				if (target) {
-					target.className = target.className.replace(/ygtv([lt])([mp])/gi,'ygtv$1$2h');
+			);
+			Event.on(
+				this.getEl(),
+				'mouseout',
+				function (ev) {
+					var target = getTarget(ev);
+					if (target) {
+						target.className = target.className.replace(/ygtv([lt])([mp])h/gi,'ygtv$1$2');
+					}
 				}
-			}
-		);
-		Event.on(
-			this.getEl(),
-			'mouseout',
-			function (ev) {
-				var target = getTarget(ev);
-				if (target) {
-					target.className = target.className.replace(/ygtv([lt])([mp])h/gi,'ygtv$1$2');
-				}
-			}
-		);
-		Event.on(
-			this.getEl(),
-			'keydown',
-			function (ev) {
-				var target = Event.getTarget(ev),
-					node = this.getNodeByElement(target),
-					newNode = node,
-					KEY = YAHOO.util.KeyListener.KEY;
+			);
+			Event.on(
+				this.getEl(),
+				'keydown',
+				function (ev) {
+					var target = Event.getTarget(ev),
+						node = this.getNodeByElement(target),
+						newNode = node,
+						KEY = YAHOO.util.KeyListener.KEY;
 
-				switch(ev.keyCode) {
-					case KEY.UP:
-						do {
-							if (newNode.previousSibling) {
-								newNode = newNode.previousSibling;
-							} else {
-								newNode = newNode.parent;
-							}
-						} while (newNode && !newNode.focus());
-						if (!newNode) { node.focus(); }
-						Event.preventDefault(ev);
-						break;
-					case KEY.DOWN:
-						do {
-							if (newNode.nextSibling) {
-								newNode = newNode.nextSibling;
-							} else {
+					switch(ev.keyCode) {
+						case KEY.UP:
+							do {
+								if (newNode.previousSibling) {
+									newNode = newNode.previousSibling;
+								} else {
+									newNode = newNode.parent;
+								}
+							} while (newNode && !newNode.focus());
+							if (!newNode) { node.focus(); }
+							Event.preventDefault(ev);
+							break;
+						case KEY.DOWN:
+							do {
+								if (newNode.nextSibling) {
+									newNode = newNode.nextSibling;
+								} else {
+									newNode.expand();
+									newNode = (newNode.children.length || null) && newNode.children[0];
+								}
+							} while (newNode && !newNode.focus());
+							if (!newNode) { node.focus(); }
+							Event.preventDefault(ev);
+							break;
+						case KEY.LEFT:
+							do {
+								if (newNode.parent) {
+									newNode = newNode.parent;
+								} else {
+									newNode = newNode.previousSibling;
+								}
+							} while (newNode && !newNode.focus());
+							if (!newNode) { node.focus(); }
+							Event.preventDefault(ev);
+							break;
+						case KEY.RIGHT:
+							do {
 								newNode.expand();
-								newNode = (newNode.children.length || null) && newNode.children[0];
-							}
-						} while (newNode && !newNode.focus());
-						if (!newNode) { node.focus(); }
-						Event.preventDefault(ev);
-						break;
-					case KEY.LEFT:
-						do {
-							if (newNode.parent) {
-								newNode = newNode.parent;
+								if (newNode.children.length) {
+									newNode = newNode.children[0];
+								} else {
+									newNode = newNode.nextSibling;
+								}
+							} while (newNode && !newNode.focus());
+							if (!newNode) { node.focus(); }
+							Event.preventDefault(ev);
+							break;
+						case KEY.ENTER:
+							if (node.href) {
+								if (node.target) {
+									window.open(node.href,node.target);
+								} else {
+									window.location(node.href);
+								}
 							} else {
-								newNode = newNode.previousSibling;
+								node.toggle();
 							}
-						} while (newNode && !newNode.focus());
-						if (!newNode) { node.focus(); }
-						Event.preventDefault(ev);
-						break;
-					case KEY.RIGHT:
-						do {
-							newNode.expand();
-							if (newNode.children.length) {
-								newNode = newNode.children[0];
+							this.fireEvent('enterKeyPressed',node);
+							Event.preventDefault(ev);
+							break;
+						case KEY.HOME:
+							newNode = this.getRoot();
+							if (newNode.children.length) {newNode = newNode.children[0];}
+							if (!newNode.focus()) { node.focus(); }
+							Event.preventDefault(ev);
+							break;
+						case KEY.END:
+							newNode = newNode.parent.children;
+							newNode = newNode[newNode.length -1];
+							if (!newNode.focus()) { node.focus(); }
+							Event.preventDefault(ev);
+							break;
+						// case KEY.PAGE_UP:
+							// break;
+						// case KEY.PAGE_DOWN:
+							// break;
+						case 107:  // plus key
+							if (ev.shiftKey) {
+								node.parent.expandAll();
 							} else {
-								newNode = newNode.nextSibling;
+								node.expand();
 							}
-						} while (newNode && !newNode.focus());
-						if (!newNode) { node.focus(); }
-						Event.preventDefault(ev);
-						break;
-					case KEY.ENTER:
-						if (node.href) {
-							if (node.target) {
-								window.open(node.href,node.target);
+							break;
+						case 109: // minus key
+							if (ev.shiftKey) {
+								node.parent.collapseAll();
 							} else {
-								window.location(node.href);
+								node.collapse();
 							}
-						} else {
-							node.toggle();
-						}
-						this.fireEvent('enterKeyPressed',node);
-						Event.preventDefault(ev);
-						break;
-					case KEY.HOME:
-						newNode = this.getRoot();
-						if (newNode.children.length) {newNode = newNode.children[0];}
-						if (!newNode.focus()) { node.focus(); }
-						Event.preventDefault(ev);
-						break;
-					case KEY.END:
-						newNode = newNode.parent.children;
-						newNode = newNode[newNode.length -1];
-						if (!newNode.focus()) { node.focus(); }
-						Event.preventDefault(ev);
-						break;
-					// case KEY.PAGE_UP:
-						// break;
-					// case KEY.PAGE_DOWN:
-						// break;
-					case 107:  // plus key
-						if (ev.shiftKey) {
-							node.parent.expandAll();
-						} else {
-							node.expand();
-						}
-						break;
-					case 109: // minus key
-						if (ev.shiftKey) {
-							node.parent.collapseAll();
-						} else {
-							node.collapse();
-						}
-						break;
-					default:
-						break;
-				}
-			},
-			this,
-			true
-		);
+							break;
+						default:
+							break;
+					}
+				},
+				this,
+				true
+			);
+		}
+		this._hasEvents = true;
     },
 	
   /**
@@ -1007,6 +1009,7 @@ TV.prototype = {
 			if (node && node.destroy) {node.destroy(); }
 		}
 		el.parentNode.removeChild(el);
+		this._hasEvents = false;
 	},
 		
 			
