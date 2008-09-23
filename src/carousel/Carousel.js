@@ -1,5 +1,4 @@
 /**
- *----------------------------------------------------------------------------
  * The Carousel module provides a widget for browsing among a set of like
  * objects represented pictorially.
  *
@@ -8,7 +7,6 @@
  * @optional animation
  * @namespace YAHOO.widget
  * @title Carousel Widget
- *----------------------------------------------------------------------------
  */
 (function () {
 
