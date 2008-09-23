@@ -10,7 +10,7 @@ yuiloader - Release Notes
  * Filters are applied to new modules that have a 'fullpath' attribute.
  * resize, editor, simpleeditor, layout, datasource, datatable,
    cookie, profiler, yuiloader out of beta.
- * Added datastore.
+ * Added carousel, paginator
  * Added slider skin.
 
 2.5.2

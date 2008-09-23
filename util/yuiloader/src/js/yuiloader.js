@@ -149,12 +149,6 @@
             'optional': ['connection']
         },
 
-        'datastore': {
-            'type': 'js',
-            'path': 'datastore/datastore-experimental-min.js',
-            'requires': ['element']
-        },
-
         'datatable': {
             'type': 'js',
             'path': 'datatable/datatable-min.js',
