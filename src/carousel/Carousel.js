@@ -1824,8 +1824,10 @@
          */
         scrollTo: function (item) {
             var anim,
+                animate,
                 animAttrs,
                 animCfg    = this.get("animation"),
+                isCircular = this.get("isCircular"),
                 isCircular = this.get("isCircular"),
                 delta,
                 direction,
@@ -1882,10 +1884,12 @@
             sentinel  = item + numPerPage;
             sentinel  = (sentinel > numItems - 1) ? numItems - 1 : sentinel;
 
-            which  = this.get("isVertical") ? "top" : "left";
-            offset = getScrollOffset.call(this, delta);
+            which     = this.get("isVertical") ? "top" : "left";
+            offset    = getScrollOffset.call(this, delta);
 
-            if (animCfg.speed > 0) {
+            animate   = animCfg.speed > 0;
+
+            if (animate) {
                 this._isAnimationInProgress = true;
                 if (this.get("isVertical")) {
                     animAttrs = { points: { by: [0, offset] } };
@@ -1906,8 +1910,6 @@
             } else {
                 offset += getStyle(this._carouselEl, which);
                 Dom.setStyle(this._carouselEl, which, offset + "px");
-                this.fireEvent(afterScrollEvent,
-                        { first: item, last: sentinel });
             }
 
             newPage = parseInt(this._firstItem / numPerPage, 10);
@@ -1925,6 +1927,11 @@
             delete this._autoPlayTimer;
             if (this.get("autoPlay") > 0) {
                 this.startAutoPlay();
+            }
+
+            if (!animate) {
+                this.fireEvent(afterScrollEvent,
+                        { first: item, last: sentinel });
             }
         },
 
