@@ -6,7 +6,7 @@ YUI Library - Charts - Release Notes
   * Fixed bug in which TimeAxis bounds calculation fails when polling. 
   * Added new optional altText attribute.
   * Moved _initialized flag from Charts to FlashAdapter.
-  * Fixed bug in which changes in the dom (e.g. display property of chart) would cause the chart to erase.
+  * Fixed bug in which changes in the dom (e.g. display property of chart) would cause the chart to erase. New known issue added. (see known issues section)
   * Added support for marker labels on PieSeries. Default is percentage values. May be customized with labelFunction property.
   * New Chart Types: StackedColumnChart and StackedBarChart.
   * Fixed bug in which charts delivered in an iframe from a different domain failed to render in Firefox.
