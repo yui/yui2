@@ -196,6 +196,7 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		{
 			case "swfReady":
    				this._loadHandler();
+   				this.fireEvent("contentReady");
 				return;
 			case "log":
 				YAHOO.log(event.message, event.category, this.toString());
@@ -219,7 +220,6 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		this.setAttributes(this._attributes, true);
 		
 		this._initialized = true;
-		this.fireEvent("contentReady");
 	},
 	
 	set: function(name, value)
