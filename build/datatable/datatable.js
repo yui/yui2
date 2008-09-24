@@ -15826,7 +15826,7 @@ lang.augmentProto(BCE, util.EventProvider);
  */
 widget.CheckboxCellEditor = function(oConfigs) {
     this._sId = "yui-checkboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, "checkbox", oConfigs); 
+    widget.CheckboxCellEditor.superclass.constructor.call(this, "checkbox", oConfigs); 
 };
 
 // CheckboxCellEditor extends BaseCellEditor
@@ -15998,7 +15998,7 @@ lang.augmentObject(widget.CheckboxCellEditor, BCE);
  */
 widget.DateCellEditor = function(oConfigs) {
     this._sId = "yui-dateceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, "date", oConfigs); 
+    widget.DateCellEditor.superclass.constructor.call(this, "date", oConfigs); 
 };
 
 // CheckboxCellEditor extends BaseCellEditor
@@ -16137,7 +16137,7 @@ lang.augmentObject(widget.DateCellEditor, BCE);
  */
 widget.DropdownCellEditor = function(oConfigs) {
     this._sId = "yui-dropdownceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, "dropdown", oConfigs); 
+    widget.DropdownCellEditor.superclass.constructor.call(this, "dropdown", oConfigs); 
 };
 
 // DropdownCellEditor extends BaseCellEditor
@@ -16272,7 +16272,7 @@ lang.augmentObject(widget.DropdownCellEditor, BCE);
  */
 widget.RadioCellEditor = function(oConfigs) {
     this._sId = "yui-radioceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, "radio", oConfigs); 
+    widget.RadioCellEditor.superclass.constructor.call(this, "radio", oConfigs); 
 };
 
 // RadioCellEditor extends BaseCellEditor
@@ -16434,7 +16434,7 @@ lang.augmentObject(widget.RadioCellEditor, BCE);
  */
 widget.TextareaCellEditor = function(oConfigs) {
     this._sId = "yui-textareaceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, "textarea", oConfigs); 
+    widget.TextareaCellEditor.superclass.constructor.call(this, "textarea", oConfigs); 
 };
 
 // TextareaCellEditor extends BaseCellEditor
@@ -16555,7 +16555,7 @@ lang.augmentObject(widget.TextareaCellEditor, BCE);
  */
 widget.TextboxCellEditor = function(oConfigs) {
     this._sId = "yui-textboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, "textbox", oConfigs); 
+    widget.TextboxCellEditor.superclass.constructor.call(this, "textbox", oConfigs); 
 };
 
 // TextboxCellEditor extends BaseCellEditor
@@ -16620,7 +16620,7 @@ renderForm : function() {
  */
 move : function() {
     this.textbox.style.width = this.getTdEl().offsetWidth + "px";
-    YAHOO.widget.TextboxCellEditor.superclass.move.call(this);
+    widget.TextboxCellEditor.superclass.move.call(this);
 },
 
 /**
