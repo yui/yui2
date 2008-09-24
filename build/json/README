@@ -1,5 +1,11 @@
 JSON Utility - Release Notes
 
+2.6.0
+    * Security updates
+    * Architecture change to make lang.JSON object more durable
+    * stringify whitelist keys scrubbed for duplicates
+    * Object keys sorted in stringify
+
 2.5.1
     * Updated validation regex to address poor unicode escape treatment in FF
     * Updated special characters RegExp

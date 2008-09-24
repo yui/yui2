@@ -1,5 +1,19 @@
 Logger Release Notes
 
+*** version 2.6.0 ***
+
+* LogWriter source member typo fix
+* LogReader pause(), resume() work when footerEnabled = false
+* Console logging in Safari now receives full message
+* Invalid markup in VERBOSE_TEMPLATE corrected, space re-added after category
+* Corrected problem where messages containing { content } were getting destroyed
+
+
+*** version 2.5.2 ***
+
+* No changes.
+
+
 *** version 2.5.1 ***
 
 * Support object introspection to Firebug.

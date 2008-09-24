@@ -1,5 +1,10 @@
 Connection Manager Release Notes
 
+*** version 2.6.0 ***
+
+* setForm optimization for select-one elements
+
+
 *** version 2.5.2 ***
 
 * In file upload transactions, in Safari 3.x, fail to send the file data.  This

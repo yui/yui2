@@ -1,5 +1,16 @@
 Slider - Release Notes
 
+2.6.0
+    * Vertical DualSlider correctly calculates minRange
+    * Correct handling of backgroundEnabled and lock()ing
+    * Added basic skin and image assets
+    * verifyOffset correction for background element moving in response to change event handler
+    * Target x,y rounded in response to FF (at least) producing subpixel coords
+    * _slideEnd now cleans state before firing slideEnd event
+
+2.5.2
+    * No change
+
 2.5.1
     * No change
 
