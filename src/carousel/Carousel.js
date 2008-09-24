@@ -517,13 +517,17 @@
      * @private
      */
      function setItemSelection(newposition, oldposition) {
-        var cssClass      = this.CLASSES,
+        var backwards,
+            cssClass   = this.CLASSES,
             el,
-            firstItem     = this._firstItem,
-            numItems      = this.get("numItems"),
-            numVisible    = this.get("numVisible"),
-            position      = oldposition,
-            sentinel      = firstItem + numVisible - 1;
+            firstItem  = this._firstItem,
+            isCircular = this.get("isCircular"),
+            numItems   = this.get("numItems"),
+            numVisible = this.get("numVisible"),
+            position   = oldposition,
+            sentinel   = firstItem + numVisible - 1;
+
+        backwards = numVisible > 1 && !isCircular && position > newposition;
 
         if (position >= 0 && position < numItems) {
             if (!JS.isUndefined(this._itemsTable.items[position])) {
@@ -554,7 +558,11 @@
 
         if (newposition < firstItem || newposition > sentinel) {
             // out of focus
-            this.scrollTo(newposition);
+            if (backwards) {
+                this.scrollTo(firstItem - numVisible, true);
+            } else {
+                this.scrollTo(newposition);
+            }
         }
     }
 
@@ -1821,8 +1829,9 @@
          * @method scrollTo
          * @public
          * @param item Number The index of the element to position at.
+         * @param dontSelect Boolean True if select should be avoided
          */
-        scrollTo: function (item) {
+        scrollTo: function (item, dontSelect) {
             var anim,
                 animate,
                 animAttrs,
@@ -1878,6 +1887,8 @@
             this._firstItem = item;
             this.set("firstVisible", item);
 
+            YAHOO.log("Scrolling to " + item, WidgetName);
+
             loadItems.call(this); // do we have all the items to display?
 
             sentinel  = item + numPerPage;
@@ -1917,9 +1928,11 @@
                 this.fireEvent(pageChangeEvent, newPage);
             }
 
-            if (this.get("selectOnScroll")) {
-                if (item != this._selectedItem) { // out of sync
-                    this.set("selectedItem", this._getSelectedItem(item));
+            if (!dontSelect) {
+                if (this.get("selectOnScroll")) {
+                    if (item != this._selectedItem) { // out of sync
+                        this.set("selectedItem", this._getSelectedItem(item));
+                    }
                 }
             }
 
@@ -2103,6 +2116,7 @@
             }
 
             if ((item = this.getItemPositionById(target.id)) >= 0) {
+                YAHOO.log("Setting selection to " + item, WidgetName);
                 this.set("selectedItem", this._getSelectedItem(item));
             }
         },
@@ -2117,7 +2131,8 @@
         _keyboardEventHandler: function (ev) {
             var key      = Event.getCharCode(ev),
                 prevent  = false,
-                position = 0;
+                position = 0,
+                selItem;
 
             if (this._isAnimationInProgress) {
                 return;         // do not mess while animation is in progress
@@ -2126,8 +2141,16 @@
             switch (key) {
             case 0x25:          // left arrow
             case 0x26:          // up arrow
-                position = this.get("selectedItem")-this.get("scrollIncrement");
-                this.set("selectedItem", this._getSelectedItem(position));
+                selItem = this.get("selectedItem");
+                if (selItem == this._firstItem) {
+                    position = selItem - this.get("numVisible");
+                    this.scrollTo(position);
+                    this.set("selectedItem", this._getSelectedItem(selItem-1));
+                } else {
+                    position = this.get("selectedItem") -
+                            this.get("scrollIncrement");
+                    this.set("selectedItem", this._getSelectedItem(position));
+                }
                 prevent = true;
                 break;
             case 0x27:          // right arrow
@@ -2163,7 +2186,7 @@
 
             target = Event.getTarget(ev);
             val = target.href || target.value;
-            if (val) {
+            if (JS.isString(val) && val) {
                 pos = val.lastIndexOf("#");
                 if (pos != -1) {
                     val = this.getItemPositionById(val.substring(pos + 1));
