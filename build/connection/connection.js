@@ -326,7 +326,6 @@ YAHOO.util.Connect =
 	setProgId:function(id)
 	{
 		this._msxml_progid.unshift(id);
-		YAHOO.log('ActiveX Program Id  ' + id + ' added to _msxml_progid.', 'info', 'Connection');
 	},
 
   /**
@@ -341,7 +340,6 @@ YAHOO.util.Connect =
 	{
 		if(typeof b == 'string'){
 			this._default_post_header = b;
-			YAHOO.log('Default POST header set to  ' + b, 'info', 'Connection');
 		}
 		else if(typeof b == 'boolean'){
 			this._use_default_post_header = b;
@@ -360,7 +358,6 @@ YAHOO.util.Connect =
 	{
 		if(typeof b == 'string'){
 			this._default_xhr_header = b;
-			YAHOO.log('Default XHR header set to  ' + b, 'info', 'Connection');
 		}
 		else{
 			this._use_default_xhr_header = b;
@@ -379,7 +376,6 @@ YAHOO.util.Connect =
 	{
 		if(typeof i == 'number' && isFinite(i)){
 			this._polling_interval = i;
-			YAHOO.log('Default polling interval set to ' + i +'ms', 'info', 'Connection');
 		}
 	},
 
@@ -401,7 +397,6 @@ YAHOO.util.Connect =
 			http = new XMLHttpRequest();
 			//  Object literal with http and tId properties
 			obj = { conn:http, tId:transactionId };
-			YAHOO.log('XHR object created for transaction ' + transactionId, 'info', 'Connection');
 		}
 		catch(e)
 		{
@@ -412,7 +407,6 @@ YAHOO.util.Connect =
 					http = new ActiveXObject(this._msxml_progid[i]);
 					//  Object literal with conn and tId properties
 					obj = { conn:http, tId:transactionId };
-					YAHOO.log('ActiveX XHR object created for transaction ' + transactionId, 'info', 'Connection');
 					break;
 				}
 				catch(e2){}
@@ -477,7 +471,6 @@ YAHOO.util.Connect =
 		var args = (callback && callback.argument)?callback.argument:null;
 
 		if(!o){
-			YAHOO.log('Unable to create connection object.', 'error', 'Connection');
 			return null;
 		}
 		else{
@@ -524,7 +517,6 @@ YAHOO.util.Connect =
 			if(this._use_default_xhr_header){
 				if(!this._default_headers['X-Requested-With']){
 					this.initHeader('X-Requested-With', this._default_xhr_header, true);
-					YAHOO.log('Initialize transaction header X-Request-Header to XMLHttpRequest.', 'info', 'Connection');
 				}
 			}
 
@@ -532,7 +524,6 @@ YAHOO.util.Connect =
 			//or a custom value, initalize the Content-Type header to this value.
 			if((method.toUpperCase() === 'POST' && this._use_default_post_header) && this._isFormSubmit === false){
 				this.initHeader('Content-Type', this._default_post_header);
-				YAHOO.log('Initialize header Content-Type to application/x-www-form-urlencoded; UTF-8 for POST transaction.', 'info', 'Connection');
 			}
 
 			//Initialize all default and custom HTTP headers,
@@ -542,7 +533,6 @@ YAHOO.util.Connect =
 
 			this.handleReadyState(o, callback);
 			o.conn.send(postData || '');
-			YAHOO.log('Transaction ' + o.tId + ' sent.', 'info', 'Connection');
 
 
 			// Reset the HTML form data and state properties as
@@ -582,11 +572,9 @@ YAHOO.util.Connect =
 			if(this._customEvents[prop][0]){
 				// Create the custom event
 				o[this._customEvents[prop][0]] = new YAHOO.util.CustomEvent(this._customEvents[prop][1], (callback.scope)?callback.scope:null);
-				YAHOO.log('Transaction-specific Custom Event ' + o[this._customEvents[prop][1]] + ' created.', 'info', 'Connection');
 
 				// Subscribe the custom event
 				o[this._customEvents[prop][0]].subscribe(callback.customevents[prop]);
-				YAHOO.log('Transaction-specific Custom Event ' + o[this._customEvents[prop][1]] + ' subscribed.', 'info', 'Connection');
 			}
 		}
 	},
@@ -681,13 +669,11 @@ YAHOO.util.Connect =
 			if(callback && callback.success){
 				if(!callback.scope){
 					callback.success(responseObject);
-					YAHOO.log('Success callback. HTTP code is ' + httpStatus, 'info', 'Connection');
 				}
 				else{
 					// If a scope property is defined, the callback will be fired from
 					// the context of the object.
 					callback.success.apply(callback.scope, [responseObject]);
-					YAHOO.log('Success callback with scope. HTTP code is ' + httpStatus, 'info', 'Connection');
 				}
 			}
 
@@ -712,11 +698,9 @@ YAHOO.util.Connect =
 					if(callback && callback.failure){
 						if(!callback.scope){
 							callback.failure(responseObject);
-							YAHOO.log('Failure callback. Exception detected. Status code is ' + httpStatus, 'warn', 'Connection');
 						}
 						else{
 							callback.failure.apply(callback.scope, [responseObject]);
-							YAHOO.log('Failure callback with scope. Exception detected. Status code is ' + httpStatus, 'warn', 'Connection');
 						}
 					}
 
@@ -726,11 +710,9 @@ YAHOO.util.Connect =
 					if(callback && callback.failure){
 						if(!callback.scope){
 							callback.failure(responseObject);
-							YAHOO.log('Failure callback. HTTP status code is ' + httpStatus, 'warn', 'Connection');
 						}
 						else{
 							callback.failure.apply(callback.scope, [responseObject]);
-							YAHOO.log('Failure callback with scope. HTTP status code is ' + httpStatus, 'warn', 'Connection');
 						}
 					}
 			}
@@ -877,7 +859,6 @@ YAHOO.util.Connect =
 			for(prop in this._default_headers){
 				if(YAHOO.lang.hasOwnProperty(this._default_headers, prop)){
 					o.conn.setRequestHeader(prop, this._default_headers[prop]);
-					YAHOO.log('Default HTTP header ' + prop + ' set with value of ' + this._default_headers[prop], 'info', 'Connection');
 				}
 			}
 		}
@@ -886,7 +867,6 @@ YAHOO.util.Connect =
 			for(prop in this._http_headers){
 				if(YAHOO.lang.hasOwnProperty(this._http_headers, prop)){
 					o.conn.setRequestHeader(prop, this._http_headers[prop]);
-					YAHOO.log('HTTP header ' + prop + ' set with value of ' + this._http_headers[prop], 'info', 'Connection');
 				}
 			}
 			delete this._http_headers;
@@ -942,7 +922,6 @@ YAHOO.util.Connect =
 			oForm = formId;
 		}
 		else{
-			YAHOO.log('Unable to create form object ' + formId, 'warn', 'Connection');
 			return;
 		}
 
@@ -1038,10 +1017,8 @@ YAHOO.util.Connect =
 		this._isFormSubmit = true;
 		this._sFormData = data.join('&');
 
-		YAHOO.log('Form initialized for transaction. HTML form POST message is: ' + this._sFormData, 'info', 'Connection');
 
 		this.initHeader('Content-Type', this._default_form_header);
-		YAHOO.log('Initialize header Content-Type to application/x-www-form-urlencoded for setForm() transaction.', 'info', 'Connection');
 
 		return this._sFormData;
 	},
@@ -1097,7 +1074,6 @@ YAHOO.util.Connect =
 		io.style.left = '-1000px';
 
 		document.body.appendChild(io);
-		YAHOO.log('File upload iframe created. Id is:' + frameId, 'info', 'Connection');
 	},
 
   /**
@@ -1253,11 +1229,9 @@ YAHOO.util.Connect =
 			if(callback && callback.upload){
 				if(!callback.scope){
 					callback.upload(obj);
-					YAHOO.log('Upload callback.', 'info', 'Connection');
 				}
 				else{
 					callback.upload.apply(callback.scope, [obj]);
-					YAHOO.log('Upload callback with scope.', 'info', 'Connection');
 				}
 			}
 
@@ -1275,7 +1249,6 @@ YAHOO.util.Connect =
 				function(){
 					document.body.removeChild(io);
 					oConn.releaseObject(o);
-					YAHOO.log('File upload iframe destroyed. Id is:' + frameId, 'info', 'Connection');
 				}, 100);
 		};
 
@@ -1325,7 +1298,6 @@ YAHOO.util.Connect =
 				YAHOO.util.Event.removeListener(io, "load");
 				// Destroy the iframe facilitating the transaction.
 				document.body.removeChild(io);
-				YAHOO.log('File upload iframe destroyed. Id is:' + frameId, 'info', 'Connection');
 
 				if(isTimeout){
 					window.clearTimeout(this._timeOut[o.tId]);
@@ -1349,7 +1321,6 @@ YAHOO.util.Connect =
 			}
 
 			this.handleTransactionResponse(o, callback, true);
-			YAHOO.log('Transaction ' + o.tId + ' aborted.', 'info', 'Connection');
 		}
 
 		return abortStatus;
@@ -1393,7 +1364,6 @@ YAHOO.util.Connect =
 			//dereference the XHR instance.
 			o.conn = null;
 
-			YAHOO.log('Connection object for transaction ' + o.tId + ' destroyed.', 'info', 'Connection');
 
 			//dereference the connection object.
 			o = null;
