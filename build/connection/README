@@ -2,8 +2,11 @@ Connection Manager Release Notes
 
 *** version 2.6.0 ***
 
-* setForm optimization for select-one elements
+* setForm optimization for select-one elements.
 
+* File upload transactions that include encoded POST data will have the keys and
+values decoded before they are used to create the form fields, to avoid having
+the data encoded twice.
 
 *** version 2.5.2 ***
 
@@ -289,6 +292,8 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
+
 
 
 
