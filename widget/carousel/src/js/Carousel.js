@@ -1828,7 +1828,6 @@
                 animAttrs,
                 animCfg    = this.get("animation"),
                 isCircular = this.get("isCircular"),
-                isCircular = this.get("isCircular"),
                 delta,
                 direction,
                 firstItem  = this._firstItem,
