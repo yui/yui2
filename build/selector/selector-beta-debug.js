@@ -347,7 +347,7 @@ var rTestNode = function(node, selector, token, deDupe) {
         var attribute;
         for (var i = 0, len = token.attributes.length; i < len; ++i) {
             attribute = node.getAttribute(token.attributes[i][0], 2);
-            if (attribute === undefined) {
+            if (attribute === null || attribute === undefined) {
                 return false;
             }
             if ( Selector.operators[token.attributes[i][1]] &&
@@ -421,6 +421,7 @@ var combinators = {
     '>': function(node, token) {
         return rTestNode(node.parentNode, null, token.previous);
     },
+
     '+': function(node, token) {
         var sib = node.previousSibling;
         while (sib && sib.nodeType !== 1) {
