@@ -34,6 +34,11 @@
     overflow: hidden;
     padding: 0;
     text-align: center;
+    /* IE 6 & 7 fix - prevent DOM scroll for focussed elements. */
+   *float: none;
+   *display: inline-block;
+   *zoom: 1;
+   *display: inline;
 }
 
 .yui-carousel .yui-carousel-item-selected {
