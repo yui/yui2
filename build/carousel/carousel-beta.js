@@ -1256,16 +1256,31 @@
          * @public
          */
         focus: function () {
-            var selItem              = this.get("selectedItem"),
-                numVisible           = this.get("numVisible"),
-                selectOnScroll       = this.get("selectOnScroll"),
-                selected             = this.getItem(selItem),
-                first                = this.get("firstVisible"),
-                last                 = first + numVisible - 1,
-                isSelectionInvisible = (selItem < first || selItem > last),
-                focusEl              = (selected && selected.id) ?
-                                       Dom.get(selected.id) : null,
-                itemsTable           = this._itemsTable;
+            var selItem,
+                numVisible,
+                selectOnScroll,
+                selected,
+                first,
+                last,
+                isSelectionInvisible,
+                focusEl,
+                itemsTable;
+
+            if (this._isAnimationInProgress) {
+                // this messes up real bad!
+                return;
+            }
+
+            selItem              = this.get("selectedItem");
+            numVisible           = this.get("numVisible");
+            selectOnScroll       = this.get("selectOnScroll");
+            selected             = this.getItem(selItem);
+            first                = this.get("firstVisible");
+            last                 = first + numVisible - 1;
+            isSelectionInvisible = (selItem < first || selItem > last);
+            focusEl              = (selected && selected.id) ?
+                                   Dom.get(selected.id) : null;
+            itemsTable           = this._itemsTable;
 
             if (!selectOnScroll && isSelectionInvisible) {
                 focusEl = (itemsTable && itemsTable.items &&
