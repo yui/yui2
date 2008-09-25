@@ -180,9 +180,16 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		{
 			if(prop == "labelFunction")
 			{
-				if(value.labelFunction !== null && typeof value.labelFunction == "function")
+				if(value.labelFunction !== null)
 				{
-					clonedXAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
+					if(typeof value.labelFunction == "function")
+					{
+						clonedXAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
+					}
+					else
+					{
+						clonedXAxis.labelFunction = value.labelFunction;
+					}
 					this._xAxisLabelFunction = clonedXAxis.labelFunction;
 				}
 			}
@@ -213,9 +220,16 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		{
 			if(prop == "labelFunction")
 			{
-				if(value.labelFunction !== null && typeof value.labelFunction == "function")
+				if(value.labelFunction !== null)
 				{
-					clonedYAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
+					if(typeof value.labelFunction == "function")
+					{
+						clonedYAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
+					}
+					else
+					{
+						clonedYAxis.labelFunction = value.labelFunction;
+					}
 					this._yAxisLabelFunction = clonedYAxis.labelFunction;
 				}
 			}
