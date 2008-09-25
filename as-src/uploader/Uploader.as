@@ -10,8 +10,10 @@
 	import flash.display.StageScaleMode;
 	import flash.events.DataEvent;
 	import flash.events.Event;
+	import flash.events.FocusEvent;
 	import flash.events.HTTPStatusEvent;
 	import flash.events.IOErrorEvent;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
@@ -20,8 +22,8 @@
 	import flash.net.FileReference;
 	import flash.net.FileReferenceList;
 	import flash.net.URLRequest;
-	import flash.net.URLRequestHeader;
 	import flash.net.URLVariables;
+	import flash.ui.Keyboard;
 	import flash.utils.Dictionary; 
 
 
@@ -29,7 +31,7 @@
 	[SWF(backgroundColor=0xffffff)]
 
 	/**
-	 * A wrapper for the Astra Uploader components to allow them to be used by the YUI library.
+	 * The base Uploader class for YUI's Flash-based file uploader.
 	 * 
 	 * @author Allen Rabinovich
 	 */
@@ -64,21 +66,30 @@
 
 		private var singleFile:FileReference;
 		private var multipleFiles:FileReferenceList;
-
+		
+		
 		/**
 		 * Determines how many files will be uploaded simultaneously
 		 *
+		 * @see setSimUploadLimit
 		 * @langversion 3.0
 		 * @playerversion Flash 9.0.28.0
 		 */
 		public var simultaneousUploadLimit:Number = 2;
+		
+		// Track the number of current upload threads
 		private var currentUploadThreads:Number = 0;
 
+		// How the uploader is rendered, either "button" or "transparent"
 		private var renderType:String;
 		
+		// The Sprite containing the rendered UI.
 		private var buttonSprite:Sprite = new Sprite();
+		
+		// The skin for the button, if "button" renderType is used.
 		private var buttonSkin:Loader = new Loader();
 		
+		// Height and width for the button
 		private var buttonHeight:Number;
 		private var buttonWidth:Number;
 		
@@ -213,30 +224,46 @@
 
 		public function enable () : void {
 			if (renderType == "button") {
-				buttonSprite.addEventListener(MouseEvent.ROLL_OVER, buttonMouseOver);
-				buttonSprite.addEventListener(MouseEvent.ROLL_OUT, buttonMouseOut);
-				buttonSprite.addEventListener(MouseEvent.MOUSE_DOWN, buttonMouseDown);
-				buttonSprite.addEventListener(MouseEvent.MOUSE_UP, buttonMouseUp);
-				buttonSprite.addEventListener(MouseEvent.CLICK, handleMouseClick);
+				this.addEventListener(MouseEvent.ROLL_OVER, buttonMouseOver);
+				this.addEventListener(MouseEvent.ROLL_OUT, buttonMouseOut);
+				this.addEventListener(MouseEvent.MOUSE_DOWN, buttonMouseDown);
+				this.addEventListener(MouseEvent.MOUSE_UP, buttonMouseUp);
+				this.addEventListener(MouseEvent.CLICK, handleMouseClick);
 				buttonSkin.y = 0;
 			}
 			else {
-				buttonSprite.addEventListener(MouseEvent.CLICK, handleMouseClick);
+				this.addEventListener(MouseEvent.CLICK, handleMouseClick);
+				this.addEventListener(MouseEvent.CLICK, transparentClick);
+			
+				this.addEventListener(MouseEvent.MOUSE_DOWN, transparentDown);
+				this.addEventListener(MouseEvent.MOUSE_UP, transparentUp);
+				this.addEventListener(MouseEvent.ROLL_OVER, transparentRollOver);
+				this.addEventListener(MouseEvent.ROLL_OUT, transparentRollOut);
 			}
+			
+			logMessage("Uploader UI has been enabled.");
 		}
 		
 		public function disable () : void {
 			if (renderType == "button") {
-				buttonSprite.removeEventListener(MouseEvent.ROLL_OVER, buttonMouseOver);
-				buttonSprite.removeEventListener(MouseEvent.ROLL_OUT, buttonMouseOut);
-				buttonSprite.removeEventListener(MouseEvent.MOUSE_DOWN, buttonMouseDown);
-				buttonSprite.removeEventListener(MouseEvent.MOUSE_UP, buttonMouseUp);
-				buttonSprite.removeEventListener(MouseEvent.CLICK, handleMouseClick);
+				this.removeEventListener(MouseEvent.ROLL_OVER, buttonMouseOver);
+				this.removeEventListener(MouseEvent.ROLL_OUT, buttonMouseOut);
+				this.removeEventListener(MouseEvent.MOUSE_DOWN, buttonMouseDown);
+				this.removeEventListener(MouseEvent.MOUSE_UP, buttonMouseUp);
+				this.removeEventListener(MouseEvent.CLICK, handleMouseClick);
 				buttonSkin.y = -3*buttonHeight;
 			}
 			else {
-				buttonSprite.removeEventListener(MouseEvent.CLICK, handleMouseClick);
+				this.removeEventListener(MouseEvent.CLICK, handleMouseClick);
+				this.removeEventListener(MouseEvent.CLICK, transparentClick);
+			
+				this.removeEventListener(MouseEvent.MOUSE_DOWN, transparentDown);
+				this.removeEventListener(MouseEvent.MOUSE_UP, transparentUp);
+				this.removeEventListener(MouseEvent.ROLL_OVER, transparentRollOver);
+				this.removeEventListener(MouseEvent.ROLL_OUT, transparentRollOut);
 			}
+			
+			logMessage("Uploader UI has been disabled.");
 		}
 
 	    /**
@@ -280,7 +307,7 @@
 	     *  </code>
 	     */
 
-		public function upload(fileID:String, url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata", headers:Object = null):void {
+		public function upload(fileID:String, url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata"):void {
 
 			// null checking in the params is not working correctly
 			filesToUpload = [];
@@ -293,7 +320,7 @@
 				fieldName = "Filedata";
 			}
 
-			var request:URLRequest = formURLRequest(url, method, vars, headers);
+			var request:URLRequest = formURLRequest(url, method, vars);
 			var fr:FileReference = fileRefList[fileID];
 
 			this.currentUploadThreads++;
@@ -321,8 +348,6 @@
 
 		public function uploadAll(url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata", headers:Object = null):void {
 
-			// null checking in the params is not working correctly
-
 			if(isEmptyString(method)) {
 				method = "GET";
 			}
@@ -331,7 +356,7 @@
 				fieldName = "Filedata";
 			}
 			
-			var request:URLRequest = formURLRequest(url, method, vars, headers);
+			var request:URLRequest = formURLRequest(url, method, vars);
 
 			for each(var fr:FileReference in fileRefList) {
 				queueForUpload(fr, request, fieldName);
@@ -368,6 +393,11 @@
 		/*
 			Events
 			-------------------------------
+			mouseDown - fires when the mouse button is pressed over uploader
+			mouseUp - fires when the mouse button is released over uploader
+			rollOver - fires when the mouse rolls over the uploader
+			rollOut - fires when the mouse rolls out of the uploader
+			click - fires when the uploader is clicked
 			fileSelect - fires when the user selects one or more files (after browse is called). Passes the array of currently selected files (if prior browse calls were made and clearFileList hasn't been called, all files the user has ever selected will be returned), along with all information available about them (name, size, type, creationDate, modificationDate, creator). 
 			uploadStart - fires when a file starts uploading. Passes a file id for identifying the file.
 			uploadProgress - fires when a file upload reports progress. Passes the file id, as well as bytesUploaded and bytesTotal for the given file.
@@ -375,6 +405,20 @@
 			uploadCompleteData - fires when data is received from the server after upload and passes the corresponding file id and the said data.
 			uploadError - fires when an error occurs during download. Passes the id of the file that was being uploaded and an error type.
 		*/
+
+		private function transparentDown (event:MouseEvent) : void {
+			logMessage("Mouse down on the uploader.");
+			var newEvent:Object = new Object();
+			newEvent.type = "mouseDown";
+			super.dispatchEventToJavaScript(newEvent);
+		}
+
+		private function transparentUp (event:MouseEvent) : void {
+			logMessage("Mouse up on the uploader.");
+			var newEvent:Object = new Object();
+			newEvent.type = "mouseUp";
+			super.dispatchEventToJavaScript(newEvent);
+		}
 
 		private function transparentRollOver (event:MouseEvent) : void {
 			logMessage("Mouse rolled over the uploader.");
@@ -459,8 +503,6 @@
 
 		private function uploadError (event:Event) : void {
 
-			// {} instead of new Object()? !
-
 	        var newEvent:Object = {};
 
 			if (event is HTTPStatusEvent) {
@@ -498,6 +540,7 @@
 
 		// Fired when the user selects a single file
 		private function singleFileSelected(event:Event):void {
+			this.clearFileList();
 			addFile(event.target as FileReference);
 			processSelection();
 		}
@@ -529,13 +572,38 @@
 				buttonMask.graphics.beginFill(0x000000,1);
 				buttonMask.graphics.drawRect(0,0,buttonWidth,buttonHeight);
 				buttonMask.graphics.endFill();
-				buttonSkin.mask = buttonMask;
 				
-				buttonSprite.addEventListener(MouseEvent.ROLL_OVER, buttonMouseOver);
-				buttonSprite.addEventListener(MouseEvent.ROLL_OUT, buttonMouseOut);
-				buttonSprite.addEventListener(MouseEvent.MOUSE_DOWN, buttonMouseDown);
-				buttonSprite.addEventListener(MouseEvent.MOUSE_UP, buttonMouseUp);
-				buttonSprite.addEventListener(MouseEvent.CLICK, handleMouseClick);
+				_this.addChild(buttonMask);
+				buttonSprite.mask = buttonMask;
+				
+				function buttonStageResize (evt:Event) : void {
+		 		buttonSprite.width = buttonSprite.stage.stageWidth;
+		 		buttonSprite.height = buttonSprite.stage.stageHeight*4;
+		 		buttonMask.width = _this.stage.stageWidth;
+		 		buttonMask.height = _this.stage.stageHeight;
+		 		};
+		 	
+				buttonSprite.width = _this.stage.stageWidth;
+				buttonSprite.height = _this.stage.stageHeight*4;
+				buttonMask.width = _this.stage.stageWidth;
+				buttonMask.height = _this.stage.stageHeight;
+				
+				_this.stage.scaleMode = StageScaleMode.NO_SCALE;
+				_this.stage.align = StageAlign.TOP_LEFT;
+				_this.stage.tabChildren = false;
+			
+				_this.stage.addEventListener(Event.RESIZE, buttonStageResize);
+				
+				_this.addEventListener(MouseEvent.ROLL_OVER, buttonMouseOver);
+				_this.addEventListener(MouseEvent.ROLL_OUT, buttonMouseOut);
+				_this.addEventListener(MouseEvent.MOUSE_DOWN, buttonMouseDown);
+				_this.addEventListener(MouseEvent.MOUSE_UP, buttonMouseUp);
+				_this.addEventListener(MouseEvent.CLICK, handleMouseClick);
+				
+				_this.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
+				_this.stage.addEventListener(KeyboardEvent.KEY_UP, handleKeyUp);
+			
+
 				_this.addChild(buttonSprite);	
 			}
 			
@@ -547,7 +615,6 @@
 			buttonSkin.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, errorLoader);
 
 		}
-
 
 		private function buttonMouseOver (event:MouseEvent) : void {
 					buttonSkin.y = -1*buttonHeight;
@@ -579,16 +646,47 @@
 			buttonSprite.graphics.endFill();
 			this.stage.scaleMode = StageScaleMode.NO_SCALE;
 			this.stage.align = StageAlign.TOP_LEFT;
+			this.stage.tabChildren = false;
+			
 			this.stage.addEventListener(Event.RESIZE, transparentStageResize);
-			buttonSprite.addEventListener(MouseEvent.CLICK, handleMouseClick);
-			buttonSprite.addEventListener(MouseEvent.CLICK, transparentClick);
-			buttonSprite.addEventListener(MouseEvent.ROLL_OVER, transparentRollOver);
-			buttonSprite.addEventListener(MouseEvent.ROLL_OUT, transparentRollOut);
-			buttonSprite.buttonMode = true;
-			buttonSprite.useHandCursor = true;
+			
+			this.addEventListener(MouseEvent.CLICK, handleMouseClick);
+			this.addEventListener(MouseEvent.CLICK, transparentClick);
+			
+			this.addEventListener(MouseEvent.MOUSE_DOWN, transparentDown);
+			this.addEventListener(MouseEvent.MOUSE_UP, transparentUp);
+			this.addEventListener(MouseEvent.ROLL_OVER, transparentRollOver);
+			this.addEventListener(MouseEvent.ROLL_OUT, transparentRollOut);
+			
+			this.buttonMode = true;
+			this.useHandCursor = true;
 			this.addChild(buttonSprite);
 		}
 		
+		private function handleKeyDown (evt:KeyboardEvent) : void {
+			if (evt.keyCode == Keyboard.ENTER || evt.keyCode == Keyboard.SPACE) {
+				logMessage("Keyboard 'Enter' or 'Space' down.");
+				buttonSkin.y = -2*buttonHeight;
+			}	
+		}
+		
+		private function handleKeyUp (evt:KeyboardEvent) : void {
+			if (evt.keyCode == Keyboard.ENTER || evt.keyCode == Keyboard.SPACE) {
+				buttonSkin.y = 0;
+				logMessage("Keyboard 'Enter' or 'Space' up.");
+				logMessage("Keyboard 'Enter' or 'Space' detected, launching 'Open File' dialog.");
+				this.browse(this.allowMultiple, this.filterArray);
+			}
+		}
+		
+		private function handleFocusIn (evt:FocusEvent) : void {
+			logMessage("Focus is on the Uploader.");
+		}
+		
+		private function handleFocusOut (evt:FocusEvent) : void {
+			logMessage("Focus is out on the Uploader.");
+		}
+
 
 		private function handleMouseClick (evt:MouseEvent) : void {
 			logMessage("Mouse click detected, launching 'Open File' dialog.");
@@ -656,16 +754,27 @@
 			// Allows log outputs to be produced.
 			ExternalInterface.addCallback("setAllowLogging", setAllowLogging);
 			 
+			// setAllowMultipleFiles (allowMultiple:Boolean = false)
+			// Allows multiple file selection
 			ExternalInterface.addCallback("setAllowMultipleFiles", this.setAllowMultipleFiles);
 			
+			// setSimUploadLimit(simUpload:int = [2,5])
+			// Sets the number of simultaneous uploads allowed when automatically managing queue.
 			ExternalInterface.addCallback("setSimUploadLimit", this.setSimUploadLimit);
 			
+			// setFileFilters(fileFilters:Array)
+			// Sets file filters for file selection.
 			ExternalInterface.addCallback("setFileFilters", this.setFileFilters);
 			
+			// enable()
+			// Enables Uploader UI
 			ExternalInterface.addCallback("enable", enable);
 			
+			// disable()
+			// Disables Uploader UI
 			ExternalInterface.addCallback("disable", disable);
 
+			// Initialize properties.
 			fileDataList = new Object();
 			fileRefList = new Object();
 			fileIDList = new Dictionary();
@@ -785,7 +894,7 @@
 		 *  Creates a URLRequest object from a url, and optionally includes an HTTP request method and additional variables to be sent
 		 */	
 
-		private function formURLRequest(url:String, method:String = "GET", vars:Object = null, headers:Object = null):URLRequest {
+		private function formURLRequest(url:String, method:String = "GET", vars:Object = null):URLRequest {
 
 			var request:URLRequest = new URLRequest();
 			request.url = url;
@@ -797,12 +906,6 @@
 				request.data[itemName] = vars[itemName];
 			}
 
-			var requestHeaders:Array = new Array();			
-			for (var headerName:String in headers) {
-				requestHeaders.push(new URLRequestHeader(headerName, headers[headerName]));
-			}
-			
-			request.requestHeaders = requestHeaders;
 
 			return request;
 		}

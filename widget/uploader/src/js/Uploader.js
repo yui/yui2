@@ -39,11 +39,38 @@
   */
 YAHOO.widget.Uploader = function(containerId, buttonSkin)
 {
+	var newWMode = "window";
+
+	if (!(buttonSkin)) {
+		newWMode = "transparent";
+	}
 	
- 	YAHOO.widget.Uploader.superclass.constructor.call(this, YAHOO.widget.Uploader.SWFURL, containerId, {wmode:"transparent"}, buttonSkin);
+ 	YAHOO.widget.Uploader.superclass.constructor.call(this, YAHOO.widget.Uploader.SWFURL, containerId, {wmode:newWMode}, buttonSkin);
+
+	this._swf.tabIndex="1";
 
 	/**
-	 * Fires when an upload of a specific file has started.
+	 * Fires when the mouse is pressed over the Uploader.
+	 * Only fires when the Uploader UI is enabled and
+	 * the render type is 'transparent'.
+	 *
+	 * @event mouseDown
+	 * @param event.type {String} The event type
+	 */
+	this.createEvent("mouseDown");
+	
+	/**
+	 * Fires when the mouse is released over the Uploader.
+	 * Only fires when the Uploader UI is enabled and
+	 * the render type is 'transparent'.
+	 *
+	 * @event mouseUp
+	 * @param event.type {String} The event type
+	 */
+	this.createEvent("mouseUp");
+
+	/**
+	 * Fires when the mouse rolls over the Uploader.
 	 *
 	 * @event rollOver
 	 * @param event.type {String} The event type
@@ -51,7 +78,7 @@ YAHOO.widget.Uploader = function(containerId, buttonSkin)
 	this.createEvent("rollOver");
 	
 	/**
-	 * Fires when an upload of a specific file has started.
+	 * Fires when the mouse rolls out of the Uploader.
 	 *
 	 * @event rollOut
 	 * @param event.type {String} The event type
@@ -59,12 +86,11 @@ YAHOO.widget.Uploader = function(containerId, buttonSkin)
 	this.createEvent("rollOut");
 	
 	/**
-	 * Fires when an upload of a specific file has started.
+	 * Fires when the uploader is clicked.
 	 *
-	 * @event uploadStart
+	 * @event click
 	 * @param event.type {String} The event type
 	 */
-	 
 	this.createEvent("click");
 	
 	/**
@@ -171,9 +197,9 @@ YAHOO.extend(YAHOO.widget.Uploader, YAHOO.widget.FlashAdapter,
  * URI, User-Agent, Vary, Via, Warning, WWW-Authenticate, x-flash-version.
  * </code> 
  */
-	upload: function(fileID, uploadScriptPath, method, vars, fieldName, headers)
+	upload: function(fileID, uploadScriptPath, method, vars, fieldName)
 	{
-		this._swf.upload(fileID, uploadScriptPath, method, vars, fieldName, headers);
+		this._swf.upload(fileID, uploadScriptPath, method, vars, fieldName);
 	},
 	
 /**
@@ -193,9 +219,9 @@ YAHOO.extend(YAHOO.widget.Uploader, YAHOO.widget.FlashAdapter,
  * URI, User-Agent, Vary, Via, Warning, WWW-Authenticate, x-flash-version.
  * </code> 
  */
-	uploadAll: function(uploadScriptPath, method, vars, fieldName, headers)
+	uploadAll: function(uploadScriptPath, method, vars, fieldName)
 	{
-		this._swf.uploadAll(uploadScriptPath, method, vars, fieldName, headers);
+		this._swf.uploadAll(uploadScriptPath, method, vars, fieldName);
 	},
 
 /**

@@ -159,6 +159,8 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 			swfObj.addParam("wmode", wmode);
 		}
 		
+		swfObj.addParam("menu", "false");
+		
 		//again, a useful ExternalInterface trick
 		swfObj.addVariable("allowedDomain", document.location.hostname);
 
