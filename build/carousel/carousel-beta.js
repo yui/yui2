@@ -1754,11 +1754,11 @@
             // Make sure at least one item is selected
             this.set("selectedItem", this.get("firstVisible"));
 
+            this.fireEvent(renderEvent);
+
             // By now, the navigation would have been rendered, so calculate
             // the container height now.
             this._setContainerSize();
-
-            this.fireEvent(renderEvent);
 
             return true;
         },
@@ -2422,7 +2422,7 @@
             if (reveal > 0) {
                 reveal = itemSize * (reveal / 100) * 2;
                 size += reveal;
-                // XXX: set the Carousel's initial offset somwehere
+                // TODO: set the Carousel's initial offset somwehere
                 currVal = parseFloat(Dom.getStyle(this._carouselEl, attr));
                 currVal = JS.isNumber(currVal) ? currVal : 0;
                 Dom.setStyle(this._carouselEl, attr, currVal+(reveal/2)+"px");
@@ -2462,9 +2462,6 @@
             var isVertical, size;
 
             isVertical = this.get("isVertical");
-            if (isVertical) {
-                return;             // no need to set the height for container
-            }
             clip       = clip || this._clipEl;
             attr       = attr || (isVertical ? "height" : "width");
             size       = parseFloat(Dom.getStyle(clip, attr), 10);
@@ -2477,6 +2474,10 @@
                     getStyle(clip, "paddingRight") +
                     getStyle(clip, "borderLeft")   +
                     getStyle(clip, "borderRight");
+
+            if (isVertical) {
+                size += getStyle(this._navEl, "height");
+            }
 
             this.setStyle(attr, size + "px");
         },
