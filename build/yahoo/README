@@ -1,5 +1,8 @@
 YAHOO Global - Release Notes
 
+2.6.0
+  * No change.
+
 2.5.2
   * YAHOO.lang now overwrites existing methods when included a second time,
     but preserves methods that are in the old version but not in the new.

@@ -25,7 +25,7 @@ response, whether container opens or not due to instance losing focus.
 * Implementers who have problems upgrading can set the property backwardCompatMode
 to true.
 
-* As a convenience, the formatResult() method now recieves a third parameter which
+* As a convenience, the formatResult() method now receives a third parameter which
 is the query matching string for the result.
 
 * In order to eliminate certain race conditions with the typeAhead feature, added
