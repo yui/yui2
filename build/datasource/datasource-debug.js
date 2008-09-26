@@ -80,7 +80,6 @@ util.DataSourceBase = function(oLiveData, oConfigs) {
      * @param oArgs.response {Object} The response object.
      * @param oArgs.callback {Object} The callback object.
      * @param oArgs.caller {Object} (deprecated) Use callback.scope.
-     * @param oArgs.tId {Number} Transaction ID.
      */
     this.createEvent("cacheResponseEvent");
 
@@ -90,6 +89,7 @@ util.DataSourceBase = function(oLiveData, oConfigs) {
      * @event requestEvent
      * @param oArgs.request {Object} The request object.
      * @param oArgs.callback {Object} The callback object.
+     * @param oArgs.tId {Number} Transaction ID.     
      * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      */
     this.createEvent("requestEvent");
@@ -101,6 +101,7 @@ util.DataSourceBase = function(oLiveData, oConfigs) {
      * @param oArgs.request {Object} The request object.
      * @param oArgs.response {Object} The raw response object.
      * @param oArgs.callback {Object} The callback object.
+     * @param oArgs.tId {Number} Transaction ID.     
      * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      */
     this.createEvent("responseEvent");

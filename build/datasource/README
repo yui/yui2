@@ -7,7 +7,7 @@ DataSource Release Notes
 the subclasses LocalDataSource, FunctionDataSource, XHRDataSource, and
 ScriptNodeDataSource. While backward compatibility of the YAHOO.util.DataSource
 constructor has been maintained, implementers should be aware that calling
-<code>new YAHOO.util.DataSource()</code> now actually returns one of these
+new YAHOO.util.DataSource() now actually returns one of these
 subclasses. Implementers can alternatively call a subclass constructor directly.
 The DataSource constructor returns one of the subclasses based on the oLiveData
 passed to it, or the dataType config value. This class-based architecture no
