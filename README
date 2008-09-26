@@ -2,7 +2,31 @@ YUI Library Release Notes
 
 *** version 2.6.0 ***
 
-- TBD
+The 2.6.0 release of YUI contains:
+
+- Two new components:
+  - Carousel 
+  - Paginator (code that handles navigation of chunked data previously released as a part of DataTable)
+- Seven components promoted from Beta to GA status
+  - Cookie
+  - DataTable
+  - DataSource
+  - Layout Manager
+  - Rich Text Editor
+  - Resize 
+  - Profiler
+- Many bug fixes to DataTable as well as a number of enhancements including:  
+  - CellEditor, BaseCellEditor, and associated subclasses which handle inline cell editing
+  - ScrollingDataTable, a new subclass which to isolates and manages the fixed scrolling architecture
+  - Pagination and sorting features that have been reworked to better support dynamically driven DataTables
+- The addition of Undo/Redo support to Rich Text Editor in addition to updates to indent/outdent processing, text attribute handling, toolbar button support to name a few.
+- The addition of new configuration properties to both Menu and Button.
+- An updated TreeView component that now includes support for keyboard navigation, delegated event listeners, tree serialization/deserialization and other new features.
+- Enhancements for Flash 10 support in the Uploader.
+- Fixes to more than 280 Source Forge bug reports.
+
+Please see the README file for each component in the build directory for specific updates since version 2.5.2 or the README Digest posted to ydn-javascript as part of the 2.6.0 release announcement.
+
 
 *** version 2.5.2 ***
 
