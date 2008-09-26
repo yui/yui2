@@ -67,7 +67,7 @@ util.DataSourceBase = function(oLiveData, oConfigs) {
      *
      * @event cacheRequestEvent
      * @param oArgs.request {Object} The request object.
-     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.callback {Object} The callback object.
      * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      */
     this.createEvent("cacheRequestEvent");
@@ -78,7 +78,7 @@ util.DataSourceBase = function(oLiveData, oConfigs) {
      * @event cacheResponseEvent
      * @param oArgs.request {Object} The request object.
      * @param oArgs.response {Object} The response object.
-     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.callback {Object} The callback object.
      * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      * @param oArgs.tId {Number} Transaction ID.
      */
@@ -89,7 +89,7 @@ util.DataSourceBase = function(oLiveData, oConfigs) {
      *
      * @event requestEvent
      * @param oArgs.request {Object} The request object.
-     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.callback {Object} The callback object.
      * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      */
     this.createEvent("requestEvent");
@@ -100,7 +100,7 @@ util.DataSourceBase = function(oLiveData, oConfigs) {
      * @event responseEvent
      * @param oArgs.request {Object} The request object.
      * @param oArgs.response {Object} The raw response object.
-     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.callback {Object} The callback object.
      * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      */
     this.createEvent("responseEvent");
@@ -111,7 +111,7 @@ util.DataSourceBase = function(oLiveData, oConfigs) {
      * @event responseParseEvent
      * @param oArgs.request {Object} The request object.
      * @param oArgs.response {Object} The parsed response object.
-     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.callback {Object} The callback object.
      * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      */
     this.createEvent("responseParseEvent");
@@ -122,7 +122,7 @@ util.DataSourceBase = function(oLiveData, oConfigs) {
      * @event responseCacheEvent
      * @param oArgs.request {Object} The request object.
      * @param oArgs.response {Object} The parsed response object.
-     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.callback {Object} The callback object.
      * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      */
     this.createEvent("responseCacheEvent");
@@ -131,7 +131,7 @@ util.DataSourceBase = function(oLiveData, oConfigs) {
      *
      * @event dataErrorEvent
      * @param oArgs.request {Object} The request object.
-     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.callback {Object} The callback object.
      * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      * @param oArgs.message {String} The error message.
      */
@@ -1653,90 +1653,9 @@ parseHTMLTableData : function(oRequest, oFullResponse) {
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DataSourceBase Custom Events
-//
-/////////////////////////////////////////////////////////////////////////////
-
 // DataSourceBase uses EventProvider
 lang.augmentProto(DS, util.EventProvider);
 
-/**
- * Fired when a request is made to the local cache.
- *
- * @event cacheRequestEvent
- * @param oArgs.request {Object} The request object.
- * @param oArgs.callback {Function} The callback function.
- * @param oArgs.caller {Object} (deprecated) Use callback.scope.
- */
-
-/**
- * Fired when data is retrieved from the local cache.
- *
- * @event cacheResponseEvent
- * @param oArgs.request {Object} The request object.
- * @param oArgs.response {Object} The response object.
- * @param oArgs.callback {Function} The callback function.
- * @param oArgs.caller {Object} (deprecated) Use callback.scope.
- */
-
-/**
- * Fired when a request is sent to the live data source.
- *
- * @event requestEvent
- * @param oArgs.tId {Number} Unique transaction ID. 
- * @param oArgs.request {Object} The request object.
- * @param oArgs.callback {Function} The callback function.
- * @param oArgs.caller {Object} (deprecated) Use callback.scope.
- */
-
-/**
- * Fired when live data source sends response.
- *
- * @event responseEvent
- * @param oArgs.tId {Number} Unique transaction ID. 
- * @param oArgs.request {Object} The request object.
- * @param oArgs.response {Object} The raw response object.
- * @param oArgs.callback {Function} The callback function.
- * @param oArgs.caller {Object} (deprecated) Use callback.scope.
- */
-
-/**
- * Fired when response is parsed.
- *
- * @event responseParseEvent
- * @param oArgs.request {Object} The request object.
- * @param oArgs.response {Object} The parsed response object.
- * @param oArgs.callback {Function} The callback function.
- * @param oArgs.caller {Object} (deprecated) Use callback.scope.
- */
-
-/**
- * Fired when response is cached.
- *
- * @event responseCacheEvent
- * @param oArgs.request {Object} The request object.
- * @param oArgs.response {Object} The parsed response object.
- * @param oArgs.callback {Function} The callback function.
- * @param oArgs.caller {Object} (deprecated) Use callback.scope.
- */
-
-/**
- * Fired when a data error is encountered.
- *
- * @event dataErrorEvent
- * @param oArgs.request {Object} The request object.
- * @param oArgs.callback {Function} The callback function.
- * @param oArgs.caller {Object} (deprecated) Use callback.scope.
- * @param oArgs.message {String} The error message.
- */
-
-/**
- * Fired when the local cache is flushed.
- *
- * @event cacheFlushEvent
- */
 
 
 /****************************************************************************/
@@ -2688,10 +2607,16 @@ var xPad=function (x, pad, r)
         z: function (d) {
                 var o = d.getTimezoneOffset();
                 var H = xPad(parseInt(Math.abs(o/60), 10), 0);
-                var M = xPad(o%60, 0);
+                var M = xPad(Math.abs(o%60), 0);
                 return (o>0?'-':'+') + H + M;
             },
-        Z: function (d) { return d.toString().replace(/^.*\(([^)]+)\)$/, '$1'); },
+        Z: function (d) {
+		var tz = d.toString().replace(/^.*:\d\d( GMT[+-]\d+)? \(?([A-Za-z ]+)\)?\d*$/, '$2').replace(/[a-z ]/g, '');
+		if(tz.length > 4) {
+			tz = Dt.formats.z(d);
+		}
+		return tz;
+	},
         '%': function (d) { return '%'; }
     },
 

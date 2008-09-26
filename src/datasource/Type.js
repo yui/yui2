@@ -211,10 +211,16 @@ var xPad=function (x, pad, r)
         z: function (d) {
                 var o = d.getTimezoneOffset();
                 var H = xPad(parseInt(Math.abs(o/60), 10), 0);
-                var M = xPad(o%60, 0);
+                var M = xPad(Math.abs(o%60), 0);
                 return (o>0?'-':'+') + H + M;
             },
-        Z: function (d) { return d.toString().replace(/^.*\(([^)]+)\)$/, '$1'); },
+        Z: function (d) {
+		var tz = d.toString().replace(/^.*:\d\d( GMT[+-]\d+)? \(?([A-Za-z ]+)\)?\d*$/, '$2').replace(/[a-z ]/g, '');
+		if(tz.length > 4) {
+			tz = Dt.formats.z(d);
+		}
+		return tz;
+	},
         '%': function (d) { return '%'; }
     },
 
