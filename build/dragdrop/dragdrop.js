@@ -678,7 +678,7 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         startDrag: function(x, y) {
-            if (this.dragCurrent.useShim) {
+            if (this.dragCurrent && this.dragCurrent.useShim) {
                 this._shimState = this.useShim;
                 this.useShim = true;
             }
@@ -780,7 +780,7 @@ YAHOO.util.DragDropMgr = function() {
 
             if (this._shimActive) {
                 this._deactivateShim();
-                if (this.dragCurrent.useShim) {
+                if (this.dragCurrent && this.dragCurrent.useShim) {
                     this.useShim = this._shimState;
                     this._shimState = false;
                 }
@@ -969,7 +969,6 @@ YAHOO.util.DragDropMgr = function() {
                     dc.fireEvent('invalidDropEvent', { e: e });
                 }
             }
-
             for (i = 0; i < events.length; i++) {
                 var tmp = null;
                 if (data[events[i] + 'Evts']) {
@@ -981,11 +980,11 @@ YAHOO.util.DragDropMgr = function() {
                         b4 = 'b4Drag' + type,
                         cev = 'drag' + type + 'Event',
                         check = 'drag' + type;
-                    
                     if (this.mode) {
                         if (dc.events[b4]) {
                             dc[b4](e, tmp, inGroups);
                             dc.fireEvent(b4 + 'Event', { event: e, info: tmp, group: inGroups });
+                            
                         }
                         if (dc.events[check]) {
                             dc[ev](e, tmp, inGroups);
@@ -2980,6 +2979,7 @@ YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop, {
         if (!this.deltaSetXY) {
             var aCoord = [oCoord.x, oCoord.y];
             YAHOO.util.Dom.setXY(el, aCoord);
+
             var newLeft = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
             var newTop  = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
 
