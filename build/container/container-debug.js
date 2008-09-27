@@ -6999,7 +6999,8 @@
 
             "BUTTONS": {
                 key: "buttons",
-                value: "none"
+                value: "none",
+                supercedes: ["visible"]
             },
 
             "HIDEAFTERSUBMIT" : {
@@ -7196,7 +7197,8 @@
             */
             this.cfg.addProperty(DEFAULT_CONFIG.BUTTONS.key, {
                 handler: this.configButtons,
-                value: DEFAULT_CONFIG.BUTTONS.value
+                value: DEFAULT_CONFIG.BUTTONS.value,
+                supercedes : DEFAULT_CONFIG.BUTTONS.supercedes
             }); 
 
         },
@@ -7748,7 +7750,9 @@
         _getButton : function(button) {
             var Button = YAHOO.widget.Button;
 
-            if (Button && button.nodeName && button.id) {
+            // If we have an HTML button and YUI Button is on the page, 
+            // get the YUI Button reference if available.
+            if (Button && button && button.nodeName && button.id) {
                 button = Button.getButton(button.id) || button;
             }
 
