@@ -1500,16 +1500,17 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
 
     // dispatch mousedowns to the active slider
     minSlider.onMouseDown = function(e) {
-        self._handleMouseDown(e);
+        return self._handleMouseDown(e);
     };
 
     // we can safely ignore a mousedown on one of the sliders since
     // they share a background
     maxSlider.onMouseDown = function(e) { 
         if (self.minSlider.isLocked() && !self.minSlider._sliding) {
-            self._handleMouseDown(e);
+            return self._handleMouseDown(e);
         } else {
             YAHOO.util.Event.stopEvent(e); 
+            return false;
         }
     };
 
