@@ -584,7 +584,7 @@ TV.prototype = {
 				function (ev) {
 					var target = getTarget(ev);
 					if (target) {
-						target.className = target.className.replace(/ygtv([lt])([mp])/gi,'ygtv$1$2h');
+target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').replace(/h+/, 'h');
 					}
 				}
 			);
