@@ -482,8 +482,7 @@
 
 
 		private function uploadCompleteData (event:DataEvent) : void {
-			logMessage("Got data back for " + fileIDList[event.target] + ": ");
-			logMessage(event.data);
+			logMessage("Got data back for " + fileIDList[event.target] + ": " + "\n" + event.data);
 			var newEvent:Object = new Object();
 			newEvent.id = fileIDList[event.target];
 			newEvent.data = event.data;
@@ -883,7 +882,7 @@
 			var fr:FileReference = objToUpload.fr;
 			var request:URLRequest = objToUpload.request;
 			var fieldName:String = objToUpload.fieldName;
-
+			logMessage("Sending to: " + request.url);
 			fr.upload(request,fieldName);
 			this.currentUploadThreads++;
 		}
