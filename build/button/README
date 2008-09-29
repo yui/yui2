@@ -57,10 +57,17 @@ Added the following features:
 
 Changes:
 --------
+
 + Removed the rounded corners for IE 6 Quirks Mode and Strict Mode and IE 7 Quirks Mode.
 
 + Changed the keyboard shortcut used to display the Menu for Button's of type "split" to the down
   arrow key.
+
++ Passing a DOM element reference to the "container" attribute will no longer result in the Button 
+  being appended to the container immediately.  Use the "appendTo" event to listen for when 
+  the Button will be appended to the element specified as its container.  To append a Button to
+  an element in the DOM immediately, use the "appendTo" method rather than the "container" 
+  attribute.
 
 
 *** Version 2.5.2 ***
