@@ -7,8 +7,7 @@
 }
 /* During resize, hide the handles */
 .yui-skin-sam .yui-layout .yui-resize-resizing .yui-resize-handle {
-    opacity: 0;
-    filter: alpha(opacity=0);
+    visibility: hidden;
 }
 /* Style the div inside the resize proxy */
 .yui-skin-sam .yui-layout .yui-resize-proxy div {
@@ -18,7 +17,7 @@
 }
 /* Set the color of the Active resize handle */
 .yui-skin-sam .yui-layout .yui-resize .yui-resize-handle-active {
-    background-color: #EDF5FF;
+    /*background-color: #EDF5FF;*/
 }
 /* Styles for the left handle */
 .yui-skin-sam .yui-layout .yui-resize-proxy .yui-layout-handle-l {
@@ -33,6 +32,8 @@
     top: 0;
     right: 0;
     height: 100%;
+    position: absolute;
+    zoom: 1;
 }
 /* Styles for the bottom handle */
 .yui-skin-sam .yui-layout .yui-resize-proxy .yui-layout-handle-b {
