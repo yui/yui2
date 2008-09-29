@@ -781,7 +781,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 t.initPageX = this.initPageX + t.startOffset[0];
                 t.initPageY = this.initPageY + t.startOffset[1];
                 t.deltaSetXY = [-this.initPageX,-this.initPageY];
-                t.resetConstraints();
+                //this.resetConstraints();
+                this.resetThumbConstraints();
 
                 return false;
             }
@@ -1014,7 +1015,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         }
 
         this.thumb.autoOffset();
-        this.thumb.resetConstraints();
+        //this.thumb.resetConstraints();
+        this.resetThumbConstraints();
     },
 
     /**
@@ -1062,6 +1064,20 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         this.unlock();
         this.moveComplete = true;
         this.fireEvents();
+    },
+
+    /**
+     * Resets the X and Y contraints for the thumb.  Used in lieu of the thumb
+     * instance's inherited resetConstraints because some logic was not
+     * applicable.
+     * @method resetThumbConstraints
+     * @protected
+     */
+    resetThumbConstraints: function () {
+        var t = this.thumb;
+
+        t.setXConstraint(t.leftConstraint, t.rightConstraint, t.xTickSize);
+        t.setYConstraint(t.topConstraint, t.bottomConstraint, t.xTickSize);
     },
 
     /**
@@ -1244,6 +1260,40 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      */
     _graduated: false,
 
+    /**
+     * Gets the coordinates for the nearest tick.  Overrides DD.getTargetCoord.
+     * @method getTargetCoord
+     * @param x {int} base pageX to find the best target X
+     * @param y {int} base pageY to find the best target Y
+     * @return {Object} { x: targetX, y: targetY }
+     * @protected
+    getTargetCoord: function (x,y) {
+        var fromX, fromY, ticks;
+
+        x -= this.deltaX;
+        y -= this.deltaY;
+
+        fromX = x - this.initPageX;
+        fromY = y - this.initPageY;
+
+        if (this.xTickSize) {
+            ticks = Math.floor(fromX / this.xTickSize);
+            ticks += (fromX % this.xTickSize) >= (this.xTickSize / 2) ? 1 : 0;
+            x = this.initPageX + Math.round(ticks * this.xTickSize);
+        }
+        if (this.yTickSize) {
+            ticks = Math.floor(fromY / this.yTickSize);
+            ticks += (fromY % this.yTickSize) >= (this.yTickSize / 2) ? 1 : 0;
+            y = this.initPageY + Math.round(ticks * this.yTickSize);
+        }
+
+
+        return {
+            x: Math.max(this.minX, Math.min(this.maxX,x)),
+            y: Math.max(this.minY, Math.min(this.maxY,y))
+        };
+    },
+     */
 
     /**
      * Returns the difference between the location of the thumb and its parent.

@@ -781,7 +781,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 t.initPageX = this.initPageX + t.startOffset[0];
                 t.initPageY = this.initPageY + t.startOffset[1];
                 t.deltaSetXY = [-this.initPageX,-this.initPageY];
-                t.resetConstraints();
+                //this.resetConstraints();
+                this.resetThumbConstraints();
 
                 return false;
             }
@@ -1014,7 +1015,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         }
 
         this.thumb.autoOffset();
-        this.thumb.resetConstraints();
+        //this.thumb.resetConstraints();
+        this.resetThumbConstraints();
     },
 
     /**
@@ -1062,6 +1064,20 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         this.unlock();
         this.moveComplete = true;
         this.fireEvents();
+    },
+
+    /**
+     * Resets the X and Y contraints for the thumb.  Used in lieu of the thumb
+     * instance's inherited resetConstraints because some logic was not
+     * applicable.
+     * @method resetThumbConstraints
+     * @protected
+     */
+    resetThumbConstraints: function () {
+        var t = this.thumb;
+
+        t.setXConstraint(t.leftConstraint, t.rightConstraint, t.xTickSize);
+        t.setYConstraint(t.topConstraint, t.bottomConstraint, t.xTickSize);
     },
 
     /**
