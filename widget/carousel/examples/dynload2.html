@@ -99,7 +99,13 @@
                 return "";
             }
 
-            YAHOO.util.Event.onAvailable("bd", function (args) {
+            YAHOO.util.Event.onDOMReady(function (ev) {
+                var i, spotlight;
+                
+                myLogReader = new YAHOO.widget.LogReader();
+                carousel    = new YAHOO.widget.Carousel("container", {
+                    numItems: 17
+                });
                 YAHOO.util.Connect.asyncRequest("GET", "php/getimages.php",
                     {
                         success: function (o) {
@@ -125,15 +131,6 @@
                             alert("Ajax request failed!");
                         }
                     });
-            });
-            
-            YAHOO.util.Event.onDOMReady(function (ev) {
-                var i, spotlight;
-                
-                myLogReader = new YAHOO.widget.LogReader();
-                carousel    = new YAHOO.widget.Carousel("container", {
-                    numItems: 17
-                });
                 spotlight   = YAHOO.util.Dom.get("spotlight"),
                 carousel.render();
                 carousel.show();
