@@ -3,23 +3,10 @@
 Fixed the following bugs:
 -------------------------
 
-+ The "getMenu" method no longer returns null when the "menu" attribute is set to an array of 
-  YAHOO.widget.MenuItem configuration properties.
-
-+ Buttons of type "menu" and "split" will automatically constrain the position of their menu to 
-  be inside the viewport boundaries if it is an instance of YAHOO.widget.Overlay.
-
 + Clicking on the option region of a Button of "type" split will fire the "option" event, but not
   "mousedown," "mouseup," "click," or "dblclick".
 
 + Buttons of type "radio" and "checkbox" will not override a value provided for the title attribute.
-
-
-
-*** version 2.6.0 Preview 1 ***
-
-Fixed the following bugs:
--------------------------
 
 + Returning false in an inline "submit" event handler for a form will now prevent the form
   from being submitted when the form contains Button instances.
@@ -50,7 +37,6 @@ Fixed the following bugs:
 + Buttons of type "menu" and "split" now consistently display their Menus in Opera.
 
 + Button no longer logs a warning when a Button is created without an id.
-
   
 
 Added the following features:
