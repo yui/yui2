@@ -619,7 +619,7 @@ if (!YAHOO.util.Event) {
 
             /**
              * Appends a focus event handler.  (The focusin event is used for Internet Explorer, 
-             * the focus, capture-event for Opera, WebKit.)
+             * the focus, capture-event for Opera, WebKit, and Gecko.)
              *
              * @method addFocusListener
              *
@@ -665,7 +665,7 @@ if (!YAHOO.util.Event) {
 
             /**
              * Appends a blur event handler.  (The focusout event is used for Internet Explorer, 
-             * the focusout, capture-event for Opera, WebKit.)
+             * the focusout, capture-event for Opera, WebKit, and Gecko.)
              *
              * @method addBlurListener
              *
