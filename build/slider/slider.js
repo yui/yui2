@@ -760,7 +760,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 // Reset thumb
                 t.initPageX = this.initPageX + t.startOffset[0];
                 t.initPageY = this.initPageY + t.startOffset[1];
-                t.deltaSetXY = [-this.initPageX,-this.initPageY];
+                //t.deltaSetXY = [-this.initPageX,-this.initPageY];
+                t.deltaSetXY = null;
                 //this.resetConstraints();
                 this.resetThumbConstraints();
 
@@ -806,6 +807,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
             // cache the current thumb pos
             this.curCoord = YAHOO.util.Dom.getXY(this.thumb.getEl());
+            this.curCoord = [Math.round(this.curCoord[0]), Math.round(this.curCoord[1])];
 
             setTimeout( function() { self.moveOneTick(p); }, this.tickPause );
 
@@ -881,13 +883,17 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         // var thresh = 10;
         // var thresh = t.tickSize + (Math.floor(t.tickSize/2));
 
-        var nextCoord = null;
+        var nextCoord = null,
+            tmpX, tmpY;
 
         if (t._isRegion) {
             nextCoord = this._getNextX(this.curCoord, finalCoord);
-            var tmpX = (nextCoord) ? nextCoord[0] : this.curCoord[0];
-            nextCoord = this._getNextY([tmpX, this.curCoord[1]], finalCoord);
+            tmpX = (nextCoord !== null) ? nextCoord[0] : this.curCoord[0];
+            nextCoord = this._getNextY(this.curCoord, finalCoord);
+            tmpY = (nextCoord !== null) ? nextCoord[1] : this.curCoord[1];
 
+            nextCoord = tmpX !== this.curCoord[0] || tmpY !== this.curCoord[1] ?
+                [ tmpX, tmpY ] : null;
         } else if (t._isHoriz) {
             nextCoord = this._getNextX(this.curCoord, finalCoord);
         } else {
@@ -907,7 +913,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
             // YAHOO.util.Dom.setStyle(el, "left", (nextCoord[0] + this.thumb.deltaSetXY[0]) + "px");
             // YAHOO.util.Dom.setStyle(el, "top",  (nextCoord[1] + this.thumb.deltaSetXY[1]) + "px");
 
-            this.thumb.alignElWithMouse(t.getEl(), nextCoord[0], nextCoord[1]);
+            this.thumb.alignElWithMouse(t.getEl(), nextCoord[0] + this.thumbCenterPoint.x, nextCoord[1] + this.thumbCenterPoint.y);
             
             // check if we are in the final position, if not make a recursive call
             if (!(nextCoord[0] == finalCoord[0] && nextCoord[1] == finalCoord[1])) {
@@ -1225,40 +1231,6 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      */
     _graduated: false,
 
-    /**
-     * Gets the coordinates for the nearest tick.  Overrides DD.getTargetCoord.
-     * @method getTargetCoord
-     * @param x {int} base pageX to find the best target X
-     * @param y {int} base pageY to find the best target Y
-     * @return {Object} { x: targetX, y: targetY }
-     * @protected
-    getTargetCoord: function (x,y) {
-        var fromX, fromY, ticks;
-
-        x -= this.deltaX;
-        y -= this.deltaY;
-
-        fromX = x - this.initPageX;
-        fromY = y - this.initPageY;
-
-        if (this.xTickSize) {
-            ticks = Math.floor(fromX / this.xTickSize);
-            ticks += (fromX % this.xTickSize) >= (this.xTickSize / 2) ? 1 : 0;
-            x = this.initPageX + Math.round(ticks * this.xTickSize);
-        }
-        if (this.yTickSize) {
-            ticks = Math.floor(fromY / this.yTickSize);
-            ticks += (fromY % this.yTickSize) >= (this.yTickSize / 2) ? 1 : 0;
-            y = this.initPageY + Math.round(ticks * this.yTickSize);
-        }
-
-
-        return {
-            x: Math.max(this.minX, Math.min(this.maxX,x)),
-            y: Math.max(this.minY, Math.min(this.maxY,y))
-        };
-    },
-     */
 
     /**
      * Returns the difference between the location of the thumb and its parent.

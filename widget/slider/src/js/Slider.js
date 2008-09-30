@@ -780,7 +780,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 // Reset thumb
                 t.initPageX = this.initPageX + t.startOffset[0];
                 t.initPageY = this.initPageY + t.startOffset[1];
-                t.deltaSetXY = [-this.initPageX,-this.initPageY];
+                //t.deltaSetXY = [-this.initPageX,-this.initPageY];
+                t.deltaSetXY = null;
                 //this.resetConstraints();
                 this.resetThumbConstraints();
 
@@ -829,6 +830,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
             // cache the current thumb pos
             this.curCoord = YAHOO.util.Dom.getXY(this.thumb.getEl());
+            this.curCoord = [Math.round(this.curCoord[0]), Math.round(this.curCoord[1])];
 
             setTimeout( function() { self.moveOneTick(p); }, this.tickPause );
 
@@ -905,13 +907,17 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         // var thresh = 10;
         // var thresh = t.tickSize + (Math.floor(t.tickSize/2));
 
-        var nextCoord = null;
+        var nextCoord = null,
+            tmpX, tmpY;
 
         if (t._isRegion) {
             nextCoord = this._getNextX(this.curCoord, finalCoord);
-            var tmpX = (nextCoord) ? nextCoord[0] : this.curCoord[0];
-            nextCoord = this._getNextY([tmpX, this.curCoord[1]], finalCoord);
+            tmpX = (nextCoord !== null) ? nextCoord[0] : this.curCoord[0];
+            nextCoord = this._getNextY(this.curCoord, finalCoord);
+            tmpY = (nextCoord !== null) ? nextCoord[1] : this.curCoord[1];
 
+            nextCoord = tmpX !== this.curCoord[0] || tmpY !== this.curCoord[1] ?
+                [ tmpX, tmpY ] : null;
         } else if (t._isHoriz) {
             nextCoord = this._getNextX(this.curCoord, finalCoord);
         } else {
@@ -935,7 +941,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
             // YAHOO.util.Dom.setStyle(el, "left", (nextCoord[0] + this.thumb.deltaSetXY[0]) + "px");
             // YAHOO.util.Dom.setStyle(el, "top",  (nextCoord[1] + this.thumb.deltaSetXY[1]) + "px");
 
-            this.thumb.alignElWithMouse(t.getEl(), nextCoord[0], nextCoord[1]);
+            this.thumb.alignElWithMouse(t.getEl(), nextCoord[0] + this.thumbCenterPoint.x, nextCoord[1] + this.thumbCenterPoint.y);
             
             // check if we are in the final position, if not make a recursive call
             if (!(nextCoord[0] == finalCoord[0] && nextCoord[1] == finalCoord[1])) {

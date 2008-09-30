@@ -110,40 +110,6 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      */
     _graduated: false,
 
-    /**
-     * Gets the coordinates for the nearest tick.  Overrides DD.getTargetCoord.
-     * @method getTargetCoord
-     * @param x {int} base pageX to find the best target X
-     * @param y {int} base pageY to find the best target Y
-     * @return {Object} { x: targetX, y: targetY }
-     * @protected
-    getTargetCoord: function (x,y) {
-        var fromX, fromY, ticks;
-
-        x -= this.deltaX;
-        y -= this.deltaY;
-
-        fromX = x - this.initPageX;
-        fromY = y - this.initPageY;
-
-        if (this.xTickSize) {
-            ticks = Math.floor(fromX / this.xTickSize);
-            ticks += (fromX % this.xTickSize) >= (this.xTickSize / 2) ? 1 : 0;
-            x = this.initPageX + Math.round(ticks * this.xTickSize);
-        }
-        if (this.yTickSize) {
-            ticks = Math.floor(fromY / this.yTickSize);
-            ticks += (fromY % this.yTickSize) >= (this.yTickSize / 2) ? 1 : 0;
-            y = this.initPageY + Math.round(ticks * this.yTickSize);
-        }
-
-
-        return {
-            x: Math.max(this.minX, Math.min(this.maxX,x)),
-            y: Math.max(this.minY, Math.min(this.maxY,y))
-        };
-    },
-     */
 
     /**
      * Returns the difference between the location of the thumb and its parent.
