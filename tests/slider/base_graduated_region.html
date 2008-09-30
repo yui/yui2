@@ -6,17 +6,25 @@
     <link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.5.2/build/logger/assets/skins/sam/logger.css">
     <link type="text/css" rel="stylesheet" href="../../build/slider/assets/skins/sam/slider.css">
     <style type="text/css">
+        #bg {
+            position: relative;
+            height: 224px;
+            width: 216px;
+            background: #eee;
+        }
+        #t {
+            position: absolute;
+            top: 4px;
+            left: 0;
+        }
     </style>
 </head>
 <body class="yui-skin-sam">
 <div id="log"></div>
 <div class="markup">
-    <div id="bg" class="yui-h-slider" tabindex="-1">
-        <div id="min" class="yui-slider-thumb">
-            <img src="../../build/slider/assets/left-thumb.png" alt="slider thumb">
-        </div>
-        <div id="max" class="yui-slider-thumb">
-            <img src="../../build/slider/assets/right-thumb.png" alt="slider thumb">
+    <div id="bg" tabindex="-1">
+        <div id="t">
+            <img src="../../build/slider/assets/thumb-n.gif" alt="slider thumb">
         </div>
     </div>
 </div>
@@ -29,12 +37,12 @@
 <script type="text/javascript">
 YAHOO.util.Event.onDOMReady(function () {
 
-var log = new YAHOO.widget.LogReader('log',{ newestOnTop: false }),
+var //log = new YAHOO.widget.LogReader('log',{ newestOnTop: false }),
     s1,
     startCount = 1,
     endCount = 1;
 
-var s1 = YAHOO.widget.Slider.getHorizDualSlider('bg','min','max',200);
+var s1 = YAHOO.widget.Slider.getSliderRegion('bg','t',0,200,0,200,20);
 
 s1.subscribe('slideStart', function () {
     YAHOO.log('slideStart: ' + (startCount++));
