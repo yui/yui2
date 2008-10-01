@@ -24,6 +24,9 @@
      */
     YAHOO.widget.Carousel = function (el, cfg) {
 
+        this._navBtns = {};
+        this._pages = {};
+
         YAHOO.widget.Carousel.superclass.constructor.call(this, el, cfg);
     };
 
@@ -818,7 +821,7 @@
          * @property _navBtns
          * @private
          */
-        _navBtns: {},
+        _navBtns: null,
 
         /**
          * The Carousel navigation.
@@ -843,7 +846,7 @@
          * @property _pages
          * @private
          */
-        _pages: {},
+        _pages: null,
 
         /**
          * Status of the previous navigation item.
@@ -1592,9 +1595,11 @@
             Event.onFocus(this.get("element"), function (ev, obj) {
                 obj._updateNavButtons(Event.getTarget(ev), true);
             }, this);
+
             Event.onBlur(this.get("element"), function (ev, obj) {
                 obj._updateNavButtons(Event.getTarget(ev), false);
             }, this);
+
         },
 
         /**
@@ -2898,4 +2903,5 @@
     });
 
 })();
+
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
