@@ -1284,11 +1284,10 @@ parseXMLResult : function(result) {
             // ...or in a node
             else {
                 var xmlNode = result.getElementsByTagName(key);
-                if(xmlNode && xmlNode.item(0) && xmlNode.item(0)) {
-                    data = xmlNode.item(0).firstChild.nodeValue;
+                if(xmlNode && xmlNode.item(0)) {
                     var item = xmlNode.item(0);
                     // For IE, then DOM...
-                    data = (item.text) ? item.text : (item.textContent) ? item.textContent : null;
+                    data = (item) ? ((item.text) ? item.text : (item.textContent) ? item.textContent : null) : null;
                     // ...then fallback, but check for multiple child nodes
                     if(!data) {
                         var datapieces = [];
