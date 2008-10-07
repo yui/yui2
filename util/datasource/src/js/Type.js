@@ -250,9 +250,9 @@ var xPad=function (x, pad, r)
      *   <dd>Any format defined by strftime is supported</dd>
      *  </dl>
      *  strftime has several format specifiers defined by the Open group at 
-     *  http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html
+     *  <a href="http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html">http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html</a>
      *
-     *  PHP added a few of its own, defined at http://www.php.net/strftime
+     *  PHP added a few of its own, defined at <a href="http://www.php.net/strftime">http://www.php.net/strftime</a>
      *
      *  This javascript implementation supports all the PHP specifiers and a few more.
      *	<dl>
