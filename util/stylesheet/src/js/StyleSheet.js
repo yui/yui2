@@ -1,16 +1,16 @@
 (function () {
 
-var s      = document.creatElement('p').style,
+var x      = document.createElement('p').style, // worker style collection
     u      = YAHOO.util,
     lang   = YAHOO.lang,
     sheets = {},
     ssId   = 0,
-    floatAttr = ('cssFloat' in s) ? 'cssFloat' : 'styleFloat',
+    floatAttr = ('cssFloat' in x) ? 'cssFloat' : 'styleFloat',
     _toCssText, toCssText;
 
 _toCssText = function (css,base) {
     var f = css.styleFloat || css.cssFloat || css['float'];
-    s.cssText = base || '';
+    x.cssText = base || '';
     if (f && !css[floatAttr]) {
         css = lang.merge(css);
         delete css.styleFloat; delete css.cssFloat; delete css['float'];
@@ -18,19 +18,23 @@ _toCssText = function (css,base) {
     }
     for (var prop in css) {
         if (css.hasOwnProperty(prop)) {
-            s[prop] = css[prop];
+            x[prop] = css[prop];
         }
     }
-    return s.cssText;
+    return x.cssText;
 };
 
-toCssText = ('opacity' in s) ? _toCssText :
+// Wrap IE's toCssText to catch opacity.  The copy/merge is to preserve the
+// input object's integrity, but if float and opacity are set, the input will
+// be copied twice in IE.  Is there a way to avoid this without increasing the
+// byte count?
+toCssText = ('opacity' in x) ? _toCssText :
     function (css, cssText) {
         if ('opacity' in css) {
             css = lang.merge(css,{
                     filter: 'alpha(opacity='+(css.opacity*100)+')'
                   });
-            delete css.opacity
+            delete css.opacity;
         }
         return _toCssText(css,cssText);
     };
@@ -38,10 +42,16 @@ toCssText = ('opacity' in s) ? _toCssText :
 u.StyleSheet = function (node) {
     var head,
         sheet,
+        name = node+'',
         cssRules = {},
         _rules,
         _insertRule,
         _deleteRule;
+
+    // Factory or constructor
+    if (!(this instanceof u.StyleSheet)) {
+        return new u.StyleSheet(node);
+    }
 
     head = document.getElementsByTagName('head')[0];
     if (!head) {
@@ -60,7 +70,8 @@ u.StyleSheet = function (node) {
     node = node && u.Dom.get(node);
 
     // Return a cached sheet if possible
-    if (node && node.yuiSSID && sheets[node.yuiSSID]) {
+    if (node && /^(?:style|link)$/i.test(node.nodeName) &&
+            node.yuiSSID && sheets[node.yuiSSID]) {
         return sheets[node.yuiSSID];
     }
 
@@ -89,14 +100,12 @@ u.StyleSheet = function (node) {
 
     // IE supports addRule with different signature
     _insertRule = ('insertRule' in sheet) ?
-        function (sel,o,i) {
-            sheet.insertRule(sel+' '+u.StyleSheet.toCssText(o),i);
-        } :
-        function (sel,o,i) {
-            sheet.addRule(sel,u.StyleSheet.toCssText(o),i);
-        };
+        function (sel,css,i) { sheet.insertRule(sel+' '+css,i); } :
+        function (sel,css,i) { sheet.addRule(sel,css,i); };
 
     // Initialize the cssRules map from the node
+    // TODO if xdomain link node, copy to a local style block and replace the
+    // link node with the style node.  CAVEAT: alternate stylesheet, @media
     var i,r,sel;
     for (i = sheet[_rules].length - 1; i >= 0; --i) {
         r   = sheet[_rules][i];
@@ -111,12 +120,14 @@ u.StyleSheet = function (node) {
     }
 
     // Cache the sheet by the generated Id
-    node.yuiSSID = 'yui-stylesheet-' + ssId;
-    sheets[node.yuiSSID] = this;
-    ssId++;
+    node.yuiSSID = 'yui-stylesheet-' + (ssId++);
+    u.StyleSheet.register(node.yuiSSID,this);
+    u.StyleSheet.register(name,this);
 
     // Public API
     YAHOO.lang.augmentObject(this,{
+        getId : function () { return node.yuiSSID; },
+
         // Enabling/disabling the stylesheet.  Changes may be made to rules
         // while disabled.
         enable : function () { sheet.disabled = false; },
@@ -126,6 +137,8 @@ u.StyleSheet = function (node) {
         isEnabled : function () { return !sheet.disabled; },
 
         // Update cssText for a rule.  Add the rule if it's not present already
+        // TODO: test for breakage in funny selectors ##i:go-..\\bo\om or valid
+        // (i think) #i\:go\-\.\.\\\\bo\\om
         setCSS : function (sel,css) {
             var rule    = cssRules[sel],
                 idx;
@@ -192,10 +205,15 @@ YAHOO.lang.augmentObject(u.StyleSheet, {
     // Memoized regex generator to remove properties from cssText
     _propertyRE : function (prop) {
         return this.PROP_REGEX[prop] ||
-              (this.PROP_REGEX[prop] = new RegExp(prop+'(?:-[a-z\\-]+)?\\s*:[^;]*(?:;|$)','gi'));
+              (this.PROP_REGEX[prop] = new RegExp(prop.replace(/([A-Z])/g,'-$1')+'(?:-[a-z\\-]+)?\\s*:[^;]*(?:;|$)','gi'));
     },
 
-    toCssText : toCssText
+    toCssText : toCssText,
+
+    register : function (name,sheet) {
+        return !!(name && sheet instanceof u.StyleSheet &&
+                  !sheets[name] && (sheets[name] = sheet));
+    }
 },true);
 
 })();
