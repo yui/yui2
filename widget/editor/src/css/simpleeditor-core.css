@@ -552,14 +552,16 @@ h2.yui-editor-skipheader, h3.yui-editor-skipheader {
     width: 65%;
 }
 
-.yui-toolbar-group-undoredo,
-.yui-toolbar-group-insertitem,
-.yui-toolbar-group-indentlist {
-    *width: 62px;
+
+.yui-toolbar-group-undoredo h3,
+.yui-toolbar-group-insertitem h3,
+.yui-toolbar-group-indentlist h3 {
+    width: 68px;
 }
-.yui-toolbar-group-indentlist2 {
-    *width: 122px;
+.yui-toolbar-group-indentlist2 h3 {
+    width: 122px;
 }
-.yui-toolbar-group-alignment {
-    *width: 130px;
+.yui-toolbar-group-alignment h3 {
+    width: 130px;
 }
+

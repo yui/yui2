@@ -3,7 +3,6 @@
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event
  * @module layout
- * @beta
  */
 (function() {
     var Dom = YAHOO.util.Dom,

@@ -3,7 +3,6 @@
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, layout
  * @optional animation, dragdrop, selector
- * @beta
  */
 (function() {
     var Dom = YAHOO.util.Dom,

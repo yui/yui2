@@ -4,7 +4,6 @@
  * @requires yahoo, dom, dragdrop, element, event
  * @optional animation
  * @module resize
- * @beta
  */
 (function() {
 var D = YAHOO.util.Dom,
@@ -335,7 +334,7 @@ var D = YAHOO.util.Dom,
                 this._wrap.appendChild(this._handles[h[i]]);
                 Event.on(this._handles[h[i]], 'mouseover', this._handleMouseOver, this, true);
                 Event.on(this._handles[h[i]], 'mouseout', this._handleMouseOut, this, true);
-                this._dds[h[i]] = new YAHOO.util.DragDrop(this._handles[h[i]], this.get('id') + '-handle-' + h, { dragOnly: true, useShim: this.get('useShim') });
+                this._dds[h[i]] = new YAHOO.util.DragDrop(this._handles[h[i]], this.get('id') + '-handle-' + h, { useShim: this.get('useShim') });
                 this._dds[h[i]].setPadding(15, 15, 15, 15);
                 this._dds[h[i]].on('startDragEvent', this._handleStartDrag, this._dds[h[i]], this);
                 this._dds[h[i]].on('mouseDownEvent', this._handleMouseDown, this._dds[h[i]], this);

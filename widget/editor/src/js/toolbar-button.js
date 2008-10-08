@@ -10,7 +10,6 @@ var Dom = YAHOO.util.Dom,
      * @class ToolbarButtonAdvanced
      * @namespace YAHOO.widget
      * @requires yahoo, dom, element, event, container_core, menu, button
-     * @beta
      * 
      * Provides a toolbar button based on the button and menu widgets.
      * @constructor

@@ -4,7 +4,6 @@
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, container_core, simpleeditor
  * @optional dragdrop, animation, menu, button
- * @beta
  */
 
 (function() {

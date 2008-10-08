@@ -3,7 +3,6 @@
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbarbutton
  * @optional container_core, dragdrop
- * @beta
  */
 (function() {
     /**
