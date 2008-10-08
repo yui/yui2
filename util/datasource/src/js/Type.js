@@ -247,18 +247,18 @@ var xPad=function (x, pad, r)
      * @param oConfig {Object} (Optional) Optional configuration values:
      *  <dl>
      *   <dt>format {String}</dt>
-     *   <dd>Any format defined by strftime is supported
+     *   <dd>
      *   <p>
-     *   strftime has several format specifiers defined by the Open group at 
+     *   Any format defined by strftime is supported. strftime has several format specifiers defined by the Open group at 
      *   <a href="http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html">http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html</a>
      *   </p>
      *   <p>   
      *   PHP added a few of its own, defined at <a href="http://www.php.net/strftime">http://www.php.net/strftime</a>
      *   </p>
      *   <p>
-     *   This javascript implementation supports all the PHP specifiers and a few more.
+     *   This javascript implementation supports all the PHP specifiers and a few more.  The full list is below:
      *   </p>
-     * 	<dl>
+     *   <dl>
      *    <dt>%a</dt> <dd>abbreviated weekday name according to the current locale</dd>
      *    <dt>%A</dt> <dd>full weekday name according to the current locale</dd>
      *    <dt>%b</dt> <dd>abbreviated month name according to the current locale</dd>
