@@ -69,7 +69,7 @@ var d = document,
     suite;
 
 StyleAssert.normalizeColor = function (c) {
-    return c && c.
+    return c && (c+'').
         replace(/#([0-9a-f])([0-9a-f])([0-9a-f])(?![0-9a-f])/i,'#$1$1$2$2$3$3').
         replace(/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})(?![0-9a-f])/i,
             function (m,r,g,b) {
@@ -105,6 +105,12 @@ suite.add(new TestCase({
     setUp : function () {
         this.styleNodeCount = Dom.getNodeCount('style');
         this.linkNodeCount  = Dom.getNodeCount('link');
+
+        this.testNode = Dom.add(testbed,'div',{id:'target'});
+    },
+
+    tearDown : function () {
+        testbed.innerHTML + '';
     },
 
     test_createNew : function () {
@@ -124,6 +130,14 @@ suite.add(new TestCase({
 
         Assert.areSame(this.styleNodeCount, Dom.getNodeCount('style'),"style");
         Assert.areSame(this.linkNodeCount, Dom.getNodeCount('link'),"link");
+    },
+
+    test_createEntireSheet : function () {
+        var s = new StyleSheet("#target { font-weight: bold; }");
+
+        Assert.areSame(this.styleNodeCount + 1, Dom.getNodeCount('style'));
+
+        Assert.areEqual('bold',Dom.getStyle(this.testNode,'font-weight'));
     },
 
     test_gettingFromCache : function () {
@@ -155,11 +169,10 @@ suite.add(new TestCase({
     setUp : function () {
         this.stylesheet = new StyleSheet('test');
 
-        this.testNode = Dom.add(testbed,'div');
-        this.testNode.id = 'target';
-        Dom.add(this.testNode,'p');
-        Dom.add(this.testNode,'p');
-        Dom.add(this.testNode,'pre');
+        this.testNode = Dom.add(testbed,'div',{
+            id:'target',
+            innerHTML:'<p>1</p><p>2</p><pre>pre</pre>'
+        });
     },
     tearDown : function () {
         testbed.innerHTML = '';
@@ -211,8 +224,7 @@ suite.add(new TestCase({
 
         this.stylesheet.enable();
 
-        this.testNode = Dom.add(testbed,'div');
-        this.testNode.id = 'target';
+        this.testNode = Dom.add(testbed,'div',{id:'target'});
 
         this.before = {
             color           : Dom.getStyle(this.testNode,'color'),
@@ -223,6 +235,7 @@ suite.add(new TestCase({
     },
 
     tearDown : function () {
+        testbed.innerHTML = '';
         this.stylesheet.enable();
         this.stylesheet.unsetCSS('#target');
         this.stylesheet.unsetCSS('#target p');
@@ -297,8 +310,10 @@ suite.add(new TestCase({
     setUp : function () {
         this.stylesheet = new StyleSheet('test');
 
-        this.testNode = Dom.add(testbed,'div');
-        this.testNode.id = 'target';
+        this.testNode = Dom.add(testbed,'div',{
+            id: 'target',
+            innerHTML: 'This is a test'
+        });
 
         this.before = {
             color           : Dom.getStyle(this.testNode,'color'),
@@ -316,12 +331,12 @@ suite.add(new TestCase({
 
     test_unsetCSS : function () {
         this.stylesheet.setCSS('#target',{
-            color           : '#123456',
+            color           : '#f00',
             backgroundColor : '#eef',
             border          : '1px solid #ccc'
         });
 
-        StyleAssert.areEqual('#123456',
+        StyleAssert.areEqual('#f00',
                         Dom.getStyle(this.testNode,'color'),
                         "color (before unset)");
         StyleAssert.areEqual('#eef',
@@ -358,6 +373,53 @@ suite.add(new TestCase({
         StyleAssert.areEqual(this.before.textAlign,
                         Dom.getStyle(this.testNode,'textAlign'),
                         "#target text-align still in place");
+    }
+}));
+
+suite.add(new TestCase({
+    name : "Test float/opacity",
+
+    setUp : function () {
+        this.stylesheet = new StyleSheet('test');
+
+        if (!Dom.get('target')) {
+            this.testNode = Dom.add(testbed,'div',{
+                id:'target',
+                innerHTML:'<p id="p1">1</p><p id="p2">2</p><p id="p3">3</p>'
+            });
+        }
+    },
+
+    test_float : function () {
+        this.stylesheet.setCSS('#target',{
+                            overflow: 'hidden',
+                            background: '#000',
+                            zoom: 1
+                        }).
+                        setCSS('#target p',{
+                            height:'100px',
+                            width:'100px',
+                            border: '5px solid #ccc',
+                            background: '#fff',
+                            margin: '1em'
+                        }).
+                        setCSS('#p1',{ float: 'left' }).
+                        setCSS('#p2',{ cssFloat: 'left' }).
+                        setCSS('#p3',{ styleFloat: 'left' });
+
+        Assert.areEqual('left', Dom.getStyle('p1','float'));
+        Assert.areEqual('left', Dom.getStyle('p2','float'));
+        Assert.areEqual('left', Dom.getStyle('p3','float'));
+    },
+
+    test_opacity : function () {
+        this.stylesheet.setCSS('#p1',{ opacity: .5 }).
+                        setCSS('#p2',{ opacity: .2 }).
+                        setCSS('#p3',{ opacity: 1 });
+
+        Assert.areEqual(0.5,Dom.getStyle('p1','opacity'));
+        Assert.areEqual(0.2,Dom.getStyle('p2','opacity'));
+        Assert.areEqual(1,Dom.getStyle('p3','opacity'));
     }
 }));
 
