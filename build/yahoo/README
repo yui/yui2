@@ -1,7 +1,10 @@
 YAHOO Global - Release Notes
 
+2.6.1
+  * isArray and isFunction updated to use Object.prototype.toString.apply(o)
+
 2.6.0
-  * No change.
+  * No change
 
 2.5.2
   * YAHOO.lang now overwrites existing methods when included a second time,
