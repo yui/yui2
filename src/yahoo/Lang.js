@@ -39,7 +39,18 @@ var L = YAHOO.lang,
     },
     
     /**
-     * Determines whether or not the provided object is a function
+     * Determines whether or not the provided object is a function.
+     * Note: Internet Explorer thinks certain functions are objects:
+     *
+     * var obj = document.createElement("object");
+     * YAHOO.lang.isFunction(obj.getAttribute) // reports false in IE
+     *
+     * var input = document.createElement("input"); // append to body
+     * YAHOO.lang.isFunction(input.focus) // reports false in IE
+     *
+     * You will have to implement additional tests if these functions
+     * matter to you.
+     *
      * @method isFunction
      * @param {any} o The object being testing
      * @return {boolean} the result
