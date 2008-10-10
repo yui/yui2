@@ -96,9 +96,10 @@ YAHOO.widget.Node.prototype = {
     multiExpand: true,
 
     /**
-     * Should we render children for a collapsed node?  It is possible that the
-     * implementer will want to render the hidden data...  @todo verify that we 
-     * need this, and implement it if we do.
+     * If set to false (the default), only the visible nodes of the tree
+     * will be rendered in order to improve the speed of the initial
+     * rendering.  Hidden nodes will have the markup generated the first
+     * time the parent is expanded.
      * @property renderHidden
      * @type boolean
      */
