@@ -1,6 +1,7 @@
 (function () {
 
-var style  = document.createElement('p').style, // worker style collection
+var p      = document.createElement('p'), // Have to hold the node (see notes)
+    style  = p.style, // worker style collection
     u      = YAHOO.util,
     lang   = YAHOO.lang,
     sheets = {},
@@ -309,6 +310,10 @@ NOTES
    You have to remove the rule altogether.
  * Stylesheet properties set with !important will trump inline style set on an
    element or in el.style.property.
+ * Creating a worker style collection like document.createElement('p').style;
+   will fail after a time in FF (~5secs of inactivity).  Property assignments
+   will not alter the property or cssText.  It may be the generated node is
+   garbage collected and the style collection becomes inert (speculation).
  * When creating an entire sheet at once, only FF2/3 & Opera allow creating a
    style node, setting its innerHTML and appending to head.
  * When creating an entire sheet at once, Safari requires the style node to be
