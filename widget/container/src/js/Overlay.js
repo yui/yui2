@@ -1580,8 +1580,8 @@
                 nLeftRegionWidth,
                 nRightRegionWidth,
 
-                leftConstraint,
-                rightConstraint,
+				leftConstraint = scrollX + nViewportOffset,
+				rightConstraint = scrollX + viewPortWidth - nOverlayOffsetWidth - nViewportOffset,
 
                 xNew = x,
 
@@ -1673,43 +1673,53 @@
             
             };
 
+			// Determine if the current value for the Overlay's "x" configuration property will
+			// result in the Overlay being positioned outside the boundaries of the viewport
+			
+			if (x < leftConstraint || x > rightConstraint) {
 
-            if (this.cfg.getProperty("preventcontextoverlap") && aContext && 
-				oOverlapPositions[(aContext[1] + aContext[2])]) {
-
-                if (bCanConstrain) {
-
-                    oContextEl = aContext[0];
-                    nContextElX = Dom.getX(oContextEl) - scrollX;
-                    nContextElWidth = oContextEl.offsetWidth;
-                    nLeftRegionWidth = nContextElX;
-                    nRightRegionWidth = (viewPortWidth - (nContextElX + nContextElWidth));
-    
-                    setHorizontalPosition();
-
-                }
-                
-                xNew = this.cfg.getProperty("x");
-            
-            }
-            else {
+				// The current value for the Overlay's "x" configuration property WILL
+				// result in the Overlay being positioned outside the boundaries of the viewport
 
                 if (bCanConstrain) {
+
+					//	If the "preventcontextoverlap" configuration property is set to "true", 
+					//	try to flip the Overlay to both keep it inside the boundaries of the 
+					//	viewport AND from overlaping its context element.
     
-                    leftConstraint = scrollX + nViewportOffset;
-                    rightConstraint = 
-                        scrollX + viewPortWidth - nOverlayOffsetWidth - nViewportOffset;
-    
-                    if (x < leftConstraint) {
-                        xNew = leftConstraint;
-                    } else if (x > rightConstraint) {
-                        xNew = rightConstraint;
-                    }
+					if (this.cfg.getProperty("preventcontextoverlap") && aContext && 
+						oOverlapPositions[(aContext[1] + aContext[2])]) {
+		
+						oContextEl = aContext[0];
+						nContextElX = Dom.getX(oContextEl) - scrollX;
+						nContextElWidth = oContextEl.offsetWidth;
+						nLeftRegionWidth = nContextElX;
+						nRightRegionWidth = (viewPortWidth - (nContextElX + nContextElWidth));
+		
+						setHorizontalPosition();
+						
+						xNew = this.cfg.getProperty("x");
+					
+					}
+					else {
+
+						if (x < leftConstraint) {
+							xNew = leftConstraint;
+						} else if (x > rightConstraint) {
+							xNew = rightConstraint;
+						}
+
+					}
+
                 } else {
+					//	The "x" configuration property cannot be set to a value that will keep
+					//	entire Overlay inside the boundary of the viewport.  Therefore, set  
+					//	the "x" configuration property to scrollY to keep as much of the 
+					//	Overlay inside the viewport as possible.                
                     xNew = nViewportOffset + scrollX;
                 }
-            
-            }
+
+			}
 
             return xNew;
         
@@ -1746,8 +1756,8 @@
                 nTopRegionHeight,
                 nBottomRegionHeight,
 
-                topConstraint,
-                bottomConstraint,
+				topConstraint = scrollY + nViewportOffset,
+				bottomConstraint = scrollY + viewPortHeight - nOverlayOffsetHeight - nViewportOffset,
 
                 yNew = y,
                 
@@ -1838,43 +1848,57 @@
             };
 
 
-            if (this.cfg.getProperty("preventcontextoverlap") && aContext && 
-            	oOverlapPositions[(aContext[1] + aContext[2])]) {
+			// Determine if the current value for the Overlay's "y" configuration property will
+			// result in the Overlay being positioned outside the boundaries of the viewport
 
-                if (bCanConstrain) {
+			if (y < topConstraint || y  > bottomConstraint) {
+		
+				// The current value for the Overlay's "y" configuration property WILL
+				// result in the Overlay being positioned outside the boundaries of the viewport
 
-                    oContextEl = aContext[0];
-                    nContextElHeight = oContextEl.offsetHeight;
-                    nContextElY = (Dom.getY(oContextEl) - scrollY);
-    
-                    nTopRegionHeight = nContextElY;
-                    nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
-    
-                    setVerticalPosition();
-                
-                }
+				if (bCanConstrain) {	
 
-                yNew = oOverlay.cfg.getProperty("y");
+					//	If the "preventcontextoverlap" configuration property is set to "true", 
+					//	try to flip the Overlay to both keep it inside the boundaries of the 
+					//	viewport AND from overlaping its context element.
+		
+					if (this.cfg.getProperty("preventcontextoverlap") && aContext && 
+						oOverlapPositions[(aContext[1] + aContext[2])]) {
+		
+						oContextEl = aContext[0];
+						nContextElHeight = oContextEl.offsetHeight;
+						nContextElY = (Dom.getY(oContextEl) - scrollY);
+		
+						nTopRegionHeight = nContextElY;
+						nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
+		
+						setVerticalPosition();
+		
+						yNew = oOverlay.cfg.getProperty("y");
+		
+					}
+					else {
 
-            }
-            else {
-
-                if (bCanConstrain) {
-    
-                    topConstraint = scrollY + nViewportOffset;
-                    bottomConstraint = 
-                        scrollY + viewPortHeight - nOverlayOffsetHeight - nViewportOffset;
-    
-                    if (y < topConstraint) {
-                        yNew  = topConstraint;
-                    } else if (y  > bottomConstraint) {
-                        yNew  = bottomConstraint;
-                    }
-                } else {
-                    yNew = nViewportOffset + scrollY;
-                }
-
-            }
+						if (y < topConstraint) {
+							yNew  = topConstraint;
+						} else if (y  > bottomConstraint) {
+							yNew  = bottomConstraint;
+						}
+					
+					}
+				
+				}
+				else {
+				
+					//	The "y" configuration property cannot be set to a value that will keep
+					//	entire Overlay inside the boundary of the viewport.  Therefore, set  
+					//	the "y" configuration property to scrollY to keep as much of the 
+					//	Overlay inside the viewport as possible.
+				
+					yNew = nViewportOffset + scrollY;
+				}
+		
+			}
 
             return yNew;
         },
