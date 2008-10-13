@@ -710,6 +710,10 @@
             if (this._recomputeSize) {
                 this._setClipContainerSize();
             }
+
+            if (this.get("selectedItem") < 0) {
+                this.set("selectedItem", this.get("firstVisible"));
+            }
             break;
         case itemRemovedEvent:
             num  = this.get("numItems");
@@ -1357,8 +1361,10 @@
                 if (!el.id) {   // in case the HTML element is passed
                     el.setAttribute("id", Dom.generateId());
                 }
-                this._parseCarousel(el);
-                parse = true;
+                parse = this._parseCarousel(el);
+                if (!parse) {
+                    this._createCarousel(elId);
+                }
             } else {
                 el = this._createCarousel(elId);
             }
@@ -1474,7 +1480,7 @@
             this.setAttributeConfig("selectedItem", {
                     method    : this._setSelectedItem,
                     validator : JS.isNumber,
-                    value     : 0
+                    value     : -1
             });
 
             /**
@@ -1572,9 +1578,11 @@
 
             this.subscribe(itemAddedEvent, syncUI);
             this.subscribe(itemAddedEvent, syncNavigation);
+            this.subscribe(itemAddedEvent, this._syncPagerUI);
 
             this.subscribe(itemRemovedEvent, syncUI);
             this.subscribe(itemRemovedEvent, syncNavigation);
+            this.subscribe(itemRemovedEvent, this._syncPagerUI);
 
             this.on(itemSelectedEvent, this.focus);
 
@@ -1785,20 +1793,18 @@
                 this.addClass(cssClass.HORIZONTAL);
             }
 
-            if (this.get("numItems") < 1) {
-                YAHOO.log("No items in the Carousel to render", "warn",
-                        WidgetName);
-                return false;
-            }
-
-            // Make sure at least one item is selected
-            this.set("selectedItem", this.get("firstVisible"));
-
             this.fireEvent(renderEvent);
 
             // By now, the navigation would have been rendered, so calculate
             // the container height now.
-            this._setContainerSize();
+            if (this.get("numItems") < 1) {
+                YAHOO.log("No items in the Carousel to render", "warn",
+                        WidgetName);
+                this._setContainerSize();
+            } else {
+                // Make sure at least one item is selected
+                this.set("selectedItem", this.get("firstVisible"));
+            }
 
             return true;
         },
@@ -2041,12 +2047,14 @@
          * @protected
          */
         _createCarousel: function (elId) {
-            var cssClass = this.CLASSES;
+            var cssClass = this.CLASSES, el = Dom.get(elId);
 
-            var el = createElement("DIV", {
-                    className : cssClass.CAROUSEL,
-                    id        : elId
-            });
+            if (!el) {
+                el = createElement("DIV", {
+                        className : cssClass.CAROUSEL,
+                        id        : elId
+                });
+            }
 
             if (!this._carouselEl) {
                 this._carouselEl = createElement(this.CONFIG.TAG_NAME,
@@ -2679,7 +2687,9 @@
                 numPages,
                 numVisible = this.get("numVisible");
 
-            page     = page || 0;
+            if (!JS.isNumber(page)) {
+                page = Math.ceil(this.get("selectedItem") / numVisible);
+            }
             numPages = Math.ceil(this.get("numItems") / numVisible);
 
             this._pages.num = numPages;
