@@ -7,6 +7,7 @@
  * @optional animation
  * @namespace YAHOO.widget
  * @title Carousel Widget
+ * @beta
  */
 (function () {
 
