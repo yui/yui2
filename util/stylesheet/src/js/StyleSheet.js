@@ -1,6 +1,7 @@
 (function () {
 
-var p      = document.createElement('p'), // Have to hold the node (see notes)
+var d      = document,
+    p      = d.createElement('p'), // Have to hold the node (see notes)
     style  = p.style, // worker style collection
     u      = YAHOO.util,
     lang   = YAHOO.lang,
@@ -9,8 +10,7 @@ var p      = document.createElement('p'), // Have to hold the node (see notes)
     floatAttr = ('cssFloat' in style) ? 'cssFloat' : 'styleFloat',
     _toCssText, toCssText,
     _unsetOpacity,
-    _unsetProperty,
-    _createSheet,factoryNode;
+    _unsetProperty;
 
 _toCssText = function (css,base) {
     var f = css.styleFloat || css.cssFloat || css['float'];
@@ -87,23 +87,6 @@ _unsetProperty = style.borderLeft ?
         }
     };
     
-factoryNode = document.createElement('p');
-factoryNode.innerHTML = '<style></style>';
-_createSheet = factoryNode.firstChild ?
-    function (cssText) {
-        factoryNode = document.createElement('p');
-        factoryNode.innerHTML = '<style type="text/css">'+cssText+'</style>';
-        return factoryNode.firstChild;
-    } :
-    function (cssText) {
-        factoryNode = document.createElement('style');
-        factoryNode.type = 'text/css';
-        if (factoryNode.styleSheet) {
-            factoryNode.styleSheet.cssText = cssText;
-        }
-        return factoryNode;
-    };
-
 u.StyleSheet = function (seed, name) {
     var head,
         node,
@@ -118,7 +101,7 @@ u.StyleSheet = function (seed, name) {
         return new u.StyleSheet(seed,name);
     }
 
-    head = document.getElementsByTagName('head')[0];
+    head = d.getElementsByTagName('head')[0];
     if (!head) {
         // TODO: do something. Preferably something smart
         YAHOO.log('HEAD element not found to append STYLE node','error','YAHOO.util.StyleSheet');
@@ -132,17 +115,24 @@ u.StyleSheet = function (seed, name) {
         return sheets[node.yuiSSID];
     }
 
+    if (!node || !/^(?:style|link)$/i.test(node.nodeName)) {
+        node = d.createElement('style');
+        node.type = 'text/css';
+    }
+
     if (typeof seed === 'string') {
-        if (seed.indexOf('{') != -1) { // create entire sheet from seed cssText
-            node = _createSheet(seed);
+        // Create entire sheet from seed cssText
+        if (seed.indexOf('{') != -1) {
+            // Not a load-time fork because low run-time impact and IE fails
+            // test for s.styleSheet at page load time (oddly)
+            if (node.styleSheet) {
+                node.styleSheet.cssText = seed;
+            } else {
+                node.appendChild(d.createTextNode(seed));
+            }
         } else if (!name) {
             name = seed;
         }
-    }
-
-    if (!node || !/^(?:style|link)$/i.test(node.nodeName)) {
-        node = document.createElement('style');
-        node.type = 'text/css';
     }
 
     if (node.parentNode !== head) {
@@ -322,6 +312,9 @@ NOTES
    be set via node.styleSheet.cssText
  * When creating an entire sheet at once in IE, styleSheet.cssText can't be
    written until node.type = 'text/css'; is performed.
+ * When creating an entire sheet at once in IE, load-time fork on
+   var styleNode = d.createElement('style'); _method = styleNode.styleSheet ?..
+   fails (falsey).  During run-time, the test for .styleSheet works fine
  * Setting complex properties in cssText will SOMETIMES allow child properties
    to be unset
    set         unset              FF2  FF3  S3.1  IE6  IE7  Op9.27  Op9.5
