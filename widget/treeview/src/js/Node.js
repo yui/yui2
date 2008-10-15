@@ -1135,7 +1135,7 @@ YAHOO.widget.Node.prototype = {
 				self._focusedItem = null;
 			}
 			
-			while ((el = self._focusHighlightedItems.shift())) {  // yes, it is meant as an assignment, really
+			while ((el = self._focusHighlightedItems.shift())) {
 				Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
 			}
 		};
@@ -1153,7 +1153,11 @@ YAHOO.widget.Node.prototype = {
 					var aEl = el.getElementsByTagName('a');
 					if (aEl.length) {
 						aEl = aEl[0];
-						aEl.focus();
+
+                        try {
+						    aEl.focus();
+                        } catch(e) {}
+
 						self._focusedItem = aEl;
 						Event.on(aEl,'blur',removeListeners);
 						focused = true;
