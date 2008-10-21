@@ -17,7 +17,6 @@ var lang   = YAHOO.lang,
  * @requires yahoo, dom, event, element, datasource
  * @optional dragdrop, dragdrop
  * @title DataTable Widget
- * @beta
  */
 
 /****************************************************************************/
@@ -5398,27 +5397,29 @@ sortColumn : function(oColumn, sDir) {
             }
             // Client-side sort
             else {
+                // Is there a custom sort handler function defined?
+                var sortFnc = (oColumn.sortOptions && lang.isFunction(oColumn.sortOptions.sortFunction)) ?
+                        // Custom sort function
+                        oColumn.sortOptions.sortFunction : null;
+                   
                 // Sort the Records
-                if(!bSorted || sDir) {
+                if(!bSorted || sDir || sortFnc) {
                     // Get the field to sort
                     var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
-                    // Is there a custom sort handler function defined?
-                    var sortFnc = (oColumn.sortOptions && lang.isFunction(oColumn.sortOptions.sortFunction)) ?
-                            // Custom sort function
-                            oColumn.sortOptions.sortFunction :
-        
-                            // Default sort function
-                            function(a, b, desc) {
-                                YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
-                                var sorted = YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
-                                if(sorted === 0) {
-                                    return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
-                                }
-                                else {
-                                    return sorted;
-                                }
-                            };
-        
+
+                    // Default sort function if necessary
+                    sortFnc = sortFnc || 
+                        function(a, b, desc) {
+                            YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
+                            var sorted = YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
+                            if(sorted === 0) {
+                                return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
+                            }
+                            else {
+                                return sorted;
+                            }
+                        };
+                    // Sort the Records        
                     this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false));
                 }
                 // Just reverse the Records
