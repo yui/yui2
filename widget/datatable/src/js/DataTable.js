@@ -6553,6 +6553,7 @@ addRows : function(aData, index) {
                 var loopN = this.get("renderLoopSize");
                 var loopEnd = recIndex + aData.length;
                 var nRowsNeeded = (loopEnd - recIndex); // how many needed
+                var isLast = (recIndex === this._elTbody.rows.length);
                 this._oChainRender.add({
                     method: function(oArg) {
                         if((this instanceof DT) && this._sId) {
@@ -6583,7 +6584,7 @@ addRows : function(aData, index) {
                         if(recIndex === 0) {
                             this._setFirstRow();
                         }
-                        if(recIndex === this._elTbody.rows.length-1) {
+                        if(oArg.isLast) {
                             this._setLastRow();
                         }
                         // Set EVEN/ODD
@@ -6594,7 +6595,7 @@ addRows : function(aData, index) {
                                 " rows at index " + recIndex +
                                 " with data " + lang.dump(aData), "info", this.toString());
                     },
-                    argument: {recIndex: recIndex},
+                    argument: {recIndex: recIndex, isLast: isLast},
                     scope: this,
                     timeout: -1 // Needs to run immediately after the DOM insertions above
                 });
