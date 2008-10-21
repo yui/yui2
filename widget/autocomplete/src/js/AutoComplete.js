@@ -692,6 +692,7 @@ YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
 * 
 * @method generateRequest
 * @param sQuery {String} Query string
+* @return {MIXED} Request
 */
 YAHOO.widget.AutoComplete.prototype.generateRequest = function(sQuery) {
     var dataType = this.dataSource.dataType;
