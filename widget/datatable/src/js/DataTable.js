@@ -10312,6 +10312,8 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
                 } else if (pag) {
                     index = pag.getStartIndex();
                 }
+                
+                this._oRecordSet.reset(); // Bug 2290604: dyanmic data shouldn't keep accumulating by default
             }
     
             this._oRecordSet.setRecords(oResponse.results, index | 0);
