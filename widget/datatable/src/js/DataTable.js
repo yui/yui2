@@ -4760,19 +4760,13 @@ render : function() {
         allRecords = this._oRecordSet.getRecords();
     }
 
-
-    /* NEW METHOD */
     // From the top, update in-place existing rows, so as to reuse DOM elements
     var elTbody = this._elTbody,
         loopN = this.get("renderLoopSize"),
         nRecordsLength = allRecords.length;
     
     // Table has rows
-    if(nRecordsLength > 0) {        
-        // So you don't see the borders in random places
-        //this._unsetFirstRow();
-        //this._unsetLastRow();
-        
+    if(nRecordsLength > 0) {                
         elTbody.style.display = "none";
         while(elTbody.lastChild) {
             elTbody.removeChild(elTbody.lastChild);
@@ -4827,60 +4821,40 @@ render : function() {
             scope: this,
             timeout: (loopN > 0) ? 0 : -1
         });
-        
-        // Fire events in separate timeout thread so implementers can
-        // subscribe immediately after the constructor
-        /*this._oChainRender.add({
-            method: function(oArg) {
-                if((this instanceof DT) && this._sId) {
-                    // Fire initEvent for first render
-                    if(this._bInit) {
-                        this._bInit = false;
-                        this.fireEvent("initEvent");
-                    }
-
-                    // Always fire renderEvent
-                    this.fireEvent("renderEvent");
-                    // Backward compatibility
-                    this.fireEvent("refreshEvent");
-                    YAHOO.log("DataTable rendered " + nRecordsLength + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
-                
-                    //YAHOO.log("end render","time");
-                }
-            },
-            scope: this
-        });*/
+     
     }
     // Table has no rows
     else {
         // Set up the loop Chain to delete rows
         var nTotal = elTbody.rows.length;
-        this._oChainRender.add({
-            method: function(oArg) {
-                if((this instanceof DT) && this._sId) {
-                    var i = oArg.nCurrent,
-                        loopN = oArg.nLoopLength,
-                        nIterEnd = (i - loopN < 0) ? -1 : i - loopN;
-
-                    elTbody.style.display = "none";
-                    
-                    for(; i>nIterEnd; i--) {
-                        elTbody.deleteRow(-1);
+        if(nTotal > 0) {
+            this._oChainRender.add({
+                method: function(oArg) {
+                    if((this instanceof DT) && this._sId) {
+                        var i = oArg.nCurrent,
+                            loopN = oArg.nLoopLength,
+                            nIterEnd = (i - loopN < 0) ? -1 : i - loopN;
+    
+                        elTbody.style.display = "none";
+                        
+                        for(; i>nIterEnd; i--) {
+                            elTbody.deleteRow(-1);
+                        }
+                        elTbody.style.display = "";
+                        
+                        // Set up for the next loop
+                        oArg.nCurrent = i;
                     }
-                    elTbody.style.display = "";
-                    
-                    // Set up for the next loop
-                    oArg.nCurrent = i;
-                }
-            },
-            scope: this,
-            iterations: (loopN > 0) ? Math.ceil(nTotal/loopN) : 1,
-            argument: {
-                nCurrent: nTotal, 
-                nLoopLength: (loopN > 0) ? loopN : nTotal
-            },
-            timeout: (loopN > 0) ? 0 : -1
-        });
+                },
+                scope: this,
+                iterations: (loopN > 0) ? Math.ceil(nTotal/loopN) : 1,
+                argument: {
+                    nCurrent: nTotal, 
+                    nLoopLength: (loopN > 0) ? loopN : nTotal
+                },
+                timeout: (loopN > 0) ? 0 : -1
+            });
+        }
     }
     this._runRenderChain();
 },
