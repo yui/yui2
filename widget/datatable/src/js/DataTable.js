@@ -6661,7 +6661,7 @@ updateRow : function(row, oData) {
  * to DataTable page element or RecordSet index.
  */
 deleteRow : function(row) {
-    var nRecordIndex = this.getRecordIndex(row);
+    var nRecordIndex = (lang.isNumber(row)) ? row : this.getRecordIndex(row);
     if(lang.isNumber(nRecordIndex)) {
         var oRecord = this.getRecord(nRecordIndex);
         if(oRecord) {
@@ -6756,7 +6756,7 @@ deleteRow : function(row) {
  * will delete towards the beginning.
  */
 deleteRows : function(row, count) {
-    var nRecordIndex = this.getRecordIndex(row);
+    var nRecordIndex = (lang.isNumber(row)) ? row : this.getRecordIndex(row);
     if(lang.isNumber(nRecordIndex)) {
         var oRecord = this.getRecord(nRecordIndex);
         if(oRecord) {
