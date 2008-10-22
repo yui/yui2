@@ -1497,7 +1497,8 @@ resetForm : function() {
  * @method focus
  */
 focus : function() {
-    this.textarea.focus();
+    // Bug 2303181, Bug 2263600
+    this.getDataTable()._focusEl(this.textarea);
     this.textarea.select();
 },
 
@@ -1622,7 +1623,8 @@ resetForm : function() {
  * @method focus
  */
 focus : function() {
-    this.textbox.focus();
+    // Bug 2303181, Bug 2263600
+    this.getDataTable()._focusEl(this.textbox);
     this.textbox.select();
 },
 
