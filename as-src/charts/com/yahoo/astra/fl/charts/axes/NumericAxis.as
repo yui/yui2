@@ -1,4 +1,4 @@
-package com.yahoo.astra.fl.charts.axes
+﻿package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.series.ISeries;
 	import com.yahoo.astra.fl.utils.UIComponentUtil;
@@ -506,7 +506,7 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				this._majorUnit = this.niceNumber(range / idealMajorUnit);
 			}
-			else majorUnit = 0;
+			else this._majorUnit = 0;
 		}
 
 		/**
