@@ -646,7 +646,7 @@ cancel : function() {
     if(this.isActive) {
         this.getContainerEl().style.display = "none";
         this.isActive = false;
-        this.getDataTable._oCellEditor =  null;
+        this.getDataTable()._oCellEditor =  null;
         this.fireEvent("cancelEvent", {editor:this});
         YAHOO.log("CellEditor canceled", "info", this.toString());
     }
