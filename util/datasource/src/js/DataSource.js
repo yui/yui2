@@ -1700,7 +1700,7 @@ util.LocalDataSource = function(oLiveData, oConfigs) {
         this.responseType = DS.TYPE_JSARRAY;
     }
     
-    this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
+    util.LocalDataSource.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
 
 // LocalDataSource extends DataSourceBase
@@ -1739,7 +1739,7 @@ util.FunctionDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_JSFUNCTION;
     oLiveData = oLiveData || function() {};
     
-    this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
+    util.FunctionDataSource.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
 
 // FunctionDataSource extends DataSourceBase
@@ -1828,7 +1828,7 @@ util.ScriptNodeDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_SCRIPTNODE;
     oLiveData = oLiveData || "";
     
-    this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
+    util.ScriptNodeDataSource.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
 
 // ScriptNodeDataSource extends DataSourceBase
@@ -2048,7 +2048,7 @@ util.XHRDataSource = function(oLiveData, oConfigs) {
     this.connMgr = this.connMgr || util.Connect;
     oLiveData = oLiveData || "";
     
-    this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
+    util.XHRDataSource.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
 
 // XHRDataSource extends DataSourceBase
