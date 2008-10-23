@@ -26,8 +26,8 @@
     YAHOO.widget.Carousel = function (el, cfg) {
         YAHOO.log("Component creation", WidgetName);
 
-        this._navBtns = {};
-        this._pages = {};
+        this._navBtns = { prev: [], next: [] };
+        this._pages = { el: null, num: 0, cur: 0 };
 
         YAHOO.widget.Carousel.superclass.constructor.call(this, el, cfg);
     };
@@ -2311,9 +2311,6 @@
                                 WidgetName);
                         if (el.nodeName == "INPUT" ||
                             el.nodeName == "BUTTON") {
-                            if (typeof this._navBtns.prev == "undefined") {
-                                this._navBtns.prev = [];
-                            }
                             this._navBtns.prev.push(el);
                         } else {
                             j = el.getElementsByTagName("INPUT");
@@ -2341,9 +2338,6 @@
                                 WidgetName);
                         if (el.nodeName == "INPUT" ||
                             el.nodeName == "BUTTON") {
-                            if (typeof this._navBtns.next == "undefined") {
-                                this._navBtns.next = [];
-                            }
                             this._navBtns.next.push(el);
                         } else {
                             j = el.getElementsByTagName("INPUT");
@@ -2385,6 +2379,7 @@
 
             cssClass = this.CLASSES;
 
+            // TODO: can the _navBtns be tested against instead?
             navContainer = Dom.getElementsByClassName(cssClass.NAVIGATION,
                     "DIV", this.get("element"));
 
@@ -2401,8 +2396,15 @@
             navContainer.appendChild(this._pages.el);
 
             nav = this.get("navigation");
-            if (nav.prev && nav.prev.length > 0) {
-                navContainer.appendChild(nav.prev[0]);
+            if (JS.isString(nav.prev) || JS.isArray(nav.prev)) {
+                if (JS.isString(nav.prev)) {
+                    nav.prev = [nav.prev];
+                }
+                for (btn in nav.prev) {
+                    if (nav.prev.hasOwnProperty(btn)) {
+                        this._navBtns.prev.push(Dom.get(nav.prev[btn]));
+                    }
+                }
             } else {
                 // TODO: separate method for creating a navigation button
                 prevButton = createElement("SPAN",
@@ -2420,8 +2422,15 @@
                 cfg = { prev: [prevButton] };
             }
 
-            if (nav.next && nav.next.length > 0) {
-                navContainer.appendChild(nav.next[0]);
+            if (JS.isString(nav.next) || JS.isArray(nav.next)) {
+                if (JS.isString(nav.next)) {
+                    nav.next = [nav.next];
+                }
+                for (btn in nav.next) {
+                    if (nav.next.hasOwnProperty(btn)) {
+                        this._navBtns.next.push(Dom.get(nav.next[btn]));
+                    }
+                }
             } else {
                 // TODO: separate method for creating a navigation button
                 nextButton = createElement("SPAN",
@@ -2726,7 +2735,9 @@
                 markup += "</select></form>";
             }
 
-            this._pages.el.innerHTML = markup;
+            if (this._pages.el) {
+                this._pages.el.innerHTML = markup;
+            }
             markup = null;
         },
 
