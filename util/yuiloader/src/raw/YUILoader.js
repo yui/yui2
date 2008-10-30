@@ -1595,7 +1595,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
          */
         _filter: function(str) {
             var f = this.filter;
-            return (f) ?  str.replace(new RegExp(f.searchExp), f.replaceStr) : str;
+            return (f) ?  str.replace(new RegExp(f.searchExp, 'g'), f.replaceStr) : str;
         },
 
         /**
@@ -1606,10 +1606,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
          * @private
          */
         _url: function(path) {
-            
-            var u = this.base || "", f=this.filter;
-            u = u + path;
-            return this._filter(u);
+            return this._filter((this.base || "") + path);
         }
 
     };

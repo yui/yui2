@@ -1,5 +1,8 @@
 yuiloader - Release Notes
 
+2.6.1
+ * combo filtering fixed
+
 2.6.0
  * Autocomplete requires datasource.
  * Config always used if provided to insert().

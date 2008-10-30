@@ -399,7 +399,12 @@ YAHOO.lang = YAHOO.lang || {};
 
 (function() {
 
+
 var L = YAHOO.lang,
+
+    ARRAY_TOSTRING = '[object Array]',
+    FUNCTION_TOSTRING = '[object Function]',
+    OP = Object.prototype,
 
     // ADD = ["toString", "valueOf", "hasOwnProperty"],
     ADD = ["toString", "valueOf"],
@@ -407,21 +412,13 @@ var L = YAHOO.lang,
     OB = {
 
     /**
-     * Determines whether or not the provided object is an array.
-     * Testing typeof/instanceof/constructor of arrays across frame 
-     * boundaries isn't possible in Safari unless you have a reference
-     * to the other frame to test against its Array prototype.  To
-     * handle this case, we test well-known array properties instead.
-     * properties.
+     * Determines wheather or not the provided object is an array.
      * @method isArray
      * @param {any} o The object being testing
      * @return {boolean} the result
      */
     isArray: function(o) { 
-        if (o) {
-           return L.isNumber(o.length) && L.isFunction(o.splice);
-        }
-        return false;
+        return OP.toString.apply(o) === ARRAY_TOSTRING;
     },
 
     /**
@@ -435,13 +432,24 @@ var L = YAHOO.lang,
     },
     
     /**
-     * Determines whether or not the provided object is a function
+     * Determines whether or not the provided object is a function.
+     * Note: Internet Explorer thinks certain functions are objects:
+     *
+     * var obj = document.createElement("object");
+     * YAHOO.lang.isFunction(obj.getAttribute) // reports false in IE
+     *
+     * var input = document.createElement("input"); // append to body
+     * YAHOO.lang.isFunction(input.focus) // reports false in IE
+     *
+     * You will have to implement additional tests if these functions
+     * matter to you.
+     *
      * @method isFunction
      * @param {any} o The object being testing
      * @return {boolean} the result
      */
     isFunction: function(o) {
-        return typeof o === 'function';
+        return OP.toString.apply(o) === FUNCTION_TOSTRING;
     },
         
     /**
@@ -509,7 +517,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     _IEEnumFix: (YAHOO.env.ua.ie) ? function(r, s) {
             for (var i=0;i<ADD.length;i=i+1) {
                 var fname=ADD[i],f=s[fname];
-                if (L.isFunction(f) && f!=Object.prototype[fname]) {
+                if (L.isFunction(f) && f!=OP[fname]) {
                     r[fname]=f;
                 }
             }
@@ -539,7 +547,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
         subc.prototype=new F();
         subc.prototype.constructor=subc;
         subc.superclass=superc.prototype;
-        if (superc.prototype.constructor == Object.prototype.constructor) {
+        if (superc.prototype.constructor == OP.constructor) {
             superc.prototype.constructor=superc;
         }
     
@@ -761,7 +769,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
 
                     // use the toString if it is not the Object toString 
                     // and the 'dump' meta info was not found
-                    if (v.toString===Object.prototype.toString||dump>-1) {
+                    if (v.toString===OP.toString || dump>-1) {
                         v = L.dump(v, parseInt(meta, 10));
                     } else {
                         v = v.toString();
@@ -915,7 +923,7 @@ return (L.isObject(o) || L.isString(o) || L.isNumber(o) || L.isBoolean(o));
  * @param prop {string} the name of the property to test
  * @return {boolean} the result
  */
-L.hasOwnProperty = (Object.prototype.hasOwnProperty) ?
+L.hasOwnProperty = (OP.hasOwnProperty) ?
     function(o, prop) {
         return o && o.hasOwnProperty(prop);
     } : function(o, prop) {
@@ -3649,7 +3657,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
          */
         _filter: function(str) {
             var f = this.filter;
-            return (f) ?  str.replace(new RegExp(f.searchExp), f.replaceStr) : str;
+            return (f) ?  str.replace(new RegExp(f.searchExp, 'g'), f.replaceStr) : str;
         },
 
         /**
@@ -3660,10 +3668,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
          * @private
          */
         _url: function(path) {
-            
-            var u = this.base || "", f=this.filter;
-            u = u + path;
-            return this._filter(u);
+            return this._filter((this.base || "") + path);
         }
 
     };
