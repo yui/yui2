@@ -3,14 +3,6 @@
     margin: 0 auto;
 }
 
-.yui-carousel-content {
-    margin: 0 5px;
-}
-
-.yui-carousel-vertical-container .yui-carousel-content {
-    margin: 5px 0;
-}
-
 .yui-carousel-element li {
     height: 75px;
 }
