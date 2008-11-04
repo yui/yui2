@@ -1724,6 +1724,7 @@
             }
 
             item = this._itemsTable.items.splice(index, 1);
+            this._itemsTable.numItems--;
             if (item && item.length == 1) {
                 this.set("numItems", num - 1);
 
