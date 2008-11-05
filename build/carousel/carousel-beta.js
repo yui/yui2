@@ -2860,13 +2860,7 @@
          * @protected
          */
         _validateNumItems: function (val) {
-            var rv = false;
-
-            if (JS.isNumber(val)) {
-                rv = val > 0;
-            }
-
-            return rv;
+            return JS.isNumber(val) && (val >= 0);
         },
 
         /**

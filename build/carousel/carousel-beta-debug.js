@@ -1739,6 +1739,7 @@
             }
 
             item = this._itemsTable.items.splice(index, 1);
+            this._itemsTable.numItems--;
             if (item && item.length == 1) {
                 this.set("numItems", num - 1);
 
@@ -2891,13 +2892,7 @@
          * @protected
          */
         _validateNumItems: function (val) {
-            var rv = false;
-
-            if (JS.isNumber(val)) {
-                rv = val > 0;
-            }
-
-            return rv;
+            return JS.isNumber(val) && (val >= 0);
         },
 
         /**
