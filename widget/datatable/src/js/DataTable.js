@@ -2426,7 +2426,7 @@ _initThEl : function(elTh, oColumn) {
     elTh.className = this._getColumnClassNames(oColumn);
             
     // Set Column width for non fallback cases
-    if(oColumn.width && !this._bDynStylesFallback) {
+    if(oColumn.width && !DT._bDynStylesFallback) {
         // Validate minWidth
         var nWidth = (oColumn.minWidth && (oColumn.width < oColumn.minWidth)) ?
                 oColumn.minWidth : oColumn.width;
@@ -2958,7 +2958,7 @@ _formatTdEl : function (oColumn, elTd, index, isLast) {
     elTd.firstChild.className = DT.CLASS_LINER;
 
     // Set Column width for fallback cases
-    if(oColumn.width && this._bDynStylesFallback) {
+    if(oColumn.width && DT._bDynStylesFallback) {
         // Validate minWidth
         var nWidth = (oColumn.minWidth && (oColumn.width < oColumn.minWidth)) ?
                 oColumn.minWidth : oColumn.width;
