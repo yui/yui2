@@ -59,6 +59,7 @@ th.yui-dt-resizeable .yui-dt-resizerliner {
     visibility:hidden;
     position:absolute;
     z-index:9000;
+    background-color:#CCC;opacity:0;filter: alpha(opacity=0); /* Bug 1952811: IE transparency z-index */
 }
 
 /* hidden columns */
