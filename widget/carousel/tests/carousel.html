@@ -25,6 +25,7 @@
             src="../../build/yuitest/yuitest-min.js"></script>
         <!-- Carousel Test Cases -->
         <script type="text/javascript" src="markupTests.js"></script>
+        <script type="text/javascript" src="scriptTests.js"></script>
         <script type="text/javascript">
             (function () {
                 YAHOO.util.Event.onDOMReady(function () {
@@ -32,6 +33,7 @@
                         tests  = YAHOO.CarouselTests;
                     
                     YAHOO.tool.TestRunner.add(tests.markupTests);
+                    YAHOO.tool.TestRunner.add(tests.scriptTests);
                     YAHOO.tool.TestRunner.run();
                 });
             })();
@@ -47,5 +49,6 @@
                 <li id="item5">Five</li>
             </ol>
         </div>
+        <div id="container2"></div>
     </body>
 </html>
