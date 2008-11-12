@@ -317,6 +317,10 @@
     function getStyle(el, style, type) {
         var value;
 
+        if (!el) {
+            return 0;
+        }
+
         function getStyleIntVal(el, style) {
             var val;
 
