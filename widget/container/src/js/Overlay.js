@@ -103,7 +103,7 @@
 
             "AUTO_FILL_HEIGHT" : {
                 key: "autofillheight",
-                supressEvent: true,
+                suppressEvent: true,
                 supercedes: ["height"],
                 value:"body"
             },
