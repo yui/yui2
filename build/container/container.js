@@ -7229,7 +7229,7 @@
             this.submitEvent.signature = SIGNATURE;
         
             /**
-            * CustomEvent fired prior to manual submission
+            * CustomEvent fired for manual submission, before the generic submit event is fired
             * @event manualSubmitEvent
             */
             this.manualSubmitEvent = 
@@ -7237,14 +7237,15 @@
             this.manualSubmitEvent.signature = SIGNATURE;
         
             /**
-            * CustomEvent fired prior to asynchronous submission
+            * CustomEvent fired after to asynchronous submission, before the generic submit event is fired
             * @event asyncSubmitEvent
+            * @param {Object} The connection object object, returned by YAHOO.util.Connect.asyncRequest
             */ 
             this.asyncSubmitEvent = this.createEvent(EVENT_TYPES.ASYNC_SUBMIT);
             this.asyncSubmitEvent.signature = SIGNATURE;
-        
+
             /**
-            * CustomEvent fired prior to form-based submission
+            * CustomEvent fired after form-based submission, before the generic submit event is fired
             * @event formSubmitEvent
             */
             this.formSubmitEvent = this.createEvent(EVENT_TYPES.FORM_SUBMIT);
@@ -7347,9 +7348,9 @@
                     formAttrs = this._getFormAttributes(oForm);
 
                     Connect.setForm(oForm, bUseFileUpload, bUseSecureFileUpload);
-                    Connect.asyncRequest(formAttrs.method, formAttrs.action, this.callback);
+                    var c = Connect.asyncRequest(formAttrs.method, formAttrs.action, this.callback);
 
-                    this.asyncSubmitEvent.fire();
+                    this.asyncSubmitEvent.fire(c);
 
                     break;
 
@@ -7687,11 +7688,16 @@
         },
 
         /**
-        * Sets focus to the first element in the Dialog's form or the first 
-        * button defined via the "buttons" configuration property. Called 
-        * when the Dialog is made visible.
-        * @method focusFirst
-        */
+         * <p>
+         * Sets focus to the first focusable element in the Dialog's form if found, 
+         * else, the default button if found, else the first button defined via the 
+         * "buttons" configuration property.
+         * </p>
+         * <p>
+         * This method is invoked when the Dialog is made visible.
+         * </p>
+         * @method focusFirst
+         */
         focusFirst: function (type, args, obj) {
 
             var el = this.firstFormElement;
@@ -7707,7 +7713,11 @@
                     // Ignore
                 }
             } else {
-                this.focusFirstButton();
+                if (this.defaultHtmlButton) {
+                    this.focusDefaultButton();
+                } else {
+                    this.focusFirstButton();
+                }
             }
         },
 
