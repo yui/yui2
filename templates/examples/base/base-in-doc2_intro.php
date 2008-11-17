@@ -1,0 +1,1 @@
+<p>See how YUI Base looks in a 950px YUI Grids page.</p>

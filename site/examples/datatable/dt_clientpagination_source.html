@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+</head>
+
+<body class="yui-skin-sam">
+<h1>Example: Client-side Pagination of Large RecordSet</h1>
+<div id="paginated"></div>
+
+<script type="text/javascript" src="../../build/yuiloader/yuiloader-beta.js"></script>
+<script type="text/javascript" src="./assets/js/data.js"></script>
+<script type="text/javascript">
+var loader = new YAHOO.util.YUILoader();
+loader.insert({
+    require: ['fonts','connection','json','datatable'],
+    base: '../../build/',
+    onSuccess: function() {
+        YAHOO.util.Event.onDOMReady(function() {
+            YAHOO.example.ClientPagination = new function() {
+                var myColumnDefs = [
+                    {key:"id", label:"ID"},
+                    {key:"name", label:"Name"},
+                    {key:"date", label:"Date"},
+                    {key:"price", label:"Price"},
+                    {key:"number", label:"Number"},
+                    {key:"address", label:"Address"},
+                    {key:"company", label:"Company"},
+                    {key:"desc", label:"Description"},
+                    {key:"age", label:"Age"},
+                    {key:"title", label:"Title"},
+                    {key:"phone", label:"Phone"},
+                    {key:"email", label:"Email"},
+                    {key:"zip", label:"Zip"},
+                    {key:"country", label:"Country"}
+                ];
+
+                this.myDataSource = new YAHOO.util.DataSource("assets/php/json_proxy.php?");
+                this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+                this.myDataSource.responseSchema = {
+                    resultsList: "records",
+                    fields: ["id","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
+                };
+
+                var oConfigs = {
+                        paginated:true,
+                        paginator: {
+                            rowsPerPage: 100,
+                            dropdownOptions: [25,50,100,500]
+                        },
+                        initialRequest: "results=504"
+                };
+                this.myDataTable = new YAHOO.widget.DataTable("paginated", myColumnDefs,
+                        this.myDataSource, oConfigs);
+            };
+        });
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+<p>This example demonstrates different ways to create a Button that functions like an HTML reset button (<code>&#60;input type="reset"/&#62;</code> and <code>&#60;button type="reset"/&#62;</code>).</p>

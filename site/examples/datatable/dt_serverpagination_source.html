@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<style type="text/css">
+/* custom styles for this example */
+#dt-pag-nav { margin-bottom:1em; } /* custom pagination UI */
+</style>
+
+</head>
+
+<body class="yui-skin-sam">
+<h1>Server-side Pagination</h1>
+<div id="dt-pag-nav">
+    <span id="prevLink">&lt;</span> Showing items
+    <span id="startIndex">0</span> - <span id="endIndex">24</span>
+    <span id="ofTotal"></span> <span id="nextLink">&gt;</span>
+</div>
+<div id="serverpagination"></div>
+
+<script type="text/javascript" src="../../build/yuiloader/yuiloader-beta.js"></script>
+<script type="text/javascript">
+var loader = new YAHOO.util.YUILoader();
+loader.insert({
+    require: ["fonts", "connection", "json", "datatable"],
+    base: '../../build/',
+    onSuccess: function() {
+        YAHOO.example.ServerPagination = new function() {
+            // Column definitions
+            var myColumnDefs = [
+                {key:"id", label:"ID"},
+                {key:"name", label:"Name"},
+                {key:"date", label:"Date"},
+                {key:"price", label:"Price"},
+                {key:"number", label:"Number"},
+                {key:"address", label:"Address"},
+                {key:"company", label:"Company"},
+                {key:"desc", label:"Description"},
+                {key:"age", label:"Age"},
+                {key:"title", label:"Title"},
+                {key:"phone", label:"Phone"},
+                {key:"email", label:"Email"},
+                {key:"zip", label:"Zip"},
+                {key:"country", label:"Country"}
+            ];
+
+            // DataSource instance
+            this.myDataSource = new YAHOO.util.DataSource("assets/php/json_proxy.php?");
+            this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+            this.myDataSource.responseSchema = {
+                resultsList: "records",
+                fields: ["id","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
+            };
+
+            // DataTable instance
+            var oConfigs = {
+                initialRequest: "startIndex=0&results=25" // Initial values
+            };
+            this.myDataTable = new YAHOO.widget.DataTable("serverpagination", myColumnDefs,
+                    this.myDataSource, oConfigs);
+
+            // Custom code to parse the raw server data for Paginator values and page links
+            this.myDataSource.doBeforeCallback = function(oRequest, oRawResponse, oParsedResponse) {
+                var oSelf = YAHOO.example.ServerPagination;
+                var oDataTable = oSelf.myDataTable;
+
+                // Get Paginator values
+                var oRawResponse = YAHOO.lang.JSON.parse(oRawResponse); //JSON.parse(oRawResponse); // Parse the JSON data
+                var recordsReturned = oRawResponse.recordsReturned; // How many records this page
+                var startIndex = oRawResponse.startIndex; // Start record index this page
+                var endIndex = startIndex + recordsReturned -1; // End record index this page
+                var totalRecords = oRawResponse.totalRecords; // Total records all pages
+
+                // Update the DataTable Paginator with new values
+                var newPag = {
+                    recordsReturned: recordsReturned,
+                    startRecordIndex: startIndex,
+                    endIndex: endIndex,
+                    totalResults: totalRecords
+                }
+                oDataTable.updatePaginator(newPag);
+
+                // Update the links UI
+                YAHOO.util.Dom.get("prevLink").innerHTML = (startIndex === 0) ? "&lt;" :
+                        "<a href=\"#previous\" alt=\"Show previous items\">&lt;</a>" ;
+                YAHOO.util.Dom.get("nextLink").innerHTML =
+                        (endIndex >= totalRecords) ? "&gt;" :
+                        "<a href=\"#next\" alt=\"Show next items\">&gt;</a>";
+                YAHOO.util.Dom.get("startIndex").innerHTML = startIndex;
+                YAHOO.util.Dom.get("endIndex").innerHTML = endIndex;
+                YAHOO.util.Dom.get("ofTotal").innerHTML = " of " + totalRecords;
+
+                // Let the DataSource parse the rest of the response
+                return oParsedResponse;
+            };
+
+            // Hook up custom pagination
+            this.getPage = function(nStartRecordIndex, nResults) {
+                // If a new value is not passed in
+                // use the old value
+                if(!YAHOO.lang.isValue(nResults)) {
+                    nResults = this.myDataTable.get("paginator").totalRecords;
+                }
+                // Invalid value
+                if(!YAHOO.lang.isValue(nStartRecordIndex)) {
+                    return;
+                }
+                var newRequest = "startIndex=" + nStartRecordIndex + "&results=" + nResults;
+                this.myDataSource.sendRequest(newRequest, this.myDataTable.onDataReturnInitializeTable, this.myDataTable);
+            };
+            this.getPreviousPage = function(e) {
+                YAHOO.util.Event.stopEvent(e);
+                // Already at first page
+                if(this.myDataTable.get("paginator").startRecordIndex === 0) {
+                    return;
+                }
+                var newStartRecordIndex = this.myDataTable.get("paginator").startRecordIndex - this.myDataTable.get("paginator").rowsThisPage;
+                this.getPage(newStartRecordIndex);
+            };
+            this.getNextPage = function(e) {
+                YAHOO.util.Event.stopEvent(e);
+                // Already at last page
+                if(this.myDataTable.get("paginator").startRecordIndex +
+                        this.myDataTable.get("paginator").rowsThispage >=
+                        this.myDataTable.get("paginator").totalRecords) {
+                    return;
+                }
+                var newStartRecordIndex = (this.myDataTable.get("paginator").startRecordIndex + this.myDataTable.get("paginator").rowsThisPage);
+                this.getPage(newStartRecordIndex);
+            };
+            YAHOO.util.Event.addListener(YAHOO.util.Dom.get("prevLink"), "click", this.getPreviousPage, this, true);
+            YAHOO.util.Event.addListener(YAHOO.util.Dom.get("nextLink"), "click", this.getNextPage, this, true);
+        };
+    }
+});
+</script>
+</body>
+</html>

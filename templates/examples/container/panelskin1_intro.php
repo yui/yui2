@@ -1,0 +1,1 @@
+<p>In this example, custom CSS and images are applied to the appearance of a Panel instance to stylize it similar to a Mac OS X document window.  Use the buttons below to show and hide the Panel.</p>

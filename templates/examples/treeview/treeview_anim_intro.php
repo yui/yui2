@@ -1,0 +1,1 @@
+<p>The TreeView Control includes animation support for fading in and fading out nodes as they expand and collapse.  This example shows the effect and the simplicity of its implementation.</p>

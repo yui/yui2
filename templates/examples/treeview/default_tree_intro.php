@@ -1,0 +1,1 @@
+<p>In this simple example you see the default presentation for the <a href="http://developer.yahoo.com/yui/treeview/">TreeView Control</a>.  Click on labels or on the expand/collapse icons for each node to interact with the TreeView Control.</p>
