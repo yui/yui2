@@ -1,7 +1,7 @@
 <?php
 //for customizing build path during development:
 if(!isset($buildpath)) {
-	$buildpath = (isset($_GET['buildpath'])) ? $_GET['buildpath'] : "../../build/";
+	$buildpath = (isset($_GET['buildpath'])) ? $_GET['buildpath'] : "../../../build/";
 }
 if($buildpath) {
 	$buildpathQS = "&buildpath=".$buildpath;
