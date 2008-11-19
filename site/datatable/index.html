@@ -778,7 +778,8 @@ var myDataTable = new YAHOO.widget.DataTable("myContainer",
 <textarea name="code" class="JScript" cols="60" rows="1">var myConfigs = {
     paginator : new YAHOO.widget.Paginator({
         rowsPerPage    : 50, // REQUIRED
-        totalRecords   : myData.length, // OPTIONAL
+        totalRecords   : myData.length, // OPTIONAL for local DataSources
+                                        // as DataTable will auto-populate
 
         // use an existing container element
         containers : 'my_pagination',
