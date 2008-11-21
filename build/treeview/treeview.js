@@ -492,10 +492,16 @@ TV.prototype = {
 				this.getEl(),
 				'click',
 				function (ev) {
+
 					var self = this,
 						el = Event.getTarget(ev),
 						node = this.getNodeByElement(el);
 					if (!node) { return; }
+
+                    // IE8 +/- click targets anchor, prevent navigating to #
+                    if (el && el.className == "ygtvspacer") { 
+                        Event.preventDefault(ev);
+                    }
 						
 					var toggle = function () {
 						if (node.expanded) {
@@ -514,7 +520,9 @@ TV.prototype = {
 					}
 					if (el) {
 						// If it is a spacer cell, do nothing
-						if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
+						if (/ygtv(blank)?depthcell/.test(el.className)) { 
+                            return;
+                        }
 						//  If it is a toggle cell, toggle
 						if (/ygtv[tl][mp]h?h?/.test(el.className)) {
 							toggle();
