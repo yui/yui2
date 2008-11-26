@@ -133,6 +133,36 @@
                 return Assert.areEqual(null, Dom.get(item.id)) &&
                        Assert.areEqual(3, carousel.get("numItems")) &&
                        Assert.areEqual(3, carousel._itemsTable.numItems);
+            },
+
+            testScrollForward: function () {
+                carousel.addItems([["Ten",0],["Eleven",0],["Twelve",0]]);
+                carousel.scrollForward();
+                Assert.areEqual("-100px", carouselEl.style.left);
+            },
+
+            testScrollPageForward: function () {
+                Dom.setStyle(carouselEl, "left", "");
+                carousel.scrollPageForward();
+                Assert.areEqual("-300px", carouselEl.style.left);
+            },
+
+            testScrollBackward: function () {
+                Dom.setStyle(carouselEl, "left", "-200px");
+                carousel.scrollBackward();
+                Assert.areEqual("-100px", carouselEl.style.left);
+            },
+
+            testScrollPageBackward: function () {
+                Dom.setStyle(carouselEl, "left", "");
+                carousel.scrollPageBackward();
+                Assert.areEqual("300px", carouselEl.style.left);
+            },
+
+            testScrollTo: function () {
+                Dom.setStyle(carouselEl, "left", "");
+                carousel.scrollTo(3);
+                Assert.areEqual("-300px", carouselEl.style.left);
             }
     });
 
@@ -142,7 +172,7 @@
             setUp: function () {
                 carousel   = new YAHOO.widget.Carousel("container");
                 carouselEl = Dom.get("carousel");
-                //carousel.render();
+                carousel.render();
             },
 
             tearDown : function () {
