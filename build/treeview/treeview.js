@@ -118,6 +118,12 @@ TV.prototype = {
      */
     _dblClickTimer: null,
 
+  /**
+     * A reference to the Node currently having the focus or null if none.
+     * @property currentFocus
+     * @type YAHOO.widget.Node
+     */
+    currentFocus: null,
 
     /**
      * Sets up the animation for expanding children
@@ -308,6 +314,17 @@ TV.prototype = {
          * @param oArgs.node {YAHOO.widget.Node} node the node that was clicked
          */
         this.createEvent("clickEvent", this);
+		
+    /**
+         * Fires when the focus receives the focus, when it changes from a Node 
+	* to another Node or when it is completely lost (blurred)
+         * @event focusChanged
+         * @type CustomEvent
+         * @param oArgs.oldNode  {YAHOO.widget.Node} Node that had the focus or null if none
+         * @param oArgs.newNode {YAHOO.widget.Node} Node that receives the focus or null if none
+         */
+        
+		this.createEvent('focusChanged',this);
 
 	/**
          * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a double Click
@@ -419,17 +436,25 @@ TV.prototype = {
      * @param {string|HTMLElement} id the id of the element that contains the markup or a reference to it.
      */
 	buildTreeFromMarkup: function (id) {
+		var expanded, title;
 		var build = function (parent,markup) {
 			var el, node, child, text;
 			for (el = Dom.getFirstChild(markup); el; el = Dom.getNextSibling(el)) {
 				if (el.nodeType == 1) {
 					switch (el.tagName.toUpperCase()) {
 						case 'LI':
+							expanded = Dom.hasClass(el,'expanded')  && !Dom.hasClass(el,'collapsed');
+							title = el.title || el.alt || '';
 							for (child = el.firstChild; child; child = child.nextSibling) {
 								if (child.nodeType == 3) {
 									text = Lang.trim(child.nodeValue);
 									if (text.length) {
-										node = new Widget.TextNode(text, parent, false);
+										node = new Widget.TextNode(
+											{
+												label:text,
+												expanded:expanded,
+												title:title
+											}, parent);
 									}
 								} else {
 									switch (child.tagName.toUpperCase()) {
@@ -442,11 +467,20 @@ TV.prototype = {
 												label:child.innerHTML,
 												href: child.href,
 												target:child.target,
-												title:child.title ||child.alt
-											},parent,false);
+												title:child.title ||child.alt,
+												expanded:expanded
+											},parent);
 											break;
 										default:
-											node = new Widget.HTMLNode(child.parentNode.innerHTML, parent, false, true);
+											var d = document.createElement('div');
+											d.appendChild(child.cloneNode(true));
+											node = new Widget.HTMLNode(
+												{
+													html:d.innerHTML,
+													title:title,
+													expanded:expanded,
+													hasIcon: true
+												}, parent);
 											break;
 									}
 								}
@@ -492,16 +526,10 @@ TV.prototype = {
 				this.getEl(),
 				'click',
 				function (ev) {
-
 					var self = this,
 						el = Event.getTarget(ev),
 						node = this.getNodeByElement(el);
 					if (!node) { return; }
-
-                    // IE8 +/- click targets anchor, prevent navigating to #
-                    if (el && el.className == "ygtvspacer") { 
-                        Event.preventDefault(ev);
-                    }
 						
 					var toggle = function () {
 						if (node.expanded) {
@@ -520,9 +548,7 @@ TV.prototype = {
 					}
 					if (el) {
 						// If it is a spacer cell, do nothing
-						if (/ygtv(blank)?depthcell/.test(el.className)) { 
-                            return;
-                        }
+						if (/ygtv(blank)?depthcell/.test(el.className)) { return; }
 						//  If it is a toggle cell, toggle
 						if (/ygtv[tl][mp]h?h?/.test(el.className)) {
 							toggle();
@@ -541,6 +567,7 @@ TV.prototype = {
 								} else {
 									if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
 										toggle();
+										Event.preventDefault(ev);
 									}
 								}
 							}
@@ -578,7 +605,7 @@ TV.prototype = {
 				function (ev) {
 					var target = getTarget(ev);
 					if (target) {
-target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').replace(/h+/, 'h');
+						target.className = target.className.replace(/ygtv([lt])([mp])/gi,'ygtv$1$2h');
 					}
 				}
 			);
@@ -600,6 +627,7 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 						node = this.getNodeByElement(target),
 						newNode = node,
 						KEY = YAHOO.util.KeyListener.KEY;
+					//console.log('key');
 
 					switch(ev.keyCode) {
 						case KEY.UP:
@@ -609,8 +637,8 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 								} else {
 									newNode = newNode.parent;
 								}
-							} while (newNode && !newNode.focus());
-							if (!newNode) { node.focus(); }
+							} while (newNode && !newNode._canHaveFocus());
+							if (newNode) { newNode.focus();	}
 							Event.preventDefault(ev);
 							break;
 						case KEY.DOWN:
@@ -621,8 +649,8 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 									newNode.expand();
 									newNode = (newNode.children.length || null) && newNode.children[0];
 								}
-							} while (newNode && !newNode.focus());
-							if (!newNode) { node.focus(); }
+							} while (newNode && !newNode._canHaveFocus);
+							if (newNode) { newNode.focus();}
 							Event.preventDefault(ev);
 							break;
 						case KEY.LEFT:
@@ -632,8 +660,8 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 								} else {
 									newNode = newNode.previousSibling;
 								}
-							} while (newNode && !newNode.focus());
-							if (!newNode) { node.focus(); }
+							} while (newNode && !newNode._canHaveFocus());
+							if (newNode) { newNode.focus();}
 							Event.preventDefault(ev);
 							break;
 						case KEY.RIGHT:
@@ -644,8 +672,8 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 								} else {
 									newNode = newNode.nextSibling;
 								}
-							} while (newNode && !newNode.focus());
-							if (!newNode) { node.focus(); }
+							} while (newNode && !newNode._canHaveFocus());
+							if (newNode) { newNode.focus();}
 							Event.preventDefault(ev);
 							break;
 						case KEY.ENTER:
@@ -664,13 +692,13 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 						case KEY.HOME:
 							newNode = this.getRoot();
 							if (newNode.children.length) {newNode = newNode.children[0];}
-							if (!newNode.focus()) { node.focus(); }
+							if (newNode._canHaveFocus()) { newNode.focus(); }
 							Event.preventDefault(ev);
 							break;
 						case KEY.END:
 							newNode = newNode.parent.children;
 							newNode = newNode[newNode.length -1];
-							if (!newNode.focus()) { node.focus(); }
+							if (newNode._canHaveFocus()) { newNode.focus(); }
 							Event.preventDefault(ev);
 							break;
 						// case KEY.PAGE_UP:
@@ -1282,10 +1310,9 @@ YAHOO.widget.Node.prototype = {
     multiExpand: true,
 
     /**
-     * If set to false (the default), only the visible nodes of the tree
-     * will be rendered in order to improve the speed of the initial
-     * rendering.  Hidden nodes will have the markup generated the first
-     * time the parent is expanded.
+     * Should we render children for a collapsed node?  It is possible that the
+     * implementer will want to render the hidden data...  @todo verify that we 
+     * need this, and implement it if we do.
      * @property renderHidden
      * @type boolean
      */
@@ -2201,23 +2228,23 @@ YAHOO.widget.Node.prototype = {
     getNodeHtml: function() { 
         var sb = [];
 
-        sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0" class="ygtvdepth' + this.depth + '">';
+        sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth + '">';
         sb[sb.length] = '<tr class="ygtvrow">';
         
         for (var i=0;i<this.depth;++i) {
-            sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';
+            sb[sb.length] = '<td class="ygtvcell ' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';
         }
 
         if (this.hasIcon) {
             sb[sb.length] = '<td'; 
             sb[sb.length] = ' id="' + this.getToggleElId() + '"';
-            sb[sb.length] = ' class="' + this.getStyle() + '"';
+            sb[sb.length] = ' class="ygtvcell ' + this.getStyle() + '"';
             sb[sb.length] = '><a href="#" class="ygtvspacer">&nbsp;</a></td>';
         }
 
         sb[sb.length] = '<td';
         sb[sb.length] = ' id="' + this.contentElId + '"'; 
-        sb[sb.length] = ' class="' + this.contentStyle  + ' ygtvcontent" ';
+        sb[sb.length] = ' class="ygtvcell ' + this.contentStyle  + ' ygtvcontent" ';
         sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
         sb[sb.length] = ' >';
 		sb[sb.length] = this.getContentHtml();
@@ -2271,7 +2298,39 @@ YAHOO.widget.Node.prototype = {
 	* @private
 	*/
 	_focusHighlightedItems: [],
+	/**
+	* DOM element that actually got the browser focus
+	* @property _focusedItem
+	* @type DOM element
+	* @private
+	*/
 	_focusedItem: null,
+	
+	/**
+	* Returns true if there are any elements in the node that can 
+	* accept the real actual browser focus
+	* @method _canHaveFocus
+	* @return {boolean} success
+	* @private
+	*/
+	_canHaveFocus: function() {
+		return this.getEl().getElementsByTagName('a').length > 0;
+	},
+	/**
+	* Removes the focus of previously selected Node
+	* @method _removeFocus
+	* @private
+	*/
+	_removeFocus:function () {
+		if (this._focusedItem) {
+			Event.removeListener(this._focusedItem,'blur');
+			this._focusedItem = null;
+		}
+		var el;
+		while ((el = this._focusHighlightedItems.shift())) {  // yes, it is meant as an assignment, really
+			Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
+		}
+	},
 	/**
 	* Sets the focus on the node element.
 	* It will only be able to set the focus on nodes that have anchor elements in it.  
@@ -2283,45 +2342,50 @@ YAHOO.widget.Node.prototype = {
 	focus: function () {
 		var focused = false, self = this;
 
-		var removeListeners = function () {
-			var el;
-			if (self._focusedItem) {
-				Event.removeListener(self._focusedItem,'blur');
-				self._focusedItem = null;
-			}
-			
-			while ((el = self._focusHighlightedItems.shift())) {
-				Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
-			}
-		};
-		removeListeners();
+		if (this.tree.currentFocus) {
+			this.tree.currentFocus._removeFocus();
+		}
+	
+		for (var n = this.parent;n;n = n.parentNode) {
+			n.expand();
+		}
 
 		Dom.getElementsBy  ( 
 			function (el) {
 				return /ygtv(([tl][pmn]h?)|(content))/.test(el.className);
 			} ,
 			'td' , 
-			this.getEl().firstChild , 
+			self.getEl().firstChild , 
 			function (el) {
 				Dom.addClass(el, YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
 				if (!focused) { 
 					var aEl = el.getElementsByTagName('a');
 					if (aEl.length) {
 						aEl = aEl[0];
-
-                        try {
-						    aEl.focus();
-                        } catch(e) {}
-
+						aEl.focus();
 						self._focusedItem = aEl;
-						Event.on(aEl,'blur',removeListeners);
+						Event.on(aEl,'blur',function () {
+							//console.log('f1');
+							self.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
+							self.tree.currentFocus = null;
+							self._removeFocus();
+						});
 						focused = true;
 					}
 				}
 				self._focusHighlightedItems.push(el);
 			}
 		);
-		if (!focused) { removeListeners(); }
+		if (focused) { 
+							//console.log('f2');
+			this.tree.fireEvent('focusChanged',{oldNode:this.tree.currentFocus,newNode:this});
+			this.tree.currentFocus = this;
+		} else {
+							//console.log('f3');
+			this.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
+			this.tree.currentFocus = null;
+			this._removeFocus(); 
+		}
 		return focused;
 	},
 
