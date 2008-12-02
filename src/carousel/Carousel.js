@@ -1077,14 +1077,6 @@
                     "style=\"margin-top:-32px;position:relative;top:50%;\">",
 
             /**
-             * The tag name of the Carousel item.
-             *
-             * @property ITEM_TAG_NAME
-             * @default "LI"
-             */
-            ITEM_TAG_NAME: "LI",
-
-            /**
              * The maximum number of pager buttons allowed beyond which the UI
              * of the pager would be a drop-down of pages instead of buttons.
              *
@@ -1108,15 +1100,7 @@
              * @property NUM_VISIBLE
              * @default 3
              */
-            NUM_VISIBLE: 3,
-
-            /**
-             * The tag name of the Carousel.
-             *
-             * @property TAG_NAME
-             * @default "OL"
-             */
-            TAG_NAME: "OL"
+            NUM_VISIBLE: 3
 
         },
 
@@ -1293,7 +1277,7 @@
             selItem              = this.get("selectedItem");
             numVisible           = this.get("numVisible");
             selectOnScroll       = this.get("selectOnScroll");
-            selected             = this.getItem(selItem);
+            selected             = (selItem>=0) ? this.getItem(selItem) : null;
             first                = this.get("firstVisible");
             last                 = first + numVisible - 1;
             isSelectionInvisible = (selItem < first || selItem > last);
@@ -1351,7 +1335,7 @@
                 return;
             }
 
-            this._itemsTable = { loading: {}, numItems: 0, items: [], size: 0 };
+            this._itemsTable={ loading: {}, numItems: 0, items: [], size: 0 };
             YAHOO.log("Component initialization", WidgetName);
 
             if (JS.isString(el)) {
@@ -1361,6 +1345,8 @@
                         "error", WidgetName);
                 return;
             }
+
+            Carousel.superclass.init.call(this, el, attrs);
 
             if (el) {
                 if (!el.id) {   // in case the HTML element is passed
@@ -1374,8 +1360,6 @@
                 el = this._createCarousel(elId);
             }
             elId = el.id;
-
-            Carousel.superclass.init.call(this, el, attrs);
 
             this.initEvents();
 
@@ -1406,6 +1390,28 @@
         initAttributes: function (attrs) {
             attrs = attrs || {};
             Carousel.superclass.initAttributes.call(this, attrs);
+
+            /**
+             * @attribute carouselEl
+             * @description The type of the Carousel element.
+             * @default OL
+             * @type Boolean
+             */
+            this.setAttributeConfig("carouselEl", {
+                    validator : JS.isString,
+                    value     : attrs.carouselEl || "OL"
+            });
+
+            /**
+             * @attribute carouselItemEl
+             * @description The type of the list of items within the Carousel.
+             * @default LI
+             * @type Boolean
+             */
+            this.setAttributeConfig("carouselItemEl", {
+                    validator : JS.isString,
+                    value     : attrs.carouselItemEl || "LI"
+            });
 
             /**
              * @attribute currentPage
@@ -1600,13 +1606,18 @@
 
             this.on("selectedItemChange", function (ev) {
                 setItemSelection.call(this, ev.newValue, ev.prevValue);
-                this._updateTabIndex(this.getElementForItem(ev.newValue));
+                if (ev.newValue >= 0) {
+                    this._updateTabIndex(this.getElementForItem(ev.newValue));
+                }
                 this.fireEvent(itemSelectedEvent, ev.newValue);
             });
 
             this.on("firstVisibleChange", function (ev) {
                 if (!this.get("selectOnScroll")) {
-                    this._updateTabIndex(this.getElementForItem(ev.newValue));
+                    if (ev.newValue >= 0) {
+                        this._updateTabIndex(
+                                this.getElementForItem(ev.newValue));
+                    }
                 }
             });
 
@@ -1628,7 +1639,8 @@
         },
 
         /**
-         * Return the ITEM_TAG_NAME at index or null if the index is not found.
+         * Return the carouselItemEl at index or null if the index is not
+         * found.
          *
          * @method getElementForItem
          * @param index {Number} The index of the item to be returned
@@ -1652,7 +1664,7 @@
         },
 
         /**
-         * Return the ITEM_TAG_NAME for all items in the Carousel.
+         * Return the carouselItemEl for all items in the Carousel.
          *
          * @method getElementForItems
          * @return {Array} Return all the items
@@ -2063,7 +2075,7 @@
             }
 
             if (!this._carouselEl) {
-                this._carouselEl = createElement(this.CONFIG.TAG_NAME,
+                this._carouselEl = createElement(this.get("carouselEl"),
                         { className: cssClass.CAROUSEL_EL });
             }
 
@@ -2091,7 +2103,7 @@
          * @protected
          */
         _createCarouselItem: function (obj) {
-            return createElement(this.CONFIG.ITEM_TAG_NAME, {
+            return createElement(this.get("carouselItemEl"), {
                     className : obj.className,
                     content   : obj.content,
                     id        : obj.id
@@ -2144,7 +2156,7 @@
             while (target && target != container &&
                    target.id != this._carouselEl) {
                 el = target.nodeName;
-                if (el.toUpperCase() == this.CONFIG.ITEM_TAG_NAME) {
+                if (el.toUpperCase() == this.get("carouselItemEl")) {
                     break;
                 }
                 target = target.parentNode;
@@ -2242,15 +2254,16 @@
          * @protected
          */
         _parseCarousel: function (parent) {
-            var child, cssClass, found, node;
+            var child, cssClass, domEl, found, node;
 
-            cssClass = this.CLASSES;
-            found    = false;
+            cssClass  = this.CLASSES;
+            domEl     = this.get("carouselEl");
+            found     = false;
 
             for (child = parent.firstChild; child; child = child.nextSibling) {
                 if (child.nodeType == 1) {
                     node = child.nodeName;
-                    if (node.toUpperCase() == this.CONFIG.TAG_NAME) {
+                    if (node.toUpperCase() == domEl) {
                         this._carouselEl = child;
                         Dom.addClass(this._carouselEl,this.CLASSES.CAROUSEL_EL);
                         YAHOO.log("Found Carousel - " + node +
@@ -2274,14 +2287,17 @@
          */
         _parseCarouselItems: function () {
             var child,
+                domItemEl,
                 elId,
                 node,
                 parent = this._carouselEl;
 
+            domItemEl = this.get("carouselItemEl");
+
             for (child = parent.firstChild; child; child = child.nextSibling) {
                 if (child.nodeType == 1) {
                     node = child.nodeName;
-                    if (node.toUpperCase() == this.CONFIG.ITEM_TAG_NAME) {
+                    if (node.toUpperCase() == domItemEl) {
                         if (child.id) {
                             elId = child.id;
                         } else {

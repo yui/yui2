@@ -1,8 +1,8 @@
 (function () {
      var ArrayAssert  = YAHOO.util.ArrayAssert,
          Assert       = YAHOO.util.Assert,
-         carousel,
-         carouselEl,
+         carousel, carousel3,
+         carouselEl, carouselEl3,
          Dom          = YAHOO.util.Dom,
          initFromMarkupTest,
          ObjectAssert = YAHOO.util.ObjectAssert;
@@ -15,6 +15,11 @@
             testCreation: function () {
                 return Assert.areEqual(true,
                         Dom.hasClass(carouselEl, "yui-carousel-element"));
+            },
+
+            testCreationFromUl: function () {
+                return Assert.areEqual(true,
+                        Dom.hasClass(carouselEl3, "yui-carousel-element"));
             },
 
             testNumItems: function () {
@@ -170,9 +175,13 @@
             name: "Carousel (from Markup) Tests",
 
             setUp: function () {
-                carousel   = new YAHOO.widget.Carousel("container");
-                carouselEl = Dom.get("carousel");
+                carousel    = new YAHOO.widget.Carousel("container");
+                carouselEl  = Dom.get("carousel");
                 carousel.render();
+                carousel3   = new YAHOO.widget.Carousel("container3", {
+                        carouselEl: "UL" });
+                carouselEl3 = Dom.get("carousel3");
+                carousel3.render();
             },
 
             tearDown : function () {
