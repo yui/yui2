@@ -2508,6 +2508,90 @@ YAHOO.widget.Node.prototype = {
 
 YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
 })();
+/**
+ * A custom YAHOO.widget.Node that handles the unique nature of 
+ * the virtual, presentationless root node.
+ * @namespace YAHOO.widget
+ * @class RootNode
+ * @extends YAHOO.widget.Node
+ * @param oTree {YAHOO.widget.TreeView} The tree instance this node belongs to
+ * @constructor
+ */
+YAHOO.widget.RootNode = function(oTree) {
+	// Initialize the node with null params.  The root node is a
+	// special case where the node has no presentation.  So we have
+	// to alter the standard properties a bit.
+	this.init(null, null, true);
+	
+	/*
+	 * For the root node, we get the tree reference from as a param
+	 * to the constructor instead of from the parent element.
+	 */
+	this.tree = oTree;
+};
+
+YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
+    
+   /**
+     * The node type
+     * @property _type
+      * @type string
+     * @private
+     * @default "RootNode"
+     */
+    _type: "RootNode",
+	
+    // overrides YAHOO.widget.Node
+    getNodeHtml: function() { 
+        return ""; 
+    },
+
+    toString: function() { 
+        return this._type;
+    },
+
+    loadComplete: function() { 
+        this.tree.draw();
+    },
+	
+   /**
+     * Count of nodes in tree.  
+    * It overrides Nodes.getNodeCount because the root node should not be counted.
+     * @method getNodeCount
+     * @return {int} number of nodes in the tree
+     */
+    getNodeCount: function() {
+		for (var i = 0, count = 0;i< this.children.length;i++) {
+			count += this.children[i].getNodeCount();
+		}
+        return count;
+    },
+
+  /**
+     * Returns an object which could be used to build a tree out of this node and its children.
+     * It can be passed to the tree constructor to reproduce this node as a tree.
+     * Since the RootNode is automatically created by treeView, 
+     * its own definition is excluded from the returned node definition
+     * which only contains its children.
+     * @method getNodeDefinition
+     * @return {Object | false}  definition of the tree or false if any child node is defined as dynamic
+     */
+    getNodeDefinition: function() {
+		
+		for (var def, defs = [], i = 0; i < this.children.length;i++) {
+			def = this.children[i].getNodeDefinition();
+			if (def === false) { return false;}
+			defs.push(def);
+		}
+		return defs;
+    },
+
+    collapse: function() {},
+    expand: function() {},
+	getSiblings: function() { return null; },
+	focus: function () {}
+
+});
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Lang = YAHOO.lang,
@@ -2675,87 +2759,42 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
 });
 })();
 /**
- * A custom YAHOO.widget.Node that handles the unique nature of 
- * the virtual, presentationless root node.
+ * A menu-specific implementation that differs from TextNode in that only 
+ * one sibling can be expanded at a time.
  * @namespace YAHOO.widget
- * @class RootNode
- * @extends YAHOO.widget.Node
- * @param oTree {YAHOO.widget.TreeView} The tree instance this node belongs to
+ * @class MenuNode
+ * @extends YAHOO.widget.TextNode
+ * @param oData {object} a string or object containing the data that will
+ * be used to render this node.
+ * Providing a string is the same as providing an object with a single property named label.
+ * All values in the oData will be used to set equally named properties in the node
+ * as long as the node does have such properties, they are not undefined, private or functions.
+ * All attributes are made available in noderef.data, which
+ * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
+ * can be used to retrieve a node by one of the attributes.
+ * @param oParent {YAHOO.widget.Node} this node's parent node
+ * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
  * @constructor
  */
-YAHOO.widget.RootNode = function(oTree) {
-	// Initialize the node with null params.  The root node is a
-	// special case where the node has no presentation.  So we have
-	// to alter the standard properties a bit.
-	this.init(null, null, true);
-	
-	/*
-	 * For the root node, we get the tree reference from as a param
-	 * to the constructor instead of from the parent element.
-	 */
-	this.tree = oTree;
+YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
+	YAHOO.widget.MenuNode.superclass.constructor.call(this,oData,oParent,expanded);
+
+   /*
+     * Menus usually allow only one branch to be open at a time.
+     */
+	this.multiExpand = false;
+
 };
 
-YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
-    
-   /**
+YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
+
+    /**
      * The node type
      * @property _type
-      * @type string
      * @private
-     * @default "RootNode"
+    * @default "MenuNode"
      */
-    _type: "RootNode",
-	
-    // overrides YAHOO.widget.Node
-    getNodeHtml: function() { 
-        return ""; 
-    },
-
-    toString: function() { 
-        return this._type;
-    },
-
-    loadComplete: function() { 
-        this.tree.draw();
-    },
-	
-   /**
-     * Count of nodes in tree.  
-    * It overrides Nodes.getNodeCount because the root node should not be counted.
-     * @method getNodeCount
-     * @return {int} number of nodes in the tree
-     */
-    getNodeCount: function() {
-		for (var i = 0, count = 0;i< this.children.length;i++) {
-			count += this.children[i].getNodeCount();
-		}
-        return count;
-    },
-
-  /**
-     * Returns an object which could be used to build a tree out of this node and its children.
-     * It can be passed to the tree constructor to reproduce this node as a tree.
-     * Since the RootNode is automatically created by treeView, 
-     * its own definition is excluded from the returned node definition
-     * which only contains its children.
-     * @method getNodeDefinition
-     * @return {Object | false}  definition of the tree or false if any child node is defined as dynamic
-     */
-    getNodeDefinition: function() {
-		
-		for (var def, defs = [], i = 0; i < this.children.length;i++) {
-			def = this.children[i].getNodeDefinition();
-			if (def === false) { return false;}
-			defs.push(def);
-		}
-		return defs;
-    },
-
-    collapse: function() {},
-    expand: function() {},
-	getSiblings: function() { return null; },
-	focus: function () {}
+    _type: "MenuNode"
 
 });
 (function () {
@@ -2877,45 +2916,6 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
 	}
 });
 })();
-/**
- * A menu-specific implementation that differs from TextNode in that only 
- * one sibling can be expanded at a time.
- * @namespace YAHOO.widget
- * @class MenuNode
- * @extends YAHOO.widget.TextNode
- * @param oData {object} a string or object containing the data that will
- * be used to render this node.
- * Providing a string is the same as providing an object with a single property named label.
- * All values in the oData will be used to set equally named properties in the node
- * as long as the node does have such properties, they are not undefined, private or functions.
- * All attributes are made available in noderef.data, which
- * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
- * can be used to retrieve a node by one of the attributes.
- * @param oParent {YAHOO.widget.Node} this node's parent node
- * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
- * @constructor
- */
-YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
-	YAHOO.widget.MenuNode.superclass.constructor.call(this,oData,oParent,expanded);
-
-   /*
-     * Menus usually allow only one branch to be open at a time.
-     */
-	this.multiExpand = false;
-
-};
-
-YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
-
-    /**
-     * The node type
-     * @property _type
-     * @private
-    * @default "MenuNode"
-     */
-    _type: "MenuNode"
-
-});
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Lang = YAHOO.lang,
@@ -3331,176 +3331,4 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 		editorData.inputContainer.innerHTML = '';
 	};
 })();
-/**
- * A static factory class for tree view expand/collapse animations
- * @class TVAnim
- * @static
- */
-YAHOO.widget.TVAnim = function() {
-    return {
-        /**
-         * Constant for the fade in animation
-         * @property FADE_IN
-         * @type string
-         * @static
-         */
-        FADE_IN: "TVFadeIn",
-
-        /**
-         * Constant for the fade out animation
-         * @property FADE_OUT
-         * @type string
-         * @static
-         */
-        FADE_OUT: "TVFadeOut",
-
-        /**
-         * Returns a ygAnim instance of the given type
-         * @method getAnim
-         * @param type {string} the type of animation
-         * @param el {HTMLElement} the element to element (probably the children div)
-         * @param callback {function} function to invoke when the animation is done.
-         * @return {YAHOO.util.Animation} the animation instance
-         * @static
-         */
-        getAnim: function(type, el, callback) {
-            if (YAHOO.widget[type]) {
-                return new YAHOO.widget[type](el, callback);
-            } else {
-                return null;
-            }
-        },
-
-        /**
-         * Returns true if the specified animation class is available
-         * @method isValid
-         * @param type {string} the type of animation
-         * @return {boolean} true if valid, false if not
-         * @static
-         */
-        isValid: function(type) {
-            return (YAHOO.widget[type]);
-        }
-    };
-} ();
-/**
- * A 1/2 second fade-in animation.
- * @class TVFadeIn
- * @constructor
- * @param el {HTMLElement} the element to animate
- * @param callback {function} function to invoke when the animation is finished
- */
-YAHOO.widget.TVFadeIn = function(el, callback) {
-    /**
-     * The element to animate
-     * @property el
-     * @type HTMLElement
-     */
-    this.el = el;
-
-    /**
-     * the callback to invoke when the animation is complete
-     * @property callback
-     * @type function
-     */
-    this.callback = callback;
-
-    this.logger = new YAHOO.widget.LogWriter(this.toString());
-};
-
-YAHOO.widget.TVFadeIn.prototype = {
-    /**
-     * Performs the animation
-     * @method animate
-     */
-    animate: function() {
-        var tvanim = this;
-
-        var s = this.el.style;
-        s.opacity = 0.1;
-        s.filter = "alpha(opacity=10)";
-        s.display = "";
-
-        var dur = 0.4; 
-        var a = new YAHOO.util.Anim(this.el, {opacity: {from: 0.1, to: 1, unit:""}}, dur);
-        a.onComplete.subscribe( function() { tvanim.onComplete(); } );
-        a.animate();
-    },
-
-    /**
-     * Clean up and invoke callback
-     * @method onComplete
-     */
-    onComplete: function() {
-        this.callback();
-    },
-
-    /**
-     * toString
-     * @method toString
-     * @return {string} the string representation of the instance
-     */
-    toString: function() {
-        return "TVFadeIn";
-    }
-};
-/**
- * A 1/2 second fade out animation.
- * @class TVFadeOut
- * @constructor
- * @param el {HTMLElement} the element to animate
- * @param callback {Function} function to invoke when the animation is finished
- */
-YAHOO.widget.TVFadeOut = function(el, callback) {
-    /**
-     * The element to animate
-     * @property el
-     * @type HTMLElement
-     */
-    this.el = el;
-
-    /**
-     * the callback to invoke when the animation is complete
-     * @property callback
-     * @type function
-     */
-    this.callback = callback;
-
-    this.logger = new YAHOO.widget.LogWriter(this.toString());
-};
-
-YAHOO.widget.TVFadeOut.prototype = {
-    /**
-     * Performs the animation
-     * @method animate
-     */
-    animate: function() {
-        var tvanim = this;
-        var dur = 0.4;
-        var a = new YAHOO.util.Anim(this.el, {opacity: {from: 1, to: 0.1, unit:""}}, dur);
-        a.onComplete.subscribe( function() { tvanim.onComplete(); } );
-        a.animate();
-    },
-
-    /**
-     * Clean up and invoke callback
-     * @method onComplete
-     */
-    onComplete: function() {
-        var s = this.el.style;
-        s.display = "none";
-        // s.opacity = 1;
-        s.filter = "alpha(opacity=100)";
-        this.callback();
-    },
-
-    /**
-     * toString
-     * @method toString
-     * @return {string} the string representation of the instance
-     */
-    toString: function() {
-        return "TVFadeOut";
-    }
-};
 YAHOO.register("treeview", YAHOO.widget.TreeView, {version: "@VERSION@", build: "@BUILD@"});

@@ -118,6 +118,12 @@ TV.prototype = {
      */
     _dblClickTimer: null,
 
+  /**
+     * A reference to the Node currently having the focus or null if none.
+     * @property currentFocus
+     * @type YAHOO.widget.Node
+     */
+    currentFocus: null,
 
     /**
      * Sets up the animation for expanding children
@@ -312,6 +318,17 @@ TV.prototype = {
          * @param oArgs.node {YAHOO.widget.Node} node the node that was clicked
          */
         this.createEvent("clickEvent", this);
+		
+    /**
+         * Fires when the focus receives the focus, when it changes from a Node 
+	* to another Node or when it is completely lost (blurred)
+         * @event focusChanged
+         * @type CustomEvent
+         * @param oArgs.oldNode  {YAHOO.widget.Node} Node that had the focus or null if none
+         * @param oArgs.newNode {YAHOO.widget.Node} Node that receives the focus or null if none
+         */
+        
+		this.createEvent('focusChanged',this);
 
 	/**
          * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a double Click
@@ -429,6 +446,7 @@ TV.prototype = {
      * @param {string|HTMLElement} id the id of the element that contains the markup or a reference to it.
      */
 	buildTreeFromMarkup: function (id) {
+		var expanded, title;
 		this.logger.log('Building tree from existing markup');
 		var build = function (parent,markup) {
 			var el, node, child, text;
@@ -436,11 +454,18 @@ TV.prototype = {
 				if (el.nodeType == 1) {
 					switch (el.tagName.toUpperCase()) {
 						case 'LI':
+							expanded = Dom.hasClass(el,'expanded')  && !Dom.hasClass(el,'collapsed');
+							title = el.title || el.alt || '';
 							for (child = el.firstChild; child; child = child.nextSibling) {
 								if (child.nodeType == 3) {
 									text = Lang.trim(child.nodeValue);
 									if (text.length) {
-										node = new Widget.TextNode(text, parent, false);
+										node = new Widget.TextNode(
+											{
+												label:text,
+												expanded:expanded,
+												title:title
+											}, parent);
 									}
 								} else {
 									switch (child.tagName.toUpperCase()) {
@@ -453,11 +478,20 @@ TV.prototype = {
 												label:child.innerHTML,
 												href: child.href,
 												target:child.target,
-												title:child.title ||child.alt
-											},parent,false);
+												title:child.title ||child.alt,
+												expanded:expanded
+											},parent);
 											break;
 										default:
-											node = new Widget.HTMLNode(child.parentNode.innerHTML, parent, false, true);
+											var d = document.createElement('div');
+											d.appendChild(child.cloneNode(true));
+											node = new Widget.HTMLNode(
+												{
+													html:d.innerHTML,
+													title:title,
+													expanded:expanded,
+													hasIcon: true
+												}, parent);
 											break;
 									}
 								}
@@ -528,7 +562,7 @@ TV.prototype = {
 					}
 					if (el) {
 						// If it is a spacer cell, do nothing
-						if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
+						if (/ygtv(blank)?depthcell/.test(el.className)) { return; }
 						//  If it is a toggle cell, toggle
 						if (/ygtv[tl][mp]h?h?/.test(el.className)) {
 							toggle();
@@ -547,6 +581,7 @@ TV.prototype = {
 								} else {
 									if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
 										toggle();
+										Event.preventDefault(ev);
 									}
 								}
 							}
@@ -584,7 +619,7 @@ TV.prototype = {
 				function (ev) {
 					var target = getTarget(ev);
 					if (target) {
-target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').replace(/h+/, 'h');
+						target.className = target.className.replace(/ygtv([lt])([mp])/gi,'ygtv$1$2h');
 					}
 				}
 			);
@@ -606,6 +641,7 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 						node = this.getNodeByElement(target),
 						newNode = node,
 						KEY = YAHOO.util.KeyListener.KEY;
+					//console.log('key');
 
 					switch(ev.keyCode) {
 						case KEY.UP:
@@ -616,8 +652,8 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 								} else {
 									newNode = newNode.parent;
 								}
-							} while (newNode && !newNode.focus());
-							if (!newNode) { node.focus(); }
+							} while (newNode && !newNode._canHaveFocus());
+							if (newNode) { newNode.focus();	}
 							Event.preventDefault(ev);
 							break;
 						case KEY.DOWN:
@@ -629,8 +665,8 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 									newNode.expand();
 									newNode = (newNode.children.length || null) && newNode.children[0];
 								}
-							} while (newNode && !newNode.focus());
-							if (!newNode) { node.focus(); }
+							} while (newNode && !newNode._canHaveFocus);
+							if (newNode) { newNode.focus();}
 							Event.preventDefault(ev);
 							break;
 						case KEY.LEFT:
@@ -641,8 +677,8 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 								} else {
 									newNode = newNode.previousSibling;
 								}
-							} while (newNode && !newNode.focus());
-							if (!newNode) { node.focus(); }
+							} while (newNode && !newNode._canHaveFocus());
+							if (newNode) { newNode.focus();}
 							Event.preventDefault(ev);
 							break;
 						case KEY.RIGHT:
@@ -654,8 +690,8 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 								} else {
 									newNode = newNode.nextSibling;
 								}
-							} while (newNode && !newNode.focus());
-							if (!newNode) { node.focus(); }
+							} while (newNode && !newNode._canHaveFocus());
+							if (newNode) { newNode.focus();}
 							Event.preventDefault(ev);
 							break;
 						case KEY.ENTER:
@@ -676,14 +712,14 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 							this.logger.log('HOME');
 							newNode = this.getRoot();
 							if (newNode.children.length) {newNode = newNode.children[0];}
-							if (!newNode.focus()) { node.focus(); }
+							if (newNode._canHaveFocus()) { newNode.focus(); }
 							Event.preventDefault(ev);
 							break;
 						case KEY.END:
 							this.logger.log('END');
 							newNode = newNode.parent.children;
 							newNode = newNode[newNode.length -1];
-							if (!newNode.focus()) { node.focus(); }
+							if (newNode._canHaveFocus()) { newNode.focus(); }
 							Event.preventDefault(ev);
 							break;
 						// case KEY.PAGE_UP:
