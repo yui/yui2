@@ -195,6 +195,16 @@
     var navigationStateChangeEvent = "navigationStateChange";
 
     /**
+     * @event noItemsEvent
+     * @description Fires when all items have been removed from the Carousel.
+     * See
+     * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
+     * for more information on listening for this event.
+     * @type YAHOO.util.CustomEvent
+     */
+    var noItemsEvent = "noItems";
+
+    /**
      * @event pageChange
      * @description Fires after the Carousel has scrolled to the previous or
      * next page.  Passes back the page number of the current page.  Note
@@ -591,8 +601,8 @@
         sentinel   = this._firstItem + this.get("numVisible");
 
         if (navigation.prev) {
-            if (this._firstItem === 0) {
-                if (!this.get("isCircular")) {
+            if (this.get("numItems") === 0 || this._firstItem === 0) {
+                if (this.get("numItems") === 0 || !this.get("isCircular")) {
                     Event.removeListener(navigation.prev, "click",
                             scrollPageBackward);
                     Dom.addClass(navigation.prev, cssClass.FIRST_NAV_DISABLED);
@@ -681,15 +691,19 @@
                 if (JS.isUndefined(o.pos)) {
                     if (!JS.isUndefined(this._itemsTable.loading[pos])) {
                         oel = this._itemsTable.loading[pos];
+                        // if oel is null, it is a problem ...
                     }
                     if (oel) {
+                        // replace the node
                         this._carouselEl.replaceChild(el, oel);
+                        // ... and remove the item from the data structure
+                        delete this._itemsTable.loading[pos];
                     } else {
                         this._carouselEl.appendChild(el);
                     }
                 } else {
                     if (!JS.isUndefined(this._itemsTable.items[o.pos + 1])) {
-                        sibling = Dom.get(this._itemsTable.items[o.pos + 1].id);
+                        sibling = Dom.get(this._itemsTable.items[o.pos+1].id);
                     }
                     if (sibling) {
                         this._carouselEl.insertBefore(el, sibling);
@@ -1247,9 +1261,24 @@
             var n = this.get("numItems");
 
             while (n > 0) {
-                this.removeItem(0);
+                if (!this.removeItem(0)) {
+                    YAHOO.log("Item could not be removed - missing?",
+                              "warn", WidgetName);
+                }
+                /*
+                    For dynamic loading, the numItems may be much larger than
+                    the actual number of items in the table.  So, set the
+                    numItems to zero, and break out of the loop if the table
+                    is already empty.
+                 */
+                if (this._itemsTable.numItems === 0) {
+                    this.set("numItems", 0);
+                    break;
+                }
                 n--;
             }
+
+            this.fireEvent(noItemsEvent);
         },
 
         /**
@@ -1604,6 +1633,12 @@
             this.subscribe(renderEvent, syncNavigation);
             this.subscribe(renderEvent, this._syncPagerUI);
 
+            this.on(noItemsEvent, function (ev) {
+                this.scrollTo(0);
+                syncNavigation.call(this);
+                this._syncPagerUI();
+            });
+
             this.on("selectedItemChange", function (ev) {
                 setItemSelection.call(this, ev.newValue, ev.prevValue);
                 if (ev.newValue >= 0) {
@@ -1755,8 +1790,8 @@
             }
 
             item = this._itemsTable.items.splice(index, 1);
-            this._itemsTable.numItems--;
             if (item && item.length == 1) {
+                this._itemsTable.numItems--;
                 this.set("numItems", num - 1);
 
                 this.fireEvent(itemRemovedEvent,
@@ -1890,8 +1925,7 @@
                 offset,
                 page       = this.get("currentPage"),
                 rv,
-                sentinel,
-                which;
+                sentinel;
 
             if (item == firstItem) {
                 return;         // nothing to do!
@@ -1907,7 +1941,7 @@
                 } else {
                     return;
                 }
-            } else if (item > numItems - 1) {
+            } else if (numItems > 0 && item > numItems - 1) {
                 if (this.get("isCircular")) {
                     item = numItems - item;
                 } else {
@@ -1931,20 +1965,20 @@
             this._firstItem = item;
             this.set("firstVisible", item);
 
-            YAHOO.log("Scrolling to " + item + " delta = " + delta, WidgetName);
+            YAHOO.log("Scrolling to " + item + " delta = " + delta,WidgetName);
 
             loadItems.call(this); // do we have all the items to display?
 
             sentinel  = item + numPerPage;
             sentinel  = (sentinel > numItems - 1) ? numItems - 1 : sentinel;
 
-            which     = this.get("isVertical") ? "top" : "left";
             offset    = getScrollOffset.call(this, delta);
             YAHOO.log("Scroll offset = " + offset, WidgetName);
 
             animate   = animCfg.speed > 0;
 
             if (animate) {
+                // TODO: move this to _animateAndSetCarouselOffset()
                 this._isAnimationInProgress = true;
                 if (this.get("isVertical")) {
                     animAttrs = { points: { by: [0, offset] } };
@@ -1963,8 +1997,7 @@
                 anim.animate();
                 anim = null;
             } else {
-                offset += getStyle(this._carouselEl, which);
-                Dom.setStyle(this._carouselEl, which, offset + "px");
+                this._setCarouselOffset(offset);
             }
 
             newPage = parseInt(this._firstItem / numPerPage, 10);
@@ -2386,6 +2419,20 @@
             }
 
             return rv;
+        },
+
+        /**
+         * Set the Carousel offset to the passed offset.
+         *
+         * @method _setCarouselOffset
+         * @protected
+         */
+        _setCarouselOffset: function (offset) {
+            var which;
+
+            which   = this.get("isVertical") ? "top" : "left";
+            offset += offset !== 0 ? getStyle(this._carouselEl, which) : 0;
+            Dom.setStyle(this._carouselEl, which, offset + "px");
         },
 
         /**
@@ -2850,13 +2897,17 @@
          * @protected
          */
         _validateFirstVisible: function (val) {
-            var rv = false;
+            var numItems = this.get("numItems"), rv = false;
 
             if (JS.isNumber(val)) {
-                rv = (val >= 0 && val < this.get("numItems"));
+                if (numItems === 0 && val == numItems) {
+                    return true;
+                } else {
+                    return (val >= 0 && val < this.get("numItems"));
+                }
             }
 
-            return rv;
+            return false;
         },
 
         /**
