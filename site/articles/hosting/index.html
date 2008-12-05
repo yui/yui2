@@ -44,6 +44,15 @@ abbr {cursor:help;}
     font-size: 75%;
 }
 
+#cdnContainer {
+    border: 2px groove #ccc;
+    margin: .3em;
+    padding: .3em;
+    width: 12em;
+    display:-moz-inline-box;
+    display: inline-block;
+}
+
 #optionsContainer {
     border: 2px groove #ccc;
     margin: .3em;
@@ -57,7 +66,7 @@ abbr {cursor:help;}
     font-size: 75%;
 }
 
-#loadOptionalContainer button {
+#loadOptionalContainer button, #cdnContainer button {
     font-size: 75%;
 }
 
@@ -93,7 +102,7 @@ $append = '
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?'.$yuiUseVersion.'/build/button/assets/skins/sam/button.css&'.$yuiUseVersion.'/build/tabview/assets/skins/sam/tabview.css">
 
 <script type="text/javascript" src="/yui/docs/assets/yuiModuleMeta.js?v=3"></script>
-<script type="text/javascript" src="/yui/docs/assets/yuiConfigurator.js?v=9"></script>
+<script type="text/javascript" src="/yui/docs/assets/yuiConfigurator.js?v=11"></script>
 
 <script type="text/javascript">
 YAHOO.yui.configurator();
@@ -106,12 +115,12 @@ YAHOO.yui.configurator();
 
 <h1>YUI: Configuration and Hosting</h1>
 
-<p><a href="#configure">Configure</a> | <a href="#background">History</a> | <a href="#tou">Terms of Use</a> | <a href="#filepaths">Filepaths</a> | <a href="#aggregates">Aggregate (Rollup) Files</a> | <a href="#combo">Combo Handling</a></p>
+<p><a href="#configure">Configure</a> | <a href="#background">History</a> | <a href="#tou">Terms of Use</a> | <a href="#filepaths">Filepaths</a> | <a href="#aggregates">Aggregate (Rollup) Files</a> | <a href="#combo">Combo Handling</a> | <a href="#ssl">SSL Support for Hosted Files</a></p>
 
 <div id="configurator">
 
 <h3 id="configure">YUI Dependency Configurator:</h3>
-<p>Choose the YUI components you want to use on your page; beneath the button toolbars, the text area will update with the sorted dependency list required to power your desired components.  By default, we'll use aggregate (rollup) files where possible and serve the files from <code>yui.yahooapis.com</code>.  You can allow rollups and/or set your own base URL path if you choose.  The <strong>Combine All JS Files</strong> option, on by default, generates a URL for your JavaScript files that combines them all into a single file, reducing HTTP requests.</p>
+<p>Choose the YUI components you want to use on your page; beneath the button toolbars, the text area will update with the sorted dependency list required to power your desired components.  By default, we'll use aggregate (rollup) files where possible and serve the files from <code>yui.yahooapis.com</code>.  You can allow rollups and/or set your own base URL path if you choose.  The <strong>Combine All JS Files</strong> option, on by default, generates a URL for your JavaScript files that combines them all into a single file, reducing HTTP requests.  If you wish to use hosted files, you can choose between Yahoo and Google Content Delivery Networks.  Yahoo's network supports combo-handling; Google's supports SSL.</p>
 
 <div>
       <fieldset id="filterContainer">
@@ -124,6 +133,11 @@ YAHOO.yui.configurator();
       </input>
       </span>
       </fieldset>
+	  
+      <fieldset id="cdnContainer">
+      <legend>CDN</legend>
+      </fieldset>
+
     </div>
 <div id="buttonContainer">
 
@@ -345,6 +359,10 @@ usage. -->
 <h3 id="combo">Combo Handling &mdash; Combining All JS Files to Reduce HTTP Requests:</h3>
 
 <p>The Configurator allows you to go beyond pre-built rollups by automatically rolling all of your JavaScript resources into a single file.  By using the "Combine All JS Files" options, you will only make one HTTP request for YUI JS.  For almost all implementations, this will result in improved performance.  For the rationale behind reducing HTTP requests, please see <a href="http://yuiblog.com/blog/2006/11/28/performance-research-part-1/">Performance Research, Part 1: What the 80/20 Rule Tells Us about Reducing HTTP Requests</a> by Tenni Theurer on YUIBlog.</p>
+
+<h3 id="ssl">SSL Support for Hosted Files:</h3>
+
+<p>SSL support is not provided for files served via Yahoo's CDN.  However, Google's CDN <em>does</em> offer SSL support.  Choose Google in the Configurator above to get SSL-compatible URLs, or choose files from the file roster above and replace <code>http://yui.yahooapis.com/</code> with <code>https://ajax.googleapis.com/ajax/libs/yui/</code>.</p>
 
 </div>
 </div>

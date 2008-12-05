@@ -14,7 +14,10 @@ include "../inc/header.inc";
 
 <div id="promo" class="component">
     <h1>Yahoo! UI Library: <?php echo $component; ?></h1>
-    <p><img src="assets/yuidoc.png" width="300" height="204" class="example" alt="Sample API documentation output from the YUI Doc tool.">YUI Doc is a Python application used at build time to generate API documentation for JavaScript code.  YUI Doc is comment-driven and supports a wide range of JavaScript coding styles. The output of YUI Doc is API documentation formatted as a set of HTML pages including information about methods, properties, custom events and inheritance for JavaScript objects. YUI Doc was written for the YUI Project by Adam Moore; it uses YUI JavaScript and CSS in the generated files (primarily for AutoComplete-driven API instant search); and it supports common YUI conventions like <a href="http://developer.yahoo.com/yui/event/#customevent">Custom Events</a>. That said, it can be used easily and productively on non-YUI code.</p>
+    <p>YUI Doc is a Python application used at build time to generate API documentation for JavaScript code.  YUI Doc is comment-driven and supports a wide range of JavaScript coding styles. The output of YUI Doc is API documentation formatted as a set of HTML pages including information about methods, properties, custom events and inheritance for JavaScript objects. YUI Doc was written for the YUI Project by Adam Moore; it uses YUI JavaScript and CSS in the generated files (primarily for AutoComplete-driven API instant search); and it supports common YUI conventions like <a href="http://developer.yahoo.com/yui/event/#customevent">Custom Events</a>. That said, it can be used easily and productively on non-YUI code.</p>
+	
+	<p><img src="assets/yuidoc.png" width="600" height="274" alt="Sample API documentation output from the YUI Doc tool." style="border:1px solid #666666;"></p>
+	
     <p>YUI Doc is most helpful to developers who are building an API for external consumption or for developers who are building library code that will be shared by others on their team.</p>
     <p>YUI Doc is stable and has been used since 2005 as part of the YUI Project.  Its public release is currently designated as a beta, which means that the API is expect to evolve further based on response from users.</p>
     
@@ -139,6 +142,10 @@ include "../inc/header.inc";
 		</tr>
     </thead>
 	<tbody>
+       <tr>
+            <td>submodule</td>
+            <td>YUI Doc supports the notion that a module is a submodule of a parent module.  For example, in YUI 3.x <code>anim-scroll</code> is a submodule of <code>anim</code>.  A submodule encompasses a subset of the parent module's functionality.  To use submodule designation, provide the parent module's name as the module property and the submodule's name in the submodule property.</td>
+        </tr>
         <tr class="odd">
             <td>namespace</td>
             <td>While it is optional to provide a namespace, it is recommended. This lets you describe your class just with the name: For example, <code>YAHOO.util.Event</code> has a <code>namespace</code> of <code>YAHOO.util</code> and a <code>class</code> of <code>Event</code>.</td>

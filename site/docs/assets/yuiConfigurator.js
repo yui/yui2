@@ -216,6 +216,9 @@ YAHOO.yui.configurator = function(container) {
 				configUrl += "&basepath&";
 				configUrl += D.get('baseInput').value;
 			}
+			if (cdnGroup.get("value") === "google") {
+				configUrl += "&google";	
+			}
 			D.get("configUrl").innerHTML = "<strong>Bookmark or mail this configuration:</strong> <a href='" + configUrl + "'>http://developer.yahoo.com" + configUrl + "</a>";	
 		}
 		
@@ -267,6 +270,38 @@ YAHOO.yui.configurator = function(container) {
 
         filterGroup.on("valueChange", onFilterChange);
         filterGroup.on("valueChange", showDependencies);
+
+		//CDN Settings
+        cdnGroup = new Y.widget.ButtonGroup({id:  "cdn", name:  "cdn", container:  "cdnContainer"});	
+
+        cdnGroup.addButtons([
+            { label: "Yahoo!", value: "yahoo", checked: ((qs.indexOf("google") > -1) ? false : true), title: "Note: Yahoo's CDN supports combo-handling, but it does not support SSL.  Yahoo's CDN includes YUI version 2.2.0 and later." },
+            { label: "Google", value: "google", checked:  ((qs.indexOf("google") > -1) ? true : false), title:"Note: Google's CDN does not support combo-handling, but it does support SSL.  Google's CDN includes version 2.6.0 and later."}
+        ]);
+		
+		function oncdnChange() {
+			//currently, these buttons control the basepath:
+			if (this.get("value") == "yahoo") {
+				comboHandlerButton.set("disabled", false);
+				D.get("baseInput").value = "";
+			} else {
+				//set path for Google:
+				comboHandlerButton.set("disabled", true);
+				D.get("baseInput").value = "http://ajax.googleapis.com/ajax/libs/yui/" + YAHOO.env.getVersion("yahoo").version + "/build/";
+			}
+		}
+
+		//set value:
+		var cdn;
+		if(qs.indexOf("google") > -1) {
+			cdn = "google";
+		} else {
+			cdn = "yahoo"
+		}
+		cdnGroup.set("value", cdn);
+
+        cdnGroup.on("valueChange", oncdnChange);
+        cdnGroup.on("valueChange", showDependencies);
 		
         loadOptionalButton = new Button({
             id: "loadOptional",
