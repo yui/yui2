@@ -1,8 +1,8 @@
 (function () {
      var ArrayAssert  = YAHOO.util.ArrayAssert,
          Assert       = YAHOO.util.Assert,
-         carousel,
-         carouselEl,
+         carousel, carousel4,
+         carouselEl, carouselEl4,
          Dom          = YAHOO.util.Dom,
          initFromScriptTest,
          ObjectAssert = YAHOO.util.ObjectAssert;
@@ -15,6 +15,11 @@
             testCreation: function () {
                 return Assert.areEqual(true,
                         Dom.hasClass(carouselEl, "yui-carousel-element"));
+            },
+
+            testCreationFromUl: function () {
+                return Assert.areEqual(true,
+                        Dom.hasClass(carouselEl4, "yui-carousel-element"));
             },
 
             testNumItems: function () {
@@ -197,6 +202,14 @@
                         "OL", carousel.get("element"));
                 if (YAHOO.lang.isArray(items) && items.length == 1) {
                     carouselEl = items[0];
+                }
+                carousel4   = new YAHOO.widget.Carousel("container4", {
+                        carouselEl: "UL" });
+                carousel4.render();
+                items    = Dom.getElementsByClassName("yui-carousel-element",
+                        "UL", carousel4.get("element"));
+                if (YAHOO.lang.isArray(items) && items.length == 1) {
+                    carouselEl4 = items[0];
                 }
             },
 
