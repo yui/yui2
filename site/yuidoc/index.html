@@ -21,7 +21,7 @@ include "../inc/header.inc";
     <p>YUI Doc is most helpful to developers who are building an API for external consumption or for developers who are building library code that will be shared by others on their team.</p>
     <p>YUI Doc is stable and has been used since 2005 as part of the YUI Project.  Its public release is currently designated as a beta, which means that the API is expect to evolve further based on response from users.</p>
     
-    <p>For discussion about and support of YUI Doc usage and development, check out <a href="http://tech.groups.yahoo.com/group/yuidoc/">the YUI Doc Community Forum on Yahoo! Groups</a>.</p>
+    <p>For discussion about and support of YUI Doc usage and development, check out <a href="http://yuilibrary.com/forum/viewforum.php?f=26">the YUI Doc Community Forum on Yahoo! Groups</a>.</p>
     <div>
     <h4>On This Page:</h4>
     <ul>
@@ -38,8 +38,8 @@ include "../inc/header.inc";
   <h2 class="first">Getting Started<a name="start"></a></h2>
   <p><strong>Note:</strong> The use of YUI Doc requires some ability to drive a computer from the command line and is most useful as part of an automated build process. The instructions here are high-level and assume some familiarity with CLIs and with the installation of command-line tools and libraries.</p>
   <ol>
-    <li><strong>Download YUI Doc from SourceForge:</strong> <a href="http://sourceforge.net/projects/yui/">YUI Doc is part of the YUI Project on SourceForge</a>, but it is a separate download from the YUI JavaScript/CSS library and the YUI Compressor.</li>
-    <li><strong>Install the required external libraries: </strong>YUI Doc relies on Python and four external libraries. If you have Python and setup tools installed, you can use <code>easy_install</code> to install the latest versions of these libraries. More info on the install process is included in the <code>INSTALL</code> file inside the source distribution. For more information on these tools, please visit their respective project pages:
+    <li><strong>Download YUI Doc from YUILibrary.com:</strong> <a href="http://yuilibrary.com/downloads/">YUI Doc is available from the YUI project website</a>, but it is a separate download from the YUI JavaScript/CSS library and the YUI Compressor.</li>
+    <li><strong>Install the required external libraries: </strong>YUI Doc relies on Python and four external libraries. If you have Python and <a href="http://pypi.python.org/pypi/setuptools">setuptools</a> installed, you can use <code>easy_install</code> to install the latest versions of these libraries. More info on the install process is included in the <code>INSTALL</code> file inside the source distribution. For more information on these tools, please visit their respective project pages:
       <ul>
         <li><a href="http://peak.telecommunity.com/DevCenter/setuptools">setuptools</a>: distribution/packaging tools</li>
         <li><a href="http://pygments.org/">Pygments</a>: Python syntax highlighter</li>
@@ -160,7 +160,7 @@ include "../inc/header.inc";
         </tr>
         <tr>
             <td>attribute</td>
-            <td>A <code>config</code> is a managed configuration attribute.  In YUI parlance, this is typically an attribute created and managed with AttributeProvider (part of the <a href="http://developer.yahoo.com/yui/element/">YUI Element Utility</a>).  An <code>attribute</code> is similar to a <code>config</code>, but YUI Doc will autogenerate documentation for the change events associated with the <code>attribute</code> as provided by Element. (<strong>Note:</strong> Unless you're using YUI and referring to an attribute managed by AttributeProvider, you should avoid using this tag.)</td>
+            <td>An <code>attribute</code> is a managed configuration attribute.  In YUI parlance, this is typically an attribute created and managed with AttributeProvider (part of the <a href="http://developer.yahoo.com/yui/element/">YUI Element Utility</a>).  An <code>attribute</code> is similar to a <code>config</code>, but YUI Doc will autogenerate documentation for the change events associated with the <code>attribute</code> as provided by Element. (<strong>Note:</strong> Unless you're using YUI and referring to an attribute managed by AttributeProvider, you should avoid using this tag.)</td>
         </tr>
         <tr class="odd">
             <td>constructor</td>
@@ -249,7 +249,8 @@ Used to define an inner class:<br /><br />
 				<h3>Examples:</h3>
 				
 				<ul>
-				  <li>The best example of YUI Doc output <a href="http://developer.yahoo.com/yui/docs/">is the YUI API documentation</a>.</li>
+				  <li>The best example of YUI Doc output <a href="http://developer.yahoo.com/yui/docs/">is the YUI API documentation</a>.  In this application, YUI Doc is used to document a project with several dozen modules and significant inheritance structures.</li>
+				  <li>In <a href="http://ericmiraglia.com/yui/docs/">this much smaller example for a YUI plugin supporting the Yahoo Term Extractor API</a>, YUI Doc is used to document a single module with a single class.</li>
 			   </ul>
 		   </div>
 
