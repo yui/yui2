@@ -2629,12 +2629,7 @@
          * @protected
          */
         _setNumVisible: function (val) {
-            if (val > 1 && val < this.get("numItems")) {
-                this._setClipContainerSize(this._clipEl, val);
-            } else {
-                val = this.get("numVisible");
-            }
-            return val;
+            this._setClipContainerSize(this._clipEl, val);
         },
 
         /**
