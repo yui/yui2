@@ -168,6 +168,25 @@
                 Dom.setStyle(carouselEl, "left", "");
                 carousel.scrollTo(3);
                 Assert.areEqual("-300px", carouselEl.style.left);
+            },
+
+            testSetNumVisible: function () {
+                if (carousel.get("numVisible") != 3 ||
+                    parseInt(Dom.getStyle(carouselEl, "width"), 10) != 300) {
+                    return Assert.fail("numVisible should be 3 by default");
+                }
+                carousel.set("numVisible", 1);
+                if (carousel.get("numVisible") != 1 ||
+                    parseInt(Dom.getStyle(carouselEl, "width"), 10) != 100) {
+                    return Assert.fail("Failed to set numVisible to 1");
+                }
+                carousel.set("numVisible", 2);
+                if (carousel.get("numVisible") != 2 ||
+                    parseInt(Dom.getStyle(carouselEl, "width"), 10) != 200) {
+                    return Assert.fail("Failed to set numVisible to 2");
+                }
+                carousel.set("numVisible", 1);
+                return Assert.areEqual(1, carousel.get("numVisible"));
             }
     });
 
