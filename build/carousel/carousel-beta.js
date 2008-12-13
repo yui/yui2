@@ -2939,7 +2939,7 @@
             var rv = false;
 
             if (JS.isNumber(val)) {
-                rv = val > 0 && val < this.get("numItems");
+                rv = val > 0 && val <= this.get("numItems");
             }
 
             return rv;
