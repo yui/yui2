@@ -25,7 +25,7 @@
 <button id="demo-run">run</button>
 </textarea>
 
-<p>Now we will define the function that sets the background color of <code>foo</code> to the background color of <code>bar</code>.  The first argument of the <code>getStyle</code> method is either the ID of an HTMLElement, or an actual HTMLElement object.  The second is the style property that we wish to retrieve.  The <code>getStyle</code> method returns the element&apos;s current value for that property.
+<p>Now we will define the function that sets the background color of <code>foo</code> to the background color of <code>bar</code>.  The first argument of the <code>getStyle</code> method is either the ID of an HTMLElement, or an actual HTMLElement object.  The second is the style property that we wish to retrieve.  The <code>getStyle</code> method returns the element's current value for that property.
 
 <textarea name="code" class="JScript" cols="60" rows="1">
 <script type="text/javascript">
@@ -39,7 +39,7 @@
 <p>To trigger the demo, we will use the <a href="http://developer.yahoo.com/yui/event/">YUI Event Utility</a>'s <code>on</code> method to listen for clicks on the button.</p>
 <textarea name="code" class="JScript" cols="60" rows="1">
 <script type="text/javascript">
-    YAHOO.util.Event.on('demo-run', 'click', move);
+    YAHOO.util.Event.on('demo-run', 'click', setBgColor);
 </script>
 </textarea>
 
