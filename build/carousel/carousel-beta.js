@@ -2533,21 +2533,21 @@
             }
 
             if (isVertical) {
-                size += getStyle(this._carouselEl, "marginTop")     +
-                        getStyle(this._carouselEl, "marginBottom")  +
-                        getStyle(this._carouselEl, "paddingTop")    +
-                        getStyle(this._carouselEl, "paddingBottom") +
-                        getStyle(this._carouselEl, "borderTop")     +
-                        getStyle(this._carouselEl, "borderBottom");
+                size += getStyle(this._carouselEl, "marginTop")        +
+                        getStyle(this._carouselEl, "marginBottom")     +
+                        getStyle(this._carouselEl, "paddingTop")       +
+                        getStyle(this._carouselEl, "paddingBottom")    +
+                        getStyle(this._carouselEl, "borderTopWidth")   +
+                        getStyle(this._carouselEl, "borderBottomWidth");
                 // XXX: for vertical Carousel
                 Dom.setStyle(clip, which, (size - (num - 1)) + "px");
             } else {
-                size += getStyle(this._carouselEl, "marginLeft")    +
-                        getStyle(this._carouselEl, "marginRight")   +
-                        getStyle(this._carouselEl, "paddingLeft")   +
-                        getStyle(this._carouselEl, "paddingRight")  +
-                        getStyle(this._carouselEl, "borderLeft")    +
-                        getStyle(this._carouselEl, "borderRight");
+                size += getStyle(this._carouselEl, "marginLeft")      +
+                        getStyle(this._carouselEl, "marginRight")     +
+                        getStyle(this._carouselEl, "paddingLeft")     +
+                        getStyle(this._carouselEl, "paddingRight")    +
+                        getStyle(this._carouselEl, "borderLeftWidth") +
+                        getStyle(this._carouselEl, "borderRightWidth");
                 Dom.setStyle(clip, which, size + "px");
             }
 
@@ -2572,12 +2572,12 @@
 
             size = JS.isNumber(size) ? size : 0;
 
-            size += getStyle(clip, "marginLeft")   +
-                    getStyle(clip, "marginRight")  +
-                    getStyle(clip, "paddingLeft")  +
-                    getStyle(clip, "paddingRight") +
-                    getStyle(clip, "borderLeft")   +
-                    getStyle(clip, "borderRight");
+            size += getStyle(clip, "marginLeft")      +
+                    getStyle(clip, "marginRight")     +
+                    getStyle(clip, "paddingLeft")     +
+                    getStyle(clip, "paddingRight")    +
+                    getStyle(clip, "borderLeftWidth") +
+                    getStyle(clip, "borderRightWidth");
 
             if (isVertical) {
                 size += getStyle(this._navEl, "height");
