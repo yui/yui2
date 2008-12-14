@@ -54,7 +54,7 @@
      * @private
      * @static
      */
-    var instances = {};
+    var instances = {},
 
     /*
      * Custom events of the Carousel component
@@ -69,7 +69,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var afterScrollEvent = "afterScroll";
+    afterScrollEvent = "afterScroll",
 
     /**
      * @event beforeHide
@@ -78,7 +78,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var beforeHideEvent = "beforeHide";
+    beforeHideEvent = "beforeHide",
 
     /**
      * @event beforePageChange
@@ -89,7 +89,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var beforePageChangeEvent = "beforePageChange";
+    beforePageChangeEvent = "beforePageChange",
 
     /**
      * @event beforeScroll
@@ -100,7 +100,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var beforeScrollEvent = "beforeScroll";
+    beforeScrollEvent = "beforeScroll",
 
     /**
      * @event beforeShow
@@ -109,7 +109,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var beforeShowEvent = "beforeShow";
+    beforeShowEvent = "beforeShow",
 
     /**
      * @event blur
@@ -118,7 +118,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var blurEvent = "blur";
+    blurEvent = "blur",
 
     /**
      * @event focus
@@ -127,7 +127,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var focusEvent = "focus";
+    focusEvent = "focus",
 
     /**
      * @event hide
@@ -136,7 +136,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var hideEvent = "hide";
+    hideEvent = "hide",
 
     /**
      * @event itemAdded
@@ -147,7 +147,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var itemAddedEvent = "itemAdded";
+    itemAddedEvent = "itemAdded",
 
     /**
      * @event itemRemoved
@@ -158,7 +158,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var itemRemovedEvent = "itemRemoved";
+    itemRemovedEvent = "itemRemoved",
 
     /**
      * @event itemSelected
@@ -169,7 +169,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var itemSelectedEvent = "itemSelected";
+    itemSelectedEvent = "itemSelected",
 
     /**
      * @event loadItems
@@ -180,7 +180,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var loadItemsEvent = "loadItems";
+    loadItemsEvent = "loadItems",
 
     /**
      * @event navigationStateChange
@@ -192,7 +192,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var navigationStateChangeEvent = "navigationStateChange";
+    navigationStateChangeEvent = "navigationStateChange",
 
     /**
      * @event noItemsEvent
@@ -202,7 +202,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var noItemsEvent = "noItems";
+    noItemsEvent = "noItems",
 
     /**
      * @event pageChange
@@ -213,7 +213,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var pageChangeEvent = "pageChange";
+    pageChangeEvent = "pageChange",
 
     /**
      * @event render
@@ -222,7 +222,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var renderEvent = "render";
+    renderEvent = "render",
 
     /**
      * @event show
@@ -231,7 +231,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var showEvent = "show";
+    showEvent = "show",
 
     /**
      * @event startAutoPlay
@@ -240,7 +240,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var startAutoPlayEvent = "startAutoPlay";
+    startAutoPlayEvent = "startAutoPlay",
 
     /**
      * @event stopAutoPlay
@@ -250,7 +250,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var stopAutoPlayEvent = "stopAutoPlay";
+    stopAutoPlayEvent = "stopAutoPlay";
 
     /*
      * Private helper functions used by the Carousel component
@@ -662,118 +662,24 @@
     /**
      * Fire custom events for synchronizing the DOM.
      *
-     * @method syncUI
+     * @method syncUi
      * @param {Object} o The item that needs to be added or removed
      * @private
      */
-    function syncUI(o) {
-        var el, i, item, num, oel, pos, sibling;
-
+    function syncUi(o) {
         if (!JS.isObject(o)) {
             return;
         }
 
         switch (o.ev) {
         case itemAddedEvent:
-            pos  = JS.isUndefined(o.pos) ? this._itemsTable.numItems-1 : o.pos;
-            if (!JS.isUndefined(this._itemsTable.items[pos])) {
-                item = this._itemsTable.items[pos];
-                if (item && !JS.isUndefined(item.id)) {
-                    oel  = Dom.get(item.id);
-                }
-            }
-            if (!oel) {
-                el = this._createCarouselItem({
-                        className : item.className,
-                        content   : item.item,
-                        id        : item.id
-                });
-                if (JS.isUndefined(o.pos)) {
-                    if (!JS.isUndefined(this._itemsTable.loading[pos])) {
-                        oel = this._itemsTable.loading[pos];
-                        // if oel is null, it is a problem ...
-                    }
-                    if (oel) {
-                        // replace the node
-                        this._carouselEl.replaceChild(el, oel);
-                        // ... and remove the item from the data structure
-                        delete this._itemsTable.loading[pos];
-                    } else {
-                        this._carouselEl.appendChild(el);
-                    }
-                } else {
-                    if (!JS.isUndefined(this._itemsTable.items[o.pos + 1])) {
-                        sibling = Dom.get(this._itemsTable.items[o.pos+1].id);
-                    }
-                    if (sibling) {
-                        this._carouselEl.insertBefore(el, sibling);
-                    } else {
-                        YAHOO.log("Unable to find sibling","error",WidgetName);
-                    }
-                }
-            } else {
-                if (JS.isUndefined(o.pos)) {
-                    if (!Dom.isAncestor(this._carouselEl, oel)) {
-                        this._carouselEl.appendChild(oel);
-                    }
-                } else {
-                    if (!Dom.isAncestor(this._carouselEl, oel)) {
-                        if (!JS.isUndefined(this._itemsTable.items[o.pos+1])) {
-                            this._carouselEl.insertBefore(oel, Dom.get(
-                                    this._itemsTable.items[o.pos+1].id));
-                        }
-                    }
-                }
-            }
-
-            if (this._recomputeSize) {
-                this._setClipContainerSize();
-            }
-
-            if (this.get("selectedItem") < 0) {
-                this.set("selectedItem", this.get("firstVisible"));
-            }
+            this._syncUiForItemAdd(o);
             break;
         case itemRemovedEvent:
-            num  = this.get("numItems");
-            item = o.item;
-            pos  = o.pos;
-
-            if (item && (el = Dom.get(item.id))) {
-                if (el && Dom.isAncestor(this._carouselEl, el)) {
-                    Event.purgeElement(el, true);
-                    this._carouselEl.removeChild(el);
-                }
-
-                if (this.get("selectedItem") == pos) {
-                    pos = pos >= num ? num - 1 : pos;
-                    this.set("selectedItem", pos);
-                }
-            } else {
-                YAHOO.log("Unable to find item", "warn", WidgetName);
-            }
+            this._syncUiForItemRemove(o);
             break;
         case loadItemsEvent:
-            for (i = o.first; i <= o.last; i++) {
-                el = this._createCarouselItem({
-                        content : this.CONFIG.ITEM_LOADING,
-                        id      : Dom.generateId()
-                });
-                if (el) {
-                    if (!JS.isUndefined(this._itemsTable.items[o.last + 1])) {
-                        sibling = Dom.get(this._itemsTable.items[o.last+1].id);
-                        if (sibling) {
-                            this._carouselEl.insertBefore(el, sibling);
-                        } else {
-                            YAHOO.log("Unable to find sibling", "error",
-                                    WidgetName);
-                        }
-                    } else {
-                        this._carouselEl.appendChild(el);
-                    }
-                }
-                this._itemsTable.loading[i] = el;
-            }
+            this._syncUiForLazyLoading(o);
             break;
         }
     }
@@ -1609,68 +1515,69 @@
          * @public
          */
         initEvents: function () {
-            var cssClass = this.CLASSES;
+            var carousel = this,
+                cssClass = this.CLASSES;
 
-            this.on("keydown", this._keyboardEventHandler);
+            carousel.on("keydown", carousel._keyboardEventHandler);
 
-            this.subscribe(afterScrollEvent, syncNavigation);
-            this.on(afterScrollEvent, this.focus);
+            carousel.on(afterScrollEvent, syncNavigation);
+            carousel.on(afterScrollEvent, carousel.focus);
 
-            this.subscribe(itemAddedEvent, syncUI);
-            this.subscribe(itemAddedEvent, syncNavigation);
-            this.subscribe(itemAddedEvent, this._syncPagerUI);
+            carousel.on(itemAddedEvent, syncUi);
+            carousel.on(itemAddedEvent, syncNavigation);
+            carousel.on(itemAddedEvent, carousel._syncPagerUi);
 
-            this.subscribe(itemRemovedEvent, syncUI);
-            this.subscribe(itemRemovedEvent, syncNavigation);
-            this.subscribe(itemRemovedEvent, this._syncPagerUI);
+            carousel.on(itemRemovedEvent, syncUi);
+            carousel.on(itemRemovedEvent, syncNavigation);
+            carousel.on(itemRemovedEvent, carousel._syncPagerUi);
 
-            this.on(itemSelectedEvent, this.focus);
+            carousel.on(itemSelectedEvent, carousel.focus);
 
-            this.subscribe(loadItemsEvent, syncUI);
+            carousel.on(loadItemsEvent, syncUi);
 
-            this.subscribe(pageChangeEvent, this._syncPagerUI);
+            carousel.on(pageChangeEvent, carousel._syncPagerUi);
 
-            this.subscribe(renderEvent, syncNavigation);
-            this.subscribe(renderEvent, this._syncPagerUI);
+            carousel.on(renderEvent, syncNavigation);
+            carousel.on(renderEvent, carousel._syncPagerUi);
 
-            this.on(noItemsEvent, function (ev) {
-                this.scrollTo(0);
-                syncNavigation.call(this);
-                this._syncPagerUI();
+            carousel.on(noItemsEvent, function (ev) {
+                carousel.scrollTo(0);
+                syncNavigation.call(carousel);
+                carousel._syncPagerUi();
             });
 
-            this.on("selectedItemChange", function (ev) {
-                setItemSelection.call(this, ev.newValue, ev.prevValue);
+            carousel.on("selectedItemChange", function (ev) {
+                setItemSelection.call(carousel, ev.newValue, ev.prevValue);
                 if (ev.newValue >= 0) {
-                    this._updateTabIndex(this.getElementForItem(ev.newValue));
+                    carousel._updateTabIndex(
+                            carousel.getElementForItem(ev.newValue));
                 }
-                this.fireEvent(itemSelectedEvent, ev.newValue);
+                carousel.fireEvent(itemSelectedEvent, ev.newValue);
             });
 
-            this.on("firstVisibleChange", function (ev) {
-                if (!this.get("selectOnScroll")) {
+            carousel.on("firstVisibleChange", function (ev) {
+                if (!carousel.get("selectOnScroll")) {
                     if (ev.newValue >= 0) {
-                        this._updateTabIndex(
-                                this.getElementForItem(ev.newValue));
+                        carousel._updateTabIndex(
+                                carousel.getElementForItem(ev.newValue));
                     }
                 }
             });
 
             // Handle item selection on mouse click
-            this.on("click", this._itemClickHandler);
+            carousel.on("click", carousel._itemClickHandler);
 
             // Handle page navigation
-            this.on("click", this._pagerClickHandler);
+            carousel.on("click", carousel._pagerClickHandler);
 
             // Restore the focus on the navigation buttons
-            Event.onFocus(this.get("element"), function (ev, obj) {
+            Event.onFocus(carousel.get("element"), function (ev, obj) {
                 obj._updateNavButtons(Event.getTarget(ev), true);
-            }, this);
+            }, carousel);
 
-            Event.onBlur(this.get("element"), function (ev, obj) {
+            Event.onBlur(carousel.get("element"), function (ev, obj) {
                 obj._updateNavButtons(Event.getTarget(ev), false);
-            }, this);
-
+            }, carousel);
         },
 
         /**
@@ -2747,12 +2654,150 @@
         },
 
         /**
-         * Synchronize and redraw the Pager UI if necessary.
+         * Synchronize and redraw the UI after an item is added.
          *
-         * @method _syncPagerUI
+         * @method _syncUiForItemAdd
          * @protected
          */
-        _syncPagerUI: function (page) {
+        _syncUiForItemAdd: function (obj) {
+            var carouselEl = this._carouselEl,
+                el,
+                item,
+                itemsTable = this._itemsTable,
+                oel,
+                pos,
+                sibling;
+
+            pos  = JS.isUndefined(obj.pos) ? itemsTable.numItems - 1 : obj.pos;
+            if (!JS.isUndefined(itemsTable.items[pos])) {
+                item = itemsTable.items[pos];
+                if (item && !JS.isUndefined(item.id)) {
+                    oel  = Dom.get(item.id);
+                }
+            }
+            if (!oel) {
+                el = this._createCarouselItem({
+                        className : item.className,
+                        content   : item.item,
+                        id        : item.id
+                });
+                if (JS.isUndefined(obj.pos)) {
+                    if (!JS.isUndefined(itemsTable.loading[pos])) {
+                        oel = itemsTable.loading[pos];
+                        // if oel is null, it is a problem ...
+                    }
+                    if (oel) {
+                        // replace the node
+                        carouselEl.replaceChild(el, oel);
+                        // ... and remove the item from the data structure
+                        delete itemsTable.loading[pos];
+                    } else {
+                        carouselEl.appendChild(el);
+                    }
+                } else {
+                    if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
+                        sibling = Dom.get(itemsTable.items[obj.pos + 1].id);
+                    }
+                    if (sibling) {
+                        carouselEl.insertBefore(el, sibling);
+                    } else {
+                        YAHOO.log("Unable to find sibling","error",WidgetName);
+                    }
+                }
+            } else {
+                if (JS.isUndefined(obj.pos)) {
+                    if (!Dom.isAncestor(this._carouselEl, oel)) {
+                        carouselEl.appendChild(oel);
+                    }
+                } else {
+                    if (!Dom.isAncestor(carouselEl, oel)) {
+                        if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
+                            carouselEl.insertBefore(oel,
+                                    Dom.get(itemsTable.items[obj.pos + 1].id));
+                        }
+                    }
+                }
+            }
+
+            if (this._recomputeSize) {
+                this._setClipContainerSize();
+            }
+
+            if (this.get("selectedItem") < 0) {
+                this.set("selectedItem", this.get("firstVisible"));
+            }
+        },
+
+        /**
+         * Synchronize and redraw the UI after an item is removed.
+         *
+         * @method _syncUiForItemAdd
+         * @protected
+         */
+        _syncUiForItemRemove: function (obj) {
+            var carouselEl = this._carouselEl, el, item, num, pos;
+
+            num  = this.get("numItems");
+            item = obj.item;
+            pos  = obj.pos;
+
+            if (item && (el = Dom.get(item.id))) {
+                if (el && Dom.isAncestor(carouselEl, el)) {
+                    Event.purgeElement(el, true);
+                    carouselEl.removeChild(el);
+                }
+
+                if (this.get("selectedItem") == pos) {
+                    pos = pos >= num ? num - 1 : pos;
+                    this.set("selectedItem", pos);
+                }
+            } else {
+                YAHOO.log("Unable to find item", "warn", WidgetName);
+            }
+        },
+
+        /**
+         * Synchronize and redraw the UI for lazy loading.
+         *
+         * @method _syncUiForLazyLoading
+         * @protected
+         */
+        _syncUiForLazyLoading: function (obj) {
+            var carouselEl = this._carouselEl,
+                el,
+                i,
+                itemsTable = this._itemsTable,
+                sibling;
+
+            for (i = obj.first; i <= obj.last; i++) {
+                el = this._createCarouselItem({
+                        content : this.CONFIG.ITEM_LOADING,
+                        id      : Dom.generateId()
+                });
+                if (el) {
+                    if (!JS.isUndefined(itemsTable.items[obj.last + 1])) {
+                        sibling = Dom.get(itemsTable.items[obj.last + 1].id);
+                        if (sibling) {
+                            carouselEl.insertBefore(el, sibling);
+                        } else {
+                            YAHOO.log("Unable to find sibling", "error",
+                                    WidgetName);
+                        }
+                    } else {
+                        carouselEl.appendChild(el);
+                    }
+                }
+                itemsTable.loading[i] = el;
+            }
+        },
+
+        /**
+         * Synchronize and redraw the Pager UI if necessary.
+         *
+         * @method _syncPagerUi
+         * @protected
+         */
+        _syncPagerUi: function (page) {
             var a,
                 cssClass = this.CLASSES,
                 i,
