@@ -1217,6 +1217,10 @@
         * called by the constructor, and  sets up all DOM references for 
         * pre-existing markup, and creates required markup if it is not 
         * already present.
+        * <p>
+        * If the element passed in does not have an id, one will be generated
+        * for it.
+        * </p>
         * @method init
         * @param {String} el The element ID representing the Module <em>OR</em>
         * @param {HTMLElement} el The element representing the Module
@@ -1252,11 +1256,8 @@
                 }
             }
 
+            this.id = Dom.generateId(el);
             this.element = el;
-
-            if (el.id) {
-                this.id = el.id;
-            }
 
             child = this.element.firstChild;
 
@@ -3053,6 +3054,7 @@
                         m_oIFrameTemplate.style.margin = "0";
                         m_oIFrameTemplate.style.padding = "0";
                         m_oIFrameTemplate.style.display = "none";
+                        m_oIFrameTemplate.tabIndex = -1;
                     }
 
                     oIFrame = m_oIFrameTemplate.cloneNode(false);
@@ -5366,7 +5368,7 @@
             }, this.cfg.getProperty("autodismissdelay"));
 
         },
-        
+
         /**
         * Fired when the Tooltip is moved, this event handler is used to 
         * prevent the Tooltip from overlapping with its context element.
@@ -7259,9 +7261,9 @@
             this.manualSubmitEvent = 
                 this.createEvent(EVENT_TYPES.MANUAL_SUBMIT);
             this.manualSubmitEvent.signature = SIGNATURE;
-        
+
             /**
-            * CustomEvent fired after to asynchronous submission, before the generic submit event is fired
+            * CustomEvent fired after asynchronous submission, before the generic submit event is fired
             * @event asyncSubmitEvent
             * @param {Object} The connection object object, returned by YAHOO.util.Connect.asyncRequest
             */ 
@@ -7274,7 +7276,7 @@
             */
             this.formSubmitEvent = this.createEvent(EVENT_TYPES.FORM_SUBMIT);
             this.formSubmitEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired after cancel
             * @event cancelEvent

@@ -525,6 +525,10 @@
         * called by the constructor, and  sets up all DOM references for 
         * pre-existing markup, and creates required markup if it is not 
         * already present.
+        * <p>
+        * If the element passed in does not have an id, one will be generated
+        * for it.
+        * </p>
         * @method init
         * @param {String} el The element ID representing the Module <em>OR</em>
         * @param {HTMLElement} el The element representing the Module
@@ -560,11 +564,8 @@
                 }
             }
 
+            this.id = Dom.generateId(el);
             this.element = el;
-
-            if (el.id) {
-                this.id = el.id;
-            }
 
             child = this.element.firstChild;
 

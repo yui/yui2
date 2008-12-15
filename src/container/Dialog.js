@@ -305,9 +305,9 @@
             this.manualSubmitEvent = 
                 this.createEvent(EVENT_TYPES.MANUAL_SUBMIT);
             this.manualSubmitEvent.signature = SIGNATURE;
-        
+
             /**
-            * CustomEvent fired after to asynchronous submission, before the generic submit event is fired
+            * CustomEvent fired after asynchronous submission, before the generic submit event is fired
             * @event asyncSubmitEvent
             * @param {Object} The connection object object, returned by YAHOO.util.Connect.asyncRequest
             */ 
@@ -320,7 +320,7 @@
             */
             this.formSubmitEvent = this.createEvent(EVENT_TYPES.FORM_SUBMIT);
             this.formSubmitEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired after cancel
             * @event cancelEvent

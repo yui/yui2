@@ -1209,6 +1209,7 @@
                         m_oIFrameTemplate.style.margin = "0";
                         m_oIFrameTemplate.style.padding = "0";
                         m_oIFrameTemplate.style.display = "none";
+                        m_oIFrameTemplate.tabIndex = -1;
                     }
 
                     oIFrame = m_oIFrameTemplate.cloneNode(false);
