@@ -2419,6 +2419,16 @@ The following HTML and CSS references provide the necessary information for skin
 <ul>
 
 	<li>
+		<h4>Selected text is cleared when a ContextMenu instance is made visible</h4>
+		<p>
+			In Gecko, Webkit and Opera when a ContextMenu is made visible, any text selected in the 
+			document will be cleared.  This is due to the first item in a Menu being focused when 
+			a Menu is made visible.  <a href="http://yuiblog.com/sandbox/yui/v260/examples/menu/example15.html">This example</a> 
+			illustrates how to work around the problem.
+		</p>
+	</li>
+
+	<li>
 		<h4>Menu instances scroll unnecessarily</h4>	
 		<p>
 			There is bug a in Menu where Menu instances will scroll unnecessarily when initially 

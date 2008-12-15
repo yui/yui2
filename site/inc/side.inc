@@ -73,7 +73,7 @@ $nav[]=array('grids','/yui/grids/','Grids CSS', 'YUI Grids CSS');
 
 $nav[]=array('', '', 'YUI Tools', '');
 $nav[]=array('compressor','/yui/compressor/','YUI Compressor', 'YUI Compressor for CSS and JavaScript');
-//$nav[]=array('yuidoc','/yui/yuidoc/','YUI Doc', 'YUI Documentation Engine for JavaScript-based projects');
+$nav[]=array('yuidoc','/yui/yuidoc/','YUI Doc', 'YUI Documentation Engine for JavaScript-based projects');
 
 $nav[]=array('', '', 'Yahoo! Developer Network', '');
 $nav[]=array('home','/','Home', 'What\'s hot?');

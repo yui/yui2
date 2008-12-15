@@ -20,16 +20,9 @@
  * be bookmarked in a specific state.
  *
  * @class History
+ * @constructor
  */
-(function () {
-
-    /* A few shortcuts... */
-    var Y = YAHOO,
-        L = Y.lang,
-        U = Y.util,
-        E = U.Event,
-        A = Y.env.ua,
-        H,
+YAHOO.util.History = (function () {
 
     /**
      * Our hidden IFrame used to store the browsing history.
@@ -39,7 +32,7 @@
      * @default null
      * @private
      */
-    _histFrame = null,
+    var _histFrame = null;
 
     /**
      * INPUT field (with type="hidden" or type="text") or TEXTAREA.
@@ -51,7 +44,7 @@
      * @default null
      * @private
      */
-    _stateField = null,
+    var _stateField = null;
 
     /**
      * Flag used to tell whether YAHOO.util.History.initialize has been called.
@@ -61,7 +54,7 @@
      * @default false
      * @private
      */
-    _initialized = false,
+    var _initialized = false;
 
     /**
      * List of registered modules.
@@ -71,7 +64,7 @@
      * @default []
      * @private
      */
-    _modules = [],
+    var _modules = [];
 
     /**
      * List of fully qualified states. This is used only by Safari.
@@ -81,16 +74,7 @@
      * @default []
      * @private
      */
-    _fqstates = [],
-
-    /**
-     * Regular expression used to parse "&"-separated key-value pairs
-     *
-     * @property QUERY_STRING_REGEXP
-     * @type RegExp
-     * @private
-     */
-    QUERY_STRING_REGEXP = /([^=&]+)=([^&]*)/g;
+    var _fqstates = [];
 
     /**
      * location.hash is a bit buggy on Opera. I have seen instances where
@@ -103,7 +87,10 @@
      * @private
      */
     function _getHash() {
-        return location.hash.substr(1);
+        var i, href;
+        href = top.location.href;
+        i = href.indexOf("#");
+        return i >= 0 ? href.substr(i + 1) : null;
     }
 
     /**
@@ -120,7 +107,7 @@
         var moduleName, moduleObj, initialStates = [], currentStates = [];
 
         for (moduleName in _modules) {
-            if (L.hasOwnProperty(_modules, moduleName)) {
+            if (YAHOO.lang.hasOwnProperty(_modules, moduleName)) {
                 moduleObj = _modules[moduleName];
                 initialStates.push(moduleName + "=" + moduleObj.initialState);
                 currentStates.push(moduleName + "=" + moduleObj.currentState);
@@ -129,7 +116,7 @@
 
         _stateField.value = initialStates.join("&") + "|" + currentStates.join("&");
 
-        if (A.webkit) {
+        if (YAHOO.env.ua.webkit) {
             _stateField.value += "|" + _fqstates.join(",");
         }
     }
@@ -145,12 +132,12 @@
      */
     function _handleFQStateChange(fqstate) {
 
-        var i, len, moduleName, moduleObj, modules, currentState, m;
+        var i, len, moduleName, moduleObj, modules, states, tokens, currentState;
 
         if (!fqstate) {
             // Notifies all modules
             for (moduleName in _modules) {
-                if (L.hasOwnProperty(_modules, moduleName)) {
+                if (YAHOO.lang.hasOwnProperty(_modules, moduleName)) {
                     moduleObj = _modules[moduleName];
                     moduleObj.currentState = moduleObj.initialState;
                     moduleObj.onStateChange(unescape(moduleObj.currentState));
@@ -160,13 +147,18 @@
         }
 
         modules = [];
-        QUERY_STRING_REGEXP.lastIndex = 0;
-        while (m = QUERY_STRING_REGEXP.exec(fqstate)) {
-            modules[m[1]] = m[2];
+        states = fqstate.split("&");
+        for (i = 0, len = states.length; i < len; i++) {
+            tokens = states[i].split("=");
+            if (tokens.length === 2) {
+                moduleName = tokens[0];
+                currentState = tokens[1];
+                modules[moduleName] = currentState;
+            }
         }
 
         for (moduleName in _modules) {
-            if (L.hasOwnProperty(_modules, moduleName)) {
+            if (YAHOO.lang.hasOwnProperty(_modules, moduleName)) {
                 moduleObj = _modules[moduleName];
                 currentState = modules[moduleName];
                 if (!currentState || moduleObj.currentState !== currentState) {
@@ -184,7 +176,7 @@
      * @private
      * @return {boolean} true if successful. false otherwise.
      */
-    function _updateIFrame(fqstate) {
+    function _updateIFrame (fqstate) {
 
         var html, doc;
 
@@ -251,7 +243,7 @@
                 if (!fqstate) {
                     states = [];
                     for (moduleName in _modules) {
-                        if (L.hasOwnProperty(_modules, moduleName)) {
+                        if (YAHOO.lang.hasOwnProperty(_modules, moduleName)) {
                             moduleObj = _modules[moduleName];
                             states.push(moduleName + "=" + moduleObj.initialState);
                         }
@@ -265,9 +257,10 @@
                 // URL fragment identifier. Note that here, we are on IE, and
                 // IE does not touch the browser history when setting the hash
                 // (unlike all the other browsers). I used to write:
-                //     top.location.replace("#" + hash);
+                //     top.location.replace( "#" + hash );
                 // but this had a side effect when the page was not the top frame.
-                top.location.hash = hash = newHash;
+                top.location.hash = newHash;
+                hash = newHash;
 
                 _storeStates();
 
@@ -295,7 +288,7 @@
         }, 50);
 
         _initialized = true;
-        H.onLoadEvent.fire();
+        YAHOO.util.History.onLoadEvent.fire();
     }
 
     /**
@@ -306,30 +299,36 @@
      */
     function _initialize() {
 
-        var i, len, parts, m, moduleName, initialState, currentState, moduleObj, counter, hash;
+        var i, len, parts, tokens, moduleName, moduleObj, initialStates, initialState, currentStates, currentState, counter, hash;
 
         // Decode the content of our storage field...
         parts = _stateField.value.split("|");
 
         if (parts.length > 1) {
 
-            QUERY_STRING_REGEXP.lastIndex = 0;
-            while (m = QUERY_STRING_REGEXP.exec(parts[0])) {
-                moduleName = m[1];
-                initialState = m[2];
-                moduleObj = _modules[moduleName];
-                if (moduleObj) {
-                    moduleObj.initialState = initialState;
+            initialStates = parts[0].split("&");
+            for (i = 0, len = initialStates.length; i < len; i++) {
+                tokens = initialStates[i].split("=");
+                if (tokens.length === 2) {
+                    moduleName = tokens[0];
+                    initialState = tokens[1];
+                    moduleObj = _modules[moduleName];
+                    if (moduleObj) {
+                        moduleObj.initialState = initialState;
+                    }
                 }
             }
 
-            QUERY_STRING_REGEXP.lastIndex = 0;
-            while (m = QUERY_STRING_REGEXP.exec(parts[1])) {
-                moduleName = m[1];
-                currentState = m[2];
-                moduleObj = _modules[moduleName];
-                if (moduleObj) {
-                    moduleObj.currentState = currentState;
+            currentStates = parts[1].split("&");
+            for (i = 0, len = currentStates.length; i < len; i++) {
+                tokens = currentStates[i].split("=");
+                if (tokens.length >= 2) {
+                    moduleName = tokens[0];
+                    currentState = tokens[1];
+                    moduleObj = _modules[moduleName];
+                    if (moduleObj) {
+                        moduleObj.currentState = currentState;
+                    }
                 }
             }
         }
@@ -338,23 +337,9 @@
             _fqstates = parts[2].split(",");
         }
 
-        if (A.ie) {
+        if (YAHOO.env.ua.ie) {
 
-            if (A.ie < 8) {
-
-                _checkIframeLoaded();
-
-            } else {
-
-                E.on(window, 'hashchange', function () {
-                    var hash = _getHash();
-                    _handleFQStateChange(hash);
-                    _storeStates();
-                });
-
-                _initialized = true;
-                H.onLoadEvent.fire();
-            }
+            _checkIframeLoaded();
 
         } else {
 
@@ -388,7 +373,7 @@
                     counter = newCounter;
                     _handleFQStateChange(hash);
                     _storeStates();
-                } else if (newCounter !== counter && A.webkit) {
+                } else if (newCounter !== counter && YAHOO.env.ua.webkit) {
                     hash = newHash;
                     counter = newCounter;
                     state = _fqstates[counter - 1];
@@ -399,11 +384,11 @@
             }, 50);
 
             _initialized = true;
-            H.onLoadEvent.fire();
+            YAHOO.util.History.onLoadEvent.fire();
         }
     }
 
-    H = {
+    return {
 
         /**
          * Fired when the Browser History Manager is ready. If you subscribe to
@@ -414,7 +399,7 @@
          * @event onLoadEvent
          * @see onReady
          */
-        onLoadEvent: new U.CustomEvent("onLoad"),
+        onLoadEvent: new YAHOO.util.CustomEvent("onLoad"),
 
         /**
          * Executes the supplied callback when the Browser History Manager is
@@ -445,7 +430,7 @@
 
             } else {
 
-                H.onLoadEvent.subscribe(fn, obj, override);
+                YAHOO.util.History.onLoadEvent.subscribe(fn, obj, override);
 
             }
         },
@@ -469,7 +454,7 @@
 
             var scope, wrappedFn;
 
-            if (typeof module !== "string" || L.trim(module) === "" ||
+            if (typeof module !== "string" || YAHOO.lang.trim(module) === "" ||
                 typeof initialState !== "string" ||
                 typeof onStateChange !== "function") {
                 throw new Error("Missing or invalid argument");
@@ -535,19 +520,13 @@
                 return;
             }
 
-            if (A.opera) {
-                // Opera cannot be supported because of several problems that
-                // have been reported to the Opera team, but never addressed:
-                //   1) Hash changes are not detected (started happening with
-                //      recent versions of Opera)
-                //   2) The entire DOM gets cached, so when you come back to
-                //      a page, the window's onload event does not get fired,
-                //      which prevents us from initializing the browser history
-                //      manager.
-                // As a consequence, the best thing we can do is to throw an
-                // exception. The application should catch it, and degrade
-                // gracefully. This is the sad state of history management.
-                throw new Error("Opera is not supported");
+            if (YAHOO.env.ua.opera && typeof history.navigationMode !== "undefined") {
+                // Disable Opera's fast back/forward navigation mode and puts
+                // it in compatible mode. This makes anchor-based history
+                // navigation work after the page has been navigated away
+                // from and re-activated, at the cost of slowing down
+                // back/forward navigation to and from that page.
+                history.navigationMode = "compatible";
             }
 
             if (typeof stateField === "string") {
@@ -564,7 +543,7 @@
 
             _stateField = stateField;
 
-            if (A.ie && A.ie < 8) {
+            if (YAHOO.env.ua.ie) {
 
                 if (typeof histFrame === "string") {
                     histFrame = document.getElementById(histFrame);
@@ -581,7 +560,7 @@
             // If it gets loaded later (which you may want to do to improve the
             // loading speed of your site), the onDOMReady event never fires,
             // and the history library never gets fully initialized.
-            E.onDOMReady(_initialize);
+            YAHOO.util.Event.onDOMReady(_initialize);
         },
 
         /**
@@ -604,7 +583,7 @@
             states = {};
             states[module] = state;
 
-            return H.multiNavigate(states);
+            return YAHOO.util.History.multiNavigate(states);
         },
 
         /**
@@ -637,9 +616,9 @@
             currentStates = [];
 
             for (moduleName in _modules) {
-                if (L.hasOwnProperty(_modules, moduleName)) {
+                if (YAHOO.lang.hasOwnProperty(_modules, moduleName)) {
                     moduleObj = _modules[moduleName];
-                    if (L.hasOwnProperty(states, moduleName)) {
+                    if (YAHOO.lang.hasOwnProperty(states, moduleName)) {
                         currentState = states[unescape(moduleName)];
                     } else {
                         currentState = unescape(moduleObj.currentState);
@@ -655,7 +634,7 @@
 
             fqstate = currentStates.join("&");
 
-            if (A.ie && A.ie < 8) {
+            if (YAHOO.env.ua.ie) {
 
                 return _updateIFrame(fqstate);
 
@@ -670,7 +649,7 @@
                 // we'll consider this an acceptable bug, and hope that Apple
                 // comes out with their next version of Safari very soon.
                 top.location.hash = fqstate;
-                if (A.webkit) {
+                if (YAHOO.env.ua.webkit) {
                     // The following two lines are only useful for Safari 1.x
                     // and 2.0. Recent nightly builds of WebKit do not require
                     // that, but unfortunately, it is not easy to differentiate
@@ -725,7 +704,7 @@
          */
         getBookmarkedState: function (module) {
 
-            var i, len, idx, hash, m;
+            var i, len, idx, hash, states, tokens, moduleName;
 
             if (typeof module !== "string") {
                 throw new Error("Missing or invalid argument");
@@ -737,10 +716,14 @@
             idx = top.location.href.indexOf("#");
             hash = idx >= 0 ? top.location.href.substr(idx + 1) : top.location.href;
 
-            QUERY_STRING_REGEXP.lastIndex = 0;
-            while (m = QUERY_STRING_REGEXP.exec(hash)) {
-                if (m[1] === module) {
-                    return unescape(m[2]);
+            states = hash.split("&");
+            for (i = 0, len = states.length; i < len; i++) {
+                tokens = states[i].split("=");
+                if (tokens.length === 2) {
+                    moduleName = tokens[0];
+                    if (moduleName === module) {
+                        return unescape(tokens[1]);
+                    }
                 }
             }
 
@@ -763,7 +746,7 @@
          */
         getQueryStringParameter: function (paramName, url) {
 
-            var i, len, idx, queryString, m;
+            var i, len, idx, queryString, params, tokens;
 
             url = url || top.location.href;
 
@@ -774,10 +757,14 @@
             idx = queryString.lastIndexOf("#");
             queryString = idx >= 0 ? queryString.substr(0, idx) : queryString;
 
-            QUERY_STRING_REGEXP.lastIndex = 0;
-            while (m = QUERY_STRING_REGEXP.exec(queryString)) {
-                if (m[1] === paramName) {
-                    return unescape(m[2]);
+            params = queryString.split("&");
+
+            for (i = 0, len = params.length; i < len; i++) {
+                tokens = params[i].split("=");
+                if (tokens.length >= 2) {
+                    if (tokens[0] === paramName) {
+                        return unescape(tokens[1]);
+                    }
                 }
             }
 
@@ -785,7 +772,5 @@
         }
 
     };
-
-    U.History = H;
 
 })();

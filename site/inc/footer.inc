@@ -45,9 +45,6 @@ if ($releasenotes) {
 }
 ?>
 
-<script type="text/javascript" src="/yui/docs/assets/yuiSiteSearch.js?v=3"></script>
-
-
 <!--MyBlogLog instrumentation-->
 <script type="text/javascript" src="http://track2.mybloglog.com/js/jsserv.php?mblID=2007020704011645"></script>
 

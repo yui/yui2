@@ -118,6 +118,12 @@ TV.prototype = {
      */
     _dblClickTimer: null,
 
+  /**
+     * A reference to the Node currently having the focus or null if none.
+     * @property currentFocus
+     * @type YAHOO.widget.Node
+     */
+    currentFocus: null,
 
     /**
      * Sets up the animation for expanding children
@@ -308,6 +314,17 @@ TV.prototype = {
          * @param oArgs.node {YAHOO.widget.Node} node the node that was clicked
          */
         this.createEvent("clickEvent", this);
+		
+    /**
+         * Fires when the focus receives the focus, when it changes from a Node 
+	* to another Node or when it is completely lost (blurred)
+         * @event focusChanged
+         * @type CustomEvent
+         * @param oArgs.oldNode  {YAHOO.widget.Node} Node that had the focus or null if none
+         * @param oArgs.newNode {YAHOO.widget.Node} Node that receives the focus or null if none
+         */
+        
+		this.createEvent('focusChanged',this);
 
 	/**
          * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a double Click
@@ -419,17 +436,25 @@ TV.prototype = {
      * @param {string|HTMLElement} id the id of the element that contains the markup or a reference to it.
      */
 	buildTreeFromMarkup: function (id) {
+		var expanded, title;
 		var build = function (parent,markup) {
 			var el, node, child, text;
 			for (el = Dom.getFirstChild(markup); el; el = Dom.getNextSibling(el)) {
 				if (el.nodeType == 1) {
 					switch (el.tagName.toUpperCase()) {
 						case 'LI':
+							expanded = Dom.hasClass(el,'expanded')  && !Dom.hasClass(el,'collapsed');
+							title = el.title || el.alt || '';
 							for (child = el.firstChild; child; child = child.nextSibling) {
 								if (child.nodeType == 3) {
 									text = Lang.trim(child.nodeValue);
 									if (text.length) {
-										node = new Widget.TextNode(text, parent, false);
+										node = new Widget.TextNode(
+											{
+												label:text,
+												expanded:expanded,
+												title:title
+											}, parent);
 									}
 								} else {
 									switch (child.tagName.toUpperCase()) {
@@ -442,11 +467,20 @@ TV.prototype = {
 												label:child.innerHTML,
 												href: child.href,
 												target:child.target,
-												title:child.title ||child.alt
-											},parent,false);
+												title:child.title ||child.alt,
+												expanded:expanded
+											},parent);
 											break;
 										default:
-											node = new Widget.HTMLNode(child.parentNode.innerHTML, parent, false, true);
+											var d = document.createElement('div');
+											d.appendChild(child.cloneNode(true));
+											node = new Widget.HTMLNode(
+												{
+													html:d.innerHTML,
+													title:title,
+													expanded:expanded,
+													hasIcon: true
+												}, parent);
 											break;
 									}
 								}
@@ -514,7 +548,7 @@ TV.prototype = {
 					}
 					if (el) {
 						// If it is a spacer cell, do nothing
-						if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
+						if (/ygtv(blank)?depthcell/.test(el.className)) { return; }
 						//  If it is a toggle cell, toggle
 						if (/ygtv[tl][mp]h?h?/.test(el.className)) {
 							toggle();
@@ -533,6 +567,7 @@ TV.prototype = {
 								} else {
 									if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
 										toggle();
+										Event.preventDefault(ev);
 									}
 								}
 							}
@@ -570,7 +605,7 @@ TV.prototype = {
 				function (ev) {
 					var target = getTarget(ev);
 					if (target) {
-target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').replace(/h+/, 'h');
+						target.className = target.className.replace(/ygtv([lt])([mp])/gi,'ygtv$1$2h');
 					}
 				}
 			);
@@ -592,6 +627,7 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 						node = this.getNodeByElement(target),
 						newNode = node,
 						KEY = YAHOO.util.KeyListener.KEY;
+					//console.log('key');
 
 					switch(ev.keyCode) {
 						case KEY.UP:
@@ -601,8 +637,8 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 								} else {
 									newNode = newNode.parent;
 								}
-							} while (newNode && !newNode.focus());
-							if (!newNode) { node.focus(); }
+							} while (newNode && !newNode._canHaveFocus());
+							if (newNode) { newNode.focus();	}
 							Event.preventDefault(ev);
 							break;
 						case KEY.DOWN:
@@ -613,8 +649,8 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 									newNode.expand();
 									newNode = (newNode.children.length || null) && newNode.children[0];
 								}
-							} while (newNode && !newNode.focus());
-							if (!newNode) { node.focus(); }
+							} while (newNode && !newNode._canHaveFocus);
+							if (newNode) { newNode.focus();}
 							Event.preventDefault(ev);
 							break;
 						case KEY.LEFT:
@@ -624,8 +660,8 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 								} else {
 									newNode = newNode.previousSibling;
 								}
-							} while (newNode && !newNode.focus());
-							if (!newNode) { node.focus(); }
+							} while (newNode && !newNode._canHaveFocus());
+							if (newNode) { newNode.focus();}
 							Event.preventDefault(ev);
 							break;
 						case KEY.RIGHT:
@@ -636,8 +672,8 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 								} else {
 									newNode = newNode.nextSibling;
 								}
-							} while (newNode && !newNode.focus());
-							if (!newNode) { node.focus(); }
+							} while (newNode && !newNode._canHaveFocus());
+							if (newNode) { newNode.focus();}
 							Event.preventDefault(ev);
 							break;
 						case KEY.ENTER:
@@ -656,13 +692,13 @@ target.className = target.className.replace(/ygtv([lt])([mp])/gi, 'ygtv$1$2h').r
 						case KEY.HOME:
 							newNode = this.getRoot();
 							if (newNode.children.length) {newNode = newNode.children[0];}
-							if (!newNode.focus()) { node.focus(); }
+							if (newNode._canHaveFocus()) { newNode.focus(); }
 							Event.preventDefault(ev);
 							break;
 						case KEY.END:
 							newNode = newNode.parent.children;
 							newNode = newNode[newNode.length -1];
-							if (!newNode.focus()) { node.focus(); }
+							if (newNode._canHaveFocus()) { newNode.focus(); }
 							Event.preventDefault(ev);
 							break;
 						// case KEY.PAGE_UP:
@@ -1274,10 +1310,9 @@ YAHOO.widget.Node.prototype = {
     multiExpand: true,
 
     /**
-     * If set to false (the default), only the visible nodes of the tree
-     * will be rendered in order to improve the speed of the initial
-     * rendering.  Hidden nodes will have the markup generated the first
-     * time the parent is expanded.
+     * Should we render children for a collapsed node?  It is possible that the
+     * implementer will want to render the hidden data...  @todo verify that we 
+     * need this, and implement it if we do.
      * @property renderHidden
      * @type boolean
      */
@@ -2193,23 +2228,23 @@ YAHOO.widget.Node.prototype = {
     getNodeHtml: function() { 
         var sb = [];
 
-        sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0" class="ygtvdepth' + this.depth + '">';
+        sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth + '">';
         sb[sb.length] = '<tr class="ygtvrow">';
         
         for (var i=0;i<this.depth;++i) {
-            sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';
+            sb[sb.length] = '<td class="ygtvcell ' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';
         }
 
         if (this.hasIcon) {
             sb[sb.length] = '<td'; 
             sb[sb.length] = ' id="' + this.getToggleElId() + '"';
-            sb[sb.length] = ' class="' + this.getStyle() + '"';
+            sb[sb.length] = ' class="ygtvcell ' + this.getStyle() + '"';
             sb[sb.length] = '><a href="#" class="ygtvspacer">&nbsp;</a></td>';
         }
 
         sb[sb.length] = '<td';
         sb[sb.length] = ' id="' + this.contentElId + '"'; 
-        sb[sb.length] = ' class="' + this.contentStyle  + ' ygtvcontent" ';
+        sb[sb.length] = ' class="ygtvcell ' + this.contentStyle  + ' ygtvcontent" ';
         sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
         sb[sb.length] = ' >';
 		sb[sb.length] = this.getContentHtml();
@@ -2263,7 +2298,39 @@ YAHOO.widget.Node.prototype = {
 	* @private
 	*/
 	_focusHighlightedItems: [],
+	/**
+	* DOM element that actually got the browser focus
+	* @property _focusedItem
+	* @type DOM element
+	* @private
+	*/
 	_focusedItem: null,
+	
+	/**
+	* Returns true if there are any elements in the node that can 
+	* accept the real actual browser focus
+	* @method _canHaveFocus
+	* @return {boolean} success
+	* @private
+	*/
+	_canHaveFocus: function() {
+		return this.getEl().getElementsByTagName('a').length > 0;
+	},
+	/**
+	* Removes the focus of previously selected Node
+	* @method _removeFocus
+	* @private
+	*/
+	_removeFocus:function () {
+		if (this._focusedItem) {
+			Event.removeListener(this._focusedItem,'blur');
+			this._focusedItem = null;
+		}
+		var el;
+		while ((el = this._focusHighlightedItems.shift())) {  // yes, it is meant as an assignment, really
+			Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
+		}
+	},
 	/**
 	* Sets the focus on the node element.
 	* It will only be able to set the focus on nodes that have anchor elements in it.  
@@ -2275,45 +2342,50 @@ YAHOO.widget.Node.prototype = {
 	focus: function () {
 		var focused = false, self = this;
 
-		var removeListeners = function () {
-			var el;
-			if (self._focusedItem) {
-				Event.removeListener(self._focusedItem,'blur');
-				self._focusedItem = null;
-			}
-			
-			while ((el = self._focusHighlightedItems.shift())) {
-				Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
-			}
-		};
-		removeListeners();
+		if (this.tree.currentFocus) {
+			this.tree.currentFocus._removeFocus();
+		}
+	
+		for (var n = this.parent;n;n = n.parentNode) {
+			n.expand();
+		}
 
 		Dom.getElementsBy  ( 
 			function (el) {
 				return /ygtv(([tl][pmn]h?)|(content))/.test(el.className);
 			} ,
 			'td' , 
-			this.getEl().firstChild , 
+			self.getEl().firstChild , 
 			function (el) {
 				Dom.addClass(el, YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
 				if (!focused) { 
 					var aEl = el.getElementsByTagName('a');
 					if (aEl.length) {
 						aEl = aEl[0];
-
-                        try {
-						    aEl.focus();
-                        } catch(e) {}
-
+						aEl.focus();
 						self._focusedItem = aEl;
-						Event.on(aEl,'blur',removeListeners);
+						Event.on(aEl,'blur',function () {
+							//console.log('f1');
+							self.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
+							self.tree.currentFocus = null;
+							self._removeFocus();
+						});
 						focused = true;
 					}
 				}
 				self._focusHighlightedItems.push(el);
 			}
 		);
-		if (!focused) { removeListeners(); }
+		if (focused) { 
+							//console.log('f2');
+			this.tree.fireEvent('focusChanged',{oldNode:this.tree.currentFocus,newNode:this});
+			this.tree.currentFocus = this;
+		} else {
+							//console.log('f3');
+			this.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
+			this.tree.currentFocus = null;
+			this._removeFocus(); 
+		}
 		return focused;
 	},
 
@@ -2376,6 +2448,90 @@ YAHOO.widget.Node.prototype = {
 
 YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
 })();
+/**
+ * A custom YAHOO.widget.Node that handles the unique nature of 
+ * the virtual, presentationless root node.
+ * @namespace YAHOO.widget
+ * @class RootNode
+ * @extends YAHOO.widget.Node
+ * @param oTree {YAHOO.widget.TreeView} The tree instance this node belongs to
+ * @constructor
+ */
+YAHOO.widget.RootNode = function(oTree) {
+	// Initialize the node with null params.  The root node is a
+	// special case where the node has no presentation.  So we have
+	// to alter the standard properties a bit.
+	this.init(null, null, true);
+	
+	/*
+	 * For the root node, we get the tree reference from as a param
+	 * to the constructor instead of from the parent element.
+	 */
+	this.tree = oTree;
+};
+
+YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
+    
+   /**
+     * The node type
+     * @property _type
+      * @type string
+     * @private
+     * @default "RootNode"
+     */
+    _type: "RootNode",
+	
+    // overrides YAHOO.widget.Node
+    getNodeHtml: function() { 
+        return ""; 
+    },
+
+    toString: function() { 
+        return this._type;
+    },
+
+    loadComplete: function() { 
+        this.tree.draw();
+    },
+	
+   /**
+     * Count of nodes in tree.  
+    * It overrides Nodes.getNodeCount because the root node should not be counted.
+     * @method getNodeCount
+     * @return {int} number of nodes in the tree
+     */
+    getNodeCount: function() {
+		for (var i = 0, count = 0;i< this.children.length;i++) {
+			count += this.children[i].getNodeCount();
+		}
+        return count;
+    },
+
+  /**
+     * Returns an object which could be used to build a tree out of this node and its children.
+     * It can be passed to the tree constructor to reproduce this node as a tree.
+     * Since the RootNode is automatically created by treeView, 
+     * its own definition is excluded from the returned node definition
+     * which only contains its children.
+     * @method getNodeDefinition
+     * @return {Object | false}  definition of the tree or false if any child node is defined as dynamic
+     */
+    getNodeDefinition: function() {
+		
+		for (var def, defs = [], i = 0; i < this.children.length;i++) {
+			def = this.children[i].getNodeDefinition();
+			if (def === false) { return false;}
+			defs.push(def);
+		}
+		return defs;
+    },
+
+    collapse: function() {},
+    expand: function() {},
+	getSiblings: function() { return null; },
+	focus: function () {}
+
+});
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Lang = YAHOO.lang,
@@ -2542,87 +2698,42 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
 });
 })();
 /**
- * A custom YAHOO.widget.Node that handles the unique nature of 
- * the virtual, presentationless root node.
+ * A menu-specific implementation that differs from TextNode in that only 
+ * one sibling can be expanded at a time.
  * @namespace YAHOO.widget
- * @class RootNode
- * @extends YAHOO.widget.Node
- * @param oTree {YAHOO.widget.TreeView} The tree instance this node belongs to
+ * @class MenuNode
+ * @extends YAHOO.widget.TextNode
+ * @param oData {object} a string or object containing the data that will
+ * be used to render this node.
+ * Providing a string is the same as providing an object with a single property named label.
+ * All values in the oData will be used to set equally named properties in the node
+ * as long as the node does have such properties, they are not undefined, private or functions.
+ * All attributes are made available in noderef.data, which
+ * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
+ * can be used to retrieve a node by one of the attributes.
+ * @param oParent {YAHOO.widget.Node} this node's parent node
+ * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
  * @constructor
  */
-YAHOO.widget.RootNode = function(oTree) {
-	// Initialize the node with null params.  The root node is a
-	// special case where the node has no presentation.  So we have
-	// to alter the standard properties a bit.
-	this.init(null, null, true);
-	
-	/*
-	 * For the root node, we get the tree reference from as a param
-	 * to the constructor instead of from the parent element.
-	 */
-	this.tree = oTree;
+YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
+	YAHOO.widget.MenuNode.superclass.constructor.call(this,oData,oParent,expanded);
+
+   /*
+     * Menus usually allow only one branch to be open at a time.
+     */
+	this.multiExpand = false;
+
 };
 
-YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
-    
-   /**
+YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
+
+    /**
      * The node type
      * @property _type
-      * @type string
      * @private
-     * @default "RootNode"
+    * @default "MenuNode"
      */
-    _type: "RootNode",
-	
-    // overrides YAHOO.widget.Node
-    getNodeHtml: function() { 
-        return ""; 
-    },
-
-    toString: function() { 
-        return this._type;
-    },
-
-    loadComplete: function() { 
-        this.tree.draw();
-    },
-	
-   /**
-     * Count of nodes in tree.  
-    * It overrides Nodes.getNodeCount because the root node should not be counted.
-     * @method getNodeCount
-     * @return {int} number of nodes in the tree
-     */
-    getNodeCount: function() {
-		for (var i = 0, count = 0;i< this.children.length;i++) {
-			count += this.children[i].getNodeCount();
-		}
-        return count;
-    },
-
-  /**
-     * Returns an object which could be used to build a tree out of this node and its children.
-     * It can be passed to the tree constructor to reproduce this node as a tree.
-     * Since the RootNode is automatically created by treeView, 
-     * its own definition is excluded from the returned node definition
-     * which only contains its children.
-     * @method getNodeDefinition
-     * @return {Object | false}  definition of the tree or false if any child node is defined as dynamic
-     */
-    getNodeDefinition: function() {
-		
-		for (var def, defs = [], i = 0; i < this.children.length;i++) {
-			def = this.children[i].getNodeDefinition();
-			if (def === false) { return false;}
-			defs.push(def);
-		}
-		return defs;
-    },
-
-    collapse: function() {},
-    expand: function() {},
-	getSiblings: function() { return null; },
-	focus: function () {}
+    _type: "MenuNode"
 
 });
 (function () {
@@ -2743,45 +2854,6 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
 	}
 });
 })();
-/**
- * A menu-specific implementation that differs from TextNode in that only 
- * one sibling can be expanded at a time.
- * @namespace YAHOO.widget
- * @class MenuNode
- * @extends YAHOO.widget.TextNode
- * @param oData {object} a string or object containing the data that will
- * be used to render this node.
- * Providing a string is the same as providing an object with a single property named label.
- * All values in the oData will be used to set equally named properties in the node
- * as long as the node does have such properties, they are not undefined, private or functions.
- * All attributes are made available in noderef.data, which
- * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
- * can be used to retrieve a node by one of the attributes.
- * @param oParent {YAHOO.widget.Node} this node's parent node
- * @param expanded {boolean} the initial expanded/collapsed state (deprecated; use oData.expanded) 
- * @constructor
- */
-YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
-	YAHOO.widget.MenuNode.superclass.constructor.call(this,oData,oParent,expanded);
-
-   /*
-     * Menus usually allow only one branch to be open at a time.
-     */
-	this.multiExpand = false;
-
-};
-
-YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
-
-    /**
-     * The node type
-     * @property _type
-     * @private
-    * @default "MenuNode"
-     */
-    _type: "MenuNode"
-
-});
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Lang = YAHOO.lang,
@@ -3192,174 +3264,4 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 		editorData.inputContainer.innerHTML = '';
 	};
 })();
-/**
- * A static factory class for tree view expand/collapse animations
- * @class TVAnim
- * @static
- */
-YAHOO.widget.TVAnim = function() {
-    return {
-        /**
-         * Constant for the fade in animation
-         * @property FADE_IN
-         * @type string
-         * @static
-         */
-        FADE_IN: "TVFadeIn",
-
-        /**
-         * Constant for the fade out animation
-         * @property FADE_OUT
-         * @type string
-         * @static
-         */
-        FADE_OUT: "TVFadeOut",
-
-        /**
-         * Returns a ygAnim instance of the given type
-         * @method getAnim
-         * @param type {string} the type of animation
-         * @param el {HTMLElement} the element to element (probably the children div)
-         * @param callback {function} function to invoke when the animation is done.
-         * @return {YAHOO.util.Animation} the animation instance
-         * @static
-         */
-        getAnim: function(type, el, callback) {
-            if (YAHOO.widget[type]) {
-                return new YAHOO.widget[type](el, callback);
-            } else {
-                return null;
-            }
-        },
-
-        /**
-         * Returns true if the specified animation class is available
-         * @method isValid
-         * @param type {string} the type of animation
-         * @return {boolean} true if valid, false if not
-         * @static
-         */
-        isValid: function(type) {
-            return (YAHOO.widget[type]);
-        }
-    };
-} ();
-/**
- * A 1/2 second fade-in animation.
- * @class TVFadeIn
- * @constructor
- * @param el {HTMLElement} the element to animate
- * @param callback {function} function to invoke when the animation is finished
- */
-YAHOO.widget.TVFadeIn = function(el, callback) {
-    /**
-     * The element to animate
-     * @property el
-     * @type HTMLElement
-     */
-    this.el = el;
-
-    /**
-     * the callback to invoke when the animation is complete
-     * @property callback
-     * @type function
-     */
-    this.callback = callback;
-
-};
-
-YAHOO.widget.TVFadeIn.prototype = {
-    /**
-     * Performs the animation
-     * @method animate
-     */
-    animate: function() {
-        var tvanim = this;
-
-        var s = this.el.style;
-        s.opacity = 0.1;
-        s.filter = "alpha(opacity=10)";
-        s.display = "";
-
-        var dur = 0.4; 
-        var a = new YAHOO.util.Anim(this.el, {opacity: {from: 0.1, to: 1, unit:""}}, dur);
-        a.onComplete.subscribe( function() { tvanim.onComplete(); } );
-        a.animate();
-    },
-
-    /**
-     * Clean up and invoke callback
-     * @method onComplete
-     */
-    onComplete: function() {
-        this.callback();
-    },
-
-    /**
-     * toString
-     * @method toString
-     * @return {string} the string representation of the instance
-     */
-    toString: function() {
-        return "TVFadeIn";
-    }
-};
-/**
- * A 1/2 second fade out animation.
- * @class TVFadeOut
- * @constructor
- * @param el {HTMLElement} the element to animate
- * @param callback {Function} function to invoke when the animation is finished
- */
-YAHOO.widget.TVFadeOut = function(el, callback) {
-    /**
-     * The element to animate
-     * @property el
-     * @type HTMLElement
-     */
-    this.el = el;
-
-    /**
-     * the callback to invoke when the animation is complete
-     * @property callback
-     * @type function
-     */
-    this.callback = callback;
-
-};
-
-YAHOO.widget.TVFadeOut.prototype = {
-    /**
-     * Performs the animation
-     * @method animate
-     */
-    animate: function() {
-        var tvanim = this;
-        var dur = 0.4;
-        var a = new YAHOO.util.Anim(this.el, {opacity: {from: 1, to: 0.1, unit:""}}, dur);
-        a.onComplete.subscribe( function() { tvanim.onComplete(); } );
-        a.animate();
-    },
-
-    /**
-     * Clean up and invoke callback
-     * @method onComplete
-     */
-    onComplete: function() {
-        var s = this.el.style;
-        s.display = "none";
-        // s.opacity = 1;
-        s.filter = "alpha(opacity=100)";
-        this.callback();
-    },
-
-    /**
-     * toString
-     * @method toString
-     * @return {string} the string representation of the instance
-     */
-    toString: function() {
-        return "TVFadeOut";
-    }
-};
 YAHOO.register("treeview", YAHOO.widget.TreeView, {version: "@VERSION@", build: "@BUILD@"});

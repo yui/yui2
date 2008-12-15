@@ -96,10 +96,9 @@ YAHOO.widget.Node.prototype = {
     multiExpand: true,
 
     /**
-     * If set to false (the default), only the visible nodes of the tree
-     * will be rendered in order to improve the speed of the initial
-     * rendering.  Hidden nodes will have the markup generated the first
-     * time the parent is expanded.
+     * Should we render children for a collapsed node?  It is possible that the
+     * implementer will want to render the hidden data...  @todo verify that we 
+     * need this, and implement it if we do.
      * @property renderHidden
      * @type boolean
      */
@@ -1046,23 +1045,23 @@ YAHOO.widget.Node.prototype = {
         this.logger.log("Generating html");
         var sb = [];
 
-        sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0" class="ygtvdepth' + this.depth + '">';
+        sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth + '">';
         sb[sb.length] = '<tr class="ygtvrow">';
         
         for (var i=0;i<this.depth;++i) {
-            sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';
+            sb[sb.length] = '<td class="ygtvcell ' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';
         }
 
         if (this.hasIcon) {
             sb[sb.length] = '<td'; 
             sb[sb.length] = ' id="' + this.getToggleElId() + '"';
-            sb[sb.length] = ' class="' + this.getStyle() + '"';
+            sb[sb.length] = ' class="ygtvcell ' + this.getStyle() + '"';
             sb[sb.length] = '><a href="#" class="ygtvspacer">&nbsp;</a></td>';
         }
 
         sb[sb.length] = '<td';
         sb[sb.length] = ' id="' + this.contentElId + '"'; 
-        sb[sb.length] = ' class="' + this.contentStyle  + ' ygtvcontent" ';
+        sb[sb.length] = ' class="ygtvcell ' + this.contentStyle  + ' ygtvcontent" ';
         sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
         sb[sb.length] = ' >';
 		sb[sb.length] = this.getContentHtml();
@@ -1116,7 +1115,39 @@ YAHOO.widget.Node.prototype = {
 	* @private
 	*/
 	_focusHighlightedItems: [],
+	/**
+	* DOM element that actually got the browser focus
+	* @property _focusedItem
+	* @type DOM element
+	* @private
+	*/
 	_focusedItem: null,
+	
+	/**
+	* Returns true if there are any elements in the node that can 
+	* accept the real actual browser focus
+	* @method _canHaveFocus
+	* @return {boolean} success
+	* @private
+	*/
+	_canHaveFocus: function() {
+		return this.getEl().getElementsByTagName('a').length > 0;
+	},
+	/**
+	* Removes the focus of previously selected Node
+	* @method _removeFocus
+	* @private
+	*/
+	_removeFocus:function () {
+		if (this._focusedItem) {
+			Event.removeListener(this._focusedItem,'blur');
+			this._focusedItem = null;
+		}
+		var el;
+		while ((el = this._focusHighlightedItems.shift())) {  // yes, it is meant as an assignment, really
+			Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
+		}
+	},
 	/**
 	* Sets the focus on the node element.
 	* It will only be able to set the focus on nodes that have anchor elements in it.  
@@ -1128,45 +1159,50 @@ YAHOO.widget.Node.prototype = {
 	focus: function () {
 		var focused = false, self = this;
 
-		var removeListeners = function () {
-			var el;
-			if (self._focusedItem) {
-				Event.removeListener(self._focusedItem,'blur');
-				self._focusedItem = null;
-			}
-			
-			while ((el = self._focusHighlightedItems.shift())) {
-				Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
-			}
-		};
-		removeListeners();
+		if (this.tree.currentFocus) {
+			this.tree.currentFocus._removeFocus();
+		}
+	
+		for (var n = this.parent;n;n = n.parentNode) {
+			n.expand();
+		}
 
 		Dom.getElementsBy  ( 
 			function (el) {
 				return /ygtv(([tl][pmn]h?)|(content))/.test(el.className);
 			} ,
 			'td' , 
-			this.getEl().firstChild , 
+			self.getEl().firstChild , 
 			function (el) {
 				Dom.addClass(el, YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
 				if (!focused) { 
 					var aEl = el.getElementsByTagName('a');
 					if (aEl.length) {
 						aEl = aEl[0];
-
-                        try {
-						    aEl.focus();
-                        } catch(e) {}
-
+						aEl.focus();
 						self._focusedItem = aEl;
-						Event.on(aEl,'blur',removeListeners);
+						Event.on(aEl,'blur',function () {
+							//console.log('f1');
+							self.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
+							self.tree.currentFocus = null;
+							self._removeFocus();
+						});
 						focused = true;
 					}
 				}
 				self._focusHighlightedItems.push(el);
 			}
 		);
-		if (!focused) { removeListeners(); }
+		if (focused) { 
+							//console.log('f2');
+			this.tree.fireEvent('focusChanged',{oldNode:this.tree.currentFocus,newNode:this});
+			this.tree.currentFocus = this;
+		} else {
+							//console.log('f3');
+			this.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
+			this.tree.currentFocus = null;
+			this._removeFocus(); 
+		}
 		return focused;
 	},
 

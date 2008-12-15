@@ -1,8 +1,8 @@
 (function () {
      var ArrayAssert  = YAHOO.util.ArrayAssert,
          Assert       = YAHOO.util.Assert,
-         carousel,
-         carouselEl,
+         carousel, carousel4,
+         carouselEl, carouselEl4,
          Dom          = YAHOO.util.Dom,
          initFromScriptTest,
          ObjectAssert = YAHOO.util.ObjectAssert;
@@ -15,6 +15,11 @@
             testCreation: function () {
                 return Assert.areEqual(true,
                         Dom.hasClass(carouselEl, "yui-carousel-element"));
+            },
+
+            testCreationFromUl: function () {
+                return Assert.areEqual(true,
+                        Dom.hasClass(carouselEl4, "yui-carousel-element"));
             },
 
             testNumItems: function () {
@@ -151,6 +156,67 @@
                 return Assert.areEqual(null, Dom.get(item.id)) &&
                        Assert.areEqual(3, carousel.get("numItems")) &&
                        Assert.areEqual(3, carousel._itemsTable.numItems);
+            },
+
+            testScrollForward: function () {
+                carousel.addItems([["Ten",0],["Eleven",0],["Twelve",0]]);
+                carousel.scrollForward();
+                Assert.areEqual("-100px", carouselEl.style.left);
+            },
+
+            testScrollPageForward: function () {
+                Dom.setStyle(carouselEl, "left", "");
+                carousel.scrollPageForward();
+                Assert.areEqual("-300px", carouselEl.style.left);
+            },
+
+            testScrollBackward: function () {
+                Dom.setStyle(carouselEl, "left", "-200px");
+                carousel.scrollBackward();
+                Assert.areEqual("-100px", carouselEl.style.left);
+            },
+
+            testScrollPageBackward: function () {
+                Dom.setStyle(carouselEl, "left", "");
+                carousel.scrollPageBackward();
+                Assert.areEqual("300px", carouselEl.style.left);
+            },
+
+            testScrollTo: function () {
+                Dom.setStyle(carouselEl, "left", "");
+                carousel.scrollTo(3);
+                Assert.areEqual("-300px", carouselEl.style.left);
+            },
+
+            testSetNumVisible: function () {
+                var num = carousel.get("numItems");
+
+                function isSameWidth(el, w) {
+                    return parseInt(Dom.getStyle(el, "width"), 10) == w;
+                }
+
+                if (carousel.get("numVisible") != 3 ||
+                    !isSameWidth(carouselEl, 300)) {
+                    return Assert.fail("numVisible should be 3 by default");
+                }
+                carousel.set("numVisible", 1);
+                if (carousel.get("numVisible") != 1 ||
+                    !isSameWidth(carouselEl, 100)) {
+                    return Assert.fail("numVisible should be 1 by default");
+                }
+                carousel.set("numVisible", num);
+                if (carousel.get("numVisible") != num ||
+                    !isSameWidth(carouselEl, num * 100)) {
+                    return Assert.fail("numVisible should have been " + num);
+                }
+                carousel.set("numVisible", 1);
+                if (carousel.get("numVisible") != 1 ||
+                    !isSameWidth(carouselEl, 100)) {
+                    return Assert.fail("numVisible should have been 1");
+                }
+                carousel.set("numVisible", 3);
+                return Assert.areEqual(3, carousel.get("numVisible")) &&
+                    Assert.areEqual(true, areSameWidth(carouselEl, 300));
             }
     });
 
@@ -167,6 +233,14 @@
                         "OL", carousel.get("element"));
                 if (YAHOO.lang.isArray(items) && items.length == 1) {
                     carouselEl = items[0];
+                }
+                carousel4   = new YAHOO.widget.Carousel("container4", {
+                        carouselEl: "UL" });
+                carousel4.render();
+                items    = Dom.getElementsByClassName("yui-carousel-element",
+                        "UL", carousel4.get("element"));
+                if (YAHOO.lang.isArray(items) && items.length == 1) {
+                    carouselEl4 = items[0];
                 }
             },
 

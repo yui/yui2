@@ -159,6 +159,7 @@ $examples["example12"] = array(
 	logger => array("menu", "example"),
 	loggerInclude => "require",
 	newWindow => "default",
+	requires => array("menu"),	
 	highlightSyntax => true,
 	bodyclass => false
 );

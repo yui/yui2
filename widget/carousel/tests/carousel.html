@@ -8,6 +8,18 @@
               href="../../build/logger/assets/logger.css">
         <link type="text/css" rel="stylesheet"
               href="../../build/yuitest/assets/testlogger.css">
+        <style type="text/css">
+        #container, #container2 {
+            width: 400px;
+        }
+
+        .yui-carousel-element li {
+            border: none;
+            margin: 0;
+            padding: 0;
+            width: 100px;
+        }
+        </style>
         <!-- Dependency JS files -->
         <script type="text/javascript"
             src="../../build/yahoo/yahoo-min.js"></script>
@@ -20,7 +32,7 @@
         <script type="text/javascript"
             src="../../build/element/element-beta-min.js"></script>
         <script type="text/javascript"
-            src="../../build/carousel/carousel-beta-min.js"></script>
+            src="../../build/carousel/carousel-beta-debug.js"></script>
         <script type="text/javascript"
             src="../../build/yuitest/yuitest-min.js"></script>
         <!-- Carousel Test Cases -->
@@ -50,5 +62,11 @@
             </ol>
         </div>
         <div id="container2"></div>
+        <div id="container3">
+            <ul id="carousel3">
+                <li>Test</li>
+            </ul>
+        </div>
+        <div id="container4"></div>
     </body>
 </html>

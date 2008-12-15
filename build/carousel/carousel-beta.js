@@ -53,7 +53,7 @@
      * @private
      * @static
      */
-    var instances = {};
+    var instances = {},
 
     /*
      * Custom events of the Carousel component
@@ -68,7 +68,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var afterScrollEvent = "afterScroll";
+    afterScrollEvent = "afterScroll",
 
     /**
      * @event beforeHide
@@ -77,7 +77,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var beforeHideEvent = "beforeHide";
+    beforeHideEvent = "beforeHide",
 
     /**
      * @event beforePageChange
@@ -88,7 +88,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var beforePageChangeEvent = "beforePageChange";
+    beforePageChangeEvent = "beforePageChange",
 
     /**
      * @event beforeScroll
@@ -99,7 +99,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var beforeScrollEvent = "beforeScroll";
+    beforeScrollEvent = "beforeScroll",
 
     /**
      * @event beforeShow
@@ -108,7 +108,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var beforeShowEvent = "beforeShow";
+    beforeShowEvent = "beforeShow",
 
     /**
      * @event blur
@@ -117,7 +117,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var blurEvent = "blur";
+    blurEvent = "blur",
 
     /**
      * @event focus
@@ -126,7 +126,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var focusEvent = "focus";
+    focusEvent = "focus",
 
     /**
      * @event hide
@@ -135,7 +135,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var hideEvent = "hide";
+    hideEvent = "hide",
 
     /**
      * @event itemAdded
@@ -146,7 +146,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var itemAddedEvent = "itemAdded";
+    itemAddedEvent = "itemAdded",
 
     /**
      * @event itemRemoved
@@ -157,7 +157,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var itemRemovedEvent = "itemRemoved";
+    itemRemovedEvent = "itemRemoved",
 
     /**
      * @event itemSelected
@@ -168,7 +168,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var itemSelectedEvent = "itemSelected";
+    itemSelectedEvent = "itemSelected",
 
     /**
      * @event loadItems
@@ -179,7 +179,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var loadItemsEvent = "loadItems";
+    loadItemsEvent = "loadItems",
 
     /**
      * @event navigationStateChange
@@ -191,7 +191,17 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var navigationStateChangeEvent = "navigationStateChange";
+    navigationStateChangeEvent = "navigationStateChange",
+
+    /**
+     * @event noItemsEvent
+     * @description Fires when all items have been removed from the Carousel.
+     * See
+     * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
+     * for more information on listening for this event.
+     * @type YAHOO.util.CustomEvent
+     */
+    noItemsEvent = "noItems",
 
     /**
      * @event pageChange
@@ -202,7 +212,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var pageChangeEvent = "pageChange";
+    pageChangeEvent = "pageChange",
 
     /**
      * @event render
@@ -211,7 +221,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var renderEvent = "render";
+    renderEvent = "render",
 
     /**
      * @event show
@@ -220,7 +230,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var showEvent = "show";
+    showEvent = "show",
 
     /**
      * @event startAutoPlay
@@ -229,7 +239,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var startAutoPlayEvent = "startAutoPlay";
+    startAutoPlayEvent = "startAutoPlay",
 
     /**
      * @event stopAutoPlay
@@ -239,7 +249,7 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    var stopAutoPlayEvent = "stopAutoPlay";
+    stopAutoPlayEvent = "stopAutoPlay";
 
     /*
      * Private helper functions used by the Carousel component
@@ -590,8 +600,8 @@
         sentinel   = this._firstItem + this.get("numVisible");
 
         if (navigation.prev) {
-            if (this._firstItem === 0) {
-                if (!this.get("isCircular")) {
+            if (this.get("numItems") === 0 || this._firstItem === 0) {
+                if (this.get("numItems") === 0 || !this.get("isCircular")) {
                     Event.removeListener(navigation.prev, "click",
                             scrollPageBackward);
                     Dom.addClass(navigation.prev, cssClass.FIRST_NAV_DISABLED);
@@ -651,110 +661,24 @@
     /**
      * Fire custom events for synchronizing the DOM.
      *
-     * @method syncUI
+     * @method syncUi
      * @param {Object} o The item that needs to be added or removed
      * @private
      */
-    function syncUI(o) {
-        var el, i, item, num, oel, pos, sibling;
-
+    function syncUi(o) {
         if (!JS.isObject(o)) {
             return;
         }
 
         switch (o.ev) {
         case itemAddedEvent:
-            pos  = JS.isUndefined(o.pos) ? this._itemsTable.numItems-1 : o.pos;
-            if (!JS.isUndefined(this._itemsTable.items[pos])) {
-                item = this._itemsTable.items[pos];
-                if (item && !JS.isUndefined(item.id)) {
-                    oel  = Dom.get(item.id);
-                }
-            }
-            if (!oel) {
-                el = this._createCarouselItem({
-                        className : item.className,
-                        content   : item.item,
-                        id        : item.id
-                });
-                if (JS.isUndefined(o.pos)) {
-                    if (!JS.isUndefined(this._itemsTable.loading[pos])) {
-                        oel = this._itemsTable.loading[pos];
-                    }
-                    if (oel) {
-                        this._carouselEl.replaceChild(el, oel);
-                    } else {
-                        this._carouselEl.appendChild(el);
-                    }
-                } else {
-                    if (!JS.isUndefined(this._itemsTable.items[o.pos + 1])) {
-                        sibling = Dom.get(this._itemsTable.items[o.pos + 1].id);
-                    }
-                    if (sibling) {
-                        this._carouselEl.insertBefore(el, sibling);
-                    } else {
-                    }
-                }
-            } else {
-                if (JS.isUndefined(o.pos)) {
-                    if (!Dom.isAncestor(this._carouselEl, oel)) {
-                        this._carouselEl.appendChild(oel);
-                    }
-                } else {
-                    if (!Dom.isAncestor(this._carouselEl, oel)) {
-                        if (!JS.isUndefined(this._itemsTable.items[o.pos+1])) {
-                            this._carouselEl.insertBefore(oel, Dom.get(
-                                    this._itemsTable.items[o.pos+1].id));
-                        }
-                    }
-                }
-            }
-
-            if (this._recomputeSize) {
-                this._setClipContainerSize();
-            }
-
-            if (this.get("selectedItem") < 0) {
-                this.set("selectedItem", this.get("firstVisible"));
-            }
+            this._syncUiForItemAdd(o);
             break;
         case itemRemovedEvent:
-            num  = this.get("numItems");
-            item = o.item;
-            pos  = o.pos;
-
-            if (item && (el = Dom.get(item.id))) {
-                if (el && Dom.isAncestor(this._carouselEl, el)) {
-                    Event.purgeElement(el, true);
-                    this._carouselEl.removeChild(el);
-                }
-
-                if (this.get("selectedItem") == pos) {
-                    pos = pos >= num ? num - 1 : pos;
-                    this.set("selectedItem", pos);
-                }
-            } else {
-            }
+            this._syncUiForItemRemove(o);
             break;
         case loadItemsEvent:
-            for (i = o.first; i <= o.last; i++) {
-                el = this._createCarouselItem({
-                        content : this.CONFIG.ITEM_LOADING,
-                        id      : Dom.generateId()
-                });
-                if (el) {
-                    if (!JS.isUndefined(this._itemsTable.items[o.last + 1])) {
-                        sibling = Dom.get(this._itemsTable.items[o.last+1].id);
-                        if (sibling) {
-                            this._carouselEl.insertBefore(el, sibling);
-                        } else {
-                        }
-                    } else {
-                        this._carouselEl.appendChild(el);
-                    }
-                }
-                this._itemsTable.loading[i] = el;
-            }
+            this._syncUiForLazyLoading(o);
             break;
         }
     }
@@ -1072,14 +996,6 @@
                     "style=\"margin-top:-32px;position:relative;top:50%;\">",
 
             /**
-             * The tag name of the Carousel item.
-             *
-             * @property ITEM_TAG_NAME
-             * @default "LI"
-             */
-            ITEM_TAG_NAME: "LI",
-
-            /**
              * The maximum number of pager buttons allowed beyond which the UI
              * of the pager would be a drop-down of pages instead of buttons.
              *
@@ -1103,15 +1019,7 @@
              * @property NUM_VISIBLE
              * @default 3
              */
-            NUM_VISIBLE: 3,
-
-            /**
-             * The tag name of the Carousel.
-             *
-             * @property TAG_NAME
-             * @default "OL"
-             */
-            TAG_NAME: "OL"
+            NUM_VISIBLE: 3
 
         },
 
@@ -1256,9 +1164,22 @@
             var n = this.get("numItems");
 
             while (n > 0) {
-                this.removeItem(0);
+                if (!this.removeItem(0)) {
+                }
+                /*
+                    For dynamic loading, the numItems may be much larger than
+                    the actual number of items in the table.  So, set the
+                    numItems to zero, and break out of the loop if the table
+                    is already empty.
+                 */
+                if (this._itemsTable.numItems === 0) {
+                    this.set("numItems", 0);
+                    break;
+                }
                 n--;
             }
+
+            this.fireEvent(noItemsEvent);
         },
 
         /**
@@ -1286,7 +1207,7 @@
             selItem              = this.get("selectedItem");
             numVisible           = this.get("numVisible");
             selectOnScroll       = this.get("selectOnScroll");
-            selected             = this.getItem(selItem);
+            selected             = (selItem>=0) ? this.getItem(selItem) : null;
             first                = this.get("firstVisible");
             last                 = first + numVisible - 1;
             isSelectionInvisible = (selItem < first || selItem > last);
@@ -1342,13 +1263,15 @@
                 return;
             }
 
-            this._itemsTable = { loading: {}, numItems: 0, items: [], size: 0 };
+            this._itemsTable={ loading: {}, numItems: 0, items: [], size: 0 };
 
             if (JS.isString(el)) {
                 el = Dom.get(el);
             } else if (!el.nodeName) {
                 return;
             }
+
+            Carousel.superclass.init.call(this, el, attrs);
 
             if (el) {
                 if (!el.id) {   // in case the HTML element is passed
@@ -1362,8 +1285,6 @@
                 el = this._createCarousel(elId);
             }
             elId = el.id;
-
-            Carousel.superclass.init.call(this, el, attrs);
 
             this.initEvents();
 
@@ -1394,6 +1315,28 @@
         initAttributes: function (attrs) {
             attrs = attrs || {};
             Carousel.superclass.initAttributes.call(this, attrs);
+
+            /**
+             * @attribute carouselEl
+             * @description The type of the Carousel element.
+             * @default OL
+             * @type Boolean
+             */
+            this.setAttributeConfig("carouselEl", {
+                    validator : JS.isString,
+                    value     : attrs.carouselEl || "OL"
+            });
+
+            /**
+             * @attribute carouselItemEl
+             * @description The type of the list of items within the Carousel.
+             * @default LI
+             * @type Boolean
+             */
+            this.setAttributeConfig("carouselItemEl", {
+                    validator : JS.isString,
+                    value     : attrs.carouselItemEl || "LI"
+            });
 
             /**
              * @attribute currentPage
@@ -1562,61 +1505,74 @@
          * @public
          */
         initEvents: function () {
-            var cssClass = this.CLASSES;
+            var carousel = this,
+                cssClass = this.CLASSES;
 
-            this.on("keydown", this._keyboardEventHandler);
+            carousel.on("keydown", carousel._keyboardEventHandler);
 
-            this.subscribe(afterScrollEvent, syncNavigation);
-            this.on(afterScrollEvent, this.focus);
+            carousel.on(afterScrollEvent, syncNavigation);
+            carousel.on(afterScrollEvent, carousel.focus);
 
-            this.subscribe(itemAddedEvent, syncUI);
-            this.subscribe(itemAddedEvent, syncNavigation);
-            this.subscribe(itemAddedEvent, this._syncPagerUI);
+            carousel.on(itemAddedEvent, syncUi);
+            carousel.on(itemAddedEvent, syncNavigation);
+            carousel.on(itemAddedEvent, carousel._syncPagerUi);
 
-            this.subscribe(itemRemovedEvent, syncUI);
-            this.subscribe(itemRemovedEvent, syncNavigation);
-            this.subscribe(itemRemovedEvent, this._syncPagerUI);
+            carousel.on(itemRemovedEvent, syncUi);
+            carousel.on(itemRemovedEvent, syncNavigation);
+            carousel.on(itemRemovedEvent, carousel._syncPagerUi);
 
-            this.on(itemSelectedEvent, this.focus);
+            carousel.on(itemSelectedEvent, carousel.focus);
 
-            this.subscribe(loadItemsEvent, syncUI);
+            carousel.on(loadItemsEvent, syncUi);
 
-            this.subscribe(pageChangeEvent, this._syncPagerUI);
+            carousel.on(pageChangeEvent, carousel._syncPagerUi);
 
-            this.subscribe(renderEvent, syncNavigation);
-            this.subscribe(renderEvent, this._syncPagerUI);
+            carousel.on(renderEvent, syncNavigation);
+            carousel.on(renderEvent, carousel._syncPagerUi);
 
-            this.on("selectedItemChange", function (ev) {
-                setItemSelection.call(this, ev.newValue, ev.prevValue);
-                this._updateTabIndex(this.getElementForItem(ev.newValue));
-                this.fireEvent(itemSelectedEvent, ev.newValue);
+            carousel.on(noItemsEvent, function (ev) {
+                carousel.scrollTo(0);
+                syncNavigation.call(carousel);
+                carousel._syncPagerUi();
             });
 
-            this.on("firstVisibleChange", function (ev) {
-                if (!this.get("selectOnScroll")) {
-                    this._updateTabIndex(this.getElementForItem(ev.newValue));
+            carousel.on("selectedItemChange", function (ev) {
+                setItemSelection.call(carousel, ev.newValue, ev.prevValue);
+                if (ev.newValue >= 0) {
+                    carousel._updateTabIndex(
+                            carousel.getElementForItem(ev.newValue));
+                }
+                carousel.fireEvent(itemSelectedEvent, ev.newValue);
+            });
+
+            carousel.on("firstVisibleChange", function (ev) {
+                if (!carousel.get("selectOnScroll")) {
+                    if (ev.newValue >= 0) {
+                        carousel._updateTabIndex(
+                                carousel.getElementForItem(ev.newValue));
+                    }
                 }
             });
 
             // Handle item selection on mouse click
-            this.on("click", this._itemClickHandler);
+            carousel.on("click", carousel._itemClickHandler);
 
             // Handle page navigation
-            this.on("click", this._pagerClickHandler);
+            carousel.on("click", carousel._pagerClickHandler);
 
             // Restore the focus on the navigation buttons
-            Event.onFocus(this.get("element"), function (ev, obj) {
+            Event.onFocus(carousel.get("element"), function (ev, obj) {
                 obj._updateNavButtons(Event.getTarget(ev), true);
-            }, this);
+            }, carousel);
 
-            Event.onBlur(this.get("element"), function (ev, obj) {
+            Event.onBlur(carousel.get("element"), function (ev, obj) {
                 obj._updateNavButtons(Event.getTarget(ev), false);
-            }, this);
-
+            }, carousel);
         },
 
         /**
-         * Return the ITEM_TAG_NAME at index or null if the index is not found.
+         * Return the carouselItemEl at index or null if the index is not
+         * found.
          *
          * @method getElementForItem
          * @param index {Number} The index of the item to be returned
@@ -1639,7 +1595,7 @@
         },
 
         /**
-         * Return the ITEM_TAG_NAME for all items in the Carousel.
+         * Return the carouselItemEl for all items in the Carousel.
          *
          * @method getElementForItems
          * @return {Array} Return all the items
@@ -1728,8 +1684,8 @@
             }
 
             item = this._itemsTable.items.splice(index, 1);
-            this._itemsTable.numItems--;
             if (item && item.length == 1) {
+                this._itemsTable.numItems--;
                 this.set("numItems", num - 1);
 
                 this.fireEvent(itemRemovedEvent,
@@ -1858,8 +1814,7 @@
                 offset,
                 page       = this.get("currentPage"),
                 rv,
-                sentinel,
-                which;
+                sentinel;
 
             if (item == firstItem) {
                 return;         // nothing to do!
@@ -1875,7 +1830,7 @@
                 } else {
                     return;
                 }
-            } else if (item > numItems - 1) {
+            } else if (numItems > 0 && item > numItems - 1) {
                 if (this.get("isCircular")) {
                     item = numItems - item;
                 } else {
@@ -1905,12 +1860,12 @@
             sentinel  = item + numPerPage;
             sentinel  = (sentinel > numItems - 1) ? numItems - 1 : sentinel;
 
-            which     = this.get("isVertical") ? "top" : "left";
             offset    = getScrollOffset.call(this, delta);
 
             animate   = animCfg.speed > 0;
 
             if (animate) {
+                // TODO: move this to _animateAndSetCarouselOffset()
                 this._isAnimationInProgress = true;
                 if (this.get("isVertical")) {
                     animAttrs = { points: { by: [0, offset] } };
@@ -1929,8 +1884,7 @@
                 anim.animate();
                 anim = null;
             } else {
-                offset += getStyle(this._carouselEl, which);
-                Dom.setStyle(this._carouselEl, which, offset + "px");
+                this._setCarouselOffset(offset);
             }
 
             newPage = parseInt(this._firstItem / numPerPage, 10);
@@ -2041,7 +1995,7 @@
             }
 
             if (!this._carouselEl) {
-                this._carouselEl = createElement(this.CONFIG.TAG_NAME,
+                this._carouselEl = createElement(this.get("carouselEl"),
                         { className: cssClass.CAROUSEL_EL });
             }
 
@@ -2069,7 +2023,7 @@
          * @protected
          */
         _createCarouselItem: function (obj) {
-            return createElement(this.CONFIG.ITEM_TAG_NAME, {
+            return createElement(this.get("carouselItemEl"), {
                     className : obj.className,
                     content   : obj.content,
                     id        : obj.id
@@ -2122,7 +2076,7 @@
             while (target && target != container &&
                    target.id != this._carouselEl) {
                 el = target.nodeName;
-                if (el.toUpperCase() == this.CONFIG.ITEM_TAG_NAME) {
+                if (el.toUpperCase() == this.get("carouselItemEl")) {
                     break;
                 }
                 target = target.parentNode;
@@ -2219,15 +2173,16 @@
          * @protected
          */
         _parseCarousel: function (parent) {
-            var child, cssClass, found, node;
+            var child, cssClass, domEl, found, node;
 
-            cssClass = this.CLASSES;
-            found    = false;
+            cssClass  = this.CLASSES;
+            domEl     = this.get("carouselEl");
+            found     = false;
 
             for (child = parent.firstChild; child; child = child.nextSibling) {
                 if (child.nodeType == 1) {
                     node = child.nodeName;
-                    if (node.toUpperCase() == this.CONFIG.TAG_NAME) {
+                    if (node.toUpperCase() == domEl) {
                         this._carouselEl = child;
                         Dom.addClass(this._carouselEl,this.CLASSES.CAROUSEL_EL);
                         found = true;
@@ -2248,14 +2203,17 @@
          */
         _parseCarouselItems: function () {
             var child,
+                domItemEl,
                 elId,
                 node,
                 parent = this._carouselEl;
 
+            domItemEl = this.get("carouselItemEl");
+
             for (child = parent.firstChild; child; child = child.nextSibling) {
                 if (child.nodeType == 1) {
                     node = child.nodeName;
-                    if (node.toUpperCase() == this.CONFIG.ITEM_TAG_NAME) {
+                    if (node.toUpperCase() == domItemEl) {
                         if (child.id) {
                             elId = child.id;
                         } else {
@@ -2338,6 +2296,20 @@
             }
 
             return rv;
+        },
+
+        /**
+         * Set the Carousel offset to the passed offset.
+         *
+         * @method _setCarouselOffset
+         * @protected
+         */
+        _setCarouselOffset: function (offset) {
+            var which;
+
+            which   = this.get("isVertical") ? "top" : "left";
+            offset += offset !== 0 ? getStyle(this._carouselEl, which) : 0;
+            Dom.setStyle(this._carouselEl, which, offset + "px");
         },
 
         /**
@@ -2472,21 +2444,21 @@
             }
 
             if (isVertical) {
-                size += getStyle(this._carouselEl, "marginTop")     +
-                        getStyle(this._carouselEl, "marginBottom")  +
-                        getStyle(this._carouselEl, "paddingTop")    +
-                        getStyle(this._carouselEl, "paddingBottom") +
-                        getStyle(this._carouselEl, "borderTop")     +
-                        getStyle(this._carouselEl, "borderBottom");
+                size += getStyle(this._carouselEl, "marginTop")        +
+                        getStyle(this._carouselEl, "marginBottom")     +
+                        getStyle(this._carouselEl, "paddingTop")       +
+                        getStyle(this._carouselEl, "paddingBottom")    +
+                        getStyle(this._carouselEl, "borderTopWidth")   +
+                        getStyle(this._carouselEl, "borderBottomWidth");
                 // XXX: for vertical Carousel
                 Dom.setStyle(clip, which, (size - (num - 1)) + "px");
             } else {
-                size += getStyle(this._carouselEl, "marginLeft")    +
-                        getStyle(this._carouselEl, "marginRight")   +
-                        getStyle(this._carouselEl, "paddingLeft")   +
-                        getStyle(this._carouselEl, "paddingRight")  +
-                        getStyle(this._carouselEl, "borderLeft")    +
-                        getStyle(this._carouselEl, "borderRight");
+                size += getStyle(this._carouselEl, "marginLeft")      +
+                        getStyle(this._carouselEl, "marginRight")     +
+                        getStyle(this._carouselEl, "paddingLeft")     +
+                        getStyle(this._carouselEl, "paddingRight")    +
+                        getStyle(this._carouselEl, "borderLeftWidth") +
+                        getStyle(this._carouselEl, "borderRightWidth");
                 Dom.setStyle(clip, which, size + "px");
             }
 
@@ -2511,12 +2483,12 @@
 
             size = JS.isNumber(size) ? size : 0;
 
-            size += getStyle(clip, "marginLeft")   +
-                    getStyle(clip, "marginRight")  +
-                    getStyle(clip, "paddingLeft")  +
-                    getStyle(clip, "paddingRight") +
-                    getStyle(clip, "borderLeft")   +
-                    getStyle(clip, "borderRight");
+            size += getStyle(clip, "marginLeft")      +
+                    getStyle(clip, "marginRight")     +
+                    getStyle(clip, "paddingLeft")     +
+                    getStyle(clip, "paddingRight")    +
+                    getStyle(clip, "borderLeftWidth") +
+                    getStyle(clip, "borderRightWidth");
 
             if (isVertical) {
                 size += getStyle(this._navEl, "height");
@@ -2568,12 +2540,7 @@
          * @protected
          */
         _setNumVisible: function (val) {
-            if (val > 1 && val < this.get("numItems")) {
-                this._setClipContainerSize(this._clipEl, val);
-            } else {
-                val = this.get("numVisible");
-            }
-            return val;
+            this._setClipContainerSize(this._clipEl, val);
         },
 
         /**
@@ -2657,12 +2624,146 @@
         },
 
         /**
-         * Synchronize and redraw the Pager UI if necessary.
+         * Synchronize and redraw the UI after an item is added.
          *
-         * @method _syncPagerUI
+         * @method _syncUiForItemAdd
          * @protected
          */
-        _syncPagerUI: function (page) {
+        _syncUiForItemAdd: function (obj) {
+            var carouselEl = this._carouselEl,
+                el,
+                item,
+                itemsTable = this._itemsTable,
+                oel,
+                pos,
+                sibling;
+
+            pos  = JS.isUndefined(obj.pos) ? itemsTable.numItems - 1 : obj.pos;
+            if (!JS.isUndefined(itemsTable.items[pos])) {
+                item = itemsTable.items[pos];
+                if (item && !JS.isUndefined(item.id)) {
+                    oel  = Dom.get(item.id);
+                }
+            }
+            if (!oel) {
+                el = this._createCarouselItem({
+                        className : item.className,
+                        content   : item.item,
+                        id        : item.id
+                });
+                if (JS.isUndefined(obj.pos)) {
+                    if (!JS.isUndefined(itemsTable.loading[pos])) {
+                        oel = itemsTable.loading[pos];
+                        // if oel is null, it is a problem ...
+                    }
+                    if (oel) {
+                        // replace the node
+                        carouselEl.replaceChild(el, oel);
+                        // ... and remove the item from the data structure
+                        delete itemsTable.loading[pos];
+                    } else {
+                        carouselEl.appendChild(el);
+                    }
+                } else {
+                    if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
+                        sibling = Dom.get(itemsTable.items[obj.pos + 1].id);
+                    }
+                    if (sibling) {
+                        carouselEl.insertBefore(el, sibling);
+                    } else {
+                    }
+                }
+            } else {
+                if (JS.isUndefined(obj.pos)) {
+                    if (!Dom.isAncestor(this._carouselEl, oel)) {
+                        carouselEl.appendChild(oel);
+                    }
+                } else {
+                    if (!Dom.isAncestor(carouselEl, oel)) {
+                        if (!JS.isUndefined(itemsTable.items[obj.pos + 1])) {
+                            carouselEl.insertBefore(oel,
+                                    Dom.get(itemsTable.items[obj.pos + 1].id));
+                        }
+                    }
+                }
+            }
+
+            if (this._recomputeSize) {
+                this._setClipContainerSize();
+            }
+
+            if (this.get("selectedItem") < 0) {
+                this.set("selectedItem", this.get("firstVisible"));
+            }
+        },
+
+        /**
+         * Synchronize and redraw the UI after an item is removed.
+         *
+         * @method _syncUiForItemAdd
+         * @protected
+         */
+        _syncUiForItemRemove: function (obj) {
+            var carouselEl = this._carouselEl, el, item, num, pos;
+
+            num  = this.get("numItems");
+            item = obj.item;
+            pos  = obj.pos;
+
+            if (item && (el = Dom.get(item.id))) {
+                if (el && Dom.isAncestor(carouselEl, el)) {
+                    Event.purgeElement(el, true);
+                    carouselEl.removeChild(el);
+                }
+
+                if (this.get("selectedItem") == pos) {
+                    pos = pos >= num ? num - 1 : pos;
+                    this.set("selectedItem", pos);
+                }
+            } else {
+            }
+        },
+
+        /**
+         * Synchronize and redraw the UI for lazy loading.
+         *
+         * @method _syncUiForLazyLoading
+         * @protected
+         */
+        _syncUiForLazyLoading: function (obj) {
+            var carouselEl = this._carouselEl,
+                el,
+                i,
+                itemsTable = this._itemsTable,
+                sibling;
+
+            for (i = obj.first; i <= obj.last; i++) {
+                el = this._createCarouselItem({
+                        content : this.CONFIG.ITEM_LOADING,
+                        id      : Dom.generateId()
+                });
+                if (el) {
+                    if (!JS.isUndefined(itemsTable.items[obj.last + 1])) {
+                        sibling = Dom.get(itemsTable.items[obj.last + 1].id);
+                        if (sibling) {
+                            carouselEl.insertBefore(el, sibling);
+                        } else {
+                        }
+                    } else {
+                        carouselEl.appendChild(el);
+                    }
+                }
+                itemsTable.loading[i] = el;
+            }
+        },
+
+        /**
+         * Synchronize and redraw the Pager UI if necessary.
+         *
+         * @method _syncPagerUi
+         * @protected
+         */
+        _syncPagerUi: function (page) {
             var a,
                 cssClass = this.CLASSES,
                 i,
@@ -2802,13 +2903,17 @@
          * @protected
          */
         _validateFirstVisible: function (val) {
-            var rv = false;
+            var numItems = this.get("numItems"), rv = false;
 
             if (JS.isNumber(val)) {
-                rv = (val >= 0 && val < this.get("numItems"));
+                if (numItems === 0 && val == numItems) {
+                    return true;
+                } else {
+                    return (val >= 0 && val < this.get("numItems"));
+                }
             }
 
-            return rv;
+            return false;
         },
 
         /**
@@ -2879,7 +2984,7 @@
             var rv = false;
 
             if (JS.isNumber(val)) {
-                rv = val > 0 && val < this.get("numItems");
+                rv = val > 0 && val <= this.get("numItems");
             }
 
             return rv;

@@ -17,10 +17,12 @@
         <echo>DOES NOT DO ANYTHING CURRENTLY</echo>
     </target>
 
+    <!--
     <target name="deploy" depends="YuiTaskLib.deploy">
          <move file="${global.build.component.assets}/${class}.css"
                 tofile="${global.build.component.assets}/${component}.css"
                 preservelastmodified="true"/>
     </target>
+    -->
 </project>
 

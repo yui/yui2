@@ -520,18 +520,13 @@ YAHOO.util.History = (function () {
                 return;
             }
 
-            if (YAHOO.env.ua.opera) {
-                // Opera cannot be supported because of several problems that
-                // have been reported to the Opera team, but never addressed:
-                //   1) Hash changes are not detected (started happening with
-                //      recent versions of Opera)
-                //   2) The entire DOM gets cached, so when you come back to
-                //      a page, the window's onload event does not get fired,
-                //      which prevents us from initializing the browser history
-                //      manager.
-                // As a consequence, the best thing we can do is to throw an
-                // exception. The application should catch it, and degrade
-                // gracefully. This is the sad state of history management.
+            if (YAHOO.env.ua.opera && typeof history.navigationMode !== "undefined") {
+                // Disable Opera's fast back/forward navigation mode and puts
+                // it in compatible mode. This makes anchor-based history
+                // navigation work after the page has been navigated away
+                // from and re-activated, at the cost of slowing down
+                // back/forward navigation to and from that page.
+                history.navigationMode = "compatible";
             }
 
             if (typeof stateField === "string") {
