@@ -103,7 +103,6 @@
 
             "AUTO_FILL_HEIGHT" : {
                 key: "autofillheight",
-                suppressEvent: true,
                 supercedes: ["height"],
                 value:"body"
             },
@@ -594,7 +593,6 @@
                 handler: this.configAutoFillHeight, 
                 value : DEFAULT_CONFIG.AUTO_FILL_HEIGHT.value,
                 validator : this._validateAutoFill,
-                suppressEvent: DEFAULT_CONFIG.AUTO_FILL_HEIGHT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.AUTO_FILL_HEIGHT.supercedes
             });
 

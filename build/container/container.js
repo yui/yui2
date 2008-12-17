@@ -1939,7 +1939,6 @@
 
             "AUTO_FILL_HEIGHT" : {
                 key: "autofillheight",
-                suppressEvent: true,
                 supercedes: ["height"],
                 value:"body"
             },
@@ -2430,7 +2429,6 @@
                 handler: this.configAutoFillHeight, 
                 value : DEFAULT_CONFIG.AUTO_FILL_HEIGHT.value,
                 validator : this._validateAutoFill,
-                suppressEvent: DEFAULT_CONFIG.AUTO_FILL_HEIGHT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.AUTO_FILL_HEIGHT.supercedes
             });
 
@@ -5764,26 +5762,33 @@
          */
         _onElementFocus : function(e){
 
-            var target = Event.getTarget(e);
+            if(_currentModal === this) {
 
-            if (target !== this.element && !Dom.isAncestor(this.element, target) && _currentModal == this) {
-                try {
-                    if (this.firstElement) {
-                        this.firstElement.focus();
-                    } else {
-                        if (this._modalFocus) {
-                            this._modalFocus.focus();
-                        } else {
-                            this.innerElement.focus();
-                        }
-                    }
-                } catch(err){
-                    // Just in case we fail to focus
+                var target = Event.getTarget(e),
+                    doc = document.documentElement,
+                    insideDoc = (target !== doc && target !== window);
+
+                // mask and documentElement checks added for IE, which focuses on the mask when it's clicked on, and focuses on 
+                // the documentElement, when the document scrollbars are clicked on
+                if (insideDoc && target !== this.element && target !== this.mask && !Dom.isAncestor(this.element, target)) {
                     try {
-                        if (target !== document && target !== document.body && target !== window) {
-                            target.blur();
+                        if (this.firstElement) {
+                            this.firstElement.focus();
+                        } else {
+                            if (this._modalFocus) {
+                                this._modalFocus.focus();
+                            } else {
+                                this.innerElement.focus();
+                            }
                         }
-                    } catch(err2) { }
+                    } catch(err){
+                        // Just in case we fail to focus
+                        try {
+                            if (insideDoc && target !== document.body) {
+                                target.blur();
+                            }
+                        } catch(err2) { }
+                    }
                 }
             }
         },
@@ -5829,7 +5834,7 @@
             e.style.position = "absolute";
             e.style.left = "-10000em";
             e.style.opacity = 0;
-            e.tabIndex = "-1";
+            e.tabIndex = -1;
             this.innerElement.appendChild(e);
             this._modalFocus = e;
         },
