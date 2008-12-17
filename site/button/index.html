@@ -979,6 +979,24 @@ CSS property to "none."  For example:
 
 
 	<li>
+		<h4>
+			Button instances with the <code>name</code> attribute set to a 
+			value of &#34;submit&#34; will prevent their parent form 
+			from submitting.
+		</h4>
+		<p>
+			Setting a Button instance's <code>name</code> attribute to 
+			&#34;submit&#34; will overwrite the parent form's reference to the 
+			<code>submit</code> method.  <em>This problem is not due to a bug 
+			in the Button Widget, is not specific to the Button Widget</em>,
+			and can 
+			<a href="http://yuiblog.com/sandbox/yui/v260/examples/button/example06.html">easily be reproduced</a> 
+			when the <code>name</code> attribute of any form element is set 
+			to &#34;submit&#34;.
+		</p>
+	</li>
+
+	<li>
 		<h4>Button(s) overflow boundaries of scrolled parent element IE 7 (Strict Mode only)</h4>
 		<p>
 			There is a bug in IE 7 (Strict Mode only) where Button instances will overflow 
