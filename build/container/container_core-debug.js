@@ -3959,13 +3959,13 @@
                         Dom.removeClass(container, "yui-override-padding");
                     }
     
-                    remaining = total - filled;
+                    remaining = Math.max(total - filled, 0);
     
                     Dom.setStyle(el, "height", remaining + "px");
     
                     // Re-adjust height if required, to account for el padding and border
                     if (el.offsetHeight != remaining) {
-                        remaining = remaining - (el.offsetHeight - remaining);
+                        remaining = Math.max(remaining - (el.offsetHeight - remaining), 0);
                     }
                     Dom.setStyle(el, "height", remaining + "px");
                 }
