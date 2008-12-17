@@ -735,6 +735,7 @@
         Event = YAHOO.util.Event,
         CustomEvent = YAHOO.util.CustomEvent,
         Module = YAHOO.widget.Module,
+        UA = YAHOO.env.ua,
 
         m_oModuleTemplate,
         m_oHeaderTemplate,
@@ -1217,6 +1218,10 @@
         * called by the constructor, and  sets up all DOM references for 
         * pre-existing markup, and creates required markup if it is not 
         * already present.
+        * <p>
+        * If the element passed in does not have an id, one will be generated
+        * for it.
+        * </p>
         * @method init
         * @param {String} el The element ID representing the Module <em>OR</em>
         * @param {HTMLElement} el The element representing the Module
@@ -1252,11 +1257,8 @@
                 }
             }
 
+            this.id = Dom.generateId(el);
             this.element = el;
-
-            if (el.id) {
-                this.id = el.id;
-            }
 
             child = this.element.firstChild;
 
@@ -1297,6 +1299,11 @@
                 this.renderEvent.subscribe(this.cfg.fireQueue, this.cfg, true);
             }
 
+            // Opera needs to force a repaint for certain types of content
+            if (UA.opera) {
+                this.showEvent.subscribe(this._forceOperaRepaint);
+            }
+
             this.initEvent.fire(Module);
         },
 
@@ -1307,7 +1314,7 @@
         */
         initResizeMonitor: function () {
 
-            var isGeckoWin = (YAHOO.env.ua.gecko && this.platform == "windows");
+            var isGeckoWin = (UA.gecko && this.platform == "windows");
             if (isGeckoWin) {
                 // Help prevent spinning loading icon which 
                 // started with FireFox 2.0.0.8/Win
@@ -1334,7 +1341,7 @@
                 Module.textResizeEvent.fire();
             }
 
-            if (!YAHOO.env.ua.opera) {
+            if (!UA.opera) {
                 oIFrame = Dom.get("_yuiResizeMonitor");
 
                 var supportsCWResize = this._supportsCWResize();
@@ -1342,7 +1349,7 @@
                 if (!oIFrame) {
                     oIFrame = document.createElement("iframe");
 
-                    if (this.isSecure && Module.RESIZE_MONITOR_SECURE_URL && YAHOO.env.ua.ie) {
+                    if (this.isSecure && Module.RESIZE_MONITOR_SECURE_URL && UA.ie) {
                         oIFrame.src = Module.RESIZE_MONITOR_SECURE_URL;
                     }
 
@@ -1389,7 +1396,7 @@
                        Don't open/close the document for Gecko like we used to, since it
                        leads to duplicate cookies. (See SourceForge bug #1721755)
                     */
-                    if (YAHOO.env.ua.webkit) {
+                    if (UA.webkit) {
                         oDoc = oIFrame.contentWindow.document;
                         oDoc.open();
                         oDoc.close();
@@ -1433,7 +1440,7 @@
                 way on all FF, until 1.9 (3.x) is out
              */
             var bSupported = true;
-            if (YAHOO.env.ua.gecko && YAHOO.env.ua.gecko <= 1.8) {
+            if (UA.gecko && UA.gecko <= 1.8) {
                 bSupported = false;
                 /*
                 var v = navigator.userAgent.match(/rv:([^\s\)]*)/); // From YAHOO.env.ua
@@ -1783,7 +1790,7 @@
                 this.hideEvent.fire();
             }
         },
-        
+
         /**
         * Default event handler for the "monitorresize" configuration property
         * @param {String} type The CustomEvent type (usually the property name)
@@ -1825,6 +1832,22 @@
                 parentNode.insertBefore(element, parentNode.firstChild);
             } else {
                 parentNode.appendChild(element);
+            }
+        },
+
+        /**
+         * Helper method, used to force opera to repaint when a Module is shown,
+         * to account for certain types of content not rendering correctly (e.g. border-collapse:collapse table borders)
+         *
+         * @method _forceOperaRepaint
+         * @prviate
+         */
+        _forceOperaRepaint : function() {
+            var docEl = document.documentElement;
+            if (docEl) {
+    			// Opera needs to force a repaint
+    			docEl.className += " ";
+                docEl.className.trim();
             }
         },
 
@@ -1947,7 +1970,6 @@
 
             "AUTO_FILL_HEIGHT" : {
                 key: "autofillheight",
-                suppressEvent: true,
                 supercedes: ["height"],
                 value:"body"
             },
@@ -2438,7 +2460,6 @@
                 handler: this.configAutoFillHeight, 
                 value : DEFAULT_CONFIG.AUTO_FILL_HEIGHT.value,
                 validator : this._validateAutoFill,
-                suppressEvent: DEFAULT_CONFIG.AUTO_FILL_HEIGHT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.AUTO_FILL_HEIGHT.supercedes
             });
 
@@ -3053,6 +3074,7 @@
                         m_oIFrameTemplate.style.margin = "0";
                         m_oIFrameTemplate.style.padding = "0";
                         m_oIFrameTemplate.style.display = "none";
+                        m_oIFrameTemplate.tabIndex = -1;
                     }
 
                     oIFrame = m_oIFrameTemplate.cloneNode(false);
@@ -3959,13 +3981,13 @@
                         Dom.removeClass(container, "yui-override-padding");
                     }
     
-                    remaining = total - filled;
+                    remaining = Math.max(total - filled, 0);
     
                     Dom.setStyle(el, "height", remaining + "px");
     
                     // Re-adjust height if required, to account for el padding and border
                     if (el.offsetHeight != remaining) {
-                        remaining = remaining - (el.offsetHeight - remaining);
+                        remaining = Math.max(remaining - (el.offsetHeight - remaining), 0);
                     }
                     Dom.setStyle(el, "height", remaining + "px");
                 }
@@ -5366,7 +5388,7 @@
             }, this.cfg.getProperty("autodismissdelay"));
 
         },
-        
+
         /**
         * Fired when the Tooltip is moved, this event handler is used to 
         * prevent the Tooltip from overlapping with its context element.
@@ -5784,26 +5806,33 @@
          */
         _onElementFocus : function(e){
 
-            var target = Event.getTarget(e);
+            if(_currentModal === this) {
 
-            if (target !== this.element && !Dom.isAncestor(this.element, target) && _currentModal == this) {
-                try {
-                    if (this.firstElement) {
-                        this.firstElement.focus();
-                    } else {
-                        if (this._modalFocus) {
-                            this._modalFocus.focus();
-                        } else {
-                            this.innerElement.focus();
-                        }
-                    }
-                } catch(err){
-                    // Just in case we fail to focus
+                var target = Event.getTarget(e),
+                    doc = document.documentElement,
+                    insideDoc = (target !== doc && target !== window);
+
+                // mask and documentElement checks added for IE, which focuses on the mask when it's clicked on, and focuses on 
+                // the documentElement, when the document scrollbars are clicked on
+                if (insideDoc && target !== this.element && target !== this.mask && !Dom.isAncestor(this.element, target)) {
                     try {
-                        if (target !== document && target !== document.body && target !== window) {
-                            target.blur();
+                        if (this.firstElement) {
+                            this.firstElement.focus();
+                        } else {
+                            if (this._modalFocus) {
+                                this._modalFocus.focus();
+                            } else {
+                                this.innerElement.focus();
+                            }
                         }
-                    } catch(err2) { }
+                    } catch(err){
+                        // Just in case we fail to focus
+                        try {
+                            if (insideDoc && target !== document.body) {
+                                target.blur();
+                            }
+                        } catch(err2) { }
+                    }
                 }
             }
         },
@@ -5849,7 +5878,7 @@
             e.style.position = "absolute";
             e.style.left = "-10000em";
             e.style.opacity = 0;
-            e.tabIndex = "-1";
+            e.tabIndex = -1;
             this.innerElement.appendChild(e);
             this._modalFocus = e;
         },
@@ -7259,9 +7288,9 @@
             this.manualSubmitEvent = 
                 this.createEvent(EVENT_TYPES.MANUAL_SUBMIT);
             this.manualSubmitEvent.signature = SIGNATURE;
-        
+
             /**
-            * CustomEvent fired after to asynchronous submission, before the generic submit event is fired
+            * CustomEvent fired after asynchronous submission, before the generic submit event is fired
             * @event asyncSubmitEvent
             * @param {Object} The connection object object, returned by YAHOO.util.Connect.asyncRequest
             */ 
@@ -7274,7 +7303,7 @@
             */
             this.formSubmitEvent = this.createEvent(EVENT_TYPES.FORM_SUBMIT);
             this.formSubmitEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired after cancel
             * @event cancelEvent

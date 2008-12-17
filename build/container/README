@@ -1,5 +1,14 @@
 Container Release Notes
 
+*** version 2.7.0 ***
+
+Changes:
+--------
+
++ Added tab-index = -1, to iframe shim to take it out of tab flow.
++ Module id is generated using Dom.generateId, if the element 
+  passed to the constructor does not have an id set.
+
 *** version 2.6.0 ***
 
 Changes:

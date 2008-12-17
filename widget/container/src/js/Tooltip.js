@@ -676,7 +676,7 @@
             }, this.cfg.getProperty("autodismissdelay"));
 
         },
-        
+
         /**
         * Fired when the Tooltip is moved, this event handler is used to 
         * prevent the Tooltip from overlapping with its context element.

@@ -171,22 +171,34 @@
             },
 
             testSetNumVisible: function () {
+                var num = carousel.get("numItems");
+
+                function isSameWidth(el, w) {
+                    return parseInt(Dom.getStyle(el, "width"), 10) == w;
+                }
+
                 if (carousel.get("numVisible") != 3 ||
-                    parseInt(Dom.getStyle(carouselEl, "width"), 10) != 300) {
+                    !isSameWidth(carouselEl, 300)) {
                     return Assert.fail("numVisible should be 3 by default");
                 }
                 carousel.set("numVisible", 1);
                 if (carousel.get("numVisible") != 1 ||
-                    parseInt(Dom.getStyle(carouselEl, "width"), 10) != 100) {
-                    return Assert.fail("Failed to set numVisible to 1");
+                    !isSameWidth(carouselEl, 100)) {
+                    return Assert.fail("numVisible should be 1 by default");
                 }
-                carousel.set("numVisible", 2);
-                if (carousel.get("numVisible") != 2 ||
-                    parseInt(Dom.getStyle(carouselEl, "width"), 10) != 200) {
-                    return Assert.fail("Failed to set numVisible to 2");
+                carousel.set("numVisible", num);
+                if (carousel.get("numVisible") != num ||
+                    !isSameWidth(carouselEl, num * 100)) {
+                    return Assert.fail("numVisible should have been " + num);
                 }
                 carousel.set("numVisible", 1);
-                return Assert.areEqual(1, carousel.get("numVisible"));
+                if (carousel.get("numVisible") != 1 ||
+                    !isSameWidth(carouselEl, 100)) {
+                    return Assert.fail("numVisible should have been 1");
+                }
+                carousel.set("numVisible", 3);
+                return Assert.areEqual(3, carousel.get("numVisible")) &&
+                    Assert.areEqual(true, areSameWidth(carouselEl, 300));
             }
     });
 

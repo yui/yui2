@@ -7,25 +7,12 @@
   </head>
   <body>
 
-    <!-- Static markup required for browser history management. Note that these
-         could be created using document.write in a script block. But they have
-         to be created while the page is being parsed, so it cannot be done
-         from an imported script file. Also, these have to be created as early
-         as possible to avoid problems on Internet Explorer.
-         Note that "magic URLs" such as:
+    <!-- Static markup required by the browser history utility. Note that the
+         iframe is only used on Internet Explorer. If this page is server
+         generated (by a PHP script for example), it is a good idea to create
+         the IFrame ONLY for Internet Explorer (use server side user agent sniffing) -->
 
-             javascript:document.open();document.write(new Date().getTime());document.close();
-
-         and such do NOT work on IE6! Only a real document works (that "real
-         document" does not need to be an HTML document. It can be an image
-         as well. Using an asset that you use somewhere else on your site,
-         instead of a separate asset avoids an unnecessary server round trip.
-         Finally, note that the iframe is only used on Internet Explorer.
-         If this page is server generated (by a PHP script for example), it is
-         a good idea to create the IFrame ONLY for Internet Explorer (use
-         server side user agent sniffing) -->
-
-    <iframe id="yui-history-iframe" src="assets/yui.gif"></iframe>
+    <iframe id="yui-history-iframe" src="assets/blank.html"></iframe>
     <input id="yui-history-field" type="hidden">
 
     <!-- Handle the case when client-side scripting is disabled. Note that if
