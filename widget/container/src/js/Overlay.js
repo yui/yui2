@@ -103,7 +103,6 @@
 
             "AUTO_FILL_HEIGHT" : {
                 key: "autofillheight",
-                suppressEvent: true,
                 supercedes: ["height"],
                 value:"body"
             },
@@ -594,7 +593,6 @@
                 handler: this.configAutoFillHeight, 
                 value : DEFAULT_CONFIG.AUTO_FILL_HEIGHT.value,
                 validator : this._validateAutoFill,
-                suppressEvent: DEFAULT_CONFIG.AUTO_FILL_HEIGHT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.AUTO_FILL_HEIGHT.supercedes
             });
 
@@ -2116,13 +2114,13 @@
                         Dom.removeClass(container, "yui-override-padding");
                     }
     
-                    remaining = total - filled;
+                    remaining = Math.max(total - filled, 0);
     
                     Dom.setStyle(el, "height", remaining + "px");
     
                     // Re-adjust height if required, to account for el padding and border
                     if (el.offsetHeight != remaining) {
-                        remaining = remaining - (el.offsetHeight - remaining);
+                        remaining = Math.max(remaining - (el.offsetHeight - remaining), 0);
                     }
                     Dom.setStyle(el, "height", remaining + "px");
                 }

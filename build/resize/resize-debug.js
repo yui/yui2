@@ -4,7 +4,6 @@
  * @requires yahoo, dom, dragdrop, element, event
  * @optional animation
  * @module resize
- * @beta
  */
 (function() {
 var D = YAHOO.util.Dom,
@@ -248,14 +247,15 @@ var D = YAHOO.util.Dom,
             YAHOO.log('Create the wrap element', 'info', 'Resize');
             this._positioned = false;
             //Force wrap for elements that can't have children 
+            //TODO IE Doesn't like this...
             switch (this.get('element').tagName.toLowerCase()) {
                 case 'img':
                 case 'textarea':
                 case 'input':
                 case 'iframe':
                 case 'select':
-                    this.set('wrap', true);
                     YAHOO.log('Auto-wrapping the element (' + this.get('element').tagName.toLowerCase() + ')', 'warn', 'Resize');
+                    this.set('wrap', true);
                     break;
             }
             if (this.get('wrap') === true) {
@@ -1307,7 +1307,7 @@ var D = YAHOO.util.Dom,
             Resize.superclass.initAttributes.call(this, attr);
 
             /**
-            * @attribute useShime
+            * @attribute useShim
             * @description This setting will be passed to the DragDrop instances on the resize handles and for the draggable property.
             * This property should be used if you want the resize handles to work over iframe and other elements.
             * @type Boolean

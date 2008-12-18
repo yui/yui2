@@ -2419,6 +2419,22 @@ The following HTML and CSS references provide the necessary information for skin
 <ul>
 
 	<li>
+		<h4>Java Applets appear on top of Menu instances</h4>
+		<p>
+			By default Java Applets will appear on top of YUI Menu instances.  
+			This is not a bug in or specific to the Menu Widget, but rather a 
+			<a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6646289">known issue with Java Applets</a>.
+			Setting the <a href="#iframeconfig"><code>iframe</code></a> 
+			configuration property to <code>true</code> will fix this problem 
+			for IE 6, IE 7, Firefox 2 (Win), and Firefox 3 (Win).  At this time 
+			there doesn't appear to be a solution that works for Safari, Opera,
+			and Firefox for Mac OS X.  
+			<a href="http://yuiblog.com/sandbox/yui/v260/examples/menu/example16.html">This example</a> 
+			demonstrates the fix working in IE 6, IE 7, Firefox 2 (Win), and Firefox 3 (Win).
+		</p>
+	</li>
+
+	<li>
 		<h4>Selected text is cleared when a ContextMenu instance is made visible</h4>
 		<p>
 			In Gecko, Webkit and Opera when a ContextMenu is made visible, any text selected in the 

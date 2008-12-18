@@ -25,7 +25,7 @@
             }
             this.hide();
         }
-        
+ 
         function cancelHandler() {
             this.hide();
         }
@@ -50,11 +50,7 @@
         });
 
         YAHOO.util.Event.on("show", "click", function() {
-		dialog.show();
-		if (YAHOO.env.ua.opera && document.documentElement) {
-			// Opera needs to force a repaint
-			document.documentElement.className += "";
-		} 
+	    dialog.show();
 	});
     });
 </script>
