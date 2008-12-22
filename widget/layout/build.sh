@@ -13,3 +13,5 @@ wait
 echo "Running (ant all)..."
 wait
 ant all
+wait
+rm -rRf build

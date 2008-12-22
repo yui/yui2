@@ -80,7 +80,7 @@
         * @description An object literal that contains a list of units in the layout
         * @type Object
         */
-        _rendered: null,
+        _units: null,
         /**
         * @private
         * @property _rendered

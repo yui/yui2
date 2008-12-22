@@ -3,7 +3,6 @@
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event
  * @module layout
- * @beta
  */
 (function() {
     var Dom = YAHOO.util.Dom,
@@ -80,7 +79,7 @@
         * @description An object literal that contains a list of units in the layout
         * @type Object
         */
-        _rendered: null,
+        _units: null,
         /**
         * @private
         * @property _rendered
@@ -659,7 +658,6 @@
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, layout
  * @optional animation, dragdrop, selector
- * @beta
  */
 (function() {
     var Dom = YAHOO.util.Dom,
