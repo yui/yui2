@@ -1,4 +1,7 @@
 #!/bin/bash
+export YUI_BUILD_DIR=/Users/davglass/src/build/builder/componentbuild
+export YUI_SRC_DIR=/Users/davglass/src/build/yui2
+
 
 ./copy.sh
 wait
