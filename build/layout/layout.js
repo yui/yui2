@@ -2006,6 +2006,7 @@
                                     this.get('parent').fireEvent('startResize');
                                     var c = this.get('parent').getUnitByPosition('center');
                                     this._lastCenterScroll = c.get('scroll');
+                                    c.addClass(this._resize.CSS_RESIZING);
                                     c.set('scroll', false);
                                 }
                                 this.fireEvent('startResize');
@@ -2019,6 +2020,7 @@
                                 if (this.get('parent')) {
                                     var c = this.get('parent').getUnitByPosition('center');
                                     c.set('scroll', this._lastCenterScroll);
+                                    c.removeClass(this._resize.CSS_RESIZING);
                                 }
                                 this.resize();
                                 this.fireEvent('endResize');
