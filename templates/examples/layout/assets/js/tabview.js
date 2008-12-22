@@ -27,6 +27,7 @@
 
             var dt = weekday[d.getDay()] + ' ' + m + '/' + dy + '/' + d.getFullYear() + ' ' + h + ':' + d.getMinutes() + ' ' + a;
             YAHOO.util.Dom.get('datetime').innerHTML = dt;
+            YAHOO.util.Dom.get('calDateStr').innerHTML = m + '/' + dy + '/' + d.getFullYear();
             YAHOO.log('Setting the time/date string to: ' + dt, 'info', 'tabview.js');
         };
         
