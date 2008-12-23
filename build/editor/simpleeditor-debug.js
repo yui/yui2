@@ -10,7 +10,6 @@ var Dom = YAHOO.util.Dom,
      * @class ToolbarButtonAdvanced
      * @namespace YAHOO.widget
      * @requires yahoo, dom, element, event, container_core, menu, button
-     * @beta
      * 
      * Provides a toolbar button based on the button and menu widgets.
      * @constructor
@@ -141,6 +140,10 @@ var Dom = YAHOO.util.Dom,
 
             this.on('mouseover', this._handleMouseOver, this, true);
             this.on('mouseout', this._handleMouseOut, this, true);
+            this.on('click', function(ev) {
+                Event.stopEvent(ev);
+                return false;
+            }, this, true);
         },
         /**
         * @method initAttributes
@@ -299,9 +302,10 @@ var Dom = YAHOO.util.Dom,
         * @method fireEvent
         * @description Overridden fireEvent method to prevent DOM events from firing if the button is disabled.
         */        
-        fireEvent: function (p_sType , p_aArgs) {
+        fireEvent: function(p_sType, p_aArgs) {
             //  Disabled buttons should not respond to DOM events
             if (this.DOM_EVENTS[p_sType] && this.get('disabled')) {
+                Event.stopEvent(p_aArgs);
                 return;
             }
         
@@ -323,7 +327,6 @@ var Dom = YAHOO.util.Dom,
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbarbutton
  * @optional container_core, dragdrop
- * @beta
  */
 (function() {
     /**
@@ -2110,7 +2113,6 @@ var Dom = YAHOO.util.Dom,
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbar
  * @optional animation, container_core, resize, dragdrop
- * @beta
  */
 
 (function() {
@@ -2962,12 +2964,46 @@ var Dom = YAHOO.util.Dom,
         },
         /**
         * @private
+        * @property _focused
+        * @description Holder for trapping focus/blur state and prevent double events
+        * @type Boolean
+        */
+        _focused: null,
+        /**
+        * @private
+        * @method _handleFocus
+        * @description Handles the focus of the iframe. Note, this is window focus event, not an Editor focus event.
+        * @param {Event} e The DOM Event
+        */
+        _handleFocus: function(e) {
+            if (!this._focused) {
+                this._focused = true;
+                this.fireEvent('editorWindowFocus', { type: 'editorWindowFocus', target: this });
+
+            }
+        },
+        /**
+        * @private
+        * @method _handleBlur
+        * @description Handles the blur of the iframe. Note, this is window blur event, not an Editor blur event.
+        * @param {Event} e The DOM Event
+        */
+        _handleBlur: function(e) {
+            if (this._focused) {
+                this._focused = false;
+                this.fireEvent('editorWindowBlur', { type: 'editorWindowBlur', target: this });
+            }
+        },
+        /**
+        * @private
         * @method _initEditorEvents
         * @description This method sets up the listeners on the Editors document.
         */
         _initEditorEvents: function() {
             //Setup Listeners on iFrame
-            var doc = this._getDoc();
+            var doc = this._getDoc(),
+                win = this._getWindow();
+
             Event.on(doc, 'mouseup', this._handleMouseUp, this, true);
             Event.on(doc, 'mousedown', this._handleMouseDown, this, true);
             Event.on(doc, 'click', this._handleClick, this, true);
@@ -2975,6 +3011,10 @@ var Dom = YAHOO.util.Dom,
             Event.on(doc, 'keypress', this._handleKeyPress, this, true);
             Event.on(doc, 'keyup', this._handleKeyUp, this, true);
             Event.on(doc, 'keydown', this._handleKeyDown, this, true);
+ 
+            //Focus and blur..
+            Event.on(win, 'focus', this._handleFocus, this, true);
+            Event.on(win, 'blur', this._handleBlur, this, true);
         },
         /**
         * @private
@@ -2983,7 +3023,9 @@ var Dom = YAHOO.util.Dom,
         */
         _removeEditorEvents: function() {
             //Remove Listeners on iFrame
-            var doc = this._getDoc();
+            var doc = this._getDoc(),
+                win = this._getWindow();
+
             Event.removeListener(doc, 'mouseup', this._handleMouseUp, this, true);
             Event.removeListener(doc, 'mousedown', this._handleMouseDown, this, true);
             Event.removeListener(doc, 'click', this._handleClick, this, true);
@@ -2991,6 +3033,10 @@ var Dom = YAHOO.util.Dom,
             Event.removeListener(doc, 'keypress', this._handleKeyPress, this, true);
             Event.removeListener(doc, 'keyup', this._handleKeyUp, this, true);
             Event.removeListener(doc, 'keydown', this._handleKeyDown, this, true);
+
+            //Focus and blur..
+            Event.removeListener(win, 'focus', this._handleFocus, this, true);
+            Event.removeListener(win, 'blur', this._handleBlur, this, true);
         },
         /**
         * @private
@@ -4555,7 +4601,7 @@ var Dom = YAHOO.util.Dom,
 
             /**
             * @config ptags
-            * @description If true, the editor uses <P> tags instead of <br> tags. (Use Shift + Enter to get a <br>)
+            * @description If true, the editor uses &lt;P&gt; tags instead of &lt;br&gt; tags. (Use Shift + Enter to get a &lt;br&gt;)
             * @default false
             * @type Boolean
             */
@@ -5501,8 +5547,9 @@ var Dom = YAHOO.util.Dom,
 
             this.get('element_cont').setStyle('display', 'none');
             this.get('element_cont').addClass(this.CLASS_CONTAINER);
-
+            
             this.set('iframe', this._createIframe());
+
             window.setTimeout(function() {
                 self._setInitialContent.call(self);
             }, 10);
@@ -6419,6 +6466,11 @@ var Dom = YAHOO.util.Dom,
                 html = html.replace(/<b(\s+[^>]*)?>/gi, '<strong$1>');
                 html = html.replace(/<\/b>/gi, '</strong>');
             }
+
+            //normalize strikethrough
+            html = html.replace(/<strike/gi, '<span style="text-decoration: line-through;"');
+            html = html.replace(/\/strike>/gi, '/span>');
+            
             
             //Case Changing
 		    html = html.replace(/<font/gi, '<font');
@@ -6888,6 +6940,17 @@ var Dom = YAHOO.util.Dom,
 * @event beforeEditorKeyDown
 * @param {Event} ev The DOM Event that occured
 * @description Fires before editor event, returning false will stop the internal processing.
+* @type YAHOO.util.CustomEvent
+*/
+
+/**
+* @event editorWindowFocus
+* @description Fires when the iframe is focused. Note, this is window focus event, not an Editor focus event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event editorWindowBlur
+* @description Fires when the iframe is blurred. Note, this is window blur event, not an Editor blur event.
 * @type YAHOO.util.CustomEvent
 */
 

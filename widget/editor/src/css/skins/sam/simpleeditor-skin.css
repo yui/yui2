@@ -11,6 +11,9 @@
     background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -200px;
     position: relative;
 }
+.yui-skin-sam .yui-editor-container .draggable .yui-toolbar-titlebar {
+    cursor: move;
+}
 
 /* Give the titlebar some color and padding */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar h2 {
@@ -37,7 +40,7 @@
     border: none;
     text-indent: 33px;
     overflow: hidden;
-    margin: .25em;
+    margin: 0 .25em;
 }
 
 /* Background color of the toolbar */
@@ -56,7 +59,8 @@
 }
 
 /* Remove the shadows from the menus in the toolbar - Menu.css override */
-.yui-skin-sam .yui-editor-container .visible .yui-menu-shadow, .yui-skin-sam .yui-editor-panel .visible .yui-menu-shadow {
+.yui-skin-sam .yui-editor-container .visible .yui-menu-shadow,
+.yui-skin-sam .yui-editor-panel .visible .yui-menu-shadow {
     display: none;
 }
 
@@ -112,10 +116,13 @@
     display: block;
     height: 22px;
     width: 30px;
+    _font-size: 0;
     margin: 0;
     border-color: #808080;
+    color: #f2f2f2;
     border-style: solid;
     border-width: 1px 0;
+    zoom: 1;
 }
 /* Set the height of the buttons and pad them on the left for the icon */
 .yui-skin-sam .yui-toolbar-container .yui-push-button a,
@@ -124,11 +131,16 @@
     padding-left: 35px;
     height: 20px;
     text-decoration: none;
-    font-size: 93%;
+    font-size: 0px;
     line-height: 2;
     display: block;
-    color: #000000;
+    color: #000;
     overflow: hidden;
+    white-space: nowrap;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton a,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-select a {
+    font-size: 12px;
 }
 /* Set the height of the buttons and pad them on the left for the icon */
 .yui-skin-sam .yui-toolbar-container .yui-push-button .first-child,
@@ -139,6 +151,7 @@
     border-width: 0 1px;
     margin: 0 -1px;
     display: block;
+    position: relative;
 }
 .yui-skin-sam .yui-toolbar-container .yui-push-button-disabled .first-child,
 .yui-skin-sam .yui-toolbar-container .yui-color-button-disabled .first-child,
@@ -224,6 +237,10 @@
 .yui-skin-sam .yui-toolbar-container .yui-button-menu {
     background-color: #fff;
 }
+/* Adding this style to Menu's allows the scrolled menu to work in IE */
+.yui-skin-sam .yui-toolbar-container .yui-button-menu .yui-menu-body-scrolled {
+    position: relative;
+}
 /* Set the background of all menu items that are selected */
 .yui-skin-sam div.yuimenu li.selected {
     background-color: #B3D4FF;
@@ -238,8 +255,23 @@
     left: 5px;
 }
 /* Setting the background position of the sprite */
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-strikethrough span.yui-toolbar-icon {
+    background-position: 0 -108px;
+    left: 5px;
+}
+/* Setting the background position of the sprite */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-italic span.yui-toolbar-icon {
     background-position: 0 -36px;
+    left: 5px;
+}
+/* Setting the background position of the sprite */
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-undo span.yui-toolbar-icon {
+    background-position: 0 -1326px;
+    left: 5px;
+}
+/* Setting the background position of the sprite */
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-redo span.yui-toolbar-icon {
+    background-position: 0 -1355px;
     left: 5px;
 }
 /* Setting the background position of the sprite */
@@ -427,6 +459,7 @@
     border: none;
     background-color: transparent;
     overflow: visible;
+    position: absolute;
 }
 
 /* Margins on the header of the Property Editor */
@@ -508,8 +541,8 @@
     width: 75%;
 }
 /* Form styling */
-.yui-skin-sam .yui-editor-panel #createlink_target,
-.yui-skin-sam .yui-editor-panel #insertimage_target {
+.yui-skin-sam .yui-editor-panel .createlink_target,
+.yui-skin-sam .yui-editor-panel .insertimage_target {
     width: auto;
     margin-right: 5px;
 }
@@ -554,6 +587,7 @@
 /* Give the padding group a width */
 .yui-skin-sam .yui-editor-panel .yui-toolbar-group-padding {
     width: 203px;
+    _width: 198px;
 }
 .yui-skin-sam .yui-editor-panel .no-button .yui-toolbar-group-padding {
     width: 172px;
@@ -654,4 +688,14 @@
 /* This image is the one used to place the blankimage placeholder into the editor when you click on Insert an Image */
 .yui-editor-blankimage {
     background-image: url( blankimage.png );
+}
+
+.yui-skin-sam .yui-editor-container .yui-resize-handle-br {
+    /* Make the handle a little bigger than the default */
+    height: 11px;
+    width: 11px;
+    /* Resposition the image */
+    background-position: -20px -60px;
+    /* Kill the hover on the handle */
+    background-color: transparent;
 }

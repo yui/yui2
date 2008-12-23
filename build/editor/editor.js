@@ -10,7 +10,6 @@ var Dom = YAHOO.util.Dom,
      * @class ToolbarButtonAdvanced
      * @namespace YAHOO.widget
      * @requires yahoo, dom, element, event, container_core, menu, button
-     * @beta
      * 
      * Provides a toolbar button based on the button and menu widgets.
      * @constructor
@@ -139,6 +138,10 @@ var Dom = YAHOO.util.Dom,
 
             this.on('mouseover', this._handleMouseOver, this, true);
             this.on('mouseout', this._handleMouseOut, this, true);
+            this.on('click', function(ev) {
+                Event.stopEvent(ev);
+                return false;
+            }, this, true);
         },
         /**
         * @method initAttributes
@@ -297,9 +300,10 @@ var Dom = YAHOO.util.Dom,
         * @method fireEvent
         * @description Overridden fireEvent method to prevent DOM events from firing if the button is disabled.
         */        
-        fireEvent: function (p_sType , p_aArgs) {
+        fireEvent: function(p_sType, p_aArgs) {
             //  Disabled buttons should not respond to DOM events
             if (this.DOM_EVENTS[p_sType] && this.get('disabled')) {
+                Event.stopEvent(p_aArgs);
                 return;
             }
         
@@ -321,7 +325,6 @@ var Dom = YAHOO.util.Dom,
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbarbutton
  * @optional container_core, dragdrop
- * @beta
  */
 (function() {
     /**
@@ -2088,7 +2091,6 @@ var Dom = YAHOO.util.Dom,
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbar
  * @optional animation, container_core, resize, dragdrop
- * @beta
  */
 
 (function() {
@@ -2936,12 +2938,46 @@ var Dom = YAHOO.util.Dom,
         },
         /**
         * @private
+        * @property _focused
+        * @description Holder for trapping focus/blur state and prevent double events
+        * @type Boolean
+        */
+        _focused: null,
+        /**
+        * @private
+        * @method _handleFocus
+        * @description Handles the focus of the iframe. Note, this is window focus event, not an Editor focus event.
+        * @param {Event} e The DOM Event
+        */
+        _handleFocus: function(e) {
+            if (!this._focused) {
+                this._focused = true;
+                this.fireEvent('editorWindowFocus', { type: 'editorWindowFocus', target: this });
+
+            }
+        },
+        /**
+        * @private
+        * @method _handleBlur
+        * @description Handles the blur of the iframe. Note, this is window blur event, not an Editor blur event.
+        * @param {Event} e The DOM Event
+        */
+        _handleBlur: function(e) {
+            if (this._focused) {
+                this._focused = false;
+                this.fireEvent('editorWindowBlur', { type: 'editorWindowBlur', target: this });
+            }
+        },
+        /**
+        * @private
         * @method _initEditorEvents
         * @description This method sets up the listeners on the Editors document.
         */
         _initEditorEvents: function() {
             //Setup Listeners on iFrame
-            var doc = this._getDoc();
+            var doc = this._getDoc(),
+                win = this._getWindow();
+
             Event.on(doc, 'mouseup', this._handleMouseUp, this, true);
             Event.on(doc, 'mousedown', this._handleMouseDown, this, true);
             Event.on(doc, 'click', this._handleClick, this, true);
@@ -2949,6 +2985,10 @@ var Dom = YAHOO.util.Dom,
             Event.on(doc, 'keypress', this._handleKeyPress, this, true);
             Event.on(doc, 'keyup', this._handleKeyUp, this, true);
             Event.on(doc, 'keydown', this._handleKeyDown, this, true);
+ 
+            //Focus and blur..
+            Event.on(win, 'focus', this._handleFocus, this, true);
+            Event.on(win, 'blur', this._handleBlur, this, true);
         },
         /**
         * @private
@@ -2957,7 +2997,9 @@ var Dom = YAHOO.util.Dom,
         */
         _removeEditorEvents: function() {
             //Remove Listeners on iFrame
-            var doc = this._getDoc();
+            var doc = this._getDoc(),
+                win = this._getWindow();
+
             Event.removeListener(doc, 'mouseup', this._handleMouseUp, this, true);
             Event.removeListener(doc, 'mousedown', this._handleMouseDown, this, true);
             Event.removeListener(doc, 'click', this._handleClick, this, true);
@@ -2965,6 +3007,10 @@ var Dom = YAHOO.util.Dom,
             Event.removeListener(doc, 'keypress', this._handleKeyPress, this, true);
             Event.removeListener(doc, 'keyup', this._handleKeyUp, this, true);
             Event.removeListener(doc, 'keydown', this._handleKeyDown, this, true);
+
+            //Focus and blur..
+            Event.removeListener(win, 'focus', this._handleFocus, this, true);
+            Event.removeListener(win, 'blur', this._handleBlur, this, true);
         },
         /**
         * @private
@@ -4501,7 +4547,7 @@ var Dom = YAHOO.util.Dom,
 
             /**
             * @config ptags
-            * @description If true, the editor uses <P> tags instead of <br> tags. (Use Shift + Enter to get a <br>)
+            * @description If true, the editor uses &lt;P&gt; tags instead of &lt;br&gt; tags. (Use Shift + Enter to get a &lt;br&gt;)
             * @default false
             * @type Boolean
             */
@@ -5441,8 +5487,9 @@ var Dom = YAHOO.util.Dom,
 
             this.get('element_cont').setStyle('display', 'none');
             this.get('element_cont').addClass(this.CLASS_CONTAINER);
-
+            
             this.set('iframe', this._createIframe());
+
             window.setTimeout(function() {
                 self._setInitialContent.call(self);
             }, 10);
@@ -6343,6 +6390,11 @@ var Dom = YAHOO.util.Dom,
                 html = html.replace(/<b(\s+[^>]*)?>/gi, '<strong$1>');
                 html = html.replace(/<\/b>/gi, '</strong>');
             }
+
+            //normalize strikethrough
+            html = html.replace(/<strike/gi, '<span style="text-decoration: line-through;"');
+            html = html.replace(/\/strike>/gi, '/span>');
+            
             
             //Case Changing
 		    html = html.replace(/<font/gi, '<font');
@@ -6810,6 +6862,17 @@ var Dom = YAHOO.util.Dom,
 * @type YAHOO.util.CustomEvent
 */
 
+/**
+* @event editorWindowFocus
+* @description Fires when the iframe is focused. Note, this is window focus event, not an Editor focus event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event editorWindowBlur
+* @description Fires when the iframe is blurred. Note, this is window blur event, not an Editor blur event.
+* @type YAHOO.util.CustomEvent
+*/
+
 
     /**
      * @description Singleton object used to track the open window objects and panels across the various open editors
@@ -6887,7 +6950,6 @@ var Dom = YAHOO.util.Dom,
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, container_core, simpleeditor
  * @optional dragdrop, animation, menu, button
- * @beta
  */
 
 (function() {
@@ -7124,6 +7186,12 @@ var Dom = YAHOO.util.Dom,
         * @type String
         */
         STR_LINK_TITLE: 'Description',
+        /**
+        * @property STR_NONE
+        * @description The string for the word none.
+        * @type String
+        */
+        STR_NONE: 'none',
         /**
         * @protected
         * @property CLASS_LOCAL_FILE
@@ -7470,6 +7538,7 @@ var Dom = YAHOO.util.Dom,
                 unlink.title = this.STR_LINK_PROP_REMOVE;
                 Event.on(unlink, 'click', function(ev) {
                     Event.stopEvent(ev);
+                    this.unsubscribeAll('afterExecCommand');
                     this.execCommand('unlink');
                     this.closeWindow();
                 }, this, true);
@@ -7479,6 +7548,9 @@ var Dom = YAHOO.util.Dom,
                 this._windows.createlink = {};
                 this._windows.createlink.body = body;
                 body.style.display = 'none';
+                Event.on(body, 'keyup', function(e) {
+                    Event.stopPropagation(e);
+                });
                 this.get('panel').editor_form.appendChild(body);
                 this.fireEvent('windowCreateLinkRender', { type: 'windowCreateLinkRender', panel: this.get('panel'), body: body });
                 return body;
@@ -7957,7 +8029,7 @@ var Dom = YAHOO.util.Dom,
                     btype = el.style.borderLeftStyle;
                 }
                 var bs_button = tbar.getButtonByValue('bordersize');
-                var bSizeStr = ((parseInt(bsize, 10) > 0) ? '' : 'none');
+                var bSizeStr = ((parseInt(bsize, 10) > 0) ? '' : this.STR_NONE);
                 bs_button.set('label', '<span class="yui-toolbar-bordersize-' + bsize + '">'+bSizeStr+'</span>');
                 this._updateMenuChecked('bordersize', bsize, tbar);
 
@@ -8107,6 +8179,18 @@ var Dom = YAHOO.util.Dom,
         * @return {<a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>}
         */
         _renderPanel: function() {
+            var panelEl = document.createElement('div');
+            Dom.addClass(panelEl, 'yui-editor-panel');
+            panelEl.id = this.get('id') + this.EDITOR_PANEL_ID;
+            panelEl.style.position = 'absolute';
+            panelEl.style.top = '-9999px';
+            panelEl.style.left = '-9999px';
+            document.body.appendChild(panelEl);
+            //TODO IE barfs on this..
+            //this.get('element_cont').insertBefore(panelEl, this.get('element_cont').get('firstChild'));
+
+                
+
             var panel = new YAHOO.widget.Overlay(this.get('id') + this.EDITOR_PANEL_ID, {
                     width: '300px',
                     iframe: true,
@@ -8117,9 +8201,9 @@ var Dom = YAHOO.util.Dom,
                 });
             this.set('panel', panel);
 
-            this.get('panel').setBody('---');
-            this.get('panel').setHeader(' ');
-            this.get('panel').setFooter(' ');
+            panel.setBody('---');
+            panel.setHeader(' ');
+            panel.setFooter(' ');
 
 
             var body = document.createElement('div');
@@ -8173,7 +8257,7 @@ var Dom = YAHOO.util.Dom,
             });
 
             var fireShowEvent = function() {
-                //panel.bringToTop();
+                panel.bringToTop();
             };
             panel.showEvent.subscribe(fireShowEvent, this, true);
             panel.renderEvent.subscribe(function() {
@@ -8183,16 +8267,10 @@ var Dom = YAHOO.util.Dom,
             }, this, true);
 
             if (this.DOMReady) {
-                this.get('panel').render(document.body);
-                //Render to the element_cont so we can skin it better
-                //this.get('panel').render(this.get('element_cont').get('element'));
-                Dom.addClass(this.get('panel').element, 'yui-editor-panel');
+                this.get('panel').render();
             } else {
                 Event.onDOMReady(function() {
-                    this.get('panel').render(document.body);
-                    //Render to the element_cont so we can skin it better
-                    //this.get('panel').render(this.get('element_cont').get('element'));
-                    Dom.addClass(this.get('panel').element, 'yui-editor-panel');
+                    this.get('panel').render();
                 }, this, true);
             }
             this.get('panel').showEvent.subscribe(function() {
@@ -8206,6 +8284,7 @@ var Dom = YAHOO.util.Dom,
         * @description Opens a new "window/panel"
         */
         openWindow: function(win) {
+            
             var self = this;
             window.setTimeout(function() {
                 self.toolbar.set('disabled', true); //Disable the toolbar when an editor window is open..
@@ -8423,7 +8502,6 @@ var Dom = YAHOO.util.Dom,
         * @description Close the currently open EditorWindow.
         */
         closeWindow: function(keepOpen) {
-            //YAHOO.widget.EditorInfo.window = {};
             this.fireEvent('window' + this.currentWindow.name + 'Close', { type: 'window' + this.currentWindow.name + 'Close', win: this.currentWindow, el: this.currentElement[0] });
             this.fireEvent('closeWindow', { type: 'closeWindow', win: this.currentWindow });
             this.currentWindow = null;
@@ -8499,7 +8577,7 @@ var Dom = YAHOO.util.Dom,
             if (this.browser.ie) {
                 action = 'formatblock';
             }
-            if (value == 'none') {
+            if (value == this.STR_NONE) {
                 if ((_sel && _sel.tagName && (_sel.tagName.toLowerCase().substring(0,1) == 'h')) || (_sel && _sel.parentNode && _sel.parentNode.tagName && (_sel.parentNode.tagName.toLowerCase().substring(0,1) == 'h'))) {
                     if (_sel.parentNode.tagName.toLowerCase().substring(0,1) == 'h') {
                         _sel = _sel.parentNode;

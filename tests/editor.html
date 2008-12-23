@@ -35,7 +35,9 @@ var editor = null;
         Event = YAHOO.util.Event,
         Tool = YAHOO.tool,
         Suite = new Tool.TestSuite('yuisuite'),
-        Assert = YAHOO.util.Assert;
+        Assert = YAHOO.util.Assert,
+        eFocus = null,
+        eBlur = null;
 
 
 
@@ -71,6 +73,22 @@ var editor = null;
                 },
                 test_doc: function() {
                     Assert.areEqual(document.getElementById('editor_editor').contentWindow.document, editor._getDoc(), 'Document object is not right');
+                },
+                test_focus: function() {
+                    YAHOO.util.UserAction.mousedown(document);
+
+                    editor.on('editorWindowFocus', function() {
+                        eFocus = true;
+                    });
+                    editor.on('editorWindowBlur', function() {
+                        eBlur = true;
+                    });
+                    editor._focusWindow();
+                    Assert.areEqual(eFocus, true, 'Editor focus event FAILED');
+                    
+                    editor.afterElement.focus();
+                    Assert.areEqual(eBlur, true, 'Editor blur event FAILED');
+                    
                 },
                 test_regex: function() {
                     editor.setEditorHTML(Dom.get('testRegEx').innerHTML);
@@ -329,6 +347,7 @@ var editor = null;
                     }, 3000);
                     Assert.areEqual('div', editor2._configs.element.value.tagName.toLowerCase(), 'Editor failed to render with HTML element (non TEXTAREA) passed to constructor');
                 }
+
             })); 
             Tool.TestRunner.add(Suite);
 

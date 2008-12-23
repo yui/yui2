@@ -245,6 +245,12 @@ var Dom = YAHOO.util.Dom,
         */
         STR_LINK_TITLE: 'Description',
         /**
+        * @property STR_NONE
+        * @description The string for the word none.
+        * @type String
+        */
+        STR_NONE: 'none',
+        /**
         * @protected
         * @property CLASS_LOCAL_FILE
         * @description CSS class applied to an element when it's found to have a local url.
@@ -591,6 +597,7 @@ var Dom = YAHOO.util.Dom,
                 unlink.title = this.STR_LINK_PROP_REMOVE;
                 Event.on(unlink, 'click', function(ev) {
                     Event.stopEvent(ev);
+                    this.unsubscribeAll('afterExecCommand');
                     this.execCommand('unlink');
                     this.closeWindow();
                 }, this, true);
@@ -600,6 +607,9 @@ var Dom = YAHOO.util.Dom,
                 this._windows.createlink = {};
                 this._windows.createlink.body = body;
                 body.style.display = 'none';
+                Event.on(body, 'keyup', function(e) {
+                    Event.stopPropagation(e);
+                });
                 this.get('panel').editor_form.appendChild(body);
                 this.fireEvent('windowCreateLinkRender', { type: 'windowCreateLinkRender', panel: this.get('panel'), body: body });
                 return body;
@@ -1087,7 +1097,7 @@ var Dom = YAHOO.util.Dom,
                     btype = el.style.borderLeftStyle;
                 }
                 var bs_button = tbar.getButtonByValue('bordersize');
-                var bSizeStr = ((parseInt(bsize, 10) > 0) ? '' : 'none');
+                var bSizeStr = ((parseInt(bsize, 10) > 0) ? '' : this.STR_NONE);
                 bs_button.set('label', '<span class="yui-toolbar-bordersize-' + bsize + '">'+bSizeStr+'</span>');
                 this._updateMenuChecked('bordersize', bsize, tbar);
 
@@ -1237,6 +1247,18 @@ var Dom = YAHOO.util.Dom,
         * @return {<a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>}
         */
         _renderPanel: function() {
+            var panelEl = document.createElement('div');
+            Dom.addClass(panelEl, 'yui-editor-panel');
+            panelEl.id = this.get('id') + this.EDITOR_PANEL_ID;
+            panelEl.style.position = 'absolute';
+            panelEl.style.top = '-9999px';
+            panelEl.style.left = '-9999px';
+            document.body.appendChild(panelEl);
+            //TODO IE barfs on this..
+            //this.get('element_cont').insertBefore(panelEl, this.get('element_cont').get('firstChild'));
+
+                
+
             var panel = new YAHOO.widget.Overlay(this.get('id') + this.EDITOR_PANEL_ID, {
                     width: '300px',
                     iframe: true,
@@ -1247,9 +1269,9 @@ var Dom = YAHOO.util.Dom,
                 });
             this.set('panel', panel);
 
-            this.get('panel').setBody('---');
-            this.get('panel').setHeader(' ');
-            this.get('panel').setFooter(' ');
+            panel.setBody('---');
+            panel.setHeader(' ');
+            panel.setFooter(' ');
 
 
             var body = document.createElement('div');
@@ -1303,7 +1325,7 @@ var Dom = YAHOO.util.Dom,
             });
 
             var fireShowEvent = function() {
-                //panel.bringToTop();
+                panel.bringToTop();
             };
             panel.showEvent.subscribe(fireShowEvent, this, true);
             panel.renderEvent.subscribe(function() {
@@ -1313,16 +1335,10 @@ var Dom = YAHOO.util.Dom,
             }, this, true);
 
             if (this.DOMReady) {
-                this.get('panel').render(document.body);
-                //Render to the element_cont so we can skin it better
-                //this.get('panel').render(this.get('element_cont').get('element'));
-                Dom.addClass(this.get('panel').element, 'yui-editor-panel');
+                this.get('panel').render();
             } else {
                 Event.onDOMReady(function() {
-                    this.get('panel').render(document.body);
-                    //Render to the element_cont so we can skin it better
-                    //this.get('panel').render(this.get('element_cont').get('element'));
-                    Dom.addClass(this.get('panel').element, 'yui-editor-panel');
+                    this.get('panel').render();
                 }, this, true);
             }
             this.get('panel').showEvent.subscribe(function() {
@@ -1336,6 +1352,7 @@ var Dom = YAHOO.util.Dom,
         * @description Opens a new "window/panel"
         */
         openWindow: function(win) {
+            
             YAHOO.log('openWindow: ' + win.name, 'info', 'Editor');
             var self = this;
             window.setTimeout(function() {
@@ -1555,7 +1572,6 @@ var Dom = YAHOO.util.Dom,
         */
         closeWindow: function(keepOpen) {
             YAHOO.log('closeWindow: ' + this.currentWindow.name, 'info', 'Editor');
-            //YAHOO.widget.EditorInfo.window = {};
             this.fireEvent('window' + this.currentWindow.name + 'Close', { type: 'window' + this.currentWindow.name + 'Close', win: this.currentWindow, el: this.currentElement[0] });
             this.fireEvent('closeWindow', { type: 'closeWindow', win: this.currentWindow });
             this.currentWindow = null;
@@ -1632,7 +1648,7 @@ var Dom = YAHOO.util.Dom,
             if (this.browser.ie) {
                 action = 'formatblock';
             }
-            if (value == 'none') {
+            if (value == this.STR_NONE) {
                 if ((_sel && _sel.tagName && (_sel.tagName.toLowerCase().substring(0,1) == 'h')) || (_sel && _sel.parentNode && _sel.parentNode.tagName && (_sel.parentNode.tagName.toLowerCase().substring(0,1) == 'h'))) {
                     if (_sel.parentNode.tagName.toLowerCase().substring(0,1) == 'h') {
                         _sel = _sel.parentNode;
