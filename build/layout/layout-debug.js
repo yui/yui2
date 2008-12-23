@@ -935,6 +935,9 @@
                 var b = this._getBorderSizes(el);
                 w = (w - (b[1] + b[3]));
                 w = this._fixQuirks(el, w, 'w');
+                if (w < 0) {
+                    w = 0;
+                }
                 Dom.setStyle(el, 'width', w + 'px');
             }
             return w;
@@ -952,6 +955,9 @@
                 var b = this._getBorderSizes(el);
                 h = (h - (b[0] + b[2]));
                 h = this._fixQuirks(el, h, 'h');
+                if (h < 0) {
+                    h = 0;
+                }
                 Dom.setStyle(el, 'height', h + 'px');
             }
             return h;
@@ -1565,6 +1571,9 @@
                 validator: Lang.isNumber,
                 method: function(h) {
                     if (!this._collapsing) {
+                        if (h < 0) {
+                            h = 0;
+                        }
                         this.setStyle('height', h + 'px');
                     }
                 }
@@ -1580,6 +1589,9 @@
                 validator: Lang.isNumber,
                 method: function(w) {
                     if (!this._collapsing) {
+                        if (w < 0) {
+                            w = 0;
+                        }
                         this.setStyle('width', w + 'px');
                     }
                 }
