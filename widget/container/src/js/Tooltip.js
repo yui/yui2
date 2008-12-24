@@ -765,7 +765,7 @@
                     addShadowVisibleClass.call(this);
 
                     this.subscribe("beforeShow", addShadowVisibleClass);
-                    this.subscribe("beforeHide", removeShadowVisibleClass);
+                    this.subscribe("hide", removeShadowVisibleClass);
 
                     if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
                         window.setTimeout(function () { 
