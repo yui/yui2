@@ -3233,19 +3233,21 @@ var Dom = YAHOO.util.Dom,
                 if (this.browser.gecko) {
                     //Added in 2.6.0
                     if (range.startContainer) {
-                        check = false;
                         if (range.startContainer.nodeType === 3) {
                             elm = range.startContainer.parentNode;
                         } else if (range.startContainer.nodeType === 1) {
                             elm = range.startContainer;
-                        } else {
-                            check = true;
                         }
-                        if (!check) {
-                            this.currentEvent = null;
+                        //Added in 2.7.0
+                        if (this.currentEvent) {
+                            var tar = Event.getTarget(this.currentEvent);
+                            if (elm !== tar) {
+                                elm = tar;
+                            }
                         }
                     }
                 }
+                
                 if (check) {
                     if (sel.anchorNode && (sel.anchorNode.nodeType == 3)) {
                         if (sel.anchorNode.parentNode) { //next check parentNode
@@ -5068,6 +5070,17 @@ var Dom = YAHOO.util.Dom,
                 writeOnce: true,
                 value: attr.resize || false
             });
+
+            /**
+            * @config filterWord
+            * @description Attempt to filter out MS Word HTML from the Editor's output.
+            * @type Boolean
+            */
+            this.setAttributeConfig('filterWord', {
+                value: attr.filterWord || false,
+                validator: YAHOO.lang.isBoolean
+            });
+
         },
         /**
         * @private
@@ -6369,6 +6382,9 @@ var Dom = YAHOO.util.Dom,
             //Make some backups...
             html = this.pre_filter_linebreaks(html, markup);
 
+            //Filter MS Word
+            html = this.filter_msword(html);
+
 		    html = html.replace(/<img([^>]*)\/>/gi, '<YUI_IMG$1>');
 		    html = html.replace(/<img([^>]*)>/gi, '<YUI_IMG$1>');
 
@@ -6397,6 +6413,12 @@ var Dom = YAHOO.util.Dom,
             
             
             //Case Changing
+            if (this.browser.ie) {
+                html = html.replace(/text-decoration/gi, 'text-decoration');
+                html = html.replace(/font-weight/gi, 'font-weight');
+                html = html.replace(/_width="([^>]*)"/gi, '');
+                html = html.replace(/_height="([^>]*)"/gi, '');
+            }
 		    html = html.replace(/<font/gi, '<font');
 		    html = html.replace(/<\/font>/gi, '</font>');
 		    html = html.replace(/<span/gi, '<span');
@@ -6458,7 +6480,7 @@ var Dom = YAHOO.util.Dom,
             //This should fix &amp;s in URL's
             html = html.replace(' &amp; ', 'YUI_AMP');
             html = html.replace('&amp;', '&');
-            html = html.replace('YUI_AMP', '&amp;');
+            html = html.replace('YUI_AMP', ' &amp; ');
 
             //Trim the output, removing whitespace from the beginning and end
             html = YAHOO.lang.trim(html);
@@ -6489,6 +6511,50 @@ var Dom = YAHOO.util.Dom,
 
             this.fireEvent('cleanHTML', { type: 'cleanHTML', target: this, html: html });
 
+            return html;
+        },
+        /**
+        * @method filter_msword
+        * @param String html The HTML string to filter
+        * @description Filters out msword html attributes and other junk. Activate with filterWord: true in config
+        */
+        filter_msword: function(html) {
+            if (!this.get('filterWord')) {
+                return html;
+            }
+            //Remove the ms o: tags
+            html = html.replace(/<o:p>\s*<\/o:p>/g, '');
+            html = html.replace(/<o:p>[\s\S]*?<\/o:p>/g, '&nbsp;');
+
+            //Remove the ms w: tags
+            html = html.replace( /<w:[^>]*>[\s\S]*?<\/w:[^>]*>/gi, '');
+
+            //Remove mso-? styles.
+            html = html.replace( /\s*mso-[^:]+:[^;"]+;?/gi, '');
+
+            //Remove more bogus MS styles.
+            html = html.replace( /\s*MARGIN: 0cm 0cm 0pt\s*;/gi, '');
+            html = html.replace( /\s*MARGIN: 0cm 0cm 0pt\s*"/gi, "\"");
+            html = html.replace( /\s*TEXT-INDENT: 0cm\s*;/gi, '');
+            html = html.replace( /\s*TEXT-INDENT: 0cm\s*"/gi, "\"");
+            html = html.replace( /\s*PAGE-BREAK-BEFORE: [^\s;]+;?"/gi, "\"");
+            html = html.replace( /\s*FONT-VARIANT: [^\s;]+;?"/gi, "\"" );
+            html = html.replace( /\s*tab-stops:[^;"]*;?/gi, '');
+            html = html.replace( /\s*tab-stops:[^"]*/gi, '');
+
+            //Remove XML declarations
+            html = html.replace(/<\\?\?xml[^>]*>/gi, '');
+
+            //Remove lang
+            html = html.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi, "<$1$3");
+
+            //Remove language tags
+            html = html.replace( /<(\w[^>]*) language=([^ |>]*)([^>]*)/gi, "<$1$3");
+
+            //Remove onmouseover and onmouseout events (from MS Word comments effect)
+            html = html.replace( /<(\w[^>]*) onmouseover="([^\"]*)"([^>]*)/gi, "<$1$3");
+            html = html.replace( /<(\w[^>]*) onmouseout="([^\"]*)"([^>]*)/gi, "<$1$3");
+            
             return html;
         },
         /**
@@ -6568,8 +6634,6 @@ var Dom = YAHOO.util.Dom,
             if (this.browser.ie) {
 		        html = html.replace(/ class= /gi, '');
 		        html = html.replace(/ class= >/gi, '');
-		        html = html.replace(/_height="([^>])"/gi, '');
-		        html = html.replace(/_width="([^>])"/gi, '');
             }
             
             return html;
@@ -6874,71 +6938,76 @@ var Dom = YAHOO.util.Dom,
 */
 
 
+YAHOO.widget.EditorFilters = {
+    HTML: function() {
+    }
+};
+
+/**
+ * @description Singleton object used to track the open window objects and panels across the various open editors
+ * @class EditorInfo
+ * @static
+*/
+YAHOO.widget.EditorInfo = {
     /**
-     * @description Singleton object used to track the open window objects and panels across the various open editors
-     * @class EditorInfo
-     * @static
+    * @private
+    * @property _instances
+    * @description A reference to all editors on the page.
+    * @type Object
     */
-    YAHOO.widget.EditorInfo = {
-        /**
-        * @private
-        * @property _instances
-        * @description A reference to all editors on the page.
-        * @type Object
-        */
-        _instances: {},
-        /**
-        * @private
-        * @property blankImage
-        * @description A reference to the blankImage url
-        * @type String 
-        */
-        blankImage: '',
-        /**
-        * @private
-        * @property window
-        * @description A reference to the currently open window object in any editor on the page.
-        * @type Object <a href="YAHOO.widget.EditorWindow.html">YAHOO.widget.EditorWindow</a>
-        */
-        window: {},
-        /**
-        * @private
-        * @property panel
-        * @description A reference to the currently open panel in any editor on the page.
-        * @type Object <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>
-        */
-        panel: null,
-        /**
-        * @method getEditorById
-        * @description Returns a reference to the Editor object associated with the given textarea
-        * @param {String/HTMLElement} id The id or reference of the textarea to return the Editor instance of
-        * @return Object <a href="YAHOO.widget.Editor.html">YAHOO.widget.Editor</a>
-        */
-        getEditorById: function(id) {
-            if (!YAHOO.lang.isString(id)) {
-                //Not a string, assume a node Reference
-                id = id.id;
-            }
-            if (this._instances[id]) {
-                return this._instances[id];
-            }
-            return false;
-        },
-        /**
-        * @method toString
-        * @description Returns a string representing the EditorInfo.
-        * @return {String}
-        */
-        toString: function() {
-            var len = 0;
-            for (var i in this._instances) {
-                if (Lang.hasOwnProperty(this._instances, i)) {
-                    len++;
-                }
-            }
-            return 'Editor Info (' + len + ' registered intance' + ((len > 1) ? 's' : '') + ')';
+    _instances: {},
+    /**
+    * @private
+    * @property blankImage
+    * @description A reference to the blankImage url
+    * @type String 
+    */
+    blankImage: '',
+    /**
+    * @private
+    * @property window
+    * @description A reference to the currently open window object in any editor on the page.
+    * @type Object <a href="YAHOO.widget.EditorWindow.html">YAHOO.widget.EditorWindow</a>
+    */
+    window: {},
+    /**
+    * @private
+    * @property panel
+    * @description A reference to the currently open panel in any editor on the page.
+    * @type Object <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>
+    */
+    panel: null,
+    /**
+    * @method getEditorById
+    * @description Returns a reference to the Editor object associated with the given textarea
+    * @param {String/HTMLElement} id The id or reference of the textarea to return the Editor instance of
+    * @return Object <a href="YAHOO.widget.Editor.html">YAHOO.widget.Editor</a>
+    */
+    getEditorById: function(id) {
+        if (!YAHOO.lang.isString(id)) {
+            //Not a string, assume a node Reference
+            id = id.id;
         }
-    };
+        if (this._instances[id]) {
+            return this._instances[id];
+        }
+        return false;
+    },
+    /**
+    * @method toString
+    * @description Returns a string representing the EditorInfo.
+    * @return {String}
+    */
+    toString: function() {
+        var len = 0;
+        for (var i in this._instances) {
+            if (Lang.hasOwnProperty(this._instances, i)) {
+                len++;
+            }
+        }
+        return 'Editor Info (' + len + ' registered intance' + ((len > 1) ? 's' : '') + ')';
+    }
+};
 
 
 

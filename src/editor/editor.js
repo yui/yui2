@@ -606,7 +606,7 @@ var Dom = YAHOO.util.Dom,
                 
                 this._windows.createlink = {};
                 this._windows.createlink.body = body;
-                body.style.display = 'none';
+                //body.style.display = 'none';
                 Event.on(body, 'keyup', function(e) {
                     Event.stopPropagation(e);
                 });
@@ -996,7 +996,7 @@ var Dom = YAHOO.util.Dom,
 
                 this._windows.insertimage = {};
                 this._windows.insertimage.body = body;
-                body.style.display = 'none';
+                //body.style.display = 'none';
                 this.get('panel').editor_form.appendChild(body);
                 this.fireEvent('windowInsertImageRender', { type: 'windowInsertImageRender', panel: this.get('panel'), body: body, toolbar: tbar });
                 return body;
@@ -1014,6 +1014,7 @@ var Dom = YAHOO.util.Dom,
                 }
             }
             this.on('afterExecCommand', function() {
+                YAHOO.log('afterExecCommand :: _handleInsertImageClick', 'info', 'Editor');
                 var el = this.currentElement[0],
                     body = null,
                     link = '',
@@ -1088,21 +1089,22 @@ var Dom = YAHOO.util.Dom,
                 tbar.editor_el = el;
                 
 
-                var bsize = '0';
-                var btype = 'solid';
+                var bsize = '0',
+                    btype = 'solid';
+
                 if (el.style.borderLeftWidth) {
                     bsize = parseInt(el.style.borderLeftWidth, 10);
                 }
                 if (el.style.borderLeftStyle) {
                     btype = el.style.borderLeftStyle;
                 }
-                var bs_button = tbar.getButtonByValue('bordersize');
-                var bSizeStr = ((parseInt(bsize, 10) > 0) ? '' : this.STR_NONE);
-                bs_button.set('label', '<span class="yui-toolbar-bordersize-' + bsize + '">'+bSizeStr+'</span>');
+                var bs_button = tbar.getButtonByValue('bordersize'),
+                    bSizeStr = ((parseInt(bsize, 10) > 0) ? '' : this.STR_NONE);
+                bs_button.set('label', '<span class="yui-toolbar-bordersize-' + bsize + '">' + bSizeStr + '</span>');
                 this._updateMenuChecked('bordersize', bsize, tbar);
 
                 var bt_button = tbar.getButtonByValue('bordertype');
-                bt_button.set('label', '<span class="yui-toolbar-bordertype-' + btype + '"></span>');
+                bt_button.set('label', '<span class="yui-toolbar-bordertype-' + btype + '">asdfa</span>');
                 this._updateMenuChecked('bordertype', btype, tbar);
                 if (parseInt(bsize, 10) > 0) {
                     tbar.enableButton(bt_button);
@@ -1118,7 +1120,7 @@ var Dom = YAHOO.util.Dom,
                     tbar.selectButton('inline');
                 }
                 if (parseInt(el.style.marginLeft, 10) > 0) {
-                     tbar.getButtonByValue('padding').set('label', ''+parseInt(el.style.marginLeft, 10));
+                    tbar.getButtonByValue('padding').set('label', ''+parseInt(el.style.marginLeft, 10));
                 }
                 if (el.style.borderSize) {
                     tbar.selectButton('bordersize');
@@ -1147,7 +1149,6 @@ var Dom = YAHOO.util.Dom,
                 if ((height != oheight) || (width != owidth)) {
                     var s = document.createElement('span');
                     s.className = 'info';
-                    //s.innerHTML = this.STR_IMAGE_ORIG_SIZE + '<br>'+ owidth +' x ' + oheight;
                     s.innerHTML = this.STR_IMAGE_ORIG_SIZE + ': ('+ owidth +' x ' + oheight + ')';
                     if (Dom.get(this.get('id') + '_insertimage_height').nextSibling) {
                         var old = Dom.get(this.get('id') + '_insertimage_height').nextSibling;
@@ -1255,7 +1256,7 @@ var Dom = YAHOO.util.Dom,
             panelEl.style.left = '-9999px';
             document.body.appendChild(panelEl);
             //TODO IE barfs on this..
-            //this.get('element_cont').insertBefore(panelEl, this.get('element_cont').get('firstChild'));
+            this.get('element_cont').insertBefore(panelEl, this.get('element_cont').get('firstChild'));
 
                 
 
@@ -1288,13 +1289,9 @@ var Dom = YAHOO.util.Dom,
             _note.className = 'yui-editor-skipheader';
             _note.innerHTML = this.STR_CLOSE_WINDOW_NOTE;
             body.appendChild(_note);
-            var form = document.createElement('form');
-            form.setAttribute('method', 'GET');
+            var form = document.createElement('fieldset');
             panel.editor_form = form;
 
-            Event.on(form, 'submit', function(ev) {
-                Event.stopEvent(ev);
-            }, this, true);
             body.appendChild(form);
             var _close = document.createElement('span');
             _close.innerHTML = 'X';
@@ -1326,12 +1323,18 @@ var Dom = YAHOO.util.Dom,
 
             var fireShowEvent = function() {
                 panel.bringToTop();
+                YAHOO.util.Dom.setStyle(this.element, 'display', 'block');
+                this._handleWindowInputs(false);
             };
             panel.showEvent.subscribe(fireShowEvent, this, true);
+            panel.hideEvent.subscribe(function() {
+                this._handleWindowInputs(true);
+            }, this, true);
             panel.renderEvent.subscribe(function() {
                 this._renderInsertImageWindow();
                 this._renderCreateLinkWindow();
                 this.fireEvent('windowRender', { type: 'windowRender', panel: panel });
+                this._handleWindowInputs(true);
             }, this, true);
 
             if (this.DOMReady) {
@@ -1341,10 +1344,23 @@ var Dom = YAHOO.util.Dom,
                     this.get('panel').render();
                 }, this, true);
             }
-            this.get('panel').showEvent.subscribe(function() {
-                YAHOO.util.Dom.setStyle(this.element, 'display', 'block');
-            });
             return this.get('panel');
+        },
+        /**
+        * @method _handleWindowInputs
+        * @param {Boolean} disable The state to set all inputs in all Editor windows to. Defaults to: false.
+        * @description Disables/Enables all fields inside Editor windows. Used in show/hide events to keep window fields from submitting when the parent form is submitted.
+        */
+        _handleWindowInputs: function(disable) {
+            if (!Lang.isBoolean(disable)) {
+                disable = false;
+            }
+            var inputs = this.get('panel').element.getElementsByTagName('input');
+            for (var i = 0; i < inputs.length; i++) {
+                try {
+                    inputs[i].disabled = disable;
+                } catch (e) {}
+            }
         },
         /**
         * @method openWindow
@@ -1364,7 +1380,6 @@ var Dom = YAHOO.util.Dom,
                 this.closeWindow();
             }
             
-
             var xy = Dom.getXY(this.currentElement[0]),
             elXY = Dom.getXY(this.get('iframe').get('element')),
             panel = this.get('panel'),
