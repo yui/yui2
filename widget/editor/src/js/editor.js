@@ -155,12 +155,6 @@ var Dom = YAHOO.util.Dom,
         */
         STR_IMAGE_PROP_TITLE: 'Image Options',
         /**
-        * @property STR_IMAGE_URL
-        * @description The label string for Image URL
-        * @type String
-        */
-        STR_IMAGE_URL: 'Image URL',
-        /**
         * @property STR_IMAGE_TITLE
         * @description The label string for Image Description
         * @type String

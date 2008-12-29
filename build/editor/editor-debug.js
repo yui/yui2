@@ -4424,6 +4424,12 @@ var Dom = YAHOO.util.Dom,
         */
         STR_IMAGE_HERE: 'Image URL Here',
         /**
+        * @property STR_IMAGE_URL
+        * @description The label string for Image URL
+        * @type String
+        */
+        STR_IMAGE_URL: 'Image URL',        
+        /**
         * @property STR_LINK_URL
         * @description The label string for the Link URL.
         * @type String
@@ -5412,7 +5418,7 @@ var Dom = YAHOO.util.Dom,
             }
         
             this.toolbar.set('disabled', true); //Disable the toolbar when the prompt is showing
-            this.on('afterExecCommand', function() {
+            var _handleAEC = function() {
                 var el = this.currentElement[0],
                     src = 'http://';
                 if (!el) {
@@ -5426,17 +5432,26 @@ var Dom = YAHOO.util.Dom,
                         }
                     }
                 }
-                var str = prompt(this.STR_LINK_URL + ': ', src);
+                var str = prompt(this.STR_IMAGE_URL + ': ', src);
                 if ((str !== '') && (str !== null)) {
                     el.setAttribute('src', str);
-                } else if (str === null) {
+                } else if (str === '') {
                     el.parentNode.removeChild(el);
                     this.currentElement = [];
                     this.nodeChange();
+                } else if ((str === null)) {
+                    src = el.getAttribute('src', 2);
+                    if (src.indexOf(this.get('blankimage')) != -1) {
+                        el.parentNode.removeChild(el);
+                        this.currentElement = [];
+                        this.nodeChange();
+                    }
                 }
                 this.closeWindow();
                 this.toolbar.set('disabled', false);
-            }, this, true);
+                this.unsubscribe('afterExecCommand', _handleAEC, this, true);
+            };
+            this.on('afterExecCommand', _handleAEC, this, true);
         },
         /**
         * @private
@@ -5473,7 +5488,7 @@ var Dom = YAHOO.util.Dom,
         
             this.toolbar.set('disabled', true); //Disable the toolbar when the prompt is showing
 
-            this.on('afterExecCommand', function() {
+            var _handleAEC = function() {
                 var el = this.currentElement[0],
                     url = '';
 
@@ -5505,7 +5520,9 @@ var Dom = YAHOO.util.Dom,
                 }
                 this.closeWindow();
                 this.toolbar.set('disabled', false);
-            }, this);
+                this.unsubscribe('afterExecCommand', _handleAEC, this, true);
+            };
+            this.on('afterExecCommand', _handleAEC, this);
 
         },
         /**
@@ -5946,6 +5963,17 @@ var Dom = YAHOO.util.Dom,
                             this.currentElement[li].parentNode.removeChild(this.currentElement[li]);
                         }
                     }
+                    
+                    var items = list.firstChild.innerHTML.split('<br>');
+                    if (items.length > 0) {
+                        list.innerHTML = '';
+                        for (var i = 0; i < items.length; i++) {
+                            var item = this._getDoc().createElement('li');
+                            item.innerHTML = items[i];
+                            list.appendChild(item);
+                        }
+                    }
+
                     this.currentElement[0].parentNode.replaceChild(list, this.currentElement[0]);
                     this.currentElement[0] = list;
                     var _h = this.currentElement[0].firstChild;
@@ -7252,12 +7280,6 @@ var Dom = YAHOO.util.Dom,
         * @type String
         */
         STR_IMAGE_PROP_TITLE: 'Image Options',
-        /**
-        * @property STR_IMAGE_URL
-        * @description The label string for Image URL
-        * @type String
-        */
-        STR_IMAGE_URL: 'Image URL',
         /**
         * @property STR_IMAGE_TITLE
         * @description The label string for Image Description
