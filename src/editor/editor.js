@@ -1489,15 +1489,13 @@ var Dom = YAHOO.util.Dom,
             } catch (e) {}
 
 
-            if (this.get('autoHeight') === false) {
-                var iTop = elXY[1] + parseInt(this.get('height'), 10);
-                var iLeft = elXY[0] + parseInt(this.get('width'), 10);
-                if (newXY[1] > iTop) {
-                    newXY[1] = iTop;
-                }
-                if (newXY[0] > iLeft) {
-                    newXY[0] = (iLeft / 2);
-                }
+            var iTop = elXY[1] + parseInt(this.get('height'), 10);
+            var iLeft = elXY[0] + parseInt(this.get('width'), 10);
+            if (newXY[1] > iTop) {
+                newXY[1] = iTop;
+            }
+            if (newXY[0] > iLeft) {
+                newXY[0] = (iLeft / 2);
             }
             
             //Convert negative numbers to positive so we can get the difference in distance

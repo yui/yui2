@@ -903,6 +903,11 @@ var Dom = YAHOO.util.Dom,
             Event.on(doc, 'keypress', this._handleKeyPress, this, true);
             Event.on(doc, 'keyup', this._handleKeyUp, this, true);
             Event.on(doc, 'keydown', this._handleKeyDown, this, true);
+            /* TODO -- Everyone but Opera works here..
+            Event.on(doc, 'paste', function() {
+                YAHOO.log('PASTE', 'info', 'SimpleEditor');
+            }, this, true);
+            */
  
             //Focus and blur..
             Event.on(win, 'focus', this._handleFocus, this, true);
@@ -1033,6 +1038,11 @@ var Dom = YAHOO.util.Dom,
 
             var value = ((this._textarea) ? this.get('element').value : this.get('element').innerHTML),
                 doc = null;
+
+            if ((value === '') && this.browser.gecko) {
+                //It seems that Gecko doesn't like an empty body so we have to give it something..
+                value = '<br>';
+            }
 
             var html = Lang.substitute(this.get('html'), {
                 TITLE: this.STR_TITLE,
@@ -3090,7 +3100,10 @@ var Dom = YAHOO.util.Dom,
                 newHeight = parseInt(this.get('height'), 10);
             }
             if ((height != newHeight) && (newHeight >= parseInt(this.get('height'), 10))) {   
-                Dom.setStyle(this.get('editor_wrapper'), 'height', newHeight + 'px');
+                var anim = this.get('animate');
+                this.set('animate', false);
+                this.set('height', newHeight + 'px');
+                this.set('animate', anim);
                 if (this.browser.ie) {
                     //Internet Explorer needs this
                     this.get('iframe').setStyle('height', '99%');
