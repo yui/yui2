@@ -5926,6 +5926,12 @@ var Dom = YAHOO.util.Dom,
             var el = this._getSelectedElement(), _a = null;
             if (this._hasParent(el, 'a')) {
                 this.currentElement[0] = this._hasParent(el, 'a');
+            } else if (this._isElement(el, 'li')) {
+                _a = this._getDoc().createElement('a');
+                _a.innerHTML = el.innerHTML;
+                el.innerHTML = '';
+                el.appendChild(_a);
+                this.currentElement[0] = _a;
             } else if (!this._isElement(el, 'a')) {
                 this._createCurrentElement('a');
                 _a = this._swapEl(this.currentElement[0], 'a');
