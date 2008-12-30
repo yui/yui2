@@ -2392,7 +2392,7 @@ var Dom = YAHOO.util.Dom,
         * @description The default CSS used in the config for 'css'. This way you can add to the config like this: { css: YAHOO.widget.SimpleEditor.prototype._defaultCSS + 'ADD MYY CSS HERE' }
         * @type String
         */
-        _defaultCSS: 'html { height: 95%; } body { padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a, a:visited, a:hover { color: blue !important; text-decoration: underline !important; cursor: text !important; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; } body.ptags.webkit div { margin: 11px 0; }',
+        _defaultCSS: 'html { height: 95%; } body { padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a, a:visited, a:hover { color: blue !important; text-decoration: underline !important; cursor: text !important; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; } body.ptags.webkit div.yui-wk-p { margin: 11px 0; } body.ptags.webkit div.yui-wk-div { margin: 0; }',
         /**
         * @property _defaultToolbar
         * @private
@@ -3045,6 +3045,12 @@ var Dom = YAHOO.util.Dom,
             Event.removeListener(win, 'focus', this._handleFocus, this, true);
             Event.removeListener(win, 'blur', this._handleBlur, this, true);
         },
+        _fixWebkitDivs: function() {
+            if (this.browser.webkit) {
+                var divs = this._getDoc().body.getElementsByTagName('div');
+                Dom.addClass(divs, 'yui-wk-div');
+            }
+        },
         /**
         * @private
         * @method _initEditor
@@ -3075,6 +3081,7 @@ var Dom = YAHOO.util.Dom,
             }
 
             this.fireEvent('editorContentLoaded', { type: 'editorLoaded', target: this });
+            this._fixWebkitDivs();
             if (this.get('dompath')) {
                 YAHOO.log('Delayed DomPath write', 'info', 'SimpleEditor');
                 var self = this;
@@ -3936,24 +3943,66 @@ var Dom = YAHOO.util.Dom,
                     }
                     break;
                 case 13:
+                    var p = null, i = 0;
                     if (this.get('ptags') && !ev.shiftKey) {
                         if (this.browser.gecko) {
                             tar = this._getSelectedElement();
                             if (!this._isElement(tar, 'li')) {
-                                doExec = true;
-                                action = 'insertparagraph';
+                                if (this._isElement(tar, 'p')) {
+                                    p = this._getDoc().createElement('p');
+                                    p.innerHTML = '&nbsp;';
+                                    Dom.insertAfter(p, tar);
+                                    this._selectNode(p.firstChild);
+                                } else if (this._isElement(tar, 'body')) {
+                                    this.execCommand('insertparagraph', null);
+                                    var ps = this._getDoc().body.getElementsByTagName('p');
+                                    for (i = 0; i < ps.length; i++) {
+                                        if (ps[i].getAttribute('_moz_dirty') !== null) {
+                                            p = this._getDoc().createElement('p');
+                                            p.innerHTML = '&nbsp;';
+                                            Dom.insertAfter(p, ps[i]);
+                                            this._selectNode(p.firstChild);
+                                            ps[i].removeAttribute('_moz_dirty');
+                                        }
+                                    }
+                                } else {
+                                    YAHOO.log('Something went wrong with paragraphs, please file a bug!!', 'error', 'SimpleEditor');
+                                    doExec = true;
+                                    action = 'insertparagraph';
+                                }
                                 Event.stopEvent(ev);
                             }
                         }
                         if (this.browser.webkit) {
                             tar = this._getSelectedElement();
                             if (!this._hasParent(tar, 'li')) {
-                                doExec = true;
-                                action = 'insertparagraph';
+                                this.execCommand('insertparagraph', null);
+                                var divs = this._getDoc().body.getElementsByTagName('div');
+                                for (i = 0; i < divs.length; i++) {
+                                    if (!Dom.hasClass(divs[i], 'yui-wk-div')) {
+                                        Dom.addClass(divs[i], 'yui-wk-p');
+                                    }
+                                }
                                 Event.stopEvent(ev);
                             }
                         }
                     } else {
+                        if (this.browser.webkit) {
+                            tar = this._getSelectedElement();
+                            if (!this._hasParent(tar, 'li')) {
+                                this.execCommand('inserthtml', '<var id="yui-br">BR</var>');
+                                var holder = this._getDoc().getElementById('yui-br'),
+                                    br = this._getDoc().createElement('br'),
+                                    caret = this._getDoc().createElement('span');
+
+                                holder.parentNode.replaceChild(br, holder);
+                                caret.className = 'yui-non';
+                                caret.innerHTML = '&nbsp;';
+                                Dom.insertAfter(caret, br);
+                                this._selectNode(caret);
+                                Event.stopEvent(ev);
+                            }
+                        }
                         if (this.browser.ie) {
                             YAHOO.log('Stopping P tags', 'info', 'SimpleEditor');
                             //Insert a <br> instead of a <p></p> in Internet Explorer
@@ -6462,6 +6511,7 @@ var Dom = YAHOO.util.Dom,
 
             html = html.replace(/<em([^>]*)>/gi, '<i$1>');
             html = html.replace(/<\/em>/gi, '</i>');
+            html = html.replace(/_moz_dirty=""/gi, '');
             
             //Put embed tags back in..
             html = html.replace(/<YUI_EMBED([^>]*)>/gi, '<embed$1>');
@@ -6525,6 +6575,8 @@ var Dom = YAHOO.util.Dom,
                 html = html.replace(/<b(\s+[^>]*)?>/gi, '<strong$1>');
                 html = html.replace(/<\/b>/gi, '</strong>');
             }
+
+            html = html.replace(/_moz_dirty=""/gi, '');
 
             //normalize strikethrough
             html = html.replace(/<strike/gi, '<span style="text-decoration: line-through;"');
@@ -6710,6 +6762,10 @@ var Dom = YAHOO.util.Dom,
                 html = html.replace(/<span class="Apple-tab-span" style="white-space:pre">([^>])<\/span>/gi, '&nbsp;&nbsp;&nbsp;&nbsp;');
                 html = html.replace(/Apple-style-span/gi, '');
                 html = html.replace(/style="line-height: normal;"/gi, '');
+                html = html.replace(/yui-wk-div/gi, '');
+                html = html.replace(/yui-wk-p/gi, '');
+
+
                 //Remove bogus LI's
                 html = html.replace(/<li><\/li>/gi, '');
                 html = html.replace(/<li> <\/li>/gi, '');
