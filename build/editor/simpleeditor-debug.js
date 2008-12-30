@@ -6644,6 +6644,10 @@ var Dom = YAHOO.util.Dom,
                 html = html.replace(/font-weight/gi, 'font-weight');
                 html = html.replace(/_width="([^>]*)"/gi, '');
                 html = html.replace(/_height="([^>]*)"/gi, '');
+                //Cleanup Image URL's
+                var url = this._baseHREF.replace(/\//gi, '\\/'),
+                    re = new RegExp('src="' + url, 'gi');
+                html = html.replace(re, 'src="');
             }
 		    html = html.replace(/<font/gi, '<font');
 		    html = html.replace(/<\/font>/gi, '</font>');
