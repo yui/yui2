@@ -84,7 +84,8 @@ var Dom = YAHOO.util.Dom,
         oConfig.element.className = 'yui-button yui-' + oConfig.attributes.type + '-button';
         oConfig.element.innerHTML = '<span class="first-child"><a href="#">LABEL</a></span>';
         oConfig.element.firstChild.firstChild.tabIndex = '-1';
-        oConfig.attributes.id = Dom.generateId();
+        oConfig.attributes.id = (oConfig.attributes.id || Dom.generateId());
+        
 
         YAHOO.widget.ToolbarButton.superclass.constructor.call(this, oConfig.element, oConfig.attributes);
     };

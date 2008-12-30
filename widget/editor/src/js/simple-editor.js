@@ -4682,16 +4682,16 @@ var Dom = YAHOO.util.Dom,
 
             html = html.replace(/<\/li><ol>/gi, '</li><li><ol>');
             html = html.replace(/<\/ol>/gi, '</ol></li>');
-            html = html.replace(/<\/ol><\/li>\n/gi, "</ol>\n");
+            html = html.replace(/<\/ol><\/li>\n/gi, "</ol>");
 
             html = html.replace(/<\/li><ul>/gi, '</li><li><ul>');
             html = html.replace(/<\/ul>/gi, '</ul></li>');
-            html = html.replace(/<\/ul><\/li>\n?/gi, "</ul>\n");
+            html = html.replace(/<\/ul><\/li>\n?/gi, "</ul>");
 
-            html = html.replace(/<\/li>/gi, "</li>\n");
-            html = html.replace(/<\/ol>/gi, "</ol>\n");
-            html = html.replace(/<ol>/gi, "<ol>\n");
-            html = html.replace(/<ul>/gi, "<ul>\n");
+            html = html.replace(/<\/li>/gi, "</li>");
+            html = html.replace(/<\/ol>/gi, "</ol>");
+            html = html.replace(/<ol>/gi, "<ol>");
+            html = html.replace(/<ul>/gi, "<ul>");
             return html;
         },
         /**
@@ -4719,8 +4719,8 @@ var Dom = YAHOO.util.Dom,
 		            html = html.replace(/<div([^>]*)>/g, '<p$1>');
 				    html = html.replace(/<\/div>/gi, '</p>');
                 } else {
-                    html = html.replace(/<div>/gi, '');
-				    html = html.replace(/<\/div>/gi, '<br>');
+                    html = html.replace(/<div>/gi, '<br>');
+				    html = html.replace(/<\/div>/gi, '');
                 }
             }
             return html;
