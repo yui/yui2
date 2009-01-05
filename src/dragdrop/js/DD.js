@@ -89,6 +89,7 @@ YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop, {
         if (!this.deltaSetXY) {
             var aCoord = [oCoord.x, oCoord.y];
             YAHOO.util.Dom.setXY(el, aCoord);
+
             var newLeft = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
             var newTop  = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
 
