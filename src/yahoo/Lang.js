@@ -195,14 +195,14 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
         if (!s||!r) {
             throw new Error("Absorb failed, verify dependencies.");
         }
-        var a=arguments, i, p, override=a[2];
-        if (override && override!==true) { // only absorb the specified properties
+        var a=arguments, i, p, overrideList=a[2];
+        if (overrideList && overrideList!==true) { // only absorb the specified properties
             for (i=2; i<a.length; i=i+1) {
                 r[a[i]] = s[a[i]];
             }
         } else { // take everything, overwriting only if the third parameter is true
             for (p in s) { 
-                if (override || !(p in r)) {
+                if (overrideList || !(p in r)) {
                     r[p] = s[p];
                 }
             }
