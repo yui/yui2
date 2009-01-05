@@ -3,5 +3,4 @@
     <description>DragDrop Build File</description>
     <property file="build.properties" />
     <import file="${builddir}/2.x/bootstrap.xml" />
-    </target>
 </project>
