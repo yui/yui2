@@ -49,7 +49,10 @@
     WidgetName = "Carousel";
 
     /**
-     * The internal table of Carousel instances.
+     * The internal table of Carousel instances.  This table has two keys,
+     * viz., "object", and "rendered".  The "object" key holds the reference
+     * to the Carousel object and the "rendered" key indicates if the
+     * corresponding instance has been rendered or not.
      * @private
      * @static
      */
@@ -249,7 +252,17 @@
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
      */
-    stopAutoPlayEvent = "stopAutoPlay";
+    stopAutoPlayEvent = "stopAutoPlay",
+
+    /**
+     * @event uiUpdateEvent
+     * @description Fires when the UI has been updated.
+     * See
+     * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
+     * for more information on listening for this event.
+     * @type YAHOO.util.CustomEvent
+     */
+    uiUpdateEvent = "uiUpdate";
 
     /*
      * Private helper functions used by the Carousel component
@@ -593,8 +606,16 @@
         var attach   = false,
             cssClass = this.CLASSES,
             i,
+            me,
             navigation,
             sentinel;
+
+        me = this.get("element").id;
+
+        // Don't do anything if the Carousel is not rendered
+        if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
+            return;
+        }
 
         navigation = this.get("navigation");
         sentinel   = this._firstItem + this.get("numVisible");
@@ -681,6 +702,47 @@
             this._syncUiForLazyLoading(o);
             break;
         }
+
+        this.fireEvent(uiUpdateEvent);
+    }
+
+    /**
+     * Update the state variables after scrolling the Carousel view port.
+     *
+     * @method updateStateAfterScroll
+     * @param {Integer} item The index to which the Carousel has scrolled to.
+     * @param {Integer} sentinel The last element in the view port.
+     * @param {Boolean} dontSelect True if select should be avoided
+     * @private
+     */
+    function updateStateAfterScroll(item, sentinel, dontSelect) {
+        var carousel   = this,
+            page       = carousel.get("currentPage"),
+            newPage,
+            numPerPage = carousel.get("numVisible");
+
+        newPage = parseInt(carousel._firstItem / numPerPage, 10);
+        if (newPage != page) {
+            carousel.setAttributeConfig("currentPage", { value: newPage });
+            carousel.fireEvent(pageChangeEvent, newPage);
+        }
+
+        if (!dontSelect) {
+            if (carousel.get("selectOnScroll")) {
+                if (item != carousel._selectedItem) { // out of sync
+                    carousel.set("selectedItem",
+                                 carousel._getSelectedItem(item));
+                }
+            }
+        }
+
+        delete carousel._autoPlayTimer;
+        if (carousel.get("autoPlay") > 0) {
+            carousel.startAutoPlay();
+        }
+
+        carousel.fireEvent(afterScrollEvent,
+                           { first: item, last: sentinel }, carousel);
     }
 
     /*
@@ -695,7 +757,7 @@
      * @static
      */
     Carousel.getById = function (id) {
-        return instances[id] ? instances[id] : false;
+        return instances[id] ? instances[id].object : false;
     };
 
     YAHOO.extend(Carousel, YAHOO.util.Element, {
@@ -703,6 +765,14 @@
         /*
          * Internal variables used within the Carousel component
          */
+
+        /**
+         * The Animation object.
+         *
+         * @property _animObj
+         * @private
+         */
+        _animObj: null,
 
         /**
          * The Carousel element.
@@ -1189,15 +1259,23 @@
          * @public
          */
         focus: function () {
-            var selItem,
+            var first,
+                focusEl,
+                isSelectionInvisible,
+                itemsTable,
+                last,
+                me,
                 numVisible,
                 selectOnScroll,
                 selected,
-                first,
-                last,
-                isSelectionInvisible,
-                focusEl,
-                itemsTable;
+                selItem;
+
+            me = this.get("element").id;
+
+            // Don't do anything if the Carousel is not rendered
+            if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
+                return;
+            }
 
             if (this._isAnimationInProgress) {
                 // this messes up real bad!
@@ -1299,7 +1377,7 @@
             this._parseCarouselNavigation(el);
             this._navEl = this._setupCarouselNavigation();
 
-            instances[elId] = this;
+            instances[elId] = { object: this, rendered: false };
 
             loadItems.call(this);
         },
@@ -1511,29 +1589,28 @@
             carousel.on("keydown", carousel._keyboardEventHandler);
 
             carousel.on(afterScrollEvent, syncNavigation);
-            carousel.on(afterScrollEvent, carousel.focus);
 
             carousel.on(itemAddedEvent, syncUi);
-            carousel.on(itemAddedEvent, syncNavigation);
-            carousel.on(itemAddedEvent, carousel._syncPagerUi);
 
             carousel.on(itemRemovedEvent, syncUi);
-            carousel.on(itemRemovedEvent, syncNavigation);
-            carousel.on(itemRemovedEvent, carousel._syncPagerUi);
 
             carousel.on(itemSelectedEvent, carousel.focus);
 
             carousel.on(loadItemsEvent, syncUi);
 
-            carousel.on(pageChangeEvent, carousel._syncPagerUi);
-
-            carousel.on(renderEvent, syncNavigation);
-            carousel.on(renderEvent, carousel._syncPagerUi);
+            carousel.on(navigationStateChangeEvent, carousel.focus);
 
             carousel.on(noItemsEvent, function (ev) {
                 carousel.scrollTo(0);
                 syncNavigation.call(carousel);
                 carousel._syncPagerUi();
+            });
+
+            carousel.on(pageChangeEvent, carousel._syncPagerUi);
+
+            carousel.on(renderEvent, function (ev) {
+                syncNavigation.call(carousel, ev);
+                carousel._syncPagerUi(ev);
             });
 
             carousel.on("selectedItemChange", function (ev) {
@@ -1543,6 +1620,11 @@
                             carousel.getElementForItem(ev.newValue));
                 }
                 carousel.fireEvent(itemSelectedEvent, ev.newValue);
+            });
+
+            carousel.on(uiUpdateEvent, function (ev) {
+                syncNavigation.call(carousel, ev);
+                carousel._syncPagerUi(ev);
             });
 
             carousel.on("firstVisibleChange", function (ev) {
@@ -1555,12 +1637,13 @@
             });
 
             // Handle item selection on mouse click
-            carousel.on("click", carousel._itemClickHandler);
-
-            // Handle page navigation
-            carousel.on("click", carousel._pagerClickHandler);
+            carousel.on("click", function (ev) {
+                carousel._itemClickHandler(ev);
+                carousel._pagerClickHandler(ev);
+            });
 
             // Restore the focus on the navigation buttons
+
             Event.onFocus(carousel.get("element"), function (ev, obj) {
                 obj._updateNavButtons(Event.getTarget(ev), true);
             }, carousel);
@@ -1737,8 +1820,6 @@
                 this.addClass(cssClass.HORIZONTAL);
             }
 
-            this.fireEvent(renderEvent);
-
             // By now, the navigation would have been rendered, so calculate
             // the container height now.
             if (this.get("numItems") < 1) {
@@ -1747,6 +1828,9 @@
                 // Make sure at least one item is selected
                 this.set("selectedItem", this.get("firstVisible"));
             }
+
+            instances[this.get("element").id].rendered = true;
+            this.fireEvent(renderEvent);
 
             return true;
         },
@@ -1800,15 +1884,12 @@
          * @param dontSelect Boolean True if select should be avoided
          */
         scrollTo: function (item, dontSelect) {
-            var anim,
-                animate,
-                animAttrs,
+            var animate,
                 animCfg    = this.get("animation"),
                 isCircular = this.get("isCircular"),
                 delta,
                 direction,
                 firstItem  = this._firstItem,
-                newPage,
                 numItems   = this.get("numItems"),
                 numPerPage = this.get("numVisible"),
                 offset,
@@ -1865,50 +1946,11 @@
             animate   = animCfg.speed > 0;
 
             if (animate) {
-                // TODO: move this to _animateAndSetCarouselOffset()
-                this._isAnimationInProgress = true;
-                if (this.get("isVertical")) {
-                    animAttrs = { points: { by: [0, offset] } };
-                } else {
-                    animAttrs = { points: { by: [offset, 0] } };
-                }
-                anim = new YAHOO.util.Motion(this._carouselEl, animAttrs,
-                        animCfg.speed, animCfg.effect);
-                anim.onComplete.subscribe(function (ev) {
-                    var first = this.get("firstVisible");
-
-                    this._isAnimationInProgress = false;
-                    this.fireEvent(afterScrollEvent,
-                            { first: first, last: sentinel });
-                }, null, this);
-                anim.animate();
-                anim = null;
+                this._animateAndSetCarouselOffset(offset, item, sentinel,
+                        dontSelect);
             } else {
                 this._setCarouselOffset(offset);
-            }
-
-            newPage = parseInt(this._firstItem / numPerPage, 10);
-            if (newPage != page) {
-                this.setAttributeConfig("currentPage", { value: newPage });
-                this.fireEvent(pageChangeEvent, newPage);
-            }
-
-            if (!dontSelect) {
-                if (this.get("selectOnScroll")) {
-                    if (item != this._selectedItem) { // out of sync
-                        this.set("selectedItem", this._getSelectedItem(item));
-                    }
-                }
-            }
-
-            delete this._autoPlayTimer;
-            if (this.get("autoPlay") > 0) {
-                this.startAutoPlay();
-            }
-
-            if (!animate) {
-                this.fireEvent(afterScrollEvent,
-                        { first: item, last: sentinel });
+                updateStateAfterScroll.call(this, item, sentinel, dontSelect);
             }
         },
 
@@ -1976,6 +2018,54 @@
         /*
          * Protected methods of the Carousel component
          */
+
+        /**
+         * Set the Carousel offset to the passed offset after animating.
+         *
+         * @method _animateAndSetCarouselOffset
+         * @param {Integer} offset The offset to which the Carousel has to be
+         * scrolled to.
+         * @param {Integer} item The index to which the Carousel will scroll.
+         * @param {Integer} sentinel The last element in the view port.
+         * @param {Boolean} dontSelect True if select should be avoided
+         * @protected
+         */
+        _animateAndSetCarouselOffset: function (offset, item, sentinel,
+                dontSelect) {
+            var animCfg = this.get("animation"),
+                animObj = null;
+
+            if (this.get("isVertical")) {
+                animObj = new YAHOO.util.Motion(this._carouselEl,
+                        { points: { by: [0, offset] } },
+                        animCfg.speed, animCfg.effect);
+            } else {
+                animObj = new YAHOO.util.Motion(this._carouselEl,
+                        { points: { by: [offset, 0] } },
+                        animCfg.speed, animCfg.effect);
+            }
+
+            this._isAnimationInProgress = true;
+            animObj.onComplete.subscribe(this._animationCompleteHandler, {
+                    scope: this, first: item, last: sentinel,
+                    dontSelect: dontSelect
+            });
+            animObj.animate();
+        },
+
+        /**
+         * Handle the animation complete event.
+         *
+         * @method _animationCompleteHandler
+         * @param {Event} ev The event.
+         * @param {Array} p The event parameters.
+         * @param {Object} o The object that has the state of the Carousel
+         * @protected
+         */
+        _animationCompleteHandler: function (ev, p, o) {
+            o.scope._isAnimationInProgress = false;
+            updateStateAfterScroll.call(o.scope,o.first,o.last,o.dontSelect);
+        },
 
         /**
          * Create the Carousel.
@@ -2768,8 +2858,18 @@
                 cssClass = this.CLASSES,
                 i,
                 markup     = "",
+                me,
                 numPages,
-                numVisible = this.get("numVisible");
+                numVisible;
+
+            me = this.get("element").id;
+
+            // Don't do anything if the Carousel is not rendered
+            if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
+                return;
+            }
+
+            numVisible = this.get("numVisible");
 
             if (!JS.isNumber(page)) {
                 page = Math.ceil(this.get("selectedItem") / numVisible);
@@ -3029,4 +3129,10 @@
     });
 
 })();
+/*
+;;  Local variables: **
+;;  mode: js2 **
+;;  indent-tabs-mode: nil **
+;;  End: **
+*/
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
