@@ -6634,6 +6634,7 @@ var Dom = YAHOO.util.Dom,
 		    html = html.replace(/<\/YUI_EMBED>/g, '<\/embed>');
             
             //This should fix &amp;s in URL's
+            //TODO Make this global
             html = html.replace(' &amp; ', 'YUI_AMP');
             html = html.replace('&amp;', '&');
             html = html.replace('YUI_AMP', ' &amp; ');
