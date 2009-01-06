@@ -620,16 +620,16 @@
          * @param {String | HTMLElement | Array} el (optional) An element or array of elements to apply the method to
          * @param {Function} method The method to apply to the element(s)
          * @param {Any} o (optional) An optional arg that is passed to the supplied method
-         * @param {Boolean} override (optional) Whether or not to override the scope of "method" with "o"
+         * @param {Boolean} overrides (optional) Whether or not to override the scope of "method" with "o"
          * @return {Any | Array} The return value(s) from the supplied method
          */
-        batch: function(el, method, o, override) {
+        batch: function(el, method, o, overrides) {
             el = (el && (el.tagName || el.item)) ? el : Y.Dom.get(el); // skip get() when possible
 
             if (!el || !method) {
                 return false;
             } 
-            var scope = (override) ? o : window;
+            var scope = (overrides) ? o : window;
             
             if (el.tagName || el.length === undefined) { // element or not array-like 
                 return method.call(scope, el, o);
