@@ -53,7 +53,7 @@ var Dom = YAHOO.util.Dom,
      * @requires yahoo, dom, element, event
      * @Extends YAHOO.util.Element
      * 
-     * Provides a toolbar button based on the button and menu widgets, <select> elements are used in place of menu's.
+     * Provides a toolbar button based on the button and menu widgets, &lt;select&gt; elements are used in place of menu's.
      * @constructor
      * @class ToolbarButton
      * @param {String/HTMLElement} el The element to turn into a button.
@@ -7570,7 +7570,9 @@ var Dom = YAHOO.util.Dom,
             * @attribute hiddencss
             * @description The CSS used to show/hide hidden elements on the page, these rules must be prefixed with the class provided in <code>this.CLASS_HIDDEN</code>
             * @default <code><pre>
-            .yui-hidden font, .yui-hidden strong, .yui-hidden b, .yui-hidden em, .yui-hidden i, .yui-hidden u, .yui-hidden div, .yui-hidden p, .yui-hidden span, .yui-hidden img, .yui-hidden ul, .yui-hidden ol, .yui-hidden li, .yui-hidden table {
+            .yui-hidden font, .yui-hidden strong, .yui-hidden b, .yui-hidden em, .yui-hidden i, .yui-hidden u,
+            .yui-hidden div, .yui-hidden p, .yui-hidden span, .yui-hidden img, .yui-hidden ul, .yui-hidden ol,
+            .yui-hidden li, .yui-hidden table {
                 border: 1px dotted #ccc;
             }
             .yui-hidden .yui-non {
