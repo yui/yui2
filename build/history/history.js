@@ -714,15 +714,16 @@ YAHOO.util.History = (function () {
             // URL-decoded, which creates problems if the state value
             // contained special characters...
             idx = top.location.href.indexOf("#");
-            hash = idx >= 0 ? top.location.href.substr(idx + 1) : top.location.href;
-
-            states = hash.split("&");
-            for (i = 0, len = states.length; i < len; i++) {
-                tokens = states[i].split("=");
-                if (tokens.length === 2) {
-                    moduleName = tokens[0];
-                    if (moduleName === module) {
-                        return unescape(tokens[1]);
+            if (idx >= 0) {
+                hash = top.location.href.substr(idx + 1);
+                states = hash.split("&");
+                for (i = 0, len = states.length; i < len; i++) {
+                    tokens = states[i].split("=");
+                    if (tokens.length === 2) {
+                        moduleName = tokens[0];
+                        if (moduleName === module) {
+                            return unescape(tokens[1]);
+                        }
                     }
                 }
             }
@@ -774,4 +775,5 @@ YAHOO.util.History = (function () {
     };
 
 })();
+
 YAHOO.register("history", YAHOO.util.History, {version: "@VERSION@", build: "@BUILD@"});
