@@ -22,13 +22,13 @@ var Dom = YAHOO.util.Dom,
  * represents the Element.
  * @param {Object} map A key-value map of initial config names and values
  */
-YAHOO.util.Element = function(el, map) {
+var Element = function(el, map) {
     if (arguments.length) {
         this.init(el, map);
     }
 };
 
-YAHOO.util.Element.prototype = {
+Element.prototype = {
     /**
      * Dom events supported by the Element instance.
      * @property DOM_EVENTS
@@ -543,6 +543,7 @@ YAHOO.util.Element.prototype = {
  * @event appendTo
  */
 
-YAHOO.augment(YAHOO.util.Element, AttributeProvider);
+YAHOO.augment(Element, AttributeProvider);
+YAHOO.util.Element = Element;
 })();
 
