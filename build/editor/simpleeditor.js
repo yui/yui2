@@ -6,6 +6,7 @@ var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
     Lang = YAHOO.lang;
     /**
+     * @module editor    
      * @description <p>Creates a rich custom Toolbar Button. Primarily used with the Rich Text Editor's Toolbar</p>
      * @class ToolbarButtonAdvanced
      * @namespace YAHOO.widget
@@ -322,6 +323,7 @@ var Dom = YAHOO.util.Dom,
     });
 })();
 /**
+ * @module editor
  * @description <p>Creates a rich Toolbar widget based on Button. Primarily used with the Rich Text Editor</p>
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbarbutton
@@ -980,11 +982,6 @@ var Dom = YAHOO.util.Dom,
                             } else {
                                 this.get('cont').appendChild(this._dragHandle);
                             }
-                            /**
-                            * @property dd
-                            * @description The DragDrop instance associated with the Toolbar
-                            * @type Object
-                            */
                             this.dd = new YAHOO.util.DD(this.get('id'));
                             this.dd.setHandleElId(this._dragHandle.id);
                             
@@ -2088,6 +2085,7 @@ var Dom = YAHOO.util.Dom,
 */
 })();
 /**
+ * @module editor
  * @description <p>The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images. The Rich Text Editor's toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.</p>
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbar
@@ -3574,7 +3572,7 @@ var Dom = YAHOO.util.Dom,
             //this._setCurrentEvent(ev);
             var self = this;
             if (this.browser.opera) {
-                /**
+                /*
                 * @knownissue Opera appears to stop the MouseDown, Click and DoubleClick events on an image inside of a document with designMode on..
                 * @browser Opera
                 * @description This work around traps the MouseUp event and sets a timer to check if another MouseUp event fires in so many seconds. If another event is fired, they we internally fire the DoubleClick event.
@@ -4708,7 +4706,7 @@ var Dom = YAHOO.util.Dom,
             });
             /**
             * @private
-            * @depreciated
+            * @depreciated - No longer used, should use this.get('element')
             * @config textarea
             * @description Internal config for holding the textarea element (replaced with element).
             * @default null
@@ -4717,17 +4715,6 @@ var Dom = YAHOO.util.Dom,
             this.setAttributeConfig('textarea', {
                 value: null,
                 writeOnce: true
-            });
-            /**
-            * @private
-            * @config container
-            * @description Internal config for holding a reference to the container to append a dynamic editor to.
-            * @default null
-            * @type HTMLElement
-            */
-            this.setAttributeConfig('container', {
-                readOnly: true,
-                value: null
             });
             /**
             * @config nodeChangeThreshold
@@ -5865,8 +5852,8 @@ var Dom = YAHOO.util.Dom,
                 value = this.get('blankimage');
             }
 
-            /**
-            * @knownissue
+            /*
+            * @knownissue Safari Cursor Position
             * @browser Safari 2.x
             * @description The issue here is that we have no way of knowing where the cursor position is
             * inside of the iframe, so we have to place the newly inserted data in the best place that we can.
@@ -5912,8 +5899,8 @@ var Dom = YAHOO.util.Dom,
         */
         cmd_inserthtml: function(value) {
             var exec = true, action = 'inserthtml', _span = null, _range = null;
-            /**
-            * @knownissue
+            /*
+            * @knownissue Safari cursor position
             * @browser Safari 2.x
             * @description The issue here is that we have no way of knowing where the cursor position is
             * inside of the iframe, so we have to place the newly inserted data in the best place that we can.
@@ -5946,7 +5933,7 @@ var Dom = YAHOO.util.Dom,
                 if (tag == 'ul') {
                     action = 'insertunorderedlist';
                 }
-            /**
+            /*
             * @knownissue Safari 2.+ doesn't support ordered and unordered lists
             * @browser Safari 2.x
             * The issue with this workaround is that when applied to a set of text
@@ -6170,7 +6157,7 @@ var Dom = YAHOO.util.Dom,
         * @method _createInsertElement
         * @description Creates a new "currentElement" then adds some text (and other things) to make it selectable and stylable. Then the user can continue typing.
         * @param {Object} css (optional) Object literal containing styles to apply to the new element.
-        * @return
+        * @return {HTMLElement}
         */
         _createInsertElement: function(css) {
             this._createCurrentElement('span', css);
@@ -6262,8 +6249,8 @@ var Dom = YAHOO.util.Dom,
                     }
                 }
                 if (tar) {
-                    /**
-                    * @knownissue
+                    /*
+                    * @knownissue Safari Cursor Position
                     * @browser Safari 2.x
                     * @description The issue here is that we have no way of knowing where the cursor position is
                     * inside of the iframe, so we have to place the newly inserted data in the best place that we can.
