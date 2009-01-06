@@ -94,7 +94,12 @@
 <script type="text/javascript" src="../../build/dom/dom-min.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script> 
 <script type="text/javascript" src="../../build/logger/logger-min.js"></script> 
-<script type="text/javascript" src="../../build/dragdrop/dragdrop-debug.js"></script> 
+<script type="text/javascript" src="js/DragDropMgr.js"></script> 
+<script type="text/javascript" src="js/DragDrop.js"></script> 
+<script type="text/javascript" src="js/DD.js"></script> 
+<script type="text/javascript" src="js/DDTarget.js"></script> 
+<script type="text/javascript" src="js/DDProxy.js"></script> 
+
 <script type="text/javascript">
 
 YAHOO.util.DDM.mode = YAHOO.util.DDM.INTERSECT;

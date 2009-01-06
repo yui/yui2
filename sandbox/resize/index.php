@@ -77,7 +77,7 @@ if (!$_GET['non']) {
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js?bust=<?php echo(mktime()); ?>"></script>
 <script type="text/javascript" src="../../build/element/element-beta-min.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../../build/logger/logger.js?bust=<?php echo(mktime()); ?>"></script> 
-<script type="text/javascript" src="../../build/resize/resize-debug.js?bust=<?php echo(mktime()); ?>"></script> 
+<script type="text/javascript" src="js/resize.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript">
 
 (function() {

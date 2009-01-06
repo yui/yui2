@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="YuiBuildSimpleEditor" default="local">
+    <description>SimpleEditor Build File</description>
+    <property file="build.simple.properties" />
+    <import file="${builddir}/2.x/bootstrap.xml" />
+    <target name="simpleeditor_build_subtask" depends="build, minifyjs" />    
+</project>
