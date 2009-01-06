@@ -29,7 +29,7 @@
 <script type="text/javascript" src="../../build/element/element-beta-min.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../../build/logger/logger.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../../build/resize/resize-debug.js?bust=<?php echo(mktime()); ?>"></script> 
-<script type="text/javascript" src="../../build/imagecropper/imagecropper-beta-debug.js?bust=<?php echo(mktime()); ?>"></script> 
+<script type="text/javascript" src="js/crop.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript">
 
 (function() {

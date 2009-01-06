@@ -1,11 +1,9 @@
 (function() {
-    /**
-    * @private
-    **/
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
     Lang = YAHOO.lang;
     /**
+     * @module editor    
      * @description <p>Creates a rich custom Toolbar Button. Primarily used with the Rich Text Editor's Toolbar</p>
      * @class ToolbarButtonAdvanced
      * @namespace YAHOO.widget
@@ -13,6 +11,7 @@ var Dom = YAHOO.util.Dom,
      * 
      * Provides a toolbar button based on the button and menu widgets.
      * @constructor
+     * @class ToolbarButtonAdvanced
      * @param {String/HTMLElement} el The element to turn into a button.
      * @param {Object} attrs Object liternal containing configuration parameters.
     */
@@ -48,14 +47,13 @@ var Dom = YAHOO.util.Dom,
 
 
     /**
-     * @description <p>Creates a basic custom Toolbar Button. Primarily used with the Rich Text Editor's Toolbar</p>
+     * @description <p>Creates a basic custom Toolbar Button. Primarily used with the Rich Text Editor's Toolbar</p><p>Provides a toolbar button based on the button and menu widgets, &lt;select&gt; elements are used in place of menu's.</p>
      * @class ToolbarButton
      * @namespace YAHOO.widget
      * @requires yahoo, dom, element, event
-     * @Extends YAHOO.util.Element
-     * @beta
+     * @extends YAHOO.util.Element
      * 
-     * Provides a toolbar button based on the button and menu widgets, <select> elements are used in place of menu's.
+     * 
      * @constructor
      * @param {String/HTMLElement} el The element to turn into a button.
      * @param {Object} attrs Object liternal containing configuration parameters.
@@ -324,15 +322,13 @@ var Dom = YAHOO.util.Dom,
     });
 })();
 /**
+ * @module editor
  * @description <p>Creates a rich Toolbar widget based on Button. Primarily used with the Rich Text Editor</p>
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbarbutton
  * @optional container_core, dragdrop
  */
 (function() {
-    /**
-    * @private
-    **/
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
     Lang = YAHOO.lang;
@@ -990,11 +986,6 @@ var Dom = YAHOO.util.Dom,
                             } else {
                                 this.get('cont').appendChild(this._dragHandle);
                             }
-                            /**
-                            * @property dd
-                            * @description The DragDrop instance associated with the Toolbar
-                            * @type Object
-                            */
                             this.dd = new YAHOO.util.DD(this.get('id'));
                             this.dd.setHandleElId(this._dragHandle.id);
                             
@@ -2110,6 +2101,7 @@ var Dom = YAHOO.util.Dom,
 */
 })();
 /**
+ * @module editor
  * @description <p>The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images. The Rich Text Editor's toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.</p>
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbar
@@ -2760,38 +2752,21 @@ var Dom = YAHOO.util.Dom,
             return this.get('iframe').get('element').contentWindow;
         },
         /**
+        * @method focus
+        * @description Attempt to set the focus of the iframes window.
+        */
+        focus: function() {
+            this._getWindow().focus();
+        },
+        /**
         * @private
+        * @depreciated - This should not be used, moved to this.focus();
         * @method _focusWindow
         * @description Attempt to set the focus of the iframes window.
-        * @param {Boolean} onLoad Safari needs some special care to set the cursor in the iframe
         */
-        _focusWindow: function(onLoad) {
-            if (this.browser.webkit) {
-                if (onLoad) {
-                    /**
-                    * @knownissue Safari Cursor Position
-                    * @browser Safari 2.x
-                    * @description Can't get Safari to place the cursor at the beginning of the text..
-                    * This workaround at least set's the toolbar into the proper state.
-                    */
-                    this._getSelection().setBaseAndExtent(this._getDoc().body.firstChild, 0, this._getDoc().body.firstChild, 1);
-                    if (this.browser.webkit3) {
-                        this._getSelection().collapseToStart();
-                    } else {
-                        this._getSelection().collapse(false);
-                    }
-                } else {
-                    this._getSelection().setBaseAndExtent(this._getDoc().body, 1, this._getDoc().body, 1);
-                    if (this.browser.webkit3) {
-                        this._getSelection().collapseToStart();
-                    } else {
-                        this._getSelection().collapse(false);
-                    }
-                }
-                this._getWindow().focus();
-            } else {
-                this._getWindow().focus();
-            }
+        _focusWindow: function() {
+            YAHOO.log('_focusWindow: depreciated in favor of this.focus()', 'warn', 'Editor');
+            this.focus();
         },
         /**
         * @private
@@ -2994,7 +2969,6 @@ var Dom = YAHOO.util.Dom,
                 YAHOO.log('Editor Window Focused', 'info', 'SimpleEditor');
                 this._focused = true;
                 this.fireEvent('editorWindowFocus', { type: 'editorWindowFocus', target: this });
-
             }
         },
         /**
@@ -3634,7 +3608,7 @@ var Dom = YAHOO.util.Dom,
             //this._setCurrentEvent(ev);
             var self = this;
             if (this.browser.opera) {
-                /**
+                /*
                 * @knownissue Opera appears to stop the MouseDown, Click and DoubleClick events on an image inside of a document with designMode on..
                 * @browser Opera
                 * @description This work around traps the MouseUp event and sets a timer to check if another MouseUp event fires in so many seconds. If another event is fired, they we internally fire the DoubleClick event.
@@ -4423,7 +4397,7 @@ var Dom = YAHOO.util.Dom,
                 if (!this.browser.webkit) {
                      var Fself = this;
                      setTimeout(function() {
-                         Fself._focusWindow.call(Fself);
+                         Fself.focus.call(Fself);
                      }, 5);
                  }
             }
@@ -4486,7 +4460,7 @@ var Dom = YAHOO.util.Dom,
                         this.toolbar.set('disabled', false);
                     }
                     this._setDesignMode('on');
-                    this._focusWindow();
+                    this.focus();
                     var self = this;
                     window.setTimeout(function() {
                         self.nodeChange.call(self);
@@ -4785,7 +4759,7 @@ var Dom = YAHOO.util.Dom,
             });
             /**
             * @private
-            * @depreciated
+            * @depreciated - No longer used, should use this.get('element')
             * @config textarea
             * @description Internal config for holding the textarea element (replaced with element).
             * @default null
@@ -4794,17 +4768,6 @@ var Dom = YAHOO.util.Dom,
             this.setAttributeConfig('textarea', {
                 value: null,
                 writeOnce: true
-            });
-            /**
-            * @private
-            * @config container
-            * @description Internal config for holding a reference to the container to append a dynamic editor to.
-            * @default null
-            * @type HTMLElement
-            */
-            this.setAttributeConfig('container', {
-                readOnly: true,
-                value: null
             });
             /**
             * @config nodeChangeThreshold
@@ -5153,7 +5116,7 @@ var Dom = YAHOO.util.Dom,
                         this.on('editorContentLoaded', function() {
                             var self = this;
                             setTimeout(function() {
-                                self._focusWindow.call(self, true);
+                                self.focus.call(self);
                                 self.editorDirty = false;
                             }, 400);
                         }, this, true);
@@ -5954,8 +5917,8 @@ var Dom = YAHOO.util.Dom,
                 value = this.get('blankimage');
             }
 
-            /**
-            * @knownissue
+            /*
+            * @knownissue Safari Cursor Position
             * @browser Safari 2.x
             * @description The issue here is that we have no way of knowing where the cursor position is
             * inside of the iframe, so we have to place the newly inserted data in the best place that we can.
@@ -6002,8 +5965,8 @@ var Dom = YAHOO.util.Dom,
         */
         cmd_inserthtml: function(value) {
             var exec = true, action = 'inserthtml', _span = null, _range = null;
-            /**
-            * @knownissue
+            /*
+            * @knownissue Safari cursor position
             * @browser Safari 2.x
             * @description The issue here is that we have no way of knowing where the cursor position is
             * inside of the iframe, so we have to place the newly inserted data in the best place that we can.
@@ -6037,7 +6000,7 @@ var Dom = YAHOO.util.Dom,
                 if (tag == 'ul') {
                     action = 'insertunorderedlist';
                 }
-            /**
+            /*
             * @knownissue Safari 2.+ doesn't support ordered and unordered lists
             * @browser Safari 2.x
             * The issue with this workaround is that when applied to a set of text
@@ -6267,7 +6230,7 @@ var Dom = YAHOO.util.Dom,
         * @method _createInsertElement
         * @description Creates a new "currentElement" then adds some text (and other things) to make it selectable and stylable. Then the user can continue typing.
         * @param {Object} css (optional) Object literal containing styles to apply to the new element.
-        * @return
+        * @return {HTMLElement}
         */
         _createInsertElement: function(css) {
             this._createCurrentElement('span', css);
@@ -6280,7 +6243,7 @@ var Dom = YAHOO.util.Dom,
             } else if (this.browser.ie || this.browser.opera) {
                 el.innerHTML = '&nbsp;';
             }
-            this._focusWindow();
+            this.focus();
             this._selectNode(el, true);
             return el;
         },
@@ -6359,8 +6322,8 @@ var Dom = YAHOO.util.Dom,
                     }
                 }
                 if (tar) {
-                    /**
-                    * @knownissue
+                    /*
+                    * @knownissue Safari Cursor Position
                     * @browser Safari 2.x
                     * @description The issue here is that we have no way of knowing where the cursor position is
                     * inside of the iframe, so we have to place the newly inserted data in the best place that we can.
@@ -6518,7 +6481,7 @@ var Dom = YAHOO.util.Dom,
         show: function() {
             if (this.browser.gecko) {
                 this._setDesignMode('on');
-                this._focusWindow();
+                this.focus();
             }
             if (this.browser.webkit) {
                 var self = this;
@@ -6714,6 +6677,7 @@ var Dom = YAHOO.util.Dom,
 		    html = html.replace(/<\/YUI_EMBED>/g, '<\/embed>');
             
             //This should fix &amp;s in URL's
+            //TODO Make this global
             html = html.replace(' &amp; ', 'YUI_AMP');
             html = html.replace('&amp;', '&');
             html = html.replace('YUI_AMP', ' &amp; ');
@@ -6998,7 +6962,7 @@ var Dom = YAHOO.util.Dom,
         closeWindow: function() {
             //this.unsubscribeAll('afterExecCommand');
             this.toolbar.resetAllButtons();
-            this._focusWindow();        
+            this.focus();        
         },
         /**
         * @method destroy
@@ -7258,7 +7222,7 @@ YAHOO.widget.EditorInfo = {
  * @description <p>The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images. The Rich Text Editor's toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.</p>
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, container_core, simpleeditor
- * @optional dragdrop, animation, menu, button
+ * @optional dragdrop, animation, menu, button, resize
  */
 
 (function() {
@@ -7696,7 +7660,9 @@ var Dom = YAHOO.util.Dom,
             * @attribute hiddencss
             * @description The CSS used to show/hide hidden elements on the page, these rules must be prefixed with the class provided in <code>this.CLASS_HIDDEN</code>
             * @default <code><pre>
-            .yui-hidden font, .yui-hidden strong, .yui-hidden b, .yui-hidden em, .yui-hidden i, .yui-hidden u, .yui-hidden div, .yui-hidden p, .yui-hidden span, .yui-hidden img, .yui-hidden ul, .yui-hidden ol, .yui-hidden li, .yui-hidden table {
+            .yui-hidden font, .yui-hidden strong, .yui-hidden b, .yui-hidden em, .yui-hidden i, .yui-hidden u,
+            .yui-hidden div, .yui-hidden p, .yui-hidden span, .yui-hidden img, .yui-hidden ul, .yui-hidden ol,
+            .yui-hidden li, .yui-hidden table {
                 border: 1px dotted #ccc;
             }
             .yui-hidden .yui-non {
@@ -8843,7 +8809,7 @@ var Dom = YAHOO.util.Dom,
             this.unsubscribeAll('afterExecCommand');
             this.toolbar.set('disabled', false); //enable the toolbar now that the window is closed
             this.toolbar.resetAllButtons();
-            this._focusWindow();
+            this.focus();
             Event.removeListener(document, 'keydown', this._closeWindow);
         },
 
@@ -8966,7 +8932,7 @@ var Dom = YAHOO.util.Dom,
         */
         cmd_removeformat: function(value) {
             var exec = true;
-            /**
+            /*
             * @knownissue Remove Format issue
             * @browser Safari 2.x
             * @description There is an issue here with Safari, that it may not always remove the format of the item that is selected.
@@ -8981,14 +8947,6 @@ var Dom = YAHOO.util.Dom,
                 for (var i = 1; i < this.currentElement.length; i++) {
                     this.currentElement[i].parentNode.removeChild(this.currentElement[i]);
                 }
-                /*
-                this._createCurrentElement('span');
-                YAHOO.util.Dom.addClass(this.currentElement[0], 'yui-non');
-                var re= /<\S[^><]*>/g;
-                var str = this.currentElement[0].innerHTML.replace(re, '');
-                var _txt = this._getDoc().createTextNode(str);
-                this.currentElement[0].parentNode.parentNode.replaceChild(_txt, this.currentElement[0].parentNode);
-                */
                 
                 exec = false;
             }
