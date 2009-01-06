@@ -6,9 +6,6 @@
  * @optional container_core, dragdrop
  */
 (function() {
-    /**
-    * @private
-    **/
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
     Lang = YAHOO.lang;
