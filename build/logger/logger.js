@@ -74,6 +74,8 @@ YAHOO.widget.LogMsg = function(oConfigs) {
  */
 YAHOO.widget.LogWriter = function(sSource) {
     if(!sSource) {
+        YAHOO.log("Could not instantiate LogWriter due to invalid source.",
+            "error", "LogWriter");
         return;
     }
     this._source = sSource;
@@ -124,6 +126,7 @@ YAHOO.widget.LogWriter.prototype.getSource = function() {
  */
 YAHOO.widget.LogWriter.prototype.setSource = function(sSource) {
     if(!sSource) {
+        YAHOO.log("Could not set source due to invalid source.", "error", this.toString());
         return;
     }
     else {
@@ -182,6 +185,8 @@ YAHOO.widget.LogReader = function(elContainer, oConfigs) {
 
     this._initContainerEl(elContainer);
     if(!this._elContainer) {
+        YAHOO.log("Could not instantiate LogReader due to an invalid container element " +
+                elContainer, "error", this.toString());
         return;
     }
     
@@ -202,6 +207,7 @@ YAHOO.widget.LogReader = function(elContainer, oConfigs) {
     YAHOO.widget.Logger.sourceCreateEvent.subscribe(this._onSourceCreate, this);
 
     this._filterLogs();
+    YAHOO.log("LogReader initialized", null, this.toString());
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1554,6 +1560,146 @@ YAHOO.widget.LogReader.prototype = {
  * Output may be read through a LogReader console and/or output to a browser
  * console.
  *
+ * @module logger
+ * @requires yahoo, event, dom
+ * @optional dragdrop
+ * @namespace YAHOO.widget
+ * @title Logger Widget
+ */
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+// Define once
+if(!YAHOO.widget.Logger) {
+    /**
+     * The singleton Logger class provides core log management functionality. Saves
+     * logs written through the global YAHOO.log function or written by a LogWriter
+     * instance. Provides access to logs for reading by a LogReader instance or
+     * native browser console such as the Firebug extension to Firefox or Safari's
+     * JavaScript console through integration with the console.log() method.
+     *
+     * @class Logger
+     * @static
+     */
+    YAHOO.widget.Logger = {
+        // Initialize properties
+        loggerEnabled: true,
+        _browserConsoleEnabled: false,
+        categories: ["info","warn","error","time","window"],
+        sources: ["global"],
+        _stack: [], // holds all log msgs
+        maxStackEntries: 2500,
+        _startTime: new Date().getTime(), // static start timestamp
+        _lastTime: null, // timestamp of last logged message
+        _windowErrorsHandled: false,
+        _origOnWindowError: null
+    };
+
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Public properties
+    //
+    /////////////////////////////////////////////////////////////////////////////
+    /**
+     * True if Logger is enabled, false otherwise.
+     *
+     * @property loggerEnabled
+     * @type Boolean
+     * @static
+     * @default true
+     */
+
+    /**
+     * Array of categories.
+     *
+     * @property categories
+     * @type String[]
+     * @static
+     * @default ["info","warn","error","time","window"]
+     */
+
+    /**
+     * Array of sources.
+     *
+     * @property sources
+     * @type String[]
+     * @static
+     * @default ["global"]
+     */
+
+    /**
+     * Upper limit on size of internal stack.
+     *
+     * @property maxStackEntries
+     * @type Number
+     * @static
+     * @default 2500
+     */
+
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Private properties
+    //
+    /////////////////////////////////////////////////////////////////////////////
+    /**
+     * Internal property to track whether output to browser console is enabled.
+     *
+     * @property _browserConsoleEnabled
+     * @type Boolean
+     * @static
+     * @default false
+     * @private
+     */
+
+    /**
+     * Array to hold all log messages.
+     *
+     * @property _stack
+     * @type Array
+     * @static
+     * @private
+     */
+    /**
+     * Static timestamp of Logger initialization.
+     *
+     * @property _startTime
+     * @type Date
+     * @static
+     * @private
+     */
+    /**
+     * Timestamp of last logged message.
+     *
+     * @property _lastTime
+     * @type Date
+     * @static
+     * @private
+     */
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Public methods
+    //
+    /////////////////////////////////////////////////////////////////////////////
+    /**
+     * Saves a log message to the stack and fires newLogEvent. If the log message is
+     * assigned to an unknown category, creates a new category. If the log message is
+     * from an unknown source, creates a new source.  If browser console is enabled,
+     * outputs the log message to browser console.
+     *
+     * @method log
+     * @param sMsg {String} The log message.
+     * @param sCategory {String} Category of log message, or null.
+     * @param sSource {String} Source of LogWriter, or null if global.
+     */
+    YAHOO.widget.Logger.log = function(sMsg, sCategory, sSource) {
+        if(this.loggerEnabled) {
+            if(!sCategory) {
+                sCategory = "info"; // default category
+            }
+            else {
+                sCategory = sCategory.toLocaleLowerCase();
                 if(this._isNewCategory(sCategory)) {
                     this._createNewCategory(sCategory);
                 }
@@ -1612,6 +1758,7 @@ YAHOO.widget.LogReader.prototype = {
     YAHOO.widget.Logger.reset = function() {
         this._stack = [];
         this._startTime = new Date().getTime();
+        this.loggerEnabled = true;
         this.log("Logger reset");
         this.logResetEvent.fire();
     };
@@ -1643,6 +1790,7 @@ YAHOO.widget.LogReader.prototype = {
      * @method disableBrowserConsole
      */
     YAHOO.widget.Logger.disableBrowserConsole = function() {
+        YAHOO.log("Logger output to the function console.log() has been disabled.");
         this._browserConsoleEnabled = false;
     };
 
@@ -1654,6 +1802,7 @@ YAHOO.widget.LogReader.prototype = {
      */
     YAHOO.widget.Logger.enableBrowserConsole = function() {
         this._browserConsoleEnabled = true;
+        YAHOO.log("Logger output to the function console.log() has been enabled.");
     };
 
     /**
@@ -1671,8 +1820,10 @@ YAHOO.widget.LogReader.prototype = {
             }
             window.onerror = YAHOO.widget.Logger._onWindowError;
             YAHOO.widget.Logger._windowErrorsHandled = true;
+            YAHOO.log("Logger handling of window.onerror has been enabled.");
         }
         else {
+            YAHOO.log("Logger handling of window.onerror had already been enabled.");
         }
     };
 
@@ -1694,8 +1845,10 @@ YAHOO.widget.LogReader.prototype = {
                 window.onerror = null;
             }
             YAHOO.widget.Logger._windowErrorsHandled = false;
+            YAHOO.log("Logger handling of window.onerror has been disabled.");
         }
         else {
+            YAHOO.log("Logger handling of window.onerror had already been disabled.");
         }
     };
     
@@ -1882,4 +2035,4 @@ YAHOO.widget.LogReader.prototype = {
 }
 
 
-YAHOO.register("Logger", YAHOO.widget.Logger, {version: "@VERSION@", build: "@BUILD@"});
+YAHOO.register("logger", YAHOO.widget.Logger, {version: "@VERSION@", build: "@BUILD@"});
