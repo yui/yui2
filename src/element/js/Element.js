@@ -23,9 +23,7 @@ var Dom = YAHOO.util.Dom,
  * @param {Object} map A key-value map of initial config names and values
  */
 var Element = function(el, map) {
-    if (arguments.length) {
-        this.init(el, map);
-    }
+    this.init(el, map);
 };
 
 Element.prototype = {
