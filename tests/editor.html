@@ -35,7 +35,9 @@ var editor = null;
         Event = YAHOO.util.Event,
         Tool = YAHOO.tool,
         Suite = new Tool.TestSuite('yuisuite'),
-        Assert = YAHOO.util.Assert;
+        Assert = YAHOO.util.Assert,
+        eFocus = null,
+        eBlur = null;
 
 
 
@@ -71,6 +73,22 @@ var editor = null;
                 },
                 test_doc: function() {
                     Assert.areEqual(document.getElementById('editor_editor').contentWindow.document, editor._getDoc(), 'Document object is not right');
+                },
+                test_focus: function() {
+                    YAHOO.util.UserAction.mousedown(document);
+
+                    editor.on('editorWindowFocus', function() {
+                        eFocus = true;
+                    });
+                    editor.on('editorWindowBlur', function() {
+                        eBlur = true;
+                    });
+                    editor._focusWindow();
+                    Assert.areEqual(true, eFocus, 'Editor focus event FAILED');
+                    
+                    editor.afterElement.focus();
+                    Assert.areEqual(true, eBlur, 'Editor blur event FAILED');
+                    
                 },
                 test_regex: function() {
                     editor.setEditorHTML(Dom.get('testRegEx').innerHTML);
@@ -116,7 +134,7 @@ var editor = null;
                 test_selected_element: function() {
                     
                     editor.setEditorHTML('<em id="test">This is a test element</em>');
-                    editor._selectNode(editor._getDoc().getElementById('test'));
+                    YAHOO.util.UserAction.dblclick(editor._getDoc().getElementById('test'));
                     
                     Assert.areEqual(editor._getDoc().getElementById('test'), editor._getSelectedElement(), 'Selected Element is not em#test');
                     Assert.areEqual(true, editor.toolbar.getButtonByValue('italic').hasClass('yui-button-selected'), 'Italic button is not selected');
@@ -125,7 +143,7 @@ var editor = null;
                 },
                 test_dom_path: function() {
                     editor.setEditorHTML('<p>This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</p><p>This is a test. This is a test. <em style="font-family: Comic Sans MS">This is a test. <strong id="test">This is a test.</strong> This is a test.</em> This is a test. This is a test. This is a test.</p><p>This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</p>');
-                    editor._selectNode(editor._getDoc().getElementById('test'));
+                    YAHOO.util.UserAction.dblclick(editor._getDoc().getElementById('test'));
                     //Editor timing is out here, force a DomPath write..
                     editor._writeDomPath();
                     Assert.areEqual('<span title=body>body</span> &lt; <span title=p>p</span> &lt; <span title=em>em</span> &lt; <span title=strong#test>strong#tes...</span>', editor.dompath.innerHTML.toLowerCase().replace(/"/g, ''), 'Dom path is not correct..');
@@ -329,6 +347,7 @@ var editor = null;
                     }, 3000);
                     Assert.areEqual('div', editor2._configs.element.value.tagName.toLowerCase(), 'Editor failed to render with HTML element (non TEXTAREA) passed to constructor');
                 }
+
             })); 
             Tool.TestRunner.add(Suite);
 

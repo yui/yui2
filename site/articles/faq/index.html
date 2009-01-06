@@ -11,6 +11,8 @@ $prepend = "
 
 #answers {clear:both;}
 #questions li {list-style:none;}
+#bd ol.getstarted #whyyui li {font-weight:normal; color:#000; list-style-type:disc; padding-left:10px; margin-bottom:.5em;}
+#morehelp {margin-bottom:0; font-style:italic;}
 
 </style>";
 
@@ -24,6 +26,7 @@ include "../../inc/header.inc";
 
 <h1 class="first-content">YUI FAQ</h1>
 
+<p id="morehelp">Not finding the answer you're looking for here?  Check out <a href="http://tech.groups.yahoo.com/group/ydn-javascript/">the YUI developer forum</a>, where thousands of YUI users and developers gather to discuss the library.  Still stuck?  <a href="mailto:miraglia_yui@yahoo.com">Send an email</a>.</p>
 <div class="yui-g" id="questions">
 	<div class="yui-u first">
 		<div class="yui-g">
@@ -71,7 +74,21 @@ include "../../inc/header.inc";
 		</li>
 
 		<li id="why">Why would I choose YUI?
-			<p>The YUI Library is free, licenced under <a href="http://developer.yahoo.com/yui/license.html">a liberal BSD license</a> that permits both commercial and non-profit use.  YUI is backed by developers at Yahoo!, where YUI code is used and refined on pages viewed billions of times each day.  YUI is increasingly comprehensive, well-documented, and supported by <a href="http://tech.groups.yahoo.com/group/ydn-javascript/">a growing community in the YUI forums</a>.</p>
+			<p>The YUI Library is free, licenced under <a href="http://developer.yahoo.com/yui/license.html">a liberal BSD license</a> that permits both commercial and non-profit use.  YUI is backed by developers at Yahoo!, where YUI code is used and refined on pages viewed billions of times each day.  YUI is increasingly comprehensive, well-documented, and supported by <a href="http://tech.groups.yahoo.com/group/ydn-javascript/">a growing community in the YUI forums</a>.<br /><br /></p>
+            
+            <p>YUI is one of several high-quality JavaScript/CSS libraries.  This is a good thing &mdash; it means that developers are now choosing from several good options, whereas five years ago we were solving most library-style problems on our own.  Given the other choices out there, why would you choose YUI?  Here are some of the core strengths of the YUI project:</p>
+            
+           <ul id="whyyui">
+           		<li><strong>Light and flexible:</strong> YUI's light, powerful core <a href="http://yuiblog.com/blog/2008/10/17/loading-yui/">weighs just 11KB on the wire</a> and offers language utilities, DOM normalizations, and a complete event/custom event suite.  For 17.4KB, you can include the Core plus the YUI Loader, which can dynamically load the requirements for any YUI-based module using a single HTTP request for JS and one more for CSS.  No other frontend kit offers you a better combination of lightness and power.</li>
+                <li><strong>The foundation matters:</strong> YUI, though light and simple to use for simple tasks, provides a rich foundation for your work when you turn toward complex client-side application development.  From its <a href="http://developer.yahoo.com/yui/event/#customevent">custom event system</a> to its <a href="http://developer.yahoo.com/yui/examples/yahoo/yahoo_extend.html">object management methods</a> to its <a href="http://yuiblog.com/blog/2008/06/24/buildingwidgets">widget-creation tools</a>, YUI scales to meet the differing challenges of each project.</li>
+           		<li><strong>A la carte design:</strong> YUI's modular approach means that you can include on the page <a href="http://yuiblog.com/blog/2006/10/16/pageweight-yui0114/">just the pieces you need</a>.  Pages that make light use of scripting may require only the YUI Core.  But no matter how many YUI components you bring into a page, you're always loading just the pieces you need.</li>
+                <li><strong>Industrial-strength hosting:</strong> YUI files are hosted freely for your use by Yahoo (and by Google).  Yahoo's CDN &mdash; the global network of edge-hosting servers that supports Yahoo's own websites &mdash; provides fantastic performance <em>and</em> combo-handling, allowing you to significantly reduce the number of HTTP requests required to load YUI components.  If you need SSL support, Google's CDN offers similar performance and supports SSL. (You can use <a href="http://developer.yahoo.com/yui/articles/hosting/#configure">the Dependency Configurator</a> to get the necessary URLs for drawing YUI from Yahoo or Google servers.)</li>
+                <li><strong>Complete stack, consistent licensing:</strong>  YUI is the only major open-source library to offer a complete set of utilities and widgets, all crafted, tested, documented and exemplified to the same high standard and all licensed under the same terms (<a href="http://developer.yahoo.com/yui/license.html">BSD</a>).  No other library supports the full range of A-Grade browsers across a full set of utilities and widgets, all under the same licensing terms.</li>
+                <li><strong>Commitment to accessibility:</strong> YUI's developers care about the experience of all users, and we've worked hard <a href="http://yuiblog.com/blog/2008/10/02/yui-aria/">to make our work support the emerging ARIA standards</a>.</li>
+                <li><strong>Documentation, documentation, documentation.</strong>  Whether you're looking at the next-generation YUI 3.x release in preview mode, the Carousel component in beta, or a GA component like DataTable, you'll find that YUI engineers have worked hard to provide great user's guides, cheat sheets, and examples.</li>
+           </ul> 
+            
+            </p>
 		</li>
 
 		<li id="download">Where can I go to download YUI?

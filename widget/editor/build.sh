@@ -1,7 +1,10 @@
 #!/bin/bash
 
-src_dir='/Users/davglass/Sites/yui/yui-editor/'
-work_dir='/Users/davglass/Sites/working/yahoo/presentation/2.x/widget/editor/src/'
+export YUI_BUILD_DIR=/Users/davglass/src/build/builder/componentbuild
+export YUI_SRC_DIR=/Users/davglass/src/build/yui2
+
+src_dir='/Users/davglass/src/local/yui/yui-editor/'
+work_dir='/Users/davglass/src/build/yui2/widget/editor/src/'
 
 cd $work_dir
 wait
@@ -46,6 +49,8 @@ wait
 cd ../
 wait
 /usr/bin/ant all
+wait
+rm -rRf build
 wait
 cd $YUI_SRC_DIR/build/editor/assets
 wait

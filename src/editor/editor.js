@@ -155,12 +155,6 @@ var Dom = YAHOO.util.Dom,
         */
         STR_IMAGE_PROP_TITLE: 'Image Options',
         /**
-        * @property STR_IMAGE_URL
-        * @description The label string for Image URL
-        * @type String
-        */
-        STR_IMAGE_URL: 'Image URL',
-        /**
         * @property STR_IMAGE_TITLE
         * @description The label string for Image Description
         * @type String
@@ -244,6 +238,12 @@ var Dom = YAHOO.util.Dom,
         * @type String
         */
         STR_LINK_TITLE: 'Description',
+        /**
+        * @property STR_NONE
+        * @description The string for the word none.
+        * @type String
+        */
+        STR_NONE: 'none',
         /**
         * @protected
         * @property CLASS_LOCAL_FILE
@@ -591,6 +591,7 @@ var Dom = YAHOO.util.Dom,
                 unlink.title = this.STR_LINK_PROP_REMOVE;
                 Event.on(unlink, 'click', function(ev) {
                     Event.stopEvent(ev);
+                    this.unsubscribeAll('afterExecCommand');
                     this.execCommand('unlink');
                     this.closeWindow();
                 }, this, true);
@@ -599,7 +600,10 @@ var Dom = YAHOO.util.Dom,
                 
                 this._windows.createlink = {};
                 this._windows.createlink.body = body;
-                body.style.display = 'none';
+                //body.style.display = 'none';
+                Event.on(body, 'keyup', function(e) {
+                    Event.stopPropagation(e);
+                });
                 this.get('panel').editor_form.appendChild(body);
                 this.fireEvent('windowCreateLinkRender', { type: 'windowCreateLinkRender', panel: this.get('panel'), body: body });
                 return body;
@@ -986,7 +990,7 @@ var Dom = YAHOO.util.Dom,
 
                 this._windows.insertimage = {};
                 this._windows.insertimage.body = body;
-                body.style.display = 'none';
+                //body.style.display = 'none';
                 this.get('panel').editor_form.appendChild(body);
                 this.fireEvent('windowInsertImageRender', { type: 'windowInsertImageRender', panel: this.get('panel'), body: body, toolbar: tbar });
                 return body;
@@ -1004,6 +1008,7 @@ var Dom = YAHOO.util.Dom,
                 }
             }
             this.on('afterExecCommand', function() {
+                YAHOO.log('afterExecCommand :: _handleInsertImageClick', 'info', 'Editor');
                 var el = this.currentElement[0],
                     body = null,
                     link = '',
@@ -1078,21 +1083,22 @@ var Dom = YAHOO.util.Dom,
                 tbar.editor_el = el;
                 
 
-                var bsize = '0';
-                var btype = 'solid';
+                var bsize = '0',
+                    btype = 'solid';
+
                 if (el.style.borderLeftWidth) {
                     bsize = parseInt(el.style.borderLeftWidth, 10);
                 }
                 if (el.style.borderLeftStyle) {
                     btype = el.style.borderLeftStyle;
                 }
-                var bs_button = tbar.getButtonByValue('bordersize');
-                var bSizeStr = ((parseInt(bsize, 10) > 0) ? '' : 'none');
-                bs_button.set('label', '<span class="yui-toolbar-bordersize-' + bsize + '">'+bSizeStr+'</span>');
+                var bs_button = tbar.getButtonByValue('bordersize'),
+                    bSizeStr = ((parseInt(bsize, 10) > 0) ? '' : this.STR_NONE);
+                bs_button.set('label', '<span class="yui-toolbar-bordersize-' + bsize + '">' + bSizeStr + '</span>');
                 this._updateMenuChecked('bordersize', bsize, tbar);
 
                 var bt_button = tbar.getButtonByValue('bordertype');
-                bt_button.set('label', '<span class="yui-toolbar-bordertype-' + btype + '"></span>');
+                bt_button.set('label', '<span class="yui-toolbar-bordertype-' + btype + '">asdfa</span>');
                 this._updateMenuChecked('bordertype', btype, tbar);
                 if (parseInt(bsize, 10) > 0) {
                     tbar.enableButton(bt_button);
@@ -1108,7 +1114,7 @@ var Dom = YAHOO.util.Dom,
                     tbar.selectButton('inline');
                 }
                 if (parseInt(el.style.marginLeft, 10) > 0) {
-                     tbar.getButtonByValue('padding').set('label', ''+parseInt(el.style.marginLeft, 10));
+                    tbar.getButtonByValue('padding').set('label', ''+parseInt(el.style.marginLeft, 10));
                 }
                 if (el.style.borderSize) {
                     tbar.selectButton('bordersize');
@@ -1137,7 +1143,6 @@ var Dom = YAHOO.util.Dom,
                 if ((height != oheight) || (width != owidth)) {
                     var s = document.createElement('span');
                     s.className = 'info';
-                    //s.innerHTML = this.STR_IMAGE_ORIG_SIZE + '<br>'+ owidth +' x ' + oheight;
                     s.innerHTML = this.STR_IMAGE_ORIG_SIZE + ': ('+ owidth +' x ' + oheight + ')';
                     if (Dom.get(this.get('id') + '_insertimage_height').nextSibling) {
                         var old = Dom.get(this.get('id') + '_insertimage_height').nextSibling;
@@ -1237,6 +1242,18 @@ var Dom = YAHOO.util.Dom,
         * @return {<a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>}
         */
         _renderPanel: function() {
+            var panelEl = document.createElement('div');
+            Dom.addClass(panelEl, 'yui-editor-panel');
+            panelEl.id = this.get('id') + this.EDITOR_PANEL_ID;
+            panelEl.style.position = 'absolute';
+            panelEl.style.top = '-9999px';
+            panelEl.style.left = '-9999px';
+            document.body.appendChild(panelEl);
+            //TODO IE barfs on this..
+            this.get('element_cont').insertBefore(panelEl, this.get('element_cont').get('firstChild'));
+
+                
+
             var panel = new YAHOO.widget.Overlay(this.get('id') + this.EDITOR_PANEL_ID, {
                     width: '300px',
                     iframe: true,
@@ -1247,9 +1264,9 @@ var Dom = YAHOO.util.Dom,
                 });
             this.set('panel', panel);
 
-            this.get('panel').setBody('---');
-            this.get('panel').setHeader(' ');
-            this.get('panel').setFooter(' ');
+            panel.setBody('---');
+            panel.setHeader(' ');
+            panel.setFooter(' ');
 
 
             var body = document.createElement('div');
@@ -1266,13 +1283,9 @@ var Dom = YAHOO.util.Dom,
             _note.className = 'yui-editor-skipheader';
             _note.innerHTML = this.STR_CLOSE_WINDOW_NOTE;
             body.appendChild(_note);
-            var form = document.createElement('form');
-            form.setAttribute('method', 'GET');
+            var form = document.createElement('fieldset');
             panel.editor_form = form;
 
-            Event.on(form, 'submit', function(ev) {
-                Event.stopEvent(ev);
-            }, this, true);
             body.appendChild(form);
             var _close = document.createElement('span');
             _close.innerHTML = 'X';
@@ -1303,32 +1316,45 @@ var Dom = YAHOO.util.Dom,
             });
 
             var fireShowEvent = function() {
-                //panel.bringToTop();
+                panel.bringToTop();
+                YAHOO.util.Dom.setStyle(this.element, 'display', 'block');
+                this._handleWindowInputs(false);
             };
             panel.showEvent.subscribe(fireShowEvent, this, true);
+            panel.hideEvent.subscribe(function() {
+                this._handleWindowInputs(true);
+            }, this, true);
             panel.renderEvent.subscribe(function() {
                 this._renderInsertImageWindow();
                 this._renderCreateLinkWindow();
                 this.fireEvent('windowRender', { type: 'windowRender', panel: panel });
+                this._handleWindowInputs(true);
             }, this, true);
 
             if (this.DOMReady) {
-                this.get('panel').render(document.body);
-                //Render to the element_cont so we can skin it better
-                //this.get('panel').render(this.get('element_cont').get('element'));
-                Dom.addClass(this.get('panel').element, 'yui-editor-panel');
+                this.get('panel').render();
             } else {
                 Event.onDOMReady(function() {
-                    this.get('panel').render(document.body);
-                    //Render to the element_cont so we can skin it better
-                    //this.get('panel').render(this.get('element_cont').get('element'));
-                    Dom.addClass(this.get('panel').element, 'yui-editor-panel');
+                    this.get('panel').render();
                 }, this, true);
             }
-            this.get('panel').showEvent.subscribe(function() {
-                YAHOO.util.Dom.setStyle(this.element, 'display', 'block');
-            });
             return this.get('panel');
+        },
+        /**
+        * @method _handleWindowInputs
+        * @param {Boolean} disable The state to set all inputs in all Editor windows to. Defaults to: false.
+        * @description Disables/Enables all fields inside Editor windows. Used in show/hide events to keep window fields from submitting when the parent form is submitted.
+        */
+        _handleWindowInputs: function(disable) {
+            if (!Lang.isBoolean(disable)) {
+                disable = false;
+            }
+            var inputs = this.get('panel').element.getElementsByTagName('input');
+            for (var i = 0; i < inputs.length; i++) {
+                try {
+                    inputs[i].disabled = disable;
+                } catch (e) {}
+            }
         },
         /**
         * @method openWindow
@@ -1336,6 +1362,7 @@ var Dom = YAHOO.util.Dom,
         * @description Opens a new "window/panel"
         */
         openWindow: function(win) {
+            
             YAHOO.log('openWindow: ' + win.name, 'info', 'Editor');
             var self = this;
             window.setTimeout(function() {
@@ -1347,7 +1374,6 @@ var Dom = YAHOO.util.Dom,
                 this.closeWindow();
             }
             
-
             var xy = Dom.getXY(this.currentElement[0]),
             elXY = Dom.getXY(this.get('iframe').get('element')),
             panel = this.get('panel'),
@@ -1463,15 +1489,13 @@ var Dom = YAHOO.util.Dom,
             } catch (e) {}
 
 
-            if (this.get('autoHeight') === false) {
-                var iTop = elXY[1] + parseInt(this.get('height'), 10);
-                var iLeft = elXY[0] + parseInt(this.get('width'), 10);
-                if (newXY[1] > iTop) {
-                    newXY[1] = iTop;
-                }
-                if (newXY[0] > iLeft) {
-                    newXY[0] = (iLeft / 2);
-                }
+            var iTop = elXY[1] + parseInt(this.get('height'), 10);
+            var iLeft = elXY[0] + parseInt(this.get('width'), 10);
+            if (newXY[1] > iTop) {
+                newXY[1] = iTop;
+            }
+            if (newXY[0] > iLeft) {
+                newXY[0] = (iLeft / 2);
             }
             
             //Convert negative numbers to positive so we can get the difference in distance
@@ -1555,7 +1579,6 @@ var Dom = YAHOO.util.Dom,
         */
         closeWindow: function(keepOpen) {
             YAHOO.log('closeWindow: ' + this.currentWindow.name, 'info', 'Editor');
-            //YAHOO.widget.EditorInfo.window = {};
             this.fireEvent('window' + this.currentWindow.name + 'Close', { type: 'window' + this.currentWindow.name + 'Close', win: this.currentWindow, el: this.currentElement[0] });
             this.fireEvent('closeWindow', { type: 'closeWindow', win: this.currentWindow });
             this.currentWindow = null;
@@ -1632,7 +1655,7 @@ var Dom = YAHOO.util.Dom,
             if (this.browser.ie) {
                 action = 'formatblock';
             }
-            if (value == 'none') {
+            if (value == this.STR_NONE) {
                 if ((_sel && _sel.tagName && (_sel.tagName.toLowerCase().substring(0,1) == 'h')) || (_sel && _sel.parentNode && _sel.parentNode.tagName && (_sel.parentNode.tagName.toLowerCase().substring(0,1) == 'h'))) {
                     if (_sel.parentNode.tagName.toLowerCase().substring(0,1) == 'h') {
                         _sel = _sel.parentNode;

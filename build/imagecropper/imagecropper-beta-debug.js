@@ -595,10 +595,10 @@ var Dom = YAHOO.util.Dom,
         */
         reset: function() {
             YAHOO.log('Resetting the control', 'log', 'ImageCropper');
-            this._resize.destroy();
-            this._resizeEl.parentNode.removeChild(this._resizeEl);
-            this._createResize();
-            this._setConstraints();
+            this._resize.resize(null, this.get('initHeight'), this.get('initWidth'), 0, 0, true);
+            this._resizeEl.style.top = this.get('initialXY')[1] + 'px';
+            this._resizeEl.style.left = this.get('initialXY')[0] + 'px';
+            this._syncBackgroundPosition();
             return this;
         },
 

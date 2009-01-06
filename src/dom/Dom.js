@@ -6,6 +6,7 @@
 
 (function() {
     var Y = YAHOO.util,     // internal shorthand
+        lang = YAHOO.lang,
         getStyle,           // for load time browser branching
         setStyle,           // ditto
         propertyCache = {}, // for faster hyphen converts
@@ -106,7 +107,7 @@
         setStyle = function(el, property, val) {
             switch (property) {
                 case 'opacity':
-                    if ( YAHOO.lang.isString(el.style.filter) ) { // in case not appended
+                    if ( lang.isString(el.style.filter) ) { // in case not appended
                         el.style.filter = 'alpha(opacity=' + val * 100 + ')';
                         
                         if (!el.currentStyle || !el.currentStyle.hasLayout) {
@@ -146,24 +147,28 @@
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
-            if (el && (el.nodeType || el.item)) { // Node, or NodeList
-                return el;
-            }
+            if (el) {
+                if (el.nodeType || el.item) { // Node, or NodeList
+                    return el;
+                }
 
-            if (YAHOO.lang.isString(el) || !el) { // id or null
-                return document.getElementById(el);
-            }
-            
-            if (el.length !== undefined) { // array-like 
-                var c = [];
-                for (var i = 0, len = el.length; i < len; ++i) {
-                    c[c.length] = Y.Dom.get(el[i]);
+                if (typeof el === 'string') { // id
+                    return document.getElementById(el);
                 }
                 
-                return c;
+                if ('length' in el) { // array-like 
+                    var c = [];
+                    for (var i = 0, len = el.length; i < len; ++i) {
+                        c[c.length] = Y.Dom.get(el[i]);
+                    }
+                    
+                    return c;
+                }
+
+                return el; // some other object, just pass it back
             }
 
-            return el; // some other object, just pass it back
+            return null;
         },
     
         /**
@@ -373,6 +378,10 @@
         /**
          * Returns a array of HTMLElements with the given class.
          * For optimized performance, include a tag and/or root node when possible.
+         * Note: This method operates against a live collection, so modifying the 
+         * collection in the callback (removing/appending nodes, etc.) will have
+         * side effects.  Instead you should iterate the returned nodes array,
+         * as you would with the native "getElementsByTagName" method. 
          * @method getElementsByClassName
          * @param {String} className The class name to match against
          * @param {String} tag (optional) The tag name of the elements being collected
@@ -381,6 +390,7 @@
          * @return {Array} An array of elements that have the given class name
          */
         getElementsByClassName: function(className, tag, root, apply) {
+            className = lang.trim(className);
             tag = tag || '*';
             root = (root) ? Y.Dom.get(root) : null || document; 
             if (!root) {
@@ -436,7 +446,7 @@
                 
                 YAHOO.log('addClass adding ' + className, 'info', 'Dom');
                 
-                el.className = YAHOO.lang.trim([el.className, className].join(' '));
+                el.className = lang.trim([el.className, className].join(' '));
                 return true;
             };
             
@@ -454,20 +464,26 @@
             var re = getClassRegEx(className);
             
             var f = function(el) {
-                if (!className || !this.hasClass(el, className)) {
-                    return false; // not present
+                var ret = false,
+                    current = el.className;
+
+                if (className && current && this.hasClass(el, className)) {
+                    
+                    el.className = current.replace(re, ' ');
+                    if ( this.hasClass(el, className) ) { // in case of multiple adjacent
+                        this.removeClass(el, className);
+                    }
+
+                    el.className = lang.trim(el.className); // remove any trailing spaces
+                    if (el.className === '') { // remove class attribute if empty
+                        var attr = (el.hasAttribute) ? 'class' : 'className';
+                        YAHOO.log('removeClass removing empty class attribute', 'info', 'Dom');
+                        el.removeAttribute(attr);
+                    }
+                    ret = true;
                 }                 
-
-                YAHOO.log('removeClass removing ' + className, 'info', 'Dom');
-                
-                var c = el.className;
-                el.className = c.replace(re, ' ');
-                if ( this.hasClass(el, className) ) { // in case of multiple adjacent
-                    this.removeClass(el, className);
-                }
-
-                el.className = YAHOO.lang.trim(el.className); // remove any trailing spaces
-                return true;
+                YAHOO.log('removeClass ' + className + ' result: ' + ret, 'info', 'Dom');
+                return ret;
             };
             
             return Y.Dom.batch(el, f, Y.Dom, true);
@@ -500,10 +516,10 @@
                 el.className = el.className.replace(re, ' ' + newClassName + ' ');
 
                 if ( this.hasClass(el, oldClassName) ) { // in case of multiple adjacent
-                    this.replaceClass(el, oldClassName, newClassName);
+                    this.removeClass(el, oldClassName);
                 }
 
-                el.className = YAHOO.lang.trim(el.className); // remove any trailing spaces
+                el.className = lang.trim(el.className); // remove any trailing spaces
                 return true;
             };
             
@@ -551,25 +567,20 @@
             haystack = Y.Dom.get(haystack);
             needle = Y.Dom.get(needle);
             
-            if (!haystack || !needle) {
-                return false;
-            }
+            var ret = false;
 
-            if (haystack.contains && needle.nodeType && !isSafari) { // safari contains is broken
-                YAHOO.log('isAncestor returning ' + haystack.contains(needle), 'info', 'Dom');
-                return haystack.contains(needle);
+            if ( (haystack && needle) && (haystack.nodeType && needle.nodeType) ) {
+                if (haystack.contains && haystack !== needle) { // contains returns true when equal
+                    ret = haystack.contains(needle);
+                }
+                else if (haystack.compareDocumentPosition) { // gecko
+                    ret = !!(haystack.compareDocumentPosition(needle) & 16);
+                }
+            } else {
+                YAHOO.log('isAncestor failed; invalid input: ' + haystack + ',' + needle, 'error', 'Dom');
             }
-            else if ( haystack.compareDocumentPosition && needle.nodeType ) {
-                YAHOO.log('isAncestor returning ' + !!(haystack.compareDocumentPosition(needle) & 16), 'info', 'Dom');
-                return !!(haystack.compareDocumentPosition(needle) & 16);
-            } else if (needle.nodeType) {
-                // fallback to crawling up (safari)
-                return !!this.getAncestorBy(needle, function(el) {
-                    return el == haystack; 
-                }); 
-            }
-            YAHOO.log('isAncestor failed; most likely needle is not an HTMLElement', 'error', 'Dom');
-            return false;
+            YAHOO.log('isAncestor(' + haystack + ',' + needle + ' returning ' + ret, 'info', 'Dom');
+            return ret;
         },
         
         /**
@@ -585,6 +596,10 @@
         /**
          * Returns a array of HTMLElements that pass the test applied by supplied boolean method.
          * For optimized performance, include a tag and/or root node when possible.
+         * Note: This method operates against a live collection, so modifying the 
+         * collection in the callback (removing/appending nodes, etc.) will have
+         * side effects.  Instead you should iterate the returned nodes array,
+         * as you would with the native "getElementsByTagName" method. 
          * @method getElementsBy
          * @param {Function} method - A boolean method for testing elements which receives the element as its only argument.
          * @param {String} tag (optional) The tag name of the elements being collected
@@ -624,17 +639,17 @@
          * @param {String | HTMLElement | Array} el (optional) An element or array of elements to apply the method to
          * @param {Function} method The method to apply to the element(s)
          * @param {Any} o (optional) An optional arg that is passed to the supplied method
-         * @param {Boolean} override (optional) Whether or not to override the scope of "method" with "o"
+         * @param {Boolean} overrides (optional) Whether or not to override the scope of "method" with "o"
          * @return {Any | Array} The return value(s) from the supplied method
          */
-        batch: function(el, method, o, override) {
+        batch: function(el, method, o, overrides) {
             el = (el && (el.tagName || el.item)) ? el : Y.Dom.get(el); // skip get() when possible
 
             if (!el || !method) {
                 YAHOO.log('batch failed: invalid arguments', 'error', 'Dom');
                 return false;
             } 
-            var scope = (override) ? o : window;
+            var scope = (overrides) ? o : window;
             
             if (el.tagName || el.length === undefined) { // element or not array-like 
                 return method.call(scope, el, o);
@@ -721,7 +736,7 @@
          * @return {Object} HTMLElement or null if not found
          */
         getAncestorBy: function(node, method) {
-            while (node = node.parentNode) { // NOTE: assignment
+            while ( (node = node.parentNode) ) { // NOTE: assignment
                 if ( testElement(node, method) ) {
                     YAHOO.log('getAncestorBy returning ' + node, 'info', 'Dom');
                     return node;
@@ -1016,11 +1031,12 @@
     var getXY = function() {
         if (document.documentElement.getBoundingClientRect) { // IE
             return function(el) {
-                var box = el.getBoundingClientRect();
+                var box = el.getBoundingClientRect(),
+                    round = Math.round;
 
                 var rootNode = el.ownerDocument;
-                return [box.left + Y.Dom.getDocumentScrollLeft(rootNode), box.top +
-                        Y.Dom.getDocumentScrollTop(rootNode)];
+                return [round(box.left + Y.Dom.getDocumentScrollLeft(rootNode)), round(box.top +
+                        Y.Dom.getDocumentScrollTop(rootNode))];
             };
         } else {
             return function(el) { // manually calculate by crawling up offsetParents
@@ -1054,13 +1070,8 @@
                 while ( parentNode.tagName && !patterns.ROOT_TAG.test(parentNode.tagName) ) 
                 {
                     if (parentNode.scrollTop || parentNode.scrollLeft) {
-                        // work around opera inline/table scrollLeft/Top bug (false reports offset as scroll)
-                        if (!patterns.OP_SCROLL.test(Y.Dom.getStyle(parentNode, 'display'))) { 
-                            if (!isOpera || Y.Dom.getStyle(parentNode, 'overflow') !== 'visible') { // opera inline-block misreports when visible
-                                pos[0] -= parentNode.scrollLeft;
-                                pos[1] -= parentNode.scrollTop;
-                            }
-                        }
+                        pos[0] -= parentNode.scrollLeft;
+                        pos[1] -= parentNode.scrollTop;
                     }
                     
                     parentNode = parentNode.parentNode; 

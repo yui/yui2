@@ -906,11 +906,6 @@ var D = YAHOO.util.Dom,
                         }
                     }
                     if (set) {
-                        if (this.browser.ie > 6) {
-                            if (h === this._cache.height) {
-                                h = h + 1;
-                            }
-                        }
                         el.style.height = h + 'px';
                     }
                     if ((this._proxy && force) || !this._proxy) {
@@ -1000,7 +995,7 @@ var D = YAHOO.util.Dom,
             YAHOO.log('Handle BR', 'info', 'Resize');
             var newW = this._setWidth(args.e);
             var newH = this._setHeight(args.e);
-            this.resize(args.e, (newH + 1), newW, 0, 0);
+            this.resize(args.e, newH, newW, 0, 0);
         },
         /** 
         * @private

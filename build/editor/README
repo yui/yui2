@@ -3,56 +3,56 @@
     * Widget promoted to GA - beta flag removed from all files.
 
     * Firefox
-	    * 1776202 - FF:rich text formatting (italize) lost when color is selected in RTE
-	    * 1886390 - [SF 1946017] Unable to delete text when editor opens (Firefox)
-	    * 2030281 - [SF 2002911] Problem with Header styling in Firefox
+        * 1776202 - FF:rich text formatting (italize) lost when color is selected in RTE
+        * 1886390 - [SF 1946017] Unable to delete text when editor opens (Firefox)
+        * 2030281 - [SF 2002911] Problem with Header styling in Firefox
         * 1765001 - [SF 1899196] Firefox button Inconsistencies
 
     * Internet Explorer
-	    * 1842631 - [SF 1869619] Image Modification Dialog
-	    * 2006122 - [SF 1995892] set('disabled',false) cause IE6 error 
-	    * 2092598 - [SF 2021359] IE7: dbl click image doesn't show settings dialog
-	    * 2093275 - [SF 2026296] Auto Adjusting height bug in IE
-	    * 2093325 - [SF 2025092] IE7:allowNoEdit turned on period '.' doesn't work
-	    * 2099035 - [SF 2027048] keyDown event does not fire in IE after enabling editor
-	    * 2189912 - [SF 2093253] Editor used in HTTPS page will provoke Security warning
+        * 1842631 - [SF 1869619] Image Modification Dialog
+        * 2006122 - [SF 1995892] set('disabled',false) cause IE6 error 
+        * 2092598 - [SF 2021359] IE7: dbl click image doesn't show settings dialog
+        * 2093275 - [SF 2026296] Auto Adjusting height bug in IE
+        * 2093325 - [SF 2025092] IE7:allowNoEdit turned on period '.' doesn't work
+        * 2099035 - [SF 2027048] keyDown event does not fire in IE after enabling editor
+        * 2189912 - [SF 2093253] Editor used in HTTPS page will provoke Security warning
         * 1655240 - [SF 1851177] Text Align not working correctly in IE
-	    * 1984727 - [SF 1986820] Clicking bulleted list before typing creates empty <li> IE7
-	    * 2108127 - [SF 2027073] IE7: editor list items misaligned 
-	    * 1918222 - [SF 1956586] Fontsize is not updating when nodechange in IE
+        * 1984727 - [SF 1986820] Clicking bulleted list before typing creates empty <li> IE7
+        * 2108127 - [SF 2027073] IE7: editor list items misaligned 
+        * 1918222 - [SF 1956586] Fontsize is not updating when nodechange in IE
 
     * Safari
-	    * 1972354 - [SF 1978372] Safari/IE list creation quirk
-	    * 1972367 - [SF 1978350] Safari 3.1 issue with lists
+        * 1972354 - [SF 1978372] Safari/IE list creation quirk
+        * 1972367 - [SF 1978350] Safari 3.1 issue with lists
 
     * All
         * 1508375 - [SF 1791252, 1964709] Have Undo, Redo functions in Editor  
-	    * 1839296 - [SF 1926238] Editor adds extra </li> tag at the end of a list
-	    * 1844215 - [SF 1928426] filter_invalid_lists
-	    * 1844258 - [SF 1923255] Give descriptive error when container isn't textarea
-	    * 1851344 - [SF 1931768] Relative links automatically converted to absolute links.
-	    * 1870106 - Add a strikethrough/blockquote buttons for the Rich Text Editor
-	    * 1886339 - [SF 1946874] Double clicking in the editor sets "editorDirty" false
-	    * 1892984 - [SF 1919826] Regex matches both <b> and <button>
-	    * 1901545 - Rich Text Editor - Link menu's url encoding "&" to "&amp" 	
-	    * 1908178 - [SF 1954228] Deleting 1+ button from buttonType:advanced fails
-	    * 1926462 - html encoded characters are unencoded
-	    * 1964404 - [SF 1975463] Editor.destroy() doesn't destroy editor windows
-	    * 1984734 - [SF 1986184] error on _formButtonClicked log message
-	    * 2030229 - [SF 2003080] Various widths affect toolbar layout
-	    * 2138168 - [SF 2048035] autoHeight will cause dialog panels to be misaligned
-	    * 2166952 - [SF 2065060] Tab & shift-tab should move focus from the editor
-	    * 2178829 - [SF 2077747] Simple editor losing its format when font color changes
+        * 1839296 - [SF 1926238] Editor adds extra </li> tag at the end of a list
+        * 1844215 - [SF 1928426] filter_invalid_lists
+        * 1844258 - [SF 1923255] Give descriptive error when container isn't textarea
+        * 1851344 - [SF 1931768] Relative links automatically converted to absolute links.
+        * 1870106 - Add a strikethrough/blockquote buttons for the Rich Text Editor
+        * 1886339 - [SF 1946874] Double clicking in the editor sets "editorDirty" false
+        * 1892984 - [SF 1919826] Regex matches both <b> and <button>
+        * 1901545 - Rich Text Editor - Link menu's url encoding "&" to "&amp" 	
+        * 1908178 - [SF 1954228] Deleting 1+ button from buttonType:advanced fails
+        * 1926462 - html encoded characters are unencoded
+        * 1964404 - [SF 1975463] Editor.destroy() doesn't destroy editor windows
+        * 1984734 - [SF 1986184] error on _formButtonClicked log message
+        * 2030229 - [SF 2003080] Various widths affect toolbar layout
+        * 2138168 - [SF 2048035] autoHeight will cause dialog panels to be misaligned
+        * 2166952 - [SF 2065060] Tab & shift-tab should move focus from the editor
+        * 2178829 - [SF 2077747] Simple editor losing its format when font color changes
         * 2015947 - [SF 1998524] Alignment Code doesn't generate
         * 2118761 - [SF 2035187] Custom Editor body CSS only applies to visited links
         * 2118723 - [SF 2034544] Image Options Dialog Box needs fixing
         * 2036613 - [SF 2007145] Removing underline not working in IE6/7, FF3
         * 2065013 - [SF 2015601] Text in some controls is not vertically centered
-	    * 1918278 - [SF 1955931] font color (background color) doesn't work properly
-	    * 1972427 - [SF 1954095] Bulleting
+        * 1918278 - [SF 1955931] font color (background color) doesn't work properly
+        * 1972427 - [SF 1954095] Bulleting
         * 1839224 - [SF 1925337] editor indent/outdent inconsistent behavior
-	    * 2006092 - [SF 1996074] Indent changes the font to Arial
-        * 206493 - Handle Submit Failing
+        * 2006092 - [SF 1996074] Indent changes the font to Arial
+        * 206493  - Handle Submit Failing
 
 
 **** version 2.5.2 ***

@@ -48,7 +48,7 @@
                 <li class="yws-flickr"><em></em><a href="#">yws-flickr</a></li>
                 <li class="yws-events"><em></em><a href="#">yws-events</a></li>
             </ul>
-            <div id="calBox"><span class="icon"></span><em><?php echo(date('m/d/Y')); ?></em></div>
+            <div id="calBox"><span class="icon"></span><em id="calDateStr"><?php echo(date('m/d/Y')); ?></em></div>
             <div id="calContainer"><div id="cal"></div></div>
         </div>
     </div>
