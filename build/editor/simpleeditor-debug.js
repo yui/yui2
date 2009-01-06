@@ -14,6 +14,7 @@ var Dom = YAHOO.util.Dom,
      * 
      * Provides a toolbar button based on the button and menu widgets.
      * @constructor
+     * @class ToolbarButtonAdvanced
      * @param {String/HTMLElement} el The element to turn into a button.
      * @param {Object} attrs Object liternal containing configuration parameters.
     */
@@ -54,10 +55,10 @@ var Dom = YAHOO.util.Dom,
      * @namespace YAHOO.widget
      * @requires yahoo, dom, element, event
      * @Extends YAHOO.util.Element
-     * @beta
      * 
      * Provides a toolbar button based on the button and menu widgets, <select> elements are used in place of menu's.
      * @constructor
+     * @class ToolbarButton
      * @param {String/HTMLElement} el The element to turn into a button.
      * @param {Object} attrs Object liternal containing configuration parameters.
     */
