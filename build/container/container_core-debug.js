@@ -1840,7 +1840,7 @@
          * to account for certain types of content not rendering correctly (e.g. border-collapse:collapse table borders)
          *
          * @method _forceOperaRepaint
-         * @prviate
+         * @private
          */
         _forceOperaRepaint : function() {
             var docEl = document.documentElement;
