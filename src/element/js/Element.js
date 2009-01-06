@@ -357,7 +357,7 @@ YAHOO.util.Element.prototype = {
         
         // set it on the element if not configured and is an HTML attribute
         if ( !this._configs[key] && !YAHOO.lang.isUndefined(el[key]) ) {
-            _registerHTMLAttr.call(this, key);
+            this._setHTMLAttrConfig(key);
         }
 
         return AttributeProvider.prototype.set.apply(this, arguments);
@@ -367,7 +367,7 @@ YAHOO.util.Element.prototype = {
         var el = this.get('element');
 
         if (el && !this._configs[key] && !YAHOO.lang.isUndefined(el[key]) ) {
-            _registerHTMLAttr.call(this, key, map);
+            this._setHTMLAttrConfig(key, map);
         } else {
             AttributeProvider.prototype.setAttributeConfig.apply(this, arguments);
         }
@@ -394,101 +394,101 @@ YAHOO.util.Element.prototype = {
     },
     
     init: function(el, attr) {
-        _initElement.apply(this, arguments); 
-    }
-};
+        this._initElement(el, attr); 
+    },
 
-var _initElement = function(el, attr) {
-    this._queue = this._queue || [];
-    this._events = this._events || {};
-    this._configs = this._configs || {};
-    this._configOrder = []; 
-    attr = attr || {};
-    attr.element = attr.element || el || null;
+    _initElement: function(el, attr) {
+        this._queue = this._queue || [];
+        this._events = this._events || {};
+        this._configs = this._configs || {};
+        this._configOrder = []; 
+        attr = attr || {};
+        attr.element = attr.element || el || null;
 
-    this.DOM_EVENTS = {
-        'click': true,
-        'dblclick': true,
-        'keydown': true,
-        'keypress': true,
-        'keyup': true,
-        'mousedown': true,
-        'mousemove': true,
-        'mouseout': true, 
-        'mouseover': true, 
-        'mouseup': true,
-        'focus': true,
-        'blur': true,
-        'submit': true
-    };
+        this.DOM_EVENTS = {
+            'click': true,
+            'dblclick': true,
+            'keydown': true,
+            'keypress': true,
+            'keyup': true,
+            'mousedown': true,
+            'mousemove': true,
+            'mouseout': true, 
+            'mouseover': true, 
+            'mouseup': true,
+            'focus': true,
+            'blur': true,
+            'submit': true
+        };
 
-    var isReady = false;  // to determine when to init HTMLElement and content
+        var isReady = false;  // to determine when to init HTMLElement and content
 
-    if (typeof attr.element === 'string') { // register ID for get() access
-        _registerHTMLAttr.call(this, 'id', { value: attr.element });
-    }
-
-    if (Dom.get(attr.element)) {
-        isReady = true;
-        _initHTMLElement.call(this, attr);
-        _initContent.call(this, attr);
-    }
-
-    YAHOO.util.Event.onAvailable(attr.element, function() {
-        if (!isReady) { // otherwise already done
-            _initHTMLElement.call(this, attr);
+        if (typeof attr.element === 'string') { // register ID for get() access
+            this._setHTMLAttrConfig('id', { value: attr.element });
         }
 
-        this.fireEvent('available', { type: 'available', target: Dom.get(attr.element) });  
-    }, this, true);
-    
-    YAHOO.util.Event.onContentReady(attr.element, function() {
-        if (!isReady) { // otherwise already done
-            _initContent.call(this, attr);
+        if (Dom.get(attr.element)) {
+            isReady = true;
+            this._initHTMLElement(attr);
+            this._initContent(attr);
         }
-        this.fireEvent('contentReady', { type: 'contentReady', target: Dom.get(attr.element) });  
-    }, this, true);
-};
 
-var _initHTMLElement = function(attr) {
+        YAHOO.util.Event.onAvailable(attr.element, function() {
+            if (!isReady) { // otherwise already done
+                this._initHTMLElement(attr);
+            }
+
+            this.fireEvent('available', { type: 'available', target: Dom.get(attr.element) });  
+        }, this, true);
+        
+        YAHOO.util.Event.onContentReady(attr.element, function() {
+            if (!isReady) { // otherwise already done
+                this._initContent(attr);
+            }
+            this.fireEvent('contentReady', { type: 'contentReady', target: Dom.get(attr.element) });  
+        }, this, true);
+    },
+
+    _initHTMLElement: function(attr) {
+        /**
+         * The HTMLElement the Element instance refers to.
+         * @attribute element
+         * @type HTMLElement
+         */
+        this.setAttributeConfig('element', {
+            value: Dom.get(attr.element),
+            readOnly: true
+         });
+    },
+
+    _initContent: function(attr) {
+        this.initAttributes(attr);
+        this.setAttributes(attr, true);
+        this.fireQueue();
+
+    },
+
     /**
-     * The HTMLElement the Element instance refers to.
-     * @attribute element
-     * @type HTMLElement
+     * Sets the value of the property and fires beforeChange and change events.
+     * @private
+     * @method _setHTMLAttrConfig
+     * @param {YAHOO.util.Element} element The Element instance to
+     * register the config to.
+     * @param {String} key The name of the config to register
+     * @param {Object} map A key-value map of the config's params
      */
-    this.setAttributeConfig('element', {
-        value: Dom.get(attr.element),
-        readOnly: true
-     });
-};
-
-var _initContent = function(attr) {
-    this.initAttributes(attr);
-    this.setAttributes(attr, true);
-    this.fireQueue();
-
-};
-
-/**
- * Sets the value of the property and fires beforeChange and change events.
- * @private
- * @method _registerHTMLAttr
- * @param {YAHOO.util.Element} element The Element instance to
- * register the config to.
- * @param {String} key The name of the config to register
- * @param {Object} map A key-value map of the config's params
- */
-var _registerHTMLAttr = function(key, map) {
-    var el = this.get('element');
-    map = map || {};
-    map.name = key;
-    map.method = map.method || function(value) {
-        if (el) {
-            el[key] = value;
-        }
-    };
-    map.value = map.value || el[key];
-    this._configs[key] = new YAHOO.util.Attribute(map, this);
+    _setHTMLAttrConfig: function(key, map) {
+        var el = this.get('element');
+        map = map || {};
+        map.name = key;
+        map.method = map.method || function(value) {
+            if (el) {
+                el[key] = value;
+            }
+        };
+        map.value = map.value || el[key];
+        this._configs[key] = new YAHOO.util.Attribute(map, this);
+    }
 };
 
 /**
