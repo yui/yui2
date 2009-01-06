@@ -1865,7 +1865,7 @@
             }
 
             if (this.get("isVertical")) {
-                size = getCarouselItemSize.call(this);
+                size = getCarouselItemSize.call(this, "width");
                 size = size < config.MIN_WIDTH ? config.MIN_WIDTH : size;
                 this.setStyle("width",  size + "px");
                 this.addClass(cssClass.VERTICAL);
