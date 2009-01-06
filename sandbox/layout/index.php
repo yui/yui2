@@ -77,7 +77,8 @@ if (!$_GET['non']) {
 <script type="text/javascript" src="../../build/logger/logger-min.js"></script> 
 <script src="http://us.js2.yimg.com/us.js.yimg.com/i/ydn/yuiweb/js/dpsyntax-min-2.js"></script>
 <script type="text/javascript" src="../../build/resize/resize-min.js"></script> 
-<script type="text/javascript" src="../../build/layout/layout-debug.js"></script> 
+<script type="text/javascript" src="js/layout.js"></script> 
+<script type="text/javascript" src="js/layoutunit.js"></script> 
 <script type="text/javascript">
 
 (function() {
