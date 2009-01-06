@@ -649,38 +649,21 @@ var Dom = YAHOO.util.Dom,
             return this.get('iframe').get('element').contentWindow;
         },
         /**
+        * @method focus
+        * @description Attempt to set the focus of the iframes window.
+        */
+        focus: function() {
+            this._getWindow().focus();
+        },
+        /**
         * @private
+        * @depreciated - This should not be used, moved to this.focus();
         * @method _focusWindow
         * @description Attempt to set the focus of the iframes window.
-        * @param {Boolean} onLoad Safari needs some special care to set the cursor in the iframe
         */
-        _focusWindow: function(onLoad) {
-            if (this.browser.webkit) {
-                if (onLoad) {
-                    /**
-                    * @knownissue Safari Cursor Position
-                    * @browser Safari 2.x
-                    * @description Can't get Safari to place the cursor at the beginning of the text..
-                    * This workaround at least set's the toolbar into the proper state.
-                    */
-                    this._getSelection().setBaseAndExtent(this._getDoc().body.firstChild, 0, this._getDoc().body.firstChild, 1);
-                    if (this.browser.webkit3) {
-                        this._getSelection().collapseToStart();
-                    } else {
-                        this._getSelection().collapse(false);
-                    }
-                } else {
-                    this._getSelection().setBaseAndExtent(this._getDoc().body, 1, this._getDoc().body, 1);
-                    if (this.browser.webkit3) {
-                        this._getSelection().collapseToStart();
-                    } else {
-                        this._getSelection().collapse(false);
-                    }
-                }
-                this._getWindow().focus();
-            } else {
-                this._getWindow().focus();
-            }
+        _focusWindow: function() {
+            YAHOO.log('_focusWindow: depreciated in favor of this.focus()', 'warn', 'Editor');
+            this.focus();
         },
         /**
         * @private
@@ -883,7 +866,6 @@ var Dom = YAHOO.util.Dom,
                 YAHOO.log('Editor Window Focused', 'info', 'SimpleEditor');
                 this._focused = true;
                 this.fireEvent('editorWindowFocus', { type: 'editorWindowFocus', target: this });
-
             }
         },
         /**
@@ -2312,7 +2294,7 @@ var Dom = YAHOO.util.Dom,
                 if (!this.browser.webkit) {
                      var Fself = this;
                      setTimeout(function() {
-                         Fself._focusWindow.call(Fself);
+                         Fself.focus.call(Fself);
                      }, 5);
                  }
             }
@@ -2375,7 +2357,7 @@ var Dom = YAHOO.util.Dom,
                         this.toolbar.set('disabled', false);
                     }
                     this._setDesignMode('on');
-                    this._focusWindow();
+                    this.focus();
                     var self = this;
                     window.setTimeout(function() {
                         self.nodeChange.call(self);
@@ -3042,7 +3024,7 @@ var Dom = YAHOO.util.Dom,
                         this.on('editorContentLoaded', function() {
                             var self = this;
                             setTimeout(function() {
-                                self._focusWindow.call(self, true);
+                                self.focus.call(self);
                                 self.editorDirty = false;
                             }, 400);
                         }, this, true);
@@ -4169,7 +4151,7 @@ var Dom = YAHOO.util.Dom,
             } else if (this.browser.ie || this.browser.opera) {
                 el.innerHTML = '&nbsp;';
             }
-            this._focusWindow();
+            this.focus();
             this._selectNode(el, true);
             return el;
         },
@@ -4407,7 +4389,7 @@ var Dom = YAHOO.util.Dom,
         show: function() {
             if (this.browser.gecko) {
                 this._setDesignMode('on');
-                this._focusWindow();
+                this.focus();
             }
             if (this.browser.webkit) {
                 var self = this;
@@ -4888,7 +4870,7 @@ var Dom = YAHOO.util.Dom,
         closeWindow: function() {
             //this.unsubscribeAll('afterExecCommand');
             this.toolbar.resetAllButtons();
-            this._focusWindow();        
+            this.focus();        
         },
         /**
         * @method destroy
