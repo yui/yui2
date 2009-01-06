@@ -1588,7 +1588,7 @@ var Dom = YAHOO.util.Dom,
             this.unsubscribeAll('afterExecCommand');
             this.toolbar.set('disabled', false); //enable the toolbar now that the window is closed
             this.toolbar.resetAllButtons();
-            this._focusWindow();
+            this.focus();
             Event.removeListener(document, 'keydown', this._closeWindow);
         },
 

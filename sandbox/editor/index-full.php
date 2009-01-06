@@ -49,6 +49,7 @@
         </select><a href="#" id="editorHTML">Editor HTML</a><br>
         <a href="#" id="editorSE">Editor Selected Element</a><br>
         <a href="#" id="editorToggle">Toggle Design Mode</a><br>
+        <a href="#" id="editorFocus">Focus Window</a><br>
         </p>
         <textarea rows="20" cols="75" id="afterHTML" style="display: none;"></textarea>
         <?php
@@ -146,6 +147,13 @@ YAHOO.util.Event.onAvailable('editorSE', function() {
         YAHOO.util.Event.stopEvent(ev);
     });
 });
+YAHOO.util.Event.onAvailable('editorFocus', function() {
+    YAHOO.util.Event.addListener('editorFocus', 'click', function(ev) {
+        var el = myEditor.focus();
+        YAHOO.util.Event.stopEvent(ev);
+    });
+});
+
 </script>
 </body>
 </html>
