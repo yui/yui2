@@ -2035,4 +2035,4 @@ if(!YAHOO.widget.Logger) {
 }
 
 
-YAHOO.register("logger", YAHOO.widget.Logger, {version: "@VERSION@", build: "@BUILD@"});
+YAHOO.register("Logger", YAHOO.widget.Logger, {version: "@VERSION@", build: "@BUILD@"});
