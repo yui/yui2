@@ -3,7 +3,7 @@
  * @description <p>The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images. The Rich Text Editor's toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.</p>
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, container_core, simpleeditor
- * @optional dragdrop, animation, menu, button
+ * @optional dragdrop, animation, menu, button, resize
  */
 
 (function() {
@@ -1711,7 +1711,7 @@ var Dom = YAHOO.util.Dom,
         */
         cmd_removeformat: function(value) {
             var exec = true;
-            /**
+            /*
             * @knownissue Remove Format issue
             * @browser Safari 2.x
             * @description There is an issue here with Safari, that it may not always remove the format of the item that is selected.
@@ -1726,14 +1726,6 @@ var Dom = YAHOO.util.Dom,
                 for (var i = 1; i < this.currentElement.length; i++) {
                     this.currentElement[i].parentNode.removeChild(this.currentElement[i]);
                 }
-                /*
-                this._createCurrentElement('span');
-                YAHOO.util.Dom.addClass(this.currentElement[0], 'yui-non');
-                var re= /<\S[^><]*>/g;
-                var str = this.currentElement[0].innerHTML.replace(re, '');
-                var _txt = this._getDoc().createTextNode(str);
-                this.currentElement[0].parentNode.parentNode.replaceChild(_txt, this.currentElement[0].parentNode);
-                */
                 
                 exec = false;
             }

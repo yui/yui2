@@ -1,4 +1,5 @@
 /**
+ * @module editor
  * @description <p>Creates a rich Toolbar widget based on Button. Primarily used with the Rich Text Editor</p>
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbarbutton
@@ -665,11 +666,6 @@ var Dom = YAHOO.util.Dom,
                             } else {
                                 this.get('cont').appendChild(this._dragHandle);
                             }
-                            /**
-                            * @property dd
-                            * @description The DragDrop instance associated with the Toolbar
-                            * @type Object
-                            */
                             this.dd = new YAHOO.util.DD(this.get('id'));
                             this.dd.setHandleElId(this._dragHandle.id);
                             
