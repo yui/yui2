@@ -681,6 +681,43 @@
     }
 
     /**
+     * Synchronize and redraw the Pager UI if necessary.
+     *
+     * @method syncPagerUi
+     * @private
+     */
+    function syncPagerUi(page) {
+        var a,
+            cssClass = this.CLASSES,
+            me,
+            numPages,
+            numVisible;
+
+        me = this.get("element").id;
+
+        // Don't do anything if the Carousel is not rendered
+        if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
+            return;
+        }
+
+        numVisible = this.get("numVisible");
+
+        if (!JS.isNumber(page)) {
+            page = Math.ceil(this.get("selectedItem") / numVisible);
+        }
+        numPages = Math.ceil(this.get("numItems") / numVisible);
+
+        this._pages.num = numPages;
+        this._pages.cur = page;
+
+        if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
+            this._updatePagerMenu();
+        } else {
+            this._updatePagerButtons();
+        }
+    }
+
+    /**
      * Fire custom events for synchronizing the DOM.
      *
      * @method syncUi
@@ -1613,14 +1650,14 @@
             carousel.on(noItemsEvent, function (ev) {
                 carousel.scrollTo(0);
                 syncNavigation.call(carousel);
-                carousel._syncPagerUi();
+                syncPagerUi.call(carousel);
             });
 
-            carousel.on(pageChangeEvent, carousel._syncPagerUi);
+            carousel.on(pageChangeEvent, syncPagerUi, carousel);
 
             carousel.on(renderEvent, function (ev) {
                 syncNavigation.call(carousel, ev);
-                carousel._syncPagerUi(ev);
+                syncPagerUi.call(carousel, ev);
             });
 
             carousel.on("selectedItemChange", function (ev) {
@@ -1634,7 +1671,7 @@
 
             carousel.on(uiUpdateEvent, function (ev) {
                 syncNavigation.call(carousel, ev);
-                carousel._syncPagerUi(ev);
+                syncPagerUi.call(carousel, ev);
             });
 
             carousel.on("firstVisibleChange", function (ev) {
@@ -2882,74 +2919,6 @@
         },
 
         /**
-         * Synchronize and redraw the Pager UI if necessary.
-         *
-         * @method _syncPagerUi
-         * @protected
-         */
-        _syncPagerUi: function (page) {
-            var a,
-                cssClass = this.CLASSES,
-                i,
-                markup     = "",
-                me,
-                numPages,
-                numVisible;
-
-            me = this.get("element").id;
-
-            // Don't do anything if the Carousel is not rendered
-            if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
-                return;
-            }
-
-            numVisible = this.get("numVisible");
-
-            if (!JS.isNumber(page)) {
-                page = Math.ceil(this.get("selectedItem") / numVisible);
-            }
-            numPages = Math.ceil(this.get("numItems") / numVisible);
-
-            this._pages.num = numPages;
-            this._pages.cur = page;
-
-            if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
-                markup = "<form><select>";
-            } else {
-                markup = "";
-            }
-
-            for (i = 0; i < numPages; i++) {
-                if (JS.isUndefined(this._itemsTable.items[i * numVisible])) {
-                    break;
-                }
-                a = this._itemsTable.items[i * numVisible].id;
-                if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
-                    markup += "<option value=\"#" + a + "\" "            +
-                            (i == page ? " selected" : "") + ">"         +
-                            this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1) +
-                            "</option>";
-                } else {
-                    markup += "<li class=\""                                   +
-                            (i === 0 ? cssClass.FIRST_PAGE : "")               +
-                            (i == page ? " " + cssClass.SELECTED_NAV : "")     +
-                            "\"><a href=\"#" + a + "\" tabindex=\"0\"><em>"    +
-                            this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)       +
-                            "</em></a></li>";
-                }
-            }
-
-            if (numPages > this.CONFIG.MAX_PAGER_BUTTONS) {
-                markup += "</select></form>";
-            }
-
-            if (this._pages.el) {
-                this._pages.el.innerHTML = markup;
-            }
-            markup = null;
-        },
-
-        /**
          * Set the correct class for the navigation buttons.
          *
          * @method _updateNavButtons
@@ -2982,6 +2951,149 @@
                     Dom.removeClass(parent, cssClass.FOCUSSED_BUTTON);
                 }
             }
+        },
+
+        /**
+         * Update the UI for the pager buttons based on the current page and
+         * the number of pages.
+         *
+         * @method _updatePagerButtons
+         * @protected
+         */
+        _updatePagerButtons: function () {
+            var css   = this.CLASSES,
+                cur   = this._pages.cur, // current page
+                el,
+                html,
+                i,
+                item,
+                n     = this.get("numVisible"),
+                num   = this._pages.num, // total pages
+                pager = this._pages.el;  // the pager container element
+
+            if (num === 0) {
+                return;         // don't do anything if number of pages is 0
+            }
+
+            // Hide the pager before redrawing it
+            Dom.setStyle(pager, "visibility", "hidden");
+
+            // Remove all nodes from the pager
+            while (pager.firstChild) {
+                pager.removeChild(pager.firstChild);
+            }
+
+            for (i = 0; i < num; i++) {
+                if (JS.isUndefined(this._itemsTable.items[i * n])) {
+                    Dom.setStyle(pager, "visibility", "visible");
+                    break;
+                }
+                item = this._itemsTable.items[i * n].id;
+
+                el   = document.createElement("LI");
+                if (!el) {
+                    YAHOO.log("Unable to create an LI pager button", "error",
+                              WidgetName);
+                    Dom.setStyle(pager, "visibility", "visible");
+                    break;
+                }
+
+                if (i === 0) {
+                    Dom.addClass(el, css.FIRST_PAGE);
+                }
+                if (i == cur) {
+                    Dom.addClass(el, css.SELECTED_NAV);
+                }
+
+                // TODO: use a template string for i18N compliance
+                html = "<a href=\"#" + item + "\" tabindex=\"0\"><em>" +
+                        this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1)   +
+                        "</em></a>";
+                el.innerHTML = html;
+
+                pager.appendChild(el);
+            }
+
+            // Show the pager now
+            Dom.setStyle(pager, "visibility", "visible");
+        },
+
+        /**
+         * Update the UI for the pager menu based on the current page and
+         * the number of pages.  If the number of pages is greater than
+         * MAX_PAGER_BUTTONS, then the selection of pages is provided by a drop
+         * down menu instead of a set of buttons.
+         *
+         * @method _updatePagerMenu
+         * @protected
+         */
+        _updatePagerMenu: function () {
+            var css   = this.CLASSES,
+                cur   = this._pages.cur, // current page
+                el,
+                html,
+                i,
+                item,
+                n     = this.get("numVisible"),
+                num   = this._pages.num, // total pages
+                pager = this._pages.el,  // the pager container element
+                sel;
+
+            if (num === 0) {
+                return;         // don't do anything if number of pages is 0
+            }
+
+            sel = document.createElement("SELECT");
+            if (!sel) {
+                YAHOO.log("Unable to create the pager menu", "error",
+                          WidgetName);
+                return;
+            }
+
+            // Hide the pager before redrawing it
+            Dom.setStyle(pager, "visibility", "hidden");
+
+            // Remove all nodes from the pager
+            while (pager.firstChild) {
+                pager.removeChild(pager.firstChild);
+            }
+
+            for (i = 0; i < num; i++) {
+                if (JS.isUndefined(this._itemsTable.items[i * n])) {
+                    Dom.setStyle(pager, "visibility", "visible");
+                    break;
+                }
+                item = this._itemsTable.items[i * n].id;
+
+                el   = document.createElement("OPTION");
+                if (!el) {
+                    YAHOO.log("Unable to create an OPTION pager menu", "error",
+                              WidgetName);
+                    Dom.setStyle(pager, "visibility", "visible");
+                    break;
+                }
+                el.value     = "#" + item;
+                // TODO: use a template string for i18N compliance
+                el.innerHTML = this.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1);
+
+                if (i == cur) {
+                    el.setAttribute("selected", "selected");
+                }
+
+                sel.appendChild(el);
+            }
+
+            el = document.createElement("FORM");
+            if (!el) {
+                YAHOO.log("Unable to create the pager menu", "error",
+                          WidgetName);
+            } else {
+                el.appendChild(sel);
+                pager.appendChild(el);
+            }
+
+            // Show the pager now
+            Dom.setStyle(pager, "visibility", "visible");
         },
 
         /**
