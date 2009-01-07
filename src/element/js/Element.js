@@ -400,9 +400,14 @@ Element.prototype = {
 
     destroy: function() {
         var el = this.get('element');
+        YAHOO.util.Event.purgeElement(el, true); // purge DOM listeners recursively
+        this.unsubscribeAll(); // unsubscribe all custom events
+
         if (el && el.parentNode) {
-            el.parentNode.removeChild(el);
+            el.parentNode.removeChild(el); // pull from the DOM
         }
+
+        // revert initial configs
         this._queue = [];
         this._events = {};
         this._configs = {};
