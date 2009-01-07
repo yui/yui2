@@ -1312,7 +1312,11 @@
                                 "hsv": hsv, "rgb": rgb
                             }));
 
-                        this.set(this.OPT.HUE, hsv[0], true);
+                        // fix bug #1754338 - when saturation is 0, hue is
+                        // silently always set to 0, but input field not updated
+                        if (hsv[1]) {
+                            this.set(this.OPT.HUE, hsv[0], true);
+                        }
                         this.set(this.OPT.SATURATION, Math.round(hsv[1]*100), true);
                         this.set(this.OPT.VALUE, Math.round(hsv[2]*100), true);
                     },
@@ -1520,7 +1524,7 @@
 
             this.on(this.OPT.HUE + "Change", this._updateRGBFromHSV, this, true);
             this.on(this.OPT.SATURATION + "Change", this._updateRGBFromHSV, this, true);
-            this.on(this.OPT.VALUE + "Change", this._updatePickerSlider, this, true);
+            this.on(this.OPT.VALUE + "Change", this._updateRGBFromHSV, this, true);
 
             this.on(this.OPT.RED + "Change", this._updateRGB, this, true);
             this.on(this.OPT.GREEN + "Change", this._updateRGB, this, true);
