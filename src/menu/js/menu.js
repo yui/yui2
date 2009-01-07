@@ -2948,8 +2948,8 @@ getConstrainedY: function (y) {
 		nTopRegionHeight,
 		nBottomRegionHeight,
 
-		topConstraint = scrollY + nViewportOffset,
-		bottomConstraint = scrollY + viewPortHeight - nMenuOffsetHeight - nViewportOffset,
+		topConstraint,
+		bottomConstraint,
 
 		yNew = y;
 		
@@ -3104,76 +3104,55 @@ getConstrainedY: function (y) {
 	};
 
 
-	// Determine if the current value for the Menu's "y" configuration property will
-	// result in the Menu being positioned outside the boundaries of the viewport
-
-	if (y < topConstraint || y  > bottomConstraint) {
-
-		// The current value for the Menu's "y" configuration property WILL
-		// result in the Menu being positioned outside the boundaries of the viewport
+	if (oMenu.cfg.getProperty(_PREVENT_CONTEXT_OVERLAP) && bPotentialContextOverlap) {
 
 		if (bCanConstrain) {
 
-			if (oMenu.cfg.getProperty(_PREVENT_CONTEXT_OVERLAP) && bPotentialContextOverlap) {
-		
-				//	SOLUTION #1:
-				//	If the "preventcontextoverlap" configuration property is set to "true", 
-				//	try to flip and/or scroll the Menu to both keep it inside the boundaries of the 
-				//	viewport AND from overlaping its context element (MenuItem or MenuBarItem).
+			oContextEl = aContext[0];
+			nContextElHeight = oContextEl.offsetHeight;
+			nContextElY = (Dom.getY(oContextEl) - scrollY);
 
-				oContextEl = aContext[0];
-				nContextElHeight = oContextEl.offsetHeight;
-				nContextElY = (Dom.getY(oContextEl) - scrollY);
-	
-				nTopRegionHeight = nContextElY;
-				nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
-	
-				setVerticalPosition();
-				
-				yNew = oMenu.cfg.getProperty(_Y);
-		
-			}
-			else if (!(oMenu instanceof YAHOO.widget.MenuBar) && 
-				nMenuOffsetHeight >= viewPortHeight) {
+			nTopRegionHeight = nContextElY;
+			nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
 
-				//	SOLUTION #2:
-				//	If the Menu exceeds the height of the viewport, introduce scroll bars
-				//	to keep the Menu inside the boundaries of the viewport
-
-				nAvailableHeight = (viewPortHeight - (nViewportOffset * 2));
+			setVerticalPosition();
 		
-				if (nAvailableHeight > oMenu.cfg.getProperty(_MIN_SCROLL_HEIGHT)) {
-		
-					oMenu._setScrollHeight(nAvailableHeight);
-					oMenu.hideEvent.subscribe(resetMaxHeight);
-		
-					alignY();
-					
-					yNew = oMenu.cfg.getProperty(_Y);
-				
-				}
-		
-			}	
-			else {
-
-				//	SOLUTION #3:
-			
-				if (y < topConstraint) {
-					yNew  = topConstraint;
-				} else if (y  > bottomConstraint) {
-					yNew  = bottomConstraint;
-				}				
-			
-			}
-
 		}
-		else {
-			//	The "y" configuration property cannot be set to a value that will keep
-			//	entire Menu inside the boundary of the viewport.  Therefore, set  
-			//	the "y" configuration property to scrollY to keep as much of the 
-			//	Menu inside the viewport as possible.
+
+		yNew = oMenu.cfg.getProperty(_Y);
+
+	}
+    else if (!(oMenu instanceof YAHOO.widget.MenuBar) && nMenuOffsetHeight >= viewPortHeight) {
+	
+		nAvailableHeight = (viewPortHeight - (nViewportOffset * 2));
+
+		if (nAvailableHeight > oMenu.cfg.getProperty(_MIN_SCROLL_HEIGHT)) {
+
+			oMenu._setScrollHeight(nAvailableHeight);
+			oMenu.hideEvent.subscribe(resetMaxHeight);
+
+			alignY();
+			
+			yNew = oMenu.cfg.getProperty(_Y);
+		
+		}
+
+    }	
+	else {
+
+		if (bCanConstrain) {
+
+			topConstraint = scrollY + nViewportOffset;
+			bottomConstraint = scrollY + viewPortHeight - nMenuOffsetHeight - nViewportOffset;
+
+			if (y < topConstraint) {
+				yNew  = topConstraint;
+			} else if (y  > bottomConstraint) {
+				yNew  = bottomConstraint;
+			}
+		} else {
 			yNew = nViewportOffset + scrollY;
-		}	
+		}
 
 	}
 

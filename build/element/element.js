@@ -10,76 +10,97 @@
 YAHOO.util.Attribute = function(hash, owner) {
     if (owner) { 
         this.owner = owner;
+        if (hash.method) {
+            hash.setter = hash.method;
+        }
+
         this.configure(hash, true);
     }
 };
 
 YAHOO.util.Attribute.prototype = {
-	/**
+    /**
      * The name of the attribute.
-	 * @property name
-	 * @type String
-	 */
+     * @property name
+     * @type String
+     */
     name: undefined,
     
-	/**
+    /**
      * The value of the attribute.
-	 * @property value
-	 * @type String
-	 */
+     * @property value
+     * @type String
+     */
     value: null,
     
-	/**
+    /**
      * The owner of the attribute.
-	 * @property owner
-	 * @type YAHOO.util.AttributeProvider
-	 */
+     * @property owner
+     * @type YAHOO.util.AttributeProvider
+     */
     owner: null,
     
-	/**
+    /**
      * Whether or not the attribute is read only.
-	 * @property readOnly
-	 * @type Boolean
-	 */
+     * @property readOnly
+     * @type Boolean
+     */
     readOnly: false,
     
-	/**
+    /**
      * Whether or not the attribute can only be written once.
-	 * @property writeOnce
-	 * @type Boolean
-	 */
+     * @property writeOnce
+     * @type Boolean
+     */
     writeOnce: false,
 
-	/**
+    /**
      * The attribute's initial configuration.
      * @private
-	 * @property _initialConfig
-	 * @type Object
-	 */
+     * @property _initialConfig
+     * @type Object
+     */
     _initialConfig: null,
     
-	/**
+    /**
      * Whether or not the attribute's value has been set.
      * @private
-	 * @property _written
-	 * @type Boolean
-	 */
+     * @property _written
+     * @type Boolean
+     */
     _written: false,
     
-	/**
+    /**
      * The method to use when setting the attribute's value.
      * The method recieves the new value as the only argument.
-	 * @property method
-	 * @type Function
-	 */
+     * @property method
+     * @type Function
+     * @deprecated Use setter
+     */
     method: null,
     
-	/**
+    /**
+     * The method to use when setting the attribute's value.
+     * The method recieves the new value as the only argument.
+     * @property setter
+     * @type Function
+     */
+    setter: null,
+    
+    /**
+     * The method to use when getting the attribute's value.
+     * The return value of the getter fn will be used as the return from get()
+     * @property getter
+     * @type Function
+     */
+    getter: null,
+
+    /**
      * The validator to use when setting the attribute's value.
-	 * @property validator
-	 * @type Function
+     * @property validator
+     * @type Function
      * @return Boolean
-	 */
+     */
     validator: null,
     
     /**
@@ -88,7 +109,13 @@ YAHOO.util.Attribute.prototype = {
      * @return {any} The current value of the attribute.
      */
     getValue: function() {
-        return this.value;
+        var val = this.value;
+
+        if (this.getter) {
+            val = this.getter.call(this.owner, this.name);
+        }
+
+        return val;
     },
     
     /**
@@ -99,9 +126,9 @@ YAHOO.util.Attribute.prototype = {
      * @return {Boolean} Whether or not the value was set.
      */
     setValue: function(value, silent) {
-        var beforeRetVal;
-        var owner = this.owner;
-        var name = this.name;
+        var beforeRetVal,
+            owner = this.owner,
+            name = this.name;
         
         var event = {
             type: name, 
@@ -124,11 +151,11 @@ YAHOO.util.Attribute.prototype = {
             }
         }
 
-        if (this.method) {
-            this.method.call(owner, value);
+        if (this.setter) {
+            this.setter.call(owner, value, this.name);
         }
         
-        this.value = value;
+        this.value = value; // TODO: set before calling method?
         this._written = true;
         
         event.type = name;
@@ -149,7 +176,10 @@ YAHOO.util.Attribute.prototype = {
     configure: function(map, init) {
         map = map || {};
 
-        this._written = false; // reset writeOnce
+        if (init) {
+            this._written = false; // reset writeOnce
+        }
+
         this._initialConfig = this._initialConfig || {};
         
         for (var key in map) {
@@ -176,7 +206,7 @@ YAHOO.util.Attribute.prototype = {
      * @method resetConfig
      */
     resetConfig: function() {
-        this.configure(this._initialConfig);
+        this.configure(this._initialConfig, true);
     },
     
     /**
@@ -228,10 +258,10 @@ YAHOO.util.Attribute.prototype = {
             var config = this._configs[key];
             
             if (!config || !this._configs.hasOwnProperty(key)) {
-                return undefined;
+                return null;
             }
             
-            return config.value;
+            return config.getValue();
         },
         
         /**
@@ -260,12 +290,11 @@ YAHOO.util.Attribute.prototype = {
          */
         getAttributeKeys: function(){
             this._configs = this._configs;
-            var keys = [];
-            var config;
-            for (var key in this._configs) {
-                config = this._configs[key];
+            var keys = [], key;
+
+            for (key in this._configs) {
                 if ( Lang.hasOwnProperty(this._configs, key) && 
-                        !Lang.isUndefined(config) ) {
+                        !Lang.isUndefined(this._configs[key]) ) {
                     keys[keys.length] = key;
                 }
             }
@@ -462,7 +491,6 @@ var Dom = YAHOO.util.Dom,
  * @module element
  * @namespace YAHOO.util
  * @requires yahoo, dom, event
- * @beta
  */
 
 /**
@@ -475,19 +503,53 @@ var Dom = YAHOO.util.Dom,
  * represents the Element.
  * @param {Object} map A key-value map of initial config names and values
  */
-YAHOO.util.Element = function(el, map) {
-    if (arguments.length) {
-        this.init(el, map);
-    }
+var Element = function(el, map) {
+    this.init.apply(this, arguments);
 };
 
-YAHOO.util.Element.prototype = {
+Element.DOM_EVENTS = {
+    'click': true,
+    'dblclick': true,
+    'keydown': true,
+    'keypress': true,
+    'keyup': true,
+    'mousedown': true,
+    'mousemove': true,
+    'mouseout': true, 
+    'mouseover': true, 
+    'mouseup': true,
+    'focus': true,
+    'blur': true,
+    'submit': true,
+    'change': true
+};
+
+Element.prototype = {
     /**
      * Dom events supported by the Element instance.
      * @property DOM_EVENTS
      * @type Object
      */
     DOM_EVENTS: null,
+
+    DEFAULT_HTML_SETTER: function(value, key) {
+        var el = this.get('element');
+        
+        if (el) {
+            el[key] = value;
+        }
+    },
+
+    DEFAULT_HTML_GETTER: function(key) {
+        var el = this.get('element'),
+            val;
+
+        if (el) {
+            val = el[key];
+        }
+
+        return val;
+    },
 
     /**
      * Wrapper for HTMLElement method.
@@ -691,12 +753,7 @@ YAHOO.util.Element.prototype = {
      * @param {String} value The value to apply to the style property
      */
     setStyle: function(property, value) {
-        var el = this.get('element');
-        if (!el) {
-            return this._queue[this._queue.length] = ['setStyle', arguments];
-        }
-
-        return Dom.setStyle(el,  property, value); // TODO: always queuing?
+        return Dom.setStyle(this.get('element'),  property, value); // TODO: always queuing?
     },
     
     /**
@@ -766,24 +823,17 @@ YAHOO.util.Element.prototype = {
     },
     
     get: function(key) {
-        var configs = this._configs || {};
-        var el = configs.element; // avoid loop due to 'element'
+        var configs = this._configs || {},
+            el = configs.element; // avoid loop due to 'element'
+
         if (el && !configs[key] && !YAHOO.lang.isUndefined(el.value[key]) ) {
-            return el.value[key];
+            this._setHTMLAttrConfig(key);
         }
 
         return AttributeProvider.prototype.get.call(this, key);
     },
 
     setAttributes: function(map, silent) {
-        var el = this.get('element');
-        for (var key in map) {
-            // need to configure if setting unconfigured HTMLElement attribute 
-            if ( !this._configs[key] && !YAHOO.lang.isUndefined(el[key]) ) {
-                this.setAttributeConfig(key);
-            }
-        }
-
         // set based on configOrder
         for (var i = 0, len = this._configOrder.length; i < len; ++i) {
             if (map[this._configOrder[i]] !== undefined) {
@@ -805,35 +855,15 @@ YAHOO.util.Element.prototype = {
         
         // set it on the element if not configured and is an HTML attribute
         if ( !this._configs[key] && !YAHOO.lang.isUndefined(el[key]) ) {
-            _registerHTMLAttr.call(this, key);
+            this._setHTMLAttrConfig(key);
         }
 
         return AttributeProvider.prototype.set.apply(this, arguments);
     },
     
     setAttributeConfig: function(key, map, init) {
-        var el = this.get('element');
-
-        if (el && !this._configs[key] && !YAHOO.lang.isUndefined(el[key]) ) {
-            _registerHTMLAttr.call(this, key, map);
-        } else {
-            AttributeProvider.prototype.setAttributeConfig.apply(this, arguments);
-        }
         this._configOrder.push(key);
-    },
-    
-    getAttributeKeys: function() {
-        var el = this.get('element');
-        var keys = AttributeProvider.prototype.getAttributeKeys.call(this);
-        
-        //add any unconfigured element keys
-        for (var key in el) {
-            if (!this._configs[key]) {
-                keys[key] = keys[key] || el[key];
-            }
-        }
-        
-        return keys;
+        AttributeProvider.prototype.setAttributeConfig.apply(this, arguments);
     },
 
     createEvent: function(type, scope) {
@@ -842,101 +872,104 @@ YAHOO.util.Element.prototype = {
     },
     
     init: function(el, attr) {
-        _initElement.apply(this, arguments); 
-    }
-};
+        this._initElement(el, attr); 
+    },
 
-var _initElement = function(el, attr) {
-    this._queue = this._queue || [];
-    this._events = this._events || {};
-    this._configs = this._configs || {};
-    this._configOrder = []; 
-    attr = attr || {};
-    attr.element = attr.element || el || null;
+    destroy: function() {
+        var el = this.get('element');
+        if (el && el.parentNode) {
+            el.parentNode.removeChild(el);
+        }
+        this._queue = this._queue || [];
+        this._events = this._events || {};
+        this._configs = this._configs || {};
+        this._configOrder = []; 
+    },
 
-    this.DOM_EVENTS = {
-        'click': true,
-        'dblclick': true,
-        'keydown': true,
-        'keypress': true,
-        'keyup': true,
-        'mousedown': true,
-        'mousemove': true,
-        'mouseout': true, 
-        'mouseover': true, 
-        'mouseup': true,
-        'focus': true,
-        'blur': true,
-        'submit': true
-    };
+    _initElement: function(el, attr) {
+        this._queue = this._queue || [];
+        this._events = this._events || {};
+        this._configs = this._configs || {};
+        this._configOrder = []; 
+        attr = attr || {};
+        attr.element = attr.element || el || null;
 
-    var isReady = false;  // to determine when to init HTMLElement and content
+        var isReady = false;  // to determine when to init HTMLElement and content
 
-    if (typeof attr.element === 'string') { // register ID for get() access
-        _registerHTMLAttr.call(this, 'id', { value: attr.element });
-    }
+        var DOM_EVENTS = Element.DOM_EVENTS;
+        this.DOM_EVENTS = this.DOM_EVENTS || {};
 
-    if (Dom.get(attr.element)) {
-        isReady = true;
-        _initHTMLElement.call(this, attr);
-        _initContent.call(this, attr);
-    }
-
-    YAHOO.util.Event.onAvailable(attr.element, function() {
-        if (!isReady) { // otherwise already done
-            _initHTMLElement.call(this, attr);
+        for (var event in DOM_EVENTS) {
+            if (DOM_EVENTS.hasOwnProperty(event)) {
+                this.DOM_EVENTS[event] = DOM_EVENTS[event];
+            }
         }
 
-        this.fireEvent('available', { type: 'available', target: Dom.get(attr.element) });  
-    }, this, true);
-    
-    YAHOO.util.Event.onContentReady(attr.element, function() {
-        if (!isReady) { // otherwise already done
-            _initContent.call(this, attr);
+        if (typeof attr.element === 'string') { // register ID for get() access
+            this._setHTMLAttrConfig('id', { value: attr.element });
         }
-        this.fireEvent('contentReady', { type: 'contentReady', target: Dom.get(attr.element) });  
-    }, this, true);
-};
 
-var _initHTMLElement = function(attr) {
+        if (Dom.get(attr.element)) {
+            isReady = true;
+            this._initHTMLElement(attr);
+            this._initContent(attr);
+        }
+
+        YAHOO.util.Event.onAvailable(attr.element, function() {
+            if (!isReady) { // otherwise already done
+                this._initHTMLElement(attr);
+            }
+
+            this.fireEvent('available', { type: 'available', target: Dom.get(attr.element) });  
+        }, this, true);
+        
+        YAHOO.util.Event.onContentReady(attr.element, function() {
+            if (!isReady) { // otherwise already done
+                this._initContent(attr);
+            }
+            this.fireEvent('contentReady', { type: 'contentReady', target: Dom.get(attr.element) });  
+        }, this, true);
+    },
+
+    _initHTMLElement: function(attr) {
+        /**
+         * The HTMLElement the Element instance refers to.
+         * @attribute element
+         * @type HTMLElement
+         */
+        this.setAttributeConfig('element', {
+            value: Dom.get(attr.element),
+            readOnly: true
+         });
+    },
+
+    _initContent: function(attr) {
+        this.initAttributes(attr);
+        this.setAttributes(attr, true);
+        this.fireQueue();
+
+    },
+
     /**
-     * The HTMLElement the Element instance refers to.
-     * @attribute element
-     * @type HTMLElement
+     * Sets the value of the property and fires beforeChange and change events.
+     * @private
+     * @method _setHTMLAttrConfig
+     * @param {YAHOO.util.Element} element The Element instance to
+     * register the config to.
+     * @param {String} key The name of the config to register
+     * @param {Object} map A key-value map of the config's params
      */
-    this.setAttributeConfig('element', {
-        value: Dom.get(attr.element),
-        readOnly: true
-     });
-};
+    _setHTMLAttrConfig: function(key, map) {
+        var el = this.get('element');
+        map = map || {};
+        map.name = key;
 
-var _initContent = function(attr) {
-    this.initAttributes(attr);
-    this.setAttributes(attr, true);
-    this.fireQueue();
+        map.setter = map.setter || this.DEFAULT_HTML_SETTER;
+        map.getter = map.getter || this.DEFAULT_HTML_GETTER;
 
-};
-
-/**
- * Sets the value of the property and fires beforeChange and change events.
- * @private
- * @method _registerHTMLAttr
- * @param {YAHOO.util.Element} element The Element instance to
- * register the config to.
- * @param {String} key The name of the config to register
- * @param {Object} map A key-value map of the config's params
- */
-var _registerHTMLAttr = function(key, map) {
-    var el = this.get('element');
-    map = map || {};
-    map.name = key;
-    map.method = map.method || function(value) {
-        if (el) {
-            el[key] = value;
-        }
-    };
-    map.value = map.value || el[key];
-    this._configs[key] = new YAHOO.util.Attribute(map, this);
+        map.value = map.value || el[key];
+        this._configs[key] = new YAHOO.util.Attribute(map, this);
+    }
 };
 
 /**
@@ -991,7 +1024,8 @@ var _registerHTMLAttr = function(key, map) {
  * @event appendTo
  */
 
-YAHOO.augment(YAHOO.util.Element, AttributeProvider);
+YAHOO.augment(Element, AttributeProvider);
+YAHOO.util.Element = Element;
 })();
 
 YAHOO.register("element", YAHOO.util.Element, {version: "@VERSION@", build: "@BUILD@"});
