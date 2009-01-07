@@ -35,16 +35,16 @@ YAHOO.util.EventProvider.prototype = {
      * @param p_fn       {function} the function to exectute when the event fires
      * @param p_obj      {Object}   An object to be passed along when the event 
      *                              fires
-     * @param p_override {boolean}  If true, the obj passed in becomes the 
+     * @param overrideContext {boolean}  If true, the obj passed in becomes the 
      *                              execution scope of the listener
      */
-    subscribe: function(p_type, p_fn, p_obj, p_override) {
+    subscribe: function(p_type, p_fn, p_obj, overrideContext) {
 
         this.__yui_events = this.__yui_events || {};
         var ce = this.__yui_events[p_type];
 
         if (ce) {
-            ce.subscribe(p_fn, p_obj, p_override);
+            ce.subscribe(p_fn, p_obj, overrideContext);
         } else {
             this.__yui_subscribers = this.__yui_subscribers || {};
             var subs = this.__yui_subscribers;
@@ -52,7 +52,7 @@ YAHOO.util.EventProvider.prototype = {
                 subs[p_type] = [];
             }
             subs[p_type].push(
-                { fn: p_fn, obj: p_obj, override: p_override } );
+                { fn: p_fn, obj: p_obj, overrideContext: overrideContext } );
         }
     },
 
@@ -159,7 +159,7 @@ YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
 
             if (qs) {
                 for (var i=0; i<qs.length; ++i) {
-                    ce.subscribe(qs[i].fn, qs[i].obj, qs[i].override);
+                    ce.subscribe(qs[i].fn, qs[i].obj, qs[i].overrideContext);
                 }
             }
         }
