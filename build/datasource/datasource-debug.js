@@ -1284,11 +1284,10 @@ parseXMLResult : function(result) {
             // ...or in a node
             else {
                 var xmlNode = result.getElementsByTagName(key);
-                if(xmlNode && xmlNode.item(0) && xmlNode.item(0)) {
-                    data = xmlNode.item(0).firstChild.nodeValue;
+                if(xmlNode && xmlNode.item(0)) {
                     var item = xmlNode.item(0);
                     // For IE, then DOM...
-                    data = (item.text) ? item.text : (item.textContent) ? item.textContent : null;
+                    data = (item) ? ((item.text) ? item.text : (item.textContent) ? item.textContent : null) : null;
                     // ...then fallback, but check for multiple child nodes
                     if(!data) {
                         var datapieces = [];
@@ -1701,7 +1700,7 @@ util.LocalDataSource = function(oLiveData, oConfigs) {
         this.responseType = DS.TYPE_JSARRAY;
     }
     
-    this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
+    util.LocalDataSource.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
 
 // LocalDataSource extends DataSourceBase
@@ -1740,7 +1739,7 @@ util.FunctionDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_JSFUNCTION;
     oLiveData = oLiveData || function() {};
     
-    this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
+    util.FunctionDataSource.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
 
 // FunctionDataSource extends DataSourceBase
@@ -1829,7 +1828,7 @@ util.ScriptNodeDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_SCRIPTNODE;
     oLiveData = oLiveData || "";
     
-    this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
+    util.ScriptNodeDataSource.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
 
 // ScriptNodeDataSource extends DataSourceBase
@@ -2049,7 +2048,7 @@ util.XHRDataSource = function(oLiveData, oConfigs) {
     this.connMgr = this.connMgr || util.Connect;
     oLiveData = oLiveData || "";
     
-    this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
+    util.XHRDataSource.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
 
 // XHRDataSource extends DataSourceBase
@@ -2644,60 +2643,66 @@ var xPad=function (x, pad, r)
      * @param oConfig {Object} (Optional) Optional configuration values:
      *  <dl>
      *   <dt>format {String}</dt>
-     *   <dd>Any format defined by strftime is supported</dd>
-     *  </dl>
-     *  strftime has several format specifiers defined by the Open group at 
-     *  http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html
-     *
-     *  PHP added a few of its own, defined at http://www.php.net/strftime
-     *
-     *  This javascript implementation supports all the PHP specifiers and a few more.
-     *
-     *  @arg \%a - abbreviated weekday name according to the current locale
-     *  @arg \%A - full weekday name according to the current locale
-     *  @arg \%b - abbreviated month name according to the current locale
-     *  @arg \%B - full month name according to the current locale
-     *  @arg \%c - preferred date and time representation for the current locale
-     *  @arg \%C - century number (the year divided by 100 and truncated to an integer, range 00 to 99)
-     *  @arg \%d - day of the month as a decimal number (range 01 to 31)
-     *  @arg \%D - same as %m/%d/%y
-     *  @arg \%e - day of the month as a decimal number, a single digit is preceded by a space (range ' 1' to '31')
-     *  @arg \%F - same as %Y-%m-%d (ISO 8601 date format)
-     *  @arg \%g - like %G, but without the century
-     *  @arg \%G - The 4-digit year corresponding to the ISO week number
-     *  @arg \%h - same as %b
-     *  @arg \%H - hour as a decimal number using a 24-hour clock (range 00 to 23)
-     *  @arg \%I - hour as a decimal number using a 12-hour clock (range 01 to 12)
-     *  @arg \%j - day of the year as a decimal number (range 001 to 366)
-     *  @arg \%k - hour as a decimal number using a 24-hour clock (range 0 to 23); single digits are preceded by a blank. (See also %H.)
-     *  @arg \%l - hour as a decimal number using a 12-hour clock (range 1 to 12); single digits are preceded by a blank. (See also %I.) 
-     *  @arg \%m - month as a decimal number (range 01 to 12)
-     *  @arg \%M - minute as a decimal number
-     *  @arg \%n - newline character
-     *  @arg \%p - either `AM' or `PM' according to the given time value, or the corresponding strings for the current locale
-     *  @arg \%P - like %p, but lower case
-     *  @arg \%r - time in a.m. and p.m. notation equal to %I:%M:%S %p
-     *  @arg \%R - time in 24 hour notation equal to %H:%M
-     *  @arg \%s - number of seconds since the Epoch, ie, since 1970-01-01 00:00:00 UTC
-     *  @arg \%S - second as a decimal number
-     *  @arg \%t - tab character
-     *  @arg \%T - current time, equal to %H:%M:%S
-     *  @arg \%u - weekday as a decimal number [1,7], with 1 representing Monday
-     *  @arg \%U - week number of the current year as a decimal number, starting with
-     *             the first Sunday as the first day of the first week
-     *  @arg \%V - The ISO 8601:1988 week number of the current year as a decimal number,
-     *             range 01 to 53, where week 1 is the first week that has at least 4 days
-     *             in the current year, and with Monday as the first day of the week.
-     *  @arg \%w - day of the week as a decimal, Sunday being 0
-     *  @arg \%W - week number of the current year as a decimal number, starting with the
-     *             first Monday as the first day of the first week
-     *  @arg \%x - preferred date representation for the current locale without the time
-     *  @arg \%X - preferred time representation for the current locale without the date
-     *  @arg \%y - year as a decimal number without a century (range 00 to 99)
-     *  @arg \%Y - year as a decimal number including the century
-     *  @arg \%z - numerical time zone representation
-     *  @arg \%Z - time zone name or abbreviation
-     *  @arg \%% - a literal `\%' character
+     *   <dd>
+     *   <p>
+     *   Any format defined by strftime is supported. strftime has several format specifiers defined by the Open group at 
+     *   <a href="http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html">http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html</a>
+     *   </p>
+     *   <p>   
+     *   PHP added a few of its own, defined at <a href="http://www.php.net/strftime">http://www.php.net/strftime</a>
+     *   </p>
+     *   <p>
+     *   This javascript implementation supports all the PHP specifiers and a few more.  The full list is below:
+     *   </p>
+     *   <dl>
+     *    <dt>%a</dt> <dd>abbreviated weekday name according to the current locale</dd>
+     *    <dt>%A</dt> <dd>full weekday name according to the current locale</dd>
+     *    <dt>%b</dt> <dd>abbreviated month name according to the current locale</dd>
+     *    <dt>%B</dt> <dd>full month name according to the current locale</dd>
+     *    <dt>%c</dt> <dd>preferred date and time representation for the current locale</dd>
+     *    <dt>%C</dt> <dd>century number (the year divided by 100 and truncated to an integer, range 00 to 99)</dd>
+     *    <dt>%d</dt> <dd>day of the month as a decimal number (range 01 to 31)</dd>
+     *    <dt>%D</dt> <dd>same as %m/%d/%y</dd>
+     *    <dt>%e</dt> <dd>day of the month as a decimal number, a single digit is preceded by a space (range ' 1' to '31')</dd>
+     *    <dt>%F</dt> <dd>same as %Y-%m-%d (ISO 8601 date format)</dd>
+     *    <dt>%g</dt> <dd>like %G, but without the century</dd>
+     *    <dt>%G</dt> <dd>The 4-digit year corresponding to the ISO week number</dd>
+     *    <dt>%h</dt> <dd>same as %b</dd>
+     *    <dt>%H</dt> <dd>hour as a decimal number using a 24-hour clock (range 00 to 23)</dd>
+     *    <dt>%I</dt> <dd>hour as a decimal number using a 12-hour clock (range 01 to 12)</dd>
+     *    <dt>%j</dt> <dd>day of the year as a decimal number (range 001 to 366)</dd>
+     *    <dt>%k</dt> <dd>hour as a decimal number using a 24-hour clock (range 0 to 23); single digits are preceded by a blank. (See also %H.)</dd>
+     *    <dt>%l</dt> <dd>hour as a decimal number using a 12-hour clock (range 1 to 12); single digits are preceded by a blank. (See also %I.) </dd>
+     *    <dt>%m</dt> <dd>month as a decimal number (range 01 to 12)</dd>
+     *    <dt>%M</dt> <dd>minute as a decimal number</dd>
+     *    <dt>%n</dt> <dd>newline character</dd>
+     *    <dt>%p</dt> <dd>either `AM' or `PM' according to the given time value, or the corresponding strings for the current locale</dd>
+     *    <dt>%P</dt> <dd>like %p, but lower case</dd>
+     *    <dt>%r</dt> <dd>time in a.m. and p.m. notation equal to %I:%M:%S %p</dd>
+     *    <dt>%R</dt> <dd>time in 24 hour notation equal to %H:%M</dd>
+     *    <dt>%s</dt> <dd>number of seconds since the Epoch, ie, since 1970-01-01 00:00:00 UTC</dd>
+     *    <dt>%S</dt> <dd>second as a decimal number</dd>
+     *    <dt>%t</dt> <dd>tab character</dd>
+     *    <dt>%T</dt> <dd>current time, equal to %H:%M:%S</dd>
+     *    <dt>%u</dt> <dd>weekday as a decimal number [1,7], with 1 representing Monday</dd>
+     *    <dt>%U</dt> <dd>week number of the current year as a decimal number, starting with the
+     *            first Sunday as the first day of the first week</dd>
+     *    <dt>%V</dt> <dd>The ISO 8601:1988 week number of the current year as a decimal number,
+     *            range 01 to 53, where week 1 is the first week that has at least 4 days
+     *            in the current year, and with Monday as the first day of the week.</dd>
+     *    <dt>%w</dt> <dd>day of the week as a decimal, Sunday being 0</dd>
+     *    <dt>%W</dt> <dd>week number of the current year as a decimal number, starting with the
+     *            first Monday as the first day of the first week</dd>
+     *    <dt>%x</dt> <dd>preferred date representation for the current locale without the time</dd>
+     *    <dt>%X</dt> <dd>preferred time representation for the current locale without the date</dd>
+     *    <dt>%y</dt> <dd>year as a decimal number without a century (range 00 to 99)</dd>
+     *    <dt>%Y</dt> <dd>year as a decimal number including the century</dd>
+     *    <dt>%z</dt> <dd>numerical time zone representation</dd>
+     *    <dt>%Z</dt> <dd>time zone name or abbreviation</dd>
+     *    <dt>%%</dt> <dd>a literal `%' character</dd>
+     *   </dl>
+     *  </dd>
+     * </dl>
      * @param sLocale {String} (Optional) The locale to use when displaying days of week,
      *  months of the year, and other locale specific strings.  The following locales are
      *  built in:

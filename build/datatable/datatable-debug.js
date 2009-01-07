@@ -2514,7 +2514,6 @@ var lang   = YAHOO.lang,
  * @requires yahoo, dom, event, element, datasource
  * @optional dragdrop, dragdrop
  * @title DataTable Widget
- * @beta
  */
 
 /****************************************************************************/
@@ -4924,7 +4923,7 @@ _initThEl : function(elTh, oColumn) {
     elTh.className = this._getColumnClassNames(oColumn);
             
     // Set Column width for non fallback cases
-    if(oColumn.width && !this._bDynStylesFallback) {
+    if(oColumn.width && !DT._bDynStylesFallback) {
         // Validate minWidth
         var nWidth = (oColumn.minWidth && (oColumn.width < oColumn.minWidth)) ?
                 oColumn.minWidth : oColumn.width;
@@ -5456,7 +5455,7 @@ _formatTdEl : function (oColumn, elTd, index, isLast) {
     elTd.firstChild.className = DT.CLASS_LINER;
 
     // Set Column width for fallback cases
-    if(oColumn.width && this._bDynStylesFallback) {
+    if(oColumn.width && DT._bDynStylesFallback) {
         // Validate minWidth
         var nWidth = (oColumn.minWidth && (oColumn.width < oColumn.minWidth)) ?
                 oColumn.minWidth : oColumn.width;
@@ -7258,19 +7257,13 @@ render : function() {
         allRecords = this._oRecordSet.getRecords();
     }
 
-
-    /* NEW METHOD */
     // From the top, update in-place existing rows, so as to reuse DOM elements
     var elTbody = this._elTbody,
         loopN = this.get("renderLoopSize"),
         nRecordsLength = allRecords.length;
     
     // Table has rows
-    if(nRecordsLength > 0) {        
-        // So you don't see the borders in random places
-        //this._unsetFirstRow();
-        //this._unsetLastRow();
-        
+    if(nRecordsLength > 0) {                
         elTbody.style.display = "none";
         while(elTbody.lastChild) {
             elTbody.removeChild(elTbody.lastChild);
@@ -7325,60 +7318,40 @@ render : function() {
             scope: this,
             timeout: (loopN > 0) ? 0 : -1
         });
-        
-        // Fire events in separate timeout thread so implementers can
-        // subscribe immediately after the constructor
-        /*this._oChainRender.add({
-            method: function(oArg) {
-                if((this instanceof DT) && this._sId) {
-                    // Fire initEvent for first render
-                    if(this._bInit) {
-                        this._bInit = false;
-                        this.fireEvent("initEvent");
-                    }
-
-                    // Always fire renderEvent
-                    this.fireEvent("renderEvent");
-                    // Backward compatibility
-                    this.fireEvent("refreshEvent");
-                    YAHOO.log("DataTable rendered " + nRecordsLength + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
-                
-                    //YAHOO.log("end render","time");
-                }
-            },
-            scope: this
-        });*/
+     
     }
     // Table has no rows
     else {
         // Set up the loop Chain to delete rows
         var nTotal = elTbody.rows.length;
-        this._oChainRender.add({
-            method: function(oArg) {
-                if((this instanceof DT) && this._sId) {
-                    var i = oArg.nCurrent,
-                        loopN = oArg.nLoopLength,
-                        nIterEnd = (i - loopN < 0) ? -1 : i - loopN;
-
-                    elTbody.style.display = "none";
-                    
-                    for(; i>nIterEnd; i--) {
-                        elTbody.deleteRow(-1);
+        if(nTotal > 0) {
+            this._oChainRender.add({
+                method: function(oArg) {
+                    if((this instanceof DT) && this._sId) {
+                        var i = oArg.nCurrent,
+                            loopN = oArg.nLoopLength,
+                            nIterEnd = (i - loopN < 0) ? -1 : i - loopN;
+    
+                        elTbody.style.display = "none";
+                        
+                        for(; i>nIterEnd; i--) {
+                            elTbody.deleteRow(-1);
+                        }
+                        elTbody.style.display = "";
+                        
+                        // Set up for the next loop
+                        oArg.nCurrent = i;
                     }
-                    elTbody.style.display = "";
-                    
-                    // Set up for the next loop
-                    oArg.nCurrent = i;
-                }
-            },
-            scope: this,
-            iterations: (loopN > 0) ? Math.ceil(nTotal/loopN) : 1,
-            argument: {
-                nCurrent: nTotal, 
-                nLoopLength: (loopN > 0) ? loopN : nTotal
-            },
-            timeout: (loopN > 0) ? 0 : -1
-        });
+                },
+                scope: this,
+                iterations: (loopN > 0) ? Math.ceil(nTotal/loopN) : 1,
+                argument: {
+                    nCurrent: nTotal, 
+                    nLoopLength: (loopN > 0) ? loopN : nTotal
+                },
+                timeout: (loopN > 0) ? 0 : -1
+            });
+        }
     }
     this._runRenderChain();
 },
@@ -7895,27 +7868,29 @@ sortColumn : function(oColumn, sDir) {
             }
             // Client-side sort
             else {
+                // Is there a custom sort handler function defined?
+                var sortFnc = (oColumn.sortOptions && lang.isFunction(oColumn.sortOptions.sortFunction)) ?
+                        // Custom sort function
+                        oColumn.sortOptions.sortFunction : null;
+                   
                 // Sort the Records
-                if(!bSorted || sDir) {
+                if(!bSorted || sDir || sortFnc) {
                     // Get the field to sort
                     var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
-                    // Is there a custom sort handler function defined?
-                    var sortFnc = (oColumn.sortOptions && lang.isFunction(oColumn.sortOptions.sortFunction)) ?
-                            // Custom sort function
-                            oColumn.sortOptions.sortFunction :
-        
-                            // Default sort function
-                            function(a, b, desc) {
-                                YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
-                                var sorted = YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
-                                if(sorted === 0) {
-                                    return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
-                                }
-                                else {
-                                    return sorted;
-                                }
-                            };
-        
+
+                    // Default sort function if necessary
+                    sortFnc = sortFnc || 
+                        function(a, b, desc) {
+                            YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
+                            var sorted = YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
+                            if(sorted === 0) {
+                                return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
+                            }
+                            else {
+                                return sorted;
+                            }
+                        };
+                    // Sort the Records        
                     this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false));
                 }
                 // Just reverse the Records
@@ -9049,6 +9024,7 @@ addRows : function(aData, index) {
                 var loopN = this.get("renderLoopSize");
                 var loopEnd = recIndex + aData.length;
                 var nRowsNeeded = (loopEnd - recIndex); // how many needed
+                var isLast = (recIndex === this._elTbody.rows.length);
                 this._oChainRender.add({
                     method: function(oArg) {
                         if((this instanceof DT) && this._sId) {
@@ -9079,7 +9055,7 @@ addRows : function(aData, index) {
                         if(recIndex === 0) {
                             this._setFirstRow();
                         }
-                        if(recIndex === this._elTbody.rows.length-1) {
+                        if(oArg.isLast) {
                             this._setLastRow();
                         }
                         // Set EVEN/ODD
@@ -9090,7 +9066,7 @@ addRows : function(aData, index) {
                                 " rows at index " + recIndex +
                                 " with data " + lang.dump(aData), "info", this.toString());
                     },
-                    argument: {recIndex: recIndex},
+                    argument: {recIndex: recIndex, isLast: isLast},
                     scope: this,
                     timeout: -1 // Needs to run immediately after the DOM insertions above
                 });
@@ -9182,7 +9158,7 @@ updateRow : function(row, oData) {
  * to DataTable page element or RecordSet index.
  */
 deleteRow : function(row) {
-    var nRecordIndex = this.getRecordIndex(row);
+    var nRecordIndex = (lang.isNumber(row)) ? row : this.getRecordIndex(row);
     if(lang.isNumber(nRecordIndex)) {
         var oRecord = this.getRecord(nRecordIndex);
         if(oRecord) {
@@ -9277,7 +9253,7 @@ deleteRow : function(row) {
  * will delete towards the beginning.
  */
 deleteRows : function(row, count) {
-    var nRecordIndex = this.getRecordIndex(row);
+    var nRecordIndex = (lang.isNumber(row)) ? row : this.getRecordIndex(row);
     if(lang.isNumber(nRecordIndex)) {
         var oRecord = this.getRecord(nRecordIndex);
         if(oRecord) {
@@ -12833,6 +12809,8 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
                 } else if (pag) {
                     index = pag.getStartIndex();
                 }
+                
+                this._oRecordSet.reset(); // Bug 2290604: dyanmic data shouldn't keep accumulating by default
             }
     
             this._oRecordSet.setRecords(oResponse.results, index | 0);
@@ -15899,7 +15877,7 @@ cancel : function() {
     if(this.isActive) {
         this.getContainerEl().style.display = "none";
         this.isActive = false;
-        this.getDataTable._oCellEditor =  null;
+        this.getDataTable()._oCellEditor =  null;
         this.fireEvent("cancelEvent", {editor:this});
         YAHOO.log("CellEditor canceled", "info", this.toString());
     }
@@ -16750,7 +16728,8 @@ resetForm : function() {
  * @method focus
  */
 focus : function() {
-    this.textarea.focus();
+    // Bug 2303181, Bug 2263600
+    this.getDataTable()._focusEl(this.textarea);
     this.textarea.select();
 },
 
@@ -16875,7 +16854,8 @@ resetForm : function() {
  * @method focus
  */
 focus : function() {
-    this.textbox.focus();
+    // Bug 2303181, Bug 2263600
+    this.getDataTable()._focusEl(this.textbox);
     this.textbox.select();
 },
 
