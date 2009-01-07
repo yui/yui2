@@ -3,15 +3,15 @@
 <head>
 <title>Element Test Suite</title>
 
-<link type="text/css" rel="stylesheet" href="../build/logger/assets/logger.css">
-<link type="text/css" rel="stylesheet" href="../build/yuitest/assets/testlogger.css">     
+<link type="text/css" rel="stylesheet" href="../../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="../../../build/yuitest/assets/testlogger.css">     
 
-<script type="text/javascript" src="../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../build/event/event.js"></script>
-<script type="text/javascript" src="../build/dom/dom.js"></script> 
-<script type="text/javascript" src="../build/element/element.js"></script> 
-<script type="text/javascript" src="../build/logger/logger-min.js"></script>
-<script type="text/javascript" src="../build/yuitest/yuitest.js"></script>
+<script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../../build/event/event.js"></script>
+<script type="text/javascript" src="../../../build/dom/dom.js"></script> 
+<script type="text/javascript" src="../../../build/element/element.js"></script> 
+<script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
+<script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
 
 <style type="text/css">
 #foo {
@@ -159,6 +159,12 @@
                 foo.on('click', function(e) { alert('click'); });
                 var baz = new Y.Element('baz');
                 baz.on('click', function(e) { alert('click'); });
+            },
+
+            test_destroy: function() {
+                foo.destroy();
+                Assert.isNull(foo.get('element'), 'foo.destroy - null element');
+                Assert.isNull(foo.get('parent'), 'foo.destroy - null parent');
             }
 
         })); 
