@@ -71,8 +71,9 @@
          */
         getAttributeKeys: function(){
             this._configs = this._configs;
-            var keys = [];
-            for (var key in this._configs) {
+            var keys = [], key;
+
+            for (key in this._configs) {
                 if ( Lang.hasOwnProperty(this._configs, key) && 
                         !Lang.isUndefined(this._configs[key]) ) {
                     keys[keys.length] = key;

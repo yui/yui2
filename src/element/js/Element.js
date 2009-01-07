@@ -271,12 +271,7 @@ Element.prototype = {
      * @param {String} value The value to apply to the style property
      */
     setStyle: function(property, value) {
-        var el = this.get('element');
-        if (!el) {
-            return this._queue[this._queue.length] = ['setStyle', arguments];
-        }
-
-        return Dom.setStyle(el,  property, value); // TODO: always queuing?
+        return Dom.setStyle(this.get('element'),  property, value); // TODO: always queuing?
     },
     
     /**
