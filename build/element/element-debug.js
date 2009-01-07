@@ -10,7 +10,11 @@
 YAHOO.util.Attribute = function(hash, owner) {
     if (owner) { 
         this.owner = owner;
-        hash.setter = hash.setter || hash.method; // "setter" was "method"
+        if (hash.method) {
+            YAHOO.log('"method" is deprecated; use "setter"', 'warn', 'Element');
+            hash.setter = hash.method;
+        }
+
         this.configure(hash, true);
     }
 };
