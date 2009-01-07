@@ -5,7 +5,7 @@
  *
  * @param {String}  type The type of event, which is passed to the callback
  *                  when the event fires
- * @param {Object}  oScope The context the event will fire from.  "this" will
+ * @param {Object}  context The context the event will fire from.  "this" will
  *                  refer to this object in the callback.  Default value: 
  *                  the window object.  The listener can override this.
  * @param {boolean} silent pass true to prevent the event from writing to
@@ -18,7 +18,7 @@
  * @class CustomEvent
  * @constructor
  */
-YAHOO.util.CustomEvent = function(type, oScope, silent, signature) {
+YAHOO.util.CustomEvent = function(type, context, silent, signature) {
 
     /**
      * The type of event, returned to subscribers when the event fires
@@ -28,12 +28,12 @@ YAHOO.util.CustomEvent = function(type, oScope, silent, signature) {
     this.type = type;
 
     /**
-     * The scope the the event will fire from by default.  Defaults to the window 
+     * The context the the event will fire from by default.  Defaults to the window 
      * obj
      * @property scope
      * @type object
      */
-    this.scope = oScope || window;
+    this.scope = context || window;
 
     /**
      * By default all custom events are logged in the debug build, set silent
@@ -94,11 +94,12 @@ YAHOO.util.CustomEvent = function(type, oScope, silent, signature) {
          * @type YAHOO.util.CustomEvent
          * @param {Function} fn The function to execute
          * @param {Object}   obj An object to be passed along when the event 
-         *                       fires
+         *                       fires defaults to the custom event
          * @param {boolean|Object}  override If true, the obj passed in becomes 
-         *                                   the execution scope of the listener.
+         *                                   the execution context of the listener.
          *                                   if an object, that object becomes the
-         *                                   the execution scope.
+         *                                   the execution context. defaults to
+         *                                   the custom event
          */
         this.subscribeEvent = 
                 new YAHOO.util.CustomEvent(onsubscribeType, this, true);
@@ -144,22 +145,22 @@ YAHOO.util.CustomEvent.prototype = {
      * @param {Function} fn        The function to execute
      * @param {Object}   obj       An object to be passed along when the event 
      *                             fires
-     * @param {boolean|Object}  override If true, the obj passed in becomes 
-     *                                   the execution scope of the listener.
+     * @param {boolean|Object}  overrideContext If true, the obj passed in becomes 
+     *                                   the execution context of the listener.
      *                                   if an object, that object becomes the
-     *                                   the execution scope.
+     *                                   the execution context.
      */
-    subscribe: function(fn, obj, override) {
+    subscribe: function(fn, obj, overrideContext) {
 
         if (!fn) {
 throw new Error("Invalid callback for subscriber to '" + this.type + "'");
         }
 
         if (this.subscribeEvent) {
-            this.subscribeEvent.fire(fn, obj, override);
+            this.subscribeEvent.fire(fn, obj, overrideContext);
         }
 
-        this.subscribers.push( new YAHOO.util.Subscriber(fn, obj, override) );
+        this.subscribers.push( new YAHOO.util.Subscriber(fn, obj, overrideContext) );
     },
 
     /**
@@ -194,7 +195,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
 
     /**
      * Notifies the subscribers.  The callback functions will be executed
-     * from the scope specified when the event was created, and with the 
+     * from the context specified when the event was created, and with the 
      * following parameters:
      *   <ul>
      *   <li>The type of event</li>
@@ -322,7 +323,7 @@ YAHOO.log("Event stopped, sub " + i + " of " + len, "info", "Event");
      */
     toString: function() {
          return "CustomEvent: " + "'" + this.type  + "', " + 
-             "scope: " + this.scope;
+             "context: " + this.scope;
 
     }
 };
@@ -333,12 +334,12 @@ YAHOO.log("Event stopped, sub " + i + " of " + len, "info", "Event");
  * Stores the subscriber information to be used when the event fires.
  * @param {Function} fn       The function to execute
  * @param {Object}   obj      An object to be passed along when the event fires
- * @param {boolean}  override If true, the obj passed in becomes the execution
- *                            scope of the listener
+ * @param {boolean}  overrideContext If true, the obj passed in becomes the execution
+ *                            context of the listener
  * @class Subscriber
  * @constructor
  */
-YAHOO.util.Subscriber = function(fn, obj, override) {
+YAHOO.util.Subscriber = function(fn, obj, overrideContext) {
 
     /**
      * The callback that will be execute when the event fires
@@ -356,32 +357,32 @@ YAHOO.util.Subscriber = function(fn, obj, override) {
     this.obj = YAHOO.lang.isUndefined(obj) ? null : obj;
 
     /**
-     * The default execution scope for the event listener is defined when the
+     * The default execution context for the event listener is defined when the
      * event is created (usually the object which contains the event).
-     * By setting override to true, the execution scope becomes the custom
-     * object passed in by the subscriber.  If override is an object, that 
-     * object becomes the scope.
-     * @property override
+     * By setting overrideContext to true, the execution context becomes the custom
+     * object passed in by the subscriber.  If overrideContext is an object, that 
+     * object becomes the context.
+     * @property overrideContext
      * @type boolean|object
      */
-    this.override = override;
+    this.overrideContext = overrideContext;
 
 };
 
 /**
- * Returns the execution scope for this listener.  If override was set to true
- * the custom obj will be the scope.  If override is an object, that is the
- * scope, otherwise the default scope will be used.
+ * Returns the execution context for this listener.  If overrideContext was set to true
+ * the custom obj will be the context.  If overrideContext is an object, that is the
+ * context, otherwise the default context will be used.
  * @method getScope
- * @param {Object} defaultScope the scope to use if this listener does not
+ * @param {Object} defaultScope the context to use if this listener does not
  *                              override it.
  */
 YAHOO.util.Subscriber.prototype.getScope = function(defaultScope) {
-    if (this.override) {
-        if (this.override === true) {
+    if (this.overrideContext) {
+        if (this.overrideContext === true) {
             return this.obj;
         } else {
-            return this.override;
+            return this.overrideContext;
         }
     }
     return defaultScope;
@@ -410,6 +411,6 @@ YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
  */
 YAHOO.util.Subscriber.prototype.toString = function() {
     return "Subscriber { obj: " + this.obj  + 
-           ", override: " +  (this.override || "no") + " }";
+           ", overrideContext: " +  (this.overrideContext || "no") + " }";
 };
 
