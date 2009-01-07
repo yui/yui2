@@ -5,7 +5,9 @@
  */
 YAHOO.util.Color = function() {
 
-    var HCHARS="0123456789ABCDEF", lang=YAHOO.lang;
+    var ZERO     = "0",
+        isArray  = YAHOO.lang.isArray,
+        isNumber = YAHOO.lang.isNumber;
 
     return {
 
@@ -31,17 +33,18 @@ YAHOO.util.Color = function() {
          */
         hsv2rgb: function(h, s, v) { 
 
-            if (lang.isArray(h)) {
+            if (isArray(h)) {
                 return this.hsv2rgb.call(this, h[0], h[1], h[2]);
             }
 
-            var r, g, b, i, f, p, q, t;
-            i = Math.floor((h/60)%6);
-            f = (h/60)-i;
-            p = v*(1-s);
-            q = v*(1-f*s);
-            t = v*(1-(1-f)*s);
-            switch(i) {
+            var r, g, b,
+                i = Math.floor((h/60)%6),
+                f = (h/60)-i,
+                p = v*(1-s),
+                q = v*(1-f*s),
+                t = v*(1-(1-f)*s);
+
+            switch (i) {
                 case 0: r=v; g=t; b=p; break;
                 case 1: r=q; g=v; b=p; break;
                 case 2: r=p; g=v; b=t; break;
@@ -66,18 +69,18 @@ YAHOO.util.Color = function() {
          */
         rgb2hsv: function(r, g, b) {
 
-            if (lang.isArray(r)) {
-                return this.rgb2hsv.call(this, r[0], r[1], r[2]);
+            if (isArray(r)) {
+                return this.rgb2hsv.apply(this, r);
             }
 
-            r=r/255;
-            g=g/255;
-            b=b/255;
+            r /= 255;
+            g /= 255;
+            b /= 255;
 
-            var min,max,delta,h,s,v;
-            min = Math.min(Math.min(r,g),b);
-            max = Math.max(Math.max(r,g),b);
-            delta = max-min;
+            var h,s,v,
+                min = Math.min(Math.min(r,g),b),
+                max = Math.max(Math.max(r,g),b),
+                delta = max-min;
 
             switch (max) {
                 case min: h=0; break;
@@ -109,8 +112,8 @@ YAHOO.util.Color = function() {
          * @return {string} the hex string
          */
         rgb2hex: function(r, g, b) {
-            if (lang.isArray(r)) {
-                return this.rgb2hex.call(this, r[0], r[1], r[2]);
+            if (isArray(r)) {
+                return this.rgb2hex.apply(this, r);
             }
 
             var f=this.dec2hex;
@@ -124,11 +127,10 @@ YAHOO.util.Color = function() {
          * @return {string} the hex equivalent
          */
         dec2hex: function(n) {
-            n = parseInt(n, 10);
-            n = (lang.isNumber(n)) ? n : 0;
+            n = parseInt(n,10)|0;
             n = (n > 255 || n < 0) ? 0 : n;
 
-            return HCHARS.charAt((n - n % 16) / 16) + HCHARS.charAt(n % 16);
+            return (ZERO+n.toString(16)).slice(-2).toUpperCase();
         },
 
         /**
@@ -138,13 +140,7 @@ YAHOO.util.Color = function() {
          * @return {int} the decimal
          */
         hex2dec: function(str) {
-            var f = function(c) {
-                return HCHARS.indexOf(c.toUpperCase());
-            };
-
-            var s=str.split('');
-            
-            return ((f(s[0]) * 16) + f(s[1]));
+            return parseInt(str,16);
         },
 
         /**
@@ -155,7 +151,7 @@ YAHOO.util.Color = function() {
          */
         hex2rgb: function(s) { 
             var f = this.hex2dec;
-            return [f(s.substr(0, 2)), f(s.substr(2, 2)), f(s.substr(4, 2))];
+            return [f(s.slice(0, 2)), f(s.slice(2, 4)), f(s.slice(4, 6))];
         },
 
         /**
@@ -170,13 +166,13 @@ YAHOO.util.Color = function() {
          */
         websafe: function(r, g, b) {
 
-            if (lang.isArray(r)) {
-                return this.websafe.call(this, r[0], r[1], r[2]);
+            if (isArray(r)) {
+                return this.websafe.apply(this, r);
             }
 
             // returns the closest match [0, 51, 102, 153, 204, 255]
             var f = function(v) {
-                if (lang.isNumber(v)) {
+                if (isNumber(v)) {
                     v = Math.min(Math.max(0, v), 255);
                     var i, next;
                     for (i=0; i<256; i=i+51) {
