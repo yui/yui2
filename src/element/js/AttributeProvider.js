@@ -37,10 +37,10 @@
             
             if (!config || !this._configs.hasOwnProperty(key)) {
                 YAHOO.log(key + ' not found', 'error', 'AttributeProvider');
-                return undefined;
+                return null;
             }
             
-            return config.value;
+            return config.getValue();
         },
         
         /**
@@ -72,11 +72,9 @@
         getAttributeKeys: function(){
             this._configs = this._configs;
             var keys = [];
-            var config;
             for (var key in this._configs) {
-                config = this._configs[key];
                 if ( Lang.hasOwnProperty(this._configs, key) && 
-                        !Lang.isUndefined(config) ) {
+                        !Lang.isUndefined(this._configs[key]) ) {
                     keys[keys.length] = key;
                 }
             }
