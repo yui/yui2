@@ -9,7 +9,6 @@ var Dom = YAHOO.util.Dom,
  * @module element
  * @namespace YAHOO.util
  * @requires yahoo, dom, event
- * @beta
  */
 
 /**
@@ -23,7 +22,24 @@ var Dom = YAHOO.util.Dom,
  * @param {Object} map A key-value map of initial config names and values
  */
 var Element = function(el, map) {
-    this.init(el, map);
+    this.init.apply(this, arguments);
+};
+
+Element.DOM_EVENTS = {
+    'click': true,
+    'dblclick': true,
+    'keydown': true,
+    'keypress': true,
+    'keyup': true,
+    'mousedown': true,
+    'mousemove': true,
+    'mouseout': true, 
+    'mouseover': true, 
+    'mouseup': true,
+    'focus': true,
+    'blur': true,
+    'submit': true,
+    'change': true
 };
 
 Element.prototype = {
@@ -33,6 +49,25 @@ Element.prototype = {
      * @type Object
      */
     DOM_EVENTS: null,
+
+    DEFAULT_HTML_SETTER: function(value, key) {
+        var el = this.get('element');
+        
+        if (el) {
+            el[key] = value;
+        }
+    },
+
+    DEFAULT_HTML_GETTER: function(key) {
+        var el = this.get('element'),
+            val;
+
+        if (el) {
+            val = el[key];
+        }
+
+        return val;
+    },
 
     /**
      * Wrapper for HTMLElement method.
@@ -316,24 +351,17 @@ Element.prototype = {
     },
     
     get: function(key) {
-        var configs = this._configs || {};
-        var el = configs.element; // avoid loop due to 'element'
+        var configs = this._configs || {},
+            el = configs.element; // avoid loop due to 'element'
+
         if (el && !configs[key] && !YAHOO.lang.isUndefined(el.value[key]) ) {
-            return el.value[key];
+            this._setHTMLAttrConfig(key);
         }
 
         return AttributeProvider.prototype.get.call(this, key);
     },
 
     setAttributes: function(map, silent) {
-        var el = this.get('element');
-        for (var key in map) {
-            // need to configure if setting unconfigured HTMLElement attribute 
-            if ( !this._configs[key] && !YAHOO.lang.isUndefined(el[key]) ) {
-                this.setAttributeConfig(key);
-            }
-        }
-
         // set based on configOrder
         for (var i = 0, len = this._configOrder.length; i < len; ++i) {
             if (map[this._configOrder[i]] !== undefined) {
@@ -362,28 +390,8 @@ Element.prototype = {
     },
     
     setAttributeConfig: function(key, map, init) {
-        var el = this.get('element');
-
-        if (el && !this._configs[key] && !YAHOO.lang.isUndefined(el[key]) ) {
-            this._setHTMLAttrConfig(key, map);
-        } else {
-            AttributeProvider.prototype.setAttributeConfig.apply(this, arguments);
-        }
         this._configOrder.push(key);
-    },
-    
-    getAttributeKeys: function() {
-        var el = this.get('element');
-        var keys = AttributeProvider.prototype.getAttributeKeys.call(this);
-        
-        //add any unconfigured element keys
-        for (var key in el) {
-            if (!this._configs[key]) {
-                keys[key] = keys[key] || el[key];
-            }
-        }
-        
-        return keys;
+        AttributeProvider.prototype.setAttributeConfig.apply(this, arguments);
     },
 
     createEvent: function(type, scope) {
@@ -395,6 +403,17 @@ Element.prototype = {
         this._initElement(el, attr); 
     },
 
+    destroy: function() {
+        var el = this.get('element');
+        if (el && el.parentNode) {
+            el.parentNode.removeChild(el);
+        }
+        this._queue = this._queue || [];
+        this._events = this._events || {};
+        this._configs = this._configs || {};
+        this._configOrder = []; 
+    },
+
     _initElement: function(el, attr) {
         this._queue = this._queue || [];
         this._events = this._events || {};
@@ -403,23 +422,16 @@ Element.prototype = {
         attr = attr || {};
         attr.element = attr.element || el || null;
 
-        this.DOM_EVENTS = {
-            'click': true,
-            'dblclick': true,
-            'keydown': true,
-            'keypress': true,
-            'keyup': true,
-            'mousedown': true,
-            'mousemove': true,
-            'mouseout': true, 
-            'mouseover': true, 
-            'mouseup': true,
-            'focus': true,
-            'blur': true,
-            'submit': true
-        };
-
         var isReady = false;  // to determine when to init HTMLElement and content
+
+        var DOM_EVENTS = Element.DOM_EVENTS;
+        this.DOM_EVENTS = this.DOM_EVENTS || {};
+
+        for (var event in DOM_EVENTS) {
+            if (DOM_EVENTS.hasOwnProperty(event)) {
+                this.DOM_EVENTS[event] = DOM_EVENTS[event];
+            }
+        }
 
         if (typeof attr.element === 'string') { // register ID for get() access
             this._setHTMLAttrConfig('id', { value: attr.element });
@@ -479,11 +491,10 @@ Element.prototype = {
         var el = this.get('element');
         map = map || {};
         map.name = key;
-        map.method = map.method || function(value) {
-            if (el) {
-                el[key] = value;
-            }
-        };
+
+        map.setter = map.setter || this.DEFAULT_HTML_SETTER;
+        map.getter = map.getter || this.DEFAULT_HTML_GETTER;
+
         map.value = map.value || el[key];
         this._configs[key] = new YAHOO.util.Attribute(map, this);
     }
