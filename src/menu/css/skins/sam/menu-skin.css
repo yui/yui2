@@ -6,7 +6,7 @@
     line-height: 2;  /* ~24px */
     *line-height: 1.9; /* For IE */
     border: solid 1px #808080;
-    background: url(../../../img/sprite.png) repeat-x 0 0;
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
 
 }
 
@@ -49,7 +49,7 @@
 
 .yui-skin-sam .yuimenubarnav .yuimenubaritemlabel-hassubmenu {
 
-    background: url(../../../img/skins/sam/menubaritem_submenuindicator.png) right center no-repeat;
+    background: url(menubaritem_submenuindicator.png) right center no-repeat;
 
 }
 
@@ -61,7 +61,7 @@
 
 .yui-skin-sam .yuimenubaritem-selected {
 
-    background: url(../../../img/sprite.png) repeat-x 0 -1700px;
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1700px;
 
 }
 
@@ -91,7 +91,7 @@
 
 .yui-skin-sam .yuimenubarnav .yuimenubaritemlabel-hassubmenu-disabled {
 
-    background-image: url(../../../img/skins/sam/menubaritem_submenuindicator_disabled.png);
+    background-image: url(menubaritem_submenuindicator_disabled.png);
 
 }
 
@@ -185,7 +185,7 @@
 
     height: 16px;
     border: solid 1px #808080;
-    background: #fff url(../../../img/sprite.png) no-repeat 0 0;
+    background: #fff url(../../../../assets/skins/sam/sprite.png) no-repeat 0 0;
 
 }
 
@@ -249,7 +249,7 @@
 
 .yui-skin-sam .yuimenuitem-hassubmenu {
 
-    background-image: url(../../../img/skins/sam/menuitem_submenuindicator.png);
+    background-image: url(menuitem_submenuindicator.png);
     background-position: right center;
     background-repeat: no-repeat;
 
@@ -257,7 +257,7 @@
 
 .yui-skin-sam .yuimenuitem-checked {
 
-    background-image: url(../../../img/skins/sam/menuitem_checkbox.png);
+    background-image: url(menuitem_checkbox.png);
     background-position: left center;
     background-repeat: no-repeat;
 
@@ -279,7 +279,7 @@
     */
 
     opacity: .12;
-    filter: alpha(opacity=12);  /* For IE */
+    *filter: alpha(opacity=12);  /* For IE */
 
 }
 
@@ -308,12 +308,12 @@
 
 .yui-skin-sam .yuimenuitem-hassubmenu-disabled {
 
-    background-image: url(../../../img/skins/sam/menuitem_submenuindicator_disabled.png);
+    background-image: url(menuitem_submenuindicator_disabled.png);
 
 }
 
 .yui-skin-sam .yuimenuitem-checked-disabled {
 
-    background-image: url(../../../img/skins/sam/menuitem_checkbox_disabled.png);
+    background-image: url(menuitem_checkbox_disabled.png);
 
 }

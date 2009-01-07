@@ -6421,7 +6421,7 @@ initDefaultConfig: function () {
     /**
     * @config keepopen
     * @description Boolean indicating if the menu should remain open when clicked.
-    * @default flase
+    * @default false
     * @type Boolean
     */
     oConfig.addProperty(
