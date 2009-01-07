@@ -3081,8 +3081,6 @@
                 }
                 else {
         
-        			this.appendTo(oContainer);
-        
         			this.on("init", function () {
         			
         				Lang.later(0, this, this.appendTo, oContainer);
