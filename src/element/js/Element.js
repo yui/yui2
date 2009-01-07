@@ -403,9 +403,9 @@ Element.prototype = {
         if (el && el.parentNode) {
             el.parentNode.removeChild(el);
         }
-        this._queue = this._queue || [];
-        this._events = this._events || {};
-        this._configs = this._configs || {};
+        this._queue = [];
+        this._events = {};
+        this._configs = {};
         this._configOrder = []; 
     },
 
