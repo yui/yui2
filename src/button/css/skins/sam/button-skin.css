@@ -3,7 +3,7 @@
     border-width: 1px 0;
     border-style: solid;
     border-color: #808080;
-    background: url(../../../img/sprite.png) repeat-x 0 0;
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
     margin: auto .25em;
     
 }
@@ -61,13 +61,13 @@
 
 .yui-skin-sam .yui-menu-button button {
 
-    background-image: url(../../../img/menu-button-arrow.png);
+    background-image: url(menu-button-arrow.png);
 
 }
 
 .yui-skin-sam .yui-split-button button {
 
-    background-image: url(../../../img/split-button-arrow.png);
+    background-image: url(split-button-arrow.png);
 
 }
 
@@ -97,7 +97,7 @@
 
 .yui-skin-sam .yui-split-button-focus button {
 
-    background-image: url(../../../img/split-button-arrow-focus.png);
+    background-image: url(split-button-arrow-focus.png);
 
 }
 
@@ -126,7 +126,7 @@
 
 .yui-skin-sam .yui-split-button-hover button {
 
-    background-image: url(../../../img/split-button-arrow-hover.png);
+    background-image: url(split-button-arrow-hover.png);
 
 }
 
@@ -168,7 +168,7 @@
 
 .yui-skin-sam .yui-split-button-activeoption button {
 
-    background-image: url(../../../img/split-button-arrow-active.png);
+    background-image: url(split-button-arrow-active.png);
 
 }
 
@@ -223,12 +223,12 @@
 
 .yui-skin-sam .yui-menu-button-disabled button {
 
-    background-image: url(../../../img/menu-button-arrow-disabled.png);
+    background-image: url(menu-button-arrow-disabled.png);
     
 }
 
 .yui-skin-sam .yui-split-button-disabled button {
 
-    background-image: url(../../../img/split-button-arrow-disabled.png);
+    background-image: url(split-button-arrow-disabled.png);
     
 }
