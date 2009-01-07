@@ -162,7 +162,9 @@
             },
 
             test_destroy: function() {
-
+                foo.destroy();
+                Assert.isNull(foo.get('element'), 'foo.destroy - null element');
+                Assert.isNull(foo.get('parent'), 'foo.destroy - null parent');
             }
 
         })); 
