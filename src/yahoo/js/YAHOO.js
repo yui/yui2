@@ -140,19 +140,29 @@ YAHOO.log = function(msg, cat, src) {
  *                             and a "build" property at minimum.
  */
 YAHOO.register = function(name, mainClass, data) {
-    var mods = YAHOO.env.modules;
+    var mods = YAHOO.env.modules, m, v, b, ls, i;
+
     if (!mods[name]) {
-        mods[name] = { versions:[], builds:[] };
+        mods[name] = { 
+            versions:[], 
+            builds:[] 
+        };
     }
-    var m=mods[name],v=data.version,b=data.build,ls=YAHOO.env.listeners;
+
+    m  = mods[name];
+    v  = data.version;
+    b  = data.build;
+    ls = YAHOO.env.listeners;
+
     m.name = name;
     m.version = v;
     m.build = b;
     m.versions.push(v);
     m.builds.push(b);
     m.mainClass = mainClass;
+
     // fire the module load listeners
-    for (var i=0;i<ls.length;i=i+1) {
+    for (i=0;i<ls.length;i=i+1) {
         ls[i](m);
     }
     // label the main class
