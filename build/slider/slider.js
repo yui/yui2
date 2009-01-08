@@ -801,7 +801,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
         this._slideStart();
 
-        if (this.animate && YAHOO.widget.Slider.ANIM_AVAIL && t._graduated && !skipAnim) {
+        if (this.animate && t._graduated && !skipAnim) {
             // this.thumb._animating = true;
             this.lock();
 

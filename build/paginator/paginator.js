@@ -363,11 +363,6 @@ YAHOO.widget.Paginator.prototype = {
      * @private
      */
     initEvents : function () {
-        this.createEvent('recordOffsetChange');
-        this.createEvent('totalRecordsChange');
-        this.createEvent('rowsPerPageChange');
-        this.createEvent('alwaysVisibleChange');
-
         /**
          * Event fired when the Paginator is initially rendered
          * @event render
@@ -899,7 +894,7 @@ YAHOO.widget.Paginator.prototype = {
     getState : function (changes) {
         var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
             l         = YAHOO.lang,
-            M = Math, min = M.min, max = M.max, floor = M.floor, ceil = M.ceil,
+            M = Math, max = M.max, floor = M.floor, ceil = M.ceil,
             currentState, state, offset;
 
         function normalizeOffset(offset,total,rpp) {
@@ -1037,9 +1032,6 @@ var Paginator = YAHOO.widget.Paginator,
  */
 Paginator.ui.CurrentPageReport = function (p) {
     this.paginator = p;
-
-    p.createEvent('pageReportClassChange');
-    p.createEvent('pageReportTemplateChange');
 
     p.subscribe('recordOffsetChange', this.update,this,true);
     p.subscribe('rowsPerPageChange', this.update,this,true);
@@ -1208,11 +1200,6 @@ var Paginator = YAHOO.widget.Paginator,
  */
 Paginator.ui.PageLinks = function (p) {
     this.paginator = p;
-
-    p.createEvent('pageLinkClassChange');
-    p.createEvent('currentPageClassChange');
-    p.createEvent('pageLinksContainerClassChange');
-    p.createEvent('pageLinksChange');
 
     p.subscribe('recordOffsetChange',this.update,this,true);
     p.subscribe('rowsPerPageChange',this.update,this,true);
@@ -1475,9 +1462,6 @@ var Paginator = YAHOO.widget.Paginator,
 Paginator.ui.FirstPageLink = function (p) {
     this.paginator = p;
 
-    p.createEvent('firstPageLinkLabelChange');
-    p.createEvent('firstPageLinkClassChange');
-
     p.subscribe('recordOffsetChange',this.update,this,true);
     p.subscribe('rowsPerPageChange',this.update,this,true);
     p.subscribe('totalRecordsChange',this.update,this,true);
@@ -1639,9 +1623,6 @@ var Paginator = YAHOO.widget.Paginator,
  */
 Paginator.ui.LastPageLink = function (p) {
     this.paginator = p;
-
-    p.createEvent('lastPageLinkLabelChange');
-    p.createEvent('lastPageLinkClassChange');
 
     p.subscribe('recordOffsetChange',this.update,this,true);
     p.subscribe('rowsPerPageChange',this.update,this,true);
@@ -1829,9 +1810,6 @@ var Paginator = YAHOO.widget.Paginator,
 Paginator.ui.NextPageLink = function (p) {
     this.paginator = p;
 
-    p.createEvent('nextPageLinkLabelChange');
-    p.createEvent('nextPageLinkClassChange');
-
     p.subscribe('recordOffsetChange', this.update,this,true);
     p.subscribe('rowsPerPageChange', this.update,this,true);
     p.subscribe('totalRecordsChange', this.update,this,true);
@@ -1997,9 +1975,6 @@ var Paginator = YAHOO.widget.Paginator,
 Paginator.ui.PreviousPageLink = function (p) {
     this.paginator = p;
 
-    p.createEvent('previousPageLinkLabelChange');
-    p.createEvent('previousPageLinkClassChange');
-
     p.subscribe('recordOffsetChange',this.update,this,true);
     p.subscribe('rowsPerPageChange',this.update,this,true);
     p.subscribe('totalRecordsChange',this.update,this,true);
@@ -2161,9 +2136,6 @@ var Paginator = YAHOO.widget.Paginator,
 Paginator.ui.RowsPerPageDropdown = function (p) {
     this.paginator = p;
 
-    p.createEvent('rowsPerPageOptionsChange');
-    p.createEvent('rowsPerPageDropdownClassChange');
-
     p.subscribe('rowsPerPageChange',this.update,this,true);
     p.subscribe('rowsPerPageOptionsChange',this.rebuild,this,true);
     p.subscribe('destroy',this.destroy,this,true);
@@ -2275,7 +2247,7 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
             var node = opt_tem.cloneNode(false),
                 opt  = options[i];
             node.value = l.isValue(opt.value) ? opt.value : opt;
-            node.innerHTML = l.isValue(opt.text) ? opt.text : opt;
+            node.innerHTML = l.isValue(opt.text)  ? opt.text  : opt;
             sel.appendChild(node);
         }
 

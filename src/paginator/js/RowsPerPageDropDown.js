@@ -16,9 +16,6 @@ var Paginator = YAHOO.widget.Paginator,
 Paginator.ui.RowsPerPageDropdown = function (p) {
     this.paginator = p;
 
-    p.createEvent('rowsPerPageOptionsChange');
-    p.createEvent('rowsPerPageDropdownClassChange');
-
     p.subscribe('rowsPerPageChange',this.update,this,true);
     p.subscribe('rowsPerPageOptionsChange',this.rebuild,this,true);
     p.subscribe('destroy',this.destroy,this,true);
@@ -130,7 +127,7 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
             var node = opt_tem.cloneNode(false),
                 opt  = options[i];
             node.value = l.isValue(opt.value) ? opt.value : opt;
-            node.innerHTML = l.isValue(opt.text) ? opt.text : opt;
+            node.innerHTML = l.isValue(opt.text)  ? opt.text  : opt;
             sel.appendChild(node);
         }
 

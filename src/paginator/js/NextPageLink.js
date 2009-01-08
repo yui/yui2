@@ -16,9 +16,6 @@ var Paginator = YAHOO.widget.Paginator,
 Paginator.ui.NextPageLink = function (p) {
     this.paginator = p;
 
-    p.createEvent('nextPageLinkLabelChange');
-    p.createEvent('nextPageLinkClassChange');
-
     p.subscribe('recordOffsetChange', this.update,this,true);
     p.subscribe('rowsPerPageChange', this.update,this,true);
     p.subscribe('totalRecordsChange', this.update,this,true);

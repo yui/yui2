@@ -363,11 +363,6 @@ YAHOO.widget.Paginator.prototype = {
      * @private
      */
     initEvents : function () {
-        this.createEvent('recordOffsetChange');
-        this.createEvent('totalRecordsChange');
-        this.createEvent('rowsPerPageChange');
-        this.createEvent('alwaysVisibleChange');
-
         /**
          * Event fired when the Paginator is initially rendered
          * @event render
@@ -899,7 +894,7 @@ YAHOO.widget.Paginator.prototype = {
     getState : function (changes) {
         var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
             l         = YAHOO.lang,
-            M = Math, min = M.min, max = M.max, floor = M.floor, ceil = M.ceil,
+            M = Math, max = M.max, floor = M.floor, ceil = M.ceil,
             currentState, state, offset;
 
         function normalizeOffset(offset,total,rpp) {

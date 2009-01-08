@@ -17,9 +17,6 @@ var Paginator = YAHOO.widget.Paginator,
 Paginator.ui.CurrentPageReport = function (p) {
     this.paginator = p;
 
-    p.createEvent('pageReportClassChange');
-    p.createEvent('pageReportTemplateChange');
-
     p.subscribe('recordOffsetChange', this.update,this,true);
     p.subscribe('rowsPerPageChange', this.update,this,true);
     p.subscribe('totalRecordsChange',this.update,this,true);

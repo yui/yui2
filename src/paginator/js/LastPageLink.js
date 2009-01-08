@@ -4,20 +4,17 @@ var Paginator = YAHOO.widget.Paginator,
     l         = YAHOO.lang;
 
 /**
- * ui Component to generate the link to jump to the previous page.
+ * ui Component to generate the link to jump to the last page.
  *
  * @namespace YAHOO.widget.Paginator.ui
- * @class PreviousPageLink
+ * @class LastPageLink
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Paginator.ui.PreviousPageLink = function (p) {
+Paginator.ui.LastPageLink = function (p) {
     this.paginator = p;
-
-    p.createEvent('previousPageLinkLabelChange');
-    p.createEvent('previousPageLinkClassChange');
 
     p.subscribe('recordOffsetChange',this.update,this,true);
     p.subscribe('rowsPerPageChange',this.update,this,true);
@@ -25,41 +22,41 @@ Paginator.ui.PreviousPageLink = function (p) {
     p.subscribe('destroy',this.destroy,this,true);
 
     // TODO: make this work
-    p.subscribe('previousPageLinkLabelChange',this.update,this,true);
-    p.subscribe('previousPageLinkClassChange',this.update,this,true);
+    p.subscribe('lastPageLinkLabelChange',this.update,this,true);
+    p.subscribe('lastPageLinkClassChange', this.update,this,true);
 };
 
 /**
  * Decorates Paginator instances with new attributes. Called during
  * Paginator instantiation.
  * @method init
- * @param p {Paginator} Paginator instance to decorate
+ * @param paginator {Paginator} Paginator instance to decorate
  * @static
  */
-Paginator.ui.PreviousPageLink.init = function (p) {
+Paginator.ui.LastPageLink.init = function (p) {
 
     /**
-     * Used as innerHTML for the previous page link/span.
-     * @attribute previousPageLinkLabel
-     * @default '&lt;&nbsp;prev'
+     * Used as innerHTML for the last page link/span.
+     * @attribute lastPageLinkLabel
+     * @default 'last&nbsp;&gt;&gt;'
      */
-    p.setAttributeConfig('previousPageLinkLabel', {
-        value : '&lt;&nbsp;prev',
+    p.setAttributeConfig('lastPageLinkLabel', {
+        value : 'last&nbsp;&gt;&gt;',
         validator : l.isString
     });
 
     /**
      * CSS class assigned to the link/span
-     * @attribute previousPageLinkClass
-     * @default 'yui-pg-previous'
+     * @attribute lastPageLinkClass
+     * @default 'yui-pg-last'
      */
-    p.setAttributeConfig('previousPageLinkClass', {
-        value : 'yui-pg-previous',
+    p.setAttributeConfig('lastPageLinkClass', {
+        value : 'yui-pg-last',
         validator : l.isString
     });
 };
 
-Paginator.ui.PreviousPageLink.prototype = {
+Paginator.ui.LastPageLink.prototype = {
 
     /**
      * Currently placed HTMLElement node
@@ -70,7 +67,7 @@ Paginator.ui.PreviousPageLink.prototype = {
     current   : null,
 
     /**
-     * Link node
+     * Link HTMLElement node
      * @property link
      * @type HTMLElement
      * @private
@@ -85,6 +82,15 @@ Paginator.ui.PreviousPageLink.prototype = {
      */
     span      : null,
 
+    /**
+     * Empty place holder node for when the last page link is inappropriate to
+     * display in any form (unlimited paging).
+     * @property na
+     * @type HTMLElement
+     * @private
+     */
+    na        : null,
+
 
     /**
      * Generate the nodes and return the appropriate node given the current
@@ -95,46 +101,62 @@ Paginator.ui.PreviousPageLink.prototype = {
      */
     render : function (id_base) {
         var p     = this.paginator,
-            c     = p.get('previousPageLinkClass'),
-            label = p.get('previousPageLinkLabel');
+            c     = p.get('lastPageLinkClass'),
+            label = p.get('lastPageLinkLabel'),
+            last  = p.getTotalPages();
 
-        this.link     = document.createElement('a');
-        this.span     = document.createElement('span');
+        this.link = document.createElement('a');
+        this.span = document.createElement('span');
+        this.na   = this.span.cloneNode(false);
 
-        this.link.id        = id_base + '-prev-link';
+        this.link.id        = id_base + '-last-link';
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
-        this.span.id        = id_base + '-prev-span';
+        this.span.id        = id_base + '-last-span';
         this.span.className = c;
         this.span.innerHTML = label;
 
-        this.current = p.get('recordOffset') < 1 ? this.span : this.link;
+        this.na.id = id_base + '-last-na';
+
+        switch (last) {
+            case Paginator.VALUE_UNLIMITED :
+                    this.current = this.na; break;
+            case p.getCurrentPage() :
+                    this.current = this.span; break;
+            default :
+                    this.current = this.link;
+        }
+
         return this.current;
     },
 
     /**
-     * Swap the link and span nodes if appropriate.
+     * Swap the link, span, and na nodes if appropriate.
      * @method update
-     * @param e {CustomEvent} The calling change event
+     * @param e {CustomEvent} The calling change event (ignored)
      */
     update : function (e) {
         if (e && e.prevValue === e.newValue) {
             return;
         }
 
-        var par = this.current ? this.current.parentNode : null;
-        if (this.paginator.get('recordOffset') < 1) {
-            if (par && this.current === this.link) {
-                par.replaceChild(this.span,this.current);
-                this.current = this.span;
+        var par   = this.current ? this.current.parentNode : null,
+            after = this.link;
+
+        if (par) {
+            switch (this.paginator.getTotalPages()) {
+                case Paginator.VALUE_UNLIMITED :
+                        after = this.na; break;
+                case this.paginator.getCurrentPage() :
+                        after = this.span; break;
             }
-        } else {
-            if (par && this.current === this.span) {
-                par.replaceChild(this.link,this.current);
-                this.current = this.link;
+
+            if (this.current !== after) {
+                par.replaceChild(after,this.current);
+                this.current = after;
             }
         }
     },
@@ -157,7 +179,7 @@ Paginator.ui.PreviousPageLink.prototype = {
      */
     onClick : function (e) {
         YAHOO.util.Event.stopEvent(e);
-        this.paginator.setPage(this.paginator.getPreviousPage());
+        this.paginator.setPage(this.paginator.getTotalPages());
     }
 };
 
