@@ -2,7 +2,7 @@
 * @module button
 * @description <p>The Button Control enables the creation of rich, graphical 
 * buttons that function like traditional HTML form buttons.  <em>Unlike</em> 
-* tradition HTML form buttons, buttons created with the Button Control can have 
+* traditional HTML form buttons, buttons created with the Button Control can have 
 * a label that is different from its value.  With the inclusion of the optional 
 * <a href="module_menu.html">Menu Control</a>, the Button Control can also be
 * used to create menu buttons and split buttons, controls that are not 

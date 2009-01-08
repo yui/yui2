@@ -5,7 +5,7 @@
  *
  * @param {String}  type The type of event, which is passed to the callback
  *                  when the event fires
- * @param {Object}  oScope The context the event will fire from.  "this" will
+ * @param {Object}  context The context the event will fire from.  "this" will
  *                  refer to this object in the callback.  Default value: 
  *                  the window object.  The listener can override this.
  * @param {boolean} silent pass true to prevent the event from writing to
@@ -18,7 +18,7 @@
  * @class CustomEvent
  * @constructor
  */
-YAHOO.util.CustomEvent = function(type, oScope, silent, signature) {
+YAHOO.util.CustomEvent = function(type, context, silent, signature) {
 
     /**
      * The type of event, returned to subscribers when the event fires
@@ -28,12 +28,12 @@ YAHOO.util.CustomEvent = function(type, oScope, silent, signature) {
     this.type = type;
 
     /**
-     * The scope the the event will fire from by default.  Defaults to the window 
+     * The context the the event will fire from by default.  Defaults to the window 
      * obj
      * @property scope
      * @type object
      */
-    this.scope = oScope || window;
+    this.scope = context || window;
 
     /**
      * By default all custom events are logged in the debug build, set silent
@@ -94,11 +94,12 @@ YAHOO.util.CustomEvent = function(type, oScope, silent, signature) {
          * @type YAHOO.util.CustomEvent
          * @param {Function} fn The function to execute
          * @param {Object}   obj An object to be passed along when the event 
-         *                       fires
+         *                       fires defaults to the custom event
          * @param {boolean|Object}  override If true, the obj passed in becomes 
-         *                                   the execution scope of the listener.
+         *                                   the execution context of the listener.
          *                                   if an object, that object becomes the
-         *                                   the execution scope.
+         *                                   the execution context. defaults to
+         *                                   the custom event
          */
         this.subscribeEvent = 
                 new YAHOO.util.CustomEvent(onsubscribeType, this, true);
@@ -144,22 +145,22 @@ YAHOO.util.CustomEvent.prototype = {
      * @param {Function} fn        The function to execute
      * @param {Object}   obj       An object to be passed along when the event 
      *                             fires
-     * @param {boolean|Object}  override If true, the obj passed in becomes 
-     *                                   the execution scope of the listener.
+     * @param {boolean|Object}  overrideContext If true, the obj passed in becomes 
+     *                                   the execution context of the listener.
      *                                   if an object, that object becomes the
-     *                                   the execution scope.
+     *                                   the execution context.
      */
-    subscribe: function(fn, obj, override) {
+    subscribe: function(fn, obj, overrideContext) {
 
         if (!fn) {
 throw new Error("Invalid callback for subscriber to '" + this.type + "'");
         }
 
         if (this.subscribeEvent) {
-            this.subscribeEvent.fire(fn, obj, override);
+            this.subscribeEvent.fire(fn, obj, overrideContext);
         }
 
-        this.subscribers.push( new YAHOO.util.Subscriber(fn, obj, override) );
+        this.subscribers.push( new YAHOO.util.Subscriber(fn, obj, overrideContext) );
     },
 
     /**
@@ -194,7 +195,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
 
     /**
      * Notifies the subscribers.  The callback functions will be executed
-     * from the scope specified when the event was created, and with the 
+     * from the context specified when the event was created, and with the 
      * following parameters:
      *   <ul>
      *   <li>The type of event</li>
@@ -322,7 +323,7 @@ YAHOO.log("Event stopped, sub " + i + " of " + len, "info", "Event");
      */
     toString: function() {
          return "CustomEvent: " + "'" + this.type  + "', " + 
-             "scope: " + this.scope;
+             "context: " + this.scope;
 
     }
 };
@@ -333,12 +334,12 @@ YAHOO.log("Event stopped, sub " + i + " of " + len, "info", "Event");
  * Stores the subscriber information to be used when the event fires.
  * @param {Function} fn       The function to execute
  * @param {Object}   obj      An object to be passed along when the event fires
- * @param {boolean}  override If true, the obj passed in becomes the execution
- *                            scope of the listener
+ * @param {boolean}  overrideContext If true, the obj passed in becomes the execution
+ *                            context of the listener
  * @class Subscriber
  * @constructor
  */
-YAHOO.util.Subscriber = function(fn, obj, override) {
+YAHOO.util.Subscriber = function(fn, obj, overrideContext) {
 
     /**
      * The callback that will be execute when the event fires
@@ -356,32 +357,32 @@ YAHOO.util.Subscriber = function(fn, obj, override) {
     this.obj = YAHOO.lang.isUndefined(obj) ? null : obj;
 
     /**
-     * The default execution scope for the event listener is defined when the
+     * The default execution context for the event listener is defined when the
      * event is created (usually the object which contains the event).
-     * By setting override to true, the execution scope becomes the custom
-     * object passed in by the subscriber.  If override is an object, that 
-     * object becomes the scope.
-     * @property override
+     * By setting overrideContext to true, the execution context becomes the custom
+     * object passed in by the subscriber.  If overrideContext is an object, that 
+     * object becomes the context.
+     * @property overrideContext
      * @type boolean|object
      */
-    this.override = override;
+    this.overrideContext = overrideContext;
 
 };
 
 /**
- * Returns the execution scope for this listener.  If override was set to true
- * the custom obj will be the scope.  If override is an object, that is the
- * scope, otherwise the default scope will be used.
+ * Returns the execution context for this listener.  If overrideContext was set to true
+ * the custom obj will be the context.  If overrideContext is an object, that is the
+ * context, otherwise the default context will be used.
  * @method getScope
- * @param {Object} defaultScope the scope to use if this listener does not
+ * @param {Object} defaultScope the context to use if this listener does not
  *                              override it.
  */
 YAHOO.util.Subscriber.prototype.getScope = function(defaultScope) {
-    if (this.override) {
-        if (this.override === true) {
+    if (this.overrideContext) {
+        if (this.overrideContext === true) {
             return this.obj;
         } else {
-            return this.override;
+            return this.overrideContext;
         }
     }
     return defaultScope;
@@ -410,7 +411,7 @@ YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
  */
 YAHOO.util.Subscriber.prototype.toString = function() {
     return "Subscriber { obj: " + this.obj  + 
-           ", override: " +  (this.override || "no") + " }";
+           ", overrideContext: " +  (this.overrideContext || "no") + " }";
 };
 
 /**
@@ -593,7 +594,7 @@ if (!YAHOO.util.Event) {
             FN: 2,
 
             /**
-             * Function wrapped for scope correction and cleanup, int constant
+             * Function wrapped for context correction and cleanup, int constant
              * @property WFN
              * @type int
              * @static
@@ -613,7 +614,7 @@ if (!YAHOO.util.Event) {
             UNLOAD_OBJ: 3,
 
             /**
-             * Adjusted scope, either the element we are registering the event
+             * Adjusted context, either the element we are registering the event
              * on or the custom object passed in by the listener, int constant
              * @property ADJ_SCOPE
              * @type int
@@ -632,7 +633,7 @@ if (!YAHOO.util.Event) {
             OBJ: 5,
 
             /**
-             * The original scope parameter passed into addListener
+             * The original context parameter passed into addListener
              * @property OVERRIDE
              * @type int
              * @static
@@ -739,26 +740,26 @@ if (!YAHOO.util.Event) {
              *
              * @method onAvailable
              *
-             * @param {string||string[]}   p_id the id of the element, or an array
+             * @param {string||string[]}   id the id of the element, or an array
              * of ids to look for.
-             * @param {function} p_fn what to execute when the element is found.
-             * @param {object}   p_obj an optional object to be passed back as
-             *                   a parameter to p_fn.
-             * @param {boolean|object}  p_override If set to true, p_fn will execute
-             *                   in the scope of p_obj, if set to an object it
-             *                   will execute in the scope of that object
+             * @param {function} fn what to execute when the element is found.
+             * @param {object}   obj an optional object to be passed back as
+             *                   a parameter to fn.
+             * @param {boolean|object}  overrideContext If set to true, fn will execute
+             *                   in the context of obj, if set to an object it
+             *                   will execute in the context of that object
              * @param checkContent {boolean} check child node readiness (onContentReady)
              * @static
              */
-            onAvailable: function(p_id, p_fn, p_obj, p_override, checkContent) {
+            onAvailable: function(id, fn, obj, overrideContext, checkContent) {
 
-                var a = (YAHOO.lang.isString(p_id)) ? [p_id] : p_id;
+                var a = (YAHOO.lang.isString(id)) ? [id] : id;
 
                 for (var i=0; i<a.length; i=i+1) {
                     onAvailStack.push({id:         a[i], 
-                                       fn:         p_fn, 
-                                       obj:        p_obj, 
-                                       override:   p_override, 
+                                       fn:         fn, 
+                                       obj:        obj, 
+                                       overrideContext:   overrideContext, 
                                        checkReady: checkContent });
                 }
 
@@ -777,18 +778,18 @@ if (!YAHOO.util.Event) {
              *
              * @method onContentReady
              *
-             * @param {string}   p_id the id of the element to look for.
-             * @param {function} p_fn what to execute when the element is ready.
-             * @param {object}   p_obj an optional object to be passed back as
-             *                   a parameter to p_fn.
-             * @param {boolean|object}  p_override If set to true, p_fn will execute
-             *                   in the scope of p_obj.  If an object, p_fn will
-             *                   exectute in the scope of that object
+             * @param {string}   id the id of the element to look for.
+             * @param {function} fn what to execute when the element is ready.
+             * @param {object}   obj an optional object to be passed back as
+             *                   a parameter to fn.
+             * @param {boolean|object}  overrideContext If set to true, fn will execute
+             *                   in the context of obj.  If an object, fn will
+             *                   exectute in the context of that object
              *
              * @static
              */
-            onContentReady: function(p_id, p_fn, p_obj, p_override) {
-                this.onAvailable(p_id, p_fn, p_obj, p_override, true);
+            onContentReady: function(id, fn, obj, overrideContext) {
+                this.onAvailable(id, fn, obj, overrideContext, true);
             },
 
             /**
@@ -814,30 +815,30 @@ if (!YAHOO.util.Event) {
              *
              * @method onDOMReady
              *
-             * @param {function} p_fn what to execute when the element is found.
-             * @param {object}   p_obj an optional object to be passed back as
-             *                   a parameter to p_fn.
-             * @param {boolean|object}  p_scope If set to true, p_fn will execute
-             *                   in the scope of p_obj, if set to an object it
-             *                   will execute in the scope of that object
+             * @param {function} fn what to execute when the element is found.
+             * @param {object}   obj an optional object to be passed back as
+             *                   a parameter to fn.
+             * @param {boolean|object}  overrideContext If set to true, fn will execute
+             *                   in the context of obj, if set to an object it
+             *                   will execute in the context of that object
              *
              * @static
              */
-            onDOMReady: function(p_fn, p_obj, p_override) {
+            onDOMReady: function(fn, obj, overrideContext) {
                 if (this.DOMReady) {
                     setTimeout(function() {
                         var s = window;
-                        if (p_override) {
-                            if (p_override === true) {
-                                s = p_obj;
+                        if (overrideContext) {
+                            if (overrideContext === true) {
+                                s = obj;
                             } else {
-                                s = p_override;
+                                s = overrideContext;
                             }
                         }
-                        p_fn.call(s, "DOMReady", [], p_obj);
+                        fn.call(s, "DOMReady", [], obj);
                     }, 0);
                 } else {
-                    this.DOMReadyEvent.subscribe(p_fn, p_obj, p_override);
+                    this.DOMReadyEvent.subscribe(fn, obj, overrideContext);
                 }
             },
 
@@ -854,10 +855,10 @@ if (!YAHOO.util.Event) {
              * @param {Function} fn        The method the event invokes
              * @param {Object}   obj    An arbitrary object that will be 
              *                             passed as a parameter to the handler
-             * @param {Boolean|object}  override  If true, the obj passed in becomes
-             *                             the execution scope of the listener. If an
+             * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes
+             *                             the execution context of the listener. If an
              *                             object, this object becomes the execution
-             *                             scope.
+             *                             context.
              * @param {boolen}      capture capture or bubble phase
              * @return {Boolean} True if the action was successful or defered,
              *                        false if one or more of the elements 
@@ -866,7 +867,7 @@ if (!YAHOO.util.Event) {
              * @private
              * @static
              */
-            _addListener: function(el, sType, fn, obj, override, bCapture) {
+            _addListener: function(el, sType, fn, obj, overrideContext, bCapture) {
 
                 if (!fn || !fn.call) {
                     YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
@@ -881,7 +882,7 @@ if (!YAHOO.util.Event) {
                                        sType, 
                                        fn, 
                                        obj, 
-                                       override) && ok;
+                                       overrideContext) && ok;
                     }
                     return ok;
 
@@ -899,7 +900,7 @@ if (!YAHOO.util.Event) {
                     } else {
                         // defer adding the event until the element is available
                         this.onAvailable(el, function() {
-                           YAHOO.util.Event.on(el, sType, fn, obj, override);
+                           YAHOO.util.Event.on(el, sType, fn, obj, overrideContext);
                         });
 
                         return true;
@@ -919,32 +920,32 @@ if (!YAHOO.util.Event) {
                 // handles explicitly during our one unload event.
                 if ("unload" == sType && obj !== this) {
                     unloadListeners[unloadListeners.length] =
-                            [el, sType, fn, obj, override];
+                            [el, sType, fn, obj, overrideContext];
                     return true;
                 }
 
                 // this.logger.debug("Adding handler: " + el + ", " + sType);
 
-                // if the user chooses to override the scope, we use the custom
-                // object passed in, otherwise the executing scope will be the
+                // if the user chooses to override the context, we use the custom
+                // object passed in, otherwise the executing context will be the
                 // HTML element that the event is registered on
-                var scope = el;
-                if (override) {
-                    if (override === true) {
-                        scope = obj;
+                var context = el;
+                if (overrideContext) {
+                    if (overrideContext === true) {
+                        context = obj;
                     } else {
-                        scope = override;
+                        context = overrideContext;
                     }
                 }
 
                 // wrap the function so we can return the obj object when
                 // the event fires;
                 var wrappedFn = function(e) {
-                        return fn.call(scope, YAHOO.util.Event.getEvent(e, el), 
+                        return fn.call(context, YAHOO.util.Event.getEvent(e, el), 
                                 obj);
                     };
 
-                var li = [el, sType, fn, wrappedFn, scope, obj, override];
+                var li = [el, sType, fn, wrappedFn, context, obj, overrideContext];
                 var index = listeners.length;
                 // cache the listener so we can try to automatically unload
                 listeners[index] = li;
@@ -1007,18 +1008,18 @@ if (!YAHOO.util.Event) {
              * @param {Function} fn        The method the event invokes
              * @param {Object}   obj    An arbitrary object that will be 
              *                             passed as a parameter to the handler
-             * @param {Boolean|object}  override  If true, the obj passed in becomes
-             *                             the execution scope of the listener. If an
+             * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes
+             *                             the execution context of the listener. If an
              *                             object, this object becomes the execution
-             *                             scope.
+             *                             context.
              * @return {Boolean} True if the action was successful or defered,
              *                        false if one or more of the elements 
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
              */
-            addListener: function (el, sType, fn, obj, override) {
-                return this._addListener(el, sType, fn, obj, override, false);
+            addListener: function (el, sType, fn, obj, overrideContext) {
+                return this._addListener(el, sType, fn, obj, overrideContext, false);
             },
 
             /**
@@ -1033,18 +1034,18 @@ if (!YAHOO.util.Event) {
              * @param {Function} fn        The method the event invokes
              * @param {Object}   obj    An arbitrary object that will be 
              *                             passed as a parameter to the handler
-             * @param {Boolean|object}  override  If true, the obj passed in becomes
-             *                             the execution scope of the listener. If an
+             * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes
+             *                             the execution context of the listener. If an
              *                             object, this object becomes the execution
-             *                             scope.
+             *                             context.
              * @return {Boolean} True if the action was successful or defered,
              *                        false if one or more of the elements 
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
              */
-            addFocusListener: function (el, fn, obj, override) {
-                return this._addListener(el, _FOCUS, fn, obj, override, true);
+            addFocusListener: function (el, fn, obj, overrideContext) {
+                return this._addListener(el, _FOCUS, fn, obj, overrideContext, true);
             },          
 
 
@@ -1079,18 +1080,18 @@ if (!YAHOO.util.Event) {
              * @param {Function} fn        The method the event invokes
              * @param {Object}   obj    An arbitrary object that will be 
              *                             passed as a parameter to the handler
-             * @param {Boolean|object}  override  If true, the obj passed in becomes
-             *                             the execution scope of the listener. If an
+             * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes
+             *                             the execution context of the listener. If an
              *                             object, this object becomes the execution
-             *                             scope.
+             *                             context.
              * @return {Boolean} True if the action was successful or defered,
              *                        false if one or more of the elements 
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
              */
-            addBlurListener: function (el, fn, obj, override) {
-                return this._addListener(el, _BLUR, fn, obj, override, true);
+            addBlurListener: function (el, fn, obj, overrideContext) {
+                return this._addListener(el, _BLUR, fn, obj, overrideContext, true);
             },          
 
             /**
@@ -1123,15 +1124,15 @@ if (!YAHOO.util.Event) {
              */
             fireLegacyEvent: function(e, legacyIndex) {
                 // this.logger.debug("fireLegacyEvent " + legacyIndex);
-                var ok=true, le, lh, li, scope, ret;
+                var ok=true, le, lh, li, context, ret;
                 
                 lh = legacyHandlers[legacyIndex].slice();
                 for (var i=0, len=lh.length; i<len; ++i) {
                 // for (var i in lh.length) {
                     li = lh[i];
                     if ( li && li[this.WFN] ) {
-                        scope = li[this.ADJ_SCOPE];
-                        ret = li[this.WFN].call(scope, e);
+                        context = li[this.ADJ_SCOPE];
+                        ret = li[this.WFN].call(context, e);
                         ok = (ok && ret);
                     }
                 }
@@ -1667,8 +1668,10 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
 
                 if (onAvailStack.length === 0) {
                     retryCount = 0;
-                    clearInterval(this._interval);
-                    this._interval = null;
+                    if (this._interval) {
+                        clearInterval(this._interval);
+                        this._interval = null;
+                    } 
                     return;
                 }
 
@@ -1703,15 +1706,15 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                 var notAvail = [];
 
                 var executeItem = function (el, item) {
-                    var scope = el;
-                    if (item.override) {
-                        if (item.override === true) {
-                            scope = item.obj;
+                    var context = el;
+                    if (item.overrideContext) {
+                        if (item.overrideContext === true) {
+                            context = item.obj;
                         } else {
-                            scope = item.override;
+                            context = item.overrideContext;
                         }
                     }
-                    item.fn.call(scope, item.obj);
+                    item.fn.call(context, item.obj);
                 };
 
                 var i, len, item, el, ready=[];
@@ -1756,8 +1759,10 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
 
                     this.startInterval();
                 } else {
-                    clearInterval(this._interval);
-                    this._interval = null;
+                    if (this._interval) {
+                        clearInterval(this._interval);
+                        this._interval = null;
+                    }
                 }
 
                 this.locked = false;
@@ -1804,8 +1809,8 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
              * &nbsp;&nbsp;type:   (string)   the type of event
              * &nbsp;&nbsp;fn:     (function) the callback supplied to addListener
              * &nbsp;&nbsp;obj:    (object)   the custom object supplied to addListener
-             * &nbsp;&nbsp;adjust: (boolean|object)  whether or not to adjust the default scope
-             * &nbsp;&nbsp;scope: (boolean)  the derived scope based on the adjust parameter
+             * &nbsp;&nbsp;adjust: (boolean|object)  whether or not to adjust the default context
+             * &nbsp;&nbsp;scope: (boolean)  the derived context based on the adjust parameter
              * &nbsp;&nbsp;index:  (int)      its position in the Event util listener cache
              * @static
              */           
@@ -1854,27 +1859,27 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
             _unload: function(e) {
 
                 var EU = YAHOO.util.Event, i, j, l, len, index,
-                         ul = unloadListeners.slice();
+                         ul = unloadListeners.slice(), context;
 
                 // execute and clear stored unload listeners
-                for (i=0,len=unloadListeners.length; i<len; ++i) {
+                for (i=0, len=unloadListeners.length; i<len; ++i) {
                     l = ul[i];
                     if (l) {
-                        var scope = window;
+                        context = window;
                         if (l[EU.ADJ_SCOPE]) {
                             if (l[EU.ADJ_SCOPE] === true) {
-                                scope = l[EU.UNLOAD_OBJ];
+                                context = l[EU.UNLOAD_OBJ];
                             } else {
-                                scope = l[EU.ADJ_SCOPE];
+                                context = l[EU.ADJ_SCOPE];
                             }
                         }
-                        l[EU.FN].call(scope, EU.getEvent(e, l[EU.EL]), l[EU.UNLOAD_OBJ] );
+                        l[EU.FN].call(context, EU.getEvent(e, l[EU.EL]), l[EU.UNLOAD_OBJ] );
                         ul[i] = null;
-                        l=null;
-                        scope=null;
                     }
                 }
 
+                l = null;
+                context = null;
                 unloadListeners = null;
 
                 // Remove listeners to handle IE memory leaks
@@ -1951,7 +1956,7 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
             },
 
             /**
-             * Adds a DOM event directly without the caching, cleanup, scope adj, etc
+             * Adds a DOM event directly without the caching, cleanup, context adj, etc
              *
              * @method _simpleAdd
              * @param {HTMLElement} el      the element to bind the handler to
@@ -2126,16 +2131,16 @@ YAHOO.util.EventProvider.prototype = {
      * @param p_fn       {function} the function to exectute when the event fires
      * @param p_obj      {Object}   An object to be passed along when the event 
      *                              fires
-     * @param p_override {boolean}  If true, the obj passed in becomes the 
+     * @param overrideContext {boolean}  If true, the obj passed in becomes the 
      *                              execution scope of the listener
      */
-    subscribe: function(p_type, p_fn, p_obj, p_override) {
+    subscribe: function(p_type, p_fn, p_obj, overrideContext) {
 
         this.__yui_events = this.__yui_events || {};
         var ce = this.__yui_events[p_type];
 
         if (ce) {
-            ce.subscribe(p_fn, p_obj, p_override);
+            ce.subscribe(p_fn, p_obj, overrideContext);
         } else {
             this.__yui_subscribers = this.__yui_subscribers || {};
             var subs = this.__yui_subscribers;
@@ -2143,7 +2148,7 @@ YAHOO.util.EventProvider.prototype = {
                 subs[p_type] = [];
             }
             subs[p_type].push(
-                { fn: p_fn, obj: p_obj, override: p_override } );
+                { fn: p_fn, obj: p_obj, overrideContext: overrideContext } );
         }
     },
 
@@ -2250,7 +2255,7 @@ YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
 
             if (qs) {
                 for (var i=0; i<qs.length; ++i) {
-                    ce.subscribe(qs[i].fn, qs[i].obj, qs[i].override);
+                    ce.subscribe(qs[i].fn, qs[i].obj, qs[i].overrideContext);
                 }
             }
         }
