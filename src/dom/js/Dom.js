@@ -6,6 +6,7 @@
 
 (function() {
     var Y = YAHOO.util,     // internal shorthand
+        lang = YAHOO.lang,
         getStyle,           // for load time browser branching
         setStyle,           // ditto
         propertyCache = {}, // for faster hyphen converts
@@ -58,7 +59,7 @@
     };
 
     // branching at load instead of runtime
-    if (document.defaultView && document.defaultView.getComputedStyle) { // W3C DOM method
+    if (window.getComputedStyle) { // W3C DOM method
         getStyle = function(el, property) {
             var value = null;
             
@@ -66,7 +67,7 @@
                 property = 'cssFloat';
             }
 
-            var computed = el.ownerDocument.defaultView.getComputedStyle(el, '');
+            var computed = el.ownerDocument.defaultView.getComputedStyle(el, null);
             if (computed) { // test computed before touching for safari
                 value = computed[toCamel(property)];
             }
@@ -106,7 +107,7 @@
         setStyle = function(el, property, val) {
             switch (property) {
                 case 'opacity':
-                    if ( YAHOO.lang.isString(el.style.filter) ) { // in case not appended
+                    if ( lang.isString(el.style.filter) ) { // in case not appended
                         el.style.filter = 'alpha(opacity=' + val * 100 + ')';
                         
                         if (!el.currentStyle || !el.currentStyle.hasLayout) {
@@ -146,24 +147,28 @@
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
-            if (el && (el.nodeType || el.item)) { // Node, or NodeList
-                return el;
-            }
+            if (el) {
+                if (el.nodeType || el.item) { // Node, or NodeList
+                    return el;
+                }
 
-            if (YAHOO.lang.isString(el) || !el) { // id or null
-                return document.getElementById(el);
-            }
-            
-            if (el.length !== undefined) { // array-like 
-                var c = [];
-                for (var i = 0, len = el.length; i < len; ++i) {
-                    c[c.length] = Y.Dom.get(el[i]);
+                if (typeof el === 'string') { // id
+                    return document.getElementById(el);
                 }
                 
-                return c;
+                if ('length' in el) { // array-like 
+                    var c = [];
+                    for (var i = 0, len = el.length; i < len; ++i) {
+                        c[c.length] = Y.Dom.get(el[i]);
+                    }
+                    
+                    return c;
+                }
+
+                return el; // some other object, just pass it back
             }
 
-            return el; // some other object, just pass it back
+            return null;
         },
     
         /**
@@ -373,6 +378,10 @@
         /**
          * Returns a array of HTMLElements with the given class.
          * For optimized performance, include a tag and/or root node when possible.
+         * Note: This method operates against a live collection, so modifying the 
+         * collection in the callback (removing/appending nodes, etc.) will have
+         * side effects.  Instead you should iterate the returned nodes array,
+         * as you would with the native "getElementsByTagName" method. 
          * @method getElementsByClassName
          * @param {String} className The class name to match against
          * @param {String} tag (optional) The tag name of the elements being collected
@@ -381,6 +390,7 @@
          * @return {Array} An array of elements that have the given class name
          */
         getElementsByClassName: function(className, tag, root, apply) {
+            className = lang.trim(className);
             tag = tag || '*';
             root = (root) ? Y.Dom.get(root) : null || document; 
             if (!root) {
@@ -436,7 +446,7 @@
                 
                 YAHOO.log('addClass adding ' + className, 'info', 'Dom');
                 
-                el.className = YAHOO.lang.trim([el.className, className].join(' '));
+                el.className = lang.trim([el.className, className].join(' '));
                 return true;
             };
             
@@ -454,20 +464,26 @@
             var re = getClassRegEx(className);
             
             var f = function(el) {
-                if (!className || !this.hasClass(el, className)) {
-                    return false; // not present
+                var ret = false,
+                    current = el.className;
+
+                if (className && current && this.hasClass(el, className)) {
+                    
+                    el.className = current.replace(re, ' ');
+                    if ( this.hasClass(el, className) ) { // in case of multiple adjacent
+                        this.removeClass(el, className);
+                    }
+
+                    el.className = lang.trim(el.className); // remove any trailing spaces
+                    if (el.className === '') { // remove class attribute if empty
+                        var attr = (el.hasAttribute) ? 'class' : 'className';
+                        YAHOO.log('removeClass removing empty class attribute', 'info', 'Dom');
+                        el.removeAttribute(attr);
+                    }
+                    ret = true;
                 }                 
-
-                YAHOO.log('removeClass removing ' + className, 'info', 'Dom');
-                
-                var c = el.className;
-                el.className = c.replace(re, ' ');
-                if ( this.hasClass(el, className) ) { // in case of multiple adjacent
-                    this.removeClass(el, className);
-                }
-
-                el.className = YAHOO.lang.trim(el.className); // remove any trailing spaces
-                return true;
+                YAHOO.log('removeClass ' + className + ' result: ' + ret, 'info', 'Dom');
+                return ret;
             };
             
             return Y.Dom.batch(el, f, Y.Dom, true);
@@ -500,10 +516,10 @@
                 el.className = el.className.replace(re, ' ' + newClassName + ' ');
 
                 if ( this.hasClass(el, oldClassName) ) { // in case of multiple adjacent
-                    this.replaceClass(el, oldClassName, newClassName);
+                    this.removeClass(el, oldClassName);
                 }
 
-                el.className = YAHOO.lang.trim(el.className); // remove any trailing spaces
+                el.className = lang.trim(el.className); // remove any trailing spaces
                 return true;
             };
             
@@ -551,25 +567,20 @@
             haystack = Y.Dom.get(haystack);
             needle = Y.Dom.get(needle);
             
-            if (!haystack || !needle) {
-                return false;
-            }
+            var ret = false;
 
-            if (haystack.contains && needle.nodeType && !isSafari) { // safari contains is broken
-                YAHOO.log('isAncestor returning ' + haystack.contains(needle), 'info', 'Dom');
-                return haystack.contains(needle);
+            if ( (haystack && needle) && (haystack.nodeType && needle.nodeType) ) {
+                if (haystack.contains && haystack !== needle) { // contains returns true when equal
+                    ret = haystack.contains(needle);
+                }
+                else if (haystack.compareDocumentPosition) { // gecko
+                    ret = !!(haystack.compareDocumentPosition(needle) & 16);
+                }
+            } else {
+                YAHOO.log('isAncestor failed; invalid input: ' + haystack + ',' + needle, 'error', 'Dom');
             }
-            else if ( haystack.compareDocumentPosition && needle.nodeType ) {
-                YAHOO.log('isAncestor returning ' + !!(haystack.compareDocumentPosition(needle) & 16), 'info', 'Dom');
-                return !!(haystack.compareDocumentPosition(needle) & 16);
-            } else if (needle.nodeType) {
-                // fallback to crawling up (safari)
-                return !!this.getAncestorBy(needle, function(el) {
-                    return el == haystack; 
-                }); 
-            }
-            YAHOO.log('isAncestor failed; most likely needle is not an HTMLElement', 'error', 'Dom');
-            return false;
+            YAHOO.log('isAncestor(' + haystack + ',' + needle + ' returning ' + ret, 'info', 'Dom');
+            return ret;
         },
         
         /**
@@ -585,6 +596,10 @@
         /**
          * Returns a array of HTMLElements that pass the test applied by supplied boolean method.
          * For optimized performance, include a tag and/or root node when possible.
+         * Note: This method operates against a live collection, so modifying the 
+         * collection in the callback (removing/appending nodes, etc.) will have
+         * side effects.  Instead you should iterate the returned nodes array,
+         * as you would with the native "getElementsByTagName" method. 
          * @method getElementsBy
          * @param {Function} method - A boolean method for testing elements which receives the element as its only argument.
          * @param {String} tag (optional) The tag name of the elements being collected
@@ -624,17 +639,17 @@
          * @param {String | HTMLElement | Array} el (optional) An element or array of elements to apply the method to
          * @param {Function} method The method to apply to the element(s)
          * @param {Any} o (optional) An optional arg that is passed to the supplied method
-         * @param {Boolean} override (optional) Whether or not to override the scope of "method" with "o"
+         * @param {Boolean} overrides (optional) Whether or not to override the scope of "method" with "o"
          * @return {Any | Array} The return value(s) from the supplied method
          */
-        batch: function(el, method, o, override) {
+        batch: function(el, method, o, overrides) {
             el = (el && (el.tagName || el.item)) ? el : Y.Dom.get(el); // skip get() when possible
 
             if (!el || !method) {
                 YAHOO.log('batch failed: invalid arguments', 'error', 'Dom');
                 return false;
             } 
-            var scope = (override) ? o : window;
+            var scope = (overrides) ? o : window;
             
             if (el.tagName || el.length === undefined) { // element or not array-like 
                 return method.call(scope, el, o);
@@ -721,7 +736,7 @@
          * @return {Object} HTMLElement or null if not found
          */
         getAncestorBy: function(node, method) {
-            while (node = node.parentNode) { // NOTE: assignment
+            while ( (node = node.parentNode) ) { // NOTE: assignment
                 if ( testElement(node, method) ) {
                     YAHOO.log('getAncestorBy returning ' + node, 'info', 'Dom');
                     return node;
@@ -1016,11 +1031,12 @@
     var getXY = function() {
         if (document.documentElement.getBoundingClientRect) { // IE
             return function(el) {
-                var box = el.getBoundingClientRect();
+                var box = el.getBoundingClientRect(),
+                    round = Math.round;
 
                 var rootNode = el.ownerDocument;
-                return [box.left + Y.Dom.getDocumentScrollLeft(rootNode), box.top +
-                        Y.Dom.getDocumentScrollTop(rootNode)];
+                return [round(box.left + Y.Dom.getDocumentScrollLeft(rootNode)), round(box.top +
+                        Y.Dom.getDocumentScrollTop(rootNode))];
             };
         } else {
             return function(el) { // manually calculate by crawling up offsetParents
@@ -1054,13 +1070,8 @@
                 while ( parentNode.tagName && !patterns.ROOT_TAG.test(parentNode.tagName) ) 
                 {
                     if (parentNode.scrollTop || parentNode.scrollLeft) {
-                        // work around opera inline/table scrollLeft/Top bug (false reports offset as scroll)
-                        if (!patterns.OP_SCROLL.test(Y.Dom.getStyle(parentNode, 'display'))) { 
-                            if (!isOpera || Y.Dom.getStyle(parentNode, 'overflow') !== 'visible') { // opera inline-block misreports when visible
-                                pos[0] -= parentNode.scrollLeft;
-                                pos[1] -= parentNode.scrollTop;
-                            }
-                        }
+                        pos[0] -= parentNode.scrollLeft;
+                        pos[1] -= parentNode.scrollTop;
                     }
                     
                     parentNode = parentNode.parentNode; 
@@ -1071,190 +1082,3 @@
         }
     }() // NOTE: Executing for loadtime branching
 })();
-/**
- * A region is a representation of an object on a grid.  It is defined
- * by the top, right, bottom, left extents, so is rectangular by default.  If 
- * other shapes are required, this class could be extended to support it.
- * @namespace YAHOO.util
- * @class Region
- * @param {Int} t the top extent
- * @param {Int} r the right extent
- * @param {Int} b the bottom extent
- * @param {Int} l the left extent
- * @constructor
- */
-YAHOO.util.Region = function(t, r, b, l) {
-
-    /**
-     * The region's top extent
-     * @property top
-     * @type Int
-     */
-    this.top = t;
-    
-    /**
-     * The region's top extent as index, for symmetry with set/getXY
-     * @property 1
-     * @type Int
-     */
-    this[1] = t;
-
-    /**
-     * The region's right extent
-     * @property right
-     * @type int
-     */
-    this.right = r;
-
-    /**
-     * The region's bottom extent
-     * @property bottom
-     * @type Int
-     */
-    this.bottom = b;
-
-    /**
-     * The region's left extent
-     * @property left
-     * @type Int
-     */
-    this.left = l;
-    
-    /**
-     * The region's left extent as index, for symmetry with set/getXY
-     * @property 0
-     * @type Int
-     */
-    this[0] = l;
-};
-
-/**
- * Returns true if this region contains the region passed in
- * @method contains
- * @param  {Region}  region The region to evaluate
- * @return {Boolean}        True if the region is contained with this region, 
- *                          else false
- */
-YAHOO.util.Region.prototype.contains = function(region) {
-    return ( region.left   >= this.left   && 
-             region.right  <= this.right  && 
-             region.top    >= this.top    && 
-             region.bottom <= this.bottom    );
-
-    // this.logger.debug("does " + this + " contain " + region + " ... " + ret);
-};
-
-/**
- * Returns the area of the region
- * @method getArea
- * @return {Int} the region's area
- */
-YAHOO.util.Region.prototype.getArea = function() {
-    return ( (this.bottom - this.top) * (this.right - this.left) );
-};
-
-/**
- * Returns the region where the passed in region overlaps with this one
- * @method intersect
- * @param  {Region} region The region that intersects
- * @return {Region}        The overlap region, or null if there is no overlap
- */
-YAHOO.util.Region.prototype.intersect = function(region) {
-    var t = Math.max( this.top,    region.top    );
-    var r = Math.min( this.right,  region.right  );
-    var b = Math.min( this.bottom, region.bottom );
-    var l = Math.max( this.left,   region.left   );
-    
-    if (b >= t && r >= l) {
-        return new YAHOO.util.Region(t, r, b, l);
-    } else {
-        return null;
-    }
-};
-
-/**
- * Returns the region representing the smallest region that can contain both
- * the passed in region and this region.
- * @method union
- * @param  {Region} region The region that to create the union with
- * @return {Region}        The union region
- */
-YAHOO.util.Region.prototype.union = function(region) {
-    var t = Math.min( this.top,    region.top    );
-    var r = Math.max( this.right,  region.right  );
-    var b = Math.max( this.bottom, region.bottom );
-    var l = Math.min( this.left,   region.left   );
-
-    return new YAHOO.util.Region(t, r, b, l);
-};
-
-/**
- * toString
- * @method toString
- * @return string the region properties
- */
-YAHOO.util.Region.prototype.toString = function() {
-    return ( "Region {"    +
-             "top: "       + this.top    + 
-             ", right: "   + this.right  + 
-             ", bottom: "  + this.bottom + 
-             ", left: "    + this.left   + 
-             "}" );
-};
-
-/**
- * Returns a region that is occupied by the DOM element
- * @method getRegion
- * @param  {HTMLElement} el The element
- * @return {Region}         The region that the element occupies
- * @static
- */
-YAHOO.util.Region.getRegion = function(el) {
-    var p = YAHOO.util.Dom.getXY(el);
-
-    var t = p[1];
-    var r = p[0] + el.offsetWidth;
-    var b = p[1] + el.offsetHeight;
-    var l = p[0];
-
-    return new YAHOO.util.Region(t, r, b, l);
-};
-
-/////////////////////////////////////////////////////////////////////////////
-
-
-/**
- * A point is a region that is special in that it represents a single point on 
- * the grid.
- * @namespace YAHOO.util
- * @class Point
- * @param {Int} x The X position of the point
- * @param {Int} y The Y position of the point
- * @constructor
- * @extends YAHOO.util.Region
- */
-YAHOO.util.Point = function(x, y) {
-   if (YAHOO.lang.isArray(x)) { // accept input from Dom.getXY, Event.getXY, etc.
-      y = x[1]; // dont blow away x yet
-      x = x[0];
-   }
-   
-    /**
-     * The X position of the point, which is also the right, left and index zero (for Dom.getXY symmetry)
-     * @property x
-     * @type Int
-     */
-
-    this.x = this.right = this.left = this[0] = x;
-     
-    /**
-     * The Y position of the point, which is also the top, bottom and index one (for Dom.getXY symmetry)
-     * @property y
-     * @type Int
-     */
-    this.y = this.top = this.bottom = this[1] = y;
-};
-
-YAHOO.util.Point.prototype = new YAHOO.util.Region();
-
-YAHOO.register("dom", YAHOO.util.Dom, {version: "@VERSION@", build: "@BUILD@"});

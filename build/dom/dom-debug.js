@@ -59,7 +59,7 @@
     };
 
     // branching at load instead of runtime
-    if (document.defaultView && document.defaultView.getComputedStyle) { // W3C DOM method
+    if (window.getComputedStyle) { // W3C DOM method
         getStyle = function(el, property) {
             var value = null;
             
@@ -67,7 +67,7 @@
                 property = 'cssFloat';
             }
 
-            var computed = el.ownerDocument.defaultView.getComputedStyle(el, '');
+            var computed = el.ownerDocument.defaultView.getComputedStyle(el, null);
             if (computed) { // test computed before touching for safari
                 value = computed[toCamel(property)];
             }
