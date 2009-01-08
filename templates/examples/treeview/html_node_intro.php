@@ -1,3 +1,0 @@
-<p>Use the HTMLNode class for nodes where you want to control the full presentation.  The HTMLNode class adds no icon; it is indented to its proper depth level, but otherwise it requires that you provide all markup and styling for its presentation.</p>
-
-<p>In the TreeView instance below, we have top-level TextNodes styled with the folder-style CSS.  Under each of these, there is a single HTMLNode styled with a simple CSS declaration.</p>

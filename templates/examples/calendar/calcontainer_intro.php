@@ -1,2 +1,0 @@
-<p>The default Calendar/CalendarGroup controls do not provide positioning or dragdrop support natively, as the Container family's Overlay control and its subclasses do.</p>
-<p>This example demonstrates how the Calendar control can be wrapped in a Container (a Dialog control in this case) which allows you to leverage Container family features to position the Calendar relative to a context element, or if desired provide a draggable Calendar.</p>

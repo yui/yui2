@@ -1,1 +1,0 @@
-<p>This example demonstrates how you can transform the look of your <a href="http://developer.yahoo.com/yui/treeview/">TreeView Control</a> simply by changing the CSS rules on the page.  Here, the TreeView instance has a "folder style" applied to it such that branch nodes appear as open or closed folders depending on their expand/collapse state.</p>

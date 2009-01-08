@@ -1,3 +1,0 @@
-<p>OverlayManager allows you to manage multiple Overlays (and Overlay subclasses like Panel, Dialog, SimpleDialog and Tooltip) on the same page, giving focus and z-index supremacy to the focused overlay and providing you with event hooks to respond to focus and blur of your overlays with your own scripts.</p>
-
-<p>Use the buttons below to show and hide the overlays in this example's OverlayManager group.  Click within differnt overlays and drag them around to get a sense for how OverlayManager provides a light, operating-system-like feel to the interaction.</p>

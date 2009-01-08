@@ -1,2 +1,0 @@
-<p>If you have a UI where it doesn't make sense to place all controls in a single container (or set of containers), you can place individual UI Components manually outside Paginator's configured container(s).</p>
-<p>For this example, we'll create a table from a data array and render a few controls into the generated <code>&lt;tfoot&gt;</code> using the Paginator's <code>template</code>.  We'll also subscribe to the Paginator's <code>render</code> event with a callback that renders a CurrentPageReport UI Component into a <code>&lt;div&gt;</code> above the table.</p>

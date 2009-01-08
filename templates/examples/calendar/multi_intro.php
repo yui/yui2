@@ -1,1 +1,0 @@
-<p>By default the Calendar control is setup for single-select mode, allowing only a single date to be selected at a time. This example shows how you can easily configure the Calendar to support multiple date selections.</p>

@@ -1,1 +1,0 @@
-<p><a href="http://developer.yahoo.com/yui/fonts/">YUI Fonts CSS</a> normalizes the font size and line height across all browsers. This example is a test page of HTML elements that allows you to explore the default rendering when YUI Fonts is applied.</p>

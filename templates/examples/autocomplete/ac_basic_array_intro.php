@@ -1,1 +1,0 @@
-<p>This AutoComplete implementation points to a JavaScript array that is available in-memory, allowing for a zippy user interaction without the need for a server-side component. Enabling the <code>prehighlightClassName</code> and <code>useShadow</code> features, as well as pulling in the Animation utility, provides an ehanced visual user experience.</p>

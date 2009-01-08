@@ -1,1 +1,0 @@
-<p>This <a href="http://developer.yahoo.com/yui/grids/">YUI Grids CSS</a> example shows how to use Special Nesting Grid "B" to create three evenly-sized columns.</p>

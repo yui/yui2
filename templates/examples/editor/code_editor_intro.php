@@ -1,1 +1,0 @@
-<p>This example demonstrates how to create a Code Editor using the Rich Text Editor.  As you begin typing, you're in a standard Editor space.  But if you click on the "code icon" &mdash the rightmost icon on the second row &mdash; you can begin using HTML markup.  When you toggle the code editing mode back off, you'll see rich text formatted with your HTML.</p>

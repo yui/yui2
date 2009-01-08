@@ -1,1 +1,0 @@
-<p>This example demonstrates the use of custom icon styles on <a href="http://developer.yahoo.com/yui/treeview/">TreeView Control</a> nodes through the use of a image sprite.  Read the tutorial below the example for full details on how to achieve this effect.</p>

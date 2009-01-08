@@ -1,1 +1,0 @@
-<p>Use the SimpleDialog Control when you want to solicit very simple (usually binary) information from your users &mdash; ok/cancel, yes/no are the classic examples of this sort of interaction.  Use the button below to show a SimpleDialog instance; if you click "yes", that choice will be echoed back to you by script.</p>

@@ -1,5 +1,0 @@
-<p>This example is a demonstration of the <a href="../../uploader/">YUI Uploader Control</a>'s features.</p>
-
-<p><strong>Note:</strong> The YUI Uploader Control requires Flash Player 9.0.45 or higher. The latest version of Flash Player is available at the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.</p>
-<p><strong>Note:</strong> The YUI Uploader Control requires the uploader.swf Flash file that is distributed as part of the YUI package, in the uploader/assets folder. Copy the uploader.swf to your server and set the YAHOO.Uploader.SWFURL variable to its full path.</p>
-<p><strong>Note:</strong> This example uses a server-side script to accept file uploads. The script used does not open or store any data sent to it. Nonetheless, when trying out the example, do not send any sensitive or private data. Do not exceed file size of 10 MB.

@@ -1,1 +1,0 @@
-<p>The purpose of this example is to call out explicitly the CSS used to create the look and feel of the <a href="http://developer.yahoo.com/yui/colorpicker/">Color Picker Control</a> so that you may more easily modify it in your own implementations.  In the description below, the full CSS for Color Picker is displayed.</p>

@@ -1,3 +1,0 @@
-<p>As with the Folder Style example, here we're using CSS to control the styling of our <a href="http://developer.yahoo.com/yui/treeview/">TreeView Control</a>'s node icons.  The CSS and image assets for the Menu Style are available as part of the YUI download package.</p>
-
-<p>This example also implements <code>MenuNode</code> instead of <code>TextNode</code> for node creation.  Only one <code>MenuNode</code> can be open at a given depth at the same time.  This creates an interaction in which nodes close up behind you as you open new ones, keeping the vertical size of the TreeView more compact during navigation.</p>

@@ -1,1 +1,0 @@
-<p>This example demonstrates different ways to create a Button that functions like an HTML checkbox (<code>&#60;input type="checkbox"/&#62;</code>).</p>

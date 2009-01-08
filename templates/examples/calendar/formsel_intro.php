@@ -1,1 +1,0 @@
-<p>This example builds upon the <a href="events.html">Events</a> example, by demonstrating how you can use the select event to set the state of some dropdowns. It also demonstates how the current page and selected date can be set on the Calendar after it is first rendered.</p>

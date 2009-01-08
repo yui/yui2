@@ -1,1 +1,0 @@
-<p>Using <a href="http://developer.yahoo.com/yui/fonts/">YUI Fonts CSS</a>, specify font size using the provided percentages. (For example, 77% renders at 10px.) By using these percentages you get accuracty across A-grade browsers while still allowing IE users to zoom their font size.</p>

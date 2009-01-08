@@ -1,1 +1,0 @@
-<p>This example shows how to use Special Nesting Grid "C" to create two columns, the first at 2/3rd and the second at 1/3rd of available space.</p>

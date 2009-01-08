@@ -1,2 +1,0 @@
-<p>This example demonstrates one way to implement a resizable panel using the <a href="http://developer.yahoo.com/yui/dragdrop/">Drag &amp; Drop Utility</a>. (<strong>Note</strong>: The <a href="http://developer.yahoo.com/yui/container/">Container Family</a> of UI controls contains a <a href="../container/panel-resize.html">Panel Resize Example</a> that also provides useful code for building resizable panels.)</p>
-

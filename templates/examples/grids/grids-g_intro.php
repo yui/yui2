@@ -1,1 +1,0 @@
-<p>This example shows how to use a standard Nesting Grid to create two evenly-sized columns.</p>

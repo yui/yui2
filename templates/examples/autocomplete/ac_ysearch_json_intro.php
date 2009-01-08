@@ -1,1 +1,0 @@
-<p>This example points to Yahoo! Search Web Services. To achieve the shrink-wrapped, centered search module, custom CSS rules have been applied, and the method <code>doBeforeExpandContainer</code> has been customized to position the container directly below the input field.</p>

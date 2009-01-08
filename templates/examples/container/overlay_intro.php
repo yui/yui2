@@ -1,3 +1,0 @@
-<p>Overlays are extensions of Modules and differ in the sense that the float <em>above</em> the normal page flow.  They can be positioned in three different ways: By fixing them to the center of the viewport (overlay1 below), by specifying a position (overlay2), and by positioning them relative to a context element (overlay3).</p>
-
-<p>Use the buttons in the example below to show and hide the three Overlay instances.</p>
