@@ -22,6 +22,7 @@
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/yuitest/yuitest.js"></script>
 <script type="text/javascript" src="../../build/get/get.js"></script>
@@ -165,6 +166,13 @@ var XMLDocument = function(rootTagName, namespaceURL) {
         Assert.areSame(DS.TYPE_JSARRAY, ds.responseType, "null");
         delete data;
         delete ds;
+    },
+
+    testLocalSendReqeust: function(){
+        var ds = new LocalDS(["a","b","c","d"]);
+        ds.sendRequest("a", {success:function(request,response) {
+            ArrayAssert.itemsAreSame(["a","b","c","d"], response.results, "Expected live array.");
+        }});                
     }
  });
  
@@ -225,6 +233,32 @@ var XMLDocument = function(rootTagName, namespaceURL) {
         Assert.areSame(DS.TYPE_UNKNOWN, ds.responseType);
         delete data;
         delete ds;
+    },
+
+    testXHRSendRequest: function() {
+        var ds = new XHRDS("php/proxy_ylocal.php?query=madonna&output=json&results=10");
+        ds.responseType = DS.TYPE_JSON;
+        ds.responseSchema = {
+            resultsList: "ResultSet.Result",
+            fields: ["Title"]
+        };
+        ds.sendRequest(null, {
+            success: function(request,response) {
+                this.resume(function() {
+                    Assert.isNull(request, "Expected null request.");
+                    Assert.isObject(response, "Expected response object.");
+                    ObjectAssert.propertiesAreEqual({tId:null,meta:null,results:null}, response, "Expected all properties.");
+                });
+            },
+            failure: function(request, response) {
+                this.resume(function() {
+                    Assert.fail("XHR failure case.");
+                });
+            },
+            scope: this
+        });                
+
+        this.wait(5000); // On a slow connection: this.wait(5000);
     }
  });
 
@@ -582,6 +616,8 @@ YAHOO.util.Event.addListener(window, "load", function() {
     if (parent && parent != window) {
         YAHOO.tool.TestManager.load();
     }
+    
+    TestRunner.run();
 });
 
 
