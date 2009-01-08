@@ -239,6 +239,8 @@ YAHOO.util.Color = function() {
         }
 
     	ColorPicker.superclass.constructor.call(this, el, attr); 
+
+        this.initPicker();
     }
 
     YAHOO.extend(ColorPicker, YAHOO.util.Element, {
@@ -521,6 +523,15 @@ YAHOO.util.Color = function() {
         },
 
         /**
+         * flag indicating whether the ColorPicker is currently initializing.
+         *
+         * @property initializing
+         * @type Boolean
+         * @default true
+         */
+        initializing : true,
+
+        /**
          * Creates the host element if it doesn't exist
          * @method _createHostElement
          * @protected
@@ -556,7 +567,7 @@ YAHOO.util.Color = function() {
             }
             this.logger.log("Hue slider is being set to " + h);
 
-            this.hueSlider.setValue(h);
+            this.hueSlider.setValue(h, this.initializing);
         },
 
         /**
@@ -575,7 +586,7 @@ YAHOO.util.Color = function() {
 
             this.logger.log("Setting picker slider to " + [s, v]);
 
-            this.pickerSlider.setRegionValue(s, v);
+            this.pickerSlider.setRegionValue(s, v, this.initializing);
         },
 
         /**
@@ -1311,7 +1322,9 @@ YAHOO.util.Color = function() {
                     me._useFieldValue.call(me, e, this, me.OPT.HEX);
                 }, this);
 
+            this.initializing = true;
             this._updateRGB();
+            this.initializing = false;
         },
 
 
@@ -1727,7 +1740,6 @@ YAHOO.util.Color = function() {
 
             this.on(this.OPT.HEX + "Change", this._updateHex, this, true);
 
-            this.initPicker();
         }
     });
 
