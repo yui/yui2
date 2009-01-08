@@ -1,1 +1,0 @@
-<p>This example shows how to use <a href="http://developer.yahoo.com/yui/grids/">YUI Grids CSS</a> to create a two-column layout with a narrow 180px column on the left.</p>

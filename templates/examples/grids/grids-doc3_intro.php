@@ -1,1 +1,0 @@
-<p>This example shows how to use <a href="http://developer.yahoo.com/yui/grids/">YUI Grids CSS</a> to create a layout that uses 100% of the viewport's width.</p>

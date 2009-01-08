@@ -1,3 +1,0 @@
-<p>A common use case for animation involves causing two or more animations to fire sequentially.  This is known as <em>chaining</em>.  It's easy to chain animations using the <a href="http://developer.yahoo.com/yui/animation/">YUI Animation Utility</a>'s custom events.</p>
-
-<p>In this example, a color animation is set to fire <em>after</em> an animation of position. Click the button below to start the sequence.</p>

@@ -1,1 +1,0 @@
-<p>The <a href="http://developer.yahoo.com/yui/profilerviewer/">ProfilerViewer Control</a> can be easily internationalized by modifying the <code>STRINGS</code> member of <code>YAHOO.widget.ProfilerViewer</code>  In this example, a German translation provided by Christian Heilmann is applied to the UI.</p>

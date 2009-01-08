@@ -1,1 +1,0 @@
-<p>This example shows how to use Special Nesting Grid "E" to create two columns, the first at 3/4ths and the second at 1/4th of available space.</p>

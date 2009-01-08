@@ -1,1 +1,0 @@
-<p>ProfilerViewer's 'skin' is provided via a combination of CSS and other style information passed via JavaScript to the Flash-based <a href='http://developer.yahoo.com/yui/charts'>Charts Control</a>.  This example helps you understand where to start if you want to customize the look and feel of a ProfilerViewer implementation.</p>

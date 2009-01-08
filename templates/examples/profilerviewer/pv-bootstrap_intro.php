@@ -1,5 +1,0 @@
-<p>The <a href="http://developer.yahoo.com/yui/profilerviewer/">ProfilerViewer Control</a> (and the <a href="http://developer.yahoo.com/yui/profiler/">Profiler</a> that drives it) is code-agnostic: It can be used as easily to profile your own code or third-party code as it can to profile YUI modules.  In this example, we use Profiler and ProfilerViewer to profile the <a href="http://code.google.com/p/syntaxhighlighter/">DP Syntax Highlighter</a> script that the YUI Project uses for code highlighting on our website.</p>
-<p>To lighten the initial YUI footprint on the page (and minimize the impact of YUI on the script being profiled), this example takes the following steps:</p>
-<ol><li><a href="http://developer.yahoo.com/yui/yuiloader/">YUI Loader</a> and Profiler are loaded first, along with the script being profiled. By putting only a tiny amount of YUI code on the page, we should be able to run DP Syntax Highlighter without its performance being impacted much by YUI.</li>
-  <li>Once DP Syntax Highlighter has run, a button allows you to actuate ProfilerViewer, loading its dependencies on-demand in the process.</li>
-</ol>

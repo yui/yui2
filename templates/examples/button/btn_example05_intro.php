@@ -1,1 +1,0 @@
-<p>This example demonstrates different ways to create a Button that functions like an HTML submit button (<code>&#60;input type="submit"/&#62;</code> and <code>&#60;button type="submit"/&#62;</code>).</p>

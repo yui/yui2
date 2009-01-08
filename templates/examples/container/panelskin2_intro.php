@@ -1,1 +1,0 @@
-<p>In this example, we move beyond the basic skinning steps demonstrated in <a href="panelskin1">the introductory skinning example</a> and show more advanced techniques with multiple styled Panel Control instances on the same page.  Use the buttons below to show and hide the styled panels.</p>

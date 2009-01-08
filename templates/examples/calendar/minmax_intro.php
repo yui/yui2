@@ -1,1 +1,0 @@
-<p>Calendar can be easily configured to prevent users from being able to select dates before and after given minimum and maximum dates. This example specifies both a minimum and maximum date, but you can also specify just one of the two, if you only want to limit the range on one end.</p>

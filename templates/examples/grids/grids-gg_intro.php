@@ -1,1 +1,0 @@
-<p>This example shows how to use nested Standard Nesting Grids to create four evenly-sized columns.</p>

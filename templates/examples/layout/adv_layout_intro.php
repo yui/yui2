@@ -1,1 +1,0 @@
-<p>An advanced application using several YUI Utilities and Controls. This example shows a layout similar to the new Yahoo! Mail look and feel. <strong>This is not a new product from Yahoo! or YUI, just a demonstration of how YUI components can work in concert in the context of a more complex application.</strong></p>

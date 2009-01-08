@@ -1,1 +1,0 @@
-<p>This basic example walks you through the steps needed to get a default Calendar up and running. It covers the set of file dependencies which need to be included as well as the basic markup and JS code required to get you started.</p>

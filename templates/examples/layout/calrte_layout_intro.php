@@ -1,1 +1,0 @@
-<p>This example shows an simple application built using the <a href="http://developer.yahoo.com/yui/layout">Layout Mananger</a>, <a href="http://developer.yahoo.com/yui/calendar">Calendar Control</a>, <a href="http://developer.yahoo.com/yui/editor">Rich Text Editor</a> and <a href="http://developer.yahoo.com/yui/connection/">Connection Manager</a>.</p>
