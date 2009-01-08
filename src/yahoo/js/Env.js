@@ -137,11 +137,20 @@ YAHOO.env.ua = function() {
          * @property air
          * @type float
          */
-        air: 0
+        air: 0,
 
-    };
+        /**
+         * Google Caja version number or 0.
+         * @property caja
+         * @type float
+         */
+        caja: 0
 
-    var ua=navigator.userAgent, m;
+    },
+
+    ua = navigator.userAgent, 
+    
+    m;
 
     // Modern KHTML browsers should qualify as Safari X-Grade
     if ((/KHTML/).test(ua)) {
@@ -194,6 +203,11 @@ YAHOO.env.ua = function() {
             }
         }
     }
+
+    m=ua.match(/Caja\/([^\s]*)/);
+    if (m&&m[1]) {
+        o.caja=parseFloat(m[1]);
+    }
     
     return o;
 }();
@@ -208,6 +222,7 @@ YAHOO.env.ua = function() {
  */
 (function() {
     YAHOO.namespace("util", "widget", "example");
+    /*global YAHOO_config*/
     if ("undefined" !== typeof YAHOO_config) {
         var l=YAHOO_config.listener,ls=YAHOO.env.listeners,unique=true,i;
         if (l) {

@@ -1,7 +1,8 @@
 YAHOO Global - Release Notes
 
-2.6.1
+2.7.0
   * isArray and isFunction updated to use Object.prototype.toString.apply(o)
+  * Added Caja detection
 
 2.6.0
   * No change
