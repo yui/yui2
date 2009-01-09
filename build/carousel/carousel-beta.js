@@ -1695,6 +1695,18 @@
         },
 
         /**
+         * Return true if the Carousel is still animating, or false otherwise.
+         *
+         * @method isAnimating
+         * @return {Boolean} Return true if animation is still in progress, or
+         * false otherwise.
+         * @public
+         */
+        isAnimating: function () {
+            return this._isAnimationInProgress;
+        },
+
+        /**
          * Return the carouselItemEl at index or null if the index is not
          * found.
          *
@@ -1930,7 +1942,7 @@
                 return;         // nothing to do!
             }
 
-            if (this._isAnimationInProgress) {
+            if (this.isAnimating()) {
                 return;         // let it take its own sweet time to complete
             }
 
@@ -2216,7 +2228,7 @@
                 position = 0,
                 selItem;
 
-            if (this._isAnimationInProgress) {
+            if (this.isAnimating()) {
                 return;         // do not mess while animation is in progress
             }
 
