@@ -2293,10 +2293,6 @@ YAHOO.util.EventProvider.prototype = {
 
 };
 
-//@TODO optimize
-//@TODO use event utility, lang abstractions
-//@TODO replace
-
 /**
 * KeyListener is a utility that provides an easy interface for listening for
 * keydown/keyup events fired against DOM elements.
