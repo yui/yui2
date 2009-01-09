@@ -74,7 +74,7 @@ Paginator.ui.PageLinks.init = function (p) {
      */
     p.setAttributeConfig('pageLinks', {
         value : 10,
-        validator : l.isNumber
+        validator : Paginator.isNumeric
     });
 
     /**
