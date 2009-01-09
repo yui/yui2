@@ -1591,38 +1591,43 @@ parseHTMLTableData : function(oRequest, oFullResponse) {
     var fields = this.responseSchema.fields;
     var oParsedResponse = {results:[]};
 
-    // Iterate through each TBODY
-    for(var i=0; i<elTable.tBodies.length; i++) {
-        var elTbody = elTable.tBodies[i];
-
-        // Iterate through each TR
-        for(var j=elTbody.rows.length-1; j>-1; j--) {
-            var elRow = elTbody.rows[j];
-            var oResult = {};
-            
-            for(var k=fields.length-1; k>-1; k--) {
-                var field = fields[k];
-                var key = (lang.isValue(field.key)) ? field.key : field;
-                var data = elRow.cells[k].innerHTML;
-
-                // Backward compatibility
-                if(!field.parser && field.converter) {
-                    field.parser = field.converter;
+    if(lang.isArray(fields)) {
+        // Iterate through each TBODY
+        for(var i=0; i<elTable.tBodies.length; i++) {
+            var elTbody = elTable.tBodies[i];
+    
+            // Iterate through each TR
+            for(var j=elTbody.rows.length-1; j>-1; j--) {
+                var elRow = elTbody.rows[j];
+                var oResult = {};
+                
+                for(var k=fields.length-1; k>-1; k--) {
+                    var field = fields[k];
+                    var key = (lang.isValue(field.key)) ? field.key : field;
+                    var data = elRow.cells[k].innerHTML;
+    
+                    // Backward compatibility
+                    if(!field.parser && field.converter) {
+                        field.parser = field.converter;
+                    }
+                    var parser = (typeof field.parser === 'function') ?
+                        field.parser :
+                        DS.Parser[field.parser+''];
+                    if(parser) {
+                        data = parser.call(this, data);
+                    }
+                    // Safety measure
+                    if(data === undefined) {
+                        data = null;
+                    }
+                    oResult[key] = data;
                 }
-                var parser = (typeof field.parser === 'function') ?
-                    field.parser :
-                    DS.Parser[field.parser+''];
-                if(parser) {
-                    data = parser.call(this, data);
-                }
-                // Safety measure
-                if(data === undefined) {
-                    data = null;
-                }
-                oResult[key] = data;
+                oParsedResponse.results[j] = oResult;
             }
-            oParsedResponse.results[j] = oResult;
         }
+    }
+    else {
+        bError = true;
     }
 
     if(bError) {
