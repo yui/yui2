@@ -1004,9 +1004,17 @@
             NAVIGATION: "yui-carousel-nav",
 
             /**
-             * The class name of the next navigation link. This variable is not
-             * only used for styling, but also for identifying the link within
-             * the Carousel container.
+             * The class name of the next Carousel navigation button.
+             *
+             * @property NEXT_NAV
+             * @default " yui-carousel-next-button"
+             */
+            NEXT_NAV: " yui-carousel-next-button",
+
+            /**
+             * The class name of the next navigation link. This variable is
+             * not only used for styling, but also for identifying the link
+             * within the Carousel container.
              *
              * @property NEXT_PAGE
              * @default "yui-carousel-next"
@@ -2508,9 +2516,9 @@
                 // XXX: for IE 6.x
                 Dom.setStyle(prevButton, "visibility", "visible");
                 btn = Dom.generateId();
-                prevButton.innerHTML = "<input type=\"button\" " +
-                        "id=\"" + btn + "\" " +
-                        "value=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\" " +
+                prevButton.innerHTML = "<button type=\"button\" "     +
+                        "id=\"" + btn + "\" " + "value=\""            +
+                        this.STRINGS.PREVIOUS_BUTTON_TEXT + "\" "     +
                         "name=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\">";
                 navContainer.appendChild(prevButton);
                 btn = Dom.get(btn);
@@ -2530,13 +2538,13 @@
             } else {
                 // TODO: separate method for creating a navigation button
                 nextButton = createElement("SPAN",
-                        { className: cssClass.BUTTON });
+                        { className: cssClass.BUTTON + cssClass.NEXT_NAV });
                 // XXX: for IE 6.x
                 Dom.setStyle(nextButton, "visibility", "visible");
                 btn = Dom.generateId();
-                nextButton.innerHTML = "<input type=\"button\" " +
-                        "id=\"" + btn + "\" " +
-                        "value=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\" " +
+                nextButton.innerHTML = "<button type=\"button\" " +
+                        "id=\"" + btn + "\" " + "value=\""        +
+                        this.STRINGS.NEXT_BUTTON_TEXT + "\" "     +
                         "name=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\">";
                 navContainer.appendChild(nextButton);
                 btn = Dom.get(btn);

@@ -30,7 +30,8 @@
     background-position: 0 -2100px;
 }
 
-.yui-skin-sam .yui-carousel-button input {
+.yui-skin-sam .yui-carousel-button input,
+.yui-skin-sam .yui-carousel-button button {
     background-color: transparent;
     border: 0;
     cursor: pointer;
