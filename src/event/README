@@ -1,6 +1,9 @@
 
 YUI Library - Event - Release Notes
 
+2.7.0
+  * unsubscribeAll return value fixed
+
 2.6.0
   * Legacy event check for Webkit increased to capture Safari 2.0.3.
   * Added add/removeFocusListener, add/removeBlurListener

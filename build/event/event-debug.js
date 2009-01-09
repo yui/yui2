@@ -294,13 +294,14 @@ YAHOO.log("Event stopped, sub " + i + " of " + len, "info", "Event");
      * @return {int} The number of listeners unsubscribed
      */
     unsubscribeAll: function() {
-        for (var i=this.subscribers.length-1; i>-1; i--) {
+        var l = this.subscribers.length, i;
+        for (i=l-1; i>-1; i--) {
             this._delete(i);
         }
 
         this.subscribers=[];
 
-        return i;
+        return l;
     },
 
     /**
@@ -2314,9 +2315,9 @@ YAHOO.log(p_type + "event fired before it was created.");
 
 };
 
-//@TODO optimize
-//@TODO use event utility, lang abstractions
-//@TODO replace
+(function() {
+
+    var Event = YAHOO.util.Event, Lang = YAHOO.lang;
 
 /**
 * KeyListener is a utility that provides an easy interface for listening for
@@ -2394,11 +2395,11 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     */
     this.disabledEvent = new YAHOO.util.CustomEvent("disabled");
 
-    if (typeof attachTo == 'string') {
-        attachTo = document.getElementById(attachTo);
+    if (Lang.isString(attachTo)) {
+        attachTo = document.getElementById(attachTo); // No Dom util
     }
 
-    if (typeof handler == 'function') {
+    if (Lang.isFunction(handler)) {
         keyEvent.subscribe(handler);
     } else {
         keyEvent.subscribe(handler.fn, handler.scope, handler.correctScope);
@@ -2427,26 +2428,22 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
             e.altKey   == keyData.alt &&
             e.ctrlKey  == keyData.ctrl) { // if we pass this, all modifiers match
             
-            var dataItem;
+            var dataItem, keys = keyData.keys, key;
 
-            if (keyData.keys instanceof Array) {
-                for (var i=0;i<keyData.keys.length;i++) {
-                    dataItem = keyData.keys[i];
+            if (YAHOO.lang.isArray(keys)) {
+                for (var i=0;i<keys.length;i++) {
+                    dataItem = keys[i];
+                    key = Event.getCharCode(e);
 
-                    if (dataItem == e.charCode ) {
-                        keyEvent.fire(e.charCode, e);
-                        break;
-                    } else if (dataItem == e.keyCode) {
-                        keyEvent.fire(e.keyCode, e);
+                    if (dataItem == key) {
+                        keyEvent.fire(key, e);
                         break;
                     }
                 }
             } else {
-                dataItem = keyData.keys;
-                if (dataItem == e.charCode ) {
-                    keyEvent.fire(e.charCode, e);
-                } else if (dataItem == e.keyCode) {
-                    keyEvent.fire(e.keyCode, e);
+                key = Event.getCharCode(e);
+                if (keys == key ) {
+                    keyEvent.fire(key, e);
                 }
             }
         }
@@ -2459,7 +2456,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     */
     this.enable = function() {
         if (! this.enabled) {
-            YAHOO.util.Event.addListener(attachTo, event, handleKeyPress);
+            Event.on(attachTo, event, handleKeyPress);
             this.enabledEvent.fire(keyData);
         }
         /**
@@ -2477,7 +2474,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     */
     this.disable = function() {
         if (this.enabled) {
-            YAHOO.util.Event.removeListener(attachTo, event, handleKeyPress);
+            Event.removeListener(attachTo, event, handleKeyPress);
             this.disabledEvent.fire(keyData);
         }
         this.enabled = false;
@@ -2495,6 +2492,8 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 
 };
 
+var KeyListener = YAHOO.util.KeyListener;
+
 /**
  * Constant representing the DOM "keydown" event.
  * @property YAHOO.util.KeyListener.KEYDOWN
@@ -2502,7 +2501,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
  * @final
  * @type String
  */
-YAHOO.util.KeyListener.KEYDOWN = "keydown";
+KeyListener.KEYDOWN = "keydown";
 
 /**
  * Constant representing the DOM "keyup" event.
@@ -2511,7 +2510,7 @@ YAHOO.util.KeyListener.KEYDOWN = "keydown";
  * @final
  * @type String
  */
-YAHOO.util.KeyListener.KEYUP = "keyup";
+KeyListener.KEYUP = "keyup";
 
 /**
  * keycode constants for a subset of the special keys
@@ -2519,7 +2518,7 @@ YAHOO.util.KeyListener.KEYUP = "keyup";
  * @static
  * @final
  */
-YAHOO.util.KeyListener.KEY = {
+KeyListener.KEY = {
     ALT          : 18,
     BACK_SPACE   : 8,
     CAPS_LOCK    : 20,
@@ -2544,4 +2543,6 @@ YAHOO.util.KeyListener.KEY = {
     TAB          : 9,
     UP           : 38
 };
+
+})();
 YAHOO.register("event", YAHOO.util.Event, {version: "@VERSION@", build: "@BUILD@"});

@@ -82,6 +82,10 @@ if (typeof YAHOO == "undefined" || !YAHOO) {
  * </pre>
  * This fails because "long" is a future reserved word in ECMAScript
  *
+ * For implementation code that uses YUI, do not create your components
+ * in the namespaces created by the library.  defined by YUI -- create 
+ * your own (YAHOO.util, YAHOO.widget, YAHOO.lang, YAHOO.env)
+ *
  * @method namespace
  * @static
  * @param  {String*} arguments 1-n namespaces to create 
@@ -90,7 +94,7 @@ if (typeof YAHOO == "undefined" || !YAHOO) {
 YAHOO.namespace = function() {
     var a=arguments, o=null, i, j, d;
     for (i=0; i<a.length; i=i+1) {
-        d=a[i].split(".");
+        d=(""+a[i]).split(".");
         o=YAHOO;
 
         // YAHOO is implied, so it is ignored if it is included

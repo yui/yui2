@@ -1,5 +1,5 @@
 .yui-skin-sam .yui-h-slider {
-    background: url(../../bg-h.gif) no-repeat 5px 0;
+    background: url(bg-h.gif) no-repeat 5px 0;
     height: 28px;
     width: 228px;
 }
@@ -8,7 +8,7 @@
 }
 
 .yui-skin-sam .yui-v-slider {
-    background: url(../../bg-v.gif) no-repeat 12px 0;
+    background: url(bg-v.gif) no-repeat 12px 0;
     height: 228px;
     width: 48px;
 }
