@@ -2498,10 +2498,10 @@
                 // XXX: for IE 6.x
                 Dom.setStyle(prevButton, "visibility", "visible");
                 btn = Dom.generateId();
-                prevButton.innerHTML = "<button type=\"button\" "     +
-                        "id=\"" + btn + "\" " + "value=\""            +
-                        this.STRINGS.PREVIOUS_BUTTON_TEXT + "\" "     +
-                        "name=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\">";
+                prevButton.innerHTML = "<button type=\"button\" "      +
+                        "id=\"" + btn + "\" name=\""                   +
+                        this.STRINGS.PREVIOUS_BUTTON_TEXT + "\">"      +
+                        this.STRINGS.PREVIOUS_BUTTON_TEXT + "</button>";
                 navContainer.appendChild(prevButton);
                 btn = Dom.get(btn);
                 this._navBtns.prev = [btn];
@@ -2524,10 +2524,10 @@
                 // XXX: for IE 6.x
                 Dom.setStyle(nextButton, "visibility", "visible");
                 btn = Dom.generateId();
-                nextButton.innerHTML = "<button type=\"button\" " +
-                        "id=\"" + btn + "\" " + "value=\""        +
-                        this.STRINGS.NEXT_BUTTON_TEXT + "\" "     +
-                        "name=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\">";
+                nextButton.innerHTML = "<button type=\"button\" "      +
+                        "id=\"" + btn + "\" name=\""                   +
+                        this.STRINGS.NEXT_BUTTON_TEXT + "\">"      +
+                        this.STRINGS.NEXT_BUTTON_TEXT + "</button>";
                 navContainer.appendChild(nextButton);
                 btn = Dom.get(btn);
                 this._navBtns.next = [btn];
