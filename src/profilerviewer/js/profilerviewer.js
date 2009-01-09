@@ -130,7 +130,7 @@
 		 * @default English language strings for UI.
 		 */
 		STRINGS: {
-			title: "YUI Profiler (beta)",
+			title: "YUI ProfilerViewer",
 			buttons: {
 				viewprofiler: "View Profiler Data",
 				hideprofiler: "Hide Profiler Report",
@@ -762,10 +762,12 @@
 	 * @private
 	 **/
 	proto._sortedByChange = function(o) {
-		YAHOO.log("Relaying DataTable sortedBy value change; new key: " + o.newValue.key + "; new direction: " + o.newValue.dir + ".", "info", "ProfilerViewer");
-		this.set("sortedBy", {key: o.newValue.key, dir:o.newValue.dir});
+		if(o.newValue && o.newValue.key) {
+			YAHOO.log("Relaying DataTable sortedBy value change; new key: " + o.newValue.key + "; new direction: " + o.newValue.dir + ".", "info", "ProfilerViewer");
+			this.set("sortedBy", {key: o.newValue.key, dir:o.newValue.dir});
+		}
 	};
-
+	
 	/**
 	 * Proxy the render event in DataTable into the ProfilerViewer
 	 * attribute.
@@ -813,7 +815,6 @@
 				/*Keep the same data on the chart, but force update to 
 				  reflect new sort order on function/method name: */
 				this._chart.set("dataSource", this._chart.get("dataSource"));
-				
 				/*no further action necessary; chart redraws*/
 				return;
 			case "calls":
@@ -842,9 +843,10 @@
 	 */
 	proto._getChartData = function() {
 		YAHOO.log("Getting data for chart from function DataSource.", "info", "ProfilerViewer");
+		//var records = this._getProfilerData();
 		var records = this._dataTable.getRecordSet().getRecords(0, this.get("maxChartFunctions"));
 		var arr = [];
-		for (var i = records.length - 1; i>-1; i--) {
+		for (var i = 0, j = records.length; i<j; i++) {
 			arr.push(records[i].getData());	
 		}
 		YAHOO.log("Returning data to Chart: " + YAHOO.lang.dump(arr), "info", "ProfilerViewer");
@@ -1218,4 +1220,3 @@
     };
 	
 })();
-YAHOO.register("profilerviewer", YAHOO.widget.ProfilerViewer, {version: "@VERSION@", build: "@BUILD@"});

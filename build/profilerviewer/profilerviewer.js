@@ -741,9 +741,11 @@
 	 * @private
 	 **/
 	proto._sortedByChange = function(o) {
-		this.set("sortedBy", {key: o.newValue.key, dir:o.newValue.dir});
+		if(o.newValue && o.newValue.key) {
+			this.set("sortedBy", {key: o.newValue.key, dir:o.newValue.dir});
+		}
 	};
-
+	
 	/**
 	 * Proxy the render event in DataTable into the ProfilerViewer
 	 * attribute.
@@ -786,7 +788,6 @@
 				/*Keep the same data on the chart, but force update to 
 				  reflect new sort order on function/method name: */
 				this._chart.set("dataSource", this._chart.get("dataSource"));
-				
 				/*no further action necessary; chart redraws*/
 				return;
 			case "calls":
@@ -813,9 +814,10 @@
 	 * @private
 	 */
 	proto._getChartData = function() {
+		//var records = this._getProfilerData();
 		var records = this._dataTable.getRecordSet().getRecords(0, this.get("maxChartFunctions"));
 		var arr = [];
-		for (var i = records.length - 1; i>-1; i--) {
+		for (var i = 0, j = records.length; i<j; i++) {
 			arr.push(records[i].getData());	
 		}
 		return arr;

@@ -142,7 +142,7 @@
 				//key: [column head label, width in pixels]
 				fn: ["Function/Method", null], //must auto-size
 				calls: ["Calls", 40],
-				avg: ["Average", 70],
+				avg: ["Average", 80],
 				min: ["Shortest", 70],
 				max: ["Longest", 70],
 				total: ["Total Time", 70],
@@ -382,30 +382,39 @@
 	 * @private
      */	
 	 proto._show = function() {
-		this._setBusyState(true);
-		if(!this._rendered) {
-			var loader = new YAHOO.util.YUILoader();
-			if (this.get("base")) {
-				loader.base = this.get("base");
+	 	if(!this._busy) {
+			this._setBusyState(true);
+			if(!this._rendered) {
+				var loader = new YAHOO.util.YUILoader();
+				if (this.get("base")) {
+					loader.base = this.get("base");
+				}
+				
+				var modules = ["datatable"];
+				if(this.get("showChart")) {
+					modules.push("charts");
+				}
+				
+				loader.insert({ require: modules,
+								onSuccess: function() {
+									this._render();
+								},
+								scope: this});
+			} else {
+				var el = this.get("element");
+				Dom.removeClass(el, "yui-pv-minimized");
+				this._toggleVisibleEl.innerHTML = PV.STRINGS.buttons.hideprofiler;
+				
+				//The Flash Charts component can't be set to display:none,
+				//and even after positioning it offscreen the screen
+				//may fail to repaint in some browsers.  Adding an empty
+				//style rule to the console body can help force a repaint:
+				Dom.addClass(el, "yui-pv-null");
+				Dom.removeClass(el, "yui-pv-null");
+				
+				//Always refresh data when changing to visible:
+				this.refreshData();
 			}
-			
-			var modules = ["datatable"];
-			if(this.get("showChart")) {
-				modules.push("charts");
-			}
-			
-			loader.insert({ require: modules,
-							onSuccess: function() {
-								this._render();
-							},
-							scope: this});
-		} else {
-			var el = this.get("element");
-			Dom.removeClass(el, "yui-pv-minimized");
-			this._toggleVisibleEl.innerHTML = PV.STRINGS.buttons.hideprofiler;
-			Dom.addClass(el, "yui-pv-null");
-			Dom.removeClass(el, "yui-pv-null");
-			this.refreshData();
 		}
     };
 
@@ -753,10 +762,12 @@
 	 * @private
 	 **/
 	proto._sortedByChange = function(o) {
-		YAHOO.log("Relaying DataTable sortedBy value change; new key: " + o.newValue.key + "; new direction: " + o.newValue.dir + ".", "info", "ProfilerViewer");
-		this.set("sortedBy", {key: o.newValue.key, dir:o.newValue.dir});
+		if(o.newValue && o.newValue.key) {
+			YAHOO.log("Relaying DataTable sortedBy value change; new key: " + o.newValue.key + "; new direction: " + o.newValue.dir + ".", "info", "ProfilerViewer");
+			this.set("sortedBy", {key: o.newValue.key, dir:o.newValue.dir});
+		}
 	};
-
+	
 	/**
 	 * Proxy the render event in DataTable into the ProfilerViewer
 	 * attribute.
@@ -804,7 +815,6 @@
 				/*Keep the same data on the chart, but force update to 
 				  reflect new sort order on function/method name: */
 				this._chart.set("dataSource", this._chart.get("dataSource"));
-				
 				/*no further action necessary; chart redraws*/
 				return;
 			case "calls":
@@ -833,9 +843,10 @@
 	 */
 	proto._getChartData = function() {
 		YAHOO.log("Getting data for chart from function DataSource.", "info", "ProfilerViewer");
+		//var records = this._getProfilerData();
 		var records = this._dataTable.getRecordSet().getRecords(0, this.get("maxChartFunctions"));
 		var arr = [];
-		for (var i = records.length - 1; i>-1; i--) {
+		for (var i = 0, j = records.length; i<j; i++) {
 			arr.push(records[i].getData());	
 		}
 		YAHOO.log("Returning data to Chart: " + YAHOO.lang.dump(arr), "info", "ProfilerViewer");
@@ -1005,10 +1016,11 @@
         /**
          * The default column key to sort by.  Valid keys are: fn, calls,
 		 * avg, min, max, total.  Valid dir values are: 
-		 * YAHOO.widget.DataTable.CLASS_ASC AND
-		 * YAHOO.widget.DataTable.CLASS_DESC.
+		 * YAHOO.widget.DataTable.CLASS_ASC and
+		 * YAHOO.widget.DataTable.CLASS_DESC (or their
+		 * string equivalents).
          * @attribute sortedBy
-         * @type obj
+         * @type string
 		 * @default {key:"total", dir:"yui-dt-desc"}
          */
         this.setAttributeConfig('sortedBy', {
@@ -1053,6 +1065,7 @@
 		 * or a path relative to the page being profiled. Changes at runtime
 		 * not supported; pass this value in at instantiation.
 		 * @attribute swfUrl
+		 * @type string
 		 * @default "http://yui.yahooapis.com/2.5.0/build/charts/assets/charts.swf"
 		 */
 		this.setAttributeConfig('swfUrl', {
@@ -1123,13 +1136,13 @@
 						total: {
 							displayName: PV.STRINGS.colHeads.total[0],
 							xField: "total",
-							style: {color:"CC3333", size:21},
+							style: {color:"4d95dd", size:20},
 							group: ["total"]
 						},
 						calls: {		
 							displayName: PV.STRINGS.colHeads.calls[0],
 							xField: "calls",
-							style: {color:"A658BD", size:21},
+							style: {color:"edff9f", size:20},
 							group: ["calls"]
 						},
 						avg: {
@@ -1153,7 +1166,7 @@
 						pct: {
 							displayName: PV.STRINGS.colHeads.pct[0],
 							xField: "pct",
-							style: {color:"bdb327", size:21},
+							style: {color:"C96EDB", size:20},
 							group: ["pct"]
 						}
 				},
@@ -1178,7 +1191,6 @@
             value: attr.visible || false,
 			validator: YAHOO.lang.isBoolean,
 			method: function(b) {
-				YAHOO.log("visible setting changing to " + b);
 				if(b) {
 					this._show();
 				} else {
@@ -1208,3 +1220,4 @@
     };
 	
 })();
+YAHOO.register("profilerviewer", YAHOO.widget.ProfilerViewer, {version: "@VERSION@", build: "@BUILD@"});
