@@ -876,6 +876,46 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
             if(xhr && oRawResponse && oRawResponse.responseText) {
                 oFullResponse = oRawResponse.responseText; 
             }
+            try {
+                // Convert to JS array if it's a string
+                if(lang.isString(oFullResponse)) {
+                    // Check for YUI JSON Util
+                    if(lang.JSON) {
+                        oFullResponse = lang.JSON.parse(oFullResponse);
+                    }
+                    // Look for JSON parsers using an API similar to json2.js
+                    else if(window.JSON && JSON.parse) {
+                        oFullResponse = JSON.parse(oFullResponse);
+                    }
+                    // Look for JSON parsers using an API similar to json.js
+                    else if(oFullResponse.parseJSON) {
+                        oFullResponse = oFullResponse.parseJSON();
+                    }
+                    // No JSON lib found so parse the string
+                    else {
+                        // Trim leading spaces
+                        while (oFullResponse.length > 0 &&
+                                (oFullResponse.charAt(0) != "{") &&
+                                (oFullResponse.charAt(0) != "[")) {
+                            oFullResponse = oFullResponse.substring(1, oFullResponse.length);
+                        }
+
+                        if(oFullResponse.length > 0) {
+                            // Strip extraneous stuff at the end
+                            var arrayEnd =
+Math.max(oFullResponse.lastIndexOf("]"),oFullResponse.lastIndexOf("}"));
+                            oFullResponse = oFullResponse.substring(0,arrayEnd+1);
+
+                            // Turn the string into an object literal...
+                            // ...eval is necessary here
+                            oFullResponse = eval("(" + oFullResponse + ")");
+
+                        }
+                    }
+                }
+            }
+            catch(e1) {
+            }
             oFullResponse = this.doBeforeParseData(oRequest, oFullResponse, oCallback);
             oParsedResponse = this.parseArrayData(oRequest, oFullResponse);
             break;

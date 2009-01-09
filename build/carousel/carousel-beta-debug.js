@@ -687,11 +687,7 @@
      * @private
      */
     function syncPagerUi(page) {
-        var a,
-            cssClass = this.CLASSES,
-            me,
-            numPages,
-            numVisible;
+        var me, numPages, numVisible;
 
         me = this.get("element").id;
 
@@ -1008,9 +1004,17 @@
             NAVIGATION: "yui-carousel-nav",
 
             /**
-             * The class name of the next navigation link. This variable is not
-             * only used for styling, but also for identifying the link within
-             * the Carousel container.
+             * The class name of the next Carousel navigation button.
+             *
+             * @property NEXT_NAV
+             * @default " yui-carousel-next-button"
+             */
+            NEXT_NAV: " yui-carousel-next-button",
+
+            /**
+             * The class name of the next navigation link. This variable is
+             * not only used for styling, but also for identifying the link
+             * within the Carousel container.
              *
              * @property NEXT_PAGE
              * @default "yui-carousel-next"
@@ -1182,7 +1186,7 @@
          * @return {Boolean} Return true on success, false otherwise
          */
         addItem: function (item, index) {
-            var className, content, el, elId, numItems = this.get("numItems");
+            var className, content, elId, numItems = this.get("numItems");
 
             if (!item) {
                 return false;
@@ -1630,8 +1634,7 @@
          * @public
          */
         initEvents: function () {
-            var carousel = this,
-                cssClass = this.CLASSES;
+            var carousel = this;
 
             carousel.on("keydown", carousel._keyboardEventHandler);
 
@@ -1658,6 +1661,7 @@
             carousel.on(renderEvent, function (ev) {
                 syncNavigation.call(carousel, ev);
                 syncPagerUi.call(carousel, ev);
+                this._setClipContainerSize();
             });
 
             carousel.on("selectedItemChange", function (ev) {
@@ -1698,6 +1702,18 @@
             Event.onBlur(carousel.get("element"), function (ev, obj) {
                 obj._updateNavButtons(Event.getTarget(ev), false);
             }, carousel);
+        },
+
+        /**
+         * Return true if the Carousel is still animating, or false otherwise.
+         *
+         * @method isAnimating
+         * @return {Boolean} Return true if animation is still in progress, or
+         * false otherwise.
+         * @public
+         */
+        isAnimating: function () {
+            return this._isAnimationInProgress;
         },
 
         /**
@@ -1839,9 +1855,7 @@
          * @return {Boolean} Status of the operation
          */
         render: function (appendTo) {
-            var config = this.CONFIG,
-                cssClass = this.CLASSES,
-                size;
+            var cssClass = this.CLASSES;
 
             this.addClass(cssClass.CAROUSEL);
 
@@ -1853,7 +1867,6 @@
             if (appendTo) {
                 this.appendChild(this._clipEl);
                 this.appendTo(appendTo);
-                this._setClipContainerSize();
             } else {
                 if (!Dom.inDocument(this.get("element"))) {
                     YAHOO.log("Nothing to render. The container should be " +
@@ -1865,27 +1878,18 @@
             }
 
             if (this.get("isVertical")) {
-                size = getCarouselItemSize.call(this, "width");
-                size = size < config.MIN_WIDTH ? config.MIN_WIDTH : size;
-                this.setStyle("width",  size + "px");
                 this.addClass(cssClass.VERTICAL);
             } else {
                 this.addClass(cssClass.HORIZONTAL);
             }
 
-            // By now, the navigation would have been rendered, so calculate
-            // the container height now.
             if (this.get("numItems") < 1) {
                 YAHOO.log("No items in the Carousel to render", "warn",
                         WidgetName);
-                this._setContainerSize();
-            } else {
-                // Make sure at least one item is selected
-                this.set("selectedItem", this.get("firstVisible"));
+                return false;
             }
 
-            instances[this.get("element").id].rendered = true;
-            this.fireEvent(renderEvent);
+            this._reRender();
 
             return true;
         },
@@ -1956,7 +1960,7 @@
                 return;         // nothing to do!
             }
 
-            if (this._isAnimationInProgress) {
+            if (this.isAnimating()) {
                 return;         // let it take its own sweet time to complete
             }
 
@@ -2156,10 +2160,7 @@
          * @protected
          */
         _createCarouselClip: function () {
-            var el = createElement("DIV", { className: this.CLASSES.CONTENT });
-            this._setClipContainerSize(el);
-
-            return el;
+            return createElement("DIV", { className: this.CLASSES.CONTENT });
         },
 
         /**
@@ -2248,7 +2249,7 @@
                 position = 0,
                 selItem;
 
-            if (this._isAnimationInProgress) {
+            if (this.isAnimating()) {
                 return;         // do not mess while animation is in progress
             }
 
@@ -2456,6 +2457,20 @@
         },
 
         /**
+         * Re-render the widget if it is not already rendered, on first item
+         * addition.
+         *
+         * @method _reRender
+         * @protected
+         */
+        _reRender: function () {
+            // Set the rendered state appropriately.
+            instances[this.get("element").id].rendered = true;
+
+            this.fireEvent(renderEvent);
+        },
+
+        /**
          * Set the Carousel offset to the passed offset.
          *
          * @method _setCarouselOffset
@@ -2476,8 +2491,7 @@
          * @protected
          */
         _setupCarouselNavigation: function () {
-            var btn, cfg, cssClass, nav, navContainer, nextButton, pageEl,
-                prevButton;
+            var btn, cfg, cssClass, nav, navContainer, nextButton, prevButton;
 
             cssClass = this.CLASSES;
 
@@ -2514,10 +2528,10 @@
                 // XXX: for IE 6.x
                 Dom.setStyle(prevButton, "visibility", "visible");
                 btn = Dom.generateId();
-                prevButton.innerHTML = "<input type=\"button\" " +
-                        "id=\"" + btn + "\" " +
-                        "value=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\" " +
-                        "name=\"" + this.STRINGS.PREVIOUS_BUTTON_TEXT + "\">";
+                prevButton.innerHTML = "<button type=\"button\" "      +
+                        "id=\"" + btn + "\" name=\""                   +
+                        this.STRINGS.PREVIOUS_BUTTON_TEXT + "\">"      +
+                        this.STRINGS.PREVIOUS_BUTTON_TEXT + "</button>";
                 navContainer.appendChild(prevButton);
                 btn = Dom.get(btn);
                 this._navBtns.prev = [btn];
@@ -2536,14 +2550,14 @@
             } else {
                 // TODO: separate method for creating a navigation button
                 nextButton = createElement("SPAN",
-                        { className: cssClass.BUTTON });
+                        { className: cssClass.BUTTON + cssClass.NEXT_NAV });
                 // XXX: for IE 6.x
                 Dom.setStyle(nextButton, "visibility", "visible");
                 btn = Dom.generateId();
-                nextButton.innerHTML = "<input type=\"button\" " +
-                        "id=\"" + btn + "\" " +
-                        "value=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\" " +
-                        "name=\"" + this.STRINGS.NEXT_BUTTON_TEXT + "\">";
+                nextButton.innerHTML = "<button type=\"button\" "      +
+                        "id=\"" + btn + "\" name=\""                   +
+                        this.STRINGS.NEXT_BUTTON_TEXT + "\">"      +
+                        this.STRINGS.NEXT_BUTTON_TEXT + "</button>";
                 navContainer.appendChild(nextButton);
                 btn = Dom.get(btn);
                 this._navBtns.next = [btn];
@@ -2631,7 +2645,9 @@
          * @protected
          */
         _setContainerSize: function (clip, attr) {
-            var isVertical, size;
+            var config = this.CONFIG,
+                isVertical,
+                size;
 
             isVertical = this.get("isVertical");
             clip       = clip || this._clipEl;
@@ -2640,18 +2656,32 @@
 
             size = JS.isNumber(size) ? size : 0;
 
-            size += getStyle(clip, "marginLeft")      +
-                    getStyle(clip, "marginRight")     +
-                    getStyle(clip, "paddingLeft")     +
-                    getStyle(clip, "paddingRight")    +
-                    getStyle(clip, "borderLeftWidth") +
-                    getStyle(clip, "borderRightWidth");
-
             if (isVertical) {
-                size += getStyle(this._navEl, "height");
+                size += getStyle(this._carouselEl, "marginTop")         +
+                        getStyle(this._carouselEl, "marginBottom")      +
+                        getStyle(this._carouselEl, "paddingTop")        +
+                        getStyle(this._carouselEl, "paddingBottom")     +
+                        getStyle(this._carouselEl, "borderTopWidth")    +
+                        getStyle(this._carouselEl, "borderBottomWidth") +
+                        getStyle(this._navEl, "height");
+            } else {
+                size += getStyle(clip, "marginLeft")                    +
+                        getStyle(clip, "marginRight")                   +
+                        getStyle(clip, "paddingLeft")                   +
+                        getStyle(clip, "paddingRight")                  +
+                        getStyle(clip, "borderLeftWidth")               +
+                        getStyle(clip, "borderRightWidth");
             }
 
             this.setStyle(attr, size + "px");
+
+            // Additionally the width of the container should be set for
+            // the vertical Carousel
+            if (isVertical) {
+                size = getCarouselItemSize.call(this, "width");
+                size = size < config.MIN_WIDTH ? config.MIN_WIDTH : size;
+                this.setStyle("width",  size + "px");
+            }
         },
 
         /**
@@ -2791,6 +2821,7 @@
                 el,
                 item,
                 itemsTable = this._itemsTable,
+                me         = this.get("element").id,
                 oel,
                 pos,
                 sibling;
@@ -2846,8 +2877,8 @@
                 }
             }
 
-            if (this._recomputeSize) {
-                this._setClipContainerSize();
+            if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
+                this._reRender();
             }
 
             if (this.get("selectedItem") < 0) {
@@ -3028,10 +3059,8 @@
          * @protected
          */
         _updatePagerMenu: function () {
-            var css   = this.CLASSES,
-                cur   = this._pages.cur, // current page
+            var cur   = this._pages.cur, // current page
                 el,
-                html,
                 i,
                 item,
                 n     = this.get("numVisible"),
@@ -3149,7 +3178,7 @@
          * @protected
          */
         _validateFirstVisible: function (val) {
-            var numItems = this.get("numItems"), rv = false;
+            var numItems = this.get("numItems");
 
             if (JS.isNumber(val)) {
                 if (numItems === 0 && val == numItems) {
