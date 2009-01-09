@@ -3525,7 +3525,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("summary", {
         value: "",
         validator: lang.isString,
-        method: function(sSummary) {
+        setter: function(sSummary) {
             if(this._elTable) {
                 this._elTable.summary = sSummary;
             }
@@ -3588,7 +3588,7 @@ initAttributes : function(oConfigs) {
                 return (oNewSortedBy === null);
             }
         },
-        method: function(oNewSortedBy) {
+        setter: function(oNewSortedBy) {
             // Stash the previous value
             var oOldSortedBy = this.get("sortedBy");
             
@@ -3676,7 +3676,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("caption", {
         value: null,
         validator: lang.isString,
-        method: function(sCaption) {
+        setter: function(sCaption) {
             this._initCaptionEl(sCaption);
         }
     });
@@ -3692,7 +3692,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("draggableColumns", {
         value: false,
         validator: lang.isBoolean,
-        method: function(oParam) {
+        setter: function(oParam) {
             if(this._elThead) {
                 if(oParam) {
                     this._initDraggableColumns();
@@ -3874,7 +3874,7 @@ initAttributes : function(oConfigs) {
      this.setAttributeConfig("MSG_SORTASC", { 	 
          value: "Click to sort ascending", 	 
          validator: lang.isString,
-         method: function(sParam) {
+         setter: function(sParam) {
             if(this._elThead) {
                 for(var i=0, allKeys=this.getColumnSet().keys, len=allKeys.length; i<len; i++) {
                     if(allKeys[i].sortable && this.getColumnSortDir(allKeys[i]) === DT.CLASS_ASC) {
@@ -3894,7 +3894,7 @@ initAttributes : function(oConfigs) {
      this.setAttributeConfig("MSG_SORTDESC", { 	 
          value: "Click to sort descending", 	 
          validator: lang.isString,
-         method: function(sParam) {
+         setter: function(sParam) {
             if(this._elThead) {
                 for(var i=0, allKeys=this.getColumnSet().keys, len=allKeys.length; i<len; i++) {
                     if(allKeys[i].sortable && this.getColumnSortDir(allKeys[i]) === DT.CLASS_DESC) {
@@ -13953,7 +13953,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("width", {
         value: null,
         validator: lang.isString,
-        method: function(oParam) {
+        setter: function(oParam) {
             if(this._elHdContainer && this._elBdContainer) {
                 this._elHdContainer.style.width = oParam;
                 this._elBdContainer.style.width = oParam;            
@@ -13971,7 +13971,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("height", {
         value: null,
         validator: lang.isString,
-        method: function(oParam) {
+        setter: function(oParam) {
             if(this._elHdContainer && this._elBdContainer) {
                 this._elBdContainer.style.height = oParam;    
                 this._syncScrollX();   
@@ -13990,7 +13990,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("COLOR_COLUMNFILLER", {
         value: "#F2F2F2",
         validator: lang.isString,
-        method: function(oParam) {
+        setter: function(oParam) {
             this._elHdContainer.style.backgroundColor = oParam;
         }
     });
