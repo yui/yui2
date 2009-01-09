@@ -283,13 +283,14 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
      * @return {int} The number of listeners unsubscribed
      */
     unsubscribeAll: function() {
-        for (var i=this.subscribers.length-1; i>-1; i--) {
+        var l = this.subscribers.length, i;
+        for (i=l-1; i>-1; i--) {
             this._delete(i);
         }
 
         this.subscribers=[];
 
-        return i;
+        return l;
     },
 
     /**
