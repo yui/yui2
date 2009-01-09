@@ -1,1 +1,0 @@
-<p>Use <a href="http://developer.yahoo.com/yui/grids/">YUI Grids CSS</a> to create an arbitrary page width.</p>

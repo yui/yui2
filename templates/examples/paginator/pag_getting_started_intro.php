@@ -1,1 +1,0 @@
-<p>In this example we illustrate the basics of attaching a Paginator to your application.  We take a short story by Stephen Crane and divide it up into pages, then use Paginator to display the page navigation.</p>

@@ -1,1 +1,0 @@
-<p>This test page of HTML elements shows how they look with YUI Base (and Reset and Fonts) applied.</p>

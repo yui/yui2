@@ -1,1 +1,0 @@
-<p>This example demonstrates different ways to create a Split Button.</p>

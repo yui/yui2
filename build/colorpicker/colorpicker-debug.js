@@ -239,6 +239,8 @@ YAHOO.util.Color = function() {
         }
 
     	ColorPicker.superclass.constructor.call(this, el, attr); 
+
+        this.initPicker();
     }
 
     YAHOO.extend(ColorPicker, YAHOO.util.Element, {
@@ -521,6 +523,17 @@ YAHOO.util.Color = function() {
         },
 
         /**
+         * Flag to allow individual UI updates to forego animation if available.
+         * True during construction for initial thumb placement.  Set to false
+         * after that.
+         *
+         * @property skipAnim
+         * @type Boolean
+         * @default true
+         */
+        skipAnim : true,
+
+        /**
          * Creates the host element if it doesn't exist
          * @method _createHostElement
          * @protected
@@ -556,7 +569,7 @@ YAHOO.util.Color = function() {
             }
             this.logger.log("Hue slider is being set to " + h);
 
-            this.hueSlider.setValue(h);
+            this.hueSlider.setValue(h, this.skipAnim);
         },
 
         /**
@@ -575,7 +588,7 @@ YAHOO.util.Color = function() {
 
             this.logger.log("Setting picker slider to " + [s, v]);
 
-            this.pickerSlider.setRegionValue(s, v);
+            this.pickerSlider.setRegionValue(s, v, this.skipAnim);
         },
 
         /**
@@ -1212,11 +1225,12 @@ YAHOO.util.Color = function() {
         },
 
         /**
-         * Sets the initial state of the sliders
-         * @method initPicker
+         * Creates any missing DOM structure.
+         *
+         * @method _initElements
+         * @protected
          */
-        initPicker : function () {
-
+        _initElements : function () {
             // bind all of our elements
             var o=this.OPT, 
                 ids = this.get(o.IDS), 
@@ -1256,62 +1270,92 @@ YAHOO.util.Color = function() {
                 }
             }
 
-            // set the initial visibility state of our controls
-                els = [o.SHOW_CONTROLS, 
-                       o.SHOW_RGB_CONTROLS,
-                       o.SHOW_HSV_CONTROLS,
-                       o.SHOW_HEX_CONTROLS,
-                       o.SHOW_HEX_SUMMARY,
-                       o.SHOW_WEBSAFE
-                       ];
+        },
 
-            for (i=0; i<els.length; i=i+1) {
-                this.set(els[i], this.get(els[i]));
-            }
+        /**
+         * Sets the initial state of the sliders
+         * @method initPicker
+         */
+        initPicker : function () {
+            this._initSliders();
+            this._bindUI();
+            this.syncUI(true);
+        },
 
-            var s = this.get(o.PICKER_SIZE);
-            this.logger.log("picker size" + s);
+        /**
+         * Creates the Hue and Value/Saturation Sliders.
+         *
+         * @method _initSliders
+         * @protected
+         */
+        _initSliders : function () {
+            var ID = this.ID,
+                size = this.get(this.OPT.PICKER_SIZE);
 
-            this.hueSlider = Slider.getVertSlider(this.getElement(this.ID.HUE_BG), 
-                                                  this.getElement(this.ID.HUE_THUMB), 0, s);
-            this.hueSlider.subscribe("change", this._onHueSliderChange, this, true);
+            this.logger.log("picker size" + size);
 
-            this.pickerSlider = Slider.getSliderRegion(this.getElement(this.ID.PICKER_BG), 
-                                                       this.getElement(this.ID.PICKER_THUMB), 0, s, 0, s);
-            this.pickerSlider.subscribe("change", this._onPickerSliderChange, this, true);
+            this.hueSlider = Slider.getVertSlider(
+                this.getElement(ID.HUE_BG), 
+                this.getElement(ID.HUE_THUMB), 0, size);
 
-            // Set the animate state
-            this.set(o.ANIMATE,this.get(o.ANIMATE));
+            this.pickerSlider = Slider.getSliderRegion(
+                this.getElement(ID.PICKER_BG), 
+                this.getElement(ID.PICKER_THUMB), 0, size, 0, size);
+        },
 
-            //this._onHueSliderChange(0);
+        /**
+         * Adds event listeners to Sliders and UI elements.  Wires everything
+         * up.
+         *
+         * @method _bindUI
+         * @protected
+         */
+        _bindUI : function () {
+            var ID = this.ID,
+                O  = this.OPT;
 
-            Event.on(this.getElement(this.ID.WEBSAFE_SWATCH), "click", function(e) {
-                   this.setValue(this.get(o.WEBSAFE));
-                   //_updateSliders
+            this.hueSlider.subscribe("change",
+                this._onHueSliderChange, this, true);
+            this.pickerSlider.subscribe("change",
+                this._onPickerSliderChange, this, true);
+
+            Event.on(this.getElement(ID.WEBSAFE_SWATCH), "click", function(e) {
+                   this.setValue(this.get(O.WEBSAFE));
                }, this, true);
 
-            Event.on(this.getElement(this.ID.CONTROLS_LABEL), "click", function(e) {
-                   this.set(o.SHOW_CONTROLS, !this.get(o.SHOW_CONTROLS));
+            Event.on(this.getElement(ID.CONTROLS_LABEL), "click", function(e) {
+                   this.set(O.SHOW_CONTROLS, !this.get(O.SHOW_CONTROLS));
                    Event.preventDefault(e);
                }, this, true);
 
-            this._attachRGBHSV(this.ID.R, this.OPT.RED); 
-            this._attachRGBHSV(this.ID.G, this.OPT.GREEN); 
-            this._attachRGBHSV(this.ID.B, this.OPT.BLUE); 
-            this._attachRGBHSV(this.ID.H, this.OPT.HUE); 
-            this._attachRGBHSV(this.ID.S, this.OPT.SATURATION); 
-            this._attachRGBHSV(this.ID.V, this.OPT.VALUE); 
+            this._attachRGBHSV(ID.R, O.RED); 
+            this._attachRGBHSV(ID.G, O.GREEN); 
+            this._attachRGBHSV(ID.B, O.BLUE); 
+            this._attachRGBHSV(ID.H, O.HUE); 
+            this._attachRGBHSV(ID.S, O.SATURATION); 
+            this._attachRGBHSV(ID.V, O.VALUE); 
 
-            Event.on(this.getElement(this.ID.HEX), "keydown", function(e, me) {
-                    me._hexFieldKeypress.call(me, e, this, me.OPT.HEX);
+            Event.on(this.getElement(ID.HEX), "keydown", function(e, me) {
+                    me._hexFieldKeypress.call(me, e, this, O.HEX);
                 }, this);
 
-            Event.on(this.getElement(this.ID.HEX), "keypress", this._hexOnly, this,true);
+            Event.on(this.getElement(this.ID.HEX), "keypress",
+                this._hexOnly, this,true);
             Event.on(this.getElement(this.ID.HEX), "blur", function(e, me) {
-                    me._useFieldValue.call(me, e, this, me.OPT.HEX);
+                    me._useFieldValue.call(me, e, this, O.HEX);
                 }, this);
+        },
 
+        /**
+         * Wrapper for _updateRGB, but allows setting 
+         *
+         * @method syncUI
+         * @param skipAnim {Boolean} Omit Slider animation for this action
+         */
+        syncUI : function (skipAnim) {
+            this.skipAnim = skipAnim;
             this._updateRGB();
+            this.skipAnim = false;
         },
 
 
@@ -1727,7 +1771,7 @@ YAHOO.util.Color = function() {
 
             this.on(this.OPT.HEX + "Change", this._updateHex, this, true);
 
-            this.initPicker();
+            this._initElements();
         }
     });
 

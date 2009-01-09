@@ -1,2 +1,0 @@
-<p>This example is a demonstration of the <a href="http://developer.yahoo.com/yui/charts/">YUI Chart Control</a>'s basic features.</p>
-<p>Please note: The YUI Charts Control requires Flash Player 9.0.45 or higher. The latest version of Flash Player is available at the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.</p>

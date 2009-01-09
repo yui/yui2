@@ -1,3 +1,0 @@
-<p>To create a POST transaction using <a href="http://developer.yahoo.com/yui/connection/">Connection Manager</a>, you will need to construct a data string as the POST message. The following code example provides a step-by-step approach to creating a simple POST transaction.</p>
-
-<p>Click "Send a POST Request" below to try it out, then read the description below to learn how to send POST data to the server using Connection Manager.</p>

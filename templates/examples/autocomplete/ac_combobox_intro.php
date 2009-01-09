@@ -1,1 +1,0 @@
-<p>This "combo box" AutoComplete implementation allows the user to pick an item from a set list or enter a custom value directly into the input field. There are also some CSS customizations which must be made to support multiple stacked AutoComplete instances, which this example demonstrates.</p>

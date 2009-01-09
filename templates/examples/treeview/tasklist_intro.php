@@ -1,1 +1,0 @@
-<p>The TaskNode example implements a task list using treeview.  It does so by extending the TextNode class to have additional, specific functionality.  In this example, each TaskNode has three potential states: Checked, partially-checked (not all subtasks complete), and unchecked.  Checking off a task automatically checks off all subtasks.</p>

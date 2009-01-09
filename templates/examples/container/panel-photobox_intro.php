@@ -1,3 +1,0 @@
-<p>This example uses the Panel Control as a starting point for creating a rich "lightbox" or "photobox" control that loops through a set of photos.  Click the button below to launch the photobox.</p>
-
-<p>The tutorial for this example demonstrates the use of "subclassing" to extend Panel's functionality.  This model of development allows you to create any manner of windowing controls using Panel (or Overlay) as a foundation.</p>
