@@ -1945,6 +1945,19 @@ generateRequestCallback : function(id) {
 },
 
 /**
+ * Overridable method gives implementers access to modify the URI before the dynamic
+ * script node gets inserted. Implementers should take care not to return an
+ * invalid URI.
+ *
+ * @method doBeforeGetScriptNode
+ * @param {String} URI to the script 
+ * @return {String} URI to the script
+ */
+doBeforeGetScriptNode : function(sUri) {
+    return sUri;
+},
+
+/**
  * Overriding method passes query to Get Utility. The returned
  * response is then forwarded to the handleResponse function.
  *
@@ -2006,6 +2019,7 @@ makeConnection : function(oRequest, oCallback, oCaller) {
     // We are now creating a request
     util.ScriptNodeDataSource._nPending++;
     var sUri = this.liveData + oRequest + this.generateRequestCallback(id);
+    sUri = this.doBeforeGetScriptNode(sUri);
     YAHOO.log("DataSource is querying URL " + sUri, "info", this.toString());
     this.getUtility.script(sUri,
             {autopurge: true,
