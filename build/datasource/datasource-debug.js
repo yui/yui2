@@ -1609,7 +1609,7 @@ parseJSONData : function(oRequest, oFullResponse) {
             }
 
         } else {
-            YAHOO.log("JSON data could not be parsed: " +
+            YAHOO.log("JSON data could not be parsed due to invalid responseSchema.resultsList or invalid response: " +
                     lang.dump(oFullResponse), "error", this.toString());
 
             oParsedResponse.error = true;
