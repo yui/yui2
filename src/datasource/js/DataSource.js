@@ -1793,6 +1793,24 @@ lang.extend(util.FunctionDataSource, DS, {
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// FunctionDataSource public properties
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Context in which to execute the function. By default, is the DataSource
+ * instance itself. If set, the function will receive the DataSource instance
+ * as an additional argument. 
+ *
+ * @property scope
+ * @type Object
+ * @default null
+ */
+scope : null,
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // FunctionDataSource public methods
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -1813,7 +1831,9 @@ makeConnection : function(oRequest, oCallback, oCaller) {
 
     // Pass the request in as a parameter and
     // forward the return value to the handler
-    var oRawResponse = this.liveData(oRequest);
+    
+    
+    var oRawResponse = (this.scope) ? this.liveData.call(this.scope, oRequest, this) : this.liveData(oRequest);
     
     // Try to sniff data type if it has not been defined
     if(this.responseType === DS.TYPE_UNKNOWN) {
