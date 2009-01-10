@@ -117,15 +117,15 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
             sel     = this.select,
             options = p.get('rowsPerPageOptions'),
             opt_tem = document.createElement('option'),
-            i,len;
+            i,len,node,opt;
 
         while (sel.firstChild) {
             sel.removeChild(sel.firstChild);
         }
 
         for (i = 0, len = options.length; i < len; ++i) {
-            var node = opt_tem.cloneNode(false),
-                opt  = options[i];
+            node = opt_tem.cloneNode(false);
+            opt  = options[i];
             node.value = l.isValue(opt.value) ? opt.value : opt;
             node.innerHTML = l.isValue(opt.text)  ? opt.text  : opt;
             sel.appendChild(node);

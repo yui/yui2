@@ -1,3 +1,4 @@
+(function () {
 /**
  * The Paginator widget provides a set of controls to navigate through paged
  * data.
@@ -22,10 +23,10 @@
  * @param config {Object} Object literal to set instance and ui component
  * configuration.
  */
-YAHOO.widget.Paginator = function (config) {
-    var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
+function Paginator(config) {
+    var UNLIMITED = Paginator.VALUE_UNLIMITED,
         lang      = YAHOO.lang,
-        attrib, initialPage, records, perPage;
+        attrib, initialPage, records, perPage, startIndex;
 
     config = lang.isObject(config) ? config : {};
 
@@ -35,7 +36,7 @@ YAHOO.widget.Paginator = function (config) {
 
     // Set the basic config keys first
     this.set('rowsPerPage',config.rowsPerPage,true);
-    if (lang.isNumber(config.totalRecords)) {
+    if (Paginator.isNumeric(config.totalRecords)) {
         this.set('totalRecords',config.totalRecords,true);
     }
     
@@ -53,16 +54,16 @@ YAHOO.widget.Paginator = function (config) {
     records     = this.get('totalRecords');
     perPage     = this.get('rowsPerPage');
     if (initialPage > 1 && perPage !== UNLIMITED) {
-        var startIndex = (initialPage - 1) * perPage;
+        startIndex = (initialPage - 1) * perPage;
         if (records === UNLIMITED || startIndex < records) {
             this.set('recordOffset',startIndex,true);
         }
     }
-};
+}
 
 
 // Static members
-YAHOO.lang.augmentObject(YAHOO.widget.Paginator, {
+YAHOO.lang.augmentObject(Paginator, {
     /**
      * Incrementing index used to give instances unique ids.
      * @static
@@ -115,13 +116,39 @@ YAHOO.lang.augmentObject(YAHOO.widget.Paginator, {
      * @static
      * @property ui
      */
-    ui : {}
+    ui : {},
+
+    /**
+     * Similar to YAHOO.lang.isNumber, but allows numeric strings.  This is
+     * is used for attribute validation in conjunction with getters that return
+     * numbers.
+     *
+     * @method isNumeric
+     * @param v {Number|String} value to be checked for number or numeric string
+     * @returns {Boolean} true if the input is coercable into a finite number
+     * @static
+     */
+    isNumeric : function (v) {
+        return isFinite(+v);
+    },
+
+    /**
+     * Return a number or null from input
+     *
+     * @method toNumber
+     * @param n {Number|String} a number or numeric string
+     * @return Number
+     * @static
+     */
+    toNumber : function (n) {
+        return isFinite(+n) ? +n : null;
+    }
 
 },true);
 
 
 // Instance members and methods
-YAHOO.widget.Paginator.prototype = {
+Paginator.prototype = {
 
     // Instance members
 
@@ -170,7 +197,7 @@ YAHOO.widget.Paginator.prototype = {
      */
     initConfig : function () {
 
-        var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
+        var UNLIMITED = Paginator.VALUE_UNLIMITED,
             l         = YAHOO.lang;
 
         /**
@@ -180,7 +207,8 @@ YAHOO.widget.Paginator.prototype = {
          */
         this.setAttributeConfig('rowsPerPage', {
             value     : 0,
-            validator : l.isNumber
+            validator : Paginator.isNumeric,
+            setter    : Paginator.toNumber
         });
 
         /**
@@ -221,7 +249,8 @@ YAHOO.widget.Paginator.prototype = {
          */
         this.setAttributeConfig('totalRecords', {
             value     : 0,
-            validator : l.isNumber
+            validator : Paginator.isNumeric,
+            setter    : Paginator.toNumber
         });
 
         /**
@@ -236,13 +265,15 @@ YAHOO.widget.Paginator.prototype = {
             value     : 0,
             validator : function (val) {
                 var total = this.get('totalRecords');
-                if (l.isNumber(val)) {
+                if (Paginator.isNumeric(val)) {
+                    val = +val;
                     return total === UNLIMITED || total > val ||
                            (total === 0 && val === 0);
                 }
 
                 return false;
-            }
+            },
+            setter    : Paginator.toNumber
         });
 
         /**
@@ -253,7 +284,8 @@ YAHOO.widget.Paginator.prototype = {
          */
         this.setAttributeConfig('initialPage', {
             value     : 1,
-            validator : l.isNumber
+            validator : Paginator.isNumeric,
+            setter    : Paginator.toNumber
         });
 
         /**
@@ -267,7 +299,7 @@ YAHOO.widget.Paginator.prototype = {
          * @type string
          */
         this.setAttributeConfig('template', {
-            value : YAHOO.widget.Paginator.TEMPLATE_DEFAULT,
+            value : Paginator.TEMPLATE_DEFAULT,
             validator : l.isString
         });
 
@@ -321,7 +353,7 @@ YAHOO.widget.Paginator.prototype = {
          * @final
          */
         this.setAttributeConfig('id', {
-            value    : YAHOO.widget.Paginator.id++,
+            value    : Paginator.id++,
             readOnly : true
         });
 
@@ -344,7 +376,7 @@ YAHOO.widget.Paginator.prototype = {
      * @private
      */
     initUIComponents : function () {
-        var ui = YAHOO.widget.Paginator.ui,
+        var ui = Paginator.ui,
             name,UIComp;
         for (name in ui) {
             if (YAHOO.lang.hasOwnProperty(ui,name)) {
@@ -447,7 +479,7 @@ YAHOO.widget.Paginator.prototype = {
     _syncRecordOffset : function (e) {
         var v = e.newValue,rpp,state;
         if (e.prevValue !== v) {
-            if (v !== YAHOO.widget.Paginator.VALUE_UNLIMITED) {
+            if (v !== Paginator.VALUE_UNLIMITED) {
                 rpp = this.get('rowsPerPage');
 
                 if (rpp && this.get('recordOffset') >= v) {
@@ -520,26 +552,26 @@ YAHOO.widget.Paginator.prototype = {
         }
 
         // Forgo rendering if only one page and alwaysVisible is off
-        var totalRecords = this.get('totalRecords');
-        if (totalRecords !== YAHOO.widget.Paginator.VALUE_UNLIMITED &&
+        var totalRecords   = this.get('totalRecords'),
+            Dom            = YAHOO.util.Dom,
+            template       = this.get('template'),
+            containerClass = this.get('containerClass'),
+            i,len,c,id_base,markers,j,jlen,m,mp,name,UIComp,comp;
+
+        if (totalRecords !== Paginator.VALUE_UNLIMITED &&
             totalRecords < this.get('rowsPerPage') &&
             !this.get('alwaysVisible')) {
             return;
         }
 
-        var Dom            = YAHOO.util.Dom,
-            template       = this.get('template'),
-            containerClass = this.get('containerClass');
-
         // add marker spans to the template html to indicate drop zones
         // for ui components
         template = template.replace(/\{([a-z0-9_ \-]+)\}/gi,
             '<span class="yui-pg-ui $1"></span>');
-        for (var i = 0, len = this._containers.length; i < len; ++i) {
-            var c       = this._containers[i],
-                // ex. yui-pg0-1 (first paginator, second container)
-                id_base = YAHOO.widget.Paginator.ID_BASE + this.get('id') +
-                          '-' + i;
+        for (i = 0, len = this._containers.length; i < len; ++i) {
+            c = this._containers[i];
+            // ex. yui-pg0-1 (first paginator, second container)
+            id_base = Paginator.ID_BASE + this.get('id') + '-' + i;
 
             if (!c) {
                 continue;
@@ -553,16 +585,16 @@ YAHOO.widget.Paginator.prototype = {
             c.innerHTML = template;
 
             // Replace each marker with the ui component's render() output
-            var markers = Dom.getElementsByClassName('yui-pg-ui','span',c);
+            markers = Dom.getElementsByClassName('yui-pg-ui','span',c);
 
-            for (var j = 0, jlen = markers.length; j < jlen; ++j) {
-                var m      = markers[j],
-                    mp     = m.parentNode,
-                    name   = m.className.replace(/\s*yui-pg-ui\s+/g,''),
-                    UIComp = YAHOO.widget.Paginator.ui[name];
+            for (j = 0, jlen = markers.length; j < jlen; ++j) {
+                m      = markers[j];
+                mp     = m.parentNode;
+                name   = m.className.replace(/\s*yui-pg-ui\s+/g,'');
+                UIComp = Paginator.ui[name];
 
                 if (YAHOO.lang.isFunction(UIComp)) {
-                    var comp = new UIComp(this);
+                    comp = new UIComp(this);
                     if (YAHOO.lang.isFunction(comp.render)) {
                         mp.replaceChild(comp.render(id_base),m);
                     }
@@ -601,13 +633,14 @@ YAHOO.widget.Paginator.prototype = {
      * @method updateVisibility
      */
     updateVisibility : function (e) {
-        var alwaysVisible = this.get('alwaysVisible');
+        var alwaysVisible = this.get('alwaysVisible'),
+            totalRecords,visible,rpp,rppOptions,i,len;
+
         if (e.type === 'alwaysVisibleChange' || !alwaysVisible) {
-            var totalRecords = this.get('totalRecords'),
-                visible = true,
-                rpp = this.get('rowsPerPage'),
-                rppOptions = this.get('rowsPerPageOptions'),
-                i,len;
+            totalRecords = this.get('totalRecords');
+            visible      = true;
+            rpp          = this.get('rowsPerPage');
+            rppOptions   = this.get('rowsPerPageOptions');
 
             if (YAHOO.lang.isArray(rppOptions)) {
                 for (i = 0, len = rppOptions.length; i < len; ++i) {
@@ -615,7 +648,7 @@ YAHOO.widget.Paginator.prototype = {
                 }
             }
 
-            if (totalRecords !== YAHOO.widget.Paginator.VALUE_UNLIMITED &&
+            if (totalRecords !== Paginator.VALUE_UNLIMITED &&
                 totalRecords <= rpp) {
                 visible = false;
             }
@@ -650,16 +683,16 @@ YAHOO.widget.Paginator.prototype = {
      * @return {number}
      */
     getTotalPages : function () {
-        var records = this.get('totalRecords');
-        var perPage = this.get('rowsPerPage');
+        var records = this.get('totalRecords'),
+            perPage = this.get('rowsPerPage');
 
         // rowsPerPage not set.  Can't calculate
         if (!perPage) {
             return null;
         }
 
-        if (records === YAHOO.widget.Paginator.VALUE_UNLIMITED) {
-            return YAHOO.widget.Paginator.VALUE_UNLIMITED;
+        if (records === Paginator.VALUE_UNLIMITED) {
+            return Paginator.VALUE_UNLIMITED;
         }
 
         return Math.ceil(records/perPage);
@@ -678,7 +711,7 @@ YAHOO.widget.Paginator.prototype = {
 
         var totalPages = this.getTotalPages();
 
-        return (totalPages === YAHOO.widget.Paginator.VALUE_UNLIMITED || totalPages >= page);
+        return (totalPages === Paginator.VALUE_UNLIMITED || totalPages >= page);
     },
 
     /**
@@ -703,7 +736,7 @@ YAHOO.widget.Paginator.prototype = {
         var currentPage = this.getCurrentPage(),
             totalPages  = this.getTotalPages();
 
-        return currentPage && (totalPages === YAHOO.widget.Paginator.VALUE_UNLIMITED || currentPage < totalPages);
+        return currentPage && (totalPages === Paginator.VALUE_UNLIMITED || currentPage < totalPages);
     },
 
     /**
@@ -755,7 +788,7 @@ YAHOO.widget.Paginator.prototype = {
         }
 
         start = (page - 1) * perPage;
-        if (records !== YAHOO.widget.Paginator.VALUE_UNLIMITED) {
+        if (records !== Paginator.VALUE_UNLIMITED) {
             if (start >= records) {
                 return null;
             }
@@ -801,13 +834,13 @@ YAHOO.widget.Paginator.prototype = {
      * changeRequest event
      */
     setRowsPerPage : function (rpp,silent) {
-        if (YAHOO.lang.isNumber(rpp) && rpp > 0 &&
-            rpp !== this.get('rowsPerPage')) {
+        if (Paginator.isNumeric(rpp) && +rpp > 0 &&
+            +rpp !== this.get('rowsPerPage')) {
             if (this.get('updateOnChange') || silent) {
                 this.set('rowsPerPage',rpp);
             } else {
                 this.fireEvent('changeRequest',
-                    this.getState({'rowsPerPage':rpp}));
+                    this.getState({'rowsPerPage':+rpp}));
             }
         }
     },
@@ -828,13 +861,13 @@ YAHOO.widget.Paginator.prototype = {
      * @param silent {boolean} whether to forcibly avoid firing the changeRequest event
      */
     setTotalRecords : function (total,silent) {
-        if (YAHOO.lang.isNumber(total) && total >= 0 &&
-            total !== this.get('totalRecords')) {
+        if (Paginator.isNumeric(total) && +total >= 0 &&
+            +total !== this.get('totalRecords')) {
             if (this.get('updateOnChange') || silent) {
                 this.set('totalRecords',total);
             } else {
                 this.fireEvent('changeRequest',
-                    this.getState({'totalRecords':total}));
+                    this.getState({'totalRecords':+total}));
             }
         }
     },
@@ -856,13 +889,13 @@ YAHOO.widget.Paginator.prototype = {
      * @param silent {boolean} whether to forcibly avoid firing the changeRequest event
      */
     setStartIndex : function (offset,silent) {
-        if (YAHOO.lang.isNumber(offset) && offset >= 0 &&
-            offset !== this.get('recordOffset')) {
+        if (Paginator.isNumeric(offset) && +offset >= 0 &&
+            +offset !== this.get('recordOffset')) {
             if (this.get('updateOnChange') || silent) {
                 this.set('recordOffset',offset);
             } else {
                 this.fireEvent('changeRequest',
-                    this.getState({'recordOffset':offset}));
+                    this.getState({'recordOffset':+offset}));
             }
         }
     },
@@ -892,9 +925,8 @@ YAHOO.widget.Paginator.prototype = {
      * </ul>
      */
     getState : function (changes) {
-        var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
-            l         = YAHOO.lang,
-            M = Math, max = M.max, floor = M.floor, ceil = M.ceil,
+        var UNLIMITED = Paginator.VALUE_UNLIMITED,
+            M = Math, max = M.max, ceil = M.ceil,
             currentState, state, offset;
 
         function normalizeOffset(offset,total,rpp) {
@@ -929,19 +961,19 @@ YAHOO.widget.Paginator.prototype = {
             before       : currentState,
 
             rowsPerPage  : changes.rowsPerPage || currentState.rowsPerPage,
-            totalRecords : (l.isNumber(changes.totalRecords) ?
+            totalRecords : (Paginator.isNumeric(changes.totalRecords) ?
                                 max(changes.totalRecords,UNLIMITED) :
-                                currentState.totalRecords)
+                                +currentState.totalRecords)
         };
 
         if (state.totalRecords === 0) {
             state.recordOffset =
             state.page         = 0;
         } else {
-            offset = l.isNumber(changes.page) ?
+            offset = Paginator.isNumeric(changes.page) ?
                         (changes.page - 1) * state.rowsPerPage :
-                        l.isNumber(changes.recordOffset) ?
-                            changes.recordOffset :
+                        Paginator.isNumeric(changes.recordOffset) ?
+                            +changes.recordOffset :
                             currentState.recordOffset;
 
             state.recordOffset = normalizeOffset(offset,
@@ -1013,4 +1045,7 @@ YAHOO.widget.Paginator.prototype = {
     }
 };
 
-YAHOO.lang.augmentProto(YAHOO.widget.Paginator, YAHOO.util.AttributeProvider);
+YAHOO.lang.augmentProto(Paginator, YAHOO.util.AttributeProvider);
+
+YAHOO.widget.Paginator = Paginator;
+})();
