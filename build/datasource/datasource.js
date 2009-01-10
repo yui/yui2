@@ -2139,7 +2139,7 @@ makeConnection : function(oRequest, oCallback, oCaller) {
     var _xhrSuccess = function(oResponse) {
         // If response ID does not match last made request ID,
         // silently fail and wait for the next response
-        if(oResponse && (this.asyncMode == "ignoreStaleResponses") &&
+        if(oResponse && (this.connXhrMode == "ignoreStaleResponses") &&
                 (oResponse.tId != oQueue.conn.tId)) {
             return null;
         }
