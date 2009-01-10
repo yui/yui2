@@ -3,8 +3,10 @@
 	import com.yahoo.astra.fl.charts.series.ISeries;
 	import com.yahoo.astra.fl.utils.UIComponentUtil;
 	import com.yahoo.astra.utils.NumberUtil;
+	import com.yahoo.astra.fl.charts.CartesianChart;	
 	
 	import flash.utils.Dictionary;
+	import fl.core.UIComponent;
 	
 	/**
 	 * An axis type representing a numeric range from minimum to maximum
@@ -157,7 +159,7 @@
 		 * @private
 		 * Storage for the minor unit.
 		 */
-		private var _minorUnit:Number = 5;
+		private var _minorUnit:Number = 0;
 		
 		/**
 		 * @private
@@ -311,6 +313,36 @@
 		 * @private
 		 */
 		private var _dataMaximum:Number = NaN;
+		
+		/**
+		 * @private
+		 */
+		private var _numLabels:Number;
+		
+		/**
+		 * @private
+		 */		
+		private var _numLabelsSetByUser:Boolean = false;
+
+		/**
+		 * @inheritDoc
+		 */
+		public function get numLabels():Number
+		{
+			return _numLabels;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set numLabels(value:Number):void
+		{
+			if(_numLabelsSetByUser) return;
+			_numLabels = value;
+			_numLabelsSetByUser = true;
+			_majorUnitSetByUser = false;
+			_minorUnitSetByUser = false;
+		}		
 			
 	//--------------------------------------
 	//  Public Methods
@@ -381,58 +413,28 @@
 			}
 			return numericValue;
 		}
-	
+			
 		/**
 		 * @inheritDoc
 		 */
-		public function updateScale(data:Array):void
-		{
-			var seriesCount:int = data.length;
-			var dataMinimum:Number = NaN;
-			var dataMaximum:Number = NaN;
-			for(var i:int = 0; i < seriesCount; i++)
-			{
-				var series:ISeries = data[i] as ISeries;
-				var seriesLength:int = series.length;
-				for(var j:int = 0; j < seriesLength; j++)
-				{
-					var item:Object = series.dataProvider[j];
-					if(item === null)
-					{
-						continue;
-					}
-					
-					//automatically calculates stacked values
-					var value:Number = this.chart.itemToAxisValue(series, j, this) as Number;
-					if(isNaN(value))
-					{
-						continue; //skip bad data
-					}
-					
-					//don't let bad data propogate
-					//Math.min()/Math.max() with a NaN argument will choose NaN. Ya Rly.
-					dataMinimum = isNaN(dataMinimum) ? value : Math.min(dataMinimum, value);
-					dataMaximum = isNaN(dataMaximum) ? value : Math.max(dataMaximum, value);
-				}
-			}
-			
-			if(!isNaN(dataMinimum) && !isNaN(dataMaximum))
-			{
-				this._dataMinimum = dataMinimum;
-				this._dataMaximum = dataMaximum;
-			}
-			else
-			{
-				//some sensible defaults
-				this._dataMinimum = 0;
-				this._dataMaximum = 1;
-			}
-			
+		public function updateScale():void
+		{			
 			this.resetScale();
 			this.calculatePositionMultiplier();
 			
 			this.renderer.ticks = this.createAxisData(this.majorUnit);
 			this.renderer.minorTicks = this.createAxisData(this.minorUnit);
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		public function getMaxLabel():String
+		{
+			var maxLength:Number = 0;
+			var currentLength:Number;
+			var maxString:String =  Math.max(this.minimum, this.maximum).toString();
+			return maxString as String;	
 		}
 		
 	//--------------------------------------
@@ -500,13 +502,52 @@
 				return;
 			}
 			
-			var range:Number = this.maximum - this.minimum;
-			var idealMajorUnit:Number = this.renderer.length / IDEAL_PIXELS_BETWEEN_MAJOR_POSITIONS;
-			if(idealMajorUnit > 0)
+			var approxLabelDistance:Number;
+			//Check to see if this axis is horizontal. Since the width of labels will be variable, we will need to apply a different alogrithm to determine the majorUnit.
+			if((this.chart as CartesianChart).horizontalAxis == this)
 			{
-				this._majorUnit = this.niceNumber(range / idealMajorUnit);
+				//extract the approximate width of the labels by getting the textWidth of the maximum date when rendered by the label function with the textFormat of the renderer.
+				approxLabelDistance = this.maxLabelWidth;			
 			}
-			else this._majorUnit = 0;
+			else
+			{
+				approxLabelDistance = this.maxLabelHeight;	
+			}
+			var labelPadding:Number = 2; 
+			approxLabelDistance += (labelPadding*2);
+			
+			var difference:Number = Math.round(Math.abs(this.minimum -  this.maximum));
+			var tempMajorUnit:Number = 0; 
+
+			var maxLabels:Number = Math.floor((this.renderer.length - labelPadding)/approxLabelDistance);
+			
+			//If set by user, use specified number of labels unless its too many
+			if(this._numLabelsSetByUser)
+			{
+				maxLabels = Math.min(maxLabels, this.numLabels);
+			}
+
+
+			tempMajorUnit = difference/maxLabels;
+			tempMajorUnit = Math.ceil(tempMajorUnit);
+			tempMajorUnit = Math.min(tempMajorUnit, Math.round(difference/2));			
+			
+			
+			if(difference%tempMajorUnit != 0 && !this._numLabelsSetByUser)
+			{
+				var adjusted:Boolean = false;
+				var len:Number = Math.min(tempMajorUnit, ((difference/2)-tempMajorUnit));
+				for(var i:int = 0;i < len; i++)
+				{
+					tempMajorUnit++;
+					if(difference%tempMajorUnit == 0)
+					{
+						this._majorUnit = tempMajorUnit;
+						break;
+					}
+				}		
+			}			
+			this._majorUnit = tempMajorUnit;
 		}
 
 		/**
@@ -522,34 +563,18 @@
 			
 			var range:Number = this.maximum - this.minimum;
 			var majorUnitSpacing:Number = this.renderer.length * (this.majorUnit / range);
-			var maximumMinorValueCount:int = int(majorUnitSpacing / IDEAL_PIXELS_BETWEEN_MINOR_POSITIONS);
-			if(maximumMinorValueCount > 0)
+
+			if(this._majorUnit != 1)
 			{
-				var smallestMinorUnit:Number = this._majorUnit / maximumMinorValueCount;
-				
-				this._minorUnit = smallestMinorUnit;
-				do
+				if(this._majorUnit % 2 == 0)
 				{
-					var lastMinorUnit:Number = this._minorUnit;
-					this._minorUnit = this.niceNumber(this._minorUnit);
-					
-					if(lastMinorUnit == this._minorUnit)
-					{
-						this._minorUnit = 0;
-						break;
-					}
-					if(this._minorUnit >= this._majorUnit)
-					{
-						this._minorUnit = this._majorUnit;
-						break;
-					}
+					this._minorUnit = this._majorUnit / 2;
 				}
-				//make sure we have a good division (not 25 and 10, for example)
-				while(this._minorUnit != 0 && this._majorUnit % this._minorUnit != 0)
-			}
-			else
-			{
-				this._minorUnit = 0;
+				else if(this._majorUnit % 3 == 0)
+				{
+					this._minorUnit = this._majorUnit / 3;
+				}
+				else this._minorUnit = 0;
 			}
 		}
 		
@@ -722,8 +747,7 @@
 		    {
 		        value = 1.0e-8;
 		    }
-		
-			
+					
 		    for(var i:int = count; i > 0; i--)
 		    {
 		    	value *= 10;
@@ -768,9 +792,54 @@
 			{
 				this.positionMultiplier = 0;
 				return;
-			}
-			
+			}			
 			this.positionMultiplier = this.renderer.length / range;
 		}
+		/**
+		 * @private
+		 */
+		override protected function parseDataProvider():void
+		{
+			var seriesCount:int = this.dataProvider.length;
+			var dataMinimum:Number = NaN;
+			var dataMaximum:Number = NaN;
+			for(var i:int = 0; i < seriesCount; i++)
+			{
+				var series:ISeries = this.dataProvider[i] as ISeries;
+				var seriesLength:int = series.length;
+				for(var j:int = 0; j < seriesLength; j++)
+				{
+					var item:Object = series.dataProvider[j];
+					if(item === null)
+					{
+						continue;
+					}
+					
+					//automatically calculates stacked values
+					var value:Number = this.chart.itemToAxisValue(series, j, this) as Number;
+					if(isNaN(value))
+					{
+						continue; //skip bad data
+					}
+					
+					//don't let bad data propogate
+					//Math.min()/Math.max() with a NaN argument will choose NaN. Ya Rly.
+					dataMinimum = isNaN(dataMinimum) ? value : Math.min(dataMinimum, value);
+					dataMaximum = isNaN(dataMaximum) ? value : Math.max(dataMaximum, value);
+				}
+			}
+			
+			if(!isNaN(dataMinimum) && !isNaN(dataMaximum))
+			{
+				this._dataMinimum = dataMinimum;
+				this._dataMaximum = dataMaximum;
+			}
+			else
+			{
+				//some sensible defaults
+				this._dataMinimum = 0;
+				this._dataMaximum = 1;
+			}									
+		}		
 	}
 }

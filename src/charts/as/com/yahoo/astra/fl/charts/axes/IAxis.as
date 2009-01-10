@@ -1,4 +1,4 @@
-package com.yahoo.astra.fl.charts.axes
+﻿package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.IChart;
 	
@@ -65,13 +65,53 @@ package com.yahoo.astra.fl.charts.axes
 		function set labelFunction(value:Function):void
 		
 		/**
+		 * Gets or sets the maximum width of a label
+		 */
+		function get maxLabelWidth():Number;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set maxLabelWidth(value:Number):void;
+		/**
+		 * Gets or sets the maximum width of a label
+		 */
+		function get maxLabelHeight():Number;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set maxLabelHeight(value:Number):void;		
+
+		/**
+		 * Data used in determining the axis scale
+		 */
+		function get dataProvider():Array;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set dataProvider(value:Array):void;
+		
+		/**
+		 * Number of labels specified by the user to appear on the axis.
+		 * <p>When this value is set, the chart will attempt to set the
+		 * specified number of labels on the axis.</p>
+		 */
+		function get numLabels():Number;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set numLabels(value:Number):void;
+
+		/**
 		 * Determines the axis scale based on the input data set.
 		 * Seperating this function from the draw method optimizes processing time,
 		 * and it allows the chart to synchronize its axes.
 		 * 
-		 * @param data		The complete dataset that could be drawn on the axis.
 		 */
-		function updateScale(data:Array):void;
+		function updateScale():void;
 		
 		/**
 		 * Calculates the position of a data point along the axis.
@@ -88,5 +128,12 @@ package com.yahoo.astra.fl.charts.axes
 		 * @return			the formatted label text
 		 */
 		function valueToLabel(value:Object):String;
+		
+		/**
+		 * Returns the maximum string length of a label on the axis.
+		 *
+		 * @return 			the formatted label
+		 */
+		function getMaxLabel():String;		
 	}
 }

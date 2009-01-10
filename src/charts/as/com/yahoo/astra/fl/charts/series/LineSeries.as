@@ -335,7 +335,7 @@
 				}
 				else
 				{
-					this.closeAreaFill(primaryIsVertical, originPosition, firstValidPosition, lastValidPosition);
+					if(showAreaFill) this.closeAreaFill(primaryIsVertical, originPosition, firstValidPosition, lastValidPosition);
 					this.setPrimaryLineStyle();
 					this.beginAreaFill(showAreaFill, fillColor);
 					lastMarkerValid = false;
@@ -392,6 +392,7 @@
 		 */
 		private function closeAreaFill(vertical:Boolean, origin:Number, firstValidPosition:Point, lastValidPosition:Point):void
 		{
+			if(isNaN(origin) || firstValidPosition == null || lastValidPosition == null) return;
 			this.graphics.lineStyle(0, 0, 0);
 			if(vertical)
 			{
@@ -406,7 +407,7 @@
 				this.graphics.lineTo(firstValidPosition.x, firstValidPosition.y);
 			}
 			this.graphics.endFill();
-		}
+		}	
 		
 	}
 }

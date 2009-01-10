@@ -1,8 +1,9 @@
-package com.yahoo.astra.fl.charts.axes
+﻿package com.yahoo.astra.fl.charts.axes
 {	
 	import com.yahoo.astra.utils.DynamicRegistration;
 	import com.yahoo.astra.utils.GeomUtil;
 	import com.yahoo.astra.utils.NumberUtil;
+	import com.yahoo.astra.display.BitmapText;
 	
 	import fl.core.InvalidationType;
 	import fl.core.UIComponent;
@@ -264,7 +265,7 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private
 		 * The TextField used to display the axis title.
 		 */
-		protected var titleTextField:TextField;
+		protected var titleTextField:BitmapText;
 		
 		/**
 		 * @inheritDoc
@@ -390,6 +391,18 @@ package com.yahoo.astra.fl.charts.axes
 			}
 		}
 		
+		private var _outerTickOffset:Number = 0;
+		
+		public function get outerTickOffset():Number
+		{
+			return _outerTickOffset;	
+		}
+		
+		public function set outerTickOffset(value:Number):void
+		{
+			_outerTickOffset = value;
+		}
+		
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
@@ -397,7 +410,7 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * @inheritDoc
 		 */
-		public function updateBounds():void
+		public function updateAxis():void
 		{
 			var showLabels:Boolean = this.getStyleValue("showLabels") as Boolean;
 			var labelDistance:Number = this.getStyleValue("labelDistance") as Number;
@@ -411,8 +424,6 @@ package com.yahoo.astra.fl.charts.axes
 			this.clearCache();
 			
 			this.updateTitle();
-			
-			this.calculateContentBounds();
 		}
 		
 	//--------------------------------------
@@ -428,7 +439,7 @@ package com.yahoo.astra.fl.charts.axes
 			
 			if(!this.titleTextField)
 			{
-				this.titleTextField = new TextField();
+				this.titleTextField = new BitmapText();
 				this.titleTextField.autoSize = TextFieldAutoSize.LEFT;
 				this.addChild(this.titleTextField);
 			}
@@ -468,7 +479,7 @@ package com.yahoo.astra.fl.charts.axes
 			var labelRotation:Number = this.getStyleValue("labelRotation") as Number;
 			var embedFonts:Boolean = this.getStyleValue("embedFonts") as Boolean;
 			labelRotation = Math.max(-90, Math.min(labelRotation, 90));
-			this.positionLabels(this.ticks, showLabels, labelDistance, labelRotation, embedFonts);
+			//this.positionLabels(this.ticks, showLabels, labelDistance, labelRotation, embedFonts);
 			
 			var tickPosition:String = this.getStyleValue("tickPosition") as String;
 			var tickLength:Number = this.getStyleValue("tickLength") as Number;
@@ -503,9 +514,9 @@ package com.yahoo.astra.fl.charts.axes
 				this.titleTextField.defaultTextFormat = textFormat;
 				this.titleTextField.embedFonts = embedFonts;
 				this.titleTextField.text = this.title;
-				if(this.orientation == AxisOrientation.VERTICAL && embedFonts)
+				if(this.orientation == AxisOrientation.VERTICAL)
 				{
-					this.titleTextField.rotation = 90;
+					this.titleTextField.rotation = -90;
 				}
 			}
 		}
@@ -522,7 +533,7 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				if(this.orientation == AxisOrientation.VERTICAL)
 				{
-					if(this.titleTextField.rotation != 0)
+					if(this.titleTextField.rotation > 0)
 					{
 						this.titleTextField.x = this.titleTextField.width;
 					}
@@ -672,94 +683,11 @@ package com.yahoo.astra.fl.charts.axes
 			var cacheLength:int = this._labelCache.length;
 			for(var i:int = 0; i < cacheLength; i++)
 			{
-				var label:TextField = TextField(this._labelCache.shift());
+				var label:BitmapText = BitmapText(this._labelCache.shift());
 				this.removeChild(label);
 			}
 		}
-		
-		/**
-		 * @private
-		 * If labels overlap, some may need to be hidden.
-		 */
-		protected function handleOverlappingLabels():void
-		{
-			var showLabels:Boolean = this.getStyleValue("showLabels");
-			var hideOverlappingLabels:Boolean = this.getStyleValue("hideOverlappingLabels");
-			if(!showLabels || !hideOverlappingLabels)
-			{
-				return;
-			}
-			
-			//sort the labels array so that they're in visual order
-			//it doesn't matter if we change the indexes in this Array
-			/*if(this.orientation == AxisOrientation.VERTICAL)
-			{
-				//be sure to reverse if we have a vertical orientation
-				//because the axis starts from the bottom
-				this.labelTextFields = this.labelTextFields.sortOn("y", Array.NUMERIC).reverse();
-			}
-			else
-			{
-				this.labelTextFields = this.labelTextFields.sortOn("x", Array.NUMERIC);
-			}*/
-			
-			var labelRotation:Number = this.getStyleValue("labelRotation") as Number;
-			var lastVisibleLabel:TextField;
-			var labelCount:int = this.labelTextFields.length;
-			for(var i:int = 0; i < labelCount; i++)
-			{
-				var index:int = labelRotation >= 0 ? i : (labelCount - i - 1);
-				var label:TextField = TextField(this.labelTextFields[index]);
-				label.visible = true;
-				if(lastVisibleLabel)
-				{
-					if(this.orientation == AxisOrientation.HORIZONTAL)
-					{
-						if(labelRotation >= 0)
-						{
-							var xDifference:Number = label.x - lastVisibleLabel.x;
-						}
-						else
-						{
-							xDifference = (lastVisibleLabel.x + lastVisibleLabel.textWidth) - (label.x + label.textWidth);
-						}
-						if(lastVisibleLabel.textWidth > xDifference)
-						{
-							var offset:Point = Point.polar(xDifference, GeomUtil.degreesToRadians(labelRotation));
-							if(Math.abs(offset.y) <= label.textHeight)
-							{
-								label.visible = false;
-							}
-						}
-						
-					}
-					else //vertical
-					{
-						if(labelRotation >= 0)
-						{
-							var yDifference:Number = lastVisibleLabel.y - label.y;
-						}
-						else
-						{
-							yDifference = (lastVisibleLabel.y + lastVisibleLabel.textHeight) - (label.y + label.textHeight);
-						}
-						if(lastVisibleLabel.textHeight > yDifference)
-						{
-							offset = Point.polar(yDifference, GeomUtil.degreesToRadians(labelRotation));
-							if(offset.x <= label.textWidth)
-							{
-								//label.visible = false;
-							}
-						}
-					}
-				}
-				if(label.visible)
-				{
-					lastVisibleLabel = label;
-				}
-			}
-		}
-		
+				
 		/**
 		 * @private
 		 * Creates the labels, sets their text and styles them. Positions the labels too.
@@ -782,7 +710,7 @@ package com.yahoo.astra.fl.charts.axes
 					continue;
 				}
 				
-				var label:TextField = this.getLabel();
+				var label:BitmapText = this.getLabel();
 				label.defaultTextFormat = textFormat;
 				label.embedFonts = embedFonts;
 				label.rotation = 0;
@@ -801,268 +729,103 @@ package com.yahoo.astra.fl.charts.axes
 			var labelCount:int = this.labelTextFields.length;
 			for(var i:int = 0; i < labelCount; i++)
 			{
-				var label:TextField = TextField(this.labelTextFields[i]);
+				var label:BitmapText = BitmapText(this.labelTextFields[i]);
 				label.rotation = 0;
 				var axisData:AxisData = AxisData(this.ticks[i]);
 				var position:Number = axisData.position;
 				if(this.orientation == AxisOrientation.VERTICAL)
 				{
 					position += this.contentBounds.y;
+					
 					if(showLabels)
 					{
-						label.x = this.contentBounds.x - label.width - labelDistance;
-						label.y = position - label.height / 2;
+						label.x = this.contentBounds.x - labelDistance - this.outerTickOffset;
+						label.y = position;
 					}
 					
-					if(!embedFonts || labelRotation == 0)
+					label.rotation = labelRotation;
+					if(labelRotation > 0)
 					{
-						//do nothing. already ideally positioned
+						if(labelRotation < 90)
+						{
+							label.x -= label.width *  (1 - labelRotation/90);
+							label.y -= label.height * (.5 + labelRotation/180);
+						}
+						else
+						{
+							label.y -= label.height/2;
+						}
 					}
-					else if(labelRotation < 90 && labelRotation > 0)
+					else if(labelRotation < 0)
+					{	
+						if(labelRotation > -90)
+						{
+							label.x -= label.width - 5;
+							label.y += label.height * (Math.abs(labelRotation/90));							
+						}
+						else
+						{
+							label.x -= label.width;
+							label.y += label.height /2;							
+						}
+					}
+					else
 					{
-						label.x -= (label.height * labelRotation / 180);
-						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
+						label.x -= label.width;
+						label.y -= label.height /2;
 					}
-					else if(labelRotation > -90 && labelRotation < 0)
-					{
-						label.x -= (label.height * Math.abs(labelRotation) / 180);
-						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
-					}
-					else if(labelRotation == -90)
-					{
-						label.y -= label.width / 2;
-						label.x -= (label.height * Math.abs(labelRotation) / 180);
-						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
-					}
-					else //90
-					{
-						label.y += label.width / 2;
-						label.x -= (label.height * Math.abs(labelRotation) / 180);
-						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
-					}
+					Math.round(label.x);
+					Math.round(label.y);
 				}
 				else //horizontal
 				{
 					position += this.contentBounds.x;
+					
 					if(showLabels)
 					{
-						label.y = this.contentBounds.height + labelDistance;
+						label.y = this.contentBounds.height + this.contentBounds.y + labelDistance + this.outerTickOffset;
 					}
 					
-					if(embedFonts && labelRotation > 0)
+					if(labelRotation > 0)
 					{
 						label.x = position;
-						label.y -= (label.height * labelRotation / 180);
-						DynamicRegistration.rotate(label, new Point(0, label.height / 2), labelRotation);
+						label.rotation = labelRotation;
+						label.x += label.textField.height * (Math.abs(labelRotation/180));
 					}
-					else if(embedFonts && labelRotation < 0)
-					{
-						label.x = position - label.width;
-						label.y -= (label.height * Math.abs(labelRotation) / 180);
-						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
+					else if(labelRotation < 0)
+					{						
+						label.x = position;
+						label.rotation = labelRotation;
+						label.x -= label.width * (1 - Math.abs(labelRotation/180));
+						label.y += label.height - (Math.sin((90 - labelRotation) * Math.PI/180) * label.textField.height);	
 					}
 					else //labelRotation == 0
 					{
 						label.x = position - label.width / 2;
 					}
+					label.x = Math.round(label.x);
+					label.y = Math.ceil(label.y);					
 				}
 			}
-			
-			this.handleOverlappingLabels();
 		}
 		
 		/**
 		 * @private
 		 * Either creates a new label TextField or retrieves one from the cache.
 		 */
-		protected function getLabel():TextField
+		protected function getLabel():BitmapText
 		{
 			if(this._labelCache.length > 0)
 			{
-				return TextField(this._labelCache.shift());
+				return BitmapText(this._labelCache.shift());
 			}
-			var label:TextField = new TextField();
+			var labelRotation:Number = this.getStyleValue("labelRotation") as Number;
+			var label:BitmapText = new BitmapText();
 			label.selectable = false;
-			label.autoSize = TextFieldAutoSize.LEFT;
+			label.autoSize = labelRotation < 0 ? TextFieldAutoSize.RIGHT : TextFieldAutoSize.LEFT;
 			this.addChild(label);
 			return label;
 		}
 		
-		/**
-		 * @private
-		 * Determines the rectangular bounds where data may be drawn within this axis.
-		 */
-		protected function calculateContentBounds():void
-		{
-			var oldContentBounds:Rectangle = this.contentBounds;
-			this._contentBounds = new Rectangle(0, 0, this.width, this.height);
-			
-			var overflowEnabled:Boolean = this.getStyleValue("overflowEnabled");
-			if(overflowEnabled)
-			{
-				return;
-			}
-			
-			var left:Number = 0;
-			var top:Number = 0;
-			var labelCount:int = this.labelTextFields.length;
-			for(var i:int = 0; i < labelCount; i++)
-			{
-				var label:TextField = TextField(this.labelTextFields[i]);
-				if(!label.visible)
-				{
-					continue;
-				}
-				var labelBounds:Rectangle = label.getBounds(this);
-				var xLabelOffset:Number = oldContentBounds.x - labelBounds.x;
-				if(xLabelOffset > 0)
-				{
-					left = Math.max(left, xLabelOffset);
-				}
-				var yLabelOffset:Number = oldContentBounds.y - labelBounds.y;
-				if(yLabelOffset > 0)
-				{
-					top = Math.max(top, yLabelOffset);
-				}
-			}
-			
-			left = Math.min(left, this._contentBounds.width);
-			top = Math.min(top, this._contentBounds.height);
-			this._contentBounds.x += left;
-			this._contentBounds.y += top;
-			this._contentBounds.width -= left;
-			this._contentBounds.height -= top;
-			
-			
-			var right:Number = 0;
-			var bottom:Number = 0;
-			for(i = 0; i < labelCount; i++)
-			{
-				label = TextField(this.labelTextFields[i]);
-				if(!label.visible)
-				{
-					continue;
-				}
-				labelBounds = label.getBounds(this);
-				var xLabelOverflow:Number = (labelBounds.x + labelBounds.width) - (oldContentBounds.x + oldContentBounds.width);
-				if(xLabelOverflow > 0)
-				{
-					right = Math.max(right, xLabelOverflow);
-				}
-				var yLabelOverflow:Number = (labelBounds.y + labelBounds.height) - (oldContentBounds.y + oldContentBounds.height);
-				if(yLabelOverflow > 0)
-				{
-					bottom = Math.max(bottom, yLabelOverflow);
-				}
-			}
-			
-			//don't let the axis calculate a negative size.
-			//this should let it fail gracefully
-			right = Math.min(right, this._contentBounds.width);
-			bottom = Math.min(bottom, this._contentBounds.height);
-			this._contentBounds.width -= right;
-			this._contentBounds.height -= bottom;
-
-			
-			var showTicks:Boolean = this.getStyleValue("showTicks") as Boolean;
-			var showMinorTicks:Boolean = this.getStyleValue("showMinorTicks") as Boolean;
-			var tickLength:Number = this.getStyleValue("tickLength") as Number;
-			var minorTickLength:Number = this.getStyleValue("minorTickLength") as Number;
-			var tickPosition:String = this.getStyleValue("tickPosition") as String;
-			var minorTickPosition:String = this.getStyleValue("minorTickPosition") as String;
-			if(this.orientation == AxisOrientation.VERTICAL)
-			{
-				var tickContentBoundsX:Number = 0;
-				if(showTicks)
-				{
-					switch(tickPosition)
-					{
-						case TickPosition.OUTSIDE:
-						case TickPosition.CROSS:
-							tickContentBoundsX = tickLength;
-							break;
-					}
-				}
-				if(showMinorTicks)
-				{
-					switch(minorTickPosition)
-					{
-						case TickPosition.OUTSIDE:
-						case TickPosition.CROSS:
-							tickContentBoundsX = Math.max(tickContentBoundsX, minorTickLength);
-					}
-				}
-				tickContentBoundsX = Math.min(tickContentBoundsX, this.contentBounds.width);
-				this._contentBounds.x += tickContentBoundsX;
-				this._contentBounds.width -= tickContentBoundsX;
-			}
-			else
-			{	
-				var tickHeight:Number = 0;
-				if(showTicks)
-				{
-					switch(tickPosition)
-					{
-						case TickPosition.OUTSIDE:
-						case TickPosition.CROSS:
-							tickHeight = tickLength;
-							break;
-					}
-				}
-				if(showMinorTicks)
-				{
-					switch(minorTickPosition)
-					{
-						case TickPosition.OUTSIDE:
-						case TickPosition.CROSS:
-							tickHeight = Math.max(tickHeight, minorTickLength);
-							break;
-					}
-				}
-				
-				tickHeight = Math.min(tickHeight, this.contentBounds.height);
-				this._contentBounds.height -= tickHeight;
-			}
-			
-			//account for the axis title
-			var showTitle:Boolean = this.getStyleValue("showTitle") as Boolean;
-			if(showTitle && this.title)
-			{
-				if(this.orientation == AxisOrientation.VERTICAL)
-				{
-					var titleContentBoundsX:Number = Math.min(this.titleTextField.width, this.contentBounds.width);
-					this._contentBounds.x += titleContentBoundsX;
-					this._contentBounds.width -= titleContentBoundsX;
-				}
-				else
-				{
-					var titleHeight:Number = Math.min(this.titleTextField.height, this.contentBounds.height);
-					this._contentBounds.height -= titleHeight;
-				}
-			}
-			
-			//correct for CS3 pixel rounding
-			var oldX:Number = this._contentBounds.x;
-			this._contentBounds.x = Math.round(this._contentBounds.x);
-			if(oldX > this._contentBounds.x)
-			{
-				this._contentBounds.width = Math.floor(this._contentBounds.width);
-			} 
-			else
-			{
-				this._contentBounds.width = Math.ceil(this._contentBounds.width);
-			}
-			
-			var oldY:Number = this._contentBounds.y;
-			this._contentBounds.y = Math.round(this._contentBounds.y);
-			if(oldY > this._contentBounds.y)
-			{
-				this._contentBounds.height = Math.floor(this._contentBounds.height);
-			} 
-			else
-			{
-				this._contentBounds.height = Math.ceil(this._contentBounds.height);
-			}
-		}
 	}
 }

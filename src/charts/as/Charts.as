@@ -1,4 +1,4 @@
-package
+﻿package
 {
 	import com.adobe.serialization.json.JSON;
 	import com.yahoo.astra.fl.charts.*;
@@ -558,7 +558,7 @@ package
 			var parsedStyles:Object = JSON.decode(styles);
 			for(var styleName:String in parsedStyles)
 			{
-				this.setStyle(styleName, parsedStyles[styleName], false);
+					this.setStyle(styleName, parsedStyles[styleName], false);
 			}
 		}
 		
@@ -1130,6 +1130,11 @@ package
 			if(styles.hideOverlappingLabels != null)
 			{
 				this.chart.setStyle(axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisHideOverlappingLabels", styles.hideOverlappingLabels);
+			}
+			
+			if(styles.labelRotation)
+			{
+				this.chart.setStyle(axisName + "AxisLabelRotation", styles.labelRotation);
 			}
 			
 			if(styles.majorGridLines)

@@ -315,5 +315,44 @@
 			
 			return hours - 12;
 		}
+		
+		public static function getDateDifferenceByTimeUnit(minDate:Date, maxDate:Date, timeUnit:String):Number
+		{
+			var dateDifference:Number = 0;
+			var maxDateNumber:Number;
+			var minDateNumber:Number;
+			
+			switch(timeUnit)
+			{
+				case TimeUnit.YEAR:
+					maxDateNumber = (maxDate.getFullYear() - minDate.getFullYear());
+				break;
+				
+				case TimeUnit.MONTH:
+					dateDifference = (12 - minDate.getMonth()) + (maxDate.getFullYear() - minDate.getFullYear() - 1)*12 + maxDate.getMonth();				
+				break;		
+				
+				case TimeUnit.DAY:
+					dateDifference = Math.round(Math.abs(maxDate.valueOf() - minDate.valueOf()) / (1000 * 60 * 60 * 24));
+				break;
+				
+				case TimeUnit.HOURS:
+					dateDifference = Math.abs(minDate.valueOf() - maxDate.valueOf()) / (60 * 60 * 1000);
+				break;
+				
+				case TimeUnit.MINUTES:
+					dateDifference = Math.abs(minDate.valueOf() - maxDate.valueOf()) / (60 * 1000);
+				break;	
+				
+				case TimeUnit.SECONDS:
+					dateDifference = Math.abs(minDate.valueOf() - maxDate.valueOf()) / 1000;
+				break;
+				
+				case TimeUnit.MILLISECONDS:
+					dateDifference = Math.abs(minDate.valueOf() - maxDate.valueOf());
+				break;
+			}
+			return dateDifference;
+		}		
 	}
 }

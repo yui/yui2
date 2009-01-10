@@ -1,4 +1,4 @@
-package com.yahoo.yui.charts
+﻿package com.yahoo.yui.charts
 {
 	import com.yahoo.astra.fl.charts.axes.CategoryAxis;
 	import com.yahoo.astra.fl.charts.axes.IAxis;
@@ -84,6 +84,10 @@ package com.yahoo.yui.charts
 				{
 					numericAxis.minorUnit = input.minorUnit;
 				}
+				if(input.numLabels != null && !isNaN(input.numLabels))
+				{
+					numericAxis.numLabels = input.numLabels;
+				}
 				numericAxis.snapToUnits = input.snapToUnits;
 				numericAxis.alwaysShowZero = input.alwaysShowZero;
 				numericAxis.scale = input.scale;
@@ -116,6 +120,10 @@ package com.yahoo.yui.charts
 				{
 					timeAxis.minorTimeUnit = input.minorTimeUnit;
 				}
+				if(input.numLabels != null && !isNaN(input.numLabels))
+				{
+					timeAxis.numLabels = input.numLabels;
+				}
 				timeAxis.snapToUnits = input.snapToUnits;
 				timeAxis.stackingEnabled = input.stackingEnabled;
 			}
@@ -125,6 +133,10 @@ package com.yahoo.yui.charts
 				if(input.categoryNames != null)
 				{
 					categoryAxis.categoryNames = input.categoryNames;
+				}
+				if(input.numLabels != null && !isNaN(input.numLabels))
+				{
+					categoryAxis.numLabels = input.numLabels;
 				}
 			}
 			return axis;

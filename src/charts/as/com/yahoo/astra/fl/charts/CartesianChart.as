@@ -1,4 +1,4 @@
-package com.yahoo.astra.fl.charts
+﻿package com.yahoo.astra.fl.charts
 {
 	import com.yahoo.astra.fl.charts.axes.AxisOrientation;
 	import com.yahoo.astra.fl.charts.axes.CategoryAxis;
@@ -14,6 +14,7 @@ package com.yahoo.astra.fl.charts
 	import com.yahoo.astra.fl.charts.series.ISeries;
 	import com.yahoo.astra.fl.charts.series.IStackedSeries;
 	import com.yahoo.astra.fl.utils.UIComponentUtil;
+	import com.yahoo.astra.utils.TextUtil;
 	
 	import fl.core.InvalidationType;
 	import fl.core.UIComponent;
@@ -1357,9 +1358,10 @@ package com.yahoo.astra.fl.charts
 			{
 				this.updateRenderers();
 			}
-			
+
 			if(sizeInvalid || dataInvalid || stylesInvalid || axesInvalid)
 			{
+				
 				this.drawAxes();
 					
 				//the series display objects are dependant on the axes, so all series redraws must
@@ -1601,6 +1603,7 @@ package com.yahoo.astra.fl.charts
 			var contentPadding:Number = this.getStyleValue("contentPadding") as Number;
 			var axisWidth:Number = this.width - (2 * contentPadding);
 			var axisHeight:Number = this.height - (2 * contentPadding);
+
 			
 			this.horizontalAxis.renderer = this.horizontalAxisRenderer;
 			if(horizontalAxis is CategoryAxis && this._explicitCategoryNames && this._explicitCategoryNames.length > 0)
@@ -1608,6 +1611,7 @@ package com.yahoo.astra.fl.charts
 				CategoryAxis(this.horizontalAxis).categoryNames = this._explicitCategoryNames;
 			}
 			var horizontalAxisRenderer:UIComponent = UIComponent(this.horizontalAxisRenderer);
+			
 			horizontalAxisRenderer.move(contentPadding, contentPadding);
 			horizontalAxisRenderer.setSize(axisWidth, axisHeight);
 			this.setChildIndex(horizontalAxisRenderer, this.numChildren - 1);
@@ -1622,13 +1626,9 @@ package com.yahoo.astra.fl.charts
 			verticalAxisRenderer.setSize(axisWidth, axisHeight);
 			this.setChildIndex(verticalAxisRenderer, this.numChildren - 1);
 			
-			//TODO: This should probably be done differently...
-			this.horizontalAxisRenderer.title = this.horizontalAxis.title;
-			this.verticalAxisRenderer.title = this.verticalAxis.title;
-			
 			this.updateAxisScalesAndBounds();
-			horizontalAxisRenderer.drawNow();
-			verticalAxisRenderer.drawNow();
+			this.horizontalAxisRenderer.updateAxis();
+			this.verticalAxisRenderer.updateAxis();		
 			
 			this.drawGridLines();
 		}
@@ -1644,39 +1644,31 @@ package com.yahoo.astra.fl.charts
 			this.horizontalAxisRenderer.ticks = [];
 			this.horizontalAxisRenderer.minorTicks = [];
 			this.verticalAxisRenderer.ticks = [];
-			this.verticalAxisRenderer.minorTicks = [];
+			this.verticalAxisRenderer.minorTicks = [];		
 			
-			/*
-				we need to run this a few times because the axis positions and
-				sizes are slowly corrected until they properly align themselves.
-				
-				NOTE: If this seems to be failing, increase the loop count.
-				more iterations == more accuracy
-				
-				worst case scenario: use a while loop and check to see if
-				calculateContentBounds() has made changes to the sizes or
-				positions of the renderers. if not, then break. if there have
-				been corrections, keep going. I suggest that you stop the loop
-				at 10 iterations because that's most likely an infinite loop.
-				you're probably only running into rounding errors at that point,
-				so there's little reason to continue anyway.
-			*/
+			//Pass series data to the axes
+			this._horizontalAxis.dataProvider = this.series;
+			this._verticalAxis.dataProvider = this.series;
+			
+			var maxHorizontalLabel:String;
+			var maxVerticalLabel:String;
+			var dataInvalid:Boolean = this.isInvalid(InvalidationType.DATA);
+
+			maxHorizontalLabel = (this.horizontalAxis as IAxis).getMaxLabel() as String;
+			maxVerticalLabel = (this.verticalAxis as IAxis).getMaxLabel() as String;
+			this.horizontalAxis.maxLabelWidth = TextUtil.getTextWidth(this.horizontalAxis.valueToLabel(maxHorizontalLabel), this.getStyleValue("horizontalAxisTextFormat") as TextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
+			this.horizontalAxis.maxLabelHeight = TextUtil.getTextHeight(this.horizontalAxis.valueToLabel(maxHorizontalLabel), this.getStyleValue("horizontalAxisTextFormat") as TextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
+			this.verticalAxis.maxLabelWidth = TextUtil.getTextWidth(this.verticalAxis.valueToLabel(maxVerticalLabel), this.getStyleValue("verticalAxisTextFormat") as TextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);
+			this.verticalAxis.maxLabelHeight = TextUtil.getTextHeight(this.verticalAxis.valueToLabel(maxVerticalLabel), this.getStyleValue("verticalAxisTextFormat") as TextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);	
+			
 			this.calculateContentBounds();
 			
-			var count:int = 0;
-			do
-			{
-				var hOldContentBounds:Rectangle = this.horizontalAxisRenderer.contentBounds.clone();
-				var vOldContentBounds:Rectangle = this.verticalAxisRenderer.contentBounds.clone();
-				this._horizontalAxis.updateScale(this.series);
-				this._verticalAxis.updateScale(this.series);
-				this.calculateContentBounds();
-				count++;
-			}
-			//if count == 10, we're close enough
-			while(count < 10 &&
-				(!hOldContentBounds.equals(this.horizontalAxisRenderer.contentBounds) ||
-				!vOldContentBounds.equals(this.verticalAxisRenderer.contentBounds)))
+			this._horizontalAxis.updateScale();
+			this._verticalAxis.updateScale();			
+			
+			//Set titles
+			this.horizontalAxisRenderer.title = this.horizontalAxis.title;
+			this.verticalAxisRenderer.title = this.verticalAxis.title;		
 		}
 		
 		/**
@@ -1685,40 +1677,88 @@ package com.yahoo.astra.fl.charts
 		 */
 		protected function calculateContentBounds():void
 		{
-			this.horizontalAxisRenderer.updateBounds();
-			this.verticalAxisRenderer.updateBounds();
-			
+			//calculate axis dimensions
 			var contentPadding:Number = this.getStyleValue("contentPadding") as Number;
 			var axisWidth:Number = this.width - (2 * contentPadding);
 			var axisHeight:Number = this.height - (2 * contentPadding);
+					
+			var verticalTitleWidth:Number =  0;
+			var horizontalTitleHeight:Number = 0;
 			
-			var horizontalAxisRenderer:UIComponent = this.horizontalAxisRenderer as UIComponent;
-			var verticalAxisRenderer:UIComponent = this.verticalAxisRenderer as UIComponent;
+			//Calculate the dimensions of the title fields.
+			if(this.verticalAxis.title != null) verticalTitleWidth = TextUtil.getTextWidth(this.verticalAxis.title, this.getStyleValue("verticalAxisTitleTextFormat") as TextFormat);
+			if(this.horizontalAxis.title != null) horizontalTitleHeight = TextUtil.getTextHeight(this.horizontalAxis.title, this.getStyleValue("horizontalAxisTitleTextFormat") as TextFormat);
 			
-			var horizontalBounds:Rectangle = this.horizontalAxisRenderer.contentBounds;
-			var verticalBounds:Rectangle = this.verticalAxisRenderer.contentBounds;
+			//Calculate the dimensions for the outerTickOffset
+			this.horizontalAxisRenderer.outerTickOffset = this.getAxisTickOffset(this.horizontalAxisRenderer) as Number;
+			this.verticalAxisRenderer.outerTickOffset = this.getAxisTickOffset(this.verticalAxisRenderer) as Number;
+			
 			this._contentBounds = new Rectangle();
+						
+			//Calculate the dimensions and positioning of the axis content	
+			var hRotation:Number = this.getStyleValue("horizontalAxisLabelRotation") as Number;
+			var vRotation:Number = this.getStyleValue("verticalAxisLabelRotation") as Number;
+			var contentBoundsLeftLabelOffset:Number = hRotation >= 0 ? this.horizontalAxis.maxLabelWidth/2 : this.horizontalAxis.maxLabelWidth;
+			var contentBoundsRightLabelOffset:Number = hRotation <= 0 ? this.horizontalAxis.maxLabelWidth/2 : this.horizontalAxis.maxLabelWidth;
+			var contentBoundsTopLabelOffset:Number = vRotation <= 0 ? this.verticalAxis.maxLabelHeight/2 : this.verticalAxis.maxLabelHeight;
+			var contentBoundsBottomLabelOffset:Number = vRotation <= 0 ? this.verticalAxis.maxLabelHeight/2 : this.verticalAxis.maxLabelHeight;
 			
-			this._contentBounds.x = Math.max(horizontalBounds.x, verticalBounds.x);
-			this._contentBounds.y = Math.max(horizontalBounds.y, verticalBounds.y);
-			this._contentBounds.width = Math.min(horizontalBounds.width, verticalBounds.width);
-			this._contentBounds.height = Math.min(horizontalBounds.height, verticalBounds.height);
+			this.contentBounds.x = Math.ceil(contentPadding + Math.max(this.verticalAxis.maxLabelWidth, contentBoundsLeftLabelOffset) + verticalTitleWidth + this.verticalAxisRenderer.outerTickOffset);
+			this.contentBounds.y = Math.ceil(contentPadding + contentBoundsTopLabelOffset);
 			
-			var hRight:Number = horizontalAxisRenderer.width - horizontalBounds.width - horizontalBounds.x;
-			var hBottom:Number = horizontalAxisRenderer.height - horizontalBounds.height - horizontalBounds.y;
-			var vRight:Number = verticalAxisRenderer.width - verticalBounds.width - verticalBounds.x;
-			var vBottom:Number = verticalAxisRenderer.height - verticalBounds.height - verticalBounds.y;
-			var contentBottom:Number = Math.max(hBottom, vBottom);
-			var contentRight:Number = Math.max(hRight, vRight);
+			this.contentBounds.width = Math.floor(this.width - (this.contentBounds.x + (contentBoundsRightLabelOffset)));
+			this.contentBounds.height = Math.floor(this.height - (this.contentBounds.y + this.horizontalAxis.maxLabelHeight + horizontalTitleHeight + this.horizontalAxisRenderer.outerTickOffset));
+			this.horizontalAxisRenderer.contentBounds.width = this.contentBounds.width;
+			this.horizontalAxisRenderer.contentBounds.height = this.contentBounds.height;	
+			this.verticalAxisRenderer.contentBounds.height = this.contentBounds.height;			
+			this.verticalAxisRenderer.contentBounds.width = this.contentBounds.width;
 			
-			horizontalAxisRenderer.x = contentPadding + this._contentBounds.x - horizontalBounds.x;
-			horizontalAxisRenderer.y = contentPadding + this._contentBounds.y - horizontalBounds.y;
-			horizontalAxisRenderer.width = axisWidth - (contentRight - hRight) - (this._contentBounds.x - horizontalBounds.x);
-			horizontalAxisRenderer.height = axisHeight - (contentBottom - hBottom) - (this._contentBounds.y - horizontalBounds.y);
-			verticalAxisRenderer.x = contentPadding + this._contentBounds.x - verticalBounds.x;
-			verticalAxisRenderer.y = contentPadding + this._contentBounds.y - verticalBounds.y;
-			verticalAxisRenderer.width = axisWidth - (contentRight - vRight) - (this._contentBounds.x - verticalBounds.x);
-			verticalAxisRenderer.height = axisHeight - (contentBottom - vBottom) - (this._contentBounds.y - verticalBounds.y);
+			this.horizontalAxisRenderer.contentBounds.x = this.contentBounds.x;
+			this.horizontalAxisRenderer.contentBounds.y = this.contentBounds.y;	
+			this.verticalAxisRenderer.contentBounds.x = this.contentBounds.x;			
+			this.verticalAxisRenderer.contentBounds.y = this.contentBounds.y;			
+		}
+
+		/**
+		 * @private
+		 * Returns the amount of distance ticks extend over the edge of the content bounds
+		 */
+		protected function getAxisTickOffset(axis:ICartesianAxisRenderer):Number
+		{
+			var showTicks:Boolean = (axis as UIComponent).getStyle("showTicks") as Boolean;
+			var showMinorTicks:Boolean = (axis as UIComponent).getStyle("showMinorTicks") as Boolean;
+			var tickPosition:String = (axis as UIComponent).getStyle("tickPosition") as String;
+			var minorTickPosition:String = (axis as UIComponent).getStyle("minorTickPosition") as String;
+			var tickLength:Number = (axis as UIComponent).getStyle("tickLength") as Number;
+			var minorTickLength:Number = (axis as UIComponent).getStyle("minorTickLength") as Number;
+			var tickBuffer:Number = 0;
+			var minorTickBuffer:Number = 0;
+			
+			if(showTicks)
+			{
+				if(tickPosition == "outside")
+				{
+					tickBuffer = tickLength;
+				}
+				else if(tickPosition == "cross")
+				{
+					tickBuffer = tickLength/2;
+				}
+			}
+			
+			if(showMinorTicks)
+			{
+				if(minorTickPosition == "outside")
+				{
+					minorTickBuffer = minorTickLength;
+				}
+				else if(minorTickPosition == "cross")
+				{
+					minorTickBuffer = minorTickLength/2;
+				}								
+			}			
+			
+			return Math.max(tickBuffer, minorTickBuffer);
 		}
 		
 		/**

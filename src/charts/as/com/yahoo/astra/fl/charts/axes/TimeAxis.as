@@ -1,8 +1,12 @@
-package com.yahoo.astra.fl.charts.axes
+﻿package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.series.ISeries;
+	import com.yahoo.astra.fl.charts.CartesianChart;
 	import com.yahoo.astra.utils.DateUtil;
 	import com.yahoo.astra.utils.TimeUnit;
+	import com.yahoo.astra.utils.TextUtil;
+	import fl.core.UIComponent;
+	import flash.text.TextFormat;
 
 	/**
 	 * An axis type representing a date and time range from minimum to maximum
@@ -17,21 +21,6 @@ package com.yahoo.astra.fl.charts.axes
 	//  Static Properties
 	//--------------------------------------
 	
-		/**
-		 * A magic number specifying an ideal minimum number of
-		 * pixels between each tick/line/label on a major unit.
-		 * Used to calculate the major unit if it is not set by
-		 * the developer. 
-		 */
-		private static const IDEAL_PIXELS_BETWEEN_MAJOR_POSITIONS:Number = 75;
-		
-		/**
-		 * A magic number specifying an ideal minimum number of
-		 * pixels between each tick/line/label on a minor unit.
-		 * Used to calculate the minor unit if it is not set by
-		 * the developer. 
-		 */
-		private static const IDEAL_PIXELS_BETWEEN_MINOR_POSITIONS:Number = 30;
 		
 		/**
 		 * @private
@@ -292,6 +281,36 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		private var _dataMaximum:Date;
 		
+		/**
+		 * @private
+		 */
+		private var _numLabels:Number;
+		
+		/**
+		 * @private
+		 */		
+		private var _numLabelsSetByUser:Boolean = false;
+
+		/**
+		 * @inheritDoc
+		 */
+		public function get numLabels():Number
+		{
+			return _numLabels;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set numLabels(value:Number):void
+		{
+			if(_numLabelsSetByUser) return;
+			_numLabels = value;
+			_numLabelsSetByUser = true;
+			_majorUnitSetByUser = false;
+			_minorUnitSetByUser = false;			
+		}
+		 
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
@@ -313,57 +332,13 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * @inheritDoc
 		 */
-		public function updateScale(data:Array):void
-		{
-			var seriesCount:int = data.length;
-			var min:Number = NaN;
-			var max:Number = NaN;
-			for(var i:int = 0; i < seriesCount; i++)
-			{
-				var series:ISeries = ISeries(data[i]);
-				var seriesLength:int = series.length;
-				for(var j:int = 0; j < seriesLength; j++)
-				{
-					var item:Object = series.dataProvider[j];
-					var value:Object = this.chart.itemToAxisValue(series, j, this);
-					var numericValue:Number = this.valueToNumber(value);
-					
-					if(isNaN(min))
-					{
-						min = numericValue;
-					}
-					else
-					{
-						min = Math.min(min, numericValue);
-					}
-					if(isNaN(max))
-					{
-						max = numericValue;
-					}
-					else
-					{
-						max = Math.max(max, numericValue);
-					}
-				}
-			}
-			
-			//bad data. show yesterday through today.
-			if(isNaN(min) || isNaN(max))
-			{
-				var today:Date = new Date();
-				max = today.valueOf();
-				today.setDate(today.getDate() - 1);
-				min = today.valueOf();
-			}
-			
-			this._dataMinimum = new Date(min);
-			this._dataMaximum = new Date(max);
-			
+		public function updateScale():void
+		{			
 			this.resetScale();
 			this.calculatePositionMultiplier();
 			
 			this.renderer.ticks = this.createAxisData(this.majorUnit, this.majorTimeUnit);
-			this.renderer.minorTicks = this.createAxisData(this.minorUnit, this.minorTimeUnit);
+			this.renderer.minorTicks = this.createAxisData(this.minorUnit, this.minorTimeUnit, false);
 		}
 		
 		/**
@@ -452,7 +427,7 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private
 		 * Generates AxisData objects for use by the axis renderer.
 		 */
-		protected function createAxisData(unit:Number, timeUnit:String):Array
+		protected function createAxisData(unit:Number, timeUnit:String, isMajorUnit:Boolean = true):Array
 		{
 			if(unit <= 0)
 			{
@@ -469,16 +444,17 @@ package com.yahoo.astra.fl.charts.axes
 				date = new Date(this.minimum.valueOf());
 				if(itemCount > 0)
 				{
-					var unitValue:Number = itemCount * this.majorUnit;
-					date = this.updateDate(date, this._majorTimeUnit, unitValue, this.snapToUnits);
+					var unitValue:Number = itemCount * unit;
+					date = this.updateDate(date, timeUnit, unitValue, this.snapToUnits);
 				}
 				
 				//stop at the maximum value.
 				if(date.valueOf() > this.maximum.valueOf())
 				{
-					date = new Date(this.maximum.valueOf());
+					break;
+					//if(isMajorUnit) break;
+					//date = new Date(this.maximum.valueOf());
 				}
-				
 				//because Flash UIComponents round the position to the nearest pixel, we need to do the same.
 				var position:Number = Math.round(this.valueToLocal(date));
 				var label:String = this.valueToLabel(date);
@@ -494,14 +470,37 @@ package com.yahoo.astra.fl.charts.axes
 			
 			return data;
 		}
-		
+
+		/**
+		 * @inheritDoc
+		 */
+		public function getMaxLabel():String
+		{
+			var maxLength:Number = 0;
+			var currentLength:Number;
+			var maxString:String  = "x";
+			
+			var newDate:Date = new Date(this._minimum);
+			var maxDate:Date = new Date(this._maximum);
+			while(newDate.valueOf() < maxDate.valueOf())
+			{
+				currentLength = (newDate.toString()).length;
+				if(currentLength > maxLength)
+				{
+					maxLength = currentLength;
+					maxString = newDate.toString();
+				}
+				newDate = this.updateDate(newDate, this.majorTimeUnit, 1, this.snapToUnits);
+			}
+			return maxString as String;	
+		}			
+
 	//--------------------------------------
 	//  Private Methods
 	//--------------------------------------
 		
 		/**
 		 * @private
-		 * Our calendar system sucks. I'd like some nifty math tricks to do this stuff.
 		 */
 		private function updateDate(date:Date, timeUnit:String, unitValue:Number, snapToUnits:Boolean):Date
 		{
@@ -600,8 +599,8 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				//ballpark it
 				var dayCount:Number = DateUtil.countDays(this.minimum, this.maximum);
-				var yearCount:Number = dayCount / 365;
-				var monthCount:Number = yearCount * 12;
+				var yearCount:Number = DateUtil.getDateDifferenceByTimeUnit(this.minimum, this.maximum, TimeUnit.YEAR);
+				var monthCount:Number = DateUtil.getDateDifferenceByTimeUnit(this.minimum, this.maximum, TimeUnit.MONTH);
 				var hourCount:Number = dayCount * 24;
 				var minuteCount:Number = hourCount * 60;
 				var secondCount:Number = minuteCount * 60;
@@ -613,49 +612,60 @@ package com.yahoo.astra.fl.charts.axes
 				else if(minuteCount >= 1) this.majorTimeUnit = TimeUnit.MINUTES;
 				else if(secondCount >= 1) this.majorTimeUnit = TimeUnit.SECONDS; 
 				else this.majorTimeUnit = TimeUnit.MILLISECONDS;
-			}	
+			}
 			
 			if(this._majorUnitSetByUser)
 			{
 				return;
 			}
 			
-			var unitIndex:int = TIME_UNITS.indexOf(this.majorTimeUnit);
-			var timeUnitSize:Number = this.calculateTimeUnitSize(this.majorTimeUnit);
-			
-			this._majorUnit = 0;
-			var savedMinimum:Date = new Date(this._minimum.valueOf());
-			var savedMaximum:Date = new Date(this._maximum.valueOf());
-			
-			var majorUnitSpacing:Number = 0;
-			var idealMajorUnit:Number = this.renderer.length / IDEAL_PIXELS_BETWEEN_MAJOR_POSITIONS;
-			do
+			this.calculateMaximumAndMinimum();
+		
+			var approxLabelDistance:Number;
+			//Check to see if this axis is horizontal. Since the width of labels will be variable, we will need to apply a different alogrithm to determine the majorUnit.
+			if((this.chart as CartesianChart).horizontalAxis == this)
 			{
-				//only change the major time unit if the user hasn't set it
-				//it may give us horrible intervals, but that's what the user wants
-				if(!this._majorTimeUnitSetByUser && this._majorUnit == 10 && unitIndex < TIME_UNITS.length - 1)
-				{
-					unitIndex++;
-					this._majorTimeUnit = TIME_UNITS[unitIndex];
-					timeUnitSize = this.calculateTimeUnitSize(this.majorTimeUnit);
-					this._majorUnit = 0;
-				}
-				this._majorUnit++;
-				
-				//if we're looping around again, restore the old minimum and maximum
-				//so that the bounds don't grow out of control when generated from the
-				//major unit.
-				this._minimum = new Date(savedMinimum.valueOf());
-				this._maximum = new Date(savedMaximum.valueOf());
-				
-				//based on the new major unit, calculate the minimum and maximum
-				this.calculateMaximumAndMinimum();
-				
-				majorUnitSpacing = this.renderer.length / (1 + (this.maximum.valueOf() - this.minimum.valueOf()) / (this._majorUnit * timeUnitSize));
+				//extract the approximate width of the labels by getting the textWidth of the maximum date when rendered by the label function with the textFormat of the renderer.
+				approxLabelDistance = this.maxLabelWidth;
+			
 			}
-			while(this._majorUnit < idealMajorUnit && majorUnitSpacing < this.renderer.length)
-			//using a while loop shouldn't cause any problems unless the axis
-			//bounds are seperated by an inordinate number of years.
+			else
+			{
+				approxLabelDistance = this.maxLabelHeight;	
+			}
+			var labelPadding:Number = 2; 
+			approxLabelDistance += (labelPadding*2);
+
+			var dateDifference:Number = Math.round(DateUtil.getDateDifferenceByTimeUnit(this.minimum, this.maximum, this.majorTimeUnit));
+			var tempMajorUnit:Number = 0; 
+
+			var maxLabels:Number = Math.floor((this.renderer.length - labelPadding)/approxLabelDistance);
+			
+			//If set by user, use specified number of labels unless its too many
+			if(this._numLabelsSetByUser)
+			{
+				maxLabels = Math.min(maxLabels, this.numLabels);
+			}
+			
+			tempMajorUnit = dateDifference/maxLabels;
+			tempMajorUnit = Math.ceil(tempMajorUnit);
+			tempMajorUnit = Math.min(tempMajorUnit, Math.round(dateDifference/2));
+			
+			this._majorUnit = tempMajorUnit;
+			
+			if(dateDifference%tempMajorUnit != 0)
+			{
+				var len:Number = Math.min(tempMajorUnit, ((dateDifference/2)-tempMajorUnit));
+				for(var i:int = 0;i < len; i++)
+				{
+					tempMajorUnit++;
+					if(dateDifference%tempMajorUnit == 0)
+					{
+						this._majorUnit = tempMajorUnit;
+						break;
+					}
+				}		
+			}
 		}
 		
 		/**
@@ -882,6 +892,55 @@ package com.yahoo.astra.fl.charts.axes
 			}
 			this.positionMultiplier = this.renderer.length / range;
 		}
-		
+
+		/**
+		 * @private
+		 */
+		override protected function parseDataProvider():void
+		{
+			var seriesCount:int = this.dataProvider.length;
+			var min:Number = NaN;
+			var max:Number = NaN;
+			for(var i:int = 0; i < seriesCount; i++)
+			{
+				var series:ISeries = ISeries(this.dataProvider[i]);
+				var seriesLength:int = series.length;
+				for(var j:int = 0; j < seriesLength; j++)
+				{
+					var item:Object = series.dataProvider[j];
+					var value:Object = this.chart.itemToAxisValue(series, j, this);
+					var numericValue:Number = this.valueToNumber(value);
+					
+					if(isNaN(min))
+					{
+						min = numericValue;
+					}
+					else
+					{
+						min = Math.min(min, numericValue);
+					}
+					if(isNaN(max))
+					{
+						max = numericValue;
+					}
+					else
+					{
+						max = Math.max(max, numericValue);
+					}
+				}
+			}
+			
+			//bad data. show yesterday through today.
+			if(isNaN(min) || isNaN(max))
+			{
+				var today:Date = new Date();
+				max = today.valueOf();
+				today.setDate(today.getDate() - 1);
+				min = today.valueOf();
+			}
+			
+			this._dataMinimum = new Date(min);
+			this._dataMaximum = new Date(max);
+		}		
 	}
 }

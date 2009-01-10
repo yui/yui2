@@ -1,4 +1,4 @@
-package com.yahoo.astra.fl.charts.axes
+﻿package com.yahoo.astra.fl.charts.axes
 {
 	import flash.geom.Rectangle;
 	
@@ -43,6 +43,10 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		function get contentBounds():Rectangle;
 		
+		function get outerTickOffset():Number
+		
+		function set outerTickOffset(value:Number):void		
+		
 	//--------------------------------------
 	//  Methods
 	//--------------------------------------
@@ -52,6 +56,6 @@ package com.yahoo.astra.fl.charts.axes
 		 * Seperating this function from the draw method optimizes processing time,
 		 * and it allows the chart to synchronize its axes.
 		 */
-		function updateBounds():void;
+		function updateAxis():void;
 	}
 }

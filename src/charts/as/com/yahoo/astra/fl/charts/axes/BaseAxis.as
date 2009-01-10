@@ -1,4 +1,4 @@
-package com.yahoo.astra.fl.charts.axes
+﻿package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.IChart;
 	
@@ -142,6 +142,74 @@ package com.yahoo.astra.fl.charts.axes
 		{
 			this._title = value;
 		}
+		
+		/**
+		 * @private
+		 * placeholder for maximum label width 
+		 */
+		protected var _maxLabelWidth:Number;		
+		
+		/**
+		 * Gets or sets the maximum width of a label
+		 */
+		public function get maxLabelWidth():Number
+		{
+			return _maxLabelWidth;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set maxLabelWidth(value:Number):void
+		{
+			_maxLabelWidth = value;
+		}
+		
+		/**
+		 * @private
+		 * placeholder for maximum label width 
+		 */
+		protected var _maxLabelHeight:Number;		
+		
+		/**
+		 * Gets or sets the maximum width of a label
+		 */
+		public function get maxLabelHeight():Number
+		{
+			return _maxLabelHeight;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set maxLabelHeight(value:Number):void
+		{
+			_maxLabelHeight = value;
+		}
+		
+		/**
+		 * @private
+		 */
+		protected var _dataProvider:Array;
+		
+		/**
+		 * Data provider for the axis
+		 */
+		public function get dataProvider():Array
+		{
+			return _dataProvider;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set dataProvider(value:Array):void
+		{
+			_dataProvider = value;
+			this.parseDataProvider();
+		}
+		
+		protected function parseDataProvider():void{}
 		
 	//--------------------------------------
 	//  Public Methods

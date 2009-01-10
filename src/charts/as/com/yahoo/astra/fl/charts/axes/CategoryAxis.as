@@ -1,7 +1,9 @@
-package com.yahoo.astra.fl.charts.axes
+﻿package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.series.ISeries;
-
+	import fl.core.UIComponent;
+	import flash.text.TextFormat;	
+	import com.yahoo.astra.utils.TextUtil;
 	/**
 	 * An axis type representing a set of categories.
 	 * 
@@ -57,19 +59,14 @@ package com.yahoo.astra.fl.charts.axes
 		public function set categoryNames(value:Array):void
 		{
 			this._categoryNamesSetByUser = value != null && value.length > 0;
-			if(!this._categoryNamesSetByUser)
+			if(this._categoryNamesSetByUser)
 			{
 				this._categoryNames = [];
 			}
 			else
 			{
 				//ensure that all category names are strings
-				var names:Array = [];
-				for(var i:int = 0; i < value.length; i++)
-				{
-					names.push(value[i].toString());
-				}
-				this._categoryNames = names;
+				this._categoryNames = getCategoryNames(value);
 			}
 		}
 		
@@ -80,6 +77,39 @@ package com.yahoo.astra.fl.charts.axes
 		{
 			return this.categoryNames.length;
 		}
+
+		/**
+		 * @private
+		 */
+		private var _numLabels:Number;
+		
+		/**
+		 * @private
+		 */		
+		private var _numLabelsSetByUser:Boolean = false;
+
+		/**
+		 * @inheritDoc
+		 */
+		public function get numLabels():Number
+		{
+			return _numLabels;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set numLabels(value:Number):void
+		{
+			if(_numLabelsSetByUser) return;
+			_numLabels = value;
+			_numLabelsSetByUser = true;
+		}		
+		
+		/**
+		 * @private
+		 */
+		private var _majorUnit:Number = 1; 
 		
 	//--------------------------------------
 	//  Public Methods
@@ -111,30 +141,41 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * @inheritDoc
 		 */
-		public function updateScale(data:Array):void
+		public function updateScale():void
 		{
 			if(!this._categoryNamesSetByUser)
 			{
-				this.autoDetectCategories(data);
+				this.autoDetectCategories(this.dataProvider);
 			}
 			this.calculateCategorySize();
-			
-			var ticks:Array = [];
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		public function getMaxLabel():String
+		{
 			var categoryCount:int = this.categoryNames.length;
+			var maxLength:Number = 0;
+			var currentLength:Number;
+			var maxString:String = "x";
+
 			for(var i:int = 0; i < categoryCount; i++)
 			{
-				var category:String = this.categoryNames[i];
-				var position:Number = this.valueToLocal(category);
-				var label:String = this.valueToLabel(category);
-				var axisData:AxisData = new AxisData(position, category, label);
-				ticks.push(axisData);
-			}
-			this.renderer.ticks = ticks;
-			this.renderer.minorTicks = [];
+				currentLength = (this.categoryNames[i].toString()).length; 
+
+				if(currentLength > maxLength)
+				{
+					maxLength = currentLength;
+					maxString = this.categoryNames[i];
+				}
+			}			
+			
+			return maxString as String;	
 		}
-	
+
 	//--------------------------------------
-	//  Public Methods
+	//  Private Methods
 	//--------------------------------------
 	
 		/**
@@ -165,7 +206,7 @@ package com.yahoo.astra.fl.charts.axes
 					}
 				}
 			}
-			this.categoryNames = uniqueCategoryNames.concat();
+			this._categoryNames = getCategoryNames(uniqueCategoryNames.concat());
 		}
 		
 		/**
@@ -180,6 +221,84 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				this.categorySize /= categoryCount;
 			}
+			
+			//If the number of labels will not fit on the axis or the user has specified the number of labels to
+			//display, calculate the major unit. 
+			if(this.categorySize < this.maxLabelWidth || (this._numLabelsSetByUser && this.numLabels != categoryCount))
+			{
+				this.calculateMajorUnit();
+			} 
 		}
+		
+		/**
+		 * @private
+		 * Calculates which labels to skip if they will not all fit on the axis.
+		 */
+		private function calculateMajorUnit():void
+		{
+			var categoryCount:int = this.categoryNames.length;
+			var maxNumLabels:Number = this.renderer.length/this.maxLabelWidth;
+			
+			//If the user specified number of labels to display, attempt to show the correct number.
+			if(this._numLabelsSetByUser)
+			{
+				maxNumLabels = Math.min(maxNumLabels, this.numLabels);
+			}
+			
+			var tempMajorUnit:Number = Math.ceil(this.categoryNames.length/maxNumLabels);
+			this._majorUnit = tempMajorUnit;			
+			if(this.renderer.length%tempMajorUnit != 0 && !this._numLabelsSetByUser)
+			{
+				var len:Number = Math.min(tempMajorUnit, ((this.renderer.length/2)-tempMajorUnit));
+				for(var i:int = 0;i < len; i++)
+				{
+					tempMajorUnit++;
+					if(this.renderer.length%tempMajorUnit == 0)
+					{
+						this._majorUnit = tempMajorUnit;
+						break;
+					}
+				}
+			}	
+		}
+		
+		/**
+		 * @private 
+		 * Ensures all values in an array are string values
+		 */
+		private function getCategoryNames(value:Array):Array
+		{
+			var names:Array = [];
+			if(value != null && value.length > 0)
+			{
+				for(var i:int = 0; i < value.length; i++)
+				{
+					names.push(value[i].toString());
+				}
+			}
+			return names;
+		}
+
+		/**
+		 * @private
+		 */
+		override protected function parseDataProvider():void
+		{
+			var ticks:Array = [];
+			var categoryCount:int = this.categoryNames.length;
+			var currentCat:int = 0;
+			while(currentCat < categoryCount && !isNaN(categoryCount))
+			{
+				var category:String = this.categoryNames[currentCat];
+				var position:Number = this.valueToLocal(category);
+				var label:String = this.valueToLabel(category);
+				var axisData:AxisData = new AxisData(position, category, label);
+				ticks.push(axisData);
+				currentCat += this._majorUnit;
+			}
+				
+			this.renderer.ticks = ticks;
+			this.renderer.minorTicks = [];				
+		}		
 	}
 }
