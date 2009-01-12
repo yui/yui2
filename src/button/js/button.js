@@ -2170,98 +2170,100 @@
                 bReturnVal;
         
 
-            switch (sType) {
-        
-            case "radio":
-            case "checkbox":
+			switch (sType) {
+
+			case "radio":
+			case "checkbox":
 
 				if (!this._hasDefaultTitle) {
-    
+
 					if (this.get("checked")) {
-						
+
 						sTitle = (sType == "radio") ? 
 									this.RADIO_CHECKED_TITLE : 
 									this.CHECKBOX_CHECKED_TITLE;
-					
+
 					}
 					else {
-					
+
 						sTitle = (sType == "radio") ? 
 									this.RADIO_DEFAULT_TITLE : 
 									this.CHECKBOX_DEFAULT_TITLE;
-					
+
 					}
-					
+
 					this.set("title", sTitle);
-                
-                }
-    
-                break;
-    
-            case "submit":
+
+				}
+
+				break;
+
+			case "submit":
 
 				if (p_oEvent.returnValue !== false) {
-    
-                	this.submitForm();
-                
-                }
-            
-                break;
-    
-            case "reset":
-    
-                oForm = this.getForm();
-    
-                if (oForm) {
-    
-                    oForm.reset();
-                
-                }
-    
-                break;
-    
-            case "menu":
-    
-                sTitle = this._menu.cfg.getProperty("visible") ? 
-                                this.MENUBUTTON_MENU_VISIBLE_TITLE : 
-                                this.MENUBUTTON_DEFAULT_TITLE;
-    
-                this.set("title", sTitle);
-    
-                break;
-    
-            case "split":
-    
-                if (Event.getPageX(p_oEvent) > this._nOptionRegionX) {
-    
-                    bReturnVal = false;
-                
-                }
-                else {
-    
-                    this._hideMenu();
-        
-                    oSrcElement = this.get("srcelement");
-        
-                    if (oSrcElement && oSrcElement.type == "submit") {
-    
-                        this.submitForm();
-                    
-                    }
-                
-                }
-    
-                sTitle = this._menu.cfg.getProperty("visible") ? 
-                                this.SPLITBUTTON_OPTION_VISIBLE_TITLE : 
-                                this.SPLITBUTTON_DEFAULT_TITLE;
-    
-                this.set("title", sTitle);
-    
-                break;
-        
-            }
-        
-        	return bReturnVal;
+
+					this.submitForm();
+
+				}
+
+				break;
+
+			case "reset":
+
+				oForm = this.getForm();
+
+				if (oForm) {
+
+					oForm.reset();
+
+				}
+
+				break;
+
+			case "menu":
+
+				sTitle = this._menu.cfg.getProperty("visible") ? 
+								this.MENUBUTTON_MENU_VISIBLE_TITLE : 
+								this.MENUBUTTON_DEFAULT_TITLE;
+
+				this.set("title", sTitle);
+
+				break;
+
+			case "split":
+
+				if (this._nOptionRegionX > 0 && 
+						(Event.getPageX(p_oEvent) > this._nOptionRegionX)) {
+
+					bReturnVal = false;
+
+				}
+				else {
+
+					this._hideMenu();
+
+					oSrcElement = this.get("srcelement");
+
+					if (oSrcElement && oSrcElement.type == "submit" && 
+							p_oEvent.returnValue !== false) {
+
+						this.submitForm();
+
+					}
+
+				}
+
+				sTitle = this._menu.cfg.getProperty("visible") ? 
+								this.SPLITBUTTON_OPTION_VISIBLE_TITLE : 
+								this.SPLITBUTTON_DEFAULT_TITLE;
+
+				this.set("title", sTitle);
+
+				break;
+
+			}
+
+			return bReturnVal;
         
         },
         
