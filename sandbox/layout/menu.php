@@ -114,7 +114,7 @@
 <script type="text/javascript" src="../../build/animation/animation.js"></script> 
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script> 
 <script type="text/javascript" src="../../build/selector/selector-beta.js"></script> 
-<script type="text/javascript" src="../../build/element/element-beta.js"></script> 
+<script type="text/javascript" src="../../build/element/element.js"></script> 
 <script type="text/javascript" src="../../build/container/container_core.js"></script> 
 <script type="text/javascript" src="../../build/menu/menu.js"></script> 
 <script type="text/javascript" src="../../build/resize/resize-min.js"></script> 

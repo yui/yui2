@@ -4450,7 +4450,8 @@ var Dom = YAHOO.util.Dom,
             html = html.replace(/&lt;script([^>]*)&gt;/gi, '<bad>');
             html = html.replace(/&lt;\/script([^>]*)&gt;/gi, '</bad>');
             //Replace the line feeds
-            html = html.replace(/\n/g, '<YUI_LF>').replace(/\r/g, '<YUI_LF>');
+            html = html.replace(/\r\n/g, '<YUI_LF>').replace(/\n/g, '<YUI_LF>').replace(/\r/g, '<YUI_LF>');
+            
             //Remove Bad HTML elements (used to be script nodes)
             html = html.replace(new RegExp('<bad([^>]*)>(.*?)<\/bad>', 'gi'), '');
             //Replace the lines feeds

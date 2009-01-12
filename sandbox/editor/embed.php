@@ -74,7 +74,7 @@
 </div>
 <!--script type="text/javascript" src="js/prototype.js?bust=<?php echo(mktime()); ?>"></script-->
 <script type="text/javascript" src="../yui-dev/build/yahoo-dom-event/yahoo-dom-event.js?bust=<?php echo(mktime()); ?>"></script> 
-<script type="text/javascript" src="../yui-dev/build/element/element-beta.js?bust=<?php echo(mktime()); ?>"></script> 
+<script type="text/javascript" src="../yui-dev/build/element/element.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../yui-dev/build/logger/logger.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../yui-dev/build/container/container_core-min.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../yui-dev/build/menu/menu-min.js?bust=<?php echo(mktime()); ?>"></script> 

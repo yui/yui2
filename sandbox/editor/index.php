@@ -92,7 +92,7 @@ Double Return
 <script type="text/javascript" src="../../build/dom/dom.js"></script> 
 <script type="text/javascript" src="../../build/event/event.js"></script> 
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script> 
-<script type="text/javascript" src="../../build/element/element-beta.js"></script> 
+<script type="text/javascript" src="../../build/element/element.js"></script> 
 <script type="text/javascript" src="../../build/resize/resize.js"></script> 
 <script type="text/javascript" src="../../build/selector/selector-beta.js"></script> 
 <script>
