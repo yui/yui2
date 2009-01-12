@@ -1047,8 +1047,6 @@ YAHOO.widget.AutoComplete.prototype.containerPopulateEvent = null;
  *
  * @event containerExpandEvent
  * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
- * @param sQuery {String} The query string.
- * @param aResults {Object[]} Results array.
  */
 YAHOO.widget.AutoComplete.prototype.containerExpandEvent = null;
 
