@@ -2030,6 +2030,11 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         this._toggleHighlight(this._elCurListItem,"from");
         this._nDisplayedItems = 0;
         this._sCurQuery = null;
+        
+        // Container is already closed, so don't bother with changing the UI
+        if(this._elContent.style.display == "none") {
+            return;
+        }
     }
 
     // If animation is enabled...
