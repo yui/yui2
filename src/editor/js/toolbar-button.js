@@ -83,7 +83,7 @@ var Dom = YAHOO.util.Dom,
         oConfig.element.innerHTML = '<span class="first-child"><a href="#">LABEL</a></span>';
         oConfig.element.firstChild.firstChild.tabIndex = '-1';
         oConfig.attributes.id = (oConfig.attributes.id || Dom.generateId());
-        
+        oConfig.element.id = oConfig.attributes.id;
 
         YAHOO.widget.ToolbarButton.superclass.constructor.call(this, oConfig.element, oConfig.attributes);
     };

@@ -2339,13 +2339,6 @@ var Dom = YAHOO.util.Dom,
                         this.toolbar.set('disabled', true);
                     }
                     this._mask = document.createElement('DIV');
-                    //TODO -- Add CSS class for this stuff..
-                    Dom.setStyle(this._mask, 'height', '100%');
-                    Dom.setStyle(this._mask, 'width', '100%');
-                    Dom.setStyle(this._mask, 'position', 'absolute');
-                    Dom.setStyle(this._mask, 'top', '0');
-                    Dom.setStyle(this._mask, 'left', '0');
-                    Dom.setStyle(this._mask, 'opacity', '.5');
                     Dom.addClass(this._mask, 'yui-editor-masked');
                     this.get('iframe').get('parentNode').appendChild(this._mask);
                 }
@@ -4270,9 +4263,7 @@ var Dom = YAHOO.util.Dom,
                 
                 for (var i = 0; i < _tmp.length; i++) {
                     if ((YAHOO.util.Dom.getStyle(_tmp[i], 'font-family') == 'yui-tmp') || (_tmp[i].face && (_tmp[i].face == 'yui-tmp'))) {
-                        //TODO Why is this here?!?
                         el = _elCreate(_tmp[i].tagName, tagStyle);
-                        //el = _elCreate(tagName, tagStyle);
                         el.innerHTML = _tmp[i].innerHTML;
                         if (this._isElement(_tmp[i], 'ol') || (this._isElement(_tmp[i], 'ul'))) {
                             var fc = _tmp[i].getElementsByTagName('li')[0];
@@ -4450,7 +4441,8 @@ var Dom = YAHOO.util.Dom,
             html = html.replace(/&lt;script([^>]*)&gt;/gi, '<bad>');
             html = html.replace(/&lt;\/script([^>]*)&gt;/gi, '</bad>');
             //Replace the line feeds
-            html = html.replace(/\n/g, '<YUI_LF>').replace(/\r/g, '<YUI_LF>');
+            html = html.replace(/\r\n/g, '<YUI_LF>').replace(/\n/g, '<YUI_LF>').replace(/\r/g, '<YUI_LF>');
+            
             //Remove Bad HTML elements (used to be script nodes)
             html = html.replace(new RegExp('<bad([^>]*)>(.*?)<\/bad>', 'gi'), '');
             //Replace the lines feeds
@@ -4575,10 +4567,9 @@ var Dom = YAHOO.util.Dom,
 		    html = html.replace(/<\/YUI_EMBED>/g, '<\/embed>');
             
             //This should fix &amp;s in URL's
-            //TODO Make this global
-            html = html.replace(' &amp; ', 'YUI_AMP');
-            html = html.replace('&amp;', '&');
-            html = html.replace('YUI_AMP', ' &amp; ');
+            html = html.replace(/ &amp; /gi, 'YUI_AMP');
+            html = html.replace(/&amp;/gi, '&');
+            html = html.replace(/YUI_AMP/gi, ' &amp; ');
 
             //Trim the output, removing whitespace from the beginning and end
             html = YAHOO.lang.trim(html);
