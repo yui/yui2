@@ -3341,27 +3341,6 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
             Dom.setStyle(_data, 'opacity', '0');
             div.appendChild(_data);
 
-            /**
-            * It seems that IE will fire the mouseup event if you pass a proxy element over a select box
-            * Placing the IFRAME element inside seems to stop this issue
-            */
-            if (YAHOO.env.ua.ie) {
-                //Only needed for Internet Explorer
-                var ifr = document.createElement('iframe');
-                ifr.setAttribute('src', 'javascript: false;');
-                ifr.setAttribute('scrolling', 'no');
-                ifr.setAttribute('frameborder', '0');
-                div.insertBefore(ifr, div.firstChild);
-                Dom.setStyle(ifr, 'height', '100%');
-                Dom.setStyle(ifr, 'width', '100%');
-                Dom.setStyle(ifr, 'position', 'absolute');
-                Dom.setStyle(ifr, 'top', '0');
-                Dom.setStyle(ifr, 'left', '0');
-                Dom.setStyle(ifr, 'opacity', '0');
-                Dom.setStyle(ifr, 'zIndex', '-1');
-                Dom.setStyle(ifr.nextSibling, 'zIndex', '2');
-            }
-
             // appendChild can blow up IE if invoked prior to the window load event
             // while rendering a table.  It is possible there are other scenarios 
             // that would cause this to happen as well.
