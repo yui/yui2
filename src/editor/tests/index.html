@@ -57,6 +57,7 @@ var editor = null;
             Suite.add( new Tool.TestCase({
                 name: 'YAHOO.widget.Editor',
                 test_render: function() {
+                    console.log(editor.get('element_cont').get('element'));
                     Assert.areEqual(Dom.get('editor_container'), editor.get('element_cont').get('element'), 'Could not find Editors container');
                     Assert.areEqual(Dom.get('editor_toolbar'), editor.toolbar.get('element'), 'Could not find Editors Toolbar');
                     Assert.isInstanceOf(YAHOO.widget.Toolbar, editor.toolbar, 'Could not find Toolbars Instance');
