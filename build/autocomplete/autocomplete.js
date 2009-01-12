@@ -1566,7 +1566,6 @@ YAHOO.widget.AutoComplete.prototype._initListEl = function() {
  * Enables interval detection for IME support.
  *
  * @method _enableIntervalDetection
- * @re 
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._enableIntervalDetection = function() {
@@ -2341,58 +2340,6 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
 // Private event handlers
 //
 /////////////////////////////////////////////////////////////////////////////
-
-/**
- * Handles &lt;li&gt; element mouseover events in the container.
- *
- * @method _onItemMouseover
- * @param v {HTMLEvent} The mouseover event.
- * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
- * @private
- */
-/*YAHOO.widget.AutoComplete.prototype._onItemMouseover = function(v,oSelf) {
-    if(oSelf.prehighlightClassName) {
-        oSelf._togglePrehighlight(this,"mouseover");
-    }
-    else {
-        oSelf._toggleHighlight(this,"to");
-    }
-
-    oSelf.itemMouseOverEvent.fire(oSelf, this);
-};*/
-
-/**
- * Handles &lt;li&gt; element mouseout events in the container.
- *
- * @method _onItemMouseout
- * @param v {HTMLEvent} The mouseout event.
- * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
- * @private
- */
-/*YAHOO.widget.AutoComplete.prototype._onItemMouseout = function(v,oSelf) {
-    if(oSelf.prehighlightClassName) {
-        oSelf._togglePrehighlight(this,"mouseout");
-    }
-    else {
-        oSelf._toggleHighlight(this,"from");
-    }
-
-    oSelf.itemMouseOutEvent.fire(oSelf, this);
-};*/
-
-/**
- * Handles &lt;li&gt; element click events in the container.
- *
- * @method _onItemMouseclick
- * @param v {HTMLEvent} The click event.
- * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
- * @private
- */
-/*YAHOO.widget.AutoComplete.prototype._onItemMouseclick = function(v,oSelf) {
-    // In case item has not been moused over
-    oSelf._toggleHighlight(this,"to");
-    oSelf._selectItem(this);
-};*/
 
 /**
  * Handles container mouseover events.
