@@ -720,7 +720,10 @@ YAHOO.widget.AutoComplete.prototype.generateRequest = function(sQuery) {
  * @param sQuery {String} Query string.
  */
 YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
-    // Adjust programatically sent queries to look like they input by user
+    // Reset focus for a new interaction
+    this._bFocused = null;
+    
+    // Adjust programatically sent queries to look like they were input by user
     // when delimiters are enabled
     var newQuery = (this.delimChar) ? this._elTextbox.value + sQuery : sQuery;
     this._sendQuery(newQuery);
@@ -2016,6 +2019,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
+
     var elContainer = this._elContainer;
 
     // If implementer has container always open and it's already open, don't mess with it
@@ -2029,12 +2033,6 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         this._toggleHighlight(this._elCurListItem,"from");
         this._nDisplayedItems = 0;
         this._sCurQuery = null;
-        
-        // Container is already closed, so don't bother with changing the UI
-        if(!this._bContainerOpen) {
-            this._elContent.style.display = "none";
-            return;
-        }
     }
 
     // If animation is enabled...
@@ -2765,15 +2763,14 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
             }
         }
 
-        if(oSelf._bContainerOpen) {
-            oSelf._toggleContainer(false);
-        }
         oSelf._clearInterval();
         oSelf._bFocused = false;
         if(oSelf._sInitInputValue !== oSelf._elTextbox.value) {
             oSelf.textboxChangeEvent.fire(oSelf);
         }
         oSelf.textboxBlurEvent.fire(oSelf);
+
+        oSelf._toggleContainer(false);
     }
 };
 
