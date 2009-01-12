@@ -5,13 +5,13 @@
         <title>Resize - IE7 textarea</title>
 
         <!-- Skin CSS file -->
-        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/assets/skins/sam/resize.css">
+        <link rel="stylesheet" type="text/css" href="../../build/resize/assets/skins/sam/resize.css">
         <!-- Utility Dependencies -->
         <script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script> 
         <script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script> 
         <script type="text/javascript" src="../../build/element/element-min.js"></script> 
         <!-- Source file for the Resize Utility -->
-        <script src="../../build/resize/resize-min.js"></script>
+        <script src="js/resize.js"></script>
         
         <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/logger/assets/skins/sam/logger.css">
         <script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/logger/logger-min.js"></script>
@@ -21,7 +21,7 @@
         
         <h1>Resize - IE7 textarea</h1>
 
-        <textarea id="resize">
+        <textarea id="resize" rows="10" cols="30">
             Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi orci urna, eleifend accumsan, vulputate sit amet, rutrum ac, ipsum. Aliquam pharetra. Nunc dapibus, nisl eget accumsan pulvinar, ante turpis fringilla mauris, quis commodo metus augue eleifend nisl. Suspendisse sagittis. Cras sed velit. Nullam in pede. Phasellus tempor pretium nisl. Aenean neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent ante pede, lobortis in, elementum sed, tristique vel, libero. Pellentesque gravida pulvinar neque.
 
             Aenean id dolor nec dui congue eleifend. Nulla tincidunt erat vitae massa. Praesent fringilla faucibus nunc. Morbi purus. Nullam sit amet metus vitae mi suscipit dignissim. Duis mattis elit a justo. Morbi vitae odio nec arcu gravida vestibulum. Proin in pede. In fermentum venenatis nulla. Etiam at risus quis massa elementum sagittis.
@@ -32,9 +32,13 @@
         (function() {                
             var logger = new YAHOO.widget.LogReader();  
                 
-            try{
-                var resize = new YAHOO.util.Resize('resize', { wrap: true });
-            }
+            //try{
+                var resize = new YAHOO.util.Resize('resize', {
+                    wrap: true,
+                    height: 200,
+                    width: 450
+                });
+            /*}
             catch(e){
                 YAHOO.log("Exception","error");
                 YAHOO.log("Message: "+e.message,"error");
@@ -42,6 +46,7 @@
                 YAHOO.log("Description: "+e.description,"error");
                 YAHOO.log("Number: "+e.number,"error");
             }
+            */
         })();
         </script>
 
