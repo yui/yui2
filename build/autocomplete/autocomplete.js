@@ -1563,6 +1563,24 @@ YAHOO.widget.AutoComplete.prototype._initListEl = function() {
 };
 
 /**
+ * Focuses input field.
+ *
+ * @method _focus
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._focus = function() {
+    // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
+    var oSelf = this;
+    setTimeout(function() {
+        try {
+            oSelf._elTextbox.focus();
+        }
+        catch(e) {
+        }
+    },0);
+};
+
+/**
  * Enables interval detection for IME support.
  *
  * @method _enableIntervalDetection
@@ -2474,7 +2492,7 @@ YAHOO.widget.AutoComplete.prototype._onContainerClick = function(v,oSelf) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._onContainerScroll = function(v,oSelf) {
-    oSelf._elTextbox.focus();
+    oSelf._focus();
 };
 
 /**
@@ -2688,7 +2706,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxFocus = function (v,oSelf) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
-    // Don't treat as a blur if it was a selection via mouse click
+    // Is a true blur
     if(!oSelf._bOverContainer || (oSelf._nKeyCode == 9)) {
         // Current query needs to be validated as a selection
         if(!oSelf._bItemSelected) {
@@ -2721,6 +2739,10 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
         oSelf.textboxBlurEvent.fire(oSelf);
 
         oSelf._toggleContainer(false);
+    }
+    // Not a true blur if it was a selection via mouse click
+    else {
+        oSelf._focus();
     }
 };
 
