@@ -54,6 +54,16 @@
                         carousel.getElementForItems());
             },
 
+            testgetVisibleItems: function () {
+                var expected = [], i;
+
+                for (i = 0; i < 3; i++) {
+                    expected.push(Dom.get("item" + (i+1)));
+                }
+                return ArrayAssert.itemsAreEqual(expected,
+                        carousel.getVisibleItems());
+            },
+
             testClearItems: function () {
                 carousel.clearItems();
                 return Assert.areEqual(0, carousel.get("numItems")) &&

@@ -1804,6 +1804,26 @@
         },
 
         /**
+         * Return all visible items as an array.
+         *
+         * @method getVisibleItems
+         * @return {Array} The array of visible items
+         * @public
+         */
+        getVisibleItems: function () {
+            var i = this.get("firstVisible"),
+                n = i + this.get("numVisible"),
+                r = [];
+
+            while (i < n) {
+                r.push(this.getElementForItem(i));
+                i++;
+            }
+
+            return r;
+        },
+
+        /**
          * Remove an item at index from the Carousel.
          *
          * @method removeItem
