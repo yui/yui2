@@ -9,8 +9,9 @@ if (!$_GET['non']) {
     <link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css"> 
     <link rel="stylesheet" href="http://blog.davglass.com/wp-content/themes/davglass/style.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="../../build/assets/skins/sam/skin.css"> 
-    <link rel="stylesheet" type="text/css" href="../../build/resize/assets/skins/sam/resize.css"> 
-
+    <link rel="stylesheet" type="text/css" href="../../src/resize/css/resize-core.css" />
+    <link rel="stylesheet" type="text/css" href="../../src/resize/css/skins/sam/resize-skin.css" />
+    
     <style type="text/css" media="screen">
         p, h2 {
             margin: 1em;
