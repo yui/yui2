@@ -88,6 +88,10 @@
 				{
 					numericAxis.numLabels = input.numLabels;
 				}
+				if(input.roundMajorUnit != null)
+				{
+					numericAxis.roundMajorUnit = input.roundMajorUnit;
+				}
 				numericAxis.snapToUnits = input.snapToUnits;
 				numericAxis.alwaysShowZero = input.alwaysShowZero;
 				numericAxis.scale = input.scale;
