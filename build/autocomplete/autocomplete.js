@@ -922,7 +922,7 @@ YAHOO.widget.AutoComplete.prototype.doBeforeExpandContainer = function(elTextbox
  * Nulls out the entire AutoComplete instance and related objects, removes attached
  * event listeners, and clears out DOM elements inside the container. After
  * calling this method, the instance reference should be expliclitly nulled by
- * implementer, as in myDataTable = null. Use with caution!
+ * implementer, as in myAutoComplete = null. Use with caution!
  *
  * @method destroy
  */
@@ -1110,6 +1110,7 @@ YAHOO.widget.AutoComplete.prototype.unmatchedItemSelectEvent = null;
  *
  * @event selectionEnforceEvent
  * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
+ * @param sClearedValue {String} The cleared value (including delimiters if applicable). 
  */
 YAHOO.widget.AutoComplete.prototype.selectionEnforceEvent = null;
 
@@ -1664,44 +1665,12 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
         return;
     }
     // Delimiter has been enabled
-    var aDelimChar = (this.delimChar) ? this.delimChar : null;
-    if(aDelimChar) {
-        // Loop through all possible delimiters and find the rightmost one in the query
-        // A " " may be a false positive if they are defined as delimiters AND
-        // are used to separate delimited queries
-        var nDelimIndex = -1;
-        for(var i = aDelimChar.length-1; i >= 0; i--) {
-            var nNewIndex = sQuery.lastIndexOf(aDelimChar[i]);
-            if(nNewIndex > nDelimIndex) {
-                nDelimIndex = nNewIndex;
-            }
-        }
-        // If we think the last delimiter is a space (" "), make sure it is NOT
-        // a false positive by also checking the char directly before it
-        if(aDelimChar[i] == " ") {
-            for (var j = aDelimChar.length-1; j >= 0; j--) {
-                if(sQuery[nDelimIndex - 1] == aDelimChar[j]) {
-                    nDelimIndex--;
-                    break;
-                }
-            }
-        }
-        // A delimiter has been found in the query so extract the latest query from past selections
-        if(nDelimIndex > -1) {
-            var nQueryStart = nDelimIndex + 1;
-            // Trim any white space from the beginning...
-            while(sQuery.charAt(nQueryStart) == " ") {
-                nQueryStart += 1;
-            }
-            // ...and save the rest of the string for later
-            this._sPastSelections = sQuery.substring(0,nQueryStart);
-            // Here is the query itself
-            sQuery = sQuery.substr(nQueryStart);
-        }
-        // No delimiter found in the query, so there are no selections from past queries
-        else {
-            this._sPastSelections = "";
-        }
+    if(this.delimChar) {
+        var extraction = this._extractQuery(sQuery);
+        // Here is the query itself
+        sQuery = extraction.query;
+        // ...and save the rest of the string for later
+        this._sPastSelections = extraction.previous;
     }
 
     // Don't search queries that are too short
@@ -1893,20 +1862,10 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._clearSelection = function() {
-    var sValue = this._elTextbox.value;
-    //TODO: need to check against all delimChars?
-    var sChar = (this.delimChar) ? this.delimChar[0] : null;
-    var nIndex = (sChar) ? sValue.lastIndexOf(sChar, sValue.length-2) : -1;
-    if(nIndex > -1) {
-        this._elTextbox.value = sValue.substring(0,nIndex);
-    }
-    else {
-         this._elTextbox.value = "";
-    }
-    this._sPastSelections = this._elTextbox.value;
-
-    // Fire custom event
-    this.selectionEnforceEvent.fire(this);
+    var extraction = (this.delimChar) ? this._extractQuery(this._elTextbox.value) :
+            {previous:"",query:this._elTextbox.value};
+    this._elTextbox.value = extraction.previous;
+    this.selectionEnforceEvent.fire(this, extraction.query);
 };
 
 /**
@@ -1987,6 +1946,63 @@ YAHOO.widget.AutoComplete.prototype._selectText = function(elTextbox, nStart, nE
     else {
         elTextbox.select();
     }
+};
+
+/**
+ * Extracts rightmost query from delimited string.
+ *
+ * @method _extractQuery
+ * @param sQuery {String} String to parse
+ * @return {Object} Object literal containing properties "query" and "previous".  
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._extractQuery = function(sQuery) {
+    var aDelimChar = this.delimChar,
+        nDelimIndex = -1,
+        nNewIndex, nQueryStart,
+        i = aDelimChar.length-1,
+        sPrevious;
+        
+    // Loop through all possible delimiters and find the rightmost one in the query
+    // A " " may be a false positive if they are defined as delimiters AND
+    // are used to separate delimited queries
+    for(; i >= 0; i--) {
+        nNewIndex = sQuery.lastIndexOf(aDelimChar[i]);
+        if(nNewIndex > nDelimIndex) {
+            nDelimIndex = nNewIndex;
+        }
+    }
+    // If we think the last delimiter is a space (" "), make sure it is NOT
+    // a false positive by also checking the char directly before it
+    if(aDelimChar[i] == " ") {
+        for (var j = aDelimChar.length-1; j >= 0; j--) {
+            if(sQuery[nDelimIndex - 1] == aDelimChar[j]) {
+                nDelimIndex--;
+                break;
+            }
+        }
+    }
+    // A delimiter has been found in the query so extract the latest query from past selections
+    if(nDelimIndex > -1) {
+        nQueryStart = nDelimIndex + 1;
+        // Trim any white space from the beginning...
+        while(sQuery.charAt(nQueryStart) == " ") {
+            nQueryStart += 1;
+        }
+        // ...and save the rest of the string for later
+        sPrevious = sQuery.substring(0,nQueryStart);
+        // Here is the query itself
+        sQuery = sQuery.substr(nQueryStart);
+    }
+    // No delimiter found in the query, so there are no selections from past queries
+    else {
+        sPrevious = "";
+    }
+    
+    return {
+        previous: sPrevious,
+        query: sQuery
+    };
 };
 
 /**
