@@ -103,28 +103,34 @@
     
     if (isIE) {
         setStyle = function(el, property, val) {
-            switch (property) {
-                case 'opacity':
-                    if ( lang.isString(el.style.filter) ) { // in case not appended
-                        el.style.filter = 'alpha(opacity=' + val * 100 + ')';
-                        
-                        if (!el.currentStyle || !el.currentStyle.hasLayout) {
-                            el.style.zoom = 1; // when no layout or cant tell
+            if (el) {
+                switch (property) {
+                    case 'opacity':
+                        if ( lang.isString(el.style.filter) ) { // in case not appended
+                            el.style.filter = 'alpha(opacity=' + val * 100 + ')';
+                            
+                            if (!el.currentStyle || !el.currentStyle.hasLayout) {
+                                el.style.zoom = 1; // when no layout or cant tell
+                            }
                         }
-                    }
-                    break;
-                case 'float':
-                    property = 'styleFloat';
-                default:
-                el.style[property] = val;
+                        break;
+                    case 'float':
+                        property = 'styleFloat';
+                    default:
+                    el.style[property] = val;
+                }
+            } else {
             }
         };
     } else {
         setStyle = function(el, property, val) {
-            if (property == 'float') {
-                property = 'cssFloat';
+            if (el) {
+                if (property == 'float') {
+                    property = 'cssFloat';
+                }
+                el.style[property] = val;
+            } else {
             }
-            el.style[property] = val;
         };
     }
 
