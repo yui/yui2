@@ -2243,7 +2243,6 @@
 			}
 
 			return bReturnVal;
-
         
         },
         
@@ -2432,8 +2431,7 @@
         */
         _onMenuHide: function (p_sType) {
             
-            var oMenu = this._menu,
-                sTitle,
+            var sTitle,
                 sState;
         
             
@@ -3022,6 +3020,16 @@
 			this.on("mousedown", this._onMouseDown);
 			this.on("mouseup", this._onMouseUp);
             this.on("click", this._onClick);
+
+			//	Need to reset the value of the "onclick" Attribute so that any
+			//	handlers registered via the "onclick" Attribute are fired after 
+			//	Button's default "_onClick" listener.
+			
+			var fnOnClick = this.get("onclick");
+
+			this.set("onclick", null);
+			this.set("onclick", fnOnClick);
+
             this.on("dblclick", this._onDblClick);
 
             if (oLabel) {
