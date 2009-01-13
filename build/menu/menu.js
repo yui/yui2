@@ -1254,7 +1254,7 @@ OFF_SCREEN_POSITION: "-999em",
 
 
 /** 
-* @property _bHideDelayEventHandlersAssigned
+* @property _useHideDelay
 * @description Boolean indicating if the "mouseover" and "mouseout" event 
 * handlers used for hiding the menu via a call to "YAHOO.lang.later" have 
 * already been assigned.
@@ -1262,7 +1262,7 @@ OFF_SCREEN_POSITION: "-999em",
 * @private
 * @type Boolean
 */
-_bHideDelayEventHandlersAssigned: false,
+_useHideDelay: false,
 
 
 /**
@@ -2596,6 +2596,10 @@ _onMouseOver: function (p_sType, p_aArgs) {
 				Dom.isAncestor(this.element, oTarget))) {
 	
 			// Menu mouseover logic
+
+	        if (this._useHideDelay) {
+	        	this._cancelHideDelay();
+	        }
 	
 			this._nCurrentMouseX = 0;
 	
@@ -2791,7 +2795,11 @@ _onMouseOut: function (p_sType, p_aArgs) {
 			!Dom.isAncestor(this.element, oRelatedTarget)) || bMovingToSubmenu)) {
 	
 			// Menu mouseout logic
-	
+
+	        if (this._useHideDelay) {
+	        	this._execHideDelay();
+	        }
+
 			Event.removeListener(this.element, _MOUSEMOVE, this._onMouseMove);
 	
 			this._nCurrentMouseX = Event.getPageX(oEvent);
@@ -3000,6 +3008,11 @@ _onKeyDown: function (p_sType, p_aArgs) {
         nNextItemOffsetTop,
         nScrollTarget,
         oParentMenu;
+
+
+	if (this._useHideDelay) {
+		this._cancelHideDelay();
+	}
 
 
     /*
@@ -3902,8 +3915,7 @@ getConstrainedY: function (y) {
 		var nDisplayRegionHeight = getDisplayRegionHeight(),
 			bMenuHasItems = (oMenu.getItems().length > 0),
 			nMenuMinScrollHeight,
-			fnReturnVal,
-			nNewY;
+			fnReturnVal;
 
 
 		if (nMenuOffsetHeight > nDisplayRegionHeight) {
@@ -4570,38 +4582,9 @@ configIframe: function (p_sType, p_aArgs, p_oMenu) {
 */
 configHideDelay: function (p_sType, p_aArgs, p_oMenu) {
 
-    var nHideDelay = p_aArgs[0],
-        oMouseOutEvent = this.mouseOutEvent,
-        oMouseOverEvent = this.mouseOverEvent,
-        oKeyDownEvent = this.keyDownEvent;
+    var nHideDelay = p_aArgs[0];
 
-    if (nHideDelay > 0) {
-
-        /*
-            Only assign event handlers once. This way the user change 
-            the value for the hidedelay as many times as they want.
-        */
-
-        if (!this._bHideDelayEventHandlersAssigned) {
-
-            oMouseOutEvent.subscribe(this._execHideDelay);
-            oMouseOverEvent.subscribe(this._cancelHideDelay);
-            oKeyDownEvent.subscribe(this._cancelHideDelay);
-
-            this._bHideDelayEventHandlersAssigned = true;
-        
-        }
-
-    }
-    else {
-
-        oMouseOutEvent.unsubscribe(this._execHideDelay);
-        oMouseOverEvent.unsubscribe(this._cancelHideDelay);
-        oKeyDownEvent.unsubscribe(this._cancelHideDelay);
-
-        this._bHideDelayEventHandlersAssigned = false;
-
-    }
+	this._useHideDelay = (nHideDelay > 0);
 
 },
 
