@@ -55,7 +55,6 @@
         var bar = new Y.Element('bar', { href: 'http://www.yahoo.com/', foo: 'foo' });
 
         var elFoo = document.getElementById('foo');
-        console.log(foo.get('element'));
 
         suite.add( new tool.TestCase({
             name: 'YAHOO.util.Element',
@@ -125,6 +124,19 @@
                 Assert.areEqual(Y.Dom.getStyle('foo', 'font-family'), 'tahoma', 'attribConfig');
                 foo.set('fontname', 'verdana');
                 foo.resetValue('fontname');
+
+                var baz = new YAHOO.util.Element(document.createElement('div'), {
+                    id: 'baz',
+                    title: 'test title',
+                    onclick: function(e) {
+                        alert(e.type);
+                    },
+                    innerHTML: 'baz'
+                });
+
+                baz.appendTo(document.body);
+                Assert.areEqual(baz.get('element').id, baz.get('id'), "baz.get('id')");
+                Assert.areEqual(baz.get('element').title, baz.get('title'), "baz.get('title')");
             },
 
             test_validator: function() {
