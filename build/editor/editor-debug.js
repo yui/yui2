@@ -1167,15 +1167,9 @@ var Dom = YAHOO.util.Dom,
                 oButton = false;
             } else {
                 //Add to .get('buttons') manually
-                //DAV - TEMP
-                if (!oButton.id) {
-                    oButton.id = Dom.generateId();
-                }
                 this._configs.buttons.value[this._configs.buttons.value.length] = oButton;
                 
                 var tmp = new this.buttonType(_oButton);
-                //DAV - TEMP
-                tmp.set('id', oButton.id);
                 tmp.get('element').tabIndex = '-1';
                 tmp.get('element').setAttribute('role', 'button');
                 tmp._selected = true;
@@ -8467,7 +8461,6 @@ var Dom = YAHOO.util.Dom,
             panelEl.style.top = '-9999px';
             panelEl.style.left = '-9999px';
             document.body.appendChild(panelEl);
-            //TODO IE barfs on this..
             this.get('element_cont').insertBefore(panelEl, this.get('element_cont').get('firstChild'));
 
                 

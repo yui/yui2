@@ -1251,7 +1251,6 @@ var Dom = YAHOO.util.Dom,
             panelEl.style.top = '-9999px';
             panelEl.style.left = '-9999px';
             document.body.appendChild(panelEl);
-            //TODO IE barfs on this..
             this.get('element_cont').insertBefore(panelEl, this.get('element_cont').get('firstChild'));
 
                 
