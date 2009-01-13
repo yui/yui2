@@ -10,11 +10,6 @@
 YAHOO.util.Attribute = function(hash, owner) {
     if (owner) { 
         this.owner = owner;
-        if (hash.method) {
-            YAHOO.log('"method" is deprecated; use "setter"', 'warn', 'Element');
-            hash.setter = hash.method;
-        }
-
         this.configure(hash, true);
     }
 };
@@ -72,25 +67,26 @@ YAHOO.util.Attribute.prototype = {
     _written: false,
     
     /**
-     * The method to use when setting the attribute's value.
-     * The method recieves the new value as the only argument.
+     * A function to call when setting the attribute's value.
+     * The method receives the new value as the first arg and the attribute name as the 2nd
      * @property method
      * @type Function
-     * @deprecated Use setter
      */
     method: null,
     
     /**
-     * The method to use when setting the attribute's value.
-     * The method recieves the new value as the only argument.
+     * The function to use when setting the attribute's value.
+     * The setter receives the new value as the first arg and the attribute name as the 2nd
+     * The return value of the setter replaces the value passed to set(). 
      * @property setter
      * @type Function
      */
     setter: null,
     
     /**
-     * The method to use when getting the attribute's value.
-     * The return value of the getter fn will be used as the return from get()
+     * The function to use when getting the attribute's value.
+     * The getter receives the new value as the first arg and the attribute name as the 2nd
+     * The return value of the getter will be used as the return from get().
      * @property getter
      * @type Function
      */
@@ -159,10 +155,17 @@ YAHOO.util.Attribute.prototype = {
         }
 
         if (this.setter) {
-            this.setter.call(owner, value, this.name);
+            value = this.setter.call(owner, value, this.name);
+            if (value === undefined) {
+                YAHOO.log('setter for ' + this.name + ' returned undefined', 'warn', 'Attribute');
+            }
         }
         
-        this.value = value; // TODO: set before calling method?
+        if (this.method) {
+            this.method.call(owner, value, this.name);
+        }
+        
+        this.value = value; // TODO: set before calling setter/method?
         this._written = true;
         
         event.type = name;
