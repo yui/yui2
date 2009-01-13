@@ -1921,7 +1921,7 @@ YAHOO.widget.AutoComplete.prototype._clearSelection = function() {
 YAHOO.widget.AutoComplete.prototype._textMatchesOption = function() {
     var elMatch = null;
 
-    for(var i = this._nDisplayedItems-1; i >= 0 ; i--) {
+    for(var i=0; i<this._nDisplayedItems; i++) {
         var elListItem = this._elList.childNodes[i];
         var sMatch = ("" + elListItem._sResultMatch).toLowerCase();
         if(sMatch == this._sCurQuery.toLowerCase()) {
