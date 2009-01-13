@@ -2293,8 +2293,8 @@ YAHOO.widget.AutoComplete.prototype._jumpSelection = function() {
 YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
     if(this._bContainerOpen) {
         // Determine current item's id number
-        var elCurListItem = this._elCurListItem;
-        var nCurItemIndex = -1;
+        var elCurListItem = this._elCurListItem,
+            nCurItemIndex = -1;
 
         if(elCurListItem) {
             nCurItemIndex = elCurListItem._nItemIndex;
@@ -2329,12 +2329,13 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
             return;
         }
         
-        var elNewListItem = this._elList.childNodes[nNewItemIndex];
+        var elNewListItem = this._elList.childNodes[nNewItemIndex],
 
         // Scroll the container if necessary
-        var elContent = this._elContent;
-        var scrollOn = ((YAHOO.util.Dom.getStyle(elContent,"overflow") == "auto") ||
-            (YAHOO.util.Dom.getStyle(elContent,"overflowY") == "auto"));
+            elContent = this._elContent,
+            sOF = YAHOO.util.Dom.getStyle(elContent,"overflow"),
+            sOFY = YAHOO.util.Dom.getStyle(elContent,"overflowY"),
+            scrollOn = ((sOF == "auto") || (sOF == "scroll") || (sOFY == "auto") || (sOFY == "scroll"));
         if(scrollOn && (nNewItemIndex > -1) &&
         (nNewItemIndex < this._nDisplayedItems)) {
             // User is keying down
