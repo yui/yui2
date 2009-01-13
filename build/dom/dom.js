@@ -23,37 +23,37 @@
     
     // regex cache
     var patterns = {
-        HYPHEN: /(-[a-z])/i, // to normalize get/setStyle
         ROOT_TAG: /^body|html$/i, // body for quirks mode, html for standards,
-        OP_SCROLL:/^(?:inline|table-row)$/i
+        OP_SCROLL:/^(?:inline|table-row)$/i,
+        CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}])/g
     };
 
+
     var toCamel = function(property) {
-        if ( !patterns.HYPHEN.test(property) ) {
-            return property; // no hyphens
+        var c = propertyCache;
+
+        function tU(x,l) {
+            return l.toUpperCase();
         }
-        
-        if (propertyCache[property]) { // already converted
-            return propertyCache[property];
-        }
-       
-        var converted = property;
- 
-        while( patterns.HYPHEN.exec(converted) ) {
-            converted = converted.replace(RegExp.$1,
-                    RegExp.$1.substr(1).toUpperCase());
-        }
-        
-        propertyCache[property] = converted;
-        return converted;
-        //return property.replace(/-([a-z])/gi, function(m0, m1) {return m1.toUpperCase()}) // cant use function as 2nd arg yet due to safari bug
+
+        return c[property] || (c[property] = property.indexOf('-') === -1 ? 
+                                property :
+                                property.replace( /-([a-z])/gi, tU ));
     };
-    
+
     var getClassRegEx = function(className) {
-        var re = reClassNameCache[className];
-        if (!re) {
-            re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
-            reClassNameCache[className] = re;
+        var re;
+        if (className !== undefined) {
+            if (className.exec) { // already a RegExp
+                re = className;
+            } else {
+                re = reClassNameCache[className];
+                if (!re) {
+                    className = className.replace(patterns.CLASS_RE_TOKENS, '\\$1');
+                    re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
+                    reClassNameCache[className] = re;
+                }
+            }
         }
         return re;
     };
@@ -151,13 +151,28 @@
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
+            var id, nodes;
+
             if (el) {
                 if (el.nodeType || el.item) { // Node, or NodeList
                     return el;
                 }
 
                 if (typeof el === 'string') { // id
-                    return document.getElementById(el);
+                    id = el;
+                    el = document.getElementById(el);
+                    if (el && el.id === id) { // IE: avoid false match on "name" attribute
+                        return el;
+                    } else if (el && document.all) { // filter by name
+                        el = null;
+                        nodes = document.all[id];
+                        for (var i = 0, len = nodes.length; i < len; ++i) {
+                            if (nodes[i].id === id) {
+                                return nodes[i];
+                            }
+                        }
+                    }
+                    return el;
                 }
                 
                 if ('length' in el) { // array-like 
@@ -996,6 +1011,31 @@
                 b = Y.Dom.getViewportHeight() + t;
 
             return new Y.Region(t, r, b, l);
+        },
+
+        setAttribute: function(el, attr, value) {
+            switch (attr) {
+                case 'for':
+                    attr = 'htmlFor';
+                    break;
+                case 'class':
+                    attr = 'className';
+                    break;
+            }
+            el[attr] = value;
+        },
+
+
+        getAttribute: function(el, attr, value) {
+            switch (attr) {
+                case 'for':
+                    attr = 'htmlFor';
+                    break;
+                case 'class':
+                    attr = 'className';
+                    break;
+            }
+            return el[attr];
         }
     };
     
