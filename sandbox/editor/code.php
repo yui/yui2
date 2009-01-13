@@ -32,7 +32,7 @@
     <div id="ft">&nbsp;</div>
 </div>
 <script type="text/javascript" src="../yui-dev/build/yahoo-dom-event/yahoo-dom-event.js?bust=<?php echo(mktime()); ?>"></script> 
-<script type="text/javascript" src="../yui-dev/build/element/element-beta-min.js?bust=<?php echo(mktime()); ?>"></script> 
+<script type="text/javascript" src="../yui-dev/build/element/element-min.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../yui-dev/build/logger/logger.js?bust=<?php echo(mktime()); ?>"></script> 
 <script src="js/toolbar-button.js?bust=<?php echo(mktime()); ?>"></script>
 <script src="js/toolbar.js?bust=<?php echo(mktime()); ?>"></script>

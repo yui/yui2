@@ -1905,6 +1905,65 @@ var Dom = YAHOO.util.Dom,
             return str;
         }
     });
+/**
+* @event beforeOpenWindow
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @description Event fires before an Editor Window is opened. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event afterOpenWindow
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @description Event fires after an Editor Window is opened. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event closeWindow
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @description Event fires after an Editor Window is closed. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event windowCMDOpen
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @description Dynamic event fired when an <a href="YAHOO.widget.EditorWindow.html">EditorWindow</a> is opened.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkOpen event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event windowCMDClose
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @description Dynamic event fired when an <a href="YAHOO.widget.EditorWindow.html">EditorWindow</a> is closed.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkClose event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event windowRender
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @description Event fired when the initial Overlay is rendered. Can be used to manipulate the content of the panel.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event windowInsertImageRender
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @param {HTMLElement} body The HTML element used as the body of the window..
+* @param {Toolbar} toolbar A reference to the toolbar object used inside this window.
+* @description Event fired when the pre render of the Insert Image window has finished.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event windowCreateLinkRender
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @param {HTMLElement} body The HTML element used as the body of the window..
+* @description Event fired when the pre render of the Create Link window has finished.
+* @type YAHOO.util.CustomEvent
+*/
+
+
+
     /**
      * @description Class to hold Window information between uses. We use the same panel to show the windows, so using this will allow you to configure a window before it is shown.
      * This is what you pass to Editor.openWindow();. These parameters will not take effect until the openWindow() is called in the editor.
@@ -1979,61 +2038,4 @@ var Dom = YAHOO.util.Dom,
             return 'Editor Window (' + this.name + ')';
         }
     };
-/**
-* @event beforeOpenWindow
-* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @description Event fires before an Editor Window is opened. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event afterOpenWindow
-* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @description Event fires after an Editor Window is opened. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event closeWindow
-* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
-* @description Event fires after an Editor Window is closed. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event windowCMDOpen
-* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @description Dynamic event fired when an <a href="YAHOO.widget.EditorWindow.html">EditorWindow</a> is opened.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkOpen event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event windowCMDClose
-* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @description Dynamic event fired when an <a href="YAHOO.widget.EditorWindow.html">EditorWindow</a> is closed.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkClose event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event windowRender
-* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @description Event fired when the initial Overlay is rendered. Can be used to manipulate the content of the panel.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event windowInsertImageRender
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @param {HTMLElement} body The HTML element used as the body of the window..
-* @param {Toolbar} toolbar A reference to the toolbar object used inside this window.
-* @description Event fired when the pre render of the Insert Image window has finished.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event windowCreateLinkRender
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @param {HTMLElement} body The HTML element used as the body of the window..
-* @description Event fired when the pre render of the Create Link window has finished.
-* @type YAHOO.util.CustomEvent
-*/
-
 })();

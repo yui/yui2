@@ -121,3 +121,14 @@
     height: 6px;
     width: 6px;
 }
+
+.yui-skin-sam .yui-resize-textarea .yui-resize-handle-r {
+    right: -8px;
+}
+.yui-skin-sam .yui-resize-textarea .yui-resize-handle-b {
+    bottom: -8px;
+}
+.yui-skin-sam .yui-resize-textarea .yui-resize-handle-br {
+    right: -8px;
+    bottom: -8px;
+}

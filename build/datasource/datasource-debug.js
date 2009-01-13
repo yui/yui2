@@ -1609,7 +1609,7 @@ parseJSONData : function(oRequest, oFullResponse) {
             }
 
         } else {
-            YAHOO.log("JSON data could not be parsed: " +
+            YAHOO.log("JSON data could not be parsed due to invalid responseSchema.resultsList or invalid response: " +
                     lang.dump(oFullResponse), "error", this.toString());
 
             oParsedResponse.error = true;
@@ -1643,40 +1643,46 @@ parseHTMLTableData : function(oRequest, oFullResponse) {
     var fields = this.responseSchema.fields;
     var oParsedResponse = {results:[]};
 
-    // Iterate through each TBODY
-    for(var i=0; i<elTable.tBodies.length; i++) {
-        var elTbody = elTable.tBodies[i];
-
-        // Iterate through each TR
-        for(var j=elTbody.rows.length-1; j>-1; j--) {
-            var elRow = elTbody.rows[j];
-            var oResult = {};
-            
-            for(var k=fields.length-1; k>-1; k--) {
-                var field = fields[k];
-                var key = (lang.isValue(field.key)) ? field.key : field;
-                var data = elRow.cells[k].innerHTML;
-
-                // Backward compatibility
-                if(!field.parser && field.converter) {
-                    field.parser = field.converter;
-                    YAHOO.log("The field property converter has been deprecated" +
-                            " in favor of parser", "warn", this.toString());
+    if(lang.isArray(fields)) {
+        // Iterate through each TBODY
+        for(var i=0; i<elTable.tBodies.length; i++) {
+            var elTbody = elTable.tBodies[i];
+    
+            // Iterate through each TR
+            for(var j=elTbody.rows.length-1; j>-1; j--) {
+                var elRow = elTbody.rows[j];
+                var oResult = {};
+                
+                for(var k=fields.length-1; k>-1; k--) {
+                    var field = fields[k];
+                    var key = (lang.isValue(field.key)) ? field.key : field;
+                    var data = elRow.cells[k].innerHTML;
+    
+                    // Backward compatibility
+                    if(!field.parser && field.converter) {
+                        field.parser = field.converter;
+                        YAHOO.log("The field property converter has been deprecated" +
+                                " in favor of parser", "warn", this.toString());
+                    }
+                    var parser = (typeof field.parser === 'function') ?
+                        field.parser :
+                        DS.Parser[field.parser+''];
+                    if(parser) {
+                        data = parser.call(this, data);
+                    }
+                    // Safety measure
+                    if(data === undefined) {
+                        data = null;
+                    }
+                    oResult[key] = data;
                 }
-                var parser = (typeof field.parser === 'function') ?
-                    field.parser :
-                    DS.Parser[field.parser+''];
-                if(parser) {
-                    data = parser.call(this, data);
-                }
-                // Safety measure
-                if(data === undefined) {
-                    data = null;
-                }
-                oResult[key] = data;
+                oParsedResponse.results[j] = oResult;
             }
-            oParsedResponse.results[j] = oResult;
         }
+    }
+    else {
+        bError = true;
+        YAHOO.log("Invalid responseSchema.fields", "error", this.toString());
     }
 
     if(bError) {
@@ -1787,6 +1793,24 @@ lang.extend(util.FunctionDataSource, DS, {
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// FunctionDataSource public properties
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Context in which to execute the function. By default, is the DataSource
+ * instance itself. If set, the function will receive the DataSource instance
+ * as an additional argument. 
+ *
+ * @property scope
+ * @type Object
+ * @default null
+ */
+scope : null,
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // FunctionDataSource public methods
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -1807,7 +1831,9 @@ makeConnection : function(oRequest, oCallback, oCaller) {
 
     // Pass the request in as a parameter and
     // forward the return value to the handler
-    var oRawResponse = this.liveData(oRequest);
+    
+    
+    var oRawResponse = (this.scope) ? this.liveData.call(this.scope, oRequest, this) : this.liveData(oRequest);
     
     // Try to sniff data type if it has not been defined
     if(this.responseType === DS.TYPE_UNKNOWN) {
@@ -1939,6 +1965,19 @@ generateRequestCallback : function(id) {
 },
 
 /**
+ * Overridable method gives implementers access to modify the URI before the dynamic
+ * script node gets inserted. Implementers should take care not to return an
+ * invalid URI.
+ *
+ * @method doBeforeGetScriptNode
+ * @param {String} URI to the script 
+ * @return {String} URI to the script
+ */
+doBeforeGetScriptNode : function(sUri) {
+    return sUri;
+},
+
+/**
  * Overriding method passes query to Get Utility. The returned
  * response is then forwarded to the handleResponse function.
  *
@@ -2000,6 +2039,7 @@ makeConnection : function(oRequest, oCallback, oCaller) {
     // We are now creating a request
     util.ScriptNodeDataSource._nPending++;
     var sUri = this.liveData + oRequest + this.generateRequestCallback(id);
+    sUri = this.doBeforeGetScriptNode(sUri);
     YAHOO.log("DataSource is querying URL " + sUri, "info", this.toString());
     this.getUtility.script(sUri,
             {autopurge: true,
@@ -2194,7 +2234,7 @@ makeConnection : function(oRequest, oCallback, oCaller) {
     var _xhrSuccess = function(oResponse) {
         // If response ID does not match last made request ID,
         // silently fail and wait for the next response
-        if(oResponse && (this.asyncMode == "ignoreStaleResponses") &&
+        if(oResponse && (this.connXhrMode == "ignoreStaleResponses") &&
                 (oResponse.tId != oQueue.conn.tId)) {
             YAHOO.log("Ignored stale response", "warn", this.toString());
             return null;

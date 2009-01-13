@@ -72,6 +72,31 @@
                         carousel.getElementForItems());
             },
 
+            testgetVisibleItems: function () {
+                var expected = [], i, j, items;
+
+                items = Dom.getChildrenBy(carouselEl, function (node) {
+                    return node.nodeName.toUpperCase() == "LI";
+                });
+                if (!items || items.length != 4) {
+                    Assert.fail();
+                }
+
+                j = 0;
+                for (i in items) {
+                    j++;
+                    if (j > 3) {
+                        break;
+                    }
+                    if (items.hasOwnProperty(i)) {
+                        expected.push(items[i]);
+                    }
+                }
+
+                return ArrayAssert.itemsAreEqual(expected,
+                        carousel.getVisibleItems());
+            },
+
             testClearItems: function () {
                 carousel.clearItems();
                 return Assert.areEqual(0, carousel.get("numItems")) &&

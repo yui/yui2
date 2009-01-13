@@ -358,9 +358,21 @@ Element.prototype = {
 
     setAttributes: function(map, silent) {
         // set based on configOrder
-        for (var i = 0, len = this._configOrder.length; i < len; ++i) {
-            if (map[this._configOrder[i]] !== undefined) {
-                this.set(this._configOrder[i], map[this._configOrder[i]], silent);
+        var done = {},
+            configOrder = this._configOrder;
+
+        // set based on configOrder
+        for (var i = 0, len = configOrder.length; i < len; ++i) {
+            if (map[configOrder[i]] !== undefined) {
+                done[configOrder[i]] = true;
+                this.set(configOrder[i], map[configOrder[i]], silent);
+            }
+        }
+
+        // unconfigured (e.g. Dom attributes)
+        for (var att in map) {
+            if (map.hasOwnProperty(att) && !done[att]) {
+                this.set(att, map[att], silent);
             }
         }
     },
