@@ -1054,7 +1054,7 @@
             }
         
         },
-        
+
         
         /**
         * @method _setMenu
@@ -1075,15 +1075,9 @@
                 */
         
                 bInstance = false,
-        
-
                 oMenu,
                 oMenuElement,
-                oSrcElement,
-                aItems,
-                nItems,
-                oItem,
-                i;
+                oSrcElement;
         
 
 			function onAppendTo() {
@@ -1141,12 +1135,13 @@
 
 						oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
 						oMenu.subscribe("click", this._onMenuClick, this, true);
-						oMenu.itemAddedEvent.subscribe(this._onMenuItemAdded, this, true);
+
+						this.on("selectedMenuItemChange", this._onSelectedMenuItemChange);
 		
 						oSrcElement = oMenu.srcElement;
 		
 						if (oSrcElement && oSrcElement.nodeName.toUpperCase() == "SELECT") {
-				
+
 							oSrcElement.style.display = "none";
 							oSrcElement.parentNode.removeChild(oSrcElement);
 		
@@ -1200,30 +1195,7 @@
 				if (p_oMenu && Menu && (p_oMenu instanceof Menu)) {
 			
 					oMenu = p_oMenu;
-					aItems = oMenu.getItems();
-					nItems = aItems.length;
 					bInstance = true;
-			
-			
-					if (nItems > 0) {
-			
-						i = nItems - 1;
-			
-						do {
-			
-							oItem = aItems[i];
-			
-							if (oItem) {
-			
-								oItem.cfg.subscribeToConfigEvent("selected", 
-									this._onMenuItemSelected, oItem, this);
-			
-							}
-			
-						}
-						while (i--);
-			
-					}
 			
 					initMenu.call(this);
 			
@@ -1338,36 +1310,7 @@
             }
         
         },
-        
-        
-        /**
-        * @method _setSelectedMenuItem
-        * @description Sets the value of the button's 
-        * "selectedMenuItem" attribute.
-        * @protected
-        * @param {Number} p_nIndex Number representing the index of the item 
-        * in the button's menu that is currently selected.
-        */
-        _setSelectedMenuItem: function (p_nIndex) {
 
-            var oMenu = this._menu,
-                oMenuItem;
-
-
-            if (Menu && oMenu && oMenu instanceof Menu) {
-
-                oMenuItem = oMenu.getItem(p_nIndex);
-                
-
-                if (oMenuItem && !oMenuItem.cfg.getProperty("selected")) {
-                
-                    oMenuItem.cfg.setProperty("selected", true);
-                
-                }
-            
-            }
-
-        },
         
         
         // Protected methods
@@ -2452,7 +2395,8 @@
         */
         _onMenuHide: function (p_sType) {
             
-            var sTitle,
+            var oMenu = this._menu,
+                sTitle,
                 sState;
         
             
@@ -2521,7 +2465,9 @@
         
             var oButtonElement = this.get("element"),
                 oButtonParent = oButtonElement.parentNode,
-                oMenuElement = this._menu.element;
+				oMenu = this._menu,
+                oMenuElement = oMenu.element,
+				oSrcElement = oMenu.srcElement;
         
         
             if (oButtonParent != oMenuElement.parentNode) {
@@ -2532,55 +2478,21 @@
 
 			this._renderedMenu = true;
 
-            this.set("selectedMenuItem", this.get("selectedMenuItem"));
+			//	If the user has designated an <option> of the Menu's source 
+			//	<select> element to be selected, sync the selectedIndex with 
+			//	the "selectedMenuItem" Attribute.
+
+			if (oSrcElement && 
+					oSrcElement.nodeName.toLowerCase() === "select" && 
+					oSrcElement.value) {
+				
+				this.set("selectedMenuItem", 
+							oMenu.getItem(oSrcElement.selectedIndex));
+				
+			}
 
         },
-        
-        
-        /**
-        * @method _onMenuItemSelected
-        * @description "selectedchange" event handler for each item in the 
-        * button's menu.
-        * @private
-        * @param {String} p_sType String representing the name of the event  
-        * that was fired.
-        * @param {Array} p_aArgs Array of arguments sent when the event 
-        * was fired.
-        * @param {MenuItem} p_oItem Object representing the menu item that
-        * subscribed to the event.
-        */
-        _onMenuItemSelected: function (p_sType, p_aArgs, p_oItem) {
 
-            var bSelected = p_aArgs[0];
-
-            if (bSelected) {
-            
-                this.set("selectedMenuItem", p_oItem);
-
-            }
-        
-        },
-        
-        
-        /**
-        * @method _onMenuItemAdded
-        * @description "itemadded" event handler for the button's menu.
-        * @private
-        * @param {String} p_sType String representing the name of the event  
-        * that was fired.
-        * @param {Array} p_aArgs Array of arguments sent when the event
-        * was fired.
-        * @param {<a href="YAHOO.widget.MenuItem.html">
-        * YAHOO.widget.MenuItem</a>} p_oItem Object representing the menu 
-        * item that subscribed to the event.
-        */
-        _onMenuItemAdded: function (p_sType, p_aArgs, p_oItem) {
-            
-            var oItem = p_aArgs[0];
-        
-           	oItem.cfg.subscribeToConfigEvent("selected", this._onMenuItemSelected, oItem, this);
-        
-        },
         
         
         /**
@@ -2614,7 +2526,29 @@
             }
         
         },
-        
+
+
+        /**
+        * @method _onSelectedMenuItemChange
+        * @description "selectedMenuItemChange" event handler for the Button's
+		* "selectedMenuItem" attribute.
+        * @param {Event} event Object representing the DOM event object  
+        * passed back by the event utility (YAHOO.util.Event).
+        */
+		_onSelectedMenuItemChange: function (event) {
+		
+			var oSelected = event.prevValue,
+				oItem = event.newValue;
+
+			if (oSelected) {
+				Dom.removeClass(oSelected.element, "yui-button-selectedmenuitem");
+			}
+			
+			if (oItem) {
+				Dom.addClass(oItem.element, "yui-button-selectedmenuitem");
+			}
+			
+		},        
         
         
         // Public methods
@@ -3047,7 +2981,7 @@
 			//	Need to reset the value of the "onclick" Attribute so that any
 			//	handlers registered via the "onclick" Attribute are fired after 
 			//	Button's default "_onClick" listener.
-			
+
 			var fnOnClick = this.get("onclick");
 
 			this.set("onclick", null);
@@ -3496,8 +3430,7 @@
             */
             this.setAttributeConfig("selectedMenuItem", {
         
-                value: null,
-                method: this._setSelectedMenuItem
+                value: null
         
             });
         
