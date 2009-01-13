@@ -1879,7 +1879,16 @@ YAHOO.widget.Axis.prototype =
 	 * @property labelFunction
 	 * @type String
 	 */
-	labelFunction: null
+	labelFunction: null,
+	
+	/**
+	 * Indicates the number of labels to attempt to display on an axis. By default, this 
+	 * number is calculated by the chart based on the data range and available space. 
+	 * 
+	 * @property numLabels
+	 * @type Number
+	 */
+	numLabels: NaN 
 };
 
 /**
@@ -1965,7 +1974,15 @@ YAHOO.lang.extend(YAHOO.widget.NumericAxis, YAHOO.widget.Axis,
 	 * @property scale
 	 * @type String
 	 */
-	scale: "linear"
+	scale: "linear",
+	
+	/**
+	 * Indicates whether to round the major unit.
+	 * 
+	 * @property roundMajorUnit
+	 * @type Boolean
+	 */
+	roundMajorUnit: true 
 });
 
 /**

@@ -210,6 +210,13 @@
 /* The disbled state of the Editor */
 .yui-editor-container .yui-editor-masked {
     background-color: #CCC;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: .5;
+    filter: alpha(opacity=50);
 }
 /* Style the editable iframe to hide it */
 .yui-editor-container iframe {

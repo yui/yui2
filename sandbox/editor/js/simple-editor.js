@@ -2339,13 +2339,6 @@ var Dom = YAHOO.util.Dom,
                         this.toolbar.set('disabled', true);
                     }
                     this._mask = document.createElement('DIV');
-                    //TODO -- Add CSS class for this stuff..
-                    Dom.setStyle(this._mask, 'height', '100%');
-                    Dom.setStyle(this._mask, 'width', '100%');
-                    Dom.setStyle(this._mask, 'position', 'absolute');
-                    Dom.setStyle(this._mask, 'top', '0');
-                    Dom.setStyle(this._mask, 'left', '0');
-                    Dom.setStyle(this._mask, 'opacity', '.5');
                     Dom.addClass(this._mask, 'yui-editor-masked');
                     this.get('iframe').get('parentNode').appendChild(this._mask);
                 }
@@ -3686,6 +3679,49 @@ var Dom = YAHOO.util.Dom,
     /* {{{  Command Overrides */
 
         /**
+        * @method cmd_bold
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('bold') is used.
+        */
+        cmd_bold: function(value) {
+            if (!this.browser.webkit) {
+                var el = this._getSelectedElement();
+                if (el && this._isElement(el, 'span') && this._hasSelection()) {
+                    if (el.style.fontWeight == 'bold') {
+                        el.style.fontWeight = '';
+                        var b = this._getDoc().createElement('b'),
+                        par = el.parentNode;
+                        par.replaceChild(b, el);
+                        b.appendChild(el);
+                    }
+                }
+            }
+            return [true];
+        },
+        /**
+        * @method cmd_italic
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('italic') is used.
+        */
+
+        cmd_italic: function(value) {
+            if (!this.browser.webkit) {
+                var el = this._getSelectedElement();
+                if (el && this._isElement(el, 'span') && this._hasSelection()) {
+                    if (el.style.fontStyle == 'italic') {
+                        el.style.fontStyle = '';
+                        var i = this._getDoc().createElement('i'),
+                        par = el.parentNode;
+                        par.replaceChild(i, el);
+                        i.appendChild(el);
+                    }
+                }
+            }
+            return [true];
+        },
+
+
+        /**
         * @method cmd_underline
         * @param value Value passed from the execCommand method
         * @description This is an execCommand override method. It is called from execCommand when the execCommand('underline') is used.
@@ -4270,9 +4306,7 @@ var Dom = YAHOO.util.Dom,
                 
                 for (var i = 0; i < _tmp.length; i++) {
                     if ((YAHOO.util.Dom.getStyle(_tmp[i], 'font-family') == 'yui-tmp') || (_tmp[i].face && (_tmp[i].face == 'yui-tmp'))) {
-                        //TODO Why is this here?!?
                         el = _elCreate(_tmp[i].tagName, tagStyle);
-                        //el = _elCreate(tagName, tagStyle);
                         el.innerHTML = _tmp[i].innerHTML;
                         if (this._isElement(_tmp[i], 'ol') || (this._isElement(_tmp[i], 'ul'))) {
                             var fc = _tmp[i].getElementsByTagName('li')[0];
@@ -4576,10 +4610,9 @@ var Dom = YAHOO.util.Dom,
 		    html = html.replace(/<\/YUI_EMBED>/g, '<\/embed>');
             
             //This should fix &amp;s in URL's
-            //TODO Make this global
-            html = html.replace(' &amp; ', 'YUI_AMP');
-            html = html.replace('&amp;', '&');
-            html = html.replace('YUI_AMP', ' &amp; ');
+            html = html.replace(/ &amp; /gi, 'YUI_AMP');
+            html = html.replace(/&amp;/gi, '&');
+            html = html.replace(/YUI_AMP/gi, ' &amp; ');
 
             //Trim the output, removing whitespace from the beginning and end
             html = YAHOO.lang.trim(html);
