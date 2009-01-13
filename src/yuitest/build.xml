@@ -1,78 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="YuiBuild" default="local">
-
     <description>Component Build File</description>
 
-    <dirname property="buildfile.dir" file="${ant.file}" />
-    <property environment="env" />
-    <property name="srcdir" value="${env.YUI_SRC_DIR}" />
-    <property name="builddir" value="${env.YUI_BUILD_DIR}" />
-    <property name="cvs.root" value="${env.CVSROOT}" />
-    <property name="cvs.rsh" value="${env.CVS_RSH}" />
-    
-    <property file="${buildfile.dir}/build.properties" />
+    <property file="build.properties" />
+    <import file="${builddir}/2.x/bootstrap.xml" description="Shared Build Properties - tools, build paths etc." />
 
-    <import file="${builddir}/buildproperties.xml" description="Shared Build Properties - tools, build paths etc." />
-    <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
-
-    <!-- Hook into customlocal, to build yuitest_core -->
-    <target name="customlocal">
-       <ant antfile="${buildfile.dir}/buildcore.xml" target="yuitest_local_subtask" inheritAll="false" />
+    <target name="build" depends="YuiModuleTargets.build">
+       <ant antfile="${buildfile.dir}/buildcore.xml" target="yuitest_build_subtask" inheritAll="false" />
     </target>
 
-    <target name="examples" description="Component Specific Over-ride">
-        <copy todir="${srcdir}/examples/${component}" preservelastmodified="true">
-            <fileset dir="${component.basedir}/examples">
-                <include name="**/*.*"/>
-                <!--
-                <include name="**/assets/*"/>
-                -->
-            </fileset>
-        </copy>
+    <target name="deployassets" depends="YuiSharedTargets.deployassets">
+        <yuicompress src="${global.build.component.assets}/testlogger.css" dest="${global.build.component.assets}/testlogger.css" args="${yuicompressor.css.args}" />
     </target>
-
-    <target name="cvscommit" description="CVS Commit">
-        <input message="Please enter cvs comment:" 
-               addproperty="cvs.msg" defaultvalue="AutoBuild" />
-
-        <echo message="commit: src" />
-        <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}" dest="${env.HOME}/dev">
-            <commandline>
-                <argument value="commit"/>
-                <argument value="-m"/>
-                <argument value="${cvs.msg}"/>
-                <argument value="yahoo/presentation/2.x/tool/${component}"/>
-            </commandline>
-        </cvs>
-        <echo message="commit: build dir" />
-        <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}" dest="${env.HOME}/dev">
-            <commandline>
-                <argument value="commit"/>
-                <argument value="-m"/>
-                <argument value="${cvs.msg}"/>
-                <argument value="yahoo/presentation/2.x/build/${component}"/>
-            </commandline>
-        </cvs>
-
-        <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}" dest="${env.HOME}/dev">
-            <commandline>
-                <argument value="commit"/>
-                <argument value="-m"/>
-                <argument value="${cvs.msg}"/>
-                <argument value="yahoo/presentation/2.x/src/${component}"/>
-            </commandline>
-        </cvs>
-        <echo message="commit: examples dir" />
-        <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}" dest="${env.HOME}/dev">
-            <commandline>
-                <argument value="commit"/>
-                <argument value="-m"/>
-                <argument value="${cvs.msg}"/>
-                <argument value="yahoo/presentation/2.x/examples/${component}"/>
-            </commandline>
-        </cvs>
-
-    </target>
-
 </project>
 
