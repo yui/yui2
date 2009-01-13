@@ -1,6 +1,7 @@
-package com.yahoo.astra.fl.charts.skins
+﻿package com.yahoo.astra.fl.charts.skins
 {
 	import fl.core.UIComponent;
+	import flash.display.Sprite;
 
 	/**
 	 * A skin shaped like a circle with a single color.
@@ -52,6 +53,36 @@ package com.yahoo.astra.fl.charts.skins
 			}
 		}
 		
+		/**
+		 * @private 
+		 * Storage for outline color
+		 */
+		private var _borderColor:uint;
+		
+		/**
+		 * @copy com.yahoo.astra.fl.charts.skins.IProgrammaticSkin#borderColor
+		 */
+		public function get borderColor():uint
+		{
+			return _borderColor;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set borderColor(value:uint):void
+		{
+			if(this._borderColor != value)
+			{
+				this._borderColor = value;
+				this.invalidate();
+			}
+		}
+		
+		private var _border:Sprite;
+		
+		private var _fill:Sprite;
+		
 	//--------------------------------------
 	//  Protected Methods
 	//--------------------------------------
@@ -69,10 +100,29 @@ package com.yahoo.astra.fl.charts.skins
 				return;
 			}
 			
-			this.graphics.lineStyle(0, 0, 0);
-			this.graphics.beginFill(this._fillColor, 1);
-			this.graphics.drawCircle(this.width / 2, this.height / 2, Math.min(this.width, this.height) / 2);
-			this.graphics.endFill();
+			
+			
+			if(_border == null)
+			{
+				_border = new Sprite();
+				this.addChild(_border);
+			}
+			_border.graphics.clear();
+			_border.graphics.lineStyle(0, 0, 0);
+			_border.graphics.beginFill(this.borderColor, 1);
+			_border.graphics.drawCircle(this.width / 2, this.height / 2, Math.min(this.width, this.height) / 2);
+			_border.graphics.endFill();
+			
+			if(_fill == null)
+			{
+				_fill = new Sprite();
+				this.addChild(_fill);
+			}
+			_fill.graphics.clear();
+			_fill.graphics.lineStyle(0, 0 , 0);
+			_fill.graphics.beginFill(this.fillColor, 1);
+			_fill.graphics.drawCircle((this.width / 2), (this.height / 2), Math.min(this.width-2, this.height-2)/2);
+			_fill.graphics.endFill();	
 		}
 		
 	}

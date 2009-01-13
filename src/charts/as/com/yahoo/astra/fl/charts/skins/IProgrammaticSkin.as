@@ -1,4 +1,4 @@
-package com.yahoo.astra.fl.charts.skins
+﻿package com.yahoo.astra.fl.charts.skins
 {
 	/**
 	 * A type of skin that supports color customization.
@@ -21,5 +21,15 @@ package com.yahoo.astra.fl.charts.skins
 		 * @private
 		 */
 		function set fillColor(value:uint):void;
+		
+		/**
+		 * The color used for the outline of the skin
+		 */
+		function get borderColor():uint;
+		
+		/**
+		 * @private
+		 */
+		function set borderColor(value:uint):void; 
 	}
 }

@@ -1,4 +1,4 @@
-package com.yahoo.astra.fl.charts.skins
+﻿package com.yahoo.astra.fl.charts.skins
 {
 	import fl.core.UIComponent;
 
@@ -52,6 +52,32 @@ package com.yahoo.astra.fl.charts.skins
 			}
 		}
 		
+		/**
+		 * @private 
+		 * Storage for outline color
+		 */
+		private var _borderColor:uint;
+		
+		/**
+		 * @copy com.yahoo.astra.fl.charts.skins.IProgrammaticSkin#borderColor
+		 */
+		public function get borderColor():uint
+		{
+			return _borderColor;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set borderColor(value:uint):void
+		{
+			if(this._borderColor != value)
+			{
+				this._borderColor = value;
+				this.invalidate();
+			}
+		}		
+		
 	//--------------------------------------
 	//  Protected Methods
 	//--------------------------------------
@@ -69,7 +95,15 @@ package com.yahoo.astra.fl.charts.skins
 				return;
 			}
 			
-			this.graphics.lineStyle(0, 0, 0);
+			if(this.borderColor == this.fillColor)
+			{
+				this.graphics.lineStyle(0, 0, 0);
+			}
+			else
+			{
+				this.graphics.lineStyle(1, this.borderColor, 1);
+			}
+			
 			this.graphics.beginFill(this._fillColor, 1);
 			
 			var w:Number = 5 * Math.min(this.width, this.height) / 4;

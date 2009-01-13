@@ -652,6 +652,9 @@
 					
 			//will be filled based on the defaults or the series style definition, if present.
 			var seriesColors:Array = [];
+			var seriesBorderColors:Array = [];
+			var seriesFillColors:Array = [];
+			var seriesLineColors:Array = [];
 			var seriesCount:int = Math.min(this.chart.dataProvider.length, styles.length);
 			for(var i:int = 0; i < seriesCount; i++)
 			{
@@ -687,6 +690,9 @@
 			
 				//initialize styles with defaults
 				var color:Object = defaultColors[i % defaultColors.length];
+				var borderColor:Object = null;
+				var fillColor:Object= null;
+				var lineColor:Object = null;
 				var skin:Object = defaultSkin;
 				var mode:Object = "repeat";
 				if(style)
@@ -742,8 +748,21 @@
 									skin.properties.fillAlpha = 1;
 								}
 								break;
+							case "borderColor":
+								borderColor = this.parseColor(style.borderColor);
+								break;
+							case "fillColor":
+								fillColor = this.parseColor(style.fillColor);
+								break;
 							case "size":
 								UIComponent(series).setStyle("markerSize", style.size);
+								break;
+							case "lineColor": //LineSeries only
+								if(!(series is LineSeries))
+								{
+									this.log("The style " + styleName + " is only supported by series of type 'line'.", LoggerCategory.WARN);
+								}
+								lineColor = this.parseColor(style.lineColor);
 								break;
 							case "alpha":
 								UIComponent(series).setStyle("markerAlpha", style.alpha);
@@ -843,9 +862,18 @@
 				else UIComponent(series).setStyle("markerSkin", skin);
 				
 				seriesColors[i] = color;
-			}
-			this.chart.setStyle("seriesColors", seriesColors);
+				seriesBorderColors[i] = borderColor!=null?borderColor:color;
+				seriesFillColors[i] = fillColor!=null?fillColor:color;
+				seriesLineColors[i] = lineColor!=null?lineColor:color;
+			}			
 
+			this.chart.setStyle("seriesColors", seriesColors);
+			this.chart.setStyle("seriesBorderColors", seriesBorderColors);
+			this.chart.setStyle("seriesFillColors", seriesFillColors);
+			if(series is LineSeries)
+			{
+				this.chart.setStyle("seriesLineColors", seriesLineColors);
+			}
 			this.chart.drawNow();
 		}
 		

@@ -177,6 +177,9 @@
 				0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
 				0xb8ebff, 0x60558f, 0x737d7e, 0xa64d9a, 0x8e9a9b, 0x803e77
 			],
+			seriesBorderColors:null,
+			seriesFillColors:null,
+			seriesLineColors:null,
 			contentPadding: 10,
 			backgroundSkin: "ChartBackground",
 			backgroundColor: 0xffffff,
@@ -192,9 +195,12 @@
 		 */
 		private static const ALL_SERIES_STYLES:Object = 
 		{
-			fillColor: "seriesColors",
+			color: "seriesColors",
 			markerSize: "seriesMarkerSizes",
-			markerSkin: "seriesMarkerSkins"
+			markerSkin: "seriesMarkerSkins",
+			borderColor: "seriesBorderColors",
+			fillColor: "seriesFillColors",
+			lineColor: "seriesLineColors"
 		};
 		
 		/**
@@ -684,12 +690,19 @@
 				//if it doesn't exist, ignore it and go with the defaults for this series
 				if(styleValues == null || styleValues.length == 0)
 				{
-					continue;
+					if(n == "borderColor" || n == "fillColor" || n == "lineColor")
+					{
+						styleValues = this.getStyleValue(styleMap["color"]) as Array;
+					}
+					else
+					{
+						continue;
+					}
 				}
 				
 				childComponent.setStyle(n, styleValues[index % styleValues.length])
 			}
-		}
+		} 
 		
 		/**
 		 * @private
