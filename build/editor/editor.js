@@ -5710,6 +5710,49 @@ var Dom = YAHOO.util.Dom,
     /* {{{  Command Overrides */
 
         /**
+        * @method cmd_bold
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('bold') is used.
+        */
+        cmd_bold: function(value) {
+            if (!this.browser.webkit) {
+                var el = this._getSelectedElement();
+                if (el && this._isElement(el, 'span') && this._hasSelection()) {
+                    if (el.style.fontWeight == 'bold') {
+                        el.style.fontWeight = '';
+                        var b = this._getDoc().createElement('b'),
+                        par = el.parentNode;
+                        par.replaceChild(b, el);
+                        b.appendChild(el);
+                    }
+                }
+            }
+            return [true];
+        },
+        /**
+        * @method cmd_italic
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('italic') is used.
+        */
+
+        cmd_italic: function(value) {
+            if (!this.browser.webkit) {
+                var el = this._getSelectedElement();
+                if (el && this._isElement(el, 'span') && this._hasSelection()) {
+                    if (el.style.fontStyle == 'italic') {
+                        el.style.fontStyle = '';
+                        var i = this._getDoc().createElement('i'),
+                        par = el.parentNode;
+                        par.replaceChild(i, el);
+                        i.appendChild(el);
+                    }
+                }
+            }
+            return [true];
+        },
+
+
+        /**
         * @method cmd_underline
         * @param value Value passed from the execCommand method
         * @description This is an execCommand override method. It is called from execCommand when the execCommand('underline') is used.
