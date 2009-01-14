@@ -836,7 +836,7 @@ YAHOO.widget.Uploader = function(containerId, buttonSkin)
 	 *
 	 * @event fileSelect
 	 * @param event.type {String} The event type
-	 * @param event.fileList {Array} An array of objects with file information
+	 * @param event.fileList {Object} A dictionary of objects with file information
 	 * @param event.fileList[].size {Number} File size in bytes for a specific file in fileList
 	 * @param event.fileList[].cDate {Date} Creation date for a specific file in fileList
 	 * @param event.fileList[].mDate {Date} Modification date for a specific file in fileList

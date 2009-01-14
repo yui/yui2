@@ -294,29 +294,29 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
     var aXY;
 
     if (!(p_oEvent.type == _MOUSEDOWN && !p_oEvent.ctrlKey)) {
-
-		/*
-			Prevent the browser's default context menu from appearing and 
-			stop the propagation of the "contextmenu" event so that 
-			other ContextMenu instances are not displayed.
-		*/
-	
-		Event.stopEvent(p_oEvent);
-	
 	
 		this.contextEventTarget = Event.getTarget(p_oEvent);
 	
 		this.triggerContextMenuEvent.fire(p_oEvent);
-	
-	
-		// Hide any other Menu instances that might be visible
-	
-		YAHOO.widget.MenuManager.hideVisible();
 		
 	
-	
 		if (!this._bCancelled) {
+
+			/*
+				Prevent the browser's default context menu from appearing and 
+				stop the propagation of the "contextmenu" event so that 
+				other ContextMenu instances are not displayed.
+			*/
+
+			Event.stopEvent(p_oEvent);
+
+
+			// Hide any other Menu instances that might be visible
+
+			YAHOO.widget.MenuManager.hideVisible();
+			
 	
+
 			// Position and display the context menu
 	
 			aXY = Event.getXY(p_oEvent);

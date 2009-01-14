@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="YuiBuild" default="local">
-
+<project name="YuiBuildYuiTestCore" default="local">
     <description>Component Build File</description>
-
-    <dirname property="buildfile.dir" file="${ant.file}" />
-    <property environment="env" />
-    <property name="srcdir" value="${env.YUI_SRC_DIR}" />
-    <property name="builddir" value="${env.YUI_BUILD_DIR}" />
-    
-    <property file="${buildfile.dir}/buildcore.properties" />
-
-    <import file="${builddir}/buildproperties.xml" description="Shared Build Properties - tools, build paths etc." />
-    <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
-
-    <target name="yuitest_local_subtask" depends="core, debug" />
-
+    <property file="buildcore.properties" />
+    <import file="${builddir}/2.x/bootstrap.xml" />
+    <target name="yuitest_build_subtask" depends="build, minify" />
 </project>
 

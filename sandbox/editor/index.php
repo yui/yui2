@@ -30,12 +30,10 @@
                 echo(stripslashes($_POST['editor']));
             } else {
         ?>
-        <ol>
-            <li>Item 1</li>
-            <li>Item 1</li>
-            <li>Item 1</li>
-        </ol>
-        
+        <p>This is a <span style="font-weight: bold;">test</span>.</p>
+        <p>This is a <span style="font-style: italic;">test</span>.</p>
+        <p>This is a <span style="text-decoration: underline;">test</span>.</p>
+        <p>This is a <span style="color: #BFBF00;">test</span>.</p>
         <?php
         }
         ?>
