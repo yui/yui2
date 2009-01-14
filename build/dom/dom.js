@@ -61,18 +61,21 @@
     // branching at load instead of runtime
     if (window.getComputedStyle) { // W3C DOM method
         getStyle = function(el, property) {
-            var value = null;
-            
             if (property == 'float') { // fix reserved word
                 property = 'cssFloat';
             }
 
-            var computed = el.ownerDocument.defaultView.getComputedStyle(el, null);
-            if (computed) { // test computed before touching for safari
-                value = computed[toCamel(property)];
+            var value = el.style[property],
+                computed;
+            
+            if (!value) {
+                computed = el.ownerDocument.defaultView.getComputedStyle(el, null);
+                if (computed) { // test computed before touching for safari
+                    value = computed[toCamel(property)];
+                }
             }
             
-            return el.style[property] || value;
+            return value;
         };
     } else if (document.documentElement.currentStyle && isIE) { // IE method
         getStyle = function(el, property) {                         
@@ -399,9 +402,11 @@
          * @param {String} tag (optional) The tag name of the elements being collected
          * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
          * @param {Function} apply (optional) A function to apply to each element when found 
+         * @param {Any} o (optional) An optional arg that is passed to the supplied method
+         * @param {Boolean} overrides (optional) Whether or not to override the scope of "method" with "o"
          * @return {Array} An array of elements that have the given class name
          */
-        getElementsByClassName: function(className, tag, root, apply) {
+        getElementsByClassName: function(className, tag, root, apply, o, overrides) {
             className = lang.trim(className);
             tag = tag || '*';
             root = (root) ? Y.Dom.get(root) : null || document; 
@@ -416,12 +421,13 @@
             for (var i = 0, len = elements.length; i < len; ++i) {
                 if ( re.test(elements[i].className) ) {
                     nodes[nodes.length] = elements[i];
-                    if (apply) {
-                        apply.call(elements[i], elements[i]);
-                    }
                 }
             }
             
+            if (apply) {
+                Y.Dom.batch(nodes, apply, o, overrides);
+            }
+
             return nodes;
         },
 
@@ -608,9 +614,11 @@
          * @param {String} tag (optional) The tag name of the elements being collected
          * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
          * @param {Function} apply (optional) A function to apply to each element when found 
+         * @param {Any} o (optional) An optional arg that is passed to the supplied method
+         * @param {Boolean} overrides (optional) Whether or not to override the scope of "method" with "o"
          * @return {Array} Array of HTMLElements
          */
-        getElementsBy: function(method, tag, root, apply) {
+        getElementsBy: function(method, tag, root, apply, o, overrides) {
             tag = tag || '*';
             root = (root) ? Y.Dom.get(root) : null || document; 
 
@@ -624,10 +632,11 @@
             for (var i = 0, len = elements.length; i < len; ++i) {
                 if ( method(elements[i]) ) {
                     nodes[nodes.length] = elements[i];
-                    if (apply) {
-                        apply(elements[i]);
-                    }
                 }
+            }
+
+            if (apply) {
+                Y.Dom.batch(nodes, apply, o, overrides);
             }
 
             
