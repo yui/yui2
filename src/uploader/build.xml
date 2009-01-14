@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="YuiBuild" default="local">
+
+    <description>Component Build File</description>
+
+    <dirname property="buildfile.dir" file="${ant.file}" />
+    <property environment="env" />
+    <property name="srcdir" value="${env.YUI_SRC_DIR}" />
+    <property name="builddir" value="${env.YUI_BUILD_DIR}" />
+    
+    <property file="${buildfile.dir}/build.properties" />
+    <exec executable="echo">
+	<arg line="${env.YUI_BUILD_DIR}"/>
+    </exec>
+    <import file="${builddir}/buildproperties.xml" description="Shared Build Properties - tools, build paths etc." />
+    <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
+    
+    <property name="flashroot" value="/Applications/Adobe Flash CS3"/>
+    <property name="flexroot" value="/usr/bin/flex-compiler"/>
+
+    <target name="customlocal" description="Uploader Override to Build SWF">
+    
+        <!-- build the uploader.swf -->
+        <!-- TODO: Make MXMLC a property -->
+        <exec executable="${flexroot}/mxmlc" failonerror="true">
+            <!-- Flash Platform -->
+            <arg line="-source-path+='/workroot/2.x/widget/charts/src/as'"/>
+            
+            <!-- Core Flash CS3 Classes -->
+            <arg line="-source-path+='/usr/share/core-as3'"/>
+            
+            <!-- Output SWF -->
+            <arg line="-output './src/swf/uploader.swf'"/>
+            
+            <!-- Document Class -->
+            <arg line="'./src/as/Uploader.as'"/>
+        </exec>
+        
+        <!-- copy the SWF to the build directory -->
+        <copy todir="${component.builddir}/assets">
+            <fileset dir="${component.srcdir}/swf" includes="*.swf" />
+        </copy>
+    </target>
+    
+    <target name="examples" description="Component Specific Over-ride">
+        <echo>DOES NOT DO ANYTHING CURRENTLY</echo>
+    </target>
+
+</project>
+

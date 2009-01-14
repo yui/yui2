@@ -26,13 +26,51 @@
  * @uses YAHOO.widget.FlashAdapter
  * @constructor
  * @param containerId {HTMLElement} Container element for the Flash Player instance.
- */
-YAHOO.widget.Uploader = function(containerId)
+ * @param buttonSkin {String} [optional]. If defined, the uploader is 
+ * rendered as a button. This parameter must provide the URL of a button
+ * skin sprite image. Acceptable types are: jpg, gif, png and swf. The 
+ * sprite is divided evenly into four sections along its height (e.g., if
+ * the sprite is 200 px tall, it's divided into four sections 50px each).
+ * Each section is used as a skin for a specific state of the button: top
+ * section is "up", second section is "over", third section is "down", and
+ * fourth section is "disabled". 
+ * If the parameter is not supplied, the uploader is rendered transparent,
+ * and it's the developer's responsibility to create a visible UI below it.
+  */
+YAHOO.widget.Uploader = function(containerId, buttonSkin)
 {
- 	YAHOO.widget.Uploader.superclass.constructor.call(this, YAHOO.widget.Uploader.SWFURL, containerId, {wmode:"transparent"});
+	var newWMode = "window";
+
+	if (!(buttonSkin)) {
+		newWMode = "transparent";
+	}
+	
+ 	YAHOO.widget.Uploader.superclass.constructor.call(this, YAHOO.widget.Uploader.SWFURL, containerId, {wmode:newWMode}, buttonSkin);
+
+	this._swf.tabIndex="1";
 
 	/**
-	 * Fires when an upload of a specific file has started.
+	 * Fires when the mouse is pressed over the Uploader.
+	 * Only fires when the Uploader UI is enabled and
+	 * the render type is 'transparent'.
+	 *
+	 * @event mouseDown
+	 * @param event.type {String} The event type
+	 */
+	this.createEvent("mouseDown");
+	
+	/**
+	 * Fires when the mouse is released over the Uploader.
+	 * Only fires when the Uploader UI is enabled and
+	 * the render type is 'transparent'.
+	 *
+	 * @event mouseUp
+	 * @param event.type {String} The event type
+	 */
+	this.createEvent("mouseUp");
+
+	/**
+	 * Fires when the mouse rolls over the Uploader.
 	 *
 	 * @event rollOver
 	 * @param event.type {String} The event type
@@ -40,7 +78,7 @@ YAHOO.widget.Uploader = function(containerId)
 	this.createEvent("rollOver");
 	
 	/**
-	 * Fires when an upload of a specific file has started.
+	 * Fires when the mouse rolls out of the Uploader.
 	 *
 	 * @event rollOut
 	 * @param event.type {String} The event type
@@ -48,12 +86,11 @@ YAHOO.widget.Uploader = function(containerId)
 	this.createEvent("rollOut");
 	
 	/**
-	 * Fires when an upload of a specific file has started.
+	 * Fires when the uploader is clicked.
 	 *
-	 * @event uploadStart
+	 * @event click
 	 * @param event.type {String} The event type
 	 */
-	 
 	this.createEvent("click");
 	
 	/**
@@ -61,7 +98,7 @@ YAHOO.widget.Uploader = function(containerId)
 	 *
 	 * @event fileSelect
 	 * @param event.type {String} The event type
-	 * @param event.fileList {Array} An array of objects with file information
+	 * @param event.fileList {Object} A dictionary of objects with file information
 	 * @param event.fileList[].size {Number} File size in bytes for a specific file in fileList
 	 * @param event.fileList[].cDate {Date} Creation date for a specific file in fileList
 	 * @param event.fileList[].mDate {Date} Modification date for a specific file in fileList
@@ -160,9 +197,9 @@ YAHOO.extend(YAHOO.widget.Uploader, YAHOO.widget.FlashAdapter,
  * URI, User-Agent, Vary, Via, Warning, WWW-Authenticate, x-flash-version.
  * </code> 
  */
-	upload: function(fileID, uploadScriptPath, method, vars, fieldName, headers)
+	upload: function(fileID, uploadScriptPath, method, vars, fieldName)
 	{
-		this._swf.upload(fileID, uploadScriptPath, method, vars, fieldName, headers);
+		this._swf.upload(fileID, uploadScriptPath, method, vars, fieldName);
 	},
 	
 /**
@@ -182,9 +219,9 @@ YAHOO.extend(YAHOO.widget.Uploader, YAHOO.widget.FlashAdapter,
  * URI, User-Agent, Vary, Via, Warning, WWW-Authenticate, x-flash-version.
  * </code> 
  */
-	uploadAll: function(uploadScriptPath, method, vars, fieldName, headers)
+	uploadAll: function(uploadScriptPath, method, vars, fieldName)
 	{
-		this._swf.uploadAll(uploadScriptPath, method, vars, fieldName, headers);
+		this._swf.uploadAll(uploadScriptPath, method, vars, fieldName);
 	},
 
 /**
@@ -259,6 +296,29 @@ YAHOO.extend(YAHOO.widget.Uploader, YAHOO.widget.FlashAdapter,
     setFileFilters : function (fileFilters) 
     {
        this._swf.setFileFilters(fileFilters);
-    }
+    },
 
+	/**
+	 * Enables the mouse events on the Uploader.
+	 * If the uploader is being rendered as a button,
+	 * then the button's skin is set to "up"
+	 * (first section of the button skin sprite).
+	 *
+	 */
+	enable : function ()
+	{
+		this._swf.enable();
+	},
+
+	/**
+	 * Disables the mouse events on the Uploader.
+	 * If the uploader is being rendered as a button,
+	 * then the button's skin is set to "disabled"
+	 * (fourth section of the button skin sprite).
+	 *
+	 */
+	disable : function () 
+	{
+		this._swf.disable();
+	}
 });
