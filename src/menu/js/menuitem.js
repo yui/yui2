@@ -74,9 +74,7 @@ var Dom = YAHOO.util.Dom,
 	_OPTION = "OPTION",
 	_OPTGROUP = "OPTGROUP",
 	_LI_UPPERCASE = "LI",
-	_LI_LOWERCASE = "li",
 	_HREF = "href",
-	_ANCHOR_TEMPLATE = "<a href=\"#\"></a>",
 	_SELECT = "SELECT",
 	_DIV = "DIV",
 	_START_HELP_TEXT = "<em class=\"helptext\">",
@@ -200,7 +198,15 @@ var Dom = YAHOO.util.Dom,
 
     CLASS_NAMES = {},
     
-    m_oMenuItemTemplate;
+	m_oFragment = document.createElement("div"),
+
+	m_sMenuItemTemplateP1 = '<li class="',
+
+	m_sMenuItemTemplateP2 = '">',
+
+	m_sMenuItemTemplateP3 = '<a href="#" class="',
+
+	m_sMenuItemTemplateP4 = '"></a></li>';
 
 
 /**
@@ -730,24 +736,15 @@ MenuItem.prototype = {
     */
     _createRootNodeStructure: function () {
 
-        var oElement,
-            oAnchor;
-
-        if (!m_oMenuItemTemplate) {
-
-            m_oMenuItemTemplate = document.createElement(_LI_LOWERCASE);
-            m_oMenuItemTemplate.innerHTML = _ANCHOR_TEMPLATE;
-
-        }
-
-        oElement = m_oMenuItemTemplate.cloneNode(true);
-        oElement.className = this.CSS_CLASS_NAME;
-
-        oAnchor = oElement.firstChild;
-        oAnchor.className = this.CSS_LABEL_CLASS_NAME;
-        
-        this.element = oElement;
-        this._oAnchor = oAnchor;
+		m_oFragment.innerHTML = m_sMenuItemTemplateP1 + 
+								this.CSS_CLASS_NAME + 
+								m_sMenuItemTemplateP2 +
+								m_sMenuItemTemplateP3 + 
+								this.CSS_LABEL_CLASS_NAME + 
+								m_sMenuItemTemplateP4;
+       
+        this.element = m_oFragment.firstChild;
+        this._oAnchor = this.element.firstChild;
 
     },
 
