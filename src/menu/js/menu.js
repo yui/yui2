@@ -3396,6 +3396,7 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         case _EFFECT:
         case _CLASSNAME:
         case _SCROLL_INCREMENT:
+        case _MAX_HEIGHT:
         case _MIN_SCROLL_HEIGHT:
         case _MONITOR_RESIZE:
         case _SHADOW:
@@ -3456,6 +3457,8 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
             
             scrollincrement: oParentCfg.getProperty(_SCROLL_INCREMENT),
             
+			maxheight: oParentCfg.getProperty(_MAX_HEIGHT),
+
             minscrollheight: oParentCfg.getProperty(_MIN_SCROLL_HEIGHT),
             
             iframe: oParentCfg.getProperty(_IFRAME),
