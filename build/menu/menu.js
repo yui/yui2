@@ -1254,7 +1254,7 @@ OFF_SCREEN_POSITION: "-999em",
 
 
 /** 
-* @property _bHideDelayEventHandlersAssigned
+* @property _useHideDelay
 * @description Boolean indicating if the "mouseover" and "mouseout" event 
 * handlers used for hiding the menu via a call to "YAHOO.lang.later" have 
 * already been assigned.
@@ -1262,7 +1262,7 @@ OFF_SCREEN_POSITION: "-999em",
 * @private
 * @type Boolean
 */
-_bHideDelayEventHandlersAssigned: false,
+_useHideDelay: false,
 
 
 /**
@@ -2596,6 +2596,10 @@ _onMouseOver: function (p_sType, p_aArgs) {
 				Dom.isAncestor(this.element, oTarget))) {
 	
 			// Menu mouseover logic
+
+	        if (this._useHideDelay) {
+	        	this._cancelHideDelay();
+	        }
 	
 			this._nCurrentMouseX = 0;
 	
@@ -2791,7 +2795,11 @@ _onMouseOut: function (p_sType, p_aArgs) {
 			!Dom.isAncestor(this.element, oRelatedTarget)) || bMovingToSubmenu)) {
 	
 			// Menu mouseout logic
-	
+
+	        if (this._useHideDelay) {
+	        	this._execHideDelay();
+	        }
+
 			Event.removeListener(this.element, _MOUSEMOVE, this._onMouseMove);
 	
 			this._nCurrentMouseX = Event.getPageX(oEvent);
@@ -3000,6 +3008,11 @@ _onKeyDown: function (p_sType, p_aArgs) {
         nNextItemOffsetTop,
         nScrollTarget,
         oParentMenu;
+
+
+	if (this._useHideDelay) {
+		this._cancelHideDelay();
+	}
 
 
     /*
@@ -3817,8 +3830,8 @@ getConstrainedY: function (y) {
 		nTopRegionHeight,
 		nBottomRegionHeight,
 
-		topConstraint,
-		bottomConstraint,
+		topConstraint = scrollY + nViewportOffset,
+		bottomConstraint = scrollY + viewPortHeight - nMenuOffsetHeight - nViewportOffset,
 
 		yNew = y;
 		
@@ -3902,8 +3915,7 @@ getConstrainedY: function (y) {
 		var nDisplayRegionHeight = getDisplayRegionHeight(),
 			bMenuHasItems = (oMenu.getItems().length > 0),
 			nMenuMinScrollHeight,
-			fnReturnVal,
-			nNewY;
+			fnReturnVal;
 
 
 		if (nMenuOffsetHeight > nDisplayRegionHeight) {
@@ -3956,7 +3968,7 @@ getConstrainedY: function (y) {
 			}
 		
 		}
-		else if (nMaxHeight && (nMaxHeight != nInitialMaxHeight)) {
+		else if (nMaxHeight && (nMaxHeight !== nInitialMaxHeight)) {
 		
 			oMenu._setScrollHeight(nInitialMaxHeight);
 			oMenu.hideEvent.subscribe(resetMaxHeight);
@@ -3973,55 +3985,76 @@ getConstrainedY: function (y) {
 	};
 
 
-	if (oMenu.cfg.getProperty(_PREVENT_CONTEXT_OVERLAP) && bPotentialContextOverlap) {
+	// Determine if the current value for the Menu's "y" configuration property will
+	// result in the Menu being positioned outside the boundaries of the viewport
+
+	if (y < topConstraint || y  > bottomConstraint) {
+
+		// The current value for the Menu's "y" configuration property WILL
+		// result in the Menu being positioned outside the boundaries of the viewport
 
 		if (bCanConstrain) {
 
-			oContextEl = aContext[0];
-			nContextElHeight = oContextEl.offsetHeight;
-			nContextElY = (Dom.getY(oContextEl) - scrollY);
-
-			nTopRegionHeight = nContextElY;
-			nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
-
-			setVerticalPosition();
+			if (oMenu.cfg.getProperty(_PREVENT_CONTEXT_OVERLAP) && bPotentialContextOverlap) {
 		
-		}
+				//	SOLUTION #1:
+				//	If the "preventcontextoverlap" configuration property is set to "true", 
+				//	try to flip and/or scroll the Menu to both keep it inside the boundaries of the 
+				//	viewport AND from overlaping its context element (MenuItem or MenuBarItem).
 
-		yNew = oMenu.cfg.getProperty(_Y);
-
-	}
-    else if (!(oMenu instanceof YAHOO.widget.MenuBar) && nMenuOffsetHeight >= viewPortHeight) {
+				oContextEl = aContext[0];
+				nContextElHeight = oContextEl.offsetHeight;
+				nContextElY = (Dom.getY(oContextEl) - scrollY);
 	
-		nAvailableHeight = (viewPortHeight - (nViewportOffset * 2));
-
-		if (nAvailableHeight > oMenu.cfg.getProperty(_MIN_SCROLL_HEIGHT)) {
-
-			oMenu._setScrollHeight(nAvailableHeight);
-			oMenu.hideEvent.subscribe(resetMaxHeight);
-
-			alignY();
-			
-			yNew = oMenu.cfg.getProperty(_Y);
+				nTopRegionHeight = nContextElY;
+				nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
+	
+				setVerticalPosition();
+				
+				yNew = oMenu.cfg.getProperty(_Y);
 		
-		}
-
-    }	
-	else {
-
-		if (bCanConstrain) {
-
-			topConstraint = scrollY + nViewportOffset;
-			bottomConstraint = scrollY + viewPortHeight - nMenuOffsetHeight - nViewportOffset;
-
-			if (y < topConstraint) {
-				yNew  = topConstraint;
-			} else if (y  > bottomConstraint) {
-				yNew  = bottomConstraint;
 			}
-		} else {
-			yNew = nViewportOffset + scrollY;
+			else if (!(oMenu instanceof YAHOO.widget.MenuBar) && 
+				nMenuOffsetHeight >= viewPortHeight) {
+
+				//	SOLUTION #2:
+				//	If the Menu exceeds the height of the viewport, introduce scroll bars
+				//	to keep the Menu inside the boundaries of the viewport
+
+				nAvailableHeight = (viewPortHeight - (nViewportOffset * 2));
+		
+				if (nAvailableHeight > oMenu.cfg.getProperty(_MIN_SCROLL_HEIGHT)) {
+		
+					oMenu._setScrollHeight(nAvailableHeight);
+					oMenu.hideEvent.subscribe(resetMaxHeight);
+		
+					alignY();
+					
+					yNew = oMenu.cfg.getProperty(_Y);
+				
+				}
+		
+			}	
+			else {
+
+				//	SOLUTION #3:
+			
+				if (y < topConstraint) {
+					yNew  = topConstraint;
+				} else if (y  > bottomConstraint) {
+					yNew  = bottomConstraint;
+				}				
+			
+			}
+
 		}
+		else {
+			//	The "y" configuration property cannot be set to a value that will keep
+			//	entire Menu inside the boundary of the viewport.  Therefore, set  
+			//	the "y" configuration property to scrollY to keep as much of the 
+			//	Menu inside the viewport as possible.
+			yNew = nViewportOffset + scrollY;
+		}	
 
 	}
 
@@ -4232,6 +4265,7 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         case _EFFECT:
         case _CLASSNAME:
         case _SCROLL_INCREMENT:
+        case _MAX_HEIGHT:
         case _MIN_SCROLL_HEIGHT:
         case _MONITOR_RESIZE:
         case _SHADOW:
@@ -4292,6 +4326,8 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
             
             scrollincrement: oParentCfg.getProperty(_SCROLL_INCREMENT),
             
+			maxheight: oParentCfg.getProperty(_MAX_HEIGHT),
+
             minscrollheight: oParentCfg.getProperty(_MIN_SCROLL_HEIGHT),
             
             iframe: oParentCfg.getProperty(_IFRAME),
@@ -4549,38 +4585,9 @@ configIframe: function (p_sType, p_aArgs, p_oMenu) {
 */
 configHideDelay: function (p_sType, p_aArgs, p_oMenu) {
 
-    var nHideDelay = p_aArgs[0],
-        oMouseOutEvent = this.mouseOutEvent,
-        oMouseOverEvent = this.mouseOverEvent,
-        oKeyDownEvent = this.keyDownEvent;
+    var nHideDelay = p_aArgs[0];
 
-    if (nHideDelay > 0) {
-
-        /*
-            Only assign event handlers once. This way the user change 
-            the value for the hidedelay as many times as they want.
-        */
-
-        if (!this._bHideDelayEventHandlersAssigned) {
-
-            oMouseOutEvent.subscribe(this._execHideDelay);
-            oMouseOverEvent.subscribe(this._cancelHideDelay);
-            oKeyDownEvent.subscribe(this._cancelHideDelay);
-
-            this._bHideDelayEventHandlersAssigned = true;
-        
-        }
-
-    }
-    else {
-
-        oMouseOutEvent.unsubscribe(this._execHideDelay);
-        oMouseOverEvent.unsubscribe(this._cancelHideDelay);
-        oKeyDownEvent.unsubscribe(this._cancelHideDelay);
-
-        this._bHideDelayEventHandlersAssigned = false;
-
-    }
+	this._useHideDelay = (nHideDelay > 0);
 
 },
 
@@ -6466,9 +6473,7 @@ var Dom = YAHOO.util.Dom,
 	_OPTION = "OPTION",
 	_OPTGROUP = "OPTGROUP",
 	_LI_UPPERCASE = "LI",
-	_LI_LOWERCASE = "li",
 	_HREF = "href",
-	_ANCHOR_TEMPLATE = "<a href=\"#\"></a>",
 	_SELECT = "SELECT",
 	_DIV = "DIV",
 	_START_HELP_TEXT = "<em class=\"helptext\">",
@@ -6483,6 +6488,9 @@ var Dom = YAHOO.util.Dom,
 	_VISIBLE = "visible",
 	_SPACE = " ",
 	_MENUITEM = "MenuItem",
+	_CLICK = "click",
+	_SHOW = "show",
+	_HIDE = "hide",
 
     EVENT_TYPES = [
     
@@ -6490,7 +6498,7 @@ var Dom = YAHOO.util.Dom,
         ["mouseOutEvent", "mouseout"],
         ["mouseDownEvent", "mousedown"],
         ["mouseUpEvent", "mouseup"],
-        ["clickEvent", "click"],
+        ["clickEvent", _CLICK],
         ["keyPressEvent", "keypress"],
         ["keyDownEvent", "keydown"],
         ["keyUpEvent", "keyup"],
@@ -6581,9 +6589,23 @@ var Dom = YAHOO.util.Dom,
 		suppressEvent: true
 	},
     
+	KEY_LISTENER_CONFIG = {
+		key: "keylistener", 
+		value: null, 
+		suppressEvent: true
+	},
+
     CLASS_NAMES = {},
     
-    m_oMenuItemTemplate;
+	m_oFragment = document.createElement("div"),
+
+	m_sMenuItemTemplateP1 = '<li class="',
+
+	m_sMenuItemTemplateP2 = '">',
+
+	m_sMenuItemTemplateP3 = '<a href="#" class="',
+
+	m_sMenuItemTemplateP4 = '"></a></li>';
 
 
 /**
@@ -7113,24 +7135,15 @@ MenuItem.prototype = {
     */
     _createRootNodeStructure: function () {
 
-        var oElement,
-            oAnchor;
-
-        if (!m_oMenuItemTemplate) {
-
-            m_oMenuItemTemplate = document.createElement(_LI_LOWERCASE);
-            m_oMenuItemTemplate.innerHTML = _ANCHOR_TEMPLATE;
-
-        }
-
-        oElement = m_oMenuItemTemplate.cloneNode(true);
-        oElement.className = this.CSS_CLASS_NAME;
-
-        oAnchor = oElement.firstChild;
-        oAnchor.className = this.CSS_LABEL_CLASS_NAME;
-        
-        this.element = oElement;
-        this._oAnchor = oAnchor;
+		m_oFragment.innerHTML = m_sMenuItemTemplateP1 + 
+								this.CSS_CLASS_NAME + 
+								m_sMenuItemTemplateP2 +
+								m_sMenuItemTemplateP3 + 
+								this.CSS_LABEL_CLASS_NAME + 
+								m_sMenuItemTemplateP4;
+       
+        this.element = m_oFragment.firstChild;
+        this._oAnchor = this.element.firstChild;
 
     },
 
@@ -7812,6 +7825,150 @@ MenuItem.prototype = {
     },
 
 
+    /**
+    * @method _dispatchClickEvent
+    * @description Dispatches a DOM "click" event to the anchor element of a 
+	* MenuItem instance.
+	* @private	
+    */
+	_dispatchClickEvent: function () {
+
+		var oMenuItem = this,
+			oAnchor,
+			oEvent;
+
+		if (!oMenuItem.cfg.getProperty(_DISABLED)) {
+
+			oAnchor = Dom.getFirstChild(oMenuItem.element);
+
+			//	Dispatch a "click" event to the MenuItem's anchor so that its
+			//	"click" event handlers will get called in response to the user 
+			//	pressing the keyboard shortcut defined by the "keylistener"
+			//	configuration property.
+
+			if (UA.ie) {
+				oAnchor.fireEvent(_ONCLICK);
+			}
+			else {
+
+				if ((UA.gecko && UA.gecko >= 1.9) || UA.opera || UA.webkit) {
+
+					oEvent = document.createEvent("HTMLEvents");
+					oEvent.initEvent(_CLICK, true, true);
+
+				}
+				else {
+
+					oEvent = document.createEvent("MouseEvents");
+					oEvent.initMouseEvent(_CLICK, true, true, window, 0, 0, 0, 
+						0, 0, false, false, false, false, 0, null);
+
+				}
+
+				oAnchor.dispatchEvent(oEvent);
+
+			}
+
+		}
+
+	},
+
+
+    /**
+    * @method _createKeyListener
+    * @description "show" event handler for a Menu instance - responsible for 
+	* setting up the KeyListener instance for a MenuItem.
+	* @private	
+    * @param {String} type String representing the name of the event that 
+    * was fired.
+    * @param {Array} args Array of arguments sent when the event was fired.
+    * @param {Array} keyData Array of arguments sent when the event was fired.
+    */
+	_createKeyListener: function (type, args, keyData) {
+
+		var oMenuItem = this,
+			oMenu = oMenuItem.parent;
+
+		var oKeyListener = new YAHOO.util.KeyListener(
+										oMenu.element.ownerDocument, 
+										keyData, 
+										{
+											fn: oMenuItem._dispatchClickEvent, 
+											scope: oMenuItem, 
+											correctScope: true });
+
+
+		if (oMenu.cfg.getProperty(_VISIBLE)) {
+			oKeyListener.enable();
+		}
+
+
+		oMenu.subscribe(_SHOW, oKeyListener.enable, null, oKeyListener);
+		oMenu.subscribe(_HIDE, oKeyListener.disable, null, oKeyListener);
+		
+		oMenuItem._keyListener = oKeyListener;
+		
+		oMenu.unsubscribe(_SHOW, oMenuItem._createKeyListener, keyData);
+		
+	},
+
+
+    /**
+    * @method configKeyListener
+    * @description Event handler for when the "keylistener" configuration 
+    * property of a menu item changes.
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    */
+    configKeyListener: function (p_sType, p_aArgs) {
+
+		var oKeyData = p_aArgs[0],
+			oMenuItem = this,
+			oMenu = oMenuItem.parent;
+
+		if (oMenuItem._keyData) {
+
+			//	Unsubscribe from the "show" event in case the keylistener 
+			//	config was changed before the Menu was ever made visible.
+
+			oMenu.unsubscribe(_SHOW, 
+					oMenuItem._createKeyListener, oMenuItem._keyData);
+
+			oMenuItem._keyData = null;					
+					
+		}
+
+
+		//	Tear down for the previous value of the "keylistener" property
+
+		if (oMenuItem._keyListener) {
+
+			oMenu.unsubscribe(_SHOW, oMenuItem._keyListener.enable);
+			oMenu.unsubscribe(_HIDE, oMenuItem._keyListener.disable);
+
+			oMenuItem._keyListener.disable();
+			oMenuItem._keyListener = null;
+
+		}
+
+
+    	if (oKeyData) {
+	
+			oMenuItem._keyData = oKeyData;
+
+			//	Defer the creation of the KeyListener instance until the 
+			//	parent Menu is visible.  This is necessary since the 
+			//	KeyListener instance needs to be bound to the document the 
+			//	Menu has been rendered into.  Deferring creation of the 
+			//	KeyListener instance also improves performance.
+
+			oMenu.subscribe(_SHOW, oMenuItem._createKeyListener, 
+				oKeyData, oMenuItem);
+		}
+    
+    },
+
 
     // Public methods
 
@@ -8069,6 +8226,25 @@ MenuItem.prototype = {
                 value: CLASS_NAME_CONFIG.value, 
                 validator: CLASS_NAME_CONFIG.validator,
                 suppressEvent: CLASS_NAME_CONFIG.suppressEvent 
+            }
+        );
+
+
+        /**
+        * @config keylistener
+        * @description Object literal representing the key(s) that can be used 
+ 		* to trigger the MenuItem's "click" event.  Possible attributes are 
+		* shift (boolean), alt (boolean), ctrl (boolean) and keys (either an int 
+		* or an array of ints representing keycodes).
+        * @default null
+        * @type Object
+        */
+        oConfig.addProperty(
+            KEY_LISTENER_CONFIG.key, 
+            { 
+                handler: this.configKeyListener,
+                value: KEY_LISTENER_CONFIG.value, 
+                suppressEvent: KEY_LISTENER_CONFIG.suppressEvent 
             }
         );
 
@@ -8691,29 +8867,29 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
     var aXY;
 
     if (!(p_oEvent.type == _MOUSEDOWN && !p_oEvent.ctrlKey)) {
-
-		/*
-			Prevent the browser's default context menu from appearing and 
-			stop the propagation of the "contextmenu" event so that 
-			other ContextMenu instances are not displayed.
-		*/
-	
-		Event.stopEvent(p_oEvent);
-	
 	
 		this.contextEventTarget = Event.getTarget(p_oEvent);
 	
 		this.triggerContextMenuEvent.fire(p_oEvent);
-	
-	
-		// Hide any other Menu instances that might be visible
-	
-		YAHOO.widget.MenuManager.hideVisible();
 		
 	
-	
 		if (!this._bCancelled) {
+
+			/*
+				Prevent the browser's default context menu from appearing and 
+				stop the propagation of the "contextmenu" event so that 
+				other ContextMenu instances are not displayed.
+			*/
+
+			Event.stopEvent(p_oEvent);
+
+
+			// Hide any other Menu instances that might be visible
+
+			YAHOO.widget.MenuManager.hideVisible();
+			
 	
+
 			// Position and display the context menu
 	
 			aXY = Event.getXY(p_oEvent);

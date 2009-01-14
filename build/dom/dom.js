@@ -163,13 +163,13 @@
 
                 if (typeof el === 'string') { // id
                     id = el;
-                    el = document.getElementById(el);
-                    if (el && el.id === id) { // IE: avoid false match on "name" attribute
-                        return el;
-                    } else if (el && document.all) { // filter by name
-                        el = null;
-                        nodes = document.all[id];
-                        for (var i = 0, len = nodes.length; i < len; ++i) {
+                el = document.getElementById(el);
+                if (el && el.id === id) { // IE: avoid false match on "name" attribute
+                    return el;
+                } else if (el && document.all) { // filter by name
+                    el = null;
+                    nodes = document.all[id];
+                    for (var i = 0, len = nodes.length; i < len; ++i) {
                             if (nodes[i].id === id) {
                                 return nodes[i];
                             }
@@ -618,7 +618,7 @@
          * @param {Boolean} overrides (optional) Whether or not to override the scope of "method" with "o"
          * @return {Array} Array of HTMLElements
          */
-        getElementsBy: function(method, tag, root, apply, o, overrides) {
+        getElementsBy: function(method, tag, root, apply, o, overrides, firstOnly) {
             tag = tag || '*';
             root = (root) ? Y.Dom.get(root) : null || document; 
 
@@ -631,7 +631,12 @@
             
             for (var i = 0, len = elements.length; i < len; ++i) {
                 if ( method(elements[i]) ) {
-                    nodes[nodes.length] = elements[i];
+                    if (firstOnly) {
+                        nodes = elements[i]; 
+                        break;
+                    } else {
+                        nodes[nodes.length] = elements[i];
+                    }
                 }
             }
 
@@ -644,6 +649,18 @@
         },
         
         /**
+         * Returns the first HTMLElement that passes the test applied by the supplied boolean method.
+         * @method getElementBy
+         * @param {Function} method - A boolean method for testing elements which receives the element as its only argument.
+         * @param {String} tag (optional) The tag name of the elements being collected
+         * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
+         * @return {HTMLElement}
+         */
+        getElementBy: function(method, tag, root) {
+            return Y.Dom.getElementsBy(method, tag, root, null, null, null, true); 
+        },
+
+        /**
          * Runs the supplied method against each item in the Collection/Array.
          * The method is called with the element(s) as the first arg, and the optional param as the second ( method(el, o) ).
          * @method batch
@@ -654,23 +671,21 @@
          * @return {Any | Array} The return value(s) from the supplied method
          */
         batch: function(el, method, o, overrides) {
+            var collection = [],
+                scope = (overrides) ? o : window;
+                
             el = (el && (el.tagName || el.item)) ? el : Y.Dom.get(el); // skip get() when possible
+            if (el && method) {
+                if (el.tagName || el.length === undefined) { // element or not array-like 
+                    return method.call(scope, el, o);
+                } 
 
-            if (!el || !method) {
+                for (var i = 0; i < el.length; ++i) {
+                    collection[collection.length] = method.call(scope, el[i], o);
+                }
+            } else {
                 return false;
             } 
-            var scope = (overrides) ? o : window;
-            
-            if (el.tagName || el.length === undefined) { // element or not array-like 
-                return method.call(scope, el, o);
-            } 
-
-            var collection = [];
-            
-            for (var i = 0, len = el.length; i < len; ++i) {
-                collection[collection.length] = method.call(scope, el[i], o);
-            }
-            
             return collection;
         },
         
@@ -1022,6 +1037,13 @@
             return new Y.Region(t, r, b, l);
         },
 
+        /**
+         * Provides a normalized attribute interface. 
+         * @method setAttibute
+         * @param {String | HTMLElement} el The target element for the attribute.
+         * @param {String} attr The attribute to set.
+         * @param {String} value The value of the attribute.
+         */
         setAttribute: function(el, attr, value) {
             switch (attr) {
                 case 'for':
@@ -1035,6 +1057,13 @@
         },
 
 
+        /**
+         * Provides a normalized attribute interface. 
+         * @method getAttibute
+         * @param {String | HTMLElement} el The target element for the attribute.
+         * @param {String} attr The attribute to get.
+         * @return {String} The current value of the attribute. 
+         */
         getAttribute: function(el, attr, value) {
             switch (attr) {
                 case 'for':
