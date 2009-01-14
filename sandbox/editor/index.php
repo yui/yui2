@@ -30,12 +30,10 @@
                 echo(stripslashes($_POST['editor']));
             } else {
         ?>
-        <ol>
-            <li>Item 1</li>
-            <li>Item 1</li>
-            <li>Item 1</li>
-        </ol>
-        
+        <p>This is a <span style="font-weight: bold;">test</span>.</p>
+        <p>This is a <span style="font-style: italic;">test</span>.</p>
+        <p>This is a <span style="text-decoration: underline;">test</span>.</p>
+        <p>This is a <span style="color: #BFBF00;">test</span>.</p>
         <?php
         }
         ?>
@@ -92,7 +90,7 @@ Double Return
 <script type="text/javascript" src="../../build/dom/dom.js"></script> 
 <script type="text/javascript" src="../../build/event/event.js"></script> 
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script> 
-<script type="text/javascript" src="../../build/element/element-beta.js"></script> 
+<script type="text/javascript" src="../../build/element/element.js"></script> 
 <script type="text/javascript" src="../../build/resize/resize.js"></script> 
 <script type="text/javascript" src="../../build/selector/selector-beta.js"></script> 
 <script>

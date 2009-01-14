@@ -26,7 +26,7 @@
 <script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../../build/animation/animation-min.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js?bust=<?php echo(mktime()); ?>"></script> 
-<script type="text/javascript" src="../../build/element/element-beta-min.js?bust=<?php echo(mktime()); ?>"></script> 
+<script type="text/javascript" src="../../build/element/element-min.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../../build/logger/logger.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../../build/resize/resize-debug.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="js/crop.js?bust=<?php echo(mktime()); ?>"></script> 

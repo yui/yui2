@@ -81,5 +81,13 @@ YAHOO.lang.extend(YAHOO.widget.NumericAxis, YAHOO.widget.Axis,
 	 * @property scale
 	 * @type String
 	 */
-	scale: "linear"
+	scale: "linear",
+	
+	/**
+	 * Indicates whether to round the major unit.
+	 * 
+	 * @property roundMajorUnit
+	 * @type Boolean
+	 */
+	roundMajorUnit: true 
 });

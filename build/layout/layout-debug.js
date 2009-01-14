@@ -652,7 +652,7 @@
     */
     /**
     * @event beforeResize
-    * @description Firef at the beginning of the resize method. If you return false, the resize is cancelled.
+    * @description Fires at the beginning of the resize method. If you return false, the resize is cancelled.
     * @type YAHOO.util.CustomEvent
     */
     /**
@@ -2201,7 +2201,7 @@
     */
     /**
     * @event beforeResize
-    * @description Firef at the beginning of the resize method. If you return false, the resize is cancelled.
+    * @description Fired at the beginning of the resize method. If you return false, the resize is cancelled.
     * @type YAHOO.util.CustomEvent
     */
     /**

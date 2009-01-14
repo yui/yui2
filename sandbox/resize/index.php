@@ -9,8 +9,9 @@ if (!$_GET['non']) {
     <link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css"> 
     <link rel="stylesheet" href="http://blog.davglass.com/wp-content/themes/davglass/style.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="../../build/assets/skins/sam/skin.css"> 
-    <link rel="stylesheet" type="text/css" href="../../build/resize/assets/skins/sam/resize.css"> 
-
+    <link rel="stylesheet" type="text/css" href="../../src/resize/css/resize-core.css" />
+    <link rel="stylesheet" type="text/css" href="../../src/resize/css/skins/sam/resize-skin.css" />
+    
     <style type="text/css" media="screen">
         p, h2 {
             margin: 1em;
@@ -75,7 +76,7 @@ if (!$_GET['non']) {
 <script type="text/javascript" src="../../build/event/event.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../../build/animation/animation.js?bust=<?php echo(mktime()); ?>"></script>
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js?bust=<?php echo(mktime()); ?>"></script>
-<script type="text/javascript" src="../../build/element/element-beta-min.js?bust=<?php echo(mktime()); ?>"></script> 
+<script type="text/javascript" src="../../build/element/element-min.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../../build/logger/logger.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="js/resize.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript">

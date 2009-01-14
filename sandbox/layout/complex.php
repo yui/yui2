@@ -24,7 +24,7 @@
 <script type="text/javascript" src="../../build/animation/animation.js"></script> 
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script> 
 <script type="text/javascript" src="../../build/selector/selector-beta.js"></script> 
-<script type="text/javascript" src="../../build/element/element-beta.js"></script> 
+<script type="text/javascript" src="../../build/element/element.js"></script> 
 <script type="text/javascript" src="../../build/logger/logger-min.js"></script> 
 <script src="http://us.js2.yimg.com/us.js.yimg.com/i/ydn/yuiweb/js/dpsyntax-min-2.js"></script>
 <script type="text/javascript" src="../../build/resize/resize-min.js"></script> 

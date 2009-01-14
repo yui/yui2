@@ -242,20 +242,24 @@ var D = YAHOO.util.Dom,
         _createWrap: function() {
             this._positioned = false;
             //Force wrap for elements that can't have children 
-            //TODO IE Doesn't like this...
-            switch (this.get('element').tagName.toLowerCase()) {
-                case 'img':
-                case 'textarea':
-                case 'input':
-                case 'iframe':
-                case 'select':
-                    this.set('wrap', true);
-                    break;
+            if (this.get('wrap') === false) {
+                switch (this.get('element').tagName.toLowerCase()) {
+                    case 'img':
+                    case 'textarea':
+                    case 'input':
+                    case 'iframe':
+                    case 'select':
+                        this.set('wrap', true);
+                        break;
+                }
             }
             if (this.get('wrap') === true) {
                 this._wrap = document.createElement('div');
                 this._wrap.id = this.get('element').id + '_wrap';
                 this._wrap.className = this.CSS_WRAP;
+                if (this.get('element').tagName.toLowerCase() == 'textarea') {
+                    D.addClass(this._wrap, 'yui-resize-textarea');
+                }
                 D.setStyle(this._wrap, 'width', this.get('width') + 'px');
                 D.setStyle(this._wrap, 'height', this.get('height') + 'px');
                 D.setStyle(this._wrap, 'z-index', this.getStyle('z-index'));
@@ -1174,9 +1178,19 @@ var D = YAHOO.util.Dom,
 
             if (p_oAttributes.height) {
                 this.set('height', parseInt(p_oAttributes.height, 10));
+            } else {
+                var h = this.getStyle('height');
+                if (h == 'auto') {
+                    this.set('height', parseInt(this.get('element').offsetHeight, 10));
+                }
             }
             if (p_oAttributes.width) {
                 this.set('width', parseInt(p_oAttributes.width, 10));
+            } else {
+                var w = this.getStyle('width');
+                if (w == 'auto') {
+                    this.set('width', parseInt(this.get('element').offsetWidth, 10));
+                }
             }
             
             var id = p_oElement;

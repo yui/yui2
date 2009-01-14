@@ -81,7 +81,7 @@ var Dom = YAHOO.util.Dom,
         oConfig.element.innerHTML = '<span class="first-child"><a href="#">LABEL</a></span>';
         oConfig.element.firstChild.firstChild.tabIndex = '-1';
         oConfig.attributes.id = (oConfig.attributes.id || Dom.generateId());
-        
+        oConfig.element.id = oConfig.attributes.id;
 
         YAHOO.widget.ToolbarButton.superclass.constructor.call(this, oConfig.element, oConfig.attributes);
     };
@@ -4383,13 +4383,6 @@ var Dom = YAHOO.util.Dom,
                         this.toolbar.set('disabled', true);
                     }
                     this._mask = document.createElement('DIV');
-                    //TODO -- Add CSS class for this stuff..
-                    Dom.setStyle(this._mask, 'height', '100%');
-                    Dom.setStyle(this._mask, 'width', '100%');
-                    Dom.setStyle(this._mask, 'position', 'absolute');
-                    Dom.setStyle(this._mask, 'top', '0');
-                    Dom.setStyle(this._mask, 'left', '0');
-                    Dom.setStyle(this._mask, 'opacity', '.5');
                     Dom.addClass(this._mask, 'yui-editor-masked');
                     this.get('iframe').get('parentNode').appendChild(this._mask);
                 }
@@ -5717,6 +5710,49 @@ var Dom = YAHOO.util.Dom,
     /* {{{  Command Overrides */
 
         /**
+        * @method cmd_bold
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('bold') is used.
+        */
+        cmd_bold: function(value) {
+            if (!this.browser.webkit) {
+                var el = this._getSelectedElement();
+                if (el && this._isElement(el, 'span') && this._hasSelection()) {
+                    if (el.style.fontWeight == 'bold') {
+                        el.style.fontWeight = '';
+                        var b = this._getDoc().createElement('b'),
+                        par = el.parentNode;
+                        par.replaceChild(b, el);
+                        b.appendChild(el);
+                    }
+                }
+            }
+            return [true];
+        },
+        /**
+        * @method cmd_italic
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('italic') is used.
+        */
+
+        cmd_italic: function(value) {
+            if (!this.browser.webkit) {
+                var el = this._getSelectedElement();
+                if (el && this._isElement(el, 'span') && this._hasSelection()) {
+                    if (el.style.fontStyle == 'italic') {
+                        el.style.fontStyle = '';
+                        var i = this._getDoc().createElement('i'),
+                        par = el.parentNode;
+                        par.replaceChild(i, el);
+                        i.appendChild(el);
+                    }
+                }
+            }
+            return [true];
+        },
+
+
+        /**
         * @method cmd_underline
         * @param value Value passed from the execCommand method
         * @description This is an execCommand override method. It is called from execCommand when the execCommand('underline') is used.
@@ -6293,9 +6329,7 @@ var Dom = YAHOO.util.Dom,
                 
                 for (var i = 0; i < _tmp.length; i++) {
                     if ((YAHOO.util.Dom.getStyle(_tmp[i], 'font-family') == 'yui-tmp') || (_tmp[i].face && (_tmp[i].face == 'yui-tmp'))) {
-                        //TODO Why is this here?!?
                         el = _elCreate(_tmp[i].tagName, tagStyle);
-                        //el = _elCreate(tagName, tagStyle);
                         el.innerHTML = _tmp[i].innerHTML;
                         if (this._isElement(_tmp[i], 'ol') || (this._isElement(_tmp[i], 'ul'))) {
                             var fc = _tmp[i].getElementsByTagName('li')[0];
@@ -6471,7 +6505,8 @@ var Dom = YAHOO.util.Dom,
             html = html.replace(/&lt;script([^>]*)&gt;/gi, '<bad>');
             html = html.replace(/&lt;\/script([^>]*)&gt;/gi, '</bad>');
             //Replace the line feeds
-            html = html.replace(/\n/g, '<YUI_LF>').replace(/\r/g, '<YUI_LF>');
+            html = html.replace(/\r\n/g, '<YUI_LF>').replace(/\n/g, '<YUI_LF>').replace(/\r/g, '<YUI_LF>');
+            
             //Remove Bad HTML elements (used to be script nodes)
             html = html.replace(new RegExp('<bad([^>]*)>(.*?)<\/bad>', 'gi'), '');
             //Replace the lines feeds
@@ -6596,10 +6631,9 @@ var Dom = YAHOO.util.Dom,
 		    html = html.replace(/<\/YUI_EMBED>/g, '<\/embed>');
             
             //This should fix &amp;s in URL's
-            //TODO Make this global
-            html = html.replace(' &amp; ', 'YUI_AMP');
-            html = html.replace('&amp;', '&');
-            html = html.replace('YUI_AMP', ' &amp; ');
+            html = html.replace(/ &amp; /gi, 'YUI_AMP');
+            html = html.replace(/&amp;/gi, '&');
+            html = html.replace(/YUI_AMP/gi, ' &amp; ');
 
             //Trim the output, removing whitespace from the beginning and end
             html = YAHOO.lang.trim(html);
@@ -8369,7 +8403,6 @@ var Dom = YAHOO.util.Dom,
             panelEl.style.top = '-9999px';
             panelEl.style.left = '-9999px';
             document.body.appendChild(panelEl);
-            //TODO IE barfs on this..
             this.get('element_cont').insertBefore(panelEl, this.get('element_cont').get('firstChild'));
 
                 
@@ -9015,6 +9048,65 @@ var Dom = YAHOO.util.Dom,
             return str;
         }
     });
+/**
+* @event beforeOpenWindow
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @description Event fires before an Editor Window is opened. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event afterOpenWindow
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @description Event fires after an Editor Window is opened. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event closeWindow
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @description Event fires after an Editor Window is closed. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event windowCMDOpen
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @description Dynamic event fired when an <a href="YAHOO.widget.EditorWindow.html">EditorWindow</a> is opened.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkOpen event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event windowCMDClose
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @description Dynamic event fired when an <a href="YAHOO.widget.EditorWindow.html">EditorWindow</a> is closed.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkClose event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event windowRender
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @description Event fired when the initial Overlay is rendered. Can be used to manipulate the content of the panel.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event windowInsertImageRender
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @param {HTMLElement} body The HTML element used as the body of the window..
+* @param {Toolbar} toolbar A reference to the toolbar object used inside this window.
+* @description Event fired when the pre render of the Insert Image window has finished.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event windowCreateLinkRender
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @param {HTMLElement} body The HTML element used as the body of the window..
+* @description Event fired when the pre render of the Create Link window has finished.
+* @type YAHOO.util.CustomEvent
+*/
+
+
+
     /**
      * @description Class to hold Window information between uses. We use the same panel to show the windows, so using this will allow you to configure a window before it is shown.
      * This is what you pass to Editor.openWindow();. These parameters will not take effect until the openWindow() is called in the editor.
@@ -9089,62 +9181,5 @@ var Dom = YAHOO.util.Dom,
             return 'Editor Window (' + this.name + ')';
         }
     };
-/**
-* @event beforeOpenWindow
-* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @description Event fires before an Editor Window is opened. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event afterOpenWindow
-* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @description Event fires after an Editor Window is opened. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event closeWindow
-* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
-* @description Event fires after an Editor Window is closed. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event windowCMDOpen
-* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @description Dynamic event fired when an <a href="YAHOO.widget.EditorWindow.html">EditorWindow</a> is opened.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkOpen event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event windowCMDClose
-* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @description Dynamic event fired when an <a href="YAHOO.widget.EditorWindow.html">EditorWindow</a> is closed.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkClose event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event windowRender
-* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @description Event fired when the initial Overlay is rendered. Can be used to manipulate the content of the panel.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event windowInsertImageRender
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @param {HTMLElement} body The HTML element used as the body of the window..
-* @param {Toolbar} toolbar A reference to the toolbar object used inside this window.
-* @description Event fired when the pre render of the Insert Image window has finished.
-* @type YAHOO.util.CustomEvent
-*/
-/**
-* @event windowCreateLinkRender
-* @param {Overlay} panel The Overlay object that is used to create the window.
-* @param {HTMLElement} body The HTML element used as the body of the window..
-* @description Event fired when the pre render of the Create Link window has finished.
-* @type YAHOO.util.CustomEvent
-*/
-
 })();
 YAHOO.register("editor", YAHOO.widget.Editor, {version: "@VERSION@", build: "@BUILD@"});

@@ -344,6 +344,27 @@
 			_minorUnitSetByUser = false;
 		}		
 			
+		/**
+		 * @private 
+		 */
+		private var _roundMajorUnit:Boolean = true;
+		
+		/**
+		 * Indicates whether to round the major unit
+		 */
+		public function get roundMajorUnit():Boolean
+		{
+			return _roundMajorUnit;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set roundMajorUnit(value:Boolean):void
+		{
+			_roundMajorUnit = value;
+		}
+		
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
@@ -527,27 +548,28 @@
 				maxLabels = Math.min(maxLabels, this.numLabels);
 			}
 
-
 			tempMajorUnit = difference/maxLabels;
-			tempMajorUnit = Math.ceil(tempMajorUnit);
+			if(tempMajorUnit > 1) tempMajorUnit = Math.ceil(tempMajorUnit);
 			tempMajorUnit = Math.min(tempMajorUnit, Math.round(difference/2));			
 			
-			
-			if(difference%tempMajorUnit != 0 && !this._numLabelsSetByUser)
+			if(this.roundMajorUnit)
 			{
-				var adjusted:Boolean = false;
-				var len:Number = Math.min(tempMajorUnit, ((difference/2)-tempMajorUnit));
-				for(var i:int = 0;i < len; i++)
+				var order:Number = Math.floor(Math.log(tempMajorUnit) * Math.LOG10E);
+				var scientificForm:Number = tempMajorUnit/Math.pow(10, order);
+
+				if(Math.ceil(scientificForm) - scientificForm > 0.5)
 				{
-					tempMajorUnit++;
-					if(difference%tempMajorUnit == 0)
-					{
-						this._majorUnit = tempMajorUnit;
-						break;
-					}
-				}		
-			}			
-			this._majorUnit = tempMajorUnit;
+					scientificForm = Math.ceil(scientificForm) - .5;
+				}
+				else
+				{
+					scientificForm = Math.ceil(scientificForm);
+				}
+
+				tempMajorUnit = scientificForm * Math.pow(10, order);	
+			}
+
+			this._majorUnit = tempMajorUnit;									
 		}
 
 		/**
@@ -613,11 +635,10 @@
 				else
 				{
 					value += unit;
-					if(this.snapToUnits)
+					if(this.snapToUnits && !this._minimumSetByUser && this.alwaysShowZero)
 					{
 						value = NumberUtil.roundDownToNearest(value, unit);
 					}
-					value = Math.min(value, this.maximum); //don't go over the max!
 				}
 				displayedMaximum = NumberUtil.fuzzyEquals(value, this.maximum);
 			}
@@ -681,6 +702,12 @@
 				{
 					this._minimum -= this._majorUnit;
 				}
+			}
+			
+			var maxLabel:Number = (this.chart as CartesianChart).horizontalAxis == this?this.maxLabelWidth:this.maxLabelHeight;
+			if((Math.abs(this._maximum - this._minimum))/this._majorUnit < maxLabel) 
+			{
+				this.calculateMajorUnit();
 			}
 		}
 		
