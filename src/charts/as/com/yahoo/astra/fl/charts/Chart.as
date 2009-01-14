@@ -180,6 +180,9 @@
 			seriesBorderColors:null,
 			seriesFillColors:null,
 			seriesLineColors:null,
+			seriesBorderAlphas:[1],
+			seriesFillAlphas:[1],
+			seriesLineAlphas:[1],
 			contentPadding: 10,
 			backgroundSkin: "ChartBackground",
 			backgroundColor: 0xffffff,
@@ -200,7 +203,10 @@
 			markerSkin: "seriesMarkerSkins",
 			borderColor: "seriesBorderColors",
 			fillColor: "seriesFillColors",
-			lineColor: "seriesLineColors"
+			lineColor: "seriesLineColors",
+			borderAlpha: "seriesBorderAlphas",
+			fillAlpha: "seriesFillAlphas",
+			lineAlpha: "seriesLineAlphas"
 		};
 		
 		/**

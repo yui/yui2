@@ -31,5 +31,25 @@
 		 * @private
 		 */
 		function set borderColor(value:uint):void; 
+		
+		/**
+		 * The alpha value of the fill.
+		 */
+		function get fillAlpha():Number;
+		
+		/**
+		 * @private
+		 */
+		function set fillAlpha(value:Number):void;
+		
+		/**
+		 * The alpha value of the border.
+		 */
+		function get borderAlpha():Number;
+		
+		/**
+		 * @private
+		 */
+		function set borderAlpha(value:Number):void; 
 	}
 }

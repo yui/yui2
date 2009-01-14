@@ -655,6 +655,9 @@
 			var seriesBorderColors:Array = [];
 			var seriesFillColors:Array = [];
 			var seriesLineColors:Array = [];
+			var seriesBorderAlphas:Array = [];
+			var seriesFillAlphas:Array = [];
+			var seriesLineAlphas:Array = [];
 			var seriesCount:int = Math.min(this.chart.dataProvider.length, styles.length);
 			for(var i:int = 0; i < seriesCount; i++)
 			{
@@ -693,6 +696,9 @@
 				var borderColor:Object = null;
 				var fillColor:Object= null;
 				var lineColor:Object = null;
+				var lineAlpha:Number = 1;
+				var borderAlpha:Number = 1;
+				var fillAlpha:Number = 1;
 				var skin:Object = defaultSkin;
 				var mode:Object = "repeat";
 				if(style)
@@ -751,9 +757,15 @@
 							case "borderColor":
 								borderColor = this.parseColor(style.borderColor);
 								break;
+							case "borderAlpha":
+								borderAlpha = style.borderAlpha;
+								break;
 							case "fillColor":
 								fillColor = this.parseColor(style.fillColor);
 								break;
+							case "fillAlpha":
+								fillAlpha = style.fillAlpha;
+								trace("coming in: " + fillAlpha);
 							case "size":
 								UIComponent(series).setStyle("markerSize", style.size);
 								break;
@@ -763,6 +775,13 @@
 									this.log("The style " + styleName + " is only supported by series of type 'line'.", LoggerCategory.WARN);
 								}
 								lineColor = this.parseColor(style.lineColor);
+								break;
+							case "lineAlpha":
+								if(!(series is LineSeries))
+								{
+									this.log("The style " + styleName + " is only supported by series of type 'line'.", LoggerCategory.WARN);
+								}
+								lineAlpha = style.lineAlpha;
 								break;
 							case "alpha":
 								UIComponent(series).setStyle("markerAlpha", style.alpha);
@@ -865,14 +884,20 @@
 				seriesBorderColors[i] = borderColor!=null?borderColor:color;
 				seriesFillColors[i] = fillColor!=null?fillColor:color;
 				seriesLineColors[i] = lineColor!=null?lineColor:color;
+				seriesBorderAlphas[i] = borderAlpha;
+				seriesFillAlphas[i] = fillAlpha;
+				seriesLineAlphas[i] = lineAlpha;
 			}			
 
 			this.chart.setStyle("seriesColors", seriesColors);
 			this.chart.setStyle("seriesBorderColors", seriesBorderColors);
 			this.chart.setStyle("seriesFillColors", seriesFillColors);
+			this.chart.setStyle("seriesBorderAlphas", seriesBorderAlphas);
+			this.chart.setStyle("seriesFillAlphas", seriesFillAlphas);
 			if(series is LineSeries)
 			{
 				this.chart.setStyle("seriesLineColors", seriesLineColors);
+				this.chart.setStyle("seriesLineAlphas", seriesLineAlphas);
 			}
 			this.chart.drawNow();
 		}
