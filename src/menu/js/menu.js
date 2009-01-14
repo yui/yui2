@@ -361,7 +361,7 @@ OFF_SCREEN_POSITION: "-999em",
 
 
 /** 
-* @property _bHideDelayEventHandlersAssigned
+* @property _useHideDelay
 * @description Boolean indicating if the "mouseover" and "mouseout" event 
 * handlers used for hiding the menu via a call to "YAHOO.lang.later" have 
 * already been assigned.
@@ -369,7 +369,7 @@ OFF_SCREEN_POSITION: "-999em",
 * @private
 * @type Boolean
 */
-_bHideDelayEventHandlersAssigned: false,
+_useHideDelay: false,
 
 
 /**
@@ -1727,6 +1727,10 @@ _onMouseOver: function (p_sType, p_aArgs) {
 				Dom.isAncestor(this.element, oTarget))) {
 	
 			// Menu mouseover logic
+
+	        if (this._useHideDelay) {
+	        	this._cancelHideDelay();
+	        }
 	
 			this._nCurrentMouseX = 0;
 	
@@ -1922,7 +1926,11 @@ _onMouseOut: function (p_sType, p_aArgs) {
 			!Dom.isAncestor(this.element, oRelatedTarget)) || bMovingToSubmenu)) {
 	
 			// Menu mouseout logic
-	
+
+	        if (this._useHideDelay) {
+	        	this._execHideDelay();
+	        }
+
 			Event.removeListener(this.element, _MOUSEMOVE, this._onMouseMove);
 	
 			this._nCurrentMouseX = Event.getPageX(oEvent);
@@ -2131,6 +2139,11 @@ _onKeyDown: function (p_sType, p_aArgs) {
         nNextItemOffsetTop,
         nScrollTarget,
         oParentMenu;
+
+
+	if (this._useHideDelay) {
+		this._cancelHideDelay();
+	}
 
 
     /*
@@ -2948,8 +2961,8 @@ getConstrainedY: function (y) {
 		nTopRegionHeight,
 		nBottomRegionHeight,
 
-		topConstraint,
-		bottomConstraint,
+		topConstraint = scrollY + nViewportOffset,
+		bottomConstraint = scrollY + viewPortHeight - nMenuOffsetHeight - nViewportOffset,
 
 		yNew = y;
 		
@@ -3033,8 +3046,7 @@ getConstrainedY: function (y) {
 		var nDisplayRegionHeight = getDisplayRegionHeight(),
 			bMenuHasItems = (oMenu.getItems().length > 0),
 			nMenuMinScrollHeight,
-			fnReturnVal,
-			nNewY;
+			fnReturnVal;
 
 
 		if (nMenuOffsetHeight > nDisplayRegionHeight) {
@@ -3087,7 +3099,7 @@ getConstrainedY: function (y) {
 			}
 		
 		}
-		else if (nMaxHeight && (nMaxHeight != nInitialMaxHeight)) {
+		else if (nMaxHeight && (nMaxHeight !== nInitialMaxHeight)) {
 		
 			oMenu._setScrollHeight(nInitialMaxHeight);
 			oMenu.hideEvent.subscribe(resetMaxHeight);
@@ -3104,55 +3116,76 @@ getConstrainedY: function (y) {
 	};
 
 
-	if (oMenu.cfg.getProperty(_PREVENT_CONTEXT_OVERLAP) && bPotentialContextOverlap) {
+	// Determine if the current value for the Menu's "y" configuration property will
+	// result in the Menu being positioned outside the boundaries of the viewport
+
+	if (y < topConstraint || y  > bottomConstraint) {
+
+		// The current value for the Menu's "y" configuration property WILL
+		// result in the Menu being positioned outside the boundaries of the viewport
 
 		if (bCanConstrain) {
 
-			oContextEl = aContext[0];
-			nContextElHeight = oContextEl.offsetHeight;
-			nContextElY = (Dom.getY(oContextEl) - scrollY);
-
-			nTopRegionHeight = nContextElY;
-			nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
-
-			setVerticalPosition();
+			if (oMenu.cfg.getProperty(_PREVENT_CONTEXT_OVERLAP) && bPotentialContextOverlap) {
 		
-		}
+				//	SOLUTION #1:
+				//	If the "preventcontextoverlap" configuration property is set to "true", 
+				//	try to flip and/or scroll the Menu to both keep it inside the boundaries of the 
+				//	viewport AND from overlaping its context element (MenuItem or MenuBarItem).
 
-		yNew = oMenu.cfg.getProperty(_Y);
-
-	}
-    else if (!(oMenu instanceof YAHOO.widget.MenuBar) && nMenuOffsetHeight >= viewPortHeight) {
+				oContextEl = aContext[0];
+				nContextElHeight = oContextEl.offsetHeight;
+				nContextElY = (Dom.getY(oContextEl) - scrollY);
 	
-		nAvailableHeight = (viewPortHeight - (nViewportOffset * 2));
-
-		if (nAvailableHeight > oMenu.cfg.getProperty(_MIN_SCROLL_HEIGHT)) {
-
-			oMenu._setScrollHeight(nAvailableHeight);
-			oMenu.hideEvent.subscribe(resetMaxHeight);
-
-			alignY();
-			
-			yNew = oMenu.cfg.getProperty(_Y);
+				nTopRegionHeight = nContextElY;
+				nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
+	
+				setVerticalPosition();
+				
+				yNew = oMenu.cfg.getProperty(_Y);
 		
-		}
-
-    }	
-	else {
-
-		if (bCanConstrain) {
-
-			topConstraint = scrollY + nViewportOffset;
-			bottomConstraint = scrollY + viewPortHeight - nMenuOffsetHeight - nViewportOffset;
-
-			if (y < topConstraint) {
-				yNew  = topConstraint;
-			} else if (y  > bottomConstraint) {
-				yNew  = bottomConstraint;
 			}
-		} else {
-			yNew = nViewportOffset + scrollY;
+			else if (!(oMenu instanceof YAHOO.widget.MenuBar) && 
+				nMenuOffsetHeight >= viewPortHeight) {
+
+				//	SOLUTION #2:
+				//	If the Menu exceeds the height of the viewport, introduce scroll bars
+				//	to keep the Menu inside the boundaries of the viewport
+
+				nAvailableHeight = (viewPortHeight - (nViewportOffset * 2));
+		
+				if (nAvailableHeight > oMenu.cfg.getProperty(_MIN_SCROLL_HEIGHT)) {
+		
+					oMenu._setScrollHeight(nAvailableHeight);
+					oMenu.hideEvent.subscribe(resetMaxHeight);
+		
+					alignY();
+					
+					yNew = oMenu.cfg.getProperty(_Y);
+				
+				}
+		
+			}	
+			else {
+
+				//	SOLUTION #3:
+			
+				if (y < topConstraint) {
+					yNew  = topConstraint;
+				} else if (y  > bottomConstraint) {
+					yNew  = bottomConstraint;
+				}				
+			
+			}
+
 		}
+		else {
+			//	The "y" configuration property cannot be set to a value that will keep
+			//	entire Menu inside the boundary of the viewport.  Therefore, set  
+			//	the "y" configuration property to scrollY to keep as much of the 
+			//	Menu inside the viewport as possible.
+			yNew = nViewportOffset + scrollY;
+		}	
 
 	}
 
@@ -3363,6 +3396,7 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         case _EFFECT:
         case _CLASSNAME:
         case _SCROLL_INCREMENT:
+        case _MAX_HEIGHT:
         case _MIN_SCROLL_HEIGHT:
         case _MONITOR_RESIZE:
         case _SHADOW:
@@ -3423,6 +3457,8 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
             
             scrollincrement: oParentCfg.getProperty(_SCROLL_INCREMENT),
             
+			maxheight: oParentCfg.getProperty(_MAX_HEIGHT),
+
             minscrollheight: oParentCfg.getProperty(_MIN_SCROLL_HEIGHT),
             
             iframe: oParentCfg.getProperty(_IFRAME),
@@ -3680,38 +3716,9 @@ configIframe: function (p_sType, p_aArgs, p_oMenu) {
 */
 configHideDelay: function (p_sType, p_aArgs, p_oMenu) {
 
-    var nHideDelay = p_aArgs[0],
-        oMouseOutEvent = this.mouseOutEvent,
-        oMouseOverEvent = this.mouseOverEvent,
-        oKeyDownEvent = this.keyDownEvent;
+    var nHideDelay = p_aArgs[0];
 
-    if (nHideDelay > 0) {
-
-        /*
-            Only assign event handlers once. This way the user change 
-            the value for the hidedelay as many times as they want.
-        */
-
-        if (!this._bHideDelayEventHandlersAssigned) {
-
-            oMouseOutEvent.subscribe(this._execHideDelay);
-            oMouseOverEvent.subscribe(this._cancelHideDelay);
-            oKeyDownEvent.subscribe(this._cancelHideDelay);
-
-            this._bHideDelayEventHandlersAssigned = true;
-        
-        }
-
-    }
-    else {
-
-        oMouseOutEvent.unsubscribe(this._execHideDelay);
-        oMouseOverEvent.unsubscribe(this._cancelHideDelay);
-        oKeyDownEvent.unsubscribe(this._cancelHideDelay);
-
-        this._bHideDelayEventHandlersAssigned = false;
-
-    }
+	this._useHideDelay = (nHideDelay > 0);
 
 },
 
