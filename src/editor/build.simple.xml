@@ -3,5 +3,5 @@
     <description>SimpleEditor Build File</description>
     <property file="build.simple.properties" />
     <import file="${builddir}/2.x/bootstrap.xml" />
-    <target name="simpleeditor_build_subtask" depends="build, minifyjs" />    
+    <target name="simpleeditor_build_subtask" depends="build, minify" />    
 </project>
