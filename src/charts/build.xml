@@ -7,13 +7,8 @@
     <import file="${builddir}/2.x/bootstrap.xml" description="Default Build Properties and Targets" />
 
     <!-- custom properties -->
-
-    <property name="flashbin" value="C:/Program Files/Adobe/Adobe Flash CS3"/>
-    <property name="flexbin" value="C:/Program Files/Adobe/Flex Builder 3/sdks/3.0.0/bin"/>
     <property name="astra.srcdir" value="${component.basedir}/as"/>
-    <property name="astra.output" value="${component.basedir}/astra"/>
     <property name="swc.output" value="${component.basedir}/as"/>
-    <property name="swf.output" value="${component.basedir}/swf"/>
     
     <target name="build" depends="YuiModuleTargets.build, swfbuild" />
     <target name="deploybuild" depends="YuiSharedTargets.deploybuild, swfdeploy" />
@@ -57,5 +52,5 @@
     <target name="swfdeploy" description="Charts Override to Build SWF">
 		<copy file="${component.builddir}/assets/charts.swf" todir="${global.build.component.assets}" />
     </target>
-
+    
 </project>
