@@ -9,6 +9,7 @@
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../../build/event/event.js"></script>
 <script type="text/javascript" src="../../../build/dom/dom.js"></script> 
+<script type="text/javascript" src="../../../build/element/element.js"></script> 
 <script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
 
@@ -42,7 +43,7 @@
                 <h2>Section Header</h2>
                 <em class="lorem ipsum ipsum" id="lorem-ipsum">lorem ipsum</em>
                 <div class="mod" id="foo">
-                    <div class="hd">
+                    <div class="hd" id="yui-gen1">
                         <h3>Module Header</h3>
                     </div>
                     <div class="bd">
@@ -103,6 +104,11 @@
 
                 Assert.areEqual('search-p', Y.Dom.get('search-p').id, 'false match on "name"');
                 Assert.isNull(Y.Dom.get('search-r'), 'false match on "name"');
+
+                Assert.isNull(Y.Dom.get('search-r'), 'false match on "name"');
+
+                Assert.areEqual(document.getElementById('doc'), Y.Dom.get(new YAHOO.util.Element('doc')),
+                        "YAHOO.util.Element('doc')");
             },            
 
             test_getStyle: function() {
@@ -224,10 +230,14 @@
             },
 
             test_generateId: function() {
-                var header = document.getElementsByTagName('h1')[0];
-                Y.Dom.generateId(header);
-                Assert.areEqual('yui-gen0', header.id,
-                        'generateId failed');
+                var h1 = document.getElementsByTagName('h1')[0];
+                var h3 = document.getElementsByTagName('h3')[0];
+
+                Y.Dom.generateId(h1);
+                Assert.areEqual('yui-gen0', h1.id, "Y.Dom.generateId(h1)");
+
+                Y.Dom.generateId(h3);
+                Assert.areEqual('yui-gen1yui-gen2', h3.id, "Y.Dom.generateId(h3)");
             },            
 
             test_isAncestor: function() {
@@ -249,12 +259,17 @@
                 Assert.isObject(Y.Dom.getRegion('bd'),
                         'getRegion failed for element in document');
 
-console.log(Y.Dom.getRegion('xbd'));
                 Assert.isFalse(Y.Dom.getRegion('xbd'),
                         'getRegion failed for id not in document');
 
                 Assert.isFalse(Y.Dom.getRegion(document.createElement('div')),
                         'getRegion failed for element not in document');
+
+                Assert.areEqual(document.getElementById('bd').offsetWidth, Y.Dom.getRegion('bd').width,
+                        'getRegion failed for width');
+
+                Assert.areEqual(document.getElementById('bd').offsetHeight, Y.Dom.getRegion('bd').height,
+                        'getRegion failed for height');
             },            
 
             test_point: function() {
@@ -267,6 +282,9 @@ console.log(Y.Dom.getRegion('xbd'));
                 var testX = point.left === point.right && point.x === point[0] && point[0] === point.left && point.left === 100;
                 var testY = point.top === point.bottom && point.y === point[1]  && point[1] == point.top && point.top === 200;
                 Assert.isTrue(testX && testY, 'test point with [x, y] constructor');
+
+                Assert.areEqual(0, point.width, 'point.width');
+                Assert.areEqual(0, point.height, 'point.height');
             },
 
             test_inDocument: function() {
