@@ -78,7 +78,9 @@
 			markerAlpha: 1.0,
 			animationEnabled: true,
 			animationEasingFunction: fl.transitions.easing.Strong.easeOut,
-			animationDuration: 500
+			animationDuration: 500,
+			borderColor: 0x00b8bf,
+			color: 0x00b8bf
 		};
 		
 		/**
@@ -87,7 +89,9 @@
 		private static const RENDERER_STYLES:Object = 
 		{
 			skin: "markerSkin",
-			fillColor: "fillColor"
+			fillColor: "fillColor",
+			borderColor: "borderColor",
+			color: "color"
 		};
 		
 	//--------------------------------------

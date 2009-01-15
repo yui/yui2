@@ -731,7 +731,7 @@
          * @return {Int} The height of the actual document (which includes the body and its margin).
          */
         getDocumentHeight: function() {
-            var scrollHeight = (document.compatMode != 'CSS1Compat') ? document.body.scrollHeight : document.documentElement.scrollHeight;
+            var scrollHeight = (document.compatMode != 'CSS1Compat' || isSafari) ? document.body.scrollHeight : document.documentElement.scrollHeight;
 
             var h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
             return h;
@@ -743,7 +743,7 @@
          * @return {Int} The width of the actual document (which includes the body and its margin).
          */
         getDocumentWidth: function() {
-            var scrollWidth = (document.compatMode != 'CSS1Compat') ? document.body.scrollWidth : document.documentElement.scrollWidth;
+            var scrollWidth = (document.compatMode != 'CSS1Compat' || isSafari) ? document.body.scrollWidth : document.documentElement.scrollWidth;
             var w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
             return w;
         },

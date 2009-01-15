@@ -7,7 +7,6 @@
 	
 	<property name="lib" value="${component.basedir}/as"/>
 	<property name="src" value="${component.basedir}/as"/>
-	<property name="output" value="$${component.basedir}/as/output"/>
 	
 	<target name="build">
 	
