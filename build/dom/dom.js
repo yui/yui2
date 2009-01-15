@@ -13,8 +13,10 @@
         propertyCache = {}, // for faster hyphen converts
         reCache = {},          // cache regexes for className
         document = window.document,     // cache for faster lookups
+        documentElement = document.documentElement,
 
         // string constants
+        _CLASS = 'class', // underscore due to reserved word
         CLASSNAME = 'className',
         EMPTY = '',
         SPACE = ' ',
@@ -34,6 +36,13 @@
         CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}])/g
     };
 
+    var CUSTOM_ATTRIBUTES = (!documentElement.hasAttribute) ? { // IE < 8
+        'for': 'htmlFor',
+        'class': 'className'
+    } : { // w3c
+        'htmlFor': 'for',
+        'className': 'class'
+    };
 
     YAHOO.env._id_counter = YAHOO.env._id_counter || 0;     // for use with generateId (global to save state if Dom is overwritten)
 
@@ -85,7 +94,7 @@
             
             return value;
         };
-    } else if (document.documentElement.currentStyle && isIE) { // IE method
+    } else if (documentElement.currentStyle && isIE) { // IE method
         getStyle = function(el, property) {                         
             switch( toCamel(property) ) {
                 case 'opacity' :// IE opacity uses filter
@@ -431,7 +440,7 @@
                 re = getClassRegEx(className);
 
             for (var i = 0, len = elements.length; i < len; ++i) {
-                if ( re.test(elements[i].className) ) {
+                if ( re.test(Y.Dom.getAttribute(elements[i], CLASSNAME)) ) {
                     nodes[nodes.length] = elements[i];
                 }
             }
@@ -455,13 +464,15 @@
         },
 
         _hasClass: function(el, className) {
-            var ret = false;
+            var ret = false,
+                current;
             
             if (el && className) {
+                current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
                 if (className.exec) {
-                    ret = className.test(el[CLASSNAME]);
+                    ret = className.test(current);
                 } else {
-                    ret = className && (SPACE + el[CLASSNAME] + SPACE).
+                    ret = className && (SPACE + current + SPACE).
                         indexOf(SPACE + className + SPACE) > -1;
                 }
             } else {
@@ -482,10 +493,13 @@
         },
 
         _addClass: function(el, className) {
-            var ret = false;
+            var ret = false,
+                current;
+
             if (el && className) {
+                current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
                 if ( !Y.Dom._hasClass(el, className) ) {
-                    el[CLASSNAME] = trim(el[CLASSNAME] + SPACE + className);
+                    Y.Dom.setAttribute(el, CLASSNAME, trim(current + SPACE + className));
                     ret = true;
                 }
             } else {
@@ -507,17 +521,20 @@
         
         _removeClass: function(el, className) {
             var ret = false,
-                current = el[CLASSNAME];
+                current,
+                newClass;
 
             if (el && className) {
-                el[CLASSNAME] = el[CLASSNAME].replace(getClassRegEx(className), EMPTY);
+                current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
+                Y.Dom.setAttribute(el, CLASSNAME, current.replace(getClassRegEx(className), EMPTY));
 
-                if (current !== el[CLASSNAME]) { // else nothing changed
-                    el[CLASSNAME] = trim(el[CLASSNAME]);
+                newClass = Y.Dom.getAttribute(el, CLASSNAME);
+                if (current !== newClass) { // else nothing changed
+                    Y.Dom.setAttribute(el, CLASSNAME, trim(newClass)); // trim after comparing to current class
                     ret = true;
 
-                    if (el[CLASSNAME] === '') { // remove class attribute if empty
-                        var attr = (el.hasAttribute && el.hasAttribute('class')) ? 'class' : 'className';
+                    if (Y.Dom.getAttribute(el, CLASSNAME) === '') { // remove class attribute if empty
+                        var attr = (el.hasAttribute && el.hasAttribute(_CLASS)) ? _CLASS : CLASSNAME;
                         el.removeAttribute(attr);
                     }
                 }
@@ -545,7 +562,8 @@
             var className,
                 from,
                 to,
-                ret = false;
+                ret = false,
+                current;
 
             if (el && classObj) {
                 from = classObj.from;
@@ -557,12 +575,13 @@
                     ret = Y.Dom._addClass(el, classObj.to);
                 } else if (from !== to) { // else nothing to replace
                     // May need to lead with DBLSPACE?
-                    className = (SPACE + el[CLASSNAME].replace(getClassRegEx(from), SPACE + to)).
+                    current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
+                    className = (SPACE + current.replace(getClassRegEx(from), SPACE + to)).
                                split(getClassRegEx(to));
 
                     // insert to into what would have been the first occurrence slot
                     className.splice(1, 0, SPACE + to);
-                    el[CLASSNAME] = trim(className.join(EMPTY));
+                    Y.Dom.setAttribute(el, CLASSNAME, trim(className.join(EMPTY)));
                     ret = true;
                 }
             } else {
@@ -635,7 +654,7 @@
          * @return {Boolean} Whether or not the element is present in the current document
          */
         inDocument: function(el) {
-            return this.isAncestor(document.documentElement, el);
+            return this.isAncestor(documentElement, el);
         },
         
         /**
@@ -731,7 +750,7 @@
          * @return {Int} The height of the actual document (which includes the body and its margin).
          */
         getDocumentHeight: function() {
-            var scrollHeight = (document.compatMode != 'CSS1Compat' || isSafari) ? document.body.scrollHeight : document.documentElement.scrollHeight;
+            var scrollHeight = (document.compatMode != 'CSS1Compat' || isSafari) ? document.body.scrollHeight : documentElement.scrollHeight;
 
             var h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
             return h;
@@ -743,7 +762,7 @@
          * @return {Int} The width of the actual document (which includes the body and its margin).
          */
         getDocumentWidth: function() {
-            var scrollWidth = (document.compatMode != 'CSS1Compat' || isSafari) ? document.body.scrollWidth : document.documentElement.scrollWidth;
+            var scrollWidth = (document.compatMode != 'CSS1Compat' || isSafari) ? document.body.scrollWidth : documentElement.scrollWidth;
             var w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
             return w;
         },
@@ -759,7 +778,7 @@
         
             if ( (mode || isIE) && !isOpera ) { // IE, Gecko
                 height = (mode == 'CSS1Compat') ?
-                        document.documentElement.clientHeight : // Standards
+                        documentElement.clientHeight : // Standards
                         document.body.clientHeight; // Quirks
             }
         
@@ -778,7 +797,7 @@
             
             if (mode || isIE) { // IE, Gecko, Opera
                 width = (mode == 'CSS1Compat') ?
-                        document.documentElement.clientWidth : // Standards
+                        documentElement.clientWidth : // Standards
                         document.body.clientWidth; // Quirks
             }
             return width;
@@ -1078,18 +1097,11 @@
          * @method setAttibute
          * @param {String | HTMLElement} el The target element for the attribute.
          * @param {String} attr The attribute to set.
-         * @param {String} value The value of the attribute.
+         * @param {String} val The value of the attribute.
          */
-        setAttribute: function(el, attr, value) {
-            switch (attr) {
-                case 'for':
-                    attr = 'htmlFor';
-                    break;
-                case 'class':
-                    attr = 'className';
-                    break;
-            }
-            el[attr] = value;
+        setAttribute: function(el, attr, val) {
+            attr = CUSTOM_ATTRIBUTES[attr] || attr;
+            el.setAttribute(attr, val);
         },
 
 
@@ -1100,21 +1112,14 @@
          * @param {String} attr The attribute to get.
          * @return {String} The current value of the attribute. 
          */
-        getAttribute: function(el, attr, value) {
-            switch (attr) {
-                case 'for':
-                    attr = 'htmlFor';
-                    break;
-                case 'class':
-                    attr = 'className';
-                    break;
-            }
-            return el[attr];
+        getAttribute: function(el, attr) {
+            attr = CUSTOM_ATTRIBUTES[attr] || attr;
+            return el.getAttribute(attr);
         }
     };
     
     var getXY = function() {
-        if (document.documentElement.getBoundingClientRect) { // IE
+        if (documentElement.getBoundingClientRect) { // IE
             return function(el) {
                 var box = el.getBoundingClientRect(),
                     round = Math.round;
