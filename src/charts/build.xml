@@ -8,19 +8,22 @@
 
     <!-- custom properties -->
     <property name="astra.srcdir" value="${component.basedir}/as"/>
-    <property name="swc.output" value="${component.basedir}/as"/>
     
     <target name="build" depends="YuiModuleTargets.build, swfbuild" />
     <target name="deploybuild" depends="YuiSharedTargets.deploybuild, swfdeploy" />
 
     <target name="swfbuild" description="Charts Override to Build SWF" depends="build-swc">
+		<exec executable="${flexbin}/mxmlc.exe" failonerror="true">
 
-        <!-- Call the build script for the charts SWF -->
-        <!-- We're using the same build script we distribute with the library. -->
-        <ant antfile="${component.basedir}/buildswf.xml">
-            <property name="basedir" value="${component.basedir}/as"/>
-            <property name="output" value="${component.builddir}/assets"/>
-        </ant>
+			<!-- start with the classes from the SWC -->
+			<arg line="--library-path+='${astra.srcdir}'"/>
+			
+			<!-- specify where to output the SWF -->
+			<arg line="--output '${component.builddir}/assets/charts.swf'"/>
+
+			<!-- compile the main class -->
+			<arg line="'${astra.srcdir}/Charts.as'"/>
+		</exec>	
     </target>
 
     <target name="build-swc" description="builds the SWC required for the Charts SWF">
@@ -45,7 +48,7 @@
             <arg value="fl.containers.UILoader"/>
 
             <!-- Output SWC -->
-            <arg line="--output '${swc.output}/charts.swc'"/>
+            <arg line="--output '${astra.srcdir}/charts.swc'"/>
         </exec>
     </target>
 
