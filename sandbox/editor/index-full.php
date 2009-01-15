@@ -96,7 +96,7 @@ var myConfig = {
     drag: true,
     resize: true,
     //extracss: 'body { font-size: 11px; }',
-    autoHeight: true,
+    //autoHeight: true,
     focusAtStart: true//,
     //extracss: 'body { background-color: blue; }'
 };
