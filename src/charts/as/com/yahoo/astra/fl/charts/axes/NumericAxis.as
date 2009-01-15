@@ -18,26 +18,6 @@
 	{
 		
 	//--------------------------------------
-	//  Static Properties
-	//--------------------------------------
-	
-		/**
-		 * A magic number specifying an ideal minimum number of
-		 * pixels between each tick/line/label on a major unit.
-		 * Used to calculate the major unit if it is not set by
-		 * the developer. 
-		 */
-		private static const IDEAL_PIXELS_BETWEEN_MAJOR_POSITIONS:Number = 70;
-		
-		/**
-		 * A magic number specifying an ideal minimum number of
-		 * pixels between each tick/line/label on a minor unit.
-		 * Used to calculate the minor unit if it is not set by
-		 * the developer. 
-		 */
-		private static const IDEAL_PIXELS_BETWEEN_MINOR_POSITIONS:Number = 30;
-		
-	//--------------------------------------
 	//  Constructor
 	//--------------------------------------
 	
@@ -542,6 +522,10 @@
 
 			var maxLabels:Number = Math.floor((this.renderer.length - labelPadding)/approxLabelDistance);
 			
+			//Adjust the max labels to account for potential maximum and minimum adjustments that may occur.
+			if(!this._maximumSetByUser && !this._minimumSetByUser && !(this.alwaysShowZero && this._minimum == 0)) maxLabels -= 1;
+			
+			
 			//If set by user, use specified number of labels unless its too many
 			if(this._numLabelsSetByUser)
 			{
@@ -566,7 +550,7 @@
 					scientificForm = Math.ceil(scientificForm);
 				}
 
-				tempMajorUnit = scientificForm * Math.pow(10, order);	
+				tempMajorUnit = scientificForm * Math.pow(10, order);			
 			}
 
 			this._majorUnit = tempMajorUnit;									
@@ -702,12 +686,6 @@
 				{
 					this._minimum -= this._majorUnit;
 				}
-			}
-			
-			var maxLabel:Number = (this.chart as CartesianChart).horizontalAxis == this?this.maxLabelWidth:this.maxLabelHeight;
-			if((Math.abs(this._maximum - this._minimum))/this._majorUnit < maxLabel) 
-			{
-				this.calculateMajorUnit();
 			}
 		}
 		

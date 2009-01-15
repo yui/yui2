@@ -180,7 +180,7 @@
 
         'element': {
             'type': 'js',
-            'path': 'element/element-beta-min.js',
+            'path': 'element/element-min.js',
             'requires': ['dom', 'event']
         },
 
@@ -272,7 +272,7 @@
 
         'profilerviewer': {
             'type': 'js',
-            'path': 'profilerviewer/profilerviewer-beta-min.js',
+            'path': 'profilerviewer/profilerviewer-min.js',
             'requires': ['profiler', 'yuiloader', 'element'],
             'skinnable': true
         },
@@ -306,7 +306,7 @@
 
         'selector': {
             'type': 'js',
-            'path': 'selector/selector-beta-min.js',
+            'path': 'selector/selector-min.js',
             'requires': ['yahoo', 'dom']
         },
 

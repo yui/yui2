@@ -7,27 +7,35 @@
 (function() {
     var Y = YAHOO.util,     // internal shorthand
         lang = YAHOO.lang,
+        trim = YAHOO.lang.trim,
         getStyle,           // for load time browser branching
         setStyle,           // ditto
         propertyCache = {}, // for faster hyphen converts
-        reClassNameCache = {},          // cache regexes for className
-        document = window.document;     // cache for faster lookups
-    
-    YAHOO.env._id_counter = YAHOO.env._id_counter || 0;     // for use with generateId (global to save state if Dom is overwritten)
+        reCache = {},          // cache regexes for className
+        document = window.document,     // cache for faster lookups
 
+        // string constants
+        CLASSNAME = 'className',
+        EMPTY = '',
+        SPACE = ' ',
+        C_START = '(?:^|\\s)',
+        C_END = '(?= |$)',
+        G = 'g',
+    
     // brower detection
-    var isOpera = YAHOO.env.ua.opera,
+        isOpera = YAHOO.env.ua.opera,
         isSafari = YAHOO.env.ua.webkit, 
         isGecko = YAHOO.env.ua.gecko,
         isIE = YAHOO.env.ua.ie; 
     
-    // regex cache
     var patterns = {
         ROOT_TAG: /^body|html$/i, // body for quirks mode, html for standards,
         OP_SCROLL:/^(?:inline|table-row)$/i,
         CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}])/g
     };
 
+
+    YAHOO.env._id_counter = YAHOO.env._id_counter || 0;     // for use with generateId (global to save state if Dom is overwritten)
 
     var toCamel = function(property) {
         var c = propertyCache;
@@ -43,15 +51,15 @@
 
     var getClassRegEx = function(className) {
         var re;
-        if (className !== undefined) {
+        if (className !== undefined) { // allow empty string to pass
             if (className.exec) { // already a RegExp
                 re = className;
             } else {
-                re = reClassNameCache[className];
+                re = reCache[className];
                 if (!re) {
+                    // escape special chars (".", "[", etc.)
                     className = className.replace(patterns.CLASS_RE_TOKENS, '\\$1');
-                    re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
-                    reClassNameCache[className] = re;
+                    re = reCache[className] = new RegExp(C_START + className + C_END, G);
                 }
             }
         }
@@ -167,13 +175,13 @@
 
                 if (typeof el === 'string') { // id
                     id = el;
-                el = document.getElementById(el);
-                if (el && el.id === id) { // IE: avoid false match on "name" attribute
+                    el = document.getElementById(el);
+                    if (el && el.id === id) { // IE: avoid false match on "name" attribute
                     return el;
-                } else if (el && document.all) { // filter by name
-                    el = null;
-                    nodes = document.all[id];
-                    for (var i = 0, len = nodes.length; i < len; ++i) {
+                    } else if (el && document.all) { // filter by name
+                        el = null;
+                        nodes = document.all[id];
+                        for (var i = 0, len = nodes.length; i < len; ++i) {
                             if (nodes[i].id === id) {
                                 return nodes[i];
                             }
@@ -182,6 +190,10 @@
                     return el;
                 }
                 
+                if (el.DOM_EVENTS) { // YAHOO.util.Element
+                    el = el.get('element');
+                }
+
                 if ('length' in el) { // array-like 
                     var c = [];
                     for (var i = 0, len = el.length; i < len; ++i) {
@@ -450,14 +462,24 @@
          * @return {Boolean | Array} A boolean value or array of boolean values
          */
         hasClass: function(el, className) {
-            var re = getClassRegEx(className);
+            return Y.Dom.batch(el, Y.Dom._hasClass, className);
+        },
 
-            var f = function(el) {
-                YAHOO.log('hasClass returning ' + re.test(el.className), 'info', 'Dom');
-                return re.test(el.className);
-            };
+        _hasClass: function(el, className) {
+            var ret = false;
             
-            return Y.Dom.batch(el, f, Y.Dom, true);
+            if (el && className) {
+                if (className.exec) {
+                    ret = className.test(el[CLASSNAME]);
+                } else {
+                    ret = className && (SPACE + el[CLASSNAME] + SPACE).
+                        indexOf(SPACE + className + SPACE) > -1;
+                }
+            } else {
+                YAHOO.log('hasClass called with invalid arguments', 'warn', 'Dom');
+            }
+
+            return ret;
         },
     
         /**
@@ -468,18 +490,21 @@
          * @return {Boolean | Array} A pass/fail boolean or array of booleans
          */
         addClass: function(el, className) {
-            var f = function(el) {
-                if (this.hasClass(el, className)) {
-                    return false; // already present
+            return Y.Dom.batch(el, Y.Dom._addClass, className);
+        },
+
+        _addClass: function(el, className) {
+            var ret = false;
+            if (el && className) {
+                if ( !Y.Dom._hasClass(el, className) ) {
+                    el[CLASSNAME] = trim(el[CLASSNAME] + SPACE + className);
+                    ret = true;
                 }
-                
-                YAHOO.log('addClass adding ' + className, 'info', 'Dom');
-                
-                el.className = lang.trim([el.className, className].join(' '));
-                return true;
-            };
-            
-            return Y.Dom.batch(el, f, Y.Dom, true);
+            } else {
+                YAHOO.log('addClass called with invalid arguments', 'warn', 'Dom');
+            }
+
+            return ret;
         },
     
         /**
@@ -490,32 +515,32 @@
          * @return {Boolean | Array} A pass/fail boolean or array of booleans
          */
         removeClass: function(el, className) {
-            var re = getClassRegEx(className);
-            
-            var f = function(el) {
-                var ret = false,
-                    current = el.className;
+            return Y.Dom.batch(el, Y.Dom._removeClass, className);
+        },
+        
+        _removeClass: function(el, className) {
+            var ret = false,
+                current = el[CLASSNAME];
 
-                if (className && current && this.hasClass(el, className)) {
-                    
-                    el.className = current.replace(re, ' ');
-                    if ( this.hasClass(el, className) ) { // in case of multiple adjacent
-                        this.removeClass(el, className);
-                    }
+            if (el && className) {
+                el[CLASSNAME] = el[CLASSNAME].replace(getClassRegEx(className), EMPTY);
 
-                    el.className = lang.trim(el.className); // remove any trailing spaces
-                    if (el.className === '') { // remove class attribute if empty
-                        var attr = (el.hasAttribute) ? 'class' : 'className';
+                if (current !== el[CLASSNAME]) { // else nothing changed
+                    el[CLASSNAME] = trim(el[CLASSNAME]);
+                    ret = true;
+
+                    if (el[CLASSNAME] === '') { // remove class attribute if empty
+                        var attr = (el.hasAttribute && el.hasAttribute('class')) ? 'class' : 'className';
                         YAHOO.log('removeClass removing empty class attribute', 'info', 'Dom');
                         el.removeAttribute(attr);
                     }
-                    ret = true;
-                }                 
-                YAHOO.log('removeClass ' + className + ' result: ' + ret, 'info', 'Dom');
-                return ret;
-            };
-            
-            return Y.Dom.batch(el, f, Y.Dom, true);
+                }
+
+            } else {
+                YAHOO.log('removeClass called with invalid arguments', 'warn', 'Dom');
+            }
+
+            return ret;
         },
         
         /**
@@ -528,31 +553,38 @@
          * @return {Boolean | Array} A pass/fail boolean or array of booleans
          */
         replaceClass: function(el, oldClassName, newClassName) {
-            if (!newClassName || oldClassName === newClassName) { // avoid infinite loop
-                return false;
+            return Y.Dom.batch(el, Y.Dom._replaceClass, { from: oldClassName, to: newClassName });
+        },
+
+        _replaceClass: function(el, classObj) {
+            var className,
+                from,
+                to,
+                ret = false;
+
+            if (el && classObj) {
+                from = classObj.from;
+                to = classObj.to;
+
+                if (!to) {
+                    ret = false;
+                }  else if (!from) { // just add if no "from"
+                    ret = Y.Dom._addClass(el, classObj.to);
+                } else if (from !== to) { // else nothing to replace
+                    // May need to lead with DBLSPACE?
+                    className = (SPACE + el[CLASSNAME].replace(getClassRegEx(from), SPACE + to)).
+                               split(getClassRegEx(to));
+
+                    // insert to into what would have been the first occurrence slot
+                    className.splice(1, 0, SPACE + to);
+                    el[CLASSNAME] = trim(className.join(EMPTY));
+                    ret = true;
+                }
+            } else {
+                YAHOO.log('replaceClass called with invalid arguments', 'warn', 'Dom');
             }
-            
-            var re = getClassRegEx(oldClassName);
 
-            var f = function(el) {
-                YAHOO.log('replaceClass replacing ' + oldClassName + ' with ' + newClassName, 'info', 'Dom');
-            
-                if ( !this.hasClass(el, oldClassName) ) {
-                    this.addClass(el, newClassName); // just add it if nothing to replace
-                    return true; // NOTE: return
-                }
-            
-                el.className = el.className.replace(re, ' ' + newClassName + ' ');
-
-                if ( this.hasClass(el, oldClassName) ) { // in case of multiple adjacent
-                    this.removeClass(el, oldClassName);
-                }
-
-                el.className = lang.trim(el.className); // remove any trailing spaces
-                return true;
-            };
-            
-            return Y.Dom.batch(el, f, Y.Dom, true);
+            return ret;
         },
         
         /**
@@ -569,12 +601,16 @@
                 if (el && el.id) { // do not override existing ID
                     YAHOO.log('generateId returning existing id ' + el.id, 'info', 'Dom');
                     return el.id;
-                } 
+                }
 
                 var id = prefix + YAHOO.env._id_counter++;
                 YAHOO.log('generateId generating ' + id, 'info', 'Dom');
 
                 if (el) {
+                    if (el.ownerDocument.getElementById(id)) { // in case one already exists
+                        // use failed id plus prefix to help ensure uniqueness
+                        return Y.Dom.generateId(el, id + prefix);
+                    }
                     el.id = id;
                 }
                 
@@ -717,7 +753,7 @@
          * @return {Int} The height of the actual document (which includes the body and its margin).
          */
         getDocumentHeight: function() {
-            var scrollHeight = (document.compatMode != 'CSS1Compat') ? document.body.scrollHeight : document.documentElement.scrollHeight;
+            var scrollHeight = (document.compatMode != 'CSS1Compat' || isSafari) ? document.body.scrollHeight : document.documentElement.scrollHeight;
 
             var h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
             YAHOO.log('getDocumentHeight returning ' + h, 'info', 'Dom');
@@ -730,7 +766,7 @@
          * @return {Int} The width of the actual document (which includes the body and its margin).
          */
         getDocumentWidth: function() {
-            var scrollWidth = (document.compatMode != 'CSS1Compat') ? document.body.scrollWidth : document.documentElement.scrollWidth;
+            var scrollWidth = (document.compatMode != 'CSS1Compat' || isSafari) ? document.body.scrollWidth : document.documentElement.scrollWidth;
             var w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
             YAHOO.log('getDocumentWidth returning ' + w, 'info', 'Dom');
             return w;

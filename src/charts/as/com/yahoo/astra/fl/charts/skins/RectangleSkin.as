@@ -1,4 +1,4 @@
-package com.yahoo.astra.fl.charts.skins
+﻿package com.yahoo.astra.fl.charts.skins
 {
 	import fl.core.UIComponent;
 
@@ -52,6 +52,84 @@ package com.yahoo.astra.fl.charts.skins
 			}
 		}
 		
+		/**
+		 * @private 
+		 * Storage for outline color
+		 */
+		private var _borderColor:uint;
+		
+		/**
+		 * @copy com.yahoo.astra.fl.charts.skins.IProgrammaticSkin#borderColor
+		 */
+		public function get borderColor():uint
+		{
+			return _borderColor;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set borderColor(value:uint):void
+		{
+			if(this._borderColor != value)
+			{
+				this._borderColor = value;
+				this.invalidate();
+			}
+		}
+		
+		/**
+		 * @private
+		 * Storage for the fill alpha.
+		 */
+		private var _fillAlpha:Number = 1;
+		
+		/**
+		 * The alpha value of the fill.
+		 */
+		public function get fillAlpha():Number
+		{
+			return _fillAlpha;
+		}
+
+		/**
+		 * @private (setter)
+		 */
+		public function set fillAlpha(value:Number):void
+		{
+			if(this._fillAlpha != value)
+			{
+				this._fillAlpha = value;
+				this.invalidate();
+			}
+		}
+		
+		/**
+		 * @private
+		 * Storage for the border alpha.
+		 */
+		private var _borderAlpha:Number = 1;
+		
+		/**
+		 * The alpha value of the border.
+		 */
+		public function get borderAlpha():Number
+		{
+			return _borderAlpha;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set borderAlpha(value:Number):void
+		{
+			if(this._borderAlpha != value)
+			{
+				this._borderAlpha = value;
+				this.invalidate();
+			}
+		}		
+
 	//--------------------------------------
 	//  Protected Methods
 	//--------------------------------------
@@ -74,8 +152,16 @@ package com.yahoo.astra.fl.charts.skins
 				return;
 			}
 			
-			this.graphics.lineStyle(0, 0, 0);
-			this.graphics.beginFill(this._fillColor, 1);
+			if(this.borderColor == this.fillColor)
+			{
+				this.graphics.lineStyle(0, 0, 0);
+			}
+			else
+			{
+				this.graphics.lineStyle(1, this.borderColor, this.borderAlpha);
+			}
+			
+			this.graphics.beginFill(this.fillColor, this.fillAlpha);
 			this.graphics.drawRect(xDiff, yDiff, this.width, this.height);
 			this.graphics.endFill();
 		}

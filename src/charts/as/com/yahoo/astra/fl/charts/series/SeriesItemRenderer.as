@@ -1,4 +1,4 @@
-package com.yahoo.astra.fl.charts.series
+﻿package com.yahoo.astra.fl.charts.series
 {
 	import com.yahoo.astra.fl.charts.skins.IProgrammaticSkin;
 	import com.yahoo.astra.fl.utils.UIComponentUtil;
@@ -21,6 +21,12 @@ package com.yahoo.astra.fl.charts.series
 	 * The color used by a skin that uses fill colors.
 	 */
     [Style(name="fillColor", type="uint")]
+    
+    
+	/**
+	 * The color used by a skin that uses border colors.
+	 */
+    [Style(name="borderColor", type="uint")]
     
     /**
      * The primary item renderer class for a chart series.
@@ -147,6 +153,8 @@ package com.yahoo.astra.fl.charts.series
 				{
 					var fillColor:uint = this.getStyleValue("fillColor") as uint;
 					(this.skin as IProgrammaticSkin).fillColor = fillColor;
+					var borderColor:uint = this.getStyleValue("borderColor") as uint;
+					(this.skin as IProgrammaticSkin).borderColor = borderColor;
 				}
 				
 				if(this.skin is UIComponent)
