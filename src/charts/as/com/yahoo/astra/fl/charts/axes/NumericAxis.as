@@ -536,6 +536,21 @@
 			if(tempMajorUnit > 1) tempMajorUnit = Math.ceil(tempMajorUnit);
 			tempMajorUnit = Math.min(tempMajorUnit, Math.round(difference/2));			
 			
+			if(difference%tempMajorUnit != 0 && !this._numLabelsSetByUser)
+			{
+				var adjusted:Boolean = false;
+				var len:Number = Math.min(tempMajorUnit, ((difference/2)-tempMajorUnit));
+				for(var i:int = 0;i < len; i++)
+				{
+					tempMajorUnit++;
+					if(difference%tempMajorUnit == 0)
+					{
+						this._majorUnit = tempMajorUnit;
+						break;
+					}
+				}		
+			}
+			
 			if(this.roundMajorUnit)
 			{
 				var order:Number = Math.floor(Math.log(tempMajorUnit) * Math.LOG10E);

@@ -1217,17 +1217,17 @@
 				}
 			}
 			
-			if(styles.emphasizedNonOriginZeroGridLine)
+			if(styles.zeroGridLine)
 			{
-				var emphasizedNonOriginZeroGridLine:Object = styles.emphasizedNonOriginZeroGridLine;
-				if(emphasizedNonOriginZeroGridLine.color != null)
+				var zeroGridLine:Object = styles.zeroGridLine;
+				if(zeroGridLine.color != null)
 				{
-					this.chart.setStyle(axisName + "EmphasizedNonOriginZeroGridLineColor", this.parseColor(emphasizedNonOriginZeroGridLine.color));
+					this.chart.setStyle(axisName + "ZeroGridLineColor", this.parseColor(zeroGridLine.color));
 				}
-				if(emphasizedNonOriginZeroGridLine.size != null)
+				if(zeroGridLine.size != null)
 				{
-					this.chart.setStyle(axisName + "emphasizedNonOriginZeroGridLineWeight", emphasizedNonOriginZeroGridLine.size);
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "EmphasizedNonOriginZeroGridLine", emphasizedNonOriginZeroGridLine.size > 0);
+					this.chart.setStyle(axisName + "ZeroGridLineWeight", zeroGridLine.size);
+					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "ZeroGridLine", zeroGridLine.size > 0);
 				}
 			}
 			

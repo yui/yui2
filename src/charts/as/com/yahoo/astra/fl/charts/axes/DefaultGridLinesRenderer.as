@@ -113,9 +113,9 @@
 			var renderer:ICartesianAxisRenderer = ICartesianAxisRenderer(this.axisRenderer);
 			var dataCount:int = data.length;
 			
-			var showEmphasizedNonOriginZeroGridLine:Boolean = this.getStyleValue("showEmphasizedNonOriginZeroGridLine") as Boolean;
-			var emphasizedNonOriginZeroGridLineWeight:Number = this.getStyleValue("emphasizedNonOriginZeroGridLineWeight") as Number;
-			var emphasizedNonOriginZeroGridLineColor:uint = this.getStyleValue("emphasizedNonOriginZeroGridLineColor") as uint;
+			var showZeroGridLine:Boolean = this.getStyleValue("showZeroGridLine") as Boolean;
+			var zeroGridLineWeight:Number = this.getStyleValue("zeroGridLineWeight") as Number;
+			var zeroGridLineColor:uint = this.getStyleValue("zeroGridLineColor") as uint;
 			for(var i:int = 0; i < dataCount; i++)
 			{
 				var axisData:AxisData = AxisData(data[i]);
@@ -126,7 +126,7 @@
 				}
 				
 				var position:Number = axisData.position;
-				var nonOriginZero:Boolean =(i > 0 && axisData.value == 0 && showEmphasizedNonOriginZeroGridLine);
+				var nonOriginZero:Boolean =(i > 0 && axisData.value == 0 && showZeroGridLine);
 				if(renderer.orientation == AxisOrientation.VERTICAL)
 				{
 					if(!isNaN(lastPosition) && fillColors && fillColors.length > 0)
@@ -143,7 +143,7 @@
 					{
 						if(nonOriginZero)
 						{
-							this.graphics.lineStyle(emphasizedNonOriginZeroGridLineWeight, emphasizedNonOriginZeroGridLineColor);
+							this.graphics.lineStyle(zeroGridLineWeight, zeroGridLineColor);
 						}
 						else
 						{
@@ -169,7 +169,7 @@
 					{
 						if(nonOriginZero)
 						{
-							this.graphics.lineStyle(emphasizedNonOriginZeroGridLineWeight, emphasizedNonOriginZeroGridLineColor);
+							this.graphics.lineStyle(zeroGridLineWeight, zeroGridLineColor);
 						}
 						else
 						{

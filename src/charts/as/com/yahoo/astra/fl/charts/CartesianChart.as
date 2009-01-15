@@ -786,9 +786,9 @@
 			showHorizontalAxisMinorGridLines: false,
 			horizontalAxisGridFillColors: [],
 			horizontalAxisGridFillAlphas: [],
-			showHorizontalEmphasizedNonOriginZeroGridLine: false,
-			horizontalEmphasizedNonOriginZeroGridLineWeight: 2,
-			horizontalEmphasizedNonOriginZeroGridLineColor: 0xbabdb6,				
+			showHorizontalZeroGridLine: false,
+			horizontalZeroGridLineWeight: 2,
+			horizontalZeroGridLineColor: 0xbabdb6,				
 			
 			//ticks
 			showHorizontalAxisTicks: false,
@@ -827,9 +827,9 @@
 			showVerticalAxisMinorGridLines: false,
 			verticalAxisGridFillColors: [],
 			verticalAxisGridFillAlphas: [],
-			showVerticalEmphasizedNonOriginZeroGridLine: false,
-			verticalEmphasizedNonOriginZeroGridLineWeight: 2,
-			verticalEmphasizedNonOriginZeroGridLineColor: 0xbabdb6,			
+			showVerticalZeroGridLine: false,
+			verticalZeroGridLineWeight: 2,
+			verticalZeroGridLineColor: 0xbabdb6,			
 			
 			//ticks
 			showVerticalAxisTicks: true,
@@ -892,9 +892,9 @@
 			minorLineColor: "horizontalAxisMinorGridLineColor",
 			showMinorLines: "showHorizontalAxisMinorGridLines",
 			
-			showEmphasizedNonOriginZeroGridLine: "showHorizontalEmphasizedNonOriginZeroGridLine",
-			emphasizedNonOriginZeroGridLineWeight: "horizontalEmphasizedNonOriginZeroGridLineWeight",
-			emphasizedNonOriginZeroGridLineColor: "horizontalEmphasizedNonOriginZeroGridLineColor", 
+			showZeroGridLine: "showHorizontalZeroGridLine",
+			zeroGridLineWeight: "horizontalZeroGridLineWeight",
+			zeroGridLineColor: "horizontalZeroGridLineColor", 
 			
 			fillColors: "horizontalAxisGridFillColors",
 			fillAlphas: "horizontalAxisGridFillAlphas"
@@ -948,9 +948,9 @@
 			minorLineColor: "verticalAxisMinorGridLineColor",
 			showMinorLines: "showVerticalAxisMinorGridLines",
 			
-			showEmphasizedNonOriginZeroGridLine: "showVerticalEmphasizedNonOriginZeroGridLine",
-			emphasizedNonOriginZeroGridLineWeight: "verticalEmphasizedNonOriginZeroGridLineWeight",
-			emphasizedNonOriginZeroGridLineColor: "verticalEmphasizedNonOriginZeroGridLineColor",			
+			showZeroGridLine: "showVerticalZeroGridLine",
+			zeroGridLineWeight: "verticalZeroGridLineWeight",
+			zeroGridLineColor: "verticalZeroGridLineColor",			
 			
 			fillColors: "verticalAxisGridFillColors",
 			fillAlphas: "verticalAxisGridFillAlphas"
