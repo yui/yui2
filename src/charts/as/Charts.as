@@ -765,7 +765,6 @@
 								break;
 							case "fillAlpha":
 								fillAlpha = style.fillAlpha;
-								trace("coming in: " + fillAlpha);
 							case "size":
 								UIComponent(series).setStyle("markerSize", style.size);
 								break;
@@ -1215,6 +1214,20 @@
 				{
 					this.chart.setStyle(axisName + "AxisMinorGridLineWeight", minorGridLines.size);
 					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorGridLines", minorGridLines.size > 0);
+				}
+			}
+			
+			if(styles.emphasizedNonOriginZeroGridLine)
+			{
+				var emphasizedNonOriginZeroGridLine:Object = styles.emphasizedNonOriginZeroGridLine;
+				if(emphasizedNonOriginZeroGridLine.color != null)
+				{
+					this.chart.setStyle(axisName + "EmphasizedNonOriginZeroGridLineColor", this.parseColor(emphasizedNonOriginZeroGridLine.color));
+				}
+				if(emphasizedNonOriginZeroGridLine.size != null)
+				{
+					this.chart.setStyle(axisName + "emphasizedNonOriginZeroGridLineWeight", emphasizedNonOriginZeroGridLine.size);
+					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "EmphasizedNonOriginZeroGridLine", emphasizedNonOriginZeroGridLine.size > 0);
 				}
 			}
 			

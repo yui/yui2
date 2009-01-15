@@ -1,4 +1,4 @@
-package com.yahoo.astra.fl.charts.axes
+﻿package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.utils.NumberUtil;
 	
@@ -96,7 +96,7 @@ package com.yahoo.astra.fl.charts.axes
 			var fillColors:Array = this.getStyleValue("fillColors") as Array;
 			var fillAlphas:Array = this.getStyleValue("fillAlphas") as Array;
 			this.drawLines(lines, showLines, lineWeight, lineColor, fillColors, fillAlphas);
-			
+
 			var minorLineWeight:int = this.getStyleValue("minorLineWeight") as int;
 			var minorLineColor:uint = this.getStyleValue("minorLineColor") as uint;
 			this.drawLines(minorLines, showMinorLines, minorLineWeight, minorLineColor);
@@ -112,6 +112,10 @@ package com.yahoo.astra.fl.charts.axes
 			var lastPosition:Number;
 			var renderer:ICartesianAxisRenderer = ICartesianAxisRenderer(this.axisRenderer);
 			var dataCount:int = data.length;
+			
+			var showEmphasizedNonOriginZeroGridLine:Boolean = this.getStyleValue("showEmphasizedNonOriginZeroGridLine") as Boolean;
+			var emphasizedNonOriginZeroGridLineWeight:Number = this.getStyleValue("emphasizedNonOriginZeroGridLineWeight") as Number;
+			var emphasizedNonOriginZeroGridLineColor:uint = this.getStyleValue("emphasizedNonOriginZeroGridLineColor") as uint;
 			for(var i:int = 0; i < dataCount; i++)
 			{
 				var axisData:AxisData = AxisData(data[i]);
@@ -122,6 +126,7 @@ package com.yahoo.astra.fl.charts.axes
 				}
 				
 				var position:Number = axisData.position;
+				var nonOriginZero:Boolean =(i > 0 && axisData.value == 0 && showEmphasizedNonOriginZeroGridLine);
 				if(renderer.orientation == AxisOrientation.VERTICAL)
 				{
 					if(!isNaN(lastPosition) && fillColors && fillColors.length > 0)
@@ -136,7 +141,14 @@ package com.yahoo.astra.fl.charts.axes
 					
 					if(showLines)
 					{
-						this.graphics.lineStyle(lineWeight, lineColor);
+						if(nonOriginZero)
+						{
+							this.graphics.lineStyle(emphasizedNonOriginZeroGridLineWeight, emphasizedNonOriginZeroGridLineColor);
+						}
+						else
+						{
+							this.graphics.lineStyle(lineWeight, lineColor);
+						}
 						this.graphics.moveTo(0, position);
 						this.graphics.lineTo(renderer.contentBounds.width, position);
 					}
@@ -155,7 +167,14 @@ package com.yahoo.astra.fl.charts.axes
 					
 					if(showLines)
 					{
-						this.graphics.lineStyle(lineWeight, lineColor);
+						if(nonOriginZero)
+						{
+							this.graphics.lineStyle(emphasizedNonOriginZeroGridLineWeight, emphasizedNonOriginZeroGridLineColor);
+						}
+						else
+						{
+							this.graphics.lineStyle(lineWeight, lineColor);
+						}
 						this.graphics.moveTo(position, 0);
 						this.graphics.lineTo(position, renderer.contentBounds.height);
 					}
