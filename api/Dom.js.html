@@ -4,11 +4,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: dom   Dom.js  (YUI Library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1231979884.82" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1231979884.82" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1231981022.1" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1231981022.1" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1231979884.82"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1231979884.82"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1231981022.1"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1231981022.1"></script>
 </head>
 
 <body id="yahoo-com">
@@ -802,7 +802,7 @@
 <span class="c">         * @return {Int} The height of the actual document (which includes the body and its margin).</span>
 <span class="c">         */</span>
         <span class="nx">getDocumentHeight</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">scrollHeight</span> <span class="o">=</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">!=</span> <span class="s1">&#39;CSS1Compat&#39;</span><span class="o">)</span> <span class="o">?</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">scrollHeight</span> <span class="o">:</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">.</span><span class="nx">scrollHeight</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">scrollHeight</span> <span class="o">=</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">!=</span> <span class="s1">&#39;CSS1Compat&#39;</span> <span class="o">||</span> <span class="nx">isSafari</span><span class="o">)</span> <span class="o">?</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">scrollHeight</span> <span class="o">:</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">.</span><span class="nx">scrollHeight</span><span class="o">;</span>
 
             <span class="k">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">scrollHeight</span><span class="o">,</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getViewportHeight</span><span class="o">());</span>
             <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;getDocumentHeight returning &#39;</span> <span class="o">+</span> <span class="nx">h</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;Dom&#39;</span><span class="o">);</span>
@@ -815,7 +815,7 @@
 <span class="c">         * @return {Int} The width of the actual document (which includes the body and its margin).</span>
 <span class="c">         */</span>
         <span class="nx">getDocumentWidth</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">scrollWidth</span> <span class="o">=</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">!=</span> <span class="s1">&#39;CSS1Compat&#39;</span><span class="o">)</span> <span class="o">?</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">scrollWidth</span> <span class="o">:</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">.</span><span class="nx">scrollWidth</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">scrollWidth</span> <span class="o">=</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">!=</span> <span class="s1">&#39;CSS1Compat&#39;</span> <span class="o">||</span> <span class="nx">isSafari</span><span class="o">)</span> <span class="o">?</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">scrollWidth</span> <span class="o">:</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">.</span><span class="nx">scrollWidth</span><span class="o">;</span>
             <span class="k">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">scrollWidth</span><span class="o">,</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getViewportWidth</span><span class="o">());</span>
             <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;getDocumentWidth returning &#39;</span> <span class="o">+</span> <span class="nx">w</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;Dom&#39;</span><span class="o">);</span>
             <span class="k">return</span> <span class="nx">w</span><span class="o">;</span>
