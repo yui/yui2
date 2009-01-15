@@ -82,6 +82,10 @@ if (typeof YAHOO == "undefined" || !YAHOO) {
  * </pre>
  * This fails because "long" is a future reserved word in ECMAScript
  *
+ * For implementation code that uses YUI, do not create your components
+ * in the namespaces created by the library.  defined by YUI -- create 
+ * your own (YAHOO.util, YAHOO.widget, YAHOO.lang, YAHOO.env)
+ *
  * @method namespace
  * @static
  * @param  {String*} arguments 1-n namespaces to create 
@@ -90,7 +94,7 @@ if (typeof YAHOO == "undefined" || !YAHOO) {
 YAHOO.namespace = function() {
     var a=arguments, o=null, i, j, d;
     for (i=0; i<a.length; i=i+1) {
-        d=a[i].split(".");
+        d=(""+a[i]).split(".");
         o=YAHOO;
 
         // YAHOO is implied, so it is ignored if it is included
@@ -140,19 +144,29 @@ YAHOO.log = function(msg, cat, src) {
  *                             and a "build" property at minimum.
  */
 YAHOO.register = function(name, mainClass, data) {
-    var mods = YAHOO.env.modules;
+    var mods = YAHOO.env.modules, m, v, b, ls, i;
+
     if (!mods[name]) {
-        mods[name] = { versions:[], builds:[] };
+        mods[name] = { 
+            versions:[], 
+            builds:[] 
+        };
     }
-    var m=mods[name],v=data.version,b=data.build,ls=YAHOO.env.listeners;
+
+    m  = mods[name];
+    v  = data.version;
+    b  = data.build;
+    ls = YAHOO.env.listeners;
+
     m.name = name;
     m.version = v;
     m.build = b;
     m.versions.push(v);
     m.builds.push(b);
     m.mainClass = mainClass;
+
     // fire the module load listeners
-    for (var i=0;i<ls.length;i=i+1) {
+    for (i=0;i<ls.length;i=i+1) {
         ls[i](m);
     }
     // label the main class
@@ -302,11 +316,20 @@ YAHOO.env.ua = function() {
          * @property air
          * @type float
          */
-        air: 0
+        air: 0,
 
-    };
+        /**
+         * Google Caja version number or 0.
+         * @property caja
+         * @type float
+         */
+        caja: 0
 
-    var ua=navigator.userAgent, m;
+    },
+
+    ua = navigator.userAgent, 
+    
+    m;
 
     // Modern KHTML browsers should qualify as Safari X-Grade
     if ((/KHTML/).test(ua)) {
@@ -359,6 +382,11 @@ YAHOO.env.ua = function() {
             }
         }
     }
+
+    m=ua.match(/Caja\/([^\s]*)/);
+    if (m&&m[1]) {
+        o.caja=parseFloat(m[1]);
+    }
     
     return o;
 }();
@@ -373,6 +401,7 @@ YAHOO.env.ua = function() {
  */
 (function() {
     YAHOO.namespace("util", "widget", "example");
+    /*global YAHOO_config*/
     if ("undefined" !== typeof YAHOO_config) {
         var l=YAHOO_config.listener,ls=YAHOO.env.listeners,unique=true,i;
         if (l) {
@@ -515,8 +544,12 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @private
      */
     _IEEnumFix: (YAHOO.env.ua.ie) ? function(r, s) {
-            for (var i=0;i<ADD.length;i=i+1) {
-                var fname=ADD[i],f=s[fname];
+            var i, fname, f;
+            for (i=0;i<ADD.length;i=i+1) {
+
+                fname = ADD[i];
+                f = s[fname];
+
                 if (L.isFunction(f) && f!=OP[fname]) {
                     r[fname]=f;
                 }
@@ -542,7 +575,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             throw new Error("extend failed, please check that " +
                             "all dependencies are included.");
         }
-        var F = function() {};
+        var F = function() {}, i;
         F.prototype=superc.prototype;
         subc.prototype=new F();
         subc.prototype.constructor=subc;
@@ -552,7 +585,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
         }
     
         if (overrides) {
-            for (var i in overrides) {
+            for (i in overrides) {
                 if (L.hasOwnProperty(overrides, i)) {
                     subc.prototype[i]=overrides[i];
                 }
@@ -623,8 +656,8 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             throw new Error("Augment failed, verify dependencies.");
         }
         //var a=[].concat(arguments);
-        var a=[r.prototype,s.prototype];
-        for (var i=2;i<arguments.length;i=i+1) {
+        var a=[r.prototype,s.prototype], i;
+        for (i=2;i<arguments.length;i=i+1) {
             a.push(arguments[i]);
         }
         L.augmentObject.apply(this, a);
@@ -724,7 +757,8 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      */
     substitute: function (s, o, f) {
         var i, j, k, key, v, meta, saved=[], token, 
-            DUMP='dump', SPACE=' ', LBRACE='{', RBRACE='}';
+            DUMP='dump', SPACE=' ', LBRACE='{', RBRACE='}',
+            dump;
 
 
         for (;;) {
@@ -762,7 +796,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                     meta = meta || "";
 
                     // look for the keyword 'dump', if found force obj dump
-                    var dump = meta.indexOf(DUMP);
+                    dump = meta.indexOf(DUMP);
                     if (dump > -1) {
                         meta = meta.substring(4);
                     }
@@ -823,8 +857,8 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @return the new merged object
      */
     merge: function() {
-        var o={}, a=arguments;
-        for (var i=0, l=a.length; i<l; i=i+1) {
+        var o={}, a=arguments, l=a.length, i;
+        for (i=0; i<l; i=i+1) {
             L.augmentObject(o, a[i], true);
         }
         return o;
@@ -1886,7 +1920,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'element': {
             'type': 'js',
-            'path': 'element/element-beta-min.js',
+            'path': 'element/element-min.js',
             'requires': ['dom', 'event']
         },
 
@@ -1978,7 +2012,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'profilerviewer': {
             'type': 'js',
-            'path': 'profilerviewer/profilerviewer-beta-min.js',
+            'path': 'profilerviewer/profilerviewer-min.js',
             'requires': ['profiler', 'yuiloader', 'element'],
             'skinnable': true
         },
@@ -2012,7 +2046,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'selector': {
             'type': 'js',
-            'path': 'selector/selector-beta-min.js',
+            'path': 'selector/selector-min.js',
             'requires': ['yahoo', 'dom']
         },
 
