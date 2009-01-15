@@ -1359,17 +1359,17 @@
                     viewWidth = Dom.getViewportWidth(),
                     viewHeight = Dom.getViewportHeight();
 
-                if (this.mask.offsetHeight > viewHeight) {
-                    this.mask.style.height = viewHeight + "px";
+                if (mask.offsetHeight > viewHeight) {
+                    mask.style.height = viewHeight + "px";
                 }
 
-                if (this.mask.offsetWidth > viewWidth) {
-                    this.mask.style.width = viewWidth + "px";
+                if (mask.offsetWidth > viewWidth) {
+                    mask.style.width = viewWidth + "px";
                 }
 
                 // Then size it to the document
-                this.mask.style.height = Dom.getDocumentHeight() + "px";
-                this.mask.style.width = Dom.getDocumentWidth() + "px";
+                mask.style.height = Dom.getDocumentHeight() + "px";
+                mask.style.width = Dom.getDocumentWidth() + "px";
             }
         },
 

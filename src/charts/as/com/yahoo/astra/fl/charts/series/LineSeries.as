@@ -248,7 +248,7 @@
 			
 			var originPosition:Number = primaryAxis.valueToLocal(primaryAxis.origin);
 			
-			var fillColor:uint = this.getStyleValue("fillColor") as uint;
+			var fillColor:uint = this.getStyleValue("lineColor") as uint;
 			var connectDiscontinuousPoints:Boolean = this.getStyleValue("connectDiscontinuousPoints") as Boolean;
 			var discontinuousDashLength:Number = this.getStyleValue("discontinuousDashLength") as Number;
 			var showAreaFill:Boolean = this.getStyleValue("showAreaFill") as Boolean;
@@ -381,7 +381,7 @@
 			}
 			
 			var lineWeight:int = this.getStyleValue("lineWeight") as int;
-			var fillColor:uint = this.getStyleValue("fillColor") as uint;
+			var fillColor:uint = this.getStyleValue("lineColor") as uint;
 			this.graphics.lineStyle(lineWeight, fillColor);
 		}
 		

@@ -5,152 +5,44 @@
  */
 
 (function() {
-    var Y = YAHOO.util,     // internal shorthand
-        lang = YAHOO.lang,
-        getStyle,           // for load time browser branching
-        setStyle,           // ditto
-        propertyCache = {}, // for faster hyphen converts
-        reClassNameCache = {},          // cache regexes for className
-        document = window.document;     // cache for faster lookups
-    
     YAHOO.env._id_counter = YAHOO.env._id_counter || 0;     // for use with generateId (global to save state if Dom is overwritten)
 
+    var Y = YAHOO.util,     // internal shorthand
+        lang = YAHOO.lang,
+        trim = YAHOO.lang.trim,
+        propertyCache = {}, // for faster hyphen converts
+        reCache = {},          // cache regexes for className
+        document = window.document,     // cache for faster lookups
+        documentElement = document.documentElement,
+
+        // string constants
+        _CLASS = 'class', // underscore due to reserved word
+        CLASSNAME = 'className',
+        EMPTY = '',
+        SPACE = ' ',
+        C_START = '(?:^|\\s)',
+        C_END = '(?= |$)',
+        G = 'g',
+    
     // brower detection
-    var isOpera = YAHOO.env.ua.opera,
+        isOpera = YAHOO.env.ua.opera,
         isSafari = YAHOO.env.ua.webkit, 
-        isGecko = YAHOO.env.ua.gecko,
         isIE = YAHOO.env.ua.ie; 
     
-    // regex cache
-    var patterns = {
-        ROOT_TAG: /^body|html$/i, // body for quirks mode, html for standards,
-        OP_SCROLL:/^(?:inline|table-row)$/i,
-        CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}])/g
-    };
-
-
-    var toCamel = function(property) {
-        var c = propertyCache;
-
-        function tU(x,l) {
-            return l.toUpperCase();
-        }
-
-        return c[property] || (c[property] = property.indexOf('-') === -1 ? 
-                                property :
-                                property.replace( /-([a-z])/gi, tU ));
-    };
-
-    var getClassRegEx = function(className) {
-        var re;
-        if (className !== undefined) {
-            if (className.exec) { // already a RegExp
-                re = className;
-            } else {
-                re = reClassNameCache[className];
-                if (!re) {
-                    className = className.replace(patterns.CLASS_RE_TOKENS, '\\$1');
-                    re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
-                    reClassNameCache[className] = re;
-                }
-            }
-        }
-        return re;
-    };
-
-    // branching at load instead of runtime
-    if (window.getComputedStyle) { // W3C DOM method
-        getStyle = function(el, property) {
-            if (property == 'float') { // fix reserved word
-                property = 'cssFloat';
-            }
-
-            var value = el.style[property],
-                computed;
-            
-            if (!value) {
-                computed = el.ownerDocument.defaultView.getComputedStyle(el, null);
-                if (computed) { // test computed before touching for safari
-                    value = computed[toCamel(property)];
-                }
-            }
-            
-            return value;
-        };
-    } else if (document.documentElement.currentStyle && isIE) { // IE method
-        getStyle = function(el, property) {                         
-            switch( toCamel(property) ) {
-                case 'opacity' :// IE opacity uses filter
-                    var val = 100;
-                    try { // will error if no DXImageTransform
-                        val = el.filters['DXImageTransform.Microsoft.Alpha'].opacity;
-
-                    } catch(e) {
-                        try { // make sure its in the document
-                            val = el.filters('alpha').opacity;
-                        } catch(e) {
-                            YAHOO.log('getStyle: IE filter failed',
-                                    'error', 'Dom');
-                        }
-                    }
-                    return val / 100;
-                case 'float': // fix reserved word
-                    property = 'styleFloat'; // fall through
-                default: 
-                    // test currentStyle before touching
-                    var value = el.currentStyle ? el.currentStyle[property] : null;
-                    return ( el.style[property] || value );
-            }
-        };
-    } else { // default to inline only
-        getStyle = function(el, property) { return el.style[property]; };
-    }
-    
-    if (isIE) {
-        setStyle = function(el, property, val) {
-            if (el) {
-                switch (property) {
-                    case 'opacity':
-                        if ( lang.isString(el.style.filter) ) { // in case not appended
-                            el.style.filter = 'alpha(opacity=' + val * 100 + ')';
-                            
-                            if (!el.currentStyle || !el.currentStyle.hasLayout) {
-                                el.style.zoom = 1; // when no layout or cant tell
-                            }
-                        }
-                        break;
-                    case 'float':
-                        property = 'styleFloat';
-                    default:
-                    el.style[property] = val;
-                }
-            } else {
-                YAHOO.log('element ' + el + ' is undefined', 'error', 'Dom');
-            }
-        };
-    } else {
-        setStyle = function(el, property, val) {
-            if (el) {
-                if (property == 'float') {
-                    property = 'cssFloat';
-                }
-                el.style[property] = val;
-            } else {
-                YAHOO.log('element ' + el + ' is undefined', 'error', 'Dom');
-            }
-        };
-    }
-
-    var testElement = function(node, method) {
-        return node && node.nodeType == 1 && ( !method || method(node) );
-    };
-
     /**
      * Provides helper methods for DOM elements.
      * @namespace YAHOO.util
      * @class Dom
      */
-    YAHOO.util.Dom = {
+    Y.Dom = {
+        CUSTOM_ATTRIBUTES: (!documentElement.hasAttribute) ? { // IE < 8
+            'for': 'htmlFor',
+            'class': 'className'
+        } : { // w3c
+            'htmlFor': 'for',
+            'className': 'class'
+        },
+
         /**
          * Returns an HTMLElement reference.
          * @method get
@@ -158,7 +50,7 @@
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
-            var id, nodes;
+            var id, nodes, c, i, len;
 
             if (el) {
                 if (el.nodeType || el.item) { // Node, or NodeList
@@ -167,13 +59,13 @@
 
                 if (typeof el === 'string') { // id
                     id = el;
-                el = document.getElementById(el);
-                if (el && el.id === id) { // IE: avoid false match on "name" attribute
+                    el = document.getElementById(el);
+                    if (el && el.id === id) { // IE: avoid false match on "name" attribute
                     return el;
-                } else if (el && document.all) { // filter by name
-                    el = null;
-                    nodes = document.all[id];
-                    for (var i = 0, len = nodes.length; i < len; ++i) {
+                    } else if (el && document.all) { // filter by name
+                        el = null;
+                        nodes = document.all[id];
+                        for (i = 0, len = nodes.length; i < len; ++i) {
                             if (nodes[i].id === id) {
                                 return nodes[i];
                             }
@@ -182,9 +74,13 @@
                     return el;
                 }
                 
+                if (el.DOM_EVENTS) { // YAHOO.util.Element
+                    el = el.get('element');
+                }
+
                 if ('length' in el) { // array-like 
-                    var c = [];
-                    for (var i = 0, len = el.length; i < len; ++i) {
+                    c = [];
+                    for (i = 0, len = el.length; i < len; ++i) {
                         c[c.length] = Y.Dom.get(el[i]);
                     }
                     
@@ -205,14 +101,62 @@
          * @return {String | Array} The current value of the style property for the element(s).
          */
         getStyle: function(el, property) {
-            property = toCamel(property);
+            property = Y.Dom._toCamel(property);
             
             var f = function(element) {
-                return getStyle(element, property);
+                return Y.Dom._getStyle(element, property);
             };
             
             return Y.Dom.batch(el, f, Y.Dom, true);
         },
+
+        // branching at load instead of runtime
+        _getStyle: function() {
+            if (window.getComputedStyle) { // W3C DOM method
+                return function(el, property) {
+                    if (property == 'float') { // fix reserved word
+                        property = 'cssFloat';
+                    }
+
+                    var value = el.style[property],
+                        computed;
+                    
+                    if (!value) {
+                        computed = el.ownerDocument.defaultView.getComputedStyle(el, null);
+                        if (computed) { // test computed before touching for safari
+                            value = computed[Y.Dom._toCamel(property)];
+                        }
+                    }
+                    
+                    return value;
+                };
+            } else if (documentElement.currentStyle) {
+                return function(el, property) {                         
+                    switch( Y.Dom._toCamel(property) ) {
+                        case 'opacity' :// IE opacity uses filter
+                            var val = 100;
+                            try { // will error if no DXImageTransform
+                                val = el.filters['DXImageTransform.Microsoft.Alpha'].opacity;
+
+                            } catch(e) {
+                                try { // make sure its in the document
+                                    val = el.filters('alpha').opacity;
+                                } catch(e) {
+                                    YAHOO.log('getStyle: IE filter failed',
+                                            'error', 'Dom');
+                                }
+                            }
+                            return val / 100;
+                        case 'float': // fix reserved word
+                            property = 'styleFloat'; // fall through
+                        default: 
+                            // test currentStyle before touching
+                            var value = el.currentStyle ? el.currentStyle[property] : null;
+                            return ( el.style[property] || value );
+                    }
+                };
+            }
+        }(),
     
         /**
          * Wrapper for setting style properties of HTMLElements.  Normalizes "opacity" across modern browsers.
@@ -222,16 +166,54 @@
          * @param {String} val The value to apply to the given property.
          */
         setStyle: function(el, property, val) {
-            property = toCamel(property);
+            property = Y.Dom._toCamel(property);
             
             var f = function(element) {
-                setStyle(element, property, val);
+                Y.Dom._setStyle(element, property, val);
                 YAHOO.log('setStyle setting ' + property + ' to ' + val, 'info', 'Dom');
                 
             };
             
             Y.Dom.batch(el, f, Y.Dom, true);
         },
+
+        _setStyle: function() {
+            if (isIE) {
+                return function(el, property, val) {
+                    if (el) {
+                        switch (property) {
+                            case 'opacity':
+                                if ( lang.isString(el.style.filter) ) { // in case not appended
+                                    el.style.filter = 'alpha(opacity=' + val * 100 + ')';
+                                    
+                                    if (!el.currentStyle || !el.currentStyle.hasLayout) {
+                                        el.style.zoom = 1; // when no layout or cant tell
+                                    }
+                                }
+                                break;
+                            case 'float':
+                                property = 'styleFloat';
+                            default:
+                            el.style[property] = val;
+                        }
+                    } else {
+                        YAHOO.log('element ' + el + ' is undefined', 'error', 'Dom');
+                    }
+                };
+            } else {
+                return function(el, property, val) {
+                    if (el) {
+                        if (property == 'float') {
+                            property = 'cssFloat';
+                        }
+                        el.style[property] = val;
+                    } else {
+                        YAHOO.log('element ' + el + ' is undefined', 'error', 'Dom');
+                    }
+                };
+            }
+
+        }(),
         
         /**
          * Gets the current position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
@@ -248,12 +230,66 @@
                     return false;
                 }
                 
-                YAHOO.log('getXY returning ' + getXY(el), 'info', 'Dom');
-                return getXY(el);
+                YAHOO.log('getXY returning ' + Y.Dom._getXY(el), 'info', 'Dom');
+                return Y.Dom._getXY(el);
             };
             
             return Y.Dom.batch(el, f, Y.Dom, true);
         },
+
+        _getXY: function() {
+            if (documentElement.getBoundingClientRect) { // IE
+                return function(el) {
+                    var box = el.getBoundingClientRect(),
+                        round = Math.round;
+
+                    var rootNode = el.ownerDocument;
+                    return [round(box.left + Y.Dom.getDocumentScrollLeft(rootNode)), round(box.top +
+                            Y.Dom.getDocumentScrollTop(rootNode))];
+                };
+            } else {
+                return function(el) { // manually calculate by crawling up offsetParents
+                    var pos = [el.offsetLeft, el.offsetTop];
+                    var parentNode = el.offsetParent;
+
+                    // safari: subtract body offsets if el is abs (or any offsetParent), unless body is offsetParent
+                    var accountForBody = (isSafari &&
+                            Y.Dom.getStyle(el, 'position') == 'absolute' &&
+                            el.offsetParent == el.ownerDocument.body);
+
+                    if (parentNode != el) {
+                        while (parentNode) {
+                            pos[0] += parentNode.offsetLeft;
+                            pos[1] += parentNode.offsetTop;
+                            if (!accountForBody && isSafari && 
+                                    Y.Dom.getStyle(parentNode,'position') == 'absolute' ) { 
+                                accountForBody = true;
+                            }
+                            parentNode = parentNode.offsetParent;
+                        }
+                    }
+
+                    if (accountForBody) { //safari doubles in this case
+                        pos[0] -= el.ownerDocument.body.offsetLeft;
+                        pos[1] -= el.ownerDocument.body.offsetTop;
+                    } 
+                    parentNode = el.parentNode;
+
+                    // account for any scrolled ancestors
+                    while ( parentNode.tagName && !Y.Dom._patterns.ROOT_TAG.test(parentNode.tagName) ) 
+                    {
+                        if (parentNode.scrollTop || parentNode.scrollLeft) {
+                            pos[0] -= parentNode.scrollLeft;
+                            pos[1] -= parentNode.scrollTop;
+                        }
+                        
+                        parentNode = parentNode.parentNode; 
+                    }
+
+                    return pos;
+                };
+            }
+        }(), // NOTE: Executing for loadtime branching
         
         /**
          * Gets the current X position of an element based on page coordinates.  The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
@@ -427,10 +463,10 @@
 
             var nodes = [],
                 elements = root.getElementsByTagName(tag),
-                re = getClassRegEx(className);
+                re = Y.Dom._getClassRegEx(className);
 
             for (var i = 0, len = elements.length; i < len; ++i) {
-                if ( re.test(elements[i].className) ) {
+                if ( re.test(Y.Dom.getAttribute(elements[i], CLASSNAME)) ) {
                     nodes[nodes.length] = elements[i];
                 }
             }
@@ -450,14 +486,26 @@
          * @return {Boolean | Array} A boolean value or array of boolean values
          */
         hasClass: function(el, className) {
-            var re = getClassRegEx(className);
+            return Y.Dom.batch(el, Y.Dom._hasClass, className);
+        },
 
-            var f = function(el) {
-                YAHOO.log('hasClass returning ' + re.test(el.className), 'info', 'Dom');
-                return re.test(el.className);
-            };
+        _hasClass: function(el, className) {
+            var ret = false,
+                current;
             
-            return Y.Dom.batch(el, f, Y.Dom, true);
+            if (el && className) {
+                current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
+                if (className.exec) {
+                    ret = className.test(current);
+                } else {
+                    ret = className && (SPACE + current + SPACE).
+                        indexOf(SPACE + className + SPACE) > -1;
+                }
+            } else {
+                YAHOO.log('hasClass called with invalid arguments', 'warn', 'Dom');
+            }
+
+            return ret;
         },
     
         /**
@@ -468,18 +516,24 @@
          * @return {Boolean | Array} A pass/fail boolean or array of booleans
          */
         addClass: function(el, className) {
-            var f = function(el) {
-                if (this.hasClass(el, className)) {
-                    return false; // already present
+            return Y.Dom.batch(el, Y.Dom._addClass, className);
+        },
+
+        _addClass: function(el, className) {
+            var ret = false,
+                current;
+
+            if (el && className) {
+                current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
+                if ( !Y.Dom._hasClass(el, className) ) {
+                    Y.Dom.setAttribute(el, CLASSNAME, trim(current + SPACE + className));
+                    ret = true;
                 }
-                
-                YAHOO.log('addClass adding ' + className, 'info', 'Dom');
-                
-                el.className = lang.trim([el.className, className].join(' '));
-                return true;
-            };
-            
-            return Y.Dom.batch(el, f, Y.Dom, true);
+            } else {
+                YAHOO.log('addClass called with invalid arguments', 'warn', 'Dom');
+            }
+
+            return ret;
         },
     
         /**
@@ -490,32 +544,35 @@
          * @return {Boolean | Array} A pass/fail boolean or array of booleans
          */
         removeClass: function(el, className) {
-            var re = getClassRegEx(className);
-            
-            var f = function(el) {
-                var ret = false,
-                    current = el.className;
+            return Y.Dom.batch(el, Y.Dom._removeClass, className);
+        },
+        
+        _removeClass: function(el, className) {
+            var ret = false,
+                current,
+                newClass;
 
-                if (className && current && this.hasClass(el, className)) {
-                    
-                    el.className = current.replace(re, ' ');
-                    if ( this.hasClass(el, className) ) { // in case of multiple adjacent
-                        this.removeClass(el, className);
-                    }
+            if (el && className) {
+                current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
+                Y.Dom.setAttribute(el, CLASSNAME, current.replace(Y.Dom._getClassRegEx(className), EMPTY));
 
-                    el.className = lang.trim(el.className); // remove any trailing spaces
-                    if (el.className === '') { // remove class attribute if empty
-                        var attr = (el.hasAttribute) ? 'class' : 'className';
+                newClass = Y.Dom.getAttribute(el, CLASSNAME);
+                if (current !== newClass) { // else nothing changed
+                    Y.Dom.setAttribute(el, CLASSNAME, trim(newClass)); // trim after comparing to current class
+                    ret = true;
+
+                    if (Y.Dom.getAttribute(el, CLASSNAME) === '') { // remove class attribute if empty
+                        var attr = (el.hasAttribute && el.hasAttribute(_CLASS)) ? _CLASS : CLASSNAME;
                         YAHOO.log('removeClass removing empty class attribute', 'info', 'Dom');
                         el.removeAttribute(attr);
                     }
-                    ret = true;
-                }                 
-                YAHOO.log('removeClass ' + className + ' result: ' + ret, 'info', 'Dom');
-                return ret;
-            };
-            
-            return Y.Dom.batch(el, f, Y.Dom, true);
+                }
+
+            } else {
+                YAHOO.log('removeClass called with invalid arguments', 'warn', 'Dom');
+            }
+
+            return ret;
         },
         
         /**
@@ -528,31 +585,40 @@
          * @return {Boolean | Array} A pass/fail boolean or array of booleans
          */
         replaceClass: function(el, oldClassName, newClassName) {
-            if (!newClassName || oldClassName === newClassName) { // avoid infinite loop
-                return false;
+            return Y.Dom.batch(el, Y.Dom._replaceClass, { from: oldClassName, to: newClassName });
+        },
+
+        _replaceClass: function(el, classObj) {
+            var className,
+                from,
+                to,
+                ret = false,
+                current;
+
+            if (el && classObj) {
+                from = classObj.from;
+                to = classObj.to;
+
+                if (!to) {
+                    ret = false;
+                }  else if (!from) { // just add if no "from"
+                    ret = Y.Dom._addClass(el, classObj.to);
+                } else if (from !== to) { // else nothing to replace
+                    // May need to lead with DBLSPACE?
+                    current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
+                    className = (SPACE + current.replace(Y.Dom._getClassRegEx(from), SPACE + to)).
+                               split(Y.Dom._getClassRegEx(to));
+
+                    // insert to into what would have been the first occurrence slot
+                    className.splice(1, 0, SPACE + to);
+                    Y.Dom.setAttribute(el, CLASSNAME, trim(className.join(EMPTY)));
+                    ret = true;
+                }
+            } else {
+                YAHOO.log('replaceClass called with invalid arguments', 'warn', 'Dom');
             }
-            
-            var re = getClassRegEx(oldClassName);
 
-            var f = function(el) {
-                YAHOO.log('replaceClass replacing ' + oldClassName + ' with ' + newClassName, 'info', 'Dom');
-            
-                if ( !this.hasClass(el, oldClassName) ) {
-                    this.addClass(el, newClassName); // just add it if nothing to replace
-                    return true; // NOTE: return
-                }
-            
-                el.className = el.className.replace(re, ' ' + newClassName + ' ');
-
-                if ( this.hasClass(el, oldClassName) ) { // in case of multiple adjacent
-                    this.removeClass(el, oldClassName);
-                }
-
-                el.className = lang.trim(el.className); // remove any trailing spaces
-                return true;
-            };
-            
-            return Y.Dom.batch(el, f, Y.Dom, true);
+            return ret;
         },
         
         /**
@@ -569,12 +635,16 @@
                 if (el && el.id) { // do not override existing ID
                     YAHOO.log('generateId returning existing id ' + el.id, 'info', 'Dom');
                     return el.id;
-                } 
+                }
 
                 var id = prefix + YAHOO.env._id_counter++;
                 YAHOO.log('generateId generating ' + id, 'info', 'Dom');
 
                 if (el) {
+                    if (el.ownerDocument.getElementById(id)) { // in case one already exists
+                        // use failed id plus prefix to help ensure uniqueness
+                        return Y.Dom.generateId(el, id + prefix);
+                    }
                     el.id = id;
                 }
                 
@@ -619,7 +689,7 @@
          * @return {Boolean} Whether or not the element is present in the current document
          */
         inDocument: function(el) {
-            return this.isAncestor(document.documentElement, el);
+            return this.isAncestor(documentElement, el);
         },
         
         /**
@@ -717,7 +787,7 @@
          * @return {Int} The height of the actual document (which includes the body and its margin).
          */
         getDocumentHeight: function() {
-            var scrollHeight = (document.compatMode != 'CSS1Compat') ? document.body.scrollHeight : document.documentElement.scrollHeight;
+            var scrollHeight = (document.compatMode != 'CSS1Compat' || isSafari) ? document.body.scrollHeight : documentElement.scrollHeight;
 
             var h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
             YAHOO.log('getDocumentHeight returning ' + h, 'info', 'Dom');
@@ -730,7 +800,7 @@
          * @return {Int} The width of the actual document (which includes the body and its margin).
          */
         getDocumentWidth: function() {
-            var scrollWidth = (document.compatMode != 'CSS1Compat') ? document.body.scrollWidth : document.documentElement.scrollWidth;
+            var scrollWidth = (document.compatMode != 'CSS1Compat' || isSafari) ? document.body.scrollWidth : documentElement.scrollWidth;
             var w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
             YAHOO.log('getDocumentWidth returning ' + w, 'info', 'Dom');
             return w;
@@ -747,7 +817,7 @@
         
             if ( (mode || isIE) && !isOpera ) { // IE, Gecko
                 height = (mode == 'CSS1Compat') ?
-                        document.documentElement.clientHeight : // Standards
+                        documentElement.clientHeight : // Standards
                         document.body.clientHeight; // Quirks
             }
         
@@ -767,7 +837,7 @@
             
             if (mode || isIE) { // IE, Gecko, Opera
                 width = (mode == 'CSS1Compat') ?
-                        document.documentElement.clientWidth : // Standards
+                        documentElement.clientWidth : // Standards
                         document.body.clientWidth; // Quirks
             }
             YAHOO.log('getViewportWidth returning ' + width, 'info', 'Dom');
@@ -784,7 +854,7 @@
          */
         getAncestorBy: function(node, method) {
             while ( (node = node.parentNode) ) { // NOTE: assignment
-                if ( testElement(node, method) ) {
+                if ( Y.Dom._testElement(node, method) ) {
                     YAHOO.log('getAncestorBy returning ' + node, 'info', 'Dom');
                     return node;
                 }
@@ -844,7 +914,7 @@
         getPreviousSiblingBy: function(node, method) {
             while (node) {
                 node = node.previousSibling;
-                if ( testElement(node, method) ) {
+                if ( Y.Dom._testElement(node, method) ) {
                     return node;
                 }
             }
@@ -880,7 +950,7 @@
         getNextSiblingBy: function(node, method) {
             while (node) {
                 node = node.nextSibling;
-                if ( testElement(node, method) ) {
+                if ( Y.Dom._testElement(node, method) ) {
                     return node;
                 }
             }
@@ -912,7 +982,7 @@
          * @return {Object} HTMLElement or null if not found
          */
         getFirstChildBy: function(node, method) {
-            var child = ( testElement(node.firstChild, method) ) ? node.firstChild : null;
+            var child = ( Y.Dom._testElement(node.firstChild, method) ) ? node.firstChild : null;
             return child || Y.Dom.getNextSiblingBy(node.firstChild, method);
         }, 
 
@@ -944,7 +1014,7 @@
                 YAHOO.log('getLastChild failed: invalid node argument', 'error', 'Dom');
                 return null;
             }
-            var child = ( testElement(node.lastChild, method) ) ? node.lastChild : null;
+            var child = ( Y.Dom._testElement(node.lastChild, method) ) ? node.lastChild : null;
             return child || Y.Dom.getPreviousSiblingBy(node.lastChild, method);
         }, 
 
@@ -1079,18 +1149,11 @@
          * @method setAttibute
          * @param {String | HTMLElement} el The target element for the attribute.
          * @param {String} attr The attribute to set.
-         * @param {String} value The value of the attribute.
+         * @param {String} val The value of the attribute.
          */
-        setAttribute: function(el, attr, value) {
-            switch (attr) {
-                case 'for':
-                    attr = 'htmlFor';
-                    break;
-                case 'class':
-                    attr = 'className';
-                    break;
-            }
-            el[attr] = value;
+        setAttribute: function(el, attr, val) {
+            attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
+            el.setAttribute(attr, val);
         },
 
 
@@ -1101,72 +1164,52 @@
          * @param {String} attr The attribute to get.
          * @return {String} The current value of the attribute. 
          */
-        getAttribute: function(el, attr, value) {
-            switch (attr) {
-                case 'for':
-                    attr = 'htmlFor';
-                    break;
-                case 'class':
-                    attr = 'className';
-                    break;
+        getAttribute: function(el, attr) {
+            attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
+            return el.getAttribute(attr);
+        },
+
+        _toCamel: function(property) {
+            var c = propertyCache;
+
+            function tU(x,l) {
+                return l.toUpperCase();
             }
-            return el[attr];
+
+            return c[property] || (c[property] = property.indexOf('-') === -1 ? 
+                                    property :
+                                    property.replace( /-([a-z])/gi, tU ));
+        },
+
+        _getClassRegEx: function(className) {
+            var re;
+            if (className !== undefined) { // allow empty string to pass
+                if (className.exec) { // already a RegExp
+                    re = className;
+                } else {
+                    re = reCache[className];
+                    if (!re) {
+                        // escape special chars (".", "[", etc.)
+                        className = className.replace(Y.Dom._patterns.CLASS_RE_TOKENS, '\\$1');
+                        re = reCache[className] = new RegExp(C_START + className + C_END, G);
+                    }
+                }
+            }
+            return re;
+        },
+
+        _patterns: {
+            ROOT_TAG: /^body|html$/i, // body for quirks mode, html for standards,
+            CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}])/g
+        },
+
+
+        _testElement: function(node, method) {
+            return node && node.nodeType == 1 && ( !method || method(node) );
         }
+
     };
     
-    var getXY = function() {
-        if (document.documentElement.getBoundingClientRect) { // IE
-            return function(el) {
-                var box = el.getBoundingClientRect(),
-                    round = Math.round;
-
-                var rootNode = el.ownerDocument;
-                return [round(box.left + Y.Dom.getDocumentScrollLeft(rootNode)), round(box.top +
-                        Y.Dom.getDocumentScrollTop(rootNode))];
-            };
-        } else {
-            return function(el) { // manually calculate by crawling up offsetParents
-                var pos = [el.offsetLeft, el.offsetTop];
-                var parentNode = el.offsetParent;
-
-                // safari: subtract body offsets if el is abs (or any offsetParent), unless body is offsetParent
-                var accountForBody = (isSafari &&
-                        Y.Dom.getStyle(el, 'position') == 'absolute' &&
-                        el.offsetParent == el.ownerDocument.body);
-
-                if (parentNode != el) {
-                    while (parentNode) {
-                        pos[0] += parentNode.offsetLeft;
-                        pos[1] += parentNode.offsetTop;
-                        if (!accountForBody && isSafari && 
-                                Y.Dom.getStyle(parentNode,'position') == 'absolute' ) { 
-                            accountForBody = true;
-                        }
-                        parentNode = parentNode.offsetParent;
-                    }
-                }
-
-                if (accountForBody) { //safari doubles in this case
-                    pos[0] -= el.ownerDocument.body.offsetLeft;
-                    pos[1] -= el.ownerDocument.body.offsetTop;
-                } 
-                parentNode = el.parentNode;
-
-                // account for any scrolled ancestors
-                while ( parentNode.tagName && !patterns.ROOT_TAG.test(parentNode.tagName) ) 
-                {
-                    if (parentNode.scrollTop || parentNode.scrollLeft) {
-                        pos[0] -= parentNode.scrollLeft;
-                        pos[1] -= parentNode.scrollTop;
-                    }
-                    
-                    parentNode = parentNode.parentNode; 
-                }
-
-                return pos;
-            };
-        }
-    }() // NOTE: Executing for loadtime branching
 })();
 /**
  * A region is a representation of an object on a grid.  It is defined
@@ -1188,6 +1231,13 @@ YAHOO.util.Region = function(t, r, b, l) {
      * @type Int
      */
     this.top = t;
+    
+    /**
+     * The region's top extent
+     * @property y
+     * @type Int
+     */
+    this.y = t;
     
     /**
      * The region's top extent as index, for symmetry with set/getXY
@@ -1218,11 +1268,32 @@ YAHOO.util.Region = function(t, r, b, l) {
     this.left = l;
     
     /**
+     * The region's left extent
+     * @property x
+     * @type Int
+     */
+    this.x = l;
+    
+    /**
      * The region's left extent as index, for symmetry with set/getXY
      * @property 0
      * @type Int
      */
     this[0] = l;
+
+    /**
+     * The region's total width 
+     * @property width 
+     * @type Int
+     */
+    this.width = this.right - this.left;
+
+    /**
+     * The region's total height 
+     * @property height 
+     * @type Int
+     */
+    this.height = this.bottom - this.top;
 };
 
 /**
@@ -1296,6 +1367,8 @@ YAHOO.util.Region.prototype.toString = function() {
              ", right: "   + this.right  + 
              ", bottom: "  + this.bottom + 
              ", left: "    + this.left   + 
+             ", height: "  + this.height + 
+             ", width: "    + this.width   + 
              "}" );
 };
 
@@ -1335,23 +1408,10 @@ YAHOO.util.Point = function(x, y) {
       y = x[1]; // dont blow away x yet
       x = x[0];
    }
-   
-    /**
-     * The X position of the point, which is also the right, left and index zero (for Dom.getXY symmetry)
-     * @property x
-     * @type Int
-     */
-
-    this.x = this.right = this.left = this[0] = x;
-     
-    /**
-     * The Y position of the point, which is also the top, bottom and index one (for Dom.getXY symmetry)
-     * @property y
-     * @type Int
-     */
-    this.y = this.top = this.bottom = this[1] = y;
+ 
+    YAHOO.util.Point.superclass.constructor.call(this, y, x, y, x);
 };
 
-YAHOO.util.Point.prototype = new YAHOO.util.Region();
+YAHOO.extend(YAHOO.util.Point, YAHOO.util.Region);
 
 YAHOO.register("dom", YAHOO.util.Dom, {version: "@VERSION@", build: "@BUILD@"});

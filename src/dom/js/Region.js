@@ -20,6 +20,13 @@ YAHOO.util.Region = function(t, r, b, l) {
     this.top = t;
     
     /**
+     * The region's top extent
+     * @property y
+     * @type Int
+     */
+    this.y = t;
+    
+    /**
      * The region's top extent as index, for symmetry with set/getXY
      * @property 1
      * @type Int
@@ -48,11 +55,32 @@ YAHOO.util.Region = function(t, r, b, l) {
     this.left = l;
     
     /**
+     * The region's left extent
+     * @property x
+     * @type Int
+     */
+    this.x = l;
+    
+    /**
      * The region's left extent as index, for symmetry with set/getXY
      * @property 0
      * @type Int
      */
     this[0] = l;
+
+    /**
+     * The region's total width 
+     * @property width 
+     * @type Int
+     */
+    this.width = this.right - this.left;
+
+    /**
+     * The region's total height 
+     * @property height 
+     * @type Int
+     */
+    this.height = this.bottom - this.top;
 };
 
 /**
@@ -126,6 +154,8 @@ YAHOO.util.Region.prototype.toString = function() {
              ", right: "   + this.right  + 
              ", bottom: "  + this.bottom + 
              ", left: "    + this.left   + 
+             ", height: "  + this.height + 
+             ", width: "    + this.width   + 
              "}" );
 };
 
@@ -165,22 +195,9 @@ YAHOO.util.Point = function(x, y) {
       y = x[1]; // dont blow away x yet
       x = x[0];
    }
-   
-    /**
-     * The X position of the point, which is also the right, left and index zero (for Dom.getXY symmetry)
-     * @property x
-     * @type Int
-     */
-
-    this.x = this.right = this.left = this[0] = x;
-     
-    /**
-     * The Y position of the point, which is also the top, bottom and index one (for Dom.getXY symmetry)
-     * @property y
-     * @type Int
-     */
-    this.y = this.top = this.bottom = this[1] = y;
+ 
+    YAHOO.util.Point.superclass.constructor.call(this, y, x, y, x);
 };
 
-YAHOO.util.Point.prototype = new YAHOO.util.Region();
+YAHOO.extend(YAHOO.util.Point, YAHOO.util.Region);
 
