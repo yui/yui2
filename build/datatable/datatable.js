@@ -7770,7 +7770,6 @@ sortColumn : function(oColumn, sDir) {
                     // Default sort function if necessary
                     sortFnc = sortFnc || 
                         function(a, b, desc) {
-                            YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
                             var sorted = YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
                             if(sorted === 0) {
                                 return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
