@@ -6241,19 +6241,23 @@ _onTheadClick : function(e, oSelf) {
         }
     }
 
-    var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
-    var bKeepBubbling = true;
+    var elTarget = Ev.getTarget(e),
+        elTag = elTarget.nodeName.toLowerCase(),
+        bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                 return;
             case "input":
-                if(elTarget.type.toLowerCase() == "checkbox") {
+                var sType = elTarget.type.toLowerCase();
+                if(sType == "checkbox") {
                     bKeepBubbling = oSelf.fireEvent("theadCheckboxClickEvent",{target:elTarget,event:e});
                 }
-                else if(elTarget.type.toLowerCase() == "radio") {
+                else if(sType == "radio") {
                     bKeepBubbling = oSelf.fireEvent("theadRadioClickEvent",{target:elTarget,event:e});
+                }
+                else if((sType == "button") || (sType == "image") || (sType == "submit") || (sType == "reset")) {
+                    bKeepBubbling = oSelf.fireEvent("theadButtonClickEvent",{target:elTarget,event:e});
                 }
                 break;
             case "a":
@@ -6315,19 +6319,23 @@ _onTbodyClick : function(e, oSelf) {
     }
 
     // Fire Custom Events
-    var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
-    var bKeepBubbling = true;
+    var elTarget = Ev.getTarget(e),
+        elTag = elTarget.nodeName.toLowerCase(),
+        bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                 return;
             case "input":
-                if(elTarget.type.toLowerCase() == "checkbox") {
+                var sType = elTarget.type.toLowerCase();
+                if(sType == "checkbox") {
                     bKeepBubbling = oSelf.fireEvent("checkboxClickEvent",{target:elTarget,event:e});
                 }
-                else if(elTarget.type.toLowerCase() == "radio") {
+                else if(sType == "radio") {
                     bKeepBubbling = oSelf.fireEvent("radioClickEvent",{target:elTarget,event:e});
+                }
+                else if((sType == "button") || (sType == "image") || (sType == "submit") || (sType == "reset")) {
+                    bKeepBubbling = oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
                 }
                 break;
             case "a":
@@ -13460,7 +13468,8 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      */
 
     /**
-     * Fired when a BUTTON element is clicked.
+     * Fired when a BUTTON element or INPUT element of type "button", "image",
+     * "submit", "reset" is clicked.
      *
      * @event buttonClickEvent
      * @param oArgs.event {HTMLEvent} The event object.
