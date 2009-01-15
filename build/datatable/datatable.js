@@ -7830,7 +7830,6 @@ setColumnWidth : function(oColumn, nWidth) {
             this._setColumnWidth(oColumn, nWidth+"px");
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
-            return;
         }
         // Unsets a width to auto-size
         else if(nWidth === null) {
@@ -7841,9 +7840,12 @@ setColumnWidth : function(oColumn, nWidth) {
             this._setColumnWidth(oColumn, "auto");
             this.validateColumnWidths(oColumn);
             this.fireEvent("columnUnsetWidthEvent",{column:oColumn});
-            
-            return;
         }
+                
+        // Bug 2339454: resize then sort misaligment
+        this._clearTrTemplateEl();
+    }
+    else {
     }
 },
 
@@ -14821,7 +14823,6 @@ setColumnWidth : function(oColumn, nWidth) {
             this._syncScroll();
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
-            return;
         }
         // Unsets a width to auto-size
         else if(nWidth === null) {
@@ -14832,9 +14833,12 @@ setColumnWidth : function(oColumn, nWidth) {
             this._setColumnWidth(oColumn, "auto");
             this.validateColumnWidths(oColumn);
             this.fireEvent("columnUnsetWidthEvent",{column:oColumn});
-
-            return;
         }
+        
+        // Bug 2339454: resize then sort misaligment
+        this._clearTrTemplateEl();
+    }
+    else {
     }
 },
 

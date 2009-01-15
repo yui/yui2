@@ -7944,7 +7944,6 @@ setColumnWidth : function(oColumn, nWidth) {
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
             YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
-            return;
         }
         // Unsets a width to auto-size
         else if(nWidth === null) {
@@ -7956,11 +7955,14 @@ setColumnWidth : function(oColumn, nWidth) {
             this.validateColumnWidths(oColumn);
             this.fireEvent("columnUnsetWidthEvent",{column:oColumn});
             YAHOO.log("Column " + oColumn + " width unset", "info", this.toString());
-            
-            return;
         }
+                
+        // Bug 2339454: resize then sort misaligment
+        this._clearTrTemplateEl();
     }
-    YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
+    else {
+        YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
+    }
 },
 
 /**
@@ -15039,7 +15041,6 @@ setColumnWidth : function(oColumn, nWidth) {
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
             YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
-            return;
         }
         // Unsets a width to auto-size
         else if(nWidth === null) {
@@ -15051,11 +15052,14 @@ setColumnWidth : function(oColumn, nWidth) {
             this.validateColumnWidths(oColumn);
             this.fireEvent("columnUnsetWidthEvent",{column:oColumn});
             YAHOO.log("Column " + oColumn + " width unset", "info", this.toString());
-
-            return;
         }
+        
+        // Bug 2339454: resize then sort misaligment
+        this._clearTrTemplateEl();
     }
-    YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
+    else {
+        YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
+    }
 },
 
 /**
