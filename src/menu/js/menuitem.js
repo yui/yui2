@@ -74,9 +74,7 @@ var Dom = YAHOO.util.Dom,
 	_OPTION = "OPTION",
 	_OPTGROUP = "OPTGROUP",
 	_LI_UPPERCASE = "LI",
-	_LI_LOWERCASE = "li",
 	_HREF = "href",
-	_ANCHOR_TEMPLATE = "<a href=\"#\"></a>",
 	_SELECT = "SELECT",
 	_DIV = "DIV",
 	_START_HELP_TEXT = "<em class=\"helptext\">",
@@ -91,6 +89,9 @@ var Dom = YAHOO.util.Dom,
 	_VISIBLE = "visible",
 	_SPACE = " ",
 	_MENUITEM = "MenuItem",
+	_CLICK = "click",
+	_SHOW = "show",
+	_HIDE = "hide",
 
     EVENT_TYPES = [
     
@@ -98,7 +99,7 @@ var Dom = YAHOO.util.Dom,
         ["mouseOutEvent", "mouseout"],
         ["mouseDownEvent", "mousedown"],
         ["mouseUpEvent", "mouseup"],
-        ["clickEvent", "click"],
+        ["clickEvent", _CLICK],
         ["keyPressEvent", "keypress"],
         ["keyDownEvent", "keydown"],
         ["keyUpEvent", "keyup"],
@@ -189,9 +190,23 @@ var Dom = YAHOO.util.Dom,
 		suppressEvent: true
 	},
     
+	KEY_LISTENER_CONFIG = {
+		key: "keylistener", 
+		value: null, 
+		suppressEvent: true
+	},
+
     CLASS_NAMES = {},
     
-    m_oMenuItemTemplate;
+	m_oFragment = document.createElement("div"),
+
+	m_sMenuItemTemplateP1 = '<li class="',
+
+	m_sMenuItemTemplateP2 = '">',
+
+	m_sMenuItemTemplateP3 = '<a href="#" class="',
+
+	m_sMenuItemTemplateP4 = '"></a></li>';
 
 
 /**
@@ -721,24 +736,15 @@ MenuItem.prototype = {
     */
     _createRootNodeStructure: function () {
 
-        var oElement,
-            oAnchor;
-
-        if (!m_oMenuItemTemplate) {
-
-            m_oMenuItemTemplate = document.createElement(_LI_LOWERCASE);
-            m_oMenuItemTemplate.innerHTML = _ANCHOR_TEMPLATE;
-
-        }
-
-        oElement = m_oMenuItemTemplate.cloneNode(true);
-        oElement.className = this.CSS_CLASS_NAME;
-
-        oAnchor = oElement.firstChild;
-        oAnchor.className = this.CSS_LABEL_CLASS_NAME;
-        
-        this.element = oElement;
-        this._oAnchor = oAnchor;
+		m_oFragment.innerHTML = m_sMenuItemTemplateP1 + 
+								this.CSS_CLASS_NAME + 
+								m_sMenuItemTemplateP2 +
+								m_sMenuItemTemplateP3 + 
+								this.CSS_LABEL_CLASS_NAME + 
+								m_sMenuItemTemplateP4;
+       
+        this.element = m_oFragment.firstChild;
+        this._oAnchor = this.element.firstChild;
 
     },
 
@@ -1420,6 +1426,150 @@ MenuItem.prototype = {
     },
 
 
+    /**
+    * @method _dispatchClickEvent
+    * @description Dispatches a DOM "click" event to the anchor element of a 
+	* MenuItem instance.
+	* @private	
+    */
+	_dispatchClickEvent: function () {
+
+		var oMenuItem = this,
+			oAnchor,
+			oEvent;
+
+		if (!oMenuItem.cfg.getProperty(_DISABLED)) {
+
+			oAnchor = Dom.getFirstChild(oMenuItem.element);
+
+			//	Dispatch a "click" event to the MenuItem's anchor so that its
+			//	"click" event handlers will get called in response to the user 
+			//	pressing the keyboard shortcut defined by the "keylistener"
+			//	configuration property.
+
+			if (UA.ie) {
+				oAnchor.fireEvent(_ONCLICK);
+			}
+			else {
+
+				if ((UA.gecko && UA.gecko >= 1.9) || UA.opera || UA.webkit) {
+
+					oEvent = document.createEvent("HTMLEvents");
+					oEvent.initEvent(_CLICK, true, true);
+
+				}
+				else {
+
+					oEvent = document.createEvent("MouseEvents");
+					oEvent.initMouseEvent(_CLICK, true, true, window, 0, 0, 0, 
+						0, 0, false, false, false, false, 0, null);
+
+				}
+
+				oAnchor.dispatchEvent(oEvent);
+
+			}
+
+		}
+
+	},
+
+
+    /**
+    * @method _createKeyListener
+    * @description "show" event handler for a Menu instance - responsible for 
+	* setting up the KeyListener instance for a MenuItem.
+	* @private	
+    * @param {String} type String representing the name of the event that 
+    * was fired.
+    * @param {Array} args Array of arguments sent when the event was fired.
+    * @param {Array} keyData Array of arguments sent when the event was fired.
+    */
+	_createKeyListener: function (type, args, keyData) {
+
+		var oMenuItem = this,
+			oMenu = oMenuItem.parent;
+
+		var oKeyListener = new YAHOO.util.KeyListener(
+										oMenu.element.ownerDocument, 
+										keyData, 
+										{
+											fn: oMenuItem._dispatchClickEvent, 
+											scope: oMenuItem, 
+											correctScope: true });
+
+
+		if (oMenu.cfg.getProperty(_VISIBLE)) {
+			oKeyListener.enable();
+		}
+
+
+		oMenu.subscribe(_SHOW, oKeyListener.enable, null, oKeyListener);
+		oMenu.subscribe(_HIDE, oKeyListener.disable, null, oKeyListener);
+		
+		oMenuItem._keyListener = oKeyListener;
+		
+		oMenu.unsubscribe(_SHOW, oMenuItem._createKeyListener, keyData);
+		
+	},
+
+
+    /**
+    * @method configKeyListener
+    * @description Event handler for when the "keylistener" configuration 
+    * property of a menu item changes.
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    */
+    configKeyListener: function (p_sType, p_aArgs) {
+
+		var oKeyData = p_aArgs[0],
+			oMenuItem = this,
+			oMenu = oMenuItem.parent;
+
+		if (oMenuItem._keyData) {
+
+			//	Unsubscribe from the "show" event in case the keylistener 
+			//	config was changed before the Menu was ever made visible.
+
+			oMenu.unsubscribe(_SHOW, 
+					oMenuItem._createKeyListener, oMenuItem._keyData);
+
+			oMenuItem._keyData = null;					
+					
+		}
+
+
+		//	Tear down for the previous value of the "keylistener" property
+
+		if (oMenuItem._keyListener) {
+
+			oMenu.unsubscribe(_SHOW, oMenuItem._keyListener.enable);
+			oMenu.unsubscribe(_HIDE, oMenuItem._keyListener.disable);
+
+			oMenuItem._keyListener.disable();
+			oMenuItem._keyListener = null;
+
+		}
+
+
+    	if (oKeyData) {
+	
+			oMenuItem._keyData = oKeyData;
+
+			//	Defer the creation of the KeyListener instance until the 
+			//	parent Menu is visible.  This is necessary since the 
+			//	KeyListener instance needs to be bound to the document the 
+			//	Menu has been rendered into.  Deferring creation of the 
+			//	KeyListener instance also improves performance.
+
+			oMenu.subscribe(_SHOW, oMenuItem._createKeyListener, 
+				oKeyData, oMenuItem);
+		}
+    
+    },
+
 
     // Public methods
 
@@ -1677,6 +1827,25 @@ MenuItem.prototype = {
                 value: CLASS_NAME_CONFIG.value, 
                 validator: CLASS_NAME_CONFIG.validator,
                 suppressEvent: CLASS_NAME_CONFIG.suppressEvent 
+            }
+        );
+
+
+        /**
+        * @config keylistener
+        * @description Object literal representing the key(s) that can be used 
+ 		* to trigger the MenuItem's "click" event.  Possible attributes are 
+		* shift (boolean), alt (boolean), ctrl (boolean) and keys (either an int 
+		* or an array of ints representing keycodes).
+        * @default null
+        * @type Object
+        */
+        oConfig.addProperty(
+            KEY_LISTENER_CONFIG.key, 
+            { 
+                handler: this.configKeyListener,
+                value: KEY_LISTENER_CONFIG.value, 
+                suppressEvent: KEY_LISTENER_CONFIG.suppressEvent 
             }
         );
 
