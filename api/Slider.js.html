@@ -1,29 +1,52 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
 <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: slider   Slider.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1231977734.35" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1231977734.35" />
+
+    <script type="text/javascript" src="assets/api-js?stamp=1231977734.35"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1231977734.35"></script>
 </head>
 
 <body id="yahoo-com">
-<div id="doc3" class="yui-t2">
 
+<div id="doc3" class="yui-t2">
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>Slider Widget&nbsp; <span class="subtitle">2.2.0</span></h3>
-        <p>
-        <a href="./index.html">Yahoo! UI Library</a> 
-            &gt; <a href="./module_slider.html">slider</a>
+        <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
+        <h3>Slider Widget&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
+            &gt; <a href="./module_slider.html" title="slider">slider</a>
                 
                  &gt; Slider.js (source view) 
-            </p>
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
 
                     <div id="srcout">
+                        <style>
+                            #doc3 .classopts { display:none; }
+                        </style>
 <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * The Slider component is a UI control that enables the user to adjust </span>
 <span class="c"> * values in a finite range along one or two axes. Typically, the Slider </span>
@@ -56,6 +79,10 @@
 <span class="c"> * @param {String}      sType  The type of slider (horiz, vert, region)</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Slider</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sElementId</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">,</span> <span class="nx">oThumb</span><span class="o">,</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Slider</span><span class="o">.</span><span class="nx">ANIM_AVAIL</span> <span class="o">=</span> 
+        <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Anim</span><span class="o">));</span>
+
     <span class="k">if</span> <span class="o">(</span><span class="nx">sElementId</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">(</span><span class="nx">sElementId</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">initSlider</span><span class="o">(</span><span class="nx">sType</span><span class="o">);</span>
@@ -124,14 +151,22 @@
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * By default, animation is available if the animation library is detected.</span>
+<span class="c"> * By default, animation is available if the animation utility is detected.</span>
 <span class="c"> * @property YAHOO.widget.Slider.ANIM_AVAIL</span>
 <span class="c"> * @static</span>
 <span class="c"> * @type boolean</span>
 <span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Slider</span><span class="o">.</span><span class="nx">ANIM_AVAIL</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Slider</span><span class="o">.</span><span class="nx">ANIM_AVAIL</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Slider</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DragDrop</span><span class="o">,</span> <span class="o">{</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Override the default setting of dragOnly to true.</span>
+<span class="c">     * @property dragOnly</span>
+<span class="c">     * @type boolean</span>
+<span class="c">     * @default true</span>
+<span class="c">     */</span>
+    <span class="nx">dragOnly</span> <span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
 
     <span class="c">/**</span>
 <span class="c">     * Initializes the slider.  Executed in the constructor</span>
@@ -213,7 +248,7 @@
 
         <span class="c">/**</span>
 <span class="c">         * Specifies the number of pixels the arrow keys will move the slider.</span>
-<span class="c">         * Default is 25.</span>
+<span class="c">         * Default is 20.</span>
 <span class="c">         * @property keyIncrement</span>
 <span class="c">         * @type int</span>
 <span class="c">         */</span>
@@ -224,9 +259,15 @@
 <span class="c">         * destination.  For animated slider, this value can be checked in </span>
 <span class="c">         * the onChange handler to make it possible to execute logic only</span>
 <span class="c">         * when the move is complete rather than at all points along the way.</span>
+<span class="c">         * Deprecated because this flag is only useful when the background is</span>
+<span class="c">         * clicked and the slider is animated.  If the user drags the thumb,</span>
+<span class="c">         * the flag is updated when the drag is over ... the final onDrag event</span>
+<span class="c">         * fires before the mouseup the ends the drag, so the implementer will</span>
+<span class="c">         * never see it.</span>
 <span class="c">         *</span>
 <span class="c">         * @property moveComplete</span>
 <span class="c">         * @type Boolean</span>
+<span class="c">         * @deprecated use the slideEnd event instead</span>
 <span class="c">         */</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">moveComplete</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 
@@ -238,6 +279,53 @@
 <span class="c">         * @default 0.2</span>
 <span class="c">         */</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">animationDuration</span> <span class="o">=</span> <span class="m">0</span><span class="o">.</span><span class="m">2</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Constant for valueChangeSource, indicating that the user clicked or</span>
+<span class="c">         * dragged the slider to change the value.</span>
+<span class="c">         * @property SOURCE_UI_EVENT</span>
+<span class="c">         * @final</span>
+<span class="c">         * @default 1</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">SOURCE_UI_EVENT</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Constant for valueChangeSource, indicating that the value was altered</span>
+<span class="c">         * by a programmatic call to setValue/setRegionValue.</span>
+<span class="c">         * @property SOURCE_SET_VALUE</span>
+<span class="c">         * @final</span>
+<span class="c">         * @default 2</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">SOURCE_SET_VALUE</span> <span class="o">=</span> <span class="m">2</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * When the slider value changes, this property is set to identify where</span>
+<span class="c">         * the update came from.  This will be either 1, meaning the slider was</span>
+<span class="c">         * clicked or dragged, or 2, meaning that it was set via a setValue() call.</span>
+<span class="c">         * This can be used within event handlers to apply some of the logic only</span>
+<span class="c">         * when dealing with one source or another.</span>
+<span class="c">         * @property valueChangeSource</span>
+<span class="c">         * @type int</span>
+<span class="c">         * @since 2.3.0</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">valueChangeSource</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Indicates whether or not events will be supressed for the current</span>
+<span class="c">         * slide operation</span>
+<span class="c">         * @property _silent</span>
+<span class="c">         * @type boolean</span>
+<span class="c">         * @private</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_silent</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+        <span class="c">/**</span>
+<span class="c">         * Saved offset used to protect against NaN problems when slider is</span>
+<span class="c">         * set to display:none</span>
+<span class="c">         * @property lastOffset</span>
+<span class="c">         * @type [int, int]</span>
+<span class="c">         */</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span> <span class="o">=</span> <span class="o">[</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">];</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -259,10 +347,10 @@
         <span class="nx">t</span><span class="o">.</span><span class="nx">cacheBetweenDrags</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 
         <span class="c">// add handler for the handle onchange event</span>
-<span class="c"></span>        <span class="nx">t</span><span class="o">.</span><span class="nx">onChange</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
-            <span class="nx">self</span><span class="o">.</span><span class="nx">handleThumbChange</span><span class="o">();</span> 
-        <span class="o">};</span>
-
+<span class="c"></span>        <span class="c">//t.onChange = function() { </span>
+<span class="c"></span>            <span class="c">//self.handleThumbChange(); </span>
+<span class="c"></span>        <span class="c">//};</span>
+<span class="c"></span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">_isHoriz</span> <span class="o">&amp;&amp;</span> <span class="nx">t</span><span class="o">.</span><span class="nx">xTicks</span> <span class="o">&amp;&amp;</span> <span class="nx">t</span><span class="o">.</span><span class="nx">xTicks</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">tickPause</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="m">360</span> <span class="o">/</span> <span class="nx">t</span><span class="o">.</span><span class="nx">xTicks</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
         <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">yTicks</span> <span class="o">&amp;&amp;</span> <span class="nx">t</span><span class="o">.</span><span class="nx">yTicks</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
@@ -272,10 +360,21 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;tickPause: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">tickPause</span><span class="o">);</span>
 
         <span class="c">// delegate thumb methods</span>
-<span class="c"></span>        <span class="nx">t</span><span class="o">.</span><span class="nx">onMouseDown</span> <span class="o">=</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="nx">self</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span> <span class="o">};</span>
-        <span class="nx">t</span><span class="o">.</span><span class="nx">onMouseUp</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="nx">self</span><span class="o">.</span><span class="nx">thumbMouseUp</span><span class="o">();</span> <span class="o">};</span>
-        <span class="nx">t</span><span class="o">.</span><span class="nx">onDrag</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="nx">self</span><span class="o">.</span><span class="nx">fireEvents</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span> <span class="o">};</span>
-        <span class="nx">t</span><span class="o">.</span><span class="nx">onAvailable</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="nx">self</span><span class="o">.</span><span class="nx">setStartSliderState</span><span class="o">();</span> <span class="o">};</span>
+<span class="c"></span>        <span class="nx">t</span><span class="o">.</span><span class="nx">onAvailable</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+                <span class="k">return</span> <span class="nx">self</span><span class="o">.</span><span class="nx">setStartSliderState</span><span class="o">();</span> 
+            <span class="o">};</span>
+        <span class="nx">t</span><span class="o">.</span><span class="nx">onMouseDown</span> <span class="o">=</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span> 
+                <span class="k">return</span> <span class="nx">self</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span> 
+            <span class="o">};</span>
+        <span class="nx">t</span><span class="o">.</span><span class="nx">startDrag</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+                <span class="nx">self</span><span class="o">.</span><span class="nx">_slideStart</span><span class="o">();</span> 
+            <span class="o">};</span>
+        <span class="nx">t</span><span class="o">.</span><span class="nx">onDrag</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+                <span class="nx">self</span><span class="o">.</span><span class="nx">fireEvents</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span> 
+            <span class="o">};</span>
+        <span class="nx">t</span><span class="o">.</span><span class="nx">onMouseUp</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+                <span class="nx">self</span><span class="o">.</span><span class="nx">thumbMouseUp</span><span class="o">();</span> 
+            <span class="o">};</span>
 
     <span class="o">},</span>
 
@@ -392,17 +491,17 @@
 
         <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">.</span><span class="nx">_isRegion</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">deferredSetRegionValue</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">setRegionValue</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">deferredSetRegionValue</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">setRegionValue</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">deferredSetRegionValue</span><span class="o">);</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">deferredSetRegionValue</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">setRegionValue</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">setRegionValue</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">deferredSetValue</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">setValue</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">deferredSetValue</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">setValue</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">deferredSetValue</span><span class="o">);</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">deferredSetValue</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">setValue</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">setValue</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">},</span>
@@ -452,16 +551,23 @@
     <span class="o">},</span>
 
     <span class="c">/**</span>
-<span class="c">     * Handles mouseup event on the slider background</span>
+<span class="c">     * Handles mouseup event on the thumb</span>
 <span class="c">     * @method thumbMouseUp</span>
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="nx">thumbMouseUp</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;bg mouseup&quot;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;thumb mouseup&quot;</span><span class="o">);</span>
         <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">isLocked</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">moveComplete</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">endMove</span><span class="o">();</span>
         <span class="o">}</span>
 
+    <span class="o">},</span>
+
+    <span class="nx">onMouseUp</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;bg mouseup&quot;</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">backgroundEnabled</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">isLocked</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">moveComplete</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">endMove</span><span class="o">();</span>
+        <span class="o">}</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -481,6 +587,7 @@
 <span class="c">     */</span>
     <span class="nx">focus</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;focus&quot;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">valueChangeSource</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">SOURCE_UI_EVENT</span><span class="o">;</span>
 
         <span class="c">// Focus the background element if possible</span>
 <span class="c"></span>        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
@@ -501,7 +608,7 @@
         <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isLocked</span><span class="o">())</span> <span class="o">{</span>
             <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">onSlideStart</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_slideStart</span><span class="o">();</span>
             <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
         <span class="o">}</span>
     <span class="o">},</span>
@@ -574,14 +681,21 @@
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="nx">handleThumbChange</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span> 
-        <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">_isRegion</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">t</span><span class="o">.</span><span class="nx">onChange</span><span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">getXValue</span><span class="o">(),</span> <span class="nx">t</span><span class="o">.</span><span class="nx">getYValue</span><span class="o">());</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;change&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">x</span><span class="o">:</span> <span class="nx">t</span><span class="o">.</span><span class="nx">getXValue</span><span class="o">(),</span> <span class="nx">y</span><span class="o">:</span> <span class="nx">t</span><span class="o">.</span><span class="nx">getYValue</span><span class="o">()</span> <span class="o">}</span> <span class="o">);</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="nx">t</span><span class="o">.</span><span class="nx">onChange</span><span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">getValue</span><span class="o">());</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;change&quot;</span><span class="o">,</span> <span class="nx">t</span><span class="o">.</span><span class="nx">getValue</span><span class="o">());</span>
-        <span class="o">}</span>
+        <span class="c">/*</span>
+<span class="c">        var t = this.thumb;</span>
+<span class="c">        if (t._isRegion) {</span>
+<span class="c"></span>
+<span class="c">            if (!this._silent) {</span>
+<span class="c">                t.onChange(t.getXValue(), t.getYValue());</span>
+<span class="c">                this.fireEvent(&quot;change&quot;, { x: t.getXValue(), y: t.getYValue() } );</span>
+<span class="c">            }</span>
+<span class="c">        } else {</span>
+<span class="c">            if (!this._silent) {</span>
+<span class="c">                t.onChange(t.getValue());</span>
+<span class="c">                this.fireEvent(&quot;change&quot;, t.getValue());</span>
+<span class="c">            }</span>
+<span class="c">        }</span>
+<span class="c">        */</span>
 
     <span class="o">},</span>
 
@@ -593,10 +707,14 @@
 <span class="c">     * @param {boolean} skipAnim set to true to disable the animation</span>
 <span class="c">     * for this move action (but not others).</span>
 <span class="c">     * @param {boolean} force ignore the locked setting and set value anyway</span>
+<span class="c">     * @param {boolean} silent when true, do not fire events</span>
 <span class="c">     * @return {boolean} true if the move was performed, false if it failed</span>
 <span class="c">     */</span>
-    <span class="nx">setValue</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">newOffset</span><span class="o">,</span> <span class="nx">skipAnim</span><span class="o">,</span> <span class="nx">force</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">setValue</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">newOffset</span><span class="o">,</span> <span class="nx">skipAnim</span><span class="o">,</span> <span class="nx">force</span><span class="o">,</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;setValue &quot;</span> <span class="o">+</span> <span class="nx">newOffset</span><span class="o">);</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">_silent</span> <span class="o">=</span> <span class="nx">silent</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">valueChangeSource</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">SOURCE_SET_VALUE</span><span class="o">;</span>
 
         <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">.</span><span class="nx">available</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;defer setValue until after onAvailble&quot;</span><span class="o">);</span>
@@ -615,17 +733,18 @@
         <span class="o">}</span>
 
         <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">;</span>
+        <span class="nx">t</span><span class="o">.</span><span class="nx">lastOffset</span> <span class="o">=</span> <span class="o">[</span><span class="nx">newOffset</span><span class="o">,</span> <span class="nx">newOffset</span><span class="o">];</span>
         <span class="k">var</span> <span class="nx">newX</span><span class="o">,</span> <span class="nx">newY</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">verifyOffset</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">_isRegion</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
         <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">_isHoriz</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">onSlideStart</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_slideStart</span><span class="o">();</span>
             <span class="c">// this.fireEvent(&quot;slideStart&quot;);</span>
 <span class="c"></span>            <span class="nx">newX</span> <span class="o">=</span> <span class="nx">t</span><span class="o">.</span><span class="nx">initPageX</span> <span class="o">+</span> <span class="nx">newOffset</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumbCenterPoint</span><span class="o">.</span><span class="nx">x</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">moveThumb</span><span class="o">(</span><span class="nx">newX</span><span class="o">,</span> <span class="nx">t</span><span class="o">.</span><span class="nx">initPageY</span><span class="o">,</span> <span class="nx">skipAnim</span><span class="o">);</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">onSlideStart</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_slideStart</span><span class="o">();</span>
             <span class="c">// this.fireEvent(&quot;slideStart&quot;);</span>
 <span class="c"></span>            <span class="nx">newY</span> <span class="o">=</span> <span class="nx">t</span><span class="o">.</span><span class="nx">initPageY</span> <span class="o">+</span> <span class="nx">newOffset</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumbCenterPoint</span><span class="o">.</span><span class="nx">y</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">moveThumb</span><span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">initPageX</span><span class="o">,</span> <span class="nx">newY</span><span class="o">,</span> <span class="nx">skipAnim</span><span class="o">);</span>
@@ -644,9 +763,14 @@
 <span class="c">     * @param {boolean} skipAnim set to true to disable the animation</span>
 <span class="c">     * for this move action (but not others).</span>
 <span class="c">     * @param {boolean} force ignore the locked setting and set value anyway</span>
+<span class="c">     * @param {boolean} silent when true, do not fire events</span>
 <span class="c">     * @return {boolean} true if the move was performed, false if it failed</span>
 <span class="c">     */</span>
-    <span class="nx">setRegionValue</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">newOffset</span><span class="o">,</span> <span class="nx">newOffset2</span><span class="o">,</span> <span class="nx">skipAnim</span><span class="o">,</span> <span class="nx">force</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">setRegionValue</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">newOffset</span><span class="o">,</span> <span class="nx">newOffset2</span><span class="o">,</span> <span class="nx">skipAnim</span><span class="o">,</span> <span class="nx">force</span><span class="o">,</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">_silent</span> <span class="o">=</span> <span class="nx">silent</span><span class="o">;</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">valueChangeSource</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">SOURCE_SET_VALUE</span><span class="o">;</span>
 
         <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">.</span><span class="nx">available</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;defer setRegionValue until after onAvailble&quot;</span><span class="o">);</span>
@@ -665,8 +789,10 @@
         <span class="o">}</span>
 
         <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">;</span>
+        <span class="nx">t</span><span class="o">.</span><span class="nx">lastOffset</span> <span class="o">=</span> <span class="o">[</span><span class="nx">newOffset</span><span class="o">,</span> <span class="nx">newOffset2</span><span class="o">];</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">verifyOffset</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">_isRegion</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">onSlideStart</span><span class="o">();</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_slideStart</span><span class="o">();</span>
             <span class="k">var</span> <span class="nx">newX</span> <span class="o">=</span> <span class="nx">t</span><span class="o">.</span><span class="nx">initPageX</span> <span class="o">+</span> <span class="nx">newOffset</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumbCenterPoint</span><span class="o">.</span><span class="nx">x</span><span class="o">;</span>
             <span class="k">var</span> <span class="nx">newY</span> <span class="o">=</span> <span class="nx">t</span><span class="o">.</span><span class="nx">initPageY</span> <span class="o">+</span> <span class="nx">newOffset2</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumbCenterPoint</span><span class="o">.</span><span class="nx">y</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">moveThumb</span><span class="o">(</span><span class="nx">newX</span><span class="o">,</span> <span class="nx">newY</span><span class="o">,</span> <span class="nx">skipAnim</span><span class="o">);</span>
@@ -686,16 +812,30 @@
 <span class="c">     */</span>
     <span class="nx">verifyOffset</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">checkPos</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">newPos</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">());</span>
-        <span class="c">//var newPos = [this.initPageX, this.initPageY];</span>
-<span class="c"></span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;newPos: &quot;</span> <span class="o">+</span> <span class="nx">newPos</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">xy</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">()),</span>
+            <span class="nx">t</span>  <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">;</span>
 
-        <span class="k">if</span> <span class="o">(</span><span class="nx">newPos</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">!=</span> <span class="k">this</span><span class="o">.</span><span class="nx">baselinePos</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">||</span> <span class="nx">newPos</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">!=</span> <span class="k">this</span><span class="o">.</span><span class="nx">baselinePos</span><span class="o">[</span><span class="m">1</span><span class="o">])</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;background moved, resetting constraints&quot;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">.</span><span class="nx">resetConstraints</span><span class="o">();</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">baselinePos</span> <span class="o">=</span> <span class="nx">newPos</span><span class="o">;</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">xy</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;newPos: &quot;</span> <span class="o">+</span> <span class="nx">xy</span><span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">xy</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">!=</span> <span class="k">this</span><span class="o">.</span><span class="nx">baselinePos</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">||</span> <span class="nx">xy</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">!=</span> <span class="k">this</span><span class="o">.</span><span class="nx">baselinePos</span><span class="o">[</span><span class="m">1</span><span class="o">])</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;background moved, resetting constraints&quot;</span><span class="o">);</span>
+
+                <span class="c">// Reset background</span>
+<span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">setInitPosition</span><span class="o">();</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">baselinePos</span> <span class="o">=</span> <span class="nx">xy</span><span class="o">;</span>
+
+                <span class="c">// Reset thumb</span>
+<span class="c"></span>                <span class="nx">t</span><span class="o">.</span><span class="nx">initPageX</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">initPageX</span> <span class="o">+</span> <span class="nx">t</span><span class="o">.</span><span class="nx">startOffset</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+                <span class="nx">t</span><span class="o">.</span><span class="nx">initPageY</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">initPageY</span> <span class="o">+</span> <span class="nx">t</span><span class="o">.</span><span class="nx">startOffset</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+                <span class="c">//t.deltaSetXY = [-this.initPageX,-this.initPageY];</span>
+<span class="c"></span>                <span class="nx">t</span><span class="o">.</span><span class="nx">deltaSetXY</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                <span class="c">//this.resetConstraints();</span>
+<span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">resetThumbConstraints</span><span class="o">();</span>
+
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
         <span class="o">}</span>
 
         <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
@@ -709,12 +849,12 @@
 <span class="c">     * @param {int} x the X coordinate of the click</span>
 <span class="c">     * @param {int} y the Y coordinate of the click</span>
 <span class="c">     * @param {boolean} skipAnim don&#39;t animate if the move happend onDrag</span>
+<span class="c">     * @param {boolean} midMove set to true if this is not terminating</span>
+<span class="c">     * the slider movement</span>
 <span class="c">     * @private</span>
 <span class="c">     */</span>
-    <span class="nx">moveThumb</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">,</span> <span class="nx">skipAnim</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">moveThumb</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">,</span> <span class="nx">skipAnim</span><span class="o">,</span> <span class="nx">midMove</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="c">// this.logger.log(&quot;move thumb&quot;, &quot;warn&quot;);</span>
-<span class="c"></span>
         <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">;</span>
         <span class="k">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
 
@@ -725,23 +865,21 @@
 
         <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;move thumb, x: &quot;</span>  <span class="o">+</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot;, y: &quot;</span> <span class="o">+</span> <span class="nx">y</span><span class="o">);</span>
 
-        <span class="c">// this.verifyOffset();</span>
-<span class="c"></span>
         <span class="nx">t</span><span class="o">.</span><span class="nx">setDelta</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">thumbCenterPoint</span><span class="o">.</span><span class="nx">x</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumbCenterPoint</span><span class="o">.</span><span class="nx">y</span><span class="o">);</span>
 
         <span class="k">var</span> <span class="nx">_p</span> <span class="o">=</span> <span class="nx">t</span><span class="o">.</span><span class="nx">getTargetCoord</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">);</span>
-        <span class="k">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="o">[</span><span class="nx">_p</span><span class="o">.</span><span class="nx">x</span><span class="o">,</span> <span class="nx">_p</span><span class="o">.</span><span class="nx">y</span><span class="o">];</span>
+        <span class="k">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="o">[</span><span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="nx">_p</span><span class="o">.</span><span class="nx">x</span><span class="o">),</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="nx">_p</span><span class="o">.</span><span class="nx">y</span><span class="o">)];</span>
 
+        <span class="k">this</span><span class="o">.</span><span class="nx">_slideStart</span><span class="o">();</span>
 
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;slideStart&quot;</span><span class="o">);</span>
-
-        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">animate</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Slider</span><span class="o">.</span><span class="nx">ANIM_AVAIL</span> <span class="o">&amp;&amp;</span> <span class="nx">t</span><span class="o">.</span><span class="nx">_graduated</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">skipAnim</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">animate</span> <span class="o">&amp;&amp;</span> <span class="nx">t</span><span class="o">.</span><span class="nx">_graduated</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">skipAnim</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;graduated&quot;</span><span class="o">);</span>
             <span class="c">// this.thumb._animating = true;</span>
 <span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">lock</span><span class="o">();</span>
 
             <span class="c">// cache the current thumb pos</span>
 <span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">.</span><span class="nx">getEl</span><span class="o">());</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span> <span class="o">=</span> <span class="o">[</span><span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span><span class="o">[</span><span class="m">0</span><span class="o">]),</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span><span class="o">[</span><span class="m">1</span><span class="o">])];</span>
 
             <span class="nx">setTimeout</span><span class="o">(</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="nx">self</span><span class="o">.</span><span class="nx">moveOneTick</span><span class="o">(</span><span class="nx">p</span><span class="o">);</span> <span class="o">},</span> <span class="k">this</span><span class="o">.</span><span class="nx">tickPause</span> <span class="o">);</span>
 
@@ -756,12 +894,42 @@
                     <span class="k">this</span><span class="o">.</span><span class="nx">animationDuration</span><span class="o">,</span> 
                     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Easing</span><span class="o">.</span><span class="nx">easeOut</span> <span class="o">);</span>
 
-            <span class="nx">oAnim</span><span class="o">.</span><span class="nx">onComplete</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="nx">self</span><span class="o">.</span><span class="nx">endMove</span><span class="o">();</span> <span class="o">}</span> <span class="o">);</span>
+            <span class="nx">oAnim</span><span class="o">.</span><span class="nx">onComplete</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+                    
+                    <span class="nx">self</span><span class="o">.</span><span class="nx">endMove</span><span class="o">();</span> 
+                <span class="o">}</span> <span class="o">);</span>
             <span class="nx">oAnim</span><span class="o">.</span><span class="nx">animate</span><span class="o">();</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
             <span class="nx">t</span><span class="o">.</span><span class="nx">setDragElPos</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">);</span>
             <span class="c">// this.fireEvents();</span>
-<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">endMove</span><span class="o">();</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(!</span><span class="nx">midMove</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">endMove</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="nx">_slideStart</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_sliding</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_silent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">onSlideStart</span><span class="o">();</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;slideStart&quot;</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_sliding</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+
+    <span class="nx">_slideEnd</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_sliding</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">moveComplete</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// Reset state before firing slideEnd</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">silent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_silent</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_sliding</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_silent</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">moveComplete</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">onSlideEnd</span><span class="o">();</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;slideEnd&quot;</span><span class="o">);</span>
+            <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">},</span>
 
@@ -788,13 +956,17 @@
 <span class="c"></span>        <span class="c">// var thresh = 10;</span>
 <span class="c"></span>        <span class="c">// var thresh = t.tickSize + (Math.floor(t.tickSize/2));</span>
 <span class="c"></span>
-        <span class="k">var</span> <span class="nx">nextCoord</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">nextCoord</span> <span class="o">=</span> <span class="kc">null</span><span class="o">,</span>
+            <span class="nx">tmpX</span><span class="o">,</span> <span class="nx">tmpY</span><span class="o">;</span>
 
         <span class="k">if</span> <span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">_isRegion</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">nextCoord</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getNextX</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span><span class="o">,</span> <span class="nx">finalCoord</span><span class="o">);</span>
-            <span class="k">var</span> <span class="nx">tmpX</span> <span class="o">=</span> <span class="o">(</span><span class="nx">nextCoord</span><span class="o">)</span> <span class="o">?</span> <span class="nx">nextCoord</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-            <span class="nx">nextCoord</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getNextY</span><span class="o">([</span><span class="nx">tmpX</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span><span class="o">[</span><span class="m">1</span><span class="o">]],</span> <span class="nx">finalCoord</span><span class="o">);</span>
+            <span class="nx">tmpX</span> <span class="o">=</span> <span class="o">(</span><span class="nx">nextCoord</span> <span class="o">!==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="nx">nextCoord</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+            <span class="nx">nextCoord</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getNextY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span><span class="o">,</span> <span class="nx">finalCoord</span><span class="o">);</span>
+            <span class="nx">tmpY</span> <span class="o">=</span> <span class="o">(</span><span class="nx">nextCoord</span> <span class="o">!==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="nx">nextCoord</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
 
+            <span class="nx">nextCoord</span> <span class="o">=</span> <span class="nx">tmpX</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">||</span> <span class="nx">tmpY</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">?</span>
+                <span class="o">[</span> <span class="nx">tmpX</span><span class="o">,</span> <span class="nx">tmpY</span> <span class="o">]</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
         <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">_isHoriz</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">nextCoord</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getNextX</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">curCoord</span><span class="o">,</span> <span class="nx">finalCoord</span><span class="o">);</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
@@ -818,7 +990,7 @@
 <span class="c"></span>            <span class="c">// YAHOO.util.Dom.setStyle(el, &quot;left&quot;, (nextCoord[0] + this.thumb.deltaSetXY[0]) + &quot;px&quot;);</span>
 <span class="c"></span>            <span class="c">// YAHOO.util.Dom.setStyle(el, &quot;top&quot;,  (nextCoord[1] + this.thumb.deltaSetXY[1]) + &quot;px&quot;);</span>
 <span class="c"></span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">.</span><span class="nx">alignElWithMouse</span><span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">getEl</span><span class="o">(),</span> <span class="nx">nextCoord</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="nx">nextCoord</span><span class="o">[</span><span class="m">1</span><span class="o">]);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">.</span><span class="nx">alignElWithMouse</span><span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">getEl</span><span class="o">(),</span> <span class="nx">nextCoord</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumbCenterPoint</span><span class="o">.</span><span class="nx">x</span><span class="o">,</span> <span class="nx">nextCoord</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumbCenterPoint</span><span class="o">.</span><span class="nx">y</span><span class="o">);</span>
             
             <span class="c">// check if we are in the final position, if not make a recursive call</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(!(</span><span class="nx">nextCoord</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">==</span> <span class="nx">finalCoord</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nx">nextCoord</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">==</span> <span class="nx">finalCoord</span><span class="o">[</span><span class="m">1</span><span class="o">]))</span> <span class="o">{</span>
@@ -893,10 +1065,14 @@
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="nx">b4MouseDown</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">.</span><span class="nx">autoOffset</span><span class="o">();</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">.</span><span class="nx">resetConstraints</span><span class="o">();</span>
-    <span class="o">},</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">backgroundEnabled</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
 
+        <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">.</span><span class="nx">autoOffset</span><span class="o">();</span>
+        <span class="c">//this.thumb.resetConstraints();</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">resetThumbConstraints</span><span class="o">();</span>
+    <span class="o">},</span>
 
     <span class="c">/**</span>
 <span class="c">     * Handles the mousedown event for the slider background</span>
@@ -907,15 +1083,16 @@
         <span class="c">// this.resetConstraints(true);</span>
 <span class="c"></span>        <span class="c">// this.thumb.resetConstraints(true);</span>
 <span class="c"></span>
-        <span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">isLocked</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">backgroundEnabled</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
-            <span class="k">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;bg mousedown: &quot;</span> <span class="o">+</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nx">y</span><span class="o">);</span>
-
-            <span class="k">this</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">moveThumb</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">backgroundEnabled</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">isLocked</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
         <span class="o">}</span>
-        
+
+        <span class="k">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;bg mousedown: &quot;</span> <span class="o">+</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nx">y</span><span class="o">);</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">moveThumb</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">);</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -924,10 +1101,11 @@
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="nx">onDrag</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">isLocked</span><span class="o">())</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">backgroundEnabled</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">isLocked</span><span class="o">())</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
             <span class="k">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">moveThumb</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">moveThumb</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvents</span><span class="o">();</span>
         <span class="o">}</span>
     <span class="o">},</span>
 
@@ -941,6 +1119,20 @@
 <span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">unlock</span><span class="o">();</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">moveComplete</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">fireEvents</span><span class="o">();</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Resets the X and Y contraints for the thumb.  Used in lieu of the thumb</span>
+<span class="c">     * instance&#39;s inherited resetConstraints because some logic was not</span>
+<span class="c">     * applicable.</span>
+<span class="c">     * @method resetThumbConstraints</span>
+<span class="c">     * @protected</span>
+<span class="c">     */</span>
+    <span class="nx">resetThumbConstraints</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">;</span>
+
+        <span class="nx">t</span><span class="o">.</span><span class="nx">setXConstraint</span><span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">leftConstraint</span><span class="o">,</span> <span class="nx">t</span><span class="o">.</span><span class="nx">rightConstraint</span><span class="o">,</span> <span class="nx">t</span><span class="o">.</span><span class="nx">xTickSize</span><span class="o">);</span>
+        <span class="nx">t</span><span class="o">.</span><span class="nx">setYConstraint</span><span class="o">(</span><span class="nx">t</span><span class="o">.</span><span class="nx">topConstraint</span><span class="o">,</span> <span class="nx">t</span><span class="o">.</span><span class="nx">bottomConstraint</span><span class="o">,</span> <span class="nx">t</span><span class="o">.</span><span class="nx">xTickSize</span><span class="o">);</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -972,8 +1164,10 @@
 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">newX</span> <span class="o">!=</span> <span class="k">this</span><span class="o">.</span><span class="nx">previousX</span> <span class="o">||</span> <span class="nx">newY</span> <span class="o">!=</span> <span class="k">this</span><span class="o">.</span><span class="nx">previousY</span><span class="o">)</span> <span class="o">{</span>
                     <span class="c">// this.logger.log(&quot;Firing onchange&quot;);</span>
-<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">onChange</span><span class="o">(</span><span class="nx">newX</span><span class="o">,</span> <span class="nx">newY</span><span class="o">);</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;change&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">x</span><span class="o">:</span> <span class="nx">newX</span><span class="o">,</span> <span class="nx">y</span><span class="o">:</span> <span class="nx">newY</span> <span class="o">});</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_silent</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">onChange</span><span class="o">(</span><span class="nx">newX</span><span class="o">,</span> <span class="nx">newY</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;change&quot;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">x</span><span class="o">:</span> <span class="nx">newX</span><span class="o">,</span> <span class="nx">y</span><span class="o">:</span> <span class="nx">newY</span> <span class="o">});</span>
+                    <span class="o">}</span>
                 <span class="o">}</span>
 
                 <span class="k">this</span><span class="o">.</span><span class="nx">previousX</span> <span class="o">=</span> <span class="nx">newX</span><span class="o">;</span>
@@ -983,17 +1177,15 @@
                 <span class="k">var</span> <span class="nx">newVal</span> <span class="o">=</span> <span class="nx">t</span><span class="o">.</span><span class="nx">getValue</span><span class="o">();</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">newVal</span> <span class="o">!=</span> <span class="k">this</span><span class="o">.</span><span class="nx">previousVal</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Firing onchange: &quot;</span> <span class="o">+</span> <span class="nx">newVal</span><span class="o">);</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">onChange</span><span class="o">(</span> <span class="nx">newVal</span> <span class="o">);</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;change&quot;</span><span class="o">,</span> <span class="nx">newVal</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_silent</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">onChange</span><span class="o">(</span> <span class="nx">newVal</span> <span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;change&quot;</span><span class="o">,</span> <span class="nx">newVal</span><span class="o">);</span>
+                    <span class="o">}</span>
                 <span class="o">}</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">previousVal</span> <span class="o">=</span> <span class="nx">newVal</span><span class="o">;</span>
             <span class="o">}</span>
 
-            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">moveComplete</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">onSlideEnd</span><span class="o">();</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;slideEnd&quot;</span><span class="o">);</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">moveComplete</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_slideEnd</span><span class="o">();</span>
 
         <span class="o">}</span>
     <span class="o">},</span>
@@ -1017,59 +1209,64 @@
 		<div class="yui-b">
             <div class="nav">
 
-                    <div class="module">
+                    <div id="moduleList" class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
-
-                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
-
-                                <li class=""><a href="module_button.html">button</a></li>
-
-                                <li class=""><a href="module_calendar.html">calendar</a></li>
-
-                                <li class=""><a href="module_connection.html">connection</a></li>
-
-                                <li class=""><a href="module_container.html">container</a></li>
-
-                                <li class=""><a href="module_dom.html">dom</a></li>
-
-                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
-
-                                <li class=""><a href="module_element.html">element</a></li>
-
-                                <li class=""><a href="module_event.html">event</a></li>
-
-                                <li class=""><a href="module_history.html">history</a></li>
-
-                                <li class=""><a href="module_logger.html">logger</a></li>
-
-                                <li class=""><a href="module_menu.html">menu</a></li>
-
-                                <li class="selected"><a href="module_slider.html">slider</a></li>
-
-                                <li class=""><a href="module_tabview.html">tabview</a></li>
-
-                                <li class=""><a href="module_treeview.html">treeview</a></li>
-
-                                <li class=""><a href="module_yahoo.html">yahoo</a></li>
+                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                                <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
+                                <li class=""><a href="module_button.html" title="button">button</a></li>
+                                <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
+                                <li class=""><a href="module_carousel.html" title="carousel">carousel</a></li>
+                                <li class=""><a href="module_charts.html" title="charts">charts</a></li>
+                                <li class=""><a href="module_colorpicker.html" title="colorpicker">colorpicker</a></li>
+                                <li class=""><a href="module_connection.html" title="connection">connection</a></li>
+                                <li class=""><a href="module_container.html" title="container">container</a></li>
+                                <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
+                                <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
+                                <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_dom.html" title="dom">dom</a></li>
+                                <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
+                                <li class=""><a href="module_editor.html" title="editor">editor</a></li>
+                                <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_get.html" title="get">get</a></li>
+                                <li class=""><a href="module_history.html" title="history">history</a></li>
+                                <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
+                                <li class=""><a href="module_imageloader.html" title="imageloader">imageloader</a></li>
+                                <li class=""><a href="module_json.html" title="json">json</a></li>
+                                <li class=""><a href="module_layout.html" title="layout">layout</a></li>
+                                <li class=""><a href="module_logger.html" title="logger">logger</a></li>
+                                <li class=""><a href="module_menu.html" title="menu">menu</a></li>
+                                <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
+                                <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
+                                <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_resize.html" title="resize">resize</a></li>
+                                <li class=""><a href="module_selector.html" title="selector">selector</a></li>
+                                <li class="selected"><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
+                                <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
+                                <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>
+                                <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
+                                <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
+                                <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
                         </ul>
                     </div>
 
-                    <div class="module">
+                    <div id="classList" class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li class=""><a href="YAHOO.widget.Slider.html">YAHOO.widget.Slider</a></li>
-                                <li class=""><a href="YAHOO.widget.SliderThumb.html">YAHOO.widget.SliderThumb</a></li>
+                                <li class=""><a href="YAHOO.widget.DualSlider.html" title="YAHOO.widget.DualSlider">YAHOO.widget.DualSlider</a></li>
+                                <li class=""><a href="YAHOO.widget.Slider.html" title="YAHOO.widget.Slider">YAHOO.widget.Slider</a></li>
+                                <li class=""><a href="YAHOO.widget.SliderThumb.html" title="YAHOO.widget.SliderThumb">YAHOO.widget.SliderThumb</a></li>
                         </ul>
                     </div>
 
-                    <div class="module">
+                    <div id="fileList" class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li class="selected"><a href="Slider.js.html">Slider.js</a></li>
-                                <li class=""><a href="SliderThumb.js.html">SliderThumb.js</a></li>
+                                <li class=""><a href="DualSlider.js.html" title="DualSlider.js">DualSlider.js</a></li>
+                                <li class="selected"><a href="Slider.js.html" title="Slider.js">Slider.js</a></li>
+                                <li class=""><a href="SliderThumb.js.html" title="SliderThumb.js">SliderThumb.js</a></li>
                         </ul>
                     </div>
 
@@ -1082,8 +1279,11 @@
 	</div>
 	<div id="ft">
         <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
 	</div>
 </div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.DualSlider", "name": "activeSlider", "url": "YAHOO.widget.DualSlider.html#property_activeSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "animate", "url": "YAHOO.widget.Slider.html#property_animate", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "animationDuration", "url": "YAHOO.widget.Slider.html#property_animationDuration", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "b4MouseDown", "url": "YAHOO.widget.Slider.html#method_b4MouseDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "backgroundEnabled", "url": "YAHOO.widget.Slider.html#property_backgroundEnabled", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "baselinePos", "url": "YAHOO.widget.Slider.html#property_baselinePos", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "change", "url": "YAHOO.widget.Slider.html#event_change", "type": "event"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "change", "url": "YAHOO.widget.DualSlider.html#event_change", "type": "event"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_cleanEvent", "url": "YAHOO.widget.DualSlider.html#method__cleanEvent", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "clearTicks", "url": "YAHOO.widget.SliderThumb.html#method_clearTicks", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "dragOnly", "url": "YAHOO.widget.Slider.html#property_dragOnly", "type": "property"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "dragOnly", "url": "YAHOO.widget.SliderThumb.html#property_dragOnly", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "enableKeys", "url": "YAHOO.widget.Slider.html#property_enableKeys", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "endMove", "url": "YAHOO.widget.Slider.html#method_endMove", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "fireEvents", "url": "YAHOO.widget.Slider.html#method_fireEvents", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "focus", "url": "YAHOO.widget.Slider.html#method_focus", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_getNextX", "url": "YAHOO.widget.Slider.html#method__getNextX", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_getNextY", "url": "YAHOO.widget.Slider.html#method__getNextY", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "getOffsetFromParent", "url": "YAHOO.widget.SliderThumb.html#method_getOffsetFromParent", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getThumb", "url": "YAHOO.widget.Slider.html#method_getThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getValue", "url": "YAHOO.widget.Slider.html#method_getValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "getValue", "url": "YAHOO.widget.SliderThumb.html#method_getValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getXValue", "url": "YAHOO.widget.Slider.html#method_getXValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "getXValue", "url": "YAHOO.widget.SliderThumb.html#method_getXValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getYValue", "url": "YAHOO.widget.Slider.html#method_getYValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "getYValue", "url": "YAHOO.widget.SliderThumb.html#method_getYValue", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "_graduated", "url": "YAHOO.widget.SliderThumb.html#property__graduated", "type": "property"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleDrag", "url": "YAHOO.widget.DualSlider.html#method__handleDrag", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "handleKeyDown", "url": "YAHOO.widget.Slider.html#method_handleKeyDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "handleKeyPress", "url": "YAHOO.widget.Slider.html#method_handleKeyPress", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleMaxChange", "url": "YAHOO.widget.DualSlider.html#method__handleMaxChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleMinChange", "url": "YAHOO.widget.DualSlider.html#method__handleMinChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "handleMouseDown", "url": "YAHOO.widget.DualSlider.html#method_handleMouseDown", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleSlideEnd", "url": "YAHOO.widget.DualSlider.html#method__handleSlideEnd", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_handleSlideStart", "url": "YAHOO.widget.DualSlider.html#method__handleSlideStart", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "handleThumbChange", "url": "YAHOO.widget.Slider.html#method_handleThumbChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "initSlider", "url": "YAHOO.widget.Slider.html#method_initSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "initSlider", "url": "YAHOO.widget.SliderThumb.html#method_initSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "initThumb", "url": "YAHOO.widget.Slider.html#method_initThumb", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "_isHoriz", "url": "YAHOO.widget.SliderThumb.html#property__isHoriz", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "isHoriz", "url": "YAHOO.widget.DualSlider.html#property_isHoriz", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "isTarget", "url": "YAHOO.widget.Slider.html#property_isTarget", "type": "property"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "isTarget", "url": "YAHOO.widget.SliderThumb.html#property_isTarget", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "keyIncrement", "url": "YAHOO.widget.Slider.html#property_keyIncrement", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "lastOffset", "url": "YAHOO.widget.Slider.html#property_lastOffset", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "lock", "url": "YAHOO.widget.Slider.html#method_lock", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "maintainOffset", "url": "YAHOO.widget.SliderThumb.html#property_maintainOffset", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "maxSlider", "url": "YAHOO.widget.DualSlider.html#property_maxSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "maxVal", "url": "YAHOO.widget.DualSlider.html#property_maxVal", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "minRange", "url": "YAHOO.widget.DualSlider.html#property_minRange", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "minSlider", "url": "YAHOO.widget.DualSlider.html#property_minSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "minVal", "url": "YAHOO.widget.DualSlider.html#property_minVal", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "moveComplete", "url": "YAHOO.widget.Slider.html#property_moveComplete", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "moveOneTick", "url": "YAHOO.widget.Slider.html#method_moveOneTick", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "moveThumb", "url": "YAHOO.widget.Slider.html#method_moveThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onAvailable", "url": "YAHOO.widget.Slider.html#method_onAvailable", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onChange", "url": "YAHOO.widget.Slider.html#method_onChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "onChange", "url": "YAHOO.widget.SliderThumb.html#method_onChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "onDrag", "url": "YAHOO.widget.Slider.html#method_onDrag", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "_oneTimeCallback", "url": "YAHOO.widget.DualSlider.html#method__oneTimeCallback", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "onMouseDown", "url": "YAHOO.widget.Slider.html#method_onMouseDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onSliderEnd", "url": "YAHOO.widget.Slider.html#method_onSliderEnd", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onSlideStart", "url": "YAHOO.widget.Slider.html#method_onSlideStart", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "parentElId", "url": "YAHOO.widget.SliderThumb.html#property_parentElId", "type": "property"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "_prevVal", "url": "YAHOO.widget.SliderThumb.html#property__prevVal", "type": "property"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "ready", "url": "YAHOO.widget.DualSlider.html#event_ready", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "resetThumbConstraints", "url": "YAHOO.widget.Slider.html#method_resetThumbConstraints", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "scroll", "url": "YAHOO.widget.SliderThumb.html#property_scroll", "type": "property"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "selectActiveSlider", "url": "YAHOO.widget.DualSlider.html#method_selectActiveSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "setMaxValue", "url": "YAHOO.widget.DualSlider.html#method_setMaxValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "setMinValue", "url": "YAHOO.widget.DualSlider.html#method_setMinValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setRegionValue", "url": "YAHOO.widget.Slider.html#method_setRegionValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setStartSliderState", "url": "YAHOO.widget.Slider.html#method_setStartSliderState", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setThumbCenterPoint", "url": "YAHOO.widget.Slider.html#method_setThumbCenterPoint", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setValue", "url": "YAHOO.widget.Slider.html#method_setValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "setValues", "url": "YAHOO.widget.DualSlider.html#method_setValues", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_silent", "url": "YAHOO.widget.Slider.html#property__silent", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "slideEnd", "url": "YAHOO.widget.Slider.html#event_slideEnd", "type": "event"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "slideEnd", "url": "YAHOO.widget.DualSlider.html#event_slideEnd", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "slideStart", "url": "YAHOO.widget.Slider.html#event_slideStart", "type": "event"}, {"access": "", "host": "YAHOO.widget.DualSlider", "name": "slideStart", "url": "YAHOO.widget.DualSlider.html#event_slideStart", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "SOURCE_SET_VALUE", "url": "YAHOO.widget.Slider.html#property_SOURCE_SET_VALUE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "SOURCE_UI_EVENT", "url": "YAHOO.widget.Slider.html#property_SOURCE_UI_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "startOffset", "url": "YAHOO.widget.SliderThumb.html#property_startOffset", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "thumb", "url": "YAHOO.widget.Slider.html#property_thumb", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "thumbCenterPoint", "url": "YAHOO.widget.Slider.html#property_thumbCenterPoint", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "thumbMouseUp", "url": "YAHOO.widget.Slider.html#method_thumbMouseUp", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "tickPause", "url": "YAHOO.widget.Slider.html#property_tickPause", "type": "property"}, {"access": "private", "host": "YAHOO.widget.SliderThumb", "name": "tickSize", "url": "YAHOO.widget.SliderThumb.html#property_tickSize", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "toString", "url": "YAHOO.widget.Slider.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.SliderThumb", "name": "toString", "url": "YAHOO.widget.SliderThumb.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "type", "url": "YAHOO.widget.Slider.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "unlock", "url": "YAHOO.widget.Slider.html#method_unlock", "type": "method"}, {"access": "private", "host": "YAHOO.widget.DualSlider", "name": "updateValue", "url": "YAHOO.widget.DualSlider.html#method_updateValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "valueChangeSource", "url": "YAHOO.widget.Slider.html#property_valueChangeSource", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "verifyOffset", "url": "YAHOO.widget.Slider.html#method_verifyOffset", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.ANIM_AVAIL", "url": "YAHOO.widget.Slider.html#property_YAHOO.widget.Slider.ANIM_AVAIL", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizDualSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getHorizDualSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getHorizSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getSliderRegion", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getSliderRegion", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertDualSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getVertDualSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getVertSlider", "type": "method"}];
+</script>
 </body>
 </html>

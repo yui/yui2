@@ -1,29 +1,52 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
 <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: yahoo   YAHOO.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1231977734.26" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1231977734.26" />
+
+    <script type="text/javascript" src="assets/api-js?stamp=1231977734.26"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1231977734.26"></script>
 </head>
 
 <body id="yahoo-com">
-<div id="doc3" class="yui-t2">
 
+<div id="doc3" class="yui-t2">
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>YAHOO Global&nbsp; <span class="subtitle">2.2.0</span></h3>
-        <p>
-        <a href="./index.html">Yahoo! UI Library</a> 
-            &gt; <a href="./module_yahoo.html">yahoo</a>
+        <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
+        <h3>YAHOO Global&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
+            &gt; <a href="./module_yahoo.html" title="yahoo">yahoo</a>
                 
                  &gt; YAHOO.js (source view) 
-            </p>
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
 
                     <div id="srcout">
+                        <style>
+                            #doc3 .classopts { display:none; }
+                        </style>
 <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * The YAHOO object is the single global object used by YUI Library.  It</span>
 <span class="c"> * contains utility function for setting up namespaces, inheritance, and</span>
@@ -34,10 +57,11 @@
 <span class="c"> */</span>
 
 <span class="c">/**</span>
-<span class="c"> * YAHOO_config is not included part of the library.  Instead it is an object</span>
-<span class="c"> * that can be defined by the implementer immediately before including the</span>
-<span class="c"> * YUI library.  The properties included in this object will be used to</span>
-<span class="c"> * configure global properties needed as soon as the library begins to load.</span>
+<span class="c"> * YAHOO_config is not included as part of the library.  Instead it is an </span>
+<span class="c"> * object that can be defined by the implementer immediately before </span>
+<span class="c"> * including the YUI library.  The properties included in this object</span>
+<span class="c"> * will be used to configure global properties needed as soon as the </span>
+<span class="c"> * library begins to load.</span>
 <span class="c"> * @class YAHOO_config</span>
 <span class="c"> * @static</span>
 <span class="c"> */</span>
@@ -48,9 +72,39 @@
 <span class="c"> * information for the module. See &lt;a href=&quot;YAHOO.env.html#getVersion&quot;&gt;</span>
 <span class="c"> * YAHOO.env.getVersion&lt;/a&gt; for the description of the version data structure.</span>
 <span class="c"> * @property listener</span>
+<span class="c"> * @type Function</span>
 <span class="c"> * @static</span>
+<span class="c"> * @default undefined</span>
 <span class="c"> */</span>
-<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span> <span class="o">{</span>
+
+<span class="c">/**</span>
+<span class="c"> * Set to true if the library will be dynamically loaded after window.onload.</span>
+<span class="c"> * Defaults to false </span>
+<span class="c"> * @property injecting</span>
+<span class="c"> * @type boolean</span>
+<span class="c"> * @static</span>
+<span class="c"> * @default undefined</span>
+<span class="c"> */</span>
+
+<span class="c">/**</span>
+<span class="c"> * Instructs the yuiloader component to dynamically load yui components and</span>
+<span class="c"> * their dependencies.  See the yuiloader documentation for more information</span>
+<span class="c"> * about dynamic loading</span>
+<span class="c"> * @property load</span>
+<span class="c"> * @static</span>
+<span class="c"> * @default undefined</span>
+<span class="c"> * @see yuiloader</span>
+<span class="c"> */</span>
+
+<span class="c">/**</span>
+<span class="c"> * Forces the use of the supplied locale where applicable in the library</span>
+<span class="c"> * @property locale</span>
+<span class="c"> * @type string</span>
+<span class="c"> * @static</span>
+<span class="c"> * @default undefined</span>
+<span class="c"> */</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">||</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="o">)</span> <span class="o">{</span>
     <span class="c">/**</span>
 <span class="c">     * The YAHOO global namespace object.  If YAHOO is already defined, the</span>
 <span class="c">     * existing YAHOO object will not be overwritten so that defined</span>
@@ -77,6 +131,10 @@
 <span class="c"> * &lt;/pre&gt;</span>
 <span class="c"> * This fails because &quot;long&quot; is a future reserved word in ECMAScript</span>
 <span class="c"> *</span>
+<span class="c"> * For implementation code that uses YUI, do not create your components</span>
+<span class="c"> * in the namespaces created by the library.  defined by YUI -- create </span>
+<span class="c"> * your own (YAHOO.util, YAHOO.widget, YAHOO.lang, YAHOO.env)</span>
+<span class="c"> *</span>
 <span class="c"> * @method namespace</span>
 <span class="c"> * @static</span>
 <span class="c"> * @param  {String*} arguments 1-n namespaces to create </span>
@@ -85,7 +143,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">a</span><span class="o">=</span><span class="nx">arguments</span><span class="o">,</span> <span class="nx">o</span><span class="o">=</span><span class="kc">null</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">j</span><span class="o">,</span> <span class="nx">d</span><span class="o">;</span>
     <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">d</span><span class="o">=</span><span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;.&quot;</span><span class="o">);</span>
+        <span class="nx">d</span><span class="o">=(</span><span class="s2">&quot;&quot;</span><span class="o">+</span><span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]).</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;.&quot;</span><span class="o">);</span>
         <span class="nx">o</span><span class="o">=</span><span class="nx">YAHOO</span><span class="o">;</span>
 
         <span class="c">// YAHOO is implied, so it is ignored if it is included</span>
@@ -120,34 +178,6 @@
     <span class="o">}</span>
 <span class="o">};</span>
 
-
-<span class="c">/**</span>
-<span class="c"> * Initializes the global by creating the default namespaces and applying</span>
-<span class="c"> * any new configuration information that is detected.</span>
-<span class="c"> * @method init</span>
-<span class="c"> * @static</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">init</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">&quot;util&quot;</span><span class="o">,</span> <span class="s2">&quot;widget&quot;</span><span class="o">,</span> <span class="s2">&quot;example&quot;</span><span class="o">);</span>
-    <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO_config</span> <span class="o">!=</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">l</span><span class="o">=</span><span class="nx">YAHOO_config</span><span class="o">.</span><span class="nx">listener</span><span class="o">,</span><span class="nx">ls</span><span class="o">=</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">listeners</span><span class="o">,</span><span class="nx">unique</span><span class="o">=</span><span class="kc">true</span><span class="o">,</span><span class="nx">i</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">l</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c">// if YAHOO is loaded multiple times we need to check to see if</span>
-<span class="c"></span>            <span class="c">// this is a new config object.  If it is, add the new component</span>
-<span class="c"></span>            <span class="c">// load listener to the stack</span>
-<span class="c"></span>            <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">ls</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">ls</span><span class="o">[</span><span class="m">1</span><span class="o">]==</span><span class="nx">l</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">unique</span><span class="o">=</span><span class="kc">false</span><span class="o">;</span>
-                    <span class="k">break</span><span class="o">;</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-            <span class="k">if</span> <span class="o">(</span><span class="nx">unique</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">ls</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">l</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">};</span>
-
 <span class="c">/**</span>
 <span class="c"> * Registers a module with the YAHOO object</span>
 <span class="c"> * @method register</span>
@@ -163,19 +193,29 @@
 <span class="c"> *                             and a &quot;build&quot; property at minimum.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">register</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">name</span><span class="o">,</span> <span class="nx">mainClass</span><span class="o">,</span> <span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">var</span> <span class="nx">mods</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">modules</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">mods</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">modules</span><span class="o">,</span> <span class="nx">m</span><span class="o">,</span> <span class="nx">v</span><span class="o">,</span> <span class="nx">b</span><span class="o">,</span> <span class="nx">ls</span><span class="o">,</span> <span class="nx">i</span><span class="o">;</span>
+
     <span class="k">if</span> <span class="o">(!</span><span class="nx">mods</span><span class="o">[</span><span class="nx">name</span><span class="o">])</span> <span class="o">{</span>
-        <span class="nx">mods</span><span class="o">[</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span> <span class="nx">versions</span><span class="o">:[],</span> <span class="nx">builds</span><span class="o">:[]</span> <span class="o">};</span>
+        <span class="nx">mods</span><span class="o">[</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span> 
+            <span class="nx">versions</span><span class="o">:[],</span> 
+            <span class="nx">builds</span><span class="o">:[]</span> 
+        <span class="o">};</span>
     <span class="o">}</span>
-    <span class="k">var</span> <span class="nx">m</span><span class="o">=</span><span class="nx">mods</span><span class="o">[</span><span class="nx">name</span><span class="o">],</span><span class="nx">v</span><span class="o">=</span><span class="nx">data</span><span class="o">.</span><span class="nx">version</span><span class="o">,</span><span class="nx">b</span><span class="o">=</span><span class="nx">data</span><span class="o">.</span><span class="nx">build</span><span class="o">,</span><span class="nx">ls</span><span class="o">=</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">listeners</span><span class="o">;</span>
+
+    <span class="nx">m</span>  <span class="o">=</span> <span class="nx">mods</span><span class="o">[</span><span class="nx">name</span><span class="o">];</span>
+    <span class="nx">v</span>  <span class="o">=</span> <span class="nx">data</span><span class="o">.</span><span class="nx">version</span><span class="o">;</span>
+    <span class="nx">b</span>  <span class="o">=</span> <span class="nx">data</span><span class="o">.</span><span class="nx">build</span><span class="o">;</span>
+    <span class="nx">ls</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">listeners</span><span class="o">;</span>
+
     <span class="nx">m</span><span class="o">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="o">;</span>
     <span class="nx">m</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nx">v</span><span class="o">;</span>
     <span class="nx">m</span><span class="o">.</span><span class="nx">build</span> <span class="o">=</span> <span class="nx">b</span><span class="o">;</span>
     <span class="nx">m</span><span class="o">.</span><span class="nx">versions</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">v</span><span class="o">);</span>
     <span class="nx">m</span><span class="o">.</span><span class="nx">builds</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">b</span><span class="o">);</span>
     <span class="nx">m</span><span class="o">.</span><span class="nx">mainClass</span> <span class="o">=</span> <span class="nx">mainClass</span><span class="o">;</span>
+
     <span class="c">// fire the module load listeners</span>
-<span class="c"></span>    <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">ls</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>    <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">ls</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
         <span class="nx">ls</span><span class="o">[</span><span class="nx">i</span><span class="o">](</span><span class="nx">m</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="c">// label the main class</span>
@@ -186,269 +226,6 @@
         <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;mainClass is undefined for module &quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">};</span>
-
-<span class="c">/**</span>
-<span class="c"> * YAHOO.env is used to keep track of what is known about the YUI library and</span>
-<span class="c"> * the browsing environment</span>
-<span class="c"> * @class YAHOO.env</span>
-<span class="c"> * @type Object</span>
-<span class="c"> * @static</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span> <span class="o">||</span> <span class="o">{</span>
-    <span class="c">/**</span>
-<span class="c">     * Keeps the version info for all YUI modules that have reported themselves</span>
-<span class="c">     * @property modules</span>
-<span class="c">     * @type Object[]</span>
-<span class="c">     */</span>
-    <span class="nx">modules</span><span class="o">:</span> <span class="o">[],</span>
-    
-    <span class="c">/**</span>
-<span class="c">     * List of functions that should be executed every time a YUI module</span>
-<span class="c">     * reports itself.</span>
-<span class="c">     * @property listeners</span>
-<span class="c">     * @type Function[]</span>
-<span class="c">     */</span>
-    <span class="nx">listeners</span><span class="o">:</span> <span class="o">[],</span>
-    
-    <span class="c">/**</span>
-<span class="c">     * Returns the version data for the specified module:</span>
-<span class="c">     *      &lt;dl&gt;</span>
-<span class="c">     *      &lt;dt&gt;name:&lt;/dt&gt;      &lt;dd&gt;The name of the module&lt;/dd&gt;</span>
-<span class="c">     *      &lt;dt&gt;version:&lt;/dt&gt;   &lt;dd&gt;The version in use&lt;/dd&gt;</span>
-<span class="c">     *      &lt;dt&gt;build:&lt;/dt&gt;     &lt;dd&gt;The build number in use&lt;/dd&gt;</span>
-<span class="c">     *      &lt;dt&gt;versions:&lt;/dt&gt;  &lt;dd&gt;All versions that were registered&lt;/dd&gt;</span>
-<span class="c">     *      &lt;dt&gt;builds:&lt;/dt&gt;    &lt;dd&gt;All builds that were registered.&lt;/dd&gt;</span>
-<span class="c">     *      &lt;dt&gt;mainClass:&lt;/dt&gt; &lt;dd&gt;An object that was was stamped with the</span>
-<span class="c">     *                 current version and build. If </span>
-<span class="c">     *                 mainClass.VERSION != version or mainClass.BUILD != build,</span>
-<span class="c">     *                 multiple versions of pieces of the library have been</span>
-<span class="c">     *                 loaded, potentially causing issues.&lt;/dd&gt;</span>
-<span class="c">     *       &lt;/dl&gt;</span>
-<span class="c">     *</span>
-<span class="c">     * @method getVersion</span>
-<span class="c">     * @static</span>
-<span class="c">     * @param {String}  name the name of the module (event, slider, etc)</span>
-<span class="c">     * @return {Object} The version info</span>
-<span class="c">     */</span>
-    <span class="nx">getVersion</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">name</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">modules</span><span class="o">[</span><span class="nx">name</span><span class="o">]</span> <span class="o">||</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">};</span>
-
-<span class="c">/**</span>
-<span class="c"> * Provides the language utilites and extensions used by the library</span>
-<span class="c"> * @class YAHOO.lang</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="c">/**</span>
-<span class="c">     * Determines whether or not the provided object is an array</span>
-<span class="c">     * @method isArray</span>
-<span class="c">     * @param {any} obj The object being testing</span>
-<span class="c">     * @return Boolean</span>
-<span class="c">     */</span>
-    <span class="nx">isArray</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">obj</span><span class="o">)</span> <span class="o">{</span> <span class="c">// frames lose type, so test constructor string</span>
-<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">obj</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">toString</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;Array&#39;</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">obj</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Array</span><span class="o">;</span>
-        <span class="o">}</span>
-    <span class="o">},</span>
-
-    <span class="c">/**</span>
-<span class="c">     * Determines whether or not the provided object is a boolean</span>
-<span class="c">     * @method isBoolean</span>
-<span class="c">     * @param {any} obj The object being testing</span>
-<span class="c">     * @return Boolean</span>
-<span class="c">     */</span>
-    <span class="nx">isBoolean</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">typeof</span> <span class="nx">obj</span> <span class="o">==</span> <span class="s1">&#39;boolean&#39;</span><span class="o">;</span>
-    <span class="o">},</span>
-    
-    <span class="c">/**</span>
-<span class="c">     * Determines whether or not the provided object is a function</span>
-<span class="c">     * @method isFunction</span>
-<span class="c">     * @param {any} obj The object being testing</span>
-<span class="c">     * @return Boolean</span>
-<span class="c">     */</span>
-    <span class="nx">isFunction</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">typeof</span> <span class="nx">obj</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="o">;</span>
-    <span class="o">},</span>
-        
-    <span class="c">/**</span>
-<span class="c">     * Determines whether or not the provided object is null</span>
-<span class="c">     * @method isNull</span>
-<span class="c">     * @param {any} obj The object being testing</span>
-<span class="c">     * @return Boolean</span>
-<span class="c">     */</span>
-    <span class="nx">isNull</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nx">obj</span> <span class="o">===</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="o">},</span>
-        
-    <span class="c">/**</span>
-<span class="c">     * Determines whether or not the provided object is a number</span>
-<span class="c">     * @method isNumber</span>
-<span class="c">     * @param {any} obj The object being testing</span>
-<span class="c">     * @return Boolean</span>
-<span class="c">     */</span>
-    <span class="nx">isNumber</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="o">!</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">obj</span><span class="o">);</span>
-    <span class="o">},</span>
-      
-    <span class="c">/**</span>
-<span class="c">     * Determines whether or not the provided object is of type object</span>
-<span class="c">     * or function</span>
-<span class="c">     * @method isObject</span>
-<span class="c">     * @param {any} obj The object being testing</span>
-<span class="c">     * @return Boolean</span>
-<span class="c">     */</span>  
-    <span class="nx">isObject</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">typeof</span> <span class="nx">obj</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isFunction</span><span class="o">(</span><span class="nx">obj</span><span class="o">);</span>
-    <span class="o">},</span>
-        
-    <span class="c">/**</span>
-<span class="c">     * Determines whether or not the provided object is a string</span>
-<span class="c">     * @method isString</span>
-<span class="c">     * @param {any} obj The object being testing</span>
-<span class="c">     * @return Boolean</span>
-<span class="c">     */</span>
-    <span class="nx">isString</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">typeof</span> <span class="nx">obj</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="o">;</span>
-    <span class="o">},</span>
-        
-    <span class="c">/**</span>
-<span class="c">     * Determines whether or not the provided object is undefined</span>
-<span class="c">     * @method isUndefined</span>
-<span class="c">     * @param {any} obj The object being testing</span>
-<span class="c">     * @return Boolean</span>
-<span class="c">     */</span>
-    <span class="nx">isUndefined</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">typeof</span> <span class="nx">obj</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="o">;</span>
-    <span class="o">},</span>
-    
-    <span class="c">/**</span>
-<span class="c">     * Determines whether or not the property was added</span>
-<span class="c">     * to the object instance.  Returns false if the property is not present</span>
-<span class="c">     * in the object, or was inherited from the prototype.</span>
-<span class="c">     * This abstraction is provided to enable hasOwnProperty for Safari 1.3.x.</span>
-<span class="c">     * There is a discrepancy between YAHOO.lang.hasOwnProperty and</span>
-<span class="c">     * Object.prototype.hasOwnProperty when the property is a primitive added to</span>
-<span class="c">     * both the instance AND prototype with the same value:</span>
-<span class="c">     * &lt;pre&gt;</span>
-<span class="c">     * var A = function() {};</span>
-<span class="c">     * A.prototype.foo = &#39;foo&#39;;</span>
-<span class="c">     * var a = new A();</span>
-<span class="c">     * a.foo = &#39;foo&#39;;</span>
-<span class="c">     * alert(a.hasOwnProperty(&#39;foo&#39;)); // true</span>
-<span class="c">     * alert(YAHOO.lang.hasOwnProperty(a, &#39;foo&#39;)); // false when using fallback</span>
-<span class="c">     * &lt;/pre&gt;</span>
-<span class="c">     * @method hasOwnProperty</span>
-<span class="c">     * @param {any} obj The object being testing</span>
-<span class="c">     * @return Boolean</span>
-<span class="c">     */</span>
-    <span class="nx">hasOwnProperty</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">obj</span><span class="o">,</span> <span class="nx">prop</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nb">Object</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="nx">obj</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">prop</span><span class="o">);</span>
-        <span class="o">}</span>
-        
-        <span class="k">return</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">obj</span><span class="o">[</span><span class="nx">prop</span><span class="o">])</span> <span class="o">&amp;&amp;</span> 
-                <span class="nx">obj</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">prototype</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">!==</span> <span class="nx">obj</span><span class="o">[</span><span class="nx">prop</span><span class="o">];</span>
-    <span class="o">},</span>
-        
-    <span class="c">/**</span>
-<span class="c">     * Utility to set up the prototype, constructor and superclass properties to</span>
-<span class="c">     * support an inheritance strategy that can chain constructors and methods.</span>
-<span class="c">     *</span>
-<span class="c">     * @method extend</span>
-<span class="c">     * @static</span>
-<span class="c">     * @param {Function} subc   the object to modify</span>
-<span class="c">     * @param {Function} superc the object to inherit</span>
-<span class="c">     * @param {Object} overrides  additional properties/methods to add to the</span>
-<span class="c">     *                              subclass prototype.  These will override the</span>
-<span class="c">     *                              matching items obtained from the superclass </span>
-<span class="c">     *                              if present.</span>
-<span class="c">     */</span>
-    <span class="nx">extend</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">subc</span><span class="o">,</span> <span class="nx">superc</span><span class="o">,</span> <span class="nx">overrides</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">F</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{};</span>
-        <span class="nx">F</span><span class="o">.</span><span class="nx">prototype</span><span class="o">=</span><span class="nx">superc</span><span class="o">.</span><span class="nx">prototype</span><span class="o">;</span>
-        <span class="nx">subc</span><span class="o">.</span><span class="nx">prototype</span><span class="o">=</span><span class="k">new</span> <span class="nx">F</span><span class="o">();</span>
-        <span class="nx">subc</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">constructor</span><span class="o">=</span><span class="nx">subc</span><span class="o">;</span>
-        <span class="nx">subc</span><span class="o">.</span><span class="nx">superclass</span><span class="o">=</span><span class="nx">superc</span><span class="o">.</span><span class="nx">prototype</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">superc</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Object</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">constructor</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">superc</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">constructor</span><span class="o">=</span><span class="nx">superc</span><span class="o">;</span>
-        <span class="o">}</span>
-    
-        <span class="k">if</span> <span class="o">(</span><span class="nx">overrides</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">overrides</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">subc</span><span class="o">.</span><span class="nx">prototype</span><span class="o">[</span><span class="nx">i</span><span class="o">]=</span><span class="nx">overrides</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">},</span>
-    
-    <span class="c">/**</span>
-<span class="c">     * Applies all prototype properties in the supplier to the receiver if the</span>
-<span class="c">     * receiver does not have these properties yet.  Optionally, one or more</span>
-<span class="c">     * methods/properties can be specified (as additional parameters).  This</span>
-<span class="c">     * option will overwrite the property if receiver has it already.</span>
-<span class="c">     *</span>
-<span class="c">     * @method augment</span>
-<span class="c">     * @static</span>
-<span class="c">     * @param {Function} r  the object to receive the augmentation</span>
-<span class="c">     * @param {Function} s  the object that supplies the properties to augment</span>
-<span class="c">     * @param {String*}  arguments zero or more properties methods to augment the</span>
-<span class="c">     *                             receiver with.  If none specified, everything</span>
-<span class="c">     *                             in the supplier will be used unless it would</span>
-<span class="c">     *                             overwrite an existing property in the receiver</span>
-<span class="c">     */</span>
-    <span class="nx">augment</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">r</span><span class="o">,</span> <span class="nx">s</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">rp</span><span class="o">=</span><span class="nx">r</span><span class="o">.</span><span class="nx">prototype</span><span class="o">,</span> <span class="nx">sp</span><span class="o">=</span><span class="nx">s</span><span class="o">.</span><span class="nx">prototype</span><span class="o">,</span> <span class="nx">a</span><span class="o">=</span><span class="nx">arguments</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">p</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">a</span><span class="o">[</span><span class="m">2</span><span class="o">])</span> <span class="o">{</span>
-            <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">2</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">rp</span><span class="o">[</span><span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]]</span> <span class="o">=</span> <span class="nx">sp</span><span class="o">[</span><span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]];</span>
-            <span class="o">}</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">for</span> <span class="o">(</span><span class="nx">p</span> <span class="k">in</span> <span class="nx">sp</span><span class="o">)</span> <span class="o">{</span> 
-                <span class="k">if</span> <span class="o">(!</span><span class="nx">rp</span><span class="o">[</span><span class="nx">p</span><span class="o">])</span> <span class="o">{</span>
-                    <span class="nx">rp</span><span class="o">[</span><span class="nx">p</span><span class="o">]</span> <span class="o">=</span> <span class="nx">sp</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">};</span>
-
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">init</span><span class="o">();</span>
-
-<span class="c">/*</span>
-<span class="c"> * An alias for &lt;a href=&quot;YAHOO.lang.html&quot;&gt;YAHOO.lang&lt;/a&gt;</span>
-<span class="c"> * @class YAHOO.util.Lang</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">;</span>
-
-<span class="c">/**</span>
-<span class="c"> * An alias for &lt;a href=&quot;YAHOO.lang.html#augment&quot;&gt;YAHOO.lang.augment&lt;/a&gt;</span>
-<span class="c"> * @for YAHOO</span>
-<span class="c"> * @method augment</span>
-<span class="c"> * @static</span>
-<span class="c"> * @param {Function} r  the object to receive the augmentation</span>
-<span class="c"> * @param {Function} s  the object that supplies the properties to augment</span>
-<span class="c"> * @param {String*}  arguments zero or more properties methods to augment the</span>
-<span class="c"> *                             receiver with.  If none specified, everything</span>
-<span class="c"> *                             in the supplier will be used unless it would</span>
-<span class="c"> *                             overwrite an existing property in the receiver</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">augment</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">augment</span><span class="o">;</span>
-       
-<span class="c">/**</span>
-<span class="c"> * An alias for &lt;a href=&quot;YAHOO.lang.html#extend&quot;&gt;YAHOO.lang.extend&lt;/a&gt;</span>
-<span class="c"> * @method extend</span>
-<span class="c"> * @static</span>
-<span class="c"> * @param {Function} subc   the object to modify</span>
-<span class="c"> * @param {Function} superc the object to inherit</span>
-<span class="c"> * @param {Object} overrides  additional properties/methods to add to the</span>
-<span class="c"> *                              subclass prototype.  These will override the</span>
-<span class="c"> *                              matching items obtained from the superclass </span>
-<span class="c"> *                              if present.</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">extend</span><span class="o">;</span>
 </pre></div>
                     </div>
 			</div>
@@ -456,60 +233,66 @@
 		<div class="yui-b">
             <div class="nav">
 
-                    <div class="module">
+                    <div id="moduleList" class="module">
                         <h4>Modules</h4>
                         <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
-
-                                <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
-
-                                <li class=""><a href="module_button.html">button</a></li>
-
-                                <li class=""><a href="module_calendar.html">calendar</a></li>
-
-                                <li class=""><a href="module_connection.html">connection</a></li>
-
-                                <li class=""><a href="module_container.html">container</a></li>
-
-                                <li class=""><a href="module_dom.html">dom</a></li>
-
-                                <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
-
-                                <li class=""><a href="module_element.html">element</a></li>
-
-                                <li class=""><a href="module_event.html">event</a></li>
-
-                                <li class=""><a href="module_history.html">history</a></li>
-
-                                <li class=""><a href="module_logger.html">logger</a></li>
-
-                                <li class=""><a href="module_menu.html">menu</a></li>
-
-                                <li class=""><a href="module_slider.html">slider</a></li>
-
-                                <li class=""><a href="module_tabview.html">tabview</a></li>
-
-                                <li class=""><a href="module_treeview.html">treeview</a></li>
-
-                                <li class="selected"><a href="module_yahoo.html">yahoo</a></li>
+                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                                <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
+                                <li class=""><a href="module_button.html" title="button">button</a></li>
+                                <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
+                                <li class=""><a href="module_carousel.html" title="carousel">carousel</a></li>
+                                <li class=""><a href="module_charts.html" title="charts">charts</a></li>
+                                <li class=""><a href="module_colorpicker.html" title="colorpicker">colorpicker</a></li>
+                                <li class=""><a href="module_connection.html" title="connection">connection</a></li>
+                                <li class=""><a href="module_container.html" title="container">container</a></li>
+                                <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
+                                <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
+                                <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_dom.html" title="dom">dom</a></li>
+                                <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
+                                <li class=""><a href="module_editor.html" title="editor">editor</a></li>
+                                <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_get.html" title="get">get</a></li>
+                                <li class=""><a href="module_history.html" title="history">history</a></li>
+                                <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
+                                <li class=""><a href="module_imageloader.html" title="imageloader">imageloader</a></li>
+                                <li class=""><a href="module_json.html" title="json">json</a></li>
+                                <li class=""><a href="module_layout.html" title="layout">layout</a></li>
+                                <li class=""><a href="module_logger.html" title="logger">logger</a></li>
+                                <li class=""><a href="module_menu.html" title="menu">menu</a></li>
+                                <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
+                                <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
+                                <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_resize.html" title="resize">resize</a></li>
+                                <li class=""><a href="module_selector.html" title="selector">selector</a></li>
+                                <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
+                                <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
+                                <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>
+                                <li class="selected"><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
+                                <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
+                                <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
                         </ul>
                     </div>
 
-                    <div class="module">
+                    <div id="classList" class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li class=""><a href="YAHOO.html">YAHOO</a></li>
-                                <li class=""><a href="YAHOO.env.html">YAHOO.env</a></li>
-                                <li class=""><a href="YAHOO.lang.html">YAHOO.lang</a></li>
-                                <li class=""><a href="YAHOO_config.html">YAHOO_config</a></li>
+                                <li class=""><a href="YAHOO.html" title="YAHOO">YAHOO</a></li>
+                                <li class=""><a href="YAHOO.env.html" title="YAHOO.env">YAHOO.env</a></li>
+                                <li class=""><a href="YAHOO.env.ua.html" title="YAHOO.env.ua">YAHOO.env.ua</a></li>
+                                <li class=""><a href="YAHOO.lang.html" title="YAHOO.lang">YAHOO.lang</a></li>
+                                <li class=""><a href="YAHOO_config.html" title="YAHOO_config">YAHOO_config</a></li>
                         </ul>
                     </div>
 
-                    <div class="module">
+                    <div id="fileList" class="module">
                         <h4>Files</h4>
                         <ul class="content">        
-                                <li class="selected"><a href="YAHOO.js.html">YAHOO.js</a></li>
+                                <li class=""><a href="Env.js.html" title="Env.js">Env.js</a></li>
+                                <li class=""><a href="Lang.js.html" title="Lang.js">Lang.js</a></li>
+                                <li class="selected"><a href="YAHOO.js.html" title="YAHOO.js">YAHOO.js</a></li>
                         </ul>
                     </div>
 
@@ -522,8 +305,11 @@
 	</div>
 	<div id="ft">
         <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
 	</div>
 </div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.env.ua", "name": "air", "url": "YAHOO.env.ua.html#property_air", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "augment", "url": "YAHOO.lang.html#method_augment", "type": "method"}, {"access": "", "host": "YAHOO", "name": "augment", "url": "YAHOO.html#method_augment", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "augmentObject", "url": "YAHOO.lang.html#method_augmentObject", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "augmentProto", "url": "YAHOO.lang.html#method_augmentProto", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "caja", "url": "YAHOO.env.ua.html#property_caja", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "dump", "url": "YAHOO.lang.html#method_dump", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "extend", "url": "YAHOO.lang.html#method_extend", "type": "method"}, {"access": "", "host": "YAHOO", "name": "extend", "url": "YAHOO.html#method_extend", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "gecko", "url": "YAHOO.env.ua.html#property_gecko", "type": "property"}, {"access": "", "host": "YAHOO.env", "name": "getVersion", "url": "YAHOO.env.html#method_getVersion", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "hasOwnProperty", "url": "YAHOO.lang.html#method_hasOwnProperty", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "ie", "url": "YAHOO.env.ua.html#property_ie", "type": "property"}, {"access": "private", "host": "YAHOO.lang", "name": "_IEEnumFix", "url": "YAHOO.lang.html#property__IEEnumFix", "type": "property"}, {"access": "", "host": "YAHOO_config", "name": "injecting", "url": "YAHOO_config.html#property_injecting", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "isArray", "url": "YAHOO.lang.html#method_isArray", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isBoolean", "url": "YAHOO.lang.html#method_isBoolean", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isFunction", "url": "YAHOO.lang.html#method_isFunction", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isNull", "url": "YAHOO.lang.html#method_isNull", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isNumber", "url": "YAHOO.lang.html#method_isNumber", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isObject", "url": "YAHOO.lang.html#method_isObject", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isString", "url": "YAHOO.lang.html#method_isString", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isUndefined", "url": "YAHOO.lang.html#method_isUndefined", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isValue", "url": "YAHOO.lang.html#method_isValue", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "later", "url": "YAHOO.lang.html#method_later", "type": "method"}, {"access": "", "host": "YAHOO_config", "name": "listener", "url": "YAHOO_config.html#property_listener", "type": "property"}, {"access": "", "host": "YAHOO.env", "name": "listeners", "url": "YAHOO.env.html#property_listeners", "type": "property"}, {"access": "", "host": "YAHOO_config", "name": "load", "url": "YAHOO_config.html#property_load", "type": "property"}, {"access": "", "host": "YAHOO_config", "name": "locale", "url": "YAHOO_config.html#property_locale", "type": "property"}, {"access": "", "host": "YAHOO", "name": "log", "url": "YAHOO.html#method_log", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "merge", "url": "YAHOO.lang.html#method_merge", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "mobile", "url": "YAHOO.env.ua.html#property_mobile", "type": "property"}, {"access": "", "host": "YAHOO.env", "name": "modules", "url": "YAHOO.env.html#property_modules", "type": "property"}, {"access": "", "host": "YAHOO", "name": "namespace", "url": "YAHOO.html#method_namespace", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "opera", "url": "YAHOO.env.ua.html#property_opera", "type": "property"}, {"access": "", "host": "YAHOO", "name": "register", "url": "YAHOO.html#method_register", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "substitute", "url": "YAHOO.lang.html#method_substitute", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "trim", "url": "YAHOO.lang.html#method_trim", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "webkit", "url": "YAHOO.env.ua.html#property_webkit", "type": "property"}];
+</script>
 </body>
 </html>
