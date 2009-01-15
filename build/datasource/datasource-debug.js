@@ -1569,9 +1569,9 @@ parseJSONData : function(oRequest, oFullResponse) {
                 }
 
                 // Process the results, flattening the records and/or applying parsers if needed
-                //if (fieldParsers.length || fieldPaths.length) {
-                    for (i = resultsList.length - 1; i >= 0; --i) {
-                        var r = resultsList[i], rec = {};
+                for (i = resultsList.length - 1; i >= 0; --i) {
+                    var r = resultsList[i], rec = {};
+                    if(r) {
                         for (j = simpleFields.length - 1; j >= 0; --j) {
                             // Bug 1777850: data might be held in an array
                             rec[simpleFields[j].key] =
@@ -1590,9 +1590,9 @@ parseJSONData : function(oRequest, oFullResponse) {
                                 rec[p] = null;
                             }
                         }
-                        results[i] = rec;
                     }
-                //}
+                    results[i] = rec;
+                }
             }
             else {
                 results = resultsList;
