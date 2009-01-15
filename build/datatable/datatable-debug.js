@@ -2525,7 +2525,7 @@ var lang   = YAHOO.lang,
  *
  * @namespace YAHOO.widget
  * @class DataTable
- * @extends Element
+ * @extends YAHOO.util.Element
  * @constructor
  * @param elContainer {HTMLElement} Container element for the TABLE.
  * @param aColumnDefs {Object[]} Array of object literal Column definitions.
