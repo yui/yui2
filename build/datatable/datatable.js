@@ -9053,7 +9053,17 @@ deleteRow : function(row) {
                     if (!rng || nRecordIndex <= rng[1]) {
                         this.render();
                     }
-                    return;
+
+                    this._oChainRender.add({
+                        method: function() {
+                            if((this instanceof DT) && this._sId) {
+                                this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex, oldData:oData, trElIndex:nTrIndex});
+                            }
+                        },
+                        scope: this,
+                        timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
+                    });
+                    this._runRenderChain();
                 }
                 // Not paginated
                 else {
@@ -9079,8 +9089,7 @@ deleteRow : function(row) {
                                         }                                
                                     }
                     
-                                    this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
-                                    oldData:oData, trElIndex:nTrIndex});
+                                    this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,oldData:oData, trElIndex:nTrIndex});
                                 }
                             },
                             scope: this,
@@ -9140,7 +9149,8 @@ deleteRows : function(row, count) {
     
             // Update the UI
             if(aData) {
-                var oPaginator = this.get('paginator');
+                var oPaginator = this.get('paginator'),
+                    loopN = this.get("renderLoopSize");
                 // If paginated and the deleted row was on this or a prior page, just
                 // re-render
                 if (oPaginator) {
@@ -9158,13 +9168,23 @@ deleteRows : function(row, count) {
                     if (!rng || lowIndex <= rng[1]) {
                         this.render();
                     }
+
+                    this._oChainRender.add({
+                        method: function(oArg) {
+                            if((this instanceof DT) && this._sId) {
+                                this.fireEvent("rowsDeleteEvent", {recordIndex:lowIndex, oldData:aData, count:count});
+                            }
+                        },
+                        scope: this,
+                        timeout: (loopN > 0) ? 0 : -1
+                    });
+                    this._runRenderChain();
                     return;
                 }
                 // Not paginated
                 else {
                     if(lang.isNumber(nTrIndex)) {
                         // Delete the TR elements starting with highest index
-                        var loopN = this.get("renderLoopSize");
                         var loopEnd = lowIndex;
                         var nRowsNeeded = count; // how many needed
                         this._oChainRender.add({
@@ -9192,8 +9212,7 @@ deleteRows : function(row, count) {
                                     this._setRowStripes();
                                 }
                                 
-                                this.fireEvent("rowsDeleteEvent", {recordIndex:count,
-                                oldData:aData, count:nTrIndex});
+                                this.fireEvent("rowsDeleteEvent", {recordIndex:lowIndex, oldData:aData, count:count});
                             },
                             scope: this,
                             timeout: -1 // Needs to run immediately after the DOM deletions above
