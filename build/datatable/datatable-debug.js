@@ -16293,7 +16293,7 @@ renderForm : function() {
         calContainer.style.cssFloat = "none";
 
         if(ua.ie) {
-            var calFloatClearer = this.getContainerEl().appendChild(document.createElement("br"));
+            var calFloatClearer = this.getContainerEl().appendChild(document.createElement("div"));
             calFloatClearer.style.clear = "both";
         }
         
