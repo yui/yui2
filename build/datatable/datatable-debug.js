@@ -9177,7 +9177,7 @@ deleteRow : function(row) {
             var sRecordId = oRecord.getId();
             var tracker = this._aSelections || [];
             for(var j=tracker.length-1; j>-1; j--) {
-                if((lang.isNumber(tracker[j]) && (tracker[j] === sRecordId)) ||
+                if((lang.isString(tracker[j]) && (tracker[j] === sRecordId)) ||
                         (lang.isObject(tracker[j]) && (tracker[j].recordId === sRecordId))) {
                     tracker.splice(j,1);
                 }
@@ -9272,7 +9272,7 @@ deleteRows : function(row, count) {
             var sRecordId = oRecord.getId();
             var tracker = this._aSelections || [];
             for(var j=tracker.length-1; j>-1; j--) {
-                if((lang.isNumber(tracker[j]) && (tracker[j] === sRecordId)) ||
+                if((lang.isString(tracker[j]) && (tracker[j] === sRecordId)) ||
                         (lang.isObject(tracker[j]) && (tracker[j].recordId === sRecordId))) {
                     tracker.splice(j,1);
                 }
@@ -11403,7 +11403,7 @@ selectRow : function(row) {
 },
 
 /**
- * Sets given row to the selected state.
+ * Sets given row to the unselected state.
  *
  * @method unselectRow
  * @param row {HTMLElement | String | YAHOO.widget.Record | Number} HTML element
