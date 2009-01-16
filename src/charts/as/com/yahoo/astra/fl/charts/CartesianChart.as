@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts
+package com.yahoo.astra.fl.charts
 {
 	import com.yahoo.astra.fl.charts.axes.AxisOrientation;
 	import com.yahoo.astra.fl.charts.axes.CategoryAxis;

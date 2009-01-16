@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.axes
+package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.series.ISeries;
 	import com.yahoo.astra.fl.utils.UIComponentUtil;
@@ -536,6 +536,7 @@
 			if(tempMajorUnit > 1) tempMajorUnit = Math.ceil(tempMajorUnit);
 			tempMajorUnit = Math.min(tempMajorUnit, Math.round(difference/2));			
 			
+
 			if(difference%tempMajorUnit != 0 && !this._numLabelsSetByUser)
 			{
 				var adjusted:Boolean = false;
@@ -549,7 +550,7 @@
 						break;
 					}
 				}		
-			}
+			}	
 			
 			if(this.roundMajorUnit)
 			{
