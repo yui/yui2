@@ -67,6 +67,11 @@
                 value: "async"
             },
 
+            "POST_DATA" : {
+                key: "postdata",
+                value: null
+            },
+
             "BUTTONS": {
                 key: "buttons",
                 value: "none",
@@ -77,6 +82,7 @@
                 key: "hideaftersubmit",
                 value: true
             }
+
         };
 
     /**
@@ -214,6 +220,20 @@
                         return true;
                     }
                 }
+            });
+
+            /**
+            * Any additional post data which needs to be sent when using the 
+            * <a href="#config_postmethod">async</a> postmethod for dialog POST submissions.
+            * The format for the post data string is defined by Connection Manager's 
+            * <a href="YAHOO.util.Connect.html#method_asyncRequest>asyncRequest</a> 
+            * method.
+            * @config postdata
+            * @type String
+            * @default null
+            */
+            this.cfg.addProperty(DEFAULT_CONFIG.POST_DATA.key, {
+                value: DEFAULT_CONFIG.POST_DATA.value
             });
 
             /**
@@ -418,7 +438,9 @@
                     formAttrs = this._getFormAttributes(oForm);
 
                     Connect.setForm(oForm, bUseFileUpload, bUseSecureFileUpload);
-                    var c = Connect.asyncRequest(formAttrs.method, formAttrs.action, this.callback);
+
+                    var postData = this.cfg.getProperty("postdata");
+                    var c = Connect.asyncRequest(formAttrs.method, formAttrs.action, this.callback, postData);
 
                     this.asyncSubmitEvent.fire(c);
 
