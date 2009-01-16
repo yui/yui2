@@ -844,12 +844,12 @@ lang.augmentObject(DT, {
      * @static
      */
     formatDropdown : function(el, oRecord, oColumn, oData) {
-        var selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field);
-        var options = (lang.isArray(oColumn.dropdownOptions)) ?
-                oColumn.dropdownOptions : null;
+        var selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field),
+            options = (lang.isArray(oColumn.dropdownOptions)) ?
+                oColumn.dropdownOptions : null,
 
-        var selectEl;
-        var collection = el.getElementsByTagName("select");
+            selectEl,
+            collection = el.getElementsByTagName("select");
 
         // Create the form element only once, so we can attach the onChange listener
         if(collection.length === 0) {
@@ -977,8 +977,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatText : function(el, oRecord, oColumn, oData) {
-        var value = (lang.isValue(oRecord.getData(oColumn.field))) ?
-                oRecord.getData(oColumn.field) : "";
+        var value = (lang.isValue(oData)) ? oData : "";
         //TODO: move to util function
         el.innerHTML = value.toString().replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
     },
@@ -994,9 +993,8 @@ lang.augmentObject(DT, {
      * @static
      */
     formatTextarea : function(el, oRecord, oColumn, oData) {
-        var value = (lang.isValue(oRecord.getData(oColumn.field))) ?
-                oRecord.getData(oColumn.field) : "";
-        var markup = "<textarea>" + value + "</textarea>";
+        var value = (lang.isValue(oData)) ? oData : "",
+            markup = "<textarea>" + value + "</textarea>";
         el.innerHTML = markup;
     },
 
@@ -1011,9 +1009,8 @@ lang.augmentObject(DT, {
      * @static
      */
     formatTextbox : function(el, oRecord, oColumn, oData) {
-        var value = (lang.isValue(oRecord.getData(oColumn.field))) ?
-                oRecord.getData(oColumn.field) : "";
-        var markup = "<input type=\"text\" value=\"" + value + "\" />";
+        var value = (lang.isValue(oData)) ? oData : "",
+            markup = "<input type=\"text\" value=\"" + value + "\" />";
         el.innerHTML = markup;
     },
 
