@@ -1720,8 +1720,7 @@
         */
         destroy: function () {
 
-            var parent,
-                e;
+            var parent;
 
             if (this.element) {
                 Event.purgeElement(this.element, true);
@@ -1992,14 +1991,14 @@
                 validator: Lang.isBoolean, 
                 supercedes: ["zindex"] 
             },
-            
+
             "PREVENT_CONTEXT_OVERLAP": {
                 key: "preventcontextoverlap",
                 value: false,
                 validator: Lang.isBoolean,  
                 supercedes: ["constraintoviewport"]
             }
-            
+
         };
 
     /**
@@ -4535,8 +4534,7 @@
         */
         register: function (overlay) {
 
-            var zIndex,
-                registered = false,
+            var registered = false,
                 i,
                 n;
 
@@ -6897,17 +6895,17 @@
                     viewWidth = Dom.getViewportWidth(),
                     viewHeight = Dom.getViewportHeight();
 
-                if (this.mask.offsetHeight > viewHeight) {
-                    this.mask.style.height = viewHeight + "px";
+                if (mask.offsetHeight > viewHeight) {
+                    mask.style.height = viewHeight + "px";
                 }
 
-                if (this.mask.offsetWidth > viewWidth) {
-                    this.mask.style.width = viewWidth + "px";
+                if (mask.offsetWidth > viewWidth) {
+                    mask.style.width = viewWidth + "px";
                 }
 
                 // Then size it to the document
-                this.mask.style.height = Dom.getDocumentHeight() + "px";
-                this.mask.style.width = Dom.getDocumentWidth() + "px";
+                mask.style.height = Dom.getDocumentHeight() + "px";
+                mask.style.width = Dom.getDocumentWidth() + "px";
             }
         },
 
@@ -7050,6 +7048,11 @@
                 value: "async"
             },
 
+            "POST_DATA" : {
+                key: "postdata",
+                value: null
+            },
+
             "BUTTONS": {
                 key: "buttons",
                 value: "none",
@@ -7060,6 +7063,7 @@
                 key: "hideaftersubmit",
                 value: true
             }
+
         };
 
     /**
@@ -7197,6 +7201,20 @@
                         return true;
                     }
                 }
+            });
+
+            /**
+            * Any additional post data which needs to be sent when using the 
+            * <a href="#config_postmethod">async</a> postmethod for dialog POST submissions.
+            * The format for the post data string is defined by Connection Manager's 
+            * <a href="YAHOO.util.Connect.html#method_asyncRequest>asyncRequest</a> 
+            * method.
+            * @config postdata
+            * @type String
+            * @default null
+            */
+            this.cfg.addProperty(DEFAULT_CONFIG.POST_DATA.key, {
+                value: DEFAULT_CONFIG.POST_DATA.value
             });
 
             /**
@@ -7401,7 +7419,9 @@
                     formAttrs = this._getFormAttributes(oForm);
 
                     Connect.setForm(oForm, bUseFileUpload, bUseSecureFileUpload);
-                    var c = Connect.asyncRequest(formAttrs.method, formAttrs.action, this.callback);
+
+                    var postData = this.cfg.getProperty("postdata");
+                    var c = Connect.asyncRequest(formAttrs.method, formAttrs.action, this.callback, postData);
 
                     this.asyncSubmitEvent.fire(c);
 

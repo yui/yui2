@@ -1720,8 +1720,7 @@
         */
         destroy: function () {
 
-            var parent,
-                e;
+            var parent;
 
             if (this.element) {
                 Event.purgeElement(this.element, true);
@@ -1992,14 +1991,14 @@
                 validator: Lang.isBoolean, 
                 supercedes: ["zindex"] 
             },
-            
+
             "PREVENT_CONTEXT_OVERLAP": {
                 key: "preventcontextoverlap",
                 value: false,
                 validator: Lang.isBoolean,  
                 supercedes: ["constraintoviewport"]
             }
-            
+
         };
 
     /**
@@ -4535,8 +4534,7 @@
         */
         register: function (overlay) {
 
-            var zIndex,
-                registered = false,
+            var registered = false,
                 i,
                 n;
 
