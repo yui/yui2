@@ -3374,8 +3374,9 @@ lang.augmentObject(DT, {
                     var optionEl = document.createElement("option");
                     optionEl.value = (lang.isValue(option.value)) ?
                             option.value : option;
+                    // Bug 2334323: Support legacy text, support label for consistency with DropdownCellEditor
                     optionEl.innerHTML = (lang.isValue(option.text)) ?
-                            option.text : option;
+                            option.text : (lang.isValue(option.label)) ? option.label : option;
                     optionEl = selectEl.appendChild(optionEl);
                     if (optionEl.value == selectedValue) {
                         optionEl.selected = true;
