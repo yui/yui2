@@ -1673,10 +1673,10 @@ package com.yahoo.astra.fl.charts
 			
 			var horizontalAxisTextFormat:TextFormat = this.getStyleValue("horizontalAxisTextFormat") != null ? this.getStyleValue("horizontalAxisTextFormat") as TextFormat : this.getStyleValue("textFormat") as TextFormat;
 			var verticalAxisTextFormat:TextFormat = this.getStyleValue("verticalAxisTextFormat") != null ? this.getStyleValue("verticalAxisTextFormat") as TextFormat : this.getStyleValue("textFormat") as TextFormat;
-			this.horizontalAxis.maxLabelWidth = TextUtil.getTextWidth(this.horizontalAxis.valueToLabel(maxHorizontalLabel), horizontalAxisTextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
-			this.horizontalAxis.maxLabelHeight = TextUtil.getTextHeight(this.horizontalAxis.valueToLabel(maxHorizontalLabel), horizontalAxisTextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
-			this.verticalAxis.maxLabelWidth = TextUtil.getTextWidth(this.verticalAxis.valueToLabel(maxVerticalLabel), verticalAxisTextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);
-			this.verticalAxis.maxLabelHeight = TextUtil.getTextHeight(this.verticalAxis.valueToLabel(maxVerticalLabel), verticalAxisTextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);	
+			this.horizontalAxis.maxLabelWidth = TextUtil.getTextWidth(maxHorizontalLabel, horizontalAxisTextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
+			this.horizontalAxis.maxLabelHeight = TextUtil.getTextHeight(maxHorizontalLabel, horizontalAxisTextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
+			this.verticalAxis.maxLabelWidth = TextUtil.getTextWidth(maxVerticalLabel, verticalAxisTextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);
+			this.verticalAxis.maxLabelHeight = TextUtil.getTextHeight(maxVerticalLabel, verticalAxisTextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);	
 			
 			this.calculateContentBounds();
 			

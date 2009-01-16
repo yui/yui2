@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.axes
+package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.series.ISeries;
 	import fl.core.UIComponent;
@@ -171,7 +171,7 @@
 				}
 			}			
 			
-			return maxString as String;	
+			return this.valueToLabel(maxString) as String;	
 		}
 
 	//--------------------------------------

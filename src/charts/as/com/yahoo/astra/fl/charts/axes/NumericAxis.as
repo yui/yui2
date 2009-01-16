@@ -432,9 +432,14 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		public function getMaxLabel():String
 		{
-			var maxLength:Number = 0;
-			var currentLength:Number;
-			var maxString:String =  Math.max(this.minimum, this.maximum).toString();
+			var difference:Number = Math.round(this.maximum - this.minimum);
+			var maxString:String = this.valueToLabel(this.maximum);
+			var minString:String = this.valueToLabel(this.minimum);
+			var halfString:String = this.valueToLabel(Math.round(difference/2));
+			var thirdString:String = this.valueToLabel(Math.round(difference/3));
+			if(maxString.length < minString.length) maxString = minString;
+			if(halfString.length > maxString.length) maxString = halfString;
+			if(thirdString.length > maxString.length) maxString = thirdString;
 			return maxString as String;	
 		}
 		
