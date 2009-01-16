@@ -4,11 +4,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: dom  YAHOO.util.Dom   (YUI Library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1232056629.7" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1232056629.7" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1232056629.7"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1232056629.7"></script>
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
@@ -1974,7 +1974,8 @@ The element must be part of the DOM tree to have a region (display:none or eleme
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Gets the current position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+                                            Gets the current position of an element based on page coordinates. 
+Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
                                         </div>
 
                                         <div class="description">
@@ -1985,7 +1986,8 @@ The element must be part of the DOM tree to have a region (display:none or eleme
                                                         <code><span property="yui:name">el</span>
                                                         &lt;<span property="yui:type">String | HTMLElement | Array</span>&gt;
                                                         </code>
-                                                        <span property="yui:description"> Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements</span>
+                                                        <span property="yui:description"> Accepts a string to use as an ID, an actual DOM
+reference, or an Array of IDs and/or HTMLElements</span>
                                                         </dd>
                                                 </dl>
 
@@ -2133,6 +2135,10 @@ The element must be part of the DOM tree to have a region (display:none or eleme
                                                          el
                                                     
                                                 
+                                                        , 
+                                                         doc
+                                                    
+                                                
                                             )
                                         </code>
                                         
@@ -2149,6 +2155,12 @@ The element must be part of the DOM tree to have a region (display:none or eleme
                                                         &lt;<span property="yui:type">String | HTMLElement</span>&gt;
                                                         </code>
                                                         <span property="yui:description"> The element to search for</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">doc</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An optional document to search, defaults to element's owner document</span>
                                                         </dd>
                                                 </dl>
 
