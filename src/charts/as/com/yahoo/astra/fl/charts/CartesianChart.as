@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts
+package com.yahoo.astra.fl.charts
 {
 	import com.yahoo.astra.fl.charts.axes.AxisOrientation;
 	import com.yahoo.astra.fl.charts.axes.CategoryAxis;
@@ -786,6 +786,9 @@
 			showHorizontalAxisMinorGridLines: false,
 			horizontalAxisGridFillColors: [],
 			horizontalAxisGridFillAlphas: [],
+			showHorizontalZeroGridLine: false,
+			horizontalZeroGridLineWeight: 2,
+			horizontalZeroGridLineColor: 0xbabdb6,				
 			
 			//ticks
 			showHorizontalAxisTicks: false,
@@ -824,6 +827,9 @@
 			showVerticalAxisMinorGridLines: false,
 			verticalAxisGridFillColors: [],
 			verticalAxisGridFillAlphas: [],
+			showVerticalZeroGridLine: false,
+			verticalZeroGridLineWeight: 2,
+			verticalZeroGridLineColor: 0xbabdb6,			
 			
 			//ticks
 			showVerticalAxisTicks: true,
@@ -886,6 +892,10 @@
 			minorLineColor: "horizontalAxisMinorGridLineColor",
 			showMinorLines: "showHorizontalAxisMinorGridLines",
 			
+			showZeroGridLine: "showHorizontalZeroGridLine",
+			zeroGridLineWeight: "horizontalZeroGridLineWeight",
+			zeroGridLineColor: "horizontalZeroGridLineColor", 
+			
 			fillColors: "horizontalAxisGridFillColors",
 			fillAlphas: "horizontalAxisGridFillAlphas"
 		}
@@ -937,6 +947,10 @@
 			minorLineWeight: "verticalAxisMinorGridLineWeight",
 			minorLineColor: "verticalAxisMinorGridLineColor",
 			showMinorLines: "showVerticalAxisMinorGridLines",
+			
+			showZeroGridLine: "showVerticalZeroGridLine",
+			zeroGridLineWeight: "verticalZeroGridLineWeight",
+			zeroGridLineColor: "verticalZeroGridLineColor",			
 			
 			fillColors: "verticalAxisGridFillColors",
 			fillAlphas: "verticalAxisGridFillAlphas"
@@ -1656,10 +1670,13 @@
 
 			maxHorizontalLabel = (this.horizontalAxis as IAxis).getMaxLabel() as String;
 			maxVerticalLabel = (this.verticalAxis as IAxis).getMaxLabel() as String;
-			this.horizontalAxis.maxLabelWidth = TextUtil.getTextWidth(this.horizontalAxis.valueToLabel(maxHorizontalLabel), this.getStyleValue("horizontalAxisTextFormat") as TextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
-			this.horizontalAxis.maxLabelHeight = TextUtil.getTextHeight(this.horizontalAxis.valueToLabel(maxHorizontalLabel), this.getStyleValue("horizontalAxisTextFormat") as TextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
-			this.verticalAxis.maxLabelWidth = TextUtil.getTextWidth(this.verticalAxis.valueToLabel(maxVerticalLabel), this.getStyleValue("verticalAxisTextFormat") as TextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);
-			this.verticalAxis.maxLabelHeight = TextUtil.getTextHeight(this.verticalAxis.valueToLabel(maxVerticalLabel), this.getStyleValue("verticalAxisTextFormat") as TextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);	
+			
+			var horizontalAxisTextFormat:TextFormat = this.getStyleValue("horizontalAxisTextFormat") != null ? this.getStyleValue("horizontalAxisTextFormat") as TextFormat : this.getStyleValue("textFormat") as TextFormat;
+			var verticalAxisTextFormat:TextFormat = this.getStyleValue("verticalAxisTextFormat") != null ? this.getStyleValue("verticalAxisTextFormat") as TextFormat : this.getStyleValue("textFormat") as TextFormat;
+			this.horizontalAxis.maxLabelWidth = TextUtil.getTextWidth(this.horizontalAxis.valueToLabel(maxHorizontalLabel), horizontalAxisTextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
+			this.horizontalAxis.maxLabelHeight = TextUtil.getTextHeight(this.horizontalAxis.valueToLabel(maxHorizontalLabel), horizontalAxisTextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
+			this.verticalAxis.maxLabelWidth = TextUtil.getTextWidth(this.verticalAxis.valueToLabel(maxVerticalLabel), verticalAxisTextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);
+			this.verticalAxis.maxLabelHeight = TextUtil.getTextHeight(this.verticalAxis.valueToLabel(maxVerticalLabel), verticalAxisTextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);	
 			
 			this.calculateContentBounds();
 			
