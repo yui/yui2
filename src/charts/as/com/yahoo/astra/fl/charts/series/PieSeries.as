@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.series
+package com.yahoo.astra.fl.charts.series
 {
 	import com.yahoo.astra.animation.Animation;
 	import com.yahoo.astra.animation.AnimationEvent;
@@ -335,7 +335,7 @@
 				var categoryName:String = this.itemToCategory(item, i);
 				var markerSkin:Object = markerSkins[i % markerSkins.length]
 				var fillColor:uint = fillColors[i % fillColors.length];
-				var data:LegendItemData = new LegendItemData(categoryName, markerSkin, fillColor);
+				var data:LegendItemData = new LegendItemData(categoryName, markerSkin, fillColor, 1, fillColor, 1);
 				items.push(data);
 			}
 			return items;			
