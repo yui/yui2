@@ -154,6 +154,9 @@ package com.yahoo.astra.fl.charts.legend
 				{
 					UIComponent(this.marker).setStyle("skin", this.data.markerSkin);
 					UIComponent(this.marker).setStyle("fillColor", this.data.fillColor);
+					UIComponent(this.marker).setStyle("borderColor", this.data.borderColor);
+					UIComponent(this.marker).setStyle("fillAlpha", this.data.fillAlpha);
+					UIComponent(this.marker).setStyle("borderAlpha", this.data.borderAlpha);		
 				}
 				
 				var textFormat:TextFormat = this.getStyleValue("textFormat") as TextFormat;

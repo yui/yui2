@@ -91,7 +91,7 @@
 
         'carousel': {
             'type': 'js',
-            'path': 'carousel/carousel-beta-min.js',
+            'path': 'carousel/carousel-min.js',
             'requires': ['element'],
             'optional': ['animation'],
             'skinnable': true
@@ -99,7 +99,7 @@
 
         'charts': {
             'type': 'js',
-            'path': 'charts/charts-experimental-min.js',
+            'path': 'charts/charts-min.js',
             'requires': ['element', 'json', 'datasource']
         },
 
@@ -216,7 +216,7 @@
 
          'imagecropper': {
              'type': 'js',
-             'path': 'imagecropper/imagecropper-beta-min.js',
+             'path': 'imagecropper/imagecropper-min.js',
              'requires': ['dom', 'event', 'dragdrop', 'element', 'resize'],
              'skinnable': true
          },
@@ -344,7 +344,7 @@
 
         'uploader': {
             'type': 'js',
-            'path': 'uploader/uploader-experimental.js',
+            'path': 'uploader/uploader.js',
             'requires': ['element']
         },
 

@@ -22,11 +22,20 @@
 	 */
     [Style(name="fillColor", type="uint")]
     
-    
 	/**
 	 * The color used by a skin that uses border colors.
 	 */
     [Style(name="borderColor", type="uint")]
+    
+    /**
+     * The alpha used by a skin that has a fill alpha.
+     */
+    [Style(name="fillAlpha", type="Number")]
+    
+    /**
+     * The alpha used by a skin that has a border alpha.
+     */
+    [Style(name="borderAlpha", type="Number")]
     
     /**
      * The primary item renderer class for a chart series.
@@ -155,6 +164,10 @@
 					(this.skin as IProgrammaticSkin).fillColor = fillColor;
 					var borderColor:uint = this.getStyleValue("borderColor") as uint;
 					(this.skin as IProgrammaticSkin).borderColor = borderColor;
+					var borderAlpha:Number = this.getStyleValue("borderAlpha") as Number;
+					(this.skin as IProgrammaticSkin).borderAlpha = borderAlpha;
+					var fillAlpha:Number = this.getStyleValue("fillAlpha") as Number;
+					(this.skin as IProgrammaticSkin).fillAlpha = fillAlpha;
 				}
 				
 				if(this.skin is UIComponent)
