@@ -112,6 +112,16 @@ YAHOO.widget.Slider.ANIM_AVAIL = false;
 YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
     /**
+     * Tracks the state of the mouse button to aid in when events are fired.
+     *
+     * @property _mouseDown
+     * @type boolean
+     * @default false
+     * @private
+     */
+    _mouseDown : false,
+
+    /**
      * Override the default setting of dragOnly to true.
      * @property dragOnly
      * @type boolean
@@ -295,12 +305,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
          * @type YAHOO.widget.SliderThumb
          */
         this.thumb = t;
-        t.cacheBetweenDrags = true;
 
-        // add handler for the handle onchange event
-        //t.onChange = function() { 
-            //self.handleThumbChange(); 
-        //};
+        t.cacheBetweenDrags = true;
 
         if (t._isHoriz && t.xTicks && t.xTicks.length) {
             this.tickPause = Math.round(360 / t.xTicks.length);
@@ -315,12 +321,16 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 return self.setStartSliderState(); 
             };
         t.onMouseDown = function () { 
+                self._mouseDown = true;
+                self.logger.log('thumb mousedown');
                 return self.focus(); 
             };
         t.startDrag = function() { 
+                self.logger.log('thumb startDrag');
                 self._slideStart(); 
             };
         t.onDrag = function() { 
+                self.logger.log('thumb drag');
                 self.fireEvents(true); 
             };
         t.onMouseUp = function() { 
@@ -348,8 +358,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     handleKeyPress: function(e) {
         if (this.enableKeys) {
-            var Event = YAHOO.util.Event;
-            var kc = Event.getCharCode(e);
+            var Event = YAHOO.util.Event,
+                kc = Event.getCharCode(e);
             switch (kc) {
                 case 0x25: // left
                 case 0x26: // up
@@ -372,13 +382,13 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     handleKeyDown: function(e) {
         if (this.enableKeys) {
-            var Event = YAHOO.util.Event;
+            var Event = YAHOO.util.Event,
+                kc = Event.getCharCode(e),
+                t  = this.thumb,
+                h  = this.getXValue(),
+                v  = this.getYValue(),
+                changeValue = true;
 
-            var kc = Event.getCharCode(e), t=this.thumb;
-            var h=this.getXValue(),v=this.getYValue();
-
-            var horiz = false;
-            var changeValue = true;
             switch (kc) {
 
                 // left
@@ -410,8 +420,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 if (t._isRegion) {
                     this.setRegionValue(h, v, true);
                 } else {
-                    var newVal = (t._isHoriz) ? h : v;
-                    this.setValue(newVal, true);
+                    this.setValue((t._isHoriz ? h : v), true);
                 }
                 Event.stopEvent(e);
             }
@@ -507,6 +516,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @private
      */
     thumbMouseUp: function() {
+        this._mouseDown = false;
         this.logger.log("thumb mouseup");
         if (!this.isLocked() && !this.moveComplete) {
             this.endMove();
@@ -515,7 +525,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
     },
 
     onMouseUp: function() {
-        this.logger.log("bg mouseup");
+        this._mouseDown = false;
+        this.logger.log("background mouseup");
         if (this.backgroundEnabled && !this.isLocked() && !this.moveComplete) {
             this.endMove();
         }
@@ -556,12 +567,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
         this.verifyOffset();
 
-        if (this.isLocked()) {
-            return false;
-        } else {
-            this._slideStart();
-            return true;
-        }
+        return !this.isLocked();
     },
 
     /**
@@ -627,30 +633,6 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
     },
 
     /**
-     * Internal handler for the slider thumb's onChange event
-     * @method handleThumbChange
-     * @private
-     */
-    handleThumbChange: function () { 
-        /*
-        var t = this.thumb;
-        if (t._isRegion) {
-
-            if (!this._silent) {
-                t.onChange(t.getXValue(), t.getYValue());
-                this.fireEvent("change", { x: t.getXValue(), y: t.getYValue() } );
-            }
-        } else {
-            if (!this._silent) {
-                t.onChange(t.getValue());
-                this.fireEvent("change", t.getValue());
-            }
-        }
-        */
-
-    },
-
-    /**
      * Provides a way to set the value of the slider in code.
      * @method setValue
      * @param {int} newOffset the number of pixels the thumb should be
@@ -662,12 +644,14 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @return {boolean} true if the move was performed, false if it failed
      */
     setValue: function(newOffset, skipAnim, force, silent) {
+        var t = this.thumb, newX, newY;
+
         this.logger.log("setValue " + newOffset);
 
         this._silent = silent;
         this.valueChangeSource = this.SOURCE_SET_VALUE;
 
-        if (!this.thumb.available) {
+        if (!t.available) {
             this.logger.log("defer setValue until after onAvailble");
             this.deferredSetValue = arguments;
             return false;
@@ -683,20 +667,20 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
             return false;
         }
 
-        var t = this.thumb;
-        t.lastOffset = [newOffset, newOffset];
-        var newX, newY;
-        this.verifyOffset(true);
         if (t._isRegion) {
+            this.logger.log("Call to setValue for region Slider ignored. Use setRegionValue","warn");
             return false;
-        } else if (t._isHoriz) {
-            this._slideStart();
-            // this.fireEvent("slideStart");
+        }
+
+        t.lastOffset = [newOffset, newOffset];
+        this.verifyOffset(true);
+
+        this._slideStart();
+
+        if (t._isHoriz) {
             newX = t.initPageX + newOffset + this.thumbCenterPoint.x;
             this.moveThumb(newX, t.initPageY, skipAnim);
         } else {
-            this._slideStart();
-            // this.fireEvent("slideStart");
             newY = t.initPageY + newOffset + this.thumbCenterPoint.y;
             this.moveThumb(t.initPageX, newY, skipAnim);
         }
@@ -718,12 +702,13 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @return {boolean} true if the move was performed, false if it failed
      */
     setRegionValue: function(newOffset, newOffset2, skipAnim, force, silent) {
+        var t = this.thumb, newX, newY;
 
         this._silent = silent;
 
         this.valueChangeSource = this.SOURCE_SET_VALUE;
 
-        if (!this.thumb.available) {
+        if (!t.available) {
             this.logger.log("defer setRegionValue until after onAvailble");
             this.deferredSetRegionValue = arguments;
             return false;
@@ -739,19 +724,21 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
             return false;
         }
 
-        var t = this.thumb;
-        t.lastOffset = [newOffset, newOffset2];
-        this.verifyOffset(true);
-        if (t._isRegion) {
-            this._slideStart();
-            var newX = t.initPageX + newOffset + this.thumbCenterPoint.x;
-            var newY = t.initPageY + newOffset2 + this.thumbCenterPoint.y;
-            this.moveThumb(newX, newY, skipAnim);
-            return true;
+        if (!t._isRegion) {
+            this.logger.log("Call to setRegionValue for non-region Slider ignored. Use setValue","warn");
+            return false;
         }
 
-        return false;
+        t.lastOffset = [newOffset, newOffset2];
+        this.verifyOffset(true);
 
+        this._slideStart();
+
+        newX = t.initPageX + newOffset + this.thumbCenterPoint.x;
+        newY = t.initPageY + newOffset2 + this.thumbCenterPoint.y;
+        this.moveThumb(newX, newY, skipAnim);
+
+        return true;
     },
 
     /**
@@ -780,9 +767,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 // Reset thumb
                 t.initPageX = this.initPageX + t.startOffset[0];
                 t.initPageY = this.initPageY + t.startOffset[1];
-                //t.deltaSetXY = [-this.initPageX,-this.initPageY];
                 t.deltaSetXY = null;
-                //this.resetConstraints();
                 this.resetThumbConstraints();
 
                 return false;
@@ -806,8 +791,9 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     moveThumb: function(x, y, skipAnim, midMove) {
 
-        var t = this.thumb;
-        var self = this;
+        var t = this.thumb,
+            self = this,
+            p,_p,anim;
 
         if (!t.available) {
             this.logger.log("thumb is not available yet, aborting move");
@@ -818,14 +804,11 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
         t.setDelta(this.thumbCenterPoint.x, this.thumbCenterPoint.y);
 
-        var _p = t.getTargetCoord(x, y);
-        var p = [Math.round(_p.x), Math.round(_p.y)];
-
-        this._slideStart();
+        _p = t.getTargetCoord(x, y);
+        p = [Math.round(_p.x), Math.round(_p.y)];
 
         if (this.animate && t._graduated && !skipAnim) {
             this.logger.log("graduated");
-            // this.thumb._animating = true;
             this.lock();
 
             // cache the current thumb pos
@@ -837,23 +820,25 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         } else if (this.animate && YAHOO.widget.Slider.ANIM_AVAIL && !skipAnim) {
             this.logger.log("animating to " + p);
 
-            // this.thumb._animating = true;
             this.lock();
 
-            var oAnim = new YAHOO.util.Motion( 
+            anim = new YAHOO.util.Motion( 
                     t.id, { points: { to: p } }, 
                     this.animationDuration, 
                     YAHOO.util.Easing.easeOut );
 
-            oAnim.onComplete.subscribe( function() { 
-                    
-                    self.endMove(); 
-                } );
-            oAnim.animate();
+            anim.onComplete.subscribe( function() { 
+                    self.logger.log("Animation completed _mouseDown:" + self._mouseDown);
+                    self.unlock();
+                    if (!self._mouseDown) {
+                        self.endMove(); 
+                    }
+                });
+            anim.animate();
+
         } else {
             t.setDragElPos(x, y);
-            // this.fireEvents();
-            if (!midMove) {
+            if (!midMove && !this._mouseDown) {
                 this.endMove();
             }
         }
@@ -870,7 +855,6 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
     },
 
     _slideEnd: function() {
-
         if (this._sliding && this.moveComplete) {
             // Reset state before firing slideEnd
             var silent = this._silent;
@@ -893,21 +877,9 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     moveOneTick: function(finalCoord) {
 
-        var t = this.thumb, tmp;
-
-
-        // redundant call to getXY since we set the position most of time prior 
-        // to getting here.  Moved to this.curCoord
-        //var curCoord = YAHOO.util.Dom.getXY(t.getEl());
-
-        // alignElWithMouse caches position in lastPageX, lastPageY .. doesn't work
-        //var curCoord = [this.lastPageX, this.lastPageY];
-
-        // var thresh = Math.min(t.tickSize + (Math.floor(t.tickSize/2)), 10);
-        // var thresh = 10;
-        // var thresh = t.tickSize + (Math.floor(t.tickSize/2));
-
-        var nextCoord = null,
+        var t = this.thumb,
+            self = this,
+            nextCoord = null,
             tmpX, tmpY;
 
         if (t._isRegion) {
@@ -935,27 +907,24 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
             this.curCoord = nextCoord;
 
             // move to the next coord
-            // YAHOO.util.Dom.setXY(t.getEl(), nextCoord);
-
-            // var el = t.getEl();
-            // YAHOO.util.Dom.setStyle(el, "left", (nextCoord[0] + this.thumb.deltaSetXY[0]) + "px");
-            // YAHOO.util.Dom.setStyle(el, "top",  (nextCoord[1] + this.thumb.deltaSetXY[1]) + "px");
-
             this.thumb.alignElWithMouse(t.getEl(), nextCoord[0] + this.thumbCenterPoint.x, nextCoord[1] + this.thumbCenterPoint.y);
             
             // check if we are in the final position, if not make a recursive call
             if (!(nextCoord[0] == finalCoord[0] && nextCoord[1] == finalCoord[1])) {
-                var self = this;
                 setTimeout(function() { self.moveOneTick(finalCoord); }, 
                         this.tickPause);
             } else {
-                this.endMove();
+                this.unlock();
+                if (!this._mouseDown) {
+                    this.endMove();
+                }
             }
         } else {
-            this.endMove();
+            this.unlock();
+            if (!this._mouseDown) {
+                this.endMove();
+            }
         }
-
-        //this.tickPause = Math.round(this.tickPause/2);
     },
 
     /**
@@ -965,10 +934,11 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     _getNextX: function(curCoord, finalCoord) {
         this.logger.log("getNextX: " + curCoord + ", " + finalCoord);
-        var t = this.thumb;
-        var thresh;
-        var tmp = [];
-        var nextCoord = null;
+        var t = this.thumb,
+            thresh,
+            tmp = [],
+            nextCoord = null;
+
         if (curCoord[0] > finalCoord[0]) {
             thresh = t.tickSize - this.thumbCenterPoint.x;
             tmp = t.getTargetCoord( curCoord[0] - thresh, curCoord[1] );
@@ -990,10 +960,10 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @private
      */
     _getNextY: function(curCoord, finalCoord) {
-        var t = this.thumb;
-        var thresh;
-        var tmp = [];
-        var nextCoord = null;
+        var t = this.thumb,
+            thresh,
+            tmp = [],
+            nextCoord = null;
 
         if (curCoord[1] > finalCoord[1]) {
             thresh = t.tickSize - this.thumbCenterPoint.y;
@@ -1021,7 +991,6 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         }
 
         this.thumb.autoOffset();
-        //this.thumb.resetConstraints();
         this.resetThumbConstraints();
     },
 
@@ -1031,18 +1000,18 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @private
      */
     onMouseDown: function(e) {
-        // this.resetConstraints(true);
-        // this.thumb.resetConstraints(true);
-
         if (!this.backgroundEnabled || this.isLocked()) {
             return false;
         }
 
-        var x = YAHOO.util.Event.getPageX(e);
-        var y = YAHOO.util.Event.getPageY(e);
+        this._mouseDown = true;
+
+        var x = YAHOO.util.Event.getPageX(e),
+            y = YAHOO.util.Event.getPageY(e);
         this.logger.log("bg mousedown: " + x + "," + y);
 
         this.focus();
+        this._slideStart();
         this.moveThumb(x, y);
     },
 
@@ -1052,9 +1021,10 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @private
      */
     onDrag: function(e) {
+        this.logger.log("background drag");
         if (this.backgroundEnabled && !this.isLocked()) {
-            var x = YAHOO.util.Event.getPageX(e);
-            var y = YAHOO.util.Event.getPageY(e);
+            var x = YAHOO.util.Event.getPageX(e),
+                y = YAHOO.util.Event.getPageY(e);
             this.moveThumb(x, y, true, true);
             this.fireEvents();
         }
@@ -1066,10 +1036,11 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @private
      */
     endMove: function () {
-        // this._animating = false;
+        this.logger.log("endMove");
         this.unlock();
-        this.moveComplete = true;
         this.fireEvents();
+        this.moveComplete = true;
+        this._slideEnd();
     },
 
     /**
@@ -1100,8 +1071,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     fireEvents: function (thumbEvent) {
 
-        var t = this.thumb;
-        // this.logger.log("FireEvents: " + t._isRegion);
+        var t = this.thumb, newX, newY, newVal;
 
         if (!thumbEvent) {
             t.cachePosition();
@@ -1109,12 +1079,10 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
         if (! this.isLocked()) {
             if (t._isRegion) {
-                this.logger.log("region");
-                var newX = t.getXValue();
-                var newY = t.getYValue();
+                newX = t.getXValue();
+                newY = t.getYValue();
 
                 if (newX != this.previousX || newY != this.previousY) {
-                    // this.logger.log("Firing onchange");
                     if (!this._silent) {
                         this.onChange(newX, newY);
                         this.fireEvent("change", { x: newX, y: newY });
@@ -1125,7 +1093,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 this.previousY = newY;
 
             } else {
-                var newVal = t.getValue();
+                newVal = t.getValue();
                 if (newVal != this.previousVal) {
                     this.logger.log("Firing onchange: " + newVal);
                     if (!this._silent) {
@@ -1135,8 +1103,6 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 }
                 this.previousVal = newVal;
             }
-
-            this._slideEnd();
 
         }
     },
@@ -1171,7 +1137,6 @@ YAHOO.augment(YAHOO.widget.Slider, YAHOO.util.EventProvider);
 YAHOO.widget.SliderThumb = function(id, sGroup, iLeft, iRight, iUp, iDown, iTickSize) {
 
     if (id) {
-        //this.init(id, sGroup);
         YAHOO.widget.SliderThumb.superclass.constructor.call(this, id, sGroup);
 
         /**
@@ -1183,8 +1148,6 @@ YAHOO.widget.SliderThumb = function(id, sGroup, iLeft, iRight, iUp, iDown, iTick
         this.parentElId = sGroup;
     }
 
-
-    //this.removeInvalidHandleType("A");
 
     this.logger = new YAHOO.widget.LogWriter(this.toString());
 
@@ -1274,28 +1237,29 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      * @type [int, int]
      */
     getOffsetFromParent0: function(parentPos) {
-        var myPos = YAHOO.util.Dom.getXY(this.getEl());
-        var ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
+        var myPos = YAHOO.util.Dom.getXY(this.getEl()),
+            ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
 
         return [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
     },
 
     getOffsetFromParent: function(parentPos) {
 
-        var el = this.getEl(), newOffset;
+        var el = this.getEl(), newOffset,
+            myPos,ppos,l,t,deltaX,deltaY,newLeft,newTop;
 
         if (!this.deltaOffset) {
 
-            var myPos = YAHOO.util.Dom.getXY(el);
-            var ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
+            myPos = YAHOO.util.Dom.getXY(el);
+            ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
 
             newOffset = [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
 
-            var l = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
-            var t = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
+            l = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
+            t = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
 
-            var deltaX = l - newOffset[0];
-            var deltaY = t - newOffset[1];
+            deltaX = l - newOffset[0];
+            deltaY = t - newOffset[1];
 
             if (isNaN(deltaX) || isNaN(deltaY)) {
                 this.logger.log("element does not have a position style def yet");
@@ -1304,15 +1268,13 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
             }
 
         } else {
-            var newLeft = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
-            var newTop  = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
+            newLeft = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
+            newTop  = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
 
             newOffset  = [newLeft + this.deltaOffset[0], newTop + this.deltaOffset[1]];
         }
 
         return newOffset;
-
-        //return [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
     },
 
     /**
@@ -1325,9 +1287,6 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      * @param {int} iTickSize the width of the tick interval.
      */
     initSlider: function (iLeft, iRight, iUp, iDown, iTickSize) {
-
-
-        //document these.  new for 0.12.1
         this.initLeft = iLeft;
         this.initRight = iRight;
         this.initUp = iUp;
@@ -1366,7 +1325,6 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      */
     getValue: function () {
         return (this._isHoriz) ? this.getXValue() : this.getYValue();
-        //this.logger.log("getVal: " + val);
     },
 
     /**
@@ -1432,7 +1390,6 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
     }
 
 });
-
 /**
  * A slider with two thumbs, one that represents the min value and 
  * the other the max.  Actually a composition of two sliders, both with
@@ -1454,8 +1411,8 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
  */
 YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
 
-    var self = this,
-        lang = YAHOO.lang;
+    var self  = this,
+        ready = { min : false, max : false };
 
     /**
      * A slider instance that keeps track of the lower value of the range.
@@ -1497,8 +1454,6 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
         initVals.splice(0,2,initVals[1],initVals[0]);
     }
 
-    var ready = { min : false, max : false };
-
     this.minSlider.thumb.onAvailable = function () {
         minSlider.setStartSliderState();
         ready.min = true;
@@ -1521,19 +1476,9 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
     };
 
     // dispatch mousedowns to the active slider
-    minSlider.onMouseDown = function(e) {
-        return self._handleMouseDown(e);
-    };
-
-    // we can safely ignore a mousedown on one of the sliders since
-    // they share a background
-    maxSlider.onMouseDown = function(e) { 
-        if (self.minSlider.isLocked() && !self.minSlider._sliding) {
-            return self._handleMouseDown(e);
-        } else {
-            YAHOO.util.Event.stopEvent(e); 
-            return false;
-        }
+    minSlider.onMouseDown =
+    maxSlider.onMouseDown = function(e) {
+        return this.backgroundEnabled && self._handleMouseDown(e);
     };
 
     // Fix the drag behavior so that only the active slider
@@ -1541,6 +1486,13 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
     minSlider.onDrag =
     maxSlider.onDrag = function(e) {
         self._handleDrag(e);
+    };
+
+    // Likely only the minSlider's onMouseUp will be executed, but both are
+    // overridden just to be safe
+    minSlider.onMouseUp =
+    maxSlider.onMouseUp = function (e) {
+        self._handleMouseUp(e);
     };
 
     // The core events for each slider are handled so we can expose a single
@@ -1729,13 +1681,14 @@ YAHOO.widget.DualSlider.prototype = {
      * events.  Default false
      */
     setMinValue : function (min, skipAnim, force, silent) {
-        var mins = this.minSlider;
+        var mins = this.minSlider,
+            self = this;
 
         this.activeSlider = mins;
 
         // Use a one-time event callback to delay the updateValue call
         // until after the slide operation is done
-        var self = this;
+        self = this;
         this._oneTimeCallback(mins,'slideEnd',function () {
             self.updateValue(silent);
             // Clean the slideEnd event on a timeout since this
@@ -1743,7 +1696,7 @@ YAHOO.widget.DualSlider.prototype = {
             setTimeout(function () { self._cleanEvent(mins,'slideEnd'); }, 0);
         });
 
-        mins.setValue(min, skipAnim, force, silent);
+        mins.setValue(min, skipAnim, force);
     },
 
     /**
@@ -1758,13 +1711,13 @@ YAHOO.widget.DualSlider.prototype = {
      * events.  Default false
      */
     setMaxValue : function (max, skipAnim, force, silent) {
-        var maxs = this.maxSlider;
+        var maxs = this.maxSlider,
+            self = this;
 
         this.activeSlider = maxs;
 
         // Use a one-time event callback to delay the updateValue call
         // until after the slide operation is done
-        var self = this;
         this._oneTimeCallback(maxs,'slideEnd',function () {
             self.updateValue(silent);
             // Clean the slideEnd event on a timeout since this
@@ -1772,7 +1725,7 @@ YAHOO.widget.DualSlider.prototype = {
             setTimeout(function () { self._cleanEvent(maxs,'slideEnd'); }, 0);
         });
 
-        maxs.setValue(max, skipAnim, force, silent);
+        maxs.setValue(max, skipAnim, force);
     },
 
     /**
@@ -1785,23 +1738,24 @@ YAHOO.widget.DualSlider.prototype = {
     updateValue: function(silent) {
         var min     = this.minSlider.getValue(),
             max     = this.maxSlider.getValue(),
-            changed = false;
+            changed = false,
+            mint,maxt,dim,minConstraint,maxConstraint,thumbInnerWidth;
 
         if (min != this.minVal || max != this.maxVal) {
             changed = true;
 
-            var mint = this.minSlider.thumb,
-                maxt = this.maxSlider.thumb,
-                dim  = this.isHoriz ? 'x' : 'y';
+            mint = this.minSlider.thumb;
+            maxt = this.maxSlider.thumb;
+            dim  = this.isHoriz ? 'x' : 'y';
 
-            var thumbInnerWidth = this.minSlider.thumbCenterPoint[dim] +
-                                  this.maxSlider.thumbCenterPoint[dim];
+            thumbInnerWidth = this.minSlider.thumbCenterPoint[dim] +
+                              this.maxSlider.thumbCenterPoint[dim];
 
             // Establish barriers within the respective other thumb's edge, less
             // the minRange.  Limit to the Slider's range in the case of
             // negative minRanges.
-            var minConstraint = Math.max(max-thumbInnerWidth-this.minRange,0);
-            var maxConstraint = Math.min(-min-thumbInnerWidth-this.minRange,0);
+            minConstraint = Math.max(max-thumbInnerWidth-this.minRange,0);
+            maxConstraint = Math.min(-min-thumbInnerWidth-this.minRange,0);
 
             if (this.isHoriz) {
                 minConstraint = Math.min(minConstraint,maxt.rightConstraint);
@@ -1835,8 +1789,8 @@ YAHOO.widget.DualSlider.prototype = {
     selectActiveSlider: function(e) {
         var min = this.minSlider,
             max = this.maxSlider,
-            minLocked = min.isLocked(),
-            maxLocked = max.isLocked(),
+            minLocked = min.isLocked() || !min.backgroundEnabled,
+            maxLocked = max.isLocked() || !min.backgroundEnabled,
             Ev  = YAHOO.util.Event,
             d;
 
@@ -1854,13 +1808,32 @@ YAHOO.widget.DualSlider.prototype = {
     },
 
     /**
-     * Overrides the onMouseDown for both slider, only moving the active slider
-     * @method handleMouseDown
-     * @private
+     * Delegates the onMouseDown to the appropriate Slider
+     *
+     * @method _handleMouseDown
+     * @param e {Event} mouseup event
+     * @protected
      */
     _handleMouseDown: function(e) {
-        this.selectActiveSlider(e);
-        YAHOO.widget.Slider.prototype.onMouseDown.call(this.activeSlider, e);
+        if (!e._handled) {
+            e._handled = true;
+            this.selectActiveSlider(e);
+            return YAHOO.widget.Slider.prototype.onMouseDown.call(this.activeSlider, e);
+        } else {
+            return false;
+        }
+    },
+
+    /**
+     * Delegates the onMouseUp to the active Slider
+     *
+     * @method _handleMouseUp
+     * @param e {Event} mouseup event
+     * @protected
+     */
+    _handleMouseUp : function (e) {
+        YAHOO.widget.Slider.prototype.onMouseUp.apply(
+            this.activeSlider, arguments);
     },
 
     /**
@@ -1891,8 +1864,9 @@ YAHOO.widget.DualSlider.prototype = {
      * @private
      */
     _cleanEvent : function (o,evt) {
+        var ce,i,len,j,subs,newSubs;
+
         if (o.__yui_events && o.events[evt]) {
-            var ce, i, len;
             for (i = o.__yui_events.length; i >= 0; --i) {
                 if (o.__yui_events[i].type === evt) {
                     ce = o.__yui_events[i];
@@ -1900,9 +1874,9 @@ YAHOO.widget.DualSlider.prototype = {
                 }
             }
             if (ce) {
-                var subs    = ce.subscribers,
-                    newSubs = [],
-                    j = 0;
+                subs    = ce.subscribers;
+                newSubs = [];
+                j = 0;
                 for (i = 0, len = subs.length; i < len; ++i) {
                     if (subs[i]) {
                         newSubs[j++] = subs[i];
@@ -1934,8 +1908,8 @@ YAHOO.augment(YAHOO.widget.DualSlider, YAHOO.util.EventProvider);
  */
 YAHOO.widget.Slider.getHorizDualSlider = 
     function (bg, minthumb, maxthumb, range, iTickSize, initVals) {
-        var mint, maxt;
-        var YW = YAHOO.widget, Slider = YW.Slider, Thumb = YW.SliderThumb;
+        var mint, maxt,
+            YW = YAHOO.widget, Slider = YW.Slider, Thumb = YW.SliderThumb;
 
         mint = new Thumb(minthumb, bg, 0, range, 0, 0, iTickSize);
         maxt = new Thumb(maxthumb, bg, 0, range, 0, 0, iTickSize);
@@ -1959,8 +1933,8 @@ YAHOO.widget.Slider.getHorizDualSlider =
  */
 YAHOO.widget.Slider.getVertDualSlider = 
     function (bg, minthumb, maxthumb, range, iTickSize, initVals) {
-        var mint, maxt;
-        var YW = YAHOO.widget, Slider = YW.Slider, Thumb = YW.SliderThumb;
+        var mint, maxt,
+            YW = YAHOO.widget, Slider = YW.Slider, Thumb = YW.SliderThumb;
 
         mint = new Thumb(minthumb, bg, 0, 0, 0, range, iTickSize);
         maxt = new Thumb(maxthumb, bg, 0, 0, 0, range, iTickSize);

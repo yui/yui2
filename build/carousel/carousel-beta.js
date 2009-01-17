@@ -548,6 +548,7 @@
      */
      function setItemSelection(newposition, oldposition) {
         var backwards,
+            carousel = this,
             cssClass   = this.CLASSES,
             el,
             firstItem  = this._firstItem,
@@ -560,8 +561,8 @@
         backwards = numVisible > 1 && !isCircular && position > newposition;
 
         if (position >= 0 && position < numItems) {
-            if (!JS.isUndefined(this._itemsTable.items[position])) {
-                el = Dom.get(this._itemsTable.items[position].id);
+            if (!JS.isUndefined(carousel._itemsTable.items[position])) {
+                el = Dom.get(carousel._itemsTable.items[position].id);
                 if (el) {
                     Dom.removeClass(el, cssClass.SELECTED_ITEM);
                 }
@@ -575,12 +576,12 @@
             newposition = firstItem;
         }
 
-        if (JS.isUndefined(this._itemsTable.items[newposition])) {
-            this.scrollTo(newposition); // still loading the item
+        if (JS.isUndefined(carousel._itemsTable.items[newposition])) {
+            carousel.scrollTo(newposition); // still loading the item
         }
 
-        if (!JS.isUndefined(this._itemsTable.items[newposition])) {
-            el = Dom.get(this._itemsTable.items[newposition].id);
+        if (!JS.isUndefined(carousel._itemsTable.items[newposition])) {
+            el = Dom.get(carousel._itemsTable.items[newposition].id);
             if (el) {
                 Dom.addClass(el, cssClass.SELECTED_ITEM);
             }
@@ -589,7 +590,7 @@
         if (newposition < firstItem || newposition > sentinel) {
             // out of focus
             if (backwards) {
-                this.scrollTo(firstItem - numVisible, true);
+                carousel.scrollTo(firstItem - numVisible, true);
             } else {
                 this.scrollTo(newposition);
             }
@@ -745,10 +746,9 @@
      * @method updateStateAfterScroll
      * @param {Integer} item The index to which the Carousel has scrolled to.
      * @param {Integer} sentinel The last element in the view port.
-     * @param {Boolean} dontSelect True if select should be avoided
      * @private
      */
-    function updateStateAfterScroll(item, sentinel, dontSelect) {
+    function updateStateAfterScroll(item, sentinel) {
         var carousel   = this,
             page       = carousel.get("currentPage"),
             newPage,
@@ -760,12 +760,9 @@
             carousel.fireEvent(pageChangeEvent, newPage);
         }
 
-        if (!dontSelect) {
-            if (carousel.get("selectOnScroll")) {
-                if (item != carousel._selectedItem) { // out of sync
-                    carousel.set("selectedItem",
-                                 carousel._getSelectedItem(item));
-                }
+        if (carousel.get("selectOnScroll")) {
+            if (carousel.get("selectedItem") != carousel._selectedItem) {
+                carousel.set("selectedItem", carousel._selectedItem);
             }
         }
 
@@ -775,7 +772,9 @@
         }
 
         carousel.fireEvent(afterScrollEvent,
-                           { first: item, last: sentinel }, carousel);
+                           { first: carousel._firstItem,
+                             last: sentinel },
+                           carousel);
     }
 
     /*
@@ -1649,6 +1648,7 @@
             carousel.on(pageChangeEvent, syncPagerUi, carousel);
 
             carousel.on(renderEvent, function (ev) {
+                this.set("selectedItem", this.get("firstVisible"));
                 syncNavigation.call(carousel, ev);
                 syncPagerUi.call(carousel, ev);
                 this._setClipContainerSize();
@@ -1923,7 +1923,10 @@
          * @public
          */
         scrollPageBackward: function () {
-            this.scrollTo(this._firstItem - this.get("numVisible"));
+            var item = this._firstItem - this.get("numVisible");
+
+            this._selectedItem = this._getSelectedItem(item);
+            this.scrollTo(item);
         },
 
         /**
@@ -1933,7 +1936,10 @@
          * @public
          */
         scrollPageForward: function () {
-            this.scrollTo(this._firstItem + this.get("numVisible"));
+            var item = this._firstItem + this.get("numVisible");
+
+            this._selectedItem = this._getSelectedItem(item);
+            this.scrollTo(item);
         },
 
         /**
@@ -2011,7 +2017,7 @@
                         dontSelect);
             } else {
                 this._setCarouselOffset(offset);
-                updateStateAfterScroll.call(this, item, sentinel, dontSelect);
+                updateStateAfterScroll.call(this, item, sentinel);
             }
         },
 
@@ -2107,10 +2113,9 @@
             }
 
             this._isAnimationInProgress = true;
-            animObj.onComplete.subscribe(this._animationCompleteHandler, {
-                    scope: this, first: item, last: sentinel,
-                    dontSelect: dontSelect
-            });
+            animObj.onComplete.subscribe(this._animationCompleteHandler,
+                                         { scope: this, item: item,
+                                           last: sentinel });
             animObj.animate();
         },
 
@@ -2125,7 +2130,7 @@
          */
         _animationCompleteHandler: function (ev, p, o) {
             o.scope._isAnimationInProgress = false;
-            updateStateAfterScroll.call(o.scope,o.first,o.last,o.dontSelect);
+            updateStateAfterScroll.call(o.scope, o.item, o.last);
         },
 
         /**
@@ -2258,8 +2263,8 @@
                 selItem = this.get("selectedItem");
                 if (selItem == this._firstItem) {
                     position = selItem - this.get("numVisible");
+                    this._selectedItem = this._getSelectedItem(selItem-1);
                     this.scrollTo(position);
-                    this.set("selectedItem", this._getSelectedItem(selItem-1));
                 } else {
                     position = this.get("selectedItem") -
                             this.get("scrollIncrement");
@@ -2304,6 +2309,7 @@
                 pos = val.lastIndexOf("#");
                 if (pos != -1) {
                     val = this.getItemPositionById(val.substring(pos + 1));
+                    this._selectedItem = val;
                     this.scrollTo(val);
                     Event.preventDefault(ev);
                 }
@@ -2797,6 +2803,7 @@
          * @protected
          */
         _setSelectedItem: function (val) {
+            console.log("setting selection to " + val);
             this._selectedItem = val;
         },
 
