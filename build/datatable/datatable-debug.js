@@ -5496,7 +5496,7 @@ _addTrEl : function (oRecord) {
  * @private
  */
 _updateTrEl : function(elTr, oRecord) {
-    var ok = this.get("formatRow") ? this.get("formatRow")(elTr, oRecord) : true;
+    var ok = this.get("formatRow") ? this.get("formatRow").call(this, elTr, oRecord) : true;
     if(ok) {
         // Hide the row to prevent constant reflows
         elTr.style.display = 'none';

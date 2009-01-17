@@ -2,6 +2,11 @@ DataTable Release Notes
 
 *** version 2.6.0 ***
 
+* The custom function defined by the formatRow Attribute is now called within
+the scope of the DataTable instance.
+
+*** version 2.6.0 ***
+
 * GA release.
 * Created new subclass ScrollingDataTable. Created new classes CellEditor,
 BaseCellEditor, and associated subclasses. As a result, the following API changes
