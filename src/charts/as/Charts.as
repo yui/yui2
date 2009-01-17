@@ -1,4 +1,4 @@
-﻿package
+package
 {
 	import com.adobe.serialization.json.JSON;
 	import com.yahoo.astra.fl.charts.*;
