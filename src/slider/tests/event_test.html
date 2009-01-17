@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+    <title>Test Page</title>
+    <link type="text/css" rel="stylesheet" href="/assets/dpSyntaxHighlighter.css">
+    <link type="text/css" rel="stylesheet" href="../../../build/logger/assets/skins/sam/logger.css">
+    <link type="text/css" rel="stylesheet" href="../../../build/slider/assets/skins/sam/slider.css">
+    <style type="text/css">
+        span.down  { background: #f00; color: #fff; }
+        span.m_up  { background: #0f0; color: #fff; }
+        span.sdrg  { background: #00f; color: #fff; }
+        span.drag  { background: #ff0; }
+        span.start { background: #f0f; color: #fff; }
+        span._end  { background: #0ff; }
+        span.end   { background: #000; color: #fff; }
+        span.go    { background: #900; color: #fff; }
+        span.stop  { background: #009; color: #fff; }
+        span.bdwn  { background: #090; color: #fff; }
+        span.bdrg  { background: #990; }
+        span.bup   { background: #099; color: #fff; }
+    </style>
+</head>
+<body class="yui-skin-sam">
+<div id="log"></div>
+<div class="markup">
+    <p><label for="v">Value</label> <input type="text" size="3" id="v" name="v" value="0"> <input type="button" id="go" value="go"> <em id="rpt">0</em></p>
+    <div id="bg" class="yui-h-slider" tabindex="-1">
+        <div id="t" class="yui-slider-thumb">
+            <img src="../../../build/slider/assets/thumb-n.gif" alt="slider thumb">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../../build/event/event.js"></script>
+<script type="text/javascript" src="../../../build/dragdrop/dragdrop.js"></script>
+<script type="text/javascript" src="../../../build/slider/slider-debug.js"></script>
+<!--script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/slider/slider-debug.js"></script-->
+<script type="text/javascript" src="../../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../../build/logger/logger.js"></script>
+<script type="text/javascript">
+YAHOO.util.Event.onDOMReady(function () {
+
+var log = new YAHOO.widget.LogReader('log',{ newestOnTop: false }),
+    $ = YAHOO.util.Dom.get,
+    Event = YAHOO.util.Event,
+    s1,
+    startCount = 1,
+    endCount = 1;
+
+log.hideCategory('info');
+log.hideCategory('warn');
+log.hideCategory('error');
+log.hideCategory('time');
+log.hideCategory('window');
+log.hideSource('global');
+log.hideSource('LogReader');
+
+var s1 = YAHOO.widget.Slider.getHorizSlider('bg','t',0,200);
+//s1.backgroundEnabled = false;
+//s1.animate = true;
+
+s1.subscribe('slideStart', function () {
+    YAHOO.log('slideStart: ' + (startCount++),'GO','debug');
+});
+
+s1.subscribe('change', function (val) {
+    $('rpt').innerHTML = val;
+});
+
+s1.subscribe('slideEnd', function () {
+    YAHOO.log('slideEnd: ' + (endCount++),'STOP','debug');
+});
+
+Event.on('go','click',function () {
+    s1.setValue(parseInt($('v').value));
+});
+
+});
+</script>
+<script type="text/javascript" src="/assets/dpSyntaxHighlighter.js" ></script>
+<script type="text/javascript" src="/assets/dpSyntaxHighlightExample.js"></script>
+</body>
+</html>
