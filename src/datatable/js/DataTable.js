@@ -2689,7 +2689,7 @@ _initMsgTbodyEl : function(elTable) {
         elMsgTr.className = DT.CLASS_FIRST + " " + DT.CLASS_LAST;
         this._elMsgTr = elMsgTr;
         var elMsgTd = elMsgTr.appendChild(document.createElement("td"));
-        elMsgTd.colSpan = this._oColumnSet.keys.length;
+        elMsgTd.colSpan = this._oColumnSet.keys.length || 1;
         elMsgTd.className = DT.CLASS_FIRST + " " + DT.CLASS_LAST;
         this._elMsgTd = elMsgTd;
         elMsgTbody = elTable.insertBefore(elMsgTbody, this._elTbody);
