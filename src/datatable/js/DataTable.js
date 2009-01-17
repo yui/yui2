@@ -6981,7 +6981,7 @@ formatCell : function(elCell, oRecord, oColumn) {
  * @method updateCell
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column | String | Number} A Column key, or a ColumnSet key index.
- * @param oData {Object} Object literal of data for the cell.
+ * @param oData {Object} New data value for the cell.
  */
 updateCell : function(oRecord, oColumn, oData) {    
     // Validate Column and Record

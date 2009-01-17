@@ -9318,7 +9318,7 @@ formatCell : function(elCell, oRecord, oColumn) {
  * @method updateCell
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column | String | Number} A Column key, or a ColumnSet key index.
- * @param oData {Object} Object literal of data for the cell.
+ * @param oData {Object} New data value for the cell.
  */
 updateCell : function(oRecord, oColumn, oData) {    
     // Validate Column and Record
@@ -16172,7 +16172,7 @@ lang.extend(widget.DropdownCellEditor, BCE, {
  * Array of dropdown values. Can either be a simple array (e.g., 
  * ["Alabama","Alaska","Arizona","Arkansas"]) or a an array of objects (e.g., 
  * [{label:"Alabama", value:"AL"}, {label:"Alaska", value:"AK"},
- * {label:"Arizona", value:"AZ}, {label:"Arkansas", value:"AR}]). 
+ * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]). 
  *
  * @property dropdownOptions
  * @type String[] | Object[]
