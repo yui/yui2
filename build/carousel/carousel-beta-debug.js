@@ -287,6 +287,7 @@
         } else {
             index = currIndex + this.get("numVisible");
         }
+        this._selectedItem = this._getSelectedItem(index);
         this.scrollTo.call(this, index);
     }
 
@@ -768,7 +769,7 @@
         }
 
         delete carousel._autoPlayTimer;
-        if (carousel.get("autoPlay") > 0) {
+        if (carousel.get("autoPlayInterval") > 0) {
             carousel.startAutoPlay();
         }
 
@@ -1619,10 +1620,24 @@
              * @description Set this to time in milli-seconds to have the
              * Carousel automatically scroll the contents.
              * @type Number
+             * @deprecated Use autoPlayInterval instead.
              */
             this.setAttributeConfig("autoPlay", {
                     validator : JS.isNumber,
                     value     : attrs.autoPlay || 0
+            });
+
+            /**
+             * @attribute autoPlayInterval
+             * @description The delay in milli-seconds for scrolling the
+             * Carousel during auto-play.
+             * Note: The startAutoPlay() method needs to be invoked to trigger
+             * automatic scrolling of Carousel.
+             * @type Number
+             */
+            this.setAttributeConfig("autoPlayInterval", {
+                    validator : JS.isNumber,
+                    value     : attrs.autoPlayInterval || 0
             });
         },
 
@@ -2098,7 +2113,7 @@
          */
         startAutoPlay: function () {
             var self  = this,
-                timer = this.get("autoPlay");
+                timer = this.get("autoPlayInterval");
 
             if (timer > 0) {
                 if (!JS.isUndefined(this._autoPlayTimer)) {
@@ -2120,7 +2135,7 @@
             if (!JS.isUndefined(this._autoPlayTimer)) {
                 clearTimeout(this._autoPlayTimer);
                 delete this._autoPlayTimer;
-                this.set("autoPlay", 0);
+                this.set("autoPlayInterval", 0);
                 this.fireEvent(stopAutoPlayEvent);
             }
         },
