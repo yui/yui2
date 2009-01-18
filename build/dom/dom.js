@@ -7,15 +7,20 @@
 (function() {
     YAHOO.env._id_counter = YAHOO.env._id_counter || 0;     // for use with generateId (global to save state if Dom is overwritten)
 
-    var Y = YAHOO.util,     // internal shorthand
+        // internal shorthand
+    var Y = YAHOO.util,
         lang = YAHOO.lang,
         trim = YAHOO.lang.trim,
         propertyCache = {}, // for faster hyphen converts
-        reCache = {},          // cache regexes for className
-        document = window.document,     // cache for faster lookups
+        reCache = {}, // cache className regexes
+
+        // DOM aliases 
+        document = window.document,     
         documentElement = document.documentElement,
+        body = document.body,
 
         // string constants
+        DOCUMENT_ELEMENT = 'documentElement',
         _CLASS = 'class', // underscore due to reserved word
         CLASSNAME = 'className',
         EMPTY = '',
@@ -101,8 +106,6 @@
          * @return {String | Array} The current value of the style property for the element(s).
          */
         getStyle: function(el, property) {
-            property = Y.Dom._toCamel(property);
-            
             var f = function(element) {
                 return Y.Dom._getStyle(element, property);
             };
@@ -114,6 +117,8 @@
         _getStyle: function() {
             if (window.getComputedStyle) { // W3C DOM method
                 return function(el, property) {
+                    property = Y.Dom._toCamel(property);
+            
                     if (property == 'float') { // fix reserved word
                         property = 'cssFloat';
                     }
@@ -132,24 +137,27 @@
                 };
             } else if (documentElement.currentStyle) {
                 return function(el, property) {                         
-                    switch( Y.Dom._toCamel(property) ) {
+                    property = Y.Dom._toCamel(property);
+                    var value;
+
+                    switch(property) {
                         case 'opacity' :// IE opacity uses filter
-                            var val = 100;
+                            value = 100;
                             try { // will error if no DXImageTransform
-                                val = el.filters['DXImageTransform.Microsoft.Alpha'].opacity;
+                                value = el.filters['DXImageTransform.Microsoft.Alpha'].opacity;
 
                             } catch(e) {
                                 try { // make sure its in the document
-                                    val = el.filters('alpha').opacity;
+                                    value = el.filters('alpha').opacity;
                                 } catch(e) {
                                 }
                             }
-                            return val / 100;
+                            return value / 100;
                         case 'float': // fix reserved word
                             property = 'styleFloat'; // fall through
                         default: 
                             // test currentStyle before touching
-                            var value = el.currentStyle ? el.currentStyle[property] : null;
+                            value = el.currentStyle ? el.currentStyle[property] : null;
                             return ( el.style[property] || value );
                     }
                 };
@@ -218,66 +226,74 @@
          */
         getXY: function(el) {
             var f = function(el) {
-                // has to be part of document to have pageXY
-                if ( (el.parentNode === null || el.offsetParent === null ||
-                        this.getStyle(el, 'display') == 'none') && el != el.ownerDocument.body) {
-                    return false;
-                }
-                
                 return Y.Dom._getXY(el);
             };
             
             return Y.Dom.batch(el, f, Y.Dom, true);
         },
 
+        _canPosition: function(el) {
+            return ( Y.Dom._getStyle(el, 'display') !== 'none' && Y.Dom.inDocument(el) );
+        },
+
         _getXY: function() {
-            if (documentElement.getBoundingClientRect) { // IE
+            if (documentElement.getBoundingClientRect) { // w3c
                 return function(el) {
                     var box = el.getBoundingClientRect(),
-                        round = Math.round;
+                        round = Math.round,
+                        rootNode = el.ownerDocument,
+                        ret = false;
 
-                    var rootNode = el.ownerDocument;
-                    return [round(box.left + Y.Dom.getDocumentScrollLeft(rootNode)), round(box.top +
-                            Y.Dom.getDocumentScrollTop(rootNode))];
+                    if ( Y.Dom._canPosition(el) ) {
+                        ret = [round(box.left + Y.Dom.getDocumentScrollLeft(rootNode)), round(box.top +
+                                Y.Dom.getDocumentScrollTop(rootNode))];
+                    } else {
+                    }
+
+                    return ret;
                 };
-            } else {
+            } else { // manual offset crawl
                 return function(el) { // manually calculate by crawling up offsetParents
-                    var pos = [el.offsetLeft, el.offsetTop];
-                    var parentNode = el.offsetParent;
+                    var pos = false,
+                        parentNode = el.offsetParent,
+                        // safari: subtract body offsets if el is abs (or any offsetParent), unless body is offsetParent
+                        accountForBody = (isSafari &&
+                                Y.Dom._getStyle(el, 'position') == 'absolute' &&
+                                el.offsetParent == el.ownerDocument.body);
 
-                    // safari: subtract body offsets if el is abs (or any offsetParent), unless body is offsetParent
-                    var accountForBody = (isSafari &&
-                            Y.Dom.getStyle(el, 'position') == 'absolute' &&
-                            el.offsetParent == el.ownerDocument.body);
-
-                    if (parentNode != el) {
-                        while (parentNode) {
-                            pos[0] += parentNode.offsetLeft;
-                            pos[1] += parentNode.offsetTop;
-                            if (!accountForBody && isSafari && 
-                                    Y.Dom.getStyle(parentNode,'position') == 'absolute' ) { 
-                                accountForBody = true;
+                    if ( Y.Dom._canPosition(el) ) {
+                        pos = [el.offsetLeft, el.offsetTop];
+                        if (parentNode != el) {
+                            while (parentNode) {
+                                pos[0] += parentNode.offsetLeft;
+                                pos[1] += parentNode.offsetTop;
+                                if (!accountForBody && isSafari && 
+                                        Y.Dom.getStyle(parentNode,'position') == 'absolute' ) { 
+                                    accountForBody = true;
+                                }
+                                parentNode = parentNode.offsetParent;
                             }
-                            parentNode = parentNode.offsetParent;
                         }
+
+                        if (accountForBody) { //safari doubles in this case
+                            pos[0] -= el.ownerDocument.body.offsetLeft;
+                            pos[1] -= el.ownerDocument.body.offsetTop;
+                        } 
+                        parentNode = el.parentNode;
+
+                        // account for any scrolled ancestors
+                        while ( parentNode.tagName && !Y.Dom._patterns.ROOT_TAG.test(parentNode.tagName) ) 
+                        {
+                            if (parentNode.scrollTop || parentNode.scrollLeft) {
+                                pos[0] -= parentNode.scrollLeft;
+                                pos[1] -= parentNode.scrollTop;
+                            }
+                            
+                            parentNode = parentNode.parentNode; 
+                        }
+                    } else {
                     }
 
-                    if (accountForBody) { //safari doubles in this case
-                        pos[0] -= el.ownerDocument.body.offsetLeft;
-                        pos[1] -= el.ownerDocument.body.offsetTop;
-                    } 
-                    parentNode = el.parentNode;
-
-                    // account for any scrolled ancestors
-                    while ( parentNode.tagName && !Y.Dom._patterns.ROOT_TAG.test(parentNode.tagName) ) 
-                    {
-                        if (parentNode.scrollTop || parentNode.scrollLeft) {
-                            pos[0] -= parentNode.scrollLeft;
-                            pos[1] -= parentNode.scrollTop;
-                        }
-                        
-                        parentNode = parentNode.parentNode; 
-                    }
 
                     return pos;
                 };
@@ -328,7 +344,7 @@
                     style_pos = 'relative';
                 }
 
-                var pageXY = this.getXY(el);
+                var pageXY = this._getXY(el);
                 if (pageXY === false) { // has to be part of doc to have pageXY
                     return false; 
                 }
@@ -666,10 +682,21 @@
          * Determines whether an HTMLElement is present in the current document.
          * @method inDocument         
          * @param {String | HTMLElement} el The element to search for
+         * @param {Object} doc An optional document to search, defaults to element's owner document 
          * @return {Boolean} Whether or not the element is present in the current document
          */
-        inDocument: function(el) {
-            return this.isAncestor(documentElement, el);
+        inDocument: function(el, doc) {
+            return Y.Dom._inDoc(Y.Dom.get(el), doc);
+        },
+
+        _inDoc: function(el, doc) {
+            var ret = false;
+            if (el && el.tagName) {
+                doc = doc || el.ownerDocument; 
+                ret = Y.Dom.isAncestor(doc[DOCUMENT_ELEMENT], el);
+            } else {
+            }
+            return ret;
         },
         
         /**
@@ -765,7 +792,7 @@
          * @return {Int} The height of the actual document (which includes the body and its margin).
          */
         getDocumentHeight: function() {
-            var scrollHeight = (document.compatMode != 'CSS1Compat' || isSafari) ? document.body.scrollHeight : documentElement.scrollHeight;
+            var scrollHeight = (document.compatMode != 'CSS1Compat' || isSafari) ? body.scrollHeight : documentElement.scrollHeight;
 
             var h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
             return h;
@@ -777,7 +804,7 @@
          * @return {Int} The width of the actual document (which includes the body and its margin).
          */
         getDocumentWidth: function() {
-            var scrollWidth = (document.compatMode != 'CSS1Compat' || isSafari) ? document.body.scrollWidth : documentElement.scrollWidth;
+            var scrollWidth = (document.compatMode != 'CSS1Compat' || isSafari) ? body.scrollWidth : documentElement.scrollWidth;
             var w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
             return w;
         },
@@ -794,7 +821,7 @@
             if ( (mode || isIE) && !isOpera ) { // IE, Gecko
                 height = (mode == 'CSS1Compat') ?
                         documentElement.clientHeight : // Standards
-                        document.body.clientHeight; // Quirks
+                        body.clientHeight; // Quirks
             }
         
             return height;
@@ -813,7 +840,7 @@
             if (mode || isIE) { // IE, Gecko, Opera
                 width = (mode == 'CSS1Compat') ?
                         documentElement.clientWidth : // Standards
-                        document.body.clientWidth; // Quirks
+                        body.clientWidth; // Quirks
             }
             return width;
         },
@@ -1039,7 +1066,7 @@
          */
         getDocumentScrollLeft: function(doc) {
             doc = doc || document;
-            return Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
+            return Math.max(doc[DOCUMENT_ELEMENT].scrollLeft, doc.body.scrollLeft);
         }, 
 
         /**
@@ -1050,7 +1077,7 @@
          */
         getDocumentScrollTop: function(doc) {
             doc = doc || document;
-            return Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
+            return Math.max(doc[DOCUMENT_ELEMENT].scrollTop, doc.body.scrollTop);
         },
 
         /**

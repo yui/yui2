@@ -269,6 +269,15 @@ defaultValue : null,
 validator : null,
 
 /**
+ * If validation is enabled, resets input field of invalid data.
+ *
+ * @property resetInvalidData
+ * @type Boolean
+ * @default true
+ */
+resetInvalidData : true,
+
+/**
  * True if currently active.
  *
  * @property isActive
@@ -592,7 +601,9 @@ save : function() {
     if(this.validator) {
         validValue = this.validator.call(this.getDataTable(), inputValue, this.value, this);
         if(validValue === undefined ) {
-            this.resetForm();
+            if(this.resetInvalidData) {
+                this.resetForm();
+            }
             this.fireEvent("invalidDataEvent",
                     {editor:this, oldData:this.value, newData:inputValue});
             YAHOO.log("Could not save Cell Editor input due to invalid data " +
@@ -1032,7 +1043,7 @@ renderForm : function() {
         calContainer.style.cssFloat = "none";
 
         if(ua.ie) {
-            var calFloatClearer = this.getContainerEl().appendChild(document.createElement("br"));
+            var calFloatClearer = this.getContainerEl().appendChild(document.createElement("div"));
             calFloatClearer.style.clear = "both";
         }
         

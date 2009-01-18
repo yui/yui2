@@ -96,7 +96,11 @@ package com.yahoo.astra.fl.charts.series
 		 */
 		public function createLegendItemData():LegendItemData
 		{
-			return new LegendItemData(this.displayName, this.getStyleValue("markerSkin"), this.getStyleValue("fillColor") as uint);
+			return new LegendItemData(this.displayName, this.getStyleValue("markerSkin"), 
+										this.getStyleValue("fillColor") as uint, 
+										this.getStyleValue("fillAlpha") as Number, 
+										this.getStyleValue("borderColor") as uint, 
+										this.getStyleValue("borderAlpha") as Number);
 		}
 		
 	}

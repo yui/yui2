@@ -1,4 +1,4 @@
-﻿package
+package
 {
 	import com.adobe.serialization.json.JSON;
 	import com.yahoo.astra.fl.charts.*;
@@ -765,7 +765,6 @@
 								break;
 							case "fillAlpha":
 								fillAlpha = style.fillAlpha;
-								trace("coming in: " + fillAlpha);
 							case "size":
 								UIComponent(series).setStyle("markerSize", style.size);
 								break;
@@ -1215,6 +1214,20 @@
 				{
 					this.chart.setStyle(axisName + "AxisMinorGridLineWeight", minorGridLines.size);
 					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorGridLines", minorGridLines.size > 0);
+				}
+			}
+			
+			if(styles.zeroGridLine)
+			{
+				var zeroGridLine:Object = styles.zeroGridLine;
+				if(zeroGridLine.color != null)
+				{
+					this.chart.setStyle(axisName + "ZeroGridLineColor", this.parseColor(zeroGridLine.color));
+				}
+				if(zeroGridLine.size != null)
+				{
+					this.chart.setStyle(axisName + "ZeroGridLineWeight", zeroGridLine.size);
+					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "ZeroGridLine", zeroGridLine.size > 0);
 				}
 			}
 			

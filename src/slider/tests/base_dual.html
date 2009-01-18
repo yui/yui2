@@ -37,13 +37,14 @@ var log = new YAHOO.widget.LogReader('log',{ newestOnTop: false }),
     endCount = 1;
 
 var s1 = YAHOO.widget.Slider.getHorizDualSlider('bg','min','max',200);
+//s1.minSlider.backgroundEnabled = false;
 
-s1.subscribe('slideStart', function () {
-    YAHOO.log('slideStart: ' + (startCount++));
+s1.subscribe('slideStart', function (slider) {
+    YAHOO.log(slider.thumb.getEl().id + 'Slider slideStart: ' + (startCount++) + " - " + slider._sliding);
 });
 
-s1.subscribe('slideEnd', function () {
-    YAHOO.log('slideEnd: ' + (endCount++));
+s1.subscribe('slideEnd', function (slider) {
+    YAHOO.log(slider.thumb.getEl().id + 'Slider slideEnd: ' + (endCount++) + " - " + slider._sliding);
 });
 
 });
