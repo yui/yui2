@@ -2042,6 +2042,42 @@
         },
 
         /**
+         * Select the previous item in the Carousel.
+         *
+         * @method selectPreviousItem
+         * @public
+         */
+        selectPreviousItem: function () {
+            var carousel = this,
+                newpos   = 0,
+                selected = carousel.get("selectedItem");
+
+            if (selected == this._firstItem) {
+                newpos = selected - carousel.get("numVisible");
+                carousel._selectedItem = carousel._getSelectedItem(selected-1);
+                carousel.scrollTo(newpos);
+            } else {
+                newpos = carousel.get("selectedItem") -
+                         carousel.get("scrollIncrement");
+                carousel.set("selectedItem",carousel._getSelectedItem(newpos));
+            }
+        },
+
+        /**
+         * Select the next item in the Carousel.
+         *
+         * @method selectNextItem
+         * @public
+         */
+        selectNextItem: function () {
+            var carousel = this, newpos = 0;
+
+            newpos = carousel.get("selectedItem") +
+                     carousel.get("scrollIncrement");
+            carousel.set("selectedItem", carousel._getSelectedItem(newpos));
+        },
+
+        /**
          * Display the Carousel.
          *
          * @method show
@@ -2269,10 +2305,8 @@
          * @protected
          */
         _keyboardEventHandler: function (ev) {
-            var key      = Event.getCharCode(ev),
-                prevent  = false,
-                position = 0,
-                selItem;
+            var key     = Event.getCharCode(ev),
+                prevent = false;
 
             if (this.isAnimating()) {
                 return;         // do not mess while animation is in progress
@@ -2281,22 +2315,12 @@
             switch (key) {
             case 0x25:          // left arrow
             case 0x26:          // up arrow
-                selItem = this.get("selectedItem");
-                if (selItem == this._firstItem) {
-                    position = selItem - this.get("numVisible");
-                    this._selectedItem = this._getSelectedItem(selItem-1);
-                    this.scrollTo(position);
-                } else {
-                    position = this.get("selectedItem") -
-                            this.get("scrollIncrement");
-                    this.set("selectedItem", this._getSelectedItem(position));
-                }
+                this.selectPreviousItem();
                 prevent = true;
                 break;
             case 0x27:          // right arrow
             case 0x28:          // down arrow
-                position = this.get("selectedItem")+this.get("scrollIncrement");
-                this.set("selectedItem", this._getSelectedItem(position));
+                this.selectNextItem();
                 prevent = true;
                 break;
             case 0x21:          // page-up
@@ -2833,7 +2857,6 @@
          * @protected
          */
         _setSelectedItem: function (val) {
-            console.log("setting selection to " + val);
             this._selectedItem = val;
         },
 
