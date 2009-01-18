@@ -1637,8 +1637,6 @@
 
             carousel.on(loadItemsEvent, syncUi);
 
-            carousel.on(navigationStateChangeEvent, carousel.focus);
-
             carousel.on(noItemsEvent, function (ev) {
                 carousel.scrollTo(0);
                 syncNavigation.call(carousel);
