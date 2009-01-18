@@ -915,22 +915,26 @@
          */
         configAutoFillHeight: function (type, args, obj) {
             var fillEl = args[0],
-                currEl = this.cfg.getProperty("autofillheight");
+                cfg = this.cfg,
+                autoFillHeight = "autofillheight",
+                height = "height",
+                currEl = cfg.getProperty(autoFillHeight),
+                autoFill = this._autoFillOnHeightChange;
 
-            this.cfg.unsubscribeFromConfigEvent("height", this._autoFillOnHeightChange);
-            Module.textResizeEvent.unsubscribe("height", this._autoFillOnHeightChange);
+            cfg.unsubscribeFromConfigEvent(height, autoFill);
+            Module.textResizeEvent.unsubscribe(height, autoFill);
 
             if (currEl && fillEl !== currEl && this[currEl]) {
-                Dom.setStyle(this[currEl], "height", "");
+                Dom.setStyle(this[currEl], height, "");
             }
 
             if (fillEl) {
                 fillEl = Lang.trim(fillEl.toLowerCase());
 
-                this.cfg.subscribeToConfigEvent("height", this._autoFillOnHeightChange, this[fillEl], this);
-                Module.textResizeEvent.subscribe(this._autoFillOnHeightChange, this[fillEl], this);
+                cfg.subscribeToConfigEvent(height, autoFill, this[fillEl], this);
+                Module.textResizeEvent.subscribe(autoFill, this[fillEl], this);
 
-                this.cfg.setProperty("autofillheight", fillEl, true);
+                cfg.setProperty(autoFillHeight, fillEl, true);
             }
         },
 
@@ -2038,7 +2042,10 @@
          * out the containers height
          */
         _autoFillOnHeightChange : function(type, args, el) {
-            this.fillHeight(el);
+            var height = this.cfg.getProperty("height");
+            if ((height && height !== "auto") || (height === 0)) {
+                this.fillHeight(el);
+            }
         },
 
         /**

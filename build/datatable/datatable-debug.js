@@ -2525,7 +2525,7 @@ var lang   = YAHOO.lang,
  *
  * @namespace YAHOO.widget
  * @class DataTable
- * @extends Element
+ * @extends YAHOO.util.Element
  * @constructor
  * @param elContainer {HTMLElement} Container element for the TABLE.
  * @param aColumnDefs {Object[]} Array of object literal Column definitions.
@@ -3341,12 +3341,12 @@ lang.augmentObject(DT, {
      * @static
      */
     formatDropdown : function(el, oRecord, oColumn, oData) {
-        var selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field);
-        var options = (lang.isArray(oColumn.dropdownOptions)) ?
-                oColumn.dropdownOptions : null;
+        var selectedValue = (lang.isValue(oData)) ? oData : oRecord.getData(oColumn.field),
+            options = (lang.isArray(oColumn.dropdownOptions)) ?
+                oColumn.dropdownOptions : null,
 
-        var selectEl;
-        var collection = el.getElementsByTagName("select");
+            selectEl,
+            collection = el.getElementsByTagName("select");
 
         // Create the form element only once, so we can attach the onChange listener
         if(collection.length === 0) {
@@ -3374,8 +3374,9 @@ lang.augmentObject(DT, {
                     var optionEl = document.createElement("option");
                     optionEl.value = (lang.isValue(option.value)) ?
                             option.value : option;
+                    // Bug 2334323: Support legacy text, support label for consistency with DropdownCellEditor
                     optionEl.innerHTML = (lang.isValue(option.text)) ?
-                            option.text : option;
+                            option.text : (lang.isValue(option.label)) ? option.label : option;
                     optionEl = selectEl.appendChild(optionEl);
                     if (optionEl.value == selectedValue) {
                         optionEl.selected = true;
@@ -3473,8 +3474,7 @@ lang.augmentObject(DT, {
      * @static
      */
     formatText : function(el, oRecord, oColumn, oData) {
-        var value = (lang.isValue(oRecord.getData(oColumn.field))) ?
-                oRecord.getData(oColumn.field) : "";
+        var value = (lang.isValue(oData)) ? oData : "";
         //TODO: move to util function
         el.innerHTML = value.toString().replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
     },
@@ -3490,9 +3490,8 @@ lang.augmentObject(DT, {
      * @static
      */
     formatTextarea : function(el, oRecord, oColumn, oData) {
-        var value = (lang.isValue(oRecord.getData(oColumn.field))) ?
-                oRecord.getData(oColumn.field) : "";
-        var markup = "<textarea>" + value + "</textarea>";
+        var value = (lang.isValue(oData)) ? oData : "",
+            markup = "<textarea>" + value + "</textarea>";
         el.innerHTML = markup;
     },
 
@@ -3507,9 +3506,8 @@ lang.augmentObject(DT, {
      * @static
      */
     formatTextbox : function(el, oRecord, oColumn, oData) {
-        var value = (lang.isValue(oRecord.getData(oColumn.field))) ?
-                oRecord.getData(oColumn.field) : "";
-        var markup = "<input type=\"text\" value=\"" + value + "\" />";
+        var value = (lang.isValue(oData)) ? oData : "",
+            markup = "<input type=\"text\" value=\"" + value + "\" />";
         el.innerHTML = markup;
     },
 
@@ -3608,7 +3606,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("summary", {
         value: "",
         validator: lang.isString,
-        setter: function(sSummary) {
+        method: function(sSummary) {
             if(this._elTable) {
                 this._elTable.summary = sSummary;
             }
@@ -3671,7 +3669,7 @@ initAttributes : function(oConfigs) {
                 return (oNewSortedBy === null);
             }
         },
-        setter: function(oNewSortedBy) {
+        method: function(oNewSortedBy) {
             // Stash the previous value
             var oOldSortedBy = this.get("sortedBy");
             
@@ -3759,7 +3757,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("caption", {
         value: null,
         validator: lang.isString,
-        setter: function(sCaption) {
+        method: function(sCaption) {
             this._initCaptionEl(sCaption);
         }
     });
@@ -3775,7 +3773,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("draggableColumns", {
         value: false,
         validator: lang.isBoolean,
-        setter: function(oParam) {
+        method: function(oParam) {
             if(this._elThead) {
                 if(oParam) {
                     this._initDraggableColumns();
@@ -3851,7 +3849,7 @@ initAttributes : function(oConfigs) {
             // Set defaults
             oState = oState || {pagination:null, sortedBy:null};
             var sort = (oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey();
-            var dir = (oState.sortedBy && oState.sortedBy.dir === DT.CLASS_DESC) ? "desc" : "asc";
+            var dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc";
             var startIndex = (oState.pagination) ? oState.pagination.recordOffset : 0;
             var results = (oState.pagination) ? oState.pagination.rowsPerPage : null;
             
@@ -3957,7 +3955,7 @@ initAttributes : function(oConfigs) {
      this.setAttributeConfig("MSG_SORTASC", { 	 
          value: "Click to sort ascending", 	 
          validator: lang.isString,
-         setter: function(sParam) {
+         method: function(sParam) {
             if(this._elThead) {
                 for(var i=0, allKeys=this.getColumnSet().keys, len=allKeys.length; i<len; i++) {
                     if(allKeys[i].sortable && this.getColumnSortDir(allKeys[i]) === DT.CLASS_ASC) {
@@ -3977,7 +3975,7 @@ initAttributes : function(oConfigs) {
      this.setAttributeConfig("MSG_SORTDESC", { 	 
          value: "Click to sort descending", 	 
          validator: lang.isString,
-         setter: function(sParam) {
+         method: function(sParam) {
             if(this._elThead) {
                 for(var i=0, allKeys=this.getColumnSet().keys, len=allKeys.length; i<len; i++) {
                     if(allKeys[i].sortable && this.getColumnSortDir(allKeys[i]) === DT.CLASS_DESC) {
@@ -6336,19 +6334,23 @@ _onTheadClick : function(e, oSelf) {
         }
     }
 
-    var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
-    var bKeepBubbling = true;
+    var elTarget = Ev.getTarget(e),
+        elTag = elTarget.nodeName.toLowerCase(),
+        bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                 return;
             case "input":
-                if(elTarget.type.toLowerCase() == "checkbox") {
+                var sType = elTarget.type.toLowerCase();
+                if(sType == "checkbox") {
                     bKeepBubbling = oSelf.fireEvent("theadCheckboxClickEvent",{target:elTarget,event:e});
                 }
-                else if(elTarget.type.toLowerCase() == "radio") {
+                else if(sType == "radio") {
                     bKeepBubbling = oSelf.fireEvent("theadRadioClickEvent",{target:elTarget,event:e});
+                }
+                else if((sType == "button") || (sType == "image") || (sType == "submit") || (sType == "reset")) {
+                    bKeepBubbling = oSelf.fireEvent("theadButtonClickEvent",{target:elTarget,event:e});
                 }
                 break;
             case "a":
@@ -6410,19 +6412,23 @@ _onTbodyClick : function(e, oSelf) {
     }
 
     // Fire Custom Events
-    var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
-    var bKeepBubbling = true;
+    var elTarget = Ev.getTarget(e),
+        elTag = elTarget.nodeName.toLowerCase(),
+        bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                 return;
             case "input":
-                if(elTarget.type.toLowerCase() == "checkbox") {
+                var sType = elTarget.type.toLowerCase();
+                if(sType == "checkbox") {
                     bKeepBubbling = oSelf.fireEvent("checkboxClickEvent",{target:elTarget,event:e});
                 }
-                else if(elTarget.type.toLowerCase() == "radio") {
+                else if(sType == "radio") {
                     bKeepBubbling = oSelf.fireEvent("radioClickEvent",{target:elTarget,event:e});
+                }
+                else if((sType == "button") || (sType == "image") || (sType == "submit") || (sType == "reset")) {
+                    bKeepBubbling = oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
                 }
                 break;
             case "a":
@@ -7881,7 +7887,6 @@ sortColumn : function(oColumn, sDir) {
                     // Default sort function if necessary
                     sortFnc = sortFnc || 
                         function(a, b, desc) {
-                            YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
                             var sorted = YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
                             if(sorted === 0) {
                                 return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
@@ -7945,7 +7950,6 @@ setColumnWidth : function(oColumn, nWidth) {
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
             YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
-            return;
         }
         // Unsets a width to auto-size
         else if(nWidth === null) {
@@ -7957,11 +7961,14 @@ setColumnWidth : function(oColumn, nWidth) {
             this.validateColumnWidths(oColumn);
             this.fireEvent("columnUnsetWidthEvent",{column:oColumn});
             YAHOO.log("Column " + oColumn + " width unset", "info", this.toString());
-            
-            return;
         }
+                
+        // Bug 2339454: resize then sort misaligment
+        this._clearTrTemplateEl();
     }
-    YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
+    else {
+        YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
+    }
 },
 
 /**
@@ -9168,7 +9175,7 @@ deleteRow : function(row) {
             var sRecordId = oRecord.getId();
             var tracker = this._aSelections || [];
             for(var j=tracker.length-1; j>-1; j--) {
-                if((lang.isNumber(tracker[j]) && (tracker[j] === sRecordId)) ||
+                if((lang.isString(tracker[j]) && (tracker[j] === sRecordId)) ||
                         (lang.isObject(tracker[j]) && (tracker[j].recordId === sRecordId))) {
                     tracker.splice(j,1);
                 }
@@ -9197,7 +9204,18 @@ deleteRow : function(row) {
                     if (!rng || nRecordIndex <= rng[1]) {
                         this.render();
                     }
-                    return;
+
+                    this._oChainRender.add({
+                        method: function() {
+                            if((this instanceof DT) && this._sId) {
+                                this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex, oldData:oData, trElIndex:nTrIndex});
+                                YAHOO.log("Deleted row with data " + YAHOO.lang.dump(oData) + " at RecordSet index " + nRecordIndex + " and page row index " + nTrIndex, "info", this.toString());     
+                            }
+                        },
+                        scope: this,
+                        timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
+                    });
+                    this._runRenderChain();
                 }
                 // Not paginated
                 else {
@@ -9223,10 +9241,8 @@ deleteRow : function(row) {
                                         }                                
                                     }
                     
-                                    this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
-                                    oldData:oData, trElIndex:nTrIndex});
-                                    YAHOO.log("Deleted row with data " + YAHOO.lang.dump(oData) +
-                                    " at RecordSet index " + nRecordIndex + " and page row index " + nTrIndex, "info", this.toString());     
+                                    this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,oldData:oData, trElIndex:nTrIndex});
+                                    YAHOO.log("Deleted row with data " + YAHOO.lang.dump(oData) + " at RecordSet index " + nRecordIndex + " and page row index " + nTrIndex, "info", this.toString());     
                                 }
                             },
                             scope: this,
@@ -9263,7 +9279,7 @@ deleteRows : function(row, count) {
             var sRecordId = oRecord.getId();
             var tracker = this._aSelections || [];
             for(var j=tracker.length-1; j>-1; j--) {
-                if((lang.isNumber(tracker[j]) && (tracker[j] === sRecordId)) ||
+                if((lang.isString(tracker[j]) && (tracker[j] === sRecordId)) ||
                         (lang.isObject(tracker[j]) && (tracker[j].recordId === sRecordId))) {
                     tracker.splice(j,1);
                 }
@@ -9287,7 +9303,8 @@ deleteRows : function(row, count) {
     
             // Update the UI
             if(aData) {
-                var oPaginator = this.get('paginator');
+                var oPaginator = this.get('paginator'),
+                    loopN = this.get("renderLoopSize");
                 // If paginated and the deleted row was on this or a prior page, just
                 // re-render
                 if (oPaginator) {
@@ -9305,13 +9322,24 @@ deleteRows : function(row, count) {
                     if (!rng || lowIndex <= rng[1]) {
                         this.render();
                     }
+
+                    this._oChainRender.add({
+                        method: function(oArg) {
+                            if((this instanceof DT) && this._sId) {
+                                this.fireEvent("rowsDeleteEvent", {recordIndex:lowIndex, oldData:aData, count:count});
+                                YAHOO.log("DataTable " + count + " rows deleted starting at index " + lowIndex, "info", this.toString());
+                            }
+                        },
+                        scope: this,
+                        timeout: (loopN > 0) ? 0 : -1
+                    });
+                    this._runRenderChain();
                     return;
                 }
                 // Not paginated
                 else {
                     if(lang.isNumber(nTrIndex)) {
                         // Delete the TR elements starting with highest index
-                        var loopN = this.get("renderLoopSize");
                         var loopEnd = lowIndex;
                         var nRowsNeeded = count; // how many needed
                         this._oChainRender.add({
@@ -9339,11 +9367,8 @@ deleteRows : function(row, count) {
                                     this._setRowStripes();
                                 }
                                 
-                                this.fireEvent("rowsDeleteEvent", {recordIndex:count,
-                                oldData:aData, count:nTrIndex});
-                                YAHOO.log("DataTable row deleted: Record ID = " + sRecordId +
-                                    ", Record index = " + nRecordIndex +
-                                    ", page row index = " + nTrIndex, "info", this.toString());
+                                this.fireEvent("rowsDeleteEvent", {recordIndex:lowIndex, oldData:aData, count:count});
+                                YAHOO.log("DataTable " + count + " rows deleted starting at index " + lowIndex, "info", this.toString());
                             },
                             scope: this,
                             timeout: -1 // Needs to run immediately after the DOM deletions above
@@ -11394,7 +11419,7 @@ selectRow : function(row) {
 },
 
 /**
- * Sets given row to the selected state.
+ * Sets given row to the unselected state.
  *
  * @method unselectRow
  * @param row {HTMLElement | String | YAHOO.widget.Record | Number} HTML element
@@ -13656,7 +13681,8 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      */
 
     /**
-     * Fired when a BUTTON element is clicked.
+     * Fired when a BUTTON element or INPUT element of type "button", "image",
+     * "submit", "reset" is clicked.
      *
      * @event buttonClickEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -14168,7 +14194,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("width", {
         value: null,
         validator: lang.isString,
-        setter: function(oParam) {
+        method: function(oParam) {
             if(this._elHdContainer && this._elBdContainer) {
                 this._elHdContainer.style.width = oParam;
                 this._elBdContainer.style.width = oParam;            
@@ -14186,7 +14212,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("height", {
         value: null,
         validator: lang.isString,
-        setter: function(oParam) {
+        method: function(oParam) {
             if(this._elHdContainer && this._elBdContainer) {
                 this._elBdContainer.style.height = oParam;    
                 this._syncScrollX();   
@@ -14205,7 +14231,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("COLOR_COLUMNFILLER", {
         value: "#F2F2F2",
         validator: lang.isString,
-        setter: function(oParam) {
+        method: function(oParam) {
             this._elHdContainer.style.backgroundColor = oParam;
         }
     });
@@ -15040,7 +15066,6 @@ setColumnWidth : function(oColumn, nWidth) {
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
             YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
-            return;
         }
         // Unsets a width to auto-size
         else if(nWidth === null) {
@@ -15052,11 +15077,14 @@ setColumnWidth : function(oColumn, nWidth) {
             this.validateColumnWidths(oColumn);
             this.fireEvent("columnUnsetWidthEvent",{column:oColumn});
             YAHOO.log("Column " + oColumn + " width unset", "info", this.toString());
-
-            return;
         }
+        
+        // Bug 2339454: resize then sort misaligment
+        this._clearTrTemplateEl();
     }
-    YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
+    else {
+        YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
+    }
 },
 
 /**
@@ -15500,6 +15528,15 @@ defaultValue : null,
 validator : null,
 
 /**
+ * If validation is enabled, resets input field of invalid data.
+ *
+ * @property resetInvalidData
+ * @type Boolean
+ * @default true
+ */
+resetInvalidData : true,
+
+/**
  * True if currently active.
  *
  * @property isActive
@@ -15823,7 +15860,9 @@ save : function() {
     if(this.validator) {
         validValue = this.validator.call(this.getDataTable(), inputValue, this.value, this);
         if(validValue === undefined ) {
-            this.resetForm();
+            if(this.resetInvalidData) {
+                this.resetForm();
+            }
             this.fireEvent("invalidDataEvent",
                     {editor:this, oldData:this.value, newData:inputValue});
             YAHOO.log("Could not save Cell Editor input due to invalid data " +
@@ -16263,7 +16302,7 @@ renderForm : function() {
         calContainer.style.cssFloat = "none";
 
         if(ua.ie) {
-            var calFloatClearer = this.getContainerEl().appendChild(document.createElement("br"));
+            var calFloatClearer = this.getContainerEl().appendChild(document.createElement("div"));
             calFloatClearer.style.clear = "both";
         }
         

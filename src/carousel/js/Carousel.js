@@ -287,6 +287,7 @@
         } else {
             index = currIndex + this.get("numVisible");
         }
+        this._selectedItem = this._getSelectedItem(index);
         this.scrollTo.call(this, index);
     }
 
@@ -549,6 +550,7 @@
      */
      function setItemSelection(newposition, oldposition) {
         var backwards,
+            carousel = this,
             cssClass   = this.CLASSES,
             el,
             firstItem  = this._firstItem,
@@ -561,8 +563,8 @@
         backwards = numVisible > 1 && !isCircular && position > newposition;
 
         if (position >= 0 && position < numItems) {
-            if (!JS.isUndefined(this._itemsTable.items[position])) {
-                el = Dom.get(this._itemsTable.items[position].id);
+            if (!JS.isUndefined(carousel._itemsTable.items[position])) {
+                el = Dom.get(carousel._itemsTable.items[position].id);
                 if (el) {
                     Dom.removeClass(el, cssClass.SELECTED_ITEM);
                 }
@@ -576,12 +578,12 @@
             newposition = firstItem;
         }
 
-        if (JS.isUndefined(this._itemsTable.items[newposition])) {
-            this.scrollTo(newposition); // still loading the item
+        if (JS.isUndefined(carousel._itemsTable.items[newposition])) {
+            carousel.scrollTo(newposition); // still loading the item
         }
 
-        if (!JS.isUndefined(this._itemsTable.items[newposition])) {
-            el = Dom.get(this._itemsTable.items[newposition].id);
+        if (!JS.isUndefined(carousel._itemsTable.items[newposition])) {
+            el = Dom.get(carousel._itemsTable.items[newposition].id);
             if (el) {
                 Dom.addClass(el, cssClass.SELECTED_ITEM);
             }
@@ -590,7 +592,7 @@
         if (newposition < firstItem || newposition > sentinel) {
             // out of focus
             if (backwards) {
-                this.scrollTo(firstItem - numVisible, true);
+                carousel.scrollTo(firstItem - numVisible, true);
             } else {
                 this.scrollTo(newposition);
             }
@@ -746,10 +748,9 @@
      * @method updateStateAfterScroll
      * @param {Integer} item The index to which the Carousel has scrolled to.
      * @param {Integer} sentinel The last element in the view port.
-     * @param {Boolean} dontSelect True if select should be avoided
      * @private
      */
-    function updateStateAfterScroll(item, sentinel, dontSelect) {
+    function updateStateAfterScroll(item, sentinel) {
         var carousel   = this,
             page       = carousel.get("currentPage"),
             newPage,
@@ -761,22 +762,21 @@
             carousel.fireEvent(pageChangeEvent, newPage);
         }
 
-        if (!dontSelect) {
-            if (carousel.get("selectOnScroll")) {
-                if (item != carousel._selectedItem) { // out of sync
-                    carousel.set("selectedItem",
-                                 carousel._getSelectedItem(item));
-                }
+        if (carousel.get("selectOnScroll")) {
+            if (carousel.get("selectedItem") != carousel._selectedItem) {
+                carousel.set("selectedItem", carousel._selectedItem);
             }
         }
 
         delete carousel._autoPlayTimer;
-        if (carousel.get("autoPlay") > 0) {
+        if (carousel.get("autoPlayInterval") > 0) {
             carousel.startAutoPlay();
         }
 
         carousel.fireEvent(afterScrollEvent,
-                           { first: item, last: sentinel }, carousel);
+                           { first: carousel._firstItem,
+                             last: sentinel },
+                           carousel);
     }
 
     /*
@@ -1620,10 +1620,24 @@
              * @description Set this to time in milli-seconds to have the
              * Carousel automatically scroll the contents.
              * @type Number
+             * @deprecated Use autoPlayInterval instead.
              */
             this.setAttributeConfig("autoPlay", {
                     validator : JS.isNumber,
                     value     : attrs.autoPlay || 0
+            });
+
+            /**
+             * @attribute autoPlayInterval
+             * @description The delay in milli-seconds for scrolling the
+             * Carousel during auto-play.
+             * Note: The startAutoPlay() method needs to be invoked to trigger
+             * automatic scrolling of Carousel.
+             * @type Number
+             */
+            this.setAttributeConfig("autoPlayInterval", {
+                    validator : JS.isNumber,
+                    value     : attrs.autoPlayInterval || 0
             });
         },
 
@@ -1648,8 +1662,6 @@
 
             carousel.on(loadItemsEvent, syncUi);
 
-            carousel.on(navigationStateChangeEvent, carousel.focus);
-
             carousel.on(noItemsEvent, function (ev) {
                 carousel.scrollTo(0);
                 syncNavigation.call(carousel);
@@ -1659,6 +1671,7 @@
             carousel.on(pageChangeEvent, syncPagerUi, carousel);
 
             carousel.on(renderEvent, function (ev) {
+                this.set("selectedItem", this.get("firstVisible"));
                 syncNavigation.call(carousel, ev);
                 syncPagerUi.call(carousel, ev);
                 this._setClipContainerSize();
@@ -1941,7 +1954,10 @@
          * @public
          */
         scrollPageBackward: function () {
-            this.scrollTo(this._firstItem - this.get("numVisible"));
+            var item = this._firstItem - this.get("numVisible");
+
+            this._selectedItem = this._getSelectedItem(item);
+            this.scrollTo(item);
         },
 
         /**
@@ -1951,7 +1967,10 @@
          * @public
          */
         scrollPageForward: function () {
-            this.scrollTo(this._firstItem + this.get("numVisible"));
+            var item = this._firstItem + this.get("numVisible");
+
+            this._selectedItem = this._getSelectedItem(item);
+            this.scrollTo(item);
         },
 
         /**
@@ -2031,8 +2050,44 @@
                         dontSelect);
             } else {
                 this._setCarouselOffset(offset);
-                updateStateAfterScroll.call(this, item, sentinel, dontSelect);
+                updateStateAfterScroll.call(this, item, sentinel);
             }
+        },
+
+        /**
+         * Select the previous item in the Carousel.
+         *
+         * @method selectPreviousItem
+         * @public
+         */
+        selectPreviousItem: function () {
+            var carousel = this,
+                newpos   = 0,
+                selected = carousel.get("selectedItem");
+
+            if (selected == this._firstItem) {
+                newpos = selected - carousel.get("numVisible");
+                carousel._selectedItem = carousel._getSelectedItem(selected-1);
+                carousel.scrollTo(newpos);
+            } else {
+                newpos = carousel.get("selectedItem") -
+                         carousel.get("scrollIncrement");
+                carousel.set("selectedItem",carousel._getSelectedItem(newpos));
+            }
+        },
+
+        /**
+         * Select the next item in the Carousel.
+         *
+         * @method selectNextItem
+         * @public
+         */
+        selectNextItem: function () {
+            var carousel = this, newpos = 0;
+
+            newpos = carousel.get("selectedItem") +
+                     carousel.get("scrollIncrement");
+            carousel.set("selectedItem", carousel._getSelectedItem(newpos));
         },
 
         /**
@@ -2058,7 +2113,7 @@
          */
         startAutoPlay: function () {
             var self  = this,
-                timer = this.get("autoPlay");
+                timer = this.get("autoPlayInterval");
 
             if (timer > 0) {
                 if (!JS.isUndefined(this._autoPlayTimer)) {
@@ -2080,7 +2135,7 @@
             if (!JS.isUndefined(this._autoPlayTimer)) {
                 clearTimeout(this._autoPlayTimer);
                 delete this._autoPlayTimer;
-                this.set("autoPlay", 0);
+                this.set("autoPlayInterval", 0);
                 this.fireEvent(stopAutoPlayEvent);
             }
         },
@@ -2127,10 +2182,9 @@
             }
 
             this._isAnimationInProgress = true;
-            animObj.onComplete.subscribe(this._animationCompleteHandler, {
-                    scope: this, first: item, last: sentinel,
-                    dontSelect: dontSelect
-            });
+            animObj.onComplete.subscribe(this._animationCompleteHandler,
+                                         { scope: this, item: item,
+                                           last: sentinel });
             animObj.animate();
         },
 
@@ -2145,7 +2199,7 @@
          */
         _animationCompleteHandler: function (ev, p, o) {
             o.scope._isAnimationInProgress = false;
-            updateStateAfterScroll.call(o.scope,o.first,o.last,o.dontSelect);
+            updateStateAfterScroll.call(o.scope, o.item, o.last);
         },
 
         /**
@@ -2264,10 +2318,8 @@
          * @protected
          */
         _keyboardEventHandler: function (ev) {
-            var key      = Event.getCharCode(ev),
-                prevent  = false,
-                position = 0,
-                selItem;
+            var key     = Event.getCharCode(ev),
+                prevent = false;
 
             if (this.isAnimating()) {
                 return;         // do not mess while animation is in progress
@@ -2276,22 +2328,12 @@
             switch (key) {
             case 0x25:          // left arrow
             case 0x26:          // up arrow
-                selItem = this.get("selectedItem");
-                if (selItem == this._firstItem) {
-                    position = selItem - this.get("numVisible");
-                    this.scrollTo(position);
-                    this.set("selectedItem", this._getSelectedItem(selItem-1));
-                } else {
-                    position = this.get("selectedItem") -
-                            this.get("scrollIncrement");
-                    this.set("selectedItem", this._getSelectedItem(position));
-                }
+                this.selectPreviousItem();
                 prevent = true;
                 break;
             case 0x27:          // right arrow
             case 0x28:          // down arrow
-                position = this.get("selectedItem")+this.get("scrollIncrement");
-                this.set("selectedItem", this._getSelectedItem(position));
+                this.selectNextItem();
                 prevent = true;
                 break;
             case 0x21:          // page-up
@@ -2325,6 +2367,7 @@
                 pos = val.lastIndexOf("#");
                 if (pos != -1) {
                     val = this.getItemPositionById(val.substring(pos + 1));
+                    this._selectedItem = val;
                     this.scrollTo(val);
                     Event.preventDefault(ev);
                 }

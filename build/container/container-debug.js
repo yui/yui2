@@ -780,24 +780,24 @@
                 value: true, 
                 validator: YAHOO.lang.isBoolean 
             },
-        
-            "EFFECT": { 
-                key: "effect", 
-                suppressEvent: true, 
-                supercedes: ["visible"] 
+
+            "EFFECT": {
+                key: "effect",
+                suppressEvent: true,
+                supercedes: ["visible"]
             },
 
-            "MONITOR_RESIZE": { 
-                key: "monitorresize", 
-                value: true  
+            "MONITOR_RESIZE": {
+                key: "monitorresize",
+                value: true
             },
 
-            "APPEND_TO_DOCUMENT_BODY": { 
-                key: "appendtodocumentbody", 
+            "APPEND_TO_DOCUMENT_BODY": {
+                key: "appendtodocumentbody",
                 value: false
             }
         };
-    
+
     /**
     * Constant representing the prefix path to use for non-secure images
     * @property YAHOO.widget.Module.IMG_ROOT
@@ -861,7 +861,19 @@
     * @type String
     */
     Module.RESIZE_MONITOR_SECURE_URL = "javascript:false;";
-    
+
+    /**
+    * Constant representing the buffer amount (in pixels) to use when positioning
+    * the text resize monitor offscreen. The resize monitor is positioned
+    * offscreen by an amount eqaul to its offsetHeight + the buffer value.
+    * 
+    * @property YAHOO.widget.Module.RESIZE_MONITOR_BUFFER
+    * @static
+    * @type Number
+    */
+    // Set to 1, to work around pixel offset in IE8, which increases when zoom is used
+    Module.RESIZE_MONITOR_BUFFER = 1;
+
     /**
     * Singleton CustomEvent fired when the font size is changed in the browser.
     * Opera's "zoom" functionality currently does not support text 
@@ -1385,10 +1397,10 @@
                         db.appendChild(oIFrame);
                     }
 
-                    oIFrame.style.width = "10em";
-                    oIFrame.style.height = "10em";
-                    oIFrame.style.top = (-1 * oIFrame.offsetHeight) + "px";
-                    oIFrame.style.left = (-1 * oIFrame.offsetWidth) + "px";
+                    oIFrame.style.width = "2em";
+                    oIFrame.style.height = "2em";
+                    oIFrame.style.top = (-1 * (oIFrame.offsetHeight + Module.RESIZE_MONITOR_BUFFER)) + "px";
+                    oIFrame.style.left = "0";
                     oIFrame.style.borderWidth = "0";
                     oIFrame.style.visibility = "visible";
 
@@ -1465,12 +1477,10 @@
         */
         onDomResize: function (e, obj) {
 
-            var nLeft = -1 * this.resizeMonitor.offsetWidth,
-                nTop = -1 * this.resizeMonitor.offsetHeight;
-        
-            this.resizeMonitor.style.top = nTop + "px";
-            this.resizeMonitor.style.left =  nLeft + "px";
+            var nTop = -1 * (this.resizeMonitor.offsetHeight + Module.RESIZE_MONITOR_BUFFER);
 
+            this.resizeMonitor.style.top = nTop + "px";
+            this.resizeMonitor.style.left = "0";
         },
 
         /**
@@ -1991,14 +2001,14 @@
                 validator: Lang.isBoolean, 
                 supercedes: ["zindex"] 
             },
-
+            
             "PREVENT_CONTEXT_OVERLAP": {
                 key: "preventcontextoverlap",
                 value: false,
                 validator: Lang.isBoolean,  
                 supercedes: ["constraintoviewport"]
             }
-
+            
         };
 
     /**
@@ -2781,22 +2791,26 @@
          */
         configAutoFillHeight: function (type, args, obj) {
             var fillEl = args[0],
-                currEl = this.cfg.getProperty("autofillheight");
+                cfg = this.cfg,
+                autoFillHeight = "autofillheight",
+                height = "height",
+                currEl = cfg.getProperty(autoFillHeight),
+                autoFill = this._autoFillOnHeightChange;
 
-            this.cfg.unsubscribeFromConfigEvent("height", this._autoFillOnHeightChange);
-            Module.textResizeEvent.unsubscribe("height", this._autoFillOnHeightChange);
+            cfg.unsubscribeFromConfigEvent(height, autoFill);
+            Module.textResizeEvent.unsubscribe(height, autoFill);
 
             if (currEl && fillEl !== currEl && this[currEl]) {
-                Dom.setStyle(this[currEl], "height", "");
+                Dom.setStyle(this[currEl], height, "");
             }
 
             if (fillEl) {
                 fillEl = Lang.trim(fillEl.toLowerCase());
 
-                this.cfg.subscribeToConfigEvent("height", this._autoFillOnHeightChange, this[fillEl], this);
-                Module.textResizeEvent.subscribe(this._autoFillOnHeightChange, this[fillEl], this);
+                cfg.subscribeToConfigEvent(height, autoFill, this[fillEl], this);
+                Module.textResizeEvent.subscribe(autoFill, this[fillEl], this);
 
-                this.cfg.setProperty("autofillheight", fillEl, true);
+                cfg.setProperty(autoFillHeight, fillEl, true);
             }
         },
 
@@ -3904,7 +3918,10 @@
          * out the containers height
          */
         _autoFillOnHeightChange : function(type, args, el) {
-            this.fillHeight(el);
+            var height = this.cfg.getProperty("height");
+            if ((height && height !== "auto") || (height === 0)) {
+                this.fillHeight(el);
+            }
         },
 
         /**
@@ -6630,7 +6647,10 @@
         _autoFillOnHeightChange : function(type, args, el) {
             Panel.superclass._autoFillOnHeightChange.apply(this, arguments);
             if (bIEQuirks) {
-                this.sizeUnderlay();
+                var panel = this;
+                setTimeout(function() {
+                    panel.sizeUnderlay();
+                },0);
             }
         },
 
@@ -6725,7 +6745,6 @@
             }
         },
 
-        
         /**
         * Registers the Panel's header for drag & drop capability.
         * @method registerDragDrop

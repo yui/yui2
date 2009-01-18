@@ -1,6 +1,7 @@
 package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.series.ISeries;
+	import com.yahoo.astra.fl.charts.CartesianChart;
 	import fl.core.UIComponent;
 	import flash.text.TextFormat;	
 	import com.yahoo.astra.utils.TextUtil;
@@ -224,7 +225,8 @@ package com.yahoo.astra.fl.charts.axes
 			
 			//If the number of labels will not fit on the axis or the user has specified the number of labels to
 			//display, calculate the major unit. 
-			if(this.categorySize < this.maxLabelWidth || (this._numLabelsSetByUser && this.numLabels != categoryCount))
+			var maxLabelSize:Number = (this.chart as CartesianChart).horizontalAxis == this ? this.maxLabelWidth : this.maxLabelHeight;
+			if(this.categorySize < maxLabelSize || (this._numLabelsSetByUser && this.numLabels != categoryCount))
 			{
 				this.calculateMajorUnit();
 			} 
@@ -236,8 +238,9 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		private function calculateMajorUnit():void
 		{
+			var maxLabelSize:Number = (this.chart as CartesianChart).horizontalAxis == this ? this.maxLabelWidth : this.maxLabelHeight;
 			var categoryCount:int = this.categoryNames.length;
-			var maxNumLabels:Number = this.renderer.length/this.maxLabelWidth;
+			var maxNumLabels:Number = this.renderer.length/maxLabelSize;
 			
 			//If the user specified number of labels to display, attempt to show the correct number.
 			if(this._numLabelsSetByUser)
