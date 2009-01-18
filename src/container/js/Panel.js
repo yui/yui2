@@ -1094,7 +1094,10 @@
         _autoFillOnHeightChange : function(type, args, el) {
             Panel.superclass._autoFillOnHeightChange.apply(this, arguments);
             if (bIEQuirks) {
-                this.sizeUnderlay();
+                var panel = this;
+                setTimeout(function() {
+                    panel.sizeUnderlay();
+                },0);
             }
         },
 
@@ -1189,7 +1192,6 @@
             }
         },
 
-        
         /**
         * Registers the Panel's header for drag & drop capability.
         * @method registerDragDrop
