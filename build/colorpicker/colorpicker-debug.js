@@ -764,9 +764,6 @@ YAHOO.util.Color = function() {
             this.set(this.OPT.SATURATION, Math.round(s*100), true);
             this.set(this.OPT.VALUE, Math.round(v*100), true);
 
-            this.logger.log('Setting SV: '+s+','+v);
-
-
             if (this.pickerSlider.valueChangeSource !== Slider.SOURCE_SET_VALUE) {
                 this._getValuesFromSliders();
             }
