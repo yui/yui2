@@ -1995,6 +1995,12 @@
                 rv,
                 sentinel;
 
+            function stopAutoScroll() {
+                if (this.get("autoPlayInterval") > 0) {
+                    this.stopAutoPlay();
+                }
+            }
+
             if (item == firstItem) {
                 return;         // nothing to do!
             }
@@ -2007,12 +2013,14 @@
                 if (isCircular) {
                     item = numItems + item;
                 } else {
+                    stopAutoScroll.call(this);
                     return;
                 }
             } else if (numItems > 0 && item > numItems - 1) {
                 if (this.get("isCircular")) {
                     item = numItems - item;
                 } else {
+                    stopAutoScroll.call(this);
                     return;
                 }
             }
