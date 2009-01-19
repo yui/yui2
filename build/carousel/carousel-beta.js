@@ -2135,7 +2135,6 @@
                 this._isAutoPlayInProgress = true;
                 this.fireEvent(startAutoPlayEvent);
                 this._autoPlayTimer = setTimeout(function () {
-                console.log("auto play");
                     autoScroll.call(self); }, timer);
             }
         },
@@ -2148,7 +2147,6 @@
          */
         stopAutoPlay: function () {
             if (!JS.isUndefined(this._autoPlayTimer)) {
-                console.log("stopping auto play");
                 clearTimeout(this._autoPlayTimer);
                 delete this._autoPlayTimer;
                 this.set("autoPlayInterval", 0);
