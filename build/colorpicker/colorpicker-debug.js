@@ -42,7 +42,8 @@ YAHOO.util.Color = function() {
                 f = (h/60)-i,
                 p = v*(1-s),
                 q = v*(1-f*s),
-                t = v*(1-(1-f)*s);
+                t = v*(1-(1-f)*s),
+                fn;
 
             switch (i) {
                 case 0: r=v; g=t; b=p; break;
@@ -53,7 +54,7 @@ YAHOO.util.Color = function() {
                 case 5: r=v; g=p; b=q; break;
             }
 
-            var fn=this.real2dec;
+            fn=this.real2dec;
 
             return [fn(r), fn(g), fn(b)];
         },
@@ -77,10 +78,11 @@ YAHOO.util.Color = function() {
             g /= 255;
             b /= 255;
 
-            var h,s,v,
+            var h,s,
                 min = Math.min(Math.min(r,g),b),
                 max = Math.max(Math.max(r,g),b),
-                delta = max-min;
+                delta = max-min,
+                hsv;
 
             switch (max) {
                 case min: h=0; break;
@@ -95,10 +97,9 @@ YAHOO.util.Color = function() {
             
             s = (max === 0) ? 0 : 1-(min/max);
 
-            var hsv = [Math.round(h), s, max];
+            hsv = [Math.round(h), s, max];
 
             return hsv;
-
         },
 
         /**
@@ -678,7 +679,7 @@ YAHOO.util.Color = function() {
                 txt = this.get(this.OPT.TXT);
 
             Dom.setStyle(el, "background-color", "rgb(" + color  + ")");
-            el.title = lang.substitute(txt.CURRENT_COLOR, {
+            el.title = sub(txt.CURRENT_COLOR, {
                     "rgb": "#" + this.get(this.OPT.HEX)
                 });
 
@@ -687,7 +688,7 @@ YAHOO.util.Color = function() {
             color = websafe.join(",");
 
             Dom.setStyle(el, "background-color", "rgb(" + color + ")");
-            el.title = lang.substitute(txt.CLOSEST_WEBSAFE, {
+            el.title = sub(txt.CLOSEST_WEBSAFE, {
                     "rgb": "#" + Color.rgb2hex(websafe)
                 });
 
@@ -700,14 +701,8 @@ YAHOO.util.Color = function() {
          * @protected
          */
         _getValuesFromSliders : function() {
-            var h=this._getH(), s=this._getS(), v=this._getV();
-            YAHOO.log("hsv " + [h, s, v]);
-
-            var rgb = Color.hsv2rgb(h, s, v);
-            //var websafe = Color.websafe(rgb);
-            //var hex = Color.rgb2hex(rgb[0], rgb[1], rgb[2]);
-
-            this.set(this.OPT.RGB, rgb);
+            this.logger.log("hsv " + [this._getH(),this._getS(),this._getV()]);
+            this.set(this.OPT.RGB, Color.hsv2rgb(this._getH(), this._getS(), this._getV()));
         },
 
         /**
@@ -738,16 +733,16 @@ YAHOO.util.Color = function() {
         _onHueSliderChange : function(newOffset) {
             this.logger.log("hue update: " + newOffset , "warn");
 
-            var h = this._getH();
+            var h        = this._getH(),
+                rgb      = Color.hsv2rgb(h, 1, 1),
+                styleDef = "rgb(" + rgb.join(",") + ")";
+
             this.set(this.OPT.HUE, h, true);
 
             // set picker background to the hue
-            var rgb = Color.hsv2rgb(h, 1, 1);
-            var styleDef = "rgb(" + rgb.join(",") + ")";
-
             Dom.setStyle(this.getElement(this.ID.PICKER_BG), "background-color", styleDef);
 
-            if (this.hueSlider.valueChangeSource === this.hueSlider.SOURCE_UI_EVENT) {
+            if (this.hueSlider.valueChangeSource !== Slider.SOURCE_SET_VALUE) {
                 this._getValuesFromSliders();
             }
 
@@ -769,7 +764,10 @@ YAHOO.util.Color = function() {
             this.set(this.OPT.SATURATION, Math.round(s*100), true);
             this.set(this.OPT.VALUE, Math.round(v*100), true);
 
-            if (this.pickerSlider.valueChangeSource === this.pickerSlider.SOURCE_UI_EVENT) {
+            this.logger.log('Setting SV: '+s+','+v);
+
+
+            if (this.pickerSlider.valueChangeSource !== Slider.SOURCE_SET_VALUE) {
                 this._getValuesFromSliders();
             }
 
@@ -852,8 +850,8 @@ YAHOO.util.Color = function() {
          * @protected
          */
         _rgbFieldKeypress : function(e, el, prop) {
-            var command = this._getCommand(e);
-            var inc = (e.shiftKey) ? 10 : 1;
+            var command = this._getCommand(e),
+                inc = (e.shiftKey) ? 10 : 1;
             switch (command) {
                 case 6: // return, update the value
                     this._useFieldValue.apply(this, arguments);
@@ -945,7 +943,7 @@ YAHOO.util.Color = function() {
 
         _createElements : function() {
             this.logger.log("Building markup");
-            var el, child, img, fld, i, 
+            var el, child, img, fld, p,
                 ids = this.get(this.OPT.IDS),
                 txt = this.get(this.OPT.TXT),
                 images = this.get(this.OPT.IMAGES),
@@ -969,7 +967,7 @@ YAHOO.util.Color = function() {
                     return new Elem(type, o);
                 };
 
-            var p = this.get("element");
+            p = this.get("element");
 
             // Picker slider (S and V) ---------------------------------------------
 
@@ -1369,9 +1367,8 @@ YAHOO.util.Color = function() {
         _updateRGBFromHSV : function() {
             var hsv = [this.get(this.OPT.HUE), 
                        this.get(this.OPT.SATURATION)/100,
-                       this.get(this.OPT.VALUE)/100];
-
-            var rgb = Color.hsv2rgb(hsv);
+                       this.get(this.OPT.VALUE)/100],
+                rgb = Color.hsv2rgb(hsv);
 
             this.logger.log("HSV converted to RGB " + hsv + " : " + rgb);
             this.set(this.OPT.RGB, rgb);
@@ -1388,11 +1385,13 @@ YAHOO.util.Color = function() {
          */
         _updateHex : function() {
            
-            var hex = this.get(this.OPT.HEX), l=hex.length;
+            var hex = this.get(this.OPT.HEX),
+                l   = hex.length,
+                c,i,rgb;
 
             // support #369 -> #336699 shorthand
             if (l === 3) {
-                var c = hex.split(""), i;
+                c = hex.split("");
                 for (i=0; i<l; i=i+1) {
                     c[i] = c[i] + c[i];
                 }
@@ -1405,16 +1404,13 @@ YAHOO.util.Color = function() {
                 return false;
             }
 
-            var rgb = Color.hex2rgb(hex);
+            rgb = Color.hex2rgb(hex);
 
             this.logger.log(sub("Hex value set to {hex} ({rgb})", {
                     hex: hex, rgb: rgb
                 }));
 
             this.setValue(rgb);
-
-            //this._updateSliders();
-
         },
 
 
@@ -1427,7 +1423,6 @@ YAHOO.util.Color = function() {
          */
         _hideShowEl : function(id, on) {
             var el = (lang.isString(id) ? this.getElement(id) : id);
-            //Dom.setStyle(id, "visibility", (on) ? "" : "hidden");
             Dom.setStyle(el, "display", (on) ? "" : "none");
         },
 
@@ -1539,13 +1534,13 @@ YAHOO.util.Color = function() {
                         this.set(this.OPT.GREEN, rgb[1], true);
                         this.set(this.OPT.BLUE, rgb[2], true);
 
-                        var websafe = Color.websafe(rgb);
-                        this.set(this.OPT.WEBSAFE, websafe, true);
+                        var websafe = Color.websafe(rgb),
+                            hex = Color.rgb2hex(rgb),
+                            hsv = Color.rgb2hsv(rgb);
 
-                        var hex = Color.rgb2hex(rgb);
+                        this.set(this.OPT.WEBSAFE, websafe, true);
                         this.set(this.OPT.HEX, hex, true);
 
-                        var hsv = Color.rgb2hsv(rgb);
 
                         this.logger.log(sub("RGB value set to {rgb} (hsv: {hsv})", {
                                 "hsv": hsv, "rgb": rgb
@@ -1596,10 +1591,10 @@ YAHOO.util.Color = function() {
                 });
 
 
-            var ids = attr.ids || lang.merge({}, this.ID);
+            var ids = attr.ids || lang.merge({}, this.ID), i;
 
             if (!attr.ids && _pickercount > 1) {
-                for (var i in ids) {
+                for (i in ids) {
                     if (lang.hasOwnProperty(ids, i)) {
                         ids[i] = ids[i] + _pickercount;
                     }

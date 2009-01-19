@@ -3,28 +3,36 @@
 <head>
 <title>Slider/ColorPicker Test Suite</title>
 
+<link type="text/css" rel="stylesheet" href="/assets/dpSyntaxHighlighter.css">
 <link type="text/css" rel="stylesheet" href="../../../build/logger/assets/logger.css">
 <link type="text/css" rel="stylesheet" href="../../../build/colorpicker/assets/skins/sam/colorpicker.css">
 <link type="text/css" rel="stylesheet" href="../../../build/yuitest/assets/testlogger.css">     
+
+<style type="text/css" class="highlight-ignore">
+#picker-container {
+    background:#ccc;
+    height:100px;
+    width:100px;
+}
+.highlight-example {
+    margin-top: 100px;
+}
+</style>
+</head>
+<body class="yui-skin-sam">
+<div id="doc">
+    <div id="picker-container">picker</div>
+</div>
 
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../../build/event/event.js"></script>
 <script type="text/javascript" src="../../../build/element/element-min.js"></script> 
 <script type="text/javascript" src="../../../build/dragdrop/dragdrop-min.js"></script> 
-<script type="text/javascript" src="../../../build/slider/slider.js"></script> 
+<script type="text/javascript" src="../../../build/slider/slider-debug.js"></script> 
 <script type="text/javascript" src="../../../build/colorpicker/colorpicker-debug.js"></script> 
 <script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
-
-<style type="text/css">
-#picker-container {
-    background:#ccc;
-    height:100px;
-    width:100px;
-}
-</style>
-
 <script type="text/javascript">
 (function() {
     var Event = YAHOO.util.Event,
@@ -39,7 +47,11 @@
         var logger = new tool.TestLogger();
             picker = new YAHOO.widget.ColorPicker('picker-container', {
                     "showhsvcontrols": true,
-                    "showhexcontrols": true
+                    "showhexcontrols": true,
+                    images : {
+                        PICKER_THUMB : '../../../build/colorpicker/assets/picker_thumb.png',
+                        HUE_THUMB : '../../../build/colorpicker/assets/hue_thumb.png'
+                    }
                 }), 
             elPicker = document.getElementById('picker-container');
 
@@ -139,13 +151,7 @@
     }); 
 })();
 </script>
-<style type="text/css">
-
-</style>
-</head>
-<body class="yui-skin-sam">
-    <div id="doc">
-        <div id="picker-container">picker</div>
-    </div>
+<script src="/assets/dpSyntaxHighlighter.js"></script>
+<script src="/assets/dpSyntaxHighlightExample.js"></script>
 </body>
 </html>
