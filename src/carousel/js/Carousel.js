@@ -768,8 +768,9 @@
             }
         }
 
+        clearTimeout(this._autoPlayTimer);
         delete carousel._autoPlayTimer;
-        if (carousel.get("autoPlayInterval") > 0) {
+        if (carousel.isAutoPlayOn()) {
             carousel.startAutoPlay();
         }
 
@@ -839,6 +840,14 @@
          * @private
          */
         _isAnimationInProgress: false,
+
+        /**
+         * Is the auto-scrolling of Carousel in progress?
+         *
+         * @property _isAutoPlayInProgress
+         * @private
+         */
+        _isAutoPlayInProgress: false,
 
         /**
          * The table of items in the Carousel.
@@ -1702,6 +1711,9 @@
 
             // Handle item selection on mouse click
             carousel.on("click", function (ev) {
+                if (carousel.isAutoPlayOn()) {
+                    carousel.stopAutoPlay();
+                }
                 carousel._itemClickHandler(ev);
                 carousel._pagerClickHandler(ev);
             });
@@ -1727,6 +1739,19 @@
          */
         isAnimating: function () {
             return this._isAnimationInProgress;
+        },
+
+        /**
+         * Return true if the auto-scrolling of Carousel is "on", or false
+         * otherwise.
+         *
+         * @method isAutoPlayOn
+         * @return {Boolean} Return true if autoPlay is "on", or false
+         * otherwise.
+         * @public
+         */
+        isAutoPlayOn: function () {
+            return this._isAutoPlayInProgress;
         },
 
         /**
@@ -1996,7 +2021,7 @@
                 sentinel;
 
             function stopAutoScroll() {
-                if (this.get("autoPlayInterval") > 0) {
+                if (this.isAutoPlayOn()) {
                     this.stopAutoPlay();
                 }
             }
@@ -2127,8 +2152,10 @@
                 if (!JS.isUndefined(this._autoPlayTimer)) {
                     return;
                 }
+                this._isAutoPlayInProgress = true;
                 this.fireEvent(startAutoPlayEvent);
                 this._autoPlayTimer = setTimeout(function () {
+                console.log("auto play");
                     autoScroll.call(self); }, timer);
             }
         },
@@ -2141,9 +2168,11 @@
          */
         stopAutoPlay: function () {
             if (!JS.isUndefined(this._autoPlayTimer)) {
+                console.log("stopping auto play");
                 clearTimeout(this._autoPlayTimer);
                 delete this._autoPlayTimer;
                 this.set("autoPlayInterval", 0);
+                this._isAutoPlayInProgress = false;
                 this.fireEvent(stopAutoPlayEvent);
             }
         },
@@ -2355,6 +2384,9 @@
             }
 
             if (prevent) {
+                if (this.isAutoPlayOn()) {
+                    this.stopAutoPlay();
+                }
                 Event.preventDefault(ev);
             }
         },
