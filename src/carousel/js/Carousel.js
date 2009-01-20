@@ -596,7 +596,9 @@
         if (newposition < firstItem || newposition > sentinel) {
             // out of focus
             if (backwards) {
-                carousel.scrollTo(firstItem - numVisible, true);
+                newposition = firstItem - numVisible;
+                newposition = newposition >= 0 ? newposition : 0;
+                carousel.scrollTo(newposition);
             } else {
                 carousel.scrollTo(newposition);
             }
@@ -2021,7 +2023,10 @@
             var carousel = this,
                 item     = carousel._firstItem - carousel.get("numVisible");
 
-            carousel._selectedItem = carousel._getSelectedItem(item);
+            item = item >= 0 ? item : 0;
+            if (carousel.get("selectOnScroll")) {
+                carousel._selectedItem = carousel._getSelectedItem(item);
+            }
             carousel.scrollTo(item);
         },
 
@@ -2035,7 +2040,9 @@
             var carousel = this,
                 item     = carousel._firstItem + carousel.get("numVisible");
 
-            carousel._selectedItem = carousel._getSelectedItem(item);
+            if (carousel.get("selectOnScroll")) {
+                carousel._selectedItem = carousel._getSelectedItem(item);
+            }
             carousel.scrollTo(item);
         },
 
