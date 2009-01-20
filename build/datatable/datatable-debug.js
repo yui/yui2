@@ -160,6 +160,7 @@ YAHOO.util.Chain.prototype = {
     }
 };
 YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1656,6 +1657,7 @@ if(YAHOO.util.DD) {
  * @deprecated Pass configs directly to CellEditor constructor. 
  */
 
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -2492,6 +2494,7 @@ YAHOO.widget.Record.prototype = {
 };
 
 })();
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -14132,6 +14135,7 @@ DT.editTextarea = function() {};
 DT.editTextbox= function() {};
 
 })();
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -15371,6 +15375,7 @@ _onTheadKeydown : function(e, oSelf) {
 });
 
 })();
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -17085,4 +17090,5 @@ lang.augmentObject(CE, BCE);
 
 
 })();
+
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});
