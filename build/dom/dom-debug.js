@@ -568,7 +568,7 @@
                 hasClass = Y.Dom.hasClass;
 
             for (var i = 0, len = elements.length; i < len; ++i) {
-                if ( hasClass(elements[i], CLASSNAME) ) {
+                if ( hasClass(elements[i], className) ) {
                     nodes[nodes.length] = elements[i];
                 }
             }
