@@ -6660,6 +6660,115 @@ updateRow : function(row, oData) {
 },
 
 /**
+ * Starting with the given row, updates associated Records with the given data.
+ * The number of rows to update are determined by the array of data provided.
+ * Undefined data (i.e., not an object literal) causes a row to be skipped. If
+ * any of the rows are on current page, the corresponding DOM elements are also
+ * updated.
+ *
+ * @method updateRows
+ * @param startrow {YAHOO.widget.Record | Number | HTMLElement | String}
+ * Starting row to update: By Record instance, by Record's RecordSet
+ * position index, by HTMLElement reference to the TR element, or by ID string
+ * of the TR element.
+ * @param aData {Object[]} Array of object literal of data for the rows.
+ */
+updateRows : function(startrow, aData) {
+    if(lang.isArray(aData)) {
+        var startIndex = startrow;
+        if (!lang.isNumber(startrow)) {
+            startIndex = this.getRecordIndex(startrow);
+        }
+            
+        if(lang.isNumber(startIndex) && (startIndex >= 0)) {
+            var lastIndex = startIndex + aData.length,
+                aOldRecords = this._oRecordSet.getRecords(startIndex, aData.length),
+                aNewRecords = this._oRecordSet.setRecords(aData, startIndex);
+            if(aNewRecords) {
+                // Paginated
+                var oPaginator = this.get('paginator');
+                if (oPaginator) {
+                    var pageStartIndex = (oPaginator.getPageRecords())[0],
+                        pageLastIndex = (oPaginator.getPageRecords())[1];
+    
+                    // At least one of the new records affects the view
+                    if ((startIndex >= pageStartIndex) || (lastIndex <= pageLastIndex)) {
+                        this.render();
+                    }
+                    
+                    this.fireEvent("rowsAddEvent", {newRecords:aNewRecords, oldRecords:aOldRecords});
+                    YAHOO.log("Added " + aNewRecords.length + 
+                            " rows starting at index " + startIndex +
+                            " with data " + lang.dump(aData), "info", this.toString());
+                    return;
+                }
+                // Not paginated
+                else {
+                    // Update the TR elements
+                    var loopN = this.get("renderLoopSize"),
+                        rowCount = aData.length, // how many needed
+                        lastRowIndex = this._elTbody.rows.length,
+                        isLast = (lastIndex >= lastRowIndex),
+                        isAdding = (lastIndex > lastRowIndex);
+                                           
+                    this._oChainRender.add({
+                        method: function(oArg) {
+                            if((this instanceof DT) && this._sId) {
+                                var aRecords = oArg.aRecords,
+                                    i = oArg.nCurrentRow,
+                                    j = oArg.nDataPointer,
+                                    len = loopN > 0 ? Math.min(i+loopN, startIndex+aRecords.length) : startIndex+aRecords.length;
+                                    
+                                for(; i < len; i++,j++) {
+                                    if(isAdding && (i>=lastRowIndex)) {
+                                        this._elTbody.appendChild(this._addTrEl(aRecords[j]));
+                                    }
+                                    else {
+                                        this._updateTrEl(this._elTbody.rows[i], aRecords[j]);
+                                    }
+                                }
+                                oArg.nCurrentRow = i;
+                                oArg.nDataPointer = j;
+                            }
+                        },
+                        iterations: (loopN > 0) ? Math.ceil(rowCount/loopN) : 1,
+                        argument: {nCurrentRow:startIndex,aRecords:aNewRecords,nDataPointer:0,isAdding:isAdding},
+                        scope: this,
+                        timeout: (loopN > 0) ? 0 : -1
+                    });
+                    this._oChainRender.add({
+                        method: function(oArg) {
+                            var recIndex = oArg.recIndex;
+                            // Set FIRST/LAST
+                            if(recIndex === 0) {
+                                this._setFirstRow();
+                            }
+                            if(oArg.isLast) {
+                                this._setLastRow();
+                            }
+                            // Set EVEN/ODD
+                            this._setRowStripes();                           
+    
+                            this.fireEvent("rowsAddEvent", {newRecords:aNewRecords, oldRecords:aOldRecords});
+                            YAHOO.log("Added " + aNewRecords.length + 
+                                    " rows starting at index " + startIndex +
+                                    " with data " + lang.dump(aData), "info", this.toString());
+                        },
+                        argument: {recIndex: startIndex, isLast: isLast},
+                        scope: this,
+                        timeout: -1 // Needs to run immediately after the DOM insertions above
+                    });
+                    this._runRenderChain();
+                    this.hideTableMessage();                
+                    return;
+                }            
+            }
+        }
+    }
+    YAHOO.log("Could not add rows with " + lang.dump(aData));
+},
+
+/**
  * Deletes the given row's Record from the RecordSet. If the row is on current page,
  * the corresponding DOM elements are also deleted.
  *
