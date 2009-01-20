@@ -43,7 +43,7 @@
                 <h2>Section Header</h2>
                 <em class="lorem ipsum ipsum" id="lorem-ipsum">lorem ipsum</em>
                 <div class="mod" id="foo">
-                    <div class="hd" id="yui-gen1">
+                    <div class="hd foo" id="yui-gen1">
                         <h3>Module Header</h3>
                     </div>
                     <div class="bd">
@@ -210,6 +210,8 @@
                 Assert.areEqual(0, Y.Dom.getElementsByClassName('mod', 'div', 'hd').length, 'getByClassName failed for #hd .mod'); 
                 Assert.areEqual(0, Y.Dom.getElementsByClassName('moo').length, 'getByClassName failed for .moo'); 
                 Assert.areEqual(0, Y.Dom.getElementsByClassName('mod', 'div', 'fake-id').length, 'getByClassName failed for #fake-id div.mod'); 
+
+                Assert.areEqual(2, Y.Dom.getElementsByClassName('hd', 'div').length, 'getByClassName("hd") '); 
             },
 
             test_getElementsBy: function() {
