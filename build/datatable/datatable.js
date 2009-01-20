@@ -8890,7 +8890,7 @@ addRows : function(aData, index) {
                 var loopN = this.get("renderLoopSize");
                 var loopEnd = recIndex + aData.length;
                 var nRowsNeeded = (loopEnd - recIndex); // how many needed
-                var isLast = (recIndex === this._elTbody.rows.length);
+                var isLast = (index >= this._elTbody.rows.length);
                 this._oChainRender.add({
                     method: function(oArg) {
                         if((this instanceof DT) && this._sId) {
@@ -8899,18 +8899,18 @@ addRows : function(aData, index) {
                                 j = oArg.nCurrentRecord,
                                 len = loopN > 0 ? Math.min(i + loopN,loopEnd) : loopEnd,
                                 df = document.createDocumentFragment(),
-                                tr;
-                            for(; i < len; ++i,++j) {
+                                elNext = (this._elTbody.rows[i]) ? this._elTbody.rows[i] : null;
+                            for(; i < len; i++, j++) {
                                 df.appendChild(this._addTrEl(aRecords[j]));
                             }
-                            var elNext = (this._elTbody.rows[index]) ? this._elTbody.rows[index] : null;
                             this._elTbody.insertBefore(df, elNext);
                             oArg.nCurrentRow = i;
                             oArg.nCurrentRecord = j;
+                            //oArg.index += i;
                         }
                     },
                     iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
-                    argument: {nCurrentRow:recIndex,nCurrentRecord:0,aRecords:aRecords},
+                    argument: {nCurrentRow:recIndex,nCurrentRecord:0,aRecords:aRecords,index:index},
                     scope: this,
                     timeout: (loopN > 0) ? 0 : -1
                 });
@@ -8929,7 +8929,7 @@ addRows : function(aData, index) {
 
                         this.fireEvent("rowsAddEvent", {records:aRecords});
                     },
-                    argument: {recIndex: recIndex, isLast: isLast},
+                    argument: {recIndex: index, isLast: isLast},
                     scope: this,
                     timeout: -1 // Needs to run immediately after the DOM insertions above
                 });
@@ -8953,31 +8953,19 @@ addRows : function(aData, index) {
  * @param oData {Object} Object literal of data for the row.
  */
 updateRow : function(row, oData) {
-    var oldRecord, oldData, updatedRecord, elRow;
-
-    // Get the Record directly
-    if((row instanceof YAHOO.widget.Record) || (lang.isNumber(row))) {
-        // Get the Record directly
-        oldRecord = this._oRecordSet.getRecord(row);
-
-        // Is this row on current page?
-        elRow = this.getTrEl(oldRecord);
-    }
-    // Get the Record by TR element
-    else {
-        elRow = this.getTrEl(row);
-        if(elRow) {
-            oldRecord = this.getRecord(elRow);
-        }
+    var index = row;
+    if (!lang.isNumber(index)) {
+        index = this.getRecordIndex(row);
     }
 
     // Update the Record
-    if(oldRecord) {
+    if(lang.isNumber(index) && (index >= 0)) {
+        var oRecordSet = this._oRecordSet,
+            oldRecord = oRecordSet.getRecord(index),
+            elRow = this.getTrEl(oldRecord),
         // Copy data from the Record for the event that gets fired later
-        var oRecordData = oldRecord.getData();
-        oldData = YAHOO.widget.DataTable._cloneObject(oRecordData);
-
-        updatedRecord = this._oRecordSet.updateRecord(oldRecord, oData);
+            oldData = oldRecord ? oldRecord.getData() : null,
+            updatedRecord = this._oRecordSet.setRecord(oData, index);
     }
     else {
         return;
@@ -8985,11 +8973,29 @@ updateRow : function(row, oData) {
     }
 
     // Update the TR only if row is on current page
-    if(elRow) {
+    if(updatedRecord) {
         this._oChainRender.add({
             method: function() {
                 if((this instanceof DT) && this._sId) {
-                    this._updateTrEl(elRow, updatedRecord);
+                    // Paginated
+                    var oPaginator = this.get('paginator');
+                    if (oPaginator) {
+                        var pageStartIndex = (oPaginator.getPageRecords())[0],
+                            pageLastIndex = (oPaginator.getPageRecords())[1];
+
+                        // At least one of the new records affects the view
+                        if ((index >= pageStartIndex) || (index <= pageLastIndex)) {
+                            this.render();
+                        }
+                    }
+                    else {
+                        if(elRow) {
+                            this._updateTrEl(elRow, updatedRecord);
+                        }
+                        else {
+                            this.getTbodyEl().appendChild(this._addTrEl(updatedRecord));
+                        }
+                    }
                     this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
                 }
             },
@@ -9000,6 +9006,108 @@ updateRow : function(row, oData) {
     }
     else {
         this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
+    }
+},
+
+/**
+ * Starting with the given row, updates associated Records with the given data.
+ * The number of rows to update are determined by the array of data provided.
+ * Undefined data (i.e., not an object literal) causes a row to be skipped. If
+ * any of the rows are on current page, the corresponding DOM elements are also
+ * updated.
+ *
+ * @method updateRows
+ * @param startrow {YAHOO.widget.Record | Number | HTMLElement | String}
+ * Starting row to update: By Record instance, by Record's RecordSet
+ * position index, by HTMLElement reference to the TR element, or by ID string
+ * of the TR element.
+ * @param aData {Object[]} Array of object literal of data for the rows.
+ */
+updateRows : function(startrow, aData) {
+    if(lang.isArray(aData)) {
+        var startIndex = startrow;
+        if (!lang.isNumber(startrow)) {
+            startIndex = this.getRecordIndex(startrow);
+        }
+            
+        if(lang.isNumber(startIndex) && (startIndex >= 0)) {
+            var lastIndex = startIndex + aData.length,
+                aOldRecords = this._oRecordSet.getRecords(startIndex, aData.length),
+                aNewRecords = this._oRecordSet.setRecords(aData, startIndex);
+            if(aNewRecords) {
+                // Paginated
+                var oPaginator = this.get('paginator');
+                if (oPaginator) {
+                    var pageStartIndex = (oPaginator.getPageRecords())[0],
+                        pageLastIndex = (oPaginator.getPageRecords())[1];
+    
+                    // At least one of the new records affects the view
+                    if ((startIndex >= pageStartIndex) || (lastIndex <= pageLastIndex)) {
+                        this.render();
+                    }
+                    
+                    this.fireEvent("rowsAddEvent", {newRecords:aNewRecords, oldRecords:aOldRecords});
+                    return;
+                }
+                // Not paginated
+                else {
+                    // Update the TR elements
+                    var loopN = this.get("renderLoopSize"),
+                        rowCount = aData.length, // how many needed
+                        lastRowIndex = this._elTbody.rows.length,
+                        isLast = (lastIndex >= lastRowIndex),
+                        isAdding = (lastIndex > lastRowIndex);
+                                           
+                    this._oChainRender.add({
+                        method: function(oArg) {
+                            if((this instanceof DT) && this._sId) {
+                                var aRecords = oArg.aRecords,
+                                    i = oArg.nCurrentRow,
+                                    j = oArg.nDataPointer,
+                                    len = loopN > 0 ? Math.min(i+loopN, startIndex+aRecords.length) : startIndex+aRecords.length;
+                                    
+                                for(; i < len; i++,j++) {
+                                    if(isAdding && (i>=lastRowIndex)) {
+                                        this._elTbody.appendChild(this._addTrEl(aRecords[j]));
+                                    }
+                                    else {
+                                        this._updateTrEl(this._elTbody.rows[i], aRecords[j]);
+                                    }
+                                }
+                                oArg.nCurrentRow = i;
+                                oArg.nDataPointer = j;
+                            }
+                        },
+                        iterations: (loopN > 0) ? Math.ceil(rowCount/loopN) : 1,
+                        argument: {nCurrentRow:startIndex,aRecords:aNewRecords,nDataPointer:0,isAdding:isAdding},
+                        scope: this,
+                        timeout: (loopN > 0) ? 0 : -1
+                    });
+                    this._oChainRender.add({
+                        method: function(oArg) {
+                            var recIndex = oArg.recIndex;
+                            // Set FIRST/LAST
+                            if(recIndex === 0) {
+                                this._setFirstRow();
+                            }
+                            if(oArg.isLast) {
+                                this._setLastRow();
+                            }
+                            // Set EVEN/ODD
+                            this._setRowStripes();                           
+    
+                            this.fireEvent("rowsAddEvent", {newRecords:aNewRecords, oldRecords:aOldRecords});
+                        },
+                        argument: {recIndex: startIndex, isLast: isLast},
+                        scope: this,
+                        timeout: -1 // Needs to run immediately after the DOM insertions above
+                    });
+                    this._runRenderChain();
+                    this.hideTableMessage();                
+                    return;
+                }            
+            }
+        }
     }
 },
 
@@ -9138,6 +9246,10 @@ deleteRows : function(row, count) {
                 highIndex = (count > 0) ? nRecordIndex + count -1 : nRecordIndex;
                 lowIndex = (count > 0) ? nRecordIndex : nRecordIndex + count + 1;
                 count = (count > 0) ? count : count*-1;
+                if(lowIndex < 0) {
+                    lowIndex = 0;
+                    count = highIndex - lowIndex;
+                }
             }
             else {
                 count = 1;
