@@ -12,7 +12,8 @@
  * be used to render this node, and any custom attributes that should be
  * stored with the node (which is available in noderef.data).
  * All values in oData will be used to set equally named properties in the node
- * as long as the node does have such properties, they are not undefined, private or functions.
+ * as long as the node does have such properties, they are not undefined, private or functions,
+ * the rest of the values will be stored in noderef.data
  * @param oParent {Node} this node's parent node
  * @param expanded {boolean} the initial expanded/collapsed state (deprecated, use oData.expanded)
  * @constructor
@@ -65,21 +66,6 @@ YAHOO.widget.Node.prototype = {
      * @type int
      */
     depth: -1,
-
-    /**
-     * The href for the node's label.  If one is not specified, the href will
-     * be set so that it toggles the node.
-     * @property href
-     * @type string
-     */
-    href: null,
-
-    /**
-     * The label href target, defaults to current window
-     * @property target
-     * @type string
-     */
-    target: "_self",
 
     /**
      * The node's expanded/collapsed state
@@ -205,12 +191,63 @@ YAHOO.widget.Node.prototype = {
      */
     contentStyle: "",
 
+
     /**
      * The generated id that will contain the data passed in by the implementer.
      * @property contentElId
      * @type string
      */
     contentElId: null,
+	
+/** 
+ * Enables node highlighting.  If true, the node can be highlighted and/or propagate highlighting
+ * @property enableHighlight
+ * @type boolean
+ * @default true
+ */
+	enableHighlight: true,
+	
+/** 
+ * Stores the highlight state.  Can be any of:
+ * <ul>
+ * <li>0 - not highlighted</li>
+ * <li>1 - highlighted</li>
+ * <li>2 - some children highlighted</li>
+ * </ul>
+ * @property highlightState
+ * @type integer
+ * @default 0
+ */
+ 
+ highlightState: 0,
+ 
+ /**
+ * Tells whether highlighting will be propagated up to the parents of the clicked node
+ * @property propagateHighlightUp
+ * @type boolean
+ * @default false
+ */
+ 
+ propagateHighlightUp: false,
+ 
+ /**
+ * Tells whether highlighting will be propagated down to the children of the clicked node
+ * @property propagateHighlightDown
+ * @type boolean
+ * @default false
+ */
+ 
+ propagateHighlightDown: false,
+ 
+ /**
+  * User-defined className to be added to the Node
+  * @property className
+  * @type string
+  * @default null
+  */
+ 
+ className: null,
+ 
  /**
      * The node type
      * @property _type
@@ -237,7 +274,7 @@ YAHOO.widget.Node.prototype = {
      */
     init: function(oData, oParent, expanded) {
 
-        this.data       = oData;
+		this.data = {};
         this.children   = [];
         this.index      = YAHOO.widget.TreeView.nodeCount;
         ++YAHOO.widget.TreeView.nodeCount;
@@ -245,8 +282,12 @@ YAHOO.widget.Node.prototype = {
 		
 		if (Lang.isObject(oData)) {
 			for (var property in oData) {
-				if (property.charAt(0) != '_'  && oData.hasOwnProperty(property) && !Lang.isUndefined(this[property]) && !Lang.isFunction(this[property]) ) {
-					this[property] = oData[property];
+				if (oData.hasOwnProperty(property)) {
+					if (property.charAt(0) != '_'  && !Lang.isUndefined(this[property]) && !Lang.isFunction(this[property]) ) {
+						this[property] = oData[property];
+					} else {
+						this.data[property] = oData[property];
+					}
 				}
 			}
 		}
@@ -690,7 +731,7 @@ YAHOO.widget.Node.prototype = {
         if (this.hasIcon) {
             var el = this.getToggleEl();
             if (el) {
-                el.className = el.className.replace(/ygtv(([tl][pmn]h?)|(loading))/,this.getStyle());
+                el.className = el.className.replace(/\bygtv(([tl][pmn]h?)|(loading))\b/gi,this.getStyle());
             }
         }
     },
@@ -739,7 +780,8 @@ YAHOO.widget.Node.prototype = {
      * @method expandAll
      */
     expandAll: function() { 
-        for (var i=0;i<this.children.length;++i) {
+		var l = this.children.length;
+        for (var i=0;i<l;++i) {
             var c = this.children[i];
             if (c.isDynamic()) {
                 this.logger.log("Not supported (lazy load + expand all)");
@@ -868,12 +910,7 @@ YAHOO.widget.Node.prototype = {
 
         this.childrenRendered = false;
 
-        var sb = [];
-        sb[sb.length] = '<div class="ygtvitem" id="' + this.getElId() + '">';
-        sb[sb.length] = this.getNodeHtml();
-        sb[sb.length] = this.getChildrenHtml();
-        sb[sb.length] = '</div>';
-        return sb.join("");
+		return ['<div class="ygtvitem" id="' , this.getElId() , '">' ,this.getNodeHtml() , this.getChildrenHtml() ,'</div>'].join("");
     },
 
     /**
@@ -888,8 +925,7 @@ YAHOO.widget.Node.prototype = {
 
 
         var sb = [];
-        sb[sb.length] = '<div class="ygtvchildren"';
-        sb[sb.length] = ' id="' + this.getChildrenElId() + '"';
+        sb[sb.length] = '<div class="ygtvchildren" id="' + this.getChildrenElId() + '"';
 
         // This is a workaround for an IE rendering issue, the child div has layout
         // in IE, creating extra space if a leaf node is created with the expanded
@@ -1045,29 +1081,33 @@ YAHOO.widget.Node.prototype = {
         this.logger.log("Generating html");
         var sb = [];
 
-        sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth + '">';
-        sb[sb.length] = '<tr class="ygtvrow">';
+        sb[sb.length] = '<table id="ygtvtableel' + this.index + '"border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
+		if (this.enableHighlight) {
+			sb[sb.length] = ' ygtv-highlight' + this.highlightState;
+		}
+		if (this.className) {
+			sb[sb.length] = ' ' + this.className;
+		}			
+        sb[sb.length] = '"><tr class="ygtvrow">';
         
         for (var i=0;i<this.depth;++i) {
             sb[sb.length] = '<td class="ygtvcell ' + this.getDepthStyle(i) + '"><div class="ygtvspacer"></div></td>';
         }
 
         if (this.hasIcon) {
-            sb[sb.length] = '<td'; 
-            sb[sb.length] = ' id="' + this.getToggleElId() + '"';
-            sb[sb.length] = ' class="ygtvcell ' + this.getStyle() + '"';
-            sb[sb.length] = '><a href="#" class="ygtvspacer">&nbsp;</a></td>';
+            sb[sb.length] = '<td id="' + this.getToggleElId();
+            sb[sb.length] = '" class="ygtvcell ';
+			sb[sb.length] = this.getStyle() ;
+            sb[sb.length] = '"><a href="#" class="ygtvspacer">&nbsp;</a></td>';
         }
 
-        sb[sb.length] = '<td';
-        sb[sb.length] = ' id="' + this.contentElId + '"'; 
-        sb[sb.length] = ' class="ygtvcell ' + this.contentStyle  + ' ygtvcontent" ';
+        sb[sb.length] = '<td id="' + this.contentElId; 
+        sb[sb.length] = '" class="ygtvcell ';
+		sb[sb.length] = this.contentStyle  + ' ygtvcontent" ';
         sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
         sb[sb.length] = ' >';
 		sb[sb.length] = this.getContentHtml();
-        sb[sb.length] = '</td>';
-        sb[sb.length] = '</tr>';
-        sb[sb.length] = '</table>';
+        sb[sb.length] = '</td></tr></table>';
 
         return sb.join("");
 
@@ -1094,7 +1134,7 @@ YAHOO.widget.Node.prototype = {
         if (this.hasIcon) {
             var el = this.getToggleEl();
             if (el) {
-                el.className = this.getStyle();
+				el.className = el.className.replace(/\bygtv[lt][nmp]h*\b/gi,this.getStyle());
             }
         }
     },
@@ -1163,9 +1203,13 @@ YAHOO.widget.Node.prototype = {
 			this.tree.currentFocus._removeFocus();
 		}
 	
-		for (var n = this.parent;n;n = n.parentNode) {
-			n.expand();
-		}
+		var  expandParent = function (node) {
+			if (node.parent) {
+				expandParent(node.parent);
+			} 
+			node.expand();
+		};
+		expandParent(this);
 
 		Dom.getElementsBy  ( 
 			function (el) {
@@ -1207,9 +1251,9 @@ YAHOO.widget.Node.prototype = {
 	},
 
   /**
-     * Count of nodes in tree
+     * Count of nodes in a branch
      * @method getNodeCount
-     * @return {int} number of nodes in the tree
+     * @return {int} number of nodes in the branch
      */
     getNodeCount: function() {
 		for (var i = 0, count = 0;i< this.children.length;i++) {
@@ -1229,15 +1273,21 @@ YAHOO.widget.Node.prototype = {
 	
 		if (this.isDynamic()) { return false; }
 		
-		var def, defs = this.data, children = []; 
+		var def, defs = Lang.merge(this.data), children = []; 
 		
 		
-		if (this.href) { defs.href = this.href; }
-		if (this.target != '_self') { defs.target = this.target; }
+
 		if (this.expanded) {defs.expanded = this.expanded; }
 		if (!this.multiExpand) { defs.multiExpand = this.multiExpand; }
+		if (!this.renderHidden) { defs.renderHidden = this.renderHidden; }
 		if (!this.hasIcon) { defs.hasIcon = this.hasIcon; }
 		if (this.nowrap) { defs.nowrap = this.nowrap; }
+		if (this.className) { defs.className = this.className; }
+		if (this.editable) { defs.editable = this.editable; }
+		if (this.enableHighlight) { defs.enableHighlight = this.enableHighlight; }
+		if (this.highlightState) { defs.highlightState = this.highlightState; }
+		if (this.propagateHighlightUp) { defs.propagateHighlightUp = this.propagateHighlightUp; }
+		if (this.propagateHighlightDown) { defs.propagateHighlightDown = this.propagateHighlightDown; }
 		defs.type = this._type;
 		
 		
@@ -1259,8 +1309,150 @@ YAHOO.widget.Node.prototype = {
      */
     getToggleLink: function() {
         return 'return false;';
-    }
-
+    },
+	
+	/**
+	* Sets the value of property for this node and all loaded descendants.  
+	* Only public and defined properties can be set, not methods.  
+	* Values for unknown properties will be assigned to the refNode.data object
+	* @method setNodesProperty
+	* @param name {string} Name of the property to be set
+	* @param value {any} value to be set
+	* @param refresh {boolean} if present and true, it does a refresh
+	*/
+	setNodesProperty: function(name, value, refresh) {
+		if (name.charAt(0) != '_'  && !Lang.isUndefined(this[name]) && !Lang.isFunction(this[name]) ) {
+			this[name] = value;
+		} else {
+			this.data[name] = value;
+		}
+		for (var i = 0; i < this.children.length;i++) {
+			this.children[i].setNodesProperty(name,value);
+		}
+		if (refresh) {
+			this.refresh();
+		}
+	},
+	/**
+	* Toggles the highlighted state of a Node
+	* @method toggleHighlight
+	*/
+	toggleHighlight: function() {
+		if (this.enableHighlight) {
+			// unhighlights only if fully highligthed.  For not or partially highlighted it will highlight
+			if (this.highlightState == 1) {
+				this.unhighlight();
+			} else {
+				this.highlight();
+			}
+		}
+	},
+	
+	/**
+	* Turns highlighting on node.  
+	* @method highlight
+	* @param _silent {boolean} optional, don't fire the highlightEvent
+	*/
+	highlight: function(_silent) {
+		if (this.enableHighlight) {
+			if (this.tree.singleNodeHighlight) {
+				if (this.tree._currentlyHighlighted) {
+					this.tree._currentlyHighlighted.unhighlight();
+				}
+				this.tree._currentlyHighlighted = this;
+			}
+			this.highlightState = 1;
+			this._setHighlightClassName();
+			if (this.propagateHighlightDown) {
+				for (var i = 0;i < this.children.length;i++) {
+					this.children[i].highlight(true);
+				}
+			}
+			if (this.propagateHighlightUp) {
+				if (this.parent) {
+					this.parent._childrenHighlighted();
+				}
+			}
+			if (!_silent) {
+				this.tree.fireEvent('highlightEvent',this);
+			}
+		}
+	},
+	/**
+	* Turns highlighting off a node.  
+	* @method unhighlight
+	* @param _silent {boolean} optional, don't fire the highlightEvent
+	*/
+	unhighlight: function(_silent) {
+		if (this.enableHighlight) {
+			this.highlightState = 0;
+			this._setHighlightClassName();
+			if (this.propagateHighlightDown) {
+				for (var i = 0;i < this.children.length;i++) {
+					this.children[i].unhighlight(true);
+				}
+			}
+			if (this.propagateHighlightUp) {
+				if (this.parent) {
+					this.parent._childrenHighlighted();
+				}
+			}
+			if (!_silent) {
+				this.tree.fireEvent('highlightEvent',this);
+			}
+		}
+	},
+	/** 
+	* Checks whether all or part of the children of a node are highlighted and
+	* sets the node highlight to full, none or partial highlight.
+	* If set to propagate it will further call the parent
+	* @method _childrenHighlighted
+	* @private
+	*/
+	_childrenHighlighted: function() {
+		var yes = false, no = false;
+		if (this.enableHighlight) {
+			for (var i = 0;i < this.children.length;i++) {
+				switch(this.children[i].highlightState) {
+					case 0:
+						no = true;
+						break;
+					case 1:
+						yes = true;
+						break;
+					case 2:
+						yes = no = true;
+						break;
+				}
+			}
+			if (yes && no) {
+				this.highlightState = 2;
+			} else if (yes) {
+				this.highlightState = 1;
+			} else {
+				this.highlightState = 0;
+			}
+			this._setHighlightClassName();
+			if (this.propagateHighlightUp) {
+				if (this.parent) {
+					this.parent._childrenHighlighted();
+				}
+			}
+		}
+	},
+	
+	/**
+	* Changes the classNames on the toggle and content containers to reflect the current highlighting
+	* @method _setHighlightClassName
+	* @private
+	*/
+	_setHighlightClassName: function() {
+		var el = Dom.get('ygtvtableel' + this.index);
+		if (el) {
+			el.className = el.className.replace(/\bygtv-highlight\d\b/gi,'ygtv-highlight' + this.highlightState);
+		}
+	}
+	
 };
 
 YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);

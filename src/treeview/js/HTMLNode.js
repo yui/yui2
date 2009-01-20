@@ -86,7 +86,6 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
      */
     setHtml: function(o) {
 
-        this.data = o;
         this.html = (typeof o === "string") ? o : o.html;
 
         var el = this.getContentEl();

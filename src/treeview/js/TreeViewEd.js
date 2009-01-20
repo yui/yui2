@@ -36,12 +36,24 @@
 	};
 	
 	/**
+	* Validator function for edited data, called from the TreeView instance scope, 
+	* receives the arguments (newValue, oldValue, nodeInstance) 
+	* and returns either the validated (or type-converted) value or undefined. 
+	* An undefined return will prevent the editor from closing
+	* @property validator
+	* @default null
+	 * @for YAHOO.widget.TreeView
+	 */
+	TVproto.validator = null;
+	
+	/**
 	* Entry point of the editing plug-in.  
 	* TreeView will call this method if it exists when a node label is clicked
 	* @method _nodeEditing
 	* @param node {YAHOO.widget.Node} the node to be edited
 	* @return {Boolean} true to indicate that the node is editable and prevent any further bubbling of the click.
 	 * @for YAHOO.widget.TreeView
+	 * @private
 	*/
 	
 	
@@ -147,13 +159,16 @@
 	
 	TVproto._closeEditor = function (save) {
 		var ed = TV.editorData, 
-			node = ed.node;
+			node = ed.node,
+			close = true;
 		if (save) { 
-			ed.node.saveEditorValue(ed); 
+			close = ed.node.saveEditorValue(ed) !== false; 
 		}
-		Dom.setStyle(ed.editorPanel,'display','none');	
-		ed.active = false;
-		node.focus();
+		if (close) {
+			Dom.setStyle(ed.editorPanel,'display','none');	
+			ed.active = false;
+			node.focus();
+		}
 	};
 	
 	/**
@@ -229,6 +244,7 @@
 	* Should be overridden by each node type
 	* @method saveEditorValue
 	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+	 * @return a return of exactly false will prevent the editor from closing
 	 * @for YAHOO.widget.Node
 	 */
 	Nproto.saveEditorValue = function (editorData) {
@@ -274,9 +290,15 @@
 	 * @for YAHOO.widget.TextNode
 	 */
 	TNproto.saveEditorValue = function (editorData) {
-		var node = editorData.node, value = editorData.inputElement.value;
+		var node = editorData.node, 
+			value = editorData.inputElement.value,
+			validator = node.tree.validator;
+		
+		if (Lang.isFunction(validator)) {
+			value = validator(value,node.label,node);
+			if (Lang.isUndefined(value)) { return false; }
+		}
 		node.label = value;
-		node.data.label = value;
 		node.getLabelEl().innerHTML = value;
 	};
 
