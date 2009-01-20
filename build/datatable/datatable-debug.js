@@ -160,7 +160,6 @@ YAHOO.util.Chain.prototype = {
     }
 };
 YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1657,7 +1656,6 @@ if(YAHOO.util.DD) {
  * @deprecated Pass configs directly to CellEditor constructor. 
  */
 
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -2494,7 +2492,6 @@ YAHOO.widget.Record.prototype = {
 };
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -13004,7 +13001,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
         if (oPaginator) {
             // Update totalRecords
             if(this.get("dynamicData")) {
-                if (lang.isNumber(oPayload.totalRecords)) {
+                if (widget.Paginator.isNumeric(oPayload.totalRecords)) {
                     oPaginator.set('totalRecords',oPayload.totalRecords);
                 }
             }
@@ -14135,7 +14132,6 @@ DT.editTextarea = function() {};
 DT.editTextbox= function() {};
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -15375,7 +15371,6 @@ _onTheadKeydown : function(e, oSelf) {
 });
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -17090,5 +17085,4 @@ lang.augmentObject(CE, BCE);
 
 
 })();
-
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});

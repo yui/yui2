@@ -10507,7 +10507,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
         if (oPaginator) {
             // Update totalRecords
             if(this.get("dynamicData")) {
-                if (lang.isNumber(oPayload.totalRecords)) {
+                if (widget.Paginator.isNumeric(oPayload.totalRecords)) {
                     oPaginator.set('totalRecords',oPayload.totalRecords);
                 }
             }

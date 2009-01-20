@@ -12,6 +12,11 @@
  * @requires  yahoo,dom,dragdrop,event
  * @optional  animation
  */
+ (function () {
+
+var getXY = YAHOO.util.Dom.getXY,
+    Event = YAHOO.util.Event,
+    _AS   = Array.prototype.slice;
 
 /**
  * A DragDrop implementation that can be used as a background for a
@@ -29,87 +34,118 @@
  * @param {SliderThumb} oThumb The thumb for this slider
  * @param {String}      sType  The type of slider (horiz, vert, region)
  */
-YAHOO.widget.Slider = function(sElementId, sGroup, oThumb, sType) {
+function Slider(sElementId, sGroup, oThumb, sType) {
 
-    YAHOO.widget.Slider.ANIM_AVAIL = 
-        (!YAHOO.lang.isUndefined(YAHOO.util.Anim));
+    Slider.ANIM_AVAIL = (!YAHOO.lang.isUndefined(YAHOO.util.Anim));
 
     if (sElementId) {
         this.init(sElementId, sGroup, true);
         this.initSlider(sType);
         this.initThumb(oThumb);
     }
-};
+}
 
-/**
- * Factory method for creating a horizontal slider
- * @method YAHOO.widget.Slider.getHorizSlider
- * @static
- * @param {String} sBGElId the id of the slider's background element
- * @param {String} sHandleElId the id of the thumb element
- * @param {int} iLeft the number of pixels the element can move left
- * @param {int} iRight the number of pixels the element can move right
- * @param {int} iTickSize optional parameter for specifying that the element 
- * should move a certain number pixels at a time.
- * @return {Slider} a horizontal slider control
- */
-YAHOO.widget.Slider.getHorizSlider = 
-    function (sBGElId, sHandleElId, iLeft, iRight, iTickSize) {
-        return new YAHOO.widget.Slider(sBGElId, sBGElId, 
-            new YAHOO.widget.SliderThumb(sHandleElId, sBGElId, 
-                               iLeft, iRight, 0, 0, iTickSize), "horiz");
-};
+YAHOO.lang.augmentObject(Slider,{
+    /**
+     * Factory method for creating a horizontal slider
+     * @method YAHOO.widget.Slider.getHorizSlider
+     * @static
+     * @param {String} sBGElId the id of the slider's background element
+     * @param {String} sHandleElId the id of the thumb element
+     * @param {int} iLeft the number of pixels the element can move left
+     * @param {int} iRight the number of pixels the element can move right
+     * @param {int} iTickSize optional parameter for specifying that the element 
+     * should move a certain number pixels at a time.
+     * @return {Slider} a horizontal slider control
+     */
+    getHorizSlider : 
+        function (sBGElId, sHandleElId, iLeft, iRight, iTickSize) {
+            return new Slider(sBGElId, sBGElId, 
+                new YAHOO.widget.SliderThumb(sHandleElId, sBGElId, 
+                                   iLeft, iRight, 0, 0, iTickSize), "horiz");
+    },
 
-/**
- * Factory method for creating a vertical slider
- * @method YAHOO.widget.Slider.getVertSlider
- * @static
- * @param {String} sBGElId the id of the slider's background element
- * @param {String} sHandleElId the id of the thumb element
- * @param {int} iUp the number of pixels the element can move up
- * @param {int} iDown the number of pixels the element can move down
- * @param {int} iTickSize optional parameter for specifying that the element 
- * should move a certain number pixels at a time.
- * @return {Slider} a vertical slider control
- */
-YAHOO.widget.Slider.getVertSlider = 
-    function (sBGElId, sHandleElId, iUp, iDown, iTickSize) {
-        return new YAHOO.widget.Slider(sBGElId, sBGElId, 
-            new YAHOO.widget.SliderThumb(sHandleElId, sBGElId, 0, 0, 
-                               iUp, iDown, iTickSize), "vert");
-};
+    /**
+     * Factory method for creating a vertical slider
+     * @method YAHOO.widget.Slider.getVertSlider
+     * @static
+     * @param {String} sBGElId the id of the slider's background element
+     * @param {String} sHandleElId the id of the thumb element
+     * @param {int} iUp the number of pixels the element can move up
+     * @param {int} iDown the number of pixels the element can move down
+     * @param {int} iTickSize optional parameter for specifying that the element 
+     * should move a certain number pixels at a time.
+     * @return {Slider} a vertical slider control
+     */
+    getVertSlider :
+        function (sBGElId, sHandleElId, iUp, iDown, iTickSize) {
+            return new Slider(sBGElId, sBGElId, 
+                new YAHOO.widget.SliderThumb(sHandleElId, sBGElId, 0, 0, 
+                                   iUp, iDown, iTickSize), "vert");
+    },
 
-/**
- * Factory method for creating a slider region like the one in the color
- * picker example
- * @method YAHOO.widget.Slider.getSliderRegion
- * @static
- * @param {String} sBGElId the id of the slider's background element
- * @param {String} sHandleElId the id of the thumb element
- * @param {int} iLeft the number of pixels the element can move left
- * @param {int} iRight the number of pixels the element can move right
- * @param {int} iUp the number of pixels the element can move up
- * @param {int} iDown the number of pixels the element can move down
- * @param {int} iTickSize optional parameter for specifying that the element 
- * should move a certain number pixels at a time.
- * @return {Slider} a slider region control
- */
-YAHOO.widget.Slider.getSliderRegion = 
-    function (sBGElId, sHandleElId, iLeft, iRight, iUp, iDown, iTickSize) {
-        return new YAHOO.widget.Slider(sBGElId, sBGElId, 
-            new YAHOO.widget.SliderThumb(sHandleElId, sBGElId, iLeft, iRight, 
-                               iUp, iDown, iTickSize), "region");
-};
+    /**
+     * Factory method for creating a slider region like the one in the color
+     * picker example
+     * @method YAHOO.widget.Slider.getSliderRegion
+     * @static
+     * @param {String} sBGElId the id of the slider's background element
+     * @param {String} sHandleElId the id of the thumb element
+     * @param {int} iLeft the number of pixels the element can move left
+     * @param {int} iRight the number of pixels the element can move right
+     * @param {int} iUp the number of pixels the element can move up
+     * @param {int} iDown the number of pixels the element can move down
+     * @param {int} iTickSize optional parameter for specifying that the element 
+     * should move a certain number pixels at a time.
+     * @return {Slider} a slider region control
+     */
+    getSliderRegion : 
+        function (sBGElId, sHandleElId, iLeft, iRight, iUp, iDown, iTickSize) {
+            return new Slider(sBGElId, sBGElId, 
+                new YAHOO.widget.SliderThumb(sHandleElId, sBGElId, iLeft, iRight, 
+                                   iUp, iDown, iTickSize), "region");
+    },
 
-/**
- * By default, animation is available if the animation utility is detected.
- * @property YAHOO.widget.Slider.ANIM_AVAIL
- * @static
- * @type boolean
- */
-YAHOO.widget.Slider.ANIM_AVAIL = false;
+    /**
+     * Constant for valueChangeSource, indicating that the user clicked or
+     * dragged the slider to change the value.
+     * @property Slider.SOURCE_UI_EVENT
+     * @final
+     * @static
+     * @default 1
+     */
+    SOURCE_UI_EVENT : 1,
 
-YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
+    /**
+     * Constant for valueChangeSource, indicating that the value was altered
+     * by a programmatic call to setValue/setRegionValue.
+     * @property Slider.SOURCE_SET_VALUE
+     * @final
+     * @static
+     * @default 2
+     */
+    SOURCE_SET_VALUE : 2,
+
+    /**
+     * Constant for valueChangeSource, indicating that the value was altered
+     * by hitting any of the supported keyboard characters.
+     * @property Slider.SOURCE_KEY_EVENT
+     * @final
+     * @static
+     * @default 2
+     */
+    SOURCE_KEY_EVENT : 3,
+
+    /**
+     * By default, animation is available if the animation utility is detected.
+     * @property Slider.ANIM_AVAIL
+     * @static
+     * @type boolean
+     */
+    ANIM_AVAIL : false
+},true);
+
+YAHOO.extend(Slider, YAHOO.util.DragDrop, {
 
     /**
      * Tracks the state of the mouse button to aid in when events are fired.
@@ -182,7 +218,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
          * @property animate
          * @type boolean
          */
-        this.animate = YAHOO.widget.Slider.ANIM_AVAIL;
+        this.animate = Slider.ANIM_AVAIL;
 
         /**
          * Set to false to disable a background click thumb move
@@ -246,6 +282,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
          * @property SOURCE_UI_EVENT
          * @final
          * @default 1
+         * @deprecated use static Slider.SOURCE_UI_EVENT
          */
         this.SOURCE_UI_EVENT = 1;
 
@@ -255,6 +292,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
          * @property SOURCE_SET_VALUE
          * @final
          * @default 2
+         * @deprecated use static Slider.SOURCE_SET_VALUE
          */
         this.SOURCE_SET_VALUE = 2;
 
@@ -339,11 +377,20 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @method onAvailable
      */
     onAvailable: function() {
-        var Event = YAHOO.util.Event;
+        this._bindKeyEvents();
+    },
+ 
+    /**
+     * Sets up the listeners for keydown and key press events.
+     *
+     * @method _bindKeyEvents
+     * @protected
+     */
+    _bindKeyEvents : function () {
         Event.on(this.id, "keydown",  this.handleKeyDown,  this, true);
         Event.on(this.id, "keypress", this.handleKeyPress, this, true);
     },
- 
+
     /**
      * Executed when a keypress event happens with the control focused.
      * Prevents the default behavior for navigation keys.  The actual
@@ -353,8 +400,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     handleKeyPress: function(e) {
         if (this.enableKeys) {
-            var Event = YAHOO.util.Event,
-                kc = Event.getCharCode(e);
+            var kc = Event.getCharCode(e);
+
             switch (kc) {
                 case 0x25: // left
                 case 0x26: // up
@@ -377,8 +424,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     handleKeyDown: function(e) {
         if (this.enableKeys) {
-            var Event = YAHOO.util.Event,
-                kc = Event.getCharCode(e),
+            var kc = Event.getCharCode(e),
                 t  = this.thumb,
                 h  = this.getXValue(),
                 v  = this.getYValue(),
@@ -413,9 +459,10 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
             if (changeValue) {
                 if (t._isRegion) {
-                    this.setRegionValue(h, v, true);
+                    this._setRegionValue(Slider.SOURCE_KEY_EVENT, h, v, true);
                 } else {
-                    this.setValue((t._isHoriz ? h : v), true);
+                    this._setValue(Slider.SOURCE_KEY_EVENT,
+                        (t._isHoriz ? h : v), true);
                 }
                 Event.stopEvent(e);
             }
@@ -439,7 +486,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
          * @property baselinePos
          * @type [int, int]
          */
-        this.baselinePos = YAHOO.util.Dom.getXY(this.getEl());
+        this.baselinePos = getXY(this.getEl());
 
         this.thumb.startOffset = this.thumb.getOffsetFromParent(this.baselinePos);
 
@@ -452,7 +499,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
             }
         } else {
             if (this.deferredSetValue) {
-                this.setValue.apply(this, this.deferredSetValue);
+                this._setValue.apply(this, this.deferredSetValue);
                 this.deferredSetValue = null;
             } else {
                 this.setValue(0, true, true, true);
@@ -538,7 +585,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @private
      */
     focus: function() {
-        this.valueChangeSource = this.SOURCE_UI_EVENT;
+        this.valueChangeSource = Slider.SOURCE_UI_EVENT;
 
         // Focus the background element if possible
         var el = this.getEl();
@@ -620,6 +667,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
     /**
      * Provides a way to set the value of the slider in code.
+     *
      * @method setValue
      * @param {int} newOffset the number of pixels the thumb should be
      * positioned away from the initial start point 
@@ -629,12 +677,29 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @param {boolean} silent when true, do not fire events
      * @return {boolean} true if the move was performed, false if it failed
      */
-    setValue: function(newOffset, skipAnim, force, silent) {
+    setValue: function() {
+        var args = _AS.call(arguments);
+        args.unshift(Slider.SOURCE_SET_VALUE);
+        return this._setValue.apply(this,args);
+    },
+
+    /**
+     * Worker function to execute the value set operation.  Accepts type of
+     * set operation in addition to the usual setValue params.
+     *
+     * @method _setValue
+     * @param source {int} what triggered the set (e.g. Slider.SOURCE_SET_VALUE)
+     * @param {int} newOffset the number of pixels the thumb should be
+     * positioned away from the initial start point 
+     * @param {boolean} skipAnim set to true to disable the animation
+     * for this move action (but not others).
+     * @param {boolean} force ignore the locked setting and set value anyway
+     * @param {boolean} silent when true, do not fire events
+     * @return {boolean} true if the move was performed, false if it failed
+     * @protected
+     */
+    _setValue: function(source, newOffset, skipAnim, force, silent) {
         var t = this.thumb, newX, newY;
-
-
-        this._silent = silent;
-        this.valueChangeSource = this.SOURCE_SET_VALUE;
 
         if (!t.available) {
             this.deferredSetValue = arguments;
@@ -652,6 +717,10 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         if (t._isRegion) {
             return false;
         }
+
+
+        this._silent = silent;
+        this.valueChangeSource = source || Slider.SOURCE_SET_VALUE;
 
         t.lastOffset = [newOffset, newOffset];
         this.verifyOffset(true);
@@ -682,12 +751,31 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @param {boolean} silent when true, do not fire events
      * @return {boolean} true if the move was performed, false if it failed
      */
-    setRegionValue: function(newOffset, newOffset2, skipAnim, force, silent) {
+    setRegionValue : function () {
+        var args = _AS.call(arguments);
+        args.unshift(Slider.SOURCE_SET_VALUE);
+        return this._setRegionValue.apply(this,args);
+    },
+
+    /**
+     * Worker function to execute the value set operation.  Accepts type of
+     * set operation in addition to the usual setValue params.
+     *
+     * @method _setRegionValue
+     * @param source {int} what triggered the set (e.g. Slider.SOURCE_SET_VALUE)
+     * @param {int} newOffset the number of pixels the thumb should be
+     * positioned away from the initial start point (x axis for region)
+     * @param {int} newOffset2 the number of pixels the thumb should be
+     * positioned away from the initial start point (y axis for region)
+     * @param {boolean} skipAnim set to true to disable the animation
+     * for this move action (but not others).
+     * @param {boolean} force ignore the locked setting and set value anyway
+     * @param {boolean} silent when true, do not fire events
+     * @return {boolean} true if the move was performed, false if it failed
+     * @protected
+     */
+    _setRegionValue: function(source, newOffset, newOffset2, skipAnim, force, silent) {
         var t = this.thumb, newX, newY;
-
-        this._silent = silent;
-
-        this.valueChangeSource = this.SOURCE_SET_VALUE;
 
         if (!t.available) {
             this.deferredSetRegionValue = arguments;
@@ -705,6 +793,10 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         if (!t._isRegion) {
             return false;
         }
+
+        this._silent = silent;
+
+        this.valueChangeSource = source || Slider.SOURCE_SET_VALUE;
 
         t.lastOffset = [newOffset, newOffset2];
         this.verifyOffset(true);
@@ -727,8 +819,12 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     verifyOffset: function(checkPos) {
 
-        var xy = YAHOO.util.Dom.getXY(this.getEl()),
+        var xy = getXY(this.getEl()),
             t  = this.thumb;
+
+        if (!this.thumbCenterPoint || !this.thumbCenterPoint.x) {
+            this.setThumbCenterPoint();
+        }
 
         if (xy) {
 
@@ -784,12 +880,12 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
             this.lock();
 
             // cache the current thumb pos
-            this.curCoord = YAHOO.util.Dom.getXY(this.thumb.getEl());
+            this.curCoord = getXY(this.thumb.getEl());
             this.curCoord = [Math.round(this.curCoord[0]), Math.round(this.curCoord[1])];
 
             setTimeout( function() { self.moveOneTick(p); }, this.tickPause );
 
-        } else if (this.animate && YAHOO.widget.Slider.ANIM_AVAIL && !skipAnim) {
+        } else if (this.animate && Slider.ANIM_AVAIL && !skipAnim) {
 
             this.lock();
 
@@ -971,8 +1067,9 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
         this._mouseDown = true;
 
-        var x = YAHOO.util.Event.getPageX(e),
-            y = YAHOO.util.Event.getPageY(e);
+        var x = Event.getPageX(e),
+            y = Event.getPageY(e);
+
 
         this.focus();
         this._slideStart();
@@ -986,8 +1083,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     onDrag: function(e) {
         if (this.backgroundEnabled && !this.isLocked()) {
-            var x = YAHOO.util.Event.getPageX(e),
-                y = YAHOO.util.Event.getPageY(e);
+            var x = Event.getPageX(e),
+                y = Event.getPageY(e);
             this.moveThumb(x, y, true, true);
             this.fireEvents();
         }
@@ -1079,8 +1176,10 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
 });
 
-YAHOO.augment(YAHOO.widget.Slider, YAHOO.util.EventProvider);
+YAHOO.lang.augmentProto(Slider, YAHOO.util.EventProvider);
 
+YAHOO.widget.Slider = Slider;
+})();
 /**
  * A drag and drop implementation to be used as the thumb of a slider.
  * @class SliderThumb
@@ -1364,10 +1463,16 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
  * @param {int}    range The number of pixels the thumbs may move within
  * @param {Array}  initVals (optional) [min,max] Initial thumb placement
  */
-YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
+(function () {
+
+var Event = YAHOO.util.Event,
+    YW = YAHOO.widget;
+
+function DualSlider(minSlider, maxSlider, range, initVals) {
 
     var self  = this,
-        ready = { min : false, max : false };
+        ready = { min : false, max : false },
+        minThumbOnMouseDown, maxThumbOnMouseDown;
 
     /**
      * A slider instance that keeps track of the lower value of the range.
@@ -1400,22 +1505,22 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
      */
     this.isHoriz = minSlider.thumb._isHoriz;
 
-    // Validate initial values
-    initVals = YAHOO.lang.isArray(initVals) ? initVals : [0,range];
-    initVals[0] = Math.min(Math.max(parseInt(initVals[0],10)|0,0),range);
-    initVals[1] = Math.max(Math.min(parseInt(initVals[1],10)|0,range),0);
-    // Swap initVals if min > max
-    if (initVals[0] > initVals[1]) {
-        initVals.splice(0,2,initVals[1],initVals[0]);
-    }
+    //FIXME: this is horrible
+    minThumbOnMouseDown = this.minSlider.thumb.onMouseDown;
+    maxThumbOnMouseDown = this.maxSlider.thumb.onMouseDown;
+    this.minSlider.thumb.onMouseDown = function() {
+        self.activeSlider = self.minSlider;
+        minThumbOnMouseDown.apply(this,arguments);
+    };
+    this.maxSlider.thumb.onMouseDown = function () {
+        self.activeSlider = self.maxSlider;
+        maxThumbOnMouseDown.apply(this,arguments);
+    };
 
     this.minSlider.thumb.onAvailable = function () {
         minSlider.setStartSliderState();
         ready.min = true;
         if (ready.max) {
-            minSlider.setValue(initVals[0],true,true,true);
-            maxSlider.setValue(initVals[1],true,true,true);
-            self.updateValue(true);
             self.fireEvent('ready',self);
         }
     };
@@ -1423,9 +1528,6 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
         maxSlider.setStartSliderState();
         ready.max = true;
         if (ready.min) {
-            minSlider.setValue(initVals[0],true,true,true);
-            maxSlider.setValue(initVals[1],true,true,true);
-            self.updateValue(true);
             self.fireEvent('ready',self);
         }
     };
@@ -1449,6 +1551,13 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
     maxSlider.onMouseUp = function (e) {
         self._handleMouseUp(e);
     };
+
+    // Replace the _bindKeyEvents for the minSlider and remove that for the
+    // maxSlider since they share the same bg element.
+    minSlider._bindKeyEvents = function () {
+        self._bindKeyEvents(this);
+    };
+    maxSlider._bindKeyEvents = function () {};
 
     // The core events for each slider are handled so we can expose a single
     // event for when the event happens on either slider
@@ -1487,9 +1596,26 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
      * @param {Slider} activeSlider the moving slider
      */
     this.createEvent("slideEnd", this);
-};
 
-YAHOO.widget.DualSlider.prototype = {
+    // Validate initial values
+    initVals = YAHOO.lang.isArray(initVals) ? initVals : [0,range];
+    initVals[0] = Math.min(Math.max(parseInt(initVals[0],10)|0,0),range);
+    initVals[1] = Math.max(Math.min(parseInt(initVals[1],10)|0,range),0);
+    // Swap initVals if min > max
+    if (initVals[0] > initVals[1]) {
+        initVals.splice(0,2,initVals[1],initVals[0]);
+    }
+    this.minVal = initVals[0];
+    this.maxVal = initVals[1];
+
+    // Set values so initial assignment when the slider thumbs are ready will
+    // use these values
+    this.minSlider.setValue(this.minVal,true,true,true);
+    this.maxSlider.setValue(this.maxVal,true,true,true);
+
+}
+
+DualSlider.prototype = {
 
     /**
      * The current value of the min thumb. <strong>read only</strong>.
@@ -1537,7 +1663,7 @@ YAHOO.widget.DualSlider.prototype = {
      * @private
      */
     _handleDrag: function(e) {
-        YAHOO.widget.Slider.prototype.onDrag.call(this.activeSlider, e);
+        YW.Slider.prototype.onDrag.call(this.activeSlider, e);
     },
 
     /**
@@ -1558,6 +1684,39 @@ YAHOO.widget.DualSlider.prototype = {
     _handleMaxChange: function() {
         this.activeSlider = this.maxSlider;
         this.updateValue();
+    },
+
+    /**
+     * Set up the listeners for the keydown and keypress events.
+     *
+     * @method _bindKeyEvents
+     * @protected
+     */
+    _bindKeyEvents : function (slider) {
+        Event.on(slider.id,'keydown', this._handleKeyDown, this,true);
+        Event.on(slider.id,'keypress',this._handleKeyPress,this,true);
+    },
+
+    /**
+     * Delegate event handling to the active Slider.  See Slider.handleKeyDown.
+     *
+     * @method _handleKeyDown
+     * @param e {Event} the mousedown DOM event
+     * @protected
+     */
+    _handleKeyDown : function (e) {
+        this.activeSlider.handleKeyDown.apply(this.activeSlider,arguments);
+    },
+
+    /**
+     * Delegate event handling to the active Slider.  See Slider.handleKeyPress.
+     *
+     * @method _handleKeyPress
+     * @param e {Event} the mousedown DOM event
+     * @protected
+     */
+    _handleKeyPress : function (e) {
+        this.activeSlider.handleKeyPress.apply(this.activeSlider,arguments);
     },
 
     /**
@@ -1773,7 +1932,7 @@ YAHOO.widget.DualSlider.prototype = {
         if (!e._handled) {
             e._handled = true;
             this.selectActiveSlider(e);
-            return YAHOO.widget.Slider.prototype.onMouseDown.call(this.activeSlider, e);
+            return YW.Slider.prototype.onMouseDown.call(this.activeSlider, e);
         } else {
             return false;
         }
@@ -1787,7 +1946,7 @@ YAHOO.widget.DualSlider.prototype = {
      * @protected
      */
     _handleMouseUp : function (e) {
-        YAHOO.widget.Slider.prototype.onMouseUp.apply(
+        YW.Slider.prototype.onMouseUp.apply(
             this.activeSlider, arguments);
     },
 
@@ -1844,7 +2003,7 @@ YAHOO.widget.DualSlider.prototype = {
 
 };
 
-YAHOO.augment(YAHOO.widget.DualSlider, YAHOO.util.EventProvider);
+YAHOO.lang.augmentProto(DualSlider, YAHOO.util.EventProvider);
 
 
 /**
@@ -1861,15 +2020,15 @@ YAHOO.augment(YAHOO.widget.DualSlider, YAHOO.util.EventProvider);
  * @param {Array}  initVals (optional) [min,max] Initial thumb placement
  * @return {DualSlider} a horizontal dual-thumb slider control
  */
-YAHOO.widget.Slider.getHorizDualSlider = 
+YW.Slider.getHorizDualSlider = 
     function (bg, minthumb, maxthumb, range, iTickSize, initVals) {
-        var mint, maxt,
-            YW = YAHOO.widget, Slider = YW.Slider, Thumb = YW.SliderThumb;
+        var mint = new YW.SliderThumb(minthumb, bg, 0, range, 0, 0, iTickSize),
+            maxt = new YW.SliderThumb(maxthumb, bg, 0, range, 0, 0, iTickSize);
 
-        mint = new Thumb(minthumb, bg, 0, range, 0, 0, iTickSize);
-        maxt = new Thumb(maxthumb, bg, 0, range, 0, 0, iTickSize);
-
-        return new YW.DualSlider(new Slider(bg, bg, mint, "horiz"), new Slider(bg, bg, maxt, "horiz"), range, initVals);
+        return new DualSlider(
+                    new YW.Slider(bg, bg, mint, "horiz"),
+                    new YW.Slider(bg, bg, maxt, "horiz"),
+                    range, initVals);
 };
 
 /**
@@ -1886,14 +2045,18 @@ YAHOO.widget.Slider.getHorizDualSlider =
  * @param {Array}  initVals (optional) [min,max] Initial thumb placement
  * @return {DualSlider} a vertical dual-thumb slider control
  */
-YAHOO.widget.Slider.getVertDualSlider = 
+YW.Slider.getVertDualSlider = 
     function (bg, minthumb, maxthumb, range, iTickSize, initVals) {
-        var mint, maxt,
-            YW = YAHOO.widget, Slider = YW.Slider, Thumb = YW.SliderThumb;
+        var mint = new YW.SliderThumb(minthumb, bg, 0, 0, 0, range, iTickSize),
+            maxt = new YW.SliderThumb(maxthumb, bg, 0, 0, 0, range, iTickSize);
 
-        mint = new Thumb(minthumb, bg, 0, 0, 0, range, iTickSize);
-        maxt = new Thumb(maxthumb, bg, 0, 0, 0, range, iTickSize);
-
-        return new YW.DualSlider(new Slider(bg, bg, mint, "vert"), new Slider(bg, bg, maxt, "vert"), range, initVals);
+        return new YW.DualSlider(
+                    new YW.Slider(bg, bg, mint, "vert"),
+                    new YW.Slider(bg, bg, maxt, "vert"),
+                    range, initVals);
 };
+
+YAHOO.widget.DualSlider = DualSlider;
+
+})();
 YAHOO.register("slider", YAHOO.widget.Slider, {version: "@VERSION@", build: "@BUILD@"});

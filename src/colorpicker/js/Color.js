@@ -42,7 +42,8 @@ YAHOO.util.Color = function() {
                 f = (h/60)-i,
                 p = v*(1-s),
                 q = v*(1-f*s),
-                t = v*(1-(1-f)*s);
+                t = v*(1-(1-f)*s),
+                fn;
 
             switch (i) {
                 case 0: r=v; g=t; b=p; break;
@@ -53,7 +54,7 @@ YAHOO.util.Color = function() {
                 case 5: r=v; g=p; b=q; break;
             }
 
-            var fn=this.real2dec;
+            fn=this.real2dec;
 
             return [fn(r), fn(g), fn(b)];
         },
@@ -77,10 +78,11 @@ YAHOO.util.Color = function() {
             g /= 255;
             b /= 255;
 
-            var h,s,v,
+            var h,s,
                 min = Math.min(Math.min(r,g),b),
                 max = Math.max(Math.max(r,g),b),
-                delta = max-min;
+                delta = max-min,
+                hsv;
 
             switch (max) {
                 case min: h=0; break;
@@ -95,10 +97,9 @@ YAHOO.util.Color = function() {
             
             s = (max === 0) ? 0 : 1-(min/max);
 
-            var hsv = [Math.round(h), s, max];
+            hsv = [Math.round(h), s, max];
 
             return hsv;
-
         },
 
         /**
