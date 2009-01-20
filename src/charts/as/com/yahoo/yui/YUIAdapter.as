@@ -202,7 +202,7 @@ package com.yahoo.yui
 		{
 			try
 			{
-				ExternalInterface.call(this.javaScriptEventHandler, this.elementID, event);
+				if(ExternalInterface.available) ExternalInterface.call(this.javaScriptEventHandler, this.elementID, event);
 			}
 			catch(error:SecurityError)
 			{
