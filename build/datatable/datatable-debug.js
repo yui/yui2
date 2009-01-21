@@ -9031,7 +9031,7 @@ addRows : function(aData, index) {
                 var loopN = this.get("renderLoopSize");
                 var loopEnd = recIndex + aData.length;
                 var nRowsNeeded = (loopEnd - recIndex); // how many needed
-                var isLast = (index >= this._elTbody.rows.length);
+                var isLast = (recIndex >= this._elTbody.rows.length);
                 this._oChainRender.add({
                     method: function(oArg) {
                         if((this instanceof DT) && this._sId) {
@@ -9047,11 +9047,10 @@ addRows : function(aData, index) {
                             this._elTbody.insertBefore(df, elNext);
                             oArg.nCurrentRow = i;
                             oArg.nCurrentRecord = j;
-                            //oArg.index += i;
                         }
                     },
                     iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
-                    argument: {nCurrentRow:recIndex,nCurrentRecord:0,aRecords:aRecords,index:index},
+                    argument: {nCurrentRow:recIndex,nCurrentRecord:0,aRecords:aRecords},
                     scope: this,
                     timeout: (loopN > 0) ? 0 : -1
                 });
@@ -9073,7 +9072,7 @@ addRows : function(aData, index) {
                                 " rows at index " + recIndex +
                                 " with data " + lang.dump(aData), "info", this.toString());
                     },
-                    argument: {recIndex: index, isLast: isLast},
+                    argument: {recIndex: recIndex, isLast: isLast},
                     scope: this,
                     timeout: -1 // Needs to run immediately after the DOM insertions above
                 });
