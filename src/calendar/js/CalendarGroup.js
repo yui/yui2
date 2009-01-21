@@ -548,33 +548,33 @@ CalendarGroup.prototype = {
 				cal[this.type + strEvent].unsubscribe(fn, obj);
 			}
 		};
-		
+
 		var defEvents = Calendar._EVENT_TYPES;
-	
+
 		/**
-		* Fired before a selection is made
+		* Fired before a date selection is made
 		* @event beforeSelectEvent
 		*/
 		me.beforeSelectEvent = new CE(defEvents.BEFORE_SELECT);
 		me.beforeSelectEvent.subscribe = sub; me.beforeSelectEvent.unsubscribe = unsub;
-	
+
 		/**
-		* Fired when a selection is made
+		* Fired when a date selection is made
 		* @event selectEvent
 		* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].
 		*/
 		me.selectEvent = new CE(defEvents.SELECT); 
 		me.selectEvent.subscribe = sub; me.selectEvent.unsubscribe = unsub;
-	
+
 		/**
-		* Fired before a selection is made
+		* Fired before a date or set of dates is deselected
 		* @event beforeDeselectEvent
 		*/
 		me.beforeDeselectEvent = new CE(defEvents.BEFORE_DESELECT); 
 		me.beforeDeselectEvent.subscribe = sub; me.beforeDeselectEvent.unsubscribe = unsub;
-	
+
 		/**
-		* Fired when a selection is made
+		* Fired when a date or set of dates has been deselected
 		* @event deselectEvent
 		* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].
 		*/
