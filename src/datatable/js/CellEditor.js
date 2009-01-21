@@ -442,6 +442,12 @@ render : function() {
     Ev.addListener(elContainer, "keydown", function(e, oSelf) {
         // ESC cancels Cell Editor
         if((e.keyCode == 27)) {
+            var target = Ev.getTarget(e);
+            // workaround for Mac FF3 bug that disabled clicks when ESC hit when
+            // select is open. [bug 2273056]
+            if (target.nodeName && target.nodeName.toLowerCase() === 'select') {
+                target.blur();
+            }
             oSelf.cancel();
         }
         // Pass through event

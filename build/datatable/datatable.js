@@ -160,7 +160,6 @@ YAHOO.util.Chain.prototype = {
     }
 };
 YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1611,7 +1610,6 @@ if(YAHOO.util.DD) {
  * @deprecated Pass configs directly to CellEditor constructor. 
  */
 
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -2415,7 +2413,6 @@ YAHOO.widget.Record.prototype = {
 };
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -13947,7 +13944,6 @@ DT.editTextarea = function() {};
 DT.editTextbox= function() {};
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -15181,7 +15177,6 @@ _onTheadKeydown : function(e, oSelf) {
 });
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -15626,6 +15621,12 @@ render : function() {
     Ev.addListener(elContainer, "keydown", function(e, oSelf) {
         // ESC cancels Cell Editor
         if((e.keyCode == 27)) {
+            var target = Ev.getTarget(e);
+            // workaround for Mac FF3 bug that disabled clicks when ESC hit when
+            // select is open. [bug 2273056]
+            if (target.nodeName && target.nodeName.toLowerCase() === 'select') {
+                target.blur();
+            }
             oSelf.cancel();
         }
         // Pass through event
@@ -16882,5 +16883,4 @@ lang.augmentObject(CE, BCE);
 
 
 })();
-
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});
