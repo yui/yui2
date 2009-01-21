@@ -25,9 +25,6 @@
      */
     YAHOO.widget.Carousel = function (el, cfg) {
 
-        this._navBtns = { prev: [], next: [] };
-        this._pages = { el: null, num: 0, cur: 0 };
-
         YAHOO.widget.Carousel.superclass.constructor.call(this, el, cfg);
     };
 
@@ -72,6 +69,16 @@
      * @type YAHOO.util.CustomEvent
      */
     afterScrollEvent = "afterScroll",
+
+    /**
+     * @event allItemsRemovedEvent
+     * @description Fires when all items have been removed from the Carousel.
+     * See
+     * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
+     * for more information on listening for this event.
+     * @type YAHOO.util.CustomEvent
+     */
+    allItemsRemovedEvent = "allItemsRemoved",
 
     /**
      * @event beforeHide
@@ -197,16 +204,6 @@
     navigationStateChangeEvent = "navigationStateChange",
 
     /**
-     * @event noItemsEvent
-     * @description Fires when all items have been removed from the Carousel.
-     * See
-     * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
-     * for more information on listening for this event.
-     * @type YAHOO.util.CustomEvent
-     */
-    noItemsEvent = "noItems",
-
-    /**
      * @event pageChange
      * @description Fires after the Carousel has scrolled to the previous or
      * next page.  Passes back the page number of the current page.  Note
@@ -267,30 +264,6 @@
     /*
      * Private helper functions used by the Carousel component
      */
-
-    /**
-     * Automatically scroll the contents of the Carousel.
-     * @method autoScroll
-     * @private
-     */
-    function autoScroll() {
-        var carousel  = this,
-            currIndex = carousel._firstItem,
-            index;
-
-        if (currIndex >= carousel.get("numItems") - 1) {
-            if (carousel.get("isCircular")) {
-                index = 0;
-            } else {
-                carousel.stopAutoPlay();
-            }
-        } else {
-            index = currIndex + carousel.get("numVisible");
-        }
-
-        carousel._selectedItem = carousel._getSelectedItem(index);
-        carousel.scrollTo.call(carousel, index);
-    }
 
     /**
      * Create an element, set its class name and optionally install the element
@@ -489,32 +462,6 @@
         }
 
         return size;
-    }
-
-    /**
-     * The load the required set of items that are needed for display.
-     *
-     * @method loadItems
-     * @private
-     */
-    function loadItems() {
-        var carousel   = this,
-            first      = carousel.get("firstVisible"),
-            last       = 0,
-            numItems   = carousel.get("numItems"),
-            numVisible = carousel.get("numVisible"),
-            reveal     = carousel.get("revealAmount");
-
-        last = first + numVisible - 1 + (reveal ? 1 : 0);
-        last = last > numItems - 1 ? numItems - 1 : last;
-
-        if (!carousel.getItem(first) || !carousel.getItem(last)) {
-            carousel.fireEvent(loadItemsEvent, {
-                    ev: loadItemsEvent,
-                    first: first, last: last,
-                    num: last - first
-            });
-        }
     }
 
     /**
@@ -845,6 +792,14 @@
          * @private
          */
         _firstItem: 0,
+
+        /**
+         * Does the Carousel element have focus?
+         *
+         * @property _hasFocus
+         * @private
+         */
+        _hasFocus: false,
 
         /**
          * Is the animation still in progress?
@@ -1317,7 +1272,7 @@
                 n--;
             }
 
-            carousel.fireEvent(noItemsEvent);
+            carousel.fireEvent(allItemsRemovedEvent);
         },
 
         /**
@@ -1414,8 +1369,11 @@
                 return;
             }
 
+            carousel._navBtns    = { prev: [], next: [] };
+            carousel._pages      = { el: null, num: 0, cur: 0 };
             carousel._itemsTable = { loading: {}, numItems: 0,
                                      items: [], size: 0 };
+
 
             if (JS.isString(el)) {
                 el = Dom.get(el);
@@ -1453,7 +1411,7 @@
 
             instances[elId] = { object: carousel, rendered: false };
 
-            loadItems.call(carousel);
+            carousel._loadItems();
         },
 
         /**
@@ -1684,11 +1642,15 @@
 
             carousel.on(itemRemovedEvent, syncUi);
 
-            carousel.on(itemSelectedEvent, carousel.focus);
+            carousel.on(itemSelectedEvent, function () {
+                if (carousel._hasFocus) {
+                    carousel.focus();
+                }
+            });
 
             carousel.on(loadItemsEvent, syncUi);
 
-            carousel.on(noItemsEvent, function (ev) {
+            carousel.on(allItemsRemovedEvent, function (ev) {
                 carousel.scrollTo(0);
                 syncNavigation.call(carousel);
                 syncPagerUi.call(carousel);
@@ -1738,10 +1700,12 @@
             // Restore the focus on the navigation buttons
 
             Event.onFocus(carousel.get("element"), function (ev, obj) {
+                obj._hasFocus = true;
                 obj._updateNavButtons(Event.getTarget(ev), true);
             }, carousel);
 
             Event.onBlur(carousel.get("element"), function (ev, obj) {
+                obj._hasFocus = false;
                 obj._updateNavButtons(Event.getTarget(ev), false);
             }, carousel);
         },
@@ -2098,7 +2062,7 @@
             carousel.set("firstVisible", item);
 
 
-            loadItems.call(carousel); // do we have all the items to display?
+            carousel._loadItems(); // do we have all the items to display?
 
             sentinel  = item + numPerPage;
             sentinel  = (sentinel > numItems - 1) ? numItems - 1 : sentinel;
@@ -2185,7 +2149,8 @@
                 carousel._isAutoPlayInProgress = true;
                 carousel.fireEvent(startAutoPlayEvent);
                 carousel._autoPlayTimer = setTimeout(function () {
-                    autoScroll.call(carousel); }, timer);
+                    carousel._autoScroll();
+                }, timer);
             }
         },
 
@@ -2266,6 +2231,30 @@
         _animationCompleteHandler: function (ev, p, o) {
             o.scope._isAnimationInProgress = false;
             updateStateAfterScroll.call(o.scope, o.item, o.last);
+        },
+
+        /**
+         * Automatically scroll the contents of the Carousel.
+         * @method _autoScroll
+         * @protected
+         */
+        _autoScroll: function() {
+            var carousel  = this,
+                currIndex = carousel._firstItem,
+                index;
+
+            if (currIndex >= carousel.get("numItems") - 1) {
+                if (carousel.get("isCircular")) {
+                    index = 0;
+                } else {
+                    carousel.stopAutoPlay();
+                }
+            } else {
+                index = currIndex + carousel.get("numVisible");
+            }
+
+            carousel._selectedItem = carousel._getSelectedItem(index);
+            carousel.scrollTo.call(carousel, index);
         },
 
         /**
@@ -2376,6 +2365,7 @@
 
             if ((item = carousel.getItemPositionById(target.id)) >= 0) {
                 carousel.set("selectedItem", carousel._getSelectedItem(item));
+                carouselfocus();
             }
         },
 
@@ -2421,6 +2411,31 @@
                     carousel.stopAutoPlay();
                 }
                 Event.preventDefault(ev);
+            }
+        },
+
+        /**
+         * The load the required set of items that are needed for display.
+         *
+         * @method _loadItems
+         * @protected
+         */
+        _loadItems: function() {
+            var carousel   = this,
+                first      = carousel.get("firstVisible"),
+                last       = 0,
+                numItems   = carousel.get("numItems"),
+                numVisible = carousel.get("numVisible"),
+                reveal     = carousel.get("revealAmount");
+
+            last = first + numVisible - 1 + (reveal ? 1 : 0);
+            last = last > numItems - 1 ? numItems - 1 : last;
+
+            if (!carousel.getItem(first) || !carousel.getItem(last)) {
+                carousel.fireEvent(loadItemsEvent, {
+                        ev: loadItemsEvent, first: first, last: last,
+                        num: last - first
+                });
             }
         },
 
