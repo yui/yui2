@@ -48,18 +48,19 @@
           //     };
           // })();
           
-          function render_tree_from_cookie_or_div(id) {
             var treeInit = function() {
-                var tree;
-                var cuky = YAHOO.util.Cookie.get(id);
+                console.log('tree initialization'),
+                id = 'markup';
+                
+                var tree, cuky = YAHOO.util.Cookie.get(id);
 
-                if (cuky === null || cuky === undefined) {
-                    alert("Instantiate based on div");
+                if (!cuky) {
+                    console.log("Instantiate based on div");
                     tree = new YAHOO.widget.TreeView(id);
                 }
                 else {
+                    console.log("Reinstantiate from cookie\n" + cuky);
                     var tree_struct_s = YAHOO.lang.JSON.parse(cuky);
-                    alert("Reinstantiate from cookie\n" + cuky);
                     tree = new YAHOO.widget.TreeView(id,tree_struct_s);
                 }
 
@@ -67,22 +68,21 @@
                 tree.subscribe("expandComplete", function(node) {
                     var tree_struct_e = tree.getTreeDefinition();
                     var tree_data_string_e = YAHOO.lang.JSON.stringify(tree_struct_e);
-                    alert("expandComplete\n" + tree_data_string_e);
+                    console.log("expandComplete\n" + tree_data_string_e);
                     YAHOO.util.Cookie.set(id,tree_data_string_e);
                 });
                 tree.subscribe("collapseComplete", function(node) { 
                     var tree_struct_c = tree.getTreeDefinition();
                     var tree_data_string_c = YAHOO.lang.JSON.stringify(tree_struct_c);
-                    alert("collapseComplete\n" + tree_data_string_c);
+                    console.log("collapseComplete\n" + tree_data_string_c);
                     YAHOO.util.Cookie.set(id,tree_data_string_c);
                 });
 
             	tree.render();
             };
 
-            // Add an onDOMReady handler to build the tree when the document is ready
             YAHOO.util.Event.onDOMReady(treeInit);
-          }
+
       </script>
       
   </head>
@@ -111,7 +111,6 @@
       		</li>
       	</ul>
       </div>
-      <script type="text/javascript">render_tree_from_cookie_or_div("markup");</script>
       
   </body>
 </html>
