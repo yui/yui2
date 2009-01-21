@@ -83,11 +83,16 @@ Anim.prototype = {
      * @param {String} unit The unit ('px', '%', etc.) of the value.
      */
     setAttribute: function(attr, val, unit) {
+        var el = this.getEl();
         if ( this.patterns.noNegatives.test(attr) ) {
             val = (val > 0) ? val : 0;
         }
 
-        Y.Dom.setStyle(this.getEl(), attr, val + unit);
+        if ('style' in el) {
+            Y.Dom.setStyle(el, attr, val + unit);
+        } else if (attr in el) {
+            el[attr] = val;
+        }
     },                        
     
     /**
@@ -108,11 +113,15 @@ Anim.prototype = {
         var pos = !!( a[3] ); // top or left
         var box = !!( a[2] ); // width or height
         
-        // use offsets for width/height and abs pos top/left
-        if ( box || (Y.Dom.getStyle(el, 'position') == 'absolute' && pos) ) {
-            val = el['offset' + a[0].charAt(0).toUpperCase() + a[0].substr(1)];
-        } else { // default to zero for other 'auto'
-            val = 0;
+        if ('style' in el) {
+            // use offsets for width/height and abs pos top/left
+            if ( box || (Y.Dom.getStyle(el, 'position') == 'absolute' && pos) ) {
+                val = el['offset' + a[0].charAt(0).toUpperCase() + a[0].substr(1)];
+            } else { // default to zero for other 'auto'
+                val = 0;
+            }
+        } else if (attr in el) {
+            val = el[attr];
         }
 
         return val;

@@ -73,6 +73,14 @@ package com.yahoo.astra.fl.charts.series
 				0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
 				0xb8ebff, 0x60558f, 0x737d7e, 0xa64d9a, 0x8e9a9b, 0x803e77
 			],
+			borderColors:
+			[
+				0x00b8bf, 0x8dd5e7, 0xc0fff6, 0xffa928, 0xedff9f, 0xd00050,
+				0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
+				0xb8ebff, 0x60558f, 0x737d7e, 0xa64d9a, 0x8e9a9b, 0x803e77
+			],			
+			fillAlphas: [1.0],
+			borderAlphas: [0.0],
 			markerSkins: [RectangleSkin],
 			showLabels: false,
 			hideOverlappingLabels: true
@@ -86,6 +94,9 @@ package com.yahoo.astra.fl.charts.series
 		private static const RENDERER_STYLES:Object = 
 		{
 			fillColor: "fillColors",
+			fillAlpha: "fillAlphas",
+			borderColor: "borderColors",
+			borderAlpha: "borderAlphas",
 			skin: "markerSkins"
 		};
 		
@@ -396,14 +407,31 @@ package com.yahoo.astra.fl.charts.series
 			var difference:int = itemCount - this.markerMasks.length;
 			if(difference > 0)
 			{
+			/*
 				for(var i:int = 0; i < difference; i++)
 				{
 					var mask:Shape = new Shape();
 					this.addChild(mask);
 					this.markerMasks.push(mask);
 					
-					var marker:Sprite = this.markers[i] as Sprite;
+					var marker:Sprite = this.markers[i + (itemCount-difference)] as Sprite;
 					marker.mask = mask;
+					marker.width = this.width;
+					marker.height = this.height;
+				}*/
+				for(var i:int = 0; i < itemCount; i++)
+				{
+					var marker:Sprite = this.markers[i] as Sprite;
+					if(marker.mask == null)
+					{
+						var mask:Shape = new Shape();
+						this.addChild(mask);
+						this.markerMasks.push(mask);
+						marker.mask = mask;						
+						
+					}
+					marker.width = this.width;
+					marker.height = this.height;
 				}
 			}
 			else if(difference < 0)
