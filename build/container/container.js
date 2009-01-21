@@ -4877,30 +4877,27 @@
     */
     Tooltip.CSS_TOOLTIP = "yui-tt";
 
-    /* 
-        "hide" event handler that sets a Tooltip instance's "width"
-        configuration property back to its original value before 
-        "setWidthToOffsetWidth" was called.
-    */
-    function restoreOriginalWidth(p_sType, p_aArgs, p_oObject) {
+    function restoreOriginalWidth(sOriginalWidth, sForcedWidth) {
 
-        var sOriginalWidth = p_oObject[0],
-            sNewWidth = p_oObject[1],
-            oConfig = this.cfg,
+        var oConfig = this.cfg,
             sCurrentWidth = oConfig.getProperty("width");
 
-        if (sCurrentWidth == sNewWidth) {
+        if (sCurrentWidth == sForcedWidth) {
             oConfig.setProperty("width", sOriginalWidth);
         }
     }
 
     /* 
-        "beforeShow" event handler that sets a Tooltip instance's "width"
+        changeContent event handler that sets a Tooltip instance's "width"
         configuration property to the value of its root HTML 
-        elements's offsetWidth
+        elements's offsetWidth if a specific width has not been set.
     */
 
     function setWidthToOffsetWidth(p_sType, p_aArgs) {
+
+        if ("_originalWidth" in this) {
+            restoreOriginalWidth.call(this, this._originalWidth, this._forcedWidth);
+        }
 
         var oBody = document.body,
             oConfig = this.cfg,
@@ -4928,7 +4925,8 @@
             oConfig.setProperty("width", sNewWidth);
             oConfig.refireEvent("xy");
 
-            this.subscribe("hide", restoreOriginalWidth, [(sOriginalWidth || ""), sNewWidth]);
+            this._originalWidth = sOriginalWidth || "";
+            this._forcedWidth = sNewWidth;
         }
     }
 
@@ -4976,7 +4974,7 @@
 
             this.setBody("");
 
-            this.subscribe("beforeShow", setWidthToOffsetWidth);
+            this.subscribe("changeContent", setWidthToOffsetWidth);
             this.subscribe("init", onInit);
             this.subscribe("render", this.onRender);
 
@@ -5252,7 +5250,7 @@
         * this will usually equal the owner.
         */
         configContext: function (type, args, obj) {
-        
+
             var context = args[0],
                 aElements,
                 nElements,
