@@ -6753,11 +6753,7 @@ getTrEl : function(row) {
                 elRow = Dom.getAncestorByTagName(elRow,"tr");
             }
 
-            // Make sure the TR is in this TBODY
-            if(elRow && (elRow.parentNode == this._elTbody)) {
-                // Now we can return the TR element
-                return elRow;
-            }
+            return elRow;
         }
     }
 
@@ -6865,11 +6861,7 @@ getTdEl : function(cell) {
             elCell = el;
         }
 
-        // Make sure the TD is in this TBODY
-        if(elCell && (elCell.parentNode.parentNode == this._elTbody)) {
-            // Now we can return the TD element
-            return elCell;
-        }
+        return elCell;
     }
     else if(cell) {
         var oRecord, nColKeyIndex;
@@ -7070,11 +7062,7 @@ getThEl : function(theadCell) {
                 elTh = el;
             }
 
-            // Make sure the TH is in this THEAD
-            if(elTh && (elTh.parentNode.parentNode == this._elThead)) {
-                // Now we can return the TD element
-                return elTh;
-            }
+            return elTh;
         }
     }
 
