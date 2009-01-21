@@ -98,7 +98,9 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
 	 */
 	saveEditorValue: function (editorData) {
-		var node = editorData.node, value;
+		var node = editorData.node, 
+			validator = node.tree.validator,
+			value;
 		if (Lang.isUndefined(Calendar)) {
 			value = editorData.inputElement.value;
 		} else {
@@ -111,11 +113,28 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 			dd[cal.cfg.getProperty('MDY_YEAR_POSITION') -1] = date.getFullYear();
 			value = dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
 		}
+		if (Lang.isFunction(validator)) {
+			value = validator(value,node.label,node);
+			if (Lang.isUndefined(value)) { return false; }
+		}
 
 		node.label = value;
-		node.data.label = value;
 		node.getLabelEl().innerHTML = value;
+	},
+  /**
+     * Returns an object which could be used to build a tree out of this node and its children.
+     * It can be passed to the tree constructor to reproduce this node as a tree.
+     * It will return false if the node or any descendant loads dynamically, regardless of whether it is loaded or not.
+     * @method getNodeDefinition
+     * @return {Object | false}  definition of the node or false if this node or any descendant is defined as dynamic
+     */	
+	getNodeDefinition: function() {
+		var def = YAHOO.widget.DateNode.superclass.getNodeDefinition.call(this);
+		if (def === false) { return false; }
+		if (this.calendarConfig) { def.calendarConfig = this.calendarConfig; }
+		return def;
 	}
+
 
 });
 })();

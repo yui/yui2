@@ -339,6 +339,7 @@
             'type': 'js',
             'path': 'treeview/treeview-min.js',
             'requires': ['event', 'dom'],
+            'optional': ['json'],
             'skinnable': true
         },
 

@@ -175,7 +175,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("width", {
         value: null,
         validator: lang.isString,
-        setter: function(oParam) {
+        method: function(oParam) {
             if(this._elHdContainer && this._elBdContainer) {
                 this._elHdContainer.style.width = oParam;
                 this._elBdContainer.style.width = oParam;            
@@ -193,7 +193,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("height", {
         value: null,
         validator: lang.isString,
-        setter: function(oParam) {
+        method: function(oParam) {
             if(this._elHdContainer && this._elBdContainer) {
                 this._elBdContainer.style.height = oParam;    
                 this._syncScrollX();   
@@ -212,7 +212,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("COLOR_COLUMNFILLER", {
         value: "#F2F2F2",
         validator: lang.isString,
-        setter: function(oParam) {
+        method: function(oParam) {
             this._elHdContainer.style.backgroundColor = oParam;
         }
     });
@@ -1047,7 +1047,6 @@ setColumnWidth : function(oColumn, nWidth) {
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
             YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
-            return;
         }
         // Unsets a width to auto-size
         else if(nWidth === null) {
@@ -1059,11 +1058,14 @@ setColumnWidth : function(oColumn, nWidth) {
             this.validateColumnWidths(oColumn);
             this.fireEvent("columnUnsetWidthEvent",{column:oColumn});
             YAHOO.log("Column " + oColumn + " width unset", "info", this.toString());
-
-            return;
         }
+        
+        // Bug 2339454: resize then sort misaligment
+        this._clearTrTemplateEl();
     }
-    YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
+    else {
+        YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
+    }
 },
 
 /**

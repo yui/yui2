@@ -3,13 +3,15 @@
 		Event = YAHOO.util.Event,
 		Lang = YAHOO.lang,
 		Widget = YAHOO.widget;
+		
+	
 
 /**
  * The treeview widget is a generic tree building tool.
  * @module treeview
  * @title TreeView Widget
  * @requires yahoo, event
- * @optional animation
+ * @optional animation, json
  * @namespace YAHOO.widget
  */
 
@@ -20,7 +22,7 @@
  * @uses YAHOO.util.EventProvider
  * @constructor
  * @param {string|HTMLElement} id The id of the element, or the element itself that the tree will be inserted into.  Existing markup in this element, if valid, will be used to build the tree
- * @param {Array|object|string}  oConfig (optional)  An array containing the definition of the tree.  Objects will be converted to arrays of one element.  A string will produce a single TextNode
+ * @param {Array|object|string}  oConfig (optional)  An array containing the definition of the tree.  (see buildTreeFromObject)
  * 
  */
 YAHOO.widget.TreeView = function(id, oConfig) {
@@ -124,6 +126,26 @@ TV.prototype = {
      * @type YAHOO.widget.Node
      */
     currentFocus: null,
+	
+	/**
+	* If true, only one Node can be highlighted at a time
+	* @property singleNodeHighlight
+	* @type boolean
+	* @default false
+	*/
+	
+	singleNodeHighlight: false,
+	
+	/**
+	* A reference to the Node that is currently highlighted.
+	* It is only meaningful if singleNodeHighlight is enabled
+	* @property _currentlyHighlighted
+	* @type YAHOO.widget.Node
+	* @default null
+	* @private
+	*/
+	
+	_currentlyHighlighted: null,
 
     /**
      * Sets up the animation for expanding children
@@ -355,6 +377,19 @@ TV.prototype = {
 	* @deprecated use clickEvent or dblClickEvent
          */
 		this.createEvent("labelClick", this);
+		
+	/**
+	 * Custom event fired when the highlight of a node changes.
+	 * The node that triggered the change is provided as an argument:
+	 * The status of the highlight can be checked in 
+	 * <a href="YAHOO.widget.Node.html#property_highlightState">nodeRef.highlightState</a>.
+	 * Depending on <a href="YAHOO.widget.Node.html#property_propagateHighlight">nodeRef.propagateHighlight</a>, other nodes might have changed
+	 * @event highlightEvent
+	 * @type CustomEvent
+        * @param node{YAHOO.widget.Node} the node that started the change in highlighting state
+	*/
+		this.createEvent("highlightEvent",this);
+	 
 
 
         this._nodes = [];
@@ -380,13 +415,22 @@ TV.prototype = {
         //Event.on(this.id, 
     //},
  /**
-     * Builds the TreeView from an object.  This is the method called by the constructor to build the tree when it has a second argument.
+     * Builds the TreeView from an object.  
+     * This is the method called by the constructor to build the tree when it has a second argument.
+     *  A tree can be described by an array of objects, each object corresponding to a node.
+     *  Node descriptions may contain values for any property of a node plus the following extra properties: <ul>
+     * <li>type:  can be one of the following:<ul>
+     *  <li> A shortname for a node type (<code>'text','menu','html'</code>) </li>
+     * <li>The name of a Node class under YAHOO.widget (<code>'TextNode', 'MenuNode', 'DateNode'</code>, etc) </li>
+     * <li>a reference to an actual class: <code>YAHOO.widget.DateNode</code></li></ul></li>
+     * <li>children: an array containing further node definitions</li></ul>
      * @method buildTreeFromObject
      * @param  oConfig {Array}  array containing a full description of the tree
      * 
      */
 	buildTreeFromObject: function (oConfig) {
-		this.logger.log('Building tree from object');
+		var logger = this.logger;
+		logger.log('Building tree from object');
 		var build = function (parent, oConfig) {
 			var i, item, node, children, type, NodeType, ThisType;
 			for (i = 0; i < oConfig.length; i++) {
@@ -398,7 +442,7 @@ TV.prototype = {
 					delete item.children;
 					type = item.type || 'text';
 					delete item.type;
-					switch (type.toLowerCase()) {
+					switch (Lang.isString(type) && type.toLowerCase()) {
 						case 'text':
 							node = new Widget.TextNode(item, parent);
 							break;
@@ -409,23 +453,27 @@ TV.prototype = {
 							node = new Widget.HTMLNode(item, parent);
 							break;
 						default:
-							NodeType = Widget[type];
+				            if (Lang.isString(type)) {
+								NodeType = Widget[type];
+							} else {
+								NodeType = type;
+							}
 							if (Lang.isObject(NodeType)) {
 								for (ThisType = NodeType; ThisType && ThisType !== Widget.Node; ThisType = ThisType.superclass.constructor) {}
 								if (ThisType) {
 									node = new NodeType(item, parent);
 								} else {
-									this.logger.log('Invalid type in node definition: ' + type,'error');
+									logger.log('Invalid type in node definition: ' + type,'error');
 								}
 							} else {
-								this.logger.log('Invalid type in node definition: ' + type,'error');
+								logger.log('Invalid type in node definition: ' + type,'error');
 							}
 					}
 					if (children) {
 						build(node,children);
 					}
 				} else {
-					this.logger.log('Invalid node definition','error');
+					logger.log('Invalid node definition','error');
 				}
 			}
 		};
@@ -434,87 +482,334 @@ TV.prototype = {
 		build(this.root,oConfig);
 	},
 /**
-     * Builds the TreeView from existing markup.   Markup should consist of &lt;UL&gt; or &lt;OL&gt; elements, possibly nested.  
-     * Depending what the &lt;LI&gt; elements contain the following will be created: <ul>
+     * Builds the TreeView from existing markup.   Markup should consist of &lt;UL&gt; or &lt;OL&gt; elements containing &lt;LI&gt; elements.  
+     * Each &lt;LI&gt; can have one element used as label and a second optional element which is to be a &lt;UL&gt; or &lt;OL&gt;
+     * containing nested nodes.
+     * Depending on what the first element of the &lt;LI&gt; element is, the following Nodes will be created: <ul>
      * 	         <li>plain text:  a regular TextNode</li>
-     * 	         <li>an (un-)ordered list: a nested branch</li>
+     * 	         <li>anchor &lt;A&gt;: a TextNode with its <code>href</code> and <code>target</code> taken from the anchor</li>
      * 	         <li>anything else: an HTMLNode</li></ul>
      * Only the first  outermost (un-)ordered list in the markup and its children will be parsed.
-     * Tree will be fully collapsed.
-     *  HTMLNodes have hasIcon set to true if the markup for that node has a className called hasIcon.
+     * Nodes will be collapsed unless  an  &lt;LI&gt;  tag has a className called 'expanded'.
+     * All other className attributes will be copied over to the Node className property.
+     * If the &lt;LI&gt; element contains an attribute called <code>yuiConfig</code>, its contents should be a JSON-encoded object
+     * as the one used in method <a href="#method_buildTreeFromObject">buildTreeFromObject</a>.
      * @method buildTreeFromMarkup
-     * @param {string|HTMLElement} id the id of the element that contains the markup or a reference to it.
+     * @param  id{string|HTMLElement} The id of the element that contains the markup or a reference to it.
      */
 	buildTreeFromMarkup: function (id) {
-		var expanded, title;
 		this.logger.log('Building tree from existing markup');
-		var build = function (parent,markup) {
-			var el, node, child, text;
+		var build = function (markup) {
+			var el, child, branch = [], config = {}, label, yuiConfig;
+			// Dom's getFirstChild and getNextSibling skip over text elements
 			for (el = Dom.getFirstChild(markup); el; el = Dom.getNextSibling(el)) {
-				if (el.nodeType == 1) {
-					switch (el.tagName.toUpperCase()) {
-						case 'LI':
-							expanded = Dom.hasClass(el,'expanded')  && !Dom.hasClass(el,'collapsed');
-							title = el.title || el.alt || '';
-							for (child = el.firstChild; child; child = child.nextSibling) {
-								if (child.nodeType == 3) {
-									text = Lang.trim(child.nodeValue);
-									if (text.length) {
-										node = new Widget.TextNode(
-											{
-												label:text,
-												expanded:expanded,
-												title:title
-											}, parent);
-									}
-								} else {
-									switch (child.tagName.toUpperCase()) {
-										case 'UL':
-										case 'OL':
-											build(node,child);
-											break;
-										case 'A':
-											node = new Widget.TextNode({
-												label:child.innerHTML,
-												href: child.href,
-												target:child.target,
-												title:child.title ||child.alt,
-												expanded:expanded
-											},parent);
-											break;
-										default:
-											var d = document.createElement('div');
-											d.appendChild(child.cloneNode(true));
-											node = new Widget.HTMLNode(
-												{
-													html:d.innerHTML,
-													title:title,
-													expanded:expanded,
-													hasIcon: true
-												}, parent);
-											break;
-									}
-								}
+				switch (el.tagName.toUpperCase()) {
+					case 'LI':
+						label = '';
+						config = {
+							expanded: Dom.hasClass(el,'expanded'),
+							title: el.title || el.alt || null,
+							className: Lang.trim(el.className.replace(/\bexpanded\b/,'')) || null
+						};
+						// I cannot skip over text elements here because I want them for labels
+						child = el.firstChild;
+						if (child.nodeType == 3) {
+							// nodes with only whitespace, tabs and new lines don't count, they are probably just formatting.
+							label = Lang.trim(child.nodeValue.replace(/[\n\t\r]*/g,''));
+							if (label) {
+								config.type = 'text';
+								config.label = label;
+							} else {
+								child = Dom.getNextSibling(child);
 							}
-							break;
-						case 'UL':
-						case 'OL':
-							this.logger.log('ULs or OLs can only contain LI elements, not other UL or OL.  This will not work in some browsers','error');
-							build(node, el);
-							break;
-					}
+						}
+						if (!label) {
+							if (child.tagName.toUpperCase() == 'A') {
+								config.type = 'text';
+								config.label = child.innerHTML;
+								config.href = child.href;
+								config.target = child.target;
+								config.title = child.title || child.alt || config.title;
+							} else {
+								config.type = 'html';
+								var d = document.createElement('div');
+								d.appendChild(child.cloneNode(true));
+								config.html = d.innerHTML;
+								config.hasIcon = true;
+							}
+						}
+						// see if after the label it has a further list which will become children of this node.
+						child = Dom.getNextSibling(child);
+						switch (child && child.tagName.toUpperCase()) {
+							case 'UL':
+							case 'OL':
+								config.children = build(child);
+								break;
+						}
+						// if there are further elements or text, it will be ignored.
+						
+						if (YAHOO.lang.JSON) {
+							yuiConfig = el.getAttribute('yuiConfig');
+							if (yuiConfig) {
+								yuiConfig = YAHOO.lang.JSON.parse(yuiConfig);
+								config = YAHOO.lang.merge(config,yuiConfig);
+							}
+						}
+						
+						branch.push(config);
+						break;
+					case 'UL':
+					case 'OL':
+						this.logger.log('ULs or OLs can only contain LI elements, not other UL or OL.  This will not work in some browsers','error');
+						config = {
+							type: 'text',
+							label: '',
+							children: build(child)
+						};
+						branch.push(config);
+						break;
 				}
 			}
-		
+			return branch;
 		};
+
 		var markup = Dom.getChildrenBy(Dom.get(id),function (el) { 
 			var tag = el.tagName.toUpperCase();
 			return  tag == 'UL' || tag == 'OL';
 		});
 		if (markup.length) {
-			build(this.root, markup[0]);
+			this.buildTreeFromObject(build(markup[0]));
 		} else {
 			this.logger.log('Markup contains no UL or OL elements','warn');
+		}
+	},
+  /**
+     * Returns the TD element where the event has occurred
+     * @method _getEventTargetTdEl
+     * @private
+     */
+	_getEventTargetTdEl: function (ev) {
+		var target = Event.getTarget(ev); 
+		// go up looking for a TD with a className with a ygtv prefix
+		while (target && !(target.tagName.toUpperCase() == 'TD' && Dom.hasClass(target.parentNode,'ygtvrow'))) { 
+			target = Dom.getAncestorByTagName(target,'td'); 
+		}
+		if (Lang.isNull(target)) { return null; }
+		// If it is a spacer cell, do nothing
+		if (/\bygtv(blank)?depthcell/.test(target.className)) { return null;}
+		// If it has an id, search for the node number and see if it belongs to a node in this tree.
+		if (target.id) {
+			var m = target.id.match(/\bygtv([^\d]*)(.*)/);
+			if (m && m[2] && this._nodes[m[2]]) {
+				return target;
+			}
+		}
+		return null;
+	},
+  /**
+     * Event listener for click events
+     * @method _onClickEvent
+     * @private
+     */
+	_onClickEvent: function (ev) {
+		var self = this,
+			td = this._getEventTargetTdEl(ev);
+		if (!td) {return; }
+		var node = this.getNodeByElement(td);
+		if (!node) { return; }
+			
+		var toggle = function () {
+			node.toggle();
+			node.focus();
+			Event.preventDefault(ev);
+		};
+		
+		// exception to handle deprecated event labelClick
+		var target = Event.getTarget(ev);
+		if (Dom.hasClass(target, node.labelStyle) || Dom.getAncestorByClassName(target,node.labelStyle)) {
+			this.logger.log("onLabelClick " + node.label);
+			this.fireEvent('labelClick',node);
+		}
+		
+		//  If it is a toggle cell, toggle
+		if (/\bygtv[tl][mp]h?h?/.test(td.className)) {
+			toggle();
+		} else {
+			if (this._dblClickTimer) {
+				window.clearTimeout(this._dblClickTimer);
+				this._dblClickTimer = null;
+			} else {
+				if (this._hasDblClickSubscriber) {
+					this._dblClickTimer = window.setTimeout(function () {
+						self._dblClickTimer = null;
+						if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
+							toggle();
+						}
+					}, 200);
+				} else {
+					if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
+						toggle();
+					}
+				}
+			}
+		}
+	},
+  /**
+     * Event listener for double-click events
+     * @method _onDblClickEvent
+     * @private
+     */
+	_onDblClickEvent: function (ev) {
+		if (!this._hasDblClickSubscriber) { return; }
+		var td = this._getEventTargetTdEl(ev);
+		if (!td) {return;}
+
+		if (!(/\bygtv[tl][mp]h?h?/.test(td.className))) {
+			this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(td)}); 
+			if (this._dblClickTimer) {
+				window.clearTimeout(this._dblClickTimer);
+				this._dblClickTimer = null;
+			}
+		}
+	},
+  /**
+     * Event listener for mouse over events
+     * @method _onMouseOverEvent
+     * @private
+     */
+	_onMouseOverEvent:function (ev) {
+		var target;
+		if ((target = this._getEventTargetTdEl(ev)) && (target = this.getNodeByElement(target)) && (target = target.getToggleEl())) {
+			target.className = target.className.replace(/\bygtv([lt])([mp])\b/gi,'ygtv$1$2h');
+		}
+	},
+  /**
+     * Event listener for mouse out events
+     * @method _onMouseOutEvent
+     * @private
+     */
+	_onMouseOutEvent: function (ev) {
+		var target;
+		if ((target = this._getEventTargetTdEl(ev)) && (target = this.getNodeByElement(target)) && (target = target.getToggleEl())) {
+			target.className = target.className.replace(/\bygtv([lt])([mp])h\b/gi,'ygtv$1$2');
+		}
+	},
+  /**
+     * Event listener for key down events
+     * @method _onKeyDownEvent
+     * @private
+     */
+	_onKeyDownEvent: function (ev) {
+		var target = Event.getTarget(ev),
+			node = this.getNodeByElement(target),
+			newNode = node,
+			KEY = YAHOO.util.KeyListener.KEY;
+
+		switch(ev.keyCode) {
+			case KEY.UP:
+				this.logger.log('UP');
+				do {
+					if (newNode.previousSibling) {
+						newNode = newNode.previousSibling;
+					} else {
+						newNode = newNode.parent;
+					}
+				} while (newNode && !newNode._canHaveFocus());
+				if (newNode) { newNode.focus();	}
+				Event.preventDefault(ev);
+				break;
+			case KEY.DOWN:
+				this.logger.log('DOWN');
+				do {
+					if (newNode.nextSibling) {
+						newNode = newNode.nextSibling;
+					} else {
+						newNode.expand();
+						newNode = (newNode.children.length || null) && newNode.children[0];
+					}
+				} while (newNode && !newNode._canHaveFocus);
+				if (newNode) { newNode.focus();}
+				Event.preventDefault(ev);
+				break;
+			case KEY.LEFT:
+				this.logger.log('LEFT');
+				do {
+					if (newNode.parent) {
+						newNode = newNode.parent;
+					} else {
+						newNode = newNode.previousSibling;
+					}
+				} while (newNode && !newNode._canHaveFocus());
+				if (newNode) { newNode.focus();}
+				Event.preventDefault(ev);
+				break;
+			case KEY.RIGHT:
+				this.logger.log('RIGHT');
+				do {
+					newNode.expand();
+					if (newNode.children.length) {
+						newNode = newNode.children[0];
+					} else {
+						newNode = newNode.nextSibling;
+					}
+				} while (newNode && !newNode._canHaveFocus());
+				if (newNode) { newNode.focus();}
+				Event.preventDefault(ev);
+				break;
+			case KEY.ENTER:
+				this.logger.log('ENTER: ' + newNode.href);
+				if (node.href) {
+					if (node.target) {
+						window.open(node.href,node.target);
+					} else {
+						window.location(node.href);
+					}
+				} else {
+					node.toggle();
+				}
+				this.fireEvent('enterKeyPressed',node);
+				Event.preventDefault(ev);
+				break;
+			case KEY.HOME:
+				this.logger.log('HOME');
+				newNode = this.getRoot();
+				if (newNode.children.length) {newNode = newNode.children[0];}
+				if (newNode._canHaveFocus()) { newNode.focus(); }
+				Event.preventDefault(ev);
+				break;
+			case KEY.END:
+				this.logger.log('END');
+				newNode = newNode.parent.children;
+				newNode = newNode[newNode.length -1];
+				if (newNode._canHaveFocus()) { newNode.focus(); }
+				Event.preventDefault(ev);
+				break;
+			// case KEY.PAGE_UP:
+				// this.logger.log('PAGE_UP');
+				// break;
+			// case KEY.PAGE_DOWN:
+				// this.logger.log('PAGE_DOWN');
+				// break;
+			case 107:  // plus key
+				if (ev.shiftKey) {
+					this.logger.log('Shift-PLUS');
+					node.parent.expandAll();
+				} else {
+					this.logger.log('PLUS');
+					node.expand();
+				}
+				break;
+			case 109: // minus key
+				if (ev.shiftKey) {
+					this.logger.log('Shift-MINUS');
+					node.parent.collapseAll();
+				} else {
+					this.logger.log('MINUS');
+					node.collapse();
+				}
+				break;
+			default:
+				break;
 		}
 	},
     /**
@@ -522,237 +817,15 @@ TV.prototype = {
      * @method render
      */
     render: function() {
-        var html = this.root.getHtml();
-        this.getEl().innerHTML = html;
-		var getTarget = function (ev) {
-			var target = Event.getTarget(ev); 
-			if (target.tagName.toUpperCase() != 'TD') { target = Dom.getAncestorByTagName(target,'td'); }
-			if (Lang.isNull(target)) { return null; }
-			if (target.className.length === 0) {
-				target = target.previousSibling;
-				if (Lang.isNull(target)) { return null; }
-			}
-			return target;
-		};
+        var html = this.root.getHtml(),
+			el = this.getEl();
+        el.innerHTML = html;
 		if (!this._hasEvents) {
-			Event.on(
-				this.getEl(),
-				'click',
-				function (ev) {
-					var self = this,
-						el = Event.getTarget(ev),
-						node = this.getNodeByElement(el);
-					if (!node) { return; }
-						
-					var toggle = function () {
-						if (node.expanded) {
-							node.collapse();
-						} else {
-							node.expand();
-						}
-						node.focus();
-					};
-					
-					if (Dom.hasClass(el, node.labelStyle) || Dom.getAncestorByClassName(el,node.labelStyle)) {
-						this.logger.log("onLabelClick " + node.label);
-						this.fireEvent('labelClick',node);
-					}
-					while (el && !Dom.hasClass(el.parentNode,'ygtvrow') && !/ygtv[tl][mp]h?h?/.test(el.className)) {
-						el = Dom.getAncestorByTagName(el,'td');
-					}
-					if (el) {
-						// If it is a spacer cell, do nothing
-						if (/ygtv(blank)?depthcell/.test(el.className)) { return; }
-						//  If it is a toggle cell, toggle
-						if (/ygtv[tl][mp]h?h?/.test(el.className)) {
-							toggle();
-						} else {
-							if (this._dblClickTimer) {
-								window.clearTimeout(this._dblClickTimer);
-								this._dblClickTimer = null;
-							} else {
-								if (this._hasDblClickSubscriber) {
-									this._dblClickTimer = window.setTimeout(function () {
-										self._dblClickTimer = null;
-										if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
-											toggle();
-										}
-									}, 200);
-								} else {
-									if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
-										toggle();
-										Event.preventDefault(ev);
-									}
-								}
-							}
-						}
-					}
-				},
-				this,
-				true
-			);
-			
-			Event.on(
-				this.getEl(),
-				'dblclick',
-				function (ev) {
-					if (!this._hasDblClickSubscriber) { return; }
-					var el = Event.getTarget(ev);
-					while (!Dom.hasClass(el.parentNode,'ygtvrow')) {
-						el = Dom.getAncestorByTagName(el,'td');
-					}
-					if (/ygtv(blank)?depthcell/.test(el.className)) { return;}
-					if (!(/ygtv[tl][mp]h?h?/.test(el.className))) {
-						this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(el)}); 
-						if (this._dblClickTimer) {
-							window.clearTimeout(this._dblClickTimer);
-							this._dblClickTimer = null;
-						}
-					}
-				},
-				this,
-				true
-			);
-			Event.on(
-				this.getEl(),
-				'mouseover',
-				function (ev) {
-					var target = getTarget(ev);
-					if (target) {
-						target.className = target.className.replace(/ygtv([lt])([mp])/gi,'ygtv$1$2h');
-					}
-				}
-			);
-			Event.on(
-				this.getEl(),
-				'mouseout',
-				function (ev) {
-					var target = getTarget(ev);
-					if (target) {
-						target.className = target.className.replace(/ygtv([lt])([mp])h/gi,'ygtv$1$2');
-					}
-				}
-			);
-			Event.on(
-				this.getEl(),
-				'keydown',
-				function (ev) {
-					var target = Event.getTarget(ev),
-						node = this.getNodeByElement(target),
-						newNode = node,
-						KEY = YAHOO.util.KeyListener.KEY;
-					//console.log('key');
-
-					switch(ev.keyCode) {
-						case KEY.UP:
-							this.logger.log('UP');
-							do {
-								if (newNode.previousSibling) {
-									newNode = newNode.previousSibling;
-								} else {
-									newNode = newNode.parent;
-								}
-							} while (newNode && !newNode._canHaveFocus());
-							if (newNode) { newNode.focus();	}
-							Event.preventDefault(ev);
-							break;
-						case KEY.DOWN:
-							this.logger.log('DOWN');
-							do {
-								if (newNode.nextSibling) {
-									newNode = newNode.nextSibling;
-								} else {
-									newNode.expand();
-									newNode = (newNode.children.length || null) && newNode.children[0];
-								}
-							} while (newNode && !newNode._canHaveFocus);
-							if (newNode) { newNode.focus();}
-							Event.preventDefault(ev);
-							break;
-						case KEY.LEFT:
-							this.logger.log('LEFT');
-							do {
-								if (newNode.parent) {
-									newNode = newNode.parent;
-								} else {
-									newNode = newNode.previousSibling;
-								}
-							} while (newNode && !newNode._canHaveFocus());
-							if (newNode) { newNode.focus();}
-							Event.preventDefault(ev);
-							break;
-						case KEY.RIGHT:
-							this.logger.log('RIGHT');
-							do {
-								newNode.expand();
-								if (newNode.children.length) {
-									newNode = newNode.children[0];
-								} else {
-									newNode = newNode.nextSibling;
-								}
-							} while (newNode && !newNode._canHaveFocus());
-							if (newNode) { newNode.focus();}
-							Event.preventDefault(ev);
-							break;
-						case KEY.ENTER:
-							this.logger.log('ENTER: ' + newNode.href);
-							if (node.href) {
-								if (node.target) {
-									window.open(node.href,node.target);
-								} else {
-									window.location(node.href);
-								}
-							} else {
-								node.toggle();
-							}
-							this.fireEvent('enterKeyPressed',node);
-							Event.preventDefault(ev);
-							break;
-						case KEY.HOME:
-							this.logger.log('HOME');
-							newNode = this.getRoot();
-							if (newNode.children.length) {newNode = newNode.children[0];}
-							if (newNode._canHaveFocus()) { newNode.focus(); }
-							Event.preventDefault(ev);
-							break;
-						case KEY.END:
-							this.logger.log('END');
-							newNode = newNode.parent.children;
-							newNode = newNode[newNode.length -1];
-							if (newNode._canHaveFocus()) { newNode.focus(); }
-							Event.preventDefault(ev);
-							break;
-						// case KEY.PAGE_UP:
-							// this.logger.log('PAGE_UP');
-							// break;
-						// case KEY.PAGE_DOWN:
-							// this.logger.log('PAGE_DOWN');
-							// break;
-						case 107:  // plus key
-							if (ev.shiftKey) {
-								this.logger.log('Shift-PLUS');
-								node.parent.expandAll();
-							} else {
-								this.logger.log('PLUS');
-								node.expand();
-							}
-							break;
-						case 109: // minus key
-							if (ev.shiftKey) {
-								this.logger.log('Shift-MINUS');
-								node.parent.collapseAll();
-							} else {
-								this.logger.log('MINUS');
-								node.collapse();
-							}
-							break;
-						default:
-							break;
-					}
-				},
-				this,
-				true
-			);
+			Event.on(el, 'click', this._onClickEvent, this, true);
+			Event.on(el, 'dblclick', this._onDblClickEvent, this, true);
+			Event.on(el, 'mouseover', this._onMouseOverEvent, this, true);
+			Event.on(el, 'mouseout', this._onMouseOutEvent, this, true);
+			Event.on(el, 'keydown', this._onKeyDownEvent, this, true);
 		}
 		this._hasEvents = true;
     },
@@ -849,7 +922,7 @@ TV.prototype = {
         for (var i in this._nodes) {
 			if (this._nodes.hasOwnProperty(i)) {
 	            var n = this._nodes[i];
-	            if (n.data && value == n.data[property]) {
+	            if ((property in n && n[property] == value) || (n.data && value == n.data[property])) {
 	                return n;
 	            }
 			}
@@ -871,7 +944,7 @@ TV.prototype = {
         for (var i in this._nodes) {
 			if (this._nodes.hasOwnProperty(i)) {
 	            var n = this._nodes[i];
-	            if (n.data && value == n.data[property]) {
+	            if ((property in n && n[property] == value) || (n.data && value == n.data[property])) {
 	                values.push(n);
 	            }
 			}
@@ -1072,7 +1145,7 @@ TV.prototype = {
 			var node = this._nodes[i];
 			if (node && node.destroy) {node.destroy(); }
 		}
-		el.parentNode.removeChild(el);
+		el.innerHTML = '';
 		this._hasEvents = false;
 	},
 		
@@ -1122,7 +1195,42 @@ TV.prototype = {
      * @param node {Node} the node that was collapsed.
      * @deprecated use treeobj.subscribe("collapse") instead
      */
-    onCollapse: function(node) { }
+    onCollapse: function(node) { },
+	
+	/**
+	* Sets the value of a property for all loaded nodes in the tree.
+	* @method setNodesProperty
+	* @param name {string} Name of the property to be set
+	* @param value {any} value to be set
+	* @param refresh {boolean} if present and true, it does a refresh
+	*/
+	setNodesProperty: function(name, value, refresh) {
+		this.root.setNodesProperty(name,value);
+		if (refresh) {
+			this.root.refresh();
+		}
+	},
+	/**
+	* Event listener to toggle node highlight.
+	* Can be assigned as listener to clickEvent, dblClickEvent and enterKeyPressed.
+	* It returns false to prevent the default action.
+	* @method onEventToggleHighlight
+	* @param oArgs {any} it takes the arguments of any of the events mentioned above
+	* @return {false} Always cancels the default action for the event
+	*/
+	onEventToggleHighlight: function (oArgs) {
+		var node;
+		if ('node' in oArgs && oArgs.node instanceof Widget.Node) {
+			node = oArgs.node;
+		} else if (oArgs instanceof Widget.Node) {
+			node = oArgs;
+		} else {
+			return false;
+		}
+		node.toggleHighlight();
+		return false;
+	}
+		
 
 };
 

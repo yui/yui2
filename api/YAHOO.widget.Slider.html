@@ -343,9 +343,43 @@ never see it.
 
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:property" resource="#property_SOURCE_SET_VALUE">
-                                    <h4><a name="property_SOURCE_SET_VALUE" property="yui:name">SOURCE_SET_VALUE</a>
-                                        - <code>final <span property="yui:type">object</span></code>
+                                    <div class="" rel="yui:property" resource="#property_Slider.ANIM_AVAIL">
+                                    <h4><a name="property_Slider.ANIM_AVAIL" property="yui:name">Slider.ANIM_AVAIL</a>
+                                        - <code>static <span property="yui:type">boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            By default, animation is available if the animation utility is detected.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_Slider.SOURCE_KEY_EVENT">
+                                    <h4><a name="property_Slider.SOURCE_KEY_EVENT" property="yui:name">Slider.SOURCE_KEY_EVENT</a>
+                                        - <code>static final <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Constant for valueChangeSource, indicating that the value was altered
+by hitting any of the supported keyboard characters.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: 2
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_Slider.SOURCE_SET_VALUE">
+                                    <h4><a name="property_Slider.SOURCE_SET_VALUE" property="yui:name">Slider.SOURCE_SET_VALUE</a>
+                                        - <code>static final <span property="yui:type">object</span></code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
@@ -362,7 +396,48 @@ by a programmatic call to setValue/setRegionValue.
 
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:property" resource="#property_SOURCE_UI_EVENT">
+                                    <div class="" rel="yui:property" resource="#property_Slider.SOURCE_UI_EVENT">
+                                    <h4><a name="property_Slider.SOURCE_UI_EVENT" property="yui:name">Slider.SOURCE_UI_EVENT</a>
+                                        - <code>static final <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Constant for valueChangeSource, indicating that the user clicked or
+dragged the slider to change the value.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: 1
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class=" deprecated" rel="yui:property" resource="#property_SOURCE_SET_VALUE">
+                                    <h4><a name="property_SOURCE_SET_VALUE" property="yui:name">SOURCE_SET_VALUE</a>
+                                        - <code>final <span property="yui:type">object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Constant for valueChangeSource, indicating that the value was altered
+by a programmatic call to setValue/setRegionValue.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: 2
+                                    </div>        
+
+                                    <div class="deprecated" property="yui:deprecated">
+                                        <strong>Deprecated:</strong> use static Slider.SOURCE_SET_VALUE
+                                    </div>        
+
+                                    <hr />
+                                    </div>
+                                    <div class=" deprecated" rel="yui:property" resource="#property_SOURCE_UI_EVENT">
                                     <h4><a name="property_SOURCE_UI_EVENT" property="yui:name">SOURCE_UI_EVENT</a>
                                         - <code>final <span property="yui:type">object</span></code>
                                     </h4>
@@ -378,6 +453,9 @@ dragged the slider to change the value.
                                         Default Value: 1
                                     </div>        
 
+                                    <div class="deprecated" property="yui:deprecated">
+                                        <strong>Deprecated:</strong> use static Slider.SOURCE_UI_EVENT
+                                    </div>        
 
                                     <hr />
                                     </div>
@@ -455,21 +533,6 @@ the update came from.  This will be either 1, meaning the slider was
 clicked or dragged, or 2, meaning that it was set via a setValue() call.
 This can be used within event handlers to apply some of the logic only
 when dealing with one source or another.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:property" resource="#property_YAHOO.widget.Slider.ANIM_AVAIL">
-                                    <h4><a name="property_YAHOO.widget.Slider.ANIM_AVAIL" property="yui:name">YAHOO.widget.Slider.ANIM_AVAIL</a>
-                                        - <code>static <span property="yui:type">boolean</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            By default, animation is available if the animation utility is detected.
                                         </div>
                                     </div>
      
@@ -633,6 +696,43 @@ when dealing with one source or another.
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="protected" rel="yui:method" resource="#method__bindKeyEvents">
+                                    <h4>
+                                        <a name="method__bindKeyEvents">_bindKeyEvents</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">_bindKeyEvents</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Sets up the listeners for keydown and key press events.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="private" rel="yui:method" resource="#method__getNextX">
                                     <h4>
                                         <a name="method__getNextX">_getNextX</a></h4>
@@ -697,6 +797,205 @@ when dealing with one source or another.
                                                         void
                                                     </code></dt>
                                                     <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected" rel="yui:method" resource="#method__setRegionValue">
+                                    <h4>
+                                        <a name="method__setRegionValue">_setRegionValue</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        boolean
+                                            <strong property="yui:name">_setRegionValue</strong>
+                                           (
+                                                
+                                                        
+                                                         source
+                                                    
+                                                
+                                                        , 
+                                                         newOffset
+                                                    
+                                                
+                                                        , 
+                                                         newOffset2
+                                                    
+                                                
+                                                        , 
+                                                         skipAnim
+                                                    
+                                                
+                                                        , 
+                                                         force
+                                                    
+                                                
+                                                        , 
+                                                         silent
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Worker function to execute the value set operation.  Accepts type of
+set operation in addition to the usual setValue params.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">source</span>
+                                                        &lt;<span property="yui:type">int</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  what triggered the set (e.g. Slider.SOURCE_SET_VALUE)</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">newOffset</span>
+                                                        &lt;<span property="yui:type">int</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> the number of pixels the thumb should be
+positioned away from the initial start point (x axis for region)</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">newOffset2</span>
+                                                        &lt;<span property="yui:type">int</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> the number of pixels the thumb should be
+positioned away from the initial start point (y axis for region)</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">skipAnim</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> set to true to disable the animation
+for this move action (but not others).</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">force</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> ignore the locked setting and set value anyway</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">silent</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> when true, do not fire events</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">true if the move was performed, false if it failed</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected" rel="yui:method" resource="#method__setValue">
+                                    <h4>
+                                        <a name="method__setValue">_setValue</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        boolean
+                                            <strong property="yui:name">_setValue</strong>
+                                           (
+                                                
+                                                        
+                                                         source
+                                                    
+                                                
+                                                        , 
+                                                         newOffset
+                                                    
+                                                
+                                                        , 
+                                                         skipAnim
+                                                    
+                                                
+                                                        , 
+                                                         force
+                                                    
+                                                
+                                                        , 
+                                                         silent
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Worker function to execute the value set operation.  Accepts type of
+set operation in addition to the usual setValue params.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">source</span>
+                                                        &lt;<span property="yui:type">int</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  what triggered the set (e.g. Slider.SOURCE_SET_VALUE)</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">newOffset</span>
+                                                        &lt;<span property="yui:type">int</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> the number of pixels the thumb should be
+positioned away from the initial start point</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">skipAnim</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> set to true to disable the animation
+for this move action (but not others).</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">force</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> ignore the locked setting and set value anyway</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">silent</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> when true, do not fire events</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">true if the move was performed, false if it failed</dd>
                                                 </dl>
 
 
@@ -3074,22 +3373,28 @@ x offset for region sliders</span>
                                 <li class=""><a href="#property_keyIncrement" title="keyIncrement">keyIncrement</a></li>
                                 <li class=""><a href="#property_lastOffset" title="lastOffset">lastOffset</a></li>
                                 <li class=" deprecated"><a href="#property_moveComplete" title="moveComplete">moveComplete</a></li>
-                                <li class=""><a href="#property_SOURCE_SET_VALUE" title="SOURCE_SET_VALUE">SOURCE_SET_VALUE</a></li>
-                                <li class=""><a href="#property_SOURCE_UI_EVENT" title="SOURCE_UI_EVENT">SOURCE_UI_EVENT</a></li>
+                                <li class=""><a href="#property_Slider.ANIM_AVAIL" title="Slider.ANIM_AVAIL">Slider.ANIM_AVAIL</a></li>
+                                <li class=""><a href="#property_Slider.SOURCE_KEY_EVENT" title="Slider.SOURCE_KEY_EVENT">Slider.SOURCE_KEY_EVENT</a></li>
+                                <li class=""><a href="#property_Slider.SOURCE_SET_VALUE" title="Slider.SOURCE_SET_VALUE">Slider.SOURCE_SET_VALUE</a></li>
+                                <li class=""><a href="#property_Slider.SOURCE_UI_EVENT" title="Slider.SOURCE_UI_EVENT">Slider.SOURCE_UI_EVENT</a></li>
+                                <li class=" deprecated"><a href="#property_SOURCE_SET_VALUE" title="SOURCE_SET_VALUE">SOURCE_SET_VALUE</a></li>
+                                <li class=" deprecated"><a href="#property_SOURCE_UI_EVENT" title="SOURCE_UI_EVENT">SOURCE_UI_EVENT</a></li>
                                 <li class=""><a href="#property_thumb" title="thumb">thumb</a></li>
                                 <li class=""><a href="#property_thumbCenterPoint" title="thumbCenterPoint">thumbCenterPoint</a></li>
                                 <li class=""><a href="#property_tickPause" title="tickPause">tickPause</a></li>
                                 <li class=""><a href="#property_type" title="type">type</a></li>
                                 <li class=""><a href="#property_valueChangeSource" title="valueChangeSource">valueChangeSource</a></li>
-                                <li class=""><a href="#property_YAHOO.widget.Slider.ANIM_AVAIL" title="YAHOO.widget.Slider.ANIM_AVAIL">YAHOO.widget.Slider.ANIM_AVAIL</a></li>
                         </ul>
                     </div>
 
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
+                                <li class="protected"><a href="#method__bindKeyEvents" title="_bindKeyEvents">_bindKeyEvents</a></li>
                                 <li class="private"><a href="#method__getNextX" title="_getNextX">_getNextX</a></li>
                                 <li class="private"><a href="#method__getNextY" title="_getNextY">_getNextY</a></li>
+                                <li class="protected"><a href="#method__setRegionValue" title="_setRegionValue">_setRegionValue</a></li>
+                                <li class="protected"><a href="#method__setValue" title="_setValue">_setValue</a></li>
                                 <li class="private"><a href="#method_b4MouseDown" title="b4MouseDown">b4MouseDown</a></li>
                                 <li class="private"><a href="#method_endMove" title="endMove">endMove</a></li>
                                 <li class="private"><a href="#method_fireEvents" title="fireEvents">fireEvents</a></li>
@@ -3147,7 +3452,7 @@ x offset for region sliders</span>
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Slider", "name": "animate", "url": "YAHOO.widget.Slider.html#property_animate", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "animationDuration", "url": "YAHOO.widget.Slider.html#property_animationDuration", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "b4MouseDown", "url": "YAHOO.widget.Slider.html#method_b4MouseDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "backgroundEnabled", "url": "YAHOO.widget.Slider.html#property_backgroundEnabled", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "baselinePos", "url": "YAHOO.widget.Slider.html#property_baselinePos", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "change", "url": "YAHOO.widget.Slider.html#event_change", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "dragOnly", "url": "YAHOO.widget.Slider.html#property_dragOnly", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "enableKeys", "url": "YAHOO.widget.Slider.html#property_enableKeys", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "endMove", "url": "YAHOO.widget.Slider.html#method_endMove", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "fireEvents", "url": "YAHOO.widget.Slider.html#method_fireEvents", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "focus", "url": "YAHOO.widget.Slider.html#method_focus", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_getNextX", "url": "YAHOO.widget.Slider.html#method__getNextX", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_getNextY", "url": "YAHOO.widget.Slider.html#method__getNextY", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getThumb", "url": "YAHOO.widget.Slider.html#method_getThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getValue", "url": "YAHOO.widget.Slider.html#method_getValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getXValue", "url": "YAHOO.widget.Slider.html#method_getXValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getYValue", "url": "YAHOO.widget.Slider.html#method_getYValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "handleKeyDown", "url": "YAHOO.widget.Slider.html#method_handleKeyDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "handleKeyPress", "url": "YAHOO.widget.Slider.html#method_handleKeyPress", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "initSlider", "url": "YAHOO.widget.Slider.html#method_initSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "initThumb", "url": "YAHOO.widget.Slider.html#method_initThumb", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "isTarget", "url": "YAHOO.widget.Slider.html#property_isTarget", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "keyIncrement", "url": "YAHOO.widget.Slider.html#property_keyIncrement", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "lastOffset", "url": "YAHOO.widget.Slider.html#property_lastOffset", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "lock", "url": "YAHOO.widget.Slider.html#method_lock", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_mouseDown", "url": "YAHOO.widget.Slider.html#property__mouseDown", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "moveComplete", "url": "YAHOO.widget.Slider.html#property_moveComplete", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "moveOneTick", "url": "YAHOO.widget.Slider.html#method_moveOneTick", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "moveThumb", "url": "YAHOO.widget.Slider.html#method_moveThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onAvailable", "url": "YAHOO.widget.Slider.html#method_onAvailable", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onChange", "url": "YAHOO.widget.Slider.html#method_onChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "onDrag", "url": "YAHOO.widget.Slider.html#method_onDrag", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "onMouseDown", "url": "YAHOO.widget.Slider.html#method_onMouseDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onSliderEnd", "url": "YAHOO.widget.Slider.html#method_onSliderEnd", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onSlideStart", "url": "YAHOO.widget.Slider.html#method_onSlideStart", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "resetThumbConstraints", "url": "YAHOO.widget.Slider.html#method_resetThumbConstraints", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setRegionValue", "url": "YAHOO.widget.Slider.html#method_setRegionValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setStartSliderState", "url": "YAHOO.widget.Slider.html#method_setStartSliderState", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setThumbCenterPoint", "url": "YAHOO.widget.Slider.html#method_setThumbCenterPoint", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setValue", "url": "YAHOO.widget.Slider.html#method_setValue", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_silent", "url": "YAHOO.widget.Slider.html#property__silent", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "slideEnd", "url": "YAHOO.widget.Slider.html#event_slideEnd", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "slideStart", "url": "YAHOO.widget.Slider.html#event_slideStart", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "SOURCE_SET_VALUE", "url": "YAHOO.widget.Slider.html#property_SOURCE_SET_VALUE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "SOURCE_UI_EVENT", "url": "YAHOO.widget.Slider.html#property_SOURCE_UI_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "thumb", "url": "YAHOO.widget.Slider.html#property_thumb", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "thumbCenterPoint", "url": "YAHOO.widget.Slider.html#property_thumbCenterPoint", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "thumbMouseUp", "url": "YAHOO.widget.Slider.html#method_thumbMouseUp", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "tickPause", "url": "YAHOO.widget.Slider.html#property_tickPause", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "toString", "url": "YAHOO.widget.Slider.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "type", "url": "YAHOO.widget.Slider.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "unlock", "url": "YAHOO.widget.Slider.html#method_unlock", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "valueChangeSource", "url": "YAHOO.widget.Slider.html#property_valueChangeSource", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "verifyOffset", "url": "YAHOO.widget.Slider.html#method_verifyOffset", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.ANIM_AVAIL", "url": "YAHOO.widget.Slider.html#property_YAHOO.widget.Slider.ANIM_AVAIL", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizDualSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getHorizDualSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getHorizSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getSliderRegion", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getSliderRegion", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertDualSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getVertDualSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getVertSlider", "type": "method"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Slider", "name": "animate", "url": "YAHOO.widget.Slider.html#property_animate", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "animationDuration", "url": "YAHOO.widget.Slider.html#property_animationDuration", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "b4MouseDown", "url": "YAHOO.widget.Slider.html#method_b4MouseDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "backgroundEnabled", "url": "YAHOO.widget.Slider.html#property_backgroundEnabled", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "baselinePos", "url": "YAHOO.widget.Slider.html#property_baselinePos", "type": "property"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "_bindKeyEvents", "url": "YAHOO.widget.Slider.html#method__bindKeyEvents", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "change", "url": "YAHOO.widget.Slider.html#event_change", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "dragOnly", "url": "YAHOO.widget.Slider.html#property_dragOnly", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "enableKeys", "url": "YAHOO.widget.Slider.html#property_enableKeys", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "endMove", "url": "YAHOO.widget.Slider.html#method_endMove", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "fireEvents", "url": "YAHOO.widget.Slider.html#method_fireEvents", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "focus", "url": "YAHOO.widget.Slider.html#method_focus", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_getNextX", "url": "YAHOO.widget.Slider.html#method__getNextX", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_getNextY", "url": "YAHOO.widget.Slider.html#method__getNextY", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getThumb", "url": "YAHOO.widget.Slider.html#method_getThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getValue", "url": "YAHOO.widget.Slider.html#method_getValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getXValue", "url": "YAHOO.widget.Slider.html#method_getXValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "getYValue", "url": "YAHOO.widget.Slider.html#method_getYValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "handleKeyDown", "url": "YAHOO.widget.Slider.html#method_handleKeyDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "handleKeyPress", "url": "YAHOO.widget.Slider.html#method_handleKeyPress", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "initSlider", "url": "YAHOO.widget.Slider.html#method_initSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "initThumb", "url": "YAHOO.widget.Slider.html#method_initThumb", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "isTarget", "url": "YAHOO.widget.Slider.html#property_isTarget", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "keyIncrement", "url": "YAHOO.widget.Slider.html#property_keyIncrement", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "lastOffset", "url": "YAHOO.widget.Slider.html#property_lastOffset", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "lock", "url": "YAHOO.widget.Slider.html#method_lock", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_mouseDown", "url": "YAHOO.widget.Slider.html#property__mouseDown", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "moveComplete", "url": "YAHOO.widget.Slider.html#property_moveComplete", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "moveOneTick", "url": "YAHOO.widget.Slider.html#method_moveOneTick", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "moveThumb", "url": "YAHOO.widget.Slider.html#method_moveThumb", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onAvailable", "url": "YAHOO.widget.Slider.html#method_onAvailable", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onChange", "url": "YAHOO.widget.Slider.html#method_onChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "onDrag", "url": "YAHOO.widget.Slider.html#method_onDrag", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "onMouseDown", "url": "YAHOO.widget.Slider.html#method_onMouseDown", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onSliderEnd", "url": "YAHOO.widget.Slider.html#method_onSliderEnd", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "onSlideStart", "url": "YAHOO.widget.Slider.html#method_onSlideStart", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "resetThumbConstraints", "url": "YAHOO.widget.Slider.html#method_resetThumbConstraints", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "_setRegionValue", "url": "YAHOO.widget.Slider.html#method__setRegionValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setRegionValue", "url": "YAHOO.widget.Slider.html#method_setRegionValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setStartSliderState", "url": "YAHOO.widget.Slider.html#method_setStartSliderState", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setThumbCenterPoint", "url": "YAHOO.widget.Slider.html#method_setThumbCenterPoint", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Slider", "name": "_setValue", "url": "YAHOO.widget.Slider.html#method__setValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "setValue", "url": "YAHOO.widget.Slider.html#method_setValue", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "_silent", "url": "YAHOO.widget.Slider.html#property__silent", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "slideEnd", "url": "YAHOO.widget.Slider.html#event_slideEnd", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.ANIM_AVAIL", "url": "YAHOO.widget.Slider.html#property_Slider.ANIM_AVAIL", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.SOURCE_KEY_EVENT", "url": "YAHOO.widget.Slider.html#property_Slider.SOURCE_KEY_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.SOURCE_SET_VALUE", "url": "YAHOO.widget.Slider.html#property_Slider.SOURCE_SET_VALUE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "Slider.SOURCE_UI_EVENT", "url": "YAHOO.widget.Slider.html#property_Slider.SOURCE_UI_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "slideStart", "url": "YAHOO.widget.Slider.html#event_slideStart", "type": "event"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "SOURCE_SET_VALUE", "url": "YAHOO.widget.Slider.html#property_SOURCE_SET_VALUE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "SOURCE_UI_EVENT", "url": "YAHOO.widget.Slider.html#property_SOURCE_UI_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "thumb", "url": "YAHOO.widget.Slider.html#property_thumb", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "thumbCenterPoint", "url": "YAHOO.widget.Slider.html#property_thumbCenterPoint", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Slider", "name": "thumbMouseUp", "url": "YAHOO.widget.Slider.html#method_thumbMouseUp", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "tickPause", "url": "YAHOO.widget.Slider.html#property_tickPause", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "toString", "url": "YAHOO.widget.Slider.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "type", "url": "YAHOO.widget.Slider.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "unlock", "url": "YAHOO.widget.Slider.html#method_unlock", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "valueChangeSource", "url": "YAHOO.widget.Slider.html#property_valueChangeSource", "type": "property"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "verifyOffset", "url": "YAHOO.widget.Slider.html#method_verifyOffset", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizDualSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getHorizDualSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getHorizSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getHorizSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getSliderRegion", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getSliderRegion", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertDualSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getVertDualSlider", "type": "method"}, {"access": "", "host": "YAHOO.widget.Slider", "name": "YAHOO.widget.Slider.getVertSlider", "url": "YAHOO.widget.Slider.html#method_YAHOO.widget.Slider.getVertSlider", "type": "method"}];
 </script>
 </body>
 </html>
