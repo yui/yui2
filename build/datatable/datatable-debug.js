@@ -5186,7 +5186,7 @@ _initMsgTbodyEl : function(elTable) {
         elMsgTr.className = DT.CLASS_FIRST + " " + DT.CLASS_LAST;
         this._elMsgTr = elMsgTr;
         var elMsgTd = elMsgTr.appendChild(document.createElement("td"));
-        elMsgTd.colSpan = this._oColumnSet.keys.length;
+        elMsgTd.colSpan = this._oColumnSet.keys.length || 1;
         elMsgTd.className = DT.CLASS_FIRST + " " + DT.CLASS_LAST;
         this._elMsgTd = elMsgTd;
         elMsgTbody = elTable.insertBefore(elMsgTbody, this._elTbody);
@@ -5496,7 +5496,7 @@ _addTrEl : function (oRecord) {
  * @private
  */
 _updateTrEl : function(elTr, oRecord) {
-    var ok = this.get("formatRow") ? this.get("formatRow")(elTr, oRecord) : true;
+    var ok = this.get("formatRow") ? this.get("formatRow").call(this, elTr, oRecord) : true;
     if(ok) {
         // Hide the row to prevent constant reflows
         elTr.style.display = 'none';
@@ -9031,7 +9031,7 @@ addRows : function(aData, index) {
                 var loopN = this.get("renderLoopSize");
                 var loopEnd = recIndex + aData.length;
                 var nRowsNeeded = (loopEnd - recIndex); // how many needed
-                var isLast = (recIndex === this._elTbody.rows.length);
+                var isLast = (recIndex >= this._elTbody.rows.length);
                 this._oChainRender.add({
                     method: function(oArg) {
                         if((this instanceof DT) && this._sId) {
@@ -9040,11 +9040,10 @@ addRows : function(aData, index) {
                                 j = oArg.nCurrentRecord,
                                 len = loopN > 0 ? Math.min(i + loopN,loopEnd) : loopEnd,
                                 df = document.createDocumentFragment(),
-                                tr;
-                            for(; i < len; ++i,++j) {
+                                elNext = (this._elTbody.rows[i]) ? this._elTbody.rows[i] : null;
+                            for(; i < len; i++, j++) {
                                 df.appendChild(this._addTrEl(aRecords[j]));
                             }
-                            var elNext = (this._elTbody.rows[index]) ? this._elTbody.rows[index] : null;
                             this._elTbody.insertBefore(df, elNext);
                             oArg.nCurrentRow = i;
                             oArg.nCurrentRecord = j;
@@ -9098,31 +9097,19 @@ addRows : function(aData, index) {
  * @param oData {Object} Object literal of data for the row.
  */
 updateRow : function(row, oData) {
-    var oldRecord, oldData, updatedRecord, elRow;
-
-    // Get the Record directly
-    if((row instanceof YAHOO.widget.Record) || (lang.isNumber(row))) {
-        // Get the Record directly
-        oldRecord = this._oRecordSet.getRecord(row);
-
-        // Is this row on current page?
-        elRow = this.getTrEl(oldRecord);
-    }
-    // Get the Record by TR element
-    else {
-        elRow = this.getTrEl(row);
-        if(elRow) {
-            oldRecord = this.getRecord(elRow);
-        }
+    var index = row;
+    if (!lang.isNumber(index)) {
+        index = this.getRecordIndex(row);
     }
 
     // Update the Record
-    if(oldRecord) {
+    if(lang.isNumber(index) && (index >= 0)) {
+        var oRecordSet = this._oRecordSet,
+            oldRecord = oRecordSet.getRecord(index),
+            elRow = this.getTrEl(oldRecord),
         // Copy data from the Record for the event that gets fired later
-        var oRecordData = oldRecord.getData();
-        oldData = YAHOO.widget.DataTable._cloneObject(oRecordData);
-
-        updatedRecord = this._oRecordSet.updateRecord(oldRecord, oData);
+            oldData = oldRecord ? oldRecord.getData() : null,
+            updatedRecord = this._oRecordSet.setRecord(oData, index);
     }
     else {
         YAHOO.log("Could not update row " + row + " with the data : " +
@@ -9132,11 +9119,29 @@ updateRow : function(row, oData) {
     }
 
     // Update the TR only if row is on current page
-    if(elRow) {
+    if(updatedRecord) {
         this._oChainRender.add({
             method: function() {
                 if((this instanceof DT) && this._sId) {
-                    this._updateTrEl(elRow, updatedRecord);
+                    // Paginated
+                    var oPaginator = this.get('paginator');
+                    if (oPaginator) {
+                        var pageStartIndex = (oPaginator.getPageRecords())[0],
+                            pageLastIndex = (oPaginator.getPageRecords())[1];
+
+                        // At least one of the new records affects the view
+                        if ((index >= pageStartIndex) || (index <= pageLastIndex)) {
+                            this.render();
+                        }
+                    }
+                    else {
+                        if(elRow) {
+                            this._updateTrEl(elRow, updatedRecord);
+                        }
+                        else {
+                            this.getTbodyEl().appendChild(this._addTrEl(updatedRecord));
+                        }
+                    }
                     this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
                     YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
                             ", Record index = " + this.getRecordIndex(updatedRecord) +
@@ -9154,6 +9159,115 @@ updateRow : function(row, oData) {
                 ", Record index = " + this.getRecordIndex(updatedRecord) +
                 ", page row index = " + this.getTrIndex(updatedRecord), "info", this.toString());   
     }
+},
+
+/**
+ * Starting with the given row, updates associated Records with the given data.
+ * The number of rows to update are determined by the array of data provided.
+ * Undefined data (i.e., not an object literal) causes a row to be skipped. If
+ * any of the rows are on current page, the corresponding DOM elements are also
+ * updated.
+ *
+ * @method updateRows
+ * @param startrow {YAHOO.widget.Record | Number | HTMLElement | String}
+ * Starting row to update: By Record instance, by Record's RecordSet
+ * position index, by HTMLElement reference to the TR element, or by ID string
+ * of the TR element.
+ * @param aData {Object[]} Array of object literal of data for the rows.
+ */
+updateRows : function(startrow, aData) {
+    if(lang.isArray(aData)) {
+        var startIndex = startrow;
+        if (!lang.isNumber(startrow)) {
+            startIndex = this.getRecordIndex(startrow);
+        }
+            
+        if(lang.isNumber(startIndex) && (startIndex >= 0)) {
+            var lastIndex = startIndex + aData.length,
+                aOldRecords = this._oRecordSet.getRecords(startIndex, aData.length),
+                aNewRecords = this._oRecordSet.setRecords(aData, startIndex);
+            if(aNewRecords) {
+                // Paginated
+                var oPaginator = this.get('paginator');
+                if (oPaginator) {
+                    var pageStartIndex = (oPaginator.getPageRecords())[0],
+                        pageLastIndex = (oPaginator.getPageRecords())[1];
+    
+                    // At least one of the new records affects the view
+                    if ((startIndex >= pageStartIndex) || (lastIndex <= pageLastIndex)) {
+                        this.render();
+                    }
+                    
+                    this.fireEvent("rowsAddEvent", {newRecords:aNewRecords, oldRecords:aOldRecords});
+                    YAHOO.log("Added " + aNewRecords.length + 
+                            " rows starting at index " + startIndex +
+                            " with data " + lang.dump(aData), "info", this.toString());
+                    return;
+                }
+                // Not paginated
+                else {
+                    // Update the TR elements
+                    var loopN = this.get("renderLoopSize"),
+                        rowCount = aData.length, // how many needed
+                        lastRowIndex = this._elTbody.rows.length,
+                        isLast = (lastIndex >= lastRowIndex),
+                        isAdding = (lastIndex > lastRowIndex);
+                                           
+                    this._oChainRender.add({
+                        method: function(oArg) {
+                            if((this instanceof DT) && this._sId) {
+                                var aRecords = oArg.aRecords,
+                                    i = oArg.nCurrentRow,
+                                    j = oArg.nDataPointer,
+                                    len = loopN > 0 ? Math.min(i+loopN, startIndex+aRecords.length) : startIndex+aRecords.length;
+                                    
+                                for(; i < len; i++,j++) {
+                                    if(isAdding && (i>=lastRowIndex)) {
+                                        this._elTbody.appendChild(this._addTrEl(aRecords[j]));
+                                    }
+                                    else {
+                                        this._updateTrEl(this._elTbody.rows[i], aRecords[j]);
+                                    }
+                                }
+                                oArg.nCurrentRow = i;
+                                oArg.nDataPointer = j;
+                            }
+                        },
+                        iterations: (loopN > 0) ? Math.ceil(rowCount/loopN) : 1,
+                        argument: {nCurrentRow:startIndex,aRecords:aNewRecords,nDataPointer:0,isAdding:isAdding},
+                        scope: this,
+                        timeout: (loopN > 0) ? 0 : -1
+                    });
+                    this._oChainRender.add({
+                        method: function(oArg) {
+                            var recIndex = oArg.recIndex;
+                            // Set FIRST/LAST
+                            if(recIndex === 0) {
+                                this._setFirstRow();
+                            }
+                            if(oArg.isLast) {
+                                this._setLastRow();
+                            }
+                            // Set EVEN/ODD
+                            this._setRowStripes();                           
+    
+                            this.fireEvent("rowsAddEvent", {newRecords:aNewRecords, oldRecords:aOldRecords});
+                            YAHOO.log("Added " + aNewRecords.length + 
+                                    " rows starting at index " + startIndex +
+                                    " with data " + lang.dump(aData), "info", this.toString());
+                        },
+                        argument: {recIndex: startIndex, isLast: isLast},
+                        scope: this,
+                        timeout: -1 // Needs to run immediately after the DOM insertions above
+                    });
+                    this._runRenderChain();
+                    this.hideTableMessage();                
+                    return;
+                }            
+            }
+        }
+    }
+    YAHOO.log("Could not add rows with " + lang.dump(aData));
 },
 
 /**
@@ -9294,6 +9408,10 @@ deleteRows : function(row, count) {
                 highIndex = (count > 0) ? nRecordIndex + count -1 : nRecordIndex;
                 lowIndex = (count > 0) ? nRecordIndex : nRecordIndex + count + 1;
                 count = (count > 0) ? count : count*-1;
+                if(lowIndex < 0) {
+                    lowIndex = 0;
+                    count = highIndex - lowIndex;
+                }
             }
             else {
                 count = 1;
@@ -9478,7 +9596,7 @@ formatCell : function(elCell, oRecord, oColumn) {
  * @method updateCell
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column | String | Number} A Column key, or a ColumnSet key index.
- * @param oData {Object} Object literal of data for the cell.
+ * @param oData {Object} New data value for the cell.
  */
 updateCell : function(oRecord, oColumn, oData) {    
     // Validate Column and Record
@@ -12794,7 +12912,41 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
         // Data ok to append
         if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
             // Insert rows
-            this.addRows(oResponse.results, oPayload.insertIndex | 0);
+            this.addRows(oResponse.results, (oPayload ? oPayload.insertIndex : 0));
+    
+            // Update state
+            this._handleDataReturnPayload(sRequest, oResponse, oPayload);
+        }
+        // Error
+        else if(ok && oResponse.error) {
+            this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
+        }
+    }
+},
+
+/**
+ * Callback function receives data from DataSource and incrementally updates Records
+ * starting at the index specified in oPayload.updateIndex. The value for
+ * oPayload.updateIndex can be populated when sending the request to the DataSource,
+ * or by accessing oPayload.updateIndex with the doBeforeLoadData() method at runtime.
+ * If applicable, creates or updates corresponding TR elements.
+ *
+ * @method onDataReturnUpdateRows
+ * @param sRequest {String} Original request.
+ * @param oResponse {Object} Response object.
+ * @param oPayload {MIXED} Argument payload, looks in oPayload.updateIndex.
+ */
+onDataReturnUpdateRows : function(sRequest, oResponse, oPayload) {
+    if((this instanceof DT) && this._sId) {
+        this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse,payload:oPayload});
+    
+        // Pass data through abstract method for any transformations
+        var ok = this.doBeforeLoadData(sRequest, oResponse, oPayload);
+    
+        // Data ok to append
+        if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
+            // Insert rows
+            this.updateRows((oPayload ? oPayload.updateIndex : 0), oResponse.results);
     
             // Update state
             this._handleDataReturnPayload(sRequest, oResponse, oPayload);
@@ -12885,7 +13037,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
         if (oPaginator) {
             // Update totalRecords
             if(this.get("dynamicData")) {
-                if (lang.isNumber(oPayload.totalRecords)) {
+                if (widget.Paginator.isNumeric(oPayload.totalRecords)) {
                     oPaginator.set('totalRecords',oPayload.totalRecords);
                 }
             }
@@ -16405,7 +16557,7 @@ lang.extend(widget.DropdownCellEditor, BCE, {
  * Array of dropdown values. Can either be a simple array (e.g., 
  * ["Alabama","Alaska","Arizona","Arkansas"]) or a an array of objects (e.g., 
  * [{label:"Alabama", value:"AL"}, {label:"Alaska", value:"AK"},
- * {label:"Arizona", value:"AZ}, {label:"Arkansas", value:"AR}]). 
+ * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]). 
  *
  * @property dropdownOptions
  * @type String[] | Object[]

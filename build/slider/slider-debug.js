@@ -845,6 +845,10 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
         var xy = getXY(this.getEl()),
             t  = this.thumb;
 
+        if (!this.thumbCenterPoint || !this.thumbCenterPoint.x) {
+            this.setThumbCenterPoint();
+        }
+
         if (xy) {
 
             this.logger.log("newPos: " + xy);
