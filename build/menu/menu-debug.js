@@ -2883,6 +2883,7 @@ _onClick: function (p_sType, p_aArgs) {
 		oItem = p_aArgs[1],
 		bInMenuAnchor = false,
 		oSubmenu,
+		oMenu,
 		oRoot,
 		sId,
 		sURL,
@@ -2971,7 +2972,14 @@ _onClick: function (p_sType, p_aArgs) {
 	
 						sId = sURL.substr(1, nLen);
 	
-						bInMenuAnchor = Dom.isAncestor(this.element, sId);
+						oMenu = YAHOO.widget.MenuManager.getMenu(sId);
+						
+						if (oMenu) {
+
+							bInMenuAnchor = 
+								(this.getRoot() === oMenu.getRoot());
+
+						}
 						
 					}
 					else if (nLen === 1) {
@@ -2983,7 +2991,6 @@ _onClick: function (p_sType, p_aArgs) {
 				}
 			
 			}
-
 
 	
 			if (bInMenuAnchor && !oItem.cfg.getProperty(_TARGET)) {
@@ -6538,6 +6545,8 @@ var Dom = YAHOO.util.Dom,
 	_CLICK = "click",
 	_SHOW = "show",
 	_HIDE = "hide",
+	_LI_LOWERCASE = "li",
+	_ANCHOR_TEMPLATE = "<a href=\"#\"></a>",
 
     EVENT_TYPES = [
     
@@ -6642,17 +6651,9 @@ var Dom = YAHOO.util.Dom,
 		suppressEvent: true
 	},
 
-    CLASS_NAMES = {},
-    
-	m_oFragment = document.createElement("div"),
+	m_oMenuItemTemplate = null,
 
-	m_sMenuItemTemplateP1 = '<li class="',
-
-	m_sMenuItemTemplateP2 = '">',
-
-	m_sMenuItemTemplateP3 = '<a href="#" class="',
-
-	m_sMenuItemTemplateP4 = '"></a></li>';
+    CLASS_NAMES = {};
 
 
 /**
@@ -7182,15 +7183,24 @@ MenuItem.prototype = {
     */
     _createRootNodeStructure: function () {
 
-		m_oFragment.innerHTML = m_sMenuItemTemplateP1 + 
-								this.CSS_CLASS_NAME + 
-								m_sMenuItemTemplateP2 +
-								m_sMenuItemTemplateP3 + 
-								this.CSS_LABEL_CLASS_NAME + 
-								m_sMenuItemTemplateP4;
-       
-        this.element = m_oFragment.firstChild;
-        this._oAnchor = this.element.firstChild;
+        var oElement,
+            oAnchor;
+
+        if (!m_oMenuItemTemplate) {
+
+            m_oMenuItemTemplate = document.createElement(_LI_LOWERCASE);
+            m_oMenuItemTemplate.innerHTML = _ANCHOR_TEMPLATE;
+
+        }
+
+        oElement = m_oMenuItemTemplate.cloneNode(true);
+        oElement.className = this.CSS_CLASS_NAME;
+
+        oAnchor = oElement.firstChild;
+        oAnchor.className = this.CSS_LABEL_CLASS_NAME;
+
+        this.element = oElement;
+        this._oAnchor = oAnchor;
 
     },
 
