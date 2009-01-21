@@ -5214,6 +5214,8 @@ CalendarGroup.prototype = {
 		var pageCount = args[0],
 			cfgPageDate = DEF_CFG.PAGEDATE.key,
 			sep = "_",
+			caldate,
+			firstPageDate = null,
 			groupCalClass = "groupcal",
 			firstClass = "first-of-type",
 			lastClass = "last-of-type";
@@ -5227,15 +5229,19 @@ CalendarGroup.prototype = {
 			childConfig.title = false;
 			childConfig.navigator = null;
 
+			if (p > 0) {
+				caldate = new Date(firstPageDate);
+				this._setMonthOnDate(caldate, caldate.getMonth() + p);
+				childConfig.pageDate = caldate;
+			}
+
 			var cal = this.constructChild(calId, calContainerId, childConfig);
-			var caldate = cal.cfg.getProperty(cfgPageDate);
-			this._setMonthOnDate(caldate, caldate.getMonth() + p);
-			cal.cfg.setProperty(cfgPageDate, caldate);
 
 			Dom.removeClass(cal.oDomContainer, this.Style.CSS_SINGLE);
 			Dom.addClass(cal.oDomContainer, groupCalClass);
 
 			if (p===0) {
+				firstPageDate = cal.cfg.getProperty(cfgPageDate);
 				Dom.addClass(cal.oDomContainer, firstClass);
 			}
 	
@@ -5330,7 +5336,7 @@ CalendarGroup.prototype = {
 	*/
 	callChildFunction : function(fnName, args) {
 		var pageCount = this.cfg.getProperty(DEF_CFG.PAGES.key);
-	
+
 		for (var p=0;p<pageCount;++p) {
 			var page = this.pages[p];
 			if (page[fnName]) {
@@ -5491,7 +5497,7 @@ CalendarGroup.prototype = {
 		}
 		return this.getSelectedDates();
 	},
-	
+
 	/**
 	* Deselects dates in the CalendarGroup based on the cell index provided. This method is used to select cells without having to do a full render. The selected style is applied to the cells directly.
 	* deselectCell will deselect the cell at the specified index on each displayed Calendar page.
@@ -5507,7 +5513,7 @@ CalendarGroup.prototype = {
 		}
 		return this.getSelectedDates();
 	},
-	
+
 	/**
 	* Resets the calendar widget to the originally selected month and year, and 
 	* sets the calendar to the initial selection(s).
