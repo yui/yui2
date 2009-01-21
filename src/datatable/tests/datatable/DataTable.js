@@ -547,31 +547,31 @@
             dt.updateRow(0, newData);
             
             var oData = dt._oRecordSet._records[0].getData();
-            Assert.areSame(newData, oData, "Failed to update by Record index (0)");
+            Assert.areSame(newData.a, oData.a, "Failed to update by Record index (0)");
 
             newData = {a:"8a",b:"8b",c:"8c"};
             dt.updateRow(3, newData);
 
             oData = dt._oRecordSet._records[3].getData();
-            Assert.areSame(newData, oData, "Failed to update by Record index (3)");
+            Assert.areSame(newData.a, oData.a, "Failed to update by Record index (3)");
 
             newData = {a:"5a",b:"5b",c:"5c"};
             dt.updateRow(dt.getRecord(0), newData);
 
             oData = dt._oRecordSet._records[0].getData();
-            Assert.areSame(newData, oData, "Failed to update by Record instance");
+            Assert.areSame(newData.a, oData.a, "Failed to update by Record instance");
 
             newData = {a:"6a",b:"6b",c:"6c"};
             dt.updateRow(dt.getRecord(0).getId(), newData);
 
             oData = dt._oRecordSet._records[0].getData();
-            Assert.areSame(newData, oData, "Failed to update by TR el ID");
+            Assert.areSame(newData.a, oData.a, "Failed to update by TR el ID");
 
             newData = {a:"7a",b:"7b",c:"7c"};
             dt.updateRow(Dom.get(dt.getRecord(0).getId()), newData);
 
             oData = dt._oRecordSet._records[0].getData();
-            Assert.areSame(newData, oData, "Failed to update by TR el reference");
+            Assert.areSame(newData.a, oData.a, "Failed to update by TR el reference");
         },
 
         testUpdateInvalidRow: function() {
