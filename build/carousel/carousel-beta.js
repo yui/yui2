@@ -847,6 +847,14 @@
         _firstItem: 0,
 
         /**
+         * Does the Carousel element have focus?
+         *
+         * @property _hasFocus
+         * @private
+         */
+        _hasFocus: false,
+
+        /**
          * Is the animation still in progress?
          *
          * @property _isAnimationInProgress
@@ -1684,7 +1692,11 @@
 
             carousel.on(itemRemovedEvent, syncUi);
 
-            carousel.on(itemSelectedEvent, carousel.focus);
+            carousel.on(itemSelectedEvent, function () {
+                if (carousel._hasFocus) {
+                    carousel.focus();
+                }
+            });
 
             carousel.on(loadItemsEvent, syncUi);
 
@@ -1738,10 +1750,12 @@
             // Restore the focus on the navigation buttons
 
             Event.onFocus(carousel.get("element"), function (ev, obj) {
+                obj._hasFocus = true;
                 obj._updateNavButtons(Event.getTarget(ev), true);
             }, carousel);
 
             Event.onBlur(carousel.get("element"), function (ev, obj) {
+                obj._hasFocus = false;
                 obj._updateNavButtons(Event.getTarget(ev), false);
             }, carousel);
         },
@@ -2376,6 +2390,7 @@
 
             if ((item = carousel.getItemPositionById(target.id)) >= 0) {
                 carousel.set("selectedItem", carousel._getSelectedItem(item));
+                carouselfocus();
             }
         },
 
