@@ -1,8 +1,8 @@
 <html>
 <head>
 <title>YUI DataSource Tests</title>
-<link type="text/css" rel="stylesheet" href="../../build/logger/assets/skins/sam/logger.css" />
-<link type="text/css" rel="stylesheet" href="../../build/yuitest/assets/testlogger.css" />
+<link type="text/css" rel="stylesheet" href="../../../build/logger/assets/skins/sam/logger.css" />
+<link type="text/css" rel="stylesheet" href="../../../build/yuitest/assets/testlogger.css" />
 <style type="text/css">
     .yui-skin-sam .yui-log {
         padding: 2.5em 1em 1em;
@@ -19,19 +19,19 @@
 <h1>DataSource Tests</h1>
 <p><input type="button" value="Run Tests" id="btnRun" disabled="true" /></p>
 
-<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/event/event.js"></script>
-<script type="text/javascript" src="../../build/connection/connection.js"></script>
-<script type="text/javascript" src="../../build/logger/logger.js"></script>
-<script type="text/javascript" src="../../build/yuitest/yuitest.js"></script>
-<script type="text/javascript" src="../../build/get/get.js"></script>
-<script type="text/javascript" src="../../build/json/json.js"></script>
-<script type="text/javascript" src="../../build/datasource/datasource.js"></script>
+<script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../../build/event/event.js"></script>
+<script type="text/javascript" src="../../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
+<script type="text/javascript" src="../../../build/get/get.js"></script>
+<script type="text/javascript" src="../../../build/json/json.js"></script>
+<script type="text/javascript" src="../../../build/datasource/datasource.js"></script>
 
 <!-- for cloneobject method -->
-<script type="text/javascript" src="../../build/element/element.js"></script>
-<script type="text/javascript" src="../../build/datatable/datatable.js"></script>
+<script type="text/javascript" src="../../../build/element/element.js"></script>
+<script type="text/javascript" src="../../../build/datatable/datatable.js"></script>
 <script type="text/javascript">
 
 (function() {
@@ -259,6 +259,33 @@ var XMLDocument = function(rootTagName, namespaceURL) {
         });                
 
         this.wait(5000); // On a slow connection: this.wait(5000);
+    },
+
+    testXHRHTMLTable: function () {
+        var ds = new XHRDS("php/xhr_table.php",{
+            responseType: DS.TYPE_HTMLTABLE,
+            responseSchema: {
+                fields: ['Col1','Col2','Col3','Col4'],
+            }
+        });
+
+        ds.sendRequest(null, {
+            success: function (req,res) {
+                this.resume(function () {
+                    Assert.isObject(res, "Expected Response object");
+                    Assert.isArray(res.results, "Expected results list");
+                    ObjectAssert.hasProperty("Col1", res.results[0], "Malformed result record");
+                });
+            },
+            failure: function (req,res) {
+                this.resume(function () {
+                    Assert.fail("XHR failure case");
+                });
+            },
+            scope: this
+        });
+
+        this.wait(5000);
     }
  });
 
