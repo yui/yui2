@@ -10,9 +10,11 @@
         // internal shorthand
     var Y = YAHOO.util,
         lang = YAHOO.lang,
+        UA = YAHOO.env.ua,
         trim = YAHOO.lang.trim,
         propertyCache = {}, // for faster hyphen converts
         reCache = {}, // cache className regexes
+        RE_TABLE = /^t(?:able|d|h)$/i, // for _calcBorders
 
         // DOM aliases 
         document = window.document,     
@@ -21,6 +23,25 @@
 
         // string constants
         DOCUMENT_ELEMENT = 'documentElement',
+        COMPAT_MODE = 'compatMode',
+        OFFSET_LEFT = 'offsetLeft',
+        OFFSET_TOP = 'offsetTop',
+        OFFSET_PARENT = 'offsetParent',
+        POSITION = 'position',
+        FIXED = 'fixed',
+        RELATIVE = 'relative',
+        LEFT = 'left',
+        TOP = 'top',
+        SCROLL_LEFT = 'scrollLeft',
+        SCROLL_TOP = 'scrollTop',
+        MEDIUM = 'medium',
+        HEIGHT = 'height',
+        WIDTH = 'width',
+        BORDER_LEFT_WIDTH = 'borderLeftWidth',
+        BORDER_TOP_WIDTH = 'borderTopWidth',
+        GET_BOUNDING_CLIENT_RECT = 'getBoundingClientRect',
+        GET_COMPUTED_STYLE = 'getComputedStyle',
+        _BACK_COMPAT = 'BackCompat',
         _CLASS = 'class', // underscore due to reserved word
         CLASSNAME = 'className',
         EMPTY = '',
@@ -30,9 +51,10 @@
         G = 'g',
     
     // brower detection
-        isOpera = YAHOO.env.ua.opera,
-        isSafari = YAHOO.env.ua.webkit, 
-        isIE = YAHOO.env.ua.ie; 
+        isOpera = UA.opera,
+        isSafari = UA.webkit, 
+        isGecko = UA.gecko, 
+        isIE = UA.ie; 
     
     /**
      * Provides helper methods for DOM elements.
@@ -98,6 +120,14 @@
             return null;
         },
     
+        getComputedStyle: function(el, property) {
+            if (window.getComputedStyle) {
+                return el.ownerDocument.defaultView.getComputedStyle(el, null)[property];
+            } else if (el.currentStyle) {
+                return Y.Dom.IE_ComputedStyle.get(el, property);
+            }
+        },
+
         /**
          * Normalizes currentStyle and ComputedStyle.
          * @method getStyle
@@ -106,22 +136,15 @@
          * @return {String | Array} The current value of the style property for the element(s).
          */
         getStyle: function(el, property) {
-            var f = function(element) {
-                return Y.Dom._getStyle(element, property);
-            };
-            
-            return Y.Dom.batch(el, f, Y.Dom, true);
+            return Y.Dom.batch(el, Y.Dom._getStyle, property);
         },
 
         // branching at load instead of runtime
         _getStyle: function() {
             if (window.getComputedStyle) { // W3C DOM method
                 return function(el, property) {
-                    property = Y.Dom._toCamel(property);
-            
-                    if (property == 'float') { // fix reserved word
-                        property = 'cssFloat';
-                    }
+                    property = (property === 'float') ? property = 'cssFloat' :
+                            Y.Dom._toCamel(property);
 
                     var value = el.style[property],
                         computed;
@@ -129,7 +152,7 @@
                     if (!value) {
                         computed = el.ownerDocument.defaultView.getComputedStyle(el, null);
                         if (computed) { // test computed before touching for safari
-                            value = computed[Y.Dom._toCamel(property)];
+                            value = computed[property];
                         }
                     }
                     
@@ -137,7 +160,6 @@
                 };
             } else if (documentElement.currentStyle) {
                 return function(el, property) {                         
-                    property = Y.Dom._toCamel(property);
                     var value;
 
                     switch(property) {
@@ -156,7 +178,7 @@
                         case 'float': // fix reserved word
                             property = 'styleFloat'; // fall through
                         default: 
-                            // test currentStyle before touching
+                            property = Y.Dom._toCamel(property);
                             value = el.currentStyle ? el.currentStyle[property] : null;
                             return ( el.style[property] || value );
                     }
@@ -172,19 +194,15 @@
          * @param {String} val The value to apply to the given property.
          */
         setStyle: function(el, property, val) {
-            property = Y.Dom._toCamel(property);
-            
-            var f = function(element) {
-                Y.Dom._setStyle(element, property, val);
-                
-            };
-            
-            Y.Dom.batch(el, f, Y.Dom, true);
+            Y.Dom.batch(el, Y.Dom._setStyle, { prop: property, val: val });
         },
 
         _setStyle: function() {
             if (isIE) {
-                return function(el, property, val) {
+                return function(el, args) {
+                    var property = Y.Dom._toCamel(args.prop),
+                        val = args.val;
+
                     if (el) {
                         switch (property) {
                             case 'opacity':
@@ -205,7 +223,9 @@
                     }
                 };
             } else {
-                return function(el, property, val) {
+                return function(el, args) {
+                    var property = Y.Dom._toCamel(args.prop),
+                        val = args.val;
                     if (el) {
                         if (property == 'float') {
                             property = 'cssFloat';
@@ -219,83 +239,139 @@
         }(),
         
         /**
-         * Gets the current position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
+         * Gets the current position of an element based on page coordinates. 
+         * Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
          * @method getXY
-         * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
+         * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM
+         * reference, or an Array of IDs and/or HTMLElements
          * @return {Array} The XY position of the element(s)
          */
         getXY: function(el) {
-            var f = function(el) {
-                return Y.Dom._getXY(el);
-            };
-            
-            return Y.Dom.batch(el, f, Y.Dom, true);
+            return Y.Dom.batch(el, Y.Dom._getXY);
         },
 
         _canPosition: function(el) {
-            return ( Y.Dom._getStyle(el, 'display') !== 'none' && Y.Dom.inDocument(el) );
+            return ( Y.Dom._getStyle(el, 'display') !== 'none' && Y.Dom._inDoc(el) );
         },
 
         _getXY: function() {
-            if (documentElement.getBoundingClientRect) { // w3c
-                return function(el) {
-                    var box = el.getBoundingClientRect(),
-                        round = Math.round,
-                        rootNode = el.ownerDocument,
-                        ret = false;
+            if (document[DOCUMENT_ELEMENT][GET_BOUNDING_CLIENT_RECT]) {
+                return function(node) {
+                    var scrollLeft, scrollTop, box, doc,
+                        off1, off2, mode, bLeft, bTop,
+                        floor = Math.floor, // TODO: round?
+                        xy = false;
 
-                    if ( Y.Dom._canPosition(el) ) {
-                        ret = [round(box.left + Y.Dom.getDocumentScrollLeft(rootNode)), round(box.top +
-                                Y.Dom.getDocumentScrollTop(rootNode))];
-                    } else {
-                    }
+                    if (Y.Dom._canPosition(node)) {
+                        box = node[GET_BOUNDING_CLIENT_RECT]();
+                        doc = node.ownerDocument;
+                        scrollLeft = Y.Dom.getDocumentScrollLeft(doc);
+                        scrollTop = Y.Dom.getDocumentScrollTop(doc);
+                        xy = [floor(box[LEFT]), floor(box[TOP])];
 
-                    return ret;
-                };
-            } else { // manual offset crawl
-                return function(el) { // manually calculate by crawling up offsetParents
-                    var pos = false,
-                        parentNode = el.offsetParent,
-                        // safari: subtract body offsets if el is abs (or any offsetParent), unless body is offsetParent
-                        accountForBody = (isSafari &&
-                                Y.Dom._getStyle(el, 'position') == 'absolute' &&
-                                el.offsetParent == el.ownerDocument.body);
+                        if (isIE && UA.ie < 8) { // IE < 8: viewport off by 2
+                            off1 = 2;
+                            off2 = 2;
+                            mode = doc[COMPAT_MODE];
+                            bLeft = Y.Dom._getStyle(doc[DOCUMENT_ELEMENT], BORDER_LEFT_WIDTH);
+                            bTop = Y.Dom._getStyle(doc[DOCUMENT_ELEMENT], BORDER_TOP_WIDTH);
 
-                    if ( Y.Dom._canPosition(el) ) {
-                        pos = [el.offsetLeft, el.offsetTop];
-                        if (parentNode != el) {
-                            while (parentNode) {
-                                pos[0] += parentNode.offsetLeft;
-                                pos[1] += parentNode.offsetTop;
-                                if (!accountForBody && isSafari && 
-                                        Y.Dom.getStyle(parentNode,'position') == 'absolute' ) { 
-                                    accountForBody = true;
+                            if (UA.ie === 6) {
+                                if (mode !== _BACK_COMPAT) {
+                                    off1 = 0;
+                                    off2 = 0;
                                 }
-                                parentNode = parentNode.offsetParent;
-                            }
-                        }
-
-                        if (accountForBody) { //safari doubles in this case
-                            pos[0] -= el.ownerDocument.body.offsetLeft;
-                            pos[1] -= el.ownerDocument.body.offsetTop;
-                        } 
-                        parentNode = el.parentNode;
-
-                        // account for any scrolled ancestors
-                        while ( parentNode.tagName && !Y.Dom._patterns.ROOT_TAG.test(parentNode.tagName) ) 
-                        {
-                            if (parentNode.scrollTop || parentNode.scrollLeft) {
-                                pos[0] -= parentNode.scrollLeft;
-                                pos[1] -= parentNode.scrollTop;
                             }
                             
-                            parentNode = parentNode.parentNode; 
+                            if ((mode == _BACK_COMPAT)) {
+                                if (bLeft !== MEDIUM) {
+                                    off1 = parseInt(bLeft, 10);
+                                }
+                                if (bTop !== MEDIUM) {
+                                    off2 = parseInt(bTop, 10);
+                                }
+                            }
+                            
+                            xy[0] -= off1;
+                            xy[1] -= off2;
+
                         }
+
+                        if ((scrollTop || scrollLeft)) {
+                            xy[0] += scrollLeft;
+                            xy[1] += scrollTop;
+                        }
+
+                        // gecko may return sub-pixel (non-int) values
+                        xy[0] = floor(xy[0]);
+                        xy[1] = floor(xy[1]);
                     } else {
                     }
 
+                    return xy;
+                };
+            } else {
+                return function(node) { // ff2, safari: manually calculate by crawling up offsetParents
+                    var docScrollLeft, docScrollTop,
+                        scrollTop, scrollLeft,
+                        bCheck,
+                        xy = false,
+                        parentNode = node;
 
-                    return pos;
+                    if  (Y.Dom._canPosition(node) ) {
+                        xy = [node[OFFSET_LEFT], node[OFFSET_TOP]];
+                        docScrollLeft = Y.Dom.getDocumentScrollLeft(node.ownerDocument);
+                        docScrollTop = Y.Dom.getDocumentScrollTop(node.ownerDocument);
+
+                        // TODO: refactor with !! or just falsey
+                        bCheck = ((isGecko || UA.webkit > 519) ? true : false);
+
+                        // TODO: worth refactoring for TOP/LEFT only?
+                        while ((parentNode = parentNode[OFFSET_PARENT])) {
+                            xy[0] += parentNode[OFFSET_LEFT];
+                            xy[1] += parentNode[OFFSET_TOP];
+                            if (bCheck) {
+                                xy = Y.Dom._calcBorders(parentNode, xy);
+                            }
+                        }
+
+                        // account for any scrolled ancestors
+                        if (Y.Dom._getStyle(node, POSITION) !== FIXED) {
+                            parentNode = node;
+
+                            while ((parentNode = parentNode.parentNode) && parentNode.tagName !== 'HTML') {
+                                scrollTop = parentNode[SCROLL_TOP];
+                                scrollLeft = parentNode[SCROLL_LEFT];
+
+                                //Firefox does something funky with borders when overflow is not visible.
+                                if (isGecko && (Y.Dom._getStyle(parentNode, 'overflow') !== 'visible')) {
+                                        xy = Y.Dom._calcBorders(parentNode, xy);
+                                }
+
+                                if (scrollTop || scrollLeft) {
+                                    xy[0] -= scrollLeft;
+                                    xy[1] -= scrollTop;
+                                }
+                            }
+                            xy[0] += docScrollLeft;
+                            xy[1] += docScrollTop;
+
+                        } else {
+                            //Fix FIXED position -- add scrollbars
+                            if (isOpera) {
+                                xy[0] -= docScrollLeft;
+                                xy[1] -= docScrollTop;
+                            } else if (isSafari || isGecko) {
+                                xy[0] += docScrollLeft;
+                                xy[1] += docScrollTop;
+                            }
+                        }
+                        //Round the numbers so we get sane data back
+                        xy[0] = Math.floor(xy[0]);
+                        xy[1] = Math.floor(xy[1]);
+                    } else {
+                    }
+                    return xy;                
                 };
             }
         }(), // NOTE: Executing for loadtime branching
@@ -337,46 +413,56 @@
          * @param {Boolean} noRetry By default we try and set the position a second time if the first fails
          */
         setXY: function(el, pos, noRetry) {
-            var f = function(el) {
-                var style_pos = this.getStyle(el, 'position');
-                if (style_pos == 'static') { // default to relative
-                    this.setStyle(el, 'position', 'relative');
-                    style_pos = 'relative';
-                }
+            Y.Dom.batch(el, Y.Dom._setXY, { pos: pos, noRetry: noRetry });
+        },
 
-                var pageXY = this._getXY(el);
-                if (pageXY === false) { // has to be part of doc to have pageXY
-                    return false; 
-                }
-                
-                var delta = [ // assuming pixels; if not we will have to retry
-                    parseInt( this.getStyle(el, 'left'), 10 ),
-                    parseInt( this.getStyle(el, 'top'), 10 )
+        _setXY: function(node, args) {
+            var pos = Y.Dom._getStyle(node, POSITION),
+                setStyle = Y.Dom.setStyle,
+                xy = args.pos,
+                noRetry = args.noRetry,
+
+                delta = [ // assuming pixels; if not we will have to retry
+                    parseInt( Y.Dom.getComputedStyle(node, LEFT), 10 ),
+                    parseInt( Y.Dom.getComputedStyle(node, TOP), 10 )
                 ];
-            
-                if ( isNaN(delta[0]) ) {// in case of 'auto'
-                    delta[0] = (style_pos == 'relative') ? 0 : el.offsetLeft;
-                } 
-                if ( isNaN(delta[1]) ) { // in case of 'auto'
-                    delta[1] = (style_pos == 'relative') ? 0 : el.offsetTop;
-                } 
         
-                if (pos[0] !== null) { el.style.left = pos[0] - pageXY[0] + delta[0] + 'px'; }
-                if (pos[1] !== null) { el.style.top = pos[1] - pageXY[1] + delta[1] + 'px'; }
-              
-                if (!noRetry) {
-                    var newXY = this.getXY(el);
+            if (pos == 'static') { // default to relative
+                pos = RELATIVE;
+                setStyle(node, POSITION, pos);
+            }
 
-                    // if retry is true, try one more time if we miss 
-                   if ( (pos[0] !== null && newXY[0] != pos[0]) || 
-                        (pos[1] !== null && newXY[1] != pos[1]) ) {
-                       this.setXY(el, pos, true);
-                   }
-                }        
-        
-            };
+            var currentXY = Y.Dom._getXY(node);
+
+            if (!xy || currentXY === false) { // has to be part of doc to have xy
+                return false; 
+            }
             
-            Y.Dom.batch(el, f, Y.Dom, true);
+            if ( isNaN(delta[0]) ) {// in case of 'auto'
+                delta[0] = (pos == RELATIVE) ? 0 : node[OFFSET_LEFT];
+            } 
+            if ( isNaN(delta[1]) ) { // in case of 'auto'
+                delta[1] = (pos == RELATIVE) ? 0 : node[OFFSET_TOP];
+            } 
+
+            if (xy[0] !== null) { // from setX
+                setStyle(node, LEFT, xy[0] - currentXY[0] + delta[0] + 'px');
+            }
+
+            if (xy[1] !== null) { // from setY
+                setStyle(node, TOP, xy[1] - currentXY[1] + delta[1] + 'px');
+            }
+          
+            if (!noRetry) {
+                var newXY = Y.Dom._getXY(node);
+
+                // if retry is true, try one more time if we miss 
+               if ( (xy[0] !== null && newXY[0] != xy[0]) || 
+                    (xy[1] !== null && newXY[1] != xy[1]) ) {
+                   Y.Dom._setXY(node, { pos: xy, noRetry: true });
+               }
+            }        
+
         },
         
         /**
@@ -468,10 +554,11 @@
 
             var nodes = [],
                 elements = root.getElementsByTagName(tag),
-                re = Y.Dom._getClassRegEx(className);
+                re = Y.Dom._getClassRegEx(className),
+                hasClass = Y.Dom.hasClass;
 
             for (var i = 0, len = elements.length; i < len; ++i) {
-                if ( re.test(Y.Dom.getAttribute(elements[i], CLASSNAME)) ) {
+                if ( hasClass(elements[i], className) ) {
                     nodes[nodes.length] = elements[i];
                 }
             }
@@ -1196,8 +1283,21 @@
 
         _testElement: function(node, method) {
             return node && node.nodeType == 1 && ( !method || method(node) );
-        }
+        },
 
+        _calcBorders: function(node, xy2) {
+            var t = parseInt(Y.Dom.getComputedStyle(node, BORDER_TOP_WIDTH), 10) || 0,
+                l = parseInt(Y.Dom.getComputedStyle(node, BORDER_LEFT_WIDTH), 10) || 0;
+            if (isGecko) {
+                if (RE_TABLE.test(node.tagName)) {
+                    t = 0;
+                    l = 0;
+                }
+            }
+            xy2[0] += l;
+            xy2[1] += t;
+            return xy2;
+        }
     };
     
 })();
@@ -1403,4 +1503,190 @@ YAHOO.util.Point = function(x, y) {
 
 YAHOO.extend(YAHOO.util.Point, YAHOO.util.Region);
 
+(function() {
+/**
+ * Add style management functionality to DOM.
+ * @module dom
+ * @for Dom
+ */
+
+var Y = YAHOO.util, 
+    CLIENT_TOP = 'clientTop',
+    CLIENT_LEFT = 'clientLeft',
+    PARENT_NODE = 'parentNode',
+    RIGHT = 'right',
+    HAS_LAYOUT = 'hasLayout',
+    PX = 'px',
+    OPACITY = 'opacity',
+    AUTO = 'auto',
+    BORDER_LEFT_WIDTH = 'borderLeftWidth',
+    BORDER_TOP_WIDTH = 'borderTopWidth',
+    BORDER_RIGHT_WIDTH = 'borderRightWidth',
+    BORDER_BOTTOM_WIDTH = 'borderBottomWidth',
+    VISIBLE = 'visible',
+    TRANSPARENT = 'transparent',
+    HEIGHT = 'height',
+    WIDTH = 'width',
+    STYLE = 'style',
+    GET_COMPUTED_STYLE = 'getComputedStyle',
+    CURRENT_STYLE = 'currentStyle';
+
+// IE getComputedStyle
+// TODO: unit-less lineHeight (e.g. 1.22)
+var re_size = /^width|height$/,
+    re_unit = /^(\d[.\d]*)+(em|ex|px|gd|rem|vw|vh|vm|ch|mm|cm|in|pt|pc|deg|rad|ms|s|hz|khz|%){1}?/i;
+
+var ComputedStyle = {
+    get: function(el, property) {
+        var value = '',
+            current = el[CURRENT_STYLE][property];
+
+        if (property === OPACITY) {
+            value = Y.Dom.getStyle(el, OPACITY);        
+        } else if (!current || (current.indexOf && current.indexOf(PX) > -1)) { // no need to convert
+            value = current;
+        } else if (Y.Dom.IE_COMPUTED[property]) { // use compute function
+            value = Y.Dom.IE_COMPUTED[property](el, property);
+        } else if (re_unit.test(current)) { // convert to pixel
+            value = Y.Dom.IE.ComputedStyle.getPixel(el, property);
+        } else {
+            value = current;
+        }
+
+        return value;
+    },
+
+    getOffset: function(el, prop) {
+        var current = el[CURRENT_STYLE][prop],                        // value of "width", "top", etc.
+            capped = prop.charAt(0).toUpperCase() + prop.substr(1), // "Width", "Top", etc.
+            offset = 'offset' + capped,                             // "offsetWidth", "offsetTop", etc.
+            pixel = 'pixel' + capped,                               // "pixelWidth", "pixelTop", etc.
+            value = '';
+
+        if (current == AUTO) {
+            var actual = el[offset]; // offsetHeight/Top etc.
+            if (actual === undefined) { // likely "right" or "bottom"
+                value = 0;
+            }
+
+            value = actual;
+            if (re_size.test(prop)) { // account for box model diff 
+                el[STYLE][prop] = actual; 
+                if (el[offset] > actual) {
+                    // the difference is padding + border (works in Standards & Quirks modes)
+                    value = actual - (el[offset] - actual);
+                }
+                el[STYLE][prop] = AUTO; // revert to auto
+            }
+        } else { // convert units to px
+            if (!el[STYLE][pixel] && !el[STYLE][prop]) { // need to map style.width to currentStyle (no currentStyle.pixelWidth)
+                el[STYLE][prop] = current;              // no style.pixelWidth if no style.width
+            }
+            value = el[STYLE][pixel];
+        }
+        return value + PX;
+    },
+
+    getBorderWidth: function(el, property) {
+        // clientHeight/Width = paddingBox (e.g. offsetWidth - borderWidth)
+        // clientTop/Left = borderWidth
+        var value = null;
+        if (!el[CURRENT_STYLE][HAS_LAYOUT]) { // TODO: unset layout?
+            el[STYLE].zoom = 1; // need layout to measure client
+        }
+
+        switch(property) {
+            case BORDER_TOP_WIDTH:
+                value = el[CLIENT_TOP];
+                break;
+            case BORDER_BOTTOM_WIDTH:
+                value = el.offsetHeight - el.clientHeight - el[CLIENT_TOP];
+                break;
+            case BORDER_LEFT_WIDTH:
+                value = el[CLIENT_LEFT];
+                break;
+            case BORDER_RIGHT_WIDTH:
+                value = el.offsetWidth - el.clientWidth - el[CLIENT_LEFT];
+                break;
+        }
+        return value + PX;
+    },
+
+    getPixel: function(node, att) {
+        // use pixelRight to convert to px
+        var val = null,
+            styleRight = node[CURRENT_STYLE][RIGHT],
+            current = node[CURRENT_STYLE][att];
+
+        node[STYLE][RIGHT] = current;
+        val = node[STYLE].pixelRight;
+        node[STYLE][RIGHT] = styleRight; // revert
+
+        return val + PX;
+    },
+
+    getMargin: function(node, att) {
+        var val;
+        if (node[CURRENT_STYLE][att] == AUTO) {
+            val = 0 + PX;
+        } else {
+            val = Y.Dom.IE.ComputedStyle.getPixel(node, att);
+        }
+        return val;
+    },
+
+    getVisibility: function(node, att) {
+        var current;
+        while ( (current = node[CURRENT_STYLE]) && current[att] == 'inherit') { // NOTE: assignment in test
+            node = node[PARENT_NODE];
+        }
+        return (current) ? current[att] : VISIBLE;
+    },
+
+    getColor: function(node, att) {
+        var current = node[CURRENT_STYLE][att];
+
+        if (!current || current === TRANSPARENT) {
+            Y.Dom.elementByAxis(node, PARENT_NODE, null, function(parent) {
+                current = parent[CURRENT_STYLE][att];
+                if (current && current !== TRANSPARENT) {
+                    node = parent;
+                    return true;
+                }
+            });
+        }
+
+        return Y.Color.toRGB(current);
+    },
+
+    getBorderColor: function(node, att) {
+        var current = node[CURRENT_STYLE];
+        var val = current[att] || current.color;
+        return Y.Color.toRGB(Y.Color.toHex(val));
+    }
+
+};
+
+//fontSize: getPixelFont,
+var IEComputed = {};
+
+IEComputed[WIDTH] = IEComputed[HEIGHT] = ComputedStyle.getOffset;
+
+IEComputed.color = IEComputed.backgroundColor = ComputedStyle.getColor;
+
+IEComputed[BORDER_TOP_WIDTH] = IEComputed[BORDER_RIGHT_WIDTH] =
+        IEComputed[BORDER_BOTTOM_WIDTH] = IEComputed[BORDER_LEFT_WIDTH] =
+        ComputedStyle.getBorderWidth;
+
+IEComputed.marginTop = IEComputed.marginRight = IEComputed.marginBottom =
+        IEComputed.marginLeft = ComputedStyle.getMargin;
+
+IEComputed.visibility = ComputedStyle.getVisibility;
+IEComputed.borderColor = IEComputed.borderTopColor =
+        IEComputed.borderRightColor = IEComputed.borderBottomColor =
+        IEComputed.borderLeftColor = ComputedStyle.getBorderColor;
+
+Y.Dom.IE_COMPUTED = IEComputed;
+Y.Dom.IE_ComputedStyle = ComputedStyle;
+})();
 YAHOO.register("dom", YAHOO.util.Dom, {version: "@VERSION@", build: "@BUILD@"});
