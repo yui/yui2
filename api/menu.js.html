@@ -2025,6 +2025,7 @@
 		<span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">1</span><span class="o">],</span>
 		<span class="nx">bInMenuAnchor</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span>
 		<span class="nx">oSubmenu</span><span class="o">,</span>
+		<span class="nx">oMenu</span><span class="o">,</span>
 		<span class="nx">oRoot</span><span class="o">,</span>
 		<span class="nx">sId</span><span class="o">,</span>
 		<span class="nx">sURL</span><span class="o">,</span>
@@ -2113,7 +2114,14 @@
 	
 						<span class="nx">sId</span> <span class="o">=</span> <span class="nx">sURL</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="m">1</span><span class="o">,</span> <span class="nx">nLen</span><span class="o">);</span>
 	
-						<span class="nx">bInMenuAnchor</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">isAncestor</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="nx">sId</span><span class="o">);</span>
+						<span class="nx">oMenu</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuManager</span><span class="o">.</span><span class="nx">getMenu</span><span class="o">(</span><span class="nx">sId</span><span class="o">);</span>
+						
+						<span class="k">if</span> <span class="o">(</span><span class="nx">oMenu</span><span class="o">)</span> <span class="o">{</span>
+
+							<span class="nx">bInMenuAnchor</span> <span class="o">=</span> 
+								<span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getRoot</span><span class="o">()</span> <span class="o">===</span> <span class="nx">oMenu</span><span class="o">.</span><span class="nx">getRoot</span><span class="o">());</span>
+
+						<span class="o">}</span>
 						
 					<span class="o">}</span>
 					<span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">nLen</span> <span class="o">===</span> <span class="m">1</span><span class="o">)</span> <span class="o">{</span>
@@ -2125,7 +2133,6 @@
 				<span class="o">}</span>
 			
 			<span class="o">}</span>
-
 
 	
 			<span class="k">if</span> <span class="o">(</span><span class="nx">bInMenuAnchor</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_TARGET</span><span class="o">))</span> <span class="o">{</span>

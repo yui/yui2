@@ -5,15 +5,15 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>YAHOO.widget.Menu Tests</title>
 
-        <link type="text/css" rel="stylesheet" href="../build/logger/assets/logger.css">
-        <link type="text/css" rel="stylesheet" href="../build/yuitest/assets/testlogger.css">
-        <link type="text/css" rel="stylesheet" href="../build/menu/assets/skins/sam/menu.css">
+        <link type="text/css" rel="stylesheet" href="../../../build/logger/assets/logger.css">
+        <link type="text/css" rel="stylesheet" href="../../../build/yuitest/assets/testlogger.css">
+        <link type="text/css" rel="stylesheet" href="../../../build/menu/assets/skins/sam/menu.css">
     
-        <script type="text/javascript" src="../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-        <script type="text/javascript" src="../build/container/container_core-min.js"></script>
-        <script type="text/javascript" src="../build/menu/menu.js"></script>
-        <script type="text/javascript" src="../build/logger/logger-min.js"></script>
-        <script type="text/javascript" src="../build/yuitest/yuitest.js"></script>
+        <script type="text/javascript" src="../../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+        <script type="text/javascript" src="../../../build/container/container_core-min.js"></script>
+        <script type="text/javascript" src="../../../build/menu/menu.js"></script>
+        <script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
+        <script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
     
         <script type="text/javascript">
 
@@ -1072,19 +1072,8 @@
                         
                         oMenu.positionOffScreen();
 
-
-                        
-                        Assert.isTrue(Menu.prototype.OFF_SCREEN_POSITION[0] >= parseInt(oMenu.element.style.top, 10), "The \"top\" style property should be equal to the first value of the OFF_SCREEN_POSITION constant.");
-                        Assert.isTrue(Menu.prototype.OFF_SCREEN_POSITION[1] >= parseInt(oMenu.element.style.left, 10), "The \"left\" style property should be equal to the second value of the OFF_SCREEN_POSITION constant.");
-
-
-                        Menu.prototype.OFF_SCREEN_POSITION = [-5000,-5000];
-                        
-                        oMenu.positionOffScreen();
-                        
-                        Assert.isTrue(Menu.prototype.OFF_SCREEN_POSITION[0] >= parseInt(oMenu.element.style.top, 10), "The \"top\" style property should be equal to the first value of the OFF_SCREEN_POSITION constant.");
-                        Assert.isTrue(Menu.prototype.OFF_SCREEN_POSITION[1] >= parseInt(oMenu.element.style.left, 10), "The \"left\" style property should be equal to the second value of the OFF_SCREEN_POSITION constant.");
-                        
+                        Assert.isTrue((parseInt(Dom.getStyle(oMenu.element, "top"), 10) < 0) , "The \"top\" style property should be less than 0.");
+                        Assert.isTrue((parseInt(Dom.getStyle(oMenu.element, "left"), 10) < 0), "The \"left\" style property should be less than 0.");
                         
                         oMenu.destroy();
                         oMenu = null;
