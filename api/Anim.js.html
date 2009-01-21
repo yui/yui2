@@ -132,11 +132,16 @@
 <span class="c">     * @param {String} unit The unit (&#39;px&#39;, &#39;%&#39;, etc.) of the value.</span>
 <span class="c">     */</span>
     <span class="nx">setAttribute</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">attr</span><span class="o">,</span> <span class="nx">val</span><span class="o">,</span> <span class="nx">unit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
         <span class="k">if</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">patterns</span><span class="o">.</span><span class="nx">noNegatives</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">attr</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
             <span class="nx">val</span> <span class="o">=</span> <span class="o">(</span><span class="nx">val</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="nx">val</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
         <span class="o">}</span>
 
-        <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">(),</span> <span class="nx">attr</span><span class="o">,</span> <span class="nx">val</span> <span class="o">+</span> <span class="nx">unit</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="s1">&#39;style&#39;</span> <span class="k">in</span> <span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">attr</span><span class="o">,</span> <span class="nx">val</span> <span class="o">+</span> <span class="nx">unit</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">attr</span> <span class="k">in</span> <span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">el</span><span class="o">[</span><span class="nx">attr</span><span class="o">]</span> <span class="o">=</span> <span class="nx">val</span><span class="o">;</span>
+        <span class="o">}</span>
     <span class="o">},</span>                        
     
     <span class="c">/**</span>
@@ -157,11 +162,15 @@
         <span class="k">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="o">!!(</span> <span class="nx">a</span><span class="o">[</span><span class="m">3</span><span class="o">]</span> <span class="o">);</span> <span class="c">// top or left</span>
 <span class="c"></span>        <span class="k">var</span> <span class="nx">box</span> <span class="o">=</span> <span class="o">!!(</span> <span class="nx">a</span><span class="o">[</span><span class="m">2</span><span class="o">]</span> <span class="o">);</span> <span class="c">// width or height</span>
 <span class="c"></span>        
-        <span class="c">// use offsets for width/height and abs pos top/left</span>
-<span class="c"></span>        <span class="k">if</span> <span class="o">(</span> <span class="nx">box</span> <span class="o">||</span> <span class="o">(</span><span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s1">&#39;position&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;absolute&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">pos</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
-            <span class="nx">val</span> <span class="o">=</span> <span class="nx">el</span><span class="o">[</span><span class="s1">&#39;offset&#39;</span> <span class="o">+</span> <span class="nx">a</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">).</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">+</span> <span class="nx">a</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">substr</span><span class="o">(</span><span class="m">1</span><span class="o">)];</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// default to zero for other &#39;auto&#39;</span>
-<span class="c"></span>            <span class="nx">val</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="s1">&#39;style&#39;</span> <span class="k">in</span> <span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// use offsets for width/height and abs pos top/left</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span> <span class="nx">box</span> <span class="o">||</span> <span class="o">(</span><span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s1">&#39;position&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;absolute&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">pos</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+                <span class="nx">val</span> <span class="o">=</span> <span class="nx">el</span><span class="o">[</span><span class="s1">&#39;offset&#39;</span> <span class="o">+</span> <span class="nx">a</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">).</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">+</span> <span class="nx">a</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">substr</span><span class="o">(</span><span class="m">1</span><span class="o">)];</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// default to zero for other &#39;auto&#39;</span>
+<span class="c"></span>                <span class="nx">val</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">attr</span> <span class="k">in</span> <span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">val</span> <span class="o">=</span> <span class="nx">el</span><span class="o">[</span><span class="nx">attr</span><span class="o">];</span>
         <span class="o">}</span>
 
         <span class="k">return</span> <span class="nx">val</span><span class="o">;</span>

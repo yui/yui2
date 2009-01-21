@@ -991,7 +991,9 @@ Math.max(oFullResponse.lastIndexOf("]"),oFullResponse.lastIndexOf("}"));
             break;
         case DS.TYPE_HTMLTABLE:
             if(xhr && oRawResponse.responseText) {
-                oFullResponse = oRawResponse.responseText;
+                var el = document.createElement('div');
+                el.innerHTML = oRawResponse.responseText;
+                oFullResponse = el.getElementsByTagName('table')[0];
             }
             oFullResponse = this.doBeforeParseData(oRequest, oFullResponse, oCallback);
             oParsedResponse = this.parseHTMLTableData(oRequest, oFullResponse);
@@ -2473,7 +2475,6 @@ util.DataSource = function(oLiveData, oConfigs) {
 lang.augmentObject(util.DataSource, DS);
 
 })();
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -2961,5 +2962,4 @@ var xPad=function (x, pad, r)
  YAHOO.util.DateLocale['en-AU'] = YAHOO.lang.merge(YAHOO.util.DateLocale['en']);
 
 })();
-
 YAHOO.register("datasource", YAHOO.util.DataSource, {version: "@VERSION@", build: "@BUILD@"});

@@ -1979,6 +1979,7 @@ _onClick: function (p_sType, p_aArgs) {
 		oItem = p_aArgs[1],
 		bInMenuAnchor = false,
 		oSubmenu,
+		oMenu,
 		oRoot,
 		sId,
 		sURL,
@@ -2067,7 +2068,14 @@ _onClick: function (p_sType, p_aArgs) {
 	
 						sId = sURL.substr(1, nLen);
 	
-						bInMenuAnchor = Dom.isAncestor(this.element, sId);
+						oMenu = YAHOO.widget.MenuManager.getMenu(sId);
+						
+						if (oMenu) {
+
+							bInMenuAnchor = 
+								(this.getRoot() === oMenu.getRoot());
+
+						}
 						
 					}
 					else if (nLen === 1) {
@@ -2079,7 +2087,6 @@ _onClick: function (p_sType, p_aArgs) {
 				}
 			
 			}
-
 
 	
 			if (bInMenuAnchor && !oItem.cfg.getProperty(_TARGET)) {
