@@ -10416,7 +10416,41 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
         // Data ok to append
         if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
             // Insert rows
-            this.addRows(oResponse.results, oPayload.insertIndex | 0);
+            this.addRows(oResponse.results, (oPayload ? oPayload.insertIndex : 0));
+    
+            // Update state
+            this._handleDataReturnPayload(sRequest, oResponse, oPayload);
+        }
+        // Error
+        else if(ok && oResponse.error) {
+            this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
+        }
+    }
+},
+
+/**
+ * Callback function receives data from DataSource and incrementally updates Records
+ * starting at the index specified in oPayload.updateIndex. The value for
+ * oPayload.updateIndex can be populated when sending the request to the DataSource,
+ * or by accessing oPayload.updateIndex with the doBeforeLoadData() method at runtime.
+ * If applicable, creates or updates corresponding TR elements.
+ *
+ * @method onDataReturnUpdateRows
+ * @param sRequest {String} Original request.
+ * @param oResponse {Object} Response object.
+ * @param oPayload {MIXED} Argument payload, looks in oPayload.updateIndex.
+ */
+onDataReturnUpdateRows : function(sRequest, oResponse, oPayload) {
+    if((this instanceof DT) && this._sId) {
+        this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse,payload:oPayload});
+    
+        // Pass data through abstract method for any transformations
+        var ok = this.doBeforeLoadData(sRequest, oResponse, oPayload);
+    
+        // Data ok to append
+        if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
+            // Insert rows
+            this.updateRows((oPayload ? oPayload.updateIndex : 0), oResponse.results);
     
             // Update state
             this._handleDataReturnPayload(sRequest, oResponse, oPayload);
