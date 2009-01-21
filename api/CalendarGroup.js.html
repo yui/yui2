@@ -597,33 +597,33 @@
 				<span class="nx">cal</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">type</span> <span class="o">+</span> <span class="nx">strEvent</span><span class="o">].</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">);</span>
 			<span class="o">}</span>
 		<span class="o">};</span>
-		
+
 		<span class="k">var</span> <span class="nx">defEvents</span> <span class="o">=</span> <span class="nx">Calendar</span><span class="o">.</span><span class="nx">_EVENT_TYPES</span><span class="o">;</span>
-	
+
 		<span class="c">/**</span>
-<span class="c">		* Fired before a selection is made</span>
+<span class="c">		* Fired before a date selection is made</span>
 <span class="c">		* @event beforeSelectEvent</span>
 <span class="c">		*/</span>
 		<span class="nx">me</span><span class="o">.</span><span class="nx">beforeSelectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CE</span><span class="o">(</span><span class="nx">defEvents</span><span class="o">.</span><span class="nx">BEFORE_SELECT</span><span class="o">);</span>
 		<span class="nx">me</span><span class="o">.</span><span class="nx">beforeSelectEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="nx">me</span><span class="o">.</span><span class="nx">beforeSelectEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
-	
+
 		<span class="c">/**</span>
-<span class="c">		* Fired when a selection is made</span>
+<span class="c">		* Fired when a date selection is made</span>
 <span class="c">		* @event selectEvent</span>
 <span class="c">		* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].</span>
 <span class="c">		*/</span>
 		<span class="nx">me</span><span class="o">.</span><span class="nx">selectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CE</span><span class="o">(</span><span class="nx">defEvents</span><span class="o">.</span><span class="nx">SELECT</span><span class="o">);</span> 
 		<span class="nx">me</span><span class="o">.</span><span class="nx">selectEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="nx">me</span><span class="o">.</span><span class="nx">selectEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
-	
+
 		<span class="c">/**</span>
-<span class="c">		* Fired before a selection is made</span>
+<span class="c">		* Fired before a date or set of dates is deselected</span>
 <span class="c">		* @event beforeDeselectEvent</span>
 <span class="c">		*/</span>
 		<span class="nx">me</span><span class="o">.</span><span class="nx">beforeDeselectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CE</span><span class="o">(</span><span class="nx">defEvents</span><span class="o">.</span><span class="nx">BEFORE_DESELECT</span><span class="o">);</span> 
 		<span class="nx">me</span><span class="o">.</span><span class="nx">beforeDeselectEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="nx">me</span><span class="o">.</span><span class="nx">beforeDeselectEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
-	
+
 		<span class="c">/**</span>
-<span class="c">		* Fired when a selection is made</span>
+<span class="c">		* Fired when a date or set of dates has been deselected</span>
 <span class="c">		* @event deselectEvent</span>
 <span class="c">		* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].</span>
 <span class="c">		*/</span>
