@@ -204,9 +204,12 @@ package com.yahoo.yui
 			{
 				if(ExternalInterface.available) ExternalInterface.call(this.javaScriptEventHandler, this.elementID, event);
 			}
-			catch(error:SecurityError)
+			catch(error:Error)
 			{
-				this.showFatalError("Warning: Cannot establish communication between YUI Charts and JavaScript. YUI Charts must be served from HTTP and cannot be viewed locally with file:/// protocol unless location is trusted by Flash Player.\n\nFor more information see:\nhttp://www.adobe.com/products/flashplayer/articles/localcontent/\n\n");
+				if(error is SecurityError)
+				{
+					this.showFatalError("Warning: Cannot establish communication between YUI Charts and JavaScript. YUI Charts must be served from HTTP and cannot be viewed locally with file:/// protocol unless location is trusted by Flash Player.\n\nFor more information see:\nhttp://www.adobe.com/products/flashplayer/articles/localcontent/\n\n");
+				}
 			}
 		}
 
