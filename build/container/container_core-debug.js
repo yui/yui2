@@ -2001,14 +2001,14 @@
                 validator: Lang.isBoolean, 
                 supercedes: ["zindex"] 
             },
-            
+
             "PREVENT_CONTEXT_OVERLAP": {
                 key: "preventcontextoverlap",
                 value: false,
                 validator: Lang.isBoolean,  
                 supercedes: ["constraintoviewport"]
             }
-            
+
         };
 
     /**
@@ -2604,6 +2604,23 @@
             Dom.replaceClass(this.element, "hide-scrollbars", "show-scrollbars");
         },
 
+        /**
+         * Internal implementation to set the visibility of the overlay in the DOM.
+         *
+         * @method _setDomVisibility
+         * @param {boolean} visible Whether to show or hide the Overlay's outer element
+         * @protected
+         */
+        _setDomVisibility : function(show) {
+            Dom.setStyle(this.element, "visibility", (show) ? "visible" : "hidden");
+
+            if (show) {
+                Dom.removeClass(this.element, "yui-overlay-hidden");
+            } else {
+                Dom.addClass(this.element, "yui-overlay-hidden");
+            }
+        },
+
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
         /**
         * The default event handler fired when the "visible" property is 
@@ -2634,8 +2651,8 @@
                 while (e.nodeType != 9 && e.nodeType != 11) {
                     currentVis = Dom.getStyle(e, "visibility");
 
-                    if (currentVis != "inherit") { 
-                        break; 
+                    if (currentVis != "inherit") {
+                        break;
                     }
 
                     e = e.parentNode;
@@ -2661,7 +2678,6 @@
                         effect.effect(this, effect.duration);
                 }
             }
-
 
             if (visible) { // Show
                 if (isMacGecko) {
@@ -2696,10 +2712,12 @@
                     if (currentVis != "visible" || currentVis === "") {
                         this.beforeShowEvent.fire();
 
-                        Dom.setStyle(this.element, "visibility", "visible");
+                        this._setDomVisibility(true);
 
                         this.cfg.refireEvent("iframe");
                         this.showEvent.fire();
+                    } else {
+                        this._setDomVisibility(true);
                     }
                 }
             } else { // Hide
@@ -2707,7 +2725,7 @@
                 if (isMacGecko) {
                     this.hideMacGeckoScrollbars();
                 }
-                    
+
                 if (effect) { // Animate out if showing
                     if (currentVis == "visible") {
                         this.beforeHideEvent.fire();
@@ -2733,15 +2751,17 @@
                         }
 
                     } else if (currentVis === "") {
-                        Dom.setStyle(this.element, "visibility", "hidden");
+                        this._setDomVisibility(false);
                     }
 
                 } else { // Simple hide
 
                     if (currentVis == "visible" || currentVis === "") {
                         this.beforeHideEvent.fire();
-                        Dom.setStyle(this.element, "visibility", "hidden");
+                        this._setDomVisibility(false);
                         this.hideEvent.fire();
+                    } else {
+                        this._setDomVisibility(false);
                     }
                 }
             }
@@ -4909,7 +4929,7 @@
 
             obj.handleUnderlayStart();
 
-            Dom.setStyle(obj.overlay.element, "visibility", "visible");
+            obj.overlay._setDomVisibility(true);
             Dom.setStyle(obj.overlay.element, "opacity", 0);
         };
 
@@ -4936,7 +4956,7 @@
             if (obj.overlay.element.style.filter) {
                 obj.overlay.element.style.filter = null;
             }
-            Dom.setStyle(obj.overlay.element, "visibility", "hidden");
+            obj.overlay._setDomVisibility(false);
             Dom.setStyle(obj.overlay.element, "opacity", 1);
 
             obj.handleUnderlayComplete();
@@ -4995,7 +5015,7 @@
             if (Dom.getStyle(obj.overlay.element, "visibility") == 
                 "hidden" && currentX < x) {
 
-                Dom.setStyle(obj.overlay.element, "visibility", "visible");
+                obj.overlay._setDomVisibility(true);
 
             }
         
@@ -5031,8 +5051,8 @@
         };
         
         slide.handleCompleteAnimateOut = function (type, args, obj) {
-            Dom.setStyle(obj.overlay.element, "visibility", "hidden");
-        
+            obj.overlay._setDomVisibility(false);
+
             obj.overlay.cfg.setProperty("xy", [x, y]);
             obj.animateOutCompleteEvent.fire();
         };
