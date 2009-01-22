@@ -160,6 +160,7 @@ YAHOO.util.Chain.prototype = {
     }
 };
 YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1656,6 +1657,7 @@ if(YAHOO.util.DD) {
  * @deprecated Pass configs directly to CellEditor constructor. 
  */
 
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -2492,6 +2494,7 @@ YAHOO.widget.Record.prototype = {
 };
 
 })();
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -6750,11 +6753,7 @@ getTrEl : function(row) {
                 elRow = Dom.getAncestorByTagName(elRow,"tr");
             }
 
-            // Make sure the TR is in this TBODY
-            if(elRow && (elRow.parentNode == this._elTbody)) {
-                // Now we can return the TR element
-                return elRow;
-            }
+            return elRow;
         }
     }
 
@@ -6862,11 +6861,7 @@ getTdEl : function(cell) {
             elCell = el;
         }
 
-        // Make sure the TD is in this TBODY
-        if(elCell && (elCell.parentNode.parentNode == this._elTbody)) {
-            // Now we can return the TD element
-            return elCell;
-        }
+        return elCell;
     }
     else if(cell) {
         var oRecord, nColKeyIndex;
@@ -7067,11 +7062,7 @@ getThEl : function(theadCell) {
                 elTh = el;
             }
 
-            // Make sure the TH is in this THEAD
-            if(elTh && (elTh.parentNode.parentNode == this._elThead)) {
-                // Now we can return the TD element
-                return elTh;
-            }
+            return elTh;
         }
     }
 
@@ -14165,6 +14156,7 @@ DT.editTextarea = function() {};
 DT.editTextbox= function() {};
 
 })();
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -15404,6 +15396,7 @@ _onTheadKeydown : function(e, oSelf) {
 });
 
 })();
+
 (function () {
 
 var lang   = YAHOO.lang,
@@ -17124,4 +17117,5 @@ lang.augmentObject(CE, BCE);
 
 
 })();
+
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});

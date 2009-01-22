@@ -372,12 +372,16 @@ parseString : function(oData) {
  * Converts data to type Number.
  *
  * @method DataSourceBase.parseNumber
- * @param oData {String | Number | Boolean | Null} Data to convert. Beware, null
- * returns as 0.
- * @return {Number} A number, or null if NaN.
+ * @param oData {String | Number | Boolean} Data to convert. Note, the following
+ * values return as null: null, undefined, NaN, "". 
+ * @return {Number} A number, or null.
  * @static
  */
 parseNumber : function(oData) {
+    if(!lang.isValue(oData) || (oData === "")) {
+        return null;
+    }
+
     //Convert to number
     var number = oData * 1;
     
