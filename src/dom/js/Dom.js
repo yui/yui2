@@ -15,6 +15,7 @@
         propertyCache = {}, // for faster hyphen converts
         reCache = {}, // cache className regexes
         RE_TABLE = /^t(?:able|d|h)$/i, // for _calcBorders
+        RE_COLOR = /color$/i,
 
         // DOM aliases 
         document = window.document,     
@@ -1336,5 +1337,33 @@
             return xy2;
         }
     };
-    
+        
+    // fix opera computedStyle default color unit (convert to rgb)
+    if (UA.opera) {
+        var _getComputedStyle = Y.Dom.getComputedStyle;
+        Y.Dom[GET_COMPUTED_STYLE] = function(node, att) {
+            var val = _getComputedStyle(node, att);
+            if (RE_COLOR.test(att)) {
+                val = Y.Dom.Color.toRGB(val);
+            }
+
+            return val;
+        };
+
+    }
+
+    // safari converts transparent to rgba(), others use "transparent"
+    if (UA.webkit) {
+        var _getComputedStyle = Y.Dom.getComputedStyle;
+        Y.Dom[GET_COMPUTED_STYLE] = function(node, att) {
+            var val = _getComputedStyle(node, att);
+
+            if (val === 'rgba(0, 0, 0, 0)') {
+                val = 'transparent'; 
+            }
+
+            return val;
+        };
+
+    }
 })();
