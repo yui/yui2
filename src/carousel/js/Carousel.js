@@ -212,7 +212,8 @@
      */
     pageChangeEvent = "pageChange",
 
-    /**
+    /*
+     * Internal event.
      * @event render
      * @description Fires when the Carousel is rendered.  See
      * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
@@ -249,7 +250,8 @@
      */
     stopAutoPlayEvent = "stopAutoPlay",
 
-    /**
+    /*
+     * Internal event.
      * @event uiUpdateEvent
      * @description Fires when the UI has been updated.
      * See
