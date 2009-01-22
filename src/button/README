@@ -1,40 +1,70 @@
+*** Version 2.7.0 ***
+
+Fixed the following bugs:
+-------------------------
+
++ Buttons of type "split" will no longer block the submission of a form when 
+  the enter key is pressed to submit a form.
+
++ Button instances will no longer overflow the boundaries of their parent 
+  element in IE 7 Strict Mode when the content of the parent element is scrolled 
+  (via use of the CSS overflow property).
+
++ "click" event listeners registered via the "onclick" attribute will no longer
+  be called when the user presses the section of a Button of type "split" 
+  responsible for showing the Button's Menu.
+
+Changes:
+--------
+
++ Hovering over MenuItems in a Button's Menu will no longer update the Button's
+  "selectedMenuItem" attribute.  The "selectedMenuItem" attribute is now only 
+  updated when the user clicks on a MenuItem.  When the "selectedMenuItem" 
+  attribute is set, a class name of "yui-button-selectedmenuitem" is added to 
+  the <LI> element of the corresponding MenuItem instance.
+
+
 *** version 2.6.0 ***
 
 Fixed the following bugs:
 -------------------------
 
-+ Clicking on the option region of a Button of "type" split will fire the "option" event, but not
-  "mousedown," "mouseup," "click," or "dblclick".
++ Clicking on the option region of a Button of "type" split will fire the 
+  "option" event, but not "mousedown," "mouseup," "click," or "dblclick".
 
-+ Buttons of type "radio" and "checkbox" will not override a value provided for the title attribute.
++ Buttons of type "radio" and "checkbox" will not override a value provided for 
+  the title attribute.
 
-+ Returning false in an inline "submit" event handler for a form will now prevent the form
-  from being submitted when the form contains Button instances.
++ Returning false in an inline "submit" event handler for a form will now 
+  prevent the form from being submitted when the form contains Button instances.
   
-+ Pressing the enter key to submit a form containing Button instances will no longer 
-  trigger a beep sound in Internet Explorer.
++ Pressing the enter key to submit a form containing Button instances will no 
+  longer trigger a beep sound in Internet Explorer.
 
-+ The Button widget no longer logs errors when strict error reporting is enabled in FireFox.
++ The Button widget no longer logs errors when strict error reporting is 
+  enabled in FireFox.
 
-+ Button instances are now automatically clicked when their corresponding <label> is clicked.
++ Button instances are now automatically clicked when their corresponding 
+  <label> is clicked.
 
-+ The name and value of selected MenuItems in submenus of a Button's Menu are now part of their
-  parent form's data when the form is submitted.
++ The name and value of selected MenuItems in submenus of a Button's Menu are 
+  now part of their parent form's data when the form is submitted.
 
-+ For Button's of type "menu" and "split" created using an existing <SELECT> element: The name and 
-  value of the pre-selected MenuItem in a Button's Menu are now part of their parent form's data 
-  when the form is submitted.
++ For Button's of type "menu" and "split" created using an existing <SELECT> 
+  element: The name and value of the pre-selected MenuItem in a Button's Menu
+  are now part of their parent form's data when the form is submitted.
 	
-+ The "appendTo" event now correctly fires when the "container" attribute is set to a 
-  node reference.
++ The "appendTo" event now correctly fires when the "container" attribute is 
+  set to a node reference.
 
-+ Simple forms with two fields: a Button of type "submit" and a text field will no longer 
-  be submitted twice when the enter key is pressed.
++ Simple forms with two fields: a Button of type "submit" and a text field will 
+  no longer be submitted twice when the enter key is pressed.
 
-+ Submitting a form by pressing the enter key will now result in a Button's "click" event 
-  handlers getting called.
++ Submitting a form by pressing the enter key will now result in a Button's 
+  "click" event handlers getting called.
 
-+ Buttons of type "menu" and "split" now consistently display their Menus in Opera.
++ Buttons of type "menu" and "split" now consistently display their Menus 
+  in Opera.
 
 + Button no longer logs a warning when a Button is created without an id.
   
@@ -42,32 +72,33 @@ Fixed the following bugs:
 Added the following features:
 -----------------------------
 
-+ Added a new "menumaxheight" attribute used to set the "maxheight" configuration property of a 
-  Button's Menu.
++ Added a new "menumaxheight" attribute used to set the "maxheight" 
+  configuration property of a Button's Menu.
 
-+ Added a new "menuminscrollheight" attribute used to set the "minscrollheight" configuration 
-  property of a Button's Menu.
++ Added a new "menuminscrollheight" attribute used to set the "minscrollheight" 
+  configuration property of a Button's Menu.
 
-+ Added a "menualignment" attribute attribute used to control how a Menu is aligned to its 
-  corresponding Button.
++ Added a "menualignment" attribute attribute used to control how a Menu is 
+  aligned to its corresponding Button.
 
-+ Added a "yui-split-button-hoveroption" CSS class that is applied when the user hovers the mouse 
-  over the "option" section of a split button.
++ Added a "yui-split-button-hoveroption" CSS class that is applied when the 
+  user hovers the mouse over the "option" section of a split button.
 
 
 Changes:
 --------
 
-+ Removed the rounded corners for IE 6 Quirks Mode and Strict Mode and IE 7 Quirks Mode.
++ Removed the rounded corners for IE 6 Quirks Mode and Strict Mode and IE 7 
+  Quirks Mode.
 
-+ Changed the keyboard shortcut used to display the Menu for Button's of type "split" to the down
-  arrow key.
++ Changed the keyboard shortcut used to display the Menu for Button's of type 
+  "split" to the down arrow key.
 
-+ Passing a DOM element reference to the "container" attribute will no longer result in the Button 
-  being appended to the container immediately.  Use the "appendTo" event to listen for when 
-  the Button will be appended to the element specified as its container.  To append a Button to
-  an element in the DOM immediately, use the "appendTo" method rather than the "container" 
-  attribute.
++ Passing a DOM element reference to the "container" attribute will no longer 
+  result in the Button being appended to the container immediately.  Use the 
+  "appendTo" event to listen for when the Button will be appended to the element 
+  specified as its container.  To append a Button to an element in the DOM 
+  immediately, use the "appendTo" method rather than the "container" attribute.
 
 
 *** Version 2.5.2 ***
@@ -75,13 +106,15 @@ Changes:
 Fixed the following bugs:
 -------------------------
 
-+ Button instances no longer flicker in Firefox 3 when their "label" attributed is updated.
++ Button instances no longer flicker in Firefox 3 when their "label" attributed 
+  is updated.
 
-+ Scrolled Menus of Buttons whose type attribute is set to "menu" or "split" no longer appear 
-  on top of their corresponding Button instance.
++ Scrolled Menus of Buttons whose type attribute is set to "menu" or "split" no 
+  longer appear on top of their corresponding Button instance.
 
-+ The keyboard shortcut responsible for triggering the display of the Menu for Button instances of
-  type "split" will no longer trigger the display of the browser's default context menu in Opera.
++ The keyboard shortcut responsible for triggering the display of the Menu for 
+  Button instances of type "split" will no longer trigger the display of the 
+  browser's default context menu in Opera.
 
 
 
@@ -93,8 +126,9 @@ Fixed the following bugs:
 
 *** Version 2.5.0 ***
 
-+ Fixed issue where returning false inside the scope of a listener for attribute "before" 
-  events (i.e "beforeCheckedChange") would not cancel the attribute's default setter.
++ Fixed issue where returning false inside the scope of a listener for attribute
+ "before" events (i.e "beforeCheckedChange") would not cancel the attribute's 
+ default setter.
 
 
 
