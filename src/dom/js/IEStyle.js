@@ -139,25 +139,13 @@ var ComputedStyle = {
     },
 
     getColor: function(node, att) {
-        var current = node[CURRENT_STYLE][att];
-
-        if (!current || current === TRANSPARENT) {
-            Y.Dom.elementByAxis(node, PARENT_NODE, null, function(parent) {
-                current = parent[CURRENT_STYLE][att];
-                if (current && current !== TRANSPARENT) {
-                    node = parent;
-                    return true;
-                }
-            });
-        }
-
-        return Y.Color.toRGB(current);
+        return Y.Dom.Color.toRGB(node[CURRENT_STYLE][att]) || TRANSPARENT;
     },
 
     getBorderColor: function(node, att) {
         var current = node[CURRENT_STYLE];
         var val = current[att] || current.color;
-        return Y.Color.toRGB(Y.Color.toHex(val));
+        return Y.Dom.Color.toRGB(Y.Dom.Color.toHex(val));
     }
 
 };
@@ -165,9 +153,10 @@ var ComputedStyle = {
 //fontSize: getPixelFont,
 var IEComputed = {};
 
-IEComputed[WIDTH] = IEComputed[HEIGHT] = ComputedStyle.getOffset;
+IEComputed['top'] = IEComputed['right'] = IEComputed['bottom'] = IEComputed['left'] = 
+        IEComputed[WIDTH] = IEComputed[HEIGHT] = ComputedStyle.getOffset;
 
-IEComputed.color = IEComputed.backgroundColor = ComputedStyle.getColor;
+IEComputed.color = ComputedStyle.getColor;
 
 IEComputed[BORDER_TOP_WIDTH] = IEComputed[BORDER_RIGHT_WIDTH] =
         IEComputed[BORDER_BOTTOM_WIDTH] = IEComputed[BORDER_LEFT_WIDTH] =
