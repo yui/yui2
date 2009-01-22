@@ -309,6 +309,13 @@ Y.Selector = {
         }
 
         root = root || Y.Selector.document;
+
+        if (root.nodeName !== '#document') { // prepend with root selector
+            Y.Dom.generateId(root); // TODO: cleanup after?
+            selector = root.tagName + '#' + root.id + ' ' + selector;
+            root = root.ownerDocument;
+        }
+
         var tokens = Y.Selector._tokenize(selector);
         var idToken = tokens[Y.Selector._getIdTokenIndex(tokens)],
             nodes = [],
