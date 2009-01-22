@@ -3,46 +3,13 @@
 var d      = document,
     p      = d.createElement('p'), // Have to hold the node (see notes)
     style  = p.style, // worker style collection
-    u      = YAHOO.util,
     lang   = YAHOO.lang,
     sheets = {},
     ssId   = 0,
     floatAttr = ('cssFloat' in style) ? 'cssFloat' : 'styleFloat',
-    _toCssText, toCssText,
+    _toCssText,
     _unsetOpacity,
     _unsetProperty;
-
-_toCssText = function (css,base) {
-    var f = css.styleFloat || css.cssFloat || css['float'];
-    style.cssText = base || '';
-    if (f && !css[floatAttr]) {
-        css = lang.merge(css);
-        delete css.styleFloat; delete css.cssFloat; delete css['float'];
-        css[floatAttr] = f;
-    }
-    for (var prop in css) {
-        if (css.hasOwnProperty(prop)) {
-            style[prop] = css[prop];
-        }
-    }
-    return style.cssText;
-};
-
-// Wrap IE's toCssText to catch opacity.  The copy/merge is to preserve the
-// input object's integrity, but if float and opacity are set, the input will
-// be copied twice in IE.  Is there a way to avoid this without increasing the
-// byte count?
-toCssText = ('opacity' in style) ? _toCssText :
-    function (css, cssText) {
-        if ('opacity' in css) {
-            css = lang.merge(css,{
-                    filter: 'alpha(opacity='+(css.opacity*100)+')'
-                  });
-            delete css.opacity;
-        }
-        return _toCssText(css,cssText);
-    };
-
 
 _unsetOpacity = ('opacity' in style) ?
     function (style) { style.opacity = ''; } :
@@ -78,7 +45,7 @@ _unsetProperty = style.borderLeft ?
         if (prop !== floatAttr && prop.toLowerCase().indexOf('float') != -1) {
             prop = floatAttr;
         }
-        if (typeof style[prop] === 'string') {
+        if (lang.isString(style[prop])) {
             if (prop === 'opacity') {
                 _unsetOpacity(style);
             } else {
@@ -87,28 +54,28 @@ _unsetProperty = style.borderLeft ?
         }
     };
     
-u.StyleSheet = function (seed, name) {
+function StyleSheet(seed, name) {
     var head,
         node,
         sheet,
         cssRules = {},
         _rules,
         _insertRule,
-        _deleteRule;
-
+        _deleteRule,
+        i,r,sel;
     // Factory or constructor
-    if (!(this instanceof u.StyleSheet)) {
-        return new u.StyleSheet(seed,name);
+    if (!(this instanceof arguments.callee)) {
+        return new arguments.callee(seed,name);
     }
 
     head = d.getElementsByTagName('head')[0];
     if (!head) {
         // TODO: do something. Preferably something smart
-        YAHOO.log('HEAD element not found to append STYLE node','error','YAHOO.util.StyleSheet');
+        YAHOO.log('HEAD element not found to append STYLE node','error','StyleSheet');
         throw new Error('HEAD element not found to append STYLE node');
     }
 
-    node = u.Dom.get(seed);
+    node = seed && (seed.nodeName ? seed : d.getElementById(seed));
     if (seed && sheets[seed]) {
         return sheets[seed];
     } else if (node && node.yuiSSID && sheets[node.yuiSSID]) {
@@ -120,7 +87,7 @@ u.StyleSheet = function (seed, name) {
         node.type = 'text/css';
     }
 
-    if (typeof seed === 'string') {
+    if (lang.isString(seed)) {
         // Create entire sheet from seed cssText
         if (seed.indexOf('{') != -1) {
             // Not a load-time fork because low run-time impact and IE fails
@@ -161,7 +128,6 @@ u.StyleSheet = function (seed, name) {
     // Initialize the cssRules map from the node
     // TODO if xdomain link node, copy to a local style block and replace the
     // link node with the style node.  CAVEAT: alternate stylesheet, @media
-    var i,r,sel;
     for (i = sheet[_rules].length - 1; i >= 0; --i) {
         r   = sheet[_rules][i];
         sel = r.selectorText;
@@ -176,14 +142,16 @@ u.StyleSheet = function (seed, name) {
 
     // Cache the sheet by the generated Id
     node.yuiSSID = 'yui-stylesheet-' + (ssId++);
-    u.StyleSheet.register(node.yuiSSID,this);
+    StyleSheet.register(node.yuiSSID,this);
     if (name) {
-        u.StyleSheet.register(name,this);
+        StyleSheet.register(name,this);
     }
 
     // Public API
-    YAHOO.lang.augmentObject(this,{
+    lang.augmentObject(this,{
         getId : function () { return node.yuiSSID; },
+
+        node : node,
 
         // Enabling/disabling the stylesheet.  Changes may be made to rules
         // while disabled.
@@ -193,20 +161,37 @@ u.StyleSheet = function (seed, name) {
 
         isEnabled : function () { return !sheet.disabled; },
 
-        // Update cssText for a rule.  Add the rule if it's not present already
-        // TODO: test for breakage in funny selectors ##i:go-..\\bo\om or valid
-        // (i think) #i\:go\-\.\.\\\\bo\\om
-        setCSS : function (sel,css) {
-            var rule    = cssRules[sel],
+        /**
+         * Update style for a rule.  Add the rule if it's not present already.
+         *
+         */
+        set : function (sel,css) {
+            var rule = cssRules[sel],
+                multi = sel.split(/\s*,\s*/),i,
                 idx;
 
-            // Opera throws an error if there's a syntax error in the cssText.
-            // Should I do something about it, or let the error happen?
+            // IE's addRule doesn't support multiple comma delimited selectors
+            if (multi.length > 1) {
+                for (i = multi.length - 1; i >= 0; --i) {
+                    this.set(multi[i], css);
+                }
+                return this;
+            }
+
+            // Some selector values can cause IE to hang
+            if (!StyleSheet.isValidSelector(sel)) {
+                YAHOO.log("Invalid selector '"+sel+"' passed to set (ignoring).",'warn','StyleSheet');
+                return this;
+            }
+
+            // Opera throws an error if there's a syntax error in assigned
+            // cssText. Avoid this using a worker style collection, then
+            // assigning the resulting cssText.
             if (rule) {
-                rule.style.cssText = u.StyleSheet.toCssText(css,rule.style.cssText);
+                rule.style.cssText = StyleSheet.toCssText(css,rule.style.cssText);
             } else {
                 idx = sheet[_rules].length;
-                _insertRule(sel,'{'+u.StyleSheet.toCssText(css)+'}',idx);
+                _insertRule(sel,'{'+StyleSheet.toCssText(css)+'}',idx);
 
                 // Safari replaces the rules collection, but maintains the rule
                 // instances in the new collection when rules are added/removed
@@ -216,14 +201,14 @@ u.StyleSheet = function (seed, name) {
         },
 
         // remove rule properties or an entire rule
-        unsetCSS : function (sel,css) {
+        unset : function (sel,css) {
             var rule = cssRules[sel],
                 remove = !css,
                 rules, i;
 
             if (rule) {
                 if (!remove) {
-                    if (!YAHOO.lang.isArray(css)) {
+                    if (!lang.isArray(css)) {
                         css = [css];
                     }
 
@@ -254,16 +239,69 @@ u.StyleSheet = function (seed, name) {
         }
     },true);
 
+}
+
+_toCssText = function (css,base) {
+    var f = css.styleFloat || css.cssFloat || css['float'],
+        prop;
+
+    style.cssText = base || '';
+
+    if (f && !css[floatAttr]) {
+        css = lang.merge(css);
+        delete css.styleFloat; delete css.cssFloat; delete css['float'];
+        css[floatAttr] = f;
+    }
+
+    for (prop in css) {
+        if (css.hasOwnProperty(prop)) {
+            try {
+                // IE throws Invalid Value errors and doesn't like whitespace
+                // in values ala ' red' or 'red '
+                style[prop] = lang.trim(css[prop]);
+            }
+            catch (e) {
+                YAHOO.log('Error assigning property "'+prop+'" to "'+css[prop]+
+                          "\" (ignored):\n"+e.message,'warn','StyleSheet');
+            }
+        }
+    }
+    return style.cssText;
 };
 
-YAHOO.lang.augmentObject(u.StyleSheet, {
-    toCssText : toCssText,
+lang.augmentObject(StyleSheet, {
+    // Wrap IE's toCssText to catch opacity.  The copy/merge is to preserve the
+    // input object's integrity, but if float and opacity are set, the input
+    // will be copied twice in IE.  Is there a way to avoid this without
+    // increasing the byte count?
+    toCssText : (('opacity' in style) ? _toCssText :
+        function (css, cssText) {
+            if ('opacity' in css) {
+                css = lang.merge(css,{
+                        filter: 'alpha(opacity='+(css.opacity*100)+')'
+                      });
+                delete css.opacity;
+            }
+            return _toCssText(css,cssText);
+        }),
 
     register : function (name,sheet) {
-        return !!(name && sheet instanceof u.StyleSheet &&
+        return !!(name && sheet instanceof StyleSheet &&
                   !sheets[name] && (sheets[name] = sheet));
+    },
+
+    // TODO: Selector should provide
+    isValidSelector : function (sel) {
+        // IE locks up on addRule(BAD_SELECTOR, '{..}');
+        // BAD_SELECTOR : unescaped `~!@$%^&()+=|{}[];'"?< or space, ., or #
+        //                followed by anything other than an alphanumeric
+        //                -abc or .-abc or #_abc or '# ' all fail (prob more)
+        // TODO: this will fail tag[prop=val] tests
+        return !/[^\\][`~!@$%\^&()+=|{}\[\];'"?<]|^\s*[^a-z0-9*#.]|[\s.#][^a-z0-9]/i.test(sel);
     }
 },true);
+
+YAHOO.util.StyleSheet = StyleSheet;
 
 })();
 
@@ -304,6 +342,12 @@ NOTES
    will fail after a time in FF (~5secs of inactivity).  Property assignments
    will not alter the property or cssText.  It may be the generated node is
    garbage collected and the style collection becomes inert (speculation).
+ * IE locks up when attempting to add a rule with a selector including at least
+   characters {[]}~`!@%^&*()+=|? (unescaped) and leading _ or -
+   such as addRule('-foo','{ color: red }') or addRule('._abc','{...}')
+ * IE's addRule doesn't support comma separated selectors such as
+   addRule('.foo, .bar','{..}')
+ * IE throws an error on valid values with leading/trailing white space.
  * When creating an entire sheet at once, only FF2/3 & Opera allow creating a
    style node, setting its innerHTML and appending to head.
  * When creating an entire sheet at once, Safari requires the style node to be
