@@ -265,7 +265,7 @@ var query = function(selector, root, firstOnly, deDupe) {
             if ( rTestNode(node, null, idToken) ) {
                 if (idToken === token) {
                     nodes = [node]; // simple selector
-                } else {
+                } else if (idToken.combinator === ' ' || idToken.combinator === '>') {
                     root = node; // start from here
                 }
             }
