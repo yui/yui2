@@ -15,6 +15,7 @@
         propertyCache = {}, // for faster hyphen converts
         reCache = {}, // cache className regexes
         RE_TABLE = /^t(?:able|d|h)$/i, // for _calcBorders
+        RE_COLOR = /color$/i,
 
         // DOM aliases 
         document = window.document,     
@@ -1336,7 +1337,35 @@
             return xy2;
         }
     };
-    
+        
+    // fix opera computedStyle default color unit (convert to rgb)
+    if (UA.opera) {
+        var _getComputedStyle = Y.Dom.getComputedStyle;
+        Y.Dom[GET_COMPUTED_STYLE] = function(node, att) {
+            var val = _getComputedStyle(node, att);
+            if (RE_COLOR.test(att)) {
+                val = Y.Dom.Color.toRGB(val);
+            }
+
+            return val;
+        };
+
+    }
+
+    // safari converts transparent to rgba(), others use "transparent"
+    if (UA.webkit) {
+        var _getComputedStyle = Y.Dom.getComputedStyle;
+        Y.Dom[GET_COMPUTED_STYLE] = function(node, att) {
+            var val = _getComputedStyle(node, att);
+
+            if (val === 'rgba(0, 0, 0, 0)') {
+                val = 'transparent'; 
+            }
+
+            return val;
+        };
+
+    }
 })();
 /**
  * A region is a representation of an object on a grid.  It is defined
@@ -1682,25 +1711,13 @@ var ComputedStyle = {
     },
 
     getColor: function(node, att) {
-        var current = node[CURRENT_STYLE][att];
-
-        if (!current || current === TRANSPARENT) {
-            Y.Dom.elementByAxis(node, PARENT_NODE, null, function(parent) {
-                current = parent[CURRENT_STYLE][att];
-                if (current && current !== TRANSPARENT) {
-                    node = parent;
-                    return true;
-                }
-            });
-        }
-
-        return Y.Color.toRGB(current);
+        return Y.Dom.Color.toRGB(node[CURRENT_STYLE][att]) || TRANSPARENT;
     },
 
     getBorderColor: function(node, att) {
         var current = node[CURRENT_STYLE];
         var val = current[att] || current.color;
-        return Y.Color.toRGB(Y.Color.toHex(val));
+        return Y.Dom.Color.toRGB(Y.Dom.Color.toHex(val));
     }
 
 };
@@ -1708,9 +1725,10 @@ var ComputedStyle = {
 //fontSize: getPixelFont,
 var IEComputed = {};
 
-IEComputed[WIDTH] = IEComputed[HEIGHT] = ComputedStyle.getOffset;
+IEComputed['top'] = IEComputed['right'] = IEComputed['bottom'] = IEComputed['left'] = 
+        IEComputed[WIDTH] = IEComputed[HEIGHT] = ComputedStyle.getOffset;
 
-IEComputed.color = IEComputed.backgroundColor = ComputedStyle.getColor;
+IEComputed.color = ComputedStyle.getColor;
 
 IEComputed[BORDER_TOP_WIDTH] = IEComputed[BORDER_RIGHT_WIDTH] =
         IEComputed[BORDER_BOTTOM_WIDTH] = IEComputed[BORDER_LEFT_WIDTH] =
@@ -1727,4 +1745,81 @@ IEComputed.borderColor = IEComputed.borderTopColor =
 Y.Dom.IE_COMPUTED = IEComputed;
 Y.Dom.IE_ComputedStyle = ComputedStyle;
 })();
+(function() {
+/**
+ * Add style management functionality to DOM.
+ * @module dom
+ * @for Dom
+ */
+
+var TO_STRING = 'toString',
+    PARSE_INT = parseInt,
+    RE = RegExp,
+    Y = YAHOO.util;
+
+Y.Dom.Color = {
+    KEYWORDS: {
+        black: '000',
+        silver: 'c0c0c0',
+        gray: '808080',
+        white: 'fff',
+        maroon: '800000',
+        red: 'f00',
+        purple: '800080',
+        fuchsia: 'f0f',
+        green: '008000',
+        lime: '0f0',
+        olive: '808000',
+        yellow: 'ff0',
+        navy: '000080',
+        blue: '00f',
+        teal: '008080',
+        aqua: '0ff'
+    },
+
+    re_RGB: /^rgb\(([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\)$/i,
+    re_hex: /^#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i,
+    re_hex3: /([0-9A-F])/gi,
+
+    toRGB: function(val) {
+        if (!Y.Dom.Color.re_RGB.test(val)) {
+            val = Y.Dom.Color.toHex(val);
+        }
+
+        if(Y.Dom.Color.re_hex.exec(val)) {
+            val = 'rgb(' + [
+                PARSE_INT(RE.$1, 16),
+                PARSE_INT(RE.$2, 16),
+                PARSE_INT(RE.$3, 16)
+            ].join(', ') + ')';
+        }
+        return val;
+    },
+
+    toHex: function(val) {
+        val = Y.Dom.Color.KEYWORDS[val] || val;
+        if (Y.Dom.Color.re_RGB.exec(val)) {
+            var r = (RE.$1.length === 1) ? '0' + RE.$1 : Number(RE.$1),
+                g = (RE.$2.length === 1) ? '0' + RE.$2 : Number(RE.$2),
+                b = (RE.$3.length === 1) ? '0' + RE.$3 : Number(RE.$3);
+
+            val = [
+                r[TO_STRING](16),
+                g[TO_STRING](16),
+                b[TO_STRING](16)
+            ].join('');
+        }
+
+        if (val.length < 6) {
+            val = val.replace(Y.Dom.Color.re_hex3, '$1$1');
+        }
+
+        if (val !== 'transparent' && val.indexOf('#') < 0) {
+            val = '#' + val;
+        }
+
+        return val.toLowerCase();
+    }
+};
+}());
 YAHOO.register("dom", YAHOO.util.Dom, {version: "@VERSION@", build: "@BUILD@"});
