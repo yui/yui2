@@ -6658,11 +6658,7 @@ getTrEl : function(row) {
                 elRow = Dom.getAncestorByTagName(elRow,"tr");
             }
 
-            // Make sure the TR is in this TBODY
-            if(elRow && (elRow.parentNode == this._elTbody)) {
-                // Now we can return the TR element
-                return elRow;
-            }
+            return elRow;
         }
     }
 
@@ -6768,11 +6764,7 @@ getTdEl : function(cell) {
             elCell = el;
         }
 
-        // Make sure the TD is in this TBODY
-        if(elCell && (elCell.parentNode.parentNode == this._elTbody)) {
-            // Now we can return the TD element
-            return elCell;
-        }
+        return elCell;
     }
     else if(cell) {
         var oRecord, nColKeyIndex;
@@ -6967,11 +6959,7 @@ getThEl : function(theadCell) {
                 elTh = el;
             }
 
-            // Make sure the TH is in this THEAD
-            if(elTh && (elTh.parentNode.parentNode == this._elThead)) {
-                // Now we can return the TD element
-                return elTh;
-            }
+            return elTh;
         }
     }
 
@@ -15626,6 +15614,12 @@ render : function() {
     Ev.addListener(elContainer, "keydown", function(e, oSelf) {
         // ESC cancels Cell Editor
         if((e.keyCode == 27)) {
+            var target = Ev.getTarget(e);
+            // workaround for Mac FF3 bug that disabled clicks when ESC hit when
+            // select is open. [bug 2273056]
+            if (target.nodeName && target.nodeName.toLowerCase() === 'select') {
+                target.blur();
+            }
             oSelf.cancel();
         }
         // Pass through event

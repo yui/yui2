@@ -31,23 +31,29 @@
      *   <dt>suffix {String}</dd>
      *   <dd>String appended after each number, like " items" (note the space)</dd>
      *  </dl>
-     * @return {String} Formatted number for display.
+     * @return {String} Formatted number for display. Note, the following values
+     * return as "": null, undefined, NaN, "".     
      */
     format : function(nData, oConfig) {
+        var lang = YAHOO.lang;
+        if(!lang.isValue(nData) || (nData === "")) {
+            return "";
+        }
+
         oConfig = oConfig || {};
         
-        if(!YAHOO.lang.isNumber(nData)) {
+        if(!lang.isNumber(nData)) {
             nData *= 1;
         }
 
-        if(YAHOO.lang.isNumber(nData)) {
+        if(lang.isNumber(nData)) {
             var bNegative = (nData < 0);
             var sOutput = nData + "";
             var sDecimalSeparator = (oConfig.decimalSeparator) ? oConfig.decimalSeparator : ".";
             var nDotIndex;
 
             // Manage decimals
-            if(YAHOO.lang.isNumber(oConfig.decimalPlaces)) {
+            if(lang.isNumber(oConfig.decimalPlaces)) {
                 // Round to the correct decimal place
                 var nDecimalPlaces = oConfig.decimalPlaces;
                 var nDecimal = Math.pow(10, nDecimalPlaces);

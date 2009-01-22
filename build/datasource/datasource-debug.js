@@ -372,12 +372,16 @@ parseString : function(oData) {
  * Converts data to type Number.
  *
  * @method DataSourceBase.parseNumber
- * @param oData {String | Number | Boolean | Null} Data to convert. Beware, null
- * returns as 0.
- * @return {Number} A number, or null if NaN.
+ * @param oData {String | Number | Boolean} Data to convert. Note, the following
+ * values return as null: null, undefined, NaN, "". 
+ * @return {Number} A number, or null.
  * @static
  */
 parseNumber : function(oData) {
+    if(!lang.isValue(oData) || (oData === "")) {
+        return null;
+    }
+
     //Convert to number
     var number = oData * 1;
     
@@ -2509,23 +2513,29 @@ lang.augmentObject(util.DataSource, DS);
      *   <dt>suffix {String}</dd>
      *   <dd>String appended after each number, like " items" (note the space)</dd>
      *  </dl>
-     * @return {String} Formatted number for display.
+     * @return {String} Formatted number for display. Note, the following values
+     * return as "": null, undefined, NaN, "".     
      */
     format : function(nData, oConfig) {
+        var lang = YAHOO.lang;
+        if(!lang.isValue(nData) || (nData === "")) {
+            return "";
+        }
+
         oConfig = oConfig || {};
         
-        if(!YAHOO.lang.isNumber(nData)) {
+        if(!lang.isNumber(nData)) {
             nData *= 1;
         }
 
-        if(YAHOO.lang.isNumber(nData)) {
+        if(lang.isNumber(nData)) {
             var bNegative = (nData < 0);
             var sOutput = nData + "";
             var sDecimalSeparator = (oConfig.decimalSeparator) ? oConfig.decimalSeparator : ".";
             var nDotIndex;
 
             // Manage decimals
-            if(YAHOO.lang.isNumber(oConfig.decimalPlaces)) {
+            if(lang.isNumber(oConfig.decimalPlaces)) {
                 // Round to the correct decimal place
                 var nDecimalPlaces = oConfig.decimalPlaces;
                 var nDecimal = Math.pow(10, nDecimalPlaces);
