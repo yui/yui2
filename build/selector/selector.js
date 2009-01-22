@@ -7,8 +7,7 @@
  */
 
 (function() {
-var Y = YAHOO.util,
-    reNth = /^(?:([-]?\d*)(n){1}|(odd|even)$)*([-+]?\d*)$/;
+var Y = YAHOO.util;
 
 /**
  * Provides helper methods for collecting and filtering DOM elements.
@@ -20,6 +19,12 @@ var Y = YAHOO.util,
 Y.Selector = {
     _foundCache: [],
     _regexCache: {},
+
+    _re: {
+        nth: /^(?:([-]?\d*)(n){1}|(odd|even)$)*([-+]?\d*)$/,
+        attr: /(\[.*\])/g,
+        urls: /^(?:href|src)/g
+    },
 
     /**
      * Default document for use queries 
@@ -105,11 +110,11 @@ Y.Selector = {
         },
 
         'first-of-type': function(node, val) {
-            return Y.Selector._getChildren(node.parentNode, node.tagName.toLowerCase())[0];
+            return Y.Selector._getChildren(node.parentNode, node.tagName)[0];
         },
          
         'last-of-type': function(node, val) {
-            var children = Y.Selector._getChildren(node.parentNode, node.tagName.toLowerCase());
+            var children = Y.Selector._getChildren(node.parentNode, node.tagName);
             return children[children.length - 1];
         },
          
@@ -119,7 +124,7 @@ Y.Selector = {
         },
 
         'only-of-type': function(node) {
-            return Y.Selector._getChildren(node.parentNode, node.tagName.toLowerCase()).length === 1;
+            return Y.Selector._getChildren(node.parentNode, node.tagName).length === 1;
         },
 
         'empty': function(node) {
@@ -172,20 +177,27 @@ Y.Selector = {
         token = token || Y.Selector._tokenize(selector).pop() || {};
 
         if (!node.tagName ||
-            (token.tag !== '*' && node.tagName.toUpperCase() !== token.tag) ||
+            (token.tag !== '*' && node.tagName !== token.tag) ||
             (deDupe && node._found) ) {
             return false;
         }
 
         if (token.attributes.length) {
-            var attribute;
-            for (var i = 0, len = token.attributes.length; i < len; ++i) {
-                attribute = node.getAttribute(token.attributes[i][0], 2);
-                if (attribute === null || attribute === undefined) {
+            var val,
+                ieFlag,
+                re_urls = Y.Selector._re.urls;
+
+            if (!node.attributes || !node.attributes.length) {
+                return false;
+            }
+            for (var i = 0, attr; attr = token.attributes[i++];) {
+                ieFlag = (re_urls.test(attr[0])) ? 2 : 0;
+                val = node.getAttribute(attr[0], ieFlag);
+                if (val === null || val === undefined) {
                     return false;
                 }
-                if ( Y.Selector.operators[token.attributes[i][1]] &&
-                        !Y.Selector.operators[token.attributes[i][1]](attribute, token.attributes[i][2])) {
+                if ( Y.Selector.operators[attr[1]] &&
+                        !Y.Selector.operators[attr[1]](val, attr[2])) {
                     return false;
                 }
             }
@@ -388,7 +400,7 @@ Y.Selector = {
 
                 for (var i = 0, len = childNodes.length; i < len; ++i) {
                     if (childNodes[i].tagName) {
-                        if (!tag || childNodes[i].tagName.toLowerCase() === tag) {
+                        if (!tag || childNodes[i].tagName === tag) {
                             children[children.length] = childNodes[i];
                         }
                     }
@@ -401,7 +413,7 @@ Y.Selector = {
 
     _combinators: {
         ' ': function(node, token) {
-            while (node = node.parentNode) {
+            while ( (node = node.parentNode) ) {
                 if (Y.Selector._test(node, '', token.previous)) {
                     return true;
                 }
@@ -446,13 +458,13 @@ Y.Selector = {
         an+0 = get every _a_th element, "0" may be omitted 
     */
     _getNth: function(node, expr, tag, reverse) {
-        if (tag) tag = tag.toLowerCase();
-        reNth.test(expr);
+        Y.Selector._re.nth.test(expr);
         var a = parseInt(RegExp.$1, 10), // include every _a_ elements (zero means no repeat, just first _a_)
             n = RegExp.$2, // "n"
             oddeven = RegExp.$3, // "odd" or "even"
             b = parseInt(RegExp.$4, 10) || 0, // start scan from element _b_
-            result = [];
+            result = [],
+            op;
 
         var siblings = Y.Selector._getChildren(node.parentNode, tag);
 
@@ -517,7 +529,6 @@ Y.Selector = {
     _patterns: {
         tag: /^((?:-?[_a-z]+[\w-]*)|\*)/i,
         attributes: /^\[([a-z]+\w*)+([~\|\^\$\*!=]=?)?['"]?([^\]]*?)['"]?\]/i,
-        //attributes: /^\[([a-z]+\w*)+([~\|\^\$\*!=]=?)?['"]?([^'"\]]*)['"]?\]*/i,
         pseudos: /^:([-\w]+)(?:\(['"]?(.+)['"]?\))*/i,
         combinator: /^\s*([>+~]|\s)\s*/
     },
@@ -547,36 +558,33 @@ Y.Selector = {
         do {
             found = false; // reset after full pass
             for (var re in patterns) {
-                    if (!YAHOO.lang.hasOwnProperty(patterns, re)) {
-                        continue;
-                    }
+                if (YAHOO.lang.hasOwnProperty(patterns, re)) {
                     if (re != 'tag' && re != 'combinator') { // only one allowed
                         token[re] = token[re] || [];
                     }
-                if (match = patterns[re].exec(selector)) { // note assignment
-                    found = true;
-                    if (re != 'tag' && re != 'combinator') { // only one allowed
-                        //token[re] = token[re] || [];
+                    if ( (match = patterns[re].exec(selector)) ) { // note assignment
+                        found = true;
+                        if (re != 'tag' && re != 'combinator') { // only one allowed
+                            // capture ID for fast path to element
+                            if (re === 'attributes' && match[1] === 'id') {
+                                token.id = match[3];
+                            }
 
-                        // capture ID for fast path to element
-                        if (re === 'attributes' && match[1] === 'id') {
-                            token.id = match[3];
+                            token[re].push(match.slice(1));
+                        } else { // single selector (tag, combinator)
+                            token[re] = match[1];
                         }
+                        selector = selector.replace(match[0], ''); // strip current match from selector
+                        if (re === 'combinator' || !selector.length) { // next token or done
+                            token.attributes = Y.Selector._fixAttributes(token.attributes);
+                            token.pseudos = token.pseudos || [];
+                            token.tag = token.tag ? token.tag.toUpperCase() : '*';
+                            tokens.push(token);
 
-                        token[re].push(match.slice(1));
-                    } else { // single selector (tag, combinator)
-                        token[re] = match[1];
-                    }
-                    selector = selector.replace(match[0], ''); // strip current match from selector
-                    if (re === 'combinator' || !selector.length) { // next token or done
-                        token.attributes = Y.Selector._fixAttributes(token.attributes);
-                        token.pseudos = token.pseudos || [];
-                        token.tag = token.tag ? token.tag.toUpperCase() : '*';
-                        tokens.push(token);
-
-                        token = { // prep next token
-                            previous: token
-                        };
+                            token = { // prep next token
+                                previous: token
+                            };
+                        }
                     }
                 }
             }
@@ -602,15 +610,16 @@ Y.Selector = {
 
     _replaceShorthand: function(selector) {
         var shorthand = Y.Selector.shorthand;
-        var attrs = selector.match(Y.Selector._patterns.attributes); // pull attributes to avoid false pos on "." and "#"
+
+        //var attrs = selector.match(Y.Selector._patterns.attributes); // pull attributes to avoid false pos on "." and "#"
+        var attrs = selector.match(Y.Selector._re.attr); // pull attributes to avoid false pos on "." and "#"
         if (attrs) {
-            selector = selector.replace(Y.Selector._patterns.attributes, 'REPLACED_ATTRIBUTE');
+            selector = selector.replace(Y.Selector._re.attr, 'REPLACED_ATTRIBUTE');
         }
         for (var re in shorthand) {
-            if (!YAHOO.lang.hasOwnProperty(shorthand, re)) {
-                continue;
+            if (YAHOO.lang.hasOwnProperty(shorthand, re)) {
+                selector = selector.replace(Y.Selector._getRegExp(re, 'gi'), shorthand[re]);
             }
-            selector = selector.replace(Y.Selector._getRegExp(re, 'gi'), shorthand[re]);
         }
 
         if (attrs) {
@@ -620,10 +629,9 @@ Y.Selector = {
         }
         return selector;
     }
-
 };
 
-if (YAHOO.env.ua.ie) { // rewrite class for IE (others use getAttribute('class')
+if (YAHOO.env.ua.ie && YAHOO.env.ua.ie < 8) { // rewrite class for IE (others use getAttribute('class')
     Y.Selector.attrAliases['class'] = 'className';
     Y.Selector.attrAliases['for'] = 'htmlFor';
 }

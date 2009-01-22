@@ -61,6 +61,7 @@
      * Provides helper methods for DOM elements.
      * @namespace YAHOO.util
      * @class Dom
+     * @requires yahoo, event
      */
     Y.Dom = {
         CUSTOM_ATTRIBUTES: (!documentElement.hasAttribute) ? { // IE < 8
