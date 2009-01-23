@@ -5,6 +5,7 @@
     
 
     // STRING CONSTANTS
+        ACTIVE_TAB = 'activeTab',
         LABEL = 'label',
         LABEL_EL = 'labelEl',
         CONTENT = 'content',
@@ -445,6 +446,18 @@
                 }
             
             return el.innerHTML;
+        },
+
+        _onActivate: function(e, tabview) {
+            var tab = this,
+                silent = false;
+            
+
+            Y.Event.preventDefault(e);
+            if (tab == tabview.get(ACTIVE_TAB)) {
+                silent = true; // dont fire activeTabChange if already active
+            }
+            tabview.set(ACTIVE_TAB, tab, silent);
         }
     });
     
