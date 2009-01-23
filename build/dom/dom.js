@@ -280,8 +280,8 @@
                             off1 = 2;
                             off2 = 2;
                             mode = doc[COMPAT_MODE];
-                            bLeft = Y.Dom._getStyle(doc[DOCUMENT_ELEMENT], BORDER_LEFT_WIDTH);
-                            bTop = Y.Dom._getStyle(doc[DOCUMENT_ELEMENT], BORDER_TOP_WIDTH);
+                            bLeft = _getComputedStyle(doc[DOCUMENT_ELEMENT], BORDER_LEFT_WIDTH);
+                            bTop = _getComputedStyle(doc[DOCUMENT_ELEMENT], BORDER_TOP_WIDTH);
 
                             if (UA.ie === 6) {
                                 if (mode !== _BACK_COMPAT) {
