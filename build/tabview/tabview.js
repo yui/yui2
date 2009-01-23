@@ -10,7 +10,7 @@
     var Y = YAHOO.util,
         Dom = Y.Dom,
         Event = Y.Event,
-        document = document,
+        document = window.document,
     
         // STRING CONSTANTS
         ACTIVE = 'active',
@@ -381,6 +381,14 @@
                     this.addListener.call(this, type, this.DOMEventHandler);
                 }
             }
+        },
+
+        deselectTab: function() {
+            this.set('activeTab', null);
+        },
+
+        selectTab: function(index) {
+            this.set('activeTab', this.getTab(index));
         },
 
         _onActiveTabChange: function(e) {
