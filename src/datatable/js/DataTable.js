@@ -2423,12 +2423,20 @@ _initThEl : function(elTh, oColumn) {
         
     elTh.className = this._getColumnClassNames(oColumn);
             
-    // Set Column width for non fallback cases
-    if(oColumn.width && !DT._bDynStylesFallback) {
+    // Set Column width...
+    if(oColumn.width) {
         // Validate minWidth
         var nWidth = (oColumn.minWidth && (oColumn.width < oColumn.minWidth)) ?
                 oColumn.minWidth : oColumn.width;
-        this._setColumnWidthDynStyles(oColumn, nWidth + 'px', 'hidden');
+        // ...for fallback cases
+        if(DT._bDynStylesFallback) {
+            elTh.firstChild.style.overflow = 'hidden';
+            elTh.firstChild.style.width = nWidth + 'px';        
+        }
+        // ...for non fallback cases
+        else {
+            this._setColumnWidthDynStyles(oColumn, nWidth + 'px', 'hidden');
+        }
     }
 
     this.formatTheadCell(elThLabel, oColumn, this.get("sortedBy"));
