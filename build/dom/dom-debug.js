@@ -514,14 +514,14 @@
          */
         getRegion: function(el) {
             var f = function(el) {
-                if ( (el[PARENT_NODE] === null || el[OFFSET_PARENT] === null ||
-                        this.getStyle(el, 'display') == 'none') && el != el[OWNER_DOCUMENT].body) {
-                    YAHOO.log('getRegion failed: element not available', 'error', 'Dom');
-                    return false;
+                var region = false;
+                if ( Y.Dom._canPosition(el) ) {
+                    region = Y.Region.getRegion(el);
+                    YAHOO.log('getRegion returning ' + region, 'info', 'Dom');
+                } else {
+                    YAHOO.log('getRegion failed: element not positionable (either not in a document or not displayed)', 'error', 'Dom');
                 }
 
-                var region = Y.Region.getRegion(el);
-                YAHOO.log('getRegion returning ' + region, 'info', 'Dom');
                 return region;
             };
             

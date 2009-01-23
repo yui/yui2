@@ -506,12 +506,12 @@
          */
         getRegion: function(el) {
             var f = function(el) {
-                if ( (el[PARENT_NODE] === null || el[OFFSET_PARENT] === null ||
-                        this.getStyle(el, 'display') == 'none') && el != el[OWNER_DOCUMENT].body) {
-                    return false;
+                var region = false;
+                if ( Y.Dom._canPosition(el) ) {
+                    region = Y.Region.getRegion(el);
+                } else {
                 }
 
-                var region = Y.Region.getRegion(el);
                 return region;
             };
             
