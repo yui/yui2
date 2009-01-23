@@ -23,11 +23,13 @@
         body = document.body,
 
         // string constants
+        DEFAULT_VIEW = 'defaultView',
         DOCUMENT_ELEMENT = 'documentElement',
         COMPAT_MODE = 'compatMode',
         OFFSET_LEFT = 'offsetLeft',
         OFFSET_TOP = 'offsetTop',
         OFFSET_PARENT = 'offsetParent',
+        OWNER_DOCUMENT = 'ownerDocument',
         POSITION = 'position',
         FIXED = 'fixed',
         RELATIVE = 'relative',
@@ -35,13 +37,11 @@
         TOP = 'top',
         SCROLL_LEFT = 'scrollLeft',
         SCROLL_TOP = 'scrollTop',
-        MEDIUM = 'medium',
-        HEIGHT = 'height',
-        WIDTH = 'width',
         BORDER_LEFT_WIDTH = 'borderLeftWidth',
         BORDER_TOP_WIDTH = 'borderTopWidth',
         GET_BOUNDING_CLIENT_RECT = 'getBoundingClientRect',
         GET_COMPUTED_STYLE = 'getComputedStyle',
+        CSS1_COMPAT = 'CSS1Compat',
         _BACK_COMPAT = 'BackCompat',
         _CLASS = 'class', // underscore due to reserved word
         CLASSNAME = 'className',
@@ -123,8 +123,8 @@
         },
     
         getComputedStyle: function(el, property) {
-            if (window.getComputedStyle) {
-                return el.ownerDocument.defaultView.getComputedStyle(el, null)[property];
+            if (window[GET_COMPUTED_STYLE]) {
+                return el[OWNER_DOCUMENT][DEFAULT_VIEW][GET_COMPUTED_STYLE](el, null)[property];
             } else if (el.currentStyle) {
                 return Y.Dom.IE_ComputedStyle.get(el, property);
             }
@@ -152,7 +152,7 @@
                         computed;
                     
                     if (!value) {
-                        computed = el.ownerDocument.defaultView.getComputedStyle(el, null);
+                        computed = el[OWNER_DOCUMENT][DEFAULT_VIEW][GET_COMPUTED_STYLE](el, null);
                         if (computed) { // test computed before touching for safari
                             value = computed[property];
                         }
@@ -270,7 +270,7 @@
 
                     if (Y.Dom._canPosition(node)) {
                         box = node[GET_BOUNDING_CLIENT_RECT]();
-                        doc = node.ownerDocument;
+                        doc = node[OWNER_DOCUMENT];
                         scrollLeft = Y.Dom.getDocumentScrollLeft(doc);
                         scrollTop = Y.Dom.getDocumentScrollTop(doc);
                         xy = [floor(box[LEFT]), floor(box[TOP])];
@@ -327,8 +327,8 @@
 
                     if  (Y.Dom._canPosition(node) ) {
                         xy = [node[OFFSET_LEFT], node[OFFSET_TOP]];
-                        docScrollLeft = Y.Dom.getDocumentScrollLeft(node.ownerDocument);
-                        docScrollTop = Y.Dom.getDocumentScrollTop(node.ownerDocument);
+                        docScrollLeft = Y.Dom.getDocumentScrollLeft(node[OWNER_DOCUMENT]);
+                        docScrollTop = Y.Dom.getDocumentScrollTop(node[OWNER_DOCUMENT]);
 
                         // TODO: refactor with !! or just falsey
                         bCheck = ((isGecko || UA.webkit > 519) ? true : false);
@@ -507,7 +507,7 @@
         getRegion: function(el) {
             var f = function(el) {
                 if ( (el.parentNode === null || el.offsetParent === null ||
-                        this.getStyle(el, 'display') == 'none') && el != el.ownerDocument.body) {
+                        this.getStyle(el, 'display') == 'none') && el != el[OWNER_DOCUMENT].body) {
                     YAHOO.log('getRegion failed: element not available', 'error', 'Dom');
                     return false;
                 }
@@ -709,7 +709,7 @@
                 } else if (from !== to) { // else nothing to replace
                     // May need to lead with DBLSPACE?
                     current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
-                    className = (SPACE + current.replace(Y.Dom._getClassRegEx(from), SPACE + to)).
+                    className = (SPACE + current.replace(Y.Dom._getClassRegex(from), SPACE + to)).
                                split(Y.Dom._getClassRegex(to));
 
                     // insert to into what would have been the first occurrence slot
@@ -744,7 +744,7 @@
                 YAHOO.log('generateId generating ' + id, 'info', 'Dom');
 
                 if (el) {
-                    if (el.ownerDocument.getElementById(id)) { // in case one already exists
+                    if (el[OWNER_DOCUMENT].getElementById(id)) { // in case one already exists
                         // use failed id plus prefix to help ensure uniqueness
                         return Y.Dom.generateId(el, id + prefix);
                     }
@@ -799,7 +799,7 @@
         _inDoc: function(el, doc) {
             var ret = false;
             if (el && el.tagName) {
-                doc = doc || el.ownerDocument; 
+                doc = doc || el[OWNER_DOCUMENT]; 
                 ret = Y.Dom.isAncestor(doc[DOCUMENT_ELEMENT], el);
             } else {
                 YAHOO.log('inDocument failed: invalid input', 'error', 'Dom');
@@ -902,7 +902,7 @@
          * @return {Int} The height of the actual document (which includes the body and its margin).
          */
         getDocumentHeight: function() {
-            var scrollHeight = (document.compatMode != 'CSS1Compat' || isSafari) ? body.scrollHeight : documentElement.scrollHeight;
+            var scrollHeight = (document.compatMode != CSS1_COMPAT || isSafari) ? body.scrollHeight : documentElement.scrollHeight;
 
             var h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
             YAHOO.log('getDocumentHeight returning ' + h, 'info', 'Dom');
@@ -915,7 +915,7 @@
          * @return {Int} The width of the actual document (which includes the body and its margin).
          */
         getDocumentWidth: function() {
-            var scrollWidth = (document.compatMode != 'CSS1Compat' || isSafari) ? body.scrollWidth : documentElement.scrollWidth;
+            var scrollWidth = (document.compatMode != CSS1_COMPAT || isSafari) ? body.scrollWidth : documentElement.scrollWidth;
             var w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
             YAHOO.log('getDocumentWidth returning ' + w, 'info', 'Dom');
             return w;
@@ -931,7 +931,7 @@
             var mode = document.compatMode;
         
             if ( (mode || isIE) && !isOpera ) { // IE, Gecko
-                height = (mode == 'CSS1Compat') ?
+                height = (mode == CSS1_COMPAT) ?
                         documentElement.clientHeight : // Standards
                         body.clientHeight; // Quirks
             }
@@ -951,7 +951,7 @@
             var mode = document.compatMode;
             
             if (mode || isIE) { // IE, Gecko, Opera
-                width = (mode == 'CSS1Compat') ?
+                width = (mode == CSS1_COMPAT) ?
                         documentElement.clientWidth : // Standards
                         body.clientWidth; // Quirks
             }
@@ -1324,8 +1324,8 @@
         },
 
         _calcBorders: function(node, xy2) {
-            var t = parseInt(Y.Dom.getComputedStyle(node, BORDER_TOP_WIDTH), 10) || 0,
-                l = parseInt(Y.Dom.getComputedStyle(node, BORDER_LEFT_WIDTH), 10) || 0;
+            var t = parseInt(Y.Dom[GET_COMPUTED_STYLE](node, BORDER_TOP_WIDTH), 10) || 0,
+                l = parseInt(Y.Dom[GET_COMPUTED_STYLE](node, BORDER_LEFT_WIDTH), 10) || 0;
             if (isGecko) {
                 if (RE_TABLE.test(node.tagName)) {
                     t = 0;
@@ -1340,7 +1340,7 @@
         
     // fix opera computedStyle default color unit (convert to rgb)
     if (UA.opera) {
-        var _getComputedStyle = Y.Dom.getComputedStyle;
+        var _getComputedStyle = Y.Dom[GET_COMPUTED_STYLE];
         Y.Dom[GET_COMPUTED_STYLE] = function(node, att) {
             var val = _getComputedStyle(node, att);
             if (RE_COLOR.test(att)) {
@@ -1354,7 +1354,7 @@
 
     // safari converts transparent to rgba(), others use "transparent"
     if (UA.webkit) {
-        var _getComputedStyle = Y.Dom.getComputedStyle;
+        var _getComputedStyle = Y.Dom[GET_COMPUTED_STYLE];
         Y.Dom[GET_COMPUTED_STYLE] = function(node, att) {
             var val = _getComputedStyle(node, att);
 
