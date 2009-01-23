@@ -46,10 +46,7 @@
     WidgetName = "Carousel";
 
     /**
-     * The internal table of Carousel instances.  This table has two keys,
-     * viz., "object", and "rendered".  The "object" key holds the reference
-     * to the Carousel object and the "rendered" key indicates if the
-     * corresponding instance has been rendered or not.
+     * The internal table of Carousel instances.
      * @private
      * @static
      */
@@ -214,7 +211,8 @@
      */
     pageChangeEvent = "pageChange",
 
-    /**
+    /*
+     * Internal event.
      * @event render
      * @description Fires when the Carousel is rendered.  See
      * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
@@ -251,7 +249,8 @@
      */
     stopAutoPlayEvent = "stopAutoPlay",
 
-    /**
+    /*
+     * Internal event.
      * @event uiUpdateEvent
      * @description Fires when the UI has been updated.
      * See
@@ -323,14 +322,36 @@
         function getStyleIntVal(el, style) {
             var val;
 
-            val = parseInt(Dom.getStyle(el, style), 10);
+            /*
+             * XXX: Safari calculates incorrect marginRight for an element
+             * which has its parent element style set to overflow: hidden
+             * https://bugs.webkit.org/show_bug.cgi?id=13343
+             * Let us assume marginLeft == marginRight
+             */
+            if (style == "marginRight" && YAHOO.env.ua.webkit) {
+                val = parseInt(Dom.getStyle(el, "marginLeft"), 10);
+            } else {
+                val = parseInt(Dom.getStyle(el, style), 10);
+            }
+
             return JS.isNumber(val) ? val : 0;
         }
 
         function getStyleFloatVal(el, style) {
             var val;
 
-            val = parseFloat(Dom.getStyle(el, style));
+            /*
+             * XXX: Safari calculates incorrect marginRight for an element
+             * which has its parent element style set to overflow: hidden
+             * https://bugs.webkit.org/show_bug.cgi?id=13343
+             * Let us assume marginLeft == marginRight
+             */
+            if (style == "marginRight" && YAHOO.env.ua.webkit) {
+                val = parseFloat(Dom.getStyle(el, "marginLeft"));
+            } else {
+                val = parseFloat(Dom.getStyle(el, style));
+            }
+
             return JS.isNumber(val) ? val : 0;
         }
 
@@ -372,13 +393,6 @@
         default:
             if (type == "int") {
                 value = getStyleIntVal(el, style);
-                // XXX: Safari calculates incorrect marginRight for an element
-                // which has its parent element style set to overflow: hidden
-                // https://bugs.webkit.org/show_bug.cgi?id=13343
-                // Let us assume marginLeft == marginRight
-                if (style == "marginRight" && YAHOO.env.ua.webkit) {
-                    value = getStyleIntVal(el, "marginLeft");
-                }
             } else if (type == "float") {
                 value = getStyleFloatVal(el, style);
             } else {
@@ -441,6 +455,20 @@
     }
 
     /**
+     * Return the index of the first item in the view port for displaying item
+     * in "pos".
+     *
+     * @method getFirstVisibleForPosition
+     * @param pos {Number} The position of the item to be displayed
+     * @private
+     */
+    function getFirstVisibleForPosition(pos) {
+        var num = this.get("numVisible");
+
+        return Math.floor(pos / num) * num;
+    }
+
+    /**
      * Return the scrolling offset size given the number of elements to
      * scroll.
      *
@@ -494,11 +522,11 @@
      * Set the selected item.
      *
      * @method setItemSelection
-     * @param {Number} newposition The index of the new position
-     * @param {Number} oldposition The index of the previous position
+     * @param {Number} newpos The index of the new position
+     * @param {Number} oldpos The index of the previous position
      * @private
      */
-     function setItemSelection(newposition, oldposition) {
+     function setItemSelection(newpos, oldpos) {
         var backwards,
             carousel = this,
             cssClass   = carousel.CLASSES,
@@ -507,10 +535,10 @@
             isCircular = carousel.get("isCircular"),
             numItems   = carousel.get("numItems"),
             numVisible = carousel.get("numVisible"),
-            position   = oldposition,
+            position   = oldpos,
             sentinel   = firstItem + numVisible - 1;
 
-        backwards = numVisible > 1 && !isCircular && position > newposition;
+        backwards = numVisible > 1 && !isCircular && position > newpos;
 
         if (position >= 0 && position < numItems) {
             if (!JS.isUndefined(carousel._itemsTable.items[position])) {
@@ -521,33 +549,34 @@
             }
         }
 
-        if (JS.isNumber(newposition)) {
-            newposition = parseInt(newposition, 10);
-            newposition = JS.isNumber(newposition) ? newposition : 0;
+        if (JS.isNumber(newpos)) {
+            newpos = parseInt(newpos, 10);
+            newpos = JS.isNumber(newpos) ? newpos : 0;
         } else {
-            newposition = firstItem;
+            newpos = firstItem;
         }
 
-        if (JS.isUndefined(carousel._itemsTable.items[newposition])) {
-            carousel.scrollTo(newposition); // still loading the item
+        if (JS.isUndefined(carousel._itemsTable.items[newpos])) {
+            newpos = getFirstVisibleForPosition(carousel, newpos);
+            carousel.scrollTo(newpos); // still loading the item
         }
 
-        if (!JS.isUndefined(carousel._itemsTable.items[newposition])) {
-            el = Dom.get(carousel._itemsTable.items[newposition].id);
+        if (!JS.isUndefined(carousel._itemsTable.items[newpos])) {
+            el = Dom.get(carousel._itemsTable.items[newpos].id);
             if (el) {
                 Dom.addClass(el, cssClass.SELECTED_ITEM);
             }
         }
 
-        if (newposition < firstItem || newposition > sentinel) {
+        if (newpos < firstItem || newpos > sentinel) {
             // out of focus
             if (backwards) {
-                newposition = firstItem - numVisible;
-                newposition = newposition >= 0 ? newposition : 0;
-                carousel.scrollTo(newposition);
-            } else {
-                carousel.scrollTo(newposition);
+                newpos = firstItem - numVisible;
+                newpos = newpos >= 0 ? newpos : 0;
             }
+
+            newpos = getFirstVisibleForPosition.call(carousel, newpos);
+            carousel.scrollTo(newpos);
         }
     }
 
@@ -562,14 +591,11 @@
             carousel = this,
             cssClass = carousel.CLASSES,
             i,
-            me,
             navigation,
             sentinel;
 
-        me = carousel.get("element").id;
-
         // Don't do anything if the Carousel is not rendered
-        if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
+        if (!carousel._hasRendered) {
             return;
         }
 
@@ -647,12 +673,10 @@
      * @private
      */
     function syncPagerUi(page) {
-        var carousel = this, me, numPages, numVisible;
-
-        me = carousel.get("element").id;
+        var carousel = this, numPages, numVisible;
 
         // Don't do anything if the Carousel is not rendered
-        if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
+        if (!carousel._hasRendered) {
             return;
         }
 
@@ -674,7 +698,9 @@
     }
 
     /**
-     * Fire custom events for synchronizing the DOM.
+     * Handle UI update.
+     * Call the appropriate methods on events fired when an item is added, or
+     * removed for synchronizing the DOM.
      *
      * @method syncUi
      * @param {Object} o The item that needs to be added or removed
@@ -800,6 +826,14 @@
          * @private
          */
         _hasFocus: false,
+
+        /**
+         * Is the Carousel rendered already?
+         *
+         * @property _hasRendered
+         * @private
+         */
+        _hasRendered: false,
 
         /**
          * Is the animation still in progress?
@@ -1288,16 +1322,13 @@
                 isSelectionInvisible,
                 itemsTable,
                 last,
-                me,
                 numVisible,
                 selectOnScroll,
                 selected,
                 selItem;
 
-            me = carousel.get("element").id;
-
             // Don't do anything if the Carousel is not rendered
-            if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
+            if (!carousel._hasRendered) {
                 return;
             }
 
@@ -1369,10 +1400,11 @@
                 return;
             }
 
-            carousel._navBtns    = { prev: [], next: [] };
-            carousel._pages      = { el: null, num: 0, cur: 0 };
-            carousel._itemsTable = { loading: {}, numItems: 0,
-                                     items: [], size: 0 };
+            carousel._hasRendered = false;
+            carousel._navBtns     = { prev: [], next: [] };
+            carousel._pages       = { el: null, num: 0, cur: 0 };
+            carousel._itemsTable  = { loading: {}, numItems: 0,
+                                      items: [], size: 0 };
 
 
             if (JS.isString(el)) {
@@ -1409,7 +1441,7 @@
             carousel._parseCarouselNavigation(el);
             carousel._navEl = carousel._setupCarouselNavigation();
 
-            instances[elId] = { object: carousel, rendered: false };
+            instances[elId] = { object: carousel };
 
             carousel._loadItems();
         },
@@ -1928,7 +1960,7 @@
                 return false;
             }
 
-            carousel._reRender();
+            carousel._refreshUi();
 
             return true;
         },
@@ -2365,7 +2397,7 @@
 
             if ((item = carousel.getItemPositionById(target.id)) >= 0) {
                 carousel.set("selectedItem", carousel._getSelectedItem(item));
-                carouselfocus();
+                carousel.focus();
             }
         },
 
@@ -2608,17 +2640,18 @@
         },
 
         /**
-         * Re-render the widget if it is not already rendered, on first item
+         * Refresh the widget UI if it is not already rendered, on first item
          * addition.
          *
-         * @method _reRender
+         * @method _refreshUi
          * @protected
          */
-        _reRender: function () {
-            // Set the rendered state appropriately.
-            instances[this.get("element").id].rendered = true;
+        _refreshUi: function () {
+            var carousel = this;
 
-            this.fireEvent(renderEvent);
+            // Set the rendered state appropriately.
+            carousel._hasRendered = true;
+            carousel.fireEvent(renderEvent);
         },
 
         /**
@@ -2753,8 +2786,10 @@
             itemSize   = getCarouselItemSize.call(carousel, which);
             size       = itemSize * num;
 
+            // TODO: try to re-use the _hasRendered indicator
             carousel._recomputeSize = (size === 0); // bleh!
             if (carousel._recomputeSize) {
+                carousel._hasRendered = false;
                 return;             // no use going further, bail out!
             }
 
@@ -2987,7 +3022,6 @@
                 el,
                 item,
                 itemsTable = carousel._itemsTable,
-                me         = carousel.get("element").id,
                 oel,
                 pos,
                 sibling;
@@ -3042,8 +3076,8 @@
                 }
             }
 
-            if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
-                carousel._reRender();
+            if (!carousel._hasRendered) {
+                carousel._refreshUi();
             }
 
             if (carousel.get("selectedItem") < 0) {

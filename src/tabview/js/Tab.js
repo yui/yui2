@@ -1,13 +1,15 @@
 (function() {
-    var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event,
-        Lang = YAHOO.lang;
+    var Y = YAHOO.util, 
+        Dom = Y.Dom,
+        Lang = YAHOO.lang,
     
 
     // STRING CONSTANTS
-    var CONTENT_EL = 'contentEl',
+        ACTIVE_TAB = 'activeTab',
+        LABEL = 'label',
         LABEL_EL = 'labelEl',
         CONTENT = 'content',
+        CONTENT_EL = 'contentEl',
         ELEMENT = 'element',
         CACHE_DATA = 'cacheData',
         DATA_SRC = 'dataSrc',
@@ -15,7 +17,7 @@
         DATA_TIMEOUT = 'dataTimeout',
         LOAD_METHOD = 'loadMethod',
         POST_DATA = 'postData',
-        DISABLED = 'disabled';
+        DISABLED = 'disabled',
     
     /**
      * A representation of a Tab's label and content.
@@ -27,7 +29,7 @@
      * represents the TabView. An element will be created if none provided.
      * @param {Object} properties A key map of initial properties
      */
-    var Tab = function(el, attr) {
+    Tab = function(el, attr) {
         attr = attr || {};
         if (arguments.length == 1 && !Lang.isString(el) && !el.nodeName) {
             attr = el;
@@ -35,7 +37,7 @@
         }
 
         if (!el && !attr.element) {
-            el = _createTabElement.call(this, attr);
+            el = this._createTabElement(attr);
         }
 
         this.loadHandler =  {
@@ -123,8 +125,8 @@
          * @return String
          */
         toString: function() {
-            var el = this.get(ELEMENT);
-            var id = el.id || el.tagName;
+            var el = this.get(ELEMENT),
+                id = el.id || el.tagName;
             return "Tab " + id; 
         },
         
@@ -136,8 +138,6 @@
         initAttributes: function(attr) {
             attr = attr || {};
             Tab.superclass.initAttributes.call(this, attr);
-            
-            var el = this.get(ELEMENT);
             
             /**
              * The event that triggers the tab's activation.
@@ -154,8 +154,9 @@
              * @type HTMLElement
              */
             this.setAttributeConfig(LABEL_EL, {
-                value: attr.labelEl || _getlabelEl.call(this),
+                value: attr[LABEL_EL] || this._getLabelEl(),
                 method: function(value) {
+                    value = Dom.get(value);
                     var current = this.get(LABEL_EL);
 
                     if (current) {
@@ -163,12 +164,9 @@
                             return false; // already set
                         }
                         
-                        this.replaceChild(value, current);
-                    } else if (el.firstChild) { // ensure label is firstChild by default
-                        this.insertBefore(value, el.firstChild);
-                    } else {
-                        this.appendChild(value);
-                    }  
+                        current.parentNode.replaceChild(value, current);
+                        this.set(LABEL, value.innerHTML);
+                    }
                 } 
             });
 
@@ -177,15 +175,15 @@
              * @attribute label
              * @type String
              */
-            this.setAttributeConfig('label', {
-                value: attr.label || _getLabel.call(this),
+            this.setAttributeConfig(LABEL, {
+                value: attr.label || this._getLabel(),
                 method: function(value) {
                     var labelEl = this.get(LABEL_EL);
                     if (!labelEl) { // create if needed
-                        this.set(LABEL_EL, _createlabelEl.call(this));
+                        this.set(LABEL_EL, this._createLabelEl());
                     }
                     
-                    _setLabel.call(this, value);
+                    labelEl.innerHTML = value;
                 }
             });
             
@@ -195,15 +193,20 @@
              * @type HTMLElement
              */
             this.setAttributeConfig(CONTENT_EL, {
-                value: attr.contentEl || document.createElement('div'),
+                value: attr[CONTENT_EL] || document.createElement('div'),
                 method: function(value) {
+                    value = Dom.get(value);
                     var current = this.get(CONTENT_EL);
 
                     if (current) {
-                        if (current == value) {
+                        if (current === value) {
                             return false; // already set
                         }
-                        this.replaceChild(value, current);
+                        if (!this.get('selected')) {
+                            Dom.addClass(value, 'yui-hidden');
+                        }
+                        current.parentNode.replaceChild(value, current);
+                        this.set(CONTENT, value.innerHTML);
                     }
                 }
             });
@@ -214,14 +217,12 @@
              * @type String
              */
             this.setAttributeConfig(CONTENT, {
-                value: attr.content,
+                value: attr[CONTENT],
                 method: function(value) {
                     this.get(CONTENT_EL).innerHTML = value;
                 }
             });
 
-            var _dataLoaded = false;
-            
             /**
              * The tab's data source, used for loading content dynamically.
              * @attribute dataSrc
@@ -349,7 +350,6 @@
                 value: attr.contentVisible,
                 method: function(value) {
                     if (value) {
-                        //this.get(CONTENT_EL).style.display = 'block';
                         Dom.removeClass(this.get(CONTENT_EL), this.HIDDEN_CLASSNAME);
                         
                         if ( this.get(DATA_SRC) ) {
@@ -368,7 +368,7 @@
         },
         
         _dataConnect: function() {
-            if (!YAHOO.util.Connect) {
+            if (!Y.Connect) {
                 YAHOO.log('YAHOO.util.Connect dependency not met',
                         'error', 'Tab');
                 return false;
@@ -376,7 +376,7 @@
 
             Dom.addClass(this.get(CONTENT_EL).parentNode, this.LOADING_CLASSNAME);
             this._loading = true; 
-            this.dataConnection = YAHOO.util.Connect.asyncRequest(
+            this.dataConnection = Y.Connect.asyncRequest(
                 this.get(LOAD_METHOD),
                 this.get(DATA_SRC), 
                 {
@@ -403,58 +403,64 @@
 
                 this.get(POST_DATA)
             );
+        },
+        _createTabElement: function(attr) {
+            var el = document.createElement('li'),
+                a = document.createElement('a'),
+                label = attr.label || null,
+                labelEl = attr.labelEl || null;
+            
+            a.href = attr.href || '#'; // TODO: Use Dom.setAttribute?
+            el.appendChild(a);
+            
+            if (labelEl) { // user supplied labelEl
+                if (!label) { // user supplied label
+                    label = this._getLabel();
+                }
+            } else {
+                labelEl = this._createLabelEl();
+            }
+            
+            a.appendChild(labelEl);
+            
+            YAHOO.log('creating Tab Dom', 'info', 'Tab');
+            return el;
+        },
+
+        _getLabelEl: function() {
+            return this.getElementsByTagName(this.LABEL_TAGNAME)[0];
+        },
+
+        _createLabelEl: function() {
+            var el = document.createElement(this.LABEL_TAGNAME);
+            return el;
+        },
+    
+        
+        _getLabel: function() {
+            var el = this.get(LABEL_EL);
+                
+                if (!el) {
+                    return undefined;
+                }
+            
+            return el.innerHTML;
+        },
+
+        _onActivate: function(e, tabview) {
+            var tab = this,
+                silent = false;
+            
+
+            Y.Event.preventDefault(e);
+            if (tab === tabview.get(ACTIVE_TAB)) {
+                silent = true; // dont fire activeTabChange if already active
+            }
+            tabview.set(ACTIVE_TAB, tab, silent);
         }
     });
     
-    var _createTabElement = function(attr) {
-        var el = document.createElement('li');
-        var a = document.createElement('a');
-        
-        a.href = attr.href || '#';
-        
-        el.appendChild(a);
-        
-        var label = attr.label || null;
-        var labelEl = attr.labelEl || null;
-        
-        if (labelEl) { // user supplied labelEl
-            if (!label) { // user supplied label
-                label = _getLabel.call(this, labelEl);
-            }
-        } else {
-            labelEl = _createlabelEl.call(this);
-        }
-        
-        a.appendChild(labelEl);
-        
-        YAHOO.log('creating Tab Dom', 'info', 'Tab');
-        return el;
-    };
     
-    var _getlabelEl = function() {
-        return this.getElementsByTagName(this.LABEL_TAGNAME)[0];
-    };
-    
-    var _createlabelEl = function() {
-        var el = document.createElement(this.LABEL_TAGNAME);
-        return el;
-    };
-    
-    var _setLabel = function(label) {
-        var el = this.get(LABEL_EL);
-        el.innerHTML = label;
-    };
-    
-    var _getLabel = function() {
-        var label,
-            el = this.get(LABEL_EL);
-            
-            if (!el) {
-                return undefined;
-            }
-        
-        return el.innerHTML;
-    };
     
     YAHOO.widget.Tab = Tab;
 })();

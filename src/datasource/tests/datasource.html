@@ -173,6 +173,32 @@ var XMLDocument = function(rootTagName, namespaceURL) {
         ds.sendRequest("a", {success:function(request,response) {
             ArrayAssert.itemsAreSame(["a","b","c","d"], response.results, "Expected live array.");
         }});                
+
+        new LocalDS('{"items":[{"foo":1},{"foo":2}]}', {
+            responseType: DS.TYPE_JSON,
+            responseSchema: {
+                resultsList:'items',
+                fields:['foo']
+            }
+        }).sendRequest(null,{ success: function (req, res) {
+                Assert.isArray(res.results, "Expected results array");
+                Assert.areEqual(res.results.length, 2, "Expected 2 records");
+            }
+        });
+
+        new LocalDS('{"items":[{"foo":1},{"foo":2}]}', {
+            parseJSONArgs: function (k,v) { return v * 3 },
+            responseType: DS.TYPE_JSON,
+            responseSchema: {
+                resultsList:'items',
+                fields:['foo']
+            }
+        }).sendRequest(null,{ success: function (req, res) {
+                Assert.isArray(res.results, "Expected results array");
+                Assert.areEqual(res.results.length, 2, "Expected 2 records");
+                Assert.areEqual(3, res.results[0].foo, "Reviver function did not alter JSON during parse");
+            }
+        });
     }
  });
  

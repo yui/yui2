@@ -10,7 +10,9 @@
 }
 
 .yui-navset .yui-content .yui-hidden {
-    display:none;
+    position:absolute;
+    left:-999999px;
+    visibility:hidden;
 }
 
 /* default width for side tabs */

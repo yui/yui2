@@ -1,5 +1,8 @@
 get - Release Notes
 
+2.7.0
+    * Fixed execution context for timeout listeners
+
 2.6.0
     * Fixed IE memory leak
     * Added timeout support

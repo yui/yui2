@@ -7,13 +7,17 @@
      *
      */
 
-    var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event,
-        Tab = YAHOO.widget.Tab,
-        doc = document;
+    var Y = YAHOO.util,
+        Dom = Y.Dom,
+        Event = Y.Event,
+        document = window.document,
     
-    // STRING CONSTANTS
-    var ELEMENT = 'element';
+        // STRING CONSTANTS
+        ACTIVE = 'active',
+        ACTIVE_INDEX = 'activeIndex',
+        ACTIVE_TAB = 'activeTab',
+        CONTENT_EL = 'contentEl',
+        ELEMENT = 'element',
     
     /**
      * A widget to control tabbed views.
@@ -27,7 +31,7 @@
      * @param {Object} attr (optional) A key map of the tabView's 
      * initial attributes.  Ignored if first arg is attributes object.
      */
-    var TabView = function(el, attr) {
+    TabView = function(el, attr) {
         attr = attr || {};
         if (arguments.length == 1 && !YAHOO.lang.isString(el) && !el.nodeName) {
             attr = el; // treat first arg as attr object
@@ -35,12 +39,12 @@
         }
         
         if (!el && !attr.element) { // create if we dont have one
-            el = _createTabViewElement.call(this, attr);
+            el = this._createTabViewElement(attr);
         }
-    	TabView.superclass.constructor.call(this, el, attr); 
+        TabView.superclass.constructor.call(this, el, attr); 
     };
 
-    YAHOO.extend(TabView, YAHOO.util.Element, {
+    YAHOO.extend(TabView, Y.Element, {
         /**
          * The className to add when building from scratch. 
          * @property CLASSNAME
@@ -82,7 +86,13 @@
          * @return void
          */
         addTab: function(tab, index) {
-            var tabs = this.get('tabs');
+            var tabs = this.get('tabs'),
+                before = this.getTab(index),
+                tabParent = this._tabParent,
+                contentParent = this._contentParent,
+                tabElement = tab.get(ELEMENT),
+                contentEl = tab.get(CONTENT_EL);
+
             if (!tabs) { // not ready yet
                 this._queue[this._queue.length] = ['addTab', arguments];
                 return false;
@@ -90,16 +100,6 @@
             
             index = (index === undefined) ? tabs.length : index;
             
-            var before = this.getTab(index);
-            
-            var self = this;
-            var el = this.get(ELEMENT);
-            var tabParent = this._tabParent;
-            var contentParent = this._contentParent;
-
-            var tabElement = tab.get(ELEMENT);
-            var contentEl = tab.get('contentEl');
-
             if ( before ) {
                 tabParent.insertBefore(tabElement, before.get(ELEMENT));
             } else {
@@ -110,33 +110,26 @@
                 contentParent.appendChild(contentEl);
             }
             
-            if ( !tab.get('active') ) {
+            if ( !tab.get(ACTIVE) ) {
                 tab.set('contentVisible', false, true); /* hide if not active */
             } else {
-                this.set('activeTab', tab, true);
+                this.set(ACTIVE_TAB, tab, true);
                 
             }
 
-            var activate = function(e) {
-                YAHOO.util.Event.preventDefault(e);
-                var silent = false;
+            this._initTabEvents(tab);
+            tabs.splice(index, 0, tab);
+        },
 
-                if (this == self.get('activeTab')) {
-                    silent = true; // dont fire activeTabChange if already active
-                }
-                self.set('activeTab', this, silent);
-            };
-            
-            tab.addListener( tab.get('activationEvent'), activate);
+        _initTabEvents: function(tab) {
+            tab.addListener( tab.get('activationEvent'), tab._onActivate, this, tab);
             
             tab.addListener('activationEventChange', function(e) {
                 if (e.prevValue != e.newValue) {
-                    tab.removeListener(e.prevValue, activate);
-                    tab.addListener(e.newValue, activate);
+                    tab.removeListener(e.prevValue, tab._onActivate);
+                    tab.addListener(e.newValue, tab._onActivate, this, tab);
                 }
             });
-            
-            tabs.splice(index, 0, tab);
         },
 
         /**
@@ -146,19 +139,18 @@
          * @return void
          */
         DOMEventHandler: function(e) {
-            var el = this.get(ELEMENT);
-            var target = YAHOO.util.Event.getTarget(e);
-            var tabParent = this._tabParent;
+            var target = Event.getTarget(e),
+                tabParent = this._tabParent,
+                tabs = this.get('tabs'),
+                tab,
+                tabEl,
+                contentEl;
+
             
             if (Dom.isAncestor(tabParent, target) ) {
-                var tabEl;
-                var tab = null;
-                var contentEl;
-                var tabs = this.get('tabs');
-
                 for (var i = 0, len = tabs.length; i < len; i++) {
                     tabEl = tabs[i].get(ELEMENT);
-                    contentEl = tabs[i].get('contentEl');
+                    contentEl = tabs[i].get(CONTENT_EL);
 
                     if ( target == tabEl || Dom.isAncestor(tabEl, target) ) {
                         tab = tabs[i];
@@ -189,8 +181,8 @@
          * @return int
          */
         getTabIndex: function(tab) {
-            var index = null;
-            var tabs = this.get('tabs');
+            var index = null,
+                tabs = this.get('tabs');
             for (var i = 0, len = tabs.length; i < len; ++i) {
                 if (tab == tabs[i]) {
                     index = i;
@@ -208,22 +200,21 @@
          * @return void
          */
         removeTab: function(tab) {
-            var tabCount = this.get('tabs').length;
+            var tabCount = this.get('tabs').length,
+                index = this.getTabIndex(tab);
 
-            var index = this.getTabIndex(tab);
-            var nextIndex = index + 1;
-            if ( tab == this.get('activeTab') ) { // select next tab
+            if ( tab == this.get(ACTIVE_TAB) ) { // select next tab
                 if (tabCount > 1) {
                     if (index + 1 == tabCount) {
-                        this.set('activeIndex', index - 1);
+                        this.set(ACTIVE_INDEX, index - 1);
                     } else {
-                        this.set('activeIndex', index + 1);
+                        this.set(ACTIVE_INDEX, index + 1);
                     }
                 }
             }
             
             this._tabParent.removeChild( tab.get(ELEMENT) );
-            this._contentParent.removeChild( tab.get('contentEl') );
+            this._contentParent.removeChild( tab.get(CONTENT_EL) );
             this._configs.tabs.value.splice(index, 1);
             
         },
@@ -243,8 +234,12 @@
          * @method contentTransition
          */
         contentTransition: function(newTab, oldTab) {
-            newTab.set('contentVisible', true);
-            oldTab.set('contentVisible', false);
+            if (newTab) {
+                newTab.set('contentVisible', true);
+            }
+            if (oldTab) {
+                oldTab.set('contentVisible', false);
+            }
         },
         
         /**
@@ -283,7 +278,7 @@
              */
             this._tabParent = 
                     this.getElementsByClassName(this.TAB_PARENT_CLASSNAME,
-                            'ul' )[0] || _createTabParent.call(this);
+                            'ul' )[0] || this._createTabParent();
                 
             /**
              * The container of the tabView's content elements.
@@ -293,7 +288,7 @@
              */
             this._contentParent = 
                     this.getElementsByClassName(this.CONTENT_PARENT_CLASSNAME,
-                            'div')[0] ||  _createContentParent.call(this);
+                            'div')[0] ||  this._createContentParent();
             
             /**
              * How the Tabs should be oriented relative to the TabView.
@@ -311,10 +306,8 @@
                         this.removeClass('yui-navset-' + current);
                     }
                     
-                    switch(value) {
-                        case 'bottom':
+                    if (value === 'bottom') {
                         this.appendChild(this._tabParent);
-                        break;
                     }
                 }
             });
@@ -324,13 +317,16 @@
              * @attribute activeIndex
              * @type Int
              */
-            this.setAttributeConfig('activeIndex', {
+            this.setAttributeConfig(ACTIVE_INDEX, {
                 value: attr.activeIndex,
                 method: function(value) {
-                    //this.set('activeTab', this.getTab(value));
                 },
                 validator: function(value) {
-                    return !this.getTab(value).get('disabled'); // cannot activate if disabled
+                    var ret = true;
+                    if (value && this.getTab(value).get('disabled')) { // cannot activate if disabled
+                        ret = false;
+                    }
+                    return ret;
                 }
             });
             
@@ -339,37 +335,40 @@
              * @attribute activeTab
              * @type YAHOO.widget.Tab
              */
-            this.setAttributeConfig('activeTab', {
+            this.setAttributeConfig(ACTIVE_TAB, {
                 value: attr.activeTab,
                 method: function(tab) {
-                    var activeTab = this.get('activeTab');
+                    var activeTab = this.get(ACTIVE_TAB);
                     
                     if (tab) {
-                        tab.set('active', true);
-                        //this._configs['activeIndex'].value = this.getTabIndex(tab); // keep in sync
+                        tab.set(ACTIVE, true);
                     }
                     
-                    if (activeTab && activeTab != tab) {
-                        activeTab.set('active', false);
+                    if (activeTab && activeTab !== tab) {
+                        activeTab.set(ACTIVE, false);
                     }
                     
-                    if (activeTab && tab != activeTab) { // no transition if only 1
+                    if (activeTab && tab !== activeTab) { // no transition if only 1
                         this.contentTransition(tab, activeTab);
                     } else if (tab) {
                         tab.set('contentVisible', true);
                     }
                 },
                 validator: function(value) {
-                    return !value.get('disabled'); // cannot activate if disabled
+                    var ret = true;
+                    if (value && value.get('disabled')) { // cannot activate if disabled
+                        ret = false;
+                    }
+                    return ret;
                 }
             });
 
-            this.on('activeTabChange', this._handleActiveTabChange);
-            this.on('activeIndexChange', this._handleActiveIndexChange);
+            this.on('activeTabChange', this._onActiveTabChange);
+            this.on('activeIndexChange', this._onActiveIndexChange);
 
             YAHOO.log('attributes initialized', 'info', 'TabView');
             if ( this._tabParent ) {
-                _initTabs.call(this);
+                this._initTabs();
             }
             
             // Due to delegation we add all DOM_EVENTS to the TabView container
@@ -385,96 +384,108 @@
             }
         },
 
-        _handleActiveTabChange: function(e) {
-            var activeIndex = this.get('activeIndex'),
+        deselectTab: function() {
+            this.set('activeTab', null);
+        },
+
+        selectTab: function(index) {
+            this.set('activeTab', this.getTab(index));
+        },
+
+        _onActiveTabChange: function(e) {
+            var activeIndex = this.get(ACTIVE_INDEX),
                 newIndex = this.getTabIndex(e.newValue);
 
             if (activeIndex !== newIndex) {
-                if (!(this.set('activeIndex', newIndex)) ) { // NOTE: setting
+                if (!(this.set(ACTIVE_INDEX, newIndex)) ) { // NOTE: setting
                      // revert if activeIndex update fails (cancelled via beforeChange) 
-                    this.set('activeTab', e.prevValue);
+                    this.set(ACTIVE_TAB, e.prevValue);
                 }
             }
         },
         
-        _handleActiveIndexChange: function(e) {
+        _onActiveIndexChange: function(e) {
             // no set if called from ActiveTabChange event
-            if (e.newValue !== this.getTabIndex(this.get('activeTab'))) {
-                if (!(this.set('activeTab', this.getTab(e.newValue))) ) { // NOTE: setting
+            if (e.newValue !== this.getTabIndex(this.get(ACTIVE_TAB))) {
+                if (!(this.set(ACTIVE_TAB, this.getTab(e.newValue))) ) { // NOTE: setting
                      // revert if activeTab update fails (cancelled via beforeChange) 
-                    this.set('activeIndex', e.prevValue);
+                    this.set(ACTIVE_INDEX, e.prevValue);
                 }
             }
+        },
+
+        /**
+         * Creates Tab instances from a collection of HTMLElements.
+         * @method _initTabs
+         * @private
+         * @return void
+         */
+        _initTabs: function() {
+            var tabs = Dom.getChildren(this._tabParent),
+                contentElements = Dom.getChildren(this._contentParent),
+                activeIndex = this.get(ACTIVE_INDEX),
+                tab,
+                attr,
+                active;
+
+            for (var i = 0, len = tabs.length; i < len; ++i) {
+                attr = {};
+                
+                if (contentElements[i]) {
+                    attr.contentEl = contentElements[i];
+                }
+
+                tab = new YAHOO.widget.Tab(tabs[i], attr);
+                this.addTab(tab);
+                
+                if (tab.hasClass(tab.ACTIVE_CLASSNAME) ) {
+                    active = tab;
+                }
+            }
+            if (activeIndex) {
+                this.set(ACTIVE_TAB, this.getTab(activeIndex));
+            } else {
+                this._configs.activeTab.value = active; // dont invoke method
+                this._configs.activeIndex.value = this.getTabIndex(active);
+            }
+        },
+
+        _createTabViewElement: function(attr) {
+            var el = document.createElement('div');
+
+            if ( this.CLASSNAME ) {
+                el.className = this.CLASSNAME;
+            }
+            
+            YAHOO.log('TabView Dom created', 'info', 'TabView');
+            return el;
+        },
+
+        _createTabParent: function(attr) {
+            var el = document.createElement('ul');
+
+            if ( this.TAB_PARENT_CLASSNAME ) {
+                el.className = this.TAB_PARENT_CLASSNAME;
+            }
+            
+            this.get(ELEMENT).appendChild(el);
+            
+            return el;
+        },
+        
+        _createContentParent: function(attr) {
+            var el = document.createElement('div');
+
+            if ( this.CONTENT_PARENT_CLASSNAME ) {
+                el.className = this.CONTENT_PARENT_CLASSNAME;
+            }
+            
+            this.get(ELEMENT).appendChild(el);
+            
+            return el;
         }
     });
     
-    
-    /**
-     * Creates Tab instances from a collection of HTMLElements.
-     * @method initTabs
-     * @private
-     * @return void
-     */
-    var _initTabs = function() {
-        var tab,
-            attr,
-            contentEl;
-            
-        var el = this.get(ELEMENT);   
-        var tabs = Dom.getChildren(this._tabParent);
-        var contentElements = Dom.getChildren(this._contentParent);
-
-        for (var i = 0, len = tabs.length; i < len; ++i) {
-            attr = {};
-            
-            if (contentElements[i]) {
-                attr.contentEl = contentElements[i];
-            }
-
-            tab = new YAHOO.widget.Tab(tabs[i], attr);
-            this.addTab(tab);
-            
-            if (tab.hasClass(tab.ACTIVE_CLASSNAME) ) {
-                this._configs.activeTab.value = tab; // dont invoke method
-                this._configs.activeIndex.value = this.getTabIndex(tab);
-            }
-        }
-    };
-    
-    var _createTabViewElement = function(attr) {
-        var el = doc.createElement('div');
-
-        if ( this.CLASSNAME ) {
-            el.className = this.CLASSNAME;
-        }
-        
-        YAHOO.log('TabView Dom created', 'info', 'TabView');
-        return el;
-    };
-    
-    var _createTabParent = function(attr) {
-        var el = doc.createElement('ul');
-
-        if ( this.TAB_PARENT_CLASSNAME ) {
-            el.className = this.TAB_PARENT_CLASSNAME;
-        }
-        
-        this.get(ELEMENT).appendChild(el);
-        
-        return el;
-    };
-    
-    var _createContentParent = function(attr) {
-        var el = doc.createElement('div');
-
-        if ( this.CONTENT_PARENT_CLASSNAME ) {
-            el.className = this.CONTENT_PARENT_CLASSNAME;
-        }
-        
-        this.get(ELEMENT).appendChild(el);
-        
-        return el;
-    };
     
     YAHOO.widget.TabView = TabView;
 })();
