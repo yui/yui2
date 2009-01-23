@@ -9605,11 +9605,14 @@ updateCell : function(oRecord, oColumn, oData) {
     // Validate Column and Record
     oColumn = (oColumn instanceof YAHOO.widget.Column) ? oColumn : this.getColumn(oColumn);
     if(oColumn && oColumn.getKey() && (oRecord instanceof YAHOO.widget.Record)) {
+        var sKey = oColumn.getKey(),
+        
         // Copy data from the Record for the event that gets fired later
-        var oldData = YAHOO.widget.DataTable._cloneObject(oRecord.getData());
+        //var oldData = YAHOO.widget.DataTable._cloneObject(oRecord.getData());
+            oldData = oRecord.getData(sKey);
 
         // Update Record with new data
-        this._oRecordSet.updateRecordValue(oRecord, oColumn.getKey(), oData);
+        this._oRecordSet.updateRecordValue(oRecord, sKey, oData);
     
         // Update the TD only if row is on current page
         var elTd = this.getTdEl({record: oRecord, column: oColumn});
@@ -12247,7 +12250,8 @@ saveCellEditor : function() {
         else if(this._oCellEditor.isActive) {
             var newData = this._oCellEditor.value;
             // Copy the data to pass to the event
-            var oldData = YAHOO.widget.DataTable._cloneObject(this._oCellEditor.record.getData(this._oCellEditor.column.key));
+            //var oldData = YAHOO.widget.DataTable._cloneObject(this._oCellEditor.record.getData(this._oCellEditor.column.key));
+            var oldData = this._oCellEditor.record.getData(this._oCellEditor.column.key);
     
             // Validate input data
             if(this._oCellEditor.validator) {
@@ -13652,7 +13656,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @event cellUpdateEvent
      * @param oArgs.record {YAHOO.widget.Record} The updated Record.
      * @param oArgs.column {YAHOO.widget.Column} The updated Column.
-     * @param oArgs.oldData {Object} Object literal of the old data.
+     * @param oArgs.oldData {Object} Original data value of the updated cell.
      */
 
     /**
@@ -16034,7 +16038,7 @@ save : function() {
         
     var oSelf = this;
     var finishSave = function(bSuccess, oNewValue) {
-        var oOrigValue = YAHOO.widget.DataTable._cloneObject(oSelf.value);
+        var oOrigValue = oSelf.value;
         if(bSuccess) {
             // Update new value
             oSelf.value = oNewValue;
