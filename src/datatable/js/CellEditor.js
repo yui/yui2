@@ -415,7 +415,7 @@ destroy : function() {
     // Column is late-binding in attach()
     var oColumn = this.getColumn();
     if(oColumn) {
-        this.getColumn().editor = null;
+        oColumn.editor = null;
     }
     
     var elContainer = this.getContainerEl();
@@ -429,6 +429,11 @@ destroy : function() {
  * @method render
  */
 render : function() {
+    if(this._elContainer) {
+        YAHOO.util.Event.purgeElement(this._elContainer, true);
+        this._elContainer.innerHTML = "";
+    }
+
     // Render Cell Editor container element as first child of body
     var elContainer = document.createElement("div");
     elContainer.id = this.getId() + "-container"; // Needed for tracking blur event
