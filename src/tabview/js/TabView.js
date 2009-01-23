@@ -327,7 +327,6 @@
             this.setAttributeConfig('activeIndex', {
                 value: attr.activeIndex,
                 method: function(value) {
-                    //this.set('activeTab', this.getTab(value));
                 },
                 validator: function(value) {
                     return !this.getTab(value).get('disabled'); // cannot activate if disabled
@@ -346,7 +345,6 @@
                     
                     if (tab) {
                         tab.set('active', true);
-                        //this._configs['activeIndex'].value = this.getTabIndex(tab); // keep in sync
                     }
                     
                     if (activeTab && activeTab != tab) {
@@ -416,13 +414,13 @@
      * @return void
      */
     var _initTabs = function() {
-        var tab,
+        var el = this.get(ELEMENT),
+            tabs = Dom.getChildren(this._tabParent),
+            contentElements = Dom.getChildren(this._contentParent),
+            activeIndex = this.get('activeIndex'),
+            tab,
             attr,
-            contentEl;
-            
-        var el = this.get(ELEMENT);   
-        var tabs = Dom.getChildren(this._tabParent);
-        var contentElements = Dom.getChildren(this._contentParent);
+            active;
 
         for (var i = 0, len = tabs.length; i < len; ++i) {
             attr = {};
@@ -435,9 +433,14 @@
             this.addTab(tab);
             
             if (tab.hasClass(tab.ACTIVE_CLASSNAME) ) {
-                this._configs.activeTab.value = tab; // dont invoke method
-                this._configs.activeIndex.value = this.getTabIndex(tab);
+                active = tab;
             }
+        }
+        if (activeIndex) {
+            this.set('activeTab', this.getTab(activeIndex));
+        } else {
+            this._configs.activeTab.value = active; // dont invoke method
+            this._configs.activeIndex.value = this.getTabIndex(active);
         }
     };
     

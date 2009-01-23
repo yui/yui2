@@ -156,6 +156,7 @@
             this.setAttributeConfig(LABEL_EL, {
                 value: attr.labelEl || _getlabelEl.call(this),
                 method: function(value) {
+                    value = Dom.get(value);
                     var current = this.get(LABEL_EL);
 
                     if (current) {
@@ -163,12 +164,9 @@
                             return false; // already set
                         }
                         
-                        this.replaceChild(value, current);
-                    } else if (el.firstChild) { // ensure label is firstChild by default
-                        this.insertBefore(value, el.firstChild);
-                    } else {
-                        this.appendChild(value);
-                    }  
+                        current.parentNode.replaceChild(value, current);
+                        this.set('label', value.innerHTML);
+                    }
                 } 
             });
 
@@ -185,7 +183,7 @@
                         this.set(LABEL_EL, _createlabelEl.call(this));
                     }
                     
-                    _setLabel.call(this, value);
+                    labelEl.innerHTML = value;
                 }
             });
             
@@ -197,13 +195,18 @@
             this.setAttributeConfig(CONTENT_EL, {
                 value: attr.contentEl || document.createElement('div'),
                 method: function(value) {
+                    value = Dom.get(value);
                     var current = this.get(CONTENT_EL);
 
                     if (current) {
-                        if (current == value) {
+                        if (current === value) {
                             return false; // already set
                         }
-                        this.replaceChild(value, current);
+                        if (!this.get('selected')) {
+                            Dom.addClass(value, 'yui-hidden');
+                        }
+                        current.parentNode.replaceChild(value, current);
+                        this.set('content', value.innerHTML);
                     }
                 }
             });
