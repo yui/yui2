@@ -566,7 +566,6 @@
 
             var nodes = [],
                 elements = root.getElementsByTagName(tag),
-                re = Y.Dom._getClassRegEx(className),
                 hasClass = Y.Dom.hasClass;
 
             for (var i = 0, len = elements.length; i < len; ++i) {
@@ -658,7 +657,7 @@
 
             if (el && className) {
                 current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
-                Y.Dom.setAttribute(el, CLASSNAME, current.replace(Y.Dom._getClassRegEx(className), EMPTY));
+                Y.Dom.setAttribute(el, CLASSNAME, current.replace(Y.Dom._getClassRegex(className), EMPTY));
 
                 newClass = Y.Dom.getAttribute(el, CLASSNAME);
                 if (current !== newClass) { // else nothing changed
@@ -711,7 +710,7 @@
                     // May need to lead with DBLSPACE?
                     current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
                     className = (SPACE + current.replace(Y.Dom._getClassRegEx(from), SPACE + to)).
-                               split(Y.Dom._getClassRegEx(to));
+                               split(Y.Dom._getClassRegex(to));
 
                     // insert to into what would have been the first occurrence slot
                     className.splice(1, 0, SPACE + to);
@@ -1297,7 +1296,7 @@
                                     property.replace( /-([a-z])/gi, tU ));
         },
 
-        _getClassRegEx: function(className) {
+        _getClassRegex: function(className) {
             var re;
             if (className !== undefined) { // allow empty string to pass
                 if (className.exec) { // already a RegExp
