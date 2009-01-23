@@ -5018,6 +5018,13 @@ focusTbodyEl : function() {
  */
 onShow : function() {
     this.validateColumnWidths();
+    
+    for(var allKeys = this._oColumnSet.keys, i=0, len=allKeys.length, col; i<len; i++) {
+        col = allKeys[i];
+        if(col._ddResizer) {
+            col._ddResizer.resetResizerEl();
+        }
+    }
 },
 
 
