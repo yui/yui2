@@ -234,8 +234,12 @@
          * @method contentTransition
          */
         contentTransition: function(newTab, oldTab) {
-            newTab.set('contentVisible', true);
-            oldTab.set('contentVisible', false);
+            if (newTab) {
+                newTab.set('contentVisible', true);
+            }
+            if (oldTab) {
+                oldTab.set('contentVisible', false);
+            }
         },
         
         /**
@@ -318,7 +322,11 @@
                 method: function(value) {
                 },
                 validator: function(value) {
-                    return !this.getTab(value).get('disabled'); // cannot activate if disabled
+                    var ret = true;
+                    if (value && this.getTab(value).get('disabled')) { // cannot activate if disabled
+                        ret = false;
+                    }
+                    return ret;
                 }
             });
             
@@ -336,18 +344,22 @@
                         tab.set(ACTIVE, true);
                     }
                     
-                    if (activeTab && activeTab != tab) {
+                    if (activeTab && activeTab !== tab) {
                         activeTab.set(ACTIVE, false);
                     }
                     
-                    if (activeTab && tab != activeTab) { // no transition if only 1
+                    if (activeTab && tab !== activeTab) { // no transition if only 1
                         this.contentTransition(tab, activeTab);
                     } else if (tab) {
                         tab.set('contentVisible', true);
                     }
                 },
                 validator: function(value) {
-                    return !value.get('disabled'); // cannot activate if disabled
+                    var ret = true;
+                    if (value && value.get('disabled')) { // cannot activate if disabled
+                        ret = false;
+                    }
+                    return ret;
                 }
             });
 

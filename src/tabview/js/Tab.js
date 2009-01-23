@@ -350,7 +350,6 @@
                 value: attr.contentVisible,
                 method: function(value) {
                     if (value) {
-                        //this.get(CONTENT_EL).style.display = 'block';
                         Dom.removeClass(this.get(CONTENT_EL), this.HIDDEN_CLASSNAME);
                         
                         if ( this.get(DATA_SRC) ) {
@@ -454,7 +453,7 @@
             
 
             Y.Event.preventDefault(e);
-            if (tab == tabview.get(ACTIVE_TAB)) {
+            if (tab === tabview.get(ACTIVE_TAB)) {
                 silent = true; // dont fire activeTabChange if already active
             }
             tabview.set(ACTIVE_TAB, tab, silent);
