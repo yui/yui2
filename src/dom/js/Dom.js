@@ -23,24 +23,18 @@
         body = document.body,
 
         // string constants
+        OWNER_DOCUMENT = 'ownerDocument',
         DEFAULT_VIEW = 'defaultView',
         DOCUMENT_ELEMENT = 'documentElement',
         COMPAT_MODE = 'compatMode',
         OFFSET_LEFT = 'offsetLeft',
         OFFSET_TOP = 'offsetTop',
         OFFSET_PARENT = 'offsetParent',
-        OWNER_DOCUMENT = 'ownerDocument',
-        POSITION = 'position',
-        FIXED = 'fixed',
-        RELATIVE = 'relative',
-        LEFT = 'left',
-        TOP = 'top',
         SCROLL_LEFT = 'scrollLeft',
         SCROLL_TOP = 'scrollTop',
-        BORDER_LEFT_WIDTH = 'borderLeftWidth',
-        BORDER_TOP_WIDTH = 'borderTopWidth',
         GET_BOUNDING_CLIENT_RECT = 'getBoundingClientRect',
         GET_COMPUTED_STYLE = 'getComputedStyle',
+        CURRENT_STYLE = 'currentStyle',
         CSS1_COMPAT = 'CSS1Compat',
         _BACK_COMPAT = 'BackCompat',
         _CLASS = 'class', // underscore due to reserved word
@@ -50,6 +44,14 @@
         C_START = '(?:^|\\s)',
         C_END = '(?= |$)',
         G = 'g',
+        POSITION = 'position',
+        FIXED = 'fixed',
+        RELATIVE = 'relative',
+        LEFT = 'left',
+        TOP = 'top',
+        MEDIUM = 'medium',
+        BORDER_LEFT_WIDTH = 'borderLeftWidth',
+        BORDER_TOP_WIDTH = 'borderTopWidth',
     
     // brower detection
         isOpera = UA.opera,
@@ -125,7 +127,7 @@
         getComputedStyle: function(el, property) {
             if (window[GET_COMPUTED_STYLE]) {
                 return el[OWNER_DOCUMENT][DEFAULT_VIEW][GET_COMPUTED_STYLE](el, null)[property];
-            } else if (el.currentStyle) {
+            } else if (el[CURRENT_STYLE]) {
                 return Y.Dom.IE_ComputedStyle.get(el, property);
             }
         },
@@ -143,7 +145,7 @@
 
         // branching at load instead of runtime
         _getStyle: function() {
-            if (window.getComputedStyle) { // W3C DOM method
+            if (window[GET_COMPUTED_STYLE]) { // W3C DOM method
                 return function(el, property) {
                     property = (property === 'float') ? property = 'cssFloat' :
                             Y.Dom._toCamel(property);
@@ -160,7 +162,7 @@
                     
                     return value;
                 };
-            } else if (documentElement.currentStyle) {
+            } else if (documentElement[CURRENT_STYLE]) {
                 return function(el, property) {                         
                     var value;
 
@@ -183,7 +185,7 @@
                             property = 'styleFloat'; // fall through
                         default: 
                             property = Y.Dom._toCamel(property);
-                            value = el.currentStyle ? el.currentStyle[property] : null;
+                            value = el[CURRENT_STYLE] ? el[CURRENT_STYLE][property] : null;
                             return ( el.style[property] || value );
                     }
                 };
@@ -213,7 +215,7 @@
                                 if ( lang.isString(el.style.filter) ) { // in case not appended
                                     el.style.filter = 'alpha(opacity=' + val * 100 + ')';
                                     
-                                    if (!el.currentStyle || !el.currentStyle.hasLayout) {
+                                    if (!el[CURRENT_STYLE] || !el[CURRENT_STYLE].hasLayout) {
                                         el.style.zoom = 1; // when no layout or cant tell
                                     }
                                 }
@@ -433,14 +435,17 @@
                 delta = [ // assuming pixels; if not we will have to retry
                     parseInt( Y.Dom.getComputedStyle(node, LEFT), 10 ),
                     parseInt( Y.Dom.getComputedStyle(node, TOP), 10 )
-                ];
+                ],
+
+                currentXY,
+                newXY;
         
             if (pos == 'static') { // default to relative
                 pos = RELATIVE;
                 setStyle(node, POSITION, pos);
             }
 
-            var currentXY = Y.Dom._getXY(node);
+            currentXY = Y.Dom._getXY(node);
 
             if (!xy || currentXY === false) { // has to be part of doc to have xy
                 YAHOO.log('xy failed: node not available', 'error', 'Node');
@@ -463,7 +468,7 @@
             }
           
             if (!noRetry) {
-                var newXY = Y.Dom._getXY(node);
+                newXY = Y.Dom._getXY(node);
 
                 // if retry is true, try one more time if we miss 
                if ( (xy[0] !== null && newXY[0] != xy[0]) || 
@@ -653,7 +658,8 @@
         _removeClass: function(el, className) {
             var ret = false,
                 current,
-                newClass;
+                newClass,
+                attr;
 
             if (el && className) {
                 current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
@@ -665,7 +671,7 @@
                     ret = true;
 
                     if (Y.Dom.getAttribute(el, CLASSNAME) === '') { // remove class attribute if empty
-                        var attr = (el.hasAttribute && el.hasAttribute(_CLASS)) ? _CLASS : CLASSNAME;
+                        attr = (el.hasAttribute && el.hasAttribute(_CLASS)) ? _CLASS : CLASSNAME;
                         YAHOO.log('removeClass removing empty class attribute', 'info', 'Dom');
                         el.removeAttribute(attr);
                     }
@@ -902,9 +908,9 @@
          * @return {Int} The height of the actual document (which includes the body and its margin).
          */
         getDocumentHeight: function() {
-            var scrollHeight = (document.compatMode != CSS1_COMPAT || isSafari) ? body.scrollHeight : documentElement.scrollHeight;
+            var scrollHeight = (document[COMPAT_MODE] != CSS1_COMPAT || isSafari) ? body.scrollHeight : documentElement.scrollHeight,
+                h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
 
-            var h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
             YAHOO.log('getDocumentHeight returning ' + h, 'info', 'Dom');
             return h;
         },
@@ -915,8 +921,8 @@
          * @return {Int} The width of the actual document (which includes the body and its margin).
          */
         getDocumentWidth: function() {
-            var scrollWidth = (document.compatMode != CSS1_COMPAT || isSafari) ? body.scrollWidth : documentElement.scrollWidth;
-            var w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
+            var scrollWidth = (document[COMPAT_MODE] != CSS1_COMPAT || isSafari) ? body.scrollWidth : documentElement.scrollWidth,
+                w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
             YAHOO.log('getDocumentWidth returning ' + w, 'info', 'Dom');
             return w;
         },
@@ -927,8 +933,8 @@
          * @return {Int} The height of the viewable area of the page (excludes scrollbars).
          */
         getViewportHeight: function() {
-            var height = self.innerHeight; // Safari, Opera
-            var mode = document.compatMode;
+            var height = self.innerHeight, // Safari, Opera
+                mode = document[COMPAT_MODE];
         
             if ( (mode || isIE) && !isOpera ) { // IE, Gecko
                 height = (mode == CSS1_COMPAT) ?
@@ -947,8 +953,8 @@
          */
         
         getViewportWidth: function() {
-            var width = self.innerWidth;  // Safari
-            var mode = document.compatMode;
+            var width = self.innerWidth,  // Safari
+                mode = document[COMPAT_MODE];
             
             if (mode || isIE) { // IE, Gecko, Opera
                 width = (mode == CSS1_COMPAT) ?
@@ -1153,8 +1159,8 @@
          * @return {Array} A static array of HTMLElements
          */
         getChildrenBy: function(node, method) {
-            var child = Y.Dom.getFirstChildBy(node, method);
-            var children = child ? [child] : [];
+            var child = Y.Dom.getFirstChildBy(node, method),
+                children = child ? [child] : [];
 
             Y.Dom.getNextSiblingBy(child, function(node) {
                 if ( !method || method(node) ) {
@@ -1338,9 +1344,9 @@
         }
     };
         
+    var _getComputedStyle = Y.Dom[GET_COMPUTED_STYLE];
     // fix opera computedStyle default color unit (convert to rgb)
     if (UA.opera) {
-        var _getComputedStyle = Y.Dom[GET_COMPUTED_STYLE];
         Y.Dom[GET_COMPUTED_STYLE] = function(node, att) {
             var val = _getComputedStyle(node, att);
             if (RE_COLOR.test(att)) {
@@ -1354,7 +1360,6 @@
 
     // safari converts transparent to rgba(), others use "transparent"
     if (UA.webkit) {
-        var _getComputedStyle = Y.Dom[GET_COMPUTED_STYLE];
         Y.Dom[GET_COMPUTED_STYLE] = function(node, att) {
             var val = _getComputedStyle(node, att);
 

@@ -115,10 +115,10 @@ YAHOO.util.Region.prototype.getArea = function() {
  * @return {Region}        The overlap region, or null if there is no overlap
  */
 YAHOO.util.Region.prototype.intersect = function(region) {
-    var t = Math.max( this.top,    region.top    );
-    var r = Math.min( this.right,  region.right  );
-    var b = Math.min( this.bottom, region.bottom );
-    var l = Math.max( this.left,   region.left   );
+    var t = Math.max( this.top,    region.top    ),
+        r = Math.min( this.right,  region.right  ),
+        b = Math.min( this.bottom, region.bottom ),
+        l = Math.max( this.left,   region.left   );
     
     if (b >= t && r >= l) {
         return new YAHOO.util.Region(t, r, b, l);
@@ -135,10 +135,10 @@ YAHOO.util.Region.prototype.intersect = function(region) {
  * @return {Region}        The union region
  */
 YAHOO.util.Region.prototype.union = function(region) {
-    var t = Math.min( this.top,    region.top    );
-    var r = Math.max( this.right,  region.right  );
-    var b = Math.max( this.bottom, region.bottom );
-    var l = Math.min( this.left,   region.left   );
+    var t = Math.min( this.top,    region.top    ),
+        r = Math.max( this.right,  region.right  ),
+        b = Math.max( this.bottom, region.bottom ),
+        l = Math.min( this.left,   region.left   );
 
     return new YAHOO.util.Region(t, r, b, l);
 };
@@ -167,12 +167,11 @@ YAHOO.util.Region.prototype.toString = function() {
  * @static
  */
 YAHOO.util.Region.getRegion = function(el) {
-    var p = YAHOO.util.Dom.getXY(el);
-
-    var t = p[1];
-    var r = p[0] + el.offsetWidth;
-    var b = p[1] + el.offsetHeight;
-    var l = p[0];
+    var p = YAHOO.util.Dom.getXY(el),
+        t = p[1],
+        r = p[0] + el.offsetWidth,
+        b = p[1] + el.offsetHeight,
+        l = p[0];
 
     return new YAHOO.util.Region(t, r, b, l);
 };

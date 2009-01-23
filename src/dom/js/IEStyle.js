@@ -23,137 +23,137 @@ var Y = YAHOO.util,
     HEIGHT = 'height',
     WIDTH = 'width',
     STYLE = 'style',
-    GET_COMPUTED_STYLE = 'getComputedStyle',
-    CURRENT_STYLE = 'currentStyle';
+    CURRENT_STYLE = 'currentStyle',
 
 // IE getComputedStyle
 // TODO: unit-less lineHeight (e.g. 1.22)
-var re_size = /^width|height$/,
-    re_unit = /^(\d[.\d]*)+(em|ex|px|gd|rem|vw|vh|vm|ch|mm|cm|in|pt|pc|deg|rad|ms|s|hz|khz|%){1}?/i;
+    re_size = /^width|height$/,
+    re_unit = /^(\d[.\d]*)+(em|ex|px|gd|rem|vw|vh|vm|ch|mm|cm|in|pt|pc|deg|rad|ms|s|hz|khz|%){1}?/i,
 
-var ComputedStyle = {
-    get: function(el, property) {
-        var value = '',
-            current = el[CURRENT_STYLE][property];
+    ComputedStyle = {
+        get: function(el, property) {
+            var value = '',
+                current = el[CURRENT_STYLE][property];
 
-        if (property === OPACITY) {
-            value = Y.Dom.getStyle(el, OPACITY);        
-        } else if (!current || (current.indexOf && current.indexOf(PX) > -1)) { // no need to convert
-            value = current;
-        } else if (Y.Dom.IE_COMPUTED[property]) { // use compute function
-            value = Y.Dom.IE_COMPUTED[property](el, property);
-        } else if (re_unit.test(current)) { // convert to pixel
-            value = Y.Dom.IE.ComputedStyle.getPixel(el, property);
-        } else {
-            value = current;
-        }
-
-        return value;
-    },
-
-    getOffset: function(el, prop) {
-        var current = el[CURRENT_STYLE][prop],                        // value of "width", "top", etc.
-            capped = prop.charAt(0).toUpperCase() + prop.substr(1), // "Width", "Top", etc.
-            offset = 'offset' + capped,                             // "offsetWidth", "offsetTop", etc.
-            pixel = 'pixel' + capped,                               // "pixelWidth", "pixelTop", etc.
-            value = '';
-
-        if (current == AUTO) {
-            var actual = el[offset]; // offsetHeight/Top etc.
-            if (actual === undefined) { // likely "right" or "bottom"
-                value = 0;
+            if (property === OPACITY) {
+                value = Y.Dom.getStyle(el, OPACITY);        
+            } else if (!current || (current.indexOf && current.indexOf(PX) > -1)) { // no need to convert
+                value = current;
+            } else if (Y.Dom.IE_COMPUTED[property]) { // use compute function
+                value = Y.Dom.IE_COMPUTED[property](el, property);
+            } else if (re_unit.test(current)) { // convert to pixel
+                value = Y.Dom.IE.ComputedStyle.getPixel(el, property);
+            } else {
+                value = current;
             }
 
-            value = actual;
-            if (re_size.test(prop)) { // account for box model diff 
-                el[STYLE][prop] = actual; 
-                if (el[offset] > actual) {
-                    // the difference is padding + border (works in Standards & Quirks modes)
-                    value = actual - (el[offset] - actual);
+            return value;
+        },
+
+        getOffset: function(el, prop) {
+            var current = el[CURRENT_STYLE][prop],                        // value of "width", "top", etc.
+                capped = prop.charAt(0).toUpperCase() + prop.substr(1), // "Width", "Top", etc.
+                offset = 'offset' + capped,                             // "offsetWidth", "offsetTop", etc.
+                pixel = 'pixel' + capped,                               // "pixelWidth", "pixelTop", etc.
+                value = '',
+                actual;
+
+            if (current == AUTO) {
+                actual = el[offset]; // offsetHeight/Top etc.
+                if (actual === undefined) { // likely "right" or "bottom"
+                    value = 0;
                 }
-                el[STYLE][prop] = AUTO; // revert to auto
+
+                value = actual;
+                if (re_size.test(prop)) { // account for box model diff 
+                    el[STYLE][prop] = actual; 
+                    if (el[offset] > actual) {
+                        // the difference is padding + border (works in Standards & Quirks modes)
+                        value = actual - (el[offset] - actual);
+                    }
+                    el[STYLE][prop] = AUTO; // revert to auto
+                }
+            } else { // convert units to px
+                if (!el[STYLE][pixel] && !el[STYLE][prop]) { // need to map style.width to currentStyle (no currentStyle.pixelWidth)
+                    el[STYLE][prop] = current;              // no style.pixelWidth if no style.width
+                }
+                value = el[STYLE][pixel];
             }
-        } else { // convert units to px
-            if (!el[STYLE][pixel] && !el[STYLE][prop]) { // need to map style.width to currentStyle (no currentStyle.pixelWidth)
-                el[STYLE][prop] = current;              // no style.pixelWidth if no style.width
+            return value + PX;
+        },
+
+        getBorderWidth: function(el, property) {
+            // clientHeight/Width = paddingBox (e.g. offsetWidth - borderWidth)
+            // clientTop/Left = borderWidth
+            var value = null;
+            if (!el[CURRENT_STYLE][HAS_LAYOUT]) { // TODO: unset layout?
+                el[STYLE].zoom = 1; // need layout to measure client
             }
-            value = el[STYLE][pixel];
+
+            switch(property) {
+                case BORDER_TOP_WIDTH:
+                    value = el[CLIENT_TOP];
+                    break;
+                case BORDER_BOTTOM_WIDTH:
+                    value = el.offsetHeight - el.clientHeight - el[CLIENT_TOP];
+                    break;
+                case BORDER_LEFT_WIDTH:
+                    value = el[CLIENT_LEFT];
+                    break;
+                case BORDER_RIGHT_WIDTH:
+                    value = el.offsetWidth - el.clientWidth - el[CLIENT_LEFT];
+                    break;
+            }
+            return value + PX;
+        },
+
+        getPixel: function(node, att) {
+            // use pixelRight to convert to px
+            var val = null,
+                styleRight = node[CURRENT_STYLE][RIGHT],
+                current = node[CURRENT_STYLE][att];
+
+            node[STYLE][RIGHT] = current;
+            val = node[STYLE].pixelRight;
+            node[STYLE][RIGHT] = styleRight; // revert
+
+            return val + PX;
+        },
+
+        getMargin: function(node, att) {
+            var val;
+            if (node[CURRENT_STYLE][att] == AUTO) {
+                val = 0 + PX;
+            } else {
+                val = Y.Dom.IE.ComputedStyle.getPixel(node, att);
+            }
+            return val;
+        },
+
+        getVisibility: function(node, att) {
+            var current;
+            while ( (current = node[CURRENT_STYLE]) && current[att] == 'inherit') { // NOTE: assignment in test
+                node = node[PARENT_NODE];
+            }
+            return (current) ? current[att] : VISIBLE;
+        },
+
+        getColor: function(node, att) {
+            return Y.Dom.Color.toRGB(node[CURRENT_STYLE][att]) || TRANSPARENT;
+        },
+
+        getBorderColor: function(node, att) {
+            var current = node[CURRENT_STYLE],
+                val = current[att] || current.color;
+            return Y.Dom.Color.toRGB(Y.Dom.Color.toHex(val));
         }
-        return value + PX;
+
     },
-
-    getBorderWidth: function(el, property) {
-        // clientHeight/Width = paddingBox (e.g. offsetWidth - borderWidth)
-        // clientTop/Left = borderWidth
-        var value = null;
-        if (!el[CURRENT_STYLE][HAS_LAYOUT]) { // TODO: unset layout?
-            el[STYLE].zoom = 1; // need layout to measure client
-        }
-
-        switch(property) {
-            case BORDER_TOP_WIDTH:
-                value = el[CLIENT_TOP];
-                break;
-            case BORDER_BOTTOM_WIDTH:
-                value = el.offsetHeight - el.clientHeight - el[CLIENT_TOP];
-                break;
-            case BORDER_LEFT_WIDTH:
-                value = el[CLIENT_LEFT];
-                break;
-            case BORDER_RIGHT_WIDTH:
-                value = el.offsetWidth - el.clientWidth - el[CLIENT_LEFT];
-                break;
-        }
-        return value + PX;
-    },
-
-    getPixel: function(node, att) {
-        // use pixelRight to convert to px
-        var val = null,
-            styleRight = node[CURRENT_STYLE][RIGHT],
-            current = node[CURRENT_STYLE][att];
-
-        node[STYLE][RIGHT] = current;
-        val = node[STYLE].pixelRight;
-        node[STYLE][RIGHT] = styleRight; // revert
-
-        return val + PX;
-    },
-
-    getMargin: function(node, att) {
-        var val;
-        if (node[CURRENT_STYLE][att] == AUTO) {
-            val = 0 + PX;
-        } else {
-            val = Y.Dom.IE.ComputedStyle.getPixel(node, att);
-        }
-        return val;
-    },
-
-    getVisibility: function(node, att) {
-        var current;
-        while ( (current = node[CURRENT_STYLE]) && current[att] == 'inherit') { // NOTE: assignment in test
-            node = node[PARENT_NODE];
-        }
-        return (current) ? current[att] : VISIBLE;
-    },
-
-    getColor: function(node, att) {
-        return Y.Dom.Color.toRGB(node[CURRENT_STYLE][att]) || TRANSPARENT;
-    },
-
-    getBorderColor: function(node, att) {
-        var current = node[CURRENT_STYLE];
-        var val = current[att] || current.color;
-        return Y.Dom.Color.toRGB(Y.Dom.Color.toHex(val));
-    }
-
-};
 
 //fontSize: getPixelFont,
-var IEComputed = {};
+    IEComputed = {};
 
-IEComputed['top'] = IEComputed['right'] = IEComputed['bottom'] = IEComputed['left'] = 
+IEComputed.top = IEComputed.right = IEComputed.bottom = IEComputed.left = 
         IEComputed[WIDTH] = IEComputed[HEIGHT] = ComputedStyle.getOffset;
 
 IEComputed.color = ComputedStyle.getColor;
