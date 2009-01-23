@@ -376,8 +376,7 @@
             <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;activeIndex&#39;</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">activeIndex</span><span class="o">,</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="c">//this.set(&#39;activeTab&#39;, this.getTab(value));</span>
-<span class="c"></span>                <span class="o">},</span>
+                <span class="o">},</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">return</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">getTab</span><span class="o">(</span><span class="nx">value</span><span class="o">).</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;disabled&#39;</span><span class="o">);</span> <span class="c">// cannot activate if disabled</span>
 <span class="c"></span>                <span class="o">}</span>
@@ -395,8 +394,7 @@
                     
                     <span class="k">if</span> <span class="o">(</span><span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">tab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;active&#39;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-                        <span class="c">//this._configs[&#39;activeIndex&#39;].value = this.getTabIndex(tab); // keep in sync</span>
-<span class="c"></span>                    <span class="o">}</span>
+                    <span class="o">}</span>
                     
                     <span class="k">if</span> <span class="o">(</span><span class="nx">activeTab</span> <span class="o">&amp;&amp;</span> <span class="nx">activeTab</span> <span class="o">!=</span> <span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">activeTab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;active&#39;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
@@ -465,13 +463,13 @@
 <span class="c">     * @return void</span>
 <span class="c">     */</span>
     <span class="k">var</span> <span class="nx">_initTabs</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">tab</span><span class="o">,</span>
+        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">ELEMENT</span><span class="o">),</span>
+            <span class="nx">tabs</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getChildren</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_tabParent</span><span class="o">),</span>
+            <span class="nx">contentElements</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getChildren</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_contentParent</span><span class="o">),</span>
+            <span class="nx">activeIndex</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;activeIndex&#39;</span><span class="o">),</span>
+            <span class="nx">tab</span><span class="o">,</span>
             <span class="nx">attr</span><span class="o">,</span>
-            <span class="nx">contentEl</span><span class="o">;</span>
-            
-        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">ELEMENT</span><span class="o">);</span>   
-        <span class="k">var</span> <span class="nx">tabs</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getChildren</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_tabParent</span><span class="o">);</span>
-        <span class="k">var</span> <span class="nx">contentElements</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getChildren</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_contentParent</span><span class="o">);</span>
+            <span class="nx">active</span><span class="o">;</span>
 
         <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">tabs</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">attr</span> <span class="o">=</span> <span class="o">{};</span>
@@ -484,9 +482,14 @@
             <span class="k">this</span><span class="o">.</span><span class="nx">addTab</span><span class="o">(</span><span class="nx">tab</span><span class="o">);</span>
             
             <span class="k">if</span> <span class="o">(</span><span class="nx">tab</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">tab</span><span class="o">.</span><span class="nx">ACTIVE_CLASSNAME</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">.</span><span class="nx">activeTab</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">tab</span><span class="o">;</span> <span class="c">// dont invoke method</span>
-<span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">.</span><span class="nx">activeIndex</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTabIndex</span><span class="o">(</span><span class="nx">tab</span><span class="o">);</span>
+                <span class="nx">active</span> <span class="o">=</span> <span class="nx">tab</span><span class="o">;</span>
             <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">activeIndex</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;activeTab&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTab</span><span class="o">(</span><span class="nx">activeIndex</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">.</span><span class="nx">activeTab</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">active</span><span class="o">;</span> <span class="c">// dont invoke method</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">.</span><span class="nx">activeIndex</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTabIndex</span><span class="o">(</span><span class="nx">active</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">};</span>
     
