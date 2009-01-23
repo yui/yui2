@@ -216,7 +216,7 @@
             this._tabParent.removeChild( tab.get(ELEMENT) );
             this._contentParent.removeChild( tab.get(CONTENT_EL) );
             this._configs.tabs.value.splice(index, 1);
-            
+            tab.fireEvent('remove', { type: 'remove', tabview: this });
         },
         
         /**
