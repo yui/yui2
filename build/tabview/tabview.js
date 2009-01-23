@@ -327,7 +327,6 @@
             this.setAttributeConfig('activeIndex', {
                 value: attr.activeIndex,
                 method: function(value) {
-                    //this.set('activeTab', this.getTab(value));
                 },
                 validator: function(value) {
                     return !this.getTab(value).get('disabled'); // cannot activate if disabled
@@ -346,7 +345,6 @@
                     
                     if (tab) {
                         tab.set('active', true);
-                        //this._configs['activeIndex'].value = this.getTabIndex(tab); // keep in sync
                     }
                     
                     if (activeTab && activeTab != tab) {
@@ -415,13 +413,13 @@
      * @return void
      */
     var _initTabs = function() {
-        var tab,
+        var el = this.get(ELEMENT),
+            tabs = Dom.getChildren(this._tabParent),
+            contentElements = Dom.getChildren(this._contentParent),
+            activeIndex = this.get('activeIndex'),
+            tab,
             attr,
-            contentEl;
-            
-        var el = this.get(ELEMENT);   
-        var tabs = Dom.getChildren(this._tabParent);
-        var contentElements = Dom.getChildren(this._contentParent);
+            active;
 
         for (var i = 0, len = tabs.length; i < len; ++i) {
             attr = {};
@@ -434,9 +432,14 @@
             this.addTab(tab);
             
             if (tab.hasClass(tab.ACTIVE_CLASSNAME) ) {
-                this._configs.activeTab.value = tab; // dont invoke method
-                this._configs.activeIndex.value = this.getTabIndex(tab);
+                active = tab;
             }
+        }
+        if (activeIndex) {
+            this.set('activeTab', this.getTab(activeIndex));
+        } else {
+            this._configs.activeTab.value = active; // dont invoke method
+            this._configs.activeIndex.value = this.getTabIndex(active);
         }
     };
     
@@ -635,6 +638,7 @@
             this.setAttributeConfig(LABEL_EL, {
                 value: attr.labelEl || _getlabelEl.call(this),
                 method: function(value) {
+                    value = Dom.get(value);
                     var current = this.get(LABEL_EL);
 
                     if (current) {
@@ -642,12 +646,9 @@
                             return false; // already set
                         }
                         
-                        this.replaceChild(value, current);
-                    } else if (el.firstChild) { // ensure label is firstChild by default
-                        this.insertBefore(value, el.firstChild);
-                    } else {
-                        this.appendChild(value);
-                    }  
+                        current.parentNode.replaceChild(value, current);
+                        this.set('label', value.innerHTML);
+                    }
                 } 
             });
 
@@ -664,7 +665,7 @@
                         this.set(LABEL_EL, _createlabelEl.call(this));
                     }
                     
-                    _setLabel.call(this, value);
+                    labelEl.innerHTML = value;
                 }
             });
             
@@ -676,13 +677,18 @@
             this.setAttributeConfig(CONTENT_EL, {
                 value: attr.contentEl || document.createElement('div'),
                 method: function(value) {
+                    value = Dom.get(value);
                     var current = this.get(CONTENT_EL);
 
                     if (current) {
-                        if (current == value) {
+                        if (current === value) {
                             return false; // already set
                         }
-                        this.replaceChild(value, current);
+                        if (!this.get('selected')) {
+                            Dom.addClass(value, 'yui-hidden');
+                        }
+                        current.parentNode.replaceChild(value, current);
+                        this.set('content', value.innerHTML);
                     }
                 }
             });
