@@ -122,7 +122,6 @@ function StyleSheet(seed, name) {
     head = d.getElementsByTagName('head')[0];
     if (!head) {
         // TODO: do something. Preferably something smart
-        YAHOO.log('HEAD element not found to append STYLE node','error','StyleSheet');
         throw new Error('HEAD element not found to append STYLE node');
     }
 
@@ -289,7 +288,6 @@ function StyleSheet(seed, name) {
 
             // Some selector values can cause IE to hang
             if (!StyleSheet.isValidSelector(sel)) {
-                YAHOO.log("Invalid selector '"+sel+"' passed to set (ignoring).",'warn','StyleSheet');
                 return this;
             }
 
@@ -389,8 +387,6 @@ _toCssText = function (css,base) {
                 workerStyle[prop] = lang.trim(css[prop]);
             }
             catch (e) {
-                YAHOO.log('Error assigning property "'+prop+'" to "'+css[prop]+
-                          "\" (ignored):\n"+e.message,'warn','StyleSheet');
             }
         }
     }
@@ -545,3 +541,4 @@ NOTES
    ??? - unsetting font-size-adjust has the same effect as unsetting font-size
 */
 
+YAHOO.register("stylesheet", YAHOO.util.StyleSheet, {version: "@VERSION@", build: "@BUILD@"});

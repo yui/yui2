@@ -545,3 +545,4 @@ NOTES
    ??? - unsetting font-size-adjust has the same effect as unsetting font-size
 */
 
+YAHOO.register("stylesheet", YAHOO.util.StyleSheet, {version: "@VERSION@", build: "@BUILD@"});

@@ -120,7 +120,7 @@
 
             obj.handleUnderlayStart();
 
-            Dom.setStyle(obj.overlay.element, "visibility", "visible");
+            obj.overlay._setDomVisibility(true);
             Dom.setStyle(obj.overlay.element, "opacity", 0);
         };
 
@@ -147,7 +147,7 @@
             if (obj.overlay.element.style.filter) {
                 obj.overlay.element.style.filter = null;
             }
-            Dom.setStyle(obj.overlay.element, "visibility", "hidden");
+            obj.overlay._setDomVisibility(false);
             Dom.setStyle(obj.overlay.element, "opacity", 1);
 
             obj.handleUnderlayComplete();
@@ -206,7 +206,7 @@
             if (Dom.getStyle(obj.overlay.element, "visibility") == 
                 "hidden" && currentX < x) {
 
-                Dom.setStyle(obj.overlay.element, "visibility", "visible");
+                obj.overlay._setDomVisibility(true);
 
             }
         
@@ -242,8 +242,8 @@
         };
         
         slide.handleCompleteAnimateOut = function (type, args, obj) {
-            Dom.setStyle(obj.overlay.element, "visibility", "hidden");
-        
+            obj.overlay._setDomVisibility(false);
+
             obj.overlay.cfg.setProperty("xy", [x, y]);
             obj.animateOutCompleteEvent.fire();
         };
