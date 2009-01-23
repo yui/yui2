@@ -30,6 +30,9 @@
         OFFSET_LEFT = 'offsetLeft',
         OFFSET_TOP = 'offsetTop',
         OFFSET_PARENT = 'offsetParent',
+        PARENT_NODE = 'parentNode',
+        NODE_TYPE = 'nodeType',
+        TAG_NAME = 'tagName',
         SCROLL_LEFT = 'scrollLeft',
         SCROLL_TOP = 'scrollTop',
         GET_BOUNDING_CLIENT_RECT = 'getBoundingClientRect',
@@ -38,7 +41,7 @@
         CSS1_COMPAT = 'CSS1Compat',
         _BACK_COMPAT = 'BackCompat',
         _CLASS = 'class', // underscore due to reserved word
-        CLASSNAME = 'className',
+        CLASS_NAME = 'className',
         EMPTY = '',
         SPACE = ' ',
         C_START = '(?:^|\\s)',
@@ -68,10 +71,10 @@
     Y.Dom = {
         CUSTOM_ATTRIBUTES: (!documentElement.hasAttribute) ? { // IE < 8
             'for': 'htmlFor',
-            'class': 'className'
+            'class': CLASS_NAME
         } : { // w3c
             'htmlFor': 'for',
-            'className': 'class'
+            'className': _CLASS
         },
 
         /**
@@ -84,7 +87,7 @@
             var id, nodes, c, i, len;
 
             if (el) {
-                if (el.nodeType || el.item) { // Node, or NodeList
+                if (el[NODE_TYPE] || el.item) { // Node, or NodeList
                     return el;
                 }
 
@@ -175,7 +178,7 @@
                             } catch(e) {
                                 try { // make sure its in the document
                                     value = el.filters('alpha').opacity;
-                                } catch(e) {
+                                } catch(err) {
                                     YAHOO.log('getStyle: IE filter failed',
                                             'error', 'Dom');
                                 }
@@ -348,7 +351,7 @@
                         if (Y.Dom._getStyle(node, POSITION) !== FIXED) {
                             parentNode = node;
 
-                            while ((parentNode = parentNode.parentNode) && parentNode.tagName !== 'HTML') {
+                            while ((parentNode = parentNode[PARENT_NODE]) && parentNode[TAG_NAME] !== 'HTML') {
                                 scrollTop = parentNode[SCROLL_TOP];
                                 scrollLeft = parentNode[SCROLL_LEFT];
 
@@ -511,7 +514,7 @@
          */
         getRegion: function(el) {
             var f = function(el) {
-                if ( (el.parentNode === null || el.offsetParent === null ||
+                if ( (el[PARENT_NODE] === null || el[OFFSET_PARENT] === null ||
                         this.getStyle(el, 'display') == 'none') && el != el[OWNER_DOCUMENT].body) {
                     YAHOO.log('getRegion failed: element not available', 'error', 'Dom');
                     return false;
@@ -602,7 +605,7 @@
                 current;
             
             if (el && className) {
-                current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
+                current = Y.Dom.getAttribute(el, CLASS_NAME) || EMPTY;
                 if (className.exec) {
                     ret = className.test(current);
                 } else {
@@ -632,9 +635,9 @@
                 current;
 
             if (el && className) {
-                current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
+                current = Y.Dom.getAttribute(el, CLASS_NAME) || EMPTY;
                 if ( !Y.Dom._hasClass(el, className) ) {
-                    Y.Dom.setAttribute(el, CLASSNAME, trim(current + SPACE + className));
+                    Y.Dom.setAttribute(el, CLASS_NAME, trim(current + SPACE + className));
                     ret = true;
                 }
             } else {
@@ -662,16 +665,16 @@
                 attr;
 
             if (el && className) {
-                current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
-                Y.Dom.setAttribute(el, CLASSNAME, current.replace(Y.Dom._getClassRegex(className), EMPTY));
+                current = Y.Dom.getAttribute(el, CLASS_NAME) || EMPTY;
+                Y.Dom.setAttribute(el, CLASS_NAME, current.replace(Y.Dom._getClassRegex(className), EMPTY));
 
-                newClass = Y.Dom.getAttribute(el, CLASSNAME);
+                newClass = Y.Dom.getAttribute(el, CLASS_NAME);
                 if (current !== newClass) { // else nothing changed
-                    Y.Dom.setAttribute(el, CLASSNAME, trim(newClass)); // trim after comparing to current class
+                    Y.Dom.setAttribute(el, CLASS_NAME, trim(newClass)); // trim after comparing to current class
                     ret = true;
 
-                    if (Y.Dom.getAttribute(el, CLASSNAME) === '') { // remove class attribute if empty
-                        attr = (el.hasAttribute && el.hasAttribute(_CLASS)) ? _CLASS : CLASSNAME;
+                    if (Y.Dom.getAttribute(el, CLASS_NAME) === '') { // remove class attribute if empty
+                        attr = (el.hasAttribute && el.hasAttribute(_CLASS)) ? _CLASS : CLASS_NAME;
                         YAHOO.log('removeClass removing empty class attribute', 'info', 'Dom');
                         el.removeAttribute(attr);
                     }
@@ -714,13 +717,13 @@
                     ret = Y.Dom._addClass(el, classObj.to);
                 } else if (from !== to) { // else nothing to replace
                     // May need to lead with DBLSPACE?
-                    current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
+                    current = Y.Dom.getAttribute(el, CLASS_NAME) || EMPTY;
                     className = (SPACE + current.replace(Y.Dom._getClassRegex(from), SPACE + to)).
                                split(Y.Dom._getClassRegex(to));
 
                     // insert to into what would have been the first occurrence slot
                     className.splice(1, 0, SPACE + to);
-                    Y.Dom.setAttribute(el, CLASSNAME, trim(className.join(EMPTY)));
+                    Y.Dom.setAttribute(el, CLASS_NAME, trim(className.join(EMPTY)));
                     ret = true;
                 }
             } else {
@@ -777,7 +780,7 @@
             
             var ret = false;
 
-            if ( (haystack && needle) && (haystack.nodeType && needle.nodeType) ) {
+            if ( (haystack && needle) && (haystack[NODE_TYPE] && needle[NODE_TYPE]) ) {
                 if (haystack.contains && haystack !== needle) { // contains returns true when equal
                     ret = haystack.contains(needle);
                 }
@@ -804,7 +807,7 @@
 
         _inDoc: function(el, doc) {
             var ret = false;
-            if (el && el.tagName) {
+            if (el && el[TAG_NAME]) {
                 doc = doc || el[OWNER_DOCUMENT]; 
                 ret = Y.Dom.isAncestor(doc[DOCUMENT_ELEMENT], el);
             } else {
@@ -886,9 +889,9 @@
             var collection = [],
                 scope = (overrides) ? o : window;
                 
-            el = (el && (el.tagName || el.item)) ? el : Y.Dom.get(el); // skip get() when possible
+            el = (el && (el[TAG_NAME] || el.item)) ? el : Y.Dom.get(el); // skip get() when possible
             if (el && method) {
-                if (el.tagName || el.length === undefined) { // element or not array-like 
+                if (el[TAG_NAME] || el.length === undefined) { // element or not array-like 
                     return method.call(scope, el, o);
                 } 
 
@@ -974,7 +977,7 @@
          * @return {Object} HTMLElement or null if not found
          */
         getAncestorBy: function(node, method) {
-            while ( (node = node.parentNode) ) { // NOTE: assignment
+            while ( (node = node[PARENT_NODE]) ) { // NOTE: assignment
                 if ( Y.Dom._testElement(node, method) ) {
                     YAHOO.log('getAncestorBy returning ' + node, 'info', 'Dom');
                     return node;
@@ -1016,7 +1019,7 @@
                 return null;
             }
             var method = function(el) {
-                 return el.tagName && el.tagName.toUpperCase() == tagName.toUpperCase();
+                 return el[TAG_NAME] && el[TAG_NAME].toUpperCase() == tagName.toUpperCase();
             };
 
             return Y.Dom.getAncestorBy(node, method);
@@ -1220,12 +1223,12 @@
             newNode = Y.Dom.get(newNode); 
             referenceNode = Y.Dom.get(referenceNode); 
             
-            if (!newNode || !referenceNode || !referenceNode.parentNode) {
+            if (!newNode || !referenceNode || !referenceNode[PARENT_NODE]) {
                 YAHOO.log('insertAfter failed: missing or invalid arg(s)', 'error', 'Dom');
                 return null;
             }       
 
-            return referenceNode.parentNode.insertBefore(newNode, referenceNode); 
+            return referenceNode[PARENT_NODE].insertBefore(newNode, referenceNode); 
         },
 
         /**
@@ -1239,15 +1242,15 @@
             newNode = Y.Dom.get(newNode); 
             referenceNode = Y.Dom.get(referenceNode); 
             
-            if (!newNode || !referenceNode || !referenceNode.parentNode) {
+            if (!newNode || !referenceNode || !referenceNode[PARENT_NODE]) {
                 YAHOO.log('insertAfter failed: missing or invalid arg(s)', 'error', 'Dom');
                 return null;
             }       
 
             if (referenceNode.nextSibling) {
-                return referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling); 
+                return referenceNode[PARENT_NODE].insertBefore(newNode, referenceNode.nextSibling); 
             } else {
-                return referenceNode.parentNode.appendChild(newNode);
+                return referenceNode[PARENT_NODE].appendChild(newNode);
             }
         },
 
@@ -1326,14 +1329,14 @@
 
 
         _testElement: function(node, method) {
-            return node && node.nodeType == 1 && ( !method || method(node) );
+            return node && node[NODE_TYPE] == 1 && ( !method || method(node) );
         },
 
         _calcBorders: function(node, xy2) {
             var t = parseInt(Y.Dom[GET_COMPUTED_STYLE](node, BORDER_TOP_WIDTH), 10) || 0,
                 l = parseInt(Y.Dom[GET_COMPUTED_STYLE](node, BORDER_LEFT_WIDTH), 10) || 0;
             if (isGecko) {
-                if (RE_TABLE.test(node.tagName)) {
+                if (RE_TABLE.test(node[TAG_NAME])) {
                     t = 0;
                     l = 0;
                 }
