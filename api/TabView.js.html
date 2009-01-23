@@ -59,7 +59,7 @@
     <span class="k">var</span> <span class="nx">Y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">,</span>
         <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
         <span class="nx">Event</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
-        <span class="nb">document</span> <span class="o">=</span> <span class="nb">document</span><span class="o">,</span>
+        <span class="nb">document</span> <span class="o">=</span> <span class="nb">window</span><span class="o">.</span><span class="nb">document</span><span class="o">,</span>
     
         <span class="c">// STRING CONSTANTS</span>
 <span class="c"></span>        <span class="nx">ACTIVE</span> <span class="o">=</span> <span class="s1">&#39;active&#39;</span><span class="o">,</span>
@@ -431,6 +431,14 @@
                     <span class="k">this</span><span class="o">.</span><span class="nx">addListener</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">type</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">DOMEventHandler</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>
+        <span class="o">},</span>
+
+        <span class="nx">deselectTab</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;activeTab&#39;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="nx">selectTab</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;activeTab&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTab</span><span class="o">(</span><span class="nx">index</span><span class="o">));</span>
         <span class="o">},</span>
 
         <span class="nx">_onActiveTabChange</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
