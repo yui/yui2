@@ -1961,7 +1961,7 @@
                 return false;
             }
 
-            carousel._reRender();
+            carousel._refreshUi();
 
             return true;
         },
@@ -2653,13 +2653,13 @@
         },
 
         /**
-         * Re-render the widget if it is not already rendered, on first item
+         * Refresh the widget UI if it is not already rendered, on first item
          * addition.
          *
-         * @method _reRender
+         * @method _refreshUi
          * @protected
          */
-        _reRender: function () {
+        _refreshUi: function () {
             var carousel = this;
 
             // Set the rendered state appropriately.
@@ -3035,7 +3035,6 @@
                 el,
                 item,
                 itemsTable = carousel._itemsTable,
-                me         = carousel.get("element").id,
                 oel,
                 pos,
                 sibling;
@@ -3092,7 +3091,7 @@
             }
 
             if (!carousel._hasRendered) {
-                carousel._reRender();
+                carousel._refreshUi();
             }
 
             if (carousel.get("selectedItem") < 0) {
