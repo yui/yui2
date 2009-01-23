@@ -122,23 +122,12 @@
         },
 
         _initTabEvents: function(tab) {
-            var silent = false,
-                tabview = this,
-
-                activate = function(e) {
-                Event.preventDefault(e);
-                if (tab == tabview.get(ACTIVE_TAB)) {
-                    silent = true; // dont fire activeTabChange if already active
-                }
-                tabview.set(ACTIVE_TAB, tab, silent);
-            };
-            
-            tab.addListener( tab.get('activationEvent'), activate);
+            tab.addListener( tab.get('activationEvent'), tab._onActivate, this, tab);
             
             tab.addListener('activationEventChange', function(e) {
                 if (e.prevValue != e.newValue) {
-                    tab.removeListener(e.prevValue, activate);
-                    tab.addListener(e.newValue, activate);
+                    tab.removeListener(e.prevValue, tab._onActivate);
+                    tab.addListener(e.newValue, tab._onActivate, this, tab);
                 }
             });
         },
@@ -488,6 +477,7 @@
     
 
     // STRING CONSTANTS
+        ACTIVE_TAB = 'activeTab',
         LABEL = 'label',
         LABEL_EL = 'labelEl',
         CONTENT = 'content',
@@ -928,6 +918,18 @@
                 }
             
             return el.innerHTML;
+        },
+
+        _onActivate: function(e, tabview) {
+            var tab = this,
+                silent = false;
+            
+
+            Y.Event.preventDefault(e);
+            if (tab == tabview.get(ACTIVE_TAB)) {
+                silent = true; // dont fire activeTabChange if already active
+            }
+            tabview.set(ACTIVE_TAB, tab, silent);
         }
     });
     
