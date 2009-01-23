@@ -322,14 +322,36 @@
         function getStyleIntVal(el, style) {
             var val;
 
-            val = parseInt(Dom.getStyle(el, style), 10);
+            /*
+             * XXX: Safari calculates incorrect marginRight for an element
+             * which has its parent element style set to overflow: hidden
+             * https://bugs.webkit.org/show_bug.cgi?id=13343
+             * Let us assume marginLeft == marginRight
+             */
+            if (style == "marginRight" && YAHOO.env.ua.webkit) {
+                val = parseInt(Dom.getStyle(el, "marginLeft"), 10);
+            } else {
+                val = parseInt(Dom.getStyle(el, style), 10);
+            }
+
             return JS.isNumber(val) ? val : 0;
         }
 
         function getStyleFloatVal(el, style) {
             var val;
 
-            val = parseFloat(Dom.getStyle(el, style));
+            /*
+             * XXX: Safari calculates incorrect marginRight for an element
+             * which has its parent element style set to overflow: hidden
+             * https://bugs.webkit.org/show_bug.cgi?id=13343
+             * Let us assume marginLeft == marginRight
+             */
+            if (style == "marginRight" && YAHOO.env.ua.webkit) {
+                val = parseFloat(Dom.getStyle(el, "marginLeft"));
+            } else {
+                val = parseFloat(Dom.getStyle(el, style));
+            }
+
             return JS.isNumber(val) ? val : 0;
         }
 
@@ -371,13 +393,6 @@
         default:
             if (type == "int") {
                 value = getStyleIntVal(el, style);
-                // XXX: Safari calculates incorrect marginRight for an element
-                // which has its parent element style set to overflow: hidden
-                // https://bugs.webkit.org/show_bug.cgi?id=13343
-                // Let us assume marginLeft == marginRight
-                if (style == "marginRight" && YAHOO.env.ua.webkit) {
-                    value = getStyleIntVal(el, "marginLeft");
-                }
             } else if (type == "float") {
                 value = getStyleFloatVal(el, style);
             } else {
@@ -683,7 +698,9 @@
     }
 
     /**
-     * Fire custom events for synchronizing the DOM.
+     * Handle UI update.
+     * Call the appropriate methods on events fired when an item is added, or
+     * removed for synchronizing the DOM.
      *
      * @method syncUi
      * @param {Object} o The item that needs to be added or removed
@@ -1943,7 +1960,7 @@
                 return false;
             }
 
-            carousel._reRender();
+            carousel._refreshUi();
 
             return true;
         },
@@ -2623,13 +2640,13 @@
         },
 
         /**
-         * Re-render the widget if it is not already rendered, on first item
+         * Refresh the widget UI if it is not already rendered, on first item
          * addition.
          *
-         * @method _reRender
+         * @method _refreshUi
          * @protected
          */
-        _reRender: function () {
+        _refreshUi: function () {
             var carousel = this;
 
             // Set the rendered state appropriately.
@@ -3005,7 +3022,6 @@
                 el,
                 item,
                 itemsTable = carousel._itemsTable,
-                me         = carousel.get("element").id,
                 oel,
                 pos,
                 sibling;
@@ -3061,7 +3077,7 @@
             }
 
             if (!carousel._hasRendered) {
-                carousel._reRender();
+                carousel._refreshUi();
             }
 
             if (carousel.get("selectedItem") < 0) {
