@@ -23,24 +23,18 @@
         body = document.body,
 
         // string constants
+        OWNER_DOCUMENT = 'ownerDocument',
         DEFAULT_VIEW = 'defaultView',
         DOCUMENT_ELEMENT = 'documentElement',
         COMPAT_MODE = 'compatMode',
         OFFSET_LEFT = 'offsetLeft',
         OFFSET_TOP = 'offsetTop',
         OFFSET_PARENT = 'offsetParent',
-        OWNER_DOCUMENT = 'ownerDocument',
-        POSITION = 'position',
-        FIXED = 'fixed',
-        RELATIVE = 'relative',
-        LEFT = 'left',
-        TOP = 'top',
         SCROLL_LEFT = 'scrollLeft',
         SCROLL_TOP = 'scrollTop',
-        BORDER_LEFT_WIDTH = 'borderLeftWidth',
-        BORDER_TOP_WIDTH = 'borderTopWidth',
         GET_BOUNDING_CLIENT_RECT = 'getBoundingClientRect',
         GET_COMPUTED_STYLE = 'getComputedStyle',
+        CURRENT_STYLE = 'currentStyle',
         CSS1_COMPAT = 'CSS1Compat',
         _BACK_COMPAT = 'BackCompat',
         _CLASS = 'class', // underscore due to reserved word
@@ -50,6 +44,14 @@
         C_START = '(?:^|\\s)',
         C_END = '(?= |$)',
         G = 'g',
+        POSITION = 'position',
+        FIXED = 'fixed',
+        RELATIVE = 'relative',
+        LEFT = 'left',
+        TOP = 'top',
+        MEDIUM = 'medium',
+        BORDER_LEFT_WIDTH = 'borderLeftWidth',
+        BORDER_TOP_WIDTH = 'borderTopWidth',
     
     // brower detection
         isOpera = UA.opera,
@@ -125,7 +127,7 @@
         getComputedStyle: function(el, property) {
             if (window[GET_COMPUTED_STYLE]) {
                 return el[OWNER_DOCUMENT][DEFAULT_VIEW][GET_COMPUTED_STYLE](el, null)[property];
-            } else if (el.currentStyle) {
+            } else if (el[CURRENT_STYLE]) {
                 return Y.Dom.IE_ComputedStyle.get(el, property);
             }
         },
@@ -143,7 +145,7 @@
 
         // branching at load instead of runtime
         _getStyle: function() {
-            if (window.getComputedStyle) { // W3C DOM method
+            if (window[GET_COMPUTED_STYLE]) { // W3C DOM method
                 return function(el, property) {
                     property = (property === 'float') ? property = 'cssFloat' :
                             Y.Dom._toCamel(property);
@@ -160,7 +162,7 @@
                     
                     return value;
                 };
-            } else if (documentElement.currentStyle) {
+            } else if (documentElement[CURRENT_STYLE]) {
                 return function(el, property) {                         
                     var value;
 
@@ -183,7 +185,7 @@
                             property = 'styleFloat'; // fall through
                         default: 
                             property = Y.Dom._toCamel(property);
-                            value = el.currentStyle ? el.currentStyle[property] : null;
+                            value = el[CURRENT_STYLE] ? el[CURRENT_STYLE][property] : null;
                             return ( el.style[property] || value );
                     }
                 };
@@ -213,7 +215,7 @@
                                 if ( lang.isString(el.style.filter) ) { // in case not appended
                                     el.style.filter = 'alpha(opacity=' + val * 100 + ')';
                                     
-                                    if (!el.currentStyle || !el.currentStyle.hasLayout) {
+                                    if (!el[CURRENT_STYLE] || !el[CURRENT_STYLE].hasLayout) {
                                         el.style.zoom = 1; // when no layout or cant tell
                                     }
                                 }
@@ -433,14 +435,17 @@
                 delta = [ // assuming pixels; if not we will have to retry
                     parseInt( Y.Dom.getComputedStyle(node, LEFT), 10 ),
                     parseInt( Y.Dom.getComputedStyle(node, TOP), 10 )
-                ];
+                ],
+
+                currentXY,
+                newXY;
         
             if (pos == 'static') { // default to relative
                 pos = RELATIVE;
                 setStyle(node, POSITION, pos);
             }
 
-            var currentXY = Y.Dom._getXY(node);
+            currentXY = Y.Dom._getXY(node);
 
             if (!xy || currentXY === false) { // has to be part of doc to have xy
                 YAHOO.log('xy failed: node not available', 'error', 'Node');
@@ -463,7 +468,7 @@
             }
           
             if (!noRetry) {
-                var newXY = Y.Dom._getXY(node);
+                newXY = Y.Dom._getXY(node);
 
                 // if retry is true, try one more time if we miss 
                if ( (xy[0] !== null && newXY[0] != xy[0]) || 
@@ -653,7 +658,8 @@
         _removeClass: function(el, className) {
             var ret = false,
                 current,
-                newClass;
+                newClass,
+                attr;
 
             if (el && className) {
                 current = Y.Dom.getAttribute(el, CLASSNAME) || EMPTY;
@@ -665,7 +671,7 @@
                     ret = true;
 
                     if (Y.Dom.getAttribute(el, CLASSNAME) === '') { // remove class attribute if empty
-                        var attr = (el.hasAttribute && el.hasAttribute(_CLASS)) ? _CLASS : CLASSNAME;
+                        attr = (el.hasAttribute && el.hasAttribute(_CLASS)) ? _CLASS : CLASSNAME;
                         YAHOO.log('removeClass removing empty class attribute', 'info', 'Dom');
                         el.removeAttribute(attr);
                     }
@@ -902,9 +908,9 @@
          * @return {Int} The height of the actual document (which includes the body and its margin).
          */
         getDocumentHeight: function() {
-            var scrollHeight = (document.compatMode != CSS1_COMPAT || isSafari) ? body.scrollHeight : documentElement.scrollHeight;
+            var scrollHeight = (document[COMPAT_MODE] != CSS1_COMPAT || isSafari) ? body.scrollHeight : documentElement.scrollHeight,
+                h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
 
-            var h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
             YAHOO.log('getDocumentHeight returning ' + h, 'info', 'Dom');
             return h;
         },
@@ -915,8 +921,8 @@
          * @return {Int} The width of the actual document (which includes the body and its margin).
          */
         getDocumentWidth: function() {
-            var scrollWidth = (document.compatMode != CSS1_COMPAT || isSafari) ? body.scrollWidth : documentElement.scrollWidth;
-            var w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
+            var scrollWidth = (document[COMPAT_MODE] != CSS1_COMPAT || isSafari) ? body.scrollWidth : documentElement.scrollWidth,
+                w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
             YAHOO.log('getDocumentWidth returning ' + w, 'info', 'Dom');
             return w;
         },
@@ -927,8 +933,8 @@
          * @return {Int} The height of the viewable area of the page (excludes scrollbars).
          */
         getViewportHeight: function() {
-            var height = self.innerHeight; // Safari, Opera
-            var mode = document.compatMode;
+            var height = self.innerHeight, // Safari, Opera
+                mode = document[COMPAT_MODE];
         
             if ( (mode || isIE) && !isOpera ) { // IE, Gecko
                 height = (mode == CSS1_COMPAT) ?
@@ -947,8 +953,8 @@
          */
         
         getViewportWidth: function() {
-            var width = self.innerWidth;  // Safari
-            var mode = document.compatMode;
+            var width = self.innerWidth,  // Safari
+                mode = document[COMPAT_MODE];
             
             if (mode || isIE) { // IE, Gecko, Opera
                 width = (mode == CSS1_COMPAT) ?
@@ -1153,8 +1159,8 @@
          * @return {Array} A static array of HTMLElements
          */
         getChildrenBy: function(node, method) {
-            var child = Y.Dom.getFirstChildBy(node, method);
-            var children = child ? [child] : [];
+            var child = Y.Dom.getFirstChildBy(node, method),
+                children = child ? [child] : [];
 
             Y.Dom.getNextSiblingBy(child, function(node) {
                 if ( !method || method(node) ) {
@@ -1338,9 +1344,9 @@
         }
     };
         
+    var _getComputedStyle = Y.Dom[GET_COMPUTED_STYLE];
     // fix opera computedStyle default color unit (convert to rgb)
     if (UA.opera) {
-        var _getComputedStyle = Y.Dom[GET_COMPUTED_STYLE];
         Y.Dom[GET_COMPUTED_STYLE] = function(node, att) {
             var val = _getComputedStyle(node, att);
             if (RE_COLOR.test(att)) {
@@ -1354,7 +1360,6 @@
 
     // safari converts transparent to rgba(), others use "transparent"
     if (UA.webkit) {
-        var _getComputedStyle = Y.Dom[GET_COMPUTED_STYLE];
         Y.Dom[GET_COMPUTED_STYLE] = function(node, att) {
             var val = _getComputedStyle(node, att);
 
@@ -1484,10 +1489,10 @@ YAHOO.util.Region.prototype.getArea = function() {
  * @return {Region}        The overlap region, or null if there is no overlap
  */
 YAHOO.util.Region.prototype.intersect = function(region) {
-    var t = Math.max( this.top,    region.top    );
-    var r = Math.min( this.right,  region.right  );
-    var b = Math.min( this.bottom, region.bottom );
-    var l = Math.max( this.left,   region.left   );
+    var t = Math.max( this.top,    region.top    ),
+        r = Math.min( this.right,  region.right  ),
+        b = Math.min( this.bottom, region.bottom ),
+        l = Math.max( this.left,   region.left   );
     
     if (b >= t && r >= l) {
         return new YAHOO.util.Region(t, r, b, l);
@@ -1504,10 +1509,10 @@ YAHOO.util.Region.prototype.intersect = function(region) {
  * @return {Region}        The union region
  */
 YAHOO.util.Region.prototype.union = function(region) {
-    var t = Math.min( this.top,    region.top    );
-    var r = Math.max( this.right,  region.right  );
-    var b = Math.max( this.bottom, region.bottom );
-    var l = Math.min( this.left,   region.left   );
+    var t = Math.min( this.top,    region.top    ),
+        r = Math.max( this.right,  region.right  ),
+        b = Math.max( this.bottom, region.bottom ),
+        l = Math.min( this.left,   region.left   );
 
     return new YAHOO.util.Region(t, r, b, l);
 };
@@ -1536,12 +1541,11 @@ YAHOO.util.Region.prototype.toString = function() {
  * @static
  */
 YAHOO.util.Region.getRegion = function(el) {
-    var p = YAHOO.util.Dom.getXY(el);
-
-    var t = p[1];
-    var r = p[0] + el.offsetWidth;
-    var b = p[1] + el.offsetHeight;
-    var l = p[0];
+    var p = YAHOO.util.Dom.getXY(el),
+        t = p[1],
+        r = p[0] + el.offsetWidth,
+        b = p[1] + el.offsetHeight,
+        l = p[0];
 
     return new YAHOO.util.Region(t, r, b, l);
 };
@@ -1595,137 +1599,137 @@ var Y = YAHOO.util,
     HEIGHT = 'height',
     WIDTH = 'width',
     STYLE = 'style',
-    GET_COMPUTED_STYLE = 'getComputedStyle',
-    CURRENT_STYLE = 'currentStyle';
+    CURRENT_STYLE = 'currentStyle',
 
 // IE getComputedStyle
 // TODO: unit-less lineHeight (e.g. 1.22)
-var re_size = /^width|height$/,
-    re_unit = /^(\d[.\d]*)+(em|ex|px|gd|rem|vw|vh|vm|ch|mm|cm|in|pt|pc|deg|rad|ms|s|hz|khz|%){1}?/i;
+    re_size = /^width|height$/,
+    re_unit = /^(\d[.\d]*)+(em|ex|px|gd|rem|vw|vh|vm|ch|mm|cm|in|pt|pc|deg|rad|ms|s|hz|khz|%){1}?/i,
 
-var ComputedStyle = {
-    get: function(el, property) {
-        var value = '',
-            current = el[CURRENT_STYLE][property];
+    ComputedStyle = {
+        get: function(el, property) {
+            var value = '',
+                current = el[CURRENT_STYLE][property];
 
-        if (property === OPACITY) {
-            value = Y.Dom.getStyle(el, OPACITY);        
-        } else if (!current || (current.indexOf && current.indexOf(PX) > -1)) { // no need to convert
-            value = current;
-        } else if (Y.Dom.IE_COMPUTED[property]) { // use compute function
-            value = Y.Dom.IE_COMPUTED[property](el, property);
-        } else if (re_unit.test(current)) { // convert to pixel
-            value = Y.Dom.IE.ComputedStyle.getPixel(el, property);
-        } else {
-            value = current;
-        }
-
-        return value;
-    },
-
-    getOffset: function(el, prop) {
-        var current = el[CURRENT_STYLE][prop],                        // value of "width", "top", etc.
-            capped = prop.charAt(0).toUpperCase() + prop.substr(1), // "Width", "Top", etc.
-            offset = 'offset' + capped,                             // "offsetWidth", "offsetTop", etc.
-            pixel = 'pixel' + capped,                               // "pixelWidth", "pixelTop", etc.
-            value = '';
-
-        if (current == AUTO) {
-            var actual = el[offset]; // offsetHeight/Top etc.
-            if (actual === undefined) { // likely "right" or "bottom"
-                value = 0;
+            if (property === OPACITY) {
+                value = Y.Dom.getStyle(el, OPACITY);        
+            } else if (!current || (current.indexOf && current.indexOf(PX) > -1)) { // no need to convert
+                value = current;
+            } else if (Y.Dom.IE_COMPUTED[property]) { // use compute function
+                value = Y.Dom.IE_COMPUTED[property](el, property);
+            } else if (re_unit.test(current)) { // convert to pixel
+                value = Y.Dom.IE.ComputedStyle.getPixel(el, property);
+            } else {
+                value = current;
             }
 
-            value = actual;
-            if (re_size.test(prop)) { // account for box model diff 
-                el[STYLE][prop] = actual; 
-                if (el[offset] > actual) {
-                    // the difference is padding + border (works in Standards & Quirks modes)
-                    value = actual - (el[offset] - actual);
+            return value;
+        },
+
+        getOffset: function(el, prop) {
+            var current = el[CURRENT_STYLE][prop],                        // value of "width", "top", etc.
+                capped = prop.charAt(0).toUpperCase() + prop.substr(1), // "Width", "Top", etc.
+                offset = 'offset' + capped,                             // "offsetWidth", "offsetTop", etc.
+                pixel = 'pixel' + capped,                               // "pixelWidth", "pixelTop", etc.
+                value = '',
+                actual;
+
+            if (current == AUTO) {
+                actual = el[offset]; // offsetHeight/Top etc.
+                if (actual === undefined) { // likely "right" or "bottom"
+                    value = 0;
                 }
-                el[STYLE][prop] = AUTO; // revert to auto
+
+                value = actual;
+                if (re_size.test(prop)) { // account for box model diff 
+                    el[STYLE][prop] = actual; 
+                    if (el[offset] > actual) {
+                        // the difference is padding + border (works in Standards & Quirks modes)
+                        value = actual - (el[offset] - actual);
+                    }
+                    el[STYLE][prop] = AUTO; // revert to auto
+                }
+            } else { // convert units to px
+                if (!el[STYLE][pixel] && !el[STYLE][prop]) { // need to map style.width to currentStyle (no currentStyle.pixelWidth)
+                    el[STYLE][prop] = current;              // no style.pixelWidth if no style.width
+                }
+                value = el[STYLE][pixel];
             }
-        } else { // convert units to px
-            if (!el[STYLE][pixel] && !el[STYLE][prop]) { // need to map style.width to currentStyle (no currentStyle.pixelWidth)
-                el[STYLE][prop] = current;              // no style.pixelWidth if no style.width
+            return value + PX;
+        },
+
+        getBorderWidth: function(el, property) {
+            // clientHeight/Width = paddingBox (e.g. offsetWidth - borderWidth)
+            // clientTop/Left = borderWidth
+            var value = null;
+            if (!el[CURRENT_STYLE][HAS_LAYOUT]) { // TODO: unset layout?
+                el[STYLE].zoom = 1; // need layout to measure client
             }
-            value = el[STYLE][pixel];
+
+            switch(property) {
+                case BORDER_TOP_WIDTH:
+                    value = el[CLIENT_TOP];
+                    break;
+                case BORDER_BOTTOM_WIDTH:
+                    value = el.offsetHeight - el.clientHeight - el[CLIENT_TOP];
+                    break;
+                case BORDER_LEFT_WIDTH:
+                    value = el[CLIENT_LEFT];
+                    break;
+                case BORDER_RIGHT_WIDTH:
+                    value = el.offsetWidth - el.clientWidth - el[CLIENT_LEFT];
+                    break;
+            }
+            return value + PX;
+        },
+
+        getPixel: function(node, att) {
+            // use pixelRight to convert to px
+            var val = null,
+                styleRight = node[CURRENT_STYLE][RIGHT],
+                current = node[CURRENT_STYLE][att];
+
+            node[STYLE][RIGHT] = current;
+            val = node[STYLE].pixelRight;
+            node[STYLE][RIGHT] = styleRight; // revert
+
+            return val + PX;
+        },
+
+        getMargin: function(node, att) {
+            var val;
+            if (node[CURRENT_STYLE][att] == AUTO) {
+                val = 0 + PX;
+            } else {
+                val = Y.Dom.IE.ComputedStyle.getPixel(node, att);
+            }
+            return val;
+        },
+
+        getVisibility: function(node, att) {
+            var current;
+            while ( (current = node[CURRENT_STYLE]) && current[att] == 'inherit') { // NOTE: assignment in test
+                node = node[PARENT_NODE];
+            }
+            return (current) ? current[att] : VISIBLE;
+        },
+
+        getColor: function(node, att) {
+            return Y.Dom.Color.toRGB(node[CURRENT_STYLE][att]) || TRANSPARENT;
+        },
+
+        getBorderColor: function(node, att) {
+            var current = node[CURRENT_STYLE],
+                val = current[att] || current.color;
+            return Y.Dom.Color.toRGB(Y.Dom.Color.toHex(val));
         }
-        return value + PX;
+
     },
-
-    getBorderWidth: function(el, property) {
-        // clientHeight/Width = paddingBox (e.g. offsetWidth - borderWidth)
-        // clientTop/Left = borderWidth
-        var value = null;
-        if (!el[CURRENT_STYLE][HAS_LAYOUT]) { // TODO: unset layout?
-            el[STYLE].zoom = 1; // need layout to measure client
-        }
-
-        switch(property) {
-            case BORDER_TOP_WIDTH:
-                value = el[CLIENT_TOP];
-                break;
-            case BORDER_BOTTOM_WIDTH:
-                value = el.offsetHeight - el.clientHeight - el[CLIENT_TOP];
-                break;
-            case BORDER_LEFT_WIDTH:
-                value = el[CLIENT_LEFT];
-                break;
-            case BORDER_RIGHT_WIDTH:
-                value = el.offsetWidth - el.clientWidth - el[CLIENT_LEFT];
-                break;
-        }
-        return value + PX;
-    },
-
-    getPixel: function(node, att) {
-        // use pixelRight to convert to px
-        var val = null,
-            styleRight = node[CURRENT_STYLE][RIGHT],
-            current = node[CURRENT_STYLE][att];
-
-        node[STYLE][RIGHT] = current;
-        val = node[STYLE].pixelRight;
-        node[STYLE][RIGHT] = styleRight; // revert
-
-        return val + PX;
-    },
-
-    getMargin: function(node, att) {
-        var val;
-        if (node[CURRENT_STYLE][att] == AUTO) {
-            val = 0 + PX;
-        } else {
-            val = Y.Dom.IE.ComputedStyle.getPixel(node, att);
-        }
-        return val;
-    },
-
-    getVisibility: function(node, att) {
-        var current;
-        while ( (current = node[CURRENT_STYLE]) && current[att] == 'inherit') { // NOTE: assignment in test
-            node = node[PARENT_NODE];
-        }
-        return (current) ? current[att] : VISIBLE;
-    },
-
-    getColor: function(node, att) {
-        return Y.Dom.Color.toRGB(node[CURRENT_STYLE][att]) || TRANSPARENT;
-    },
-
-    getBorderColor: function(node, att) {
-        var current = node[CURRENT_STYLE];
-        var val = current[att] || current.color;
-        return Y.Dom.Color.toRGB(Y.Dom.Color.toHex(val));
-    }
-
-};
 
 //fontSize: getPixelFont,
-var IEComputed = {};
+    IEComputed = {};
 
-IEComputed['top'] = IEComputed['right'] = IEComputed['bottom'] = IEComputed['left'] = 
+IEComputed.top = IEComputed.right = IEComputed.bottom = IEComputed.left = 
         IEComputed[WIDTH] = IEComputed[HEIGHT] = ComputedStyle.getOffset;
 
 IEComputed.color = ComputedStyle.getColor;
