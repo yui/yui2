@@ -683,7 +683,9 @@
     }
 
     /**
-     * Fire custom events for synchronizing the DOM.
+     * Handle UI update.
+     * Call the appropriate methods on events fired when an item is added, or
+     * removed for synchronizing the DOM.
      *
      * @method syncUi
      * @param {Object} o The item that needs to be added or removed
