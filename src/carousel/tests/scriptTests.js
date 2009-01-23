@@ -214,29 +214,30 @@
             },
 
             testSetNumVisible: function () {
-                var num = carousel.get("numItems");
+                var contentEl = carouselEl.parentNode,
+                    num = carousel.get("numItems");
 
                 function isSameWidth(el, w) {
                     return parseInt(Dom.getStyle(el, "width"), 10) == w;
                 }
 
                 if (carousel.get("numVisible") != 3 ||
-                    !isSameWidth(carouselEl, 300)) {
+                    !isSameWidth(contentEl, 300)) {
                     return Assert.fail("numVisible should be 3 by default");
                 }
                 carousel.set("numVisible", 1);
                 if (carousel.get("numVisible") != 1 ||
-                    !isSameWidth(carouselEl, 100)) {
+                    !isSameWidth(contentEl, 100)) {
                     return Assert.fail("numVisible should be 1 by default");
                 }
                 carousel.set("numVisible", num);
                 if (carousel.get("numVisible") != num ||
-                    !isSameWidth(carouselEl, num * 100)) {
+                    !isSameWidth(contentEl, num * 100)) {
                     return Assert.fail("numVisible should have been " + num);
                 }
                 carousel.set("numVisible", 1);
                 if (carousel.get("numVisible") != 1 ||
-                    !isSameWidth(carouselEl, 100)) {
+                    !isSameWidth(contentEl, 100)) {
                     return Assert.fail("numVisible should have been 1");
                 }
                 carousel.set("numVisible", 3);
@@ -276,3 +277,9 @@
 
     YAHOO.CarouselTests.scriptTests.add(initFromScriptTest);
 })();
+/*
+;;  Local variables: **
+;;  mode: js2 **
+;;  indent-tabs-mode: nil **
+;;  End: **
+*/
