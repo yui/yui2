@@ -1,9 +1,15 @@
 DataTable Release Notes
 
-*** version 2.6.0 ***
+*** version 2.7.0 ***
 
 * The custom function defined by the formatRow Attribute is now called within
 the scope of the DataTable instance.
+* Fixed cellUpdateEvent to pass along the following values: record (the updated
+Record), column (the updated Column), oldData (the original data value of the
+updated cell, no longer an object literal of all data).
+* Added updateRows() and onDataReturnUpdateRows() to support incremental data
+modifications to a subset of rows.
+
 
 *** version 2.6.0 ***
 

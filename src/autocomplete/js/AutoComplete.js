@@ -476,7 +476,7 @@ YAHOO.widget.AutoComplete.prototype.useShadow = false;
 /**
  * Whether or not the input field should be updated with selections.
  *
- * @property supressInputUpdate
+ * @property suppressInputUpdate
  * @type Boolean
  * @default false
  */
