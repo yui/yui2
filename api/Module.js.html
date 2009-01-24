@@ -1213,7 +1213,7 @@
             <span class="k">if</span> <span class="o">(</span><span class="nx">docEl</span><span class="o">)</span> <span class="o">{</span>
     			<span class="c">// Opera needs to force a repaint</span>
 <span class="c"></span>    			<span class="nx">docEl</span><span class="o">.</span><span class="nx">className</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span><span class="o">;</span>
-                <span class="nx">docEl</span><span class="o">.</span><span class="nx">className</span><span class="o">.</span><span class="nx">trim</span><span class="o">();</span>
+                <span class="nx">docEl</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">trim</span><span class="o">(</span><span class="nx">docEl</span><span class="o">.</span><span class="nx">className</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">},</span>
 
