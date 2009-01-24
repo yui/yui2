@@ -56,6 +56,11 @@ optgroup {
 	font-weight: inherit;
 }
 
+del,
+ins {
+	text-decoration: none;
+}
+
 li {
 	list-style: none;
 }
@@ -86,14 +91,19 @@ acronym {
 	font-variant: normal;
 }
 
-/* to preserve line-height and selector appearance */
-
 sup {
+	/* to preserve line-height and selector appearance */
 	vertical-align: text-top;
 }
 
 sub {
+	/* to preserve line-height and selector appearance */
 	vertical-align: text-bottom;
+}
+
+/*because legend doesn't inherit in IE */
+legend {
+	color: #000;
 }
 
 input,
@@ -103,25 +113,14 @@ optgroup,
 option {
 	font-family: inherit;
 	font-size: inherit;
+	font-style: inherit;
 	font-weight: inherit;
 }
 
 /*@purpose To enable resizing for IE */
 /*@branch For IE6-Win, IE7-Win */
-
 input,
 textarea,
 select {
 	*font-size: 100%;
-}
-
-/*because legend doesn't inherit in IE */
-
-legend {
-	color: #000;
-}
-
-del,
-ins {
-	text-decoration: none;
 }

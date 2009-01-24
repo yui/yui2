@@ -7,7 +7,8 @@ Version 2.7.0
   * Added new test for nested em and strong.
   * Added new test for nested blockquote.
   * Conformed with new CSS styleguide rules (draft):
-
+  * Known issue: Can not reset the font-style and font-weight properties for 
+    the option and optiongroup elements on IE8 (as of build 18372)
 #a-style {
 	display: block;
 	float: left;
