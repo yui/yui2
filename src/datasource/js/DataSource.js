@@ -372,12 +372,16 @@ parseString : function(oData) {
  * Converts data to type Number.
  *
  * @method DataSourceBase.parseNumber
- * @param oData {String | Number | Boolean | Null} Data to convert. Beware, null
- * returns as 0.
- * @return {Number} A number, or null if NaN.
+ * @param oData {String | Number | Boolean} Data to convert. Note, the following
+ * values return as null: null, undefined, NaN, "". 
+ * @return {Number} A number, or null.
  * @static
  */
 parseNumber : function(oData) {
+    if(!lang.isValue(oData) || (oData === "")) {
+        return null;
+    }
+
     //Convert to number
     var number = oData * 1;
     
@@ -575,6 +579,17 @@ responseType : DS.TYPE_UNKNOWN,
  */
 responseSchema : null,
 
+/**
+ * Additional arguments passed to the JSON parse routine.  The JSON string
+ * is the assumed first argument (where applicable).  This property is not
+ * set by default, but the parse methods will use it if present.
+ *
+ * @property parseJSONArgs
+ * @type {MIXED|Array} If an Array, contents are used as individual arguments.
+ *                     Otherwise, value is used as an additional argument.
+ */
+// property intentionally undefined
+ 
 /////////////////////////////////////////////////////////////////////////////
 //
 // DataSourceBase public methods
@@ -902,17 +917,18 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
             try {
                 // Convert to JS array if it's a string
                 if(lang.isString(oFullResponse)) {
+                    var parseArgs = [oFullResponse].concat(this.parseJSONArgs);
                     // Check for YUI JSON Util
                     if(lang.JSON) {
-                        oFullResponse = lang.JSON.parse(oFullResponse);
+                        oFullResponse = lang.JSON.parse.apply(lang.JSON,parseArgs);
                     }
                     // Look for JSON parsers using an API similar to json2.js
                     else if(window.JSON && JSON.parse) {
-                        oFullResponse = JSON.parse(oFullResponse);
+                        oFullResponse = JSON.parse.apply(JSON,parseArgs);
                     }
                     // Look for JSON parsers using an API similar to json.js
                     else if(oFullResponse.parseJSON) {
-                        oFullResponse = oFullResponse.parseJSON();
+                        oFullResponse = oFullResponse.parseJSON.apply(oFullResponse,parseArgs.slice(1));
                     }
                     // No JSON lib found so parse the string
                     else {
@@ -949,17 +965,18 @@ Math.max(oFullResponse.lastIndexOf("]"),oFullResponse.lastIndexOf("}"));
             try {
                 // Convert to JSON object if it's a string
                 if(lang.isString(oFullResponse)) {
+                    var parseArgs = [oFullResponse].concat(this.parseJSONArgs);
                     // Check for YUI JSON Util
                     if(lang.JSON) {
-                        oFullResponse = lang.JSON.parse(oFullResponse);
+                        oFullResponse = lang.JSON.parse.apply(lang.JSON,parseArgs);
                     }
                     // Look for JSON parsers using an API similar to json2.js
                     else if(window.JSON && JSON.parse) {
-                        oFullResponse = JSON.parse(oFullResponse);
+                        oFullResponse = JSON.parse.apply(JSON,parseArgs);
                     }
                     // Look for JSON parsers using an API similar to json.js
                     else if(oFullResponse.parseJSON) {
-                        oFullResponse = oFullResponse.parseJSON();
+                        oFullResponse = oFullResponse.parseJSON.apply(oFullResponse,parseArgs.slice(1));
                     }
                     // No JSON lib found so parse the string
                     else {
@@ -991,7 +1008,9 @@ Math.max(oFullResponse.lastIndexOf("]"),oFullResponse.lastIndexOf("}"));
             break;
         case DS.TYPE_HTMLTABLE:
             if(xhr && oRawResponse.responseText) {
-                oFullResponse = oRawResponse.responseText;
+                var el = document.createElement('div');
+                el.innerHTML = oRawResponse.responseText;
+                oFullResponse = el.getElementsByTagName('table')[0];
             }
             oFullResponse = this.doBeforeParseData(oRequest, oFullResponse, oCallback);
             oParsedResponse = this.parseHTMLTableData(oRequest, oFullResponse);

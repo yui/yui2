@@ -190,7 +190,7 @@ YAHOO.util.Get = function() {
         YAHOO.log("Timeout " + id, "info", "get");
         var q = queues[id];
         if (q.onTimeout) {
-            var sc=q.context || q;
+            var sc=q.scope || q;
             q.onTimeout.call(sc, _returnData(q));
         }
     };

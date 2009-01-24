@@ -415,7 +415,7 @@ destroy : function() {
     // Column is late-binding in attach()
     var oColumn = this.getColumn();
     if(oColumn) {
-        this.getColumn().editor = null;
+        oColumn.editor = null;
     }
     
     var elContainer = this.getContainerEl();
@@ -429,6 +429,11 @@ destroy : function() {
  * @method render
  */
 render : function() {
+    if(this._elContainer) {
+        YAHOO.util.Event.purgeElement(this._elContainer, true);
+        this._elContainer.innerHTML = "";
+    }
+
     // Render Cell Editor container element as first child of body
     var elContainer = document.createElement("div");
     elContainer.id = this.getId() + "-container"; // Needed for tracking blur event
@@ -442,6 +447,12 @@ render : function() {
     Ev.addListener(elContainer, "keydown", function(e, oSelf) {
         // ESC cancels Cell Editor
         if((e.keyCode == 27)) {
+            var target = Ev.getTarget(e);
+            // workaround for Mac FF3 bug that disabled clicks when ESC hit when
+            // select is open. [bug 2273056]
+            if (target.nodeName && target.nodeName.toLowerCase() === 'select') {
+                target.blur();
+            }
             oSelf.cancel();
         }
         // Pass through event
@@ -614,7 +625,7 @@ save : function() {
         
     var oSelf = this;
     var finishSave = function(bSuccess, oNewValue) {
-        var oOrigValue = YAHOO.widget.DataTable._cloneObject(oSelf.value);
+        var oOrigValue = oSelf.value;
         if(bSuccess) {
             // Update new value
             oSelf.value = oNewValue;
@@ -1011,6 +1022,14 @@ lang.extend(widget.DateCellEditor, BCE, {
 calendar : null,
 
 /**
+ * Configs for the calendar instance, to be passed to Calendar constructor.
+ *
+ * @property calendarOptions
+ * @type Object
+ */
+calendarOptions : null,
+
+/**
  * Default value.
  *
  * @property defaultValue
@@ -1038,7 +1057,7 @@ renderForm : function() {
         calContainer.id = this.getId() + "-dateContainer"; // Needed for Calendar constructor
         var calendar =
                 new YAHOO.widget.Calendar(this.getId() + "-date",
-                calContainer.id);
+                calContainer.id, this.calendarOptions);
         calendar.render();
         calContainer.style.cssFloat = "none";
 

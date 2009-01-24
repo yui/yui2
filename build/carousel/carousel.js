@@ -25,9 +25,6 @@
      */
     YAHOO.widget.Carousel = function (el, cfg) {
 
-        this._navBtns = { prev: [], next: [] };
-        this._pages = { el: null, num: 0, cur: 0 };
-
         YAHOO.widget.Carousel.superclass.constructor.call(this, el, cfg);
     };
 
@@ -49,10 +46,7 @@
     WidgetName = "Carousel";
 
     /**
-     * The internal table of Carousel instances.  This table has two keys,
-     * viz., "object", and "rendered".  The "object" key holds the reference
-     * to the Carousel object and the "rendered" key indicates if the
-     * corresponding instance has been rendered or not.
+     * The internal table of Carousel instances.
      * @private
      * @static
      */
@@ -72,6 +66,16 @@
      * @type YAHOO.util.CustomEvent
      */
     afterScrollEvent = "afterScroll",
+
+    /**
+     * @event allItemsRemovedEvent
+     * @description Fires when all items have been removed from the Carousel.
+     * See
+     * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
+     * for more information on listening for this event.
+     * @type YAHOO.util.CustomEvent
+     */
+    allItemsRemovedEvent = "allItemsRemoved",
 
     /**
      * @event beforeHide
@@ -197,16 +201,6 @@
     navigationStateChangeEvent = "navigationStateChange",
 
     /**
-     * @event noItemsEvent
-     * @description Fires when all items have been removed from the Carousel.
-     * See
-     * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
-     * for more information on listening for this event.
-     * @type YAHOO.util.CustomEvent
-     */
-    noItemsEvent = "noItems",
-
-    /**
      * @event pageChange
      * @description Fires after the Carousel has scrolled to the previous or
      * next page.  Passes back the page number of the current page.  Note
@@ -217,7 +211,8 @@
      */
     pageChangeEvent = "pageChange",
 
-    /**
+    /*
+     * Internal event.
      * @event render
      * @description Fires when the Carousel is rendered.  See
      * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
@@ -254,7 +249,8 @@
      */
     stopAutoPlayEvent = "stopAutoPlay",
 
-    /**
+    /*
+     * Internal event.
      * @event uiUpdateEvent
      * @description Fires when the UI has been updated.
      * See
@@ -267,30 +263,6 @@
     /*
      * Private helper functions used by the Carousel component
      */
-
-    /**
-     * Automatically scroll the contents of the Carousel.
-     * @method autoScroll
-     * @private
-     */
-    function autoScroll() {
-        var carousel  = this,
-            currIndex = carousel._firstItem,
-            index;
-
-        if (currIndex >= carousel.get("numItems") - 1) {
-            if (carousel.get("isCircular")) {
-                index = 0;
-            } else {
-                carousel.stopAutoPlay();
-            }
-        } else {
-            index = currIndex + carousel.get("numVisible");
-        }
-
-        carousel._selectedItem = carousel._getSelectedItem(index);
-        carousel.scrollTo.call(carousel, index);
-    }
 
     /**
      * Create an element, set its class name and optionally install the element
@@ -350,14 +322,36 @@
         function getStyleIntVal(el, style) {
             var val;
 
-            val = parseInt(Dom.getStyle(el, style), 10);
+            /*
+             * XXX: Safari calculates incorrect marginRight for an element
+             * which has its parent element style set to overflow: hidden
+             * https://bugs.webkit.org/show_bug.cgi?id=13343
+             * Let us assume marginLeft == marginRight
+             */
+            if (style == "marginRight" && YAHOO.env.ua.webkit) {
+                val = parseInt(Dom.getStyle(el, "marginLeft"), 10);
+            } else {
+                val = parseInt(Dom.getStyle(el, style), 10);
+            }
+
             return JS.isNumber(val) ? val : 0;
         }
 
         function getStyleFloatVal(el, style) {
             var val;
 
-            val = parseFloat(Dom.getStyle(el, style));
+            /*
+             * XXX: Safari calculates incorrect marginRight for an element
+             * which has its parent element style set to overflow: hidden
+             * https://bugs.webkit.org/show_bug.cgi?id=13343
+             * Let us assume marginLeft == marginRight
+             */
+            if (style == "marginRight" && YAHOO.env.ua.webkit) {
+                val = parseFloat(Dom.getStyle(el, "marginLeft"));
+            } else {
+                val = parseFloat(Dom.getStyle(el, style));
+            }
+
             return JS.isNumber(val) ? val : 0;
         }
 
@@ -399,13 +393,6 @@
         default:
             if (type == "int") {
                 value = getStyleIntVal(el, style);
-                // XXX: Safari calculates incorrect marginRight for an element
-                // which has its parent element style set to overflow: hidden
-                // https://bugs.webkit.org/show_bug.cgi?id=13343
-                // Let us assume marginLeft == marginRight
-                if (style == "marginRight" && YAHOO.env.ua.webkit) {
-                    value = getStyleIntVal(el, "marginLeft");
-                }
             } else if (type == "float") {
                 value = getStyleFloatVal(el, style);
             } else {
@@ -468,6 +455,20 @@
     }
 
     /**
+     * Return the index of the first item in the view port for displaying item
+     * in "pos".
+     *
+     * @method getFirstVisibleForPosition
+     * @param pos {Number} The position of the item to be displayed
+     * @private
+     */
+    function getFirstVisibleForPosition(pos) {
+        var num = this.get("numVisible");
+
+        return Math.floor(pos / num) * num;
+    }
+
+    /**
      * Return the scrolling offset size given the number of elements to
      * scroll.
      *
@@ -489,32 +490,6 @@
         }
 
         return size;
-    }
-
-    /**
-     * The load the required set of items that are needed for display.
-     *
-     * @method loadItems
-     * @private
-     */
-    function loadItems() {
-        var carousel   = this,
-            first      = carousel.get("firstVisible"),
-            last       = 0,
-            numItems   = carousel.get("numItems"),
-            numVisible = carousel.get("numVisible"),
-            reveal     = carousel.get("revealAmount");
-
-        last = first + numVisible - 1 + (reveal ? 1 : 0);
-        last = last > numItems - 1 ? numItems - 1 : last;
-
-        if (!carousel.getItem(first) || !carousel.getItem(last)) {
-            carousel.fireEvent(loadItemsEvent, {
-                    ev: loadItemsEvent,
-                    first: first, last: last,
-                    num: last - first
-            });
-        }
     }
 
     /**
@@ -547,11 +522,11 @@
      * Set the selected item.
      *
      * @method setItemSelection
-     * @param {Number} newposition The index of the new position
-     * @param {Number} oldposition The index of the previous position
+     * @param {Number} newpos The index of the new position
+     * @param {Number} oldpos The index of the previous position
      * @private
      */
-     function setItemSelection(newposition, oldposition) {
+     function setItemSelection(newpos, oldpos) {
         var backwards,
             carousel = this,
             cssClass   = carousel.CLASSES,
@@ -560,10 +535,10 @@
             isCircular = carousel.get("isCircular"),
             numItems   = carousel.get("numItems"),
             numVisible = carousel.get("numVisible"),
-            position   = oldposition,
+            position   = oldpos,
             sentinel   = firstItem + numVisible - 1;
 
-        backwards = numVisible > 1 && !isCircular && position > newposition;
+        backwards = numVisible > 1 && !isCircular && position > newpos;
 
         if (position >= 0 && position < numItems) {
             if (!JS.isUndefined(carousel._itemsTable.items[position])) {
@@ -574,33 +549,34 @@
             }
         }
 
-        if (JS.isNumber(newposition)) {
-            newposition = parseInt(newposition, 10);
-            newposition = JS.isNumber(newposition) ? newposition : 0;
+        if (JS.isNumber(newpos)) {
+            newpos = parseInt(newpos, 10);
+            newpos = JS.isNumber(newpos) ? newpos : 0;
         } else {
-            newposition = firstItem;
+            newpos = firstItem;
         }
 
-        if (JS.isUndefined(carousel._itemsTable.items[newposition])) {
-            carousel.scrollTo(newposition); // still loading the item
+        if (JS.isUndefined(carousel._itemsTable.items[newpos])) {
+            newpos = getFirstVisibleForPosition(carousel, newpos);
+            carousel.scrollTo(newpos); // still loading the item
         }
 
-        if (!JS.isUndefined(carousel._itemsTable.items[newposition])) {
-            el = Dom.get(carousel._itemsTable.items[newposition].id);
+        if (!JS.isUndefined(carousel._itemsTable.items[newpos])) {
+            el = Dom.get(carousel._itemsTable.items[newpos].id);
             if (el) {
                 Dom.addClass(el, cssClass.SELECTED_ITEM);
             }
         }
 
-        if (newposition < firstItem || newposition > sentinel) {
+        if (newpos < firstItem || newpos > sentinel) {
             // out of focus
             if (backwards) {
-                newposition = firstItem - numVisible;
-                newposition = newposition >= 0 ? newposition : 0;
-                carousel.scrollTo(newposition);
-            } else {
-                carousel.scrollTo(newposition);
+                newpos = firstItem - numVisible;
+                newpos = newpos >= 0 ? newpos : 0;
             }
+
+            newpos = getFirstVisibleForPosition.call(carousel, newpos);
+            carousel.scrollTo(newpos);
         }
     }
 
@@ -615,14 +591,11 @@
             carousel = this,
             cssClass = carousel.CLASSES,
             i,
-            me,
             navigation,
             sentinel;
 
-        me = carousel.get("element").id;
-
         // Don't do anything if the Carousel is not rendered
-        if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
+        if (!carousel._hasRendered) {
             return;
         }
 
@@ -700,12 +673,10 @@
      * @private
      */
     function syncPagerUi(page) {
-        var carousel = this, me, numPages, numVisible;
-
-        me = carousel.get("element").id;
+        var carousel = this, numPages, numVisible;
 
         // Don't do anything if the Carousel is not rendered
-        if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
+        if (!carousel._hasRendered) {
             return;
         }
 
@@ -727,7 +698,9 @@
     }
 
     /**
-     * Fire custom events for synchronizing the DOM.
+     * Handle UI update.
+     * Call the appropriate methods on events fired when an item is added, or
+     * removed for synchronizing the DOM.
      *
      * @method syncUi
      * @param {Object} o The item that needs to be added or removed
@@ -845,6 +818,22 @@
          * @private
          */
         _firstItem: 0,
+
+        /**
+         * Does the Carousel element have focus?
+         *
+         * @property _hasFocus
+         * @private
+         */
+        _hasFocus: false,
+
+        /**
+         * Is the Carousel rendered already?
+         *
+         * @property _hasRendered
+         * @private
+         */
+        _hasRendered: false,
 
         /**
          * Is the animation still in progress?
@@ -1317,7 +1306,7 @@
                 n--;
             }
 
-            carousel.fireEvent(noItemsEvent);
+            carousel.fireEvent(allItemsRemovedEvent);
         },
 
         /**
@@ -1333,16 +1322,13 @@
                 isSelectionInvisible,
                 itemsTable,
                 last,
-                me,
                 numVisible,
                 selectOnScroll,
                 selected,
                 selItem;
 
-            me = carousel.get("element").id;
-
             // Don't do anything if the Carousel is not rendered
-            if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
+            if (!carousel._hasRendered) {
                 return;
             }
 
@@ -1414,8 +1400,12 @@
                 return;
             }
 
-            carousel._itemsTable = { loading: {}, numItems: 0,
-                                     items: [], size: 0 };
+            carousel._hasRendered = false;
+            carousel._navBtns     = { prev: [], next: [] };
+            carousel._pages       = { el: null, num: 0, cur: 0 };
+            carousel._itemsTable  = { loading: {}, numItems: 0,
+                                      items: [], size: 0 };
+
 
             if (JS.isString(el)) {
                 el = Dom.get(el);
@@ -1451,9 +1441,9 @@
             carousel._parseCarouselNavigation(el);
             carousel._navEl = carousel._setupCarouselNavigation();
 
-            instances[elId] = { object: carousel, rendered: false };
+            instances[elId] = { object: carousel };
 
-            loadItems.call(carousel);
+            carousel._loadItems();
         },
 
         /**
@@ -1684,11 +1674,15 @@
 
             carousel.on(itemRemovedEvent, syncUi);
 
-            carousel.on(itemSelectedEvent, carousel.focus);
+            carousel.on(itemSelectedEvent, function () {
+                if (carousel._hasFocus) {
+                    carousel.focus();
+                }
+            });
 
             carousel.on(loadItemsEvent, syncUi);
 
-            carousel.on(noItemsEvent, function (ev) {
+            carousel.on(allItemsRemovedEvent, function (ev) {
                 carousel.scrollTo(0);
                 syncNavigation.call(carousel);
                 syncPagerUi.call(carousel);
@@ -1738,10 +1732,12 @@
             // Restore the focus on the navigation buttons
 
             Event.onFocus(carousel.get("element"), function (ev, obj) {
+                obj._hasFocus = true;
                 obj._updateNavButtons(Event.getTarget(ev), true);
             }, carousel);
 
             Event.onBlur(carousel.get("element"), function (ev, obj) {
+                obj._hasFocus = false;
                 obj._updateNavButtons(Event.getTarget(ev), false);
             }, carousel);
         },
@@ -1964,7 +1960,7 @@
                 return false;
             }
 
-            carousel._reRender();
+            carousel._refreshUi();
 
             return true;
         },
@@ -2098,7 +2094,7 @@
             carousel.set("firstVisible", item);
 
 
-            loadItems.call(carousel); // do we have all the items to display?
+            carousel._loadItems(); // do we have all the items to display?
 
             sentinel  = item + numPerPage;
             sentinel  = (sentinel > numItems - 1) ? numItems - 1 : sentinel;
@@ -2185,7 +2181,8 @@
                 carousel._isAutoPlayInProgress = true;
                 carousel.fireEvent(startAutoPlayEvent);
                 carousel._autoPlayTimer = setTimeout(function () {
-                    autoScroll.call(carousel); }, timer);
+                    carousel._autoScroll();
+                }, timer);
             }
         },
 
@@ -2266,6 +2263,30 @@
         _animationCompleteHandler: function (ev, p, o) {
             o.scope._isAnimationInProgress = false;
             updateStateAfterScroll.call(o.scope, o.item, o.last);
+        },
+
+        /**
+         * Automatically scroll the contents of the Carousel.
+         * @method _autoScroll
+         * @protected
+         */
+        _autoScroll: function() {
+            var carousel  = this,
+                currIndex = carousel._firstItem,
+                index;
+
+            if (currIndex >= carousel.get("numItems") - 1) {
+                if (carousel.get("isCircular")) {
+                    index = 0;
+                } else {
+                    carousel.stopAutoPlay();
+                }
+            } else {
+                index = currIndex + carousel.get("numVisible");
+            }
+
+            carousel._selectedItem = carousel._getSelectedItem(index);
+            carousel.scrollTo.call(carousel, index);
         },
 
         /**
@@ -2376,6 +2397,7 @@
 
             if ((item = carousel.getItemPositionById(target.id)) >= 0) {
                 carousel.set("selectedItem", carousel._getSelectedItem(item));
+                carousel.focus();
             }
         },
 
@@ -2421,6 +2443,31 @@
                     carousel.stopAutoPlay();
                 }
                 Event.preventDefault(ev);
+            }
+        },
+
+        /**
+         * The load the required set of items that are needed for display.
+         *
+         * @method _loadItems
+         * @protected
+         */
+        _loadItems: function() {
+            var carousel   = this,
+                first      = carousel.get("firstVisible"),
+                last       = 0,
+                numItems   = carousel.get("numItems"),
+                numVisible = carousel.get("numVisible"),
+                reveal     = carousel.get("revealAmount");
+
+            last = first + numVisible - 1 + (reveal ? 1 : 0);
+            last = last > numItems - 1 ? numItems - 1 : last;
+
+            if (!carousel.getItem(first) || !carousel.getItem(last)) {
+                carousel.fireEvent(loadItemsEvent, {
+                        ev: loadItemsEvent, first: first, last: last,
+                        num: last - first
+                });
             }
         },
 
@@ -2593,17 +2640,18 @@
         },
 
         /**
-         * Re-render the widget if it is not already rendered, on first item
+         * Refresh the widget UI if it is not already rendered, on first item
          * addition.
          *
-         * @method _reRender
+         * @method _refreshUi
          * @protected
          */
-        _reRender: function () {
-            // Set the rendered state appropriately.
-            instances[this.get("element").id].rendered = true;
+        _refreshUi: function () {
+            var carousel = this;
 
-            this.fireEvent(renderEvent);
+            // Set the rendered state appropriately.
+            carousel._hasRendered = true;
+            carousel.fireEvent(renderEvent);
         },
 
         /**
@@ -2738,8 +2786,10 @@
             itemSize   = getCarouselItemSize.call(carousel, which);
             size       = itemSize * num;
 
+            // TODO: try to re-use the _hasRendered indicator
             carousel._recomputeSize = (size === 0); // bleh!
             if (carousel._recomputeSize) {
+                carousel._hasRendered = false;
                 return;             // no use going further, bail out!
             }
 
@@ -2972,7 +3022,6 @@
                 el,
                 item,
                 itemsTable = carousel._itemsTable,
-                me         = carousel.get("element").id,
                 oel,
                 pos,
                 sibling;
@@ -3027,8 +3076,8 @@
                 }
             }
 
-            if (JS.isUndefined(instances[me]) || !instances[me].rendered) {
-                carousel._reRender();
+            if (!carousel._hasRendered) {
+                carousel._refreshUi();
             }
 
             if (carousel.get("selectedItem") < 0) {

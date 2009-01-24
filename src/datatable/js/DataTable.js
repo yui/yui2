@@ -2423,12 +2423,20 @@ _initThEl : function(elTh, oColumn) {
         
     elTh.className = this._getColumnClassNames(oColumn);
             
-    // Set Column width for non fallback cases
-    if(oColumn.width && !DT._bDynStylesFallback) {
+    // Set Column width...
+    if(oColumn.width) {
         // Validate minWidth
         var nWidth = (oColumn.minWidth && (oColumn.width < oColumn.minWidth)) ?
                 oColumn.minWidth : oColumn.width;
-        this._setColumnWidthDynStyles(oColumn, nWidth + 'px', 'hidden');
+        // ...for fallback cases
+        if(DT._bDynStylesFallback) {
+            elTh.firstChild.style.overflow = 'hidden';
+            elTh.firstChild.style.width = nWidth + 'px';        
+        }
+        // ...for non fallback cases
+        else {
+            this._setColumnWidthDynStyles(oColumn, nWidth + 'px', 'hidden');
+        }
     }
 
     this.formatTheadCell(elThLabel, oColumn, this.get("sortedBy"));
@@ -4256,11 +4264,7 @@ getTrEl : function(row) {
                 elRow = Dom.getAncestorByTagName(elRow,"tr");
             }
 
-            // Make sure the TR is in this TBODY
-            if(elRow && (elRow.parentNode == this._elTbody)) {
-                // Now we can return the TR element
-                return elRow;
-            }
+            return elRow;
         }
     }
 
@@ -4368,11 +4372,7 @@ getTdEl : function(cell) {
             elCell = el;
         }
 
-        // Make sure the TD is in this TBODY
-        if(elCell && (elCell.parentNode.parentNode == this._elTbody)) {
-            // Now we can return the TD element
-            return elCell;
-        }
+        return elCell;
     }
     else if(cell) {
         var oRecord, nColKeyIndex;
@@ -4573,11 +4573,7 @@ getThEl : function(theadCell) {
                 elTh = el;
             }
 
-            // Make sure the TH is in this THEAD
-            if(elTh && (elTh.parentNode.parentNode == this._elThead)) {
-                // Now we can return the TD element
-                return elTh;
-            }
+            return elTh;
         }
     }
 
@@ -5022,6 +5018,13 @@ focusTbodyEl : function() {
  */
 onShow : function() {
     this.validateColumnWidths();
+    
+    for(var allKeys = this._oColumnSet.keys, i=0, len=allKeys.length, col; i<len; i++) {
+        col = allKeys[i];
+        if(col._ddResizer) {
+            col._ddResizer.resetResizerEl();
+        }
+    }
 },
 
 
@@ -6534,7 +6537,7 @@ addRows : function(aData, index) {
                 var loopN = this.get("renderLoopSize");
                 var loopEnd = recIndex + aData.length;
                 var nRowsNeeded = (loopEnd - recIndex); // how many needed
-                var isLast = (index >= this._elTbody.rows.length);
+                var isLast = (recIndex >= this._elTbody.rows.length);
                 this._oChainRender.add({
                     method: function(oArg) {
                         if((this instanceof DT) && this._sId) {
@@ -6550,11 +6553,10 @@ addRows : function(aData, index) {
                             this._elTbody.insertBefore(df, elNext);
                             oArg.nCurrentRow = i;
                             oArg.nCurrentRecord = j;
-                            //oArg.index += i;
                         }
                     },
                     iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
-                    argument: {nCurrentRow:recIndex,nCurrentRecord:0,aRecords:aRecords,index:index},
+                    argument: {nCurrentRow:recIndex,nCurrentRecord:0,aRecords:aRecords},
                     scope: this,
                     timeout: (loopN > 0) ? 0 : -1
                 });
@@ -6576,7 +6578,7 @@ addRows : function(aData, index) {
                                 " rows at index " + recIndex +
                                 " with data " + lang.dump(aData), "info", this.toString());
                     },
-                    argument: {recIndex: index, isLast: isLast},
+                    argument: {recIndex: recIndex, isLast: isLast},
                     scope: this,
                     timeout: -1 // Needs to run immediately after the DOM insertions above
                 });
@@ -7106,11 +7108,14 @@ updateCell : function(oRecord, oColumn, oData) {
     // Validate Column and Record
     oColumn = (oColumn instanceof YAHOO.widget.Column) ? oColumn : this.getColumn(oColumn);
     if(oColumn && oColumn.getKey() && (oRecord instanceof YAHOO.widget.Record)) {
+        var sKey = oColumn.getKey(),
+        
         // Copy data from the Record for the event that gets fired later
-        var oldData = YAHOO.widget.DataTable._cloneObject(oRecord.getData());
+        //var oldData = YAHOO.widget.DataTable._cloneObject(oRecord.getData());
+            oldData = oRecord.getData(sKey);
 
         // Update Record with new data
-        this._oRecordSet.updateRecordValue(oRecord, oColumn.getKey(), oData);
+        this._oRecordSet.updateRecordValue(oRecord, sKey, oData);
     
         // Update the TD only if row is on current page
         var elTd = this.getTdEl({record: oRecord, column: oColumn});
@@ -9748,7 +9753,8 @@ saveCellEditor : function() {
         else if(this._oCellEditor.isActive) {
             var newData = this._oCellEditor.value;
             // Copy the data to pass to the event
-            var oldData = YAHOO.widget.DataTable._cloneObject(this._oCellEditor.record.getData(this._oCellEditor.column.key));
+            //var oldData = YAHOO.widget.DataTable._cloneObject(this._oCellEditor.record.getData(this._oCellEditor.column.key));
+            var oldData = this._oCellEditor.record.getData(this._oCellEditor.column.key);
     
             // Validate input data
             if(this._oCellEditor.validator) {
@@ -10416,7 +10422,41 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
         // Data ok to append
         if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
             // Insert rows
-            this.addRows(oResponse.results, oPayload.insertIndex | 0);
+            this.addRows(oResponse.results, (oPayload ? oPayload.insertIndex : 0));
+    
+            // Update state
+            this._handleDataReturnPayload(sRequest, oResponse, oPayload);
+        }
+        // Error
+        else if(ok && oResponse.error) {
+            this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
+        }
+    }
+},
+
+/**
+ * Callback function receives data from DataSource and incrementally updates Records
+ * starting at the index specified in oPayload.updateIndex. The value for
+ * oPayload.updateIndex can be populated when sending the request to the DataSource,
+ * or by accessing oPayload.updateIndex with the doBeforeLoadData() method at runtime.
+ * If applicable, creates or updates corresponding TR elements.
+ *
+ * @method onDataReturnUpdateRows
+ * @param sRequest {String} Original request.
+ * @param oResponse {Object} Response object.
+ * @param oPayload {MIXED} Argument payload, looks in oPayload.updateIndex.
+ */
+onDataReturnUpdateRows : function(sRequest, oResponse, oPayload) {
+    if((this instanceof DT) && this._sId) {
+        this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse,payload:oPayload});
+    
+        // Pass data through abstract method for any transformations
+        var ok = this.doBeforeLoadData(sRequest, oResponse, oPayload);
+    
+        // Data ok to append
+        if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
+            // Insert rows
+            this.updateRows((oPayload ? oPayload.updateIndex : 0), oResponse.results);
     
             // Update state
             this._handleDataReturnPayload(sRequest, oResponse, oPayload);
@@ -11119,7 +11159,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @event cellUpdateEvent
      * @param oArgs.record {YAHOO.widget.Record} The updated Record.
      * @param oArgs.column {YAHOO.widget.Column} The updated Column.
-     * @param oArgs.oldData {Object} Object literal of the old data.
+     * @param oArgs.oldData {Object} Original data value of the updated cell.
      */
 
     /**

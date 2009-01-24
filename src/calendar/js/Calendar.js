@@ -634,26 +634,26 @@ Calendar.prototype = {
 			cal = this; // To help with minification
 
 		/**
-		* Fired before a selection is made
+		* Fired before a date selection is made
 		* @event beforeSelectEvent
 		*/
 		cal.beforeSelectEvent = new CE(defEvents.BEFORE_SELECT); 
 
 		/**
-		* Fired when a selection is made
+		* Fired when a date selection is made
 		* @event selectEvent
 		* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].
 		*/
 		cal.selectEvent = new CE(defEvents.SELECT);
-	
+
 		/**
-		* Fired before a selection is made
+		* Fired before a date or set of dates is deselected
 		* @event beforeDeselectEvent
 		*/
 		cal.beforeDeselectEvent = new CE(defEvents.BEFORE_DESELECT);
-	
+
 		/**
-		* Fired when a selection is made
+		* Fired when a date or set of dates is deselected
 		* @event deselectEvent
 		* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].
 		*/
@@ -2785,19 +2785,19 @@ Calendar.prototype = {
 				}
 				selected.splice(cellDateIndex, 1);
 			}
-	
+
 			if (this.parent) {
 				this.parent.cfg.setProperty(DEF_CFG.SELECTED.key, selected);
 			} else {
 				this.cfg.setProperty(DEF_CFG.SELECTED.key, selected);
 			}
-	
-			this.deselectEvent.fire(selectDate);
+
+			this.deselectEvent.fire([selectDate]);
 		}
-	
+
 		return this.getSelectedDates();
 	},
-	
+
 	/**
 	* Deselects all dates on the current calendar.
 	* @method deselectAll

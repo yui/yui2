@@ -1206,8 +1206,8 @@ YAHOO.widget.Node.prototype = {
 		var  expandParent = function (node) {
 			if (node.parent) {
 				expandParent(node.parent);
+				node.parent.expand();
 			} 
-			node.expand();
 		};
 		expandParent(this);
 

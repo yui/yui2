@@ -1,5 +1,21 @@
 Calendar Release Notes
 
+*** version 2.7.0 ***
+
++ Fixed CalendarGroup page construction, so that the intial pagedate for 
+  each Calendar page instance is set in it's constructor, as opposed to
+  setting it in 2 passes, as was done before (setting all the pages to the
+  same pagedate during construction, and then incrementing them to the 
+  correct pagedate for page). This fixes a bug in reset(), where all the 
+  Calendar pages were being reset to the same month.
+  
++ Fixed the argument for the delectEvent fired from deselectCell 
+  to be an array of date fields arrays (e.g. [[2009, 1, 21]]) as opposed to
+  just a date field array (e.g. [2009, 1, 21]), so that the argument 
+  structure is consistent for both select and deselect events, regardless
+  of where they are fired from, and whether they have one or more date 
+  field arrays.
+  
 *** version 2.6.0 ***
 
 + Fixed incorrect cell index parsing from cell id attribute, when

@@ -1847,7 +1847,7 @@
             if (docEl) {
     			// Opera needs to force a repaint
     			docEl.className += " ";
-                docEl.className.trim();
+                docEl.className = YAHOO.lang.trim(docEl.className);
             }
         },
 
@@ -1992,14 +1992,14 @@
                 validator: Lang.isBoolean, 
                 supercedes: ["zindex"] 
             },
-            
+
             "PREVENT_CONTEXT_OVERLAP": {
                 key: "preventcontextoverlap",
                 value: false,
                 validator: Lang.isBoolean,  
                 supercedes: ["constraintoviewport"]
             }
-            
+
         };
 
     /**
@@ -2595,6 +2595,23 @@
             Dom.replaceClass(this.element, "hide-scrollbars", "show-scrollbars");
         },
 
+        /**
+         * Internal implementation to set the visibility of the overlay in the DOM.
+         *
+         * @method _setDomVisibility
+         * @param {boolean} visible Whether to show or hide the Overlay's outer element
+         * @protected
+         */
+        _setDomVisibility : function(show) {
+            Dom.setStyle(this.element, "visibility", (show) ? "visible" : "hidden");
+
+            if (show) {
+                Dom.removeClass(this.element, "yui-overlay-hidden");
+            } else {
+                Dom.addClass(this.element, "yui-overlay-hidden");
+            }
+        },
+
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
         /**
         * The default event handler fired when the "visible" property is 
@@ -2625,8 +2642,8 @@
                 while (e.nodeType != 9 && e.nodeType != 11) {
                     currentVis = Dom.getStyle(e, "visibility");
 
-                    if (currentVis != "inherit") { 
-                        break; 
+                    if (currentVis != "inherit") {
+                        break;
                     }
 
                     e = e.parentNode;
@@ -2652,7 +2669,6 @@
                         effect.effect(this, effect.duration);
                 }
             }
-
 
             if (visible) { // Show
                 if (isMacGecko) {
@@ -2687,10 +2703,12 @@
                     if (currentVis != "visible" || currentVis === "") {
                         this.beforeShowEvent.fire();
 
-                        Dom.setStyle(this.element, "visibility", "visible");
+                        this._setDomVisibility(true);
 
                         this.cfg.refireEvent("iframe");
                         this.showEvent.fire();
+                    } else {
+                        this._setDomVisibility(true);
                     }
                 }
             } else { // Hide
@@ -2698,7 +2716,7 @@
                 if (isMacGecko) {
                     this.hideMacGeckoScrollbars();
                 }
-                    
+
                 if (effect) { // Animate out if showing
                     if (currentVis == "visible") {
                         this.beforeHideEvent.fire();
@@ -2724,15 +2742,17 @@
                         }
 
                     } else if (currentVis === "") {
-                        Dom.setStyle(this.element, "visibility", "hidden");
+                        this._setDomVisibility(false);
                     }
 
                 } else { // Simple hide
 
                     if (currentVis == "visible" || currentVis === "") {
                         this.beforeHideEvent.fire();
-                        Dom.setStyle(this.element, "visibility", "hidden");
+                        this._setDomVisibility(false);
                         this.hideEvent.fire();
+                    } else {
+                        this._setDomVisibility(false);
                     }
                 }
             }
@@ -4877,30 +4897,27 @@
     */
     Tooltip.CSS_TOOLTIP = "yui-tt";
 
-    /* 
-        "hide" event handler that sets a Tooltip instance's "width"
-        configuration property back to its original value before 
-        "setWidthToOffsetWidth" was called.
-    */
-    function restoreOriginalWidth(p_sType, p_aArgs, p_oObject) {
+    function restoreOriginalWidth(sOriginalWidth, sForcedWidth) {
 
-        var sOriginalWidth = p_oObject[0],
-            sNewWidth = p_oObject[1],
-            oConfig = this.cfg,
+        var oConfig = this.cfg,
             sCurrentWidth = oConfig.getProperty("width");
 
-        if (sCurrentWidth == sNewWidth) {
+        if (sCurrentWidth == sForcedWidth) {
             oConfig.setProperty("width", sOriginalWidth);
         }
     }
 
     /* 
-        "beforeShow" event handler that sets a Tooltip instance's "width"
+        changeContent event handler that sets a Tooltip instance's "width"
         configuration property to the value of its root HTML 
-        elements's offsetWidth
+        elements's offsetWidth if a specific width has not been set.
     */
 
     function setWidthToOffsetWidth(p_sType, p_aArgs) {
+
+        if ("_originalWidth" in this) {
+            restoreOriginalWidth.call(this, this._originalWidth, this._forcedWidth);
+        }
 
         var oBody = document.body,
             oConfig = this.cfg,
@@ -4928,7 +4945,8 @@
             oConfig.setProperty("width", sNewWidth);
             oConfig.refireEvent("xy");
 
-            this.subscribe("hide", restoreOriginalWidth, [(sOriginalWidth || ""), sNewWidth]);
+            this._originalWidth = sOriginalWidth || "";
+            this._forcedWidth = sNewWidth;
         }
     }
 
@@ -4976,7 +4994,7 @@
 
             this.setBody("");
 
-            this.subscribe("beforeShow", setWidthToOffsetWidth);
+            this.subscribe("changeContent", setWidthToOffsetWidth);
             this.subscribe("init", onInit);
             this.subscribe("render", this.onRender);
 
@@ -5252,7 +5270,7 @@
         * this will usually equal the owner.
         */
         configContext: function (type, args, obj) {
-        
+
             var context = args[0],
                 aElements,
                 nElements,
@@ -8728,7 +8746,7 @@
 
             obj.handleUnderlayStart();
 
-            Dom.setStyle(obj.overlay.element, "visibility", "visible");
+            obj.overlay._setDomVisibility(true);
             Dom.setStyle(obj.overlay.element, "opacity", 0);
         };
 
@@ -8755,7 +8773,7 @@
             if (obj.overlay.element.style.filter) {
                 obj.overlay.element.style.filter = null;
             }
-            Dom.setStyle(obj.overlay.element, "visibility", "hidden");
+            obj.overlay._setDomVisibility(false);
             Dom.setStyle(obj.overlay.element, "opacity", 1);
 
             obj.handleUnderlayComplete();
@@ -8814,7 +8832,7 @@
             if (Dom.getStyle(obj.overlay.element, "visibility") == 
                 "hidden" && currentX < x) {
 
-                Dom.setStyle(obj.overlay.element, "visibility", "visible");
+                obj.overlay._setDomVisibility(true);
 
             }
         
@@ -8850,8 +8868,8 @@
         };
         
         slide.handleCompleteAnimateOut = function (type, args, obj) {
-            Dom.setStyle(obj.overlay.element, "visibility", "hidden");
-        
+            obj.overlay._setDomVisibility(false);
+
             obj.overlay.cfg.setProperty("xy", [x, y]);
             obj.animateOutCompleteEvent.fire();
         };

@@ -1255,8 +1255,8 @@
 		<span class="k">var</span>  <span class="nx">expandParent</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">node</span><span class="o">)</span> <span class="o">{</span>
 			<span class="k">if</span> <span class="o">(</span><span class="nx">node</span><span class="o">.</span><span class="nx">parent</span><span class="o">)</span> <span class="o">{</span>
 				<span class="nx">expandParent</span><span class="o">(</span><span class="nx">node</span><span class="o">.</span><span class="nx">parent</span><span class="o">);</span>
+				<span class="nx">node</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">expand</span><span class="o">();</span>
 			<span class="o">}</span> 
-			<span class="nx">node</span><span class="o">.</span><span class="nx">expand</span><span class="o">();</span>
 		<span class="o">};</span>
 		<span class="nx">expandParent</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 

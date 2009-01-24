@@ -4,4 +4,3 @@
     <property file="build.properties" />
     <import file="${builddir}/2.x/bootstrap.xml" description="Default Build Properties and Targets" />
 </project>
-

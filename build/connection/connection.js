@@ -228,8 +228,9 @@ YAHOO.util.Connect =
 				document,
 				'click',
 				function(e){
-					var obj = YAHOO.util.Event.getTarget(e);
-					if(obj.nodeName.toLowerCase() == 'input' && (obj.type && obj.type.toLowerCase() == 'submit')){
+					var obj = YAHOO.util.Event.getTarget(e),
+						name = obj.nodeName.toLowerCase();
+					if((name === 'input' || name === 'button') && (obj.type && obj.type.toLowerCase() == 'submit')){
 						YAHOO.util.Connect._submitElementValue = encodeURIComponent(obj.name) + "=" + encodeURIComponent(obj.value);
 					}
 				});
@@ -1001,10 +1002,6 @@ YAHOO.util.Connect =
 							if(this._hasSubmitListener && this._submitElementValue){
                                 data[item++] = this._submitElementValue;
 							}
-							else{
-                                data[item++] = oName + oValue;
-							}
-
 							hasSubmit = true;
 						}
 						break;
