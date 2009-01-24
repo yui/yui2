@@ -4,6 +4,8 @@ Version 2.7.0
   * Added new test for nesting ordered and unordered lists.
   * Added new test for thead, tfoot, tbody.
   * Added new test for optgroup and option. 
+  * Added new test for nested em and strong.
+  * Added new test for nested blockquote.
   * Conformed with new CSS styleguide rules (draft):
 
 #a-style {
