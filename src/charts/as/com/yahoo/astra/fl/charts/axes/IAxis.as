@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.axes
+package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.IChart;
 	
@@ -105,6 +105,16 @@
 		 */
 		function set numLabels(value:Number):void;
 
+		/**
+		 * The padding between labels on an axis.
+		 */
+		function get labelPadding():Number;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set labelPadding(value:Number):void; 
+		
 		/**
 		 * Determines the axis scale based on the input data set.
 		 * Seperating this function from the draw method optimizes processing time,

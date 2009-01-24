@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.axes
+package com.yahoo.astra.fl.charts.axes
 {	
 	import com.yahoo.astra.utils.DynamicRegistration;
 	import com.yahoo.astra.utils.GeomUtil;
@@ -60,6 +60,13 @@
 	 */
 	[Style(name="labelDistance", type="Number")]
     
+	/**
+	 * The distance, in pixels, between a title and the axis labels.
+	 * 
+	 * @default 2
+	 */
+	[Style(name="titleDistance", type="Number")]
+	
 	/** 
 	 * If true, labels that overlap previously drawn labels on the axis will be
 	 * hidden. The first and last labels on the axis will always be drawn.
@@ -70,14 +77,19 @@
     
 	/** 
 	 * The angle, in degrees, of the labels on the axis. May be a value
-	 * between <code>-90</code> and <code>90</code>. The font must be embedded
-	 * in the SWF and the <code>embedFonts</code> style on the chart must be set
-	 * to <code>true</code> before labels may be rotated. If these conditions
-	 * aren't met, the labels will not be rotated.
+	 * between <code>-90</code> and <code>90</code>. 
 	 * 
 	 * @default 0
 	 */
 	[Style(name="labelRotation", type="Number")]
+	
+	/** 
+	 * The angle, in degrees, of the title on the axis. May be a value
+	 * between <code>-90</code> and <code>90</code>. 
+	 * 
+	 * @default 0
+	 */
+	[Style(name="titleRotation", type="Number")]	
 	
 	//-- Ticks
     
@@ -200,6 +212,8 @@
 			embedFonts: false,
 			hideOverlappingLabels: true,
 			labelRotation: 0,
+			titleRotation: 0,
+			titleDistance: 2,
 			
 			//ticks
 			showTicks: true,
@@ -514,10 +528,9 @@
 				this.titleTextField.defaultTextFormat = textFormat;
 				this.titleTextField.embedFonts = embedFonts;
 				this.titleTextField.text = this.title;
-				if(this.orientation == AxisOrientation.VERTICAL)
-				{
-					this.titleTextField.rotation = -90;
-				}
+
+				var titleRotation:Number = this.getStyleValue("titleRotation") as Number;
+				this.titleTextField.rotation = Math.max(-90, Math.min(titleRotation, 90));;
 			}
 		}
 		
@@ -531,19 +544,44 @@
 			this.titleTextField.visible = showTitle;
 			if(showTitle)
 			{
+				var titleRotation:Number = this.titleTextField.rotation; 
 				if(this.orientation == AxisOrientation.VERTICAL)
 				{
-					if(this.titleTextField.rotation > 0)
-					{
-						this.titleTextField.x = this.titleTextField.width;
+					this.titleTextField.y = this.contentBounds.y + (this.contentBounds.height) / 2;
+					this.titleTextField.x = 0;
+					if(titleRotation > 0)
+					{						
+						this.titleTextField.x += this.titleTextField.textField.height * (titleRotation/90);
+						this.titleTextField.y -= this.titleTextField.height/2;
 					}
-					this.titleTextField.y = this.contentBounds.y + (this.contentBounds.height - this.titleTextField.height) / 2;
+					else if(titleRotation < 0)
+					{	
+						this.titleTextField.y += this.titleTextField.height/2;
+					}
+					else
+					{
+						this.titleTextField.y -= this.titleTextField.height /2;
+					}
 				}
 				else //horizontal
-				{
-					this.titleTextField.x = this.contentBounds.x + (this.contentBounds.width - this.titleTextField.width) / 2;
-					this.titleTextField.y = this.height - this.titleTextField.height;
-				}
+				{					
+					this.titleTextField.x = this.contentBounds.x + (this.contentBounds.width/2);
+					this.titleTextField.y = this.y + this.height - this.titleTextField.height;
+					if(titleRotation > 0)
+					{
+						this.titleTextField.x += (-.5 + titleRotation/90) * this.titleTextField.width;
+													
+					}
+					else if(titleRotation < 0)
+					{
+						this.titleTextField.x -= (this.titleTextField.width * (1 - Math.abs(titleRotation/180)))/2;
+						this.titleTextField.y += this.titleTextField.height - (Math.sin((90 - titleRotation) * Math.PI/180) * this.titleTextField.textField.height);						
+					}
+					else
+					{
+						this.titleTextField.x -= this.titleTextField.width/2;					
+					}
+				}	
 			}
 		}
 	

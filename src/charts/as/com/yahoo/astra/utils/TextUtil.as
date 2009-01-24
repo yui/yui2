@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.utils
+package com.yahoo.astra.utils
 {
 	/**
 	 * Used to estimate text field properties for strings
@@ -6,6 +6,7 @@
 	 * @author Tripp Bridges
 	 */
 	
+	import com.yahoo.astra.display.BitmapText;
 	import flash.display.Sprite;
 	import flash.text.*;
 	import flash.display.Bitmap;
@@ -26,18 +27,13 @@
 		public static function getTextWidth(textValue:String, tf:TextFormat, rotation:Number = 0):Number
 		{
 			rotation = Math.max(-90, Math.min(rotation, 90));			
-			var textField:TextField = new TextField();
+			var textField:BitmapText = new BitmapText();
 			textField.selectable = false;
 			textField.autoSize = rotation < 0 ? TextFieldAutoSize.RIGHT : TextFieldAutoSize.LEFT;			
+			if(tf != null) textField.defaultTextFormat = tf;
 			textField.text = textValue;
-			if(tf != null) textField.setTextFormat(tf);
-			if(rotation != 0)
-			{
-				return getBitmapTextSize(textField, rotation).width * (1 - Math.abs(rotation/180));	
-			}
-			
-			return Math.max(textField.textWidth, textField.width);
-			
+			textField.rotation = rotation;
+			return textField.width;
 		}
 		
 		/**
@@ -51,16 +47,12 @@
 		public static function getTextHeight(textValue:String, tf:TextFormat, rotation:Number = 0):Number
 		{
 			rotation = Math.max(-90, Math.min(rotation, 90));
-			var textField:TextField = new TextField();
+			var textField:BitmapText = new BitmapText();
 			textField.selectable = false;
 			textField.autoSize = rotation < 0 ? TextFieldAutoSize.RIGHT : TextFieldAutoSize.LEFT;			
+			if(tf != null) textField.defaultTextFormat = tf;
 			textField.text = textValue;
-			if(tf != null) textField.setTextFormat(tf);
-			if(rotation != 0)
-			{
-				return getBitmapTextSize(textField, rotation).height;
-			}
-			
+			textField.rotation = rotation;
 			return textField.height;
 			
 		}

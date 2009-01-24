@@ -407,7 +407,6 @@ package com.yahoo.astra.fl.charts.series
 			var difference:int = itemCount - this.markerMasks.length;
 			if(difference > 0)
 			{
-			/*
 				for(var i:int = 0; i < difference; i++)
 				{
 					var mask:Shape = new Shape();
@@ -416,20 +415,6 @@ package com.yahoo.astra.fl.charts.series
 					
 					var marker:Sprite = this.markers[i + (itemCount-difference)] as Sprite;
 					marker.mask = mask;
-					marker.width = this.width;
-					marker.height = this.height;
-				}*/
-				for(var i:int = 0; i < itemCount; i++)
-				{
-					var marker:Sprite = this.markers[i] as Sprite;
-					if(marker.mask == null)
-					{
-						var mask:Shape = new Shape();
-						this.addChild(mask);
-						this.markerMasks.push(mask);
-						marker.mask = mask;						
-						
-					}
 					marker.width = this.width;
 					marker.height = this.height;
 				}
