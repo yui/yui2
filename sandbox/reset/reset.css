@@ -124,3 +124,11 @@ textarea,
 select {
 	*font-size: 100%;
 }
+
+/* Opera requires 1px of passing to render with contemporary native chrome */
+input[type="checkbox"],
+input[type="radio"] {
+	padding:1px;
+}
+
+
