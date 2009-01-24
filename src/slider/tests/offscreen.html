@@ -10,6 +10,8 @@
             position: absolute;
             left: -9999px;
         }
+        span.go   { background: #009; color: #fff; }
+        span.stop { background: #900; color: #fff; }
     </style>
 </head>
 <body class="yui-skin-sam">
@@ -33,25 +35,25 @@
 <script type="text/javascript" src="../../../build/slider/slider-debug.js"></script>
 <script type="text/javascript" src="../../../build/logger/logger.js"></script>
 <script type="text/javascript">
-YAHOO.widget.Slider.prototype.on = function () {
-    if (YAHOO.lang.isArray(arguments[0])) {
-        var _ = [].slice.call(arguments), ev = _.shift(), i = ev.length;
-        while (i--) this.subscribe.apply(this,[ev[i]].concat(_));
-    } else {
-        this.subscribe.apply(this,arguments);
-    }
-};
-
 YAHOO.util.Event.onDOMReady(function () {
 
 var log = new YAHOO.widget.LogReader('log',{ newestOnTop: false }),
-    s1,
+    slider,
     startCount = 1,
     endCount = 1;
 
-var s1 = YAHOO.widget.Slider.getHorizSlider('bg','t',0,200);
-s1.on('slideStart', function (){ YAHOO.log('slideStart: ' + (startCount++)); });
-s1.on('slideEnd', function () { YAHOO.log('slideEnd: ' + (endCount++)); });
+log.hideCategory('info');
+log.hideSource('global');
+log.hideSource('Slider');
+log.hideSource('LogReader');
+
+slider = YAHOO.widget.Slider.getHorizSlider('bg','t',0,200);
+slider.subscribe('slideStart', function (){
+    YAHOO.log('slideStart: ' + (startCount++),'GO','debug');
+});
+slider.subscribe('slideEnd', function () {
+    YAHOO.log('slideEnd: ' + (endCount++),'STOP','debug');
+});
 
 YAHOO.util.Event.on('show','click',function () {
     YAHOO.util.Dom.removeClass('wrapper','offscreen');
