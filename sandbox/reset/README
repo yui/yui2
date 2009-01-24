@@ -1,5 +1,34 @@
 YUI Library - Reset - Release Notes
 
+Version 2.7.0
+  * Added new test for nesting ordered and unordered lists.
+  * Added new test for thead, tfoot, tbody.
+  * Added new test for optgroup and option. 
+  * Conformed with new CSS styleguide rules (draft):
+
+#a-style {
+	display: block;
+	float: left;
+	clear: both;
+}
+
+#another-style,
+#another-selector,
+#another-selector  {
+	width: 20px;
+	height: 10px;
+}
+
+  * YUIDoc Comment Sections (draft):
+	
+		-@group
+		-@branch
+		-@filter
+		-@purpose
+
+
+
+
 Version 2.6.0 
 
   * Added del,ins{text-decoration:none;} per SF-1957908

@@ -50,9 +50,10 @@ dfn,
 em,
 strong,
 th,
-var {
-	font-style: normal;
-	font-weight: normal;
+var,
+optgroup {
+	font-style: inherit;
+	font-weight: inherit;
 }
 
 li {
@@ -97,7 +98,9 @@ sub {
 
 input,
 textarea,
-select {
+select,
+optgroup,
+option {
 	font-family: inherit;
 	font-size: inherit;
 	font-weight: inherit;
