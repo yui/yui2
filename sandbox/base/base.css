@@ -99,12 +99,3 @@ pre {
 	/* So things don't run into each other. */
 	margin-bottom: 1em;
 }
-
-/* Setting a consistent width, 160px; Control of type=file still not possible. */
-
-input[type=text],
-input[type=password],
-textarea {
-	width: 12.25em;
-	*width: 11.9em;
-}
