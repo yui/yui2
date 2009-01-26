@@ -17,10 +17,16 @@
  * @param {int}    range The number of pixels the thumbs may move within
  * @param {Array}  initVals (optional) [min,max] Initial thumb placement
  */
-YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
+(function () {
 
-    var self = this,
-        lang = YAHOO.lang;
+var Event = YAHOO.util.Event,
+    YW = YAHOO.widget;
+
+function DualSlider(minSlider, maxSlider, range, initVals) {
+
+    var self  = this,
+        ready = { min : false, max : false },
+        minThumbOnMouseDown, maxThumbOnMouseDown;
 
     /**
      * A slider instance that keeps track of the lower value of the range.
@@ -53,24 +59,22 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
      */
     this.isHoriz = minSlider.thumb._isHoriz;
 
-    // Validate initial values
-    initVals = YAHOO.lang.isArray(initVals) ? initVals : [0,range];
-    initVals[0] = Math.min(Math.max(parseInt(initVals[0],10)|0,0),range);
-    initVals[1] = Math.max(Math.min(parseInt(initVals[1],10)|0,range),0);
-    // Swap initVals if min > max
-    if (initVals[0] > initVals[1]) {
-        initVals.splice(0,2,initVals[1],initVals[0]);
-    }
-
-    var ready = { min : false, max : false };
+    //FIXME: this is horrible
+    minThumbOnMouseDown = this.minSlider.thumb.onMouseDown;
+    maxThumbOnMouseDown = this.maxSlider.thumb.onMouseDown;
+    this.minSlider.thumb.onMouseDown = function() {
+        self.activeSlider = self.minSlider;
+        minThumbOnMouseDown.apply(this,arguments);
+    };
+    this.maxSlider.thumb.onMouseDown = function () {
+        self.activeSlider = self.maxSlider;
+        maxThumbOnMouseDown.apply(this,arguments);
+    };
 
     this.minSlider.thumb.onAvailable = function () {
         minSlider.setStartSliderState();
         ready.min = true;
         if (ready.max) {
-            minSlider.setValue(initVals[0],true,true,true);
-            maxSlider.setValue(initVals[1],true,true,true);
-            self.updateValue(true);
             self.fireEvent('ready',self);
         }
     };
@@ -78,27 +82,14 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
         maxSlider.setStartSliderState();
         ready.max = true;
         if (ready.min) {
-            minSlider.setValue(initVals[0],true,true,true);
-            maxSlider.setValue(initVals[1],true,true,true);
-            self.updateValue(true);
             self.fireEvent('ready',self);
         }
     };
 
     // dispatch mousedowns to the active slider
-    minSlider.onMouseDown = function(e) {
-        return self._handleMouseDown(e);
-    };
-
-    // we can safely ignore a mousedown on one of the sliders since
-    // they share a background
-    maxSlider.onMouseDown = function(e) { 
-        if (self.minSlider.isLocked() && !self.minSlider._sliding) {
-            return self._handleMouseDown(e);
-        } else {
-            YAHOO.util.Event.stopEvent(e); 
-            return false;
-        }
+    minSlider.onMouseDown =
+    maxSlider.onMouseDown = function(e) {
+        return this.backgroundEnabled && self._handleMouseDown(e);
     };
 
     // Fix the drag behavior so that only the active slider
@@ -107,6 +98,20 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
     maxSlider.onDrag = function(e) {
         self._handleDrag(e);
     };
+
+    // Likely only the minSlider's onMouseUp will be executed, but both are
+    // overridden just to be safe
+    minSlider.onMouseUp =
+    maxSlider.onMouseUp = function (e) {
+        self._handleMouseUp(e);
+    };
+
+    // Replace the _bindKeyEvents for the minSlider and remove that for the
+    // maxSlider since they share the same bg element.
+    minSlider._bindKeyEvents = function () {
+        self._bindKeyEvents(this);
+    };
+    maxSlider._bindKeyEvents = function () {};
 
     // The core events for each slider are handled so we can expose a single
     // event for when the event happens on either slider
@@ -145,9 +150,27 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
      * @param {Slider} activeSlider the moving slider
      */
     this.createEvent("slideEnd", this);
-};
 
-YAHOO.widget.DualSlider.prototype = {
+    // Validate initial values
+    initVals = YAHOO.lang.isArray(initVals) ? initVals : [0,range];
+    initVals[0] = Math.min(Math.max(parseInt(initVals[0],10)|0,0),range);
+    initVals[1] = Math.max(Math.min(parseInt(initVals[1],10)|0,range),0);
+    // Swap initVals if min > max
+    if (initVals[0] > initVals[1]) {
+        initVals.splice(0,2,initVals[1],initVals[0]);
+    }
+    this.minVal = initVals[0];
+    this.maxVal = initVals[1];
+
+    // Set values so initial assignment when the slider thumbs are ready will
+    // use these values
+    this.minSlider.setValue(this.minVal,true,true,true);
+    this.maxSlider.setValue(this.maxVal,true,true,true);
+
+    YAHOO.log("Setting initial values " + this.minVal + ", " + this.maxVal,"info","DualSlider");
+}
+
+DualSlider.prototype = {
 
     /**
      * The current value of the min thumb. <strong>read only</strong>.
@@ -195,7 +218,7 @@ YAHOO.widget.DualSlider.prototype = {
      * @private
      */
     _handleDrag: function(e) {
-        YAHOO.widget.Slider.prototype.onDrag.call(this.activeSlider, e);
+        YW.Slider.prototype.onDrag.call(this.activeSlider, e);
     },
 
     /**
@@ -216,6 +239,39 @@ YAHOO.widget.DualSlider.prototype = {
     _handleMaxChange: function() {
         this.activeSlider = this.maxSlider;
         this.updateValue();
+    },
+
+    /**
+     * Set up the listeners for the keydown and keypress events.
+     *
+     * @method _bindKeyEvents
+     * @protected
+     */
+    _bindKeyEvents : function (slider) {
+        Event.on(slider.id,'keydown', this._handleKeyDown, this,true);
+        Event.on(slider.id,'keypress',this._handleKeyPress,this,true);
+    },
+
+    /**
+     * Delegate event handling to the active Slider.  See Slider.handleKeyDown.
+     *
+     * @method _handleKeyDown
+     * @param e {Event} the mousedown DOM event
+     * @protected
+     */
+    _handleKeyDown : function (e) {
+        this.activeSlider.handleKeyDown.apply(this.activeSlider,arguments);
+    },
+
+    /**
+     * Delegate event handling to the active Slider.  See Slider.handleKeyPress.
+     *
+     * @method _handleKeyPress
+     * @param e {Event} the mousedown DOM event
+     * @protected
+     */
+    _handleKeyPress : function (e) {
+        this.activeSlider.handleKeyPress.apply(this.activeSlider,arguments);
     },
 
     /**
@@ -294,13 +350,14 @@ YAHOO.widget.DualSlider.prototype = {
      * events.  Default false
      */
     setMinValue : function (min, skipAnim, force, silent) {
-        var mins = this.minSlider;
+        var mins = this.minSlider,
+            self = this;
 
         this.activeSlider = mins;
 
         // Use a one-time event callback to delay the updateValue call
         // until after the slide operation is done
-        var self = this;
+        self = this;
         this._oneTimeCallback(mins,'slideEnd',function () {
             self.updateValue(silent);
             // Clean the slideEnd event on a timeout since this
@@ -308,7 +365,7 @@ YAHOO.widget.DualSlider.prototype = {
             setTimeout(function () { self._cleanEvent(mins,'slideEnd'); }, 0);
         });
 
-        mins.setValue(min, skipAnim, force, silent);
+        mins.setValue(min, skipAnim, force);
     },
 
     /**
@@ -323,13 +380,13 @@ YAHOO.widget.DualSlider.prototype = {
      * events.  Default false
      */
     setMaxValue : function (max, skipAnim, force, silent) {
-        var maxs = this.maxSlider;
+        var maxs = this.maxSlider,
+            self = this;
 
         this.activeSlider = maxs;
 
         // Use a one-time event callback to delay the updateValue call
         // until after the slide operation is done
-        var self = this;
         this._oneTimeCallback(maxs,'slideEnd',function () {
             self.updateValue(silent);
             // Clean the slideEnd event on a timeout since this
@@ -337,7 +394,7 @@ YAHOO.widget.DualSlider.prototype = {
             setTimeout(function () { self._cleanEvent(maxs,'slideEnd'); }, 0);
         });
 
-        maxs.setValue(max, skipAnim, force, silent);
+        maxs.setValue(max, skipAnim, force);
     },
 
     /**
@@ -350,23 +407,24 @@ YAHOO.widget.DualSlider.prototype = {
     updateValue: function(silent) {
         var min     = this.minSlider.getValue(),
             max     = this.maxSlider.getValue(),
-            changed = false;
+            changed = false,
+            mint,maxt,dim,minConstraint,maxConstraint,thumbInnerWidth;
 
         if (min != this.minVal || max != this.maxVal) {
             changed = true;
 
-            var mint = this.minSlider.thumb,
-                maxt = this.maxSlider.thumb,
-                dim  = this.isHoriz ? 'x' : 'y';
+            mint = this.minSlider.thumb;
+            maxt = this.maxSlider.thumb;
+            dim  = this.isHoriz ? 'x' : 'y';
 
-            var thumbInnerWidth = this.minSlider.thumbCenterPoint[dim] +
-                                  this.maxSlider.thumbCenterPoint[dim];
+            thumbInnerWidth = this.minSlider.thumbCenterPoint[dim] +
+                              this.maxSlider.thumbCenterPoint[dim];
 
             // Establish barriers within the respective other thumb's edge, less
             // the minRange.  Limit to the Slider's range in the case of
             // negative minRanges.
-            var minConstraint = Math.max(max-thumbInnerWidth-this.minRange,0);
-            var maxConstraint = Math.min(-min-thumbInnerWidth-this.minRange,0);
+            minConstraint = Math.max(max-thumbInnerWidth-this.minRange,0);
+            maxConstraint = Math.min(-min-thumbInnerWidth-this.minRange,0);
 
             if (this.isHoriz) {
                 minConstraint = Math.min(minConstraint,maxt.rightConstraint);
@@ -400,8 +458,8 @@ YAHOO.widget.DualSlider.prototype = {
     selectActiveSlider: function(e) {
         var min = this.minSlider,
             max = this.maxSlider,
-            minLocked = min.isLocked(),
-            maxLocked = max.isLocked(),
+            minLocked = min.isLocked() || !min.backgroundEnabled,
+            maxLocked = max.isLocked() || !min.backgroundEnabled,
             Ev  = YAHOO.util.Event,
             d;
 
@@ -419,13 +477,32 @@ YAHOO.widget.DualSlider.prototype = {
     },
 
     /**
-     * Overrides the onMouseDown for both slider, only moving the active slider
-     * @method handleMouseDown
-     * @private
+     * Delegates the onMouseDown to the appropriate Slider
+     *
+     * @method _handleMouseDown
+     * @param e {Event} mouseup event
+     * @protected
      */
     _handleMouseDown: function(e) {
-        this.selectActiveSlider(e);
-        YAHOO.widget.Slider.prototype.onMouseDown.call(this.activeSlider, e);
+        if (!e._handled) {
+            e._handled = true;
+            this.selectActiveSlider(e);
+            return YW.Slider.prototype.onMouseDown.call(this.activeSlider, e);
+        } else {
+            return false;
+        }
+    },
+
+    /**
+     * Delegates the onMouseUp to the active Slider
+     *
+     * @method _handleMouseUp
+     * @param e {Event} mouseup event
+     * @protected
+     */
+    _handleMouseUp : function (e) {
+        YW.Slider.prototype.onMouseUp.apply(
+            this.activeSlider, arguments);
     },
 
     /**
@@ -456,8 +533,9 @@ YAHOO.widget.DualSlider.prototype = {
      * @private
      */
     _cleanEvent : function (o,evt) {
+        var ce,i,len,j,subs,newSubs;
+
         if (o.__yui_events && o.events[evt]) {
-            var ce, i, len;
             for (i = o.__yui_events.length; i >= 0; --i) {
                 if (o.__yui_events[i].type === evt) {
                     ce = o.__yui_events[i];
@@ -465,9 +543,9 @@ YAHOO.widget.DualSlider.prototype = {
                 }
             }
             if (ce) {
-                var subs    = ce.subscribers,
-                    newSubs = [],
-                    j = 0;
+                subs    = ce.subscribers;
+                newSubs = [];
+                j = 0;
                 for (i = 0, len = subs.length; i < len; ++i) {
                     if (subs[i]) {
                         newSubs[j++] = subs[i];
@@ -480,7 +558,7 @@ YAHOO.widget.DualSlider.prototype = {
 
 };
 
-YAHOO.augment(YAHOO.widget.DualSlider, YAHOO.util.EventProvider);
+YAHOO.lang.augmentProto(DualSlider, YAHOO.util.EventProvider);
 
 
 /**
@@ -497,15 +575,15 @@ YAHOO.augment(YAHOO.widget.DualSlider, YAHOO.util.EventProvider);
  * @param {Array}  initVals (optional) [min,max] Initial thumb placement
  * @return {DualSlider} a horizontal dual-thumb slider control
  */
-YAHOO.widget.Slider.getHorizDualSlider = 
+YW.Slider.getHorizDualSlider = 
     function (bg, minthumb, maxthumb, range, iTickSize, initVals) {
-        var mint, maxt;
-        var YW = YAHOO.widget, Slider = YW.Slider, Thumb = YW.SliderThumb;
+        var mint = new YW.SliderThumb(minthumb, bg, 0, range, 0, 0, iTickSize),
+            maxt = new YW.SliderThumb(maxthumb, bg, 0, range, 0, 0, iTickSize);
 
-        mint = new Thumb(minthumb, bg, 0, range, 0, 0, iTickSize);
-        maxt = new Thumb(maxthumb, bg, 0, range, 0, 0, iTickSize);
-
-        return new YW.DualSlider(new Slider(bg, bg, mint, "horiz"), new Slider(bg, bg, maxt, "horiz"), range, initVals);
+        return new DualSlider(
+                    new YW.Slider(bg, bg, mint, "horiz"),
+                    new YW.Slider(bg, bg, maxt, "horiz"),
+                    range, initVals);
 };
 
 /**
@@ -522,13 +600,17 @@ YAHOO.widget.Slider.getHorizDualSlider =
  * @param {Array}  initVals (optional) [min,max] Initial thumb placement
  * @return {DualSlider} a vertical dual-thumb slider control
  */
-YAHOO.widget.Slider.getVertDualSlider = 
+YW.Slider.getVertDualSlider = 
     function (bg, minthumb, maxthumb, range, iTickSize, initVals) {
-        var mint, maxt;
-        var YW = YAHOO.widget, Slider = YW.Slider, Thumb = YW.SliderThumb;
+        var mint = new YW.SliderThumb(minthumb, bg, 0, 0, 0, range, iTickSize),
+            maxt = new YW.SliderThumb(maxthumb, bg, 0, 0, 0, range, iTickSize);
 
-        mint = new Thumb(minthumb, bg, 0, 0, 0, range, iTickSize);
-        maxt = new Thumb(maxthumb, bg, 0, 0, 0, range, iTickSize);
-
-        return new YW.DualSlider(new Slider(bg, bg, mint, "vert"), new Slider(bg, bg, maxt, "vert"), range, initVals);
+        return new YW.DualSlider(
+                    new YW.Slider(bg, bg, mint, "vert"),
+                    new YW.Slider(bg, bg, maxt, "vert"),
+                    range, initVals);
 };
+
+YAHOO.widget.DualSlider = DualSlider;
+
+})();

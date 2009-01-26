@@ -269,6 +269,15 @@ defaultValue : null,
 validator : null,
 
 /**
+ * If validation is enabled, resets input field of invalid data.
+ *
+ * @property resetInvalidData
+ * @type Boolean
+ * @default true
+ */
+resetInvalidData : true,
+
+/**
  * True if currently active.
  *
  * @property isActive
@@ -406,7 +415,7 @@ destroy : function() {
     // Column is late-binding in attach()
     var oColumn = this.getColumn();
     if(oColumn) {
-        this.getColumn().editor = null;
+        oColumn.editor = null;
     }
     
     var elContainer = this.getContainerEl();
@@ -420,6 +429,11 @@ destroy : function() {
  * @method render
  */
 render : function() {
+    if(this._elContainer) {
+        YAHOO.util.Event.purgeElement(this._elContainer, true);
+        this._elContainer.innerHTML = "";
+    }
+
     // Render Cell Editor container element as first child of body
     var elContainer = document.createElement("div");
     elContainer.id = this.getId() + "-container"; // Needed for tracking blur event
@@ -433,6 +447,12 @@ render : function() {
     Ev.addListener(elContainer, "keydown", function(e, oSelf) {
         // ESC cancels Cell Editor
         if((e.keyCode == 27)) {
+            var target = Ev.getTarget(e);
+            // workaround for Mac FF3 bug that disabled clicks when ESC hit when
+            // select is open. [bug 2273056]
+            if (target.nodeName && target.nodeName.toLowerCase() === 'select') {
+                target.blur();
+            }
             oSelf.cancel();
         }
         // Pass through event
@@ -592,7 +612,9 @@ save : function() {
     if(this.validator) {
         validValue = this.validator.call(this.getDataTable(), inputValue, this.value, this);
         if(validValue === undefined ) {
-            this.resetForm();
+            if(this.resetInvalidData) {
+                this.resetForm();
+            }
             this.fireEvent("invalidDataEvent",
                     {editor:this, oldData:this.value, newData:inputValue});
             YAHOO.log("Could not save Cell Editor input due to invalid data " +
@@ -603,7 +625,7 @@ save : function() {
         
     var oSelf = this;
     var finishSave = function(bSuccess, oNewValue) {
-        var oOrigValue = YAHOO.widget.DataTable._cloneObject(oSelf.value);
+        var oOrigValue = oSelf.value;
         if(bSuccess) {
             // Update new value
             oSelf.value = oNewValue;
@@ -1000,6 +1022,14 @@ lang.extend(widget.DateCellEditor, BCE, {
 calendar : null,
 
 /**
+ * Configs for the calendar instance, to be passed to Calendar constructor.
+ *
+ * @property calendarOptions
+ * @type Object
+ */
+calendarOptions : null,
+
+/**
  * Default value.
  *
  * @property defaultValue
@@ -1027,12 +1057,12 @@ renderForm : function() {
         calContainer.id = this.getId() + "-dateContainer"; // Needed for Calendar constructor
         var calendar =
                 new YAHOO.widget.Calendar(this.getId() + "-date",
-                calContainer.id);
+                calContainer.id, this.calendarOptions);
         calendar.render();
         calContainer.style.cssFloat = "none";
 
         if(ua.ie) {
-            var calFloatClearer = this.getContainerEl().appendChild(document.createElement("br"));
+            var calFloatClearer = this.getContainerEl().appendChild(document.createElement("div"));
             calFloatClearer.style.clear = "both";
         }
         
@@ -1135,7 +1165,7 @@ lang.extend(widget.DropdownCellEditor, BCE, {
  * Array of dropdown values. Can either be a simple array (e.g., 
  * ["Alabama","Alaska","Arizona","Arkansas"]) or a an array of objects (e.g., 
  * [{label:"Alabama", value:"AL"}, {label:"Alaska", value:"AK"},
- * {label:"Arizona", value:"AZ}, {label:"Arkansas", value:"AR}]). 
+ * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]). 
  *
  * @property dropdownOptions
  * @type String[] | Object[]

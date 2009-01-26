@@ -772,24 +772,24 @@
                 value: true, 
                 validator: YAHOO.lang.isBoolean 
             },
-        
-            "EFFECT": { 
-                key: "effect", 
-                suppressEvent: true, 
-                supercedes: ["visible"] 
+
+            "EFFECT": {
+                key: "effect",
+                suppressEvent: true,
+                supercedes: ["visible"]
             },
 
-            "MONITOR_RESIZE": { 
-                key: "monitorresize", 
-                value: true  
+            "MONITOR_RESIZE": {
+                key: "monitorresize",
+                value: true
             },
 
-            "APPEND_TO_DOCUMENT_BODY": { 
-                key: "appendtodocumentbody", 
+            "APPEND_TO_DOCUMENT_BODY": {
+                key: "appendtodocumentbody",
                 value: false
             }
         };
-    
+
     /**
     * Constant representing the prefix path to use for non-secure images
     * @property YAHOO.widget.Module.IMG_ROOT
@@ -853,7 +853,19 @@
     * @type String
     */
     Module.RESIZE_MONITOR_SECURE_URL = "javascript:false;";
-    
+
+    /**
+    * Constant representing the buffer amount (in pixels) to use when positioning
+    * the text resize monitor offscreen. The resize monitor is positioned
+    * offscreen by an amount eqaul to its offsetHeight + the buffer value.
+    * 
+    * @property YAHOO.widget.Module.RESIZE_MONITOR_BUFFER
+    * @static
+    * @type Number
+    */
+    // Set to 1, to work around pixel offset in IE8, which increases when zoom is used
+    Module.RESIZE_MONITOR_BUFFER = 1;
+
     /**
     * Singleton CustomEvent fired when the font size is changed in the browser.
     * Opera's "zoom" functionality currently does not support text 
@@ -1377,10 +1389,10 @@
                         db.appendChild(oIFrame);
                     }
 
-                    oIFrame.style.width = "10em";
-                    oIFrame.style.height = "10em";
-                    oIFrame.style.top = (-1 * oIFrame.offsetHeight) + "px";
-                    oIFrame.style.left = (-1 * oIFrame.offsetWidth) + "px";
+                    oIFrame.style.width = "2em";
+                    oIFrame.style.height = "2em";
+                    oIFrame.style.top = (-1 * (oIFrame.offsetHeight + Module.RESIZE_MONITOR_BUFFER)) + "px";
+                    oIFrame.style.left = "0";
                     oIFrame.style.borderWidth = "0";
                     oIFrame.style.visibility = "visible";
 
@@ -1457,12 +1469,10 @@
         */
         onDomResize: function (e, obj) {
 
-            var nLeft = -1 * this.resizeMonitor.offsetWidth,
-                nTop = -1 * this.resizeMonitor.offsetHeight;
-        
-            this.resizeMonitor.style.top = nTop + "px";
-            this.resizeMonitor.style.left =  nLeft + "px";
+            var nTop = -1 * (this.resizeMonitor.offsetHeight + Module.RESIZE_MONITOR_BUFFER);
 
+            this.resizeMonitor.style.top = nTop + "px";
+            this.resizeMonitor.style.left = "0";
         },
 
         /**
@@ -1711,8 +1721,7 @@
         */
         destroy: function () {
 
-            var parent,
-                e;
+            var parent;
 
             if (this.element) {
                 Event.purgeElement(this.element, true);
@@ -1838,7 +1847,7 @@
             if (docEl) {
     			// Opera needs to force a repaint
     			docEl.className += " ";
-                docEl.className.trim();
+                docEl.className = YAHOO.lang.trim(docEl.className);
             }
         },
 
@@ -1890,6 +1899,7 @@
 
         _SUBSCRIBE = "subscribe",
         _UNSUBSCRIBE = "unsubscribe",
+        _CONTAINED = "contained",
 
         m_oIFrameTemplate,
 
@@ -1943,7 +1953,6 @@
             "FIXED_CENTER": { 
                 key: "fixedcenter", 
                 value: false, 
-                validator: Lang.isBoolean, 
                 supercedes: ["iframe", "visible"] 
             },
 
@@ -1983,14 +1992,14 @@
                 validator: Lang.isBoolean, 
                 supercedes: ["zindex"] 
             },
-            
+
             "PREVENT_CONTEXT_OVERLAP": {
                 key: "preventcontextoverlap",
                 value: false,
                 validator: Lang.isBoolean,  
                 supercedes: ["constraintoviewport"]
             }
-            
+
         };
 
     /**
@@ -2402,10 +2411,47 @@
             });
 
             /**
-            * True if the Overlay should be anchored to the center of 
-            * the viewport.
+            * Determines whether or not the Overlay should be anchored 
+            * to the center of the viewport.
+            * 
+            * <p>This property can be set to:</p>
+            * 
+            * <dl>
+            * <dt>true</dt>
+            * <dd>
+            * To enable fixed center positioning
+            * <p>
+            * When enabled, the overlay will 
+            * be positioned in the center of viewport when initially displayed, and 
+            * will remain in the center of the viewport whenever the window is 
+            * scrolled or resized.
+            * </p>
+            * <p>
+            * If the overlay is too big for the viewport, 
+            * it's top left corner will be aligned with the top left corner of the viewport.
+            * </p>
+            * </dd>
+            * <dt>false</dt>
+            * <dd>
+            * To disable fixed center positioning.
+            * <p>In this case the overlay can still be 
+            * centered as a one-off operation, by invoking the <code>center()</code> method,
+            * however it will not remain centered when the window is scrolled/resized.
+            * </dd>
+            * <dt>"contained"<dt>
+            * <dd>To enable fixed center positioning, as with the <code>true</code> option.
+            * <p>However, unlike setting the property to <code>true</code>, 
+            * when the property is set to <code>"contained"</code>, if the overlay is 
+            * too big for the viewport, it will not get automatically centered when the 
+            * user scrolls or resizes the window (until the window is large enough to contain the 
+            * overlay). This is useful in cases where the Overlay has both header and footer 
+            * UI controls which the user may need to access.
+            * </p>
+            * </dd>
+            * </dl>
+            *
             * @config fixedcenter
-            * @type Boolean
+            * @type Boolean | String
             * @default false
             */
             cfg.addProperty(DEFAULT_CONFIG.FIXED_CENTER.key, {
@@ -2549,6 +2595,23 @@
             Dom.replaceClass(this.element, "hide-scrollbars", "show-scrollbars");
         },
 
+        /**
+         * Internal implementation to set the visibility of the overlay in the DOM.
+         *
+         * @method _setDomVisibility
+         * @param {boolean} visible Whether to show or hide the Overlay's outer element
+         * @protected
+         */
+        _setDomVisibility : function(show) {
+            Dom.setStyle(this.element, "visibility", (show) ? "visible" : "hidden");
+
+            if (show) {
+                Dom.removeClass(this.element, "yui-overlay-hidden");
+            } else {
+                Dom.addClass(this.element, "yui-overlay-hidden");
+            }
+        },
+
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
         /**
         * The default event handler fired when the "visible" property is 
@@ -2579,8 +2642,8 @@
                 while (e.nodeType != 9 && e.nodeType != 11) {
                     currentVis = Dom.getStyle(e, "visibility");
 
-                    if (currentVis != "inherit") { 
-                        break; 
+                    if (currentVis != "inherit") {
+                        break;
                     }
 
                     e = e.parentNode;
@@ -2606,7 +2669,6 @@
                         effect.effect(this, effect.duration);
                 }
             }
-
 
             if (visible) { // Show
                 if (isMacGecko) {
@@ -2641,10 +2703,12 @@
                     if (currentVis != "visible" || currentVis === "") {
                         this.beforeShowEvent.fire();
 
-                        Dom.setStyle(this.element, "visibility", "visible");
+                        this._setDomVisibility(true);
 
                         this.cfg.refireEvent("iframe");
                         this.showEvent.fire();
+                    } else {
+                        this._setDomVisibility(true);
                     }
                 }
             } else { // Hide
@@ -2652,7 +2716,7 @@
                 if (isMacGecko) {
                     this.hideMacGeckoScrollbars();
                 }
-                    
+
                 if (effect) { // Animate out if showing
                     if (currentVis == "visible") {
                         this.beforeHideEvent.fire();
@@ -2678,29 +2742,56 @@
                         }
 
                     } else if (currentVis === "") {
-                        Dom.setStyle(this.element, "visibility", "hidden");
+                        this._setDomVisibility(false);
                     }
 
                 } else { // Simple hide
 
                     if (currentVis == "visible" || currentVis === "") {
                         this.beforeHideEvent.fire();
-                        Dom.setStyle(this.element, "visibility", "hidden");
+                        this._setDomVisibility(false);
                         this.hideEvent.fire();
+                    } else {
+                        this._setDomVisibility(false);
                     }
                 }
             }
         },
 
         /**
-        * Center event handler used for centering on scroll/resize, but only if 
-        * the Overlay is visible
+        * Fixed center event handler used for centering on scroll/resize, but only if 
+        * the overlay is visible and, if "fixedcenter" is set to "contained", only if 
+        * the overlay fits within the viewport.
+        *
         * @method doCenterOnDOMEvent
         */
         doCenterOnDOMEvent: function () {
-            if (this.cfg.getProperty("visible")) {
-                this.center();
+            var cfg = this.cfg,
+                fc = cfg.getProperty("fixedcenter");
+
+            if (cfg.getProperty("visible")) {
+                if (fc && (fc !== _CONTAINED || this.fitsInViewport())) {
+                    this.center();
+                }
             }
+        },
+
+        /**
+         * Determines if the Overlay (including the offset value defined by Overlay.VIEWPORT_OFFSET) 
+         * will fit entirely inside the viewport, in both dimensions - width and height.
+         * 
+         * @method fitsInViewport
+         * @return boolean true if the Overlay will fit, false if not
+         */
+        fitsInViewport : function() {
+            var nViewportOffset = Overlay.VIEWPORT_OFFSET,
+                element = this.element,
+                elementWidth = element.offsetWidth,
+                elementHeight = element.offsetHeight,
+                viewportWidth = Dom.getViewportWidth(),
+                viewportHeight = Dom.getViewportHeight();
+
+            return ((elementWidth + nViewportOffset < viewportWidth) && (elementHeight + nViewportOffset < viewportHeight));
         },
 
         /**
@@ -2723,7 +2814,7 @@
             if (val) {
                 this.center();
 
-                if (!alreadySubscribed(this.beforeShowEvent, this.center, this)) {
+                if (!alreadySubscribed(this.beforeShowEvent, this.center)) {
                     this.beforeShowEvent.subscribe(this.center);
                 }
 
@@ -2742,7 +2833,7 @@
                 windowScrollEvent.unsubscribe(this.doCenterOnDOMEvent, this);
             }
         },
-        
+
         /**
         * The default event handler fired when the "height" property is changed.
         * @method configHeight
@@ -2773,22 +2864,26 @@
          */
         configAutoFillHeight: function (type, args, obj) {
             var fillEl = args[0],
-                currEl = this.cfg.getProperty("autofillheight");
+                cfg = this.cfg,
+                autoFillHeight = "autofillheight",
+                height = "height",
+                currEl = cfg.getProperty(autoFillHeight),
+                autoFill = this._autoFillOnHeightChange;
 
-            this.cfg.unsubscribeFromConfigEvent("height", this._autoFillOnHeightChange);
-            Module.textResizeEvent.unsubscribe("height", this._autoFillOnHeightChange);
+            cfg.unsubscribeFromConfigEvent(height, autoFill);
+            Module.textResizeEvent.unsubscribe(height, autoFill);
 
             if (currEl && fillEl !== currEl && this[currEl]) {
-                Dom.setStyle(this[currEl], "height", "");
+                Dom.setStyle(this[currEl], height, "");
             }
 
             if (fillEl) {
                 fillEl = Lang.trim(fillEl.toLowerCase());
 
-                this.cfg.subscribeToConfigEvent("height", this._autoFillOnHeightChange, this[fillEl], this);
-                Module.textResizeEvent.subscribe(this._autoFillOnHeightChange, this[fillEl], this);
+                cfg.subscribeToConfigEvent(height, autoFill, this[fillEl], this);
+                Module.textResizeEvent.subscribe(autoFill, this[fillEl], this);
 
-                this.cfg.setProperty("autofillheight", fillEl, true);
+                cfg.setProperty(autoFillHeight, fillEl, true);
             }
         },
 
@@ -3436,8 +3531,8 @@
                 nLeftRegionWidth,
                 nRightRegionWidth,
 
-				leftConstraint = scrollX + nViewportOffset,
-				rightConstraint = scrollX + viewPortWidth - nOverlayOffsetWidth - nViewportOffset,
+                leftConstraint = scrollX + nViewportOffset,
+                rightConstraint = scrollX + viewPortWidth - nOverlayOffsetWidth - nViewportOffset,
 
                 xNew = x,
 
@@ -3529,53 +3624,53 @@
             
             };
 
-			// Determine if the current value for the Overlay's "x" configuration property will
-			// result in the Overlay being positioned outside the boundaries of the viewport
-			
-			if (x < leftConstraint || x > rightConstraint) {
+            // Determine if the current value for the Overlay's "x" configuration property will
+            // result in the Overlay being positioned outside the boundaries of the viewport
+            
+            if (x < leftConstraint || x > rightConstraint) {
 
-				// The current value for the Overlay's "x" configuration property WILL
-				// result in the Overlay being positioned outside the boundaries of the viewport
+                // The current value for the Overlay's "x" configuration property WILL
+                // result in the Overlay being positioned outside the boundaries of the viewport
 
                 if (bCanConstrain) {
 
-					//	If the "preventcontextoverlap" configuration property is set to "true", 
-					//	try to flip the Overlay to both keep it inside the boundaries of the 
-					//	viewport AND from overlaping its context element.
+                    //	If the "preventcontextoverlap" configuration property is set to "true", 
+                    //	try to flip the Overlay to both keep it inside the boundaries of the 
+                    //	viewport AND from overlaping its context element.
     
-					if (this.cfg.getProperty("preventcontextoverlap") && aContext && 
-						oOverlapPositions[(aContext[1] + aContext[2])]) {
-		
-						oContextEl = aContext[0];
-						nContextElX = Dom.getX(oContextEl) - scrollX;
-						nContextElWidth = oContextEl.offsetWidth;
-						nLeftRegionWidth = nContextElX;
-						nRightRegionWidth = (viewPortWidth - (nContextElX + nContextElWidth));
-		
-						setHorizontalPosition();
-						
-						xNew = this.cfg.getProperty("x");
-					
-					}
-					else {
+                    if (this.cfg.getProperty("preventcontextoverlap") && aContext && 
+                        oOverlapPositions[(aContext[1] + aContext[2])]) {
+        
+                        oContextEl = aContext[0];
+                        nContextElX = Dom.getX(oContextEl) - scrollX;
+                        nContextElWidth = oContextEl.offsetWidth;
+                        nLeftRegionWidth = nContextElX;
+                        nRightRegionWidth = (viewPortWidth - (nContextElX + nContextElWidth));
+        
+                        setHorizontalPosition();
+                        
+                        xNew = this.cfg.getProperty("x");
+                    
+                    }
+                    else {
 
-						if (x < leftConstraint) {
-							xNew = leftConstraint;
-						} else if (x > rightConstraint) {
-							xNew = rightConstraint;
-						}
+                        if (x < leftConstraint) {
+                            xNew = leftConstraint;
+                        } else if (x > rightConstraint) {
+                            xNew = rightConstraint;
+                        }
 
-					}
+                    }
 
                 } else {
-					//	The "x" configuration property cannot be set to a value that will keep
-					//	entire Overlay inside the boundary of the viewport.  Therefore, set  
-					//	the "x" configuration property to scrollY to keep as much of the 
-					//	Overlay inside the viewport as possible.                
+                    //	The "x" configuration property cannot be set to a value that will keep
+                    //	entire Overlay inside the boundary of the viewport.  Therefore, set  
+                    //	the "x" configuration property to scrollY to keep as much of the 
+                    //	Overlay inside the viewport as possible.                
                     xNew = nViewportOffset + scrollX;
                 }
 
-			}
+            }
 
             return xNew;
         
@@ -3612,8 +3707,8 @@
                 nTopRegionHeight,
                 nBottomRegionHeight,
 
-				topConstraint = scrollY + nViewportOffset,
-				bottomConstraint = scrollY + viewPortHeight - nOverlayOffsetHeight - nViewportOffset,
+                topConstraint = scrollY + nViewportOffset,
+                bottomConstraint = scrollY + viewPortHeight - nOverlayOffsetHeight - nViewportOffset,
 
                 yNew = y,
                 
@@ -3704,57 +3799,57 @@
             };
 
 
-			// Determine if the current value for the Overlay's "y" configuration property will
-			// result in the Overlay being positioned outside the boundaries of the viewport
+            // Determine if the current value for the Overlay's "y" configuration property will
+            // result in the Overlay being positioned outside the boundaries of the viewport
 
-			if (y < topConstraint || y  > bottomConstraint) {
-		
-				// The current value for the Overlay's "y" configuration property WILL
-				// result in the Overlay being positioned outside the boundaries of the viewport
+            if (y < topConstraint || y  > bottomConstraint) {
+        
+                // The current value for the Overlay's "y" configuration property WILL
+                // result in the Overlay being positioned outside the boundaries of the viewport
 
-				if (bCanConstrain) {	
+                if (bCanConstrain) {	
 
-					//	If the "preventcontextoverlap" configuration property is set to "true", 
-					//	try to flip the Overlay to both keep it inside the boundaries of the 
-					//	viewport AND from overlaping its context element.
-		
-					if (this.cfg.getProperty("preventcontextoverlap") && aContext && 
-						oOverlapPositions[(aContext[1] + aContext[2])]) {
-		
-						oContextEl = aContext[0];
-						nContextElHeight = oContextEl.offsetHeight;
-						nContextElY = (Dom.getY(oContextEl) - scrollY);
-		
-						nTopRegionHeight = nContextElY;
-						nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
-		
-						setVerticalPosition();
-		
-						yNew = oOverlay.cfg.getProperty("y");
-		
-					}
-					else {
+                    //	If the "preventcontextoverlap" configuration property is set to "true", 
+                    //	try to flip the Overlay to both keep it inside the boundaries of the 
+                    //	viewport AND from overlaping its context element.
+        
+                    if (this.cfg.getProperty("preventcontextoverlap") && aContext && 
+                        oOverlapPositions[(aContext[1] + aContext[2])]) {
+        
+                        oContextEl = aContext[0];
+                        nContextElHeight = oContextEl.offsetHeight;
+                        nContextElY = (Dom.getY(oContextEl) - scrollY);
+        
+                        nTopRegionHeight = nContextElY;
+                        nBottomRegionHeight = (viewPortHeight - (nContextElY + nContextElHeight));
+        
+                        setVerticalPosition();
+        
+                        yNew = oOverlay.cfg.getProperty("y");
+        
+                    }
+                    else {
 
-						if (y < topConstraint) {
-							yNew  = topConstraint;
-						} else if (y  > bottomConstraint) {
-							yNew  = bottomConstraint;
-						}
-					
-					}
-				
-				}
-				else {
-				
-					//	The "y" configuration property cannot be set to a value that will keep
-					//	entire Overlay inside the boundary of the viewport.  Therefore, set  
-					//	the "y" configuration property to scrollY to keep as much of the 
-					//	Overlay inside the viewport as possible.
-				
-					yNew = nViewportOffset + scrollY;
-				}
-		
-			}
+                        if (y < topConstraint) {
+                            yNew  = topConstraint;
+                        } else if (y  > bottomConstraint) {
+                            yNew  = bottomConstraint;
+                        }
+                    
+                    }
+                
+                }
+                else {
+                
+                    //	The "y" configuration property cannot be set to a value that will keep
+                    //	entire Overlay inside the boundary of the viewport.  Therefore, set  
+                    //	the "y" configuration property to scrollY to keep as much of the 
+                    //	Overlay inside the viewport as possible.
+                
+                    yNew = nViewportOffset + scrollY;
+                }
+        
+            }
 
             return yNew;
         },
@@ -3895,7 +3990,10 @@
          * out the containers height
          */
         _autoFillOnHeightChange : function(type, args, el) {
-            this.fillHeight(el);
+            var height = this.cfg.getProperty("height");
+            if ((height && height !== "auto") || (height === 0)) {
+                this.fillHeight(el);
+            }
         },
 
         /**
@@ -4525,8 +4623,7 @@
         */
         register: function (overlay) {
 
-            var zIndex,
-                registered = false,
+            var registered = false,
                 i,
                 n;
 
@@ -4800,30 +4897,27 @@
     */
     Tooltip.CSS_TOOLTIP = "yui-tt";
 
-    /* 
-        "hide" event handler that sets a Tooltip instance's "width"
-        configuration property back to its original value before 
-        "setWidthToOffsetWidth" was called.
-    */
-    function restoreOriginalWidth(p_sType, p_aArgs, p_oObject) {
+    function restoreOriginalWidth(sOriginalWidth, sForcedWidth) {
 
-        var sOriginalWidth = p_oObject[0],
-            sNewWidth = p_oObject[1],
-            oConfig = this.cfg,
+        var oConfig = this.cfg,
             sCurrentWidth = oConfig.getProperty("width");
 
-        if (sCurrentWidth == sNewWidth) {
+        if (sCurrentWidth == sForcedWidth) {
             oConfig.setProperty("width", sOriginalWidth);
         }
     }
 
     /* 
-        "beforeShow" event handler that sets a Tooltip instance's "width"
+        changeContent event handler that sets a Tooltip instance's "width"
         configuration property to the value of its root HTML 
-        elements's offsetWidth
+        elements's offsetWidth if a specific width has not been set.
     */
 
     function setWidthToOffsetWidth(p_sType, p_aArgs) {
+
+        if ("_originalWidth" in this) {
+            restoreOriginalWidth.call(this, this._originalWidth, this._forcedWidth);
+        }
 
         var oBody = document.body,
             oConfig = this.cfg,
@@ -4851,7 +4945,8 @@
             oConfig.setProperty("width", sNewWidth);
             oConfig.refireEvent("xy");
 
-            this.subscribe("hide", restoreOriginalWidth, [(sOriginalWidth || ""), sNewWidth]);
+            this._originalWidth = sOriginalWidth || "";
+            this._forcedWidth = sNewWidth;
         }
     }
 
@@ -4899,7 +4994,7 @@
 
             this.setBody("");
 
-            this.subscribe("beforeShow", setWidthToOffsetWidth);
+            this.subscribe("changeContent", setWidthToOffsetWidth);
             this.subscribe("init", onInit);
             this.subscribe("render", this.onRender);
 
@@ -5175,7 +5270,7 @@
         * this will usually equal the owner.
         */
         configContext: function (type, args, obj) {
-        
+
             var context = args[0],
                 aElements,
                 nElements,
@@ -6609,7 +6704,10 @@
         _autoFillOnHeightChange : function(type, args, el) {
             Panel.superclass._autoFillOnHeightChange.apply(this, arguments);
             if (bIEQuirks) {
-                this.sizeUnderlay();
+                var panel = this;
+                setTimeout(function() {
+                    panel.sizeUnderlay();
+                },0);
             }
         },
 
@@ -6704,7 +6802,6 @@
             }
         },
 
-        
         /**
         * Registers the Panel's header for drag & drop capability.
         * @method registerDragDrop
@@ -6873,17 +6970,17 @@
                     viewWidth = Dom.getViewportWidth(),
                     viewHeight = Dom.getViewportHeight();
 
-                if (this.mask.offsetHeight > viewHeight) {
-                    this.mask.style.height = viewHeight + "px";
+                if (mask.offsetHeight > viewHeight) {
+                    mask.style.height = viewHeight + "px";
                 }
 
-                if (this.mask.offsetWidth > viewWidth) {
-                    this.mask.style.width = viewWidth + "px";
+                if (mask.offsetWidth > viewWidth) {
+                    mask.style.width = viewWidth + "px";
                 }
 
                 // Then size it to the document
-                this.mask.style.height = Dom.getDocumentHeight() + "px";
-                this.mask.style.width = Dom.getDocumentWidth() + "px";
+                mask.style.height = Dom.getDocumentHeight() + "px";
+                mask.style.width = Dom.getDocumentWidth() + "px";
             }
         },
 
@@ -7026,6 +7123,11 @@
                 value: "async"
             },
 
+            "POST_DATA" : {
+                key: "postdata",
+                value: null
+            },
+
             "BUTTONS": {
                 key: "buttons",
                 value: "none",
@@ -7036,6 +7138,7 @@
                 key: "hideaftersubmit",
                 value: true
             }
+
         };
 
     /**
@@ -7173,6 +7276,20 @@
                         return true;
                     }
                 }
+            });
+
+            /**
+            * Any additional post data which needs to be sent when using the 
+            * <a href="#config_postmethod">async</a> postmethod for dialog POST submissions.
+            * The format for the post data string is defined by Connection Manager's 
+            * <a href="YAHOO.util.Connect.html#method_asyncRequest>asyncRequest</a> 
+            * method.
+            * @config postdata
+            * @type String
+            * @default null
+            */
+            this.cfg.addProperty(DEFAULT_CONFIG.POST_DATA.key, {
+                value: DEFAULT_CONFIG.POST_DATA.value
             });
 
             /**
@@ -7377,7 +7494,9 @@
                     formAttrs = this._getFormAttributes(oForm);
 
                     Connect.setForm(oForm, bUseFileUpload, bUseSecureFileUpload);
-                    var c = Connect.asyncRequest(formAttrs.method, formAttrs.action, this.callback);
+
+                    var postData = this.cfg.getProperty("postdata");
+                    var c = Connect.asyncRequest(formAttrs.method, formAttrs.action, this.callback, postData);
 
                     this.asyncSubmitEvent.fire(c);
 
@@ -8627,7 +8746,7 @@
 
             obj.handleUnderlayStart();
 
-            Dom.setStyle(obj.overlay.element, "visibility", "visible");
+            obj.overlay._setDomVisibility(true);
             Dom.setStyle(obj.overlay.element, "opacity", 0);
         };
 
@@ -8654,7 +8773,7 @@
             if (obj.overlay.element.style.filter) {
                 obj.overlay.element.style.filter = null;
             }
-            Dom.setStyle(obj.overlay.element, "visibility", "hidden");
+            obj.overlay._setDomVisibility(false);
             Dom.setStyle(obj.overlay.element, "opacity", 1);
 
             obj.handleUnderlayComplete();
@@ -8713,7 +8832,7 @@
             if (Dom.getStyle(obj.overlay.element, "visibility") == 
                 "hidden" && currentX < x) {
 
-                Dom.setStyle(obj.overlay.element, "visibility", "visible");
+                obj.overlay._setDomVisibility(true);
 
             }
         
@@ -8749,8 +8868,8 @@
         };
         
         slide.handleCompleteAnimateOut = function (type, args, obj) {
-            Dom.setStyle(obj.overlay.element, "visibility", "hidden");
-        
+            obj.overlay._setDomVisibility(false);
+
             obj.overlay.cfg.setProperty("xy", [x, y]);
             obj.animateOutCompleteEvent.fire();
         };

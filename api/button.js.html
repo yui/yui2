@@ -4,11 +4,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: button   button.js  (YUI Library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1231977737.16" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1231977737.16" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1231977737.16"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1231977737.16"></script>
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
@@ -3145,6 +3145,7 @@
 <span class="c">            * &quot;radio,&quot; &quot;menu,&quot; and &quot;split.&quot;</span>
 <span class="c">            * @default &quot;push&quot;</span>
 <span class="c">            * @type String</span>
+<span class="c">			* @writeonce</span>
 <span class="c">            */</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;type&quot;</span><span class="o">,</span> <span class="o">{</span>
         
@@ -3152,7 +3153,7 @@
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">,</span>
                 <span class="nx">writeOnce</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setType</span>
-        
+
             <span class="o">});</span>
         
         
@@ -3300,6 +3301,7 @@
 <span class="c">            * @type &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
 <span class="c">            * level-one-html.html#ID-58190037&quot;&gt;HTMLElement&lt;/a&gt;|String</span>
 <span class="c">            * @default null</span>
+<span class="c">			* @writeonce</span>
 <span class="c">            */</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;container&quot;</span><span class="o">,</span> <span class="o">{</span>
         
@@ -3317,6 +3319,7 @@
 <span class="c">            * @type &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
 <span class="c">            * level-one-html.html#ID-58190037&quot;&gt;HTMLElement&lt;/a&gt;|String</span>
 <span class="c">            * @default null</span>
+<span class="c">			* @writeonce</span>
 <span class="c">            */</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;srcelement&quot;</span><span class="o">,</span> <span class="o">{</span>
         
@@ -3360,6 +3363,7 @@
 <span class="c">            * href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
 <span class="c">            * one-html.html#ID-58190037&quot;&gt;HTMLElement&lt;/a&gt;|String|Array</span>
 <span class="c">            * @default null</span>
+<span class="c">			* @writeonce</span>
 <span class="c">            */</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;menu&quot;</span><span class="o">,</span> <span class="o">{</span>
         
@@ -3393,6 +3397,7 @@
 <span class="c">            * attribute.&lt;/em&gt;</span>
 <span class="c">            * @default true</span>
 <span class="c">            * @type Boolean</span>
+<span class="c">			* @writeonce</span>
 <span class="c">            */</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;lazyloadmenu&quot;</span><span class="o">,</span> <span class="o">{</span>
         
@@ -3409,6 +3414,7 @@
 <span class="c">            * applied to the root element of the button&#39;s menu.</span>
 <span class="c">            * @type String</span>
 <span class="c">            * @default &quot;yui-button-menu&quot;</span>
+<span class="c">			* @writeonce</span>
 <span class="c">            */</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;menuclassname&quot;</span><span class="o">,</span> <span class="o">{</span>
         

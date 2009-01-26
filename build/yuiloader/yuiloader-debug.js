@@ -1831,7 +1831,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'carousel': {
             'type': 'js',
-            'path': 'carousel/carousel-beta-min.js',
+            'path': 'carousel/carousel-min.js',
             'requires': ['element'],
             'optional': ['animation'],
             'skinnable': true
@@ -1839,7 +1839,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'charts': {
             'type': 'js',
-            'path': 'charts/charts-experimental-min.js',
+            'path': 'charts/charts-min.js',
             'requires': ['element', 'json', 'datasource']
         },
 
@@ -1956,7 +1956,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
          'imagecropper': {
              'type': 'js',
-             'path': 'imagecropper/imagecropper-beta-min.js',
+             'path': 'imagecropper/imagecropper-min.js',
              'requires': ['dom', 'event', 'dragdrop', 'element', 'resize'],
              'skinnable': true
          },
@@ -2079,12 +2079,13 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'type': 'js',
             'path': 'treeview/treeview-min.js',
             'requires': ['event', 'dom'],
+            'optional': ['json'],
             'skinnable': true
         },
 
         'uploader': {
             'type': 'js',
-            'path': 'uploader/uploader-experimental.js',
+            'path': 'uploader/uploader.js',
             'requires': ['element']
         },
 

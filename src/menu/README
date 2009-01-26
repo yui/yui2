@@ -1,31 +1,68 @@
-*** version 2.6.0 ***
+*** version 2.7.0 ***
 
 Fixed the following bugs:
 -------------------------
 
-+ Submenus no longer appear in the top-left corner of the viewport before moving into position when 
-  initially made visible.
++ Menus will no longer scroll unnecessarily when the "preventcontextoverlap" 
+  configuration property is set to true.
 
-+ Submenus are no longer re-shown when the mouse moves from a submenu back to its parent MenuItem.
++ Submenus containing content other than MenuItem instances will no longer hide 
+  when the user mouses from the submenu's parent MenuItem to an element that is
+  a child of the submenu's body node (<div class="bd">).
 
-+ A Menu's shadow is now rendered at the correct dimensions consistently in Internet Explorer.
-
-+ Menus no longer trigger a JavaScript error if the "constraintoviewport" configuration property 
-  is set to "true", but the "context" configuration property is not set.
++ Multiple ContenxtMenu instances can now be attached to the same element 
+  without the first ContextMenu instance preventing the display of the others.
 
 
 Added the following features:
 -----------------------------
 
-+ Added a "keepopen" configuration property to YAHOO.widget.Menu that, when set to "true", will 
-  result in a Menu remaining open when clicked.
++ Added a "keylistener" configuration property that accepts an Object literal 
+  representing the key(s) that can be used to trigger the MenuItem's "click" 
+  event.  Possible attributes are shift (boolean), alt (boolean), ctrl (boolean) 
+  and keys (either an int or an array of ints representing keycodes).
 
-+ Popup Menus now automatically focus themselves when made visible, and when hidden, restore focus 
-  to the element in the DOM that had focus prior to them being made visible.
+Changes:
+--------
 
-+ Added a new "submenutoggleregion" configuration property to YAHOO.widget.MenuBar.  When set to 
-  "true", only clicking a specific region of a MenuBarItem will toggle the display of a submenu.  
-  The width of the toggle region is defined 
++ The "maxheight" configuration property now automatically propagates to 
+  all submenus.
+
+
+
+*** version 2.6.0 ***
+
+Fixed the following bugs:
+-------------------------
+
++ Submenus no longer appear in the top-left corner of the viewport before 
+  moving into position when initially made visible.
+
++ Submenus are no longer re-shown when the mouse moves from a submenu back to 
+  its parent MenuItem.
+
++ A Menu's shadow is now rendered at the correct dimensions consistently in 
+  Internet Explorer.
+
++ Menus no longer trigger a JavaScript error if the "constraintoviewport" 
+  configuration property is set to "true", but the "context" configuration 
+  property is not set.
+
+
+Added the following features:
+-----------------------------
+
++ Added a "keepopen" configuration property to YAHOO.widget.Menu that, when set 
+  to "true", will result in a Menu remaining open when clicked.
+
++ Popup Menus now automatically focus themselves when made visible, and when 
+  hidden, restore focus to the element in the DOM that had focus prior to them 
+  being made visible.
+
++ Added a new "submenutoggleregion" configuration property to 
+  YAHOO.widget.MenuBar.  When set to "true", only clicking a specific region of 
+  a MenuBarItem will toggle the display of a submenu.  The width of the toggle 
+  region is defined 
   by YAHOO.widget.MenuBar.prototype.SUBMENU_TOGGLE_REGION_WIDTH.
 
 
@@ -35,55 +72,60 @@ Added the following features:
 Fixed the following bugs:
 -------------------------
 
-+ Setting the "submenualignment" configuration property for a MenuBar instance will no longer 
-  result in the value being automatically propagated across all submenus.
++ Setting the "submenualignment" configuration property for a MenuBar instance 
+  will no longer result in the value being automatically propagated across 
+  all submenus.
 
-+ Setting a MenuItem instance's "disabled" configuration property to "true" inside the scope of 
-  a "click" event listener registered via the "onclick" configuration property will no longer 
-  prevent the "click" event of its parent Menu instance from firing.
++ Setting a MenuItem instance's "disabled" configuration property to "true" 
+  inside the scope of a "click" event listener registered via the "onclick" 
+  configuration property will no longer prevent the "click" event of its parent 
+  Menu instance from firing.
   
-+ MenuItem instances of submenus that open to the left of their parent MenuItem will now 
-  highlight in response to the "mouseover" event in Firefox 2.
++ MenuItem instances of submenus that open to the left of their parent MenuItem 
+  will now highlight in response to the "mouseover" event in Firefox 2.
   
-+ The Menu library no longer logs errors when strict error reporting is enabled in FireFox.
++ The Menu library no longer logs errors when strict error reporting is enabled 
+  in FireFox.
 
-+ Submenus will no longer hide in IE 7 when moving the mouse from an item in a MenuBar to 
-  its corresponding submenu.
++ Submenus will no longer hide in IE 7 when moving the mouse from an item in a 
+  MenuBar to its corresponding submenu.
 
-+ MenuItem instances placed in groups are now properly removed and destroyed when the 
-  "clearContent" method of their parent Menu instance is called.
++ MenuItem instances placed in groups are now properly removed and destroyed 
+  when the "clearContent" method of their parent Menu instance is called.
 
 + The "monitorresize" configuration property now propagates to submenus.
   
-+ Updated the "maxheight" configuration property so that it will only scroll the body of a Menu if 
-  its content is composed of MenuItem instances.
++ Updated the "maxheight" configuration property so that it will only scroll 
+  the body of a Menu if its content is composed of MenuItem instances.
 
-+ Updated the implementation of Menu's "constraintoviewport" configuration property so that 
-  submenus will automatically scroll and reposition themselves to remain inside the boundaries of 
-  the viewport regardless of the default value supplied to the "submenualignment" 
-  configuration property.
++ Updated the implementation of Menu's "constraintoviewport" configuration 
+  property so that submenus will automatically scroll and reposition themselves 
+  to remain inside the boundaries of the viewport regardless of the default 
+  value supplied to the "submenualignment" configuration property.
 
 
 Added the following features:
 -----------------------------
 
-+ Added a new "preventcontextoverlap" configuration property that is used to manage whether or not 
-  a submenu should overlap its parent MenuItem when the "constraintoviewport" configuration 
-  property is set to "true".
++ Added a new "preventcontextoverlap" configuration property that is used to 
+  manage whether or not a submenu should overlap its parent MenuItem when the 
+  "constraintoviewport" configuration property is set to "true".
 
-+ Added a new "shadow" configuration property.  The "shadow" configuration property should be 
-  set via the constructor and cannot be changed.  Previously a Menu's shadow was created via the 
-  public "onRender" method.  This method has been removed.
++ Added a new "shadow" configuration property.  The "shadow" configuration 
+  property should be set via the constructor and cannot be changed.  Previously 
+  a Menu's shadow was created via the public "onRender" method.  This method 
+  has been removed.
 
 
 Changes:
 --------
 
-+ The "url" configuration property for MenuItem instances with a submenu will now be set to 
-  "#[submenu_id]" if the "url" property is not otherwise specified by the user. 
++ The "url" configuration property for MenuItem instances with a submenu will 
+  now be set to "#[submenu_id]" if the "url" property is not otherwise specified
+  by the user. 
 
-+ Dynamically positioned submenus now have a default z-index of 1, rather than one greater than 
-  the z-index of their parent Menu.
++ Dynamically positioned submenus now have a default z-index of 1, rather than 
+  one greater than the z-index of their parent Menu.
 
 
 *** version 2.5.2 ***
@@ -91,24 +133,25 @@ Changes:
 Fixed the following bugs:
 -------------------------
 
-+ Mousing over a Menu instance will no longer result in the JavaScript error "oItem has 
-  no properties"
++ Mousing over a Menu instance will no longer result in the JavaScript error 
+  "oItem has no properties"
 
-+ When using a custom skin, a Menu instance's width will no longer continue to increase in IE each 
-  time it is displayed.
++ When using a custom skin, a Menu instance's width will no longer continue to 
+  increase in IE each time it is displayed.
 
-+ Menu no longer blocks the display of the browser's default context menu when right clicking on a 
-  MenuItem instance in Firefox 2 for Windows or Firefox 3.
++ Menu no longer blocks the display of the browser's default context menu when 
+  right clicking on a MenuItem instance in Firefox 2 for Windows or Firefox 3.
 
-+ Fixed the behavior of the "clicktohide" configuration property so that the property properly 
-  cascades to all submenus when a Menu instance's "position" configuration property is set to 
-  "dynamic".
++ Fixed the behavior of the "clicktohide" configuration property so that the 
+  property properly cascades to all submenus when a Menu instance's "position" 
+  configuration property is set to "dynamic".
 
-+ Rolled back a change introduced in 2.5.0 that modified the behavior of submenus so that they are 
-  no longer hidden then re-shown when the mouse is moving from a visible submenu back to its parent 
-  MenuItem instance.  This change in 2.5.0 introduced a problem where multiple submenus of a menu
-  could end up being displayed at once.  Currently targeting to restore the behavior introduced in 
-  2.5.0 in 2.6.0.
++ Rolled back a change introduced in 2.5.0 that modified the behavior of 
+  submenus so that they are no longer hidden then re-shown when the mouse is 
+  moving from a visible submenu back to its parent MenuItem instance.  This 
+  change in 2.5.0 introduced a problem where multiple submenus of a menu could 
+  end up being displayed at once.  Currently targeting to restore the behavior 
+  introduced in 2.5.0 in 2.6.0.
 
 
 
@@ -117,10 +160,11 @@ Fixed the following bugs:
 Fixed the following bugs:
 -------------------------
 
-+ The "url" configuration property of YAHOO.widget.MenuItem now returns the exact value of the 
-  "href" attribute of its anchor element in Internet Explorer. 
++ The "url" configuration property of YAHOO.widget.MenuItem now returns the 
+  exact value of the "href" attribute of its anchor element in Internet Explorer. 
 
-+ Clicking on an item in a Menu will no longer cause Firefox to scroll to the top of the window.
++ Clicking on an item in a Menu will no longer cause Firefox to scroll to the 
+  top of the window.
 
 + Improved Menu's viewport boundary awareness.
 
@@ -131,18 +175,18 @@ Fixed the following bugs:
 Fixed the following bugs:
 -------------------------
 
-+ Corrected the paths to all images in the original Menu CSS file so that checked MenuItems now
-  render correctly.
++ Corrected the paths to all images in the original Menu CSS file so that 
+  checked MenuItems now render correctly.
 
-+ Clicking on a disabled MenuItem instance will no longer cause the browser to navigate to 
-  the top of the current page.
++ Clicking on a disabled MenuItem instance will no longer cause the browser to 
+  navigate to the top of the current page.
 
 + Removed the use of the "yui-skin-sam" class name from the Menu core CSS file.
 
 + Scrolling Menus now render correctly in IE 6 and IE 7.
 
-+ Submenus are no longer hidden then re-shown when the mouse is moving from a visible submenu back
-  to its parent MenuItem instance.
++ Submenus are no longer hidden then re-shown when the mouse is moving from a 
+  visible submenu back to its parent MenuItem instance.
 
 
 

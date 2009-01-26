@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.axes
+package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.series.ISeries;
 	import com.yahoo.astra.fl.charts.CartesianChart;
@@ -452,8 +452,6 @@
 				if(date.valueOf() > this.maximum.valueOf())
 				{
 					break;
-					//if(isMajorUnit) break;
-					//date = new Date(this.maximum.valueOf());
 				}
 				//because Flash UIComponents round the position to the nearest pixel, we need to do the same.
 				var position:Number = Math.round(this.valueToLocal(date));
@@ -476,23 +474,10 @@
 		 */
 		public function getMaxLabel():String
 		{
-			var maxLength:Number = 0;
-			var currentLength:Number;
-			var maxString:String  = "x";
-			
-			var newDate:Date = new Date(this._minimum);
-			var maxDate:Date = new Date(this._maximum);
-			while(newDate.valueOf() < maxDate.valueOf())
-			{
-				currentLength = (newDate.toString()).length;
-				if(currentLength > maxLength)
-				{
-					maxLength = currentLength;
-					maxString = newDate.toString();
-				}
-				newDate = this.updateDate(newDate, this.majorTimeUnit, 1, this.snapToUnits);
-			}
-			return maxString as String;	
+			var maxAbbrevDate:String = this.valueToLabel(new Date(5/30/2008));
+			var maxFullDate:String = this.valueToLabel(new Date(9/30/2008));
+			var maxDate:String = maxAbbrevDate.length > maxFullDate.length ? maxAbbrevDate : maxFullDate;
+			return maxDate;	
 		}			
 
 	//--------------------------------------
@@ -633,7 +618,7 @@
 			{
 				approxLabelDistance = this.maxLabelHeight;	
 			}
-			var labelPadding:Number = 2; 
+			var labelPadding:Number = this.labelPadding; 
 			approxLabelDistance += (labelPadding*2);
 
 			var dateDifference:Number = Math.round(DateUtil.getDateDifferenceByTimeUnit(this.minimum, this.maximum, this.majorTimeUnit));

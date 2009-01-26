@@ -1,4 +1,4 @@
-﻿package
+package
 {
 	import com.adobe.serialization.json.JSON;
 	import com.yahoo.astra.fl.charts.*;
@@ -765,7 +765,6 @@
 								break;
 							case "fillAlpha":
 								fillAlpha = style.fillAlpha;
-								trace("coming in: " + fillAlpha);
 							case "size":
 								UIComponent(series).setStyle("markerSize", style.size);
 								break;
@@ -1190,6 +1189,26 @@
 				this.chart.setStyle(axisName + "AxisLabelRotation", styles.labelRotation);
 			}
 			
+			if(styles.labelPadding)
+			{
+				this.chart.setStyle(axisName + "AxisLabelPadding", styles.labelPadding);
+			}
+			
+			if(styles.labelDistance)
+			{
+				this.chart.setStyle(axisName + "AxisLabelDistance", styles.labelDistance);	
+			}
+			
+			if(styles.titleRotation)
+			{
+				this.chart.setStyle(axisName + "AxisTitleRotation", styles.titleRotation);
+			}
+			
+			if(styles.titleDistance)
+			{
+				this.chart.setStyle(axisName + "AxisTitleDistance", styles.titleDistance);
+			}
+			
 			if(styles.majorGridLines)
 			{
 				var majorGridLines:Object = styles.majorGridLines;
@@ -1215,6 +1234,20 @@
 				{
 					this.chart.setStyle(axisName + "AxisMinorGridLineWeight", minorGridLines.size);
 					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorGridLines", minorGridLines.size > 0);
+				}
+			}
+			
+			if(styles.zeroGridLine)
+			{
+				var zeroGridLine:Object = styles.zeroGridLine;
+				if(zeroGridLine.color != null)
+				{
+					this.chart.setStyle(axisName + "ZeroGridLineColor", this.parseColor(zeroGridLine.color));
+				}
+				if(zeroGridLine.size != null)
+				{
+					this.chart.setStyle(axisName + "ZeroGridLineWeight", zeroGridLine.size);
+					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "ZeroGridLine", zeroGridLine.size > 0);
 				}
 			}
 			

@@ -88,24 +88,24 @@
                 value: true, 
                 validator: YAHOO.lang.isBoolean 
             },
-        
-            "EFFECT": { 
-                key: "effect", 
-                suppressEvent: true, 
-                supercedes: ["visible"] 
+
+            "EFFECT": {
+                key: "effect",
+                suppressEvent: true,
+                supercedes: ["visible"]
             },
 
-            "MONITOR_RESIZE": { 
-                key: "monitorresize", 
-                value: true  
+            "MONITOR_RESIZE": {
+                key: "monitorresize",
+                value: true
             },
 
-            "APPEND_TO_DOCUMENT_BODY": { 
-                key: "appendtodocumentbody", 
+            "APPEND_TO_DOCUMENT_BODY": {
+                key: "appendtodocumentbody",
                 value: false
             }
         };
-    
+
     /**
     * Constant representing the prefix path to use for non-secure images
     * @property YAHOO.widget.Module.IMG_ROOT
@@ -169,7 +169,19 @@
     * @type String
     */
     Module.RESIZE_MONITOR_SECURE_URL = "javascript:false;";
-    
+
+    /**
+    * Constant representing the buffer amount (in pixels) to use when positioning
+    * the text resize monitor offscreen. The resize monitor is positioned
+    * offscreen by an amount eqaul to its offsetHeight + the buffer value.
+    * 
+    * @property YAHOO.widget.Module.RESIZE_MONITOR_BUFFER
+    * @static
+    * @type Number
+    */
+    // Set to 1, to work around pixel offset in IE8, which increases when zoom is used
+    Module.RESIZE_MONITOR_BUFFER = 1;
+
     /**
     * Singleton CustomEvent fired when the font size is changed in the browser.
     * Opera's "zoom" functionality currently does not support text 
@@ -693,10 +705,10 @@
                         db.appendChild(oIFrame);
                     }
 
-                    oIFrame.style.width = "10em";
-                    oIFrame.style.height = "10em";
-                    oIFrame.style.top = (-1 * oIFrame.offsetHeight) + "px";
-                    oIFrame.style.left = (-1 * oIFrame.offsetWidth) + "px";
+                    oIFrame.style.width = "2em";
+                    oIFrame.style.height = "2em";
+                    oIFrame.style.top = (-1 * (oIFrame.offsetHeight + Module.RESIZE_MONITOR_BUFFER)) + "px";
+                    oIFrame.style.left = "0";
                     oIFrame.style.borderWidth = "0";
                     oIFrame.style.visibility = "visible";
 
@@ -773,12 +785,10 @@
         */
         onDomResize: function (e, obj) {
 
-            var nLeft = -1 * this.resizeMonitor.offsetWidth,
-                nTop = -1 * this.resizeMonitor.offsetHeight;
-        
-            this.resizeMonitor.style.top = nTop + "px";
-            this.resizeMonitor.style.left =  nLeft + "px";
+            var nTop = -1 * (this.resizeMonitor.offsetHeight + Module.RESIZE_MONITOR_BUFFER);
 
+            this.resizeMonitor.style.top = nTop + "px";
+            this.resizeMonitor.style.left = "0";
         },
 
         /**
@@ -1028,8 +1038,7 @@
         */
         destroy: function () {
 
-            var parent,
-                e;
+            var parent;
 
             if (this.element) {
                 Event.purgeElement(this.element, true);
@@ -1155,7 +1164,7 @@
             if (docEl) {
     			// Opera needs to force a repaint
     			docEl.className += " ";
-                docEl.className.trim();
+                docEl.className = YAHOO.lang.trim(docEl.className);
             }
         },
 

@@ -382,7 +382,8 @@
 			
 			var lineWeight:int = this.getStyleValue("lineWeight") as int;
 			var fillColor:uint = this.getStyleValue("lineColor") as uint;
-			this.graphics.lineStyle(lineWeight, fillColor);
+			var lineAlpha:Number = this.getStyleValue("lineAlpha") as Number;
+			this.graphics.lineStyle(lineWeight, fillColor, lineAlpha);
 		}
 		
 		/**

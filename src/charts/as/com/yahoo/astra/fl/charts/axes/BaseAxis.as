@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.axes
+package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.IChart;
 	
@@ -209,8 +209,26 @@
 			this.parseDataProvider();
 		}
 		
-		protected function parseDataProvider():void{}
+		/**
+		 * @private
+		 */
+		private var _labelPadding:Number = 2; 
 		
+		/**
+		 * @copy com.yahoo.astra.fl.charts.axes.IAxis#labelPadding
+		 */
+		public function get labelPadding():Number
+		{
+			return _labelPadding;	
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set labelPadding(value:Number):void
+		{
+			if(value != _labelPadding) _labelPadding = value;
+		}
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
@@ -237,5 +255,14 @@
 			}
 			return text;
 		}
+		
+	//--------------------------------------
+	//  Protected Methods
+	//--------------------------------------		
+		/**
+		 * @private
+		 */
+		protected function parseDataProvider():void{}
+		
 	}
 }

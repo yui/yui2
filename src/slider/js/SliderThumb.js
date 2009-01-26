@@ -15,7 +15,6 @@
 YAHOO.widget.SliderThumb = function(id, sGroup, iLeft, iRight, iUp, iDown, iTickSize) {
 
     if (id) {
-        //this.init(id, sGroup);
         YAHOO.widget.SliderThumb.superclass.constructor.call(this, id, sGroup);
 
         /**
@@ -27,8 +26,6 @@ YAHOO.widget.SliderThumb = function(id, sGroup, iLeft, iRight, iUp, iDown, iTick
         this.parentElId = sGroup;
     }
 
-
-    //this.removeInvalidHandleType("A");
 
     this.logger = new YAHOO.widget.LogWriter(this.toString());
 
@@ -118,28 +115,29 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      * @type [int, int]
      */
     getOffsetFromParent0: function(parentPos) {
-        var myPos = YAHOO.util.Dom.getXY(this.getEl());
-        var ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
+        var myPos = YAHOO.util.Dom.getXY(this.getEl()),
+            ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
 
         return [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
     },
 
     getOffsetFromParent: function(parentPos) {
 
-        var el = this.getEl(), newOffset;
+        var el = this.getEl(), newOffset,
+            myPos,ppos,l,t,deltaX,deltaY,newLeft,newTop;
 
         if (!this.deltaOffset) {
 
-            var myPos = YAHOO.util.Dom.getXY(el);
-            var ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
+            myPos = YAHOO.util.Dom.getXY(el);
+            ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
 
             newOffset = [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
 
-            var l = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
-            var t = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
+            l = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
+            t = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
 
-            var deltaX = l - newOffset[0];
-            var deltaY = t - newOffset[1];
+            deltaX = l - newOffset[0];
+            deltaY = t - newOffset[1];
 
             if (isNaN(deltaX) || isNaN(deltaY)) {
                 this.logger.log("element does not have a position style def yet");
@@ -148,15 +146,13 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
             }
 
         } else {
-            var newLeft = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
-            var newTop  = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
+            newLeft = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
+            newTop  = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
 
             newOffset  = [newLeft + this.deltaOffset[0], newTop + this.deltaOffset[1]];
         }
 
         return newOffset;
-
-        //return [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
     },
 
     /**
@@ -169,9 +165,6 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      * @param {int} iTickSize the width of the tick interval.
      */
     initSlider: function (iLeft, iRight, iUp, iDown, iTickSize) {
-
-
-        //document these.  new for 0.12.1
         this.initLeft = iLeft;
         this.initRight = iRight;
         this.initUp = iUp;
@@ -210,7 +203,6 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      */
     getValue: function () {
         return (this._isHoriz) ? this.getXValue() : this.getYValue();
-        //this.logger.log("getVal: " + val);
     },
 
     /**
@@ -276,4 +268,3 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
     }
 
 });
-

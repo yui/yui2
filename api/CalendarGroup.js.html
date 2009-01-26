@@ -4,11 +4,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: calendar   CalendarGroup.js  (YUI Library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1231977729.48" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1231977729.48" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1231977729.48"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1231977729.48"></script>
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
@@ -597,33 +597,33 @@
 				<span class="nx">cal</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">type</span> <span class="o">+</span> <span class="nx">strEvent</span><span class="o">].</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">);</span>
 			<span class="o">}</span>
 		<span class="o">};</span>
-		
+
 		<span class="k">var</span> <span class="nx">defEvents</span> <span class="o">=</span> <span class="nx">Calendar</span><span class="o">.</span><span class="nx">_EVENT_TYPES</span><span class="o">;</span>
-	
+
 		<span class="c">/**</span>
-<span class="c">		* Fired before a selection is made</span>
+<span class="c">		* Fired before a date selection is made</span>
 <span class="c">		* @event beforeSelectEvent</span>
 <span class="c">		*/</span>
 		<span class="nx">me</span><span class="o">.</span><span class="nx">beforeSelectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CE</span><span class="o">(</span><span class="nx">defEvents</span><span class="o">.</span><span class="nx">BEFORE_SELECT</span><span class="o">);</span>
 		<span class="nx">me</span><span class="o">.</span><span class="nx">beforeSelectEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="nx">me</span><span class="o">.</span><span class="nx">beforeSelectEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
-	
+
 		<span class="c">/**</span>
-<span class="c">		* Fired when a selection is made</span>
+<span class="c">		* Fired when a date selection is made</span>
 <span class="c">		* @event selectEvent</span>
 <span class="c">		* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].</span>
 <span class="c">		*/</span>
 		<span class="nx">me</span><span class="o">.</span><span class="nx">selectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CE</span><span class="o">(</span><span class="nx">defEvents</span><span class="o">.</span><span class="nx">SELECT</span><span class="o">);</span> 
 		<span class="nx">me</span><span class="o">.</span><span class="nx">selectEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="nx">me</span><span class="o">.</span><span class="nx">selectEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
-	
+
 		<span class="c">/**</span>
-<span class="c">		* Fired before a selection is made</span>
+<span class="c">		* Fired before a date or set of dates is deselected</span>
 <span class="c">		* @event beforeDeselectEvent</span>
 <span class="c">		*/</span>
 		<span class="nx">me</span><span class="o">.</span><span class="nx">beforeDeselectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CE</span><span class="o">(</span><span class="nx">defEvents</span><span class="o">.</span><span class="nx">BEFORE_DESELECT</span><span class="o">);</span> 
 		<span class="nx">me</span><span class="o">.</span><span class="nx">beforeDeselectEvent</span><span class="o">.</span><span class="nx">subscribe</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">;</span> <span class="nx">me</span><span class="o">.</span><span class="nx">beforeDeselectEvent</span><span class="o">.</span><span class="nx">unsubscribe</span> <span class="o">=</span> <span class="nx">unsub</span><span class="o">;</span>
-	
+
 		<span class="c">/**</span>
-<span class="c">		* Fired when a selection is made</span>
+<span class="c">		* Fired when a date or set of dates has been deselected</span>
 <span class="c">		* @event deselectEvent</span>
 <span class="c">		* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].</span>
 <span class="c">		*/</span>
@@ -754,6 +754,8 @@
 		<span class="k">var</span> <span class="nx">pageCount</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
 			<span class="nx">cfgPageDate</span> <span class="o">=</span> <span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">PAGEDATE</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span>
 			<span class="nx">sep</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">,</span>
+			<span class="nx">caldate</span><span class="o">,</span>
+			<span class="nx">firstPageDate</span> <span class="o">=</span> <span class="kc">null</span><span class="o">,</span>
 			<span class="nx">groupCalClass</span> <span class="o">=</span> <span class="s2">&quot;groupcal&quot;</span><span class="o">,</span>
 			<span class="nx">firstClass</span> <span class="o">=</span> <span class="s2">&quot;first-of-type&quot;</span><span class="o">,</span>
 			<span class="nx">lastClass</span> <span class="o">=</span> <span class="s2">&quot;last-of-type&quot;</span><span class="o">;</span>
@@ -767,15 +769,19 @@
 			<span class="nx">childConfig</span><span class="o">.</span><span class="nx">title</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
 			<span class="nx">childConfig</span><span class="o">.</span><span class="nx">navigator</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
+			<span class="k">if</span> <span class="o">(</span><span class="nx">p</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">caldate</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">(</span><span class="nx">firstPageDate</span><span class="o">);</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">_setMonthOnDate</span><span class="o">(</span><span class="nx">caldate</span><span class="o">,</span> <span class="nx">caldate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()</span> <span class="o">+</span> <span class="nx">p</span><span class="o">);</span>
+				<span class="nx">childConfig</span><span class="o">.</span><span class="nx">pageDate</span> <span class="o">=</span> <span class="nx">caldate</span><span class="o">;</span>
+			<span class="o">}</span>
+
 			<span class="k">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">constructChild</span><span class="o">(</span><span class="nx">calId</span><span class="o">,</span> <span class="nx">calContainerId</span><span class="o">,</span> <span class="nx">childConfig</span><span class="o">);</span>
-			<span class="k">var</span> <span class="nx">caldate</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">);</span>
-			<span class="k">this</span><span class="o">.</span><span class="nx">_setMonthOnDate</span><span class="o">(</span><span class="nx">caldate</span><span class="o">,</span> <span class="nx">caldate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()</span> <span class="o">+</span> <span class="nx">p</span><span class="o">);</span>
-			<span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">,</span> <span class="nx">caldate</span><span class="o">);</span>
 
 			<span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">Style</span><span class="o">.</span><span class="nx">CSS_SINGLE</span><span class="o">);</span>
 			<span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="nx">groupCalClass</span><span class="o">);</span>
 
 			<span class="k">if</span> <span class="o">(</span><span class="nx">p</span><span class="o">===</span><span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">firstPageDate</span> <span class="o">=</span> <span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">);</span>
 				<span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">cal</span><span class="o">.</span><span class="nx">oDomContainer</span><span class="o">,</span> <span class="nx">firstClass</span><span class="o">);</span>
 			<span class="o">}</span>
 	
@@ -870,7 +876,7 @@
 <span class="c">	*/</span>
 	<span class="nx">callChildFunction</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">fnName</span><span class="o">,</span> <span class="nx">args</span><span class="o">)</span> <span class="o">{</span>
 		<span class="k">var</span> <span class="nx">pageCount</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">PAGES</span><span class="o">.</span><span class="nx">key</span><span class="o">);</span>
-	
+
 		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">p</span><span class="o">&lt;</span><span class="nx">pageCount</span><span class="o">;++</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
 			<span class="k">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">pages</span><span class="o">[</span><span class="nx">p</span><span class="o">];</span>
 			<span class="k">if</span> <span class="o">(</span><span class="nx">page</span><span class="o">[</span><span class="nx">fnName</span><span class="o">])</span> <span class="o">{</span>
@@ -1031,7 +1037,7 @@
 		<span class="o">}</span>
 		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getSelectedDates</span><span class="o">();</span>
 	<span class="o">},</span>
-	
+
 	<span class="c">/**</span>
 <span class="c">	* Deselects dates in the CalendarGroup based on the cell index provided. This method is used to select cells without having to do a full render. The selected style is applied to the cells directly.</span>
 <span class="c">	* deselectCell will deselect the cell at the specified index on each displayed Calendar page.</span>
@@ -1047,7 +1053,7 @@
 		<span class="o">}</span>
 		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getSelectedDates</span><span class="o">();</span>
 	<span class="o">},</span>
-	
+
 	<span class="c">/**</span>
 <span class="c">	* Resets the calendar widget to the originally selected month and year, and </span>
 <span class="c">	* sets the calendar to the initial selection(s).</span>

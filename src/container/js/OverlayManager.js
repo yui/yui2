@@ -433,8 +433,7 @@
         */
         register: function (overlay) {
 
-            var zIndex,
-                registered = false,
+            var registered = false,
                 i,
                 n;
 

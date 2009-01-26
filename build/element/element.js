@@ -883,7 +883,7 @@ Element.prototype = {
 
     createEvent: function(type, scope) {
         this._events[type] = true;
-        AttributeProvider.prototype.createEvent.apply(this, arguments);
+        return AttributeProvider.prototype.createEvent.apply(this, arguments);
     },
     
     init: function(el, attr) {

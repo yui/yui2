@@ -4,11 +4,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: calendar   Calendar.js  (YUI Library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1231977729.48" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1231977729.48" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1231977729.48"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1231977729.48"></script>
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
@@ -683,26 +683,26 @@
 			<span class="nx">cal</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span> <span class="c">// To help with minification</span>
 <span class="c"></span>
 		<span class="c">/**</span>
-<span class="c">		* Fired before a selection is made</span>
+<span class="c">		* Fired before a date selection is made</span>
 <span class="c">		* @event beforeSelectEvent</span>
 <span class="c">		*/</span>
 		<span class="nx">cal</span><span class="o">.</span><span class="nx">beforeSelectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CE</span><span class="o">(</span><span class="nx">defEvents</span><span class="o">.</span><span class="nx">BEFORE_SELECT</span><span class="o">);</span> 
 
 		<span class="c">/**</span>
-<span class="c">		* Fired when a selection is made</span>
+<span class="c">		* Fired when a date selection is made</span>
 <span class="c">		* @event selectEvent</span>
 <span class="c">		* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].</span>
 <span class="c">		*/</span>
 		<span class="nx">cal</span><span class="o">.</span><span class="nx">selectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CE</span><span class="o">(</span><span class="nx">defEvents</span><span class="o">.</span><span class="nx">SELECT</span><span class="o">);</span>
-	
+
 		<span class="c">/**</span>
-<span class="c">		* Fired before a selection is made</span>
+<span class="c">		* Fired before a date or set of dates is deselected</span>
 <span class="c">		* @event beforeDeselectEvent</span>
 <span class="c">		*/</span>
 		<span class="nx">cal</span><span class="o">.</span><span class="nx">beforeDeselectEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CE</span><span class="o">(</span><span class="nx">defEvents</span><span class="o">.</span><span class="nx">BEFORE_DESELECT</span><span class="o">);</span>
-	
+
 		<span class="c">/**</span>
-<span class="c">		* Fired when a selection is made</span>
+<span class="c">		* Fired when a date or set of dates is deselected</span>
 <span class="c">		* @event deselectEvent</span>
 <span class="c">		* @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].</span>
 <span class="c">		*/</span>
@@ -2834,19 +2834,19 @@
 				<span class="o">}</span>
 				<span class="nx">selected</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">cellDateIndex</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span>
 			<span class="o">}</span>
-	
+
 			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">)</span> <span class="o">{</span>
 				<span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">SELECTED</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="nx">selected</span><span class="o">);</span>
 			<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
 				<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">SELECTED</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="nx">selected</span><span class="o">);</span>
 			<span class="o">}</span>
-	
-			<span class="k">this</span><span class="o">.</span><span class="nx">deselectEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">selectDate</span><span class="o">);</span>
+
+			<span class="k">this</span><span class="o">.</span><span class="nx">deselectEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">([</span><span class="nx">selectDate</span><span class="o">]);</span>
 		<span class="o">}</span>
-	
+
 		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getSelectedDates</span><span class="o">();</span>
 	<span class="o">},</span>
-	
+
 	<span class="c">/**</span>
 <span class="c">	* Deselects all dates on the current calendar.</span>
 <span class="c">	* @method deselectAll</span>

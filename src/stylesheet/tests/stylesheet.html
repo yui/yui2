@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!doctype html>
 <html>
 <head>
     <title>Test Page</title>
@@ -48,7 +48,7 @@
 <script type="text/javascript" src="../../../build/event/event.js"></script>
 <script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../../../build/yuitest/yuitest-min.js"></script>
-<script type="text/javascript" src="../../../build/stylesheet/stylesheet-experimental-debug.js"></script>
+<script type="text/javascript" src="../../../build/stylesheet/stylesheet-beta-debug.js"></script>
 <script type="text/javascript">
 (function () {
 
@@ -63,6 +63,7 @@ var d = document,
     Event       = u.Event,
     Dom         = u.Dom,
     Assert      = u.Assert,
+    ArrayAssert = u.ArrayAssert,
     StyleAssert = {},
     testbed     = Dom.get('testbed'),
     StyleSheet  = u.StyleSheet,
@@ -164,7 +165,7 @@ suite.add(new TestCase({
 }));
 
 suite.add(new TestCase({
-    name : "Test setCSS",
+    name : "Test set",
 
     setUp : function () {
         this.stylesheet = new StyleSheet('test');
@@ -176,12 +177,15 @@ suite.add(new TestCase({
     },
     tearDown : function () {
         testbed.innerHTML = '';
-        this.stylesheet.unsetCSS('#target');
-        this.stylesheet.unsetCSS('#target p');
+        this.stylesheet.unset('#target');
+        this.stylesheet.unset('#target p');
+        this.stylesheet.unset('#target pre');
+        // This should be unnecessary, but for the sake of cleanliness...
+        this.stylesheet.unset('#target, #target p, #target pre');
     },
 
     test_addSimpleSelector : function () {
-        this.stylesheet.setCSS('#target',{
+        this.stylesheet.set('#target',{
             color           : '#123456',
             backgroundColor : '#eef',
             border          : '1px solid #ccc'
@@ -202,7 +206,7 @@ suite.add(new TestCase({
         var before = Dom.getStyle(
                         testbed.getElementsByTagName('pre')[0],'textAlign');
 
-        this.stylesheet.setCSS('#target p', { textAlign: 'right' });
+        this.stylesheet.set('#target p', { textAlign: 'right' });
 
         StyleAssert.areEqual('right',
                         Dom.getStyle(
@@ -213,6 +217,31 @@ suite.add(new TestCase({
                         Dom.getStyle(
                             testbed.getElementsByTagName('pre')[0],'textAlign'),
                         "#target pre should not be set (maybe auto/inherit?)");
+    },
+
+    test_setCommaSelector : function () {
+        var sheet = this.stylesheet.node.sheet ||
+            this.stylesheet.node.styleSheet;
+
+        if (!sheet) {
+            Assert.fail("Could not capture this.node.sheet");
+        }
+
+        this.stylesheet.set('#target, #target p, #target pre', {
+            paddingLeft: '16px'
+        });
+
+        Assert.areEqual(3,(sheet.cssRules || sheet.rules).length, "Comma selector split failure");
+
+        StyleAssert.areEqual('16px', Dom.getStyle(this.testNode,'paddingLeft'));
+        StyleAssert.areEqual('16px',
+                        Dom.getStyle(
+                            testbed.getElementsByTagName('p')[0],'paddingLeft'),
+                        "#target p");
+        StyleAssert.areEqual('16px',
+                        Dom.getStyle(
+                            testbed.getElementsByTagName('pre')[0],'paddingLeft'),
+                        "#target pre");
     }
 }));
 
@@ -237,12 +266,12 @@ suite.add(new TestCase({
     tearDown : function () {
         testbed.innerHTML = '';
         this.stylesheet.enable();
-        this.stylesheet.unsetCSS('#target');
-        this.stylesheet.unsetCSS('#target p');
+        this.stylesheet.unset('#target');
+        this.stylesheet.unset('#target p');
     },
 
     test_disableSheet : function () {
-        this.stylesheet.setCSS('#target',{
+        this.stylesheet.set('#target',{
             color           : '#123456',
             backgroundColor : '#eef',
             border          : '1px solid #ccc'
@@ -274,7 +303,7 @@ suite.add(new TestCase({
     test_enableSheet : function () {
         this.stylesheet.disable();
 
-        this.stylesheet.setCSS('#target',{
+        this.stylesheet.set('#target',{
             color           : '#123456',
             backgroundColor : '#eef',
             border          : '1px solid #ccc'
@@ -305,14 +334,14 @@ suite.add(new TestCase({
 }));
 
 suite.add(new TestCase({
-    name : "Test unsetCSS",
+    name : "Test unset",
 
     setUp : function () {
         this.stylesheet = new StyleSheet('test');
 
         this.testNode = Dom.add(testbed,'div',{
-            id: 'target',
-            innerHTML: 'This is a test'
+            id:'target',
+            innerHTML:'<p>1</p><p>2</p><pre>pre</pre>'
         });
 
         this.before = {
@@ -325,12 +354,15 @@ suite.add(new TestCase({
     },
     tearDown : function () {
         testbed.innerHTML = '';
-        this.stylesheet.unsetCSS('#target');
-        this.stylesheet.unsetCSS('#target p');
+        this.stylesheet.unset('#target');
+        this.stylesheet.unset('#target p');
+        this.stylesheet.unset('#target pre');
+        // This should be unnecessary, but for the sake of cleanliness...
+        this.stylesheet.unset('#target, #target p, #target pre');
     },
 
-    test_unsetCSS : function () {
-        this.stylesheet.setCSS('#target',{
+    test_unset : function () {
+        this.stylesheet.set('#target',{
             color           : '#f00',
             backgroundColor : '#eef',
             border          : '1px solid #ccc'
@@ -346,13 +378,13 @@ suite.add(new TestCase({
                         Dom.getStyle(this.testNode,'borderLeftWidth'),
                         "border (before unset)");
 
-        this.stylesheet.unsetCSS('#target', 'color');
+        this.stylesheet.unset('#target', 'color');
 
         StyleAssert.areEqual(this.before.color,
                         Dom.getStyle(this.testNode,'color'),
                         "color (after unset)");
 
-        this.stylesheet.unsetCSS('#target', ['backgroundColor','border']);
+        this.stylesheet.unset('#target', ['backgroundColor','border']);
 
         StyleAssert.areEqual(this.before.backgroundColor,
                         Dom.getStyle(this.testNode,'backgroundColor'),
@@ -363,16 +395,79 @@ suite.add(new TestCase({
     },
 
     test_removeRule : function () {
-        this.stylesheet.setCSS('#target', { textAlign: 'right' });
+        this.stylesheet.set('#target', { textAlign: 'right' });
 
         StyleAssert.areEqual('right',
                         Dom.getStyle(this.testNode,'textAlign'),
                         "#target { text-align: right; }");
 
-        this.stylesheet.unsetCSS('#target');
+        this.stylesheet.unset('#target');
         StyleAssert.areEqual(this.before.textAlign,
                         Dom.getStyle(this.testNode,'textAlign'),
                         "#target text-align still in place");
+    },
+
+    test_unsetCommaSelector : function () {
+        var p      = this.testNode.getElementsByTagName('p')[0],
+            pre    = this.testNode.getElementsByTagName('pre')[0],
+            before = {
+                paddingLeft:Dom.getStyle([this.testNode,p,pre],'paddingLeft'),
+                marginRight:Dom.getStyle([this.testNode,p,pre],'marginRight')
+            },
+            after,
+            sheet = this.stylesheet.node.sheet ||
+                    this.stylesheet.node.styleSheet;
+
+        if (!sheet) {
+            Assert.fail("Could not capture this.node.sheet");
+        }
+
+        this.stylesheet.set('#target, #target p, #target pre', {
+            marginRight: '30px',
+            paddingLeft: '16px'
+        });
+
+
+        Assert.areEqual(3,(sheet.cssRules || sheet.rules).length,
+                        "Comma selector split failure");
+
+
+        this.stylesheet.unset('#target, #target p, #target pre','paddingLeft');
+
+        after = Dom.getStyle([this.testNode,p,pre],'paddingLeft');
+
+        Assert.areEqual(3,(sheet.cssRules || sheet.rules).length,
+                        "Should still be 3 rules");
+
+        ArrayAssert.itemsAreEqual(before.paddingLeft,after);
+
+        after = Dom.getStyle([this.testNode,p,pre],'marginRight');
+        ArrayAssert.itemsAreEqual(['30px','30px','30px'],after);
+    },
+
+    test_removeCommaSelector : function () {
+        var p      = this.testNode.getElementsByTagName('p')[0],
+            pre    = this.testNode.getElementsByTagName('pre')[0],
+            before = {
+                paddingLeft:Dom.getStyle([this.testNode,p,pre],'paddingLeft')
+            },
+            sheet = this.stylesheet.node.sheet ||
+                    this.stylesheet.node.styleSheet;
+
+        if (!sheet) {
+            Assert.fail("Could not capture this.node.sheet");
+        }
+
+        this.stylesheet.set('#target, #target p, #target pre', {
+            paddingLeft: '16px'
+        });
+
+        Assert.areEqual(3,(sheet.cssRules || sheet.rules).length,
+                        "Comma selector split failure");
+
+        this.stylesheet.unset('#target, #target pre','paddingLeft');
+
+        Assert.areEqual(1,(sheet.cssRules || sheet.rules).length);
     }
 }));
 
@@ -391,21 +486,21 @@ suite.add(new TestCase({
     },
 
     test_float : function () {
-        this.stylesheet.setCSS('#target',{
+        this.stylesheet.set('#target',{
                             overflow: 'hidden',
                             background: '#000',
                             zoom: 1
                         }).
-                        setCSS('#target p',{
+                        set('#target p',{
                             height:'100px',
                             width:'100px',
                             border: '5px solid #ccc',
                             background: '#fff',
                             margin: '1em'
                         }).
-                        setCSS('#p1',{ float: 'left' }).
-                        setCSS('#p2',{ cssFloat: 'left' }).
-                        setCSS('#p3',{ styleFloat: 'left' });
+                        set('#p1',{ float: 'left' }).
+                        set('#p2',{ cssFloat: 'left' }).
+                        set('#p3',{ styleFloat: 'left' });
 
         Assert.areEqual('left', Dom.getStyle('p1','float'));
         Assert.areEqual('left', Dom.getStyle('p2','float'));
@@ -413,13 +508,53 @@ suite.add(new TestCase({
     },
 
     test_opacity : function () {
-        this.stylesheet.setCSS('#p1',{ opacity: .5 }).
-                        setCSS('#p2',{ opacity: .2 }).
-                        setCSS('#p3',{ opacity: 1 });
+        this.stylesheet.set('#p1',{ opacity: .5 }).
+                        set('#p2',{ opacity: .2 }).
+                        set('#p3',{ opacity: 1 });
 
         Assert.areEqual(0.5,Dom.getStyle('p1','opacity'));
         Assert.areEqual(0.2,Dom.getStyle('p2','opacity'));
         Assert.areEqual(1,Dom.getStyle('p3','opacity'));
+    }
+}));
+
+suite.add(new TestCase({
+    name : "Test getCssText",
+
+    setUp : function () {
+        this.stylesheet = new StyleSheet('test');
+
+        this.testNode = Dom.add(testbed,'div',{
+            id:'target',
+            innerHTML:'<p>1</p><p>2</p><pre>pre</pre>'
+        });
+
+        this.stylesheet.set('#target, #target p', {
+            padding: '3px'
+        });
+    },
+    tearDown : function () {
+        testbed.innerHTML = '';
+        this.stylesheet.unset('#target');
+        this.stylesheet.unset('#target p');
+    },
+
+    test_getRuleCSS : function () {
+        var css = this.stylesheet.getCssText('#target p');
+        YAHOO.log(css, 'info','TestLogger');
+        Assert.isString(css);
+        Assert.areSame(true, /padding/i.test(css));
+    },
+
+    test_getSheetCSS : function () {
+        var css = this.stylesheet.getCssText();
+
+        YAHOO.log(css, 'info','TestLogger');
+
+        Assert.isString(css);
+        Assert.areSame(true, /padding/i.test(css));
+        Assert.areSame(true, /#target/i.test(css));
+        Assert.areSame(true, /#target\s+p\s+\{/i.test(css));
     }
 }));
 

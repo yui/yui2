@@ -30,8 +30,14 @@
     -moz-outline:none;
 }
 
+/* sortable columns */
+
+.yui-skin-sam thead .yui-dt-sortable {
+    cursor:pointer;
+}
+
 /* draggable columns */
-.yui-dt-draggable {
+.yui-skin-sam thead .yui-dt-draggable {
     cursor: move;
 }
 .yui-dt-coltarget {

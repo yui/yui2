@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.series
+package com.yahoo.astra.fl.charts.series
 {
 	import com.yahoo.astra.fl.charts.events.ChartEvent;
 	
@@ -38,6 +38,11 @@
 	 */
     [Style(name="fillColor", type="uint")]
     
+    /** 
+     * The border color used by programatic skins in this series.
+     */
+    [Style(name="borderColor", type="uint")]
+    
 	/**
 	 * The Class used to instantiate each marker's skin.
 	 */
@@ -52,6 +57,16 @@
 	 * The alpha value from 0.0 to 1.0 to use for drawing the markers.
 	 */
     [Style(name="markerAlpha", type="Number")]
+    
+    /**
+     * The alpha value from 0.0 to 1.0 to use for drawing the fills of markers.
+     */
+    [Style(name="fillAlpha", type="Number")]
+    
+    /**
+     * The alpha value from 0.0 to 1.0 to use for drawing the border of markers.
+     */
+    [Style(name="borderAlpha", type="Number")]
 
 	/**
 	 * Functionality common to most series. Generally, a <code>Series</code> object
@@ -76,6 +91,8 @@
 			fillColor: 0x00b8bf,
 			markerSize: 10,
 			markerAlpha: 1.0,
+			fillAlpha: 1.0,
+			borderAlpha: 1.0,
 			animationEnabled: true,
 			animationEasingFunction: fl.transitions.easing.Strong.easeOut,
 			animationDuration: 500,
@@ -91,7 +108,9 @@
 			skin: "markerSkin",
 			fillColor: "fillColor",
 			borderColor: "borderColor",
-			color: "color"
+			color: "color",
+			fillAlpha: "fillAlpha",
+			borderAlpha: "borderAlpha"
 		};
 		
 	//--------------------------------------

@@ -3,7 +3,6 @@
 .yui-skin-sam .yui-navset .yui-navset-top .yui-nav { /* protect nested tabviews from other orientations */
     border:solid #2647a0; /* color between tab list and content */
     border-width:0 0 5px;
-    Xposition:relative;
     zoom:1;
 }
 

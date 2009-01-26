@@ -1,5 +1,15 @@
 Connection Manager Release Notes
 
+*** version 2.7.1 ***
+
+* [FIXED] SF2141044.  Button elements of type "submit" are now handled in the
+same manner as input elements of type "submit", including disambiguation of
+multiple submit buttons in a single HTML form.
+
+* HTML form submissions, using setForm(), will not include the submit button's
+value, if the submission did not include the use of the button (e.g., form
+object's submit method.)
+
 *** version 2.6.0 ***
 
 * setForm optimization for select-one elements.
@@ -292,6 +302,7 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
 
 
 

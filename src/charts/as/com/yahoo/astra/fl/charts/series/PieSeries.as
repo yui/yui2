@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.series
+package com.yahoo.astra.fl.charts.series
 {
 	import com.yahoo.astra.animation.Animation;
 	import com.yahoo.astra.animation.AnimationEvent;
@@ -73,6 +73,14 @@
 				0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
 				0xb8ebff, 0x60558f, 0x737d7e, 0xa64d9a, 0x8e9a9b, 0x803e77
 			],
+			borderColors:
+			[
+				0x00b8bf, 0x8dd5e7, 0xc0fff6, 0xffa928, 0xedff9f, 0xd00050,
+				0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
+				0xb8ebff, 0x60558f, 0x737d7e, 0xa64d9a, 0x8e9a9b, 0x803e77
+			],			
+			fillAlphas: [1.0],
+			borderAlphas: [0.0],
 			markerSkins: [RectangleSkin],
 			showLabels: false,
 			hideOverlappingLabels: true
@@ -86,6 +94,9 @@
 		private static const RENDERER_STYLES:Object = 
 		{
 			fillColor: "fillColors",
+			fillAlpha: "fillAlphas",
+			borderColor: "borderColors",
+			borderAlpha: "borderAlphas",
 			skin: "markerSkins"
 		};
 		
@@ -335,7 +346,7 @@
 				var categoryName:String = this.itemToCategory(item, i);
 				var markerSkin:Object = markerSkins[i % markerSkins.length]
 				var fillColor:uint = fillColors[i % fillColors.length];
-				var data:LegendItemData = new LegendItemData(categoryName, markerSkin, fillColor);
+				var data:LegendItemData = new LegendItemData(categoryName, markerSkin, fillColor, 1, fillColor, 1);
 				items.push(data);
 			}
 			return items;			
@@ -402,8 +413,10 @@
 					this.addChild(mask);
 					this.markerMasks.push(mask);
 					
-					var marker:Sprite = this.markers[i] as Sprite;
+					var marker:Sprite = this.markers[i + (itemCount-difference)] as Sprite;
 					marker.mask = mask;
+					marker.width = this.width;
+					marker.height = this.height;
 				}
 			}
 			else if(difference < 0)

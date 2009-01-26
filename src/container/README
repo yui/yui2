@@ -5,9 +5,97 @@ Container Release Notes
 Changes:
 --------
 
++ Added a "yui-overlay-hidden" class to hidden Overlays (and derived widgets).
+  This class can be used to define CSS properties to work around bugs in 
+  IE6 and IE7's handling of tables with captions, or tables with border-collapse 
+  set to "collapse".
+  
+  In IE6 and IE7, if the overlay contains tables with captions, the 
+  user will not be able to interact with element which lie underneath
+  the table, even when the overlay is hidden.
+  
+  The above marker class can be used to hide tables when the overlay is hidden
+  to workaround the IE bug:
+  
+    #containerWithTable.yui-overlay-hidden table {
+        // Display is used here as an example, you could also
+        // set the height, or margin, or position for the table to 
+        // hide it if required.
+        display:none;
+    }
+
+  Also, in IE6 and IE7, if the overlay contains tables with border-collapse
+  set to "collapse", as is the case for the YUI Calendar's default Sam skin,
+  the borders will remain visible even when the overlay is hidden.
+
+  The above marker class can be used to flip the tables border-collapse setting,
+  to workaround the IE bug:
+  
+    #containerWithTable.yui-overlay-hidden table {
+	    // IE hides the border correctly if it is set to "separate"
+	    border-collapse:separate;
+    }
+	
 + Added tab-index = -1, to iframe shim to take it out of tab flow.
+
 + Module id is generated using Dom.generateId, if the element 
   passed to the constructor does not have an id set.
+  
++ Added code to force Opera to repaint on show, to fix occasional 
+  content dependant rendering glitches (using documentElement.className).
+  
++ Resize monitor is now only positioned offset top, instead of both 
+  offset top and offset left, to avoid scrollbars in RTL pages. A buffer 
+  constant (Module.RESIZE_MONITOR_BUFFER) is also provided, to add a buffer
+  amount to the offscreen position.
+
+Bug Fixes:
+----------
+
++ Fixed focusFirst behavior to give the default button priority over 
+  the first button if defined.
+  
++ Fixed erratic scrolling when clicking on the scrollbar in IE when a 
+  modal panel is visible.
+
++ Removed suppressEvent from autofillheight in overlay, was causing 
+  "autofillheight" to not be honored in Panel.
+  
++ Added < 0 check for "autofillheight".
+
++ Fixed "autofillheight", so that it only takes effect if a non "auto" 
+  height has been set on the container.
+
++ Fixed shadow in IE6 not being resized correctly when autofillheight 
+  is set, and text is resized.
+  
++ Fixed opacity flash seen when a tooltip with ContainerEffect.FADE 
+  applied, is hidden.
+
++ Fixed incorrect tooltip width, for the case where the width is 
+  set dynamically (see Tooltip's width configuration property), 
+  and the user moves from one of the Tooltip's context elements 
+  to another, without the tooltip being hidden.
+  
+New Features:
+-------------
+
++ Dialog now supports a "postdata" configuration parameter which can be
+  used to define post data to be sent along with any data mined from the 
+  form, for async post requests.
+  
++ Dialog now provides the connection object, as the first argument to
+  subscribers of the "asyncSubmit" event.
+  
++ Added support for fixedcenter:"contained", which acts like 
+  fixedcenter:true, enabling the user to keep the Overlay centered in 
+  the viewport when scrolling or resizing the window. 
+  
+  However when fixedcenter is set to "contained", if the Overlay is 
+  too big for the viewport, re-centering on scroll will be disabled 
+  until the viewport is large enough to contain the Overlay 
+  completely. This allows the user to scroll the viewport to 
+  access sections of the Overlay outside the current viewport.
 
 *** version 2.6.0 ***
 
@@ -34,8 +122,8 @@ Changes:
   vertical space. This behavior can be configured using the 
   "autofillheight" configuration property discussed below.
 
-Added the following features:
------------------------------
+New Features:
+-------------
 
 + Added a new "preventcontextoverlap" configuration property used 
   to manage whether or not an Overlay instance should overlap its 
@@ -61,7 +149,7 @@ Added the following features:
 + Panel now supports focusFirst and focusLast methods, as 
   well as tab, shift-tab looping when modal (similar to Dialog).
 
-Fixed the following bugs:
+Bug Fixes:
 -------------------------
 
 + Fixed issue with tooltip iframe remaining visible in situations
@@ -129,7 +217,7 @@ Fixed the following bugs:
 
 *** version 2.5.1 ***
 
-Fixed the following bugs:
+Bug Fixes:
 -------------------------
 
 + Module.setBody, setHeader and setFooter methods now accept
@@ -165,7 +253,7 @@ Changes:
 
 *** version 2.5.0 ***
 
-Fixed the following bugs:
+Bug Fixes:
 -------------------------
 
 + We now add the text resize monitor iframe to the DOM in a timeout,
@@ -184,7 +272,7 @@ Fixed the following bugs:
   scrollbar bleedthrough, another Gecko bug (discussed in Container's 
   known issues section).
   
-Added the following features:
+New Features:
 -----------------------------
 
 + Added a "hideaftersubmit" config property to Dialog, to allow the end
@@ -211,7 +299,7 @@ Changes:
 
 *** version 2.4.0 ***
 
-Fixed the following bugs:
+Bug Fixes:
 -------------------------
 
 + constraintoviewport and fixedcenter now handle Overlays which are 
@@ -258,7 +346,7 @@ Fixed the following bugs:
   default HTML buttons, giving them a look inconsistent with 
   non-default buttons.
 
-Added the following features:
+New Features:
 -----------------------------
 
 + Added "dragOnly" configuration property to Panel, to leverage
@@ -278,7 +366,7 @@ Added the following features:
 
 *** version 2.3.1 ***
 
-Fixed the following bugs:
+Bug Fixes:
 -------------------------
 
 + To help reduce the occurrence of "Operation Aborted" errors in IE, 
@@ -441,7 +529,7 @@ Known Issues
 
 *** version 2.3.0 ***
 
-Fixed the following bugs:
+Bug Fixes:
 -------------------------
 
 + Improved creation of the <iframe> element used to monitor changes to the 
@@ -570,7 +658,7 @@ Changes:
           }   
 
 
-Added the following features:
+New Features:
 -----------------------------
 
 + Added ability for YAHOO.widget.Tooltip instances to have shadow:
