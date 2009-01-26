@@ -329,8 +329,18 @@ function StyleSheet(seed, name) {
          */
         unset : function (sel,css) {
             var rule = cssRules[sel],
+                multi = sel.split(/\s*,\s*/),
                 remove = !css,
                 rules, i;
+
+            // IE's addRule doesn't support multiple comma delimited selectors
+            // so rules are mapped internally by atomic selectors
+            if (multi.length > 1) {
+                for (i = multi.length - 1; i >= 0; --i) {
+                    this.unset(multi[i], css);
+                }
+                return this;
+            }
 
             if (rule) {
                 if (!remove) {
@@ -362,6 +372,38 @@ function StyleSheet(seed, name) {
                 }
             }
             return this;
+        },
+
+        /**
+         * Get the current cssText for a rule or the entire sheet.  If the
+         * selector param is supplied, only the cssText for that rule will be
+         * returned, if found.  If the selector string targets multiple
+         * selectors separated by commas, the cssText of the first rule only
+         * will be returned.  If no selector string, the stylesheet's full
+         * cssText will be returned.
+         *
+         * @method getCssText
+         * @param sel {String} Selector string
+         * @return {String}
+         */
+        getCssText : function (sel) {
+            var rule,css;
+            if (lang.isString(sel)) {
+                // IE's addRule doesn't support multiple comma delimited
+                // selectors so rules are mapped internally by atomic selectors
+                rule = cssRules[sel.split(/\s*,\s*/)[0]];
+
+                return rule ? rule.style.cssText : null;
+            } else {
+                css = [];
+                for (sel in cssRules) {
+                    if (cssRules.hasOwnProperty(sel)) {
+                        rule = cssRules[sel];
+                        css.push(rule.selectorText+" {"+rule.style.cssText+"}");
+                    }
+                }
+                return css.join("\n");
+            }
         }
     },true);
 
@@ -539,6 +581,8 @@ NOTES
    overflow    -x                 NO   NO   YES             n/a     YES
 
    ??? - unsetting font-size-adjust has the same effect as unsetting font-size
+ * FireFox and WebKit populate rule.cssText as "SELECTOR { CSSTEXT }", but
+   Opera and IE do not.
 */
 
 YAHOO.register("stylesheet", YAHOO.util.StyleSheet, {version: "@VERSION@", build: "@BUILD@"});
