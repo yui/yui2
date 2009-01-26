@@ -3096,6 +3096,7 @@
             * "radio," "menu," and "split."
             * @default "push"
             * @type String
+			* @writeonce
             */
             this.setAttributeConfig("type", {
         
@@ -3103,7 +3104,7 @@
                 validator: Lang.isString,
                 writeOnce: true,
                 method: this._setType
-        
+
             });
         
         
@@ -3251,6 +3252,7 @@
             * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
             * level-one-html.html#ID-58190037">HTMLElement</a>|String
             * @default null
+			* @writeonce
             */
             this.setAttributeConfig("container", {
         
@@ -3268,6 +3270,7 @@
             * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
             * level-one-html.html#ID-58190037">HTMLElement</a>|String
             * @default null
+			* @writeonce
             */
             this.setAttributeConfig("srcelement", {
         
@@ -3311,6 +3314,7 @@
             * href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
             * one-html.html#ID-58190037">HTMLElement</a>|String|Array
             * @default null
+			* @writeonce
             */
             this.setAttributeConfig("menu", {
         
@@ -3344,6 +3348,7 @@
             * attribute.</em>
             * @default true
             * @type Boolean
+			* @writeonce
             */
             this.setAttributeConfig("lazyloadmenu", {
         
@@ -3360,6 +3365,7 @@
             * applied to the root element of the button's menu.
             * @type String
             * @default "yui-button-menu"
+			* @writeonce
             */
             this.setAttributeConfig("menuclassname", {
         
