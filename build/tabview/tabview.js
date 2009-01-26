@@ -10,7 +10,7 @@
     var Y = YAHOO.util,
         Dom = Y.Dom,
         Event = Y.Event,
-        document = document,
+        document = window.document,
     
         // STRING CONSTANTS
         ACTIVE = 'active',
@@ -216,7 +216,7 @@
             this._tabParent.removeChild( tab.get(ELEMENT) );
             this._contentParent.removeChild( tab.get(CONTENT_EL) );
             this._configs.tabs.value.splice(index, 1);
-            
+            tab.fireEvent('remove', { type: 'remove', tabview: this });
         },
         
         /**
@@ -381,6 +381,14 @@
                     this.addListener.call(this, type, this.DOMEventHandler);
                 }
             }
+        },
+
+        deselectTab: function() {
+            this.set('activeTab', null);
+        },
+
+        selectTab: function(index) {
+            this.set('activeTab', this.getTab(index));
         },
 
         _onActiveTabChange: function(e) {

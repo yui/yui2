@@ -1,5 +1,12 @@
 AutoComplete Release Notes
 
+*** version 2.7.0 ***
+
+* Better support for dealing with Arrays, including pure Arrays sent by remote
+DataSources, and empty Array result sets.
+
+
+
 *** version 2.6.0 ***
 
 * AutoComplete has a new required dependency on YAHOO.util.DataSource,

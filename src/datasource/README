@@ -6,6 +6,9 @@ DataSource Release Notes
 null, undefined, NaN, ""
 * YAHOO.util.Number.format() will now return "" for the following values:
 null, undefined, NaN, ""
+* Added support for customizeable scope in JS Function DataSources.
+* Added doBeforeGetScriptNode() as a hook to access the script URL immediately
+before it is processed by the Get Utility in Script Node DataSources.
 
 
 

@@ -108,7 +108,7 @@ Paginator.ui.FirstPageLink.prototype = {
         this.span.className = c;
         this.span.innerHTML = label;
 
-        this.current = p.get('recordOffset') < 1 ? this.span : this.link;
+        this.current = p.getCurrentPage() > 1 ? this.link : this.span;
         return this.current;
     },
 
@@ -123,15 +123,15 @@ Paginator.ui.FirstPageLink.prototype = {
         }
 
         var par = this.current ? this.current.parentNode : null;
-        if (this.paginator.get('recordOffset') < 1) {
-            if (par && this.current === this.link) {
-                par.replaceChild(this.span,this.current);
-                this.current = this.span;
-            }
-        } else {
+        if (this.paginator.getCurrentPage() > 1) {
             if (par && this.current === this.span) {
                 par.replaceChild(this.link,this.current);
                 this.current = this.link;
+            }
+        } else {
+            if (par && this.current === this.link) {
+                par.replaceChild(this.span,this.current);
+                this.current = this.span;
             }
         }
     },

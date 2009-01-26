@@ -1847,7 +1847,7 @@
             if (docEl) {
     			// Opera needs to force a repaint
     			docEl.className += " ";
-                docEl.className.trim();
+                docEl.className = YAHOO.lang.trim(docEl.className);
             }
         },
 

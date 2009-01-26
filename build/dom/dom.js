@@ -20,7 +20,6 @@
         // DOM aliases 
         document = window.document,     
         documentElement = document.documentElement,
-        body = document.body,
 
         // string constants
         OWNER_DOCUMENT = 'ownerDocument',
@@ -889,7 +888,7 @@
          * @return {Int} The height of the actual document (which includes the body and its margin).
          */
         getDocumentHeight: function() {
-            var scrollHeight = (document[COMPAT_MODE] != CSS1_COMPAT || isSafari) ? body.scrollHeight : documentElement.scrollHeight,
+            var scrollHeight = (document[COMPAT_MODE] != CSS1_COMPAT || isSafari) ? document.body.scrollHeight : documentElement.scrollHeight,
                 h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
 
             return h;
@@ -901,7 +900,7 @@
          * @return {Int} The width of the actual document (which includes the body and its margin).
          */
         getDocumentWidth: function() {
-            var scrollWidth = (document[COMPAT_MODE] != CSS1_COMPAT || isSafari) ? body.scrollWidth : documentElement.scrollWidth,
+            var scrollWidth = (document[COMPAT_MODE] != CSS1_COMPAT || isSafari) ? document.body.scrollWidth : documentElement.scrollWidth,
                 w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
             return w;
         },
@@ -918,7 +917,7 @@
             if ( (mode || isIE) && !isOpera ) { // IE, Gecko
                 height = (mode == CSS1_COMPAT) ?
                         documentElement.clientHeight : // Standards
-                        body.clientHeight; // Quirks
+                        document.body.clientHeight; // Quirks
             }
         
             return height;
@@ -937,7 +936,7 @@
             if (mode || isIE) { // IE, Gecko, Opera
                 width = (mode == CSS1_COMPAT) ?
                         documentElement.clientWidth : // Standards
-                        body.clientWidth; // Quirks
+                        document.body.clientWidth; // Quirks
             }
             return width;
         },
@@ -1338,6 +1337,7 @@
 
     }
 })();
+
 /**
  * A region is a representation of an object on a grid.  It is defined
  * by the top, right, bottom, left extents, so is rectangular by default.  If 
@@ -1539,6 +1539,7 @@ YAHOO.util.Point = function(x, y) {
 
 YAHOO.extend(YAHOO.util.Point, YAHOO.util.Region);
 
+
 (function() {
 /**
  * Add style management functionality to DOM.
@@ -1714,6 +1715,7 @@ IEComputed.borderColor = IEComputed.borderTopColor =
 Y.Dom.IE_COMPUTED = IEComputed;
 Y.Dom.IE_ComputedStyle = ComputedStyle;
 })();
+
 (function() {
 /**
  * Add style management functionality to DOM.
@@ -1791,4 +1793,5 @@ Y.Dom.Color = {
     }
 };
 }());
+
 YAHOO.register("dom", YAHOO.util.Dom, {version: "@VERSION@", build: "@BUILD@"});

@@ -4830,12 +4830,20 @@ _initThEl : function(elTh, oColumn) {
         
     elTh.className = this._getColumnClassNames(oColumn);
             
-    // Set Column width for non fallback cases
-    if(oColumn.width && !DT._bDynStylesFallback) {
+    // Set Column width...
+    if(oColumn.width) {
         // Validate minWidth
         var nWidth = (oColumn.minWidth && (oColumn.width < oColumn.minWidth)) ?
                 oColumn.minWidth : oColumn.width;
-        this._setColumnWidthDynStyles(oColumn, nWidth + 'px', 'hidden');
+        // ...for fallback cases
+        if(DT._bDynStylesFallback) {
+            elTh.firstChild.style.overflow = 'hidden';
+            elTh.firstChild.style.width = nWidth + 'px';        
+        }
+        // ...for non fallback cases
+        else {
+            this._setColumnWidthDynStyles(oColumn, nWidth + 'px', 'hidden');
+        }
     }
 
     this.formatTheadCell(elThLabel, oColumn, this.get("sortedBy"));
@@ -7399,6 +7407,13 @@ focusTbodyEl : function() {
  */
 onShow : function() {
     this.validateColumnWidths();
+    
+    for(var allKeys = this._oColumnSet.keys, i=0, len=allKeys.length, col; i<len; i++) {
+        col = allKeys[i];
+        if(col._ddResizer) {
+            col._ddResizer.resetResizerEl();
+        }
+    }
 },
 
 
@@ -9423,11 +9438,14 @@ updateCell : function(oRecord, oColumn, oData) {
     // Validate Column and Record
     oColumn = (oColumn instanceof YAHOO.widget.Column) ? oColumn : this.getColumn(oColumn);
     if(oColumn && oColumn.getKey() && (oRecord instanceof YAHOO.widget.Record)) {
+        var sKey = oColumn.getKey(),
+        
         // Copy data from the Record for the event that gets fired later
-        var oldData = YAHOO.widget.DataTable._cloneObject(oRecord.getData());
+        //var oldData = YAHOO.widget.DataTable._cloneObject(oRecord.getData());
+            oldData = oRecord.getData(sKey);
 
         // Update Record with new data
-        this._oRecordSet.updateRecordValue(oRecord, oColumn.getKey(), oData);
+        this._oRecordSet.updateRecordValue(oRecord, sKey, oData);
     
         // Update the TD only if row is on current page
         var elTd = this.getTdEl({record: oRecord, column: oColumn});
@@ -12037,7 +12055,8 @@ saveCellEditor : function() {
         else if(this._oCellEditor.isActive) {
             var newData = this._oCellEditor.value;
             // Copy the data to pass to the event
-            var oldData = YAHOO.widget.DataTable._cloneObject(this._oCellEditor.record.getData(this._oCellEditor.column.key));
+            //var oldData = YAHOO.widget.DataTable._cloneObject(this._oCellEditor.record.getData(this._oCellEditor.column.key));
+            var oldData = this._oCellEditor.record.getData(this._oCellEditor.column.key);
     
             // Validate input data
             if(this._oCellEditor.validator) {
@@ -13434,7 +13453,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @event cellUpdateEvent
      * @param oArgs.record {YAHOO.widget.Record} The updated Record.
      * @param oArgs.column {YAHOO.widget.Column} The updated Column.
-     * @param oArgs.oldData {Object} Object literal of the old data.
+     * @param oArgs.oldData {Object} Original data value of the updated cell.
      */
 
     /**
@@ -15587,7 +15606,7 @@ destroy : function() {
     // Column is late-binding in attach()
     var oColumn = this.getColumn();
     if(oColumn) {
-        this.getColumn().editor = null;
+        oColumn.editor = null;
     }
     
     var elContainer = this.getContainerEl();
@@ -15601,6 +15620,11 @@ destroy : function() {
  * @method render
  */
 render : function() {
+    if(this._elContainer) {
+        YAHOO.util.Event.purgeElement(this._elContainer, true);
+        this._elContainer.innerHTML = "";
+    }
+
     // Render Cell Editor container element as first child of body
     var elContainer = document.createElement("div");
     elContainer.id = this.getId() + "-container"; // Needed for tracking blur event
@@ -15786,7 +15810,7 @@ save : function() {
         
     var oSelf = this;
     var finishSave = function(bSuccess, oNewValue) {
-        var oOrigValue = YAHOO.widget.DataTable._cloneObject(oSelf.value);
+        var oOrigValue = oSelf.value;
         if(bSuccess) {
             // Update new value
             oSelf.value = oNewValue;
@@ -16177,6 +16201,14 @@ lang.extend(widget.DateCellEditor, BCE, {
 calendar : null,
 
 /**
+ * Configs for the calendar instance, to be passed to Calendar constructor.
+ *
+ * @property calendarOptions
+ * @type Object
+ */
+calendarOptions : null,
+
+/**
  * Default value.
  *
  * @property defaultValue
@@ -16204,7 +16236,7 @@ renderForm : function() {
         calContainer.id = this.getId() + "-dateContainer"; // Needed for Calendar constructor
         var calendar =
                 new YAHOO.widget.Calendar(this.getId() + "-date",
-                calContainer.id);
+                calContainer.id, this.calendarOptions);
         calendar.render();
         calContainer.style.cssFloat = "none";
 

@@ -18,6 +18,7 @@ Paginator.ui.RowsPerPageDropdown = function (p) {
 
     p.subscribe('rowsPerPageChange',this.update,this,true);
     p.subscribe('rowsPerPageOptionsChange',this.rebuild,this,true);
+    p.subscribe('totalRecordsChange',this._handleTotalRecordsChange,this,true);
     p.subscribe('destroy',this.destroy,this,true);
 
     // TODO: make this work
@@ -68,6 +69,15 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
 
 
     /**
+     * option node for the optional All value
+     *
+     * @property all
+     * @type HTMLElement
+     * @protected
+     */
+    all : null,
+
+    /**
      * Generate the select and option nodes and returns the select node.
      * @method render
      * @param id_base {string} used to create unique ids for generated nodes
@@ -87,6 +97,41 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
     },
 
     /**
+     * (Re)generate the select options.
+     * @method rebuild
+     */
+    rebuild : function (e) {
+        var p       = this.paginator,
+            sel     = this.select,
+            options = p.get('rowsPerPageOptions'),
+            opt,cfg,val,i,len;
+
+        this.all = null;
+
+        for (i = 0, len = options.length; i < len; ++i) {
+            cfg = options[i];
+            opt = sel.options[i] ||
+                  sel.appendChild(document.createElement('option'));
+            val = l.isValue(cfg.value) ? cfg.value : cfg;
+            opt.innerHTML = l.isValue(cfg.text) ? cfg.text : cfg;
+
+            if (l.isString(val) && val.toLowerCase() === 'all') {
+                this.all  = opt;
+                opt.value = p.get('totalRecords');
+            } else{
+                opt.value = val;
+            }
+
+        }
+
+        while (sel.options.length > options.length) {
+            sel.removeChild(sel.firstChild);
+        }
+
+        this.update();
+    },
+
+    /**
      * Select the appropriate option if changed.
      * @method update
      * @param e {CustomEvent} The calling change event
@@ -96,42 +141,45 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
             return;
         }
 
-        var rpp     = this.paginator.get('rowsPerPage'),
+        var rpp     = this.paginator.get('rowsPerPage')+'',
             options = this.select.options,
             i,len;
 
         for (i = 0, len = options.length; i < len; ++i) {
-            if (parseInt(options[i].value,10) === rpp) {
+            if (options[i].value === rpp) {
                 options[i].selected = true;
+                break;
             }
         }
     },
 
+    /**
+     * Listener for the select's onchange event.  Sent to setRowsPerPage method.
+     * @method onChange
+     * @param e {DOMEvent} The change event
+     */
+    onChange : function (e) {
+        this.paginator.setRowsPerPage(
+                parseInt(this.select.options[this.select.selectedIndex].value,10));
+    },
 
     /**
-     * (Re)generate the select options.
-     * @method rebuild
+     * Updates the all option value (and Paginator's rowsPerPage attribute if
+     * necessary) in response to a change in the Paginator's totalRecords.
+     *
+     * @method _handleTotalRecordsChange
+     * @param e {Event} attribute change event
+     * @protected
      */
-    rebuild : function (e) {
-        var p       = this.paginator,
-            sel     = this.select,
-            options = p.get('rowsPerPageOptions'),
-            opt_tem = document.createElement('option'),
-            i,len,node,opt;
-
-        while (sel.firstChild) {
-            sel.removeChild(sel.firstChild);
+    _handleTotalRecordsChange : function (e) {
+        if (!this.all || (e && e.prevValue === e.newValue)) {
+            return;
         }
 
-        for (i = 0, len = options.length; i < len; ++i) {
-            node = opt_tem.cloneNode(false);
-            opt  = options[i];
-            node.value = l.isValue(opt.value) ? opt.value : opt;
-            node.innerHTML = l.isValue(opt.text)  ? opt.text  : opt;
-            sel.appendChild(node);
+        this.all.value = e.newValue;
+        if (this.all.selected) {
+            this.paginator.set('rowsPerPage',e.newValue);
         }
-
-        this.update();
     },
 
     /**
@@ -143,16 +191,6 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
         YAHOO.util.Event.purgeElement(this.select);
         this.select.parentNode.removeChild(this.select);
         this.select = null;
-    },
-
-    /**
-     * Listener for the select's onchange event.  Sent to setRowsPerPage method.
-     * @method onChange
-     * @param e {DOMEvent} The change event
-     */
-    onChange : function (e) {
-        this.paginator.setRowsPerPage(
-                parseInt(this.select.options[this.select.selectedIndex].value,10));
     }
 };
 

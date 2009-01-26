@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.axes
+package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.utils.NumberUtil;
 	
