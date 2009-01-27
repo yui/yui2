@@ -730,7 +730,7 @@
                 Dom.addClass(this.underlay, "yui-tt-shadow-visible");
 
                 if (UA.ie) {
-                    this._forceShadowRepaint();
+                    this._forceShadowRedraw();
                 }
             }
 
@@ -808,13 +808,13 @@
          * required to force the opacity filter to be repainted when a 
          * tooltip is shown.
          * 
-         * @method _forceShadowRepaint
+         * @method _forceShadowRedraw
          * @private
          */
-        _forceShadowRepaint : function() {
+        _forceShadowRedraw : function() {
             var tt = this;
-            tt.underlay.innerHTML = " ";
-            setTimeout(function() {tt.underlay.innerHTML = "";}, 0);
+            Dom.addClass(tt.underlay, "yui-force-redraw");
+            setTimeout(function() {Dom.removeClass(tt.underlay, "yui-force-redraw");}, 0);
         },
 
         /**
