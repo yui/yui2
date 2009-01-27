@@ -166,38 +166,40 @@ function StyleSheet(seed, name) {
     // Begin setting up private aliases to the important moving parts
     // 1. The stylesheet object
     // IE stores StyleSheet under the "styleSheet" property
+    // Safari doesn't populate sheet for xdomain link elements
     sheet = node.sheet || node.styleSheet;
 
     // 2. The style rules collection
     // IE stores the rules collection under the "rules" property
-    _rules = ('cssRules' in sheet) ? 'cssRules' : 'rules';
+    _rules = sheet && ('cssRules' in sheet) ? 'cssRules' : 'rules';
 
-    // 3. The method to remove a rule from the stylesheet
+    // 3. Initialize the cssRules map from the node
+    // xdomain link nodes forbid access to the cssRules collection, so this
+    // will throw an error.
+    // TODO: research alternate stylesheet, @media
+        for (i = sheet[_rules].length - 1; i >= 0; --i) {
+            r   = sheet[_rules][i];
+            sel = r.selectorText;
+
+            if (cssRules[sel]) {
+                cssRules[sel].style.cssText += ';' + r.style.cssText;
+                _deleteRule(i);
+            } else {
+                cssRules[sel] = r;
+            }
+        }
+
+    // 4. The method to remove a rule from the stylesheet
     // IE supports removeRule
     _deleteRule = ('deleteRule' in sheet) ?
         function (i) { sheet.deleteRule(i); } :
         function (i) { sheet.removeRule(i); };
 
-    // 4. The method to add a new rule to the stylesheet
+    // 5. The method to add a new rule to the stylesheet
     // IE supports addRule with different signature
     _insertRule = ('insertRule' in sheet) ?
         function (sel,css,i) { sheet.insertRule(sel+' '+css,i); } :
         function (sel,css,i) { sheet.addRule(sel,css,i); };
-
-    // Initialize the cssRules map from the node
-    // TODO if xdomain link node, copy to a local style block and replace the
-    // link node with the style node.  CAVEAT: alternate stylesheet, @media
-    for (i = sheet[_rules].length - 1; i >= 0; --i) {
-        r   = sheet[_rules][i];
-        sel = r.selectorText;
-
-        if (cssRules[sel]) {
-            cssRules[sel].style.cssText += ';' + r.style.cssText;
-            _deleteRule(i);
-        } else {
-            cssRules[sel] = r;
-        }
-    }
 
     // Cache the instance by the generated Id
     node.yuiSSID = 'yui-stylesheet-' + (ssId++);
@@ -388,6 +390,7 @@ function StyleSheet(seed, name) {
          */
         getCssText : function (sel) {
             var rule,css;
+
             if (lang.isString(sel)) {
                 // IE's addRule doesn't support multiple comma delimited
                 // selectors so rules are mapped internally by atomic selectors
@@ -519,6 +522,11 @@ NOTES
  * Opera requires that the index be passed with insertRule.
  * Same-domain restrictions prevent modifying StyleSheet objects attached to
    link elements with remote href (or "about:blank" or "javascript:false")
+ * Same-domain restrictions prevent reading StyleSheet cssRules/rules
+   collection of link elements with remote href (or "about:blank" or
+   "javascript:false")
+ * Same-domain restrictions result in Safari not populating node.sheet property
+   for link elements with remote href (et.al)
  * IE names StyleSheet related properties and methods differently (see code)
  * IE converts tag names to upper case in the Rule's selectorText
  * IE converts empty string assignment to complex properties to value settings
