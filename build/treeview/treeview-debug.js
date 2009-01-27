@@ -1,10 +1,10 @@
 (function () {
-	var Dom = YAHOO.util.Dom,
-		Event = YAHOO.util.Event,
-		Lang = YAHOO.lang,
-		Widget = YAHOO.widget;
-		
-	
+    var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event,
+        Lang = YAHOO.lang,
+        Widget = YAHOO.widget;
+        
+    
 
 /**
  * The treeview widget is a generic tree building tool.
@@ -27,14 +27,14 @@
  */
 YAHOO.widget.TreeView = function(id, oConfig) {
     if (id) { this.init(id); }
-	if (oConfig) {
-		if (!Lang.isArray(oConfig)) {
-			oConfig = [oConfig];
-		}
-		this.buildTreeFromObject(oConfig);
-	} else if (Lang.trim(this._el.innerHTML)) {
-		this.buildTreeFromMarkup(id);
-	}
+    if (oConfig) {
+        if (!Lang.isArray(oConfig)) {
+            oConfig = [oConfig];
+        }
+        this.buildTreeFromObject(oConfig);
+    } else if (Lang.trim(this._el.innerHTML)) {
+        this.buildTreeFromMarkup(id);
+    }
 };
 
 var TV = Widget.TreeView;
@@ -111,7 +111,7 @@ TV.prototype = {
      * @private
      */
     _hasDblClickSubscriber: false,
-	
+    
     /**
      * Stores the timer used to check for double clicks
      * @property _dblClickTimer
@@ -126,26 +126,26 @@ TV.prototype = {
      * @type YAHOO.widget.Node
      */
     currentFocus: null,
-	
-	/**
-	* If true, only one Node can be highlighted at a time
-	* @property singleNodeHighlight
-	* @type boolean
-	* @default false
-	*/
-	
-	singleNodeHighlight: false,
-	
-	/**
-	* A reference to the Node that is currently highlighted.
-	* It is only meaningful if singleNodeHighlight is enabled
-	* @property _currentlyHighlighted
-	* @type YAHOO.widget.Node
-	* @default null
-	* @private
-	*/
-	
-	_currentlyHighlighted: null,
+    
+    /**
+    * If true, only one Node can be highlighted at a time
+    * @property singleNodeHighlight
+    * @type boolean
+    * @default false
+    */
+    
+    singleNodeHighlight: false,
+    
+    /**
+    * A reference to the Node that is currently highlighted.
+    * It is only meaningful if singleNodeHighlight is enabled
+    * @property _currentlyHighlighted
+    * @type YAHOO.widget.Node
+    * @default null
+    * @private
+    */
+    
+    _currentlyHighlighted: null,
 
     /**
      * Sets up the animation for expanding children
@@ -264,8 +264,8 @@ TV.prototype = {
      * @private
      */
     init: function(id) {
-		this._el = Dom.get(id);
-		this.id = Dom.generateId(this._el,"yui-tv-auto-id-");
+        this._el = Dom.get(id);
+        this.id = Dom.generateId(this._el,"yui-tv-auto-id-");
 
     /**
          * When animation is enabled, this event fires when the animation
@@ -330,66 +330,66 @@ TV.prototype = {
          * @param {YAHOO.widget.Node} node the node that has the focus
          */
         this.createEvent("enterKeyPressed", this);
-		
+        
     /**
          * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a Click.
-	* The listener may return false to cancel toggling and focusing on the node.
+    * The listener may return false to cancel toggling and focusing on the node.
          * @event clickEvent
          * @type CustomEvent
          * @param oArgs.event  {HTMLEvent} The event object
          * @param oArgs.node {YAHOO.widget.Node} node the node that was clicked
          */
         this.createEvent("clickEvent", this);
-		
+        
     /**
          * Fires when the focus receives the focus, when it changes from a Node 
-	* to another Node or when it is completely lost (blurred)
+    * to another Node or when it is completely lost (blurred)
          * @event focusChanged
          * @type CustomEvent
          * @param oArgs.oldNode  {YAHOO.widget.Node} Node that had the focus or null if none
          * @param oArgs.newNode {YAHOO.widget.Node} Node that receives the focus or null if none
          */
         
-		this.createEvent('focusChanged',this);
+        this.createEvent('focusChanged',this);
 
-	/**
+    /**
          * Fires when the label in a TextNode or MenuNode or content in an HTMLNode receives a double Click
          * @event dblClickEvent
          * @type CustomEvent
          * @param oArgs.event  {HTMLEvent} The event object
          * @param oArgs.node {YAHOO.widget.Node} node the node that was clicked
          */
-		var self = this;
+        var self = this;
         this.createEvent("dblClickEvent", {
-			scope:this,
-			onSubscribeCallback: function() {
-				self._hasDblClickSubscriber = true;
-			}
-		});
-		
-	/**
+            scope:this,
+            onSubscribeCallback: function() {
+                self._hasDblClickSubscriber = true;
+            }
+        });
+        
+    /**
          * Custom event that is fired when the text node label is clicked. 
          *  The node clicked is  provided as an argument
          *
          * @event labelClick
          * @type CustomEvent
          * @param {YAHOO.widget.Node} node the node clicked
-	* @deprecated use clickEvent or dblClickEvent
+    * @deprecated use clickEvent or dblClickEvent
          */
-		this.createEvent("labelClick", this);
-		
-	/**
-	 * Custom event fired when the highlight of a node changes.
-	 * The node that triggered the change is provided as an argument:
-	 * The status of the highlight can be checked in 
-	 * <a href="YAHOO.widget.Node.html#property_highlightState">nodeRef.highlightState</a>.
-	 * Depending on <a href="YAHOO.widget.Node.html#property_propagateHighlight">nodeRef.propagateHighlight</a>, other nodes might have changed
-	 * @event highlightEvent
-	 * @type CustomEvent
+        this.createEvent("labelClick", this);
+        
+    /**
+     * Custom event fired when the highlight of a node changes.
+     * The node that triggered the change is provided as an argument:
+     * The status of the highlight can be checked in 
+     * <a href="YAHOO.widget.Node.html#property_highlightState">nodeRef.highlightState</a>.
+     * Depending on <a href="YAHOO.widget.Node.html#property_propagateHighlight">nodeRef.propagateHighlight</a>, other nodes might have changed
+     * @event highlightEvent
+     * @type CustomEvent
         * @param node{YAHOO.widget.Node} the node that started the change in highlighting state
-	*/
-		this.createEvent("highlightEvent",this);
-	 
+    */
+        this.createEvent("highlightEvent",this);
+     
 
 
         this._nodes = [];
@@ -405,7 +405,7 @@ TV.prototype = {
         this.logger = (LW) ? new LW(this.toString()) : YAHOO;
 
         this.logger.log("tree init: " + this.id);
-		
+        
         // YAHOO.util.Event.onContentReady(this.id, this.handleAvailable, this, true);
         // YAHOO.util.Event.on(this.id, "click", this.handleClick, this, true);
     },
@@ -428,67 +428,67 @@ TV.prototype = {
      * @param  oConfig {Array}  array containing a full description of the tree
      * 
      */
-	buildTreeFromObject: function (oConfig) {
-		var logger = this.logger;
-		logger.log('Building tree from object');
-		var build = function (parent, oConfig) {
-			var i, item, node, children, type, NodeType, ThisType;
-			for (i = 0; i < oConfig.length; i++) {
-				item = oConfig[i];
-				if (Lang.isString(item)) {
-					node = new Widget.TextNode(item, parent);
-				} else if (Lang.isObject(item)) {
-					children = item.children;
-					delete item.children;
-					type = item.type || 'text';
-					delete item.type;
-					switch (Lang.isString(type) && type.toLowerCase()) {
-						case 'text':
-							node = new Widget.TextNode(item, parent);
-							break;
-						case 'menu':
-							node = new Widget.MenuNode(item, parent);
-							break;
-						case 'html':
-							node = new Widget.HTMLNode(item, parent);
-							break;
-						default:
-				            if (Lang.isString(type)) {
-								NodeType = Widget[type];
-							} else {
-								NodeType = type;
-							}
-							if (Lang.isObject(NodeType)) {
-								for (ThisType = NodeType; ThisType && ThisType !== Widget.Node; ThisType = ThisType.superclass.constructor) {}
-								if (ThisType) {
-									node = new NodeType(item, parent);
-								} else {
-									logger.log('Invalid type in node definition: ' + type,'error');
-								}
-							} else {
-								logger.log('Invalid type in node definition: ' + type,'error');
-							}
-					}
-					if (children) {
-						build(node,children);
-					}
-				} else {
-					logger.log('Invalid node definition','error');
-				}
-			}
-		};
-							
-					
-		build(this.root,oConfig);
-	},
+    buildTreeFromObject: function (oConfig) {
+        var logger = this.logger;
+        logger.log('Building tree from object');
+        var build = function (parent, oConfig) {
+            var i, item, node, children, type, NodeType, ThisType;
+            for (i = 0; i < oConfig.length; i++) {
+                item = oConfig[i];
+                if (Lang.isString(item)) {
+                    node = new Widget.TextNode(item, parent);
+                } else if (Lang.isObject(item)) {
+                    children = item.children;
+                    delete item.children;
+                    type = item.type || 'text';
+                    delete item.type;
+                    switch (Lang.isString(type) && type.toLowerCase()) {
+                        case 'text':
+                            node = new Widget.TextNode(item, parent);
+                            break;
+                        case 'menu':
+                            node = new Widget.MenuNode(item, parent);
+                            break;
+                        case 'html':
+                            node = new Widget.HTMLNode(item, parent);
+                            break;
+                        default:
+                            if (Lang.isString(type)) {
+                                NodeType = Widget[type];
+                            } else {
+                                NodeType = type;
+                            }
+                            if (Lang.isObject(NodeType)) {
+                                for (ThisType = NodeType; ThisType && ThisType !== Widget.Node; ThisType = ThisType.superclass.constructor) {}
+                                if (ThisType) {
+                                    node = new NodeType(item, parent);
+                                } else {
+                                    logger.log('Invalid type in node definition: ' + type,'error');
+                                }
+                            } else {
+                                logger.log('Invalid type in node definition: ' + type,'error');
+                            }
+                    }
+                    if (children) {
+                        build(node,children);
+                    }
+                } else {
+                    logger.log('Invalid node definition','error');
+                }
+            }
+        };
+                            
+                    
+        build(this.root,oConfig);
+    },
 /**
      * Builds the TreeView from existing markup.   Markup should consist of &lt;UL&gt; or &lt;OL&gt; elements containing &lt;LI&gt; elements.  
      * Each &lt;LI&gt; can have one element used as label and a second optional element which is to be a &lt;UL&gt; or &lt;OL&gt;
      * containing nested nodes.
      * Depending on what the first element of the &lt;LI&gt; element is, the following Nodes will be created: <ul>
-     * 	         <li>plain text:  a regular TextNode</li>
-     * 	         <li>anchor &lt;A&gt;: a TextNode with its <code>href</code> and <code>target</code> taken from the anchor</li>
-     * 	         <li>anything else: an HTMLNode</li></ul>
+     *           <li>plain text:  a regular TextNode</li>
+     *           <li>anchor &lt;A&gt;: a TextNode with its <code>href</code> and <code>target</code> taken from the anchor</li>
+     *           <li>anything else: an HTMLNode</li></ul>
      * Only the first  outermost (un-)ordered list in the markup and its children will be parsed.
      * Nodes will be collapsed unless  an  &lt;LI&gt;  tag has a className called 'expanded'.
      * All other className attributes will be copied over to the Node className property.
@@ -497,339 +497,363 @@ TV.prototype = {
      * @method buildTreeFromMarkup
      * @param  id{string|HTMLElement} The id of the element that contains the markup or a reference to it.
      */
-	buildTreeFromMarkup: function (id) {
-		this.logger.log('Building tree from existing markup');
-		var build = function (markup) {
-			var el, child, branch = [], config = {}, label, yuiConfig;
-			// Dom's getFirstChild and getNextSibling skip over text elements
-			for (el = Dom.getFirstChild(markup); el; el = Dom.getNextSibling(el)) {
-				switch (el.tagName.toUpperCase()) {
-					case 'LI':
-						label = '';
-						config = {
-							expanded: Dom.hasClass(el,'expanded'),
-							title: el.title || el.alt || null,
-							className: Lang.trim(el.className.replace(/\bexpanded\b/,'')) || null
-						};
-						// I cannot skip over text elements here because I want them for labels
-						child = el.firstChild;
-						if (child.nodeType == 3) {
-							// nodes with only whitespace, tabs and new lines don't count, they are probably just formatting.
-							label = Lang.trim(child.nodeValue.replace(/[\n\t\r]*/g,''));
-							if (label) {
-								config.type = 'text';
-								config.label = label;
-							} else {
-								child = Dom.getNextSibling(child);
-							}
-						}
-						if (!label) {
-							if (child.tagName.toUpperCase() == 'A') {
-								config.type = 'text';
-								config.label = child.innerHTML;
-								config.href = child.href;
-								config.target = child.target;
-								config.title = child.title || child.alt || config.title;
-							} else {
-								config.type = 'html';
-								var d = document.createElement('div');
-								d.appendChild(child.cloneNode(true));
-								config.html = d.innerHTML;
-								config.hasIcon = true;
-							}
-						}
-						// see if after the label it has a further list which will become children of this node.
-						child = Dom.getNextSibling(child);
-						switch (child && child.tagName.toUpperCase()) {
-							case 'UL':
-							case 'OL':
-								config.children = build(child);
-								break;
-						}
-						// if there are further elements or text, it will be ignored.
-						
-						if (YAHOO.lang.JSON) {
-							yuiConfig = el.getAttribute('yuiConfig');
-							if (yuiConfig) {
-								yuiConfig = YAHOO.lang.JSON.parse(yuiConfig);
-								config = YAHOO.lang.merge(config,yuiConfig);
-							}
-						}
-						
-						branch.push(config);
-						break;
-					case 'UL':
-					case 'OL':
-						this.logger.log('ULs or OLs can only contain LI elements, not other UL or OL.  This will not work in some browsers','error');
-						config = {
-							type: 'text',
-							label: '',
-							children: build(child)
-						};
-						branch.push(config);
-						break;
-				}
-			}
-			return branch;
-		};
+    buildTreeFromMarkup: function (id) {
+        this.logger.log('Building tree from existing markup');
+        var build = function (markup) {
+            var el, child, branch = [], config = {}, label, yuiConfig;
+            // Dom's getFirstChild and getNextSibling skip over text elements
+            for (el = Dom.getFirstChild(markup); el; el = Dom.getNextSibling(el)) {
+                switch (el.tagName.toUpperCase()) {
+                    case 'LI':
+                        label = '';
+                        config = {
+                            expanded: Dom.hasClass(el,'expanded'),
+                            title: el.title || el.alt || null,
+                            className: Lang.trim(el.className.replace(/\bexpanded\b/,'')) || null
+                        };
+                        // I cannot skip over text elements here because I want them for labels
+                        child = el.firstChild;
+                        if (child.nodeType == 3) {
+                            // nodes with only whitespace, tabs and new lines don't count, they are probably just formatting.
+                            label = Lang.trim(child.nodeValue.replace(/[\n\t\r]*/g,''));
+                            if (label) {
+                                config.type = 'text';
+                                config.label = label;
+                            } else {
+                                child = Dom.getNextSibling(child);
+                            }
+                        }
+                        if (!label) {
+                            if (child.tagName.toUpperCase() == 'A') {
+                                config.type = 'text';
+                                config.label = child.innerHTML;
+                                config.href = child.href;
+                                config.target = child.target;
+                                config.title = child.title || child.alt || config.title;
+                            } else {
+                                config.type = 'html';
+                                var d = document.createElement('div');
+                                d.appendChild(child.cloneNode(true));
+                                config.html = d.innerHTML;
+                                config.hasIcon = true;
+                            }
+                        }
+                        // see if after the label it has a further list which will become children of this node.
+                        child = Dom.getNextSibling(child);
+                        switch (child && child.tagName.toUpperCase()) {
+                            case 'UL':
+                            case 'OL':
+                                config.children = build(child);
+                                break;
+                        }
+                        // if there are further elements or text, it will be ignored.
+                        
+                        if (YAHOO.lang.JSON) {
+                            yuiConfig = el.getAttribute('yuiConfig');
+                            if (yuiConfig) {
+                                yuiConfig = YAHOO.lang.JSON.parse(yuiConfig);
+                                config = YAHOO.lang.merge(config,yuiConfig);
+                            }
+                        }
+                        
+                        branch.push(config);
+                        break;
+                    case 'UL':
+                    case 'OL':
+                        this.logger.log('ULs or OLs can only contain LI elements, not other UL or OL.  This will not work in some browsers','error');
+                        config = {
+                            type: 'text',
+                            label: '',
+                            children: build(child)
+                        };
+                        branch.push(config);
+                        break;
+                }
+            }
+            return branch;
+        };
 
-		var markup = Dom.getChildrenBy(Dom.get(id),function (el) { 
-			var tag = el.tagName.toUpperCase();
-			return  tag == 'UL' || tag == 'OL';
-		});
-		if (markup.length) {
-			this.buildTreeFromObject(build(markup[0]));
-		} else {
-			this.logger.log('Markup contains no UL or OL elements','warn');
-		}
-	},
+        var markup = Dom.getChildrenBy(Dom.get(id),function (el) { 
+            var tag = el.tagName.toUpperCase();
+            return  tag == 'UL' || tag == 'OL';
+        });
+        if (markup.length) {
+            this.buildTreeFromObject(build(markup[0]));
+        } else {
+            this.logger.log('Markup contains no UL or OL elements','warn');
+        }
+    },
   /**
      * Returns the TD element where the event has occurred
      * @method _getEventTargetTdEl
      * @private
      */
-	_getEventTargetTdEl: function (ev) {
-		var target = Event.getTarget(ev); 
-		// go up looking for a TD with a className with a ygtv prefix
-		while (target && !(target.tagName.toUpperCase() == 'TD' && Dom.hasClass(target.parentNode,'ygtvrow'))) { 
-			target = Dom.getAncestorByTagName(target,'td'); 
-		}
-		if (Lang.isNull(target)) { return null; }
-		// If it is a spacer cell, do nothing
-		if (/\bygtv(blank)?depthcell/.test(target.className)) { return null;}
-		// If it has an id, search for the node number and see if it belongs to a node in this tree.
-		if (target.id) {
-			var m = target.id.match(/\bygtv([^\d]*)(.*)/);
-			if (m && m[2] && this._nodes[m[2]]) {
-				return target;
-			}
-		}
-		return null;
-	},
+    _getEventTargetTdEl: function (ev) {
+        var target = Event.getTarget(ev); 
+        // go up looking for a TD with a className with a ygtv prefix
+        while (target && !(target.tagName.toUpperCase() == 'TD' && Dom.hasClass(target.parentNode,'ygtvrow'))) { 
+            target = Dom.getAncestorByTagName(target,'td'); 
+        }
+        if (Lang.isNull(target)) { return null; }
+        // If it is a spacer cell, do nothing
+        if (/\bygtv(blank)?depthcell/.test(target.className)) { return null;}
+        // If it has an id, search for the node number and see if it belongs to a node in this tree.
+        if (target.id) {
+            var m = target.id.match(/\bygtv([^\d]*)(.*)/);
+            if (m && m[2] && this._nodes[m[2]]) {
+                return target;
+            }
+        }
+        return null;
+    },
   /**
      * Event listener for click events
      * @method _onClickEvent
      * @private
      */
-	_onClickEvent: function (ev) {
-		var self = this,
-			td = this._getEventTargetTdEl(ev);
-		if (!td) {return; }
-		var node = this.getNodeByElement(td);
-		if (!node) { return; }
-			
-		var toggle = function () {
-			node.toggle();
-			node.focus();
-			Event.preventDefault(ev);
-		};
-		
-		// exception to handle deprecated event labelClick
-		var target = Event.getTarget(ev);
-		if (Dom.hasClass(target, node.labelStyle) || Dom.getAncestorByClassName(target,node.labelStyle)) {
-			this.logger.log("onLabelClick " + node.label);
-			this.fireEvent('labelClick',node);
-		}
-		
-		//  If it is a toggle cell, toggle
-		if (/\bygtv[tl][mp]h?h?/.test(td.className)) {
-			toggle();
-		} else {
-			if (this._dblClickTimer) {
-				window.clearTimeout(this._dblClickTimer);
-				this._dblClickTimer = null;
-			} else {
-				if (this._hasDblClickSubscriber) {
-					this._dblClickTimer = window.setTimeout(function () {
-						self._dblClickTimer = null;
-						if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
-							toggle();
-						}
-					}, 200);
-				} else {
-					if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
-						toggle();
-					}
-				}
-			}
-		}
-	},
+    _onClickEvent: function (ev) {
+        var self = this,
+            td = this._getEventTargetTdEl(ev),
+            node,
+            target,
+            toggle = function () {
+                node.toggle();
+                node.focus();
+                try {
+                    Event.preventDefault(ev);
+                } catch (e) {
+                    // @TODO
+                    // For some reason IE8 is providing an event object with
+                    // most of the fields missing, but only when clicking on
+                    // the node's label, and only when working with inline
+                    // editing.  This generates a "Member not found" error
+                    // in that browser.  Determine if this is a browser
+                    // bug, or a problem with this code.  Already checked to
+                    // see if the problem has to do with access the event
+                    // in the outer scope, and that isn't the problem.
+                    // Maybe the markup for inline editing is broken.
+                }
+            };
+
+        if (!td) {
+            return; 
+        }
+
+        node = this.getNodeByElement(td);
+        if (!node) { 
+            return; 
+        }
+        
+        // exception to handle deprecated event labelClick
+        // @TODO take another look at this deprecation.  It is common for people to
+        // only be interested in the label click, so why make them have to test
+        // the node type to figure out whether the click was on the label?
+        target = Event.getTarget(ev);
+        if (Dom.hasClass(target, node.labelStyle) || Dom.getAncestorByClassName(target,node.labelStyle)) {
+            this.logger.log("onLabelClick " + node.label);
+            this.fireEvent('labelClick',node);
+        }
+        
+        //  If it is a toggle cell, toggle
+        if (/\bygtv[tl][mp]h?h?/.test(td.className)) {
+            toggle();
+        } else {
+            if (this._dblClickTimer) {
+                window.clearTimeout(this._dblClickTimer);
+                this._dblClickTimer = null;
+            } else {
+                if (this._hasDblClickSubscriber) {
+                    this._dblClickTimer = window.setTimeout(function () {
+                        self._dblClickTimer = null;
+                        if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
+                            toggle();
+                        }
+                    }, 200);
+                } else {
+                    if (self.fireEvent('clickEvent', {event:ev,node:node}) !== false) { 
+                        toggle();
+                    }
+                }
+            }
+        }
+    },
+
   /**
      * Event listener for double-click events
      * @method _onDblClickEvent
      * @private
      */
-	_onDblClickEvent: function (ev) {
-		if (!this._hasDblClickSubscriber) { return; }
-		var td = this._getEventTargetTdEl(ev);
-		if (!td) {return;}
+    _onDblClickEvent: function (ev) {
+        if (!this._hasDblClickSubscriber) { return; }
+        var td = this._getEventTargetTdEl(ev);
+        if (!td) {return;}
 
-		if (!(/\bygtv[tl][mp]h?h?/.test(td.className))) {
-			this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(td)}); 
-			if (this._dblClickTimer) {
-				window.clearTimeout(this._dblClickTimer);
-				this._dblClickTimer = null;
-			}
-		}
-	},
+        if (!(/\bygtv[tl][mp]h?h?/.test(td.className))) {
+            this.fireEvent('dblClickEvent', {event:ev, node:this.getNodeByElement(td)}); 
+            if (this._dblClickTimer) {
+                window.clearTimeout(this._dblClickTimer);
+                this._dblClickTimer = null;
+            }
+        }
+    },
   /**
      * Event listener for mouse over events
      * @method _onMouseOverEvent
      * @private
      */
-	_onMouseOverEvent:function (ev) {
-		var target;
-		if ((target = this._getEventTargetTdEl(ev)) && (target = this.getNodeByElement(target)) && (target = target.getToggleEl())) {
-			target.className = target.className.replace(/\bygtv([lt])([mp])\b/gi,'ygtv$1$2h');
-		}
-	},
+    _onMouseOverEvent:function (ev) {
+        var target;
+        if ((target = this._getEventTargetTdEl(ev)) && (target = this.getNodeByElement(target)) && (target = target.getToggleEl())) {
+            target.className = target.className.replace(/\bygtv([lt])([mp])\b/gi,'ygtv$1$2h');
+        }
+    },
   /**
      * Event listener for mouse out events
      * @method _onMouseOutEvent
      * @private
      */
-	_onMouseOutEvent: function (ev) {
-		var target;
-		if ((target = this._getEventTargetTdEl(ev)) && (target = this.getNodeByElement(target)) && (target = target.getToggleEl())) {
-			target.className = target.className.replace(/\bygtv([lt])([mp])h\b/gi,'ygtv$1$2');
-		}
-	},
+    _onMouseOutEvent: function (ev) {
+        var target;
+        if ((target = this._getEventTargetTdEl(ev)) && (target = this.getNodeByElement(target)) && (target = target.getToggleEl())) {
+            target.className = target.className.replace(/\bygtv([lt])([mp])h\b/gi,'ygtv$1$2');
+        }
+    },
   /**
      * Event listener for key down events
      * @method _onKeyDownEvent
      * @private
      */
-	_onKeyDownEvent: function (ev) {
-		var target = Event.getTarget(ev),
-			node = this.getNodeByElement(target),
-			newNode = node,
-			KEY = YAHOO.util.KeyListener.KEY;
+    _onKeyDownEvent: function (ev) {
+        var target = Event.getTarget(ev),
+            node = this.getNodeByElement(target),
+            newNode = node,
+            KEY = YAHOO.util.KeyListener.KEY;
 
-		switch(ev.keyCode) {
-			case KEY.UP:
-				this.logger.log('UP');
-				do {
-					if (newNode.previousSibling) {
-						newNode = newNode.previousSibling;
-					} else {
-						newNode = newNode.parent;
-					}
-				} while (newNode && !newNode._canHaveFocus());
-				if (newNode) { newNode.focus();	}
-				Event.preventDefault(ev);
-				break;
-			case KEY.DOWN:
-				this.logger.log('DOWN');
-				do {
-					if (newNode.nextSibling) {
-						newNode = newNode.nextSibling;
-					} else {
-						newNode.expand();
-						newNode = (newNode.children.length || null) && newNode.children[0];
-					}
-				} while (newNode && !newNode._canHaveFocus);
-				if (newNode) { newNode.focus();}
-				Event.preventDefault(ev);
-				break;
-			case KEY.LEFT:
-				this.logger.log('LEFT');
-				do {
-					if (newNode.parent) {
-						newNode = newNode.parent;
-					} else {
-						newNode = newNode.previousSibling;
-					}
-				} while (newNode && !newNode._canHaveFocus());
-				if (newNode) { newNode.focus();}
-				Event.preventDefault(ev);
-				break;
-			case KEY.RIGHT:
-				this.logger.log('RIGHT');
-				do {
-					newNode.expand();
-					if (newNode.children.length) {
-						newNode = newNode.children[0];
-					} else {
-						newNode = newNode.nextSibling;
-					}
-				} while (newNode && !newNode._canHaveFocus());
-				if (newNode) { newNode.focus();}
-				Event.preventDefault(ev);
-				break;
-			case KEY.ENTER:
-				this.logger.log('ENTER: ' + newNode.href);
-				if (node.href) {
-					if (node.target) {
-						window.open(node.href,node.target);
-					} else {
-						window.location(node.href);
-					}
-				} else {
-					node.toggle();
-				}
-				this.fireEvent('enterKeyPressed',node);
-				Event.preventDefault(ev);
-				break;
-			case KEY.HOME:
-				this.logger.log('HOME');
-				newNode = this.getRoot();
-				if (newNode.children.length) {newNode = newNode.children[0];}
-				if (newNode._canHaveFocus()) { newNode.focus(); }
-				Event.preventDefault(ev);
-				break;
-			case KEY.END:
-				this.logger.log('END');
-				newNode = newNode.parent.children;
-				newNode = newNode[newNode.length -1];
-				if (newNode._canHaveFocus()) { newNode.focus(); }
-				Event.preventDefault(ev);
-				break;
-			// case KEY.PAGE_UP:
-				// this.logger.log('PAGE_UP');
-				// break;
-			// case KEY.PAGE_DOWN:
-				// this.logger.log('PAGE_DOWN');
-				// break;
-			case 107:  // plus key
-				if (ev.shiftKey) {
-					this.logger.log('Shift-PLUS');
-					node.parent.expandAll();
-				} else {
-					this.logger.log('PLUS');
-					node.expand();
-				}
-				break;
-			case 109: // minus key
-				if (ev.shiftKey) {
-					this.logger.log('Shift-MINUS');
-					node.parent.collapseAll();
-				} else {
-					this.logger.log('MINUS');
-					node.collapse();
-				}
-				break;
-			default:
-				break;
-		}
-	},
+        switch(ev.keyCode) {
+            case KEY.UP:
+                this.logger.log('UP');
+                do {
+                    if (newNode.previousSibling) {
+                        newNode = newNode.previousSibling;
+                    } else {
+                        newNode = newNode.parent;
+                    }
+                } while (newNode && !newNode._canHaveFocus());
+                if (newNode) { newNode.focus(); }
+                Event.preventDefault(ev);
+                break;
+            case KEY.DOWN:
+                this.logger.log('DOWN');
+                do {
+                    if (newNode.nextSibling) {
+                        newNode = newNode.nextSibling;
+                    } else {
+                        newNode.expand();
+                        newNode = (newNode.children.length || null) && newNode.children[0];
+                    }
+                } while (newNode && !newNode._canHaveFocus);
+                if (newNode) { newNode.focus();}
+                Event.preventDefault(ev);
+                break;
+            case KEY.LEFT:
+                this.logger.log('LEFT');
+                do {
+                    if (newNode.parent) {
+                        newNode = newNode.parent;
+                    } else {
+                        newNode = newNode.previousSibling;
+                    }
+                } while (newNode && !newNode._canHaveFocus());
+                if (newNode) { newNode.focus();}
+                Event.preventDefault(ev);
+                break;
+            case KEY.RIGHT:
+                this.logger.log('RIGHT');
+                do {
+                    newNode.expand();
+                    if (newNode.children.length) {
+                        newNode = newNode.children[0];
+                    } else {
+                        newNode = newNode.nextSibling;
+                    }
+                } while (newNode && !newNode._canHaveFocus());
+                if (newNode) { newNode.focus();}
+                Event.preventDefault(ev);
+                break;
+            case KEY.ENTER:
+                this.logger.log('ENTER: ' + newNode.href);
+                if (node.href) {
+                    if (node.target) {
+                        window.open(node.href,node.target);
+                    } else {
+                        window.location(node.href);
+                    }
+                } else {
+                    node.toggle();
+                }
+                this.fireEvent('enterKeyPressed',node);
+                Event.preventDefault(ev);
+                break;
+            case KEY.HOME:
+                this.logger.log('HOME');
+                newNode = this.getRoot();
+                if (newNode.children.length) {newNode = newNode.children[0];}
+                if (newNode._canHaveFocus()) { newNode.focus(); }
+                Event.preventDefault(ev);
+                break;
+            case KEY.END:
+                this.logger.log('END');
+                newNode = newNode.parent.children;
+                newNode = newNode[newNode.length -1];
+                if (newNode._canHaveFocus()) { newNode.focus(); }
+                Event.preventDefault(ev);
+                break;
+            // case KEY.PAGE_UP:
+                // this.logger.log('PAGE_UP');
+                // break;
+            // case KEY.PAGE_DOWN:
+                // this.logger.log('PAGE_DOWN');
+                // break;
+            case 107:  // plus key
+                if (ev.shiftKey) {
+                    this.logger.log('Shift-PLUS');
+                    node.parent.expandAll();
+                } else {
+                    this.logger.log('PLUS');
+                    node.expand();
+                }
+                break;
+            case 109: // minus key
+                if (ev.shiftKey) {
+                    this.logger.log('Shift-MINUS');
+                    node.parent.collapseAll();
+                } else {
+                    this.logger.log('MINUS');
+                    node.collapse();
+                }
+                break;
+            default:
+                break;
+        }
+    },
     /**
      * Renders the tree boilerplate and visible nodes
      * @method render
      */
     render: function() {
         var html = this.root.getHtml(),
-			el = this.getEl();
+            el = this.getEl();
         el.innerHTML = html;
-		if (!this._hasEvents) {
-			Event.on(el, 'click', this._onClickEvent, this, true);
-			Event.on(el, 'dblclick', this._onDblClickEvent, this, true);
-			Event.on(el, 'mouseover', this._onMouseOverEvent, this, true);
-			Event.on(el, 'mouseout', this._onMouseOutEvent, this, true);
-			Event.on(el, 'keydown', this._onKeyDownEvent, this, true);
-		}
-		this._hasEvents = true;
+        if (!this._hasEvents) {
+            Event.on(el, 'click', this._onClickEvent, this, true);
+            Event.on(el, 'dblclick', this._onDblClickEvent, this, true);
+            Event.on(el, 'mouseover', this._onMouseOverEvent, this, true);
+            Event.on(el, 'mouseout', this._onMouseOutEvent, this, true);
+            Event.on(el, 'keydown', this._onKeyDownEvent, this, true);
+        }
+        this._hasEvents = true;
     },
-	
+    
   /**
      * Returns the tree's host element
      * @method getEl
@@ -920,12 +944,12 @@ TV.prototype = {
      */
     getNodeByProperty: function(property, value) {
         for (var i in this._nodes) {
-			if (this._nodes.hasOwnProperty(i)) {
-	            var n = this._nodes[i];
-	            if ((property in n && n[property] == value) || (n.data && value == n.data[property])) {
-	                return n;
-	            }
-			}
+            if (this._nodes.hasOwnProperty(i)) {
+                var n = this._nodes[i];
+                if ((property in n && n[property] == value) || (n.data && value == n.data[property])) {
+                    return n;
+                }
+            }
         }
 
         return null;
@@ -942,12 +966,12 @@ TV.prototype = {
     getNodesByProperty: function(property, value) {
         var values = [];
         for (var i in this._nodes) {
-			if (this._nodes.hasOwnProperty(i)) {
-	            var n = this._nodes[i];
-	            if ((property in n && n[property] == value) || (n.data && value == n.data[property])) {
-	                values.push(n);
-	            }
-			}
+            if (this._nodes.hasOwnProperty(i)) {
+                var n = this._nodes[i];
+                if ((property in n && n[property] == value) || (n.data && value == n.data[property])) {
+                    values.push(n);
+                }
+            }
         }
 
         return (values.length) ? values : null;
@@ -1123,33 +1147,33 @@ TV.prototype = {
         delete this._nodes[node.index];
     },
 
-	/**
-	* Nulls out the entire TreeView instance and related objects, removes attached
-	* event listeners, and clears out DOM elements inside the container. After
-	* calling this method, the instance reference should be expliclitly nulled by
-	* implementer, as in myDataTable = null. Use with caution!
-	*
-	* @method destroy
-	*/
-	destroy : function() {
-		// Since the label editor can be separated from the main TreeView control
-		// the destroy method for it might not be there.
-		if (this._destroyEditor) { this._destroyEditor(); }
-		var el = this.getEl();
-		Event.removeListener(el,'click');
-		Event.removeListener(el,'dblclick');
-		Event.removeListener(el,'mouseover');
-		Event.removeListener(el,'mouseout');
-		Event.removeListener(el,'keydown');
-		for (var i = 0 ; i < this._nodes.length; i++) {
-			var node = this._nodes[i];
-			if (node && node.destroy) {node.destroy(); }
-		}
-		el.innerHTML = '';
-		this._hasEvents = false;
-	},
-		
-			
+    /**
+    * Nulls out the entire TreeView instance and related objects, removes attached
+    * event listeners, and clears out DOM elements inside the container. After
+    * calling this method, the instance reference should be expliclitly nulled by
+    * implementer, as in myDataTable = null. Use with caution!
+    *
+    * @method destroy
+    */
+    destroy : function() {
+        // Since the label editor can be separated from the main TreeView control
+        // the destroy method for it might not be there.
+        if (this._destroyEditor) { this._destroyEditor(); }
+        var el = this.getEl();
+        Event.removeListener(el,'click');
+        Event.removeListener(el,'dblclick');
+        Event.removeListener(el,'mouseover');
+        Event.removeListener(el,'mouseout');
+        Event.removeListener(el,'keydown');
+        for (var i = 0 ; i < this._nodes.length; i++) {
+            var node = this._nodes[i];
+            if (node && node.destroy) {node.destroy(); }
+        }
+        el.innerHTML = '';
+        this._hasEvents = false;
+    },
+        
+            
 
 
     /**
@@ -1196,41 +1220,41 @@ TV.prototype = {
      * @deprecated use treeobj.subscribe("collapse") instead
      */
     onCollapse: function(node) { },
-	
-	/**
-	* Sets the value of a property for all loaded nodes in the tree.
-	* @method setNodesProperty
-	* @param name {string} Name of the property to be set
-	* @param value {any} value to be set
-	* @param refresh {boolean} if present and true, it does a refresh
-	*/
-	setNodesProperty: function(name, value, refresh) {
-		this.root.setNodesProperty(name,value);
-		if (refresh) {
-			this.root.refresh();
-		}
-	},
-	/**
-	* Event listener to toggle node highlight.
-	* Can be assigned as listener to clickEvent, dblClickEvent and enterKeyPressed.
-	* It returns false to prevent the default action.
-	* @method onEventToggleHighlight
-	* @param oArgs {any} it takes the arguments of any of the events mentioned above
-	* @return {false} Always cancels the default action for the event
-	*/
-	onEventToggleHighlight: function (oArgs) {
-		var node;
-		if ('node' in oArgs && oArgs.node instanceof Widget.Node) {
-			node = oArgs.node;
-		} else if (oArgs instanceof Widget.Node) {
-			node = oArgs;
-		} else {
-			return false;
-		}
-		node.toggleHighlight();
-		return false;
-	}
-		
+    
+    /**
+    * Sets the value of a property for all loaded nodes in the tree.
+    * @method setNodesProperty
+    * @param name {string} Name of the property to be set
+    * @param value {any} value to be set
+    * @param refresh {boolean} if present and true, it does a refresh
+    */
+    setNodesProperty: function(name, value, refresh) {
+        this.root.setNodesProperty(name,value);
+        if (refresh) {
+            this.root.refresh();
+        }
+    },
+    /**
+    * Event listener to toggle node highlight.
+    * Can be assigned as listener to clickEvent, dblClickEvent and enterKeyPressed.
+    * It returns false to prevent the default action.
+    * @method onEventToggleHighlight
+    * @param oArgs {any} it takes the arguments of any of the events mentioned above
+    * @return {false} Always cancels the default action for the event
+    */
+    onEventToggleHighlight: function (oArgs) {
+        var node;
+        if ('node' in oArgs && oArgs.node instanceof Widget.Node) {
+            node = oArgs.node;
+        } else if (oArgs instanceof Widget.Node) {
+            node = oArgs;
+        } else {
+            return false;
+        }
+        node.toggleHighlight();
+        return false;
+    }
+        
 
 };
 
@@ -1305,7 +1329,7 @@ TV.getNode = function(treeId, nodeIndex) {
      * @final
      * @default "ygtvfocus"
 
-	*/ 
+    */ 
 TV.FOCUS_CLASS_NAME = 'ygtvfocus';
 
 /**
@@ -1350,9 +1374,9 @@ TV.preload = function(e, prefix) {
 Event.addListener(window,"load", TV.preload);
 })();
 (function () {
-	var Dom = YAHOO.util.Dom,
-		Lang = YAHOO.lang,
-		Event = YAHOO.util.Event;
+    var Dom = YAHOO.util.Dom,
+        Lang = YAHOO.lang,
+        Event = YAHOO.util.Event;
 /**
  * The base class for all tree nodes.  The node's presentation and behavior in
  * response to mouse events is handled in Node subclasses.
@@ -1549,15 +1573,15 @@ YAHOO.widget.Node.prototype = {
      * @type string
      */
     contentElId: null,
-	
+    
 /** 
  * Enables node highlighting.  If true, the node can be highlighted and/or propagate highlighting
  * @property enableHighlight
  * @type boolean
  * @default true
  */
-	enableHighlight: true,
-	
+    enableHighlight: true,
+    
 /** 
  * Stores the highlight state.  Can be any of:
  * <ul>
@@ -1625,25 +1649,25 @@ YAHOO.widget.Node.prototype = {
      */
     init: function(oData, oParent, expanded) {
 
-		this.data = {};
+        this.data = {};
         this.children   = [];
         this.index      = YAHOO.widget.TreeView.nodeCount;
         ++YAHOO.widget.TreeView.nodeCount;
-		this.contentElId = "ygtvcontentel" + this.index;
-		
-		if (Lang.isObject(oData)) {
-			for (var property in oData) {
-				if (oData.hasOwnProperty(property)) {
-					if (property.charAt(0) != '_'  && !Lang.isUndefined(this[property]) && !Lang.isFunction(this[property]) ) {
-						this[property] = oData[property];
-					} else {
-						this.data[property] = oData[property];
-					}
-				}
-			}
-		}
-		if (!Lang.isUndefined(expanded) ) {	this.expanded  = expanded;	}
-		
+        this.contentElId = "ygtvcontentel" + this.index;
+        
+        if (Lang.isObject(oData)) {
+            for (var property in oData) {
+                if (oData.hasOwnProperty(property)) {
+                    if (property.charAt(0) != '_'  && !Lang.isUndefined(this[property]) && !Lang.isFunction(this[property]) ) {
+                        this[property] = oData[property];
+                    } else {
+                        this.data[property] = oData[property];
+                    }
+                }
+            }
+        }
+        if (!Lang.isUndefined(expanded) ) { this.expanded  = expanded;  }
+        
         this.logger     = new YAHOO.widget.LogWriter(this.toString());
 
         /**
@@ -1830,11 +1854,11 @@ YAHOO.widget.Node.prototype = {
      * @return Node[]
      */
     getSiblings: function() {
-		var sib =  this.parent.children.slice(0);
-		for (var i=0;i < sib.length && sib[i] != this;i++) {}
-		sib.splice(i,1);
-		if (sib.length) { return sib; }
-		return null;
+        var sib =  this.parent.children.slice(0);
+        for (var i=0;i < sib.length && sib[i] != this;i++) {}
+        sib.splice(i,1);
+        if (sib.length) { return sib; }
+        return null;
     },
 
     /**
@@ -1928,10 +1952,10 @@ YAHOO.widget.Node.prototype = {
         return Dom.get(this.getToggleElId());
     },
     /**
-	* Returns the outer html element for this node's content
-	* @method getContentEl
-	* @return {HTMLElement} the element
-	*/
+    * Returns the outer html element for this node's content
+    * @method getContentEl
+    * @return {HTMLElement} the element
+    */
     getContentEl: function() { 
         return Dom.get(this.contentElId);
     },
@@ -2131,7 +2155,7 @@ YAHOO.widget.Node.prototype = {
      * @method expandAll
      */
     expandAll: function() { 
-		var l = this.children.length;
+        var l = this.children.length;
         for (var i=0;i<l;++i) {
             var c = this.children[i];
             if (c.isDynamic()) {
@@ -2261,7 +2285,7 @@ YAHOO.widget.Node.prototype = {
 
         this.childrenRendered = false;
 
-		return ['<div class="ygtvitem" id="' , this.getElId() , '">' ,this.getNodeHtml() , this.getChildrenHtml() ,'</div>'].join("");
+        return ['<div class="ygtvitem" id="' , this.getElId() , '">' ,this.getNodeHtml() , this.getChildrenHtml() ,'</div>'].join("");
     },
 
     /**
@@ -2433,12 +2457,12 @@ YAHOO.widget.Node.prototype = {
         var sb = [];
 
         sb[sb.length] = '<table id="ygtvtableel' + this.index + '"border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
-		if (this.enableHighlight) {
-			sb[sb.length] = ' ygtv-highlight' + this.highlightState;
-		}
-		if (this.className) {
-			sb[sb.length] = ' ' + this.className;
-		}			
+        if (this.enableHighlight) {
+            sb[sb.length] = ' ygtv-highlight' + this.highlightState;
+        }
+        if (this.className) {
+            sb[sb.length] = ' ' + this.className;
+        }           
         sb[sb.length] = '"><tr class="ygtvrow">';
         
         for (var i=0;i<this.depth;++i) {
@@ -2448,30 +2472,30 @@ YAHOO.widget.Node.prototype = {
         if (this.hasIcon) {
             sb[sb.length] = '<td id="' + this.getToggleElId();
             sb[sb.length] = '" class="ygtvcell ';
-			sb[sb.length] = this.getStyle() ;
+            sb[sb.length] = this.getStyle() ;
             sb[sb.length] = '"><a href="#" class="ygtvspacer">&nbsp;</a></td>';
         }
 
         sb[sb.length] = '<td id="' + this.contentElId; 
         sb[sb.length] = '" class="ygtvcell ';
-		sb[sb.length] = this.contentStyle  + ' ygtvcontent" ';
+        sb[sb.length] = this.contentStyle  + ' ygtvcontent" ';
         sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
         sb[sb.length] = ' >';
-		sb[sb.length] = this.getContentHtml();
+        sb[sb.length] = this.getContentHtml();
         sb[sb.length] = '</td></tr></table>';
 
         return sb.join("");
 
     },
-	/**
+    /**
      * Get the markup for the contents of the node.  This is designed to be overrided so that we can
      * support different types of nodes.
      * @method getContentHtml
      * @return {string} The HTML that will render the content of this node.
      */
-	getContentHtml: function () {
-		return "";
-	},
+    getContentHtml: function () {
+        return "";
+    },
 
     /**
      * Regenerates the html for this node and its children.  To be used when the
@@ -2485,7 +2509,7 @@ YAHOO.widget.Node.prototype = {
         if (this.hasIcon) {
             var el = this.getToggleEl();
             if (el) {
-				el.className = el.className.replace(/\bygtv[lt][nmp]h*\b/gi,this.getStyle());
+                el.className = el.className.replace(/\bygtv[lt][nmp]h*\b/gi,this.getStyle());
             }
         }
     },
@@ -2498,108 +2522,108 @@ YAHOO.widget.Node.prototype = {
     toString: function() {
         return this._type + " (" + this.index + ")";
     },
-	/**
-	* array of items that had the focus set on them
-	* so that they can be cleaned when focus is lost
-	* @property _focusHighlightedItems
-	* @type Array of DOM elements
-	* @private
-	*/
-	_focusHighlightedItems: [],
-	/**
-	* DOM element that actually got the browser focus
-	* @property _focusedItem
-	* @type DOM element
-	* @private
-	*/
-	_focusedItem: null,
-	
-	/**
-	* Returns true if there are any elements in the node that can 
-	* accept the real actual browser focus
-	* @method _canHaveFocus
-	* @return {boolean} success
-	* @private
-	*/
-	_canHaveFocus: function() {
-		return this.getEl().getElementsByTagName('a').length > 0;
-	},
-	/**
-	* Removes the focus of previously selected Node
-	* @method _removeFocus
-	* @private
-	*/
-	_removeFocus:function () {
-		if (this._focusedItem) {
-			Event.removeListener(this._focusedItem,'blur');
-			this._focusedItem = null;
-		}
-		var el;
-		while ((el = this._focusHighlightedItems.shift())) {  // yes, it is meant as an assignment, really
-			Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
-		}
-	},
-	/**
-	* Sets the focus on the node element.
-	* It will only be able to set the focus on nodes that have anchor elements in it.  
-	* Toggle or branch icons have anchors and can be focused on.  
-	* If will fail in nodes that have no anchor
-	* @method focus
-	* @return {boolean} success
-	*/
-	focus: function () {
-		var focused = false, self = this;
+    /**
+    * array of items that had the focus set on them
+    * so that they can be cleaned when focus is lost
+    * @property _focusHighlightedItems
+    * @type Array of DOM elements
+    * @private
+    */
+    _focusHighlightedItems: [],
+    /**
+    * DOM element that actually got the browser focus
+    * @property _focusedItem
+    * @type DOM element
+    * @private
+    */
+    _focusedItem: null,
+    
+    /**
+    * Returns true if there are any elements in the node that can 
+    * accept the real actual browser focus
+    * @method _canHaveFocus
+    * @return {boolean} success
+    * @private
+    */
+    _canHaveFocus: function() {
+        return this.getEl().getElementsByTagName('a').length > 0;
+    },
+    /**
+    * Removes the focus of previously selected Node
+    * @method _removeFocus
+    * @private
+    */
+    _removeFocus:function () {
+        if (this._focusedItem) {
+            Event.removeListener(this._focusedItem,'blur');
+            this._focusedItem = null;
+        }
+        var el;
+        while ((el = this._focusHighlightedItems.shift())) {  // yes, it is meant as an assignment, really
+            Dom.removeClass(el,YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
+        }
+    },
+    /**
+    * Sets the focus on the node element.
+    * It will only be able to set the focus on nodes that have anchor elements in it.  
+    * Toggle or branch icons have anchors and can be focused on.  
+    * If will fail in nodes that have no anchor
+    * @method focus
+    * @return {boolean} success
+    */
+    focus: function () {
+        var focused = false, self = this;
 
-		if (this.tree.currentFocus) {
-			this.tree.currentFocus._removeFocus();
-		}
-	
-		var  expandParent = function (node) {
-			if (node.parent) {
-				expandParent(node.parent);
-				node.parent.expand();
-			} 
-		};
-		expandParent(this);
+        if (this.tree.currentFocus) {
+            this.tree.currentFocus._removeFocus();
+        }
+    
+        var  expandParent = function (node) {
+            if (node.parent) {
+                expandParent(node.parent);
+                node.parent.expand();
+            } 
+        };
+        expandParent(this);
 
-		Dom.getElementsBy  ( 
-			function (el) {
-				return /ygtv(([tl][pmn]h?)|(content))/.test(el.className);
-			} ,
-			'td' , 
-			self.getEl().firstChild , 
-			function (el) {
-				Dom.addClass(el, YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
-				if (!focused) { 
-					var aEl = el.getElementsByTagName('a');
-					if (aEl.length) {
-						aEl = aEl[0];
-						aEl.focus();
-						self._focusedItem = aEl;
-						Event.on(aEl,'blur',function () {
-							//console.log('f1');
-							self.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
-							self.tree.currentFocus = null;
-							self._removeFocus();
-						});
-						focused = true;
-					}
-				}
-				self._focusHighlightedItems.push(el);
-			}
-		);
-		if (focused) { 
-							//console.log('f2');
-			this.tree.fireEvent('focusChanged',{oldNode:this.tree.currentFocus,newNode:this});
-			this.tree.currentFocus = this;
-		} else {
-							//console.log('f3');
-			this.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
-			this.tree.currentFocus = null;
-			this._removeFocus(); 
-		}
-		return focused;
-	},
+        Dom.getElementsBy  ( 
+            function (el) {
+                return /ygtv(([tl][pmn]h?)|(content))/.test(el.className);
+            } ,
+            'td' , 
+            self.getEl().firstChild , 
+            function (el) {
+                Dom.addClass(el, YAHOO.widget.TreeView.FOCUS_CLASS_NAME );
+                if (!focused) { 
+                    var aEl = el.getElementsByTagName('a');
+                    if (aEl.length) {
+                        aEl = aEl[0];
+                        aEl.focus();
+                        self._focusedItem = aEl;
+                        Event.on(aEl,'blur',function () {
+                            //console.log('f1');
+                            self.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
+                            self.tree.currentFocus = null;
+                            self._removeFocus();
+                        });
+                        focused = true;
+                    }
+                }
+                self._focusHighlightedItems.push(el);
+            }
+        );
+        if (focused) { 
+                            //console.log('f2');
+            this.tree.fireEvent('focusChanged',{oldNode:this.tree.currentFocus,newNode:this});
+            this.tree.currentFocus = this;
+        } else {
+                            //console.log('f3');
+            this.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
+            this.tree.currentFocus = null;
+            this._removeFocus(); 
+        }
+        return focused;
+    },
 
   /**
      * Count of nodes in a branch
@@ -2607,13 +2631,13 @@ YAHOO.widget.Node.prototype = {
      * @return {int} number of nodes in the branch
      */
     getNodeCount: function() {
-		for (var i = 0, count = 0;i< this.children.length;i++) {
-			count += this.children[i].getNodeCount();
-		}
+        for (var i = 0, count = 0;i< this.children.length;i++) {
+            count += this.children[i].getNodeCount();
+        }
         return count + 1;
     },
-	
-	  /**
+    
+      /**
      * Returns an object which could be used to build a tree out of this node and its children.
      * It can be passed to the tree constructor to reproduce this node as a tree.
      * It will return false if the node or any children loads dynamically, regardless of whether it is loaded or not.
@@ -2621,35 +2645,35 @@ YAHOO.widget.Node.prototype = {
      * @return {Object | false}  definition of the tree or false if the node or any children is defined as dynamic
      */
     getNodeDefinition: function() {
-	
-		if (this.isDynamic()) { return false; }
-		
-		var def, defs = Lang.merge(this.data), children = []; 
-		
-		
+    
+        if (this.isDynamic()) { return false; }
+        
+        var def, defs = Lang.merge(this.data), children = []; 
+        
+        
 
-		if (this.expanded) {defs.expanded = this.expanded; }
-		if (!this.multiExpand) { defs.multiExpand = this.multiExpand; }
-		if (!this.renderHidden) { defs.renderHidden = this.renderHidden; }
-		if (!this.hasIcon) { defs.hasIcon = this.hasIcon; }
-		if (this.nowrap) { defs.nowrap = this.nowrap; }
-		if (this.className) { defs.className = this.className; }
-		if (this.editable) { defs.editable = this.editable; }
-		if (this.enableHighlight) { defs.enableHighlight = this.enableHighlight; }
-		if (this.highlightState) { defs.highlightState = this.highlightState; }
-		if (this.propagateHighlightUp) { defs.propagateHighlightUp = this.propagateHighlightUp; }
-		if (this.propagateHighlightDown) { defs.propagateHighlightDown = this.propagateHighlightDown; }
-		defs.type = this._type;
-		
-		
-		
-		for (var i = 0; i < this.children.length;i++) {
-			def = this.children[i].getNodeDefinition();
-			if (def === false) { return false;}
-			children.push(def);
-		}
-		if (children.length) { defs.children = children; }
-		return defs;
+        if (this.expanded) {defs.expanded = this.expanded; }
+        if (!this.multiExpand) { defs.multiExpand = this.multiExpand; }
+        if (!this.renderHidden) { defs.renderHidden = this.renderHidden; }
+        if (!this.hasIcon) { defs.hasIcon = this.hasIcon; }
+        if (this.nowrap) { defs.nowrap = this.nowrap; }
+        if (this.className) { defs.className = this.className; }
+        if (this.editable) { defs.editable = this.editable; }
+        if (this.enableHighlight) { defs.enableHighlight = this.enableHighlight; }
+        if (this.highlightState) { defs.highlightState = this.highlightState; }
+        if (this.propagateHighlightUp) { defs.propagateHighlightUp = this.propagateHighlightUp; }
+        if (this.propagateHighlightDown) { defs.propagateHighlightDown = this.propagateHighlightDown; }
+        defs.type = this._type;
+        
+        
+        
+        for (var i = 0; i < this.children.length;i++) {
+            def = this.children[i].getNodeDefinition();
+            if (def === false) { return false;}
+            children.push(def);
+        }
+        if (children.length) { defs.children = children; }
+        return defs;
     },
 
 
@@ -2661,149 +2685,149 @@ YAHOO.widget.Node.prototype = {
     getToggleLink: function() {
         return 'return false;';
     },
-	
-	/**
-	* Sets the value of property for this node and all loaded descendants.  
-	* Only public and defined properties can be set, not methods.  
-	* Values for unknown properties will be assigned to the refNode.data object
-	* @method setNodesProperty
-	* @param name {string} Name of the property to be set
-	* @param value {any} value to be set
-	* @param refresh {boolean} if present and true, it does a refresh
-	*/
-	setNodesProperty: function(name, value, refresh) {
-		if (name.charAt(0) != '_'  && !Lang.isUndefined(this[name]) && !Lang.isFunction(this[name]) ) {
-			this[name] = value;
-		} else {
-			this.data[name] = value;
-		}
-		for (var i = 0; i < this.children.length;i++) {
-			this.children[i].setNodesProperty(name,value);
-		}
-		if (refresh) {
-			this.refresh();
-		}
-	},
-	/**
-	* Toggles the highlighted state of a Node
-	* @method toggleHighlight
-	*/
-	toggleHighlight: function() {
-		if (this.enableHighlight) {
-			// unhighlights only if fully highligthed.  For not or partially highlighted it will highlight
-			if (this.highlightState == 1) {
-				this.unhighlight();
-			} else {
-				this.highlight();
-			}
-		}
-	},
-	
-	/**
-	* Turns highlighting on node.  
-	* @method highlight
-	* @param _silent {boolean} optional, don't fire the highlightEvent
-	*/
-	highlight: function(_silent) {
-		if (this.enableHighlight) {
-			if (this.tree.singleNodeHighlight) {
-				if (this.tree._currentlyHighlighted) {
-					this.tree._currentlyHighlighted.unhighlight();
-				}
-				this.tree._currentlyHighlighted = this;
-			}
-			this.highlightState = 1;
-			this._setHighlightClassName();
-			if (this.propagateHighlightDown) {
-				for (var i = 0;i < this.children.length;i++) {
-					this.children[i].highlight(true);
-				}
-			}
-			if (this.propagateHighlightUp) {
-				if (this.parent) {
-					this.parent._childrenHighlighted();
-				}
-			}
-			if (!_silent) {
-				this.tree.fireEvent('highlightEvent',this);
-			}
-		}
-	},
-	/**
-	* Turns highlighting off a node.  
-	* @method unhighlight
-	* @param _silent {boolean} optional, don't fire the highlightEvent
-	*/
-	unhighlight: function(_silent) {
-		if (this.enableHighlight) {
-			this.highlightState = 0;
-			this._setHighlightClassName();
-			if (this.propagateHighlightDown) {
-				for (var i = 0;i < this.children.length;i++) {
-					this.children[i].unhighlight(true);
-				}
-			}
-			if (this.propagateHighlightUp) {
-				if (this.parent) {
-					this.parent._childrenHighlighted();
-				}
-			}
-			if (!_silent) {
-				this.tree.fireEvent('highlightEvent',this);
-			}
-		}
-	},
-	/** 
-	* Checks whether all or part of the children of a node are highlighted and
-	* sets the node highlight to full, none or partial highlight.
-	* If set to propagate it will further call the parent
-	* @method _childrenHighlighted
-	* @private
-	*/
-	_childrenHighlighted: function() {
-		var yes = false, no = false;
-		if (this.enableHighlight) {
-			for (var i = 0;i < this.children.length;i++) {
-				switch(this.children[i].highlightState) {
-					case 0:
-						no = true;
-						break;
-					case 1:
-						yes = true;
-						break;
-					case 2:
-						yes = no = true;
-						break;
-				}
-			}
-			if (yes && no) {
-				this.highlightState = 2;
-			} else if (yes) {
-				this.highlightState = 1;
-			} else {
-				this.highlightState = 0;
-			}
-			this._setHighlightClassName();
-			if (this.propagateHighlightUp) {
-				if (this.parent) {
-					this.parent._childrenHighlighted();
-				}
-			}
-		}
-	},
-	
-	/**
-	* Changes the classNames on the toggle and content containers to reflect the current highlighting
-	* @method _setHighlightClassName
-	* @private
-	*/
-	_setHighlightClassName: function() {
-		var el = Dom.get('ygtvtableel' + this.index);
-		if (el) {
-			el.className = el.className.replace(/\bygtv-highlight\d\b/gi,'ygtv-highlight' + this.highlightState);
-		}
-	}
-	
+    
+    /**
+    * Sets the value of property for this node and all loaded descendants.  
+    * Only public and defined properties can be set, not methods.  
+    * Values for unknown properties will be assigned to the refNode.data object
+    * @method setNodesProperty
+    * @param name {string} Name of the property to be set
+    * @param value {any} value to be set
+    * @param refresh {boolean} if present and true, it does a refresh
+    */
+    setNodesProperty: function(name, value, refresh) {
+        if (name.charAt(0) != '_'  && !Lang.isUndefined(this[name]) && !Lang.isFunction(this[name]) ) {
+            this[name] = value;
+        } else {
+            this.data[name] = value;
+        }
+        for (var i = 0; i < this.children.length;i++) {
+            this.children[i].setNodesProperty(name,value);
+        }
+        if (refresh) {
+            this.refresh();
+        }
+    },
+    /**
+    * Toggles the highlighted state of a Node
+    * @method toggleHighlight
+    */
+    toggleHighlight: function() {
+        if (this.enableHighlight) {
+            // unhighlights only if fully highligthed.  For not or partially highlighted it will highlight
+            if (this.highlightState == 1) {
+                this.unhighlight();
+            } else {
+                this.highlight();
+            }
+        }
+    },
+    
+    /**
+    * Turns highlighting on node.  
+    * @method highlight
+    * @param _silent {boolean} optional, don't fire the highlightEvent
+    */
+    highlight: function(_silent) {
+        if (this.enableHighlight) {
+            if (this.tree.singleNodeHighlight) {
+                if (this.tree._currentlyHighlighted) {
+                    this.tree._currentlyHighlighted.unhighlight();
+                }
+                this.tree._currentlyHighlighted = this;
+            }
+            this.highlightState = 1;
+            this._setHighlightClassName();
+            if (this.propagateHighlightDown) {
+                for (var i = 0;i < this.children.length;i++) {
+                    this.children[i].highlight(true);
+                }
+            }
+            if (this.propagateHighlightUp) {
+                if (this.parent) {
+                    this.parent._childrenHighlighted();
+                }
+            }
+            if (!_silent) {
+                this.tree.fireEvent('highlightEvent',this);
+            }
+        }
+    },
+    /**
+    * Turns highlighting off a node.  
+    * @method unhighlight
+    * @param _silent {boolean} optional, don't fire the highlightEvent
+    */
+    unhighlight: function(_silent) {
+        if (this.enableHighlight) {
+            this.highlightState = 0;
+            this._setHighlightClassName();
+            if (this.propagateHighlightDown) {
+                for (var i = 0;i < this.children.length;i++) {
+                    this.children[i].unhighlight(true);
+                }
+            }
+            if (this.propagateHighlightUp) {
+                if (this.parent) {
+                    this.parent._childrenHighlighted();
+                }
+            }
+            if (!_silent) {
+                this.tree.fireEvent('highlightEvent',this);
+            }
+        }
+    },
+    /** 
+    * Checks whether all or part of the children of a node are highlighted and
+    * sets the node highlight to full, none or partial highlight.
+    * If set to propagate it will further call the parent
+    * @method _childrenHighlighted
+    * @private
+    */
+    _childrenHighlighted: function() {
+        var yes = false, no = false;
+        if (this.enableHighlight) {
+            for (var i = 0;i < this.children.length;i++) {
+                switch(this.children[i].highlightState) {
+                    case 0:
+                        no = true;
+                        break;
+                    case 1:
+                        yes = true;
+                        break;
+                    case 2:
+                        yes = no = true;
+                        break;
+                }
+            }
+            if (yes && no) {
+                this.highlightState = 2;
+            } else if (yes) {
+                this.highlightState = 1;
+            } else {
+                this.highlightState = 0;
+            }
+            this._setHighlightClassName();
+            if (this.propagateHighlightUp) {
+                if (this.parent) {
+                    this.parent._childrenHighlighted();
+                }
+            }
+        }
+    },
+    
+    /**
+    * Changes the classNames on the toggle and content containers to reflect the current highlighting
+    * @method _setHighlightClassName
+    * @private
+    */
+    _setHighlightClassName: function() {
+        var el = Dom.get('ygtvtableel' + this.index);
+        if (el) {
+            el.className = el.className.replace(/\bygtv-highlight\d\b/gi,'ygtv-highlight' + this.highlightState);
+        }
+    }
+    
 };
 
 YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
@@ -2818,16 +2842,16 @@ YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
  * @constructor
  */
 YAHOO.widget.RootNode = function(oTree) {
-	// Initialize the node with null params.  The root node is a
-	// special case where the node has no presentation.  So we have
-	// to alter the standard properties a bit.
-	this.init(null, null, true);
-	
-	/*
-	 * For the root node, we get the tree reference from as a param
-	 * to the constructor instead of from the parent element.
-	 */
-	this.tree = oTree;
+    // Initialize the node with null params.  The root node is a
+    // special case where the node has no presentation.  So we have
+    // to alter the standard properties a bit.
+    this.init(null, null, true);
+    
+    /*
+     * For the root node, we get the tree reference from as a param
+     * to the constructor instead of from the parent element.
+     */
+    this.tree = oTree;
 };
 
 YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
@@ -2840,7 +2864,7 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
      * @default "RootNode"
      */
     _type: "RootNode",
-	
+    
     // overrides YAHOO.widget.Node
     getNodeHtml: function() { 
         return ""; 
@@ -2853,7 +2877,7 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
     loadComplete: function() { 
         this.tree.draw();
     },
-	
+    
    /**
      * Count of nodes in tree.  
     * It overrides Nodes.getNodeCount because the root node should not be counted.
@@ -2861,9 +2885,9 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
      * @return {int} number of nodes in the tree
      */
     getNodeCount: function() {
-		for (var i = 0, count = 0;i< this.children.length;i++) {
-			count += this.children[i].getNodeCount();
-		}
+        for (var i = 0, count = 0;i< this.children.length;i++) {
+            count += this.children[i].getNodeCount();
+        }
         return count;
     },
 
@@ -2877,25 +2901,25 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
      * @return {Object | false}  definition of the tree or false if any child node is defined as dynamic
      */
     getNodeDefinition: function() {
-		
-		for (var def, defs = [], i = 0; i < this.children.length;i++) {
-			def = this.children[i].getNodeDefinition();
-			if (def === false) { return false;}
-			defs.push(def);
-		}
-		return defs;
+        
+        for (var def, defs = [], i = 0; i < this.children.length;i++) {
+            def = this.children[i].getNodeDefinition();
+            if (def === false) { return false;}
+            defs.push(def);
+        }
+        return defs;
     },
 
     collapse: function() {},
     expand: function() {},
-	getSiblings: function() { return null; },
-	focus: function () {}
+    getSiblings: function() { return null; },
+    focus: function () {}
 
 });
 (function () {
-	var Dom = YAHOO.util.Dom,
-		Lang = YAHOO.lang,
-		Event = YAHOO.util.Event;
+    var Dom = YAHOO.util.Dom,
+        Lang = YAHOO.lang,
+        Event = YAHOO.util.Event;
 /**
  * The default node presentation.  The first parameter should be
  * either a string that will be used as the node's label, or an object
@@ -2963,7 +2987,7 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      * @type string
      */
     title: null,
-	
+    
     /**
      * The href for the node's label.  If one is not specified, the href will
      * be set so that it toggles the node.
@@ -2978,8 +3002,8 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      * @type string
      */
     target: "_self",
-	
-	/**
+    
+    /**
      * The node type
      * @property _type
      * @private
@@ -3001,15 +3025,15 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
                 label: oData 
             };
         } else {
-			if (oData.style) {
-				this.labelStyle = oData.style;
-			}
+            if (oData.style) {
+                this.labelStyle = oData.style;
+            }
         }
 
         this.label = oData.label;
 
         this.labelElId = "ygtvlabelel" + this.index;
-		
+        
     },
 
     /**
@@ -3023,18 +3047,18 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
     },
 
     // overrides YAHOO.widget.Node
-	getContentHtml: function() { 
+    getContentHtml: function() { 
         var sb = [];
         sb[sb.length] = this.href?'<a':'<span';
         sb[sb.length] = ' id="' + this.labelElId + '"';
         sb[sb.length] = ' class="' + this.labelStyle  + '"';
-		if (this.href) {
-			sb[sb.length] = ' href="' + this.href + '"';
-			sb[sb.length] = ' target="' + this.target + '"';
-		} 
-		if (this.title) {
-			sb[sb.length] = ' title="' + this.title + '"';
-		}
+        if (this.href) {
+            sb[sb.length] = ' href="' + this.href + '"';
+            sb[sb.length] = ' target="' + this.target + '"';
+        } 
+        if (this.title) {
+            sb[sb.length] = ' title="' + this.title + '"';
+        }
         sb[sb.length] = ' >';
         sb[sb.length] = this.label;
         sb[sb.length] = this.href?'</a>':'</span>';
@@ -3051,19 +3075,19 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      * @return {Object | false}  definition of the tree or false if this node or any descendant is defined as dynamic
      */
     getNodeDefinition: function() {
-		var def = YAHOO.widget.TextNode.superclass.getNodeDefinition.call(this);
-		if (def === false) { return false; }
+        var def = YAHOO.widget.TextNode.superclass.getNodeDefinition.call(this);
+        if (def === false) { return false; }
 
-		// Node specific properties
-		def.label = this.label;
-		if (this.labelStyle != 'ygtvlabel') { def.style = this.labelStyle; }
-		if (this.title) { def.title = this.title; }
-		if (this.href) { def.href = this.href; }
-		if (this.target != '_self') { def.target = this.target; }		
+        // Node specific properties
+        def.label = this.label;
+        if (this.labelStyle != 'ygtvlabel') { def.style = this.labelStyle; }
+        if (this.title) { def.title = this.title; }
+        if (this.href) { def.href = this.href; }
+        if (this.target != '_self') { def.target = this.target; }       
 
-		return def;
-	
-	},
+        return def;
+    
+    },
 
     toString: function() { 
         return YAHOO.widget.TextNode.superclass.toString.call(this) + ": " + this.label;
@@ -3071,21 +3095,21 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
 
     // deprecated
     onLabelClick: function() {
-		return false;
+        return false;
     },
-	refresh: function() {
-		YAHOO.widget.TextNode.superclass.refresh.call(this);
-		var label = this.getLabelEl();
-		label.innerHTML = this.label;
-		if (label.tagName.toUpperCase() == 'A') {
-			label.href = this.href;
-			label.target = this.target;
-		}
-	}
-		
-	
+    refresh: function() {
+        YAHOO.widget.TextNode.superclass.refresh.call(this);
+        var label = this.getLabelEl();
+        label.innerHTML = this.label;
+        if (label.tagName.toUpperCase() == 'A') {
+            label.href = this.href;
+            label.target = this.target;
+        }
+    }
+        
+    
 
-	
+    
 });
 })();
 /**
@@ -3107,12 +3131,12 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
  * @constructor
  */
 YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
-	YAHOO.widget.MenuNode.superclass.constructor.call(this,oData,oParent,expanded);
+    YAHOO.widget.MenuNode.superclass.constructor.call(this,oData,oParent,expanded);
 
    /*
      * Menus usually allow only one branch to be open at a time.
      */
-	this.multiExpand = false;
+    this.multiExpand = false;
 
 };
 
@@ -3128,9 +3152,9 @@ YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
 
 });
 (function () {
-	var Dom = YAHOO.util.Dom,
-		Lang = YAHOO.lang,
-		Event = YAHOO.util.Event;
+    var Dom = YAHOO.util.Dom,
+        Lang = YAHOO.lang,
+        Event = YAHOO.util.Event;
 
 /**
  * This implementation takes either a string or object for the
@@ -3183,7 +3207,7 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
      * @type string
      */
     html: null,
-	
+    
 /**
      * The node type
      * @property _type
@@ -3203,8 +3227,8 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     initContent: function(oData, hasIcon) { 
         this.setHtml(oData);
         this.contentElId = "ygtvcontentel" + this.index;
-		if (!Lang.isUndefined(hasIcon)) { this.hasIcon  = hasIcon; }
-		
+        if (!Lang.isUndefined(hasIcon)) { this.hasIcon  = hasIcon; }
+        
         this.logger = new YAHOO.widget.LogWriter(this.toString());
     },
 
@@ -3228,8 +3252,8 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     getContentHtml: function() { 
         return this.html;
     },
-	
-	  /**
+    
+      /**
      * Returns an object which could be used to build a tree out of this node and its children.
      * It can be passed to the tree constructor to reproduce this node as a tree.
      * It will return false if any node loads dynamically, regardless of whether it is loaded or not.
@@ -3237,20 +3261,20 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
      * @return {Object | false}  definition of the tree or false if any node is defined as dynamic
      */
     getNodeDefinition: function() {
-		var def = YAHOO.widget.HTMLNode.superclass.getNodeDefinition.call(this);
-		if (def === false) { return false; }
-		def.html = this.html;
-		return def;
-	
-	}
+        var def = YAHOO.widget.HTMLNode.superclass.getNodeDefinition.call(this);
+        if (def === false) { return false; }
+        def.html = this.html;
+        return def;
+    
+    }
 });
 })();
 (function () {
-	var Dom = YAHOO.util.Dom,
-		Lang = YAHOO.lang,
-		Event = YAHOO.util.Event,
-		Calendar = YAHOO.widget.Calendar;
-		
+    var Dom = YAHOO.util.Dom,
+        Lang = YAHOO.lang,
+        Event = YAHOO.util.Event,
+        Calendar = YAHOO.widget.Calendar;
+        
 /**
  * A Date-specific implementation that differs from TextNode in that it uses 
  * YAHOO.widget.Calendar as an in-line editor, if available
@@ -3271,7 +3295,7 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
  * @constructor
  */
 YAHOO.widget.DateNode = function(oData, oParent, expanded) {
-	YAHOO.widget.DateNode.superclass.constructor.call(this,oData, oParent, expanded);
+    YAHOO.widget.DateNode.superclass.constructor.call(this,oData, oParent, expanded);
 };
 
 YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
@@ -3284,421 +3308,421 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
      * @default  "DateNode"
      */
     _type: "DateNode",
-	
-	/**
-	* Configuration object for the Calendar editor, if used.
-	* See <a href="http://developer.yahoo.com/yui/calendar/#internationalization">http://developer.yahoo.com/yui/calendar/#internationalization</a>
-	* @property calendarConfig
-	*/
-	calendarConfig: null,
-	
-	
-	
-	/** 
-	 *  If YAHOO.widget.Calendar is available, it will pop up a Calendar to enter a new date.  Otherwise, it falls back to a plain &lt;input&gt;  textbox
-	 * @method fillEditorContainer
-	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
-	 * @return void
-	 */
-	fillEditorContainer: function (editorData) {
-	
-		var cal, container = editorData.inputContainer;
-		
-		if (Lang.isUndefined(Calendar)) {
-			Dom.replaceClass(editorData.editorPanel,'ygtv-edit-DateNode','ygtv-edit-TextNode');
-			YAHOO.widget.DateNode.superclass.fillEditorContainer.call(this, editorData);
-			return;
-		}
-			
-		if (editorData.nodeType != this._type) {
-			editorData.nodeType = this._type;
-			editorData.saveOnEnter = false;
-			
-			editorData.node.destroyEditorContents(editorData);
+    
+    /**
+    * Configuration object for the Calendar editor, if used.
+    * See <a href="http://developer.yahoo.com/yui/calendar/#internationalization">http://developer.yahoo.com/yui/calendar/#internationalization</a>
+    * @property calendarConfig
+    */
+    calendarConfig: null,
+    
+    
+    
+    /** 
+     *  If YAHOO.widget.Calendar is available, it will pop up a Calendar to enter a new date.  Otherwise, it falls back to a plain &lt;input&gt;  textbox
+     * @method fillEditorContainer
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     * @return void
+     */
+    fillEditorContainer: function (editorData) {
+    
+        var cal, container = editorData.inputContainer;
+        
+        if (Lang.isUndefined(Calendar)) {
+            Dom.replaceClass(editorData.editorPanel,'ygtv-edit-DateNode','ygtv-edit-TextNode');
+            YAHOO.widget.DateNode.superclass.fillEditorContainer.call(this, editorData);
+            return;
+        }
+            
+        if (editorData.nodeType != this._type) {
+            editorData.nodeType = this._type;
+            editorData.saveOnEnter = false;
+            
+            editorData.node.destroyEditorContents(editorData);
 
-			editorData.inputObject = cal = new Calendar(container.appendChild(document.createElement('div')));
-			if (this.calendarConfig) { 
-				cal.cfg.applyConfig(this.calendarConfig,true); 
-				cal.cfg.fireQueue();
-			}
-			cal.selectEvent.subscribe(function () {
-				this.tree._closeEditor(true);
-			},this,true);
-		} else {
-			cal = editorData.inputObject;
-		}
+            editorData.inputObject = cal = new Calendar(container.appendChild(document.createElement('div')));
+            if (this.calendarConfig) { 
+                cal.cfg.applyConfig(this.calendarConfig,true); 
+                cal.cfg.fireQueue();
+            }
+            cal.selectEvent.subscribe(function () {
+                this.tree._closeEditor(true);
+            },this,true);
+        } else {
+            cal = editorData.inputObject;
+        }
 
-		cal.cfg.setProperty("selected",this.label, false); 
+        cal.cfg.setProperty("selected",this.label, false); 
 
-		var delim = cal.cfg.getProperty('DATE_FIELD_DELIMITER');
-		var pageDate = this.label.split(delim);
-		cal.cfg.setProperty('pagedate',pageDate[cal.cfg.getProperty('MDY_MONTH_POSITION') -1] + delim + pageDate[cal.cfg.getProperty('MDY_YEAR_POSITION') -1]);
-		cal.cfg.fireQueue();
+        var delim = cal.cfg.getProperty('DATE_FIELD_DELIMITER');
+        var pageDate = this.label.split(delim);
+        cal.cfg.setProperty('pagedate',pageDate[cal.cfg.getProperty('MDY_MONTH_POSITION') -1] + delim + pageDate[cal.cfg.getProperty('MDY_YEAR_POSITION') -1]);
+        cal.cfg.fireQueue();
 
-		cal.render();
-		cal.oDomContainer.focus();
-	},
-	/**
-	* Saves the date entered in the editor into the DateNode label property and displays it.
-	* Overrides Node.saveEditorValue
-	* @method saveEditorValue
-	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
-	 */
-	saveEditorValue: function (editorData) {
-		var node = editorData.node, 
-			validator = node.tree.validator,
-			value;
-		if (Lang.isUndefined(Calendar)) {
-			value = editorData.inputElement.value;
-		} else {
-			var cal = editorData.inputObject,
-				date = cal.getSelectedDates()[0],
-				dd = [];
-				
-			dd[cal.cfg.getProperty('MDY_DAY_POSITION') -1] = date.getDate();
-			dd[cal.cfg.getProperty('MDY_MONTH_POSITION') -1] = date.getMonth() + 1;
-			dd[cal.cfg.getProperty('MDY_YEAR_POSITION') -1] = date.getFullYear();
-			value = dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
-		}
-		if (Lang.isFunction(validator)) {
-			value = validator(value,node.label,node);
-			if (Lang.isUndefined(value)) { return false; }
-		}
+        cal.render();
+        cal.oDomContainer.focus();
+    },
+    /**
+    * Saves the date entered in the editor into the DateNode label property and displays it.
+    * Overrides Node.saveEditorValue
+    * @method saveEditorValue
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     */
+    saveEditorValue: function (editorData) {
+        var node = editorData.node, 
+            validator = node.tree.validator,
+            value;
+        if (Lang.isUndefined(Calendar)) {
+            value = editorData.inputElement.value;
+        } else {
+            var cal = editorData.inputObject,
+                date = cal.getSelectedDates()[0],
+                dd = [];
+                
+            dd[cal.cfg.getProperty('MDY_DAY_POSITION') -1] = date.getDate();
+            dd[cal.cfg.getProperty('MDY_MONTH_POSITION') -1] = date.getMonth() + 1;
+            dd[cal.cfg.getProperty('MDY_YEAR_POSITION') -1] = date.getFullYear();
+            value = dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
+        }
+        if (Lang.isFunction(validator)) {
+            value = validator(value,node.label,node);
+            if (Lang.isUndefined(value)) { return false; }
+        }
 
-		node.label = value;
-		node.getLabelEl().innerHTML = value;
-	},
+        node.label = value;
+        node.getLabelEl().innerHTML = value;
+    },
   /**
      * Returns an object which could be used to build a tree out of this node and its children.
      * It can be passed to the tree constructor to reproduce this node as a tree.
      * It will return false if the node or any descendant loads dynamically, regardless of whether it is loaded or not.
      * @method getNodeDefinition
      * @return {Object | false}  definition of the node or false if this node or any descendant is defined as dynamic
-     */	
-	getNodeDefinition: function() {
-		var def = YAHOO.widget.DateNode.superclass.getNodeDefinition.call(this);
-		if (def === false) { return false; }
-		if (this.calendarConfig) { def.calendarConfig = this.calendarConfig; }
-		return def;
-	}
+     */ 
+    getNodeDefinition: function() {
+        var def = YAHOO.widget.DateNode.superclass.getNodeDefinition.call(this);
+        if (def === false) { return false; }
+        if (this.calendarConfig) { def.calendarConfig = this.calendarConfig; }
+        return def;
+    }
 
 
 });
 })();
 (function () {
-	var Dom = YAHOO.util.Dom,
-		Lang = YAHOO.lang, 
-		Event = YAHOO.util.Event,
-		TV = YAHOO.widget.TreeView,
-		TVproto = TV.prototype;
+    var Dom = YAHOO.util.Dom,
+        Lang = YAHOO.lang, 
+        Event = YAHOO.util.Event,
+        TV = YAHOO.widget.TreeView,
+        TVproto = TV.prototype;
 
-	/**
-	 * An object to store information used for in-line editing
-	 * for all Nodes of all TreeViews. It contains:
-	 * <ul>
-	* <li>active {boolean}, whether there is an active cell editor </li>
-	* <li>whoHasIt {YAHOO.widget.TreeView} TreeView instance that is currently using the editor</li>
-	* <li>nodeType {string} value of static Node._type property, allows reuse of input element if node is of the same type.</li>
-	* <li>editorPanel {HTMLelement (&lt;div&gt;)} element holding the in-line editor</li>
-	* <li>inputContainer {HTMLelement (&lt;div&gt;)} element which will hold the type-specific input element(s) to be filled by the fillEditorContainer method</li>
-	* <li>buttonsContainer {HTMLelement (&lt;div&gt;)} element which holds the &lt;button&gt; elements for Ok/Cancel.  If you don't want any of the buttons, hide it via CSS styles, don't destroy it</li>
-	* <li>node {YAHOO.widget.Node} reference to the Node being edited</li>
-	* <li>saveOnEnter {boolean}, whether the Enter key should be accepted as a Save command (Esc. is always taken as Cancel), disable for multi-line input elements </li>
-	* </ul>
-	*  Editors are free to use this object to store additional data.
-	 * @property editorData
-	 * @static
-	 * @for YAHOO.widget.TreeView
-	 */
-	TV.editorData = {
-		active:false,
-		whoHasIt:null, // which TreeView has it
-		nodeType:null,
-		editorPanel:null,
-		inputContainer:null,
-		buttonsContainer:null,
-		node:null, // which Node is being edited
-		saveOnEnter:true
-		// Each node type is free to add its own properties to this as it sees fit.
-	};
-	
-	/**
-	* Validator function for edited data, called from the TreeView instance scope, 
-	* receives the arguments (newValue, oldValue, nodeInstance) 
-	* and returns either the validated (or type-converted) value or undefined. 
-	* An undefined return will prevent the editor from closing
-	* @property validator
-	* @default null
-	 * @for YAHOO.widget.TreeView
-	 */
-	TVproto.validator = null;
-	
-	/**
-	* Entry point of the editing plug-in.  
-	* TreeView will call this method if it exists when a node label is clicked
-	* @method _nodeEditing
-	* @param node {YAHOO.widget.Node} the node to be edited
-	* @return {Boolean} true to indicate that the node is editable and prevent any further bubbling of the click.
-	 * @for YAHOO.widget.TreeView
-	 * @private
-	*/
-	
-	
-	TVproto._nodeEditing = function (node) {
-		if (node.fillEditorContainer && node.editable) {
-			var ed, topLeft, buttons, button, editorData = TV.editorData;
-			editorData.active = true;
-			editorData.whoHasIt = this;
-			if (!editorData.nodeType) {
-				editorData.editorPanel = ed = document.body.appendChild(document.createElement('div'));
-				Dom.addClass(ed,'ygtv-label-editor');
+    /**
+     * An object to store information used for in-line editing
+     * for all Nodes of all TreeViews. It contains:
+     * <ul>
+    * <li>active {boolean}, whether there is an active cell editor </li>
+    * <li>whoHasIt {YAHOO.widget.TreeView} TreeView instance that is currently using the editor</li>
+    * <li>nodeType {string} value of static Node._type property, allows reuse of input element if node is of the same type.</li>
+    * <li>editorPanel {HTMLelement (&lt;div&gt;)} element holding the in-line editor</li>
+    * <li>inputContainer {HTMLelement (&lt;div&gt;)} element which will hold the type-specific input element(s) to be filled by the fillEditorContainer method</li>
+    * <li>buttonsContainer {HTMLelement (&lt;div&gt;)} element which holds the &lt;button&gt; elements for Ok/Cancel.  If you don't want any of the buttons, hide it via CSS styles, don't destroy it</li>
+    * <li>node {YAHOO.widget.Node} reference to the Node being edited</li>
+    * <li>saveOnEnter {boolean}, whether the Enter key should be accepted as a Save command (Esc. is always taken as Cancel), disable for multi-line input elements </li>
+    * </ul>
+    *  Editors are free to use this object to store additional data.
+     * @property editorData
+     * @static
+     * @for YAHOO.widget.TreeView
+     */
+    TV.editorData = {
+        active:false,
+        whoHasIt:null, // which TreeView has it
+        nodeType:null,
+        editorPanel:null,
+        inputContainer:null,
+        buttonsContainer:null,
+        node:null, // which Node is being edited
+        saveOnEnter:true
+        // Each node type is free to add its own properties to this as it sees fit.
+    };
+    
+    /**
+    * Validator function for edited data, called from the TreeView instance scope, 
+    * receives the arguments (newValue, oldValue, nodeInstance) 
+    * and returns either the validated (or type-converted) value or undefined. 
+    * An undefined return will prevent the editor from closing
+    * @property validator
+    * @default null
+     * @for YAHOO.widget.TreeView
+     */
+    TVproto.validator = null;
+    
+    /**
+    * Entry point of the editing plug-in.  
+    * TreeView will call this method if it exists when a node label is clicked
+    * @method _nodeEditing
+    * @param node {YAHOO.widget.Node} the node to be edited
+    * @return {Boolean} true to indicate that the node is editable and prevent any further bubbling of the click.
+     * @for YAHOO.widget.TreeView
+     * @private
+    */
+    
+    
+    TVproto._nodeEditing = function (node) {
+        if (node.fillEditorContainer && node.editable) {
+            var ed, topLeft, buttons, button, editorData = TV.editorData;
+            editorData.active = true;
+            editorData.whoHasIt = this;
+            if (!editorData.nodeType) {
+                editorData.editorPanel = ed = document.body.appendChild(document.createElement('div'));
+                Dom.addClass(ed,'ygtv-label-editor');
 
-				buttons = editorData.buttonsContainer = ed.appendChild(document.createElement('div'));
-				Dom.addClass(buttons,'ygtv-button-container');
-				button = buttons.appendChild(document.createElement('button'));
-				Dom.addClass(button,'ygtvok');
-				button.innerHTML = ' ';
-				button = buttons.appendChild(document.createElement('button'));
-				Dom.addClass(button,'ygtvcancel');
-				button.innerHTML = ' ';
-				Event.on(buttons, 'click', function (ev) {
-					this.logger.log('click on editor');
-					var target = Event.getTarget(ev);
-					var node = TV.editorData.node;
-					if (Dom.hasClass(target,'ygtvok')) {
-						node.logger.log('ygtvok');
-						Event.stopEvent(ev);
-						this._closeEditor(true);
-					}
-					if (Dom.hasClass(target,'ygtvcancel')) {
-						node.logger.log('ygtvcancel');
-						Event.stopEvent(ev);
-						this._closeEditor(false);
-					}
-				}, this, true);
+                buttons = editorData.buttonsContainer = ed.appendChild(document.createElement('div'));
+                Dom.addClass(buttons,'ygtv-button-container');
+                button = buttons.appendChild(document.createElement('button'));
+                Dom.addClass(button,'ygtvok');
+                button.innerHTML = ' ';
+                button = buttons.appendChild(document.createElement('button'));
+                Dom.addClass(button,'ygtvcancel');
+                button.innerHTML = ' ';
+                Event.on(buttons, 'click', function (ev) {
+                    this.logger.log('click on editor');
+                    var target = Event.getTarget(ev);
+                    var node = TV.editorData.node;
+                    if (Dom.hasClass(target,'ygtvok')) {
+                        node.logger.log('ygtvok');
+                        Event.stopEvent(ev);
+                        this._closeEditor(true);
+                    }
+                    if (Dom.hasClass(target,'ygtvcancel')) {
+                        node.logger.log('ygtvcancel');
+                        Event.stopEvent(ev);
+                        this._closeEditor(false);
+                    }
+                }, this, true);
 
-				editorData.inputContainer = ed.appendChild(document.createElement('div'));
-				Dom.addClass(editorData.inputContainer,'ygtv-input');
-				
-				Event.on(ed,'keydown',function (ev) {
-					var editorData = TV.editorData,
-						KEY = YAHOO.util.KeyListener.KEY;
-					switch (ev.keyCode) {
-						case KEY.ENTER:
-							this.logger.log('ENTER');
-							Event.stopEvent(ev);
-							if (editorData.saveOnEnter) { 
-								this._closeEditor(true);
-							}
-							break;
-						case KEY.ESCAPE:
-							this.logger.log('ESC');
-							Event.stopEvent(ev);
-							this._closeEditor(false);
-							break;
-					}
-				},this,true);
+                editorData.inputContainer = ed.appendChild(document.createElement('div'));
+                Dom.addClass(editorData.inputContainer,'ygtv-input');
+                
+                Event.on(ed,'keydown',function (ev) {
+                    var editorData = TV.editorData,
+                        KEY = YAHOO.util.KeyListener.KEY;
+                    switch (ev.keyCode) {
+                        case KEY.ENTER:
+                            this.logger.log('ENTER');
+                            Event.stopEvent(ev);
+                            if (editorData.saveOnEnter) { 
+                                this._closeEditor(true);
+                            }
+                            break;
+                        case KEY.ESCAPE:
+                            this.logger.log('ESC');
+                            Event.stopEvent(ev);
+                            this._closeEditor(false);
+                            break;
+                    }
+                },this,true);
 
 
-				
-			} else {
-				ed = editorData.editorPanel;
-			}
-			editorData.node = node;
-			if (editorData.nodeType) {
-				Dom.removeClass(ed,'ygtv-edit-' + editorData.nodeType);
-			}
-			Dom.addClass(ed,' ygtv-edit-' + node._type);
-			topLeft = Dom.getXY(node.getContentEl());
-			Dom.setStyle(ed,'left',topLeft[0] + 'px');
-			Dom.setStyle(ed,'top',topLeft[1] + 'px');
-			Dom.setStyle(ed,'display','block');
-			ed.focus();
-			node.fillEditorContainer(editorData);
+                
+            } else {
+                ed = editorData.editorPanel;
+            }
+            editorData.node = node;
+            if (editorData.nodeType) {
+                Dom.removeClass(ed,'ygtv-edit-' + editorData.nodeType);
+            }
+            Dom.addClass(ed,' ygtv-edit-' + node._type);
+            topLeft = Dom.getXY(node.getContentEl());
+            Dom.setStyle(ed,'left',topLeft[0] + 'px');
+            Dom.setStyle(ed,'top',topLeft[1] + 'px');
+            Dom.setStyle(ed,'display','block');
+            ed.focus();
+            node.fillEditorContainer(editorData);
 
-			return true;  // If inline editor available, don't do anything else.
-		}
-	};
-	
-	/**
-	* Method to be associated with an event (clickEvent, dblClickEvent or enterKeyPressed) to pop up the contents editor
-	*  It calls the corresponding node editNode method.
-	* @method onEventEditNode
-	* @param oArgs {object} Object passed as arguments to TreeView event listeners
-	 * @for YAHOO.widget.TreeView
-	*/
+            return true;  // If inline editor available, don't do anything else.
+        }
+    };
+    
+    /**
+    * Method to be associated with an event (clickEvent, dblClickEvent or enterKeyPressed) to pop up the contents editor
+    *  It calls the corresponding node editNode method.
+    * @method onEventEditNode
+    * @param oArgs {object} Object passed as arguments to TreeView event listeners
+     * @for YAHOO.widget.TreeView
+    */
 
-	TVproto.onEventEditNode = function (oArgs) {
-		if (oArgs instanceof YAHOO.widget.Node) {
-			oArgs.editNode();
-		} else if (oArgs.node instanceof YAHOO.widget.Node) {
-			oArgs.node.editNode();
-		}
-	};
-	
-	/**
-	* Method to be called when the inline editing is finished and the editor is to be closed
-	* @method _closeEditor
-	* @param save {Boolean} true if the edited value is to be saved, false if discarded
-	* @private
-	 * @for YAHOO.widget.TreeView
-	*/
-	
-	TVproto._closeEditor = function (save) {
-		var ed = TV.editorData, 
-			node = ed.node,
-			close = true;
-		if (save) { 
-			close = ed.node.saveEditorValue(ed) !== false; 
-		}
-		if (close) {
-			Dom.setStyle(ed.editorPanel,'display','none');	
-			ed.active = false;
-			node.focus();
-		}
-	};
-	
-	/**
-	*  Entry point for TreeView's destroy method to destroy whatever the editing plug-in has created
-	* @method _destroyEditor
-	* @private
-	 * @for YAHOO.widget.TreeView
-	*/
-	TVproto._destroyEditor = function() {
-		var ed = TV.editorData;
-		if (ed && ed.nodeType && (!ed.active || ed.whoHasIt === this)) {
-			Event.removeListener(ed.editorPanel,'keydown');
-			Event.removeListener(ed.buttonContainer,'click');
-			ed.node.destroyEditorContents(ed);
-			document.body.removeChild(ed.editorPanel);
-			ed.nodeType = ed.editorPanel = ed.inputContainer = ed.buttonsContainer = ed.whoHasIt = ed.node = null;
-			ed.active = false;
-		}
-	};
-	
-	var Nproto = YAHOO.widget.Node.prototype;
-	
-	/**
-	* Signals if the label is editable.  (Ignored on TextNodes with href set.)
-	* @property editable
-	* @type boolean
+    TVproto.onEventEditNode = function (oArgs) {
+        if (oArgs instanceof YAHOO.widget.Node) {
+            oArgs.editNode();
+        } else if (oArgs.node instanceof YAHOO.widget.Node) {
+            oArgs.node.editNode();
+        }
+    };
+    
+    /**
+    * Method to be called when the inline editing is finished and the editor is to be closed
+    * @method _closeEditor
+    * @param save {Boolean} true if the edited value is to be saved, false if discarded
+    * @private
+     * @for YAHOO.widget.TreeView
+    */
+    
+    TVproto._closeEditor = function (save) {
+        var ed = TV.editorData, 
+            node = ed.node,
+            close = true;
+        if (save) { 
+            close = ed.node.saveEditorValue(ed) !== false; 
+        }
+        if (close) {
+            Dom.setStyle(ed.editorPanel,'display','none');  
+            ed.active = false;
+            node.focus();
+        }
+    };
+    
+    /**
+    *  Entry point for TreeView's destroy method to destroy whatever the editing plug-in has created
+    * @method _destroyEditor
+    * @private
+     * @for YAHOO.widget.TreeView
+    */
+    TVproto._destroyEditor = function() {
+        var ed = TV.editorData;
+        if (ed && ed.nodeType && (!ed.active || ed.whoHasIt === this)) {
+            Event.removeListener(ed.editorPanel,'keydown');
+            Event.removeListener(ed.buttonContainer,'click');
+            ed.node.destroyEditorContents(ed);
+            document.body.removeChild(ed.editorPanel);
+            ed.nodeType = ed.editorPanel = ed.inputContainer = ed.buttonsContainer = ed.whoHasIt = ed.node = null;
+            ed.active = false;
+        }
+    };
+    
+    var Nproto = YAHOO.widget.Node.prototype;
+    
+    /**
+    * Signals if the label is editable.  (Ignored on TextNodes with href set.)
+    * @property editable
+    * @type boolean
          * @for YAHOO.widget.Node
-	*/
-	Nproto.editable = false;
-	
-	/**
-	* pops up the contents editor, if there is one and the node is declared editable
-	* @method editNode
-	 * @for YAHOO.widget.Node
-	*/
-	
-	Nproto.editNode = function () {
-		this.tree._nodeEditing(this);
-	};
-	
-	
+    */
+    Nproto.editable = false;
+    
+    /**
+    * pops up the contents editor, if there is one and the node is declared editable
+    * @method editNode
+     * @for YAHOO.widget.Node
+    */
+    
+    Nproto.editNode = function () {
+        this.tree._nodeEditing(this);
+    };
+    
+    
 
 
-	/** Placeholder for a function that should provide the inline node label editor.
-	 *   Leaving it set to null will indicate that this node type is not editable.
-	 * It should be overridden by nodes that provide inline editing.
-	 *  The Node-specific editing element (input box, textarea or whatever) should be inserted into editorData.inputContainer.
-	 * @method fillEditorContainer
-	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
-	 * @return void
-	 * @for YAHOO.widget.Node
-	 */
-	Nproto.fillEditorContainer = null;
+    /** Placeholder for a function that should provide the inline node label editor.
+     *   Leaving it set to null will indicate that this node type is not editable.
+     * It should be overridden by nodes that provide inline editing.
+     *  The Node-specific editing element (input box, textarea or whatever) should be inserted into editorData.inputContainer.
+     * @method fillEditorContainer
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     * @return void
+     * @for YAHOO.widget.Node
+     */
+    Nproto.fillEditorContainer = null;
 
-	
-	/**
-	* Node-specific destroy function to empty the contents of the inline editor panel
-	* This function is the worst case alternative that will purge all possible events and remove the editor contents
-	* Method Event.purgeElement is somewhat costly so if it can be replaced by specifc Event.removeListeners, it is better to do so.
-	* @method destroyEditorContents
-	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
-	 * @for YAHOO.widget.Node
-	 */
-	Nproto.destroyEditorContents = function (editorData) {
-		// In the worst case, if the input editor (such as the Calendar) has no destroy method
-		// we can only try to remove all possible events on it.
-		Event.purgeElement(editorData.inputContainer,true);
-		editorData.inputContainer.innerHTML = '';
-	};
+    
+    /**
+    * Node-specific destroy function to empty the contents of the inline editor panel
+    * This function is the worst case alternative that will purge all possible events and remove the editor contents
+    * Method Event.purgeElement is somewhat costly so if it can be replaced by specifc Event.removeListeners, it is better to do so.
+    * @method destroyEditorContents
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     * @for YAHOO.widget.Node
+     */
+    Nproto.destroyEditorContents = function (editorData) {
+        // In the worst case, if the input editor (such as the Calendar) has no destroy method
+        // we can only try to remove all possible events on it.
+        Event.purgeElement(editorData.inputContainer,true);
+        editorData.inputContainer.innerHTML = '';
+    };
 
-	/**
-	* Saves the value entered into the editor.
-	* Should be overridden by each node type
-	* @method saveEditorValue
-	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
-	 * @return a return of exactly false will prevent the editor from closing
-	 * @for YAHOO.widget.Node
-	 */
-	Nproto.saveEditorValue = function (editorData) {
-	};
-	
-	var TNproto = YAHOO.widget.TextNode.prototype;
-	
+    /**
+    * Saves the value entered into the editor.
+    * Should be overridden by each node type
+    * @method saveEditorValue
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     * @return a return of exactly false will prevent the editor from closing
+     * @for YAHOO.widget.Node
+     */
+    Nproto.saveEditorValue = function (editorData) {
+    };
+    
+    var TNproto = YAHOO.widget.TextNode.prototype;
+    
 
 
-	/** 
-	 *  Places an &lt;input&gt;  textbox in the input container and loads the label text into it
-	 * @method fillEditorContainer
-	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
-	 * @return void
-	 * @for YAHOO.widget.TextNode
-	 */
-	TNproto.fillEditorContainer = function (editorData) {
-	
-		var input;
-		// If last node edited is not of the same type as this one, delete it and fill it with our editor
-		if (editorData.nodeType != this._type) {
-			editorData.nodeType = this._type;
-			editorData.saveOnEnter = true;
-			editorData.node.destroyEditorContents(editorData);
+    /** 
+     *  Places an &lt;input&gt;  textbox in the input container and loads the label text into it
+     * @method fillEditorContainer
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     * @return void
+     * @for YAHOO.widget.TextNode
+     */
+    TNproto.fillEditorContainer = function (editorData) {
+    
+        var input;
+        // If last node edited is not of the same type as this one, delete it and fill it with our editor
+        if (editorData.nodeType != this._type) {
+            editorData.nodeType = this._type;
+            editorData.saveOnEnter = true;
+            editorData.node.destroyEditorContents(editorData);
 
-			editorData.inputElement = input = editorData.inputContainer.appendChild(document.createElement('input'));
-			
-		} else {
-			// if the last node edited was of the same time, reuse the input element.
-			input = editorData.inputElement;
-		}
+            editorData.inputElement = input = editorData.inputContainer.appendChild(document.createElement('input'));
+            
+        } else {
+            // if the last node edited was of the same time, reuse the input element.
+            input = editorData.inputElement;
+        }
 
-		input.value = this.label;
-		input.focus();
-		input.select();
-	};
-	
-	/**
-	* Saves the value entered in the editor into the TextNode label property and displays it
-	* Overrides Node.saveEditorValue
-	* @method saveEditorValue
-	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
-	 * @for YAHOO.widget.TextNode
-	 */
-	TNproto.saveEditorValue = function (editorData) {
-		var node = editorData.node, 
-			value = editorData.inputElement.value,
-			validator = node.tree.validator;
-		
-		if (Lang.isFunction(validator)) {
-			value = validator(value,node.label,node);
-			if (Lang.isUndefined(value)) { return false; }
-		}
-		node.label = value;
-		node.getLabelEl().innerHTML = value;
-	};
+        input.value = this.label;
+        input.focus();
+        input.select();
+    };
+    
+    /**
+    * Saves the value entered in the editor into the TextNode label property and displays it
+    * Overrides Node.saveEditorValue
+    * @method saveEditorValue
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     * @for YAHOO.widget.TextNode
+     */
+    TNproto.saveEditorValue = function (editorData) {
+        var node = editorData.node, 
+            value = editorData.inputElement.value,
+            validator = node.tree.validator;
+        
+        if (Lang.isFunction(validator)) {
+            value = validator(value,node.label,node);
+            if (Lang.isUndefined(value)) { return false; }
+        }
+        node.label = value;
+        node.getLabelEl().innerHTML = value;
+    };
 
-	/**
-	* Destroys the contents of the inline editor panel
-	* Overrides Node.destroyEditorContent
-	* Since we didn't set any event listeners on this inline editor, it is more efficient to avoid the generic method in Node
-	* @method destroyEditorContents
-	 * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
-	 * @for YAHOO.widget.TextNode
-	 */
-	TNproto.destroyEditorContents = function (editorData) {
-		editorData.inputContainer.innerHTML = '';
-	};
+    /**
+    * Destroys the contents of the inline editor panel
+    * Overrides Node.destroyEditorContent
+    * Since we didn't set any event listeners on this inline editor, it is more efficient to avoid the generic method in Node
+    * @method destroyEditorContents
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     * @for YAHOO.widget.TextNode
+     */
+    TNproto.destroyEditorContents = function (editorData) {
+        editorData.inputContainer.innerHTML = '';
+    };
 })();
 YAHOO.register("treeview", YAHOO.widget.TreeView, {version: "@VERSION@", build: "@BUILD@"});
