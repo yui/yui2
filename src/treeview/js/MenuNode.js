@@ -17,12 +17,12 @@
  * @constructor
  */
 YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
-	YAHOO.widget.MenuNode.superclass.constructor.call(this,oData,oParent,expanded);
+    YAHOO.widget.MenuNode.superclass.constructor.call(this,oData,oParent,expanded);
 
    /*
      * Menus usually allow only one branch to be open at a time.
      */
-	this.multiExpand = false;
+    this.multiExpand = false;
 
 };
 

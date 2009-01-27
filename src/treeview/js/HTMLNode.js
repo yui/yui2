@@ -1,7 +1,7 @@
 (function () {
-	var Dom = YAHOO.util.Dom,
-		Lang = YAHOO.lang,
-		Event = YAHOO.util.Event;
+    var Dom = YAHOO.util.Dom,
+        Lang = YAHOO.lang,
+        Event = YAHOO.util.Event;
 
 /**
  * This implementation takes either a string or object for the
@@ -54,7 +54,7 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
      * @type string
      */
     html: null,
-	
+    
 /**
      * The node type
      * @property _type
@@ -74,8 +74,8 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     initContent: function(oData, hasIcon) { 
         this.setHtml(oData);
         this.contentElId = "ygtvcontentel" + this.index;
-		if (!Lang.isUndefined(hasIcon)) { this.hasIcon  = hasIcon; }
-		
+        if (!Lang.isUndefined(hasIcon)) { this.hasIcon  = hasIcon; }
+        
         this.logger = new YAHOO.widget.LogWriter(this.toString());
     },
 
@@ -99,8 +99,8 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     getContentHtml: function() { 
         return this.html;
     },
-	
-	  /**
+    
+      /**
      * Returns an object which could be used to build a tree out of this node and its children.
      * It can be passed to the tree constructor to reproduce this node as a tree.
      * It will return false if any node loads dynamically, regardless of whether it is loaded or not.
@@ -108,11 +108,11 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
      * @return {Object | false}  definition of the tree or false if any node is defined as dynamic
      */
     getNodeDefinition: function() {
-		var def = YAHOO.widget.HTMLNode.superclass.getNodeDefinition.call(this);
-		if (def === false) { return false; }
-		def.html = this.html;
-		return def;
-	
-	}
+        var def = YAHOO.widget.HTMLNode.superclass.getNodeDefinition.call(this);
+        if (def === false) { return false; }
+        def.html = this.html;
+        return def;
+    
+    }
 });
 })();
