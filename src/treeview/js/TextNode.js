@@ -1,7 +1,7 @@
 (function () {
-	var Dom = YAHOO.util.Dom,
-		Lang = YAHOO.lang,
-		Event = YAHOO.util.Event;
+    var Dom = YAHOO.util.Dom,
+        Lang = YAHOO.lang,
+        Event = YAHOO.util.Event;
 /**
  * The default node presentation.  The first parameter should be
  * either a string that will be used as the node's label, or an object
@@ -69,7 +69,7 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      * @type string
      */
     title: null,
-	
+    
     /**
      * The href for the node's label.  If one is not specified, the href will
      * be set so that it toggles the node.
@@ -84,8 +84,8 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      * @type string
      */
     target: "_self",
-	
-	/**
+    
+    /**
      * The node type
      * @property _type
      * @private
@@ -107,15 +107,15 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
                 label: oData 
             };
         } else {
-			if (oData.style) {
-				this.labelStyle = oData.style;
-			}
+            if (oData.style) {
+                this.labelStyle = oData.style;
+            }
         }
 
         this.label = oData.label;
 
         this.labelElId = "ygtvlabelel" + this.index;
-		
+        
     },
 
     /**
@@ -129,18 +129,18 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
     },
 
     // overrides YAHOO.widget.Node
-	getContentHtml: function() { 
+    getContentHtml: function() { 
         var sb = [];
         sb[sb.length] = this.href?'<a':'<span';
         sb[sb.length] = ' id="' + this.labelElId + '"';
         sb[sb.length] = ' class="' + this.labelStyle  + '"';
-		if (this.href) {
-			sb[sb.length] = ' href="' + this.href + '"';
-			sb[sb.length] = ' target="' + this.target + '"';
-		} 
-		if (this.title) {
-			sb[sb.length] = ' title="' + this.title + '"';
-		}
+        if (this.href) {
+            sb[sb.length] = ' href="' + this.href + '"';
+            sb[sb.length] = ' target="' + this.target + '"';
+        } 
+        if (this.title) {
+            sb[sb.length] = ' title="' + this.title + '"';
+        }
         sb[sb.length] = ' >';
         sb[sb.length] = this.label;
         sb[sb.length] = this.href?'</a>':'</span>';
@@ -157,19 +157,19 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
      * @return {Object | false}  definition of the tree or false if this node or any descendant is defined as dynamic
      */
     getNodeDefinition: function() {
-		var def = YAHOO.widget.TextNode.superclass.getNodeDefinition.call(this);
-		if (def === false) { return false; }
+        var def = YAHOO.widget.TextNode.superclass.getNodeDefinition.call(this);
+        if (def === false) { return false; }
 
-		// Node specific properties
-		def.label = this.label;
-		if (this.labelStyle != 'ygtvlabel') { def.style = this.labelStyle; }
-		if (this.title) { def.title = this.title; }
-		if (this.href) { def.href = this.href; }
-		if (this.target != '_self') { def.target = this.target; }		
+        // Node specific properties
+        def.label = this.label;
+        if (this.labelStyle != 'ygtvlabel') { def.style = this.labelStyle; }
+        if (this.title) { def.title = this.title; }
+        if (this.href) { def.href = this.href; }
+        if (this.target != '_self') { def.target = this.target; }       
 
-		return def;
-	
-	},
+        return def;
+    
+    },
 
     toString: function() { 
         return YAHOO.widget.TextNode.superclass.toString.call(this) + ": " + this.label;
@@ -177,20 +177,20 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
 
     // deprecated
     onLabelClick: function() {
-		return false;
+        return false;
     },
-	refresh: function() {
-		YAHOO.widget.TextNode.superclass.refresh.call(this);
-		var label = this.getLabelEl();
-		label.innerHTML = this.label;
-		if (label.tagName.toUpperCase() == 'A') {
-			label.href = this.href;
-			label.target = this.target;
-		}
-	}
-		
-	
+    refresh: function() {
+        YAHOO.widget.TextNode.superclass.refresh.call(this);
+        var label = this.getLabelEl();
+        label.innerHTML = this.label;
+        if (label.tagName.toUpperCase() == 'A') {
+            label.href = this.href;
+            label.target = this.target;
+        }
+    }
+        
+    
 
-	
+    
 });
 })();
