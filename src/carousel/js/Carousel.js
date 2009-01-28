@@ -558,7 +558,7 @@
         }
 
         if (JS.isUndefined(carousel._itemsTable.items[newpos])) {
-            newpos = getFirstVisibleForPosition(carousel, newpos);
+            newpos = getFirstVisibleForPosition.call(carousel, newpos);
             carousel.scrollTo(newpos); // still loading the item
         }
 
