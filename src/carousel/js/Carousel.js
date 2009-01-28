@@ -1008,6 +1008,15 @@
             HORIZONTAL: "yui-carousel-horizontal",
 
             /**
+             * The element to be used as the progress indicator when the item
+             * is still being loaded.
+             *
+             * @property ITEM_LOADING
+             * @default The progress indicator (spinner) image CSS class
+             */
+            ITEM_LOADING: "yui-carousel-item-loading",
+
+            /**
              * The class name that will be set if the Carousel adjusts itself
              * for a minimum width.
              *
@@ -1124,15 +1133,6 @@
              * @default 180
              */
             HORZ_MIN_WIDTH: 180,
-
-            /**
-             * The element to be used as the progress indicator when the item
-             * is still being loaded.
-             *
-             * @property ITEM_LOADING
-             * @default The progress indicator (spinner) image CSS class
-             */
-            ITEM_LOADING: "yui-carousel-item-loading",
 
             /**
              * The maximum number of pager buttons allowed beyond which the UI
@@ -3196,7 +3196,7 @@
 
             for (i = obj.first; i <= obj.last; i++) {
                 el = carousel._createCarouselItem({
-                        className : carousel.CONFIG.ITEM_LOADING,
+                        className : carousel.CLASSES.ITEM_LOADING,
                         content   : carousel.STRINGS.ITEM_LOADING_CONTENT,
                         id        : Dom.generateId()
                 });
