@@ -1111,12 +1111,9 @@
              * is still being loaded.
              *
              * @property ITEM_LOADING
-             * @default The progress indicator (spinner) image
+             * @default The progress indicator (spinner) image CSS class
              */
-            ITEM_LOADING: "<img " +
-                    "src=\"../../build/carousel/assets/ajax-loader.gif\" " +
-                    "alt=\"Loading\" " +
-                    "style=\"margin-top:-32px;position:relative;top:50%;\">",
+            ITEM_LOADING: "yui-carousel-item-loading",
 
             /**
              * The maximum number of pager buttons allowed beyond which the UI
@@ -1151,6 +1148,15 @@
          */
 
         STRINGS: {
+
+            /**
+             * The content to be used as the progress indicator when the item
+             * is still being loaded.
+             *
+             * @property ITEM_LOADING_CONTENT
+             * @default "Loading"
+             */
+            ITEM_LOADING_CONTENT: "Loading",
 
             /**
              * The next navigation button name/text.
@@ -3130,8 +3136,9 @@
 
             for (i = obj.first; i <= obj.last; i++) {
                 el = carousel._createCarouselItem({
-                        content : carousel.CONFIG.ITEM_LOADING,
-                        id      : Dom.generateId()
+                        className : carousel.CONFIG.ITEM_LOADING,
+                        content   : carousel.STRINGS.ITEM_LOADING_CONTENT,
+                        id        : Dom.generateId()
                 });
                 if (el) {
                     if (!JS.isUndefined(itemsTable.items[obj.last + 1])) {
