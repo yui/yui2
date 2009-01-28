@@ -9413,7 +9413,7 @@ deleteRows : function(row, count) {
                 count = (count > 0) ? count : count*-1;
                 if(lowIndex < 0) {
                     lowIndex = 0;
-                    count = highIndex - lowIndex;
+                    count = highIndex - lowIndex + 1;
                 }
             }
             else {
