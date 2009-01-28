@@ -3243,7 +3243,7 @@
                 num      = carousel._pages.num, // total pages
                 pager    = carousel._pages.el;  // the pager container element
 
-            if (num === 0) {
+            if (num === 0 || !pager) {
                 return;         // don't do anything if number of pages is 0
             }
 
