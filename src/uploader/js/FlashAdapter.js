@@ -8,7 +8,7 @@
  */
 YAHOO.widget.FlashAdapter = function(swfURL, containerID, attributes, buttonSkin)
 {
-	// set up the initial events and attributes stuff
+	
 	this._queue = this._queue || [];
 	this._events = this._events || {};
 	this._configs = this._configs || {};
@@ -42,6 +42,8 @@ YAHOO.widget.FlashAdapter = function(swfURL, containerID, attributes, buttonSkin
 	}
 	catch(e){}
 };
+
+YAHOO.widget.FlashAdapter.owners = YAHOO.widget.FlashAdapter.owners || {};
 
 YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 {
@@ -177,9 +179,7 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		if(result)
 		{
 			this._swf = YAHOO.util.Dom.get(swfID);
-			//if successful, let's add an owner property to the SWF reference
-			//this will allow the event handler to communicate with a YAHOO.widget.FlashAdapter
-			this._swf.owner = this;
+			YAHOO.widget.FlashAdapter.owners[swfID] = this;
 		}
 		else
 		{
@@ -205,6 +205,7 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 				YAHOO.log(event.message, event.category, this.toString());
 				return;
 		}
+		
 		
 		//be sure to return after your case or the event will automatically fire!
 		this.fireEvent(type, event);
@@ -334,6 +335,7 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	}
 });
 
+
 /**
  * Receives event messages from SWF and passes them to the correct instance
  * of FlashAdapter.
@@ -344,15 +346,15 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
  */
 YAHOO.widget.FlashAdapter.eventHandler = function(elementID, event)
 {
-	var loadedSWF = YAHOO.util.Dom.get(elementID);
-	if(!loadedSWF.owner)
+
+	if(!YAHOO.widget.FlashAdapter.owners[elementID])
 	{
 		//fix for ie: if owner doesn't exist yet, try again in a moment
 		setTimeout(function() { YAHOO.widget.FlashAdapter.eventHandler( elementID, event ); }, 0);
 	}
 	else
 	{
-		loadedSWF.owner._eventHandler(event);
+		YAHOO.widget.FlashAdapter.owners[elementID]._eventHandler(event);
 	}
 };
 
