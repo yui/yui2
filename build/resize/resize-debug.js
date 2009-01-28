@@ -415,8 +415,8 @@ var D = YAHOO.util.Dom,
                 YAHOO.log('Resize Locked', 'info', 'Resize');
                 return false;
             }
-            //Internet Explorer needs this
             D.removeClass(this._wrap, this.CSS_RESIZE);
+
             if (this.get('hover')) {
                 D.removeClass(this._wrap, this.CSS_HOVER);
             }
@@ -436,7 +436,6 @@ var D = YAHOO.util.Dom,
                 }
             }
 
-            //Internet Explorer needs this
             D.addClass(this._wrap, this.CSS_RESIZE);
         },
         /** 
@@ -446,7 +445,6 @@ var D = YAHOO.util.Dom,
         * @description Removes CSS class names to the handles
         */
         _handleMouseOut: function(ev) {
-            //Internet Explorer needs this
             D.removeClass(this._wrap, this.CSS_RESIZE);
             if (this.get('hover') && !this._active) {
                 D.addClass(this._wrap, this.CSS_HOVER);
@@ -466,7 +464,6 @@ var D = YAHOO.util.Dom,
                     }
                 }
             }
-            //Internet Explorer needs this
             D.addClass(this._wrap, this.CSS_RESIZE);
         },
         /** 
@@ -1110,7 +1107,7 @@ var D = YAHOO.util.Dom,
                     nw = (xy - x) + parseInt(this.get('width'), 10);
                 }
                 
-                nw = this._snapTick(nw, this.get('yTicks'));
+                nw = this._snapTick(nw, this.get('xTicks'));
                 nw = this._checkWidth(nw);
             return nw;
         },
@@ -1178,7 +1175,7 @@ var D = YAHOO.util.Dom,
                 if (flip) {
                     nh = (xy - y) + parseInt(this.get('height'), 10);
                 }
-                nh = this._snapTick(nh, this.get('xTicks'));
+                nh = this._snapTick(nh, this.get('yTicks'));
                 nh = this._checkHeight(nh);
                 
             return nh;
