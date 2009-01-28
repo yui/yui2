@@ -1107,7 +1107,7 @@ var D = YAHOO.util.Dom,
                     nw = (xy - x) + parseInt(this.get('width'), 10);
                 }
                 
-                nw = this._snapTick(nw, this.get('yTicks'));
+                nw = this._snapTick(nw, this.get('xTicks'));
                 nw = this._checkWidth(nw);
             return nw;
         },
@@ -1175,7 +1175,7 @@ var D = YAHOO.util.Dom,
                 if (flip) {
                     nh = (xy - y) + parseInt(this.get('height'), 10);
                 }
-                nh = this._snapTick(nh, this.get('xTicks'));
+                nh = this._snapTick(nh, this.get('yTicks'));
                 nh = this._checkHeight(nh);
                 
             return nh;
