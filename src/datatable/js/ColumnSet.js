@@ -1015,7 +1015,7 @@ YAHOO.widget.Column.prototype = {
      * @return {String} Sanitized Column key.
      */
     getSanitizedKey : function() {
-        return this.getKey().replace(/[^\w\-.:]/g,"");
+        return this.getKey().replace(/[^\w\-]/g,"");
     },
 
     /**
