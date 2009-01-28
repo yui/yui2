@@ -10,6 +10,7 @@
 }
 
 .yui-carousel-content {
+    margin: 0 auto;
     overflow: hidden;
     position: relative;
 }

@@ -70,6 +70,10 @@
     padding: 0;
 }
 
+.yui-skin-sam .yui-carousel-min-width .yui-carousel-nav ul {
+    *margin-left: -170px;
+}
+
 .yui-skin-sam .yui-carousel-nav select {
     position: relative;
    *right: 50px;
