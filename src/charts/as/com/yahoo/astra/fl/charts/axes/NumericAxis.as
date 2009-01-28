@@ -519,7 +519,7 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				approxLabelDistance = this.maxLabelHeight;	
 			}
-			var labelPadding:Number = 2; 
+			var labelPadding:Number = this.labelPadding; 
 			approxLabelDistance += (labelPadding*2);
 			
 			var difference:Number = Math.round(Math.abs(this.minimum -  this.maximum));

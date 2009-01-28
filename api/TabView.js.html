@@ -265,7 +265,7 @@
             <span class="k">this</span><span class="o">.</span><span class="nx">_tabParent</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">ELEMENT</span><span class="o">)</span> <span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_contentParent</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">CONTENT_EL</span><span class="o">)</span> <span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">.</span><span class="nx">tabs</span><span class="o">.</span><span class="nx">value</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span>
-            
+            <span class="nx">tab</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;remove&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;remove&#39;</span><span class="o">,</span> <span class="nx">tabview</span><span class="o">:</span> <span class="k">this</span> <span class="o">});</span>
         <span class="o">},</span>
         
         <span class="c">/**</span>

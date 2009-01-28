@@ -20,7 +20,6 @@
         // DOM aliases 
         document = window.document,     
         documentElement = document.documentElement,
-        body = document.body,
 
         // string constants
         OWNER_DOCUMENT = 'ownerDocument',
@@ -911,7 +910,7 @@
          * @return {Int} The height of the actual document (which includes the body and its margin).
          */
         getDocumentHeight: function() {
-            var scrollHeight = (document[COMPAT_MODE] != CSS1_COMPAT || isSafari) ? body.scrollHeight : documentElement.scrollHeight,
+            var scrollHeight = (document[COMPAT_MODE] != CSS1_COMPAT || isSafari) ? document.body.scrollHeight : documentElement.scrollHeight,
                 h = Math.max(scrollHeight, Y.Dom.getViewportHeight());
 
             YAHOO.log('getDocumentHeight returning ' + h, 'info', 'Dom');
@@ -924,7 +923,7 @@
          * @return {Int} The width of the actual document (which includes the body and its margin).
          */
         getDocumentWidth: function() {
-            var scrollWidth = (document[COMPAT_MODE] != CSS1_COMPAT || isSafari) ? body.scrollWidth : documentElement.scrollWidth,
+            var scrollWidth = (document[COMPAT_MODE] != CSS1_COMPAT || isSafari) ? document.body.scrollWidth : documentElement.scrollWidth,
                 w = Math.max(scrollWidth, Y.Dom.getViewportWidth());
             YAHOO.log('getDocumentWidth returning ' + w, 'info', 'Dom');
             return w;
@@ -942,7 +941,7 @@
             if ( (mode || isIE) && !isOpera ) { // IE, Gecko
                 height = (mode == CSS1_COMPAT) ?
                         documentElement.clientHeight : // Standards
-                        body.clientHeight; // Quirks
+                        document.body.clientHeight; // Quirks
             }
         
             YAHOO.log('getViewportHeight returning ' + height, 'info', 'Dom');
@@ -962,7 +961,7 @@
             if (mode || isIE) { // IE, Gecko, Opera
                 width = (mode == CSS1_COMPAT) ?
                         documentElement.clientWidth : // Standards
-                        body.clientWidth; // Quirks
+                        document.body.clientWidth; // Quirks
             }
             YAHOO.log('getViewportWidth returning ' + width, 'info', 'Dom');
             return width;
@@ -1189,7 +1188,7 @@
 
             return Y.Dom.getChildrenBy(node);
         },
- 
+
         /**
          * Returns the left scroll value of the document 
          * @method getDocumentScrollLeft

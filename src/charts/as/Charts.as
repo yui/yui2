@@ -1189,6 +1189,26 @@ package
 				this.chart.setStyle(axisName + "AxisLabelRotation", styles.labelRotation);
 			}
 			
+			if(styles.labelPadding)
+			{
+				this.chart.setStyle(axisName + "AxisLabelPadding", styles.labelPadding);
+			}
+			
+			if(styles.labelDistance)
+			{
+				this.chart.setStyle(axisName + "AxisLabelDistance", styles.labelDistance);	
+			}
+			
+			if(styles.titleRotation)
+			{
+				this.chart.setStyle(axisName + "AxisTitleRotation", styles.titleRotation);
+			}
+			
+			if(styles.titleDistance)
+			{
+				this.chart.setStyle(axisName + "AxisTitleDistance", styles.titleDistance);
+			}
+			
 			if(styles.majorGridLines)
 			{
 				var majorGridLines:Object = styles.majorGridLines;

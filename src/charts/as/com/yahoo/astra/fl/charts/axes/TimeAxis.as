@@ -618,7 +618,7 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				approxLabelDistance = this.maxLabelHeight;	
 			}
-			var labelPadding:Number = 2; 
+			var labelPadding:Number = this.labelPadding; 
 			approxLabelDistance += (labelPadding*2);
 
 			var dateDifference:Number = Math.round(DateUtil.getDateDifferenceByTimeUnit(this.minimum, this.maximum, this.majorTimeUnit));

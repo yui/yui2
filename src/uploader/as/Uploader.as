@@ -357,6 +357,8 @@
 			}
 			
 			var request:URLRequest = formURLRequest(url, method, vars);
+			
+			filesToUpload = [];
 
 			for each(var fr:FileReference in fileRefList) {
 				queueForUpload(fr, request, fieldName);
@@ -379,10 +381,14 @@
 				for each (var item:FileReference in fileRefList) {
 					item.cancel();
 				}
+				this.currentUploadThreads = 0;
+				filesToUpload = [];
 			} 
 
 			else { // cancel specified file
 				var fr:FileReference = fileRefList[fileID];
+				if (this.currentUploadThreads > 0)
+					this.currentUploadThreads--;
 				fr.cancel();
 			}
 

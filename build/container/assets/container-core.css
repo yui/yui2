@@ -134,7 +134,7 @@ PLEASE NOTE:
     padding-bottom: 1px;
 }
 
-.yui-effect-fade .underlay {
+.yui-effect-fade .underlay, .yui-effect-fade .yui-tt-shadow {
     display:none;
 }
 

@@ -1,5 +1,39 @@
 YUI Library - Reset - Release Notes
 
+Version 2.7.0
+  * Added new test for nesting ordered and unordered lists.
+  * Added new test for thead, tfoot, tbody.
+  * Added new test for optgroup and option. 
+  * Added new test for nested em and strong.
+  * Added new test for nested blockquote.
+  * Added new test for radio and checkbox. Added 1px padding so that Opera will
+    render checkbox and radio using its correct chrome. Bug #1985570. 
+  * Conformed with new CSS styleguide rules (draft):
+  * Known issue: Can not reset the font-style and font-weight properties for 
+    the option and optiongroup elements on IE8 (as of build 18372)
+#a-style {
+	display: block;
+	float: left;
+	clear: both;
+}
+
+#another-style,
+#another-selector,
+#another-selector  {
+	width: 20px;
+	height: 10px;
+}
+
+  * YUIDoc Comment Sections (draft):
+	
+		-@group
+		-@branch
+		-@filter
+		-@purpose
+
+
+
+
 Version 2.6.0 
 
   * Added del,ins{text-decoration:none;} per SF-1957908

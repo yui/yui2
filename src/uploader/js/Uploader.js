@@ -36,18 +36,21 @@
  * fourth section is "disabled". 
  * If the parameter is not supplied, the uploader is rendered transparent,
  * and it's the developer's responsibility to create a visible UI below it.
+ * @param forceTransparent {Boolean} This parameter, if true, forces the Flash
+ * UI to be rendered with wmode set to "transparent". This behavior is useful 
+ * in conjunction with non-rectangular button skins with PNG transparency. 
+ * The parameter is false by default, and ignored if no buttonSkin is defined.
   */
-YAHOO.widget.Uploader = function(containerId, buttonSkin)
+YAHOO.widget.Uploader = function(containerId, buttonSkin, forceTransparent)
 {
 	var newWMode = "window";
 
-	if (!(buttonSkin)) {
+	if (!(buttonSkin) || (buttonSkin && forceTransparent)) {
 		newWMode = "transparent";
 	}
+
 	
  	YAHOO.widget.Uploader.superclass.constructor.call(this, YAHOO.widget.Uploader.SWFURL, containerId, {wmode:newWMode}, buttonSkin);
-
-	this._swf.tabIndex="1";
 
 	/**
 	 * Fires when the mouse is pressed over the Uploader.
@@ -187,14 +190,6 @@ YAHOO.extend(YAHOO.widget.Uploader, YAHOO.widget.FlashAdapter,
  * @param method {String} Either "GET" or "POST", specifying how the variables accompanying the file upload POST request should be submitted. "GET" by default.
  * @param vars {Object} The object containing variables to be sent in the same request as the file upload.
  * @param fieldName {String} The name of the variable in the POST request containing the file data. "Filedata" by default.
- * @param headers {Object} An object containing variables that should be set as headers in the POST request. The following header names
- * cannot be used: 
- * <code>
- * Accept-Charset, Accept-Encoding, Accept-Ranges, Age, Allow, Allowed, Authorization, Charge-To, Connect, Connection, 
- * Content-Length, Content-Location, Content-Range, Cookie, Date, Delete, ETag, Expect, Get, Head, Host, Keep-Alive, 
- * Last-Modified, Location, Max-Forwards, Options, Post, Proxy-Authenticate, Proxy-Authorization, Proxy-Connection, 
- * Public, Put, Range, Referer, Request-Range, Retry-After, Server, TE, Trace, Trailer, Transfer-Encoding, Upgrade, 
- * URI, User-Agent, Vary, Via, Warning, WWW-Authenticate, x-flash-version.
  * </code> 
  */
 	upload: function(fileID, uploadScriptPath, method, vars, fieldName)
@@ -209,14 +204,6 @@ YAHOO.extend(YAHOO.widget.Uploader, YAHOO.widget.FlashAdapter,
  * @param method {String} Either "GET" or "POST", specifying how the variables accompanying the file upload POST request should be submitted. "GET" by default.
  * @param vars {Object} The object containing variables to be sent in the same request as the file upload.
  * @param fieldName {String} The name of the variable in the POST request containing the file data. "Filedata" by default.
- * @param headers {Object} An object containing variables that should be set as headers in the POST request. The following header names
- * cannot be used: 
- * <code>
- * Accept-Charset, Accept-Encoding, Accept-Ranges, Age, Allow, Allowed, Authorization, Charge-To, Connect, Connection, 
- * Content-Length, Content-Location, Content-Range, Cookie, Date, Delete, ETag, Expect, Get, Head, Host, Keep-Alive, 
- * Last-Modified, Location, Max-Forwards, Options, Post, Proxy-Authenticate, Proxy-Authorization, Proxy-Connection, 
- * Public, Put, Range, Referer, Request-Range, Retry-After, Server, TE, Trace, Trailer, Transfer-Encoding, Upgrade, 
- * URI, User-Agent, Vary, Via, Warning, WWW-Authenticate, x-flash-version.
  * </code> 
  */
 	uploadAll: function(uploadScriptPath, method, vars, fieldName)
@@ -261,7 +248,7 @@ YAHOO.extend(YAHOO.widget.Uploader, YAHOO.widget.FlashAdapter,
  */
     setAllowLogging: function (allowLogging)
     {
-       this._swf.setAllowLogging(allowLogging);
+      	this._swf.setAllowLogging(allowLogging);
     },
 
 /**
