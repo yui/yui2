@@ -558,7 +558,7 @@
         }
 
         if (JS.isUndefined(carousel._itemsTable.items[newpos])) {
-            newpos = getFirstVisibleForPosition(carousel, newpos);
+            newpos = getFirstVisibleForPosition.call(carousel, newpos);
             carousel.scrollTo(newpos); // still loading the item
         }
 
@@ -1008,6 +1008,24 @@
             HORIZONTAL: "yui-carousel-horizontal",
 
             /**
+             * The element to be used as the progress indicator when the item
+             * is still being loaded.
+             *
+             * @property ITEM_LOADING
+             * @default The progress indicator (spinner) image CSS class
+             */
+            ITEM_LOADING: "yui-carousel-item-loading",
+
+            /**
+             * The class name that will be set if the Carousel adjusts itself
+             * for a minimum width.
+             *
+             * @property MIN_WIDTH
+             * @default "yui-carousel-min-width"
+             */
+            MIN_WIDTH: "yui-carousel-min-width",
+
+            /**
              * The navigation element container class name.
              *
              * @property NAVIGATION
@@ -1108,16 +1126,13 @@
             FIRST_VISIBLE: 0,
 
             /**
-             * The element to be used as the progress indicator when the item
-             * is still being loaded.
+             * The minimum width of the horizontal Carousel container to support
+             * the navigation buttons.
              *
-             * @property ITEM_LOADING
-             * @default The progress indicator (spinner) image
+             * @property HORZ_MIN_WIDTH
+             * @default 180
              */
-            ITEM_LOADING: "<img " +
-                    "src=\"../../build/carousel/assets/ajax-loader.gif\" " +
-                    "alt=\"Loading\" " +
-                    "style=\"margin-top:-32px;position:relative;top:50%;\">",
+            HORZ_MIN_WIDTH: 180,
 
             /**
              * The maximum number of pager buttons allowed beyond which the UI
@@ -1129,13 +1144,13 @@
             MAX_PAGER_BUTTONS: 5,
 
             /**
-             * The minimum width of the Carousel container to support the
-             * navigation buttons.
+             * The minimum width of the vertical Carousel container to support
+             * the navigation buttons.
              *
-             * @property MIN_WIDTH
+             * @property VERT_MIN_WIDTH
              * @default 99
              */
-            MIN_WIDTH: 99,
+            VERT_MIN_WIDTH: 99,
 
             /**
              * The number of visible items in the Carousel.
@@ -1152,6 +1167,15 @@
          */
 
         STRINGS: {
+
+            /**
+             * The content to be used as the progress indicator when the item
+             * is still being loaded.
+             *
+             * @property ITEM_LOADING_CONTENT
+             * @default "Loading"
+             */
+            ITEM_LOADING_CONTENT: "Loading",
 
             /**
              * The next navigation button name/text.
@@ -2866,6 +2890,7 @@
         _setContainerSize: function (clip, attr) {
             var carousel = this,
                 config   = carousel.CONFIG,
+                cssClass = carousel.CLASSES,
                 isVertical,
                 size;
 
@@ -2893,13 +2918,22 @@
                         getStyle(clip, "borderRightWidth");
             }
 
-            carousel.setStyle(attr, size + "px");
+            if (!isVertical) {
+                if (size < config.HORZ_MIN_WIDTH) {
+                    size = config.HORZ_MIN_WIDTH;
+                    carousel.addClass(cssClass.MIN_WIDTH);
+                }
+            }
+            carousel.setStyle(attr,  size + "px");
 
             // Additionally the width of the container should be set for
             // the vertical Carousel
             if (isVertical) {
                 size = getCarouselItemSize.call(carousel, "width");
-                size = size < config.MIN_WIDTH ? config.MIN_WIDTH : size;
+                if (size < config.VERT_MIN_WIDTH) {
+                    size = config.VERT_MIN_WIDTH;
+                    carousel.addClass(cssClass.MIN_WIDTH);
+                }
                 carousel.setStyle("width",  size + "px");
             }
         },
@@ -3162,8 +3196,9 @@
 
             for (i = obj.first; i <= obj.last; i++) {
                 el = carousel._createCarouselItem({
-                        content : carousel.CONFIG.ITEM_LOADING,
-                        id      : Dom.generateId()
+                        className : carousel.CLASSES.ITEM_LOADING,
+                        content   : carousel.STRINGS.ITEM_LOADING_CONTENT,
+                        id        : Dom.generateId()
                 });
                 if (el) {
                     if (!JS.isUndefined(itemsTable.items[obj.last + 1])) {
@@ -3236,7 +3271,7 @@
                 num      = carousel._pages.num, // total pages
                 pager    = carousel._pages.el;  // the pager container element
 
-            if (num === 0) {
+            if (num === 0 || !pager) {
                 return;         // don't do anything if number of pages is 0
             }
 

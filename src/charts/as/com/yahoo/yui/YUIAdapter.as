@@ -25,6 +25,13 @@ package com.yahoo.yui
 		 */
 		public function YUIAdapter()
 		{
+			if(this.stage)
+			{
+				this.stage.addEventListener(Event.RESIZE, stageResizeHandler);
+				this.stage.scaleMode = StageScaleMode.NO_SCALE;
+				this.stage.align = StageAlign.TOP_LEFT;
+			}
+			
 			super();
 			
 			try
@@ -59,12 +66,7 @@ package com.yahoo.yui
 				throw new IOError("Flash YUIComponent cannot communicate with JavaScript content.");
 			}
 			
-			if(this.stage)
-			{
-				this.stage.addEventListener(Event.RESIZE, stageResizeHandler);
-				this.stage.scaleMode = StageScaleMode.NO_SCALE;
-				this.stage.align = StageAlign.TOP_LEFT;
-			}
+
 		}
 		
 	//--------------------------------------

@@ -1709,10 +1709,13 @@ package com.yahoo.astra.fl.charts
 			
 			var horizontalAxisTextFormat:TextFormat = this.getStyleValue("horizontalAxisTextFormat") != null ? this.getStyleValue("horizontalAxisTextFormat") as TextFormat : this.getStyleValue("textFormat") as TextFormat;
 			var verticalAxisTextFormat:TextFormat = this.getStyleValue("verticalAxisTextFormat") != null ? this.getStyleValue("verticalAxisTextFormat") as TextFormat : this.getStyleValue("textFormat") as TextFormat;
+
 			this.horizontalAxis.maxLabelWidth = TextUtil.getTextWidth(maxHorizontalLabel, horizontalAxisTextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
-			this.horizontalAxis.maxLabelHeight = TextUtil.getTextHeight(maxHorizontalLabel, horizontalAxisTextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
+			this.horizontalAxis.maxLabelHeight = TextUtil.getTextHeight(maxHorizontalLabel, horizontalAxisTextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);	
+		
 			this.verticalAxis.maxLabelWidth = TextUtil.getTextWidth(maxVerticalLabel, verticalAxisTextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);
 			this.verticalAxis.maxLabelHeight = TextUtil.getTextHeight(maxVerticalLabel, verticalAxisTextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);	
+	
 			this.horizontalAxis.labelPadding = this.getStyleValue("horizontalAxisLabelPadding") as Number;
 			this.verticalAxis.labelPadding = this.getStyleValue("verticalAxisLabelPadding") as Number;
 			
@@ -1769,6 +1772,20 @@ package com.yahoo.astra.fl.charts
 			var contentBoundsRightLabelOffset:Number = hRotation <= 0 ? this.horizontalAxis.maxLabelWidth/2 : this.horizontalAxis.maxLabelWidth;
 			var contentBoundsTopLabelOffset:Number = vRotation <= 0 ? this.verticalAxis.maxLabelHeight/2 : this.verticalAxis.maxLabelHeight;
 			var contentBoundsBottomLabelOffset:Number = vRotation <= 0 ? this.verticalAxis.maxLabelHeight/2 : this.verticalAxis.maxLabelHeight;
+			
+			//Accomodate for the fact that the category axis is not and origin axis and labels are not plotted at the origin or end of the axis.
+			if(this.horizontalAxis is CategoryAxis) 
+			{
+				contentBoundsLeftLabelOffset = contentBoundsLeftLabelOffset/2;
+				contentBoundsRightLabelOffset = contentBoundsRightLabelOffset/2;
+			}
+			
+			//Accomodate for the fact that the category axis is not and origin axis and labels are not plotted at the origin or end of the axis.
+			if(this.verticalAxis is CategoryAxis)
+			{
+				contentBoundsTopLabelOffset = contentBoundsTopLabelOffset/2;
+				contentBoundsBottomLabelOffset = contentBoundsBottomLabelOffset/2;
+			}
 			
 			var horizontalAxisLabelDistance:Number = this.getStyleValue("horizontalAxisLabelDistance") as Number;
 			var verticalAxisLabelDistance:Number = this.getStyleValue("verticalAxisLabelDistance") as Number
