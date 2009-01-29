@@ -6,7 +6,7 @@
 }
 
 .yui-panel {
-    position:static;
+    position:relative;
 }
 
 .yui-panel-container form {
