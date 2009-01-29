@@ -230,3 +230,7 @@ when one of its submenus is visible.
     overflow: auto;
 
 }
+
+.yui-overlay.yui-force-redraw {
+   margin-bottom: 1px;
+}
