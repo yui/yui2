@@ -92,6 +92,16 @@ caption {
 	text-align: center;
 }
 
+sup {
+	/* to preserve line-height and selector appearance */
+	vertical-align: super;
+}
+
+sub {
+	/* to preserve line-height and selector appearance */
+	vertical-align: sub;
+}
+
 p,
 fieldset,
 table,
