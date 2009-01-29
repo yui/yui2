@@ -730,7 +730,7 @@
                 Dom.addClass(this.underlay, "yui-tt-shadow-visible");
 
                 if (UA.ie) {
-                    this._forceShadowRedraw();
+                    this.forceUnderlayRedraw();
                 }
             }
 
@@ -804,14 +804,12 @@
         },
 
         /**
-         * Forces the shadow element to be repainted. This is currently
-         * required to force the opacity filter to be repainted when a 
-         * tooltip is shown.
+         * Forces the underlay element to be repainted, through the application/removal
+         * of a yui-force-redraw class to the underlay element.
          * 
-         * @method _forceShadowRedraw
-         * @private
+         * @method forceUnderlayRedraw
          */
-        _forceShadowRedraw : function() {
+        forceUnderlayRedraw : function() {
             var tt = this;
             Dom.addClass(tt.underlay, "yui-force-redraw");
             setTimeout(function() {Dom.removeClass(tt.underlay, "yui-force-redraw");}, 0);
