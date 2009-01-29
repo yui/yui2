@@ -350,7 +350,7 @@
                         if (Y.Dom._getStyle(node, POSITION) !== FIXED) {
                             parentNode = node;
 
-                            while ((parentNode = parentNode[PARENT_NODE]) && parentNode[TAG_NAME] !== 'HTML') {
+                            while ((parentNode = parentNode[PARENT_NODE]) && parentNode[TAG_NAME]) {
                                 scrollTop = parentNode[SCROLL_TOP];
                                 scrollLeft = parentNode[SCROLL_LEFT];
 
