@@ -332,8 +332,3 @@ if(!document.getElementById && document.all)
 {
 	document.getElementById = function(id) { return document.all[id]; };
 }
-
-/* add some aliases for ease of use/backwards compatibility */
-var getQueryParamValue = YAHOO.deconcept.util.getRequestParameter;
-var FlashObject = YAHOO.deconcept.SWFObject; // for legacy support
-var SWFObject = YAHOO.deconcept.SWFObject;
