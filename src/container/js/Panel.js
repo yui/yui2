@@ -802,19 +802,6 @@
                 sUnderlay = args[0].toLowerCase(),
                 oUnderlay = this.underlay,
                 oElement = this.element;
-                
-            function fixWebkitUnderlay() {
-                // Webkit 419.3 (Safari 2.x) does not update
-                // it's Render Tree for the Container when content changes. 
-                // We need to force it to update using this contentChange 
-                // listener
-
-                // Webkit 523.6 doesn't have this problem and doesn't 
-                // need the fix
-                var u = this.underlay;
-                Dom.addClass(u, "yui-force-redraw");
-                window.setTimeout(function(){Dom.removeClass(u, "yui-force-redraw");}, 0);
-            }
 
             function createUnderlay() {
                 var bNew = false;
@@ -840,8 +827,9 @@
                     }
 
                     if (UA.webkit && UA.webkit < 420) {
-                        this.changeContentEvent.subscribe(fixWebkitUnderlay);
+                        this.changeContentEvent.subscribe(this.forceUnderlayRedraw);
                     }
+
                     bNew = true;
                 }
             }
@@ -865,7 +853,7 @@
                     this.cfg.unsubscribeFromConfigEvent("width", this.sizeUnderlay);
                     this.cfg.unsubscribeFromConfigEvent("height",this.sizeUnderlay);
                     this.changeContentEvent.unsubscribe(this.sizeUnderlay);
-                    this.changeContentEvent.unsubscribe(fixWebkitUnderlay);
+                    this.changeContentEvent.unsubscribe(this.forceUnderlayRedraw);
                     YAHOO.widget.Module.textResizeEvent.unsubscribe(this.sizeUnderlay, this, true);
 
                     this.element.removeChild(oUnderlay);
@@ -1431,7 +1419,19 @@
             }
             Panel.superclass.destroy.call(this);  
         },
-        
+
+        /**
+         * Forces the underlay element to be repainted through the application/removal 
+         * of a yui-force-redraw class to the underlay element.
+         *
+         * @method forceUnderlayRedraw
+         */
+        forceUnderlayRedraw : function () {
+            var u = this.underlay;
+            Dom.addClass(u, "yui-force-redraw");
+            setTimeout(function(){Dom.removeClass(u, "yui-force-redraw");}, 0);
+        },
+
         /**
         * Returns a String representation of the object.
         * @method toString

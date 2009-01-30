@@ -14,7 +14,8 @@ body {
 select,
 input,
 button,
-textarea {
+textarea,
+button {
 	font:99% arial,helvetica,clean,sans-serif;
 }
 

@@ -230,6 +230,7 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				this.calculateMajorUnit();
 			} 
+			this.updateAxisRenderer();
 		}
 		
 		/**
@@ -287,7 +288,7 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * @private
 		 */
-		override protected function parseDataProvider():void
+		protected function updateAxisRenderer():void
 		{
 			var ticks:Array = [];
 			var categoryCount:int = this.categoryNames.length;
@@ -301,7 +302,7 @@ package com.yahoo.astra.fl.charts.axes
 				ticks.push(axisData);
 				currentCat += this._majorUnit;
 			}
-				
+
 			this.renderer.ticks = ticks;
 			this.renderer.minorTicks = [];				
 		}		

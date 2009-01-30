@@ -23,6 +23,7 @@ form,
 fieldset,
 legend,
 input,
+button,
 textarea,
 p,
 blockquote,
@@ -107,6 +108,7 @@ legend {
 }
 
 input,
+button,
 textarea,
 select,
 optgroup,
@@ -120,15 +122,11 @@ option {
 /*@purpose To enable resizing for IE */
 /*@branch For IE6-Win, IE7-Win */
 input,
+button,
 textarea,
 select {
 	*font-size: 100%;
 }
 
-/* Opera requires 1px of passing to render with contemporary native chrome */
-input[type="checkbox"],
-input[type="radio"] {
-	padding:1px;
-}
 
 

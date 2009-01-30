@@ -165,6 +165,44 @@ suite.add(new TestCase({
 }));
 
 suite.add(new TestCase({
+    name : "Test xdomain stylesheet access",
+
+    setUp : function () {
+        this.remoteLink = Dom.add(
+            d.getElementsByTagName('head')[0],'link',{
+                type : 'text/css',
+                rel  : 'stylesheet',
+                href : 'http://yui.yahooapis.com/2.6.0/build/base/base-min.css'
+            });
+    },
+
+    tearDown : function () {
+        this.remoteLink.parentNode.removeChild(this.remoteLink);
+    },
+
+    _should : {
+        error : {
+            test_remoteStyleSheet : true
+        }
+    },
+
+    test_remoteStyleSheet : function () {
+        // Each line should throw an exception
+        var sheet = YAHOO.util.StyleSheet(this.remoteLink);
+
+        sheet.getCssText();
+
+        sheet.set('#target', { color: '#f00' });
+
+        sheet.unset('#target', 'color');
+
+        sheet.disable();
+
+        sheet.enable();
+    }
+}));
+
+suite.add(new TestCase({
     name : "Test set",
 
     setUp : function () {

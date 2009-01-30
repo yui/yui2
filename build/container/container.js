@@ -874,6 +874,24 @@
     */
     Module.textResizeEvent = new CustomEvent("textResize");
 
+    /**
+     * Helper utility method, used to force a document level redraw to account for certain
+     * types of content not rendering correctly (e.g. border-collapse:collapse table borders).
+     * <p>
+     * Currently used to prevent Opera repaint glitches on show.
+     * </p>
+     *
+     * @method YAHOO.widget.Module.forceDocumentRedraw
+     * @static
+     */
+    Module.forceDocumentRedraw = function() {
+        var docEl = document.documentElement;
+        if (docEl) {
+			docEl.className += " ";
+            docEl.className = YAHOO.lang.trim(docEl.className);
+        }
+    };
+
     function createModuleTemplate() {
 
         if (!m_oModuleTemplate) {
@@ -1305,7 +1323,7 @@
 
             // Opera needs to force a repaint for certain types of content
             if (UA.opera) {
-                this.showEvent.subscribe(this._forceOperaRepaint);
+                this.showEvent.subscribe(Module.forceDocumentRedraw);
             }
 
             this.initEvent.fire(Module);
@@ -1441,22 +1459,11 @@
                 Gecko 1.8.1.6+ (FF2.0.0.6+) and all other browsers will fire resize on contentWindow.
 
                 We don't want to start sniffing for patch versions, so fire textResize the same
-                way on all FF, until 1.9 (3.x) is out
+                way on all FF2 flavors
              */
             var bSupported = true;
             if (UA.gecko && UA.gecko <= 1.8) {
                 bSupported = false;
-                /*
-                var v = navigator.userAgent.match(/rv:([^\s\)]*)/); // From YAHOO.env.ua
-                if (v && v[0]) {
-                    var sv = v[0].match(/\d\.\d\.(\d)/);
-                    if (sv && sv[1]) {
-                        if (parseInt(sv[1], 10) > 0) {
-                            bSupported = true;
-                        }
-                    }
-                }
-                */
             }
             return bSupported;
         },
@@ -1832,22 +1839,6 @@
                 parentNode.insertBefore(element, parentNode.firstChild);
             } else {
                 parentNode.appendChild(element);
-            }
-        },
-
-        /**
-         * Helper method, used to force opera to repaint when a Module is shown,
-         * to account for certain types of content not rendering correctly (e.g. border-collapse:collapse table borders)
-         *
-         * @method _forceOperaRepaint
-         * @private
-         */
-        _forceOperaRepaint : function() {
-            var docEl = document.documentElement;
-            if (docEl) {
-    			// Opera needs to force a repaint
-    			docEl.className += " ";
-                docEl.className = YAHOO.lang.trim(docEl.className);
             }
         },
 
@@ -3896,6 +3887,10 @@
 
             this.cfg.setProperty("xy", [parseInt(x, 10), parseInt(y, 10)]);
             this.cfg.refireEvent("iframe");
+
+            if (UA.webkit) {
+                this.forceContainerRedraw();
+            }
         },
 
         /**
@@ -4174,6 +4169,26 @@
             Module.textResizeEvent.unsubscribe(this._autoFillOnHeightChange);
 
             Overlay.superclass.destroy.call(this);
+        },
+
+        /**
+         * Can be used to force the container to repaint/redraw it's contents.
+         * <p>
+         * By default applies and then removes a 0px margin through the 
+         * application/removal of a "yui-force-redraw" class.
+         * </p>
+         * <p>
+         * It is currently used by Overlay to force a repaint for webkit 
+         * browsers, when centering.
+         * </p>
+         * @method forceContainerRedraw
+         */
+        forceContainerRedraw : function() {
+            var c = this;
+            Dom.addClass(c.element, "yui-force-redraw");
+            setTimeout(function() {
+                Dom.removeClass(c.element, "yui-force-redraw");
+            }, 0);
         },
 
         /**
@@ -4822,6 +4837,7 @@
         CustomEvent = YAHOO.util.CustomEvent,
         Dom = YAHOO.util.Dom,
         Tooltip = YAHOO.widget.Tooltip,
+        UA = YAHOO.env.ua,
 
         m_oShadowTemplate,
 
@@ -5413,7 +5429,7 @@
             var yOffset = 25,
                 me = this;
 
-            if (YAHOO.env.ua.opera && context.tagName && 
+            if (UA.opera && context.tagName && 
                 context.tagName.toUpperCase() == "A") {
                 yOffset += 12;
             }
@@ -5503,7 +5519,7 @@
             function sizeShadow() {
     
                 var oElement = this.element,
-                    oShadow = this._shadow;
+                    oShadow = this.underlay;
             
                 if (oShadow) {
                     oShadow.style.width = (oElement.offsetWidth + 6) + "px";
@@ -5513,17 +5529,20 @@
             }
 
             function addShadowVisibleClass() {
-                Dom.addClass(this._shadow, "yui-tt-shadow-visible");
+                Dom.addClass(this.underlay, "yui-tt-shadow-visible");
+
+                if (UA.ie) {
+                    this.forceUnderlayRedraw();
+                }
             }
-            
 
             function removeShadowVisibleClass() {
-                Dom.removeClass(this._shadow, "yui-tt-shadow-visible");
+                Dom.removeClass(this.underlay, "yui-tt-shadow-visible");
             }
 
             function createShadow() {
     
-                var oShadow = this._shadow,
+                var oShadow = this.underlay,
                     oElement,
                     Module,
                     nIE,
@@ -5533,7 +5552,7 @@
     
                     oElement = this.element;
                     Module = YAHOO.widget.Module;
-                    nIE = YAHOO.env.ua.ie;
+                    nIE = UA.ie;
                     me = this;
 
                     if (!m_oShadowTemplate) {
@@ -5545,7 +5564,11 @@
 
                     oElement.appendChild(oShadow);
 
-                    this._shadow = oShadow;
+                    this.underlay = oShadow;
+
+                    // Backward compatibility, even though it's probably 
+                    // intended to be "private", it isn't marked as such in the api docs
+                    this._shadow = this.underlay;
 
                     addShadowVisibleClass.call(this);
 
@@ -5581,7 +5604,19 @@
             }
         
         },
-        
+
+        /**
+         * Forces the underlay element to be repainted, through the application/removal
+         * of a yui-force-redraw class to the underlay element.
+         * 
+         * @method forceUnderlayRedraw
+         */
+        forceUnderlayRedraw : function() {
+            var tt = this;
+            Dom.addClass(tt.underlay, "yui-force-redraw");
+            setTimeout(function() {Dom.removeClass(tt.underlay, "yui-force-redraw");}, 0);
+        },
+
         /**
         * Removes the Tooltip element from the DOM and sets all child 
         * elements to null.
@@ -6412,19 +6447,6 @@
                 sUnderlay = args[0].toLowerCase(),
                 oUnderlay = this.underlay,
                 oElement = this.element;
-                
-            function fixWebkitUnderlay() {
-                // Webkit 419.3 (Safari 2.x) does not update
-                // it's Render Tree for the Container when content changes. 
-                // We need to force it to update using this contentChange 
-                // listener
-
-                // Webkit 523.6 doesn't have this problem and doesn't 
-                // need the fix
-                var u = this.underlay;
-                Dom.addClass(u, "yui-force-redraw");
-                window.setTimeout(function(){Dom.removeClass(u, "yui-force-redraw");}, 0);
-            }
 
             function createUnderlay() {
                 var bNew = false;
@@ -6450,8 +6472,9 @@
                     }
 
                     if (UA.webkit && UA.webkit < 420) {
-                        this.changeContentEvent.subscribe(fixWebkitUnderlay);
+                        this.changeContentEvent.subscribe(this.forceUnderlayRedraw);
                     }
+
                     bNew = true;
                 }
             }
@@ -6475,7 +6498,7 @@
                     this.cfg.unsubscribeFromConfigEvent("width", this.sizeUnderlay);
                     this.cfg.unsubscribeFromConfigEvent("height",this.sizeUnderlay);
                     this.changeContentEvent.unsubscribe(this.sizeUnderlay);
-                    this.changeContentEvent.unsubscribe(fixWebkitUnderlay);
+                    this.changeContentEvent.unsubscribe(this.forceUnderlayRedraw);
                     YAHOO.widget.Module.textResizeEvent.unsubscribe(this.sizeUnderlay, this, true);
 
                     this.element.removeChild(oUnderlay);
@@ -7040,7 +7063,19 @@
             }
             Panel.superclass.destroy.call(this);  
         },
-        
+
+        /**
+         * Forces the underlay element to be repainted through the application/removal 
+         * of a yui-force-redraw class to the underlay element.
+         *
+         * @method forceUnderlayRedraw
+         */
+        forceUnderlayRedraw : function () {
+            var u = this.underlay;
+            Dom.addClass(u, "yui-force-redraw");
+            setTimeout(function(){Dom.removeClass(u, "yui-force-redraw");}, 0);
+        },
+
         /**
         * Returns a String representation of the object.
         * @method toString

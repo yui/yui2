@@ -112,3 +112,7 @@
 .yui-skin-sam .yui-carousel-nav ul li.yui-carousel-nav-page-selected a {
     background-position: 0 -700px;
 }
+
+.yui-skin-sam .yui-carousel-item-loading {
+    background: url(ajax-loading.gif) no-repeat 50% 0;
+}

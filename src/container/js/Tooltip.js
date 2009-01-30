@@ -23,6 +23,7 @@
         CustomEvent = YAHOO.util.CustomEvent,
         Dom = YAHOO.util.Dom,
         Tooltip = YAHOO.widget.Tooltip,
+        UA = YAHOO.env.ua,
 
         m_oShadowTemplate,
 
@@ -619,7 +620,7 @@
             var yOffset = 25,
                 me = this;
 
-            if (YAHOO.env.ua.opera && context.tagName && 
+            if (UA.opera && context.tagName && 
                 context.tagName.toUpperCase() == "A") {
                 yOffset += 12;
             }
@@ -716,7 +717,7 @@
             function sizeShadow() {
     
                 var oElement = this.element,
-                    oShadow = this._shadow;
+                    oShadow = this.underlay;
             
                 if (oShadow) {
                     oShadow.style.width = (oElement.offsetWidth + 6) + "px";
@@ -726,17 +727,20 @@
             }
 
             function addShadowVisibleClass() {
-                Dom.addClass(this._shadow, "yui-tt-shadow-visible");
+                Dom.addClass(this.underlay, "yui-tt-shadow-visible");
+
+                if (UA.ie) {
+                    this.forceUnderlayRedraw();
+                }
             }
-            
 
             function removeShadowVisibleClass() {
-                Dom.removeClass(this._shadow, "yui-tt-shadow-visible");
+                Dom.removeClass(this.underlay, "yui-tt-shadow-visible");
             }
 
             function createShadow() {
     
-                var oShadow = this._shadow,
+                var oShadow = this.underlay,
                     oElement,
                     Module,
                     nIE,
@@ -746,7 +750,7 @@
     
                     oElement = this.element;
                     Module = YAHOO.widget.Module;
-                    nIE = YAHOO.env.ua.ie;
+                    nIE = UA.ie;
                     me = this;
 
                     if (!m_oShadowTemplate) {
@@ -758,7 +762,11 @@
 
                     oElement.appendChild(oShadow);
 
-                    this._shadow = oShadow;
+                    this.underlay = oShadow;
+
+                    // Backward compatibility, even though it's probably 
+                    // intended to be "private", it isn't marked as such in the api docs
+                    this._shadow = this.underlay;
 
                     addShadowVisibleClass.call(this);
 
@@ -794,7 +802,19 @@
             }
         
         },
-        
+
+        /**
+         * Forces the underlay element to be repainted, through the application/removal
+         * of a yui-force-redraw class to the underlay element.
+         * 
+         * @method forceUnderlayRedraw
+         */
+        forceUnderlayRedraw : function() {
+            var tt = this;
+            Dom.addClass(tt.underlay, "yui-force-redraw");
+            setTimeout(function() {Dom.removeClass(tt.underlay, "yui-force-redraw");}, 0);
+        },
+
         /**
         * Removes the Tooltip element from the DOM and sets all child 
         * elements to null.

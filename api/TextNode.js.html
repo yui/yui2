@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>TreeView Widget&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>TreeView Widget&nbsp; <span class="subtitle">2.7.0</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_treeview.html" title="treeview">treeview</a>
                 
@@ -48,9 +48,9 @@
                             #doc3 .classopts { display:none; }
                         </style>
 <div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-	<span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
-		<span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
-		<span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
+        <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
+        <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
 <span class="c">/**</span>
 <span class="c"> * The default node presentation.  The first parameter should be</span>
 <span class="c"> * either a string that will be used as the node&#39;s label, or an object</span>
@@ -118,7 +118,7 @@
 <span class="c">     * @type string</span>
 <span class="c">     */</span>
     <span class="nx">title</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
-	
+    
     <span class="c">/**</span>
 <span class="c">     * The href for the node&#39;s label.  If one is not specified, the href will</span>
 <span class="c">     * be set so that it toggles the node.</span>
@@ -133,8 +133,8 @@
 <span class="c">     * @type string</span>
 <span class="c">     */</span>
     <span class="nx">target</span><span class="o">:</span> <span class="s2">&quot;_self&quot;</span><span class="o">,</span>
-	
-	<span class="c">/**</span>
+    
+    <span class="c">/**</span>
 <span class="c">     * The node type</span>
 <span class="c">     * @property _type</span>
 <span class="c">     * @private</span>
@@ -156,15 +156,15 @@
                 <span class="k">label</span><span class="o">:</span> <span class="nx">oData</span> 
             <span class="o">};</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-			<span class="k">if</span> <span class="o">(</span><span class="nx">oData</span><span class="o">.</span><span class="nx">style</span><span class="o">)</span> <span class="o">{</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">.</span><span class="nx">style</span><span class="o">;</span>
-			<span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">oData</span><span class="o">.</span><span class="nx">style</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">.</span><span class="nx">style</span><span class="o">;</span>
+            <span class="o">}</span>
         <span class="o">}</span>
 
         <span class="k">this</span><span class="o">.</span><span class="k">label</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">labelElId</span> <span class="o">=</span> <span class="s2">&quot;ygtvlabelel&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">index</span><span class="o">;</span>
-		
+        
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -178,18 +178,18 @@
     <span class="o">},</span>
 
     <span class="c">// overrides YAHOO.widget.Node</span>
-<span class="c"></span>	<span class="nx">getContentHtml</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
+<span class="c"></span>    <span class="nx">getContentHtml</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
         <span class="k">var</span> <span class="nx">sb</span> <span class="o">=</span> <span class="o">[];</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">?</span><span class="s1">&#39;&lt;a&#39;</span><span class="o">:</span><span class="s1">&#39;&lt;span&#39;</span><span class="o">;</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">labelElId</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; class=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span>  <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
-		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">)</span> <span class="o">{</span>
-			<span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; href=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
-			<span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; target=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">target</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
-		<span class="o">}</span> 
-		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">title</span><span class="o">)</span> <span class="o">{</span>
-			<span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; title=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">title</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
-		<span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; href=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; target=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">target</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="o">}</span> 
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">title</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; title=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">title</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+        <span class="o">}</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; &gt;&#39;</span><span class="o">;</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">?</span><span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="o">:</span><span class="s1">&#39;&lt;/span&gt;&#39;</span><span class="o">;</span>
@@ -206,19 +206,19 @@
 <span class="c">     * @return {Object | false}  definition of the tree or false if this node or any descendant is defined as dynamic</span>
 <span class="c">     */</span>
     <span class="nx">getNodeDefinition</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">var</span> <span class="nx">def</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextNode</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">getNodeDefinition</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-		<span class="k">if</span> <span class="o">(</span><span class="nx">def</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span> <span class="o">}</span>
+        <span class="k">var</span> <span class="nx">def</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextNode</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">getNodeDefinition</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">def</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span> <span class="o">}</span>
 
-		<span class="c">// Node specific properties</span>
-<span class="c"></span>		<span class="nx">def</span><span class="o">.</span><span class="k">label</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
-		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span> <span class="o">!=</span> <span class="s1">&#39;ygtvlabel&#39;</span><span class="o">)</span> <span class="o">{</span> <span class="nx">def</span><span class="o">.</span><span class="nx">style</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span><span class="o">;</span> <span class="o">}</span>
-		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">title</span><span class="o">)</span> <span class="o">{</span> <span class="nx">def</span><span class="o">.</span><span class="nx">title</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">title</span><span class="o">;</span> <span class="o">}</span>
-		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">)</span> <span class="o">{</span> <span class="nx">def</span><span class="o">.</span><span class="nx">href</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">;</span> <span class="o">}</span>
-		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">target</span> <span class="o">!=</span> <span class="s1">&#39;_self&#39;</span><span class="o">)</span> <span class="o">{</span> <span class="nx">def</span><span class="o">.</span><span class="nx">target</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">target</span><span class="o">;</span> <span class="o">}</span>		
+        <span class="c">// Node specific properties</span>
+<span class="c"></span>        <span class="nx">def</span><span class="o">.</span><span class="k">label</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span> <span class="o">!=</span> <span class="s1">&#39;ygtvlabel&#39;</span><span class="o">)</span> <span class="o">{</span> <span class="nx">def</span><span class="o">.</span><span class="nx">style</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">labelStyle</span><span class="o">;</span> <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">title</span><span class="o">)</span> <span class="o">{</span> <span class="nx">def</span><span class="o">.</span><span class="nx">title</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">title</span><span class="o">;</span> <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">)</span> <span class="o">{</span> <span class="nx">def</span><span class="o">.</span><span class="nx">href</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">;</span> <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">target</span> <span class="o">!=</span> <span class="s1">&#39;_self&#39;</span><span class="o">)</span> <span class="o">{</span> <span class="nx">def</span><span class="o">.</span><span class="nx">target</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">target</span><span class="o">;</span> <span class="o">}</span>       
 
-		<span class="k">return</span> <span class="nx">def</span><span class="o">;</span>
-	
-	<span class="o">},</span>
+        <span class="k">return</span> <span class="nx">def</span><span class="o">;</span>
+    
+    <span class="o">},</span>
 
     <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
         <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextNode</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">toString</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
@@ -226,21 +226,21 @@
 
     <span class="c">// deprecated</span>
 <span class="c"></span>    <span class="nx">onLabelClick</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
     <span class="o">},</span>
-	<span class="nx">refresh</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextNode</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">refresh</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-		<span class="k">var</span> <span class="k">label</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getLabelEl</span><span class="o">();</span>
-		<span class="k">label</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
-		<span class="k">if</span> <span class="o">(</span><span class="k">label</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;A&#39;</span><span class="o">)</span> <span class="o">{</span>
-			<span class="k">label</span><span class="o">.</span><span class="nx">href</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">;</span>
-			<span class="k">label</span><span class="o">.</span><span class="nx">target</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">target</span><span class="o">;</span>
-		<span class="o">}</span>
-	<span class="o">}</span>
-		
-	
+    <span class="nx">refresh</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TextNode</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">refresh</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="k">var</span> <span class="k">label</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getLabelEl</span><span class="o">();</span>
+        <span class="k">label</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="k">label</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">label</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;A&#39;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">label</span><span class="o">.</span><span class="nx">href</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">href</span><span class="o">;</span>
+            <span class="k">label</span><span class="o">.</span><span class="nx">target</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">target</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+        
+    
 
-	
+    
 <span class="o">});</span>
 <span class="o">})();</span>
 </pre></div>
