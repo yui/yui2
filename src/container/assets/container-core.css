@@ -5,6 +5,10 @@
     z-index: 2;
 }
 
+.yui-panel {
+    position:relative;
+}
+
 .yui-panel-container form {
     margin: 0;
 }
@@ -159,4 +163,8 @@ PLEASE NOTE:
     overflow:hidden;
     text-indent:-10000em;
     text-decoration:none;
+}
+
+.yui-overlay.yui-force-redraw, .yui-panel-container.yui-force-redraw {
+    margin-bottom:1px;
 }

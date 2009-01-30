@@ -558,7 +558,7 @@
         }
 
         if (JS.isUndefined(carousel._itemsTable.items[newpos])) {
-            newpos = getFirstVisibleForPosition(carousel, newpos);
+            newpos = getFirstVisibleForPosition.call(carousel, newpos);
             carousel.scrollTo(newpos); // still loading the item
         }
 
@@ -1008,6 +1008,24 @@
             HORIZONTAL: "yui-carousel-horizontal",
 
             /**
+             * The element to be used as the progress indicator when the item
+             * is still being loaded.
+             *
+             * @property ITEM_LOADING
+             * @default The progress indicator (spinner) image CSS class
+             */
+            ITEM_LOADING: "yui-carousel-item-loading",
+
+            /**
+             * The class name that will be set if the Carousel adjusts itself
+             * for a minimum width.
+             *
+             * @property MIN_WIDTH
+             * @default "yui-carousel-min-width"
+             */
+            MIN_WIDTH: "yui-carousel-min-width",
+
+            /**
              * The navigation element container class name.
              *
              * @property NAVIGATION
@@ -1040,6 +1058,15 @@
              * @default "yui-carousel-buttons"
              */
             NAV_CONTAINER: "yui-carousel-buttons",
+
+            /**
+             * The class name of the focussed page navigation.  This class is
+             * specifically used for the ugly focus handling in Opera.
+             *
+             * @property PAGE_FOCUS
+             * @default "yui-carousel-nav-page-focus"
+             */
+            PAGE_FOCUS: "yui-carousel-nav-page-focus",
 
             /**
              * The class name of the previous navigation link. This variable
@@ -1108,13 +1135,13 @@
             FIRST_VISIBLE: 0,
 
             /**
-             * The element to be used as the progress indicator when the item
-             * is still being loaded.
+             * The minimum width of the horizontal Carousel container to support
+             * the navigation buttons.
              *
-             * @property ITEM_LOADING
-             * @default The progress indicator (spinner) image CSS class
+             * @property HORZ_MIN_WIDTH
+             * @default 180
              */
-            ITEM_LOADING: "yui-carousel-item-loading",
+            HORZ_MIN_WIDTH: 180,
 
             /**
              * The maximum number of pager buttons allowed beyond which the UI
@@ -1126,13 +1153,13 @@
             MAX_PAGER_BUTTONS: 5,
 
             /**
-             * The minimum width of the Carousel container to support the
-             * navigation buttons.
+             * The minimum width of the vertical Carousel container to support
+             * the navigation buttons.
              *
-             * @property MIN_WIDTH
+             * @property VERT_MIN_WIDTH
              * @default 99
              */
-            MIN_WIDTH: 99,
+            VERT_MIN_WIDTH: 99,
 
             /**
              * The number of visible items in the Carousel.
@@ -1680,7 +1707,9 @@
          * @public
          */
         initEvents: function () {
-            var carousel = this;
+            var carousel = this,
+                cssClass = carousel.CLASSES,
+                focussedLi;
 
             carousel.on("keydown", carousel._keyboardEventHandler);
 
@@ -1748,6 +1777,21 @@
             // Restore the focus on the navigation buttons
 
             Event.onFocus(carousel.get("element"), function (ev, obj) {
+                var target = Event.getTarget(ev);
+
+                if (target && target.nodeName.toUpperCase() == "A" &&
+                    Dom.getAncestorByClassName(target, cssClass.NAVIGATION)) {
+                    if (focussedLi) {
+                        Dom.removeClass(focussedLi, cssClass.PAGE_FOCUS);
+                    }
+                    focussedLi = target.parentNode;
+                    Dom.addClass(focussedLi, cssClass.PAGE_FOCUS);
+                } else {
+                    if (focussedLi) {
+                        Dom.removeClass(focussedLi, cssClass.PAGE_FOCUS);
+                    }
+                }
+
                 obj._hasFocus = true;
                 obj._updateNavButtons(Event.getTarget(ev), true);
             }, carousel);
@@ -2506,17 +2550,44 @@
          * @protected
          */
         _pagerClickHandler: function (ev) {
-            var carousel = this, pos, target, val;
+            var carousel = this,
+                pos,
+                target   = Event.getTarget(ev),
+                val;
 
-            target = Event.getTarget(ev);
-            val = target.href || target.value;
-            if (JS.isString(val) && val) {
-                pos = val.lastIndexOf("#");
-                if (pos != -1) {
-                    val = carousel.getItemPositionById(val.substring(pos + 1));
-                    carousel._selectedItem = val;
-                    carousel.scrollTo(val);
-                    Event.preventDefault(ev);
+            function getPagerNode(el) {
+                var itemEl = carousel.get("carouselItemEl");
+
+                if (el.nodeName.toUpperCase() == itemEl.toUpperCase()) {
+                    el = Dom.getChildrenBy(el, function (node) {
+                        // either an anchor or select at least
+                        return node.href || node.value;
+                    });
+                    if (el && el[0]) {
+                        return el[0];
+                    }
+                } else if (el.href || el.value) {
+                    return el;
+                }
+
+                return null;
+            }
+
+            if (target) {
+                target = getPagerNode(target);
+                if (!target) {
+                    return;
+                }
+                val = target.href || target.value;
+                if (JS.isString(val) && val) {
+                    pos = val.lastIndexOf("#");
+                    if (pos != -1) {
+                        val = carousel.getItemPositionById(
+                                val.substring(pos + 1));
+                        carousel._selectedItem = val;
+                        carousel.scrollTo(val);
+                        Event.preventDefault(ev);
+                    }
                 }
             }
         },
@@ -2872,6 +2943,7 @@
         _setContainerSize: function (clip, attr) {
             var carousel = this,
                 config   = carousel.CONFIG,
+                cssClass = carousel.CLASSES,
                 isVertical,
                 size;
 
@@ -2899,13 +2971,22 @@
                         getStyle(clip, "borderRightWidth");
             }
 
-            carousel.setStyle(attr, size + "px");
+            if (!isVertical) {
+                if (size < config.HORZ_MIN_WIDTH) {
+                    size = config.HORZ_MIN_WIDTH;
+                    carousel.addClass(cssClass.MIN_WIDTH);
+                }
+            }
+            carousel.setStyle(attr,  size + "px");
 
             // Additionally the width of the container should be set for
             // the vertical Carousel
             if (isVertical) {
                 size = getCarouselItemSize.call(carousel, "width");
-                size = size < config.MIN_WIDTH ? config.MIN_WIDTH : size;
+                if (size < config.VERT_MIN_WIDTH) {
+                    size = config.VERT_MIN_WIDTH;
+                    carousel.addClass(cssClass.MIN_WIDTH);
+                }
                 carousel.setStyle("width",  size + "px");
             }
         },
@@ -3168,7 +3249,7 @@
 
             for (i = obj.first; i <= obj.last; i++) {
                 el = carousel._createCarouselItem({
-                        className : carousel.CONFIG.ITEM_LOADING,
+                        className : carousel.CLASSES.ITEM_LOADING,
                         content   : carousel.STRINGS.ITEM_LOADING_CONTENT,
                         id        : Dom.generateId()
                 });

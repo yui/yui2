@@ -2030,6 +2030,10 @@
 
             this.cfg.setProperty("xy", [parseInt(x, 10), parseInt(y, 10)]);
             this.cfg.refireEvent("iframe");
+
+            if (UA.webkit) {
+                this.forceContainerRedraw();
+            }
         },
 
         /**
@@ -2308,6 +2312,26 @@
             Module.textResizeEvent.unsubscribe(this._autoFillOnHeightChange);
 
             Overlay.superclass.destroy.call(this);
+        },
+
+        /**
+         * Can be used to force the container to repaint/redraw it's contents.
+         * <p>
+         * By default applies and then removes a 0px margin through the 
+         * application/removal of a "yui-force-redraw" class.
+         * </p>
+         * <p>
+         * It is currently used by Overlay to force a repaint for webkit 
+         * browsers, when centering.
+         * </p>
+         * @method forceContainerRedraw
+         */
+        forceContainerRedraw : function() {
+            var c = this;
+            Dom.addClass(c.element, "yui-force-redraw");
+            setTimeout(function() {
+                Dom.removeClass(c.element, "yui-force-redraw");
+            }, 0);
         },
 
         /**

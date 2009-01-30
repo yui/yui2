@@ -62,12 +62,17 @@
 
 .yui-skin-sam .yui-carousel-nav ul {
     float: right;
+    height: 19px;
     margin: 0;
     margin-left: -220px;
     margin-right: 100px;
    *margin-left: -160px;
    *margin-right: 0;
     padding: 0;
+}
+
+.yui-skin-sam .yui-carousel-min-width .yui-carousel-nav ul {
+    *margin-left: -170px;
 }
 
 .yui-skin-sam .yui-carousel-nav select {
@@ -84,9 +89,15 @@
 }
 
 .yui-skin-sam .yui-carousel-nav ul li {
+    background: url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -650px;
+    cursor: pointer;
     float: left;
-    height: 19px;
+    height: 9px;
     list-style: none;
+    margin: 10px 0 0 5px;
+    overflow: hidden;
+    padding: 0;
+    width: 9px;
 }
 
 .yui-skin-sam .yui-carousel-nav ul:after {
@@ -96,20 +107,15 @@
 }
 
 .yui-skin-sam .yui-carousel-nav ul li a {
-    background: url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -650px;
-    display: block;
-    height: 9px;
-    margin: 10px 0 0 5px;
-    overflow: hidden;
-    width: 9px;
-}
-
-.yui-skin-sam .yui-carousel-nav ul li a em {
     left: -10000px;
     position: absolute;
 }
 
-.yui-skin-sam .yui-carousel-nav ul li.yui-carousel-nav-page-selected a {
+.yui-skin-sam .yui-carousel-nav ul li.yui-carousel-nav-page-focus {
+    outline: 1px dotted #000;
+}
+
+.yui-skin-sam .yui-carousel-nav ul li.yui-carousel-nav-page-selected {
     background-position: 0 -700px;
 }
 
