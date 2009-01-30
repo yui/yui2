@@ -312,7 +312,7 @@
                 i1 = 1;
                 i2 = 3;
             }
-            if (this.browser.ie && !this.browser.standardsMode) {
+            if ((this.browser.ie < 8) && !this.browser.standardsMode) {
                 //Internet Explorer - Quirks Mode
                 var b = this._getBorderSizes(el),
                     bp = this._getBorderSizes(el.parentNode);
