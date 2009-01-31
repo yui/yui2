@@ -337,6 +337,7 @@ package com.yahoo.astra.fl.charts.axes
 			this.resetScale();
 			this.calculatePositionMultiplier();
 			
+			(this.renderer as ICartesianAxisRenderer).majorUnitSetByUser = this._majorUnitSetByUser;
 			this.renderer.ticks = this.createAxisData(this.majorUnit, this.majorTimeUnit);
 			this.renderer.minorTicks = this.createAxisData(this.minorUnit, this.minorTimeUnit, false);
 		}
@@ -451,7 +452,8 @@ package com.yahoo.astra.fl.charts.axes
 				//stop at the maximum value.
 				if(date.valueOf() > this.maximum.valueOf())
 				{
-					break;
+					if(!this._majorUnitSetByUser) break;
+					date = new Date(this.maximum.valueOf());
 				}
 				//because Flash UIComponents round the position to the nearest pixel, we need to do the same.
 				var position:Number = Math.round(this.valueToLocal(date));

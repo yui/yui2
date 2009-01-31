@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.axes
+package com.yahoo.astra.fl.charts.axes
 {
 	import flash.geom.Rectangle;
 	
@@ -43,10 +43,25 @@
 		 */
 		function get contentBounds():Rectangle;
 		
+		/**
+		 * Indicates the number of pixels of an outer tick.
+		 */
 		function get outerTickOffset():Number
 		
+		/**
+		 * @private (setter)
+		 */
 		function set outerTickOffset(value:Number):void		
+
+		/**
+		 * Indicates whether the user explicitly set a major unit for the axis of this renderer.
+		 */
+		function get majorUnitSetByUser():Boolean;
 		
+		/**
+		 * @private (setter)
+		 */
+		function set majorUnitSetByUser(value:Boolean):void;
 	//--------------------------------------
 	//  Methods
 	//--------------------------------------

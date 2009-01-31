@@ -1181,7 +1181,7 @@ package
 			
 			if(styles.hideOverlappingLabels != null)
 			{
-				this.chart.setStyle(axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisHideOverlappingLabels", styles.hideOverlappingLabels);
+				this.chart.setStyle(axisName + "AxisHideOverlappingLabels", styles.hideOverlappingLabels);
 			}
 			
 			if(styles.labelRotation)

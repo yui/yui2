@@ -423,6 +423,7 @@ package com.yahoo.astra.fl.charts.axes
 			this.resetScale();
 			this.calculatePositionMultiplier();
 			
+			(this.renderer as ICartesianAxisRenderer).majorUnitSetByUser = this._majorUnitSetByUser;
 			this.renderer.ticks = this.createAxisData(this.majorUnit);
 			this.renderer.minorTicks = this.createAxisData(this.minorUnit);
 		}
@@ -644,6 +645,7 @@ package com.yahoo.astra.fl.charts.axes
 					{
 						value = NumberUtil.roundDownToNearest(value, unit);
 					}
+					if(this._majorUnitSetByUser) value = Math.min(value, this.maximum);
 				}
 				displayedMaximum = NumberUtil.fuzzyEquals(value, this.maximum);
 			}
