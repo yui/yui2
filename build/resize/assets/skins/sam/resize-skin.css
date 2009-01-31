@@ -1,6 +1,7 @@
 /* Give the handle a background color */
 .yui-skin-sam .yui-resize .yui-resize-handle {
     background-color: #F2F2F2;
+    zoom: 1;
 }
 /* Give the active handle a different color */
 .yui-skin-sam .yui-resize .yui-resize-handle-active {
@@ -12,6 +13,7 @@
 .yui-skin-sam .yui-resize .yui-resize-handle-l-active,
 .yui-skin-sam .yui-resize .yui-resize-handle-r-active {
     height: 100%;
+    zoom: 1;
 }
 /* Give a border to the 8-way knob style handles */
 .yui-skin-sam .yui-resize-knob .yui-resize-handle {

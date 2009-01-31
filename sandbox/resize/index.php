@@ -9,8 +9,8 @@ if (!$_GET['non']) {
     <link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css"> 
     <link rel="stylesheet" href="http://blog.davglass.com/wp-content/themes/davglass/style.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="../../build/assets/skins/sam/skin.css"> 
-    <link rel="stylesheet" type="text/css" href="../../src/resize/css/resize-core.css" />
-    <link rel="stylesheet" type="text/css" href="../../src/resize/css/skins/sam/resize-skin.css" />
+    <link rel="stylesheet" type="text/css" href="../../src/resize/assets/resize-core.css" />
+    <link rel="stylesheet" type="text/css" href="../../src/resize/assets/skins/sam/resize-skin.css" />
     
     <style type="text/css" media="screen">
         p, h2 {
@@ -76,11 +76,10 @@ if (!$_GET['non']) {
 <script type="text/javascript" src="../../build/event/event.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../../build/animation/animation.js?bust=<?php echo(mktime()); ?>"></script>
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js?bust=<?php echo(mktime()); ?>"></script>
-<script type="text/javascript" src="../../build/element/element-min.js?bust=<?php echo(mktime()); ?>"></script> 
+<script type="text/javascript" src="../../build/element/element.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="../../build/logger/logger.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript" src="js/resize.js?bust=<?php echo(mktime()); ?>"></script> 
 <script type="text/javascript">
-
 (function() {
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event;
@@ -134,19 +133,21 @@ if (!$_GET['non']) {
             status: true,
             useShim: true
         });
+
         var resize2 = new YAHOO.util.Resize('resize2', {
             //wrap: true
-            minHeight: 50,
-            minWidth: 300,
-            maxWidth: 900,
-            maxHeight: 600//,
+            //minHeight: 50,
+            //minWidth: 300,
+            //maxWidth: 900,
+            //maxHeight: 600//,
             //proxy: true,
             //animate: true,
             //animateDuration: .5,
             //animateEasing: YAHOO.util.Easing.backIn,
-            //xTicks: 100,
-           // yTicks: 100
+            xTicks: 100,
+            yTicks: 100
         });
+
         var resize3 = new YAHOO.util.Resize('resize3', {
             minHeight: 50,
             minWidth: 300,
@@ -158,6 +159,8 @@ if (!$_GET['non']) {
             animateDuration: .5,
             animateEasing: YAHOO.util.Easing.backIn
         });
+
+
     });
 
 })();

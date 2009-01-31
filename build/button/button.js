@@ -4358,6 +4358,7 @@
             * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
             * level-one-html.html#ID-58190037">HTMLElement</a>|String
             * @default null
+			* @writeonce
             */
             this.setAttributeConfig("container", {
         

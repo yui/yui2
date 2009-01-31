@@ -99,3 +99,11 @@ pre {
 	/* So things don't run into each other. */
 	margin-bottom: 1em;
 }
+/* Opera requires 1px of passing to render with contemporary native chrome */
+button,
+input[type="checkbox"],
+input[type="radio"],
+input[type="reset"],
+input[type="submit"] {
+	padding:1px;
+}

@@ -714,10 +714,6 @@ var D = YAHOO.util.Dom,
         _updateStatus: function(h, w, t, l) {
             if (this._resizeEvent && (!Lang.isString(this._resizeEvent))) {
                 YAHOO.log('Updating Status Box', 'info', 'Resize');
-                if (this.get('status')) {
-                    YAHOO.log('Showing Status Box', 'info', 'Resize');
-                    D.setStyle(this._status, 'display', 'inline');
-                }
                 h = ((h === 0) ? this._cache.start.height : h);
                 w = ((w === 0) ? this._cache.start.width : w);
                 var h1 = parseInt(this.get('height'), 10),
@@ -733,8 +729,13 @@ var D = YAHOO.util.Dom,
                 var diffW = (parseInt(w, 10) - w1);
                 this._cache.offsetHeight = diffH;
                 this._cache.offsetWidth = diffW;
-                this._status.innerHTML = '<strong>' + parseInt(h, 10) + ' x ' + parseInt(w, 10) + '</strong><em>' + ((diffH > 0) ? '+' : '') + diffH + ' x ' + ((diffW > 0) ? '+' : '') + diffW + '</em>';
-                D.setXY(this._status, [Event.getPageX(this._resizeEvent) + 12, Event.getPageY(this._resizeEvent) + 12]);
+                if (this.get('status')) {
+                    YAHOO.log('Showing Status Box', 'info', 'Resize');
+                    D.setStyle(this._status, 'display', 'inline');
+                    //This will cause IE8 to crash if the status box is hidden..
+                    this._status.innerHTML = '<strong>' + parseInt(h, 10) + ' x ' + parseInt(w, 10) + '</strong><em>' + ((diffH > 0) ? '+' : '') + diffH + ' x ' + ((diffW > 0) ? '+' : '') + diffW + '</em>';
+                    D.setXY(this._status, [Event.getPageX(this._resizeEvent) + 12, Event.getPageY(this._resizeEvent) + 12]);
+                }
             }
         },
         /** 
@@ -815,13 +816,14 @@ var D = YAHOO.util.Dom,
                     l = this._cache.left - l;
                 }
             }
-
+            
+            
             var ratio = this._setRatio(h, w, t, l);
             h = parseInt(ratio[0], 10);
             w = parseInt(ratio[1], 10);
             t = parseInt(ratio[2], 10);
             l = parseInt(ratio[3], 10);
-
+            
             if (t == 0) {
                 //No Offset, get from cache
                 t = D.getY(el);
@@ -883,6 +885,7 @@ var D = YAHOO.util.Dom,
             }
 
             this._updateStatus(h, w, t, l);
+
 
             if (this._positioned) {
                 if (this._proxy && force) {
@@ -1107,7 +1110,7 @@ var D = YAHOO.util.Dom,
                     nw = (xy - x) + parseInt(this.get('width'), 10);
                 }
                 
-                nw = this._snapTick(nw, this.get('yTicks'));
+                nw = this._snapTick(nw, this.get('xTicks'));
                 nw = this._checkWidth(nw);
             return nw;
         },
@@ -1175,7 +1178,7 @@ var D = YAHOO.util.Dom,
                 if (flip) {
                     nh = (xy - y) + parseInt(this.get('height'), 10);
                 }
-                nh = this._snapTick(nh, this.get('xTicks'));
+                nh = this._snapTick(nh, this.get('yTicks'));
                 nh = this._checkHeight(nh);
                 
             return nh;

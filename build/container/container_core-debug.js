@@ -882,6 +882,24 @@
     */
     Module.textResizeEvent = new CustomEvent("textResize");
 
+    /**
+     * Helper utility method, used to force a document level redraw to account for certain
+     * types of content not rendering correctly (e.g. border-collapse:collapse table borders).
+     * <p>
+     * Currently used to prevent Opera repaint glitches on show.
+     * </p>
+     *
+     * @method YAHOO.widget.Module.forceDocumentRedraw
+     * @static
+     */
+    Module.forceDocumentRedraw = function() {
+        var docEl = document.documentElement;
+        if (docEl) {
+			docEl.className += " ";
+            docEl.className = YAHOO.lang.trim(docEl.className);
+        }
+    };
+
     function createModuleTemplate() {
 
         if (!m_oModuleTemplate) {
@@ -1313,7 +1331,7 @@
 
             // Opera needs to force a repaint for certain types of content
             if (UA.opera) {
-                this.showEvent.subscribe(this._forceOperaRepaint);
+                this.showEvent.subscribe(Module.forceDocumentRedraw);
             }
 
             this.initEvent.fire(Module);
@@ -1449,22 +1467,11 @@
                 Gecko 1.8.1.6+ (FF2.0.0.6+) and all other browsers will fire resize on contentWindow.
 
                 We don't want to start sniffing for patch versions, so fire textResize the same
-                way on all FF, until 1.9 (3.x) is out
+                way on all FF2 flavors
              */
             var bSupported = true;
             if (UA.gecko && UA.gecko <= 1.8) {
                 bSupported = false;
-                /*
-                var v = navigator.userAgent.match(/rv:([^\s\)]*)/); // From YAHOO.env.ua
-                if (v && v[0]) {
-                    var sv = v[0].match(/\d\.\d\.(\d)/);
-                    if (sv && sv[1]) {
-                        if (parseInt(sv[1], 10) > 0) {
-                            bSupported = true;
-                        }
-                    }
-                }
-                */
             }
             return bSupported;
         },
@@ -1841,22 +1848,6 @@
                 parentNode.insertBefore(element, parentNode.firstChild);
             } else {
                 parentNode.appendChild(element);
-            }
-        },
-
-        /**
-         * Helper method, used to force opera to repaint when a Module is shown,
-         * to account for certain types of content not rendering correctly (e.g. border-collapse:collapse table borders)
-         *
-         * @method _forceOperaRepaint
-         * @private
-         */
-        _forceOperaRepaint : function() {
-            var docEl = document.documentElement;
-            if (docEl) {
-    			// Opera needs to force a repaint
-    			docEl.className += " ";
-                docEl.className = YAHOO.lang.trim(docEl.className);
             }
         },
 
@@ -3906,6 +3897,10 @@
 
             this.cfg.setProperty("xy", [parseInt(x, 10), parseInt(y, 10)]);
             this.cfg.refireEvent("iframe");
+
+            if (UA.webkit) {
+                this.forceContainerRedraw();
+            }
         },
 
         /**
@@ -4184,6 +4179,26 @@
             Module.textResizeEvent.unsubscribe(this._autoFillOnHeightChange);
 
             Overlay.superclass.destroy.call(this);
+        },
+
+        /**
+         * Can be used to force the container to repaint/redraw it's contents.
+         * <p>
+         * By default applies and then removes a 0px margin through the 
+         * application/removal of a "yui-force-redraw" class.
+         * </p>
+         * <p>
+         * It is currently used by Overlay to force a repaint for webkit 
+         * browsers, when centering.
+         * </p>
+         * @method forceContainerRedraw
+         */
+        forceContainerRedraw : function() {
+            var c = this;
+            Dom.addClass(c.element, "yui-force-redraw");
+            setTimeout(function() {
+                Dom.removeClass(c.element, "yui-force-redraw");
+            }, 0);
         },
 
         /**

@@ -350,7 +350,7 @@
                         if (Y.Dom._getStyle(node, POSITION) !== FIXED) {
                             parentNode = node;
 
-                            while ((parentNode = parentNode[PARENT_NODE]) && parentNode[TAG_NAME] !== 'HTML') {
+                            while ((parentNode = parentNode[PARENT_NODE]) && parentNode[TAG_NAME]) {
                                 scrollTop = parentNode[SCROLL_TOP];
                                 scrollLeft = parentNode[SCROLL_LEFT];
 
@@ -1188,7 +1188,7 @@
 
             return Y.Dom.getChildrenBy(node);
         },
- 
+
         /**
          * Returns the left scroll value of the document 
          * @method getDocumentScrollLeft
@@ -1374,7 +1374,6 @@
 
     }
 })();
-
 /**
  * A region is a representation of an object on a grid.  It is defined
  * by the top, right, bottom, left extents, so is rectangular by default.  If 
@@ -1577,7 +1576,6 @@ YAHOO.util.Point = function(x, y) {
 
 YAHOO.extend(YAHOO.util.Point, YAHOO.util.Region);
 
-
 (function() {
 /**
  * Add style management functionality to DOM.
@@ -1753,7 +1751,6 @@ IEComputed.borderColor = IEComputed.borderTopColor =
 Y.Dom.IE_COMPUTED = IEComputed;
 Y.Dom.IE_ComputedStyle = ComputedStyle;
 })();
-
 (function() {
 /**
  * Add style management functionality to DOM.
@@ -1831,5 +1828,4 @@ Y.Dom.Color = {
     }
 };
 }());
-
 YAHOO.register("dom", YAHOO.util.Dom, {version: "@VERSION@", build: "@BUILD@"});
