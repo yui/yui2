@@ -6613,9 +6613,23 @@ updateRow : function(row, oData) {
         var oRecordSet = this._oRecordSet,
             oldRecord = oRecordSet.getRecord(index),
             elRow = this.getTrEl(oldRecord),
-        // Copy data from the Record for the event that gets fired later
+            // Copy data from the Record for the event that gets fired later
             oldData = oldRecord ? oldRecord.getData() : null,
             updatedRecord = this._oRecordSet.setRecord(oData, index);
+            
+        // Update selections as necessary
+        var tracker = this._aSelections,
+            i=0,
+            oldId = oldRecord.getId(),
+            newId = updatedRecord.getId();
+        for(; i<tracker.length; i++) {
+            if((tracker[i] === oldId)) {
+                tracker[i] = newId;
+            }
+            else if(tracker[i].recordId === oldId) {
+                tracker[i].recordId = newId;
+            }
+        }
     }
     else {
         YAHOO.log("Could not update row " + row + " with the data : " +
@@ -6693,6 +6707,21 @@ updateRows : function(startrow, aData) {
                 aOldRecords = this._oRecordSet.getRecords(startIndex, aData.length),
                 aNewRecords = this._oRecordSet.setRecords(aData, startIndex);
             if(aNewRecords) {
+                // Update selections as necessary
+                var tracker = this._aSelections,
+                    i=0, j, newId, oldId;
+                for(; i<tracker.length; i++) {
+                    for(j=0; j<aOldRecords.length; j++) {
+                        oldId = aOldRecords[j].getId();
+                        if((tracker[i] === oldId)) {
+                            tracker[i] = aNewRecords[j].getId();
+                        }
+                        else if(tracker[i].recordId === oldId) {
+                            tracker[i].recordId = aNewRecords[j].getId();
+                        }
+                    }
+                }
+            
                 // Paginated
                 var oPaginator = this.get('paginator');
                 if (oPaginator) {
