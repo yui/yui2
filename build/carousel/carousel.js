@@ -1059,6 +1059,15 @@
             NAV_CONTAINER: "yui-carousel-buttons",
 
             /**
+             * The class name of the focussed page navigation.  This class is
+             * specifically used for the ugly focus handling in Opera.
+             *
+             * @property PAGE_FOCUS
+             * @default "yui-carousel-nav-page-focus"
+             */
+            PAGE_FOCUS: "yui-carousel-nav-page-focus",
+
+            /**
              * The class name of the previous navigation link. This variable
              * is not only used for styling, but also for identifying the link
              * within the Carousel container.
@@ -1688,7 +1697,9 @@
          * @public
          */
         initEvents: function () {
-            var carousel = this;
+            var carousel = this,
+                cssClass = carousel.CLASSES,
+                focussedLi;
 
             carousel.on("keydown", carousel._keyboardEventHandler);
 
@@ -1756,6 +1767,21 @@
             // Restore the focus on the navigation buttons
 
             Event.onFocus(carousel.get("element"), function (ev, obj) {
+                var target = Event.getTarget(ev);
+
+                if (target && target.nodeName.toUpperCase() == "A" &&
+                    Dom.getAncestorByClassName(target, cssClass.NAVIGATION)) {
+                    if (focussedLi) {
+                        Dom.removeClass(focussedLi, cssClass.PAGE_FOCUS);
+                    }
+                    focussedLi = target.parentNode;
+                    Dom.addClass(focussedLi, cssClass.PAGE_FOCUS);
+                } else {
+                    if (focussedLi) {
+                        Dom.removeClass(focussedLi, cssClass.PAGE_FOCUS);
+                    }
+                }
+
                 obj._hasFocus = true;
                 obj._updateNavButtons(Event.getTarget(ev), true);
             }, carousel);
@@ -2503,17 +2529,44 @@
          * @protected
          */
         _pagerClickHandler: function (ev) {
-            var carousel = this, pos, target, val;
+            var carousel = this,
+                pos,
+                target   = Event.getTarget(ev),
+                val;
 
-            target = Event.getTarget(ev);
-            val = target.href || target.value;
-            if (JS.isString(val) && val) {
-                pos = val.lastIndexOf("#");
-                if (pos != -1) {
-                    val = carousel.getItemPositionById(val.substring(pos + 1));
-                    carousel._selectedItem = val;
-                    carousel.scrollTo(val);
-                    Event.preventDefault(ev);
+            function getPagerNode(el) {
+                var itemEl = carousel.get("carouselItemEl");
+
+                if (el.nodeName.toUpperCase() == itemEl.toUpperCase()) {
+                    el = Dom.getChildrenBy(el, function (node) {
+                        // either an anchor or select at least
+                        return node.href || node.value;
+                    });
+                    if (el && el[0]) {
+                        return el[0];
+                    }
+                } else if (el.href || el.value) {
+                    return el;
+                }
+
+                return null;
+            }
+
+            if (target) {
+                target = getPagerNode(target);
+                if (!target) {
+                    return;
+                }
+                val = target.href || target.value;
+                if (JS.isString(val) && val) {
+                    pos = val.lastIndexOf("#");
+                    if (pos != -1) {
+                        val = carousel.getItemPositionById(
+                                val.substring(pos + 1));
+                        carousel._selectedItem = val;
+                        carousel.scrollTo(val);
+                        Event.preventDefault(ev);
+                    }
                 }
             }
         },
