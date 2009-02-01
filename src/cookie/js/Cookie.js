@@ -279,7 +279,8 @@ YAHOO.util.Cookie = {
     },
 
     /**
-     * Removes a sub cookie with a given name.
+     * Removes a subcookie with a given name. Removing the last subcookie
+     * will remove the entire cookie.
      * @param {String} name The name of the cookie in which the subcookie exists.
      * @param {String} subName The name of the subcookie to remove.
      * @param {Object} options (Optional) An object containing one or more
@@ -291,14 +292,16 @@ YAHOO.util.Cookie = {
      * @static
      */
     removeSub : function(name /*:String*/, subName /*:String*/, options /*:Object*/) /*:String*/ {
-    
+        
+        var lang = YAHOO.lang;
+        
         //check cookie name
-        if (!YAHOO.lang.isString(name) || name === ""){
+        if (!lang.isString(name) || name === ""){
             throw new TypeError("Cookie.removeSub(): Cookie name must be a non-empty string.");
         }
         
         //check subcookie name
-        if (!YAHOO.lang.isString(subName) || subName === ""){
+        if (!lang.isString(subName) || subName === ""){
             throw new TypeError("Cookie.removeSub(): Subcookie name must be a non-empty string.");
         }
         
@@ -306,11 +309,17 @@ YAHOO.util.Cookie = {
         var subs = this.getSubs(name);
         
         //delete the indicated subcookie
-        if (YAHOO.lang.isObject(subs) && YAHOO.lang.hasOwnProperty(subs, subName)){
+        if (lang.isObject(subs) && lang.hasOwnProperty(subs, subName)){
             delete subs[subName];
             
-            //reset the cookie
-            return this.setSubs(name, subs, options);
+            //reset the cookie if there are subcookies left, else remove
+            for (var key in hash){
+                if (lang.hasOwnProperty(hash, key) && !lang.isFunction(hash[key]) && !lang.isUndefined(hash[key])){
+                    return this.setSubs(name, subs, options);
+                }
+            }
+            
+            return this.remove(name, options);
         } else {
             return "";
         }
