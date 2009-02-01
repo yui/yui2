@@ -1821,6 +1821,7 @@
                 <span class="o">}</span>
                 <span class="nx">carousel</span><span class="o">.</span><span class="nx">_itemClickHandler</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span>
                 <span class="nx">carousel</span><span class="o">.</span><span class="nx">_pagerClickHandler</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span>
+                <span class="nx">carousel</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
             <span class="o">});</span>
 
             <span class="c">// Restore the focus on the navigation buttons</span>
@@ -3338,7 +3339,7 @@
             <span class="o">}</span>
             <span class="nx">grandParent</span> <span class="o">=</span> <span class="nx">parent</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
 
-            <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">&quot;INPUT&quot;</span> <span class="o">&amp;&amp;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toUpperCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">&quot;BUTTON&quot;</span> <span class="o">&amp;&amp;</span>
                 <span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">parent</span><span class="o">,</span> <span class="nx">cssClass</span><span class="o">.</span><span class="nx">BUTTON</span><span class="o">))</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">setFocus</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">grandParent</span><span class="o">)</span> <span class="o">{</span>
