@@ -332,7 +332,7 @@ YAHOO.util.Cookie = {
      * @param {Variant} value The value to set for the cookie.
      * @param {Object} options (Optional) An object containing one or more
      *      cookie options: path (a string), domain (a string), expires (a Date object),
-     *      and secure (true/false).
+     *      encodeValue (true/false), and secure (true/false).
      * @return {String} The created cookie string.
      * @method set
      * @static
@@ -350,7 +350,7 @@ YAHOO.util.Cookie = {
         }
         
     
-        var text /*:String*/ = this._createCookieString(name, value, true, options);
+        var text /*:String*/ = this._createCookieString(name, value, ('encodeValue' in options) ? options.encodeValue : true, options);
         document.cookie = text;
         return text;
     },
