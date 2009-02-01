@@ -1772,6 +1772,7 @@
                 }
                 carousel._itemClickHandler(ev);
                 carousel._pagerClickHandler(ev);
+                carousel.focus();
             });
 
             // Restore the focus on the navigation buttons
@@ -3289,7 +3290,7 @@
             }
             grandParent = parent.parentNode;
 
-            if (el.nodeName.toUpperCase() == "INPUT" &&
+            if (el.nodeName.toUpperCase() == "BUTTON" &&
                 Dom.hasClass(parent, cssClass.BUTTON)) {
                 if (setFocus) {
                     if (grandParent) {
