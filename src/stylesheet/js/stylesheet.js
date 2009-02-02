@@ -5,6 +5,7 @@
  * @module stylesheet
  * @namespace YAHOO.util
  * @requires yahoo
+ * @beta
  */
 (function () {
 
