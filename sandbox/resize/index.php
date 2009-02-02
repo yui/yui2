@@ -90,7 +90,7 @@ if (!$_GET['non']) {
 
     Event.onDOMReady(function() {
         //YAHOO.util.DDM.useShim = true;
-        resize_img = new YAHOO.util.Resize('resize_img', {
+        var resize_img = new YAHOO.util.Resize('resize_img', {
             width: '100px',
             height: '75px',
             handles: 't, b, r, l, bl, br, tl, tr',
@@ -101,7 +101,7 @@ if (!$_GET['non']) {
             autoRatio: true//,
             //draggable: true
         });
-        resize_img2 = new YAHOO.util.Resize('resize_img2', {
+        var resize_img2 = new YAHOO.util.Resize('resize_img2', {
             width: '100px',
             height: '75px',
             //handles: ['t', 'b', 'r', 'l', 'bl', 'br', 'tl', 'tr'],
@@ -121,7 +121,7 @@ if (!$_GET['non']) {
             //Dom.setStyle(this._proxy.firstChild, 'opacity', '.25');
         }, resize_img2, true);
 
-        resize = new YAHOO.util.Resize('resize', {
+        var resize = new YAHOO.util.Resize('resize', {
             minHeight: 50,
             minWidth: 300,
             maxWidth: 900,
@@ -133,7 +133,8 @@ if (!$_GET['non']) {
             status: true,
             useShim: true
         });
-        resize2 = new YAHOO.util.Resize('resize2', {
+
+        var resize2 = new YAHOO.util.Resize('resize2', {
             //wrap: true
             //minHeight: 50,
             //minWidth: 300,
@@ -146,7 +147,8 @@ if (!$_GET['non']) {
             xTicks: 100,
             yTicks: 100
         });
-        resize3 = new YAHOO.util.Resize('resize3', {
+
+        var resize3 = new YAHOO.util.Resize('resize3', {
             minHeight: 50,
             minWidth: 300,
             maxWidth: 900,
@@ -157,6 +159,8 @@ if (!$_GET['non']) {
             animateDuration: .5,
             animateEasing: YAHOO.util.Easing.backIn
         });
+
+
     });
 
 })();

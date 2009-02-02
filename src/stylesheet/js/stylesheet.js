@@ -5,6 +5,7 @@
  * @module stylesheet
  * @namespace YAHOO.util
  * @requires yahoo
+ * @beta
  */
 (function () {
 
@@ -12,6 +13,7 @@ var d      = document,
     p      = d.createElement('p'), // Have to hold the node (see notes)
     workerStyle = p.style, // worker style collection
     lang   = YAHOO.lang,
+    selectors = {},
     sheets = {},
     ssId   = 0,
     floatAttr = ('cssFloat' in workerStyle) ? 'cssFloat' : 'styleFloat',
@@ -488,7 +490,7 @@ lang.augmentObject(StyleSheet, {
     },
 
     /**
-     * <p>Determines if a selector string is safe to use.  This is used internally
+     * <p>Determines if a selector string is safe to use.  Used internally
      * in set to prevent IE from locking up when attempting to add a rule for a
      * &quot;bad selector&quot;.</p>
      *
@@ -504,8 +506,33 @@ lang.augmentObject(StyleSheet, {
      * @static
      */
     isValidSelector : function (sel) {
-        // TODO: this will fail tag[prop=val] tests
-        return !/[^\\][`~!@$%\^&()+=|{}\[\];'"?<]|^\s*[^a-z0-9*#.]|[\s.#][^a-z0-9]/i.test(sel);
+        var valid = false;
+
+        if (sel && lang.isString(sel)) {
+
+            if (!selectors.hasOwnProperty(sel)) {
+                // TEST: there should be nothing but white-space left after
+                // these destructive regexs
+                selectors[sel] = !/\S/.test(
+                    // combinators
+                    sel.replace(/\s+|\s*[+~>]\s*/g,' ').
+                    // attribute selectors (contents not validated)
+                    replace(/([^ ])\[.*?\]/g,'$1').
+                    // pseudo-class|element selectors (contents of parens
+                    // such as :nth-of-type(2) or :not(...) not validated)
+                    replace(/([^ ])::?[a-z][a-z\-]+[a-z](?:\(.*?\))?/ig,'$1').
+                    // element tags
+                    replace(/(?:^| )[a-z0-6]+/ig,' ').
+                    // escaped characters
+                    replace(/\\./g,'').
+                    // class and id identifiers
+                    replace(/[.#]\w[\w\-]*/g,''));
+            }
+
+            valid = selectors[sel];
+        }
+
+        return valid;
     }
 },true);
 

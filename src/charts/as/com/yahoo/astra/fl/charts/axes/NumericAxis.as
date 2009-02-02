@@ -423,6 +423,7 @@ package com.yahoo.astra.fl.charts.axes
 			this.resetScale();
 			this.calculatePositionMultiplier();
 			
+			(this.renderer as ICartesianAxisRenderer).majorUnitSetByUser = this._majorUnitSetByUser;
 			this.renderer.ticks = this.createAxisData(this.majorUnit);
 			this.renderer.minorTicks = this.createAxisData(this.minorUnit);
 		}
@@ -519,13 +520,13 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				approxLabelDistance = this.maxLabelHeight;	
 			}
-			var labelPadding:Number = this.labelPadding; 
-			approxLabelDistance += (labelPadding*2);
+			var labelSpacing:Number = this.labelSpacing; 
+			approxLabelDistance += (labelSpacing*2);
 			
 			var difference:Number = Math.round(Math.abs(this.minimum -  this.maximum));
 			var tempMajorUnit:Number = 0; 
 
-			var maxLabels:Number = Math.floor((this.renderer.length - labelPadding)/approxLabelDistance);
+			var maxLabels:Number = Math.floor((this.renderer.length - labelSpacing)/approxLabelDistance);
 			
 			//Adjust the max labels to account for potential maximum and minimum adjustments that may occur.
 			if(!this._maximumSetByUser && !this._minimumSetByUser && !(this.alwaysShowZero && this._minimum == 0)) maxLabels -= 1;
@@ -644,6 +645,7 @@ package com.yahoo.astra.fl.charts.axes
 					{
 						value = NumberUtil.roundDownToNearest(value, unit);
 					}
+					if(this._majorUnitSetByUser) value = Math.min(value, this.maximum);
 				}
 				displayedMaximum = NumberUtil.fuzzyEquals(value, this.maximum);
 			}
@@ -686,7 +688,17 @@ package com.yahoo.astra.fl.charts.axes
 			if(!this._maximumSetByUser && !(this.alwaysShowZero && this._maximum == 0))
 			{
 				var oldMaximum:Number = this._maximum;
-				this._maximum = NumberUtil.roundUpToNearest(this._maximum, this._majorUnit);
+				if(this._minimumSetByUser)
+				{	
+					//if the user sets the minimum, we need to ensure that the maximum is an increment of the major unit starting from 
+					//the minimum instead of zero
+					this._maximum = NumberUtil.roundUpToNearest(this._maximum - this._minimum, this._majorUnit);
+					this._maximum += this._minimum;
+				}
+				else
+				{
+					this._maximum = NumberUtil.roundUpToNearest(this._maximum, this._majorUnit);
+				}
 				
 				//uncomment to include an additional major unit in this adjustment
 				if(this._maximum == oldMaximum /*|| this._maximum - oldMaximum < this._majorUnit */)

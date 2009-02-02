@@ -779,7 +779,7 @@ package com.yahoo.astra.fl.charts
 			horizontalAxisLabelDistance: 2,
 			horizontalAxisHideOverlappingLabels: true,
 			horizontalAxisLabelRotation: 0,
-			horizontalAxisLabelPadding: 2,
+			horizontalAxisLabelSpacing: 2,
 			
 			//grid lines
 			horizontalAxisGridLineWeight: 1,
@@ -823,7 +823,7 @@ package com.yahoo.astra.fl.charts
 			verticalAxisLabelDistance: 2,
 			verticalAxisHideOverlappingLabels: true,
 			verticalAxisLabelRotation: 0,
-			verticalAxisLabelPadding: 2,
+			verticalAxisLabelSpacing: 2,
 			
 			//grid lines
 			showVerticalAxisGridLines: true,
@@ -867,7 +867,7 @@ package com.yahoo.astra.fl.charts
 			labelRotation: "horizontalAxisLabelRotation",
 			labelDistance: "horizontalAxisLabelDistance",
 			showLabels: "showHorizontalAxisLabels",
-			labelPadding: "horizontalAxisLabelPadding",
+			labelSpacing: "horizontalAxisLabelSpacing",
 			titleRotation: "horizontalAxisTitleRotation", 
 			titleDistance: "horizontalAxisTitleDistance",
 			
@@ -926,7 +926,7 @@ package com.yahoo.astra.fl.charts
 			labelRotation: "verticalAxisLabelRotation",
 			labelDistance: "verticalAxisLabelDistance",
 			showLabels: "showVerticalAxisLabels",
-			labelPadding: "verticalAxisLabelPadding",
+			labelSpacing: "verticalAxisLabelSpacing",
 			titleRotation: "verticalAxisTitleRotation", 
 			titleDistance: "verticalAxisTitleDistance",
 			
@@ -1716,8 +1716,8 @@ package com.yahoo.astra.fl.charts
 			this.verticalAxis.maxLabelWidth = TextUtil.getTextWidth(maxVerticalLabel, verticalAxisTextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);
 			this.verticalAxis.maxLabelHeight = TextUtil.getTextHeight(maxVerticalLabel, verticalAxisTextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);	
 	
-			this.horizontalAxis.labelPadding = this.getStyleValue("horizontalAxisLabelPadding") as Number;
-			this.verticalAxis.labelPadding = this.getStyleValue("verticalAxisLabelPadding") as Number;
+			this.horizontalAxis.labelSpacing = this.getStyleValue("horizontalAxisLabelSpacing") as Number;
+			this.verticalAxis.labelSpacing = this.getStyleValue("verticalAxisLabelSpacing") as Number;
 			
 			this.calculateContentBounds();
 			
