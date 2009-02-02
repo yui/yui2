@@ -240,8 +240,8 @@ package com.yahoo.astra.fl.charts.axes
 		private function calculateMajorUnit():void
 		{
 			var maxLabelSize:Number = (this.chart as CartesianChart).horizontalAxis == this ? this.maxLabelWidth : this.maxLabelHeight;
-			var labelPadding:Number = this.labelPadding; 
-			maxLabelSize += (labelPadding*2);
+			var labelSpacing:Number = this.labelSpacing; 
+			maxLabelSize += (labelSpacing*2);
 			var categoryCount:int = this.categoryNames.length;
 			var maxNumLabels:Number = this.renderer.length/maxLabelSize;
 			

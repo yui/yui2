@@ -1181,7 +1181,7 @@ package
 			
 			if(styles.hideOverlappingLabels != null)
 			{
-				this.chart.setStyle(axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisHideOverlappingLabels", styles.hideOverlappingLabels);
+				this.chart.setStyle(axisName + "AxisHideOverlappingLabels", styles.hideOverlappingLabels);
 			}
 			
 			if(styles.labelRotation)
@@ -1189,9 +1189,9 @@ package
 				this.chart.setStyle(axisName + "AxisLabelRotation", styles.labelRotation);
 			}
 			
-			if(styles.labelPadding)
+			if(styles.labelSpacing)
 			{
-				this.chart.setStyle(axisName + "AxisLabelPadding", styles.labelPadding);
+				this.chart.setStyle(axisName + "AxisLabelSpacing", styles.labelSpacing);
 			}
 			
 			if(styles.labelDistance)

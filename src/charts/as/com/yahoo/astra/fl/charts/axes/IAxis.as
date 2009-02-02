@@ -106,14 +106,14 @@ package com.yahoo.astra.fl.charts.axes
 		function set numLabels(value:Number):void;
 
 		/**
-		 * The padding between labels on an axis.
+		 * The space, in pixels, between labels on an axis.
 		 */
-		function get labelPadding():Number;
+		function get labelSpacing():Number;
 		
 		/**
 		 * @private (setter)
 		 */
-		function set labelPadding(value:Number):void; 
+		function set labelSpacing(value:Number):void; 
 		
 		/**
 		 * Determines the axis scale based on the input data set.
