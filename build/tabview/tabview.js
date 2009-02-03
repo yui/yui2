@@ -203,13 +203,15 @@
             var tabCount = this.get('tabs').length,
                 index = this.getTabIndex(tab);
 
-            if ( tab == this.get(ACTIVE_TAB) ) { // select next tab
-                if (tabCount > 1) {
-                    if (index + 1 == tabCount) {
+            if ( tab === this.get(ACTIVE_TAB) ) { 
+                if (tabCount > 1) { // select another tab
+                    if (index + 1 === tabCount) { // if last, activate previous
                         this.set(ACTIVE_INDEX, index - 1);
-                    } else {
+                    } else { // activate next tab
                         this.set(ACTIVE_INDEX, index + 1);
                     }
+                } else { // no more tabs
+                    this.set(ACTIVE_TAB, null);
                 }
             }
             
