@@ -618,6 +618,8 @@ NOTES
    ??? - unsetting font-size-adjust has the same effect as unsetting font-size
  * FireFox and WebKit populate rule.cssText as "SELECTOR { CSSTEXT }", but
    Opera and IE do not.
+ * IE6 and IE7 silently ignore the { and } if passed into addRule('.foo','{
+   color:#000}',0).  IE8 does not and creates an empty rule.
 */
 
 YAHOO.register("stylesheet", YAHOO.util.StyleSheet, {version: "@VERSION@", build: "@BUILD@"});
