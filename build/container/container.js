@@ -2862,7 +2862,8 @@
                 autoFill = this._autoFillOnHeightChange;
 
             cfg.unsubscribeFromConfigEvent(height, autoFill);
-            Module.textResizeEvent.unsubscribe(height, autoFill);
+            Module.textResizeEvent.unsubscribe(autoFill);
+            this.changeContentEvent.unsubscribe(autoFill);
 
             if (currEl && fillEl !== currEl && this[currEl]) {
                 Dom.setStyle(this[currEl], height, "");
@@ -2873,6 +2874,7 @@
 
                 cfg.subscribeToConfigEvent(height, autoFill, this[fillEl], this);
                 Module.textResizeEvent.subscribe(autoFill, this[fillEl], this);
+                this.changeContentEvent.subscribe(autoFill, this[fillEl], this);
 
                 cfg.setProperty(autoFillHeight, fillEl, true);
             }
@@ -7847,13 +7849,7 @@
                 }
             }
 
-            // Everything which needs to be done if content changed
-            // TODO: Should we be firing contentChange here?
-
-            this.setFirstLastFocusable();
-
-            this.cfg.refireEvent("iframe");
-            this.cfg.refireEvent("underlay");
+            this.changeContentEvent.fire();
         },
 
         /**
