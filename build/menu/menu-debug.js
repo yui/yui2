@@ -1647,9 +1647,12 @@ init: function (p_oElement, p_oConfig) {
         this.keyDownEvent.subscribe(this._onKeyDown);
         this.keyPressEvent.subscribe(this._onKeyPress);
         this.blurEvent.subscribe(this._onBlur);
-        
 
-        if (UA.gecko || UA.webkit) {
+
+		//	Fixes an issue in Firefox 2 and Webkit where Dom's "getX" and "getY" 
+		//	methods return values that don't take scrollTop into consideration 
+
+        if ((UA.gecko && UA.gecko < 1.9) || UA.webkit) {
 
             this.cfg.subscribeToConfigEvent(_Y, this._onYChange);
 
@@ -2894,16 +2897,16 @@ _onClick: function (p_sType, p_aArgs) {
 	var hide = function () {
 
 		/*
-			There is an inconsistency between Firefox 2 for Mac OS X and Firefox 2 Windows 
+			There is an inconsistency between Firefox for Mac OS X and Firefox Windows 
 			regarding the triggering of the display of the browser's context menu and the 
 			subsequent firing of the "click" event. In Firefox for Windows, when the user 
 			triggers the display of the browser's context menu the "click" event also fires 
 			for the document object, even though the "click" event did not fire for the 
 			element that was the original target of the "contextmenu" event. This is unique 
-			to Firefox on Windows. For all other A-Grade browsers, including Firefox 2 for 
+			to Firefox on Windows. For all other A-Grade browsers, including Firefox for 
 			Mac OS X, the "click" event doesn't fire for the document object. 
 
-			This bug in Firefox 2 for Windows affects Menu as Menu instances listen for 
+			This bug in Firefox for Windows affects Menu as Menu instances listen for 
 			events at the document level and have an internal "click" event handler they 
 			use to hide themselves when clicked. As a result, in Firefox for Windows a 
 			Menu will hide when the user right clicks on a MenuItem to raise the browser's 
@@ -4193,13 +4196,13 @@ _onShow: function (p_sType, p_aArgs) {
         }
 
 
-		// The following fixes an issue with the selected state of a MenuItem not rendering 
-		// correctly when a submenu is aligned to the left of its parent Menu instance.
+		//	The following fixes an issue with the selected state of a MenuItem 
+		//	not rendering correctly when a submenu is aligned to the left of
+		//	its parent Menu instance.
 
 		if ((this.cfg.getProperty("x") < oParentMenu.cfg.getProperty("x")) && 
-			(UA.gecko < 1.9) && 
-			!this.cfg.getProperty(_WIDTH)) {
-		
+			(UA.gecko && UA.gecko < 1.9) && !this.cfg.getProperty(_WIDTH)) {
+
 			oElement = this.element;
 			nOffsetWidth = oElement.offsetWidth;
 			
@@ -4691,7 +4694,6 @@ _setScrollHeight: function (p_nScrollHeight) {
         oBody,
         oHeader,
         oFooter,
-		oParent,
         fnMouseOver,
         fnMouseOut,
         nMinScrollHeight,
@@ -4709,7 +4711,6 @@ _setScrollHeight: function (p_nScrollHeight) {
         fnMouseOver = this._onScrollTargetMouseOver;
         fnMouseOut = this._onScrollTargetMouseOut;
         nMinScrollHeight = this.cfg.getProperty(_MIN_SCROLL_HEIGHT);
-        oParent = this.parent;
 
 
 		if (nScrollHeight > 0 && nScrollHeight < nMinScrollHeight) {
@@ -4724,24 +4725,26 @@ _setScrollHeight: function (p_nScrollHeight) {
 		oBody.scrollTop = 0;
 
 
-		/*
-			There is a bug in gecko-based browsers where an element whose 
-			"position" property is set to "absolute" and "overflow" property is set 
-			to "hidden" will not render at the correct width when its 
-			offsetParent's "position" property is also set to "absolute."  It is 
-			possible to work around this bug by specifying a value for the width 
-			property in addition to overflow.
+		//	Need to set a width for the Menu to fix the following problems in 
+		//	Firefox 2 and IE:
+
+		//	#1) Scrolled Menus will render at 1px wide in Firefox 2
+
+		//	#2) There is a bug in gecko-based browsers where an element whose 
+		//	"position" property is set to "absolute" and "overflow" property is 
+		//	set to "hidden" will not render at the correct width when its 
+		//	offsetParent's "position" property is also set to "absolute."  It is 
+		//	possible to work around this bug by specifying a value for the width 
+		//	property in addition to overflow.
+
+		//	#3) In IE it is necessary to give the Menu a width before the 
+		//	scrollbars are rendered to prevent the Menu from rendering with a 
+		//	width that is 100% of the browser viewport.
 	
-			In IE it is also necessary to give the Menu a width before the scrollbars are 
-			rendered to prevent the Menu from rendering with a width that is 100% of
-			the browser viewport.
-		*/
-	
-		bSetWidth = ((UA.gecko && oParent && oParent.parent && 
-			oParent.parent.cfg.getProperty(_POSITION) == _DYNAMIC) || UA.ie);
+		bSetWidth = ((UA.gecko && UA.gecko < 1.9) || UA.ie);
 
 		if (nScrollHeight > 0 && bSetWidth && !this.cfg.getProperty(_WIDTH)) {
-	
+
 			nOffsetWidth = oElement.offsetWidth;
 	
 			/*
@@ -5161,7 +5164,7 @@ configShadow: function (p_sType, p_aArgs, p_oMenu) {
 
 
     var onBeforeShow = function () {
-    
+
     	if (this._shadow) {
 
 			// If called because the "shadow" event was refired - just append again and resize

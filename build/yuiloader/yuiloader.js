@@ -1209,7 +1209,7 @@ YAHOO.util.Get = function() {
     var _timeout = function(id) {
         var q = queues[id];
         if (q.onTimeout) {
-            var sc=q.context || q;
+            var sc=q.scope || q;
             q.onTimeout.call(sc, _returnData(q));
         }
     };
@@ -2066,6 +2066,12 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'optional': ['animation'],
             'skinnable': true
         },
+
+         'stylesheet': {
+            'type': 'js',
+            'path': 'stylesheet/stylesheet-min.js',
+            'requires': ['yahoo']
+         },
 
         'tabview': {
             'type': 'js',

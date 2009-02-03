@@ -789,9 +789,12 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">keyDownEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_onKeyDown</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">keyPressEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_onKeyPress</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">blurEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_onBlur</span><span class="o">);</span>
-        
 
-        <span class="k">if</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">||</span> <span class="nx">UA</span><span class="o">.</span><span class="nx">webkit</span><span class="o">)</span> <span class="o">{</span>
+
+		<span class="c">//	Fixes an issue in Firefox 2 and Webkit where Dom&#39;s &quot;getX&quot; and &quot;getY&quot; </span>
+<span class="c"></span>		<span class="c">//	methods return values that don&#39;t take scrollTop into consideration </span>
+<span class="c"></span>
+        <span class="k">if</span> <span class="o">((</span><span class="nx">UA</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">&amp;&amp;</span> <span class="nx">UA</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">&lt;</span> <span class="m">1</span><span class="o">.</span><span class="m">9</span><span class="o">)</span> <span class="o">||</span> <span class="nx">UA</span><span class="o">.</span><span class="nx">webkit</span><span class="o">)</span> <span class="o">{</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">subscribeToConfigEvent</span><span class="o">(</span><span class="nx">_Y</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_onYChange</span><span class="o">);</span>
 
@@ -2036,16 +2039,16 @@
 	<span class="k">var</span> <span class="nx">hide</span> <span class="o">=</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
 		<span class="c">/*</span>
-<span class="c">			There is an inconsistency between Firefox 2 for Mac OS X and Firefox 2 Windows </span>
+<span class="c">			There is an inconsistency between Firefox for Mac OS X and Firefox Windows </span>
 <span class="c">			regarding the triggering of the display of the browser&#39;s context menu and the </span>
 <span class="c">			subsequent firing of the &quot;click&quot; event. In Firefox for Windows, when the user </span>
 <span class="c">			triggers the display of the browser&#39;s context menu the &quot;click&quot; event also fires </span>
 <span class="c">			for the document object, even though the &quot;click&quot; event did not fire for the </span>
 <span class="c">			element that was the original target of the &quot;contextmenu&quot; event. This is unique </span>
-<span class="c">			to Firefox on Windows. For all other A-Grade browsers, including Firefox 2 for </span>
+<span class="c">			to Firefox on Windows. For all other A-Grade browsers, including Firefox for </span>
 <span class="c">			Mac OS X, the &quot;click&quot; event doesn&#39;t fire for the document object. </span>
 <span class="c"></span>
-<span class="c">			This bug in Firefox 2 for Windows affects Menu as Menu instances listen for </span>
+<span class="c">			This bug in Firefox for Windows affects Menu as Menu instances listen for </span>
 <span class="c">			events at the document level and have an internal &quot;click&quot; event handler they </span>
 <span class="c">			use to hide themselves when clicked. As a result, in Firefox for Windows a </span>
 <span class="c">			Menu will hide when the user right clicks on a MenuItem to raise the browser&#39;s </span>
@@ -3335,13 +3338,13 @@
         <span class="o">}</span>
 
 
-		<span class="c">// The following fixes an issue with the selected state of a MenuItem not rendering </span>
-<span class="c"></span>		<span class="c">// correctly when a submenu is aligned to the left of its parent Menu instance.</span>
+		<span class="c">//	The following fixes an issue with the selected state of a MenuItem </span>
+<span class="c"></span>		<span class="c">//	not rendering correctly when a submenu is aligned to the left of</span>
+<span class="c"></span>		<span class="c">//	its parent Menu instance.</span>
 <span class="c"></span>
 		<span class="k">if</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;x&quot;</span><span class="o">)</span> <span class="o">&lt;</span> <span class="nx">oParentMenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;x&quot;</span><span class="o">))</span> <span class="o">&amp;&amp;</span> 
-			<span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">&lt;</span> <span class="m">1</span><span class="o">.</span><span class="m">9</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
-			<span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_WIDTH</span><span class="o">))</span> <span class="o">{</span>
-		
+			<span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">&amp;&amp;</span> <span class="nx">UA</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">&lt;</span> <span class="m">1</span><span class="o">.</span><span class="m">9</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_WIDTH</span><span class="o">))</span> <span class="o">{</span>
+
 			<span class="nx">oElement</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">;</span>
 			<span class="nx">nOffsetWidth</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">;</span>
 			
@@ -3833,7 +3836,6 @@
         <span class="nx">oBody</span><span class="o">,</span>
         <span class="nx">oHeader</span><span class="o">,</span>
         <span class="nx">oFooter</span><span class="o">,</span>
-		<span class="nx">oParent</span><span class="o">,</span>
         <span class="nx">fnMouseOver</span><span class="o">,</span>
         <span class="nx">fnMouseOut</span><span class="o">,</span>
         <span class="nx">nMinScrollHeight</span><span class="o">,</span>
@@ -3851,7 +3853,6 @@
         <span class="nx">fnMouseOver</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_onScrollTargetMouseOver</span><span class="o">;</span>
         <span class="nx">fnMouseOut</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_onScrollTargetMouseOut</span><span class="o">;</span>
         <span class="nx">nMinScrollHeight</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_MIN_SCROLL_HEIGHT</span><span class="o">);</span>
-        <span class="nx">oParent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">;</span>
 
 
 		<span class="k">if</span> <span class="o">(</span><span class="nx">nScrollHeight</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nx">nScrollHeight</span> <span class="o">&lt;</span> <span class="nx">nMinScrollHeight</span><span class="o">)</span> <span class="o">{</span>
@@ -3866,24 +3867,26 @@
 		<span class="nx">oBody</span><span class="o">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
 
 
-		<span class="c">/*</span>
-<span class="c">			There is a bug in gecko-based browsers where an element whose </span>
-<span class="c">			&quot;position&quot; property is set to &quot;absolute&quot; and &quot;overflow&quot; property is set </span>
-<span class="c">			to &quot;hidden&quot; will not render at the correct width when its </span>
-<span class="c">			offsetParent&#39;s &quot;position&quot; property is also set to &quot;absolute.&quot;  It is </span>
-<span class="c">			possible to work around this bug by specifying a value for the width </span>
-<span class="c">			property in addition to overflow.</span>
-<span class="c">	</span>
-<span class="c">			In IE it is also necessary to give the Menu a width before the scrollbars are </span>
-<span class="c">			rendered to prevent the Menu from rendering with a width that is 100% of</span>
-<span class="c">			the browser viewport.</span>
-<span class="c">		*/</span>
-	
-		<span class="nx">bSetWidth</span> <span class="o">=</span> <span class="o">((</span><span class="nx">UA</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">&amp;&amp;</span> <span class="nx">oParent</span> <span class="o">&amp;&amp;</span> <span class="nx">oParent</span><span class="o">.</span><span class="nx">parent</span> <span class="o">&amp;&amp;</span> 
-			<span class="nx">oParent</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_POSITION</span><span class="o">)</span> <span class="o">==</span> <span class="nx">_DYNAMIC</span><span class="o">)</span> <span class="o">||</span> <span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span><span class="o">);</span>
+		<span class="c">//	Need to set a width for the Menu to fix the following problems in </span>
+<span class="c"></span>		<span class="c">//	Firefox 2 and IE:</span>
+<span class="c"></span>
+		<span class="c">//	#1) Scrolled Menus will render at 1px wide in Firefox 2</span>
+<span class="c"></span>
+		<span class="c">//	#2) There is a bug in gecko-based browsers where an element whose </span>
+<span class="c"></span>		<span class="c">//	&quot;position&quot; property is set to &quot;absolute&quot; and &quot;overflow&quot; property is </span>
+<span class="c"></span>		<span class="c">//	set to &quot;hidden&quot; will not render at the correct width when its </span>
+<span class="c"></span>		<span class="c">//	offsetParent&#39;s &quot;position&quot; property is also set to &quot;absolute.&quot;  It is </span>
+<span class="c"></span>		<span class="c">//	possible to work around this bug by specifying a value for the width </span>
+<span class="c"></span>		<span class="c">//	property in addition to overflow.</span>
+<span class="c"></span>
+		<span class="c">//	#3) In IE it is necessary to give the Menu a width before the </span>
+<span class="c"></span>		<span class="c">//	scrollbars are rendered to prevent the Menu from rendering with a </span>
+<span class="c"></span>		<span class="c">//	width that is 100% of the browser viewport.</span>
+<span class="c"></span>	
+		<span class="nx">bSetWidth</span> <span class="o">=</span> <span class="o">((</span><span class="nx">UA</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">&amp;&amp;</span> <span class="nx">UA</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">&lt;</span> <span class="m">1</span><span class="o">.</span><span class="m">9</span><span class="o">)</span> <span class="o">||</span> <span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span><span class="o">);</span>
 
 		<span class="k">if</span> <span class="o">(</span><span class="nx">nScrollHeight</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nx">bSetWidth</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_WIDTH</span><span class="o">))</span> <span class="o">{</span>
-	
+
 			<span class="nx">nOffsetWidth</span> <span class="o">=</span> <span class="nx">oElement</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">;</span>
 	
 			<span class="c">/*</span>
@@ -4303,7 +4306,7 @@
 
 
     <span class="k">var</span> <span class="nx">onBeforeShow</span> <span class="o">=</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-    
+
     	<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_shadow</span><span class="o">)</span> <span class="o">{</span>
 
 			<span class="c">// If called because the &quot;shadow&quot; event was refired - just append again and resize</span>
