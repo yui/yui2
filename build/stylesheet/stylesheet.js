@@ -200,7 +200,7 @@ function StyleSheet(seed, name) {
     // 5. The method to add a new rule to the stylesheet
     // IE supports addRule with different signature
     _insertRule = ('insertRule' in sheet) ?
-        function (sel,css,i) { sheet.insertRule(sel+' '+css,i); } :
+        function (sel,css,i) { sheet.insertRule(sel+' {'+css+'}',i); } :
         function (sel,css,i) { sheet.addRule(sel,css,i); };
 
     // Cache the instance by the generated Id
@@ -302,7 +302,7 @@ function StyleSheet(seed, name) {
                 rule.style.cssText = StyleSheet.toCssText(css,rule.style.cssText);
             } else {
                 idx = sheet[_rules].length;
-                _insertRule(sel,'{'+StyleSheet.toCssText(css)+'}',idx);
+                _insertRule(sel, StyleSheet.toCssText(css), idx);
 
                 // Safari replaces the rules collection, but maintains the rule
                 // instances in the new collection when rules are added/removed
