@@ -1189,9 +1189,9 @@ package
 				this.chart.setStyle(axisName + "AxisLabelRotation", styles.labelRotation);
 			}
 			
-			if(styles.labelPadding)
+			if(styles.labelSpacing)
 			{
-				this.chart.setStyle(axisName + "AxisLabelPadding", styles.labelPadding);
+				this.chart.setStyle(axisName + "AxisLabelSpacing", styles.labelSpacing);
 			}
 			
 			if(styles.labelDistance)
