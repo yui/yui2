@@ -805,13 +805,7 @@
                 <span class="o">}</span>
             <span class="o">}</span>
 
-            <span class="c">// Everything which needs to be done if content changed</span>
-<span class="c"></span>            <span class="c">// TODO: Should we be firing contentChange here?</span>
-<span class="c"></span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setFirstLastFocusable</span><span class="o">();</span>
-
-            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">refireEvent</span><span class="o">(</span><span class="s2">&quot;iframe&quot;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">refireEvent</span><span class="o">(</span><span class="s2">&quot;underlay&quot;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>

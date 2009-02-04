@@ -1772,7 +1772,6 @@
                 }
                 carousel._itemClickHandler(ev);
                 carousel._pagerClickHandler(ev);
-                carousel.focus();
             });
 
             // Restore the focus on the navigation buttons
@@ -2587,6 +2586,9 @@
                                 val.substring(pos + 1));
                         carousel._selectedItem = val;
                         carousel.scrollTo(val);
+                        if (!target.value) { // not a select element
+                            carousel.focus();
+                        }
                         Event.preventDefault(ev);
                     }
                 }

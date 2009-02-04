@@ -756,13 +756,7 @@
                 }
             }
 
-            // Everything which needs to be done if content changed
-            // TODO: Should we be firing contentChange here?
-
-            this.setFirstLastFocusable();
-
-            this.cfg.refireEvent("iframe");
-            this.cfg.refireEvent("underlay");
+            this.changeContentEvent.fire();
         },
 
         /**
