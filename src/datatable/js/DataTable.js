@@ -6618,7 +6618,7 @@ updateRow : function(row, oData) {
             updatedRecord = this._oRecordSet.setRecord(oData, index);
             
         // Update selections as necessary
-        var tracker = this._aSelections,
+        var tracker = this._aSelections || [],
             i=0,
             oldId = oldRecord.getId(),
             newId = updatedRecord.getId();
@@ -6708,7 +6708,7 @@ updateRows : function(startrow, aData) {
                 aNewRecords = this._oRecordSet.setRecords(aData, startIndex);
             if(aNewRecords) {
                 // Update selections as necessary
-                var tracker = this._aSelections,
+                var tracker = this._aSelections || [],
                     i=0, j, newId, oldId;
                 for(; i<tracker.length; i++) {
                     for(j=0; j<aOldRecords.length; j++) {
