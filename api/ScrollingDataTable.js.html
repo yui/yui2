@@ -530,8 +530,10 @@
 <span class="nx">_initTbodyEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">elTable</span><span class="o">)</span> <span class="o">{</span>
     <span class="nx">SDT</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">_initTbodyEl</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">elTable</span><span class="o">);</span>
     
-    <span class="c">// Bug 2105534 - Safari gap</span>
-<span class="c"></span>    <span class="nx">elTable</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">marginTop</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">+</span><span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">.</span><span class="nx">offsetTop</span><span class="o">+</span><span class="s2">&quot;px&quot;</span><span class="o">;</span>
+    <span class="c">// Bug 2105534 - Safari 3 gap</span>
+<span class="c"></span>    <span class="c">// Bug 2492591 - IE8 offsetTop</span>
+<span class="c"></span>    <span class="nx">elTable</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">marginTop</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">.</span><span class="nx">offsetTop</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span>
+            <span class="s2">&quot;-&quot;</span><span class="o">+</span><span class="k">this</span><span class="o">.</span><span class="nx">_elTbody</span><span class="o">.</span><span class="nx">offsetTop</span><span class="o">+</span><span class="s2">&quot;px&quot;</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
 <span class="o">},</span>
 
 

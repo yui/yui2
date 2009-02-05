@@ -48,7 +48,7 @@
 <script type="text/javascript" src="../../../build/event/event.js"></script>
 <script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../../../build/yuitest/yuitest-min.js"></script>
-<script type="text/javascript" src="../../../build/stylesheet/stylesheet-beta-debug.js"></script>
+<script type="text/javascript" src="../../../build/stylesheet/stylesheet-debug.js"></script>
 <script type="text/javascript">
 (function () {
 
@@ -238,6 +238,11 @@ suite.add(new TestCase({
         StyleAssert.areEqual('1px',
                         Dom.getStyle(this.testNode,'borderLeftWidth'),
                         "border");
+    },
+
+    test_addRuleWithInvalidValue : function () {
+        // This would throw an exception in IE if anywhere
+        this.stylesheet.set('#target .foo .bar', { color : 'invalid-value' });
     },
 
     test_descendantSelector : function () {

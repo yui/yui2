@@ -152,6 +152,18 @@ YAHOO.test.cookie_test = (function(){
             ObjectAssert.hasProperty("undefined", cookies, "Cookie 'undefined' is missing.");
         },
         
+        /**
+         * Tests that the cookie utility deals with cookies that contain
+         * an invalid encoding. It shouldn't error, but should treat the cookie
+         * as if it doesn't exist (return null).
+         */
+        testParseCookieStringInvalidEncoding: function(){
+            var cookieString = "DetailInfoList=CPN03022194=@|@=CPN03#|#%B4%EB%C3%B5%C7%D8%BC%F6%BF%E5%C0%E5#|#1016026000#|#%BD%C5%C8%E6%B5%BF#|##|#";
+            var cookies = YAHOO.util.Cookie._parseCookieString(cookieString);
+            
+            Assert.isNull(cookies["DetailInfoList"], "Cookie 'DetailInfoList' should not have a value.");
+        },
+        
         testParseCookieStringWithHash : function(){
         
             var cookieString = "name=Nicholas%20Zakas; hash=a=b&c=d&e=f&g=h; title=front%20end%20engineer";

@@ -48,7 +48,8 @@
     zoom:1;
 }
 
-.yui-navset .yui-content {
+.yui-navset .yui-content,
+.yui-navset .yui-content div {
     zoom:1;
 }
 

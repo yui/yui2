@@ -920,9 +920,23 @@ package com.yahoo.astra.fl.charts.axes
 						}
 						else
 						{
-							xDifference = (lastVisibleLabel.x + lastVisibleLabel.width) - (label.x + label.width);
+							xDifference = (lastVisibleLabel.x + lastVisibleLabel.textField.textWidth) - (label.x + label.textField.textWidth);
 						}
-						if(lastVisibleLabel.width > xDifference)
+						var textWidth:Number;
+
+						if(labelRotation == 0)
+						{
+							textWidth = lastVisibleLabel.textField.textWidth;
+						}
+						else if(Math.abs(labelRotation) == 90)
+						{
+							textWidth = lastVisibleLabel.textField.textHeight;
+						}
+						else
+						{
+							textWidth = label.width;
+						}
+						if(textWidth > xDifference)
 						{
 							var offset:Point = Point.polar(xDifference, GeomUtil.degreesToRadians(labelRotation));
 							if(Math.abs(offset.y) <= label.height)
@@ -935,13 +949,27 @@ package com.yahoo.astra.fl.charts.axes
 					{
 						if(labelRotation >= 0)
 						{
-							var yDifference:Number = lastVisibleLabel.y - label.y;
+							var yDifference:Number = Math.abs(lastVisibleLabel.y - label.y);
 						}
 						else
 						{
-							yDifference = (label.y + label.height) - (lastVisibleLabel.y + lastVisibleLabel.height);
+							yDifference = Math.abs((lastVisibleLabel.y + lastVisibleLabel.height) - (label.y + label.height));
 						}
-						if(lastVisibleLabel.height > yDifference)
+						var textHeight:Number;
+						
+						if(labelRotation == 0)
+						{
+							textHeight = lastVisibleLabel.textField.textHeight;
+						}
+						else if(Math.abs(labelRotation) == 90)
+						{
+							textHeight = lastVisibleLabel.textField.textWidth;
+						}
+						else
+						{
+							textHeight = lastVisibleLabel.height;
+						}
+						if(textHeight > yDifference)
 						{
 							offset = Point.polar(yDifference, GeomUtil.degreesToRadians(labelRotation));
 							if(offset.x <= label.width)

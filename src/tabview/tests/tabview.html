@@ -48,6 +48,11 @@
 
                 Y.Assert.areEqual(2, tabview.get('activeIndex'), 'incorrect activeTab');
                 Y.Assert.areEqual(tabview.get('tabs')[2], tabview.get('activeTab'),  'incorrect activeTab');
+
+                tabview.selectTab(1);
+                Y.Assert.areEqual(1, tabview.get('activeIndex'), 'tabview.selectTab(1);');
+                tabview.deselectTab(1);
+                Y.Assert.areEqual(null, tabview.get('activeIndex'), 'tabview.selectTab(1);');
             },            
 
             test_addTab: function() {
