@@ -481,8 +481,10 @@ _initBdThEl : function(elTh, oColumn) {
 _initTbodyEl : function(elTable) {
     SDT.superclass._initTbodyEl.call(this, elTable);
     
-    // Bug 2105534 - Safari gap
-    elTable.style.marginTop = "-"+this._elTbody.offsetTop+"px";
+    // Bug 2105534 - Safari 3 gap
+    // Bug 2492591 - IE8 offsetTop
+    elTable.style.marginTop = (this._elTbody.offsetTop > 0) ?
+            "-"+this._elTbody.offsetTop+"px" : 0;
 },
 
 

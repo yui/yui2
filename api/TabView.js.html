@@ -252,13 +252,15 @@
             <span class="k">var</span> <span class="nx">tabCount</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;tabs&#39;</span><span class="o">).</span><span class="nx">length</span><span class="o">,</span>
                 <span class="nx">index</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTabIndex</span><span class="o">(</span><span class="nx">tab</span><span class="o">);</span>
 
-            <span class="k">if</span> <span class="o">(</span> <span class="nx">tab</span> <span class="o">==</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">ACTIVE_TAB</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span> <span class="c">// select next tab</span>
-<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">tabCount</span> <span class="o">&gt;</span> <span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="nx">index</span> <span class="o">+</span> <span class="m">1</span> <span class="o">==</span> <span class="nx">tabCount</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="nx">ACTIVE_INDEX</span><span class="o">,</span> <span class="nx">index</span> <span class="o">-</span> <span class="m">1</span><span class="o">);</span>
-                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="nx">ACTIVE_INDEX</span><span class="o">,</span> <span class="nx">index</span> <span class="o">+</span> <span class="m">1</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="nx">tab</span> <span class="o">===</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">ACTIVE_TAB</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span> 
+                <span class="k">if</span> <span class="o">(</span><span class="nx">tabCount</span> <span class="o">&gt;</span> <span class="m">1</span><span class="o">)</span> <span class="o">{</span> <span class="c">// select another tab</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">index</span> <span class="o">+</span> <span class="m">1</span> <span class="o">===</span> <span class="nx">tabCount</span><span class="o">)</span> <span class="o">{</span> <span class="c">// if last, activate previous</span>
+<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="nx">ACTIVE_INDEX</span><span class="o">,</span> <span class="nx">index</span> <span class="o">-</span> <span class="m">1</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// activate next tab</span>
+<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="nx">ACTIVE_INDEX</span><span class="o">,</span> <span class="nx">index</span> <span class="o">+</span> <span class="m">1</span><span class="o">);</span>
                     <span class="o">}</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// no more tabs</span>
+<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="nx">ACTIVE_TAB</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>
             

@@ -1149,6 +1149,9 @@
             <span class="k">this</span><span class="o">.</span><span class="nx">pickerSlider</span> <span class="o">=</span> <span class="nx">Slider</span><span class="o">.</span><span class="nx">getSliderRegion</span><span class="o">(</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">ID</span><span class="o">.</span><span class="nx">PICKER_BG</span><span class="o">),</span> 
                 <span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">ID</span><span class="o">.</span><span class="nx">PICKER_THUMB</span><span class="o">),</span> <span class="m">0</span><span class="o">,</span> <span class="nx">size</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="nx">size</span><span class="o">);</span>
+
+            <span class="c">// Apply animate attribute configuration</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">ANIMATE</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">ANIMATE</span><span class="o">));</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
@@ -1601,8 +1604,10 @@
             <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">ANIMATE</span><span class="o">,</span> <span class="o">{</span>
                     <span class="nx">value</span><span class="o">:</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isBoolean</span><span class="o">(</span><span class="nx">attr</span><span class="o">.</span><span class="nx">animate</span><span class="o">)</span> <span class="o">?</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">animate</span> <span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
                     <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">on</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">pickerSlider</span><span class="o">.</span><span class="nx">animate</span> <span class="o">=</span> <span class="nx">on</span><span class="o">;</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">hueSlider</span><span class="o">.</span><span class="nx">animate</span> <span class="o">=</span> <span class="nx">on</span><span class="o">;</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">pickerSlider</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">this</span><span class="o">.</span><span class="nx">pickerSlider</span><span class="o">.</span><span class="nx">animate</span> <span class="o">=</span> <span class="nx">on</span><span class="o">;</span>
+                            <span class="k">this</span><span class="o">.</span><span class="nx">hueSlider</span><span class="o">.</span><span class="nx">animate</span> <span class="o">=</span> <span class="nx">on</span><span class="o">;</span>
+                        <span class="o">}</span>
                     <span class="o">}</span>
                 <span class="o">});</span>
 
