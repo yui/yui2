@@ -302,11 +302,18 @@ function StyleSheet(seed, name) {
                 rule.style.cssText = StyleSheet.toCssText(css,rule.style.cssText);
             } else {
                 idx = sheet[_rules].length;
-                _insertRule(sel, StyleSheet.toCssText(css), idx);
+                css = StyleSheet.toCssText(css);
 
-                // Safari replaces the rules collection, but maintains the rule
-                // instances in the new collection when rules are added/removed
-                cssRules[sel] = sheet[_rules][idx];
+                // IE throws an error when attempting to addRule(sel,'',n)
+                // which would crop up if no, or only invalid values are used
+                if (css) {
+                    _insertRule(sel, css, idx);
+
+                    // Safari replaces the rules collection, but maintains the
+                    // rule instances in the new collection when rules are
+                    // added/removed
+                    cssRules[sel] = sheet[_rules][idx];
+                }
             }
             return this;
         },
@@ -620,6 +627,7 @@ NOTES
    Opera and IE do not.
  * IE6 and IE7 silently ignore the { and } if passed into addRule('.foo','{
    color:#000}',0).  IE8 does not and creates an empty rule.
+ * IE6-8 addRule('.foo','',n) throws an error.  Must supply *some* cssText
 */
 
 YAHOO.register("stylesheet", YAHOO.util.StyleSheet, {version: "@VERSION@", build: "@BUILD@"});
