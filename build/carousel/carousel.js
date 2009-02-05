@@ -2088,7 +2088,6 @@
                 numItems, numPerPage, offset, page, rv, sentinel,
                 stopAutoScroll;
 
-            console.log(">>> " + item);
             if (JS.isUndefined(item) || item == carousel._firstItem ||
                 carousel.isAnimating()) {
                 return;         // nothing to do!
@@ -2136,7 +2135,7 @@
 
             delta = firstItem - item; // yes, the delta is reverse
             carousel._firstItem = item;
-            carousel.set("firstVisible", item, true);
+            carousel.set("firstVisible", item);
 
 
             carousel._loadItems(); // do we have all the items to display?
@@ -2216,11 +2215,11 @@
          * @public
          */
         startAutoPlay: function () {
-            var carousel = this,
-                timer    = carousel.get("autoPlayInterval");
+            var carousel = this, timer;
 
-            if (timer > 0) {
-                if (!JS.isUndefined(carousel._autoPlayTimer)) {
+            if (JS.isUndefined(carousel._autoPlayTimer)) {
+                timer = carousel.get("autoPlayInterval");
+                if (timer <= 0) {
                     return;
                 }
                 carousel._isAutoPlayInProgress = true;
@@ -2243,7 +2242,6 @@
             if (!JS.isUndefined(carousel._autoPlayTimer)) {
                 clearTimeout(carousel._autoPlayTimer);
                 delete carousel._autoPlayTimer;
-                carousel.set("autoPlayInterval", 0);
                 carousel._isAutoPlayInProgress = false;
                 carousel.fireEvent(stopAutoPlayEvent);
             }
