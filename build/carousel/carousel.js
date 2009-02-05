@@ -2084,32 +2084,27 @@
          */
         scrollTo: function (item, dontSelect) {
             var carousel   = this,
-                animate,
-                animCfg    = carousel.get("animation"),
-                isCircular = carousel.get("isCircular"),
-                delta,
-                direction,
-                firstItem  = carousel._firstItem,
-                numItems   = carousel.get("numItems"),
-                numPerPage = carousel.get("numVisible"),
-                offset,
-                page       = carousel.get("currentPage"),
-                rv,
-                sentinel;
+                animate, animCfg, isCircular, delta, direction, firstItem,
+                numItems, numPerPage, offset, page, rv, sentinel,
+                stopAutoScroll;
 
-            function stopAutoScroll() {
-                if (carousel.isAutoPlayOn()) {
-                    carousel.stopAutoPlay();
-                }
-            }
-
-            if (item == firstItem) {
+            console.log(">>> " + item);
+            if (JS.isUndefined(item) || item == carousel._firstItem ||
+                carousel.isAnimating()) {
                 return;         // nothing to do!
             }
 
-            if (carousel.isAnimating()) {
-                return;         // let it take its own sweet time to complete
-            }
+            animCfg        = carousel.get("animation");
+            isCircular     = carousel.get("isCircular");
+            firstItem      = carousel._firstItem;
+            numItems       = carousel.get("numItems");
+            numPerPage     = carousel.get("numVisible");
+            page           = carousel.get("currentPage");
+            stopAutoScroll = function () {
+                if (carousel.isAutoPlayOn()) {
+                    carousel.stopAutoPlay();
+                }
+            };
 
             if (item < 0) {
                 if (isCircular) {
@@ -2141,7 +2136,7 @@
 
             delta = firstItem - item; // yes, the delta is reverse
             carousel._firstItem = item;
-            carousel.set("firstVisible", item);
+            carousel.set("firstVisible", item, true);
 
 
             carousel._loadItems(); // do we have all the items to display?
@@ -3470,7 +3465,7 @@
                 if (numItems === 0 && val == numItems) {
                     return true;
                 } else {
-                    return (val >= 0 && val < carousel.get("numItems"));
+                    return (val >= 0 && val < numItems);
                 }
             }
 
