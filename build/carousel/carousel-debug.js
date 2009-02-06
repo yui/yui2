@@ -2102,32 +2102,26 @@
          */
         scrollTo: function (item, dontSelect) {
             var carousel   = this,
-                animate,
-                animCfg    = carousel.get("animation"),
-                isCircular = carousel.get("isCircular"),
-                delta,
-                direction,
-                firstItem  = carousel._firstItem,
-                numItems   = carousel.get("numItems"),
-                numPerPage = carousel.get("numVisible"),
-                offset,
-                page       = carousel.get("currentPage"),
-                rv,
-                sentinel;
+                animate, animCfg, isCircular, delta, direction, firstItem,
+                numItems, numPerPage, offset, page, rv, sentinel,
+                stopAutoScroll;
 
-            function stopAutoScroll() {
-                if (carousel.isAutoPlayOn()) {
-                    carousel.stopAutoPlay();
-                }
-            }
-
-            if (item == firstItem) {
+            if (JS.isUndefined(item) || item == carousel._firstItem ||
+                carousel.isAnimating()) {
                 return;         // nothing to do!
             }
 
-            if (carousel.isAnimating()) {
-                return;         // let it take its own sweet time to complete
-            }
+            animCfg        = carousel.get("animation");
+            isCircular     = carousel.get("isCircular");
+            firstItem      = carousel._firstItem;
+            numItems       = carousel.get("numItems");
+            numPerPage     = carousel.get("numVisible");
+            page           = carousel.get("currentPage");
+            stopAutoScroll = function () {
+                if (carousel.isAutoPlayOn()) {
+                    carousel.stopAutoPlay();
+                }
+            };
 
             if (item < 0) {
                 if (isCircular) {
@@ -2241,11 +2235,11 @@
          * @public
          */
         startAutoPlay: function () {
-            var carousel = this,
-                timer    = carousel.get("autoPlayInterval");
+            var carousel = this, timer;
 
-            if (timer > 0) {
-                if (!JS.isUndefined(carousel._autoPlayTimer)) {
+            if (JS.isUndefined(carousel._autoPlayTimer)) {
+                timer = carousel.get("autoPlayInterval");
+                if (timer <= 0) {
                     return;
                 }
                 carousel._isAutoPlayInProgress = true;
@@ -2268,7 +2262,6 @@
             if (!JS.isUndefined(carousel._autoPlayTimer)) {
                 clearTimeout(carousel._autoPlayTimer);
                 delete carousel._autoPlayTimer;
-                carousel.set("autoPlayInterval", 0);
                 carousel._isAutoPlayInProgress = false;
                 carousel.fireEvent(stopAutoPlayEvent);
             }
@@ -3512,7 +3505,7 @@
                 if (numItems === 0 && val == numItems) {
                     return true;
                 } else {
-                    return (val >= 0 && val < carousel.get("numItems"));
+                    return (val >= 0 && val < numItems);
                 }
             }
 

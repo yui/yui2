@@ -23,7 +23,7 @@ Y.Selector = {
     _re: {
         nth: /^(?:([-]?\d*)(n){1}|(odd|even)$)*([-+]?\d*)$/,
         attr: /(\[.*\])/g,
-        urls: /^(?:href|src)/g
+        urls: /^(?:href|src)/
     },
 
     /**
@@ -66,9 +66,9 @@ Y.Selector = {
             var s = ' ';
             return (s + attr + s).indexOf((s + val + s)) > -1;
         },
-        '|=': function(attr, val) { return Y.Selector._getRegExp('^' + val + '[-]?').test(attr); }, // Match start with value followed by optional hyphen
+        '|=': function(attr, val) { return attr === val || attr.slice(0, val.length + 1) === val + '-'; }, // Matches value followed by optional hyphen
         '^=': function(attr, val) { return attr.indexOf(val) === 0; }, // Match starts with value
-        '$=': function(attr, val) { return attr.lastIndexOf(val) === attr.length - val.length; }, // Match ends with value
+        '$=': function(attr, val) { return attr.slice(-val.length) === val; }, // Match ends with value
         '*=': function(attr, val) { return attr.indexOf(val) > -1; }, // Match contains value as substring 
         '': function(attr, val) { return attr; } // Just test for existence of attribute
     },
@@ -295,7 +295,9 @@ Y.Selector = {
 
 
     _query: function(selector, root, firstOnly, deDupe) {
-        var result =  (firstOnly) ? null : [];
+        var result =  (firstOnly) ? null : [],
+            node;
+
         if (!selector) {
             return result;
         }
@@ -325,13 +327,13 @@ Y.Selector = {
         if (root.nodeName !== '#document') { // prepend with root selector
             Y.Dom.generateId(root); // TODO: cleanup after?
             selector = root.tagName + '#' + root.id + ' ' + selector;
+            node = root;
             root = root.ownerDocument;
         }
 
         var tokens = Y.Selector._tokenize(selector);
         var idToken = tokens[Y.Selector._getIdTokenIndex(tokens)],
             nodes = [],
-            node,
             id,
             token = tokens.pop() || {};
             
@@ -341,9 +343,9 @@ Y.Selector = {
 
         // use id shortcut when possible
         if (id) {
-            node = Y.Selector.document.getElementById(id);
+            node = node || Y.Selector.document.getElementById(id);
 
-            if (node && (root.nodeName == '#document' || Y.Dom.isAncestor(root, node))) {
+            if (node && (root.nodeName === '#document' || Y.Dom.isAncestor(root, node))) {
                 if ( Y.Selector._test(node, null, idToken) ) {
                     if (idToken === token) {
                         nodes = [node]; // simple selector
@@ -638,7 +640,7 @@ Y.Selector = {
     }
 };
 
-if (YAHOO.env.ua.ie && YAHOO.env.ua.ie < 8) { // rewrite class for IE (others use getAttribute('class')
+if (YAHOO.env.ua.ie && YAHOO.env.ua.ie < 8) { // rewrite class for IE < 8
     Y.Selector.attrAliases['class'] = 'className';
     Y.Selector.attrAliases['for'] = 'htmlFor';
 }
