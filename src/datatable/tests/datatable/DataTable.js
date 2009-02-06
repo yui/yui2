@@ -607,6 +607,45 @@
             Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
         },
 
+        testUpdateRowsRenderLoopSize: function() {
+            var dt = this.createInstance(null, {renderLoopSize:2});
+            var newData = [{a:"4a",b:"4b",c:"4c"},{a:"5a",b:"5b",c:"5c"}];
+            dt.updateRows(0, newData);
+            
+            var oData = dt._oRecordSet._records[0].getData();
+            Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
+            oData = dt._oRecordSet._records[1].getData();
+            Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
+
+            newData = [{a:"6a",b:"6b",c:"6c"},{a:"7a",b:"7b",c:"7c"}];
+            dt.updateRows(3, newData);
+
+            oData = dt._oRecordSet._records[3].getData();
+            Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
+            oData = dt._oRecordSet._records[4].getData();
+            Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
+        },
+        
+        testUpdateRowsPaginated: function() {
+            var dt = this.createInstance(null, {paginator:new YAHOO.widget.Paginator({rowsPerPage:2})});
+            var newData = [{a:"4a",b:"4b",c:"4c"},{a:"5a",b:"5b",c:"5c"}];
+            dt.updateRows(0, newData);
+            
+            var oData = dt._oRecordSet._records[0].getData();
+            Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
+            DataTableAssert.areSameRow(dt.getFirstTrEl(), dt._oRecordSet._records[0], dt,  "First row mismatch");
+            oData = dt._oRecordSet._records[1].getData();
+            Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
+
+            newData = [{a:"6a",b:"6b",c:"6c"},{a:"7a",b:"7b",c:"7c"}];
+            dt.updateRows(3, newData);
+
+            oData = dt._oRecordSet._records[3].getData();
+            Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
+            oData = dt._oRecordSet._records[4].getData();
+            Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
+        },
+
         testDeleteRow: function() {
             //TODO: Test all the arg sigs of deleteRow() method
             var dt = this.createInstance();
