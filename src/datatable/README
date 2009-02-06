@@ -10,6 +10,8 @@ updated cell, no longer an object literal of all data).
 * Added updateRows() and onDataReturnUpdateRows() to support incremental data
 modifications to a subset of rows.
 * The method getSanitizedKey() now also strips "." and ":" chars from Column keys.
+* Better validation of out-of-range index in the methods addRow(), addRows(),
+updateRow() and updateRows().
 
 *** version 2.6.0 ***
 
