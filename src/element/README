@@ -1,6 +1,6 @@
 Element Release Notes
 
-*** version 2.6.0 ***
+*** version 2.7.0 ***
 * Taken out of BETA
 * Added setter/getter fields to Attribute
 * get() now returns null for undefined attributes
