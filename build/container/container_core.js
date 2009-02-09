@@ -4176,7 +4176,7 @@
         /**
          * Can be used to force the container to repaint/redraw it's contents.
          * <p>
-         * By default applies and then removes a 0px margin through the 
+         * By default applies and then removes a 1px bottom margin through the 
          * application/removal of a "yui-force-redraw" class.
          * </p>
          * <p>

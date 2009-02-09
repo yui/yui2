@@ -388,7 +388,25 @@
 
         <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
 
-            <span class="nx">_checkIframeLoaded</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentMode</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">||</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentMode</span> <span class="o">&lt;</span> <span class="m">8</span><span class="o">)</span> <span class="o">{</span>
+
+                <span class="c">// IE &lt; 8 or IE8 in quirks mode or IE7 standards mode</span>
+<span class="c"></span>                <span class="nx">_checkIframeLoaded</span><span class="o">();</span>
+
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+
+                <span class="c">// IE8 in IE8 standards mode</span>
+<span class="c"></span>                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">top</span><span class="o">,</span> <span class="s2">&quot;hashchange&quot;</span><span class="o">,</span>
+                    <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                        <span class="k">var</span> <span class="nx">hash</span> <span class="o">=</span> <span class="nx">_getHash</span><span class="o">();</span>
+                        <span class="nx">_handleFQStateChange</span><span class="o">(</span><span class="nx">hash</span><span class="o">);</span>
+                        <span class="nx">_storeStates</span><span class="o">();</span>
+                    <span class="o">});</span>
+
+                <span class="nx">_initialized</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">History</span><span class="o">.</span><span class="nx">onLoadEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+
+            <span class="o">}</span>
 
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
 
@@ -592,7 +610,8 @@
 
             <span class="nx">_stateField</span> <span class="o">=</span> <span class="nx">stateField</span><span class="o">;</span>
 
-            <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// IE &lt; 8 or IE8 in quirks mode or IE7 standards mode</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="k">typeof</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentMode</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">||</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentMode</span> <span class="o">&lt;</span> <span class="m">8</span><span class="o">))</span> <span class="o">{</span>
 
                 <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">histFrame</span> <span class="o">===</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">histFrame</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">histFrame</span><span class="o">);</span>
@@ -683,7 +702,7 @@
 
             <span class="nx">fqstate</span> <span class="o">=</span> <span class="nx">currentStates</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot;&amp;&quot;</span><span class="o">);</span>
 
-            <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="k">typeof</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentMode</span> <span class="o">===</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">||</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentMode</span> <span class="o">&lt;</span> <span class="m">8</span><span class="o">))</span> <span class="o">{</span>
 
                 <span class="k">return</span> <span class="nx">_updateIFrame</span><span class="o">(</span><span class="nx">fqstate</span><span class="o">);</span>
 

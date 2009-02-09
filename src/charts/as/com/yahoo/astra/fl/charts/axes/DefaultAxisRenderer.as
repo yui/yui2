@@ -804,39 +804,31 @@ package com.yahoo.astra.fl.charts.axes
 					}
 					
 					label.rotation = labelRotation;
-					if(labelRotation > 0)
+					
+					if(labelRotation == 90)
 					{
-						if(labelRotation < 90)
-						{
-							label.x -= label.width *  (1 - labelRotation/90);
-							label.y -= label.height * (.5 + labelRotation/180);
-						}
-						else
-						{
-							label.y -= label.height/2;
-						}
+						label.y -= label.height/2;
 					}
-					else if(labelRotation < 0)
-					{	
-						if(labelRotation > -90)
-						{
-							label.x -= label.width - 5;
-							label.y += label.height * (Math.abs(labelRotation/90));							
-						}
-						else
-						{
-							label.x -= label.width;
-							label.y += label.height /2;							
-						}
-					}
-					else
+					else if (labelRotation == -90)
 					{
 						label.x -= label.width;
-						label.y -= label.height /2;
+						label.y += label.height/2;						
 					}
-					Math.round(label.x);
-					Math.round(label.y);
+					else if (labelRotation >= 0 && labelRotation != 90)
+					{
+						label.y -= label.height - 0.5 * Math.abs(label.textField.height*Math.cos(labelRotation*Math.PI/180));
+						label.x -= label.width - Math.abs(Math.sin(labelRotation*Math.PI/180)*label.textField.height);
+					}					
+					else if (labelRotation < 0 && labelRotation != -90)
+					{	
+						label.y += label.height - 1.5 * Math.abs(label.textField.height*Math.cos(labelRotation*Math.PI/180));
+						label.x -= label.width;
+					}
+									
+					label.x = Math.round(label.x);
+					label.y = Math.round(label.y);
 				}
+				
 				else //horizontal
 				{
 					position += this.contentBounds.x;
@@ -850,14 +842,14 @@ package com.yahoo.astra.fl.charts.axes
 					{
 						label.x = position;
 						label.rotation = labelRotation;
-						label.x += label.textField.height * (Math.abs(labelRotation/180));
+						label.x += label.textField.height * Math.sin(labelRotation * Math.PI/180)/2; 
 					}
 					else if(labelRotation < 0)
 					{						
 						label.x = position;
 						label.rotation = labelRotation;
-						label.x -= label.width * (1 - Math.abs(labelRotation/180));
-						label.y += label.height - (Math.sin((90 - labelRotation) * Math.PI/180) * label.textField.height);	
+						label.x -= label.width - Math.abs((label.textField.height * Math.sin(labelRotation*Math.PI/180)))/2; 
+						label.y += label.height - Math.abs((Math.cos(labelRotation*Math.PI/180) * label.textField.height));	
 					}
 					else //labelRotation == 0
 					{
