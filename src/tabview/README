@@ -1,6 +1,16 @@
 TabView Release Notes
 
+*** version 2.7.0 ***
+* null "activeTab" when all tabs are removed
+* allow cancelling of tab change from "beforeActiveTabChange"
+* changed yui-hidden implementation to hide offscreen instead of display:none
+* allow for "activeIndex" in constructor
+* fixed setters for "contentEl" and "labelEl"
+* added selectTab and deselectTab methods
+* fire "remove" event when a tab is removed
+
 *** version 2.6.0 ***
+* moved from inline style to "yui-hidden" class for hidden tabs
 * activeIndex and activeTab sync issue fixed
 * activeIndex change events mapped to activeTab (and vice-versa)
 

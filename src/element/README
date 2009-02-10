@@ -1,5 +1,13 @@
 Element Release Notes
 
+*** version 2.7.0 ***
+* Taken out of BETA
+* Added setter/getter fields to Attribute
+* get() now returns null for undefined attributes
+* added support for "change" event
+* Configured DOM attributes no longer store state in DOM unless configured to do so
+* Added destroy method
+
 *** version 2.6.0 ***
 * Passing return values from DOM methods (appendChild, insertBefore, etc)
 

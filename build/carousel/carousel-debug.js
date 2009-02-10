@@ -528,8 +528,7 @@
      * @private
      */
      function setItemSelection(newpos, oldpos) {
-        var backwards,
-            carousel = this,
+        var carousel = this,
             cssClass   = carousel.CLASSES,
             el,
             firstItem  = carousel._firstItem,
@@ -538,8 +537,6 @@
             numVisible = carousel.get("numVisible"),
             position   = oldpos,
             sentinel   = firstItem + numVisible - 1;
-
-        backwards = numVisible > 1 && !isCircular && position > newpos;
 
         if (position >= 0 && position < numItems) {
             if (!JS.isUndefined(carousel._itemsTable.items[position])) {
@@ -569,13 +566,7 @@
             }
         }
 
-        if (newpos < firstItem || newpos > sentinel) {
-            // out of focus
-            if (backwards) {
-                newpos = firstItem - numVisible;
-                newpos = newpos >= 0 ? newpos : 0;
-            }
-
+        if (newpos < firstItem || newpos > sentinel) { // out of focus
             newpos = getFirstVisibleForPosition.call(carousel, newpos);
             carousel.scrollTo(newpos);
         }
@@ -1058,6 +1049,15 @@
              * @default "yui-carousel-buttons"
              */
             NAV_CONTAINER: "yui-carousel-buttons",
+
+            /**
+             * The class name of the focussed page navigation.  This class is
+             * specifically used for the ugly focus handling in Opera.
+             *
+             * @property PAGE_FOCUS
+             * @default "yui-carousel-nav-page-focus"
+             */
+            PAGE_FOCUS: "yui-carousel-nav-page-focus",
 
             /**
              * The class name of the previous navigation link. This variable
@@ -1698,7 +1698,9 @@
          * @public
          */
         initEvents: function () {
-            var carousel = this;
+            var carousel = this,
+                cssClass = carousel.CLASSES,
+                focussedLi;
 
             carousel.on("keydown", carousel._keyboardEventHandler);
 
@@ -1766,6 +1768,21 @@
             // Restore the focus on the navigation buttons
 
             Event.onFocus(carousel.get("element"), function (ev, obj) {
+                var target = Event.getTarget(ev);
+
+                if (target && target.nodeName.toUpperCase() == "A" &&
+                    Dom.getAncestorByClassName(target, cssClass.NAVIGATION)) {
+                    if (focussedLi) {
+                        Dom.removeClass(focussedLi, cssClass.PAGE_FOCUS);
+                    }
+                    focussedLi = target.parentNode;
+                    Dom.addClass(focussedLi, cssClass.PAGE_FOCUS);
+                } else {
+                    if (focussedLi) {
+                        Dom.removeClass(focussedLi, cssClass.PAGE_FOCUS);
+                    }
+                }
+
                 obj._hasFocus = true;
                 obj._updateNavButtons(Event.getTarget(ev), true);
             }, carousel);
@@ -2043,9 +2060,10 @@
             var carousel = this,
                 item     = carousel._firstItem - carousel.get("numVisible");
 
-            item = item >= 0 ? item : 0;
             if (carousel.get("selectOnScroll")) {
                 carousel._selectedItem = carousel._getSelectedItem(item);
+            } else {
+                item = carousel._getValidIndex(item);
             }
             carousel.scrollTo(item);
         },
@@ -2062,6 +2080,8 @@
 
             if (carousel.get("selectOnScroll")) {
                 carousel._selectedItem = carousel._getSelectedItem(item);
+            } else {
+                item = carousel._getValidIndex(item);
             }
             carousel.scrollTo(item);
         },
@@ -2076,32 +2096,26 @@
          */
         scrollTo: function (item, dontSelect) {
             var carousel   = this,
-                animate,
-                animCfg    = carousel.get("animation"),
-                isCircular = carousel.get("isCircular"),
-                delta,
-                direction,
-                firstItem  = carousel._firstItem,
-                numItems   = carousel.get("numItems"),
-                numPerPage = carousel.get("numVisible"),
-                offset,
-                page       = carousel.get("currentPage"),
-                rv,
-                sentinel;
+                animate, animCfg, isCircular, delta, direction, firstItem,
+                numItems, numPerPage, offset, page, rv, sentinel,
+                stopAutoScroll;
 
-            function stopAutoScroll() {
-                if (carousel.isAutoPlayOn()) {
-                    carousel.stopAutoPlay();
-                }
-            }
-
-            if (item == firstItem) {
+            if (JS.isUndefined(item) || item == carousel._firstItem ||
+                carousel.isAnimating()) {
                 return;         // nothing to do!
             }
 
-            if (carousel.isAnimating()) {
-                return;         // let it take its own sweet time to complete
-            }
+            animCfg        = carousel.get("animation");
+            isCircular     = carousel.get("isCircular");
+            firstItem      = carousel._firstItem;
+            numItems       = carousel.get("numItems");
+            numPerPage     = carousel.get("numVisible");
+            page           = carousel.get("currentPage");
+            stopAutoScroll = function () {
+                if (carousel.isAutoPlayOn()) {
+                    carousel.stopAutoPlay();
+                }
+            };
 
             if (item < 0) {
                 if (isCircular) {
@@ -2215,11 +2229,11 @@
          * @public
          */
         startAutoPlay: function () {
-            var carousel = this,
-                timer    = carousel.get("autoPlayInterval");
+            var carousel = this, timer;
 
-            if (timer > 0) {
-                if (!JS.isUndefined(carousel._autoPlayTimer)) {
+            if (JS.isUndefined(carousel._autoPlayTimer)) {
+                timer = carousel.get("autoPlayInterval");
+                if (timer <= 0) {
                     return;
                 }
                 carousel._isAutoPlayInProgress = true;
@@ -2242,7 +2256,6 @@
             if (!JS.isUndefined(carousel._autoPlayTimer)) {
                 clearTimeout(carousel._autoPlayTimer);
                 delete carousel._autoPlayTimer;
-                carousel.set("autoPlayInterval", 0);
                 carousel._isAutoPlayInProgress = false;
                 carousel.fireEvent(stopAutoPlayEvent);
             }
@@ -2386,6 +2399,30 @@
         },
 
         /**
+         * Return a valid item for a possibly out of bounds index considering
+         * the isCircular property.
+         *
+         * @method _getValidIndex
+         * @param index {Number} The index of the item to be returned
+         * @return {Object} Return a valid item index
+         * @protected
+         */
+        _getValidIndex: function (index) {
+            var carousel   = this,
+                isCircular = carousel.get("isCircular"),
+                numItems   = carousel.get("numItems"),
+                sentinel   = numItems - 1;
+
+            if (index < 0) {
+                index = isCircular ? numItems + index : 0;
+            } else if (index > sentinel) {
+                index = isCircular ? index - numItems : sentinel;
+            }
+
+            return index;
+        },
+
+        /**
          * Get the value for the selected item.
          *
          * @method _getSelectedItem
@@ -2524,17 +2561,47 @@
          * @protected
          */
         _pagerClickHandler: function (ev) {
-            var carousel = this, pos, target, val;
+            var carousel = this,
+                pos,
+                target   = Event.getTarget(ev),
+                val;
 
-            target = Event.getTarget(ev);
-            val = target.href || target.value;
-            if (JS.isString(val) && val) {
-                pos = val.lastIndexOf("#");
-                if (pos != -1) {
-                    val = carousel.getItemPositionById(val.substring(pos + 1));
-                    carousel._selectedItem = val;
-                    carousel.scrollTo(val);
-                    Event.preventDefault(ev);
+            function getPagerNode(el) {
+                var itemEl = carousel.get("carouselItemEl");
+
+                if (el.nodeName.toUpperCase() == itemEl.toUpperCase()) {
+                    el = Dom.getChildrenBy(el, function (node) {
+                        // either an anchor or select at least
+                        return node.href || node.value;
+                    });
+                    if (el && el[0]) {
+                        return el[0];
+                    }
+                } else if (el.href || el.value) {
+                    return el;
+                }
+
+                return null;
+            }
+
+            if (target) {
+                target = getPagerNode(target);
+                if (!target) {
+                    return;
+                }
+                val = target.href || target.value;
+                if (JS.isString(val) && val) {
+                    pos = val.lastIndexOf("#");
+                    if (pos != -1) {
+                        val = carousel.getItemPositionById(
+                                val.substring(pos + 1));
+                        carousel._selectedItem = val;
+                        carousel.scrollTo(val);
+                        if (!target.value) { // not a select element
+                            carousel.focus();
+                        }
+                        Event.preventDefault(ev);
+                    }
                 }
             }
         },
@@ -3236,7 +3303,7 @@
             }
             grandParent = parent.parentNode;
 
-            if (el.nodeName.toUpperCase() == "INPUT" &&
+            if (el.nodeName.toUpperCase() == "BUTTON" &&
                 Dom.hasClass(parent, cssClass.BUTTON)) {
                 if (setFocus) {
                     if (grandParent) {
@@ -3456,7 +3523,7 @@
                 if (numItems === 0 && val == numItems) {
                     return true;
                 } else {
-                    return (val >= 0 && val < carousel.get("numItems"));
+                    return (val >= 0 && val < numItems);
                 }
             }
 

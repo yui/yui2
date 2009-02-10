@@ -339,7 +339,25 @@ YAHOO.util.History = (function () {
 
         if (YAHOO.env.ua.ie) {
 
-            _checkIframeLoaded();
+            if (typeof document.documentMode === "undefined" || document.documentMode < 8) {
+
+                // IE < 8 or IE8 in quirks mode or IE7 standards mode
+                _checkIframeLoaded();
+
+            } else {
+
+                // IE8 in IE8 standards mode
+                YAHOO.util.Event.on(top, "hashchange",
+                    function () {
+                        var hash = _getHash();
+                        _handleFQStateChange(hash);
+                        _storeStates();
+                    });
+
+                _initialized = true;
+                YAHOO.util.History.onLoadEvent.fire();
+
+            }
 
         } else {
 
@@ -543,7 +561,8 @@ YAHOO.util.History = (function () {
 
             _stateField = stateField;
 
-            if (YAHOO.env.ua.ie) {
+            // IE < 8 or IE8 in quirks mode or IE7 standards mode
+            if (YAHOO.env.ua.ie && (typeof document.documentMode === "undefined" || document.documentMode < 8)) {
 
                 if (typeof histFrame === "string") {
                     histFrame = document.getElementById(histFrame);
@@ -634,7 +653,7 @@ YAHOO.util.History = (function () {
 
             fqstate = currentStates.join("&");
 
-            if (YAHOO.env.ua.ie) {
+            if (YAHOO.env.ua.ie && (typeof document.documentMode === "undefined" || document.documentMode < 8)) {
 
                 return _updateIFrame(fqstate);
 
@@ -775,5 +794,4 @@ YAHOO.util.History = (function () {
     };
 
 })();
-
 YAHOO.register("history", YAHOO.util.History, {version: "@VERSION@", build: "@BUILD@"});

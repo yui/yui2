@@ -48,7 +48,7 @@
 <script type="text/javascript" src="../../../build/event/event.js"></script>
 <script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../../../build/yuitest/yuitest-min.js"></script>
-<script type="text/javascript" src="../../../build/stylesheet/stylesheet-beta-debug.js"></script>
+<script type="text/javascript" src="../../../build/stylesheet/stylesheet-debug.js"></script>
 <script type="text/javascript">
 (function () {
 
@@ -238,6 +238,11 @@ suite.add(new TestCase({
         StyleAssert.areEqual('1px',
                         Dom.getStyle(this.testNode,'borderLeftWidth'),
                         "border");
+    },
+
+    test_addRuleWithInvalidValue : function () {
+        // This would throw an exception in IE if anywhere
+        this.stylesheet.set('#target .foo .bar', { color : 'invalid-value' });
     },
 
     test_descendantSelector : function () {
@@ -510,6 +515,46 @@ suite.add(new TestCase({
 }));
 
 suite.add(new TestCase({
+    name : "Test getCssText",
+
+    setUp : function () {
+        this.stylesheet = new StyleSheet('test');
+
+        this.testNode = Dom.add(testbed,'div',{
+            id:'target',
+            innerHTML:'<p>1</p><p>2</p><pre>pre</pre>'
+        });
+
+        this.stylesheet.set('#target, #target p', {
+            padding: '3px'
+        });
+    },
+    tearDown : function () {
+        testbed.innerHTML = '';
+        this.stylesheet.unset('#target');
+        this.stylesheet.unset('#target p');
+    },
+
+    test_getRuleCSS : function () {
+        var css = this.stylesheet.getCssText('#target p');
+        YAHOO.log(css, 'info','TestLogger');
+        Assert.isString(css);
+        Assert.areSame(true, /padding/i.test(css));
+    },
+
+    test_getSheetCSS : function () {
+        var css = this.stylesheet.getCssText();
+
+        YAHOO.log(css, 'info','TestLogger');
+
+        Assert.isString(css);
+        Assert.areSame(true, /padding/i.test(css));
+        Assert.areSame(true, /#target/i.test(css));
+        Assert.areSame(true, /#target\s+p\s+\{/i.test(css));
+    }
+}));
+
+suite.add(new TestCase({
     name : "Test float/opacity",
 
     setUp : function () {
@@ -547,52 +592,12 @@ suite.add(new TestCase({
 
     test_opacity : function () {
         this.stylesheet.set('#p1',{ opacity: .5 }).
-                        set('#p2',{ opacity: .2 }).
+                        set('#p2',{ opacity: ".2" }).
                         set('#p3',{ opacity: 1 });
 
         Assert.areEqual(0.5,Dom.getStyle('p1','opacity'));
         Assert.areEqual(0.2,Dom.getStyle('p2','opacity'));
         Assert.areEqual(1,Dom.getStyle('p3','opacity'));
-    }
-}));
-
-suite.add(new TestCase({
-    name : "Test getCssText",
-
-    setUp : function () {
-        this.stylesheet = new StyleSheet('test');
-
-        this.testNode = Dom.add(testbed,'div',{
-            id:'target',
-            innerHTML:'<p>1</p><p>2</p><pre>pre</pre>'
-        });
-
-        this.stylesheet.set('#target, #target p', {
-            padding: '3px'
-        });
-    },
-    tearDown : function () {
-        testbed.innerHTML = '';
-        this.stylesheet.unset('#target');
-        this.stylesheet.unset('#target p');
-    },
-
-    test_getRuleCSS : function () {
-        var css = this.stylesheet.getCssText('#target p');
-        YAHOO.log(css, 'info','TestLogger');
-        Assert.isString(css);
-        Assert.areSame(true, /padding/i.test(css));
-    },
-
-    test_getSheetCSS : function () {
-        var css = this.stylesheet.getCssText();
-
-        YAHOO.log(css, 'info','TestLogger');
-
-        Assert.isString(css);
-        Assert.areSame(true, /padding/i.test(css));
-        Assert.areSame(true, /#target/i.test(css));
-        Assert.areSame(true, /#target\s+p\s+\{/i.test(css));
     }
 }));
 

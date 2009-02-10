@@ -708,7 +708,6 @@ var Dom = YAHOO.util.Dom,
             * @type Array
             */
             this.setAttributeConfig('initialXY', {
-                writeOnce: true,
                 validator: YAHOO.lang.isArray,
                 value: attr.initialXY || [10, 10]
             });

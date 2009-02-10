@@ -5,6 +5,7 @@
  * @module stylesheet
  * @namespace YAHOO.util
  * @requires yahoo
+ * @beta
  */
 (function () {
 
@@ -12,6 +13,7 @@ var d      = document,
     p      = d.createElement('p'), // Have to hold the node (see notes)
     workerStyle = p.style, // worker style collection
     lang   = YAHOO.lang,
+    selectors = {},
     sheets = {},
     ssId   = 0,
     floatAttr = ('cssFloat' in workerStyle) ? 'cssFloat' : 'styleFloat',
@@ -199,7 +201,7 @@ function StyleSheet(seed, name) {
     // 5. The method to add a new rule to the stylesheet
     // IE supports addRule with different signature
     _insertRule = ('insertRule' in sheet) ?
-        function (sel,css,i) { sheet.insertRule(sel+' '+css,i); } :
+        function (sel,css,i) { sheet.insertRule(sel+' {'+css+'}',i); } :
         function (sel,css,i) { sheet.addRule(sel,css,i); };
 
     // Cache the instance by the generated Id
@@ -302,11 +304,18 @@ function StyleSheet(seed, name) {
                 rule.style.cssText = StyleSheet.toCssText(css,rule.style.cssText);
             } else {
                 idx = sheet[_rules].length;
-                _insertRule(sel,'{'+StyleSheet.toCssText(css)+'}',idx);
+                css = StyleSheet.toCssText(css);
 
-                // Safari replaces the rules collection, but maintains the rule
-                // instances in the new collection when rules are added/removed
-                cssRules[sel] = sheet[_rules][idx];
+                // IE throws an error when attempting to addRule(sel,'',n)
+                // which would crop up if no, or only invalid values are used
+                if (css) {
+                    _insertRule(sel, css, idx);
+
+                    // Safari replaces the rules collection, but maintains the
+                    // rule instances in the new collection when rules are
+                    // added/removed
+                    cssRules[sel] = sheet[_rules][idx];
+                }
             }
             return this;
         },
@@ -488,7 +497,7 @@ lang.augmentObject(StyleSheet, {
     },
 
     /**
-     * <p>Determines if a selector string is safe to use.  This is used internally
+     * <p>Determines if a selector string is safe to use.  Used internally
      * in set to prevent IE from locking up when attempting to add a rule for a
      * &quot;bad selector&quot;.</p>
      *
@@ -504,8 +513,33 @@ lang.augmentObject(StyleSheet, {
      * @static
      */
     isValidSelector : function (sel) {
-        // TODO: this will fail tag[prop=val] tests
-        return !/[^\\][`~!@$%\^&()+=|{}\[\];'"?<]|^\s*[^a-z0-9*#.]|[\s.#][^a-z0-9]/i.test(sel);
+        var valid = false;
+
+        if (sel && lang.isString(sel)) {
+
+            if (!selectors.hasOwnProperty(sel)) {
+                // TEST: there should be nothing but white-space left after
+                // these destructive regexs
+                selectors[sel] = !/\S/.test(
+                    // combinators
+                    sel.replace(/\s+|\s*[+~>]\s*/g,' ').
+                    // attribute selectors (contents not validated)
+                    replace(/([^ ])\[.*?\]/g,'$1').
+                    // pseudo-class|element selectors (contents of parens
+                    // such as :nth-of-type(2) or :not(...) not validated)
+                    replace(/([^ ])::?[a-z][a-z\-]+[a-z](?:\(.*?\))?/ig,'$1').
+                    // element tags
+                    replace(/(?:^| )[a-z0-6]+/ig,' ').
+                    // escaped characters
+                    replace(/\\./g,'').
+                    // class and id identifiers
+                    replace(/[.#]\w[\w\-]*/g,''));
+            }
+
+            valid = selectors[sel];
+        }
+
+        return valid;
     }
 },true);
 
@@ -595,5 +629,8 @@ NOTES
    ??? - unsetting font-size-adjust has the same effect as unsetting font-size
  * FireFox and WebKit populate rule.cssText as "SELECTOR { CSSTEXT }", but
    Opera and IE do not.
+ * IE6 and IE7 silently ignore the { and } if passed into addRule('.foo','{
+   color:#000}',0).  IE8 does not and creates an empty rule.
+ * IE6-8 addRule('.foo','',n) throws an error.  Must supply *some* cssText
 */
 

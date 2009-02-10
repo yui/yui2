@@ -27,6 +27,18 @@
 #foo {
     float:left; /* required for getStyle test */
 }
+
+#computed-test {
+    left:-10em;
+    border-top:2px solid red;
+    position:relative;
+    width:10em;
+}
+
+#computed-wrap {
+    background:#ccc;
+    color:#fff;
+}
 </style>
 
 </head>
@@ -34,6 +46,9 @@
     <em class="my.class our(class" id="class-regex-one">lorem</em> 
     <em class="my-class" id="class-regex-two">ipsum</em>
     <em class="yiv-integer:([{1,30}])^$?*+|" id="class-regex-three">dolor</em> 
+    <div id="computed-wrap">
+        <div id="computed-test">test computed style</div>
+    </div>
     <div id="doc">
         <div id="hd">
             <h1>Page Header</h1>
@@ -140,6 +155,17 @@
                 Assert.isUndefined(Y.Dom.setStyle('fake-id', 'width', '200px'), "(Y.Dom.setStyle('fake-id', 'width', '200px')");
                 Assert.isUndefined(Y.Dom.setStyle(['fake-id'], 'width', '200px'), "(Y.Dom.setStyle(['fake-id'], 'width', '200px')");
             },            
+
+            test_computedStyle: function() {
+                var el = Y.Dom.get('computed-test');
+                Assert.areEqual(el.offsetWidth + 'px', Y.Dom.getComputedStyle(el, 'width'), "Y.Dom.getComputedStyle(el, 'width')");
+                Assert.isTrue(Y.Dom.getComputedStyle(el, 'left').indexOf('px') > -1, "Y.Dom.getComputedStyle(el, 'left')");
+                Assert.areEqual('rgb(255, 255, 255)', Y.Dom.getComputedStyle(el, 'color'), "Y.Dom.getComputedStyle(el, 'color')");
+                Assert.areEqual('transparent', Y.Dom.getComputedStyle(el, 'backgroundColor'), "Y.Dom.getComputedStyle(el, 'backgroundColor')");
+                Assert.areEqual('rgb(255, 0, 0)', Y.Dom.getComputedStyle(el, 'borderTopColor'), "Y.Dom.getComputedStyle(el, 'borderTopColor')");
+
+            },
+
             test_hasClass: function() {
                 Assert.isTrue(Y.Dom.hasClass('lorem-ipsum', 'lorem'),
                         'hasClass failed with existing class');
@@ -197,8 +223,25 @@
                         'replaceClass should return false if new class and old are equal');
 
                 var el = document.createElement('div');
+                el.className = 'foo bar';
+                Y.Dom.replaceClass(el, 'bar', 'baz');
+                Assert.areEqual('foo baz', el.className, "Y.Dom.replaceClass(el, 'bar', 'baz')");
+
+                el.className = 'foo bar'; 
+                Y.Dom.replaceClass(el, /(?:^|\s)bar(?= |$)/g, 'baz');
+                Assert.areEqual('foo baz', el.className, "Y.Dom.replaceClass(el, /bar/, 'baz')");
+
+                el.className = 'foo bar'; 
+                Y.Dom.replaceClass(el, /bar/, 'baz');
+                Assert.areEqual('foo baz', el.className, "Y.Dom.replaceClass(el, /bar/, 'baz')");
+
                 el.className = 'yiv-required yiv-integer:[1,30]';
-                YAHOO.util.Dom.replaceClass(el, new RegExp('yiv-integer:\\[1,(?:30|72|43200)\\]'), 'yiv-integer:[1]');
+                Y.Dom.replaceClass(el, new RegExp('yiv-integer:\\[1,(?:30|72|43200)\\]'), 'yiv-integer:[1]');
+                Assert.areEqual('yiv-required yiv-integer:[1]', el.className, "Y.Dom.replaceClass(el, new RegExp('yiv-integer:\\[1,(?:30|72|43200)\\]'), 'yiv-integer:[1]')");
+
+                el.className = 'satg-x';
+                YAHOO.util.Dom.replaceClass(el, /satg-(x|y|z)/, 'satg-y');
+                Assert.areEqual('satg-y', el.className, "Y.Dom.replaceClass(el, /satg-(x|y|z)/, 'satg-y')");
 
             },            
 

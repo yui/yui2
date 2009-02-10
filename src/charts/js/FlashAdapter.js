@@ -144,7 +144,7 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	_embedSWF: function(swfURL, containerID, swfID, version, backgroundColor, expressInstall, wmode)
 	{
 		//standard SWFObject embed
-		var swfObj = new deconcept.SWFObject(swfURL, swfID, "100%", "100%", version, backgroundColor);
+		var swfObj = new YAHOO.deconcept.SWFObject(swfURL, swfID, "100%", "100%", version, backgroundColor);
 
 		if(expressInstall)
 		{

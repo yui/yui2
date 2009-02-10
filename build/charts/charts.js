@@ -4,24 +4,28 @@
  *
  * SWFObject is (c) 2007 Geoff Stearns and is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
+ * @namespace YAHOO
  */
-var deconcept = deconcept || {};
 
-if(typeof deconcept.util == "undefined" || !deconcept.util)
+YAHOO.namespace("deconcept"); 
+	
+YAHOO.deconcept = YAHOO.deconcept || {};
+
+if(typeof YAHOO.deconcept.util == "undefined" || !YAHOO.deconcept.util)
 {
-	deconcept.util = {};
+	YAHOO.deconcept.util = {};
 }
 
-if(typeof deconcept.SWFObjectUtil == "undefined" || !deconcept.SWFObjectUtil)
+if(typeof YAHOO.deconcept.SWFObjectUtil == "undefined" || !YAHOO.deconcept.SWFObjectUtil)
 {
-	deconcept.SWFObjectUtil = {};
+	YAHOO.deconcept.SWFObjectUtil = {};
 }
 
-deconcept.SWFObject = function(swf, id, w, h, ver, c, quality, xiRedirectUrl, redirectUrl, detectKey)
+YAHOO.deconcept.SWFObject = function(swf, id, w, h, ver, c, quality, xiRedirectUrl, redirectUrl, detectKey)
 {
 	if(!document.getElementById) { return; }
 	this.DETECT_KEY = detectKey ? detectKey : 'detectflash';
-	this.skipDetect = deconcept.util.getRequestParameter(this.DETECT_KEY);
+	this.skipDetect = YAHOO.deconcept.util.getRequestParameter(this.DETECT_KEY);
 	this.params = {};
 	this.variables = {};
 	this.attributes = [];
@@ -29,12 +33,12 @@ deconcept.SWFObject = function(swf, id, w, h, ver, c, quality, xiRedirectUrl, re
 	if(id) { this.setAttribute('id', id); }
 	if(w) { this.setAttribute('width', w); }
 	if(h) { this.setAttribute('height', h); }
-	if(ver) { this.setAttribute('version', new deconcept.PlayerVersion(ver.toString().split("."))); }
-	this.installedVer = deconcept.SWFObjectUtil.getPlayerVersion();
+	if(ver) { this.setAttribute('version', new YAHOO.deconcept.PlayerVersion(ver.toString().split("."))); }
+	this.installedVer = YAHOO.deconcept.SWFObjectUtil.getPlayerVersion();
 	if (!window.opera && document.all && this.installedVer.major > 7)
 	{
 		// only add the onunload cleanup if the Flash Player version supports External Interface and we are in IE
-		deconcept.SWFObject.doPrepUnload = true;
+		YAHOO.deconcept.SWFObject.doPrepUnload = true;
 	}
 	if(c)
 	{
@@ -53,7 +57,7 @@ deconcept.SWFObject = function(swf, id, w, h, ver, c, quality, xiRedirectUrl, re
 	}
 };
 
-deconcept.SWFObject.prototype =
+YAHOO.deconcept.SWFObject.prototype =
 {
 	useExpressInstall: function(path)
 	{
@@ -142,7 +146,7 @@ deconcept.SWFObject.prototype =
 	{
 		if(this.getAttribute('useExpressInstall')) {
 			// check to see if we need to do an express install
-			var expressInstallReqVer = new deconcept.PlayerVersion([6,0,65]);
+			var expressInstallReqVer = new YAHOO.deconcept.PlayerVersion([6,0,65]);
 			if (this.installedVer.versionIsValid(expressInstallReqVer) && !this.installedVer.versionIsValid(this.getAttribute('version'))) {
 				this.setAttribute('doExpressInstall', true);
 				this.addVariable("MMredirectURL", escape(this.getAttribute('xiRedirectUrl')));
@@ -168,16 +172,16 @@ deconcept.SWFObject.prototype =
 };
 
 /* ---- detection functions ---- */
-deconcept.SWFObjectUtil.getPlayerVersion = function()
+YAHOO.deconcept.SWFObjectUtil.getPlayerVersion = function()
 {
 	var axo = null;
-	var PlayerVersion = new deconcept.PlayerVersion([0,0,0]);
+	var PlayerVersion = new YAHOO.deconcept.PlayerVersion([0,0,0]);
 	if(navigator.plugins && navigator.mimeTypes.length)
 	{
 		var x = navigator.plugins["Shockwave Flash"];
 		if(x && x.description)
 		{
-			PlayerVersion = new deconcept.PlayerVersion(x.description.replace(/([a-zA-Z]|\s)+/, "").replace(/(\s+r|\s+b[0-9]+)/, ".").split("."));
+			PlayerVersion = new YAHOO.deconcept.PlayerVersion(x.description.replace(/([a-zA-Z]|\s)+/, "").replace(/(\s+r|\s+b[0-9]+)/, ".").split("."));
 		}
 	}
 	else if (navigator.userAgent && navigator.userAgent.indexOf("Windows CE") >= 0)
@@ -190,7 +194,7 @@ deconcept.SWFObjectUtil.getPlayerVersion = function()
 				counter++;
 				axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash."+ counter);
 //				document.write("player v: "+ counter);
-				PlayerVersion = new deconcept.PlayerVersion([counter,0,0]);
+				PlayerVersion = new YAHOO.deconcept.PlayerVersion([counter,0,0]);
 			}
 			catch(e)
 			{
@@ -211,7 +215,7 @@ deconcept.SWFObjectUtil.getPlayerVersion = function()
 			try
 			{
 				axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.6");
-				PlayerVersion = new deconcept.PlayerVersion([6,0,21]);
+				PlayerVersion = new YAHOO.deconcept.PlayerVersion([6,0,21]);
 				axo.AllowScriptAccess = "always"; // error if player version < 6.0.47 (thanks to Michael Williams @ Adobe for this code)
 			}
 			catch(e)
@@ -230,20 +234,20 @@ deconcept.SWFObjectUtil.getPlayerVersion = function()
 		
 		if(axo !== null)
 		{
-			PlayerVersion = new deconcept.PlayerVersion(axo.GetVariable("$version").split(" ")[1].split(","));
+			PlayerVersion = new YAHOO.deconcept.PlayerVersion(axo.GetVariable("$version").split(" ")[1].split(","));
 		}
 	}
 	return PlayerVersion;
 };
 
-deconcept.PlayerVersion = function(arrVersion)
+YAHOO.deconcept.PlayerVersion = function(arrVersion)
 {
 	this.major = arrVersion[0] !== null ? parseInt(arrVersion[0], 0) : 0;
 	this.minor = arrVersion[1] !== null ? parseInt(arrVersion[1], 0) : 0;
 	this.rev = arrVersion[2] !== null ? parseInt(arrVersion[2], 0) : 0;
 };
 
-deconcept.PlayerVersion.prototype.versionIsValid = function(fv)
+YAHOO.deconcept.PlayerVersion.prototype.versionIsValid = function(fv)
 {
 	if(this.major < fv.major)
 	{
@@ -269,7 +273,7 @@ deconcept.PlayerVersion.prototype.versionIsValid = function(fv)
 };
 
 /* ---- get value of query string param ---- */
-deconcept.util =
+YAHOO.deconcept.util =
 {
 	getRequestParameter: function(param)
 	{
@@ -291,7 +295,7 @@ deconcept.util =
 };
 
 /* fix for video streaming bug */
-deconcept.SWFObjectUtil.cleanupSWFs = function()
+YAHOO.deconcept.SWFObjectUtil.cleanupSWFs = function()
 {
 	var objects = document.getElementsByTagName("OBJECT");
 	for(var i = objects.length - 1; i >= 0; i--)
@@ -308,18 +312,18 @@ deconcept.SWFObjectUtil.cleanupSWFs = function()
 };
 
 // fixes bug in some fp9 versions see http://blog.deconcept.com/2006/07/28/swfobject-143-released/
-if(deconcept.SWFObject.doPrepUnload)
+if(YAHOO.deconcept.SWFObject.doPrepUnload)
 {
-	if(!deconcept.unloadSet)
+	if(!YAHOO.deconcept.unloadSet)
 	{
-		deconcept.SWFObjectUtil.prepUnload = function()
+		YAHOO.deconcept.SWFObjectUtil.prepUnload = function()
 		{
 			__flash_unloadHandler = function(){};
 			__flash_savedUnloadHandler = function(){};
-			window.attachEvent("onunload", deconcept.SWFObjectUtil.cleanupSWFs);
+			window.attachEvent("onunload", YAHOO.deconcept.SWFObjectUtil.cleanupSWFs);
 		};
-		window.attachEvent("onbeforeunload", deconcept.SWFObjectUtil.prepUnload);
-		deconcept.unloadSet = true;
+		window.attachEvent("onbeforeunload", YAHOO.deconcept.SWFObjectUtil.prepUnload);
+		YAHOO.deconcept.unloadSet = true;
 	}
 }
 
@@ -329,10 +333,6 @@ if(!document.getElementById && document.all)
 	document.getElementById = function(id) { return document.all[id]; };
 }
 
-/* add some aliases for ease of use/backwards compatibility */
-var getQueryParamValue = deconcept.util.getRequestParameter;
-var FlashObject = deconcept.SWFObject; // for legacy support
-var SWFObject = deconcept.SWFObject;
 
 /**
  * Wraps Flash embedding functionality and allows communication with SWF through
@@ -479,7 +479,7 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	_embedSWF: function(swfURL, containerID, swfID, version, backgroundColor, expressInstall, wmode)
 	{
 		//standard SWFObject embed
-		var swfObj = new deconcept.SWFObject(swfURL, swfID, "100%", "100%", version, backgroundColor);
+		var swfObj = new YAHOO.deconcept.SWFObject(swfURL, swfID, "100%", "100%", version, backgroundColor);
 
 		if(expressInstall)
 		{
@@ -2092,7 +2092,17 @@ YAHOO.lang.extend(YAHOO.widget.CategoryAxis, YAHOO.widget.Axis,
 	 * @property categoryNames
 	 * @type Array
 	 */
-	categoryNames: null
+	categoryNames: null,
+	
+	/**
+	 * Indicates whether or not to calculate the number of categories (ticks and labels)
+	 * when there is not enough room to display all labels on the axis. If set to true, the axis 
+	 * will determine the number of categories to plot. If not, all categories will be plotted.
+	 *
+	 * @property calcualateCategoryCount
+	 * @type Boolean
+	 */
+	calculateCategoryCount: false 
 });
 
 /**

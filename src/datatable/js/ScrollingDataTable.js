@@ -168,8 +168,7 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute width
-    * @description Table width for scrollable tables. Note: When setting width
-    * and height at runtime, please set height first.
+    * @description Table width for scrollable tables (e.g., "40em").
     * @type String
     */
     this.setAttributeConfig("width", {
@@ -187,7 +186,7 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute height
-    * @description Table body height for scrollable tables, not including headers.
+    * @description Table body height for scrollable tables, not including headers (e.g., "40em").
     * @type String
     */
     this.setAttributeConfig("height", {
@@ -481,8 +480,10 @@ _initBdThEl : function(elTh, oColumn) {
 _initTbodyEl : function(elTable) {
     SDT.superclass._initTbodyEl.call(this, elTable);
     
-    // Bug 2105534 - Safari gap
-    elTable.style.marginTop = "-"+this._elTbody.offsetTop+"px";
+    // Bug 2105534 - Safari 3 gap
+    // Bug 2492591 - IE8 offsetTop
+    elTable.style.marginTop = (this._elTbody.offsetTop > 0) ?
+            "-"+this._elTbody.offsetTop+"px" : 0;
 },
 
 

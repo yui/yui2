@@ -2871,7 +2871,8 @@
                 autoFill = this._autoFillOnHeightChange;
 
             cfg.unsubscribeFromConfigEvent(height, autoFill);
-            Module.textResizeEvent.unsubscribe(height, autoFill);
+            Module.textResizeEvent.unsubscribe(autoFill);
+            this.changeContentEvent.unsubscribe(autoFill);
 
             if (currEl && fillEl !== currEl && this[currEl]) {
                 Dom.setStyle(this[currEl], height, "");
@@ -2882,6 +2883,7 @@
 
                 cfg.subscribeToConfigEvent(height, autoFill, this[fillEl], this);
                 Module.textResizeEvent.subscribe(autoFill, this[fillEl], this);
+                this.changeContentEvent.subscribe(autoFill, this[fillEl], this);
 
                 cfg.setProperty(autoFillHeight, fillEl, true);
             }
@@ -4184,7 +4186,7 @@
         /**
          * Can be used to force the container to repaint/redraw it's contents.
          * <p>
-         * By default applies and then removes a 0px margin through the 
+         * By default applies and then removes a 1px bottom margin through the 
          * application/removal of a "yui-force-redraw" class.
          * </p>
          * <p>
@@ -4848,6 +4850,7 @@
         Dom = YAHOO.util.Dom,
         Tooltip = YAHOO.widget.Tooltip,
         UA = YAHOO.env.ua,
+        bIEQuirks = (UA.ie && (UA.ie <= 6 || document.compatMode == "BackCompat")),
 
         m_oShadowTemplate,
 
@@ -5597,7 +5600,7 @@
                     this.subscribe("beforeShow", addShadowVisibleClass);
                     this.subscribe("hide", removeShadowVisibleClass);
 
-                    if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
+                    if (bIEQuirks) {
                         window.setTimeout(function () { 
                             sizeShadow.call(me); 
                         }, 0);
@@ -5698,7 +5701,7 @@
         Panel = YAHOO.widget.Panel,
         UA = YAHOO.env.ua,
 
-        bIEQuirks = (UA.ie == 6 || (UA.ie == 7 && document.compatMode == "BackCompat")),
+        bIEQuirks = (UA.ie && (UA.ie <= 6 || document.compatMode == "BackCompat")),
 
         m_oMaskTemplate,
         m_oUnderlayTemplate,
@@ -5855,12 +5858,11 @@
 
     function setWidthToOffsetWidth(p_sType, p_aArgs) {
 
-        var nIE = YAHOO.env.ua.ie,
-            oConfig,
+        var oConfig,
             sOriginalWidth,
             sNewWidth;
 
-        if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
+        if (bIEQuirks) {
 
             oConfig = this.cfg;
             sOriginalWidth = oConfig.getProperty("width");
@@ -5870,7 +5872,7 @@
                 sNewWidth = (this.element.offsetWidth + "px");
     
                 oConfig.setProperty("width", sNewWidth);
-                
+
                 this.subscribe("hide", restoreOriginalWidth, 
                     [(sOriginalWidth || ""), sNewWidth]);
             
@@ -7871,13 +7873,7 @@
                 }
             }
 
-            // Everything which needs to be done if content changed
-            // TODO: Should we be firing contentChange here?
-
-            this.setFirstLastFocusable();
-
-            this.cfg.refireEvent("iframe");
-            this.cfg.refireEvent("underlay");
+            this.changeContentEvent.fire();
         },
 
         /**

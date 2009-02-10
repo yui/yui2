@@ -1,5 +1,10 @@
 YUI Library - Selector - Release Notes
 
+2.7.0   
+  * Taken out of BETA
+  * allow for root node with initial combinator (e.g. "query('> li', 'foo')
+  * updated for IE8 getAttribute('class')
+
 2.6.0
   * now supporting cross-browser "for" attribute 
   * gracefully handling non-existant IDs 

@@ -2871,7 +2871,8 @@
                 autoFill = this._autoFillOnHeightChange;
 
             cfg.unsubscribeFromConfigEvent(height, autoFill);
-            Module.textResizeEvent.unsubscribe(height, autoFill);
+            Module.textResizeEvent.unsubscribe(autoFill);
+            this.changeContentEvent.unsubscribe(autoFill);
 
             if (currEl && fillEl !== currEl && this[currEl]) {
                 Dom.setStyle(this[currEl], height, "");
@@ -2882,6 +2883,7 @@
 
                 cfg.subscribeToConfigEvent(height, autoFill, this[fillEl], this);
                 Module.textResizeEvent.subscribe(autoFill, this[fillEl], this);
+                this.changeContentEvent.subscribe(autoFill, this[fillEl], this);
 
                 cfg.setProperty(autoFillHeight, fillEl, true);
             }
@@ -4184,7 +4186,7 @@
         /**
          * Can be used to force the container to repaint/redraw it's contents.
          * <p>
-         * By default applies and then removes a 0px margin through the 
+         * By default applies and then removes a 1px bottom margin through the 
          * application/removal of a "yui-force-redraw" class.
          * </p>
          * <p>

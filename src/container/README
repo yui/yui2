@@ -76,6 +76,12 @@ Bug Fixes:
   set dynamically (see Tooltip's width configuration property), 
   and the user moves from one of the Tooltip's context elements 
   to another, without the tooltip being hidden.
+
++ Autofillheight if enabled, is recalculated whenever content 
+  changes, to account for changes in section height.
+
++ Fixed faulty repaint on Safari 3.2/MacOS 10.5, when using fixed
+  center, by forcing redraw after centering.
   
 New Features:
 -------------

@@ -4,6 +4,7 @@ yuiloader - Release Notes
  * Combo filtering fixed.
  * Took selector, element, and profilerviewer out of beta.
  * json is an optional dependency for treeview.
+ * Added stylesheet
 
 2.6.0
  * Autocomplete requires datasource.

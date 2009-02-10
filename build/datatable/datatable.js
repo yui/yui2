@@ -8786,6 +8786,10 @@ unhighlightColumn : function(column) {
  * @param index {Number} (optional) RecordSet position index at which to add data.
  */
 addRow : function(oData, index) {
+    if(lang.isNumber(index) && (index < 0 || index > this._oRecordSet.getLength())) {
+        return;
+    }
+
     if(oData && lang.isObject(oData)) {
         var oRecord = this._oRecordSet.addRecord(oData, index);
         if(oRecord) {
@@ -8863,6 +8867,10 @@ addRow : function(oData, index) {
  * @param index {Number} (optional) RecordSet position index at which to add data.
  */
 addRows : function(aData, index) {
+    if(lang.isNumber(index) && (index < 0 || index > this._oRecordSet.getLength())) {
+        return;
+    }
+
     if(lang.isArray(aData)) {
         var aRecords = this._oRecordSet.addRecords(aData, index);
         if(aRecords) {
@@ -8963,52 +8971,65 @@ updateRow : function(row, oData) {
     // Update the Record
     if(lang.isNumber(index) && (index >= 0)) {
         var oRecordSet = this._oRecordSet,
-            oldRecord = oRecordSet.getRecord(index),
-            elRow = this.getTrEl(oldRecord),
-        // Copy data from the Record for the event that gets fired later
-            oldData = oldRecord ? oldRecord.getData() : null,
-            updatedRecord = this._oRecordSet.setRecord(oData, index);
-    }
-    else {
-        return;
-
-    }
-
-    // Update the TR only if row is on current page
-    if(updatedRecord) {
-        this._oChainRender.add({
-            method: function() {
-                if((this instanceof DT) && this._sId) {
-                    // Paginated
-                    var oPaginator = this.get('paginator');
-                    if (oPaginator) {
-                        var pageStartIndex = (oPaginator.getPageRecords())[0],
-                            pageLastIndex = (oPaginator.getPageRecords())[1];
-
-                        // At least one of the new records affects the view
-                        if ((index >= pageStartIndex) || (index <= pageLastIndex)) {
-                            this.render();
-                        }
+            oldRecord = oRecordSet.getRecord(index);
+            
+        
+        if(oldRecord) {
+            var updatedRecord = this._oRecordSet.setRecord(oData, index),
+                elRow = this.getTrEl(oldRecord),
+                // Copy data from the Record for the event that gets fired later
+                oldData = oldRecord ? oldRecord.getData() : null;
+               
+            if(updatedRecord) {
+                // Update selected rows as necessary
+                var tracker = this._aSelections || [],
+                i=0,
+                oldId = oldRecord.getId(),
+                newId = updatedRecord.getId();
+                for(; i<tracker.length; i++) {
+                    if((tracker[i] === oldId)) {
+                        tracker[i] = newId;
                     }
-                    else {
-                        if(elRow) {
-                            this._updateTrEl(elRow, updatedRecord);
-                        }
-                        else {
-                            this.getTbodyEl().appendChild(this._addTrEl(updatedRecord));
-                        }
+                    else if(tracker[i].recordId === oldId) {
+                        tracker[i].recordId = newId;
                     }
-                    this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
                 }
-            },
-            scope: this,
-            timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
-        });
-        this._runRenderChain();
+
+                // Update the TR only if row is on current page
+                this._oChainRender.add({
+                    method: function() {
+                        if((this instanceof DT) && this._sId) {
+                            // Paginated
+                            var oPaginator = this.get('paginator');
+                            if (oPaginator) {
+                                var pageStartIndex = (oPaginator.getPageRecords())[0],
+                                    pageLastIndex = (oPaginator.getPageRecords())[1];
+        
+                                // At least one of the new records affects the view
+                                if ((index >= pageStartIndex) || (index <= pageLastIndex)) {
+                                    this.render();
+                                }
+                            }
+                            else {
+                                if(elRow) {
+                                    this._updateTrEl(elRow, updatedRecord);
+                                }
+                                else {
+                                    this.getTbodyEl().appendChild(this._addTrEl(updatedRecord));
+                                }
+                            }
+                            this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
+                        }
+                    },
+                    scope: this,
+                    timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
+                });
+                this._runRenderChain();
+                return;
+            }
+        }
     }
-    else {
-        this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
-    }
+    return;
 },
 
 /**
@@ -9027,16 +9048,33 @@ updateRow : function(row, oData) {
  */
 updateRows : function(startrow, aData) {
     if(lang.isArray(aData)) {
-        var startIndex = startrow;
+        var startIndex = startrow,
+            oRecordSet = this._oRecordSet;
+            
         if (!lang.isNumber(startrow)) {
             startIndex = this.getRecordIndex(startrow);
         }
             
-        if(lang.isNumber(startIndex) && (startIndex >= 0)) {
+        if(lang.isNumber(startIndex) && (startIndex >= 0) && (startIndex < oRecordSet.getLength())) {
             var lastIndex = startIndex + aData.length,
-                aOldRecords = this._oRecordSet.getRecords(startIndex, aData.length),
-                aNewRecords = this._oRecordSet.setRecords(aData, startIndex);
+                aOldRecords = oRecordSet.getRecords(startIndex, aData.length),
+                aNewRecords = oRecordSet.setRecords(aData, startIndex);
             if(aNewRecords) {
+                // Update selected rows as necessary
+                var tracker = this._aSelections || [],
+                    i=0, j, newId, oldId;
+                for(; i<tracker.length; i++) {
+                    for(j=0; j<aOldRecords.length; j++) {
+                        oldId = aOldRecords[j].getId();
+                        if((tracker[i] === oldId)) {
+                            tracker[i] = aNewRecords[j].getId();
+                        }
+                        else if(tracker[i].recordId === oldId) {
+                            tracker[i].recordId = aNewRecords[j].getId();
+                        }
+                    }
+                }
+            
                 // Paginated
                 var oPaginator = this.get('paginator');
                 if (oPaginator) {
@@ -14125,8 +14163,7 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute width
-    * @description Table width for scrollable tables. Note: When setting width
-    * and height at runtime, please set height first.
+    * @description Table width for scrollable tables (e.g., "40em").
     * @type String
     */
     this.setAttributeConfig("width", {
@@ -14144,7 +14181,7 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute height
-    * @description Table body height for scrollable tables, not including headers.
+    * @description Table body height for scrollable tables, not including headers (e.g., "40em").
     * @type String
     */
     this.setAttributeConfig("height", {
@@ -14436,8 +14473,10 @@ _initBdThEl : function(elTh, oColumn) {
 _initTbodyEl : function(elTable) {
     SDT.superclass._initTbodyEl.call(this, elTable);
     
-    // Bug 2105534 - Safari gap
-    elTable.style.marginTop = "-"+this._elTbody.offsetTop+"px";
+    // Bug 2105534 - Safari 3 gap
+    // Bug 2492591 - IE8 offsetTop
+    elTable.style.marginTop = (this._elTbody.offsetTop > 0) ?
+            "-"+this._elTbody.offsetTop+"px" : 0;
 },
 
 

@@ -1296,6 +1296,9 @@ YAHOO.util.Color = function() {
             this.pickerSlider = Slider.getSliderRegion(
                 this.getElement(ID.PICKER_BG), 
                 this.getElement(ID.PICKER_THUMB), 0, size, 0, size);
+
+            // Apply animate attribute configuration
+            this.set(this.OPT.ANIMATE, this.get(this.OPT.ANIMATE));
         },
 
         /**
@@ -1748,8 +1751,10 @@ YAHOO.util.Color = function() {
             this.setAttributeConfig(this.OPT.ANIMATE, {
                     value: lang.isBoolean(attr.animate) ? attr.animate : true,
                     method: function(on) {
-                        this.pickerSlider.animate = on;
-                        this.hueSlider.animate = on;
+                        if (this.pickerSlider) {
+                            this.pickerSlider.animate = on;
+                            this.hueSlider.animate = on;
+                        }
                     }
                 });
 

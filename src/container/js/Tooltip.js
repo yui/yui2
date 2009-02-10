@@ -24,6 +24,7 @@
         Dom = YAHOO.util.Dom,
         Tooltip = YAHOO.widget.Tooltip,
         UA = YAHOO.env.ua,
+        bIEQuirks = (UA.ie && (UA.ie <= 6 || document.compatMode == "BackCompat")),
 
         m_oShadowTemplate,
 
@@ -773,7 +774,7 @@
                     this.subscribe("beforeShow", addShadowVisibleClass);
                     this.subscribe("hide", removeShadowVisibleClass);
 
-                    if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
+                    if (bIEQuirks) {
                         window.setTimeout(function () { 
                             sizeShadow.call(me); 
                         }, 0);
