@@ -384,12 +384,12 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		this._doc = calBox.ownerDocument;
 
 		/**
-		 * Private flag, to identify IE6/IE7 Quirks
+		 * Private flag, to identify IE Quirks
 		 * @private
 		 * @property __isIEQuirks
 		 */
 		var ie = YAHOO.env.ua.ie;
-		this.__isIEQuirks = (ie && ((ie <= 6) || (ie === 7 && this._doc.compatMode == "BackCompat")));
+		this.__isIEQuirks = (ie && ((ie <= 6) || (this._doc.compatMode == "BackCompat")));
 	},
 
 	/**
@@ -587,7 +587,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 
 	/**
 	 * Used to set the width/height of the mask in pixels to match the Calendar Container.
-	 * Currently only used for IE6 and IE7 quirks mode. The other A-Grade browser are handled using CSS (width/height 100%).
+	 * Currently only used for IE6 or IE in quirks mode. The other A-Grade browser are handled using CSS (width/height 100%).
 	 * <p>
 	 * The method is also registered as an HTMLElement resize listener on the Calendars container element.
 	 * </p>

@@ -4850,6 +4850,7 @@
         Dom = YAHOO.util.Dom,
         Tooltip = YAHOO.widget.Tooltip,
         UA = YAHOO.env.ua,
+        bIEQuirks = (UA.ie && (UA.ie <= 6 || document.compatMode == "BackCompat")),
 
         m_oShadowTemplate,
 
@@ -5599,7 +5600,7 @@
                     this.subscribe("beforeShow", addShadowVisibleClass);
                     this.subscribe("hide", removeShadowVisibleClass);
 
-                    if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
+                    if (bIEQuirks) {
                         window.setTimeout(function () { 
                             sizeShadow.call(me); 
                         }, 0);
@@ -5700,7 +5701,7 @@
         Panel = YAHOO.widget.Panel,
         UA = YAHOO.env.ua,
 
-        bIEQuirks = (UA.ie == 6 || (UA.ie == 7 && document.compatMode == "BackCompat")),
+        bIEQuirks = (UA.ie && (UA.ie <= 6 || document.compatMode == "BackCompat")),
 
         m_oMaskTemplate,
         m_oUnderlayTemplate,
@@ -5857,12 +5858,11 @@
 
     function setWidthToOffsetWidth(p_sType, p_aArgs) {
 
-        var nIE = YAHOO.env.ua.ie,
-            oConfig,
+        var oConfig,
             sOriginalWidth,
             sNewWidth;
 
-        if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
+        if (bIEQuirks) {
 
             oConfig = this.cfg;
             sOriginalWidth = oConfig.getProperty("width");
@@ -5872,7 +5872,7 @@
                 sNewWidth = (this.element.offsetWidth + "px");
     
                 oConfig.setProperty("width", sNewWidth);
-                
+
                 this.subscribe("hide", restoreOriginalWidth, 
                     [(sOriginalWidth || ""), sNewWidth]);
             
