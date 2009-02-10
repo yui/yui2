@@ -449,7 +449,8 @@
      */
     var dtRowMutationTemplate = YAHOO.lang.merge(dtBaseTemplate, {
         name: "DataTable Row Mutation Tests",
-        testInsertRow: function() {
+
+        testAddRowInsert: function() {
             var dt = this.createInstance();
             dt.addRow({a:"4a",b:"4b",c:"4c"}, 0);
             
@@ -467,7 +468,7 @@
             Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last position");
         },
         
-        testInsertRows: function() {
+        testAddRowsInsert: function() {
             var dt = this.createInstance();
             dt.addRow([{a:"4a",b:"4b",c:"4c"},{a:"5a",b:"5b",c:"5c"}], 0);
             
@@ -495,7 +496,7 @@
             Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last position");
         },
 
-        testAppendRow: function() {
+        testAddRowAppend: function() {
             var dt = this.createInstance();
             dt.addRow({a:"4a",b:"4b",c:"4c"});
             
@@ -513,7 +514,7 @@
             Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last         position");
         },
 
-        testAppendRows: function() {
+        testAddRowsAppend: function() {
             var dt = this.createInstance();
             dt.addRows([{a:"4a",b:"4b",c:"4c"},{a:"5a",b:"5b",c:"5c"}]);
             
@@ -539,6 +540,48 @@
             var aLastRows = Dom.getElementsByClassName("yui-dt-last", "tr", dt.getTbodyEl());
             Assert.areSame(1, aLastRows.length, "Expected one last row");
             Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last         position");
+        },
+
+        testAddInvalidRow: function() {
+            var dt = this.createInstance();
+            var oData = {a:"4a", b:"4b", c:"4b"};
+            dt.addRow(oData, -1);
+
+            var oTestRecords = dt.getRecordSet().getRecords();
+            for(var i=0, oTestData; i<oTestRecords.length; i++) {
+                var oTestData = oTestRecords[i].getData();
+                Assert.areNotSame(oData.a, oTestData.a, "Negative Record "+i+ " should not have been added");
+            }
+
+            newData = {a:"5a",b:"5b",c:"5c"};
+            dt.addRow(20, newData);
+
+            oTestRecords = dt.getRecordSet().getRecords();
+            for(i=0; i<oTestRecords.length; i++) {
+                oTestData = oTestRecords[i].getData();
+                Assert.areNotSame(oData.a, oTestData.a, "Out of range Record "+i+" should not have been added");
+            }
+        },
+
+        testAddInvalidRows: function() {
+            var dt = this.createInstance();
+            var aData = [{a:"4a", b:"4b", c:"4b"}];
+            dt.addRows(aData, -1);
+
+            var oTestRecords = dt.getRecordSet().getRecords();
+            for(var i=0, oTestData; i<oTestRecords.length; i++) {
+                var oTestData = oTestRecords[i].getData();
+                Assert.areNotSame(aData[0].a, oTestData.a, "Negative Records "+i+" should not have been added");
+            }
+
+            aData = [{a:"5a", b:"5b", c:"5b"}];
+            dt.addRows(20, newData);
+
+            oTestRecords = dt.getRecordSet().getRecords();
+            for(i=0; i<oTestRecords.length; i++) {
+                oTestData = oTestRecords[i].getData();
+                Assert.areNotSame(aData[0].a, oTestData.a, "Out of range Records "+i+" should not have updated");
+            }
         },
 
         testUpdateRow: function() {
@@ -582,10 +625,107 @@
             dt.updateRow(oRecord, oData);
 
             var oTestRecords = dt.getRecordSet().getRecords();
-            for(var i=0; i<oTestRecords.length; i++) {
+            for(var i=0, oTestData; i<oTestRecords.length; i++) {
                 var oTestData = oTestRecords[i].getData();
-                Assert.areNotSame(oData, oTestData, "Record "+i+"should not have updated");
+                Assert.areNotSame(oData.a, oTestData.a, "Non-existent Record "+i+"should not have updated");
             }
+
+            newData = {a:"5a",b:"5b",c:"5c"};
+            dt.updateRow(-1, newData);
+
+            oTestRecords = dt.getRecordSet().getRecords();
+            for(i=0; i<oTestRecords.length; i++) {
+                oTestData = oTestRecords[i].getData();
+                Assert.areNotSame(oData.a, oTestData.a, "Negative Record "+i+"should not have updated");
+            }
+
+            newData = {a:"6a",b:"6b",c:"6c"};
+            dt.updateRow(4, newData);
+
+            oTestRecords = dt.getRecordSet().getRecords();
+            for(i=0; i<oTestRecords.length; i++) {
+                oTestData = oTestRecords[i].getData();
+                Assert.areNotSame(oData.a, oTestData.a, "Out of range Record "+i+"should not have updated");
+            }
+        },
+
+        testUpdateRows: function() {
+            var dt = this.createInstance();
+            var newData = [{a:"4a",b:"4b",c:"4c"},{a:"5a",b:"5b",c:"5c"}];
+            dt.updateRows(0, newData);
+            
+            var oData = dt._oRecordSet._records[0].getData();
+            Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
+            oData = dt._oRecordSet._records[1].getData();
+            Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
+
+            newData = [{a:"6a",b:"6b",c:"6c"},{a:"7a",b:"7b",c:"7c"}];
+            dt.updateRows(3, newData);
+
+            oData = dt._oRecordSet._records[3].getData();
+            Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
+            oData = dt._oRecordSet._records[4].getData();
+            Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
+        },
+
+        testUpdateInvalidRows: function() {
+            var dt = this.createInstance();
+            var newData = [{a:"4a",b:"4b",c:"4c"},{a:"5a",b:"5b",c:"5c"}];
+            dt.updateRows(-1, newData);
+            
+            var oTestRecords = dt.getRecordSet().getRecords();
+            for(var i=0, oTestData; i<oTestRecords.length; i++) {
+                oTestData = oTestRecords[i].getData();
+                Assert.areNotSame(newData[0].a, oTestData.a, "Negative Record "+i+" should not have updated");
+            }
+
+            newData = [{a:"6a",b:"6b",c:"6c"},{a:"7a",b:"7b",c:"7c"}];
+            dt.updateRows(4, newData);
+
+            oTestRecords = dt.getRecordSet().getRecords();
+            for(i=0; i<oTestRecords.length; i++) {
+                oTestData = oTestRecords[i].getData();
+                Assert.areNotSame(newData[0].a, oTestData.a, "Out of range Record "+i+" should not have updated");
+            }            
+        },
+
+        testUpdateRowsRenderLoopSize: function() {
+            var dt = this.createInstance(null, {renderLoopSize:2});
+            var newData = [{a:"4a",b:"4b",c:"4c"},{a:"5a",b:"5b",c:"5c"}];
+            dt.updateRows(0, newData);
+            
+            var oData = dt._oRecordSet._records[0].getData();
+            Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
+            oData = dt._oRecordSet._records[1].getData();
+            Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
+
+            newData = [{a:"6a",b:"6b",c:"6c"},{a:"7a",b:"7b",c:"7c"}];
+            dt.updateRows(3, newData);
+
+            oData = dt._oRecordSet._records[3].getData();
+            Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
+            oData = dt._oRecordSet._records[4].getData();
+            Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
+        },
+        
+        testUpdateRowsPaginated: function() {
+            var dt = this.createInstance(null, {paginator:new YAHOO.widget.Paginator({rowsPerPage:2})});
+            var newData = [{a:"4a",b:"4b",c:"4c"},{a:"5a",b:"5b",c:"5c"}];
+            dt.updateRows(0, newData);
+            
+            var oData = dt._oRecordSet._records[0].getData();
+            Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
+            DataTableAssert.areSameRow(dt.getFirstTrEl(), dt._oRecordSet._records[0], dt,  "First row mismatch");
+            oData = dt._oRecordSet._records[1].getData();
+            Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
+
+            newData = [{a:"6a",b:"6b",c:"6c"},{a:"7a",b:"7b",c:"7c"}];
+            dt.updateRows(3, newData);
+
+            oData = dt._oRecordSet._records[3].getData();
+            Assert.areSame(newData[0].a, oData.a, "Failed to update by Record index (0)");
+            oData = dt._oRecordSet._records[4].getData();
+            Assert.areSame(newData[1].a, oData.a, "Failed to update by Record index (0)");
         },
 
         testDeleteRow: function() {
@@ -895,6 +1035,47 @@
             var aLastRows = Dom.getElementsByClassName("yui-dt-last", "tr", dt.getTbodyEl());
             Assert.areSame(1, aLastRows.length, "Expected one last row");
             Assert.areSame(dt.getTbodyEl().rows.length-1, aLastRows[0].sectionRowIndex, "Expected row in last position");
+        },
+        
+        testDeleteInvalidRow: function() {
+            var dt = this.createInstance();
+            dt.deleteRow(-1);
+            
+            var nRecordsLength = dt.getRecordSet().getLength();
+            var nTrElsLength = dt.getTbodyEl().rows.length;
+            Assert.areSame(4, nRecordsLength, "Expected 4 Records left");
+            Assert.areSame(4, nTrElsLength, "Expected 4 TR els left");
+        
+            dt.deleteRow(4);
+            
+            nRecordsLength = dt.getRecordSet().getLength();
+            nTrElsLength = dt.getTbodyEl().rows.length;
+            Assert.areSame(4, nRecordsLength, "Expected 4 Records left");
+            Assert.areSame(4, nTrElsLength, "Expected 4 TR els left");
+        },
+        
+        testDeleteInvalidRows: function() {
+            var dt = this.createInstance();
+            dt.deleteRows(-1, 2);
+            
+            var nRecordsLength = dt.getRecordSet().getLength();
+            var nTrElsLength = dt.getTbodyEl().rows.length;
+            Assert.areSame(4, nRecordsLength, "Expected 4 Records left");
+            Assert.areSame(4, nTrElsLength, "Expected 4 TR els left");
+        
+            dt.deleteRows(-1, -2);
+            
+            var nRecordsLength = dt.getRecordSet().getLength();
+            var nTrElsLength = dt.getTbodyEl().rows.length;
+            Assert.areSame(4, nRecordsLength, "Expected 4 Records left");
+            Assert.areSame(4, nTrElsLength, "Expected 4 TR els left");
+
+            dt.deleteRows(4, -2);
+            
+            nRecordsLength = dt.getRecordSet().getLength();
+            nTrElsLength = dt.getTbodyEl().rows.length;
+            Assert.areSame(4, nRecordsLength, "Expected 4 Records left");
+            Assert.areSame(4, nTrElsLength, "Expected 4 TR els left");        
         }
     });
     var dtRowMutationTest = new DataTableTestCase(dtRowMutationTemplate);

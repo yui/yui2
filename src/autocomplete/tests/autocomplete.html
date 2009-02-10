@@ -1,17 +1,17 @@
 <html>
 <head>
 <title>YUI AutoComplete Tests</title>
-<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css" />
-<link type="text/css" rel="stylesheet" href="../../build/yuitest/assets/testlogger.css" />
-<link type="text/css" rel="stylesheet" href="../../build/autocomplete/assets/autocomplete.css" />
+<link type="text/css" rel="stylesheet" href="../../../build/logger/assets/logger.css" />
+<link type="text/css" rel="stylesheet" href="../../../build/yuitest/assets/testlogger.css" />
+<link type="text/css" rel="stylesheet" href="../../../build/autocomplete/assets/autocomplete.css" />
 
-<script type="text/javascript" src="../../build/yahoo/yahoo-min.js"></script>
-<script type="text/javascript" src="../../build/dom/dom-min.js"></script>
-<script type="text/javascript" src="../../build/event/event-min.js"></script>
-<script type="text/javascript" src="../../build/logger/logger-min.js"></script>
-<script type="text/javascript" src="../../build/yuitest/yuitest.js"></script>
-<script type="text/javascript" src="../../build/datasource/datasource.js"></script>
-<script type="text/javascript" src="../../build/autocomplete/autocomplete.js"></script>
+<script type="text/javascript" src="../../../build/yahoo/yahoo-min.js"></script>
+<script type="text/javascript" src="../../../build/dom/dom-min.js"></script>
+<script type="text/javascript" src="../../../build/event/event-min.js"></script>
+<script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
+<script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
+<script type="text/javascript" src="../../../build/datasource/datasource.js"></script>
+<script type="text/javascript" src="../../../build/autocomplete/autocomplete.js"></script>
 </head>
 <body>
 <h1>AutoComplete Tests</h1>
@@ -246,6 +246,8 @@
         if (parent && parent != window) {
             YAHOO.tool.TestManager.load();
         }
+        
+        TestRunner.run();
     });
 })();
 

@@ -346,7 +346,7 @@ issueCallback : function (callback,params,error,scope) {
  * @method DataSourceBase.parseString
  * @param oData {String | Number | Boolean | Date | Array | Object} Data to parse.
  * The special values null and undefined will return null.
- * @return {Number} A string, or null.
+ * @return {String} A string, or null.
  * @static
  */
 parseString : function(oData) {

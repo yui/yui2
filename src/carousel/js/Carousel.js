@@ -528,8 +528,7 @@
      * @private
      */
      function setItemSelection(newpos, oldpos) {
-        var backwards,
-            carousel = this,
+        var carousel = this,
             cssClass   = carousel.CLASSES,
             el,
             firstItem  = carousel._firstItem,
@@ -538,8 +537,6 @@
             numVisible = carousel.get("numVisible"),
             position   = oldpos,
             sentinel   = firstItem + numVisible - 1;
-
-        backwards = numVisible > 1 && !isCircular && position > newpos;
 
         if (position >= 0 && position < numItems) {
             if (!JS.isUndefined(carousel._itemsTable.items[position])) {
@@ -569,13 +566,7 @@
             }
         }
 
-        if (newpos < firstItem || newpos > sentinel) {
-            // out of focus
-            if (backwards) {
-                newpos = firstItem - numVisible;
-                newpos = newpos >= 0 ? newpos : 0;
-            }
-
+        if (newpos < firstItem || newpos > sentinel) { // out of focus
             newpos = getFirstVisibleForPosition.call(carousel, newpos);
             carousel.scrollTo(newpos);
         }
@@ -2069,9 +2060,10 @@
             var carousel = this,
                 item     = carousel._firstItem - carousel.get("numVisible");
 
-            item = item >= 0 ? item : 0;
             if (carousel.get("selectOnScroll")) {
                 carousel._selectedItem = carousel._getSelectedItem(item);
+            } else {
+                item = carousel._getValidIndex(item);
             }
             carousel.scrollTo(item);
         },
@@ -2088,6 +2080,8 @@
 
             if (carousel.get("selectOnScroll")) {
                 carousel._selectedItem = carousel._getSelectedItem(item);
+            } else {
+                item = carousel._getValidIndex(item);
             }
             carousel.scrollTo(item);
         },
@@ -2402,6 +2396,30 @@
                     content   : obj.content,
                     id        : obj.id
             });
+        },
+
+        /**
+         * Return a valid item for a possibly out of bounds index considering
+         * the isCircular property.
+         *
+         * @method _getValidIndex
+         * @param index {Number} The index of the item to be returned
+         * @return {Object} Return a valid item index
+         * @protected
+         */
+        _getValidIndex: function (index) {
+            var carousel   = this,
+                isCircular = carousel.get("isCircular"),
+                numItems   = carousel.get("numItems"),
+                sentinel   = numItems - 1;
+
+            if (index < 0) {
+                index = isCircular ? numItems + index : 0;
+            } else if (index > sentinel) {
+                index = isCircular ? index - numItems : sentinel;
+            }
+
+            return index;
         },
 
         /**
