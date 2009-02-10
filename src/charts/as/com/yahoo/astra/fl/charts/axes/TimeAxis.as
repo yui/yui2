@@ -636,8 +636,8 @@ package com.yahoo.astra.fl.charts.axes
 			
 			tempMajorUnit = dateDifference/maxLabels;
 			tempMajorUnit = Math.ceil(tempMajorUnit);
-			tempMajorUnit = Math.min(tempMajorUnit, Math.round(dateDifference/2));
 			
+			if(tempMajorUnit > Math.round(dateDifference/2)) tempMajorUnit = dateDifference;
 			this._majorUnit = tempMajorUnit;
 			
 			if(dateDifference%tempMajorUnit != 0)
