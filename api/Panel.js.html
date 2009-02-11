@@ -79,7 +79,7 @@
         <span class="nx">Panel</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Panel</span><span class="o">,</span>
         <span class="nx">UA</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">,</span>
 
-        <span class="nx">bIEQuirks</span> <span class="o">=</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span> <span class="o">==</span> <span class="m">6</span> <span class="o">||</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span> <span class="o">==</span> <span class="m">7</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">==</span> <span class="s2">&quot;BackCompat&quot;</span><span class="o">)),</span>
+        <span class="nx">bIEQuirks</span> <span class="o">=</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span> <span class="o">&lt;=</span> <span class="m">6</span> <span class="o">||</span> <span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">==</span> <span class="s2">&quot;BackCompat&quot;</span><span class="o">)),</span>
 
         <span class="nx">m_oMaskTemplate</span><span class="o">,</span>
         <span class="nx">m_oUnderlayTemplate</span><span class="o">,</span>
@@ -236,12 +236,11 @@
 
     <span class="k">function</span> <span class="nx">setWidthToOffsetWidth</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="k">var</span> <span class="nx">nIE</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">,</span>
-            <span class="nx">oConfig</span><span class="o">,</span>
+        <span class="k">var</span> <span class="nx">oConfig</span><span class="o">,</span>
             <span class="nx">sOriginalWidth</span><span class="o">,</span>
             <span class="nx">sNewWidth</span><span class="o">;</span>
 
-        <span class="k">if</span> <span class="o">(</span><span class="nx">nIE</span> <span class="o">==</span> <span class="m">6</span> <span class="o">||</span> <span class="o">(</span><span class="nx">nIE</span> <span class="o">==</span> <span class="m">7</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">==</span> <span class="s2">&quot;BackCompat&quot;</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">bIEQuirks</span><span class="o">)</span> <span class="o">{</span>
 
             <span class="nx">oConfig</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">;</span>
             <span class="nx">sOriginalWidth</span> <span class="o">=</span> <span class="nx">oConfig</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">);</span>
@@ -251,7 +250,7 @@
                 <span class="nx">sNewWidth</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">);</span>
     
                 <span class="nx">oConfig</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;width&quot;</span><span class="o">,</span> <span class="nx">sNewWidth</span><span class="o">);</span>
-                
+
                 <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;hide&quot;</span><span class="o">,</span> <span class="nx">restoreOriginalWidth</span><span class="o">,</span> 
                     <span class="o">[(</span><span class="nx">sOriginalWidth</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="o">),</span> <span class="nx">sNewWidth</span><span class="o">]);</span>
             

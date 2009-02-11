@@ -433,12 +433,12 @@
 		<span class="k">this</span><span class="o">.</span><span class="nx">_doc</span> <span class="o">=</span> <span class="nx">calBox</span><span class="o">.</span><span class="nx">ownerDocument</span><span class="o">;</span>
 
 		<span class="c">/**</span>
-<span class="c">		 * Private flag, to identify IE6/IE7 Quirks</span>
+<span class="c">		 * Private flag, to identify IE Quirks</span>
 <span class="c">		 * @private</span>
 <span class="c">		 * @property __isIEQuirks</span>
 <span class="c">		 */</span>
 		<span class="k">var</span> <span class="nx">ie</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">;</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">__isIEQuirks</span> <span class="o">=</span> <span class="o">(</span><span class="nx">ie</span> <span class="o">&amp;&amp;</span> <span class="o">((</span><span class="nx">ie</span> <span class="o">&lt;=</span> <span class="m">6</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="nx">ie</span> <span class="o">===</span> <span class="m">7</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">==</span> <span class="s2">&quot;BackCompat&quot;</span><span class="o">)));</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">__isIEQuirks</span> <span class="o">=</span> <span class="o">(</span><span class="nx">ie</span> <span class="o">&amp;&amp;</span> <span class="o">((</span><span class="nx">ie</span> <span class="o">&lt;=</span> <span class="m">6</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">==</span> <span class="s2">&quot;BackCompat&quot;</span><span class="o">)));</span>
 	<span class="o">},</span>
 
 	<span class="c">/**</span>
@@ -636,7 +636,7 @@
 
 	<span class="c">/**</span>
 <span class="c">	 * Used to set the width/height of the mask in pixels to match the Calendar Container.</span>
-<span class="c">	 * Currently only used for IE6 and IE7 quirks mode. The other A-Grade browser are handled using CSS (width/height 100%).</span>
+<span class="c">	 * Currently only used for IE6 or IE in quirks mode. The other A-Grade browser are handled using CSS (width/height 100%).</span>
 <span class="c">	 * &lt;p&gt;</span>
 <span class="c">	 * The method is also registered as an HTMLElement resize listener on the Calendars container element.</span>
 <span class="c">	 * &lt;/p&gt;</span>
