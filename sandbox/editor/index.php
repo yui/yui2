@@ -30,15 +30,15 @@
                 echo(stripslashes($_POST['editor']));
             } else {
         ?>
-        <p>This is a <span style="font-weight: bold;">test</span>.</p>
-        <p>This is a <span style="font-style: italic;">test</span>.</p>
-        <p>This is a <span style="text-decoration: underline;">test</span>.</p>
-        <p>This is a <span style="color: #BFBF00;">test</span>.</p>
         <?php
         }
         ?>
 </textarea>
         <!--img src="pics/Photo1.jpg" align="right"/>
+        <p>This is a <span style="font-weight: bold;">test</span>.</p>
+        <p>This is a <span style="font-style: italic;">test</span>.</p>
+        <p>This is a <span style="text-decoration: underline;">test</span>.</p>
+        <p>This is a <span style="color: #BFBF00;">test</span>.</p>
         This is a test.
     test This
     Test This Again.
@@ -126,7 +126,7 @@ var myConfig = {
     dompath: true,
     handleSubmit: true,
     insert: false,
-    ptags: true,
+    //ptags: true,
     drag: true,
     resize: true,
     extracss: 'body { font-size: 11px; }'

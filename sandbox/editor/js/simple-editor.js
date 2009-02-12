@@ -1903,7 +1903,7 @@ var Dom = YAHOO.util.Dom,
                         if (this.browser.webkit) {
                             tar = this._getSelectedElement();
                             if (!this._hasParent(tar, 'li')) {
-                                this.execCommand('inserthtml', '<var id="yui-br">BR</var>');
+                                this.execCommand('inserthtml', '<var id="yui-br"></var>');
                                 var holder = this._getDoc().getElementById('yui-br'),
                                     br = this._getDoc().createElement('br'),
                                     caret = this._getDoc().createElement('span');
