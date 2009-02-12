@@ -492,7 +492,7 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
 
         if (this.thumb._isRegion) {
             if (this.deferredSetRegionValue) {
-                this.setRegionValue.apply(this, this.deferredSetRegionValue);
+                this._setRegionValue.apply(this, this.deferredSetRegionValue);
                 this.deferredSetRegionValue = null;
             } else {
                 this.setRegionValue(0, 0, true, true, true);
