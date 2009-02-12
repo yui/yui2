@@ -172,7 +172,7 @@ package com.yahoo.astra.fl.charts.axes
 		protected var _maxLabelHeight:Number;		
 		
 		/**
-		 * Gets or sets the maximum width of a label
+		 * Gets or sets the maximum height of a label
 		 */
 		public function get maxLabelHeight():Number
 		{
