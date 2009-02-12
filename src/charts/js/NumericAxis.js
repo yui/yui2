@@ -3,6 +3,7 @@
  *
  * @namespace YAHOO.widget
  * @class NumericAxis
+ * @extends YAHOO.widget.Axis
  * @constructor
  */
 YAHOO.widget.NumericAxis = function()
