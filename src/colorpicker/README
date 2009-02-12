@@ -8,6 +8,7 @@ ColorPicker - Release Notes
     * Can now set rgb config at construction for initial color
     * initPicker logic broken up into methods _initElements, _initSliders,
       _bindUI, and syncUI.
+    * Micro optimizations to color value conversions
 
 2.6.0
     * Added colorpicker-core.css (empty) for completeness
