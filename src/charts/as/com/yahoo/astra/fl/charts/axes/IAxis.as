@@ -94,9 +94,7 @@ package com.yahoo.astra.fl.charts.axes
 		function set dataProvider(value:Array):void;
 		
 		/**
-		 * Number of labels specified by the user to appear on the axis.
-		 * <p>When this value is set, the chart will attempt to set the
-		 * specified number of labels on the axis.</p>
+		 * @private
 		 */
 		function get numLabels():Number;
 		
