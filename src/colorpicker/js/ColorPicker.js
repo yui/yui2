@@ -999,7 +999,7 @@
                 }, this);
             Event.on(this.getElement(id), "keypress", this._numbersOnly, this, true);
             Event.on(this.getElement(id), "blur", function(e, me) {
-                    me._useFieldValue(me, e, this, config);
+                    me._useFieldValue(e, this, config);
                 }, this);
         },
 
@@ -1144,7 +1144,7 @@
             Event.on(this.getElement(this.ID.HEX), "keypress",
                 this._hexOnly, this,true);
             Event.on(this.getElement(this.ID.HEX), "blur", function(e, me) {
-                    me._useFieldValue.call(me, e, this, O.HEX);
+                    me._useFieldValue.call(e, this, O.HEX);
                 }, this);
         },
 
