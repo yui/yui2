@@ -291,7 +291,7 @@ var XMLDocument = function(rootTagName, namespaceURL) {
         var ds = new XHRDS("php/xhr_table.php?cols=4",{
             responseType: DS.TYPE_HTMLTABLE,
             responseSchema: {
-                fields: ['Col0','Col1','Col2','Col3'],
+                fields: ['Col0','Col1','Col2','Col3']
             }
         });
 
@@ -637,7 +637,7 @@ var XMLDocument = function(rootTagName, namespaceURL) {
 
         date = YAHOO.util.Date.format(myDate, {format:"%m/%d/%Y"});
         Assert.areSame("01/14/2001", date, "Incorrect %m/%d/%Y");
-    },
+    }
 });
 
 /**
