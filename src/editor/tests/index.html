@@ -328,6 +328,45 @@ var editor = null;
                         Assert.areEqual(h1.length, 1, 'Did not find one H' + i + ' tag');
                     }
                 },
+                test_forecolor: function() {
+                    editor.setEditorHTML('TEST');
+                    editor.execCommand('selectall', '');
+                    editor.execCommand('forecolor', '#bebebe');
+                    var el = editor._getDoc().body.firstChild;
+                    var color = editor.filter_rgb(el.style.color);
+                    Assert.areEqual(color, '#bebebe', 'Fore Colors do not match');
+                },
+                test_backcolor: function() {
+                    editor.setEditorHTML('TEST');
+                    editor.execCommand('selectall', '');
+                    editor.execCommand('backcolor', '#bebebe');
+                    var el = editor._getDoc().body.firstChild;
+                    var color = editor.filter_rgb(el.style.backgroundColor);
+                    Assert.areEqual(color, '#bebebe', 'Back Colors do not match');
+                },
+                test_forecolor_font: function() {
+                    editor.setEditorHTML('TEST');
+                    editor.execCommand('selectall', '');
+                    editor.execCommand('fontname', 'Verdana');
+                    editor.execCommand('selectall', '');
+                    editor.execCommand('forecolor', '#bebebe');
+                    var el = editor._getDoc().body.firstChild;
+                    var color = editor.filter_rgb(el.style.color);
+                    Assert.areEqual(color, '#bebebe', 'Fore Colors do not match');
+                    Assert.areEqual(el.style.fontFamily, 'Verdana', 'Font Names do not match');
+                },
+                test_forecolor_font_el: function() {
+                    editor.setEditorHTML('<b>TEST</b>');
+                    editor.execCommand('selectall', '');
+                    editor.execCommand('fontname', 'Verdana');
+                    editor.execCommand('selectall', '');
+                    editor.execCommand('forecolor', '#bebebe');
+                    var el = editor._getDoc().body.firstChild;
+                    var color = editor.filter_rgb(el.style.color);
+                    Assert.areEqual(color, '#bebebe', 'Fore Colors do not match');
+                    Assert.areEqual(el.style.fontFamily, 'Verdana', 'Font Names do not match');
+                    Assert.areEqual(el.tagName.toLowerCase(), 'b', 'Elements do not match');
+                },
                 test_destroy: function() {
                     var panel = editor.get('panel').element;
                     editor.destroy();

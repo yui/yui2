@@ -3763,7 +3763,7 @@ var Dom = YAHOO.util.Dom,
                 if (this.get('insert')) {
                     el = this._createInsertElement({ backgroundColor: value });
                 } else {
-                    this._createCurrentElement('span', { backgroundColor: value, color: el.style.color });
+                    this._createCurrentElement('span', { backgroundColor: value, color: el.style.color, fontSize: el.style.fontSize, fontFamily: el.style.fontFamily });
                     this._selectNode(this.currentElement[0]);
                 }
                 exec = false;
@@ -3788,7 +3788,7 @@ var Dom = YAHOO.util.Dom,
                     if (this.get('insert')) {
                         el = this._createInsertElement({ color: value });
                     } else {
-                        this._createCurrentElement('span', { color: value, backgroundColor: el.style.backgroundColor });
+                        this._createCurrentElement('span', { color: value, fontSize: el.style.fontSize, fontFamily: el.style.fontFamily, backgroundColor: el.style.backgroundColor });
                         this._selectNode(this.currentElement[0]);
                     }
                     exec = false;
@@ -4122,7 +4122,7 @@ var Dom = YAHOO.util.Dom,
                         this.currentElement[0] = el;
                         this._selectNode(this.currentElement[0]);
                     } else {
-                        this._createCurrentElement('span', {'fontSize': value });
+                        this._createCurrentElement('span', {'fontSize': value, fontFamily: el.style.fontFamily, color: el.style.color, backgroundColor: el.style.backgroundColor });
                         this._selectNode(this.currentElement[0]);
                     }
                 }
