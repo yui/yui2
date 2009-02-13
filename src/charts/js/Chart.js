@@ -350,141 +350,151 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		});
 		
 		/**
+		 *Available styles are listed below:
+		 *<dl>
+		 *	<dt>padding</dt><dd><em>Number</em> : Specifies the spacing around the edge of the chart's contents. Unlike CSS padding in HTML, the chart's padding does not increase the dimensions of the chart.</dd>
+		 *	<dt>animationEnabled</dt><dd><em>Boolean</em> : Specifies whether marker animations are enabled or not. Defaults to true.</dd>
+		 *	<dt>font</dt><dd><em>Object</em> : One may declare a font style to customize the default axis text, including the font name, size, color and more. It contains several substyles.
+		 *		<dl>
+		 *			<dt>name</dt><dd><em>String</em> : Accepts the name of the font or a list of comma-delimited font names, similar to the way font-family works in CSS.</dd>
+		 *			<dt>color</dt><dd>A hex-formatted string or number value like "ff0000" or 0xff0000.</dd>
+		 *			<dt>size</dt><dd><em>Number</em>Point size of the font. No other font size units are available.</dd>
+		 *			<dt>bold</dt><dd><em>Boolean</em> : Determines if the font is displayed in bold.</dd>
+		 *			<dt>italic</dt><dd><em>Boolean</em> : Determines if the font is displayed in italics.</dd>
+		 *			<dt>underline</dt><dd><em>Boolean</em> : Determines if the font is displayed with an underline.</dd>
+		 *		</dl>
+		 *	</dd>
+		 *	<dt>border</dt><dd><em>Object</em> : Allows a developer to add a colored border around the chart. The chart itself will decrease in dimensions to accomodate the border. It is represented as an Object value that contains several substyles.
+		 *		<dl>
+		 *			<dt>color</dt>
+		 *				<dd>A hex-formatted string or number value like "ff0000" or 0xff0000.</dd>
+		 *			<dt>size</dt>
+		 *				<dd><em>Number</em> : The border thickness in pixels</dd>
+		 *		</dl>
+		 *	</dd>	
+		 *	<dt>background</dt>
+		 *	<dd><em>Object</em> : Allows one to customize the background color or image. It contains several substyles.
+		 *		<dl>
+		 *			<dt>color</dt>
+		 *				<dd>Specifies the background fill color. If an image is present, this fill color will appear behind the image. A hex-formatted string or number value like "ff0000" or 0xff0000.</dd>
+		 * 			<dt>alpha</dt>
+		 *				<dd><em>Number</em> : A value from 0.0 to 1.0 that refers to the transparency of the background color.</dd>
+		 *			<dt>image</dt>
+		 *				<dd><em>String</em> : The URL of a JPG, PNG, GIF, or SWF image. May be relative or absolute. Relative URLs are relative to the HTML document in which the chart is embedded.</dd>
+		 *			<dt>mode</dt>
+		 *				<dd><em>String</em> : The method used to display the background image. May be "repeat" (default), "repeat-x", "repeat-y", "no-repeat", or "stretch".</dd>
+		 *		</dl>	
+		 *	</dd>	
+		 *	<dt>legend</dt>
+		 *	<dd><em>Object</em> : Allows a developer customize the appearance of the legend. It contains several substyles.
+		 *		<dl>
+		 *			<dt>display</dt><dd><em>String</em> : Specifies the location where the legend will be drawn. Accepted values include "none", "left", "right", "top", and "bottom". The default value is "none".</dd>
+		 *			<dt>spacing</dt><dd><em>Number</em> : Specifies the number of pixels between each of the items displayed in the legend.</dd>
+		 *			<dt>padding</dt><dd>Specifies the spacing around the edge of the legend's contents. Unlike CSS padding in HTML, the legend's padding does not increase the dimensions of the legend.</dd>
+		 *			<dt>border</dt><dd><em>Object</em> :Allows a developer to add a colored border around the legend. The legend itself will decrease in dimensions to accomodate the border. It contains several substyles.
+		 *				<dl>
+		 *					<dt>color</dt><dd>A hex-formatted string or number value like "ff0000" or 0xff0000.</dd>
+		 *					<dt>size</dt><dd><em>Number</em> : The border thickness in pixels</dd>			
+		 *				</dl>
+		 *			</dd>
+		 *			<dt>background</dt>
+		 *			<dd><em>Object</em> : Allows one to customize the legend's background color or image. It contains several substyles.
+		 *				<dl>
+		 *					<dt>color</dt><dd>Specifies the background fill color. If an image is present, this fill color will appear behind the image. A hex-formatted string or number value like "ff0000" or 0xff0000.</dd>
+		 *					<dt>alpha</dt><dd><em>Number</em> : A value from 0.0 to 1.0 that refers to the transparency of the background color.</dd>
+		 *					<dt>image</dt><dd><em>String</em> : The URL of a JPG, PNG, GIF, or SWF image. May be relative or absolute. Relative URLs are relative to the HTML document in which the chart is embedded.</dd>
+		 *					<dt>mode</dt><dd><em>String</em> : The method used to display the background image. May be "repeat" (default), "repeat-x", "repeat-y", "no-repeat", or "stretch".</dd>
+		 *				</dl>	
+		 *			</dd>
+		 *			<dt>font</dt>
+		 *			<dd><em>Object</em> : One may declare a font style to customize the default legend text, including the font name, size, color and more. It contains several substyles.
+		 *				<dl>
+		 *					<dt>name</dt><dd><em>String</em> : Accepts the name of the font or a list of comma-delimited font names, similar to the way font-family works in CSS.</dd>
+		 *					<dt>color</dt><dd>A hex-formatted string or number value like "ff0000" or 0xff0000.</dd>
+		 *					<dt>size</dt><dd><em>Number</em>Point size of the font. No other font size units are available.</dd>
+		 *					<dt>bold</dt><dd><em>Boolean</em> : Determines if the font is displayed in bold.</dd>
+		 *					<dt>italic</dt><dd><em>Boolean</em> : Determines if the font is displayed in italics.</dd>
+		 *					<dt>underline</dt><dd><em>Boolean</em> : Determines if the font is displayed with an underline.</dd>
+		 *				</dl>
+		 *			</dd>
+		 *		</dl>
+		 *	</dd>	
+		 *	<dt>dataTip</dt><dd>The dataTip style lets a developer customize the appearance of the data tip. It is represented as an Object value that contains several substyles.
+		 *		<dl>
+		 *			<dt>padding</dt><dd>Specifies the spacing around the edge of the dataTip's contents. Unlike CSS padding in HTML, the dataTip's padding does not increase the dimensions of the dataTip.</dd>
+		 *			<dt>border</dt><dd><em>Object</em> :Allows a developer to add a colored border around the dataTip. The dataTip itself will decrease in dimensions to accomodate the border. It contains several substyles.
+		 *				<dl>
+		 *					<dt>color</dt><dd>A hex-formatted string or number value like "ff0000" or 0xff0000.</dd>
+		 *					<dt>size</dt><dd><em>Number</em> : The border thickness in pixels</dd>			
+		 *				</dl>
+		 *			</dd>
+		 *			<dt>background</dt><dd><em>Object</em> : Allows one to customize the dataTip's background color or image. It contains several substyles.
+		 *				<dl>
+         *					<dt>color</dt><dd>Specifies the background fill color. If an image is present, this fill color will appear behind the image. A hex-formatted string or number value like "ff0000" or 0xff0000.</dd>
+		 *					<dt>alpha</dt><dd><em>Number</em> : A value from 0.0 to 1.0 that refers to the transparency of the background color.</dd>
+		 *					<dt>image</dt><dd><em>String</em> : The URL of a JPG, PNG, GIF, or SWF image. May be relative or absolute. Relative URLs are relative to the HTML document in which the chart is embedded.</dd>
+		 *					<dt>mode</dt><dd><em>String</em> : The method used to display the background image. May be "repeat" (default), "repeat-x", "repeat-y", "no-repeat", or "stretch".</dd>
+		 *				</dl>	
+		 *			</dd>
+		 *			<dt>font</dt><dd><em>Object</em> : One may declare a font style to customize the default legend text, including the font name, size, color and more. It contains several substyles.
+		 *				<dl>
+		 *					<dt>name</dt><dd><em>String</em> : Accepts the name of the font or a list of comma-delimited font names, similar to the way font-family works in CSS.</dd>
+		 *					<dt>color</dt><dd>A hex-formatted string or number value like "ff0000" or 0xff0000.</dd>
+		 *					<dt>size</dt><dd><em>Number</em>Point size of the font. No other font size units are available.</dd>
+		 *					<dt>bold</dt><dd><em>Boolean</em> : Determines if the font is displayed in bold.</dd>
+		 *					<dt>italic</dt><dd><em>Boolean</em> : Determines if the font is displayed in italics.</dd>
+		 *					<dt>underline</dt><dd><em>Boolean</em> : Determines if the font is displayed with an underline.</dd>
+		 *				</dl>
+		 *			</dd>
+		 *		</dl>
+		 *	</dd>	
+		 *	<dt>xAxis and yAxis</dt><dd>The xAxis and yAxis styles allow one to customize the appearance of either axis. They are represented as Object values that contain several substyles.
+		 *		<dl>
+		 *			<dt>color</dt><dd>The color of the axis itself. A hex-formatted string or number value like "ff0000" or 0xff0000.</dd>
+		 *			<dt>size</dt><dd><em>Number</em> : The thickness of the axis itself. A value of 0 will hide the axis (but not the labels).</dd>
+		 *			<dt>showLabels</dt><dd><em>Boolean</em>If true, the labels are displayed. If false, they are hidden.</dd>
+		 *			<dt>hideOverlappingLabels</dt><dd><em>Boolean</em> : Indicates whether or not to hide overlapping labels. This style will be used on the Category Axis when calculateCategoryCount is falseThe style will be used on the TimeAxis and NumericAxis when the user specifies the majorUnit. Otherwise, the axes will place the labels so that they do not overlap.</dd>
+		 *			<dt>labelRotation</dt><dd><em>Number</em> : Indicates the rotation of the labels on the axis. Acceptable values are -90 through 90. Labels will display most clearly when set to 90, -90 or 0. The default value is 0.</dd>
+		 *			<dt>labelSpacing</dt><dd><em>Number</em> : The distance, in pixels, between labels on an axis. The default value is 2.</dd>
+		 *			<dt>labelDistance</dt><dd><em>Number</em> : The distance, in pixels, between a label and the axis. The default value is 2.</dd>
+		 *			<dt>titleRotation</dt><dd><em>Number</em> : Indicates the rotation of the title on the axis.</dd>
+		 *			<dt>titleDistance</dt><dd><em>Number</em> : The distance, in pixels, between a title and the axis labels. The default value is 2.</dd>
+		 *			<dt>majorGridLines</dt>
+		 *			<dt>minorGridLines</dt>
+		 *			<dd>
+		 *				<dl>
+		 *					<dt>color</dt><dd>The color of the grid lines. A hex-formatted string or number value like "ff0000" or 0xff0000.</dd>
+		 *					<dt>size</dt><dd><em>Number</em> : The thickness of the grid lines. To hide the grid lines, set the size substyle to 0 (zero). If the grid lines are hidden by default, a thickness greater than zero must be specified to show them.</dd>
+		 *				</dl>				
+		 *			</dd>
+		 *			<dt>zeroGridLine</dt><dd>The zeroGridLine style allows for emphasis on the zero grid line when it falls beyond the origin of the axis. The zeroGridLine style has the following substyles:
+		 *				<dl>
+		 *					<dt>color</dt>
+		 *						<dd>The color of the zero grid line. A hex-formatted string or number value like "ff0000" or 0xff0000.</dd>
+		 *					<dt>size</dt>
+		 *						<dd><em>Number</em> : The thickness of the zero grid line. To hide the grid line, set the size substyle to 0.</dd>
+		 *				</dl>		
+		 *			</dd>
+		 *			<dt>majorTicks</dt>
+		 *			<dt>minorTicks</dt>
+		 *			<dd>
+		 *				<dl>
+		 *					<dt>color</dt>
+		 *						<dd>The color of the ticks. Same accepted formats as color styles described above.</dd>
+		 *					<dt>size</dt>
+		 *						<dd><em>Number</em> The thickness of the ticks. This style may need to be set to a valid numeric value greater than zero if the ticks are not shown by default.</dd>
+		 *					<dt>length</dt>
+		 *						<dd><em>Number</em> : The number of pixels the ticks extend from the axis. This style may need to be set to a valid numeric value greater than zero if the ticks are not shown by default.</dd>
+		 *					<dt>display</dt>
+		 *						<dd><em>String</em> : Specifies how the ticks are drawn. Accepted values include "none", "inside", "outside", and "cross". In many cases, "none" is the default.</dd>
+		 *				</dl>		
+		 *			</dd>
+		 *		</dl>
+		 *	</dd>
+		 *</dl>
 		 * @attribute style
-		 * @description Standard set of values used to style the chart. Can only be set in the constructor or
-		 * through the <code>setStyle</code> (individually) and <code>setStyles</code> (all) methods.
+		 * @description Standard set of values used to style the chart. Can only be set in the constructor and updated through the <code>setStyle</code> (individually) and <code>setStyles</code> (all) methods.
 		 * @type Object
-		 *
-		 *<p>Available styles are listed below:</p>
-		 *<code>padding</code>
-		 *<p>A numeric value that specifies the spacing around the edge of the chart's contents. Unlike CSS padding in HTML, the chart's padding does not increase the dimensions of the chart.</p>
-		 *<code>animationEnabled</code>
-		 *<p>A Boolean value that specifies whether marker animations are enabled or not. The default value is <code>true</code>, meaning that markers will animate when data changes.</p>
-		 *<code>font</code>
-		 *<p>One may declare a <code>font</code> style to customize the default axis text, including the font name, size, color and more. It is represented as an Object value that contains several substyles.</p>
-		 *<dl>
-		 *	<dt><code>name</code></dt>
-		 *		<dd>Accepts a String that is either the name of the font or a list of comma-delimited font names, similar to the way font-family works in CSS.</dd>
-		 *	<dt><code>color</code></dt>
-		 *		<dd>A hex-formatted string or number value like <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
-		 *	<dt><code>size</code></dt>
-		 *		<dd>Accepts a numeric value for the point size. No other font size units are available.</dd>
-		 *	<dt><code>bold</code></dt>
-		 *		<dd>Boolean value to set if the font is displayed in bold.</dd>
-		 *	<dt><code>italic</code></dt>
-		 *		<dd>Boolean value to set if the font is displayed in italics.</dd>
-		 *	<dt><code>underline</code></dt>
-		 *		<dd>Boolean value to set if the font is displayed with an underline.</dd>
-		 *</dl>
-		 *<code>border</code>
-		 *<p>The <code>border</code> style allows a developer to add a colored border around the chart. The chart itself will decrease in dimensions to accomodate the border. It is represented as an Object value that contains several substyles.</p>
-		 *<dl>
-		 *	<dt><code>color</code></dt>
-		 *		<dd>A hex-formatted string or number value like <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
-		 *	<dt><code>size</code></dt>
-		 *		<dd>the border thickness in pixels</dd>
-		 *</dl>
-		 *<code>background</code>
-		 *<p>The <code>background</code> style allows one to customize the background color or image. It is represented as an Object value that contains several substyles.</p>
-		 *<dl>
-		 *	<dt><code>color</code></dt>
-		 *		<dd>Specifies the background fill color. If an image is present, this fill color will appear behind the image. A hex-formatted string or number value like <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
-		 *	<dt><code>alpha</code></dt>
-		 *		<dd>A value from <code>0.0</code> to <code>1.0</code> that refers to the transparency of the background color. This is most useful when used on the data tip background.</dd>
-		 *	<dt><code>image</code></dt>
-		 *		<dd>The URL of a JPG, PNG, GIF, or SWF image. May be relative or absolute. Relative URLs are relative to the HTML document in which the chart is embedded.</dd>
-		 *	<dt><code>mode</code></dt>
-		 *		<dd>The method used to display the background image. May be <code>"repeat"</code> (default), <code>"repeat-x"</code>, <code>"repeat-y"</code>, <code>"no-repeat"</code>, or <code>"stretch"</code>.</dd>
-		 *</dl>
-		 *<p>The <code>mode</code> value will be covered in more detail below in the <a href="#advancedskins">Advanced Skinning</a> section.</p>
-		 *<code>legend</code>
-		 *<p>The <code>legend</code> style lets a developer customize the appearance of the legend. It is represented as an Object value that contains several substyles.</p>
-		 *<dl>
-		 *	<dt><code>display</code></dt>
-		 *		<dd>Specifies the location where the legend will be drawn. Accepted values include <code>"none"</code>, <code>"left"</code>, <code>"right"</code>, <code>"top"</code>, and <code>"bottom"</code>. The default value is <code>"none"</code>.</dd>
-		 *	<dt><code>spacing</code></dt>
-		 *		<dd>A value that specifies the number of pixels between each of the items displayed in the legend.</dd>
-		 *	<dt><code>padding</code></dt>
-		 *		<dd>Same as the <code>padding</code> style described above.</dd>
-		 *	<dt><code>border</code></dt>
-		 *		<dd>Same as the <code>border</code> style described above.</dd>
-		 *	<dt><code>background</code></dt>
-		 *		<dd>Same as the <code>background</code> style described above.</dd>
-		 *	<dt><code>font</code></dt>
-		 *		<dd>Same as the <code>font</code> style described above.</dd>
-		 *</dl>
-		 *<code>dataTip</code>
-		 *<p>The <code>dataTip</code> style lets a developer customize the appearance of the data tip. It is represented as an Object value that contains several substyles.</p>
-		 *<dl>
-		 *	<dt><code>padding</code></dt>
-		 *		<dd>Same as the <code>padding</code> style described above.</dd>
-		 *	<dt><code>border</code></dt>
-		 *		<dd>Same as the <code>border</code> style described above.</dd>
-		 *	<dt><code>background</code></dt>
-		 *		<dd>Same as the <code>background</code> style described above.</dd>
-		 *	<dt><code>font</code></dt>
-		 *		<dd>Same as the <code>font</code> style described above.</dd>
-		 *</dl>
-		 *<code>xAxis and yAxis</code>
-		 *<p>The <code>xAxis</code> and <code>yAxis</code> styles allow one to customize the appearance of either axis. They are represented as Object values that contain several substyles.</p>
-		 *<dl>
-		 *	<dt><code>color</code></dt>
-		 *		<dd>The color of the axis itself. A hex-formatted string or number value like <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
-		 *	<dt><code>size</code></dt>
-		 *		<dd>A numeric value that represents the thickness of the axis itself. A value of <code>0</code> will hide the axis (but not the labels).</dd>
-		 *	<dt><code>showLabels</code></dt>
-		 *		<dd>If <code>true</code>, the labels are displayed. If <code>false</code>, they are hidden.</dd>
-		 *	<dt><code>hideOverlappingLabels</code></dt>
-		 *		<dd>Indicates whether or not to hide overlapping labels. This style will be used on the Category Axis when <code>calculateCategoryCount</code> is <code>false</code>The style will be used on the <code>TimeAxis</code> and <code>NumericAxis</code> when the user specifies the <code>majorUnit</code>. Otherwise, the axes will place the labels so that they do not overlap.</dd>
-		 *	<dt><code>labelRotation</code></dt>
-		 *		<dd>Indicates the rotation of the labels on the axis. Acceptable values are -90 through 90. Labels will display most clearly when set to <code>90</code>, <code>-90</code> or <code>0</code>. The default value is <code>0</code>.</dd>
-		 *	<dt><code>labelSpacing</code></dt>
-		 *		<dd>The distance, in pixels, between labels on an axis. The default value is <code>2</code>.</dd>
-		 *	<dt><code>labelDistance</code></dt>
-		 *		<dd>The distance, in pixels, between a label and the axis. The default value is <code>2</code>.</dd>
-		 *	<dt><code>titleRotation</code></dt>
-		 *		<dd>Indicates the rotation of the title on the axis.</dd>
-		 *	<dt><code>titleDistance</code></dt>
-		 *		<dd>The distance, in pixels, between a title and the axis labels. The default value is <code>2</code>.</dd>
-		 *	<dt><code>majorGridLines</code></dt>
-		 *		<dd>Described below.</dd>
-		 *	<dt><code>minorGridLines</code></dt>
-		 *		<dd>Described below.</dd>
-		 *		 <dt><code>zeroGridLine</code></dt>
-		 *		<dd>Described below.</dd>
-		 *	<dt><code>majorTicks</code></dt>
-		 *		<dd>Described below.</dd>
-		 *	<dt><code>minorTicks</code></dt>
-		 *		<dd>Described below.</dd>
-		 *</dl>
-		 *<code>majorGridLines and minorGridLines</code>
-		 *<p>The <code>majorGridLines</code> and <code>minorGridLines</code> styles have a couple of substyles that need extra explanation. As shown above, <code>majorGridLines</code> and <code>minorGridLines</code> are substyles of the <code>xAxis</code> and <code>yAxis</code> styles.</p>
-		 *<dl>
-		 *	<dt><code>color</code></dt>
-		 *		<dd>The color of the grid lines. A hex-formatted string or number value like <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
-		 *	<dt><code>size</code></dt>
-		 *		<dd>A numeric value that represents the thickness of the grid lines. To hide the grid lines, set the <code>size</code> substyle to <code>0</code> (zero). If the grid lines are hidden by default, a thickness greater than zero must be specified to show them.</dd>
-		 *</dl>
-		 *<code>zeroGridLine</code>
-		 *<p>The <code>zeroGridLine</code> style allows for emphasis on the zero grid line when it falls beyond the origin of the axis. The <code>zeroGridLine</code> style has the following substyles:</p>
-		 *<dl>
-		 *	<dt><code>color</code></dt>
-		 *		<dd>The color of the zero grid line. A hex-formatted string or number value like <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
-		 *	<dt><code>size</code></dt>
-		 *		<dd>A numeric value that represents the thickness of the zero grid line. To hide the grid line, set the <code>size</code> substyle to <code>0</code>.</dd>
-		 *</dl>
-		 *<code>majorTicks and minorTicks</code>
-		 *<p>The <code>majorTicks</code> and <code>minorTicks</code> styles have a couple of substyles that need extra explanation. As shown above, <code>majorTicks</code> and <code>minorTicks</code> are substyles of the <code>xAxis</code> and <code>yAxis</code> styles.</p>
-		 *<dl>
-		 *	<dt><code>color</code></dt>
-		 *		<dd>The color of the ticks. Same accepted formats as <code>color</code> styles described above.</dd>
-		 *	<dt><code>size</code></dt>
-		 *		<dd>A numeric value that represents the thickness of the ticks. This style may need to be set to a valid numeric value greater than zero if the ticks are not shown by default.</dd>
-		 *	<dt><code>length</code></dt>
-		 *		<dd>The number of pixels the ticks extend from the axis. This style may need to be set to a valid numeric value greater than zero if the ticks are not shown by default.</dd>
-		 *	<dt><code>display</code></dt>
-		 *		<dd>Specifies how the ticks are drawn. Accepted values include <code>"none"</code>, <code>"inside"</code>, <code>"outside"</code>, and <code>"cross"</code>. In many cases, <code>"none"</code> is the default.</dd>
-		 *</dl>
 		 */
 		
 	},
