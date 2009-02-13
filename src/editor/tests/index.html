@@ -296,23 +296,6 @@ var editor = null;
                     var e_data = editor.getEditorHTML();
                     Assert.areEqual(t_data, e_data, 'Editor data is different than text area');
                 },
-                test_undo: function() {
-                    var one = '<p>this is a test.</p>',
-                        two = '<p>this is a test.</p><p>this is another test</p>';
-                    editor._undoLevel = 0;
-                    editor._undoCache = [];
-                    editor.setEditorHTML(one);
-                    editor.nodeChange();
-                    editor.setEditorHTML(two);
-                    editor.nodeChange();
-                    Assert.areEqual(2, editor._undoLevel, 'Editor undo level is not high enough');
-                    editor.execCommand('undo');
-                    editor.execCommand('undo');
-                    Assert.areEqual(one, editor.saveHTML().toLowerCase(), 'Editor undo level did not undo');
-                    editor.execCommand('redo');
-                    Assert.areEqual(two, editor.saveHTML().toLowerCase(), 'Editor undo level did not redo');
-
-                },
                 test_dd: function() {
                     Assert.isInstanceOf(YAHOO.util.DD, editor.dd, 'DD not instantiated');
                 },
@@ -396,6 +379,7 @@ var editor = null;
                     }, 3000);
                     Assert.areEqual('div', editor2._configs.element.value.tagName.toLowerCase(), 'Editor failed to render with HTML element (non TEXTAREA) passed to constructor');
                 }
+            
             })); 
             Tool.TestRunner.add(Suite);
 
