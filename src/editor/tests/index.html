@@ -47,6 +47,7 @@ var editor = null;
             nodeChangeDelay: false,
             removeLineBreaks: true,
             animate: true,
+            width: '700px',
             resize: true,
             drag: true
         });
@@ -57,7 +58,6 @@ var editor = null;
             Suite.add( new Tool.TestCase({
                 name: 'YAHOO.widget.Editor',
                 test_render: function() {
-                    console.log(editor.get('element_cont').get('element'));
                     Assert.areEqual(Dom.get('editor_container'), editor.get('element_cont').get('element'), 'Could not find Editors container');
                     Assert.areEqual(Dom.get('editor_toolbar'), editor.toolbar.get('element'), 'Could not find Editors Toolbar');
                     Assert.isInstanceOf(YAHOO.widget.Toolbar, editor.toolbar, 'Could not find Toolbars Instance');
@@ -319,6 +319,15 @@ var editor = null;
                 test_resize: function() {
                     Assert.isInstanceOf(YAHOO.util.Resize, editor.resize, 'Resize not instantiated');
                 },
+                test_headers: function() {
+                    for (var i = 1; i < 6; i++) {
+                        editor.setEditorHTML('This is a test header #' + i);
+                        editor.execCommand('selectall', '');
+                        editor.execCommand('heading', 'h' + i);
+                        var h1 = editor._getDoc().body.getElementsByTagName('h' + i);
+                        Assert.areEqual(h1.length, 1, 'Did not find one H' + i + ' tag');
+                    }
+                },
                 test_destroy: function() {
                     var panel = editor.get('panel').element;
                     editor.destroy();
@@ -348,7 +357,6 @@ var editor = null;
                     }, 3000);
                     Assert.areEqual('div', editor2._configs.element.value.tagName.toLowerCase(), 'Editor failed to render with HTML element (non TEXTAREA) passed to constructor');
                 }
-
             })); 
             Tool.TestRunner.add(Suite);
 
