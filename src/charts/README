@@ -9,7 +9,6 @@ YUI Library - Charts - Release Notes
   * Fixed bug in which the Line Chart broke when the first value of a data source was null.
   * Fixed bug in which mouseover events were fired before the chart object was ready.
   * Refactored axes so that major units are more accurately plotted.
-  * Fixed bug in which charts failed to redraw in Opera when the display was toggled.
   * Added ability to uniquely style a non-origin 0 gridline.
 
 2.6.0
