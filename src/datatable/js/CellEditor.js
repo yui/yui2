@@ -110,6 +110,7 @@ _oDataTable : null,
  * @property _oColumn
  * @type YAHOO.widget.Column
  * @default null
+ * @private 
  */
 _oColumn : null,
 

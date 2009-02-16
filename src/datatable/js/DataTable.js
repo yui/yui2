@@ -82,7 +82,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Initialize DOM elements
     var okDom = this._initDomElements(elContainer);
     if(!okDom) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
+        YAHOO.log("Could not instantiate DataTable due to an invalid DOM element", "error", this.toString());
         return;
     }
             
@@ -2067,7 +2067,6 @@ _initDomElements : function(elContainer) {
     this._initTbodyEl(this._elTable);
 
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
         return false;
     }
     else {

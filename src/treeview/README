@@ -5,48 +5,49 @@ TreeView - Release Notes
     selection and propagation up and down
   * Improved focus functionality: property currentFocus, 
     event focusChanged, methods _canHaveFocus and _removeFocus.
-	The focus method has been improved so it can be safely called
-	by the developer.  If called on a Node in a collapsed branch,
-	said branch will be expanded from the root so all unexpanded 
-	nodes will be rendered
+    The focus method has been improved so it can be safely called
+    by the developer.  If called on a Node in a collapsed branch,
+    said branch will be expanded from the root so all unexpanded 
+    nodes will be rendered
   * buildTreeFromObject:  type can also contain a reference 
     to an actual object class
   * buildTreeFromMarkup: improved parsing.  It can read an
     HTML attribute called yuiConfig which can override any
-	property read from the markup.  It assembles an object
-	literal which then passes to buildTreeFromObject.
+    property read from the markup.  It assembles an object
+    literal which then passes to buildTreeFromObject.
   * Event handling: the event listeners for UI events set in
     method render had been moved from anonymous inner functions to
-	private methods, allowing for easy overriding:
-	_onClickEvent, _onDblClickEvent, _onMouseOverEvent,
-	_onMouseOutEvent and _onKeyDownEvent and helper function
-	_getEventTargetTdEl
+    private methods, allowing for easy overriding:
+    _onClickEvent, _onDblClickEvent, _onMouseOverEvent,
+    _onMouseOutEvent and _onKeyDownEvent and helper function
+    _getEventTargetTdEl
   * Configuration properties, the first argument to a Node constructor
     will now go to either an actual Node property if it exists 
-	or to member Node.data otherwise, not to both.
+    or to member Node.data otherwise, not to both.
   * Methods getNodeByProperty and getNodesByProperty have been
     changed to look for property values either as native properties
-	or in Node.data.
+    or in Node.data.
   * destroy method now destroys the content of the tree container
     not the container itself.
   * classNames ygtvtable, ygtvrow and ygtvcell have been added
     to make it easier to identify elements in the generated HTML
   * getNodeDefinition:  fixed bug where original configuration
     would continue to be reported in its initial state
-	(initially expanded nodes would	always report expanded 
-	even when later collapsed).
+    (initially expanded nodes would always report expanded 
+    even when later collapsed).
   * refresh method was overriden in TextNode to refresh 
     the node label.
   * Node editor accepts a validator function which can convert
     the entered value and validate it, rejecting it by returning
-	undefined (not false, which might be a valid value).  
-	Method saveEditorValue can prevent the pop up editor from 
-	closing by returning false. If validator returns undefined, 
-	saveEditorValue will return false. 
+    undefined (not false, which might be a valid value).  
+    Method saveEditorValue can prevent the pop up editor from 
+    closing by returning false. If validator returns undefined, 
+    saveEditorValue will return false. 
   * Properties href and target were moved from Node to TextNode,
-    which is the only kind of node that cares about the,
+    which is the lowest point in the hierarchy that uses these
+    properties.
   * Method getNodeDefinition was not serializing all properties
-	for every node type.
+    for every node type.
   * Added method setNodesProperty to globaly set a property on
     all nodes of a branch or the whole tree.
   * JSON utility is now an optional dependency for TreeView when

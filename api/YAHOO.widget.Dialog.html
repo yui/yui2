@@ -2043,7 +2043,7 @@ overridden if validation is necessary.
                                             (
                                                 
                                                         
-                                                         The
+                                                         conn
                                                     
                                                 
                                             )
@@ -2060,10 +2060,10 @@ overridden if validation is necessary.
                                                 <dl rel="yui:parameters">
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">The</span>
+                                                            <code><span property="yui:name">conn</span>
                                                                 &lt;<span property="yui:type">Object</span>&gt;
                                                             </code>
-                                                            <span property="yui:description"> connection object object, returned by YAHOO.util.Connect.asyncRequest</span>
+                                                            <span property="yui:description"> The connection object, returned by YAHOO.util.Connect.asyncRequest</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2329,9 +2329,11 @@ overridden if validation is necessary.
                                         <div class="description" property="yui:description">
                                             Array of object literals, each containing a set of properties 
 defining a button to be appended into the Dialog's footer.
-Each button object in the buttons array can have three properties:
+<p>Each button object in the buttons array can have three properties:</p>
+<dl>
 <dt>text:</dt>
-<dd>The text that will display on the face of the button. The text can 
+<dd>
+The text that will display on the face of the button. The text can 
 include HTML, as long as it is compliant with HTML Button specifications.
 </dd>
 <dt>handler:</dt>
@@ -2341,17 +2343,31 @@ include HTML, as long as it is compliant with HTML Button specifications.
 button is clicked.  (In this case scope of this function is 
 always its Dialog instance.)</li>
 <li>An object literal representing the code to be 
-executed when the button is clicked.  Format:<br> <code> {<br>
-<strong>fn:</strong> Function,   &#47;&#47; The handler to call 
-when  the event fires.<br> <strong>obj:</strong> Object,
-&#47;&#47; An  object to pass back to the handler.<br> <strong>
-scope:</strong>  Object &#47;&#47; The object to use for the 
-scope of the handler. <br> } </code> <br></li>
+executed when the button is clicked.
+<p>Format:</p>
+<p>
+<code>{
+<br>
+<strong>fn:</strong> Function, &#47;&#47;
+The handler to call when  the event fires.
+<br>
+<strong>obj:</strong> Object, &#47;&#47; 
+An  object to pass back to the handler.
+<br>
+<strong>scope:</strong> Object &#47;&#47; 
+The object to use for the scope of the handler.
+<br>
+}</code>
+</p>
+</li>
 </ol>
 </dd>
 <dt>isDefault:</dt>
-<dd>An optional boolean value that specifies that a button 
-should be highlighted and focused by default.</dd>
+<dd>
+An optional boolean value that specifies that a button 
+should be highlighted and focused by default.
+</dd>
+</dl>
 <em>NOTE:</em>If the YUI Button Widget is included on the page, 
 the buttons created will be instances of YAHOO.widget.Button. 
 Otherwise, HTML Buttons (<code>&#60;BUTTON&#62;</code>) will be 
@@ -2393,7 +2409,7 @@ dialog should be automatically hidden after submit.
                                             Any additional post data which needs to be sent when using the 
 <a href="#config_postmethod">async</a> postmethod for dialog POST submissions.
 The format for the post data string is defined by Connection Manager's 
-<a href="YAHOO.util.Connect.html#method_asyncRequest>asyncRequest</a> 
+<a href="YAHOO.util.Connect.html#method_asyncRequest">asyncRequest</a> 
 method.
                                         </div>
                                     </div>

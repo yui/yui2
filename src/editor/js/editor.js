@@ -48,7 +48,7 @@ var Dom = YAHOO.util.Dom,
         * @return Boolean
         */
         _hasUndoLevel: function() {
-            return (this._undoCache.length && this._undoLevel);
+            return ((this._undoCache.length > 1) && this._undoLevel);
         },
         /**
         * @private
@@ -66,6 +66,7 @@ var Dom = YAHOO.util.Dom,
                     this.toolbar.enableButton(redo_button);
                 }
             }
+            this._lastCommand = null;
         },
         /**
         * @private

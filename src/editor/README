@@ -1,3 +1,36 @@
+**** version 2.7.0 ***
+    * 1946017 - Unable to delete text when editor opens (Firefox)
+    * 2527610 - Insert image deletes image in FF3
+    * 2527613 - Create link window - remove link from text option disables toolbar 
+    * 2527678 - Rich Text Editor producing inconsistent line-breaks in Safari 
+    * 2527647 - Unable to input image url with rich editor in modal panel 
+    * 2034544 - Image Options Dialog Box needs fixing
+    * 2048035 - autoHeight will cause misaligned dialog panels
+    * 2107828 - extra newlines when using cleanHTML()
+    * 2117571 - getButtonBy doesn't work with custom id's on btns
+    * 2144339 - colouring a word colours the sentence (REGRESSION)
+    * 2148477 - RTE Image Editor Broken When yui-skin-sam on div
+    * 2151060 - RTE w/ Custom Image Editor broken in FF, Safari
+    * 2152230 - using ptags option only works in IE
+    * 2172817 - ampersand (&) converted to XML entity in image URL
+    * 2193135 - Safari incorrectly strips first line break
+    * 2212320 - Clicking on disabled buttons goes to '#' link
+    * 2212572 - Relative Links still convert to absolute links
+    * 2226092 - FF3: Cannot always make list item into a hyperlink
+    * 2226228 - Saf:multiple list items not made from mult lines
+    * 2277647 - Support for focus and blur events
+    * 2285513 - Ordered list html output has an extra li element
+    * 2310520 - Translating the widget
+    * 2355070 - Keyboard shortcut for Font Size isnot working.
+    * 2412129 - Removing link deactivates toolbar
+    * 2412770 - RTE color highligh whole paragraph
+    * 2417798 - cleanHTML() removes spaces around &
+    * 2447328 - Safari and Chrome inserts HTML at wrong position
+    * 2490558 - Unable to unapply formatting
+    * 2491229 - _cleanIncomingHTML replaces Cr+Lf with 2 BRs
+    * 2412129 - Removing link deactivates toolbar
+
+
 **** version 2.6.0 ***
     
     * Widget promoted to GA - beta flag removed from all files.
