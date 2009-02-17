@@ -1,6 +1,12 @@
-/* Base, part of YUI's CSS Foundation. */
+/**
+ * YUI Base
+ * @module base
+ * @namespace yui-
+ * @requires reset, fonts
+*/
 
 body {
+	/* For breathing room between content and viewport. */
 	margin:10px;
 }
 
