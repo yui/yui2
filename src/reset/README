@@ -1,5 +1,19 @@
 YUI Library - Reset - Release Notes
 
+Version 2.7.0
+
+  * Added new test for nesting ordered and unordered lists.
+  * Added new test for thead, tfoot, tbody.
+  * Added new test for optgroup and option. 
+  * Added new test for nested em and strong.
+  * Added new test for nested blockquote.
+  * Added new test for radio and checkbox.
+  * Added button to Reset and Base. Bug #2359418
+  * For button and various input types, added padding:1px; via Base so that 
+    Opera (9.63) will render using its standard form controls. Bug #1985570. 
+  * Known issue: Can not reset the font-style and font-weight properties for 
+    the option and optgroup elements on IE8 (as of build 18372, RC1)
+
 Version 2.6.0 
 
   * Added del,ins{text-decoration:none;} per SF-1957908
