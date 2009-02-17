@@ -28,7 +28,8 @@ body {
 		Subsection: General 
 	*/
 
-#doc,#doc2,#doc3,#doc4,.yui-t1,.yui-t2,.yui-t3,.yui-t4,.yui-t5,.yui-t6,.yui-t7 {
+#doc,#doc2,#doc3,#doc4,
+.yui-t1,.yui-t2,.yui-t3,.yui-t4,.yui-t5,.yui-t6,.yui-t7 {
 	margin: auto;
 	text-align: left;
 	width: 57.69em;
@@ -36,8 +37,8 @@ body {
 }
 
 /* 
-		Subsection: 950 Centered (doc2) 
-	*/
+	Subsection: 950 Centered (doc2) 
+*/
 
 #doc2 {
 	width: 73.076em;
@@ -45,8 +46,8 @@ body {
 }
 
 /* 
-		Subsection: 100% (doc3) 
-	*/
+	Subsection: 100% (doc3) 
+*/
 
 #doc3 {
 /* Left and Right margins are not a structural part of Grids. Without them Grids
