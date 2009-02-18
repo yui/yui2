@@ -1,5 +1,12 @@
 YUI Library - Fonts - Release Notes
 
+Version 2.7.0
+
+   * Added button element to rule adjusting font sizes for some form elements.
+     Bug #2359418
+   * Known issue: In IE8, font sizes defined via YUI Fonts CSS are user-
+     scalable via IE8's zooming feature, but not via IE8's "View > Text Size." 
+
 Version 2.6.0
 
    * Added font reduction and face restatement for select, input, button, and textarea

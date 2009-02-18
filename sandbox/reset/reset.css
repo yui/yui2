@@ -1,3 +1,9 @@
+/**
+ * YUI Reset
+ * @module reset
+ * @namespace
+ * @requires 
+ */
 html {
 	color: #000;
 	background: #FFF;
@@ -93,13 +99,11 @@ acronym {
 }
 
 sup {
-	/* to preserve line-height and selector appearance */
-	vertical-align: text-top;
+	vertical-align: baseline;
 }
 
 sub {
-	/* to preserve line-height and selector appearance */
-	vertical-align: text-bottom;
+	vertical-align: baseline;
 }
 
 /*because legend doesn't inherit in IE */

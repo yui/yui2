@@ -1,6 +1,12 @@
-/* Base, part of YUI's CSS Foundation. */
+/**
+ * YUI Base
+ * @module base
+ * @namespace yui-
+ * @requires reset, fonts
+*/
 
 body {
+	/* For breathing room between content and viewport. */
 	margin:10px;
 }
 
@@ -24,7 +30,7 @@ h1,h2,h3 {
 	margin: 1em 0;
 }
 
-h1,h2,h3,h4,h5,h6,strong,optgroup,dt {
+h1,h2,h3,h4,h5,h6,strong,dt {
 	/* Bringing boldness back to headers and the strong element. */
 	font-weight: bold;
 }
@@ -90,6 +96,16 @@ caption {
 	margin-bottom: .5em;
 	/* Centered so it doesn't blend in to other content. */
 	text-align: center;
+}
+
+sup {
+	/* to preserve line-height and selector appearance */
+	vertical-align: super;
+}
+
+sub {
+	/* to preserve line-height and selector appearance */
+	vertical-align: sub;
 }
 
 p,
