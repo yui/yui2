@@ -1,5 +1,28 @@
 YUI Library Release Notes
 
+*** version 2.7.0 ***
+
+The 2.7.0 release of YUI contains:
+
+One new component:
+  - StyleSheet 
+
+Three components promoted from Beta to GA status
+  - Element
+  - ProfilerViewer
+  - Selector
+
+One components promoted from Experimental to Beta status
+  - Uploader
+
+2.7.0 contains a number of updates to the components to provide IE8 compatibility based on the testing we
+have done with the pre-release distributions.  Further updates will be made, if needed, following the 
+official launch of the browser.
+
+Bug fixes and feature enhancements were added to many components.  Refer to the README files for full 
+details on the specific changes to each component. 
+
+
 *** version 2.6.0 ***
 
 The 2.6.0 release of YUI contains:
