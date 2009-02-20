@@ -1,6 +1,6 @@
 Connection Manager Release Notes
 
-*** version 2.7.1 ***
+*** version 2.7.0 ***
 
 * [FIXED] SF2141044.  Button elements of type "submit" are now handled in the
 same manner as input elements of type "submit", including disambiguation of

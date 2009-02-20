@@ -40,10 +40,10 @@ Changes:
 
 + Module id is generated using Dom.generateId, if the element 
   passed to the constructor does not have an id set.
-  
-+ Added code to force Opera to repaint on show, to fix occasional 
-  content dependant rendering glitches (using documentElement.className).
-  
+
++ Added Module.forceDocumentRedraw method which can be used to
+  fix occasional content dependant rendering glitches in Opera.
+
 + Resize monitor is now only positioned offset top, instead of both 
   offset top and offset left, to avoid scrollbars in RTL pages. A buffer 
   constant (Module.RESIZE_MONITOR_BUFFER) is also provided, to add a buffer

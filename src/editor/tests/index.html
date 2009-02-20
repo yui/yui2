@@ -47,6 +47,7 @@ var editor = null;
             nodeChangeDelay: false,
             removeLineBreaks: true,
             animate: true,
+            width: '700px',
             resize: true,
             drag: true
         });
@@ -57,7 +58,6 @@ var editor = null;
             Suite.add( new Tool.TestCase({
                 name: 'YAHOO.widget.Editor',
                 test_render: function() {
-                    console.log(editor.get('element_cont').get('element'));
                     Assert.areEqual(Dom.get('editor_container'), editor.get('element_cont').get('element'), 'Could not find Editors container');
                     Assert.areEqual(Dom.get('editor_toolbar'), editor.toolbar.get('element'), 'Could not find Editors Toolbar');
                     Assert.isInstanceOf(YAHOO.widget.Toolbar, editor.toolbar, 'Could not find Toolbars Instance');
@@ -296,28 +296,59 @@ var editor = null;
                     var e_data = editor.getEditorHTML();
                     Assert.areEqual(t_data, e_data, 'Editor data is different than text area');
                 },
-                test_undo: function() {
-                    var one = '<p>this is a test.</p>',
-                        two = '<p>this is a test.</p><p>this is another test</p>';
-                    editor._undoLevel = 0;
-                    editor._undoCache = [];
-                    editor.setEditorHTML(one);
-                    editor.nodeChange();
-                    editor.setEditorHTML(two);
-                    editor.nodeChange();
-                    Assert.areEqual(2, editor._undoLevel, 'Editor undo level is not high enough');
-                    editor.execCommand('undo');
-                    editor.execCommand('undo');
-                    Assert.areEqual(one, editor.saveHTML().toLowerCase(), 'Editor undo level did not undo');
-                    editor.execCommand('redo');
-                    Assert.areEqual(two, editor.saveHTML().toLowerCase(), 'Editor undo level did not redo');
-
-                },
                 test_dd: function() {
                     Assert.isInstanceOf(YAHOO.util.DD, editor.dd, 'DD not instantiated');
                 },
                 test_resize: function() {
                     Assert.isInstanceOf(YAHOO.util.Resize, editor.resize, 'Resize not instantiated');
+                },
+                test_headers: function() {
+                    for (var i = 1; i < 6; i++) {
+                        editor.setEditorHTML('This is a test header #' + i);
+                        editor.execCommand('selectall', '');
+                        editor.execCommand('heading', 'h' + i);
+                        var h1 = editor._getDoc().body.getElementsByTagName('h' + i);
+                        Assert.areEqual(h1.length, 1, 'Did not find one H' + i + ' tag');
+                    }
+                },
+                test_forecolor: function() {
+                    editor.setEditorHTML('TEST');
+                    editor.execCommand('selectall', '');
+                    editor.execCommand('forecolor', '#bebebe');
+                    var el = editor._getDoc().body.firstChild;
+                    var color = editor.filter_rgb(el.style.color);
+                    Assert.areEqual(color, '#bebebe', 'Fore Colors do not match');
+                },
+                test_backcolor: function() {
+                    editor.setEditorHTML('TEST');
+                    editor.execCommand('selectall', '');
+                    editor.execCommand('backcolor', '#bebebe');
+                    var el = editor._getDoc().body.firstChild;
+                    var color = editor.filter_rgb(el.style.backgroundColor);
+                    Assert.areEqual(color, '#bebebe', 'Back Colors do not match');
+                },
+                test_forecolor_font: function() {
+                    editor.setEditorHTML('TEST');
+                    editor.execCommand('selectall', '');
+                    editor.execCommand('fontname', 'Verdana');
+                    editor.execCommand('selectall', '');
+                    editor.execCommand('forecolor', '#bebebe');
+                    var el = editor._getDoc().body.firstChild;
+                    var color = editor.filter_rgb(el.style.color);
+                    Assert.areEqual(color, '#bebebe', 'Fore Colors do not match');
+                    Assert.areEqual(el.style.fontFamily, 'Verdana', 'Font Names do not match');
+                },
+                test_forecolor_font_el: function() {
+                    editor.setEditorHTML('<b>TEST</b>');
+                    editor.execCommand('selectall', '');
+                    editor.execCommand('fontname', 'Verdana');
+                    editor.execCommand('selectall', '');
+                    editor.execCommand('forecolor', '#bebebe');
+                    var el = editor._getDoc().body.firstChild;
+                    var color = editor.filter_rgb(el.style.color);
+                    Assert.areEqual(color, '#bebebe', 'Fore Colors do not match');
+                    Assert.areEqual(el.style.fontFamily, 'Verdana', 'Font Names do not match');
+                    Assert.areEqual(el.tagName.toLowerCase(), 'b', 'Elements do not match');
                 },
                 test_destroy: function() {
                     var panel = editor.get('panel').element;
@@ -348,7 +379,7 @@ var editor = null;
                     }, 3000);
                     Assert.areEqual('div', editor2._configs.element.value.tagName.toLowerCase(), 'Editor failed to render with HTML element (non TEXTAREA) passed to constructor');
                 }
-
+            
             })); 
             Tool.TestRunner.add(Suite);
 

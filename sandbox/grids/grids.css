@@ -1,92 +1,85 @@
 /**
-* Grids
-*
-* @module grids
-* @namespace yui-
-* @requires reset, fonts
-*/
+ * YUI Grids
+ * @module grids
+ * @namespace yui-
+ * @requires reset, fonts
+ */
 
-/*
-	Note: Throughout this file, the *property (star-property) filter is used 
-    to give a value to IE that other browsers do not see. _property is only seen 
-    by IE7, so the combo of *prop and _prop can target between IE6 and IE7.
-*/
+/**  
+ * Note: Throughout this file, the *property (star-property) filter is used 
+ * to give a value to IE that other browsers do not see. _property is only seen 
+ * by IE7, so the combo of *prop and _prop can target between IE6 and IE7.
+ * 
+ * More information on these filters and related validation errors:
+ * http://tech.groups.yahoo.com/group/ydn-javascript/message/40059
+ */
 
-/*
-	Section: General Rules
-*/
+/**
+ * Section: General Rules
+ */
 
 body {
 	text-align: center;
 }
 
-/*
-	Section: Page Width Rules (#doc, #doc2, #doc3, #doc4)
-*/
+/**
+ * Section: Page Width Rules (#doc, #doc2, #doc3, #doc4)
+ */
 
-/* 
-		Subsection: General 
-	*/
-
-#doc,#doc2,#doc3,#doc4,.yui-t1,.yui-t2,.yui-t3,.yui-t4,.yui-t5,.yui-t6,.yui-t7 {
+#doc,#doc2,#doc3,#doc4,
+.yui-t1,.yui-t2,.yui-t3,.yui-t4,.yui-t5,.yui-t6,.yui-t7 {
 	margin: auto;
 	text-align: left;
 	width: 57.69em;
 	*width: 56.25em;
 }
 
-/* 
-		Subsection: 950 Centered (doc2) 
-	*/
-
+/* 950 Centered (doc2) */
 #doc2 {
 	width: 73.076em;
 	*width: 71.25em;
 }
 
-/* 
-		Subsection: 100% (doc3) 
-	*/
-
+/* 100% (doc3) */
 #doc3 {
-/* Left and Right margins are not a structural part of Grids. Without them Grids
-   works fine, but content bleeds to the very edge of the document, which often
-   impairs readability and usability. They are provided because they prevent 
-   the content from "bleeding" into the browser's chrome. */
+/**
+ * Left and Right margins are not a structural part of Grids. Without them 
+ * Grids works fine, but content bleeds to the very edge of the document, which
+ * often impairs readability and usability. They are provided because they 
+ * prevent the content from "bleeding" into the browser's chrome. 
+ */
 	margin: auto 10px;
 	width: auto;
 }
 
-/* Subsection: 974 Centered (doc4) */
+/* 974 Centered (doc4) */
 #doc4 {
 	width: 74.923em;
 	*width: 73.05em;
 }
 
-/*
-	Section: Preset Template Rules (.yui-t[1-6])
-*/
+/**
+ * Section: Preset Template Rules (.yui-t[1-6])
+ */
 
-/* 
-		Subsection: General
-	*/
-
-/* to preserve source-order independence for Gecko */
 
 .yui-b {
+	/* to preserve source-order independence for Gecko */
 	position: relative;
 }
 
 .yui-b {
+	/* to preserve source-order independence for IE */
 	_position: static;
 }
 
 #yui-main .yui-b {
+	/* to preserve source-order independence for Gecko */
 	position: static;
 }
 
 #yui-main,
-	.yui-g .yui-u .yui-g {
+.yui-g .yui-u .yui-g {
 	width: 100%;
 }
 
@@ -94,21 +87,21 @@ body {
 .yui-t2 #yui-main,
 .yui-t3 #yui-main {
 	float: right;
+	/* IE: preserve layout at narrow widths */
 	margin-left: -25em;
-/* IE: preserve layout at narrow widths */
 }
 
 .yui-t4 #yui-main,
 .yui-t5 #yui-main,
 .yui-t6 #yui-main {
 	float: left;
+	/* IE: preserve layout at narrow widths */
 	margin-right: -25em;
-/* IE: preserve layout at narrow widths */
 }
 
-/* 
-		Subsection: For Specific Template Presets
-	*/
+/** 
+ * For Specific Template Presets
+ */
 
 .yui-t1 .yui-b {
 	float: left;
@@ -186,14 +179,11 @@ body {
 	width: auto;
 }
 
-/*
-	Section: Grids and Nesting Grids
-*/
+/**
+ * Section: Grids and Nesting Grids
+ */
 
-/*
-		Subsection: Children generally take half the available space
-	*/
-
+/* Children generally take half the available space */
 .yui-gb .yui-u,
 .yui-g .yui-gb .yui-u,
 .yui-gb .yui-g,
@@ -208,8 +198,7 @@ body {
 	float: left;
 }
 
-/*Float units (and sub grids) to the right */
-
+/* Float units (and sub grids) to the right */
 .yui-g .yui-u,
 .yui-g .yui-g,
 .yui-g .yui-gb, 
@@ -228,7 +217,6 @@ body {
 }
 
 /*Float units (and sub grids) to the left */
-
 .yui-g div.first, 
 .yui-gb div.first,
 .yui-gc div.first,
@@ -267,7 +255,6 @@ body {
 }
 
 /* Give IE some extra breathing room for 1/3-based rounding issues */
-
 .yui-gb .yui-u {
 	*margin-left: 1.9%;
 	*width: 31.9%;
@@ -299,9 +286,9 @@ body {
 	margin-left: 0;
 }
 
-/*
-		Section: Deep Nesting 
-	*/
+/**
+ * Section: Deep Nesting 
+ */
 
 .yui-g .yui-g .yui-u,
 .yui-gb .yui-g .yui-u,
@@ -319,7 +306,6 @@ body {
 }
 
 /*SF 1927599 from 1.14 to 2.6.0*/
-
 .yui-g .yui-gb div.first,
 	.yui-gb .yui-gb div.first {
 	*margin-right: 0;
@@ -423,7 +409,6 @@ body {
 }
 
 /* Width Accommodation for Nested Contexts */
-
 .yui-gb .yui-ge .yui-u,
 	.yui-gb .yui-gf div.first {
 	*width: 24%;
@@ -431,7 +416,6 @@ body {
 }
 
 /* Width Accommodation for Nested Contexts */
-
 .yui-gb .yui-ge div.first, 
 	.yui-gb .yui-gf .yui-u {
 	*width: 73.5%;
@@ -439,7 +423,6 @@ body {
 }
 
 /* Patch for GD within GE */
-
 .yui-ge div.first .yui-gd .yui-u {
 	width: 65%;
 }
@@ -449,7 +432,6 @@ body {
 }
 
 /* @group Clearing */
-
 #hd:after,
 #bd:after,
 #ft:after,

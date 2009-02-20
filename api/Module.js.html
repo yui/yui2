@@ -240,11 +240,9 @@
     <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;textResize&quot;</span><span class="o">);</span>
 
     <span class="c">/**</span>
-<span class="c">     * Helper utility method, used to force a document level redraw to account for certain</span>
-<span class="c">     * types of content not rendering correctly (e.g. border-collapse:collapse table borders).</span>
-<span class="c">     * &lt;p&gt;</span>
-<span class="c">     * Currently used to prevent Opera repaint glitches on show.</span>
-<span class="c">     * &lt;/p&gt;</span>
+<span class="c">     * Helper utility method, which forces a document level </span>
+<span class="c">     * redraw for Opera, which can help remove repaint</span>
+<span class="c">     * irregularities after applying DOM changes.</span>
 <span class="c">     *</span>
 <span class="c">     * @method YAHOO.widget.Module.forceDocumentRedraw</span>
 <span class="c">     * @static</span>
@@ -252,7 +250,7 @@
     <span class="nx">Module</span><span class="o">.</span><span class="nx">forceDocumentRedraw</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">docEl</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">;</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">docEl</span><span class="o">)</span> <span class="o">{</span>
-			<span class="nx">docEl</span><span class="o">.</span><span class="nx">className</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span><span class="o">;</span>
+            <span class="nx">docEl</span><span class="o">.</span><span class="nx">className</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span><span class="o">;</span>
             <span class="nx">docEl</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">trim</span><span class="o">(</span><span class="nx">docEl</span><span class="o">.</span><span class="nx">className</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">};</span>
@@ -684,11 +682,6 @@
 
             <span class="k">if</span> <span class="o">(!</span><span class="nx">Config</span><span class="o">.</span><span class="nx">alreadySubscribed</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">fireQueue</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">))</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">renderEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">fireQueue</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="o">}</span>
-
-            <span class="c">// Opera needs to force a repaint for certain types of content</span>
-<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">opera</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">showEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">Module</span><span class="o">.</span><span class="nx">forceDocumentRedraw</span><span class="o">);</span>
             <span class="o">}</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">initEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">Module</span><span class="o">);</span>

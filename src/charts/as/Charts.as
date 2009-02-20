@@ -1186,7 +1186,14 @@ package
 			
 			if(styles.labelRotation)
 			{
-				this.chart.setStyle(axisName + "AxisLabelRotation", styles.labelRotation);
+				if(!isNaN(Number(styles.labelRotation)))
+				{
+					this.chart.setStyle(axisName + "AxisLabelRotation", Number(styles.labelRotation));
+				}
+				else
+				{
+					this.log("The " + axisName + " labelRotation style must be of type Number.", LoggerCategory.WARN);
+				}
 			}
 			
 			if(styles.labelSpacing)

@@ -1,3 +1,8 @@
+**** version 2.7.0 ***
+    
+    * 2172971 - Attribute "useShim" for Resize mislabeled
+
+
 **** version 2.6.0 ***
 
     * Widget promoted to GA - beta flag removed

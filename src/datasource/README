@@ -9,6 +9,8 @@ null, undefined, NaN, ""
 * Added support for customizeable scope in JS Function DataSources.
 * Added doBeforeGetScriptNode() as a hook to access the script URL immediately
 before it is processed by the Get Utility in Script Node DataSources.
+* Added parseJSONArgs instance property to allow extra params be passed to JSON.parse routine.
+* XHR instances configured with responseType TYPE_HTMLTABLE now create the requisite DOM table from the XHR responseText
 
 
 

@@ -1,3 +1,11 @@
+**** version 2.7.0 ****
+
+    * 1940339 - Add resizing class to center unit whilst resizing
+    * 2144192 - !!!)double "_rendered" instead of "_unit" prop def
+    * 2481958 - Typos in Layout Manager API docs
+    * 2481962 - Getting Started sample code
+    * 2511189 - _rendered property found twice 
+
 **** version 2.6.0 ****
 
     Enhancements:

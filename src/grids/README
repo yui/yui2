@@ -1,5 +1,11 @@
 YUI Library - Grids - Release Notes
 
+Version 2.7.0
+
+  * Improved code formatting.
+  * Added clearing for #hd. 
+  * Removed min-width from all doc[0-4] rules.
+
 Version 2.6.0
 
   * Removed extraneous "s" typo per Bugzilla #1826435 and SF #1921958
