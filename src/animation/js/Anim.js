@@ -92,6 +92,8 @@ Anim.prototype = {
             Y.Dom.setStyle(el, attr, val + unit);
         } else if (attr in el) {
             el[attr] = val;
+        } else { // fall back for batching
+            Y.Dom.setStyle(el, attr, val + unit);
         }
     },                        
     
