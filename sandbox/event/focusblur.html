@@ -1,0 +1,26 @@
+
+   <html>
+   <head>
+   <script type="text/javascript"
+   src=[1]"http://yui.yahooapis.com/combo?2.7.0/build/yahoo/yahoo-min.js&2.7.0/build/event/event-min.js"></script>
+   </head>
+   <body>
+
+   <h1>testing addFocusListener</h1>
+   <input name="name" id="inp_name" type="text"/>
+
+   </body>
+   <script>
+
+   ( function() {
+
+       var sayHello = function(ev, data) {
+               alert('hello');
+           };
+
+       YAHOO.util.Event.addFocusListener('inp_name', sayHello);
+
+   })();
+
+   </script>
+   </html>
