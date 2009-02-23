@@ -1373,6 +1373,7 @@ TV.preload = function(e, prefix) {
 
 Event.addListener(window,"load", TV.preload);
 })();
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -1633,7 +1634,7 @@ YAHOO.widget.Node.prototype = {
     _type: "Node",
 
     /*
-    spacerPath: "http://us.i1.yimg.com/us.yimg.com/i/space.gif",
+    spacerPath: "http://l.yimg.com/a/i/space.gif",
     expandedText: "Expanded",
     collapsedText: "Collapsed",
     loadingText: "Loading",
@@ -2832,6 +2833,7 @@ YAHOO.widget.Node.prototype = {
 
 YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
 })();
+
 /**
  * A custom YAHOO.widget.Node that handles the unique nature of 
  * the virtual, presentationless root node.
@@ -2916,6 +2918,7 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
     focus: function () {}
 
 });
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -3112,6 +3115,7 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
     
 });
 })();
+
 /**
  * A menu-specific implementation that differs from TextNode in that only 
  * one sibling can be expanded at a time.
@@ -3151,6 +3155,7 @@ YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
     _type: "MenuNode"
 
 });
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -3269,6 +3274,7 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     }
 });
 })();
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -3409,6 +3415,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 
 });
 })();
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang, 
@@ -3725,4 +3732,5 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         editorData.inputContainer.innerHTML = '';
     };
 })();
+
 YAHOO.register("treeview", YAHOO.widget.TreeView, {version: "@VERSION@", build: "@BUILD@"});
