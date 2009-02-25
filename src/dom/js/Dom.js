@@ -1269,7 +1269,7 @@
 
         /**
          * Provides a normalized attribute interface. 
-         * @method setAttibute
+         * @method setAttribute
          * @param {String | HTMLElement} el The target element for the attribute.
          * @param {String} attr The attribute to set.
          * @param {String} val The value of the attribute.
@@ -1282,7 +1282,7 @@
 
         /**
          * Provides a normalized attribute interface. 
-         * @method getAttibute
+         * @method getAttribute
          * @param {String | HTMLElement} el The target element for the attribute.
          * @param {String} attr The attribute to get.
          * @return {String} The current value of the attribute. 
