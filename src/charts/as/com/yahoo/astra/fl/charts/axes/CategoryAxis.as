@@ -60,7 +60,7 @@ package com.yahoo.astra.fl.charts.axes
 		public function set categoryNames(value:Array):void
 		{
 			this._categoryNamesSetByUser = value != null && value.length > 0;
-			if(this._categoryNamesSetByUser)
+			if(!this._categoryNamesSetByUser)
 			{
 				this._categoryNames = [];
 			}
