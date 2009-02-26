@@ -1,4 +1,4 @@
-﻿package com.yahoo.yui.charts
+package com.yahoo.yui.charts
 {
 	import com.yahoo.astra.fl.charts.axes.CategoryAxis;
 	import com.yahoo.astra.fl.charts.axes.IAxis;
@@ -141,6 +141,10 @@
 				if(input.numLabels != null && !isNaN(input.numLabels))
 				{
 					categoryAxis.numLabels = input.numLabels;
+				}
+				if(input.calculateCategoryCount)
+				{
+					categoryAxis.calculateCategoryCount = input.calculateCategoryCount;
 				}
 			}
 			return axis;

@@ -327,6 +327,12 @@
             'skinnable': true
         },
 
+         'stylesheet': {
+            'type': 'js',
+            'path': 'stylesheet/stylesheet-min.js',
+            'requires': ['yahoo']
+         },
+
         'tabview': {
             'type': 'js',
             'path': 'tabview/tabview-min.js',

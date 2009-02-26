@@ -1053,7 +1053,8 @@
                 <span class="nx">autoFill</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_autoFillOnHeightChange</span><span class="o">;</span>
 
             <span class="nx">cfg</span><span class="o">.</span><span class="nx">unsubscribeFromConfigEvent</span><span class="o">(</span><span class="nx">height</span><span class="o">,</span> <span class="nx">autoFill</span><span class="o">);</span>
-            <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">height</span><span class="o">,</span> <span class="nx">autoFill</span><span class="o">);</span>
+            <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">autoFill</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">autoFill</span><span class="o">);</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">currEl</span> <span class="o">&amp;&amp;</span> <span class="nx">fillEl</span> <span class="o">!==</span> <span class="nx">currEl</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">[</span><span class="nx">currEl</span><span class="o">])</span> <span class="o">{</span>
                 <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">[</span><span class="nx">currEl</span><span class="o">],</span> <span class="nx">height</span><span class="o">,</span> <span class="s2">&quot;&quot;</span><span class="o">);</span>
@@ -1064,6 +1065,7 @@
 
                 <span class="nx">cfg</span><span class="o">.</span><span class="nx">subscribeToConfigEvent</span><span class="o">(</span><span class="nx">height</span><span class="o">,</span> <span class="nx">autoFill</span><span class="o">,</span> <span class="k">this</span><span class="o">[</span><span class="nx">fillEl</span><span class="o">],</span> <span class="k">this</span><span class="o">);</span>
                 <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">autoFill</span><span class="o">,</span> <span class="k">this</span><span class="o">[</span><span class="nx">fillEl</span><span class="o">],</span> <span class="k">this</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">autoFill</span><span class="o">,</span> <span class="k">this</span><span class="o">[</span><span class="nx">fillEl</span><span class="o">],</span> <span class="k">this</span><span class="o">);</span>
 
                 <span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">autoFillHeight</span><span class="o">,</span> <span class="nx">fillEl</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
             <span class="o">}</span>
@@ -2366,7 +2368,7 @@
         <span class="c">/**</span>
 <span class="c">         * Can be used to force the container to repaint/redraw it&#39;s contents.</span>
 <span class="c">         * &lt;p&gt;</span>
-<span class="c">         * By default applies and then removes a 0px margin through the </span>
+<span class="c">         * By default applies and then removes a 1px bottom margin through the </span>
 <span class="c">         * application/removal of a &quot;yui-force-redraw&quot; class.</span>
 <span class="c">         * &lt;/p&gt;</span>
 <span class="c">         * &lt;p&gt;</span>

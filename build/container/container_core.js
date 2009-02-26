@@ -875,11 +875,9 @@
     Module.textResizeEvent = new CustomEvent("textResize");
 
     /**
-     * Helper utility method, used to force a document level redraw to account for certain
-     * types of content not rendering correctly (e.g. border-collapse:collapse table borders).
-     * <p>
-     * Currently used to prevent Opera repaint glitches on show.
-     * </p>
+     * Helper utility method, which forces a document level 
+     * redraw for Opera, which can help remove repaint
+     * irregularities after applying DOM changes.
      *
      * @method YAHOO.widget.Module.forceDocumentRedraw
      * @static
@@ -887,7 +885,7 @@
     Module.forceDocumentRedraw = function() {
         var docEl = document.documentElement;
         if (docEl) {
-			docEl.className += " ";
+            docEl.className += " ";
             docEl.className = YAHOO.lang.trim(docEl.className);
         }
     };
@@ -1319,11 +1317,6 @@
 
             if (!Config.alreadySubscribed(this.renderEvent, this.cfg.fireQueue, this.cfg)) {
                 this.renderEvent.subscribe(this.cfg.fireQueue, this.cfg, true);
-            }
-
-            // Opera needs to force a repaint for certain types of content
-            if (UA.opera) {
-                this.showEvent.subscribe(Module.forceDocumentRedraw);
             }
 
             this.initEvent.fire(Module);
@@ -2862,7 +2855,8 @@
                 autoFill = this._autoFillOnHeightChange;
 
             cfg.unsubscribeFromConfigEvent(height, autoFill);
-            Module.textResizeEvent.unsubscribe(height, autoFill);
+            Module.textResizeEvent.unsubscribe(autoFill);
+            this.changeContentEvent.unsubscribe(autoFill);
 
             if (currEl && fillEl !== currEl && this[currEl]) {
                 Dom.setStyle(this[currEl], height, "");
@@ -2873,6 +2867,7 @@
 
                 cfg.subscribeToConfigEvent(height, autoFill, this[fillEl], this);
                 Module.textResizeEvent.subscribe(autoFill, this[fillEl], this);
+                this.changeContentEvent.subscribe(autoFill, this[fillEl], this);
 
                 cfg.setProperty(autoFillHeight, fillEl, true);
             }
@@ -4174,7 +4169,7 @@
         /**
          * Can be used to force the container to repaint/redraw it's contents.
          * <p>
-         * By default applies and then removes a 0px margin through the 
+         * By default applies and then removes a 1px bottom margin through the 
          * application/removal of a "yui-force-redraw" class.
          * </p>
          * <p>

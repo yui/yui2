@@ -288,10 +288,10 @@ var XMLDocument = function(rootTagName, namespaceURL) {
     },
 
     testXHRHTMLTable: function () {
-        var ds = new XHRDS("php/xhr_table.php",{
+        var ds = new XHRDS("php/xhr_table.php?cols=4",{
             responseType: DS.TYPE_HTMLTABLE,
             responseSchema: {
-                fields: ['Col1','Col2','Col3','Col4'],
+                fields: ['Col0','Col1','Col2','Col3']
             }
         });
 
@@ -300,7 +300,7 @@ var XMLDocument = function(rootTagName, namespaceURL) {
                 this.resume(function () {
                     Assert.isObject(res, "Expected Response object");
                     Assert.isArray(res.results, "Expected results list");
-                    ObjectAssert.hasProperty("Col1", res.results[0], "Malformed result record");
+                    ObjectAssert.hasProperty("Col0", res.results[0], "Malformed result record");
                 });
             },
             failure: function (req,res) {
@@ -637,7 +637,7 @@ var XMLDocument = function(rootTagName, namespaceURL) {
 
         date = YAHOO.util.Date.format(myDate, {format:"%m/%d/%Y"});
         Assert.areSame("01/14/2001", date, "Incorrect %m/%d/%Y");
-    },
+    }
 });
 
 /**

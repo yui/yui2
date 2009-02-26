@@ -1,8 +1,8 @@
 <html>
 <head>
-<script type="text/javascript" src="../../build/yahoo/yahoo-min.js" ></script>
-<script type="text/javascript" src="../../build/event/event-min.js" ></script>
-<script type="text/javascript" src="../../build/datasource/datasource.js" ></script>
+<script type="text/javascript" src="../../../build/yahoo/yahoo-min.js" ></script>
+<script type="text/javascript" src="../../../build/event/event-min.js" ></script>
+<script type="text/javascript" src="../../../build/datasource/datasource.js" ></script>
 <script type="text/javascript">
 YAHOO.util.DateLocale['fr'] = YAHOO.lang.merge(YAHOO.util.DateLocale, {
 	a: ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'],

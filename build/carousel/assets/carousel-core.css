@@ -2,6 +2,7 @@
     visibility: hidden;
     overflow: hidden;
     position: relative;
+    text-align: left;
     zoom: 1;
 }
 
@@ -10,7 +11,6 @@
 }
 
 .yui-carousel-content {
-    margin: 0 auto;
     overflow: hidden;
     position: relative;
 }
@@ -75,4 +75,8 @@
 
 .yui-carousel-button-focus {
     outline: 1px dotted #000;
+}
+
+.yui-carousel-min-width .yui-carousel-content {
+    margin: 0 auto;
 }

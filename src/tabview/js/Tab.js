@@ -461,6 +461,13 @@
     });
     
     
+    /**
+     * Fires when a tab is removed from the tabview
+     * @event remove
+     * @type CustomEvent
+     * @param {Event} An event object with fields for "type" ("remove")
+     * and "tabview" (the tabview instance it was removed from) 
+     */
     
     YAHOO.widget.Tab = Tab;
 })();

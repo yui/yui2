@@ -6,15 +6,15 @@ This document is not updated with each release.  Changes to
 the utilities.js source are noted in the README
 file for each component that comprises this aggregate:
 
-yahoo/README
-dom/README
-event/README
-connection/README
-animation/README
-dragdrop/README
-element/README
-get/README
-yuiloader/README
+README.yahoo
+README.dom
+README.event
+README.connection
+README.animation
+README.dragdrop
+README.element
+README.get
+README.yuiloader
 
 *************
 

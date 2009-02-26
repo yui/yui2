@@ -15,6 +15,7 @@ package com.yahoo.astra.fl.charts
 	import com.yahoo.astra.fl.charts.series.IStackedSeries;
 	import com.yahoo.astra.fl.utils.UIComponentUtil;
 	import com.yahoo.astra.utils.TextUtil;
+	import com.yahoo.astra.display.BitmapText;
 	
 	import fl.core.InvalidationType;
 	import fl.core.UIComponent;
@@ -25,6 +26,7 @@ package com.yahoo.astra.fl.charts
 	import flash.geom.Rectangle;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
+	import flash.text.TextFieldAutoSize;
 	import flash.utils.Dictionary;
 	
 	//--------------------------------------
@@ -779,7 +781,7 @@ package com.yahoo.astra.fl.charts
 			horizontalAxisLabelDistance: 2,
 			horizontalAxisHideOverlappingLabels: true,
 			horizontalAxisLabelRotation: 0,
-			horizontalAxisLabelPadding: 2,
+			horizontalAxisLabelSpacing: 2,
 			
 			//grid lines
 			horizontalAxisGridLineWeight: 1,
@@ -823,7 +825,7 @@ package com.yahoo.astra.fl.charts
 			verticalAxisLabelDistance: 2,
 			verticalAxisHideOverlappingLabels: true,
 			verticalAxisLabelRotation: 0,
-			verticalAxisLabelPadding: 2,
+			verticalAxisLabelSpacing: 2,
 			
 			//grid lines
 			showVerticalAxisGridLines: true,
@@ -867,7 +869,7 @@ package com.yahoo.astra.fl.charts
 			labelRotation: "horizontalAxisLabelRotation",
 			labelDistance: "horizontalAxisLabelDistance",
 			showLabels: "showHorizontalAxisLabels",
-			labelPadding: "horizontalAxisLabelPadding",
+			labelSpacing: "horizontalAxisLabelSpacing",
 			titleRotation: "horizontalAxisTitleRotation", 
 			titleDistance: "horizontalAxisTitleDistance",
 			
@@ -926,7 +928,7 @@ package com.yahoo.astra.fl.charts
 			labelRotation: "verticalAxisLabelRotation",
 			labelDistance: "verticalAxisLabelDistance",
 			showLabels: "showVerticalAxisLabels",
-			labelPadding: "verticalAxisLabelPadding",
+			labelSpacing: "verticalAxisLabelSpacing",
 			titleRotation: "verticalAxisTitleRotation", 
 			titleDistance: "verticalAxisTitleDistance",
 			
@@ -1151,6 +1153,16 @@ package com.yahoo.astra.fl.charts
 			}
 		}
 		
+		/**
+		 * @private
+		 */
+		private var _horizontalAxisLabelData:Object;
+		
+		/**
+		 * @private
+		 */
+		private var _verticalAxisLabelData:Object; 
+		
 	//-- Titles
 		
 		/**
@@ -1326,10 +1338,7 @@ package com.yahoo.astra.fl.charts
 				values.unshift(item[valueField]);
 			}
 			
-			if(values.length > 0)
-			{
-				stackValue = stackAxis.stack.apply(stackAxis, values);
-			}
+			if(values.length > 0) stackValue = stackAxis.stack.apply(stackAxis, values);
 			return stackValue;
 		}
 		
@@ -1388,7 +1397,6 @@ package com.yahoo.astra.fl.charts
 
 			if(sizeInvalid || dataInvalid || stylesInvalid || axesInvalid)
 			{
-				
 				this.drawAxes();
 					
 				//the series display objects are dependant on the axes, so all series redraws must
@@ -1406,7 +1414,6 @@ package com.yahoo.astra.fl.charts
 		override protected function refreshSeries():void
 		{
 			super.refreshSeries();
-		
 			var numericAxis:IAxis = this.horizontalAxis;
 			var otherAxis:IAxis = this.verticalAxis;
 			if(this.verticalAxis is NumericAxis)
@@ -1416,7 +1423,6 @@ package com.yahoo.astra.fl.charts
 			}
 						
 			var seriesCount:int = this.series.length;
-			
 			for(var i:int = 0; i < seriesCount; i++)
 			{
 				var currentSeries:ISeries = this.series[i] as ISeries;
@@ -1424,14 +1430,10 @@ package com.yahoo.astra.fl.charts
 				var numericField:String = this.axisAndSeriesToField(numericAxis, currentSeries);
 				var otherField:String = this.axisAndSeriesToField(otherAxis, currentSeries);
 				
-				var dict:Dictionary = new Dictionary();
 				var seriesLength:int = currentSeries.length;
-				
-				var newDataProvider:Array = [];
 				for(var j:int = 0; j < seriesLength; j++)
-				{	
+				{
 					var item:Object = currentSeries.dataProvider[j];
-
 					if(item is Number || !isNaN(Number(item)))
 					{
 						//if we only have a number, then it is safe to convert
@@ -1449,28 +1451,60 @@ package com.yahoo.astra.fl.charts
 						else point[otherField] = j;
 						currentSeries.dataProvider[j] = point;
 					}
-					
-					//Combine items that share the same "other field" property
-					if(!dict.hasOwnProperty(item[otherField]))
+				}                 	
+				combineDuplicateCategoryNames(otherAxis);
+			}						
+		}
+			
+		/**
+		 * @private
+		 *
+		 * Combines duplicate category labels
+		 */
+		private function combineDuplicateCategoryNames(categoryAxis:IAxis):void
+		{
+			if(!(categoryAxis is CategoryAxis)) return;
+			var seriesCount:int = this.series.length;
+			for(var i:int = 0; i < seriesCount; i++)
+			{
+				var currentSeries:ISeries = this.series[i] as ISeries;
+				var categoryField:String = this.axisAndSeriesToField(categoryAxis, currentSeries);
+				var dict:Dictionary = new Dictionary();
+				var seriesLength:int = currentSeries.length;
+				var newDataProvider:Array = [];
+				for(var j:int = 0; j < seriesLength; j++)
+				{	
+					var item:Object = currentSeries.dataProvider[j];
+
+					if(item.hasOwnProperty(categoryField)) 
 					{
-						dict[item[otherField]] = item;
-						newDataProvider.push(dict[item[otherField]]);
+						//Combine items that share the same "categoryField" property
+						if(!dict.hasOwnProperty(item[categoryField]))
+						{
+							dict[item[categoryField]] = item;
+							newDataProvider.push(dict[item[categoryField]]);
+						}
+						else
+						{
+							for(var z:String in item)
+							{
+								if(z != categoryField && item[z] != null)
+								{
+									dict[item[categoryField]][z] = item[z];
+								}
+							}
+						}
 					}
 					else
 					{
-						for(var z:String in item)
-						{
-							if(z != otherField && item[z] != null)
-							{
-								dict[item[otherField]][z] = item[z];
-							}
-						}
-					}					
-				}                   
-				currentSeries.dataProvider = newDataProvider.concat();
-			}						
+						dict[item] = item;
+						newDataProvider.push(dict[item]);
+					}
+				}	
+				currentSeries.dataProvider = newDataProvider.concat();				
+			}
 		}
-				
+		
 		/**
 		 * @private
 		 * Creates the default axes. Without user intervention, the x-axis is a category
@@ -1662,7 +1696,6 @@ package com.yahoo.astra.fl.charts
 			}
 			var horizontalAxisRenderer:UIComponent = UIComponent(this.horizontalAxisRenderer);
 			
-			horizontalAxisRenderer.move(contentPadding, contentPadding);
 			horizontalAxisRenderer.setSize(axisWidth, axisHeight);
 			this.setChildIndex(horizontalAxisRenderer, this.numChildren - 1);
 						
@@ -1672,7 +1705,7 @@ package com.yahoo.astra.fl.charts
 				CategoryAxis(this.verticalAxis).categoryNames = this._explicitCategoryNames;
 			}
 			var verticalAxisRenderer:UIComponent = UIComponent(this.verticalAxisRenderer);
-			verticalAxisRenderer.move(contentPadding, contentPadding);
+			
 			verticalAxisRenderer.setSize(axisWidth, axisHeight);
 			this.setChildIndex(verticalAxisRenderer, this.numChildren - 1);
 			
@@ -1699,25 +1732,21 @@ package com.yahoo.astra.fl.charts
 			//Pass series data to the axes
 			this._horizontalAxis.dataProvider = this.series;
 			this._verticalAxis.dataProvider = this.series;
-			
-			var maxHorizontalLabel:String;
-			var maxVerticalLabel:String;
-			var dataInvalid:Boolean = this.isInvalid(InvalidationType.DATA);
-
-			maxHorizontalLabel = (this.horizontalAxis as IAxis).getMaxLabel() as String;
-			maxVerticalLabel = (this.verticalAxis as IAxis).getMaxLabel() as String;
-			
+						
 			var horizontalAxisTextFormat:TextFormat = this.getStyleValue("horizontalAxisTextFormat") != null ? this.getStyleValue("horizontalAxisTextFormat") as TextFormat : this.getStyleValue("textFormat") as TextFormat;
 			var verticalAxisTextFormat:TextFormat = this.getStyleValue("verticalAxisTextFormat") != null ? this.getStyleValue("verticalAxisTextFormat") as TextFormat : this.getStyleValue("textFormat") as TextFormat;
-
-			this.horizontalAxis.maxLabelWidth = TextUtil.getTextWidth(maxHorizontalLabel, horizontalAxisTextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);
-			this.horizontalAxis.maxLabelHeight = TextUtil.getTextHeight(maxHorizontalLabel, horizontalAxisTextFormat, this.getStyleValue("horizontalAxisLabelRotation") as Number);	
+			
+			_horizontalAxisLabelData = getHorizontalAxisLabelData();
+			_verticalAxisLabelData = getVerticalAxisLabelData();
+			
+			this.horizontalAxis.maxLabelWidth = _horizontalAxisLabelData.maxLabelWidth;
+			this.horizontalAxis.maxLabelHeight = _horizontalAxisLabelData.maxLabelHeight;	
 		
-			this.verticalAxis.maxLabelWidth = TextUtil.getTextWidth(maxVerticalLabel, verticalAxisTextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);
-			this.verticalAxis.maxLabelHeight = TextUtil.getTextHeight(maxVerticalLabel, verticalAxisTextFormat, this.getStyleValue("verticalAxisLabelRotation") as Number);	
+			this.verticalAxis.maxLabelWidth = _verticalAxisLabelData.maxLabelWidth;
+			this.verticalAxis.maxLabelHeight = _verticalAxisLabelData.maxLabelHeight;	
 	
-			this.horizontalAxis.labelPadding = this.getStyleValue("horizontalAxisLabelPadding") as Number;
-			this.verticalAxis.labelPadding = this.getStyleValue("verticalAxisLabelPadding") as Number;
+			this.horizontalAxis.labelSpacing = this.getStyleValue("horizontalAxisLabelSpacing") as Number;
+			this.verticalAxis.labelSpacing = this.getStyleValue("verticalAxisLabelSpacing") as Number;
 			
 			this.calculateContentBounds();
 			
@@ -1745,8 +1774,7 @@ package com.yahoo.astra.fl.charts
 			var verticalAxisTitleDistance:Number = 0;
 			var horizontalAxisTitleDistance:Number = 0;
 			
-			//Calculate the dimensions of the title fields.
-			
+			//Calculate the dimensions of the title fields.			
 			if(this.verticalAxis.title != null) 
 			{
 				verticalTitleWidth = TextUtil.getTextWidth(this.verticalAxis.title, this.getStyleValue("verticalAxisTitleTextFormat") as TextFormat, this.getStyleValue("verticalAxisTitleRotation") as Number);
@@ -1763,15 +1791,13 @@ package com.yahoo.astra.fl.charts
 			this.horizontalAxisRenderer.outerTickOffset = this.getAxisTickOffset(this.horizontalAxisRenderer) as Number;
 			this.verticalAxisRenderer.outerTickOffset = this.getAxisTickOffset(this.verticalAxisRenderer) as Number;
 			
-			this._contentBounds = new Rectangle();
-						
-			//Calculate the dimensions and positioning of the axis content	
-			var hRotation:Number = this.getStyleValue("horizontalAxisLabelRotation") as Number;
-			var vRotation:Number = this.getStyleValue("verticalAxisLabelRotation") as Number;
-			var contentBoundsLeftLabelOffset:Number = hRotation >= 0 ? this.horizontalAxis.maxLabelWidth/2 : this.horizontalAxis.maxLabelWidth;
-			var contentBoundsRightLabelOffset:Number = hRotation <= 0 ? this.horizontalAxis.maxLabelWidth/2 : this.horizontalAxis.maxLabelWidth;
-			var contentBoundsTopLabelOffset:Number = vRotation <= 0 ? this.verticalAxis.maxLabelHeight/2 : this.verticalAxis.maxLabelHeight;
-			var contentBoundsBottomLabelOffset:Number = vRotation <= 0 ? this.verticalAxis.maxLabelHeight/2 : this.verticalAxis.maxLabelHeight;
+			this._contentBounds = new Rectangle();			
+			
+			var contentBoundsLeftLabelOffset:Number = _horizontalAxisLabelData.leftLabelOffset;
+			var contentBoundsRightLabelOffset:Number = _horizontalAxisLabelData.rightLabelOffset;
+
+			var contentBoundsTopLabelOffset:Number = _verticalAxisLabelData.topLabelOffset;
+			var contentBoundsBottomLabelOffset:Number = _verticalAxisLabelData.bottomLabelOffset;
 			
 			//Accomodate for the fact that the category axis is not and origin axis and labels are not plotted at the origin or end of the axis.
 			if(this.horizontalAxis is CategoryAxis) 
@@ -1790,21 +1816,20 @@ package com.yahoo.astra.fl.charts
 			var horizontalAxisLabelDistance:Number = this.getStyleValue("horizontalAxisLabelDistance") as Number;
 			var verticalAxisLabelDistance:Number = this.getStyleValue("verticalAxisLabelDistance") as Number
 			
-
-			this.contentBounds.x = Math.ceil(contentPadding + Math.max(this.verticalAxis.maxLabelWidth, contentBoundsLeftLabelOffset) + verticalTitleWidth + this.verticalAxisRenderer.outerTickOffset + verticalAxisTitleDistance + verticalAxisLabelDistance);
-			this.contentBounds.y = Math.ceil(contentPadding + contentBoundsTopLabelOffset);
+			this.contentBounds.x = Math.ceil(Math.max((this.verticalAxis.maxLabelWidth + verticalTitleWidth + this.verticalAxisRenderer.outerTickOffset + verticalAxisTitleDistance + verticalAxisLabelDistance), contentBoundsLeftLabelOffset));
+			this.contentBounds.y = Math.ceil(contentBoundsTopLabelOffset);
 			
 			this.contentBounds.width = Math.floor(this.width - (this.contentBounds.x + (contentBoundsRightLabelOffset)));
-			this.contentBounds.height = Math.floor(this.height - (this.contentBounds.y + this.horizontalAxis.maxLabelHeight + horizontalTitleHeight + this.horizontalAxisRenderer.outerTickOffset + horizontalAxisTitleDistance + horizontalAxisLabelDistance));
-			this.horizontalAxisRenderer.contentBounds.width = this.contentBounds.width;
-			this.horizontalAxisRenderer.contentBounds.height = this.contentBounds.height;	
-			this.verticalAxisRenderer.contentBounds.height = this.contentBounds.height;			
-			this.verticalAxisRenderer.contentBounds.width = this.contentBounds.width;
+			this.contentBounds.height = Math.floor(this.height - (this.contentBounds.y + Math.max((this.horizontalAxis.maxLabelHeight + horizontalTitleHeight + this.horizontalAxisRenderer.outerTickOffset + horizontalAxisTitleDistance + horizontalAxisLabelDistance), contentBoundsBottomLabelOffset)));
+			this.horizontalAxisRenderer.contentBounds.width = this.contentBounds.width - (contentPadding * 2);
+			this.horizontalAxisRenderer.contentBounds.height = this.contentBounds.height - (contentPadding * 2);	
+			this.verticalAxisRenderer.contentBounds.height = this.contentBounds.height - (contentPadding * 2);			
+			this.verticalAxisRenderer.contentBounds.width = this.contentBounds.width - (contentPadding * 2);
 			
-			this.horizontalAxisRenderer.contentBounds.x = this.contentBounds.x;
-			this.horizontalAxisRenderer.contentBounds.y = this.contentBounds.y;	
-			this.verticalAxisRenderer.contentBounds.x = this.contentBounds.x;			
-			this.verticalAxisRenderer.contentBounds.y = this.contentBounds.y;			
+			this.horizontalAxisRenderer.contentBounds.x = contentPadding + this.contentBounds.x;
+			this.horizontalAxisRenderer.contentBounds.y = contentPadding + this.contentBounds.y;	
+			this.verticalAxisRenderer.contentBounds.x = contentPadding + this.contentBounds.x;			
+			this.verticalAxisRenderer.contentBounds.y = contentPadding + this.contentBounds.y;			
 		}
 
 		/**
@@ -1982,6 +2007,126 @@ package com.yahoo.astra.fl.charts
 				return this.verticalAxisRenderer;
 			}
 			return null;
+		}
+		
+		/**
+		 * @private
+		 * Returns an object containing values necessary for rendering labels on an axis based on the
+		 * text, format and rotation of the labels.
+		 */
+		private function getHorizontalAxisLabelData():Object
+		{
+			var labelData:Object = {};
+			var label:BitmapText = new BitmapText();			
+			var rotation:Number = this.getStyleValue("horizontalAxisLabelRotation") as Number;
+			var textFormat:TextFormat = this.getStyleValue("horizontalAxisTextFormat") != null ? this.getStyleValue("horizontalAxisTextFormat") as TextFormat : this.getStyleValue("textFormat") as TextFormat
+			rotation = Math.max(-90, Math.min(rotation, 90));			
+			label.selectable = false;
+			label.autoSize = rotation < 0 ? TextFieldAutoSize.RIGHT : TextFieldAutoSize.LEFT;			
+			if(textFormat != null) label.defaultTextFormat = textFormat;
+			label.text = (this.horizontalAxis as IAxis).getMaxLabel() as String;
+			label.rotation = rotation;			
+
+			var adjustedWidth:Number;
+			var leftTextOverflow:Number;
+			var rightTextOverflow:Number;
+
+			if(rotation == 0 || Math.abs(rotation) == 90)
+			{
+				adjustedWidth = label.width;
+				leftTextOverflow = label.width/2;
+				rightTextOverflow = label.width/2;
+			}
+			else if(rotation > 0)
+			{
+				if(rotation < 10)
+				{
+					adjustedWidth = label.width - (Math.abs(Math.sin(rotation*Math.PI/180)*label.textField.height)*2);	
+				}
+				else
+				{
+					adjustedWidth = label.textField.height / (Math.cos((90-Math.abs(rotation))*Math.PI/180));
+					adjustedWidth = Math.min(adjustedWidth, label.width);					
+				}
+				leftTextOverflow = label.textField.height * Math.sin(rotation * Math.PI/180)/2;
+				rightTextOverflow = label.width - Math.abs((label.textField.height * Math.sin(rotation*Math.PI/180)))/2;
+			}
+			else
+			{
+				if(rotation > -10)
+				{
+					adjustedWidth = label.width - (Math.abs(Math.sin(rotation*Math.PI/180)*label.textField.height)*2);	
+				}
+				else
+				{
+					adjustedWidth = label.textField.height / (Math.cos((90-Math.abs(rotation))*Math.PI/180));
+					adjustedWidth = Math.min(adjustedWidth, label.width);					
+				}
+				leftTextOverflow = label.width - Math.abs((label.textField.height * Math.sin(rotation*Math.PI/180)))/2;	
+				rightTextOverflow = label.textField.height * Math.abs(Math.sin(rotation * Math.PI/180)/2);	
+			}
+			labelData.maxLabelWidth = adjustedWidth;
+			labelData.leftLabelOffset = leftTextOverflow;
+			labelData.rightLabelOffset = rightTextOverflow;
+			labelData.maxLabelHeight = label.height;
+			return labelData;
+		}
+		
+		/**
+		 * @private
+		 * Returns an object containing values necessary for rendering labels on an axis based on the
+		 * text, format and rotation of the labels.
+		 */		
+		private function getVerticalAxisLabelData():Object
+		{
+			var labelData:Object = {};
+			var label:BitmapText = new BitmapText();			
+			var rotation:Number = this.getStyleValue("verticalAxisLabelRotation") as Number;
+			var textFormat:TextFormat = this.getStyleValue("verticalAxisTextFormat") != null ? this.getStyleValue("verticalAxisTextFormat") as TextFormat : this.getStyleValue("textFormat") as TextFormat
+			rotation = Math.max(-90, Math.min(rotation, 90));			
+			label.selectable = false;
+			label.autoSize = rotation < 0 ? TextFieldAutoSize.RIGHT : TextFieldAutoSize.LEFT;			
+			if(textFormat != null) label.defaultTextFormat = textFormat;
+			label.text = (this.verticalAxis as IAxis).getMaxLabel() as String;
+			label.rotation = rotation;			
+			
+			var adjustedHeight:Number;
+			var topTextOverflow:Number;
+			var bottomTextOverflow:Number;
+			
+			if(rotation == 0 || Math.abs(rotation) == 90)
+			{
+				adjustedHeight = label.height;
+				topTextOverflow = label.height/2;
+				bottomTextOverflow = label.height/2;
+			}
+			else
+			{
+				if(Math.abs(rotation) > 70)
+				{
+					adjustedHeight = label.height;	
+				}
+				else
+				{
+					adjustedHeight = label.textField.height / (Math.sin((90 - Math.abs(rotation))*Math.PI/180));	
+				}
+				if(rotation > 0)
+				{
+					//topTextOverflow = label.height - (label.textField.height * Math.sin((Math.abs(rotation)) * Math.PI/180));
+					topTextOverflow = label.height - .5 * Math.abs(label.textField.height*Math.cos(rotation*Math.PI/180));
+					bottomTextOverflow = label.textField.height/2  * Math.cos((Math.abs(rotation)) * Math.PI/180);
+				}
+				else
+				{
+					topTextOverflow = label.textField.height/2  * Math.cos((Math.abs(rotation)) * Math.PI/180);
+					bottomTextOverflow = label.height - .5 * Math.abs(label.textField.height*Math.cos(rotation*Math.PI/180));
+				}				
+			}
+			labelData.maxLabelWidth = label.width;
+			labelData.topLabelOffset = topTextOverflow;
+			labelData.bottomLabelOffset = bottomTextOverflow;
+			labelData.maxLabelHeight = adjustedHeight;							
+			return labelData;			
 		}
 	}
 }

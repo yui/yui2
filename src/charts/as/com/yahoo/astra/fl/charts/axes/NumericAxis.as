@@ -520,17 +520,16 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				approxLabelDistance = this.maxLabelHeight;	
 			}
-			var labelPadding:Number = this.labelPadding; 
-			approxLabelDistance += (labelPadding*2);
+			var labelSpacing:Number = this.labelSpacing; 
+			approxLabelDistance += (labelSpacing*2);
 			
 			var difference:Number = Math.round(Math.abs(this.minimum -  this.maximum));
 			var tempMajorUnit:Number = 0; 
 
-			var maxLabels:Number = Math.floor((this.renderer.length - labelPadding)/approxLabelDistance);
+			var maxLabels:Number = Math.floor((this.renderer.length - labelSpacing)/approxLabelDistance);
 			
 			//Adjust the max labels to account for potential maximum and minimum adjustments that may occur.
 			if(!this._maximumSetByUser && !this._minimumSetByUser && !(this.alwaysShowZero && this._minimum == 0)) maxLabels -= 1;
-			
 			
 			//If set by user, use specified number of labels unless its too many
 			if(this._numLabelsSetByUser)
@@ -542,39 +541,22 @@ package com.yahoo.astra.fl.charts.axes
 			if(tempMajorUnit > 1) tempMajorUnit = Math.ceil(tempMajorUnit);
 			tempMajorUnit = Math.min(tempMajorUnit, Math.round(difference/2));			
 			
-
-			if(difference%tempMajorUnit != 0 && !this._numLabelsSetByUser)
-			{
-				var adjusted:Boolean = false;
-				var len:Number = Math.min(tempMajorUnit, ((difference/2)-tempMajorUnit));
-				for(var i:int = 0;i < len; i++)
-				{
-					tempMajorUnit++;
-					if(difference%tempMajorUnit == 0)
-					{
-						this._majorUnit = tempMajorUnit;
-						break;
-					}
-				}		
-			}	
-			
 			if(this.roundMajorUnit)
 			{
-				var order:Number = Math.floor(Math.log(tempMajorUnit) * Math.LOG10E);
-				var scientificForm:Number = tempMajorUnit/Math.pow(10, order);
+				var order:Number = Math.ceil(Math.log(tempMajorUnit) * Math.LOG10E);
+				var roundedMajorUnit:Number = Math.pow(10, order);
 
-				if(Math.ceil(scientificForm) - scientificForm > 0.5)
+				if (roundedMajorUnit / 2 >= tempMajorUnit) 
 				{
-					scientificForm = Math.ceil(scientificForm) - .5;
+					var roundedDiff:Number = Math.floor((roundedMajorUnit / 2 - tempMajorUnit) / (Math.pow(10,order-1)/2));
+				 	tempMajorUnit = roundedMajorUnit/2 - roundedDiff*Math.pow(10,order-1)/2;
 				}
-				else
+				else 
 				{
-					scientificForm = Math.ceil(scientificForm);
+					tempMajorUnit = roundedMajorUnit;
 				}
-
-				tempMajorUnit = scientificForm * Math.pow(10, order);			
 			}
-
+	
 			this._majorUnit = tempMajorUnit;									
 		}
 
@@ -688,7 +670,17 @@ package com.yahoo.astra.fl.charts.axes
 			if(!this._maximumSetByUser && !(this.alwaysShowZero && this._maximum == 0))
 			{
 				var oldMaximum:Number = this._maximum;
-				this._maximum = NumberUtil.roundUpToNearest(this._maximum, this._majorUnit);
+				if(this._minimumSetByUser)
+				{	
+					//if the user sets the minimum, we need to ensure that the maximum is an increment of the major unit starting from 
+					//the minimum instead of zero
+					this._maximum = NumberUtil.roundUpToNearest(this._maximum - this._minimum, this._majorUnit);
+					this._maximum += this._minimum;
+				}
+				else
+				{
+					this._maximum = NumberUtil.roundUpToNearest(this._maximum, this._majorUnit);
+				}
 				
 				//uncomment to include an additional major unit in this adjustment
 				if(this._maximum == oldMaximum /*|| this._maximum - oldMaximum < this._majorUnit */)

@@ -346,7 +346,7 @@ issueCallback : function (callback,params,error,scope) {
  * @method DataSourceBase.parseString
  * @param oData {String | Number | Boolean | Date | Array | Object} Data to parse.
  * The special values null and undefined will return null.
- * @return {Number} A string, or null.
+ * @return {String} A string, or null.
  * @static
  */
 parseString : function(oData) {
@@ -782,7 +782,28 @@ clearAllIntervals : function() {
 },
 
 /**
- * First looks for cached response, then sends request to live data.
+ * First looks for cached response, then sends request to live data. The
+ * following arguments are passed to the callback function:
+ *     <dl>
+ *     <dt><code>oRequest</code></dt>
+ *     <dd>The same value that was passed in as the first argument to sendRequest.</dd>
+ *     <dt><code>oParsedResponse</code></dt>
+ *     <dd>An object literal containing the following properties:
+ *         <dl>
+ *         <dt><code>tId</code></dt>
+ *         <dd>Unique transaction ID number.</dd>
+ *         <dt><code>results</code></dt>
+ *         <dd>Schema-parsed data results.</dd>
+ *         <dt><code>error</code></dt>
+ *         <dd>True in cases of data error.</dd>
+ *         <dt><code>cached</code></dt>
+ *         <dd>True when response is returned from DataSource cache.</dd> 
+ *         <dt><code>meta</code></dt>
+ *         <dd>Schema-parsed meta data.</dd>
+ *         </dl>
+ *     <dt><code>oPayload</code></dt>
+ *     <dd>The same value as was passed in as <code>argument</code> in the oCallback object literal.</dd>
+ *     </dl> 
  *
  * @method sendRequest
  * @param oRequest {Object} Request object.

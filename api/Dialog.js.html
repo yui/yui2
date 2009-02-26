@@ -221,7 +221,7 @@
                 <span class="nx">failure</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
 
                 <span class="c">/**</span>
-<span class="c">                 *&lt;p&gt;</span>
+<span class="c">                *&lt;p&gt;</span>
 <span class="c">                * The function to execute upon success of the </span>
 <span class="c">                * Connection submission, when the form contains</span>
 <span class="c">                * a file input element.</span>
@@ -275,7 +275,7 @@
 <span class="c">            * Any additional post data which needs to be sent when using the </span>
 <span class="c">            * &lt;a href=&quot;#config_postmethod&quot;&gt;async&lt;/a&gt; postmethod for dialog POST submissions.</span>
 <span class="c">            * The format for the post data string is defined by Connection Manager&#39;s </span>
-<span class="c">            * &lt;a href=&quot;YAHOO.util.Connect.html#method_asyncRequest&gt;asyncRequest&lt;/a&gt; </span>
+<span class="c">            * &lt;a href=&quot;YAHOO.util.Connect.html#method_asyncRequest&quot;&gt;asyncRequest&lt;/a&gt; </span>
 <span class="c">            * method.</span>
 <span class="c">            * @config postdata</span>
 <span class="c">            * @type String</span>
@@ -295,41 +295,60 @@
 <span class="c">            */</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">HIDEAFTERSUBMIT</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">DEFAULT_CONFIG</span><span class="o">.</span><span class="nx">HIDEAFTERSUBMIT</span><span class="o">.</span><span class="nx">value</span>
-            <span class="o">});</span> 
+            <span class="o">});</span>
 
             <span class="c">/**</span>
 <span class="c">            * Array of object literals, each containing a set of properties </span>
 <span class="c">            * defining a button to be appended into the Dialog&#39;s footer.</span>
-<span class="c">            * </span>
-<span class="c">            * Each button object in the buttons array can have three properties:</span>
-<span class="c">            * &lt;dt&gt;text:&lt;/dt&gt;</span>
-<span class="c">            * &lt;dd&gt;The text that will display on the face of the button. The text can </span>
-<span class="c">            * include HTML, as long as it is compliant with HTML Button specifications.</span>
-<span class="c">            * &lt;/dd&gt;</span>
-<span class="c">            * &lt;dt&gt;handler:&lt;/dt&gt;</span>
-<span class="c">            * &lt;dd&gt;Can be either:</span>
-<span class="c">            *     &lt;ol&gt;</span>
-<span class="c">            *         &lt;li&gt;A reference to a function that should fire when the </span>
-<span class="c">            * button is clicked.  (In this case scope of this function is </span>
-<span class="c">            * always its Dialog instance.)&lt;/li&gt;</span>
-<span class="c">            *         &lt;li&gt;An object literal representing the code to be </span>
-<span class="c">            * executed when the button is clicked.  Format:&lt;br&gt; &lt;code&gt; {&lt;br&gt;</span>
-<span class="c">            * &lt;strong&gt;fn:&lt;/strong&gt; Function,   &amp;#47;&amp;#47; The handler to call </span>
-<span class="c">            * when  the event fires.&lt;br&gt; &lt;strong&gt;obj:&lt;/strong&gt; Object,</span>
-<span class="c">            * &amp;#47;&amp;#47; An  object to pass back to the handler.&lt;br&gt; &lt;strong&gt;</span>
-<span class="c">            * scope:&lt;/strong&gt;  Object &amp;#47;&amp;#47; The object to use for the </span>
-<span class="c">            * scope of the handler. &lt;br&gt; } &lt;/code&gt; &lt;br&gt;&lt;/li&gt;</span>
+<span class="c">            *</span>
+<span class="c">            * &lt;p&gt;Each button object in the buttons array can have three properties:&lt;/p&gt;</span>
+<span class="c">            * &lt;dl&gt;</span>
+<span class="c">            *    &lt;dt&gt;text:&lt;/dt&gt;</span>
+<span class="c">            *    &lt;dd&gt;</span>
+<span class="c">            *       The text that will display on the face of the button. The text can </span>
+<span class="c">            *       include HTML, as long as it is compliant with HTML Button specifications.</span>
+<span class="c">            *    &lt;/dd&gt;</span>
+<span class="c">            *    &lt;dt&gt;handler:&lt;/dt&gt;</span>
+<span class="c">            *    &lt;dd&gt;Can be either:</span>
+<span class="c">            *    &lt;ol&gt;</span>
+<span class="c">            *       &lt;li&gt;A reference to a function that should fire when the </span>
+<span class="c">            *       button is clicked.  (In this case scope of this function is </span>
+<span class="c">            *       always its Dialog instance.)&lt;/li&gt;</span>
+<span class="c">            *</span>
+<span class="c">            *       &lt;li&gt;An object literal representing the code to be </span>
+<span class="c">            *       executed when the button is clicked.</span>
+<span class="c">            *       </span>
+<span class="c">            *       &lt;p&gt;Format:&lt;/p&gt;</span>
+<span class="c">            *</span>
+<span class="c">            *       &lt;p&gt;</span>
+<span class="c">            *       &lt;code&gt;{</span>
+<span class="c">            *       &lt;br&gt;</span>
+<span class="c">            *       &lt;strong&gt;fn:&lt;/strong&gt; Function, &amp;#47;&amp;#47;</span>
+<span class="c">            *       The handler to call when  the event fires.</span>
+<span class="c">            *       &lt;br&gt;</span>
+<span class="c">            *       &lt;strong&gt;obj:&lt;/strong&gt; Object, &amp;#47;&amp;#47; </span>
+<span class="c">            *       An  object to pass back to the handler.</span>
+<span class="c">            *       &lt;br&gt;</span>
+<span class="c">            *       &lt;strong&gt;scope:&lt;/strong&gt; Object &amp;#47;&amp;#47; </span>
+<span class="c">            *       The object to use for the scope of the handler.</span>
+<span class="c">            *       &lt;br&gt;</span>
+<span class="c">            *       }&lt;/code&gt;</span>
+<span class="c">            *       &lt;/p&gt;</span>
+<span class="c">            *       &lt;/li&gt;</span>
 <span class="c">            *     &lt;/ol&gt;</span>
-<span class="c">            * &lt;/dd&gt;</span>
-<span class="c">            * &lt;dt&gt;isDefault:&lt;/dt&gt;</span>
-<span class="c">            * &lt;dd&gt;An optional boolean value that specifies that a button </span>
-<span class="c">            * should be highlighted and focused by default.&lt;/dd&gt;</span>
-<span class="c">            * </span>
+<span class="c">            *     &lt;/dd&gt;</span>
+<span class="c">            *     &lt;dt&gt;isDefault:&lt;/dt&gt;</span>
+<span class="c">            *     &lt;dd&gt;</span>
+<span class="c">            *        An optional boolean value that specifies that a button </span>
+<span class="c">            *        should be highlighted and focused by default.</span>
+<span class="c">            *     &lt;/dd&gt;</span>
+<span class="c">            * &lt;/dl&gt;</span>
+<span class="c">            *</span>
 <span class="c">            * &lt;em&gt;NOTE:&lt;/em&gt;If the YUI Button Widget is included on the page, </span>
 <span class="c">            * the buttons created will be instances of YAHOO.widget.Button. </span>
 <span class="c">            * Otherwise, HTML Buttons (&lt;code&gt;&amp;#60;BUTTON&amp;#62;&lt;/code&gt;) will be </span>
 <span class="c">            * created.</span>
-<span class="c">            * </span>
+<span class="c">            *</span>
 <span class="c">            * @config buttons</span>
 <span class="c">            * @type {Array|String}</span>
 <span class="c">            * @default &quot;none&quot;</span>
@@ -377,9 +396,10 @@
 
             <span class="c">/**</span>
 <span class="c">            * CustomEvent fired after asynchronous submission, before the generic submit event is fired</span>
+<span class="c">            *</span>
 <span class="c">            * @event asyncSubmitEvent</span>
-<span class="c">            * @param {Object} The connection object object, returned by YAHOO.util.Connect.asyncRequest</span>
-<span class="c">            */</span> 
+<span class="c">            * @param {Object} conn The connection object, returned by YAHOO.util.Connect.asyncRequest</span>
+<span class="c">            */</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">asyncSubmitEvent</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">EVENT_TYPES</span><span class="o">.</span><span class="nx">ASYNC_SUBMIT</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">asyncSubmitEvent</span><span class="o">.</span><span class="nx">signature</span> <span class="o">=</span> <span class="nx">SIGNATURE</span><span class="o">;</span>
 
@@ -404,6 +424,7 @@
 <span class="c">        * all of its subclasses. This method is automatically called by the </span>
 <span class="c">        * constructor, and  sets up all DOM references for pre-existing markup, </span>
 <span class="c">        * and creates required markup if it is not already present.</span>
+<span class="c">        * </span>
 <span class="c">        * @method init</span>
 <span class="c">        * @param {String} el The element ID representing the Dialog &lt;em&gt;OR&lt;/em&gt;</span>
 <span class="c">        * @param {HTMLElement} el The element representing the Dialog</span>
@@ -805,13 +826,7 @@
                 <span class="o">}</span>
             <span class="o">}</span>
 
-            <span class="c">// Everything which needs to be done if content changed</span>
-<span class="c"></span>            <span class="c">// TODO: Should we be firing contentChange here?</span>
-<span class="c"></span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setFirstLastFocusable</span><span class="o">();</span>
-
-            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">refireEvent</span><span class="o">(</span><span class="s2">&quot;iframe&quot;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">refireEvent</span><span class="o">(</span><span class="s2">&quot;underlay&quot;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">changeContentEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>

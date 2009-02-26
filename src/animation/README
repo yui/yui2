@@ -1,5 +1,8 @@
 Animation Release Notes
 
+*** version 2.7.0 ***
+* Updated set/getAttribute to fall back to element.attribute
+
 *** version 2.6.0 ***
 * ColorAnim updated to use getAncestorBy 
 

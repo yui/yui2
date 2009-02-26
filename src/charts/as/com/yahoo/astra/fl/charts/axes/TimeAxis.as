@@ -620,13 +620,13 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				approxLabelDistance = this.maxLabelHeight;	
 			}
-			var labelPadding:Number = this.labelPadding; 
-			approxLabelDistance += (labelPadding*2);
+			var labelSpacing:Number = this.labelSpacing; 
+			approxLabelDistance += (labelSpacing*2);
 
 			var dateDifference:Number = Math.round(DateUtil.getDateDifferenceByTimeUnit(this.minimum, this.maximum, this.majorTimeUnit));
 			var tempMajorUnit:Number = 0; 
 
-			var maxLabels:Number = Math.floor((this.renderer.length - labelPadding)/approxLabelDistance);
+			var maxLabels:Number = Math.floor((this.renderer.length - labelSpacing)/approxLabelDistance);
 			
 			//If set by user, use specified number of labels unless its too many
 			if(this._numLabelsSetByUser)
@@ -636,8 +636,8 @@ package com.yahoo.astra.fl.charts.axes
 			
 			tempMajorUnit = dateDifference/maxLabels;
 			tempMajorUnit = Math.ceil(tempMajorUnit);
-			tempMajorUnit = Math.min(tempMajorUnit, Math.round(dateDifference/2));
 			
+			if(tempMajorUnit > Math.round(dateDifference/2)) tempMajorUnit = dateDifference;
 			this._majorUnit = tempMajorUnit;
 			
 			if(dateDifference%tempMajorUnit != 0)

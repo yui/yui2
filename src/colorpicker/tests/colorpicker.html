@@ -22,6 +22,7 @@
 <body class="yui-skin-sam">
 <div id="doc">
     <div id="picker-container">picker</div>
+    <div id="picker-container2">picker #2</div>
 </div>
 
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
@@ -137,6 +138,15 @@
                         r: 51, g: 51, b: 51, h: 0, s: 0, v: 20,
                         hex: "333333", rgb: [51, 51, 51], websafe: [51, 51, 51]
                     });
+            },
+
+            test_animateConfig : function () {
+                var picker2 = new YAHOO.widget.ColorPicker('picker-container2',{
+                    animate : false
+                });
+
+                Assert.areEqual(false,picker2.pickerSlider.animate);
+                Assert.areEqual(false,picker2.hueSlider.animate);
             }
 
         })); 

@@ -624,7 +624,7 @@
 
         /**
          * Use the value of the text field to update the control
-         * @method _hexFieldKeypress
+         * @method _useFieldValue
          * @param e {Event} an event
          * @param el {HTMLElement} the field
          * @param prop {string} the key to the linked property
@@ -995,11 +995,11 @@
 
         _attachRGBHSV : function(id, config) {
             Event.on(this.getElement(id), "keydown", function(e, me) {
-                    me._rgbFieldKeypress.call(me, e, this, config);
+                    me._rgbFieldKeypress(e, this, config);
                 }, this);
             Event.on(this.getElement(id), "keypress", this._numbersOnly, this, true);
             Event.on(this.getElement(id), "blur", function(e, me) {
-                    me._useFieldValue(me, e, this, config);
+                    me._useFieldValue(e, this, config);
                 }, this);
         },
 
@@ -1100,6 +1100,9 @@
             this.pickerSlider = Slider.getSliderRegion(
                 this.getElement(ID.PICKER_BG), 
                 this.getElement(ID.PICKER_THUMB), 0, size, 0, size);
+
+            // Apply animate attribute configuration
+            this.set(this.OPT.ANIMATE, this.get(this.OPT.ANIMATE));
         },
 
         /**
@@ -1135,13 +1138,13 @@
             this._attachRGBHSV(ID.V, O.VALUE); 
 
             Event.on(this.getElement(ID.HEX), "keydown", function(e, me) {
-                    me._hexFieldKeypress.call(me, e, this, O.HEX);
+                    me._hexFieldKeypress(e, this, O.HEX);
                 }, this);
 
             Event.on(this.getElement(this.ID.HEX), "keypress",
                 this._hexOnly, this,true);
             Event.on(this.getElement(this.ID.HEX), "blur", function(e, me) {
-                    me._useFieldValue.call(me, e, this, O.HEX);
+                    me._useFieldValue(e, this, O.HEX);
                 }, this);
         },
 
@@ -1552,8 +1555,10 @@
             this.setAttributeConfig(this.OPT.ANIMATE, {
                     value: lang.isBoolean(attr.animate) ? attr.animate : true,
                     method: function(on) {
-                        this.pickerSlider.animate = on;
-                        this.hueSlider.animate = on;
+                        if (this.pickerSlider) {
+                            this.pickerSlider.animate = on;
+                            this.hueSlider.animate = on;
+                        }
                     }
                 });
 

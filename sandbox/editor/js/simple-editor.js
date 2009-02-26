@@ -1903,7 +1903,7 @@ var Dom = YAHOO.util.Dom,
                         if (this.browser.webkit) {
                             tar = this._getSelectedElement();
                             if (!this._hasParent(tar, 'li')) {
-                                this.execCommand('inserthtml', '<var id="yui-br">BR</var>');
+                                this.execCommand('inserthtml', '<var id="yui-br"></var>');
                                 var holder = this._getDoc().getElementById('yui-br'),
                                     br = this._getDoc().createElement('br'),
                                     caret = this._getDoc().createElement('span');
@@ -3756,18 +3756,14 @@ var Dom = YAHOO.util.Dom,
             }
 
             if (!this._isElement(el, 'body') && !this._hasSelection()) {
-                Dom.setStyle(el, 'background-color', value);
+                el.style.backgroundColor = value;
                 this._selectNode(el);
                 exec = false;
-            //} else if (!this._isElement(el, 'body') && this._hasSelection()) {
-            //    Dom.setStyle(el, 'background-color', value);
-            //    this._selectNode(el);
-            //    exec = false;
             } else {
                 if (this.get('insert')) {
                     el = this._createInsertElement({ backgroundColor: value });
                 } else {
-                    this._createCurrentElement('span', { backgroundColor: value });
+                    this._createCurrentElement('span', { backgroundColor: value, color: el.style.color, fontSize: el.style.fontSize, fontFamily: el.style.fontFamily });
                     this._selectNode(this.currentElement[0]);
                 }
                 exec = false;
@@ -3788,15 +3784,11 @@ var Dom = YAHOO.util.Dom,
                     Dom.setStyle(el, 'color', value);
                     this._selectNode(el);
                     exec = false;
-                //} else if (!this._isElement(el, 'body') && this._hasSelection()) {
-                //    Dom.setStyle(el, 'color', value);
-                //    this._selectNode(el);
-                //    exec = false;
                 } else {
                     if (this.get('insert')) {
                         el = this._createInsertElement({ color: value });
                     } else {
-                        this._createCurrentElement('span', { color: value });
+                        this._createCurrentElement('span', { color: value, fontSize: el.style.fontSize, fontFamily: el.style.fontFamily, backgroundColor: el.style.backgroundColor });
                         this._selectNode(this.currentElement[0]);
                     }
                     exec = false;
@@ -4130,7 +4122,7 @@ var Dom = YAHOO.util.Dom,
                         this.currentElement[0] = el;
                         this._selectNode(this.currentElement[0]);
                     } else {
-                        this._createCurrentElement('span', {'fontSize': value });
+                        this._createCurrentElement('span', {'fontSize': value, fontFamily: el.style.fontFamily, color: el.style.color, backgroundColor: el.style.backgroundColor });
                         this._selectNode(this.currentElement[0]);
                     }
                 }
@@ -4306,7 +4298,11 @@ var Dom = YAHOO.util.Dom,
                 
                 for (var i = 0; i < _tmp.length; i++) {
                     if ((YAHOO.util.Dom.getStyle(_tmp[i], 'font-family') == 'yui-tmp') || (_tmp[i].face && (_tmp[i].face == 'yui-tmp'))) {
-                        el = _elCreate(_tmp[i].tagName, tagStyle);
+                        if (tagName !== 'span') {
+                            el = _elCreate(tagName, tagStyle);
+                        } else {
+                            el = _elCreate(_tmp[i].tagName, tagStyle);
+                        }
                         el.innerHTML = _tmp[i].innerHTML;
                         if (this._isElement(_tmp[i], 'ol') || (this._isElement(_tmp[i], 'ul'))) {
                             var fc = _tmp[i].getElementsByTagName('li')[0];

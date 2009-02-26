@@ -250,12 +250,12 @@ var xPad=function (x, pad, r)
      *
      * @method format
      * @param oDate {Date} Date.
-     * @param oConfig {Object} (Optional) Optional configuration values:
+     * @param oConfig {Object} (Optional) Object literal of configuration values:
      *  <dl>
-     *   <dt>format {String}</dt>
+     *   <dt>format &lt;String&gt;</dt>
      *   <dd>
      *   <p>
-     *   Any format defined by strftime is supported. strftime has several format specifiers defined by the Open group at 
+     *   Any strftime string is supported, such as "%I:%M:%S %p". strftime has several format specifiers defined by the Open group at 
      *   <a href="http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html">http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html</a>
      *   </p>
      *   <p>   

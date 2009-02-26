@@ -82,7 +82,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Initialize DOM elements
     var okDom = this._initDomElements(elContainer);
     if(!okDom) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
+        YAHOO.log("Could not instantiate DataTable due to an invalid DOM element", "error", this.toString());
         return;
     }
             
@@ -2067,7 +2067,6 @@ _initDomElements : function(elContainer) {
     this._initTbodyEl(this._elTable);
 
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
         return false;
     }
     else {
@@ -6424,6 +6423,11 @@ unhighlightColumn : function(column) {
  * @param index {Number} (optional) RecordSet position index at which to add data.
  */
 addRow : function(oData, index) {
+    if(lang.isNumber(index) && (index < 0 || index > this._oRecordSet.getLength())) {
+        YAHOO.log("Could not add row at index " + index + " with " + lang.dump(oData), "warn", this.toString());
+        return;
+    }
+
     if(oData && lang.isObject(oData)) {
         var oRecord = this._oRecordSet.addRecord(oData, index);
         if(oRecord) {
@@ -6493,7 +6497,7 @@ addRow : function(oData, index) {
             }            
         }
     }
-    YAHOO.log("Could not add row with " + lang.dump(oData), "error", this.toString());
+    YAHOO.log("Could not add row at index " + index + " with " + lang.dump(oData), "warn", this.toString());
 },
 
 /**
@@ -6504,6 +6508,11 @@ addRow : function(oData, index) {
  * @param index {Number} (optional) RecordSet position index at which to add data.
  */
 addRows : function(aData, index) {
+    if(lang.isNumber(index) && (index < 0 || index > this._oRecordSet.getLength())) {
+        YAHOO.log("Could not add rows at index " + index + " with " + lang.dump(aData), "warn", this.toString());    
+        return;
+    }
+
     if(lang.isArray(aData)) {
         var aRecords = this._oRecordSet.addRecords(aData, index);
         if(aRecords) {
@@ -6527,7 +6536,7 @@ addRows : function(aData, index) {
                 
                 this.fireEvent("rowsAddEvent", {records:aRecords});
                 YAHOO.log("Added " + aRecords.length + 
-                        " rows at index " + recIndex +
+                        " rows at index " + this._oRecordSet.getRecordIndex(aRecords[0]) +
                         " with data " + lang.dump(aData), "info", this.toString());
                 return;
             }
@@ -6575,7 +6584,7 @@ addRows : function(aData, index) {
 
                         this.fireEvent("rowsAddEvent", {records:aRecords});
                         YAHOO.log("Added " + aRecords.length + 
-                                " rows at index " + recIndex +
+                                " rows at index " + this._oRecordSet.getRecordIndex(aRecords[0]) +
                                 " with data " + lang.dump(aData), "info", this.toString());
                     },
                     argument: {recIndex: recIndex, isLast: isLast},
@@ -6588,7 +6597,7 @@ addRows : function(aData, index) {
             }            
         }
     }
-    YAHOO.log("Could not add rows with " + lang.dump(aData));    
+    YAHOO.log("Could not add rows at index " + index + " with " + lang.dump(aData), "warn", this.toString());    
 },
 
 /**
@@ -6611,74 +6620,69 @@ updateRow : function(row, oData) {
     // Update the Record
     if(lang.isNumber(index) && (index >= 0)) {
         var oRecordSet = this._oRecordSet,
-            oldRecord = oRecordSet.getRecord(index),
-            elRow = this.getTrEl(oldRecord),
-            // Copy data from the Record for the event that gets fired later
-            oldData = oldRecord ? oldRecord.getData() : null,
-            updatedRecord = this._oRecordSet.setRecord(oData, index);
+            oldRecord = oRecordSet.getRecord(index);
             
-        // Update selections as necessary
-        var tracker = this._aSelections,
-            i=0,
-            oldId = oldRecord.getId(),
-            newId = updatedRecord.getId();
-        for(; i<tracker.length; i++) {
-            if((tracker[i] === oldId)) {
-                tracker[i] = newId;
-            }
-            else if(tracker[i].recordId === oldId) {
-                tracker[i].recordId = newId;
+        
+        if(oldRecord) {
+            var updatedRecord = this._oRecordSet.setRecord(oData, index),
+                elRow = this.getTrEl(oldRecord),
+                // Copy data from the Record for the event that gets fired later
+                oldData = oldRecord ? oldRecord.getData() : null;
+               
+            if(updatedRecord) {
+                // Update selected rows as necessary
+                var tracker = this._aSelections || [],
+                i=0,
+                oldId = oldRecord.getId(),
+                newId = updatedRecord.getId();
+                for(; i<tracker.length; i++) {
+                    if((tracker[i] === oldId)) {
+                        tracker[i] = newId;
+                    }
+                    else if(tracker[i].recordId === oldId) {
+                        tracker[i].recordId = newId;
+                    }
+                }
+
+                // Update the TR only if row is on current page
+                this._oChainRender.add({
+                    method: function() {
+                        if((this instanceof DT) && this._sId) {
+                            // Paginated
+                            var oPaginator = this.get('paginator');
+                            if (oPaginator) {
+                                var pageStartIndex = (oPaginator.getPageRecords())[0],
+                                    pageLastIndex = (oPaginator.getPageRecords())[1];
+        
+                                // At least one of the new records affects the view
+                                if ((index >= pageStartIndex) || (index <= pageLastIndex)) {
+                                    this.render();
+                                }
+                            }
+                            else {
+                                if(elRow) {
+                                    this._updateTrEl(elRow, updatedRecord);
+                                }
+                                else {
+                                    this.getTbodyEl().appendChild(this._addTrEl(updatedRecord));
+                                }
+                            }
+                            this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
+                            YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
+                                    ", Record index = " + this.getRecordIndex(updatedRecord) +
+                                    ", page row index = " + this.getTrIndex(updatedRecord), "info", this.toString());
+                        }
+                    },
+                    scope: this,
+                    timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
+                });
+                this._runRenderChain();
+                return;
             }
         }
     }
-    else {
-        YAHOO.log("Could not update row " + row + " with the data : " +
-                lang.dump(oData), "error", this.toString());
-        return;
-
-    }
-
-    // Update the TR only if row is on current page
-    if(updatedRecord) {
-        this._oChainRender.add({
-            method: function() {
-                if((this instanceof DT) && this._sId) {
-                    // Paginated
-                    var oPaginator = this.get('paginator');
-                    if (oPaginator) {
-                        var pageStartIndex = (oPaginator.getPageRecords())[0],
-                            pageLastIndex = (oPaginator.getPageRecords())[1];
-
-                        // At least one of the new records affects the view
-                        if ((index >= pageStartIndex) || (index <= pageLastIndex)) {
-                            this.render();
-                        }
-                    }
-                    else {
-                        if(elRow) {
-                            this._updateTrEl(elRow, updatedRecord);
-                        }
-                        else {
-                            this.getTbodyEl().appendChild(this._addTrEl(updatedRecord));
-                        }
-                    }
-                    this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
-                    YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
-                            ", Record index = " + this.getRecordIndex(updatedRecord) +
-                            ", page row index = " + this.getTrIndex(updatedRecord), "info", this.toString());
-                }
-            },
-            scope: this,
-            timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
-        });
-        this._runRenderChain();
-    }
-    else {
-        this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
-        YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
-                ", Record index = " + this.getRecordIndex(updatedRecord) +
-                ", page row index = " + this.getTrIndex(updatedRecord), "info", this.toString());   
-    }
+    YAHOO.log("Could not update row " + row + " with the data : " + lang.dump(oData), "warn", this.toString());
+    return;
 },
 
 /**
@@ -6697,18 +6701,20 @@ updateRow : function(row, oData) {
  */
 updateRows : function(startrow, aData) {
     if(lang.isArray(aData)) {
-        var startIndex = startrow;
+        var startIndex = startrow,
+            oRecordSet = this._oRecordSet;
+            
         if (!lang.isNumber(startrow)) {
             startIndex = this.getRecordIndex(startrow);
         }
             
-        if(lang.isNumber(startIndex) && (startIndex >= 0)) {
+        if(lang.isNumber(startIndex) && (startIndex >= 0) && (startIndex < oRecordSet.getLength())) {
             var lastIndex = startIndex + aData.length,
-                aOldRecords = this._oRecordSet.getRecords(startIndex, aData.length),
-                aNewRecords = this._oRecordSet.setRecords(aData, startIndex);
+                aOldRecords = oRecordSet.getRecords(startIndex, aData.length),
+                aNewRecords = oRecordSet.setRecords(aData, startIndex);
             if(aNewRecords) {
-                // Update selections as necessary
-                var tracker = this._aSelections,
+                // Update selected rows as necessary
+                var tracker = this._aSelections || [],
                     i=0, j, newId, oldId;
                 for(; i<tracker.length; i++) {
                     for(j=0; j<aOldRecords.length; j++) {
@@ -6802,7 +6808,7 @@ updateRows : function(startrow, aData) {
             }
         }
     }
-    YAHOO.log("Could not add rows with " + lang.dump(aData));
+    YAHOO.log("Could not update rows at " + startrow + " with " + lang.dump(aData), "warn", this.toString());
 },
 
 /**

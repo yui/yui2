@@ -54,6 +54,7 @@
 <span class="c"> * @module stylesheet</span>
 <span class="c"> * @namespace YAHOO.util</span>
 <span class="c"> * @requires yahoo</span>
+<span class="c"> * @beta</span>
 <span class="c"> */</span>
 <span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
@@ -249,7 +250,7 @@
     <span class="c">// 5. The method to add a new rule to the stylesheet</span>
 <span class="c"></span>    <span class="c">// IE supports addRule with different signature</span>
 <span class="c"></span>    <span class="nx">_insertRule</span> <span class="o">=</span> <span class="o">(</span><span class="s1">&#39;insertRule&#39;</span> <span class="k">in</span> <span class="nx">sheet</span><span class="o">)</span> <span class="o">?</span>
-        <span class="k">function</span> <span class="o">(</span><span class="nx">sel</span><span class="o">,</span><span class="nx">css</span><span class="o">,</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span> <span class="nx">sheet</span><span class="o">.</span><span class="nx">insertRule</span><span class="o">(</span><span class="nx">sel</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nx">css</span><span class="o">,</span><span class="nx">i</span><span class="o">);</span> <span class="o">}</span> <span class="o">:</span>
+        <span class="k">function</span> <span class="o">(</span><span class="nx">sel</span><span class="o">,</span><span class="nx">css</span><span class="o">,</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span> <span class="nx">sheet</span><span class="o">.</span><span class="nx">insertRule</span><span class="o">(</span><span class="nx">sel</span><span class="o">+</span><span class="s1">&#39; {&#39;</span><span class="o">+</span><span class="nx">css</span><span class="o">+</span><span class="s1">&#39;}&#39;</span><span class="o">,</span><span class="nx">i</span><span class="o">);</span> <span class="o">}</span> <span class="o">:</span>
         <span class="k">function</span> <span class="o">(</span><span class="nx">sel</span><span class="o">,</span><span class="nx">css</span><span class="o">,</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span> <span class="nx">sheet</span><span class="o">.</span><span class="nx">addRule</span><span class="o">(</span><span class="nx">sel</span><span class="o">,</span><span class="nx">css</span><span class="o">,</span><span class="nx">i</span><span class="o">);</span> <span class="o">};</span>
 
     <span class="c">// Cache the instance by the generated Id</span>
@@ -352,11 +353,18 @@
                 <span class="nx">rule</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">cssText</span> <span class="o">=</span> <span class="nx">StyleSheet</span><span class="o">.</span><span class="nx">toCssText</span><span class="o">(</span><span class="nx">css</span><span class="o">,</span><span class="nx">rule</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">cssText</span><span class="o">);</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                 <span class="nx">idx</span> <span class="o">=</span> <span class="nx">sheet</span><span class="o">[</span><span class="nx">_rules</span><span class="o">].</span><span class="nx">length</span><span class="o">;</span>
-                <span class="nx">_insertRule</span><span class="o">(</span><span class="nx">sel</span><span class="o">,</span><span class="s1">&#39;{&#39;</span><span class="o">+</span><span class="nx">StyleSheet</span><span class="o">.</span><span class="nx">toCssText</span><span class="o">(</span><span class="nx">css</span><span class="o">)+</span><span class="s1">&#39;}&#39;</span><span class="o">,</span><span class="nx">idx</span><span class="o">);</span>
+                <span class="nx">css</span> <span class="o">=</span> <span class="nx">StyleSheet</span><span class="o">.</span><span class="nx">toCssText</span><span class="o">(</span><span class="nx">css</span><span class="o">);</span>
 
-                <span class="c">// Safari replaces the rules collection, but maintains the rule</span>
-<span class="c"></span>                <span class="c">// instances in the new collection when rules are added/removed</span>
-<span class="c"></span>                <span class="nx">cssRules</span><span class="o">[</span><span class="nx">sel</span><span class="o">]</span> <span class="o">=</span> <span class="nx">sheet</span><span class="o">[</span><span class="nx">_rules</span><span class="o">][</span><span class="nx">idx</span><span class="o">];</span>
+                <span class="c">// IE throws an error when attempting to addRule(sel,&#39;&#39;,n)</span>
+<span class="c"></span>                <span class="c">// which would crop up if no, or only invalid values are used</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">css</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">_insertRule</span><span class="o">(</span><span class="nx">sel</span><span class="o">,</span> <span class="nx">css</span><span class="o">,</span> <span class="nx">idx</span><span class="o">);</span>
+
+                    <span class="c">// Safari replaces the rules collection, but maintains the</span>
+<span class="c"></span>                    <span class="c">// rule instances in the new collection when rules are</span>
+<span class="c"></span>                    <span class="c">// added/removed</span>
+<span class="c"></span>                    <span class="nx">cssRules</span><span class="o">[</span><span class="nx">sel</span><span class="o">]</span> <span class="o">=</span> <span class="nx">sheet</span><span class="o">[</span><span class="nx">_rules</span><span class="o">][</span><span class="nx">idx</span><span class="o">];</span>
+                <span class="o">}</span>
             <span class="o">}</span>
             <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
         <span class="o">},</span>
@@ -670,6 +678,9 @@
 <span class="c">   ??? - unsetting font-size-adjust has the same effect as unsetting font-size</span>
 <span class="c"> * FireFox and WebKit populate rule.cssText as &quot;SELECTOR { CSSTEXT }&quot;, but</span>
 <span class="c">   Opera and IE do not.</span>
+<span class="c"> * IE6 and IE7 silently ignore the { and } if passed into addRule(&#39;.foo&#39;,&#39;{</span>
+<span class="c">   color:#000}&#39;,0).  IE8 does not and creates an empty rule.</span>
+<span class="c"> * IE6-8 addRule(&#39;.foo&#39;,&#39;&#39;,n) throws an error.  Must supply *some* cssText</span>
 <span class="c">*/</span>
 </pre></div>
                     </div>

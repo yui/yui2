@@ -203,19 +203,22 @@
             var tabCount = this.get('tabs').length,
                 index = this.getTabIndex(tab);
 
-            if ( tab == this.get(ACTIVE_TAB) ) { // select next tab
-                if (tabCount > 1) {
-                    if (index + 1 == tabCount) {
+            if ( tab === this.get(ACTIVE_TAB) ) { 
+                if (tabCount > 1) { // select another tab
+                    if (index + 1 === tabCount) { // if last, activate previous
                         this.set(ACTIVE_INDEX, index - 1);
-                    } else {
+                    } else { // activate next tab
                         this.set(ACTIVE_INDEX, index + 1);
                     }
+                } else { // no more tabs
+                    this.set(ACTIVE_TAB, null);
                 }
             }
             
             this._tabParent.removeChild( tab.get(ELEMENT) );
             this._contentParent.removeChild( tab.get(CONTENT_EL) );
             this._configs.tabs.value.splice(index, 1);
+
             tab.fireEvent('remove', { type: 'remove', tabview: this });
         },
         
@@ -384,10 +387,22 @@
             }
         },
 
-        deselectTab: function() {
-            this.set('activeTab', null);
+        /**
+         * Removes selected state from the given tab if it is the activeTab
+         * @method deselectTab
+         * @param {Int} index The tab index to deselect 
+         */
+        deselectTab: function(index) {
+            if (this.getTab(index) === this.get('activeTab')) {
+                this.set('activeTab', null);
+            }
         },
 
+        /**
+         * Makes the tab at the given index the active tab
+         * @method selectTab
+         * @param {Int} index The tab index to be made active
+         */
         selectTab: function(index) {
             this.set('activeTab', this.getTab(index));
         },
@@ -953,6 +968,13 @@
     });
     
     
+    /**
+     * Fires when a tab is removed from the tabview
+     * @event remove
+     * @type CustomEvent
+     * @param {Event} An event object with fields for "type" ("remove")
+     * and "tabview" (the tabview instance it was removed from) 
+     */
     
     YAHOO.widget.Tab = Tab;
 })();

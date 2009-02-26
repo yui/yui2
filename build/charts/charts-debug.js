@@ -1886,13 +1886,20 @@ YAHOO.widget.Axis.prototype =
 	labelFunction: null,
 	
 	/**
-	 * Indicates the number of labels to attempt to display on an axis. By default, this 
-	 * number is calculated by the chart based on the data range and available space. 
-	 * 
-	 * @property numLabels
+	 * The space, in pixels, between labels on an axis.
+	 *
+	 * @property labelSpacing
 	 * @type Number
 	 */
-	numLabels: NaN 
+	labelSpacing: 2,
+	
+	/**
+	 * The text that will appear next to the axis to indicate information about the data that it displays.
+	 *
+	 * @property title
+	 * @type String
+	 */
+	title: null 
 };
 
 /**
@@ -1900,6 +1907,7 @@ YAHOO.widget.Axis.prototype =
  *
  * @namespace YAHOO.widget
  * @class NumericAxis
+ * @extends YAHOO.widget.Axis
  * @constructor
  */
 YAHOO.widget.NumericAxis = function()
@@ -2096,7 +2104,17 @@ YAHOO.lang.extend(YAHOO.widget.CategoryAxis, YAHOO.widget.Axis,
 	 * @property categoryNames
 	 * @type Array
 	 */
-	categoryNames: null
+	categoryNames: null,
+	
+	/**
+	 * Indicates whether or not to calculate the number of categories (ticks and labels)
+	 * when there is not enough room to display all labels on the axis. If set to true, the axis 
+	 * will determine the number of categories to plot. If not, all categories will be plotted.
+	 *
+	 * @property calcualateCategoryCount
+	 * @type Boolean
+	 */
+	calculateCategoryCount: false 
 });
 
 /**

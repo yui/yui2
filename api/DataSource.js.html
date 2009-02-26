@@ -395,7 +395,7 @@
 <span class="c"> * @method DataSourceBase.parseString</span>
 <span class="c"> * @param oData {String | Number | Boolean | Date | Array | Object} Data to parse.</span>
 <span class="c"> * The special values null and undefined will return null.</span>
-<span class="c"> * @return {Number} A string, or null.</span>
+<span class="c"> * @return {String} A string, or null.</span>
 <span class="c"> * @static</span>
 <span class="c"> */</span>
 <span class="nx">parseString</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">{</span>
@@ -831,7 +831,28 @@
 <span class="o">},</span>
 
 <span class="c">/**</span>
-<span class="c"> * First looks for cached response, then sends request to live data.</span>
+<span class="c"> * First looks for cached response, then sends request to live data. The</span>
+<span class="c"> * following arguments are passed to the callback function:</span>
+<span class="c"> *     &lt;dl&gt;</span>
+<span class="c"> *     &lt;dt&gt;&lt;code&gt;oRequest&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="c"> *     &lt;dd&gt;The same value that was passed in as the first argument to sendRequest.&lt;/dd&gt;</span>
+<span class="c"> *     &lt;dt&gt;&lt;code&gt;oParsedResponse&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="c"> *     &lt;dd&gt;An object literal containing the following properties:</span>
+<span class="c"> *         &lt;dl&gt;</span>
+<span class="c"> *         &lt;dt&gt;&lt;code&gt;tId&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="c"> *         &lt;dd&gt;Unique transaction ID number.&lt;/dd&gt;</span>
+<span class="c"> *         &lt;dt&gt;&lt;code&gt;results&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="c"> *         &lt;dd&gt;Schema-parsed data results.&lt;/dd&gt;</span>
+<span class="c"> *         &lt;dt&gt;&lt;code&gt;error&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="c"> *         &lt;dd&gt;True in cases of data error.&lt;/dd&gt;</span>
+<span class="c"> *         &lt;dt&gt;&lt;code&gt;cached&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="c"> *         &lt;dd&gt;True when response is returned from DataSource cache.&lt;/dd&gt; </span>
+<span class="c"> *         &lt;dt&gt;&lt;code&gt;meta&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="c"> *         &lt;dd&gt;Schema-parsed meta data.&lt;/dd&gt;</span>
+<span class="c"> *         &lt;/dl&gt;</span>
+<span class="c"> *     &lt;dt&gt;&lt;code&gt;oPayload&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="c"> *     &lt;dd&gt;The same value as was passed in as &lt;code&gt;argument&lt;/code&gt; in the oCallback object literal.&lt;/dd&gt;</span>
+<span class="c"> *     &lt;/dl&gt; </span>
 <span class="c"> *</span>
 <span class="c"> * @method sendRequest</span>
 <span class="c"> * @param oRequest {Object} Request object.</span>

@@ -37,11 +37,18 @@ YAHOO.widget.Axis.prototype =
 	labelFunction: null,
 	
 	/**
-	 * Indicates the number of labels to attempt to display on an axis. By default, this 
-	 * number is calculated by the chart based on the data range and available space. 
-	 * 
-	 * @property numLabels
+	 * The space, in pixels, between labels on an axis.
+	 *
+	 * @property labelSpacing
 	 * @type Number
 	 */
-	numLabels: NaN 
+	labelSpacing: 2,
+	
+	/**
+	 * The text that will appear next to the axis to indicate information about the data that it displays.
+	 *
+	 * @property title
+	 * @type String
+	 */
+	title: null 
 };

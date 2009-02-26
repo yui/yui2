@@ -346,7 +346,7 @@ issueCallback : function (callback,params,error,scope) {
  * @method DataSourceBase.parseString
  * @param oData {String | Number | Boolean | Date | Array | Object} Data to parse.
  * The special values null and undefined will return null.
- * @return {Number} A string, or null.
+ * @return {String} A string, or null.
  * @static
  */
 parseString : function(oData) {
@@ -782,7 +782,28 @@ clearAllIntervals : function() {
 },
 
 /**
- * First looks for cached response, then sends request to live data.
+ * First looks for cached response, then sends request to live data. The
+ * following arguments are passed to the callback function:
+ *     <dl>
+ *     <dt><code>oRequest</code></dt>
+ *     <dd>The same value that was passed in as the first argument to sendRequest.</dd>
+ *     <dt><code>oParsedResponse</code></dt>
+ *     <dd>An object literal containing the following properties:
+ *         <dl>
+ *         <dt><code>tId</code></dt>
+ *         <dd>Unique transaction ID number.</dd>
+ *         <dt><code>results</code></dt>
+ *         <dd>Schema-parsed data results.</dd>
+ *         <dt><code>error</code></dt>
+ *         <dd>True in cases of data error.</dd>
+ *         <dt><code>cached</code></dt>
+ *         <dd>True when response is returned from DataSource cache.</dd> 
+ *         <dt><code>meta</code></dt>
+ *         <dd>Schema-parsed meta data.</dd>
+ *         </dl>
+ *     <dt><code>oPayload</code></dt>
+ *     <dd>The same value as was passed in as <code>argument</code> in the oCallback object literal.</dd>
+ *     </dl> 
  *
  * @method sendRequest
  * @param oRequest {Object} Request object.
@@ -2492,6 +2513,7 @@ util.DataSource = function(oLiveData, oConfigs) {
 lang.augmentObject(util.DataSource, DS);
 
 })();
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -2744,12 +2766,12 @@ var xPad=function (x, pad, r)
      *
      * @method format
      * @param oDate {Date} Date.
-     * @param oConfig {Object} (Optional) Optional configuration values:
+     * @param oConfig {Object} (Optional) Object literal of configuration values:
      *  <dl>
-     *   <dt>format {String}</dt>
+     *   <dt>format &lt;String&gt;</dt>
      *   <dd>
      *   <p>
-     *   Any format defined by strftime is supported. strftime has several format specifiers defined by the Open group at 
+     *   Any strftime string is supported, such as "%I:%M:%S %p". strftime has several format specifiers defined by the Open group at 
      *   <a href="http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html">http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html</a>
      *   </p>
      *   <p>   
@@ -2985,4 +3007,5 @@ var xPad=function (x, pad, r)
  YAHOO.util.DateLocale['en-AU'] = YAHOO.lang.merge(YAHOO.util.DateLocale['en']);
 
 })();
+
 YAHOO.register("datasource", YAHOO.util.DataSource, {version: "@VERSION@", build: "@BUILD@"});

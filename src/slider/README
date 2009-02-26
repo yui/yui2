@@ -3,6 +3,14 @@ Slider - Release Notes
 2.7.0
     * Sliders with ticks no longer require YAHOO.util.Anim to be animated.
       Still need to set slider.animated = true, however.
+    * Added skin images to assets/skins/sam
+    * Structure changes for better compression
+    * Event cleanup, so slideStart and slideEnd fire consistently
+    * DualSlider setMinValue and setMaxValue set respective Slider values in non-silent mode
+    * Added SOURCE_KEY_EVENT as value for valueChangeSource
+    * Moved SOURCE_* to statics, deprecated instance consts
+    * Added key support for DualSlider
+    * Slider recalcs the thumb center point if it is not yet set when an operation requires it (useful for Sliders with thumb div or image without declared or styled dimensions)
 
 2.6.0
     * Vertical DualSlider correctly calculates minRange

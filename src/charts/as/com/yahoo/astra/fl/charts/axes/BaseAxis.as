@@ -172,7 +172,7 @@ package com.yahoo.astra.fl.charts.axes
 		protected var _maxLabelHeight:Number;		
 		
 		/**
-		 * Gets or sets the maximum width of a label
+		 * Gets or sets the maximum height of a label
 		 */
 		public function get maxLabelHeight():Number
 		{
@@ -212,22 +212,22 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * @private
 		 */
-		private var _labelPadding:Number = 2; 
+		private var _labelSpacing:Number = 2; 
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.axes.IAxis#labelPadding
+		 * @copy com.yahoo.astra.fl.charts.axes.IAxis#labelSpacing
 		 */
-		public function get labelPadding():Number
+		public function get labelSpacing():Number
 		{
-			return _labelPadding;	
+			return _labelSpacing;	
 		}
 		
 		/**
 		 * @private (setter)
 		 */
-		public function set labelPadding(value:Number):void
+		public function set labelSpacing(value:Number):void
 		{
-			if(value != _labelPadding) _labelPadding = value;
+			if(value != _labelSpacing) _labelSpacing = value;
 		}
 	//--------------------------------------
 	//  Public Methods

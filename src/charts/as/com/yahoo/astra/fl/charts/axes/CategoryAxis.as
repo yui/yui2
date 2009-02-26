@@ -60,7 +60,7 @@ package com.yahoo.astra.fl.charts.axes
 		public function set categoryNames(value:Array):void
 		{
 			this._categoryNamesSetByUser = value != null && value.length > 0;
-			if(this._categoryNamesSetByUser)
+			if(!this._categoryNamesSetByUser)
 			{
 				this._categoryNames = [];
 			}
@@ -111,6 +111,30 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private
 		 */
 		private var _majorUnit:Number = 1; 
+		
+		/**
+		 * @private 
+		 * Holds value for calculateCategoryCount
+		 */
+		private var _calculateCategoryCount:Boolean = false;
+		
+		/**
+		 * Indicates whether or not to calculate the number of categories (ticks and labels) 
+		 * when there is not enough room to display all labels on the axis. If set to true, the axis 
+		 * will determine the number of categories to plot. If not, all categories will be plotted. 
+		 */
+		public function get calculateCategoryCount():Boolean
+		{
+			return _calculateCategoryCount;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set calculateCategoryCount(value:Boolean):void
+		{
+			_calculateCategoryCount = value;
+		}
 		
 	//--------------------------------------
 	//  Public Methods
@@ -226,10 +250,15 @@ package com.yahoo.astra.fl.charts.axes
 			//If the number of labels will not fit on the axis or the user has specified the number of labels to
 			//display, calculate the major unit. 
 			var maxLabelSize:Number = (this.chart as CartesianChart).horizontalAxis == this ? this.maxLabelWidth : this.maxLabelHeight;
-			if(this.categorySize < maxLabelSize || (this._numLabelsSetByUser && this.numLabels != categoryCount))
+			if((this.categorySize < maxLabelSize && this.calculateCategoryCount) || (this._numLabelsSetByUser && this.numLabels != categoryCount))
 			{
 				this.calculateMajorUnit();
+				(this.renderer as ICartesianAxisRenderer).majorUnitSetByUser = false;
 			} 
+			else
+			{
+				(this.renderer as ICartesianAxisRenderer).majorUnitSetByUser = true;
+			}
 			this.updateAxisRenderer();
 		}
 		
@@ -240,8 +269,8 @@ package com.yahoo.astra.fl.charts.axes
 		private function calculateMajorUnit():void
 		{
 			var maxLabelSize:Number = (this.chart as CartesianChart).horizontalAxis == this ? this.maxLabelWidth : this.maxLabelHeight;
-			var labelPadding:Number = this.labelPadding; 
-			maxLabelSize += (labelPadding*2);
+			var labelSpacing:Number = this.labelSpacing; 
+			maxLabelSize += (labelSpacing*2);
 			var categoryCount:int = this.categoryNames.length;
 			var maxNumLabels:Number = this.renderer.length/maxLabelSize;
 			
@@ -302,7 +331,19 @@ package com.yahoo.astra.fl.charts.axes
 				ticks.push(axisData);
 				currentCat += this._majorUnit;
 			}
-
+			
+			//If a major unit has been calculated, we are not plotting all categories.
+			//Adjust the postion of each tick.
+			if(this._majorUnit > 1)
+			{
+				categoryCount = ticks.length;
+				var categorySize:Number = this.renderer.length / categoryCount;
+				for(var i:int = 0; i < categoryCount; i++)
+				{
+					(ticks[i] as AxisData).position = categorySize * i + (categorySize/2);
+				}
+			}
+			
 			this.renderer.ticks = ticks;
 			this.renderer.minorTicks = [];				
 		}		

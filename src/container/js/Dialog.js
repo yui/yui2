@@ -172,7 +172,7 @@
                 failure: null,
 
                 /**
-                 *<p>
+                *<p>
                 * The function to execute upon success of the 
                 * Connection submission, when the form contains
                 * a file input element.
@@ -226,7 +226,7 @@
             * Any additional post data which needs to be sent when using the 
             * <a href="#config_postmethod">async</a> postmethod for dialog POST submissions.
             * The format for the post data string is defined by Connection Manager's 
-            * <a href="YAHOO.util.Connect.html#method_asyncRequest>asyncRequest</a> 
+            * <a href="YAHOO.util.Connect.html#method_asyncRequest">asyncRequest</a> 
             * method.
             * @config postdata
             * @type String
@@ -246,41 +246,60 @@
             */
             this.cfg.addProperty(DEFAULT_CONFIG.HIDEAFTERSUBMIT.key, {
                 value: DEFAULT_CONFIG.HIDEAFTERSUBMIT.value
-            }); 
+            });
 
             /**
             * Array of object literals, each containing a set of properties 
             * defining a button to be appended into the Dialog's footer.
-            * 
-            * Each button object in the buttons array can have three properties:
-            * <dt>text:</dt>
-            * <dd>The text that will display on the face of the button. The text can 
-            * include HTML, as long as it is compliant with HTML Button specifications.
-            * </dd>
-            * <dt>handler:</dt>
-            * <dd>Can be either:
-            *     <ol>
-            *         <li>A reference to a function that should fire when the 
-            * button is clicked.  (In this case scope of this function is 
-            * always its Dialog instance.)</li>
-            *         <li>An object literal representing the code to be 
-            * executed when the button is clicked.  Format:<br> <code> {<br>
-            * <strong>fn:</strong> Function,   &#47;&#47; The handler to call 
-            * when  the event fires.<br> <strong>obj:</strong> Object,
-            * &#47;&#47; An  object to pass back to the handler.<br> <strong>
-            * scope:</strong>  Object &#47;&#47; The object to use for the 
-            * scope of the handler. <br> } </code> <br></li>
+            *
+            * <p>Each button object in the buttons array can have three properties:</p>
+            * <dl>
+            *    <dt>text:</dt>
+            *    <dd>
+            *       The text that will display on the face of the button. The text can 
+            *       include HTML, as long as it is compliant with HTML Button specifications.
+            *    </dd>
+            *    <dt>handler:</dt>
+            *    <dd>Can be either:
+            *    <ol>
+            *       <li>A reference to a function that should fire when the 
+            *       button is clicked.  (In this case scope of this function is 
+            *       always its Dialog instance.)</li>
+            *
+            *       <li>An object literal representing the code to be 
+            *       executed when the button is clicked.
+            *       
+            *       <p>Format:</p>
+            *
+            *       <p>
+            *       <code>{
+            *       <br>
+            *       <strong>fn:</strong> Function, &#47;&#47;
+            *       The handler to call when  the event fires.
+            *       <br>
+            *       <strong>obj:</strong> Object, &#47;&#47; 
+            *       An  object to pass back to the handler.
+            *       <br>
+            *       <strong>scope:</strong> Object &#47;&#47; 
+            *       The object to use for the scope of the handler.
+            *       <br>
+            *       }</code>
+            *       </p>
+            *       </li>
             *     </ol>
-            * </dd>
-            * <dt>isDefault:</dt>
-            * <dd>An optional boolean value that specifies that a button 
-            * should be highlighted and focused by default.</dd>
-            * 
+            *     </dd>
+            *     <dt>isDefault:</dt>
+            *     <dd>
+            *        An optional boolean value that specifies that a button 
+            *        should be highlighted and focused by default.
+            *     </dd>
+            * </dl>
+            *
             * <em>NOTE:</em>If the YUI Button Widget is included on the page, 
             * the buttons created will be instances of YAHOO.widget.Button. 
             * Otherwise, HTML Buttons (<code>&#60;BUTTON&#62;</code>) will be 
             * created.
-            * 
+            *
             * @config buttons
             * @type {Array|String}
             * @default "none"
@@ -328,9 +347,10 @@
 
             /**
             * CustomEvent fired after asynchronous submission, before the generic submit event is fired
+            *
             * @event asyncSubmitEvent
-            * @param {Object} The connection object object, returned by YAHOO.util.Connect.asyncRequest
-            */ 
+            * @param {Object} conn The connection object, returned by YAHOO.util.Connect.asyncRequest
+            */
             this.asyncSubmitEvent = this.createEvent(EVENT_TYPES.ASYNC_SUBMIT);
             this.asyncSubmitEvent.signature = SIGNATURE;
 
@@ -355,6 +375,7 @@
         * all of its subclasses. This method is automatically called by the 
         * constructor, and  sets up all DOM references for pre-existing markup, 
         * and creates required markup if it is not already present.
+        * 
         * @method init
         * @param {String} el The element ID representing the Dialog <em>OR</em>
         * @param {HTMLElement} el The element representing the Dialog
@@ -756,13 +777,7 @@
                 }
             }
 
-            // Everything which needs to be done if content changed
-            // TODO: Should we be firing contentChange here?
-
-            this.setFirstLastFocusable();
-
-            this.cfg.refireEvent("iframe");
-            this.cfg.refireEvent("underlay");
+            this.changeContentEvent.fire();
         },
 
         /**
