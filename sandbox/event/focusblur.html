@@ -1,26 +1,25 @@
+<html>
+<head>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/yahoo/yahoo-min.js&2.7.0/build/event/event-min.js"></script>
+</head>
+<body>
 
-   <html>
-   <head>
-   <script type="text/javascript"
-   src=[1]"http://yui.yahooapis.com/combo?2.7.0/build/yahoo/yahoo-min.js&2.7.0/build/event/event-min.js"></script>
-   </head>
-   <body>
 
-   <h1>testing addFocusListener</h1>
-   <input name="name" id="inp_name" type="text"/>
+<h1>testing addFocusListener</h1>
+<input name="nameasdf" id="inpname" type="text"/>
 
-   </body>
-   <script>
+<script>
 
-   ( function() {
+(function() {
 
-       var sayHello = function(ev, data) {
-               alert('hello');
-           };
+   var sayHello = function(ev, data) {
+           alert('hello');
+       };
 
-       YAHOO.util.Event.addFocusListener('inp_name', sayHello);
+   YAHOO.util.Event.addFocusListener('inpname', sayHello);
 
-   })();
+})();
 
-   </script>
-   </html>
+</script>
+</body>
+</html>
