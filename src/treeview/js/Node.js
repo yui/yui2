@@ -258,7 +258,7 @@ YAHOO.widget.Node.prototype = {
     _type: "Node",
 
     /*
-    spacerPath: "http://us.i1.yimg.com/us.yimg.com/i/space.gif",
+    spacerPath: "http://l.yimg.com/a/i/space.gif",
     expandedText: "Expanded",
     collapsedText: "Collapsed",
     loadingText: "Loading",
