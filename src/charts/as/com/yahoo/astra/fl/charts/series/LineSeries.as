@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.series
+package com.yahoo.astra.fl.charts.series
 {
 	import com.yahoo.astra.animation.Animation;
 	import com.yahoo.astra.animation.AnimationEvent;
@@ -248,14 +248,16 @@
 			
 			var originPosition:Number = primaryAxis.valueToLocal(primaryAxis.origin);
 			
-			var fillColor:uint = this.getStyleValue("lineColor") as uint;
+			
+			
+			var lineColor:uint = this.getStyleValue("lineColor") != null ? this.getStyleValue("lineColor") as uint : this.getStyleValue("color") as uint;
 			var connectDiscontinuousPoints:Boolean = this.getStyleValue("connectDiscontinuousPoints") as Boolean;
 			var discontinuousDashLength:Number = this.getStyleValue("discontinuousDashLength") as Number;
 			var showAreaFill:Boolean = this.getStyleValue("showAreaFill") as Boolean;
 			
 			this.graphics.clear();
 			this.setPrimaryLineStyle();
-			this.beginAreaFill(showAreaFill, fillColor);
+			this.beginAreaFill(showAreaFill, lineColor);
 			
 			var firstValidPosition:Point;
 			var lastValidPosition:Point;
@@ -337,7 +339,7 @@
 				{
 					if(showAreaFill) this.closeAreaFill(primaryIsVertical, originPosition, firstValidPosition, lastValidPosition);
 					this.setPrimaryLineStyle();
-					this.beginAreaFill(showAreaFill, fillColor);
+					this.beginAreaFill(showAreaFill, lineColor);
 					lastMarkerValid = false;
 					firstValidPosition = null;
 				}
@@ -381,9 +383,9 @@
 			}
 			
 			var lineWeight:int = this.getStyleValue("lineWeight") as int;
-			var fillColor:uint = this.getStyleValue("lineColor") as uint;
+			var lineColor:uint = this.getStyleValue("lineColor") != null ? this.getStyleValue("lineColor") as uint : this.getStyleValue("color") as uint;
 			var lineAlpha:Number = this.getStyleValue("lineAlpha") as Number;
-			this.graphics.lineStyle(lineWeight, fillColor, lineAlpha);
+			this.graphics.lineStyle(lineWeight, lineColor, lineAlpha);
 		}
 		
 		/**

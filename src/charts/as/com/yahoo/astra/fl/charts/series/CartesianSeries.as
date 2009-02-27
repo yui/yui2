@@ -96,10 +96,12 @@ package com.yahoo.astra.fl.charts.series
 		 */
 		public function createLegendItemData():LegendItemData
 		{
+			var fillColor:uint = this.getStyleValue("fillColor") != null ? this.getStyleValue("fillColor") as uint : this.getStyleValue("color") as uint;
+			var borderColor:uint = this.getStyleValue("borderColor") != null ? this.getStyleValue("borderColor") as uint : this.getStyleValue("color") as uint;
 			return new LegendItemData(this.displayName, this.getStyleValue("markerSkin"), 
-										this.getStyleValue("fillColor") as uint, 
+										fillColor, 
 										this.getStyleValue("fillAlpha") as Number, 
-										this.getStyleValue("borderColor") as uint, 
+										borderColor, 
 										this.getStyleValue("borderAlpha") as Number);
 		}
 		

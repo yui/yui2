@@ -103,6 +103,9 @@ var myConfig = {
 };
 
 myEditor = new YAHOO.widget.Editor('editor', myConfig);
+//myEditor.on('afterRender', function() {
+//    myEditor.toolbar.collapse();
+//});
 /*
 myEditor._keyMap.CLOSE_WINDOW = {
     key: 69,

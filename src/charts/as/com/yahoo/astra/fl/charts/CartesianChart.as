@@ -1338,10 +1338,7 @@ package com.yahoo.astra.fl.charts
 				values.unshift(item[valueField]);
 			}
 			
-			if(values.length > 0)
-			{
-				stackValue = stackAxis.stack.apply(stackAxis, values);
-			}
+			if(values.length > 0) stackValue = stackAxis.stack.apply(stackAxis, values);
 			return stackValue;
 		}
 		
@@ -1400,7 +1397,6 @@ package com.yahoo.astra.fl.charts
 
 			if(sizeInvalid || dataInvalid || stylesInvalid || axesInvalid)
 			{
-				
 				this.drawAxes();
 					
 				//the series display objects are dependant on the axes, so all series redraws must
@@ -1418,7 +1414,6 @@ package com.yahoo.astra.fl.charts
 		override protected function refreshSeries():void
 		{
 			super.refreshSeries();
-		
 			var numericAxis:IAxis = this.horizontalAxis;
 			var otherAxis:IAxis = this.verticalAxis;
 			if(this.verticalAxis is NumericAxis)
@@ -1428,7 +1423,6 @@ package com.yahoo.astra.fl.charts
 			}
 						
 			var seriesCount:int = this.series.length;
-			
 			for(var i:int = 0; i < seriesCount; i++)
 			{
 				var currentSeries:ISeries = this.series[i] as ISeries;
@@ -1436,14 +1430,10 @@ package com.yahoo.astra.fl.charts
 				var numericField:String = this.axisAndSeriesToField(numericAxis, currentSeries);
 				var otherField:String = this.axisAndSeriesToField(otherAxis, currentSeries);
 				
-				var dict:Dictionary = new Dictionary();
 				var seriesLength:int = currentSeries.length;
-				
-				var newDataProvider:Array = [];
 				for(var j:int = 0; j < seriesLength; j++)
-				{	
+				{
 					var item:Object = currentSeries.dataProvider[j];
-
 					if(item is Number || !isNaN(Number(item)))
 					{
 						//if we only have a number, then it is safe to convert
@@ -1461,28 +1451,60 @@ package com.yahoo.astra.fl.charts
 						else point[otherField] = j;
 						currentSeries.dataProvider[j] = point;
 					}
-					
-					//Combine items that share the same "other field" property
-					if(!dict.hasOwnProperty(item[otherField]))
+				}                 	
+				combineDuplicateCategoryNames(otherAxis);
+			}						
+		}
+			
+		/**
+		 * @private
+		 *
+		 * Combines duplicate category labels
+		 */
+		private function combineDuplicateCategoryNames(categoryAxis:IAxis):void
+		{
+			if(!(categoryAxis is CategoryAxis)) return;
+			var seriesCount:int = this.series.length;
+			for(var i:int = 0; i < seriesCount; i++)
+			{
+				var currentSeries:ISeries = this.series[i] as ISeries;
+				var categoryField:String = this.axisAndSeriesToField(categoryAxis, currentSeries);
+				var dict:Dictionary = new Dictionary();
+				var seriesLength:int = currentSeries.length;
+				var newDataProvider:Array = [];
+				for(var j:int = 0; j < seriesLength; j++)
+				{	
+					var item:Object = currentSeries.dataProvider[j];
+
+					if(item.hasOwnProperty(categoryField)) 
 					{
-						dict[item[otherField]] = item;
-						newDataProvider.push(dict[item[otherField]]);
+						//Combine items that share the same "categoryField" property
+						if(!dict.hasOwnProperty(item[categoryField]))
+						{
+							dict[item[categoryField]] = item;
+							newDataProvider.push(dict[item[categoryField]]);
+						}
+						else
+						{
+							for(var z:String in item)
+							{
+								if(z != categoryField && item[z] != null)
+								{
+									dict[item[categoryField]][z] = item[z];
+								}
+							}
+						}
 					}
 					else
 					{
-						for(var z:String in item)
-						{
-							if(z != otherField && item[z] != null)
-							{
-								dict[item[otherField]][z] = item[z];
-							}
-						}
-					}					
-				}                   
-				currentSeries.dataProvider = newDataProvider.concat();
-			}						
+						dict[item] = item;
+						newDataProvider.push(dict[item]);
+					}
+				}	
+				currentSeries.dataProvider = newDataProvider.concat();				
+			}
 		}
-				
+		
 		/**
 		 * @private
 		 * Creates the default axes. Without user intervention, the x-axis is a category
@@ -1674,7 +1696,6 @@ package com.yahoo.astra.fl.charts
 			}
 			var horizontalAxisRenderer:UIComponent = UIComponent(this.horizontalAxisRenderer);
 			
-			horizontalAxisRenderer.move(contentPadding, contentPadding);
 			horizontalAxisRenderer.setSize(axisWidth, axisHeight);
 			this.setChildIndex(horizontalAxisRenderer, this.numChildren - 1);
 						
@@ -1684,7 +1705,7 @@ package com.yahoo.astra.fl.charts
 				CategoryAxis(this.verticalAxis).categoryNames = this._explicitCategoryNames;
 			}
 			var verticalAxisRenderer:UIComponent = UIComponent(this.verticalAxisRenderer);
-			verticalAxisRenderer.move(contentPadding, contentPadding);
+			
 			verticalAxisRenderer.setSize(axisWidth, axisHeight);
 			this.setChildIndex(verticalAxisRenderer, this.numChildren - 1);
 			
@@ -1795,20 +1816,20 @@ package com.yahoo.astra.fl.charts
 			var horizontalAxisLabelDistance:Number = this.getStyleValue("horizontalAxisLabelDistance") as Number;
 			var verticalAxisLabelDistance:Number = this.getStyleValue("verticalAxisLabelDistance") as Number
 			
-			this.contentBounds.x = Math.ceil(contentPadding + Math.max((this.verticalAxis.maxLabelWidth + verticalTitleWidth + this.verticalAxisRenderer.outerTickOffset + verticalAxisTitleDistance + verticalAxisLabelDistance), contentBoundsLeftLabelOffset));
-			this.contentBounds.y = Math.ceil(contentPadding + contentBoundsTopLabelOffset);
+			this.contentBounds.x = Math.ceil(Math.max((this.verticalAxis.maxLabelWidth + verticalTitleWidth + this.verticalAxisRenderer.outerTickOffset + verticalAxisTitleDistance + verticalAxisLabelDistance), contentBoundsLeftLabelOffset));
+			this.contentBounds.y = Math.ceil(contentBoundsTopLabelOffset);
 			
 			this.contentBounds.width = Math.floor(this.width - (this.contentBounds.x + (contentBoundsRightLabelOffset)));
 			this.contentBounds.height = Math.floor(this.height - (this.contentBounds.y + Math.max((this.horizontalAxis.maxLabelHeight + horizontalTitleHeight + this.horizontalAxisRenderer.outerTickOffset + horizontalAxisTitleDistance + horizontalAxisLabelDistance), contentBoundsBottomLabelOffset)));
-			this.horizontalAxisRenderer.contentBounds.width = this.contentBounds.width;
-			this.horizontalAxisRenderer.contentBounds.height = this.contentBounds.height;	
-			this.verticalAxisRenderer.contentBounds.height = this.contentBounds.height;			
-			this.verticalAxisRenderer.contentBounds.width = this.contentBounds.width;
+			this.horizontalAxisRenderer.contentBounds.width = this.contentBounds.width - (contentPadding * 2);
+			this.horizontalAxisRenderer.contentBounds.height = this.contentBounds.height - (contentPadding * 2);	
+			this.verticalAxisRenderer.contentBounds.height = this.contentBounds.height - (contentPadding * 2);			
+			this.verticalAxisRenderer.contentBounds.width = this.contentBounds.width - (contentPadding * 2);
 			
-			this.horizontalAxisRenderer.contentBounds.x = this.contentBounds.x;
-			this.horizontalAxisRenderer.contentBounds.y = this.contentBounds.y;	
-			this.verticalAxisRenderer.contentBounds.x = this.contentBounds.x;			
-			this.verticalAxisRenderer.contentBounds.y = this.contentBounds.y;			
+			this.horizontalAxisRenderer.contentBounds.x = contentPadding + this.contentBounds.x;
+			this.horizontalAxisRenderer.contentBounds.y = contentPadding + this.contentBounds.y;	
+			this.verticalAxisRenderer.contentBounds.x = contentPadding + this.contentBounds.x;			
+			this.verticalAxisRenderer.contentBounds.y = contentPadding + this.contentBounds.y;			
 		}
 
 		/**
