@@ -660,7 +660,7 @@ YAHOO.widget.Node.prototype = {
      */
     expand: function(lazySource) {
         // Only expand if currently collapsed.
-        if (this.expanded && !lazySource) { 
+        if (this.isLoading || (this.expanded && !lazySource)) { 
             return; 
         }
 
