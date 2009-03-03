@@ -405,6 +405,10 @@ TV.prototype = {
         this.logger = (LW) ? new LW(this.toString()) : YAHOO;
 
         this.logger.log("tree init: " + this.id);
+		
+		if (this._initEditor) {
+			this._initEditor();
+		}
         
         // YAHOO.util.Event.onContentReady(this.id, this.handleAvailable, this, true);
         // YAHOO.util.Event.on(this.id, "click", this.handleClick, this, true);

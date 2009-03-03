@@ -81,6 +81,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
             cal = editorData.inputObject;
         }
 
+		editorData.oldValue = this.label;
         cal.cfg.setProperty("selected",this.label, false); 
 
         var delim = cal.cfg.getProperty('DATE_FIELD_DELIMITER');
@@ -91,18 +92,17 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         cal.render();
         cal.oDomContainer.focus();
     },
-    /**
-    * Saves the date entered in the editor into the DateNode label property and displays it.
-    * Overrides Node.saveEditorValue
-    * @method saveEditorValue
+     /**
+    * Returns the value from the input element.
+    * Overrides Node.getEditorValue.
+    * @method getEditorValue
      * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     * @return {string} date entered
      */
-    saveEditorValue: function (editorData) {
-        var node = editorData.node, 
-            validator = node.tree.validator,
-            value;
+
+	getEditorValue: function (editorData) {
         if (Lang.isUndefined(Calendar)) {
-            value = editorData.inputElement.value;
+            return editorData.inputElement.value;
         } else {
             var cal = editorData.inputObject,
                 date = cal.getSelectedDates()[0],
@@ -111,16 +111,22 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
             dd[cal.cfg.getProperty('MDY_DAY_POSITION') -1] = date.getDate();
             dd[cal.cfg.getProperty('MDY_MONTH_POSITION') -1] = date.getMonth() + 1;
             dd[cal.cfg.getProperty('MDY_YEAR_POSITION') -1] = date.getFullYear();
-            value = dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
+            return dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
         }
-        if (Lang.isFunction(validator)) {
-            value = validator(value,node.label,node);
-            if (Lang.isUndefined(value)) { return false; }
-        }
+	},
 
-        node.label = value;
-        node.getLabelEl().innerHTML = value;
-    },
+	/**
+    * Finally displays the newly entered date in the tree.
+    * Overrides Node.displayEditedValue.
+    * @method displayEditedValue
+     *  @param value {string} date to be displayed and stored in the node
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     */
+	displayEditedValue: function (value,editorData) {
+		var node = editorData.node;
+		node.label = value;
+		node.getLabelEl().innerHTML = value;
+	},
   /**
      * Returns an object which could be used to build a tree out of this node and its children.
      * It can be passed to the tree constructor to reproduce this node as a tree.
