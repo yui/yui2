@@ -1516,8 +1516,10 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelperEls = function() {
         elIFrame.style.position = "absolute";
         elIFrame.style.width = 0;
         elIFrame.style.height = 0;
-        elIFrame.tabIndex = -1;
         elIFrame.style.padding = 0;
+        elIFrame.tabIndex = -1;
+        elIFrame.role = "presentation";
+        elIFrame.title = "Presentational iframe shim";
         this._elIFrame = this._elContainer.appendChild(elIFrame);
     }
 };
