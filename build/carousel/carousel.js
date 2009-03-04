@@ -2391,12 +2391,14 @@
             var carousel   = this,
                 isCircular = carousel.get("isCircular"),
                 numItems   = carousel.get("numItems"),
+                numVisible = carousel.get("numVisible"),
                 sentinel   = numItems - 1;
 
             if (index < 0) {
-                index = isCircular ? numItems + index : 0;
+                index = isCircular ?
+                        Math.ceil(numItems/numVisible)*numVisible + index : 0;
             } else if (index > sentinel) {
-                index = isCircular ? index - numItems : sentinel;
+                index = isCircular ? 0 : sentinel;
             }
 
             return index;

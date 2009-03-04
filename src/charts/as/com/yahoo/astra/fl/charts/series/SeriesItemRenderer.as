@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.fl.charts.series
+package com.yahoo.astra.fl.charts.series
 {
 	import com.yahoo.astra.fl.charts.skins.IProgrammaticSkin;
 	import com.yahoo.astra.fl.utils.UIComponentUtil;
@@ -160,10 +160,13 @@
 				
 				if(this.skin is IProgrammaticSkin)
 				{
-					var fillColor:uint = this.getStyleValue("fillColor") as uint;
+					var color:uint = this.getStyleValue("color") as uint;
+					var fillColor:uint = this.getStyleValue("fillColor") != null ? this.getStyleValue("fillColor") as uint : color;
 					(this.skin as IProgrammaticSkin).fillColor = fillColor;
-					var borderColor:uint = this.getStyleValue("borderColor") as uint;
+					
+					var borderColor:uint = this.getStyleValue("borderColor") != null ? this.getStyleValue("borderColor") as uint : color;
 					(this.skin as IProgrammaticSkin).borderColor = borderColor;
+					
 					var borderAlpha:Number = this.getStyleValue("borderAlpha") as Number;
 					(this.skin as IProgrammaticSkin).borderAlpha = borderAlpha;
 					var fillAlpha:Number = this.getStyleValue("fillAlpha") as Number;

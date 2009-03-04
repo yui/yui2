@@ -27,10 +27,12 @@ The source tree for YUI includes the following directories:
      demonstration code created by library authors.
 * src: This directory contains the source code (JavaScript, CSS, image
      assets, ActionScript files) for the library. src also contains (or
-     will contain) all module-specific documentation, tests and examples.
-     All modifications to the library and its documentation should take 
-     place in this directory.  (You will find in the src directory files
-     like build.xml that are used in the build process.  We have not
+     will contain) all module documentation, tests and examples. The 
+     src/common directory contains documentation, tests and examples 
+     that are not for a specific YUI component. All modifications to 
+     the library and its documentation should take place in this 
+     directory.  (You will find in the src directory files like 
+     build.xml that are used in the build process.  We have not
      yet released the build tool that builds components or the build
      tool that builds the library generally; we are working on
      documenting those tools for public use and they will appear on

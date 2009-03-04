@@ -523,7 +523,7 @@ package com.yahoo.astra.fl.charts.axes
 			var labelSpacing:Number = this.labelSpacing; 
 			approxLabelDistance += (labelSpacing*2);
 			
-			var difference:Number = Math.round(Math.abs(this.minimum -  this.maximum));
+			var difference:Number = this.maximum - this.minimum;
 			var tempMajorUnit:Number = 0; 
 
 			var maxLabels:Number = Math.floor((this.renderer.length - labelSpacing)/approxLabelDistance);
@@ -537,9 +537,7 @@ package com.yahoo.astra.fl.charts.axes
 				maxLabels = Math.min(maxLabels, this.numLabels);
 			}
 
-			tempMajorUnit = difference/maxLabels;
-			if(tempMajorUnit > 1) tempMajorUnit = Math.ceil(tempMajorUnit);
-			tempMajorUnit = Math.min(tempMajorUnit, Math.round(difference/2));			
+			tempMajorUnit = difference/maxLabels;			
 			
 			if(this.roundMajorUnit)
 			{
@@ -602,9 +600,9 @@ package com.yahoo.astra.fl.charts.axes
 			var data:Array = [];
 			var displayedMaximum:Boolean = false;
 			var value:Number = this.minimum;
-			while(value <= this.maximum)
+			while(value < this.maximum || NumberUtil.fuzzyEquals(value, this.maximum))
 			{
-				value = NumberUtil.roundToPrecision(value, 10);
+				if(value % 1 != 0) value = NumberUtil.roundToPrecision(value, 10);
 				
 				//because Flash UIComponents round the position to the nearest pixel, we need to do the same.
 				var position:Number = Math.round(this.valueToLocal(value));

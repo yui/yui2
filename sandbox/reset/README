@@ -7,36 +7,12 @@ Version 2.7.0
   * Added new test for optgroup and option. 
   * Added new test for nested em and strong.
   * Added new test for nested blockquote.
-  * Added new test for radio and checkbox. Added 1px padding so that Opera will
-    render checkbox and radio using its correct chrome. Bug #1985570. 
-  * Added BUTTON to Reset and Base. Bug #2359418
-  * For BUTTON and various INPUT types, added padding:1px; via Base so that 
-    Opera (9.63) will render using its standard form controls.
-  * Conformed with new CSS styleguide rules (draft):
+  * Added new test for radio and checkbox.
+  * Added button to Reset and Base. Bug #2359418
+  * For button and various input types, added padding:1px; via Base so that 
+    Opera (9.63) will render using its standard form controls. Bug #1985570. 
   * Known issue: Can not reset the font-style and font-weight properties for 
-    the option and optiongroup elements on IE8 (as of build 18372)
-#a-style {
-	display: block;
-	float: left;
-	clear: both;
-}
-
-#another-style,
-#another-selector,
-#another-selector  {
-	width: 20px;
-	height: 10px;
-}
-
-  * YUIDoc Comment Sections (draft):
-	
-		-@group
-		-@branch
-		-@filter
-		-@purpose
-
-
-
+    the option and optgroup elements on IE8 (as of build 18372, RC1)
 
 Version 2.6.0 
 

@@ -27,10 +27,10 @@
 
 </script>
 
-<script type="text/javascript" src="../../../build/yuiloader/yuiloader-beta.js"></script>
-<script type="text/javascript" src="../../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../../build/event/event.js"></script>
-<script type="text/javascript" src="../../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../build/yuiloader/yuiloader.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
 
 <style id="styleoverrides">
 
@@ -75,9 +75,9 @@ YAHOO.example.tabviewinit = function( ){
 
     var loader = new YAHOO.util.YUILoader();
     loader.insert({
-        // require: ["tabview", "treeview"],
+        require: ["tabview", "treeview"],
         // require: ["uploader"],
-        require: ["datatable", "dragdrop"],
+        //require: ["datatable", "dragdrop"],
         //require: ["charts", "simpleeditor"],
         base: '../../build/',
         insertBefore: 'styleoverrides',
@@ -105,7 +105,7 @@ YAHOO.example.tabviewinit = function( ){
         },
 
         //ignore: "skin-sam-treeview",
-        //ignore: "skin-sam-tabview",
+        ignore: ["skin-sam-tabview"],
 
         filter: 'raw'
      }

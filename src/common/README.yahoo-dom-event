@@ -6,9 +6,9 @@ This document is not updated with each release.  Changes to
 the yahoo-dom-event.js source are noted in the README
 file for each component that comprises this aggregate:
 
-yahoo/README
-dom/README
-event/README
+README.yahoo
+README.dom
+README.event
 
 ************
 

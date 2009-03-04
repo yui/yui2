@@ -2716,7 +2716,7 @@
                     }
                     else if (bMenuSrcElementIsSelect) {
 					
-						oForm.appendChild(oMenuSrcElement);
+						oMenuField = oForm.appendChild(oMenuSrcElement);
                     
                     }
         
@@ -2764,7 +2764,7 @@
                 if (Dom.inDocument(p_oElement)) {
         
                     p_oElement.parentNode.removeChild(p_oElement);
-                
+
                 }
                 
             }
@@ -3431,7 +3431,7 @@
             * @attribute selectedMenuItem
             * @description Object representing the item in the button's menu 
             * that is currently selected.
-            * @type Number
+            * @type YAHOO.widget.MenuItem
             * @default null
             */
             this.setAttributeConfig("selectedMenuItem", {

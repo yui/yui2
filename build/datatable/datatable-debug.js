@@ -291,6 +291,25 @@ YAHOO.widget.ColumnSet.prototype = {
         // Tracks current node list depth being tracked
         var nodeDepth = -1;
 
+        // Internal function counts terminal child nodes for a tree node
+        var countTerminalChildNodes = function(ancestor) {
+            var terminalChildNodes = 0,
+                descendants = ancestor.children;
+                
+            // Drill down each branch and count terminal nodes
+            for(var k=0; k<descendants.length; k++) {
+                // Keep drilling down
+                if(YAHOO.lang.isArray(descendants[k].children)) {
+                    countTerminalChildNodes(descendants[k]);
+                }
+                // Reached branch terminus
+                else {
+                    terminalChildNodes++;
+                }
+            }
+            return terminalChildNodes;
+        };
+
         // Internal recursive function to define Column instances
         var parseColumns = function(nodeList, parent) {
             // One level down
@@ -325,22 +344,7 @@ YAHOO.widget.ColumnSet.prototype = {
                     oColumn.children = currentNode.children;
 
                     // Determine COLSPAN value for this Column
-                    var terminalChildNodes = 0;
-                    var countTerminalChildNodes = function(ancestor) {
-                        var descendants = ancestor.children;
-                        // Drill down each branch and count terminal nodes
-                        for(var k=0; k<descendants.length; k++) {
-                            // Keep drilling down
-                            if(YAHOO.lang.isArray(descendants[k].children)) {
-                                countTerminalChildNodes(descendants[k]);
-                            }
-                            // Reached branch terminus
-                            else {
-                                terminalChildNodes++;
-                            }
-                        }
-                    };
-                    countTerminalChildNodes(currentNode);
+                    var terminalChildNodes = countTerminalChildNodes(currentNode);
                     oColumn._nColspan = terminalChildNodes;
 
                     // Cascade certain properties to children if not defined on their own
@@ -2579,7 +2583,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Initialize DOM elements
     var okDom = this._initDomElements(elContainer);
     if(!okDom) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
+        YAHOO.log("Could not instantiate DataTable due to an invalid DOM element", "error", this.toString());
         return;
     }
             
@@ -4564,7 +4568,6 @@ _initDomElements : function(elContainer) {
     this._initTbodyEl(this._elTable);
 
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
         return false;
     }
     else {
@@ -5044,7 +5047,10 @@ _destroyResizeableColumns : function() {
 _initResizeableColumns : function() {
     this._destroyResizeableColumns();
     if(util.DD) {
-        var oColumn, elTh, elThLiner, elThResizerLiner, elThResizer, elResizerProxy, cancelClick;
+        var oColumn, elTh, elThLiner, elThResizerLiner, elThResizer, elResizerProxy,
+            cancelClick = function(e) {
+                    Ev.stopPropagation(e);
+            };
         for(var i=0, len=this._oColumnSet.keys.length; i<len; i++) {
             oColumn = this._oColumnSet.keys[i];
             if(oColumn.resizeable) {
@@ -5070,10 +5076,7 @@ _initResizeableColumns : function() {
                 elResizerProxy = DT._initColumnResizerProxyEl();
                 oColumn._ddResizer = new YAHOO.util.ColumnResizer(
                         this, oColumn, elTh, elThResizer, elResizerProxy);
-                cancelClick = function(e) {
-                    Ev.stopPropagation(e);
-                };
-                Ev.addListener(elThResizer,"click",cancelClick);
+                Ev.addListener(elThResizer, "click", cancelClick);
             }
         }
     }
@@ -15565,6 +15568,7 @@ _oDataTable : null,
  * @property _oColumn
  * @type YAHOO.widget.Column
  * @default null
+ * @private 
  */
 _oColumn : null,
 

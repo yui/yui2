@@ -1,6 +1,5 @@
 package com.yahoo.astra.fl.charts.axes
 {	
-	import com.yahoo.astra.utils.DynamicRegistration;
 	import com.yahoo.astra.utils.GeomUtil;
 	import com.yahoo.astra.utils.NumberUtil;
 	import com.yahoo.astra.display.BitmapText;
@@ -460,6 +459,7 @@ package com.yahoo.astra.fl.charts.axes
 			this.clearCache();
 			
 			this.updateTitle();
+			this.draw();
 		}
 		
 	//--------------------------------------

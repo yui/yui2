@@ -6,9 +6,9 @@ This document is not updated with each release.  Changes to
 the reset-fonts-grids.css source are noted in the README
 file for each component that comprises this aggregate:
 
-reset/README
-fonts/README
-grids/README
+README.reset
+README.fonts
+README.grids
 
 ************
 

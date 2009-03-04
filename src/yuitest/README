@@ -32,3 +32,7 @@ YUI Library - YUITest - Release Notes
   * Added failsafe mechanism for wait() - will automatically fail a test after 10 seconds if resume() isn't called.
   * Augmented wait() to allow a single argument, a timeout after which point the test should fail.
   * Fixed small bug in TestManager.
+
+2.7.0
+
+  * No changes

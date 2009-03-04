@@ -43,6 +43,7 @@
         <!-- Carousel Test Cases -->
         <script type="text/javascript" src="markupTests.js"></script>
         <script type="text/javascript" src="scriptTests.js"></script>
+        <script type="text/javascript" src="protectedMethodTests.js"></script>
         <script type="text/javascript">
             (function () {
                 YAHOO.util.Event.onDOMReady(function () {
@@ -51,6 +52,7 @@
                     
                     YAHOO.tool.TestRunner.add(tests.markupTests);
                     YAHOO.tool.TestRunner.add(tests.scriptTests);
+                    YAHOO.tool.TestRunner.add(tests.protectedMethodTests);
                     YAHOO.tool.TestRunner.run();
                 });
             })();
@@ -73,5 +75,6 @@
             </ul>
         </div>
         <div id="container4"></div>
+        <div id="container5"></div>
     </body>
 </html>

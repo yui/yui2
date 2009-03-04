@@ -1,5 +1,8 @@
 Drag and Drop Release Notes
 
+2.7.0
+    * No Changes
+
 2.6.0
     * Fixed issue with loop when mouseup occured outside of an iframe in Internet Explorer
     * Added useShim flag to DragDropMgr to place a shim over the page during a drag operation.
