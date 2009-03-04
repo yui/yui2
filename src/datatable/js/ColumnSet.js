@@ -128,6 +128,25 @@ YAHOO.widget.ColumnSet.prototype = {
         // Tracks current node list depth being tracked
         var nodeDepth = -1;
 
+        // Internal function counts terminal child nodes for a tree node
+        var countTerminalChildNodes = function(ancestor) {
+            var terminalChildNodes = 0,
+                descendants = ancestor.children;
+                
+            // Drill down each branch and count terminal nodes
+            for(var k=0; k<descendants.length; k++) {
+                // Keep drilling down
+                if(YAHOO.lang.isArray(descendants[k].children)) {
+                    countTerminalChildNodes(descendants[k]);
+                }
+                // Reached branch terminus
+                else {
+                    terminalChildNodes++;
+                }
+            }
+            return terminalChildNodes;
+        };
+
         // Internal recursive function to define Column instances
         var parseColumns = function(nodeList, parent) {
             // One level down
@@ -162,22 +181,7 @@ YAHOO.widget.ColumnSet.prototype = {
                     oColumn.children = currentNode.children;
 
                     // Determine COLSPAN value for this Column
-                    var terminalChildNodes = 0;
-                    var countTerminalChildNodes = function(ancestor) {
-                        var descendants = ancestor.children;
-                        // Drill down each branch and count terminal nodes
-                        for(var k=0; k<descendants.length; k++) {
-                            // Keep drilling down
-                            if(YAHOO.lang.isArray(descendants[k].children)) {
-                                countTerminalChildNodes(descendants[k]);
-                            }
-                            // Reached branch terminus
-                            else {
-                                terminalChildNodes++;
-                            }
-                        }
-                    };
-                    countTerminalChildNodes(currentNode);
+                    var terminalChildNodes = countTerminalChildNodes(currentNode);
                     oColumn._nColspan = terminalChildNodes;
 
                     // Cascade certain properties to children if not defined on their own

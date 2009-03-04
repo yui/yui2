@@ -868,9 +868,11 @@ makeConnection : function(oRequest, oCallback, oCaller) {
 handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
     this.fireEvent("responseEvent", {tId:tId, request:oRequest, response:oRawResponse,
             callback:oCallback, caller:oCaller});
-    var xhr = (this.dataType == DS.TYPE_XHR) ? true : false;
-    var oParsedResponse = null;
-    var oFullResponse = oRawResponse;
+    
+    var xhr = (this.dataType == DS.TYPE_XHR) ? true : false,
+        oParsedResponse = null,
+        oFullResponse = oRawResponse,
+        parseArgs;
     
     // Try to sniff data type if it has not been defined
     if(this.responseType === DS.TYPE_UNKNOWN) {
@@ -915,7 +917,7 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
             try {
                 // Convert to JS array if it's a string
                 if(lang.isString(oFullResponse)) {
-                    var parseArgs = [oFullResponse].concat(this.parseJSONArgs);
+                    parseArgs = [oFullResponse].concat(this.parseJSONArgs);
                     // Check for YUI JSON Util
                     if(lang.JSON) {
                         oFullResponse = lang.JSON.parse.apply(lang.JSON,parseArgs);
@@ -963,7 +965,7 @@ Math.max(oFullResponse.lastIndexOf("]"),oFullResponse.lastIndexOf("}"));
             try {
                 // Convert to JSON object if it's a string
                 if(lang.isString(oFullResponse)) {
-                    var parseArgs = [oFullResponse].concat(this.parseJSONArgs);
+                    parseArgs = [oFullResponse].concat(this.parseJSONArgs);
                     // Check for YUI JSON Util
                     if(lang.JSON) {
                         oFullResponse = lang.JSON.parse.apply(lang.JSON,parseArgs);
