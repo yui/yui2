@@ -2546,10 +2546,7 @@ _destroyResizeableColumns : function() {
 _initResizeableColumns : function() {
     this._destroyResizeableColumns();
     if(util.DD) {
-        var oColumn, elTh, elThLiner, elThResizerLiner, elThResizer, elResizerProxy,
-            cancelClick = function(e) {
-                    Ev.stopPropagation(e);
-            };
+        var oColumn, elTh, elThLiner, elThResizerLiner, elThResizer, elResizerProxy, cancelClick;
         for(var i=0, len=this._oColumnSet.keys.length; i<len; i++) {
             oColumn = this._oColumnSet.keys[i];
             if(oColumn.resizeable) {
@@ -2575,7 +2572,10 @@ _initResizeableColumns : function() {
                 elResizerProxy = DT._initColumnResizerProxyEl();
                 oColumn._ddResizer = new YAHOO.util.ColumnResizer(
                         this, oColumn, elTh, elThResizer, elResizerProxy);
-                Ev.addListener(elThResizer, "click", cancelClick);
+                cancelClick = function(e) {
+                    Ev.stopPropagation(e);
+                };
+                Ev.addListener(elThResizer,"click",cancelClick);
             }
         }
     }
