@@ -176,33 +176,33 @@ function StyleSheet(seed, name) {
     // IE stores the rules collection under the "rules" property
     _rules = sheet && ('cssRules' in sheet) ? 'cssRules' : 'rules';
 
-    // 3. Initialize the cssRules map from the node
-    // xdomain link nodes forbid access to the cssRules collection, so this
-    // will throw an error.
-    // TODO: research alternate stylesheet, @media
-        for (i = sheet[_rules].length - 1; i >= 0; --i) {
-            r   = sheet[_rules][i];
-            sel = r.selectorText;
-
-            if (cssRules[sel]) {
-                cssRules[sel].style.cssText += ';' + r.style.cssText;
-                _deleteRule(i);
-            } else {
-                cssRules[sel] = r;
-            }
-        }
-
-    // 4. The method to remove a rule from the stylesheet
+    // 3. The method to remove a rule from the stylesheet
     // IE supports removeRule
     _deleteRule = ('deleteRule' in sheet) ?
         function (i) { sheet.deleteRule(i); } :
         function (i) { sheet.removeRule(i); };
 
-    // 5. The method to add a new rule to the stylesheet
+    // 4. The method to add a new rule to the stylesheet
     // IE supports addRule with different signature
     _insertRule = ('insertRule' in sheet) ?
         function (sel,css,i) { sheet.insertRule(sel+' {'+css+'}',i); } :
         function (sel,css,i) { sheet.addRule(sel,css,i); };
+
+    // 5. Initialize the cssRules map from the node
+    // xdomain link nodes forbid access to the cssRules collection, so this
+    // will throw an error.
+    // TODO: research alternate stylesheet, @media
+    for (i = sheet[_rules].length - 1; i >= 0; --i) {
+        r   = sheet[_rules][i];
+        sel = r.selectorText;
+
+        if (cssRules[sel]) {
+            cssRules[sel].style.cssText += ';' + r.style.cssText;
+            _deleteRule(i);
+        } else {
+            cssRules[sel] = r;
+        }
+    }
 
     // Cache the instance by the generated Id
     node.yuiSSID = 'yui-stylesheet-' + (ssId++);
