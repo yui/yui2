@@ -6738,8 +6738,8 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @protected
 	 */
 	_update : function(cal) {
-		cal.setYear(this.getYear());
-		cal.setMonth(this.getMonth());
+		var date = YAHOO.widget.DateMath.getDate(this.getYear(), this.getMonth(), 1);
+		cal.cfg.setProperty("pagedate", date);
 		cal.render();
 	},
 
