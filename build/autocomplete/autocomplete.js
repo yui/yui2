@@ -498,6 +498,17 @@ YAHOO.widget.AutoComplete.prototype.resultTypeList = true;
  */
 YAHOO.widget.AutoComplete.prototype.queryQuestionMark = true;
 
+/**
+ * If true, before each time the container expands, the container element will be
+ * positioned to snap to the bottom-left corner of the input element. If
+ * autoSnapContainer is set to false, this positioning will not be done.  
+ *
+ * @property autoSnapContainer
+ * @type Boolean
+ * @default true
+ */
+YAHOO.widget.AutoComplete.prototype.autoSnapContainer = true;
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public methods
@@ -727,6 +738,18 @@ YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
     // when delimiters are enabled
     var newQuery = (this.delimChar) ? this._elTextbox.value + sQuery : sQuery;
     this._sendQuery(newQuery);
+};
+
+/**
+ * Snaps container to bottom-left corner of input element
+ *
+ * @method snapContainer
+ */
+YAHOO.widget.AutoComplete.prototype.snapContainer = function() {
+    var oTextbox = this._elTextbox,
+        pos = YAHOO.util.Dom.getXY(oTextbox);
+    pos[1] += YAHOO.util.Dom.get(oTextbox).offsetHeight + 2;
+    YAHOO.util.Dom.setXY(this._elContainer,pos);
 };
 
 /**
@@ -1493,8 +1516,10 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelperEls = function() {
         elIFrame.style.position = "absolute";
         elIFrame.style.width = 0;
         elIFrame.style.height = 0;
-        elIFrame.tabIndex = -1;
         elIFrame.style.padding = 0;
+        elIFrame.tabIndex = -1;
+        elIFrame.role = "presentation";
+        elIFrame.title = "Presentational iframe shim";
         this._elIFrame = this._elContainer.appendChild(elIFrame);
     }
 };
@@ -1835,8 +1860,10 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
                     this._toggleHighlight(this._elCurListItem,"from");
                 }
         
+                // Pre-expansion stuff
+                ok = this._doBeforeExpandContainer(this._elTextbox, this._elContainer, sQuery, allResults);
+                
                 // Expand the container
-                ok = this.doBeforeExpandContainer(this._elTextbox, this._elContainer, sQuery, allResults);
                 this._toggleContainer(ok);
             }
             else {
@@ -1851,6 +1878,26 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
         this.dataErrorEvent.fire(this, sQuery);
     }
         
+};
+
+/**
+ * Called before container expands, by default snaps container to the
+ * bottom-left corner of the input element, then calls public overrideable method.
+ *
+ * @method _doBeforeExpandContainer
+ * @param elTextbox {HTMLElement} The text input box.
+ * @param elContainer {HTMLElement} The container element.
+ * @param sQuery {String} The query string.
+ * @param aResults {Object[]}  An array of query results.
+ * @return {Boolean} Return true to continue expanding container, false to cancel the expand.
+ * @private 
+ */
+YAHOO.widget.AutoComplete.prototype._doBeforeExpandContainer = function(elTextbox, elContainer, sQuery, aResults) {
+    if(this.autoSnapContainer) {
+        this.snapContainer();
+    }
+
+    return this.doBeforeExpandContainer(elTextbox, elContainer, sQuery, aResults);
 };
 
 /**

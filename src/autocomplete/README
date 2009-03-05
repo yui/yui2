@@ -1,5 +1,15 @@
 AutoComplete Release Notes
 
+*** version 2.NEXT ***
+
+* Added the property autoSnapContainer for better out-of-the-box support for inline
+elements, such as labels and submit buttons. By default, autoSnapContainer is
+true, but implementers can disable this feature if they do not use inline
+elements and they want to eliminate the overhead of positioning the container
+element before each time it expands.
+
+
+
 *** version 2.7.0 ***
 
 * Better support for dealing with Arrays, including pure Arrays sent by remote

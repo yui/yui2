@@ -88,7 +88,7 @@ package com.yahoo.astra.fl.charts.series
 		private static var defaultStyles:Object = 
 		{	
 			markerSkin: Shape, //an empty display object
-			fillColor: 0x00b8bf,
+			fillColor: null,
 			markerSize: 10,
 			markerAlpha: 1.0,
 			fillAlpha: 1.0,
@@ -96,7 +96,7 @@ package com.yahoo.astra.fl.charts.series
 			animationEnabled: true,
 			animationEasingFunction: fl.transitions.easing.Strong.easeOut,
 			animationDuration: 500,
-			borderColor: 0x00b8bf,
+			borderColor: null,
 			color: 0x00b8bf
 		};
 		
