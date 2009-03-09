@@ -5148,7 +5148,7 @@ initDefaultConfig: function () {
     * @description Array of context arguments for context-sensitive positioning.  
     * The format is: [id or element, element corner, context corner]. 
     * For example, setting this property to ["img1", "tl", "bl"] would 
-    * align the Mnu's top left corner to the context element's 
+    * align the Menu's top left corner to the context element's 
     * bottom left corner.  This property is only applied when the "position" 
     * configuration property is set to dynamic.
     * @type Array
@@ -5454,7 +5454,7 @@ initDefaultConfig: function () {
     /**
     * @config maxheight
     * @description Number defining the maximum height (in pixels) for a menu's 
-    * body element (<code>&#60;div class="bd"&#60;</code>).  Once a menu's body 
+    * body element (<code>&#60;div class="bd"&#62;</code>).  Once a menu's body 
     * exceeds this height, the contents of the body are scrolled to maintain 
     * this value.  This value cannot be set lower than the value of the 
     * "minscrollheight" configuration property.
