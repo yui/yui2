@@ -22,6 +22,7 @@ td.ygtvcell {
 a.ygtvspacer {
 	text-decoration:none;
 	outline-style:none;
+	display:block;
 }
 
 

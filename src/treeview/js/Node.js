@@ -258,7 +258,7 @@ YAHOO.widget.Node.prototype = {
     _type: "Node",
 
     /*
-    spacerPath: "http://us.i1.yimg.com/us.yimg.com/i/space.gif",
+    spacerPath: "http://l.yimg.com/a/i/space.gif",
     expandedText: "Expanded",
     collapsedText: "Collapsed",
     loadingText: "Loading",
@@ -660,7 +660,7 @@ YAHOO.widget.Node.prototype = {
      */
     expand: function(lazySource) {
         // Only expand if currently collapsed.
-        if (this.expanded && !lazySource) { 
+        if (this.isLoading || (this.expanded && !lazySource)) { 
             return; 
         }
 
@@ -1098,7 +1098,7 @@ YAHOO.widget.Node.prototype = {
             sb[sb.length] = '<td id="' + this.getToggleElId();
             sb[sb.length] = '" class="ygtvcell ';
             sb[sb.length] = this.getStyle() ;
-            sb[sb.length] = '"><a href="#" class="ygtvspacer">&nbsp;</a></td>';
+            sb[sb.length] = '"><a href="#" class="ygtvspacer">&#160;</a></td>';
         }
 
         sb[sb.length] = '<td id="' + this.contentElId; 

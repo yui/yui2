@@ -137,10 +137,10 @@
             <span class="nx">val</span> <span class="o">=</span> <span class="o">(</span><span class="nx">val</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="nx">val</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
         <span class="o">}</span>
 
-        <span class="k">if</span> <span class="o">(</span><span class="s1">&#39;style&#39;</span> <span class="k">in</span> <span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">attr</span><span class="o">,</span> <span class="nx">val</span> <span class="o">+</span> <span class="nx">unit</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">attr</span> <span class="k">in</span> <span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">attr</span> <span class="k">in</span> <span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="o">!(</span><span class="s1">&#39;style&#39;</span> <span class="k">in</span> <span class="nx">el</span><span class="o">))</span> <span class="o">{</span>
             <span class="nx">el</span><span class="o">[</span><span class="nx">attr</span><span class="o">]</span> <span class="o">=</span> <span class="nx">val</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">attr</span><span class="o">,</span> <span class="nx">val</span> <span class="o">+</span> <span class="nx">unit</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>                        
     

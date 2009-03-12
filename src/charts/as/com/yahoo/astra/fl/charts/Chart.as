@@ -177,9 +177,9 @@ package com.yahoo.astra.fl.charts
 				0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
 				0xb8ebff, 0x60558f, 0x737d7e, 0xa64d9a, 0x8e9a9b, 0x803e77
 			],
-			seriesBorderColors:null,
-			seriesFillColors:null,
-			seriesLineColors:null,
+			seriesBorderColors:[],
+			seriesFillColors:[],
+			seriesLineColors:[],
 			seriesBorderAlphas:[1],
 			seriesFillAlphas:[1],
 			seriesLineAlphas:[1],
@@ -694,18 +694,7 @@ package com.yahoo.astra.fl.charts
 				var styleValues:Array = this.getStyleValue(styleMap[n]) as Array;
 				
 				//if it doesn't exist, ignore it and go with the defaults for this series
-				if(styleValues == null || styleValues.length == 0)
-				{
-					if(n == "borderColor" || n == "fillColor" || n == "lineColor")
-					{
-						styleValues = this.getStyleValue(styleMap["color"]) as Array;
-					}
-					else
-					{
-						continue;
-					}
-				}
-				
+				if(styleValues == null || styleValues.length == 0) continue;
 				childComponent.setStyle(n, styleValues[index % styleValues.length])
 			}
 		} 
