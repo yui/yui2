@@ -158,7 +158,7 @@
         <span class="k">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
 
         <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getter</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">val</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getter</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">owner</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">name</span><span class="o">);</span>
+            <span class="nx">val</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getter</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">owner</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">name</span><span class="o">,</span> <span class="nx">val</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="k">return</span> <span class="nx">val</span><span class="o">;</span>
