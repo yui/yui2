@@ -74,7 +74,7 @@
          * The class name applied to active tabs.
          * @property ACTIVE_CLASSNAME
          * @type String
-         * @default "selected"
+         * @default "yui-hidden"
          */
         HIDDEN_CLASSNAME: 'yui-hidden',
         
@@ -203,7 +203,7 @@
                             return false; // already set
                         }
                         if (!this.get('selected')) {
-                            Dom.addClass(value, 'yui-hidden');
+                            Dom.addClass(value, this.HIDDEN_CLASSNAME);
                         }
                         current.parentNode.replaceChild(value, current);
                         this.set(CONTENT, value.innerHTML);
