@@ -399,6 +399,10 @@ TV.prototype = {
         var LW = Widget.LogWriter;
 
 
+		
+		if (this._initEditor) {
+			this._initEditor();
+		}
         
         // YAHOO.util.Event.onContentReady(this.id, this.handleAvailable, this, true);
         // YAHOO.util.Event.on(this.id, "click", this.handleClick, this, true);
@@ -602,22 +606,24 @@ TV.prototype = {
             td = this._getEventTargetTdEl(ev),
             node,
             target,
-            toggle = function () {
-                node.toggle();
+            toggle = function (force) {
                 node.focus();
-                try {
-                    Event.preventDefault(ev);
-                } catch (e) {
-                    // @TODO
-                    // For some reason IE8 is providing an event object with
-                    // most of the fields missing, but only when clicking on
-                    // the node's label, and only when working with inline
-                    // editing.  This generates a "Member not found" error
-                    // in that browser.  Determine if this is a browser
-                    // bug, or a problem with this code.  Already checked to
-                    // see if the problem has to do with access the event
-                    // in the outer scope, and that isn't the problem.
-                    // Maybe the markup for inline editing is broken.
+				if (force || !node.href) {
+					node.toggle();
+					try {
+						Event.preventDefault(ev);
+					} catch (e) {
+	                    // @TODO
+	                    // For some reason IE8 is providing an event object with
+	                    // most of the fields missing, but only when clicking on
+	                    // the node's label, and only when working with inline
+	                    // editing.  This generates a "Member not found" error
+	                    // in that browser.  Determine if this is a browser
+	                    // bug, or a problem with this code.  Already checked to
+	                    // see if the problem has to do with access the event
+	                    // in the outer scope, and that isn't the problem.
+	                    // Maybe the markup for inline editing is broken.
+					}
                 }
             };
 
@@ -641,7 +647,7 @@ TV.prototype = {
         
         //  If it is a toggle cell, toggle
         if (/\bygtv[tl][mp]h?h?/.test(td.className)) {
-            toggle();
+            toggle(true);
         } else {
             if (this._dblClickTimer) {
                 window.clearTimeout(this._dblClickTimer);
@@ -1997,7 +2003,7 @@ YAHOO.widget.Node.prototype = {
      */
     expand: function(lazySource) {
         // Only expand if currently collapsed.
-        if (this.expanded && !lazySource) { 
+        if (this.isLoading || (this.expanded && !lazySource)) { 
             return; 
         }
 
@@ -3289,6 +3295,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
             cal = editorData.inputObject;
         }
 
+		editorData.oldValue = this.label;
         cal.cfg.setProperty("selected",this.label, false); 
 
         var delim = cal.cfg.getProperty('DATE_FIELD_DELIMITER');
@@ -3299,18 +3306,17 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         cal.render();
         cal.oDomContainer.focus();
     },
-    /**
-    * Saves the date entered in the editor into the DateNode label property and displays it.
-    * Overrides Node.saveEditorValue
-    * @method saveEditorValue
+     /**
+    * Returns the value from the input element.
+    * Overrides Node.getEditorValue.
+    * @method getEditorValue
      * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     * @return {string} date entered
      */
-    saveEditorValue: function (editorData) {
-        var node = editorData.node, 
-            validator = node.tree.validator,
-            value;
+
+	getEditorValue: function (editorData) {
         if (Lang.isUndefined(Calendar)) {
-            value = editorData.inputElement.value;
+            return editorData.inputElement.value;
         } else {
             var cal = editorData.inputObject,
                 date = cal.getSelectedDates()[0],
@@ -3319,16 +3325,22 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
             dd[cal.cfg.getProperty('MDY_DAY_POSITION') -1] = date.getDate();
             dd[cal.cfg.getProperty('MDY_MONTH_POSITION') -1] = date.getMonth() + 1;
             dd[cal.cfg.getProperty('MDY_YEAR_POSITION') -1] = date.getFullYear();
-            value = dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
+            return dd.join(cal.cfg.getProperty('DATE_FIELD_DELIMITER'));
         }
-        if (Lang.isFunction(validator)) {
-            value = validator(value,node.label,node);
-            if (Lang.isUndefined(value)) { return false; }
-        }
+	},
 
-        node.label = value;
-        node.getLabelEl().innerHTML = value;
-    },
+	/**
+    * Finally displays the newly entered date in the tree.
+    * Overrides Node.displayEditedValue.
+    * @method displayEditedValue
+     *  @param value {string} date to be displayed and stored in the node
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     */
+	displayEditedValue: function (value,editorData) {
+		var node = editorData.node;
+		node.label = value;
+		node.getLabelEl().innerHTML = value;
+	},
   /**
      * Returns an object which could be used to build a tree out of this node and its children.
      * It can be passed to the tree constructor to reproduce this node as a tree.
@@ -3365,6 +3377,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
     * <li>buttonsContainer {HTMLelement (&lt;div&gt;)} element which holds the &lt;button&gt; elements for Ok/Cancel.  If you don't want any of the buttons, hide it via CSS styles, don't destroy it</li>
     * <li>node {YAHOO.widget.Node} reference to the Node being edited</li>
     * <li>saveOnEnter {boolean}, whether the Enter key should be accepted as a Save command (Esc. is always taken as Cancel), disable for multi-line input elements </li>
+    * <li>oldValue {any}  value before editing</li>
     * </ul>
     *  Editors are free to use this object to store additional data.
      * @property editorData
@@ -3379,7 +3392,8 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         inputContainer:null,
         buttonsContainer:null,
         node:null, // which Node is being edited
-        saveOnEnter:true
+        saveOnEnter:true,
+		oldValue:undefined
         // Each node type is free to add its own properties to this as it sees fit.
     };
     
@@ -3389,11 +3403,43 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
     * and returns either the validated (or type-converted) value or undefined. 
     * An undefined return will prevent the editor from closing
     * @property validator
+    * @type function
     * @default null
      * @for YAHOO.widget.TreeView
      */
     TVproto.validator = null;
     
+    /**
+    * Entry point for initializing the editing plug-in.  
+    * TreeView will call this method on initializing if it exists
+    * @method _initEditor
+     * @for YAHOO.widget.TreeView
+     * @private
+    */
+
+	TVproto._initEditor = function () {
+		/** 
+	 	* Fires when the user clicks on the ok button of a node editor
+	 	* @event editorSaveEvent 
+	 	* @type CustomEvent 
+	 	* @param oArgs.newValue {mixed} the new value just entered 
+	 	* @param oArgs.oldValue {mixed} the value originally in the tree 
+	 	* @param oArgs.node {YAHOO.widget.Node} the node that has the focus 
+	        * @for YAHOO.widget.TreeView
+	 	*/ 
+	 	this.createEvent("editorSaveEvent", this); 
+		
+		/** 
+	 	* Fires when the user clicks on the cancel button of a node editor
+	 	* @event editorCancelEvent 
+	 	* @type CustomEvent 
+	 	* @param {YAHOO.widget.Node} node the node that has the focus 
+	        * @for YAHOO.widget.TreeView
+	 	*/ 
+	 	this.createEvent("editorCancelEvent", this); 
+
+	};
+
     /**
     * Entry point of the editing plug-in.  
     * TreeView will call this method if it exists when a node label is clicked
@@ -3403,6 +3449,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
      * @for YAHOO.widget.TreeView
      * @private
     */
+	
     
     
     TVproto._nodeEditing = function (node) {
@@ -3506,7 +3553,10 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
             close = true;
         if (save) { 
             close = ed.node.saveEditorValue(ed) !== false; 
-        }
+        } else {
+			this.fireEvent( 'editorCancelEvent', node); 
+		}
+			
         if (close) {
             Dom.setStyle(ed.editorPanel,'display','none');  
             ed.active = false;
@@ -3568,8 +3618,8 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 
     
     /**
-    * Node-specific destroy function to empty the contents of the inline editor panel
-    * This function is the worst case alternative that will purge all possible events and remove the editor contents
+    * Node-specific destroy function to empty the contents of the inline editor panel.
+    * This function is the worst case alternative that will purge all possible events and remove the editor contents.
     * Method Event.purgeElement is somewhat costly so if it can be replaced by specifc Event.removeListeners, it is better to do so.
     * @method destroyEditorContents
      * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
@@ -3584,21 +3634,64 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 
     /**
     * Saves the value entered into the editor.
-    * Should be overridden by each node type
     * @method saveEditorValue
      * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
-     * @return a return of exactly false will prevent the editor from closing
+     * @return {false or none} a return of exactly false will prevent the editor from closing
      * @for YAHOO.widget.Node
      */
     Nproto.saveEditorValue = function (editorData) {
-    };
+        var node = editorData.node, 
+			value,
+            validator = node.tree.validator;
+			
+		value = this.getEditorValue(editorData);
+        
+        if (Lang.isFunction(validator)) {
+            value = validator(value,editorData.oldValue,node);
+            if (Lang.isUndefined(value)) { 
+				return false; 
+			}
+        }
+
+		if (this.tree.fireEvent( 'editorSaveEvent', {
+			newValue:value,
+			oldValue:editorData.oldValue,
+			node:node
+		}) !== false) {
+			this.displayEditedValue(value,editorData);
+		}
+	};
+	
+	
+    /**
+    * Returns the value(s) from the input element(s) .
+    * Should be overridden by each node type.
+    * @method getEditorValue
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     * @return {any} value entered
+     * @for YAHOO.widget.Node
+     */
+
+	 Nproto.getEditorValue = function (editorData) {
+	};
+
+	/**
+    * Finally displays the newly edited value(s) in the tree.
+    * Should be overridden by each node type.
+    * @method displayEditedValue
+     *  @param value {any} value to be displayed and stored in the node
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     * @for YAHOO.widget.Node
+     */
+	Nproto.displayEditedValue = function (value,editorData) {
+	};
     
     var TNproto = YAHOO.widget.TextNode.prototype;
     
 
 
     /** 
-     *  Places an &lt;input&gt;  textbox in the input container and loads the label text into it
+     *  Places an &lt;input&gt;  textbox in the input container and loads the label text into it.
      * @method fillEditorContainer
      * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
      * @return void
@@ -3619,36 +3712,43 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
             // if the last node edited was of the same time, reuse the input element.
             input = editorData.inputElement;
         }
-
+		editorData.oldValue = this.label;
         input.value = this.label;
         input.focus();
         input.select();
     };
     
     /**
-    * Saves the value entered in the editor into the TextNode label property and displays it
-    * Overrides Node.saveEditorValue
-    * @method saveEditorValue
+    * Returns the value from the input element.
+    * Overrides Node.getEditorValue.
+    * @method getEditorValue
+     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
+     * @return {string} value entered
+     * @for YAHOO.widget.TextNode
+     */
+
+    TNproto.getEditorValue = function (editorData) {
+        return editorData.inputElement.value;
+	};
+
+	/**
+    * Finally displays the newly edited value in the tree.
+    * Overrides Node.displayEditedValue.
+    * @method displayEditedValue
+     *  @param value {string} value to be displayed and stored in the node
      * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
      * @for YAHOO.widget.TextNode
      */
-    TNproto.saveEditorValue = function (editorData) {
-        var node = editorData.node, 
-            value = editorData.inputElement.value,
-            validator = node.tree.validator;
-        
-        if (Lang.isFunction(validator)) {
-            value = validator(value,node.label,node);
-            if (Lang.isUndefined(value)) { return false; }
-        }
-        node.label = value;
-        node.getLabelEl().innerHTML = value;
-    };
+	TNproto.displayEditedValue = function (value,editorData) {
+		var node = editorData.node;
+		node.label = value;
+		node.getLabelEl().innerHTML = value;
+	};
 
     /**
-    * Destroys the contents of the inline editor panel
-    * Overrides Node.destroyEditorContent
-    * Since we didn't set any event listeners on this inline editor, it is more efficient to avoid the generic method in Node
+    * Destroys the contents of the inline editor panel.
+    * Overrides Node.destroyEditorContent.
+    * Since we didn't set any event listeners on this inline editor, it is more efficient to avoid the generic method in Node.
     * @method destroyEditorContents
      * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information
      * @for YAHOO.widget.TextNode
