@@ -283,8 +283,6 @@
                             off1 = 2;
                             off2 = 2;
                             mode = doc[COMPAT_MODE];
-                            bLeft = _getComputedStyle(doc[DOCUMENT_ELEMENT], BORDER_LEFT_WIDTH);
-                            bTop = _getComputedStyle(doc[DOCUMENT_ELEMENT], BORDER_TOP_WIDTH);
 
                             if (UA.ie === 6) {
                                 if (mode !== _BACK_COMPAT) {
@@ -293,7 +291,9 @@
                                 }
                             }
                             
-                            if ((mode == _BACK_COMPAT)) {
+                            if ((mode === _BACK_COMPAT)) {
+                                bLeft = _getComputedStyle(doc[DOCUMENT_ELEMENT], BORDER_LEFT_WIDTH);
+                                bTop = _getComputedStyle(doc[DOCUMENT_ELEMENT], BORDER_TOP_WIDTH);
                                 if (bLeft !== MEDIUM) {
                                     off1 = parseInt(bLeft, 10);
                                 }
