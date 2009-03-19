@@ -1144,6 +1144,13 @@ TV.prototype = {
             node.nextSibling.previousSibling = node.previousSibling;
         }
 
+		if (this.currentFocus == node) {
+			this.currentFocus = null;
+		}
+		if (this._currentlyHighlighted == node) {
+			this._currentlyHighlighted = null;
+		}
+
         node.parent = null;
         node.previousSibling = null;
         node.nextSibling = null;
