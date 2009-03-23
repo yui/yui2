@@ -1144,6 +1144,13 @@ TV.prototype = {
             node.nextSibling.previousSibling = node.previousSibling;
         }
 
+		if (this.currentFocus == node) {
+			this.currentFocus = null;
+		}
+		if (this._currentlyHighlighted == node) {
+			this._currentlyHighlighted = null;
+		}
+
         node.parent = null;
         node.previousSibling = null;
         node.nextSibling = null;
@@ -1379,6 +1386,7 @@ TV.preload = function(e, prefix) {
 
 Event.addListener(window,"load", TV.preload);
 })();
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -2594,7 +2602,7 @@ YAHOO.widget.Node.prototype = {
 
         Dom.getElementsBy  ( 
             function (el) {
-                return /ygtv(([tl][pmn]h?)|(content))/.test(el.className);
+                return (/ygtv(([tl][pmn]h?)|(content))/).test(el.className);
             } ,
             'td' , 
             self.getEl().firstChild , 
@@ -2744,16 +2752,18 @@ YAHOO.widget.Node.prototype = {
             }
             this.highlightState = 1;
             this._setHighlightClassName();
-            if (this.propagateHighlightDown) {
-                for (var i = 0;i < this.children.length;i++) {
-                    this.children[i].highlight(true);
-                }
-            }
-            if (this.propagateHighlightUp) {
-                if (this.parent) {
-                    this.parent._childrenHighlighted();
-                }
-            }
+            if (!this.tree.singleNodeHighlight) {
+				if (this.propagateHighlightDown) {
+					for (var i = 0;i < this.children.length;i++) {
+						this.children[i].highlight(true);
+					}
+				}
+				if (this.propagateHighlightUp) {
+					if (this.parent) {
+						this.parent._childrenHighlighted();
+					}
+				}
+			}
             if (!_silent) {
                 this.tree.fireEvent('highlightEvent',this);
             }
@@ -2766,18 +2776,22 @@ YAHOO.widget.Node.prototype = {
     */
     unhighlight: function(_silent) {
         if (this.enableHighlight) {
+			// might have checked singleNodeHighlight but it wouldn't really matter either way
+            this.tree._currentlyHighlighted = null;
             this.highlightState = 0;
             this._setHighlightClassName();
-            if (this.propagateHighlightDown) {
-                for (var i = 0;i < this.children.length;i++) {
-                    this.children[i].unhighlight(true);
-                }
-            }
-            if (this.propagateHighlightUp) {
-                if (this.parent) {
-                    this.parent._childrenHighlighted();
-                }
-            }
+            if (!this.tree.singleNodeHighlight) {
+				if (this.propagateHighlightDown) {
+					for (var i = 0;i < this.children.length;i++) {
+						this.children[i].unhighlight(true);
+					}
+				}
+				if (this.propagateHighlightUp) {
+					if (this.parent) {
+						this.parent._childrenHighlighted();
+					}
+				}
+			}
             if (!_silent) {
                 this.tree.fireEvent('highlightEvent',this);
             }
@@ -2838,6 +2852,7 @@ YAHOO.widget.Node.prototype = {
 
 YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
 })();
+
 /**
  * A custom YAHOO.widget.Node that handles the unique nature of 
  * the virtual, presentationless root node.
@@ -2922,6 +2937,7 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
     focus: function () {}
 
 });
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -3118,6 +3134,7 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
     
 });
 })();
+
 /**
  * A menu-specific implementation that differs from TextNode in that only 
  * one sibling can be expanded at a time.
@@ -3157,6 +3174,7 @@ YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
     _type: "MenuNode"
 
 });
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -3275,6 +3293,7 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     }
 });
 })();
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -3421,6 +3440,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 
 });
 })();
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang, 
@@ -3825,4 +3845,5 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         editorData.inputContainer.innerHTML = '';
     };
 })();
+
 YAHOO.register("treeview", YAHOO.widget.TreeView, {version: "@VERSION@", build: "@BUILD@"});
