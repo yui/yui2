@@ -1262,7 +1262,7 @@
 
         <span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsBy</span>  <span class="o">(</span> 
             <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="sr">/ygtv(([tl][pmn]h?)|(content))/</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">className</span><span class="o">);</span>
+                <span class="k">return</span> <span class="o">(</span><span class="sr">/ygtv(([tl][pmn]h?)|(content))/</span><span class="o">).</span><span class="nx">test</span><span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">className</span><span class="o">);</span>
             <span class="o">}</span> <span class="o">,</span>
             <span class="s1">&#39;td&#39;</span> <span class="o">,</span> 
             <span class="nx">self</span><span class="o">.</span><span class="nx">getEl</span><span class="o">().</span><span class="nx">firstChild</span> <span class="o">,</span> 
@@ -1412,16 +1412,18 @@
             <span class="o">}</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">highlightState</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_setHighlightClassName</span><span class="o">();</span>
-            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">propagateHighlightDown</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">highlight</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">propagateHighlightUp</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">_childrenHighlighted</span><span class="o">();</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">singleNodeHighlight</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">propagateHighlightDown</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+						<span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">highlight</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+					<span class="o">}</span>
+				<span class="o">}</span>
+				<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">propagateHighlightUp</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">)</span> <span class="o">{</span>
+						<span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">_childrenHighlighted</span><span class="o">();</span>
+					<span class="o">}</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
             <span class="k">if</span> <span class="o">(!</span><span class="nx">_silent</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;highlightEvent&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
             <span class="o">}</span>
@@ -1434,18 +1436,22 @@
 <span class="c">    */</span>
     <span class="nx">unhighlight</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">_silent</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">enableHighlight</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c">// might have checked singleNodeHighlight but it wouldn&#39;t really matter either way</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">_currentlyHighlighted</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">highlightState</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_setHighlightClassName</span><span class="o">();</span>
-            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">propagateHighlightDown</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">unhighlight</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">propagateHighlightUp</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">_childrenHighlighted</span><span class="o">();</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">singleNodeHighlight</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">propagateHighlightDown</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+						<span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">unhighlight</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+					<span class="o">}</span>
+				<span class="o">}</span>
+				<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">propagateHighlightUp</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">)</span> <span class="o">{</span>
+						<span class="k">this</span><span class="o">.</span><span class="nx">parent</span><span class="o">.</span><span class="nx">_childrenHighlighted</span><span class="o">();</span>
+					<span class="o">}</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
             <span class="k">if</span> <span class="o">(!</span><span class="nx">_silent</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;highlightEvent&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
             <span class="o">}</span>
