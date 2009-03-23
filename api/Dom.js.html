@@ -332,8 +332,6 @@
 <span class="c"></span>                            <span class="nx">off1</span> <span class="o">=</span> <span class="m">2</span><span class="o">;</span>
                             <span class="nx">off2</span> <span class="o">=</span> <span class="m">2</span><span class="o">;</span>
                             <span class="nx">mode</span> <span class="o">=</span> <span class="nx">doc</span><span class="o">[</span><span class="nx">COMPAT_MODE</span><span class="o">];</span>
-                            <span class="nx">bLeft</span> <span class="o">=</span> <span class="nx">_getComputedStyle</span><span class="o">(</span><span class="nx">doc</span><span class="o">[</span><span class="nx">DOCUMENT_ELEMENT</span><span class="o">],</span> <span class="nx">BORDER_LEFT_WIDTH</span><span class="o">);</span>
-                            <span class="nx">bTop</span> <span class="o">=</span> <span class="nx">_getComputedStyle</span><span class="o">(</span><span class="nx">doc</span><span class="o">[</span><span class="nx">DOCUMENT_ELEMENT</span><span class="o">],</span> <span class="nx">BORDER_TOP_WIDTH</span><span class="o">);</span>
 
                             <span class="k">if</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span> <span class="o">===</span> <span class="m">6</span><span class="o">)</span> <span class="o">{</span>
                                 <span class="k">if</span> <span class="o">(</span><span class="nx">mode</span> <span class="o">!==</span> <span class="nx">_BACK_COMPAT</span><span class="o">)</span> <span class="o">{</span>
@@ -342,7 +340,9 @@
                                 <span class="o">}</span>
                             <span class="o">}</span>
                             
-                            <span class="k">if</span> <span class="o">((</span><span class="nx">mode</span> <span class="o">==</span> <span class="nx">_BACK_COMPAT</span><span class="o">))</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">((</span><span class="nx">mode</span> <span class="o">===</span> <span class="nx">_BACK_COMPAT</span><span class="o">))</span> <span class="o">{</span>
+                                <span class="nx">bLeft</span> <span class="o">=</span> <span class="nx">_getComputedStyle</span><span class="o">(</span><span class="nx">doc</span><span class="o">[</span><span class="nx">DOCUMENT_ELEMENT</span><span class="o">],</span> <span class="nx">BORDER_LEFT_WIDTH</span><span class="o">);</span>
+                                <span class="nx">bTop</span> <span class="o">=</span> <span class="nx">_getComputedStyle</span><span class="o">(</span><span class="nx">doc</span><span class="o">[</span><span class="nx">DOCUMENT_ELEMENT</span><span class="o">],</span> <span class="nx">BORDER_TOP_WIDTH</span><span class="o">);</span>
                                 <span class="k">if</span> <span class="o">(</span><span class="nx">bLeft</span> <span class="o">!==</span> <span class="nx">MEDIUM</span><span class="o">)</span> <span class="o">{</span>
                                     <span class="nx">off1</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">bLeft</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
                                 <span class="o">}</span>
@@ -597,7 +597,7 @@
         <span class="o">},</span>
 
         <span class="c">/**</span>
-<span class="c">         * Returns a array of HTMLElements with the given class.</span>
+<span class="c">         * Returns an array of HTMLElements with the given class.</span>
 <span class="c">         * For optimized performance, include a tag and/or root node when possible.</span>
 <span class="c">         * Note: This method operates against a live collection, so modifying the </span>
 <span class="c">         * collection in the callback (removing/appending nodes, etc.) will have</span>
@@ -865,7 +865,7 @@
         <span class="o">},</span>
         
         <span class="c">/**</span>
-<span class="c">         * Returns a array of HTMLElements that pass the test applied by supplied boolean method.</span>
+<span class="c">         * Returns an array of HTMLElements that pass the test applied by supplied boolean method.</span>
 <span class="c">         * For optimized performance, include a tag and/or root node when possible.</span>
 <span class="c">         * Note: This method operates against a live collection, so modifying the </span>
 <span class="c">         * collection in the callback (removing/appending nodes, etc.) will have</span>
