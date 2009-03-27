@@ -3770,4 +3770,174 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         editorData.inputContainer.innerHTML = '';
     };
 })();
+/**
+ * A static factory class for tree view expand/collapse animations
+ * @class TVAnim
+ * @static
+ */
+YAHOO.widget.TVAnim = function() {
+    return {
+        /**
+         * Constant for the fade in animation
+         * @property FADE_IN
+         * @type string
+         * @static
+         */
+        FADE_IN: "TVFadeIn",
+
+        /**
+         * Constant for the fade out animation
+         * @property FADE_OUT
+         * @type string
+         * @static
+         */
+        FADE_OUT: "TVFadeOut",
+
+        /**
+         * Returns a ygAnim instance of the given type
+         * @method getAnim
+         * @param type {string} the type of animation
+         * @param el {HTMLElement} the element to element (probably the children div)
+         * @param callback {function} function to invoke when the animation is done.
+         * @return {YAHOO.util.Animation} the animation instance
+         * @static
+         */
+        getAnim: function(type, el, callback) {
+            if (YAHOO.widget[type]) {
+                return new YAHOO.widget[type](el, callback);
+            } else {
+                return null;
+            }
+        },
+
+        /**
+         * Returns true if the specified animation class is available
+         * @method isValid
+         * @param type {string} the type of animation
+         * @return {boolean} true if valid, false if not
+         * @static
+         */
+        isValid: function(type) {
+            return (YAHOO.widget[type]);
+        }
+    };
+} ();
+/**
+ * A 1/2 second fade-in animation.
+ * @class TVFadeIn
+ * @constructor
+ * @param el {HTMLElement} the element to animate
+ * @param callback {function} function to invoke when the animation is finished
+ */
+YAHOO.widget.TVFadeIn = function(el, callback) {
+    /**
+     * The element to animate
+     * @property el
+     * @type HTMLElement
+     */
+    this.el = el;
+
+    /**
+     * the callback to invoke when the animation is complete
+     * @property callback
+     * @type function
+     */
+    this.callback = callback;
+
+};
+
+YAHOO.widget.TVFadeIn.prototype = {
+    /**
+     * Performs the animation
+     * @method animate
+     */
+    animate: function() {
+        var tvanim = this;
+
+        var s = this.el.style;
+        s.opacity = 0.1;
+        s.filter = "alpha(opacity=10)";
+        s.display = "";
+
+        var dur = 0.4; 
+        var a = new YAHOO.util.Anim(this.el, {opacity: {from: 0.1, to: 1, unit:""}}, dur);
+        a.onComplete.subscribe( function() { tvanim.onComplete(); } );
+        a.animate();
+    },
+
+    /**
+     * Clean up and invoke callback
+     * @method onComplete
+     */
+    onComplete: function() {
+        this.callback();
+    },
+
+    /**
+     * toString
+     * @method toString
+     * @return {string} the string representation of the instance
+     */
+    toString: function() {
+        return "TVFadeIn";
+    }
+};
+/**
+ * A 1/2 second fade out animation.
+ * @class TVFadeOut
+ * @constructor
+ * @param el {HTMLElement} the element to animate
+ * @param callback {Function} function to invoke when the animation is finished
+ */
+YAHOO.widget.TVFadeOut = function(el, callback) {
+    /**
+     * The element to animate
+     * @property el
+     * @type HTMLElement
+     */
+    this.el = el;
+
+    /**
+     * the callback to invoke when the animation is complete
+     * @property callback
+     * @type function
+     */
+    this.callback = callback;
+
+};
+
+YAHOO.widget.TVFadeOut.prototype = {
+    /**
+     * Performs the animation
+     * @method animate
+     */
+    animate: function() {
+        var tvanim = this;
+        var dur = 0.4;
+        var a = new YAHOO.util.Anim(this.el, {opacity: {from: 1, to: 0.1, unit:""}}, dur);
+        a.onComplete.subscribe( function() { tvanim.onComplete(); } );
+        a.animate();
+    },
+
+    /**
+     * Clean up and invoke callback
+     * @method onComplete
+     */
+    onComplete: function() {
+        var s = this.el.style;
+        s.display = "none";
+        // s.opacity = 1;
+        s.filter = "alpha(opacity=100)";
+        this.callback();
+    },
+
+    /**
+     * toString
+     * @method toString
+     * @return {string} the string representation of the instance
+     */
+    toString: function() {
+        return "TVFadeOut";
+    }
+};
 YAHOO.register("treeview", YAHOO.widget.TreeView, {version: "@VERSION@", build: "@BUILD@"});
