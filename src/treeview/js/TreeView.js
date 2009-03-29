@@ -405,6 +405,10 @@ TV.prototype = {
         this.logger = (LW) ? new LW(this.toString()) : YAHOO;
 
         this.logger.log("tree init: " + this.id);
+		
+		if (this._initEditor) {
+			this._initEditor();
+		}
         
         // YAHOO.util.Event.onContentReady(this.id, this.handleAvailable, this, true);
         // YAHOO.util.Event.on(this.id, "click", this.handleClick, this, true);
@@ -616,22 +620,24 @@ TV.prototype = {
             td = this._getEventTargetTdEl(ev),
             node,
             target,
-            toggle = function () {
-                node.toggle();
+            toggle = function (force) {
                 node.focus();
-                try {
-                    Event.preventDefault(ev);
-                } catch (e) {
-                    // @TODO
-                    // For some reason IE8 is providing an event object with
-                    // most of the fields missing, but only when clicking on
-                    // the node's label, and only when working with inline
-                    // editing.  This generates a "Member not found" error
-                    // in that browser.  Determine if this is a browser
-                    // bug, or a problem with this code.  Already checked to
-                    // see if the problem has to do with access the event
-                    // in the outer scope, and that isn't the problem.
-                    // Maybe the markup for inline editing is broken.
+				if (force || !node.href) {
+					node.toggle();
+					try {
+						Event.preventDefault(ev);
+					} catch (e) {
+	                    // @TODO
+	                    // For some reason IE8 is providing an event object with
+	                    // most of the fields missing, but only when clicking on
+	                    // the node's label, and only when working with inline
+	                    // editing.  This generates a "Member not found" error
+	                    // in that browser.  Determine if this is a browser
+	                    // bug, or a problem with this code.  Already checked to
+	                    // see if the problem has to do with access the event
+	                    // in the outer scope, and that isn't the problem.
+	                    // Maybe the markup for inline editing is broken.
+					}
                 }
             };
 
@@ -656,7 +662,7 @@ TV.prototype = {
         
         //  If it is a toggle cell, toggle
         if (/\bygtv[tl][mp]h?h?/.test(td.className)) {
-            toggle();
+            toggle(true);
         } else {
             if (this._dblClickTimer) {
                 window.clearTimeout(this._dblClickTimer);
@@ -1137,6 +1143,13 @@ TV.prototype = {
         if (node.nextSibling) {
             node.nextSibling.previousSibling = node.previousSibling;
         }
+
+		if (this.currentFocus == node) {
+			this.currentFocus = null;
+		}
+		if (this._currentlyHighlighted == node) {
+			this._currentlyHighlighted = null;
+		}
 
         node.parent = null;
         node.previousSibling = null;

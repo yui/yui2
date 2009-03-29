@@ -2460,12 +2460,14 @@
             <span class="k">var</span> <span class="nx">carousel</span>   <span class="o">=</span> <span class="k">this</span><span class="o">,</span>
                 <span class="nx">isCircular</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;isCircular&quot;</span><span class="o">),</span>
                 <span class="nx">numItems</span>   <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;numItems&quot;</span><span class="o">),</span>
+                <span class="nx">numVisible</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;numVisible&quot;</span><span class="o">),</span>
                 <span class="nx">sentinel</span>   <span class="o">=</span> <span class="nx">numItems</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">index</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">index</span> <span class="o">=</span> <span class="nx">isCircular</span> <span class="o">?</span> <span class="nx">numItems</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
+                <span class="nx">index</span> <span class="o">=</span> <span class="nx">isCircular</span> <span class="o">?</span>
+                        <span class="nb">Math</span><span class="o">.</span><span class="nx">ceil</span><span class="o">(</span><span class="nx">numItems</span><span class="o">/</span><span class="nx">numVisible</span><span class="o">)*</span><span class="nx">numVisible</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">index</span> <span class="o">&gt;</span> <span class="nx">sentinel</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">index</span> <span class="o">=</span> <span class="nx">isCircular</span> <span class="o">?</span> <span class="nx">index</span> <span class="o">-</span> <span class="nx">numItems</span> <span class="o">:</span> <span class="nx">sentinel</span><span class="o">;</span>
+                <span class="nx">index</span> <span class="o">=</span> <span class="nx">isCircular</span> <span class="o">?</span> <span class="m">0</span> <span class="o">:</span> <span class="nx">sentinel</span><span class="o">;</span>
             <span class="o">}</span>
 
             <span class="k">return</span> <span class="nx">index</span><span class="o">;</span>
@@ -3761,6 +3763,7 @@
                         <ul class="content">        
                                 <li class="selected"><a href="Carousel.js.html" title="Carousel.js">Carousel.js</a></li>
                                 <li class=""><a href="markupTests.js.html" title="markupTests.js">markupTests.js</a></li>
+                                <li class=""><a href="protectedMethodTests.js.html" title="protectedMethodTests.js">protectedMethodTests.js</a></li>
                                 <li class=""><a href="scriptTests.js.html" title="scriptTests.js">scriptTests.js</a></li>
                         </ul>
                     </div>

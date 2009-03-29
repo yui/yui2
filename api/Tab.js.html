@@ -123,7 +123,7 @@
 <span class="c">         * The class name applied to active tabs.</span>
 <span class="c">         * @property ACTIVE_CLASSNAME</span>
 <span class="c">         * @type String</span>
-<span class="c">         * @default &quot;selected&quot;</span>
+<span class="c">         * @default &quot;yui-hidden&quot;</span>
 <span class="c">         */</span>
         <span class="nx">HIDDEN_CLASSNAME</span><span class="o">:</span> <span class="s1">&#39;yui-hidden&#39;</span><span class="o">,</span>
         
@@ -252,7 +252,7 @@
                             <span class="k">return</span> <span class="kc">false</span><span class="o">;</span> <span class="c">// already set</span>
 <span class="c"></span>                        <span class="o">}</span>
                         <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;selected&#39;</span><span class="o">))</span> <span class="o">{</span>
-                            <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">value</span><span class="o">,</span> <span class="s1">&#39;yui-hidden&#39;</span><span class="o">);</span>
+                            <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">value</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">HIDDEN_CLASSNAME</span><span class="o">);</span>
                         <span class="o">}</span>
                         <span class="nx">current</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">replaceChild</span><span class="o">(</span><span class="nx">value</span><span class="o">,</span> <span class="nx">current</span><span class="o">);</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="nx">CONTENT</span><span class="o">,</span> <span class="nx">value</span><span class="o">.</span><span class="nx">innerHTML</span><span class="o">);</span>

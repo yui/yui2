@@ -2765,7 +2765,7 @@
                     <span class="o">}</span>
                     <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">bMenuSrcElementIsSelect</span><span class="o">)</span> <span class="o">{</span>
 					
-						<span class="nx">oForm</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">oMenuSrcElement</span><span class="o">);</span>
+						<span class="nx">oMenuField</span> <span class="o">=</span> <span class="nx">oForm</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">oMenuSrcElement</span><span class="o">);</span>
                     
                     <span class="o">}</span>
         
@@ -2813,7 +2813,7 @@
                 <span class="k">if</span> <span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">inDocument</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">))</span> <span class="o">{</span>
         
                     <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">);</span>
-                
+
                 <span class="o">}</span>
                 
             <span class="o">}</span>
@@ -3480,7 +3480,7 @@
 <span class="c">            * @attribute selectedMenuItem</span>
 <span class="c">            * @description Object representing the item in the button&#39;s menu </span>
 <span class="c">            * that is currently selected.</span>
-<span class="c">            * @type Number</span>
+<span class="c">            * @type YAHOO.widget.MenuItem</span>
 <span class="c">            * @default null</span>
 <span class="c">            */</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;selectedMenuItem&quot;</span><span class="o">,</span> <span class="o">{</span>

@@ -238,26 +238,28 @@
             var sIcon = args[0],
                 oBody = this.body,
                 sCSSClass = SimpleDialog.ICON_CSS_CLASSNAME,
+				aElements,
                 oIcon,
                 oIconParent;
         
             if (sIcon && sIcon != "none") {
 
-                oIcon = Dom.getElementsByClassName(sCSSClass, "*" , oBody);
+                aElements = Dom.getElementsByClassName(sCSSClass, "*" , oBody);
 
-                if (oIcon) {
+				if (aElements.length === 1) {
 
+					oIcon = aElements[0];
                     oIconParent = oIcon.parentNode;
-                    
+
                     if (oIconParent) {
-                    
+
                         oIconParent.removeChild(oIcon);
-                        
+
                         oIcon = null;
-                    
+
                     }
 
-                }
+				}
 
 
                 if (sIcon.indexOf(".") == -1) {

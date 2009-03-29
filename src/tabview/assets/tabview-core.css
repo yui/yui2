@@ -10,8 +10,16 @@
 }
 
 .yui-navset .yui-content .yui-hidden {
+    /* absolute position off-screen and box collapsing used to
+       avoid display:none, which causes issues for some content (firefox
+       restarts flash movies) */
+    border:0;
+    height:0;
+    width:0;
+    padding:0;
     position:absolute;
     left:-999999px;
+    overflow:hidden;
     visibility:hidden;
 }
 

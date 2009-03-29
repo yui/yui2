@@ -1216,6 +1216,11 @@ YAHOO.widget.LogReader.prototype = {
                 }
             }
             if(okToPrint) {
+                // Start from 0ms elapsed time
+                if (this._consoleMsgCount === 0) {
+                    this._lastTime = entry.time.getTime();
+                }
+
                 msg = this.formatMsg(entry);
                 if (typeof msg === 'string') {
                     msgHTML[msgHTML.length] = msg;

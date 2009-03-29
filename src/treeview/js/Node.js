@@ -660,7 +660,7 @@ YAHOO.widget.Node.prototype = {
      */
     expand: function(lazySource) {
         // Only expand if currently collapsed.
-        if (this.expanded && !lazySource) { 
+        if (this.isLoading || (this.expanded && !lazySource)) { 
             return; 
         }
 
@@ -1098,7 +1098,7 @@ YAHOO.widget.Node.prototype = {
             sb[sb.length] = '<td id="' + this.getToggleElId();
             sb[sb.length] = '" class="ygtvcell ';
             sb[sb.length] = this.getStyle() ;
-            sb[sb.length] = '"><a href="#" class="ygtvspacer">&nbsp;</a></td>';
+            sb[sb.length] = '"><a href="#" class="ygtvspacer">&#160;</a></td>';
         }
 
         sb[sb.length] = '<td id="' + this.contentElId; 
@@ -1213,7 +1213,7 @@ YAHOO.widget.Node.prototype = {
 
         Dom.getElementsBy  ( 
             function (el) {
-                return /ygtv(([tl][pmn]h?)|(content))/.test(el.className);
+                return (/ygtv(([tl][pmn]h?)|(content))/).test(el.className);
             } ,
             'td' , 
             self.getEl().firstChild , 
@@ -1363,16 +1363,18 @@ YAHOO.widget.Node.prototype = {
             }
             this.highlightState = 1;
             this._setHighlightClassName();
-            if (this.propagateHighlightDown) {
-                for (var i = 0;i < this.children.length;i++) {
-                    this.children[i].highlight(true);
-                }
-            }
-            if (this.propagateHighlightUp) {
-                if (this.parent) {
-                    this.parent._childrenHighlighted();
-                }
-            }
+            if (!this.tree.singleNodeHighlight) {
+				if (this.propagateHighlightDown) {
+					for (var i = 0;i < this.children.length;i++) {
+						this.children[i].highlight(true);
+					}
+				}
+				if (this.propagateHighlightUp) {
+					if (this.parent) {
+						this.parent._childrenHighlighted();
+					}
+				}
+			}
             if (!_silent) {
                 this.tree.fireEvent('highlightEvent',this);
             }
@@ -1385,18 +1387,22 @@ YAHOO.widget.Node.prototype = {
     */
     unhighlight: function(_silent) {
         if (this.enableHighlight) {
+			// might have checked singleNodeHighlight but it wouldn't really matter either way
+            this.tree._currentlyHighlighted = null;
             this.highlightState = 0;
             this._setHighlightClassName();
-            if (this.propagateHighlightDown) {
-                for (var i = 0;i < this.children.length;i++) {
-                    this.children[i].unhighlight(true);
-                }
-            }
-            if (this.propagateHighlightUp) {
-                if (this.parent) {
-                    this.parent._childrenHighlighted();
-                }
-            }
+            if (!this.tree.singleNodeHighlight) {
+				if (this.propagateHighlightDown) {
+					for (var i = 0;i < this.children.length;i++) {
+						this.children[i].unhighlight(true);
+					}
+				}
+				if (this.propagateHighlightUp) {
+					if (this.parent) {
+						this.parent._childrenHighlighted();
+					}
+				}
+			}
             if (!_silent) {
                 this.tree.fireEvent('highlightEvent',this);
             }

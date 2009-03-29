@@ -2,7 +2,7 @@
 <html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: carousel   (YUI Library)</title>
+	<title>API: carousel   protectedMethodTests.js  (YUI Library)</title>
 
 	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
 	<link rel="stylesheet" type="text/css" href="assets/api.css" />
@@ -20,7 +20,7 @@
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_carousel.html" title="carousel">carousel</a>
                 
-                
+                 &gt; protectedMethodTests.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
                 Search: <input autocomplete="off" id="searchinput" />
@@ -43,38 +43,75 @@
                 </fieldset>
             </form>
 
-                   
-                    <h3>Module: carousel
-                    
-                    <span class="description"><em>Beta</em></span>
+                    <div id="srcout">
+                        <style>
+                            #doc3 .classopts { display:none; }
+                        </style>
+<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+     <span class="k">var</span> <span class="nx">ArrayAssert</span>  <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ArrayAssert</span><span class="o">,</span>
+         <span class="nx">Assert</span>       <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">,</span>
+         <span class="nx">carousel</span><span class="o">,</span>
+         <span class="nx">protectedMethods</span><span class="o">,</span>
+         <span class="nx">ObjectAssert</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ObjectAssert</span><span class="o">;</span>
 
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">&quot;CarouselTests&quot;</span><span class="o">);</span>
 
-                    </h3>
-                    <div class="description summary">
-                        The Carousel module provides a widget for browsing among a set of like
-objects represented pictorially.
+    <span class="nx">protectedMethods</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestCase</span><span class="o">({</span>
+        <span class="nx">testGetValidIndex</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+            <span class="nx">carousel</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;numItems&quot;</span><span class="o">,</span> <span class="m">9</span><span class="o">);</span>
+            <span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getValidIndex</span><span class="o">(</span><span class="m">0</span><span class="o">),</span>
+                            <span class="s2">&quot;_getValidIndex(0) should have returned 0&quot;</span><span class="o">);</span>
+            <span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="m">3</span><span class="o">,</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getValidIndex</span><span class="o">(</span><span class="m">3</span><span class="o">),</span>
+                            <span class="s2">&quot;_getValidIndex(3) should have returned 3&quot;</span><span class="o">);</span>
+            <span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="m">6</span><span class="o">,</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getValidIndex</span><span class="o">(</span><span class="m">6</span><span class="o">),</span>
+                            <span class="s2">&quot;_getValidIndex(6) should have returned 6&quot;</span><span class="o">);</span>
+            <span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="m">8</span><span class="o">,</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getValidIndex</span><span class="o">(</span><span class="m">9</span><span class="o">),</span>
+                            <span class="s2">&quot;_getValidIndex(9) should have returned 8&quot;</span><span class="o">);</span>
+            <span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getValidIndex</span><span class="o">(-</span><span class="m">3</span><span class="o">),</span>
+                            <span class="s2">&quot;_getValidIndex(-3) should have returned 0&quot;</span><span class="o">);</span>
+
+            <span class="nx">carousel</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;numItems&quot;</span><span class="o">,</span> <span class="m">8</span><span class="o">);</span>
+            <span class="nx">carousel</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;isCircular&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="nx">testGetValidIndexForCircularCarousel</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+            <span class="nx">carousel</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;numItems&quot;</span><span class="o">,</span> <span class="m">8</span><span class="o">);</span>
+            <span class="nx">carousel</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;isCircular&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getValidIndex</span><span class="o">(</span><span class="m">0</span><span class="o">),</span>
+                            <span class="s2">&quot;_getValidIndex(0) should have returned 0&quot;</span><span class="o">);</span>
+            <span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="m">3</span><span class="o">,</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getValidIndex</span><span class="o">(</span><span class="m">3</span><span class="o">),</span>
+                            <span class="s2">&quot;_getValidIndex(3) should have returned 3&quot;</span><span class="o">);</span>
+            <span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="m">6</span><span class="o">,</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getValidIndex</span><span class="o">(</span><span class="m">6</span><span class="o">),</span>
+                            <span class="s2">&quot;_getValidIndex(6) should have returned 6&quot;</span><span class="o">);</span>
+            <span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getValidIndex</span><span class="o">(</span><span class="m">9</span><span class="o">),</span>
+                            <span class="s2">&quot;_getValidIndex(9) should have returned 0&quot;</span><span class="o">);</span>
+            <span class="nx">Assert</span><span class="o">.</span><span class="nx">areEqual</span><span class="o">(</span><span class="m">6</span><span class="o">,</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getValidIndex</span><span class="o">(-</span><span class="m">3</span><span class="o">),</span>
+                            <span class="s2">&quot;_getValidIndex(-3) should have returned 6&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">});</span>
+
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">CarouselTests</span><span class="o">.</span><span class="nx">protectedMethodTests</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">tool</span><span class="o">.</span><span class="nx">TestSuite</span><span class="o">({</span>
+            <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Carousel (protected methods) Tests&quot;</span><span class="o">,</span>
+
+            <span class="nx">setUp</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                <span class="nx">carousel</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Carousel</span><span class="o">(</span><span class="s2">&quot;container5&quot;</span><span class="o">);</span>
+            <span class="o">},</span>
+
+            <span class="nx">tearDown</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                <span class="nx">delete</span> <span class="nx">carousel</span><span class="o">;</span>
+            <span class="o">}</span>
+    <span class="o">});</span>
+
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">CarouselTests</span><span class="o">.</span><span class="nx">protectedMethodTests</span><span class="o">.</span><span class="nx">add</span><span class="o">(</span><span class="nx">protectedMethods</span><span class="o">);</span>
+<span class="o">})();</span>
+<span class="c">/*</span>
+<span class="c">;;  Local variables: **</span>
+<span class="c">;;  mode: js2 **</span>
+<span class="c">;;  indent-tabs-mode: nil **</span>
+<span class="c">;;  End: **</span>
+<span class="c">*/</span>
+</pre></div>
                     </div>
-
-
-
-                <div class="yui-gc">
-                    <div class="yui-u first">
-
-                            <p>This module contains the following classes:</p>
-                            <script>
-                            //var YUI_CLASS_LIST = [{"extends": {"superclass": {"YAHOO.util.Element": "YAHOO.util.Element", "YAHOO.util.AttributeProvider": "YAHOO.util.AttributeProvider"}, "events": {"YAHOO.util.Element": [{"access": "", "deprecated": false, "name": "appendTo"}, {"access": "", "deprecated": false, "name": "available"}, {"access": "", "deprecated": false, "name": "beforeAppendTo"}, {"access": "", "deprecated": false, "name": "beforeElementChange"}, {"access": "", "deprecated": false, "name": "contentReady"}, {"access": "", "deprecated": false, "name": "elementChange"}]}, "configs": {"YAHOO.util.Element": [{"access": "", "deprecated": false, "name": "element"}]}, "properties": {"YAHOO.util.Element": [{"access": "", "deprecated": false, "name": "DOM_EVENTS"}], "YAHOO.util.AttributeProvider": [{"access": "private", "deprecated": false, "name": "_configs"}]}, "methods": {"YAHOO.util.Element": [{"access": "private", "deprecated": false, "name": "_setHTMLAttrConfig"}, {"access": "", "deprecated": false, "name": "addClass"}, {"access": "", "deprecated": false, "name": "addListener"}, {"access": "", "deprecated": false, "name": "appendChild"}, {"access": "", "deprecated": false, "name": "appendTo"}, {"access": "", "deprecated": false, "name": "fireQueue"}, {"access": "", "deprecated": false, "name": "getElementsByClassName"}, {"access": "", "deprecated": false, "name": "getElementsByTagName"}, {"access": "", "deprecated": false, "name": "getStyle"}, {"access": "", "deprecated": false, "name": "hasChildNodes"}, {"access": "", "deprecated": false, "name": "hasClass"}, {"access": "", "deprecated": false, "name": "initAttributes"}, {"access": "", "deprecated": false, "name": "insertBefore"}, {"access": "", "deprecated": false, "name": "on"}, {"access": "", "deprecated": false, "name": "removeChild"}, {"access": "", "deprecated": false, "name": "removeClass"}, {"access": "", "deprecated": false, "name": "removeListener"}, {"access": "", "deprecated": false, "name": "replaceChild"}, {"access": "", "deprecated": false, "name": "replaceClass"}, {"access": "", "deprecated": false, "name": "setStyle"}, {"access": "", "deprecated": false, "name": "subscribe"}], "YAHOO.util.AttributeProvider": [{"access": "", "deprecated": true, "name": "configureAttribute"}, {"access": "", "deprecated": false, "name": "fireBeforeChangeEvent"}, {"access": "", "deprecated": false, "name": "fireChangeEvent"}, {"access": "", "deprecated": false, "name": "get"}, {"access": "private", "deprecated": false, "name": "getAttributeConfig"}, {"access": "", "deprecated": false, "name": "getAttributeKeys"}, {"access": "", "deprecated": false, "name": "refresh"}, {"access": "", "deprecated": true, "name": "register"}, {"access": "private", "deprecated": false, "name": "resetAttributeConfig"}, {"access": "", "deprecated": false, "name": "resetValue"}, {"access": "", "deprecated": false, "name": "set"}, {"access": "", "deprecated": false, "name": "setAttributeConfig"}, {"access": "", "deprecated": false, "name": "setAttributes"}]}}, "description": "The Carousel widget.", "guessedname": "Carousel", "name": "YAHOO.widget.Carousel"}];
-                            </script>
-                            <div id="splash_classList">
-                                <ul>
-                                    <li><a href="YAHOO.widget.Carousel.html" title="YAHOO.widget.Carousel" id="class_0">Carousel</a></li>
-                                </ul>
-                            </div>
-                    </div>
-                    <div class="yui-u">
-
-                        </div>
-                </div>
-
 			</div>
 		</div>
 		<div class="yui-b">
@@ -136,7 +173,7 @@ objects represented pictorially.
                         <ul class="content">        
                                 <li class=""><a href="Carousel.js.html" title="Carousel.js">Carousel.js</a></li>
                                 <li class=""><a href="markupTests.js.html" title="markupTests.js">markupTests.js</a></li>
-                                <li class=""><a href="protectedMethodTests.js.html" title="protectedMethodTests.js">protectedMethodTests.js</a></li>
+                                <li class="selected"><a href="protectedMethodTests.js.html" title="protectedMethodTests.js">protectedMethodTests.js</a></li>
                                 <li class=""><a href="scriptTests.js.html" title="scriptTests.js">scriptTests.js</a></li>
                         </ul>
                     </div>
