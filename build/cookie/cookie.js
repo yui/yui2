@@ -30,15 +30,14 @@ YAHOO.util.Cookie = {
     _createCookieString : function (name /*:String*/, value /*:Variant*/, encodeValue /*:Boolean*/, options /*:Object*/) /*:String*/ {
     
         //shortcut
-        var lang = YAHOO.lang;
-    
-        var text /*:String*/ = encodeURIComponent(name) + "=" + (encodeValue ? encodeURIComponent(value) : value);
+        var lang = YAHOO.lang,    
+            text = encodeURIComponent(name) + "=" + (encodeValue ? encodeURIComponent(value) : value);
         
     
         if (lang.isObject(options)){
             //expiration date
             if (options.expires instanceof Date){
-                text += "; expires=" + options.expires.toGMTString();
+                text += "; expires=" + options.expires.toUTCString();
             }
         
             //path
