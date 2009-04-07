@@ -79,15 +79,14 @@
     <span class="nx">_createCookieString</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">name</span> <span class="c">/*:String*/</span><span class="o">,</span> <span class="nx">value</span> <span class="c">/*:Variant*/</span><span class="o">,</span> <span class="nx">encodeValue</span> <span class="c">/*:Boolean*/</span><span class="o">,</span> <span class="nx">options</span> <span class="c">/*:Object*/</span><span class="o">)</span> <span class="c">/*:String*/</span> <span class="o">{</span>
     
         <span class="c">//shortcut</span>
-<span class="c"></span>        <span class="k">var</span> <span class="nx">lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">;</span>
-    
-        <span class="k">var</span> <span class="nx">text</span> <span class="c">/*:String*/</span> <span class="o">=</span> <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">name</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="nx">encodeValue</span> <span class="o">?</span> <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">:</span> <span class="nx">value</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>    
+            <span class="nx">text</span> <span class="o">=</span> <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">name</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="nx">encodeValue</span> <span class="o">?</span> <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">:</span> <span class="nx">value</span><span class="o">);</span>
         
     
         <span class="k">if</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">options</span><span class="o">)){</span>
             <span class="c">//expiration date</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">options</span><span class="o">.</span><span class="nx">expires</span> <span class="k">instanceof</span> <span class="nb">Date</span><span class="o">){</span>
-                <span class="nx">text</span> <span class="o">+=</span> <span class="s2">&quot;; expires=&quot;</span> <span class="o">+</span> <span class="nx">options</span><span class="o">.</span><span class="nx">expires</span><span class="o">.</span><span class="nx">toGMTString</span><span class="o">();</span>
+                <span class="nx">text</span> <span class="o">+=</span> <span class="s2">&quot;; expires=&quot;</span> <span class="o">+</span> <span class="nx">options</span><span class="o">.</span><span class="nx">expires</span><span class="o">.</span><span class="nx">toUTCString</span><span class="o">();</span>
             <span class="o">}</span>
         
             <span class="c">//path</span>
