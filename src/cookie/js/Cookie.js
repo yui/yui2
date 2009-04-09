@@ -273,9 +273,10 @@ YAHOO.util.Cookie = {
             throw new TypeError("Cookie.remove(): Cookie name must be a non-empty string.");
         }
         
-        //set options
-        options = options || {};
-        options.expires = new Date(0);
+        //set options - clone options so the original isn't affected
+        options = YAHOO.lang.merge(options || {}, {
+            expires: new Date(0)
+        });
         
         //set cookie
         return this.set(name, "", options);
