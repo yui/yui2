@@ -853,6 +853,9 @@ YAHOO.test.cookie_test = (function(){
             Assert.isNull(value, "Cookie value should be null.");           
         },
         
+        /*
+         * These next five tests pass because they throw an error.
+         */
         testRemoveInvalidName1 : function(){        
             YAHOO.util.Cookie.remove();        
         },
@@ -871,6 +874,15 @@ YAHOO.test.cookie_test = (function(){
         
         testRemoveInvalidName5 : function(){
             YAHOO.util.Cookie.remove(null);        
+        },
+        
+        /*
+         * Tests that remove() doesn't change the options object that was passed in.
+         */
+        testRemoveWithOptionsIntact: function(){
+            var options = {};
+            YAHOO.util.Cookie.remove("name", options);
+            Assert.isUndefined(options.expires, "Options should not have an expires property.");
         }
         
         
