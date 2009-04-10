@@ -296,13 +296,13 @@ YAHOO.util.Cookie = {
 
     /**
      * Removes a subcookie with a given name. Removing the last subcookie
-     * will remove the entire cookie.
+     * will remove the entire cookie unless options.removeIfEmpty is false.
      * @param {String} name The name of the cookie in which the subcookie exists.
      * @param {String} subName The name of the subcookie to remove.
      * @param {Object} options (Optional) An object containing one or more
      *      cookie options: path (a string), domain (a string), expires (a Date object),
-     *      and secure (true/false). This must be the same settings as the original
-     *      subcookie.
+     *      removeIfEmpty (true/false), and secure (true/false). This must be the same
+     *      settings as the original subcookie.
      * @return {String} The created cookie string.
      * @method removeSub
      * @static
@@ -310,6 +310,8 @@ YAHOO.util.Cookie = {
     removeSub : function(name /*:String*/, subName /*:String*/, options /*:Object*/) /*:String*/ {
         
         var lang = YAHOO.lang;
+        
+        options = options || {};
         
         //check cookie name
         if (!lang.isString(name) || name === ""){
@@ -328,14 +330,19 @@ YAHOO.util.Cookie = {
         if (lang.isObject(subs) && lang.hasOwnProperty(subs, subName)){
             delete subs[subName];
             
-            //reset the cookie if there are subcookies left, else remove
-            for (var key in hash){
-                if (lang.hasOwnProperty(hash, key) && !lang.isFunction(hash[key]) && !lang.isUndefined(hash[key])){
-                    return this.setSubs(name, subs, options);
+            if (options.removeIfEmpty === false) {
+                //reset the cookie
+                return this.setSubs(name, subs, options);
+            } else {
+                //reset the cookie if there are subcookies left, else remove
+                for (var key in hash){
+                    if (lang.hasOwnProperty(hash, key) && !lang.isFunction(hash[key]) && !lang.isUndefined(hash[key])){
+                        return this.setSubs(name, subs, options);
+                    }
                 }
+                
+                return this.remove(name, options);
             }
-            
-            return this.remove(name, options);
         } else {
             return "";
         }
@@ -355,9 +362,9 @@ YAHOO.util.Cookie = {
      */
     set : function (name /*:String*/, value /*:Variant*/, options /*:Object*/) /*:String*/ {
     
-        options = options || {};
-    
         var lang = YAHOO.lang;
+    
+        options = options || {};
     
         if (!lang.isString(name)){
             throw new TypeError("Cookie.set(): Cookie name must be a string.");
