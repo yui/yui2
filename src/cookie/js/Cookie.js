@@ -166,18 +166,31 @@ YAHOO.util.Cookie = {
     /**
      * Returns the cookie value for the given name.
      * @param {String} name The name of the cookie to retrieve.
-     * @param {Function} converter (Optional) A function to run on the value before returning
-     *      it. The function is not used if the cookie doesn't exist.
+     * @param {Object|Function} options (Optional) An object containing one or more
+     *      cookie options: decodeValue (true/false) and converter (a function).
+     *      The converter function is run on the value before returning it. The
+     *      function is not used if the cookie doesn't exist. The function can be
+     *      passed instead of the options object for backwards compatibility.
      * @return {Variant} If no converter is specified, returns a string or null if
      *      the cookie doesn't exist. If the converter is specified, returns the value
      *      returned from the converter or null if the cookie doesn't exist.
      * @method get
      * @static
      */
-    get : function (name /*:String*/, converter /*:Function*/) /*:Variant*/{
+    get : function (name /*:String*/, options /*:Object*/) /*:Variant*/{
         
         var lang = YAHOO.lang;
-        var cookies /*:Object*/ = this._parseCookieString(document.cookie);        
+        
+        if (lang.isFunction(options)) {
+            var convertor = options;
+            options = {};
+        } else if (lang.isObject(options)) {
+            var convertor = options.convertor;
+        } else {
+            options = {};
+        }
+        
+        var cookies /*:Object*/ = this._parseCookieString(document.cookie, options.decodeValue);
         
         if (!lang.isString(name) || name === ""){
             throw new TypeError("Cookie.get(): Cookie name must be a non-empty string.");
@@ -342,6 +355,8 @@ YAHOO.util.Cookie = {
      * @static
      */
     set : function (name /*:String*/, value /*:Variant*/, options /*:Object*/) /*:String*/ {
+    
+        options = options || {};
     
         var lang = YAHOO.lang;
     
