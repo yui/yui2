@@ -288,8 +288,7 @@ YAHOO.util.Cookie = {
         }
         
         //set options
-        options = options || {};
-        options.expires = new Date(0);
+        options = YAHOO.lang.merge(options || {}, { expires: new Date(0) });
         
         //set cookie
         return this.set(name, "", options);
