@@ -121,12 +121,6 @@ function StyleSheet(seed, name) {
         return new arguments.callee(seed,name);
     }
 
-    head = d.getElementsByTagName('head')[0];
-    if (!head) {
-        // TODO: do something. Preferably something smart
-        throw new Error('HEAD element not found to append STYLE node');
-    }
-
     // capture the DOM node if the string is an id
     node = seed && (seed.nodeName ? seed : d.getElementById(seed));
 
@@ -158,7 +152,8 @@ function StyleSheet(seed, name) {
         }
     }
 
-    if (node.parentNode !== head) {
+    if (!node.parentNode || node.parentNode.nodeName.toLowerCase() !== 'head') {
+        head = (node.ownerDocument || d).getElementsByTagName('head')[0];
         // styleSheet isn't available on the style node in FF2 until appended
         // to the head element.  style nodes appended to body do not affect
         // change in Safari.
