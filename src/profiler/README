@@ -17,4 +17,10 @@ YUI Library - Profiler - Release Notes
 
   * No changes
   
+2.NEXT
 
+  * Changed profiler so that unregistering a function/object no longer deletes all recorded data.
+  * Added clear() method to remove profiler data.
+  * Added instrument() method to profile anonymous functions.
+  * Added getReport() method and deprecated getFunctionReport().
+  * Added getOriginal() method to retrieve uninstrumented versions of functions.

@@ -98,20 +98,19 @@ YAHOO.test.profiler_test = (function(){
         //---------------------------------------------------------------------
     
         assertFunctionIsRegistered : function (fullFuncName, shortFuncName, owner, originalFunction, newFunction){
-            var containerFunc = Profiler._container[fullFuncName];
+            var containerFunc = Profiler.getOriginal(fullFuncName);
             Assert.areNotEqual(originalFunction, newFunction, fullFuncName + " function was not replaced.");
             Assert.areEqual(originalFunction, containerFunc, "Original " + fullFuncName + " function was not stored.");
             Assert.areEqual(originalFunction.prototype, containerFunc.prototype, fullFuncName + " prototype was not copied.");
             Assert.areEqual(shortFuncName, containerFunc.__yuiFuncName, fullFuncName + " function name was not stored.");
             Assert.areEqual(owner, containerFunc.__yuiOwner, "Owner for " + fullFuncName + "was not stored.");
-            Assert.isObject(Profiler._report[fullFuncName], "Report for " + fullFuncName + " function was not created.");
+            Assert.isObject(Profiler.getReport(fullFuncName), "Report for " + fullFuncName + " function was not created.");
         
         },
         
         assertFunctionIsNotRegistered : function(fullFuncName, shortFuncName, owner, originalFunction, newFunction){
             Assert.areEqual(originalFunction, newFunction, "Original " + fullFuncName + " function was not placed back on owner.");
-            Assert.isUndefined(Profiler._report[fullFuncName], "Report for " + fullFuncName + " function was not destroyed.");
-            Assert.isUndefined(Profiler._container[fullFuncName], "Container for original " + fullFuncName + " function was not destroyed.");        
+            Assert.isUndefined(Profiler.getOriginal(fullFuncName), "Container for original " + fullFuncName + " function was not destroyed.");        
         },
         
         //---------------------------------------------------------------------
@@ -178,7 +177,7 @@ YAHOO.test.profiler_test = (function(){
             
             Profiler.registerObject("testObject", testObject);
             
-            Assert.isObject(Profiler._container["testObject"], "Object was not added to container.");
+            Assert.isObject(Profiler.getOriginal("testObject"), "Object was not added to container.");
             
             //check each method
             for (var i=0; i < funcNames.length; i++){
@@ -196,7 +195,7 @@ YAHOO.test.profiler_test = (function(){
                 this.assertFunctionIsNotRegistered(fullFuncName, funcNames[i], testObject, originalFunction, testObject[funcNames[i]]);
             }            
             
-            Assert.isUndefined(Profiler._container["testObject"], "Object was not removed from container.");
+            Assert.isUndefined(Profiler.getOriginal("testObject"), "Object was not removed from container.");
         
         },
         
