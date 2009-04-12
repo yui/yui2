@@ -93,6 +93,10 @@ YAHOO.test.profiler_test = (function(){
     
         name : "Profiler Registration Tests",
         
+        tearDown: function(){
+            Profiler.clear();
+        },
+        
         //---------------------------------------------------------------------
         // Special assertions for profiler
         //---------------------------------------------------------------------
@@ -116,6 +120,15 @@ YAHOO.test.profiler_test = (function(){
         //---------------------------------------------------------------------
         // Tests
         //---------------------------------------------------------------------
+    
+        testInstrument: function(){
+            var original = function() { return "Hello"; };
+            var instrumented = Profiler.instrument("hello", original);
+            
+            this.assertFunctionIsRegistered("hello", "hello", null, original, instrumented);
+        
+        
+        },
     
         testRegisterFunction : function (){
         

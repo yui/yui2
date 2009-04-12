@@ -154,8 +154,15 @@ YAHOO.tool.Profiler = function(){
             //assign prototype and flag as being profiled
             newMethod.__yuiProfiled = true;
             newMethod.prototype = method.prototype;
+            
+            //store original method
+            container[name] = method;
+            container[name].__yuiFuncName = name;
+            
+            //create the report
+            createReport(name);
 
-            //return it
+            //return the new method
             return newMethod;
         },    
         
@@ -400,25 +407,22 @@ YAHOO.tool.Profiler = function(){
             //see if the method has already been registered
             if (lang.isFunction(method) && !method.__yuiProfiled){
                 
+                //replace the function with the profiling one
+                owner[funcName] = this.instrument(name, method);
+                        
                 /*
                  * Store original function information. We store the actual
                  * function as well as the owner and the name used to identify
                  * the function so it can be restored later.
                  */
-                container[name] = method;
                 container[name].__yuiOwner = owner;
-                container[name].__yuiFuncName = funcName;
+                container[name].__yuiFuncName = funcName;  //overwrite with less-specific name
                  
-                //replace the function with the profiling one
-                owner[funcName] = this.instrument(name, method);
-                        
                 //register prototype if necessary
                 if (registerPrototype) {            
                     this.registerObject(name + ".prototype", prototype);          
                 }
-                
-                //create a report entry
-                createReport(name);     
+    
             }
         
         },
