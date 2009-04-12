@@ -329,13 +329,13 @@ YAHOO.test.profiler_test = (function(){
         // Special assertions for profiler
         //---------------------------------------------------------------------
     
-        testGetFunctionReport : function (){
+        testGetReport : function (){
         
             Profiler.registerFunction("testObject.factorial", testObject);
             
             testObject.factorial(10);
             
-            var report = Profiler.getFunctionReport("testObject.factorial");
+            var report = Profiler.getReport("testObject.factorial");
             Profiler.unregisterFunction("testObject.factorial");
 
             Assert.isObject(report, "Report should be an object.");
@@ -351,7 +351,7 @@ YAHOO.test.profiler_test = (function(){
             
             testObject.factorial(10);
             
-            var report = Profiler.getFunctionReport("testObject.factorial");
+            var report = Profiler.getReport("testObject.factorial");
             var callCount = Profiler.getCallCount("testObject.factorial");
             Profiler.unregisterFunction("testObject.factorial");
 

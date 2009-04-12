@@ -22,6 +22,11 @@ YAHOO.tool.Profiler = function(){
     
     var container   = {},   //Container object on which to put the original unprofiled methods.
         report      = {},   //Profiling information for functions
+        stopwatches = {},   //Additional stopwatch information
+        
+        WATCH_STARTED   = 0,
+        WATCH_STOPPED   = 1,
+        WATCH_PAUSED    = 2,    
         
         lang    = YAHOO.lang;
 
@@ -102,8 +107,10 @@ YAHOO.tool.Profiler = function(){
         clear: function(name){
             if (lang.isString(name)){
                 delete report[name];
+                delete stopwatches[name];
             } else {
                 report = {};
+                stopwatches = {};
             }
         },
 
@@ -151,6 +158,90 @@ YAHOO.tool.Profiler = function(){
             //return it
             return newMethod;
         },    
+        
+        //-------------------------------------------------------------------------
+        // Stopwatch Methods
+        //-------------------------------------------------------------------------        
+        
+        /**
+         * Pauses profiling information for a given name.
+         * @param {String} name The name of the data point.
+         * @return {Void}
+         * @method pause
+         * @static
+         */        
+        pause: function(name){
+            var now = new Date(),
+                stopwatch = stopwatches[name];
+                
+            if (stopwatch && stopwatch.state == WATCH_STARTED){
+                stopwatch.total += (now - stopwatch.start);
+                stopwatch.start = 0;
+                stopwatch.state = WATCH_PAUSED;
+            }
+        
+        },
+        
+        /**
+         * Start profiling information for a given name. The name cannot be the name
+         * of a registered function or object. This is used to start timing for a
+         * particular block of code rather than instrumenting the entire function.
+         * @param {String} name The name of the data point.
+         * @return {Void}
+         * @method start
+         * @static
+         */
+        start: function(name){
+            if(container[name]){
+                throw new Error("Cannot use '" + name + "' for profiling through start(), name is already in use.");
+            } else {
+            
+                //create report if necessary
+                if (!report[name]){
+                    createReport(name);
+                }
+                
+                //create stopwatch object if necessary
+                if (!stopwatches[name]){             
+                    stopwatches[name] = {
+                        state: WATCH_STOPPED,
+                        start: 0,
+                        total: 0
+                    };
+                }
+                
+                if (stopwatches[name].state == WATCH_STOPPED){
+                    stopwatches[name].state = WATCH_STARTED;
+                    stopwatches[name].start = new Date();                    
+                }
+
+            }
+        },
+        
+        /**
+         * Stops profiling information for a given name.
+         * @param {String} name The name of the data point.
+         * @return {Void}
+         * @method stop
+         * @static
+         */
+        stop: function(name){
+            var now = new Date(),
+                stopwatch = stopwatches[name];
+                
+            if (stopwatch){
+                if (stopwatch.state == WATCH_STARTED){
+                    saveDataPoint(name, stopwatch.total + (now - stopwatch.start));                    
+                } else if (stopwatch.state == WATCH_PAUSED){
+                    saveDataPoint(name, stopwatch.total);
+                }
+                
+                //reset stopwatch information
+                stopwatch.start = 0;
+                stopwatch.total = 0;
+                stopwatch.state = WATCH_STOPPED;                
+            }
+        },
     
         //-------------------------------------------------------------------------
         // Reporting Methods
