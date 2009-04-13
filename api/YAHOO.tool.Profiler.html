@@ -64,41 +64,6 @@
 
                     
                     <div rel="yui:properties" resource="#properties">
-                        <div class="section field details">
-                            <h3 id="properties">Properties</h3>
-                            <div class="content">
-                                    <div class="private" rel="yui:property" resource="#property__container">
-                                    <h4><a name="property__container" property="yui:name">_container</a>
-                                        - <code>private static <span property="yui:type">Object</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Container object on which to put the original unprofiled methods.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__report">
-                                    <h4><a name="property__report" property="yui:name">_report</a>
-                                        - <code>private static <span property="yui:type">Object</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Call information for functions.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                            </div>
-                        </div>
 
                     </div>
 
@@ -106,33 +71,27 @@
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
-                                    <div class="private" rel="yui:method" resource="#method__saveData">
+                                    <div class="" rel="yui:method" resource="#method_clear">
                                     <h4>
-                                        <a name="method__saveData">_saveData</a></h4>
+                                        <a name="method_clear">clear</a></h4>
                                     <div class="detail" >
                                         <code>
-                                         private 
+                                        
                                          static 
                                         
                                         Void
-                                            <strong property="yui:name">_saveData</strong>
+                                            <strong property="yui:name">clear</strong>
                                            (
                                                 
                                                         
                                                          name
                                                     
                                                 
-                                                        , 
-                                                         duration
-                                                    
-                                                
                                             )
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Called when a method ends execution. Marks the start and end time of the 
-method so it can calculate how long the function took to execute. Also 
-updates min/max/avg calculations for the function.
+                                            Removes all report data from the profiler.
                                         </div>
 
                                         <div class="description">
@@ -143,14 +102,59 @@ updates min/max/avg calculations for the function.
                                                         <code><span property="yui:name">name</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
                                                         </code>
-                                                        <span property="yui:description"> The name of the function to mark as stopped.</span>
+                                                        <span property="yui:description"> (Optional) The name of the report to clear. If
+omitted, then all report data is cleared.</span>
                                                         </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method_createReport">
+                                    <h4>
+                                        <a name="method_createReport">createReport</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        Void
+                                            <strong property="yui:name">createReport</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Creates a report object with the given name.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">duration</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
                                                         </code>
-                                                        <span property="yui:description"> The number of milliseconds it took the function to
-execute.</span>
+                                                        <span property="yui:description"> The name to store for the report object.</span>
                                                         </dd>
                                                 </dl>
 
@@ -315,7 +319,7 @@ function.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:method" resource="#method_getFunctionReport">
+                                    <div class=" deprecated" rel="yui:method" resource="#method_getFunctionReport">
                                     <h4>
                                         <a name="method_getFunctionReport">getFunctionReport</a></h4>
                                     <div class="detail" >
@@ -347,6 +351,9 @@ The object has an entry for min, max, avg, calls, and points).
 
 
              
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> Use getReport() instead.
+                                            </div>        
 
                                         </div>
 
@@ -359,7 +366,7 @@ The object has an entry for min, max, avg, calls, and points).
                                     <div class="detail" >
                                         <code>
                                         
-                                        
+                                         static 
                                         
                                         float
                                             <strong property="yui:name">getMax</strong>
@@ -413,7 +420,7 @@ a normal object method would just be 'object.methodName'.</span>
                                     <div class="detail" >
                                         <code>
                                         
-                                        
+                                         static 
                                         
                                         float
                                             <strong property="yui:name">getMin</strong>
@@ -451,6 +458,207 @@ a normal object method would just be 'object.methodName'.</span>
                                                         float
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The minimum time it takes the function to execute.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_getOriginal">
+                                    <h4>
+                                        <a name="method_getOriginal">getOriginal</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Function|Object
+                                            <strong property="yui:name">getOriginal</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns the uninstrumented version of a function/object.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the function/object to retrieve.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Function|Object
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The uninstrumented version of a function/object.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_getReport">
+                                    <h4>
+                                        <a name="method_getReport">getReport</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Object
+                                            <strong property="yui:name">getReport</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns an object containing profiling data for a single function.
+The object has an entry for min, max, avg, calls, and points).
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Object
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">An object containing profile data for a given function.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_instrument">
+                                    <h4>
+                                        <a name="method_instrument">instrument</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Function
+                                            <strong property="yui:name">instrument</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                                        , 
+                                                         method
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Instruments a method to have profiling calls.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the report for the function.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">method</span>
+                                                        &lt;<span property="yui:type">Function</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The function to instrument.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Function
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">An instrumented version of the function.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_pause">
+                                    <h4>
+                                        <a name="method_pause">pause</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Void
+                                            <strong property="yui:name">pause</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Pauses profiling information for a given name.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the data point.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
                                                 </dl>
 
 
@@ -528,7 +736,7 @@ a normal object method would just be 'object.methodName'.</span>
                                     <div class="detail" >
                                         <code>
                                         
-                                        
+                                         static 
                                         
                                         Void
                                             <strong property="yui:name">registerFunction</strong>
@@ -542,13 +750,17 @@ a normal object method would just be 'object.methodName'.</span>
                                                          owner
                                                     
                                                 
+                                                        , 
+                                                         registerPrototype
+                                                    
+                                                
                                             )
                                         </code>
                                         
                                         <div class="description" property="yui:description">
                                             Sets up a function for profiling. It essentially overwrites the function with one
 that has instrumentation data. This method also creates an entry for the function
-in the profile report. The original function is stored on the _container object.
+in the profile report. The original function is stored on the container object.
                                         </div>
 
                                         <div class="description">
@@ -570,6 +782,14 @@ is the name of the function that is stored in the report.</span>
 isn't global then this argument is required. This could be the namespace that
 the function belongs to, such as YAHOO.util.Dom, or the object on which it's
 a method.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">registerPrototype</span>
+                                                        &lt;<span property="yui:type">Boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> (Optional) Indicates that the prototype should
+also be instrumented. Setting to true has the same effect as calling
+registerConstructor().</span>
                                                         </dd>
                                                 </dl>
 
@@ -663,13 +883,181 @@ using the same methodology.
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="private" rel="yui:method" resource="#method_saveDataPoint">
+                                    <h4>
+                                        <a name="method_saveDataPoint">saveDataPoint</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                         static 
+                                        
+                                        Void
+                                            <strong property="yui:name">saveDataPoint</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                                        , 
+                                                         duration
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Called when a method ends execution. Marks the start and end time of the 
+method so it can calculate how long the function took to execute. Also 
+updates min/max/avg calculations for the function.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the function to mark as stopped.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">duration</span>
+                                                        &lt;<span property="yui:type">int</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The number of milliseconds it took the function to
+execute.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_start">
+                                    <h4>
+                                        <a name="method_start">start</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Void
+                                            <strong property="yui:name">start</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Start profiling information for a given name. The name cannot be the name
+of a registered function or object. This is used to start timing for a
+particular block of code rather than instrumenting the entire function.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the data point.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_stop">
+                                    <h4>
+                                        <a name="method_stop">stop</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        Void
+                                            <strong property="yui:name">stop</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Stops profiling information for a given name.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the data point.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_unregisterFunction">
                                     <h4>
                                         <a name="method_unregisterFunction">unregisterFunction</a></h4>
                                     <div class="detail" >
                                         <code>
                                         
-                                        
+                                         static 
                                         
                                         Void
                                             <strong property="yui:name">unregisterFunction</strong>
@@ -857,27 +1245,28 @@ unregistered.</span>
                         </ul>
                     </div>
 
-                    <div id="propertyList" class="module">
-                        <h4>Properties</h4>
-                        <ul class="content">        
-                                <li class="private"><a href="#property__container" title="_container">_container</a></li>
-                                <li class="private"><a href="#property__report" title="_report">_report</a></li>
-                        </ul>
-                    </div>
 
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li class="private"><a href="#method__saveData" title="_saveData">_saveData</a></li>
+                                <li class=""><a href="#method_clear" title="clear">clear</a></li>
+                                <li class="private"><a href="#method_createReport" title="createReport">createReport</a></li>
                                 <li class=""><a href="#method_getAverage" title="getAverage">getAverage</a></li>
                                 <li class=""><a href="#method_getCallCount" title="getCallCount">getCallCount</a></li>
                                 <li class=""><a href="#method_getFullReport" title="getFullReport">getFullReport</a></li>
-                                <li class=""><a href="#method_getFunctionReport" title="getFunctionReport">getFunctionReport</a></li>
+                                <li class=" deprecated"><a href="#method_getFunctionReport" title="getFunctionReport">getFunctionReport</a></li>
                                 <li class=""><a href="#method_getMax" title="getMax">getMax</a></li>
                                 <li class=""><a href="#method_getMin" title="getMin">getMin</a></li>
+                                <li class=""><a href="#method_getOriginal" title="getOriginal">getOriginal</a></li>
+                                <li class=""><a href="#method_getReport" title="getReport">getReport</a></li>
+                                <li class=""><a href="#method_instrument" title="instrument">instrument</a></li>
+                                <li class=""><a href="#method_pause" title="pause">pause</a></li>
                                 <li class=""><a href="#method_registerConstructor" title="registerConstructor">registerConstructor</a></li>
                                 <li class=""><a href="#method_registerFunction" title="registerFunction">registerFunction</a></li>
                                 <li class=""><a href="#method_registerObject" title="registerObject">registerObject</a></li>
+                                <li class="private"><a href="#method_saveDataPoint" title="saveDataPoint">saveDataPoint</a></li>
+                                <li class=""><a href="#method_start" title="start">start</a></li>
+                                <li class=""><a href="#method_stop" title="stop">stop</a></li>
                                 <li class=""><a href="#method_unregisterFunction" title="unregisterFunction">unregisterFunction</a></li>
                                 <li class=""><a href="#method_unregisterObject" title="unregisterObject">unregisterObject</a></li>
                         </ul>
@@ -894,7 +1283,7 @@ unregistered.</span>
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "private", "host": "YAHOO.tool.Profiler", "name": "_container", "url": "YAHOO.tool.Profiler.html#property__container", "type": "property"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getAverage", "url": "YAHOO.tool.Profiler.html#method_getAverage", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getCallCount", "url": "YAHOO.tool.Profiler.html#method_getCallCount", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getFullReport", "url": "YAHOO.tool.Profiler.html#method_getFullReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getFunctionReport", "url": "YAHOO.tool.Profiler.html#method_getFunctionReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getMax", "url": "YAHOO.tool.Profiler.html#method_getMax", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getMin", "url": "YAHOO.tool.Profiler.html#method_getMin", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "registerConstructor", "url": "YAHOO.tool.Profiler.html#method_registerConstructor", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "registerFunction", "url": "YAHOO.tool.Profiler.html#method_registerFunction", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "registerObject", "url": "YAHOO.tool.Profiler.html#method_registerObject", "type": "method"}, {"access": "private", "host": "YAHOO.tool.Profiler", "name": "_report", "url": "YAHOO.tool.Profiler.html#property__report", "type": "property"}, {"access": "private", "host": "YAHOO.tool.Profiler", "name": "_saveData", "url": "YAHOO.tool.Profiler.html#method__saveData", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "unregisterFunction", "url": "YAHOO.tool.Profiler.html#method_unregisterFunction", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "unregisterObject", "url": "YAHOO.tool.Profiler.html#method_unregisterObject", "type": "method"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.tool.Profiler", "name": "clear", "url": "YAHOO.tool.Profiler.html#method_clear", "type": "method"}, {"access": "private", "host": "YAHOO.tool.Profiler", "name": "createReport", "url": "YAHOO.tool.Profiler.html#method_createReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getAverage", "url": "YAHOO.tool.Profiler.html#method_getAverage", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getCallCount", "url": "YAHOO.tool.Profiler.html#method_getCallCount", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getFullReport", "url": "YAHOO.tool.Profiler.html#method_getFullReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getFunctionReport", "url": "YAHOO.tool.Profiler.html#method_getFunctionReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getMax", "url": "YAHOO.tool.Profiler.html#method_getMax", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getMin", "url": "YAHOO.tool.Profiler.html#method_getMin", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getOriginal", "url": "YAHOO.tool.Profiler.html#method_getOriginal", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getReport", "url": "YAHOO.tool.Profiler.html#method_getReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "instrument", "url": "YAHOO.tool.Profiler.html#method_instrument", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "pause", "url": "YAHOO.tool.Profiler.html#method_pause", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "registerConstructor", "url": "YAHOO.tool.Profiler.html#method_registerConstructor", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "registerFunction", "url": "YAHOO.tool.Profiler.html#method_registerFunction", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "registerObject", "url": "YAHOO.tool.Profiler.html#method_registerObject", "type": "method"}, {"access": "private", "host": "YAHOO.tool.Profiler", "name": "saveDataPoint", "url": "YAHOO.tool.Profiler.html#method_saveDataPoint", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "start", "url": "YAHOO.tool.Profiler.html#method_start", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "stop", "url": "YAHOO.tool.Profiler.html#method_stop", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "unregisterFunction", "url": "YAHOO.tool.Profiler.html#method_unregisterFunction", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "unregisterObject", "url": "YAHOO.tool.Profiler.html#method_unregisterObject", "type": "method"}];
 </script>
 </body>
 </html>
