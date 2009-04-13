@@ -1193,6 +1193,13 @@
             <span class="nx">node</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">.</span><span class="nx">previousSibling</span> <span class="o">=</span> <span class="nx">node</span><span class="o">.</span><span class="nx">previousSibling</span><span class="o">;</span>
         <span class="o">}</span>
 
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">currentFocus</span> <span class="o">==</span> <span class="nx">node</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">currentFocus</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_currentlyHighlighted</span> <span class="o">==</span> <span class="nx">node</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">_currentlyHighlighted</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="o">}</span>
+
         <span class="nx">node</span><span class="o">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
         <span class="nx">node</span><span class="o">.</span><span class="nx">previousSibling</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
         <span class="nx">node</span><span class="o">.</span><span class="nx">nextSibling</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>

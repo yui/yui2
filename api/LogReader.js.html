@@ -1265,6 +1265,11 @@
                 <span class="o">}</span>
             <span class="o">}</span>
             <span class="k">if</span><span class="o">(</span><span class="nx">okToPrint</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c">// Start from 0ms elapsed time</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_consoleMsgCount</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_lastTime</span> <span class="o">=</span> <span class="nx">entry</span><span class="o">.</span><span class="nx">time</span><span class="o">.</span><span class="nx">getTime</span><span class="o">();</span>
+                <span class="o">}</span>
+
                 <span class="nx">msg</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">formatMsg</span><span class="o">(</span><span class="nx">entry</span><span class="o">);</span>
                 <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">msg</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">msgHTML</span><span class="o">[</span><span class="nx">msgHTML</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">msg</span><span class="o">;</span>
