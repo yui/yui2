@@ -775,15 +775,32 @@ TV.prototype = {
                 break;
             case KEY.RIGHT:
                 this.logger.log('RIGHT');
-                do {
-                    newNode.expand();
-                    if (newNode.children.length) {
-                        newNode = newNode.children[0];
-                    } else {
-                        newNode = newNode.nextSibling;
-                    }
-                } while (newNode && !newNode._canHaveFocus());
-                if (newNode) { newNode.focus();}
+				var self = this,
+					moveFocusRight,
+					focusOnExpand = function (newNode) {
+						self.unsubscribe('expandComplete',focusOnExpand);
+						moveFocusRight(newNode);
+					};
+				moveFocusRight = function (newNode) {
+					do {
+						if (newNode.isDynamic() && !newNode.childrenRendered) {
+							self.subscribe('expandComplete',focusOnExpand);
+							newNode.expand();
+							newNode = null;
+							break;
+						} else {
+							newNode.expand();
+							if (newNode.children.length) {
+								newNode = newNode.children[0];
+							} else {
+								newNode = newNode.nextSibling;
+							}
+						}
+					} while (newNode && !newNode._canHaveFocus());
+					if (newNode) { newNode.focus();}
+				};
+					
+				moveFocusRight(newNode);
                 Event.preventDefault(ev);
                 break;
             case KEY.ENTER:
@@ -3252,7 +3269,7 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     },
 
     /**
-     * Synchronizes the node.data, node.html, and the node's content
+     * Synchronizes the node.html, and the node's content
      * @property setHtml
      * @param o {object} An html string or object containing an html property
      */

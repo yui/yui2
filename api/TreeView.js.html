@@ -824,15 +824,32 @@
                 <span class="k">break</span><span class="o">;</span>
             <span class="nx">case</span> <span class="nx">KEY</span><span class="o">.</span><span class="nx">RIGHT</span><span class="o">:</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;RIGHT&#39;</span><span class="o">);</span>
-                <span class="k">do</span> <span class="o">{</span>
-                    <span class="nx">newNode</span><span class="o">.</span><span class="nx">expand</span><span class="o">();</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="nx">newNode</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">newNode</span> <span class="o">=</span> <span class="nx">newNode</span><span class="o">.</span><span class="nx">children</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                        <span class="nx">newNode</span> <span class="o">=</span> <span class="nx">newNode</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">;</span>
-                    <span class="o">}</span>
-                <span class="o">}</span> <span class="k">while</span> <span class="o">(</span><span class="nx">newNode</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">newNode</span><span class="o">.</span><span class="nx">_canHaveFocus</span><span class="o">());</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">newNode</span><span class="o">)</span> <span class="o">{</span> <span class="nx">newNode</span><span class="o">.</span><span class="nx">focus</span><span class="o">();}</span>
+				<span class="k">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">,</span>
+					<span class="nx">moveFocusRight</span><span class="o">,</span>
+					<span class="nx">focusOnExpand</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">newNode</span><span class="o">)</span> <span class="o">{</span>
+						<span class="nx">self</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="s1">&#39;expandComplete&#39;</span><span class="o">,</span><span class="nx">focusOnExpand</span><span class="o">);</span>
+						<span class="nx">moveFocusRight</span><span class="o">(</span><span class="nx">newNode</span><span class="o">);</span>
+					<span class="o">};</span>
+				<span class="nx">moveFocusRight</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">newNode</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">do</span> <span class="o">{</span>
+						<span class="k">if</span> <span class="o">(</span><span class="nx">newNode</span><span class="o">.</span><span class="nx">isDynamic</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">newNode</span><span class="o">.</span><span class="nx">childrenRendered</span><span class="o">)</span> <span class="o">{</span>
+							<span class="nx">self</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;expandComplete&#39;</span><span class="o">,</span><span class="nx">focusOnExpand</span><span class="o">);</span>
+							<span class="nx">newNode</span><span class="o">.</span><span class="nx">expand</span><span class="o">();</span>
+							<span class="nx">newNode</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+							<span class="k">break</span><span class="o">;</span>
+						<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+							<span class="nx">newNode</span><span class="o">.</span><span class="nx">expand</span><span class="o">();</span>
+							<span class="k">if</span> <span class="o">(</span><span class="nx">newNode</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
+								<span class="nx">newNode</span> <span class="o">=</span> <span class="nx">newNode</span><span class="o">.</span><span class="nx">children</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
+							<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+								<span class="nx">newNode</span> <span class="o">=</span> <span class="nx">newNode</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">;</span>
+							<span class="o">}</span>
+						<span class="o">}</span>
+					<span class="o">}</span> <span class="k">while</span> <span class="o">(</span><span class="nx">newNode</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">newNode</span><span class="o">.</span><span class="nx">_canHaveFocus</span><span class="o">());</span>
+					<span class="k">if</span> <span class="o">(</span><span class="nx">newNode</span><span class="o">)</span> <span class="o">{</span> <span class="nx">newNode</span><span class="o">.</span><span class="nx">focus</span><span class="o">();}</span>
+				<span class="o">};</span>
+					
+				<span class="nx">moveFocusRight</span><span class="o">(</span><span class="nx">newNode</span><span class="o">);</span>
                 <span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span>
                 <span class="k">break</span><span class="o">;</span>
             <span class="nx">case</span> <span class="nx">KEY</span><span class="o">.</span><span class="nx">ENTER</span><span class="o">:</span>
