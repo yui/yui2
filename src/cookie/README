@@ -22,3 +22,8 @@ YUI Library - Cookie Utility - Release Notes
 2.7.0
 
   * Implemented change to return null for any cookie with an invalid encoding (causing decodeURIComponent() to fail).
+
+2.NEXT
+ 
+  * Changes formatting of date from toGMTString() to toUTCString() (trac# 2527892). 
+  * Updated remove() so that it no longer modifies the options object that is passed in (trac# 2527838).

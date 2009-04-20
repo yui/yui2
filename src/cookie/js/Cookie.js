@@ -30,15 +30,14 @@ YAHOO.util.Cookie = {
     _createCookieString : function (name /*:String*/, value /*:Variant*/, encodeValue /*:Boolean*/, options /*:Object*/) /*:String*/ {
     
         //shortcut
-        var lang = YAHOO.lang;
-    
-        var text /*:String*/ = encodeURIComponent(name) + "=" + (encodeValue ? encodeURIComponent(value) : value);
+        var lang = YAHOO.lang,    
+            text = encodeURIComponent(name) + "=" + (encodeValue ? encodeURIComponent(value) : value);
         
     
         if (lang.isObject(options)){
             //expiration date
             if (options.expires instanceof Date){
-                text += "; expires=" + options.expires.toGMTString();
+                text += "; expires=" + options.expires.toUTCString();
             }
         
             //path
@@ -274,9 +273,10 @@ YAHOO.util.Cookie = {
             throw new TypeError("Cookie.remove(): Cookie name must be a non-empty string.");
         }
         
-        //set options
-        options = options || {};
-        options.expires = new Date(0);
+        //set options - clone options so the original isn't affected
+        options = YAHOO.lang.merge(options || {}, {
+            expires: new Date(0)
+        });
         
         //set cookie
         return this.set(name, "", options);

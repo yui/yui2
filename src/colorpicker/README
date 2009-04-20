@@ -1,5 +1,7 @@
 ColorPicker - Release Notes
 
+Development master
+
 2.7.0
     * Moved private functions to protected prototype methods
     * Now allows paste into RGB, HSV, Hex input fields (SF bug 1907525)
