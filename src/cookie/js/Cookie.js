@@ -63,7 +63,7 @@ YAHOO.util.Cookie = {
      * Formats a cookie value for an object containing multiple values.
      * @param {Object} hash An object of key-value pairs to create a string for.
      * @return {String} A string suitable for use as a cookie value.
-     * @method _createCookieHash
+     * @method _createCookieHashString
      * @private
      * @static
      */
@@ -251,7 +251,7 @@ YAHOO.util.Cookie = {
      * @param {String} name The name of the cookie to retrieve.
      * @return {Object} An object of name-value pairs if the cookie with the given name
      *      exists, null if it does not.
-     * @method getHash
+     * @method getSubs
      * @static
      */
     getSubs : function (name /*:String*/) /*:Object*/ {
@@ -298,7 +298,7 @@ YAHOO.util.Cookie = {
     
     /**
      * Removes a subcookie with a given name. Removing the last subcookie
-     * will remove the entire cookie unless options.removeIfEmpty is false.
+     *      will remove the entire cookie unless options.removeIfEmpty is false.
      * @param {String} name The name of the cookie in which the subcookie exists.
      * @param {String} subName The name of the subcookie to remove.
      * @param {Object} options (Optional) An object containing one or more
