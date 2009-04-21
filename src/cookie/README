@@ -1,17 +1,14 @@
 YUI Library - Cookie Utility - Release Notes
 
-2.5.0
-
-  * Beta release
+Development Master
+ 
+  * Changes formatting of date from toGMTString() to toUTCString() (trac# 2527892). 
+  * Updated remove() so that it no longer modifies the options object that is passed in (trac# 2527838).
   
-2.5.1
+2.7.0
 
-  * Fixed error in parsing routine that incorrectly handled special characters.
-  
-2.5.2
+  * Implemented change to return null for any cookie with an invalid encoding (causing decodeURIComponent() to fail).
 
-  * No changes.
-  
 2.6.0
 
   * Implemented removeSub() method.
@@ -19,11 +16,15 @@ YUI Library - Cookie Utility - Release Notes
   * Fixed parsing issue when cookie string was empty (SF 2007223).
   * Out of beta.
 
-2.7.0
+2.5.2
 
-  * Implemented change to return null for any cookie with an invalid encoding (causing decodeURIComponent() to fail).
+  * No changes.
+  
+2.5.1
 
-2.NEXT
- 
-  * Changes formatting of date from toGMTString() to toUTCString() (trac# 2527892). 
-  * Updated remove() so that it no longer modifies the options object that is passed in (trac# 2527838).
+  * Fixed error in parsing routine that incorrectly handled special characters.  
+  
+2.5.0
+
+  * Beta release
+  
