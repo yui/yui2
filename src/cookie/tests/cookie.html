@@ -570,48 +570,48 @@ YAHOO.test.cookie_test = (function(){
             deleteCookie("name");
         },
         
-        testGetSimpleWithTrueDecodeValue : function(){
+        testGetSimpleWithFalseRaw : function(){
             setCookie("name", "Nicholas%20Zakas");
             
-            var value = YAHOO.util.Cookie.get("name", { decodeValue: true });
+            var value = YAHOO.util.Cookie.get("name", { raw: false });
             Assert.areEqual("Nicholas Zakas", value, "Retrieved cookie value is incorrect.");
             
             deleteCookie("name");
         },
         
-        testGetSimpleWithFalseDecodeValue : function(){
+        testGetSimpleWithTrueRaw : function(){
             setCookie("name", "Nicholas%20Zakas");
             
-            var value = YAHOO.util.Cookie.get("name", { decodeValue: false });
+            var value = YAHOO.util.Cookie.get("name", { raw: true });
             Assert.areEqual("Nicholas%20Zakas", value, "Retrieved cookie value is incorrect.");
             
             deleteCookie("name");
         },
         
-        testGetSimpleWithInvalidDecodeValue : function(){
+        testGetSimpleWithInvalidRaw : function(){
             setCookie("name", "Nicholas%20Zakas");
             
-            var value = YAHOO.util.Cookie.get("name", { decodeValue: "blah" });
+            var value = YAHOO.util.Cookie.get("name", { raw: "blah" });
             Assert.areEqual("Nicholas Zakas", value, "Retrieved cookie value is incorrect.");
             
             deleteCookie("name");
         },
         
-        testGetComplexWithTrueDecodeValue : function(){
+        testGetComplexWithFalseRaw : function(){
             setCookie("name", encodeURIComponent("as.bd ed|ieh,~!!@#$%^*=098345|}{<>?"));
             
-            var value = YAHOO.util.Cookie.get("name", { decodeValue: true });
+            var value = YAHOO.util.Cookie.get("name", { raw: false });
             Assert.areEqual("as.bd ed|ieh,~!!@#$%^*=098345|}{<>?", value, "Retrieved cookie value is incorrect.");
             
             deleteCookie("name");
         },
         
-        testGetComplexWithFalseDecodeValue : function(){
+        testGetComplexWithTrueRaw : function(){
             setCookie("name", "as.bd ed|ieh,~!!@#$%^*=098345|}{<>?");
             setCookie("name2", encodeURIComponent("as.bd ed|ieh,~!!@#$%^*=098345|}{<>?"));
             
-            var value  = YAHOO.util.Cookie.get("name",  { decodeValue: false }),
-                value2 = YAHOO.util.Cookie.get("name2", { decodeValue: false });
+            var value  = YAHOO.util.Cookie.get("name",  { raw: true }),
+                value2 = YAHOO.util.Cookie.get("name2", { raw: true });
             Assert.areEqual("as.bd ed|ieh,~!!@#$%^*=098345|}{<>?", value, "Retrieved cookie value is incorrect.");
             Assert.areEqual(encodeURIComponent("as.bd ed|ieh,~!!@#$%^*=098345|}{<>?"), value2, "Retrieved cookie value is incorrect.");
             
@@ -619,10 +619,10 @@ YAHOO.test.cookie_test = (function(){
             deleteCookie("name2");
         },
         
-        testGetComplexWithInvalidDecodeValue : function(){
+        testGetComplexWithInvalidRaw : function(){
             setCookie("name", encodeURIComponent("as.bd ed|ieh,~!!@#$%^*=098345|}{<>?"));
             
-            var value = YAHOO.util.Cookie.get("name", { decodeValue: "blah" });
+            var value = YAHOO.util.Cookie.get("name", { raw: "blah" });
             Assert.areEqual("as.bd ed|ieh,~!!@#$%^*=098345|}{<>?", value, "Retrieved cookie value is incorrect.");
             
             deleteCookie("name");
@@ -942,7 +942,7 @@ YAHOO.test.cookie_test = (function(){
         testRemoveLastSub : function(){
             YAHOO.util.Cookie.removeSub("info", "a");
             var value = YAHOO.util.Cookie.get("info");
-            Assert.isNull(value, "Cookie value should be null.");
+            Assert.areEqual("", value, "Cookie string is incorrect.");
         },
         
         testRemoveLastSubWithTrueRemoveIfEmpty : function(){
@@ -960,7 +960,7 @@ YAHOO.test.cookie_test = (function(){
         testRemoveLastSubWithInvalidRemoveIfEmpty : function() {
             YAHOO.util.Cookie.removeSub("info", "a", { removeIfEmpty: "blah" });
             var value = YAHOO.util.Cookie.get("info");
-            Assert.isNull(value, "Cookie value should be null.");
+            Assert.areEqual("", value, "Cookie string is incorrect.");
         },
         
         testRemoveNotLastSubWithTrueRemoveIfEmpty : function(){
@@ -977,6 +977,7 @@ YAHOO.test.cookie_test = (function(){
             var value = YAHOO.util.Cookie.removeSub("data", "c", { removeIfEmpty: "blah" });
             Assert.areEqual("data=a=b&e=f&g=h&found=true&count=11&age=29&title=f2e&stuff=no%20way&special=" + encodeURIComponent("Something with & and ="), value, "Cookie string is incorrect.");
         }
+
     }));
     
     //-------------------------------------------------------------------------
@@ -1103,20 +1104,20 @@ YAHOO.test.cookie_test = (function(){
             Assert.areEqual("data=1234; name=Nicholas%20C.%20Zakas", document.cookie, "Cookies were not set to document.");
         },
         
-        testSetSimpleWithTrueEncodeValue : function(){
-            var output = YAHOO.util.Cookie.set("data", "1234", { encodeValue: true });
+        testSetSimpleWithFalseRaw : function(){
+            var output = YAHOO.util.Cookie.set("data", "1234", { raw: false });
             Assert.areEqual("data=1234", output, "Cookie string format is wrong.");
             Assert.areEqual("data=1234", document.cookie, "Cookie was not set onto document.");
         },
         
-        testSetSimpleWithFalseEncodeValue : function(){
-            var output = YAHOO.util.Cookie.set("data", "1234", { encodeValue: false });
+        testSetSimpleWithTrueRaw : function(){
+            var output = YAHOO.util.Cookie.set("data", "1234", { raw: true });
             Assert.areEqual("data=1234", output, "Cookie string format is wrong.");
             Assert.areEqual("data=1234", document.cookie, "Cookie was not set onto document.");
         },
         
-        testSetSimpleWithTrueEncodeValue : function(){
-            var output = YAHOO.util.Cookie.set("data", "1234", { encodeValue: "blah" });
+        testSetSimpleWithInvalidRaw : function(){
+            var output = YAHOO.util.Cookie.set("data", "1234", { raw: "blah" });
             Assert.areEqual("data=1234", output, "Cookie string format is wrong.");
             Assert.areEqual("data=1234", document.cookie, "Cookie was not set onto document.");
         },
@@ -1209,29 +1210,29 @@ YAHOO.test.cookie_test = (function(){
             Assert.areEqual(result, document.cookie, "Cookie was not set to document.");
         },
         
-        testSetComplexWithTrueEncodeValue : function(){
+        testSetComplexWithFalseRaw : function(){
             var name = "c.f name";
             var value = "as.bd ed|ieh,~!!@#$%^*=098345|}{<>?";
             var result = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-            var text = YAHOO.util.Cookie.set(name, value, { encodeValue: true });
+            var text = YAHOO.util.Cookie.set(name, value, { raw: false });
             Assert.areEqual(result, text, "Cookie string is incorrect.");
             Assert.areEqual(result, document.cookie, "Cookie was not set to document.");
         },
         
-        testSetComplexWithFalseEncodeValue : function(){
+        testSetComplexWithTrueRaw : function(){
             var name = "c.f name";
             var value = "as.bd ed|ieh,~!!@#$%^*=098345|}{<>?";
             var result = encodeURIComponent(name) + "=" + value;
-            var text = YAHOO.util.Cookie.set(name, value, { encodeValue: false });
+            var text = YAHOO.util.Cookie.set(name, value, { raw: true });
             Assert.areEqual(result, text, "Cookie string is incorrect.");
             Assert.areEqual(result, document.cookie, "Cookie was not set to document.");
         },
         
-        testSetComplexWithInvalidEncodeValue : function(){
+        testSetComplexWithInvalidRaw : function(){
             var name = "c.f name";
             var value = "as.bd ed|ieh,~!!@#$%^*=098345|}{<>?";
             var result = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-            var text = YAHOO.util.Cookie.set(name, value, { encodeValue: "blah" });
+            var text = YAHOO.util.Cookie.set(name, value, { raw: "blah" });
             Assert.areEqual(result, text, "Cookie string is incorrect.");
             Assert.areEqual(result, document.cookie, "Cookie was not set to document.");
         },

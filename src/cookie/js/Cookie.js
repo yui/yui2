@@ -20,7 +20,7 @@ YAHOO.util.Cookie = {
      * Creates a cookie string that can be assigned into document.cookie.
      * @param {String} name The name of the cookie.
      * @param {String} value The value of the cookie.
-     * @param {encodeValue} encodeValue True to encode the value, false to leave as-is.
+     * @param {Boolean} encodeValue True to encode the value, false to leave as-is.
      * @param {Object} options (Optional) Options for the cookie.
      * @return {String} The formatted cookie string.
      * @method _createCookieString
@@ -166,7 +166,7 @@ YAHOO.util.Cookie = {
      * Returns the cookie value for the given name.
      * @param {String} name The name of the cookie to retrieve.
      * @param {Object|Function} options (Optional) An object containing one or more
-     *      cookie options: decodeValue (true/false) and converter (a function).
+     *      cookie options: raw (true/false) and converter (a function).
      *      The converter function is run on the value before returning it. The
      *      function is not used if the cookie doesn't exist. The function can be
      *      passed instead of the options object for backwards compatibility.
@@ -176,7 +176,7 @@ YAHOO.util.Cookie = {
      * @method get
      * @static
      */
-    get : function (name /*:String*/, options /*:Object*/) /*:Variant*/{
+    get : function (name /*:String*/, options /*:Variant*/) /*:Variant*/{
         
         var lang = YAHOO.lang,
         converter;
@@ -190,7 +190,7 @@ YAHOO.util.Cookie = {
             options = {};
         }
         
-        var cookies /*:Object*/ = this._parseCookieString(document.cookie, options.decodeValue);
+        var cookies /*:Object*/ = this._parseCookieString(document.cookie, (options.raw !== true));
         
         if (!lang.isString(name) || name === ""){
             throw new TypeError("Cookie.get(): Cookie name must be a non-empty string.");
@@ -298,7 +298,7 @@ YAHOO.util.Cookie = {
     
     /**
      * Removes a subcookie with a given name. Removing the last subcookie
-     *      will remove the entire cookie unless options.removeIfEmpty is false.
+     *      won't remove the entire cookie unless options.removeIfEmpty is true.
      * @param {String} name The name of the cookie in which the subcookie exists.
      * @param {String} subName The name of the subcookie to remove.
      * @param {Object} options (Optional) An object containing one or more
@@ -332,7 +332,7 @@ YAHOO.util.Cookie = {
         if (lang.isObject(subs) && lang.hasOwnProperty(subs, subName)){
             delete subs[subName];
             
-            if (options.removeIfEmpty === false) {
+            if (options.removeIfEmpty !== true) {
                 //reset the cookie
                 return this.setSubs(name, subs, options);
             } else {
@@ -357,7 +357,7 @@ YAHOO.util.Cookie = {
      * @param {Variant} value The value to set for the cookie.
      * @param {Object} options (Optional) An object containing one or more
      *      cookie options: path (a string), domain (a string), expires (a Date object),
-     *      encodeValue (true/false), and secure (true/false).
+     *      raw (true/false), and secure (true/false).
      * @return {String} The created cookie string.
      * @method set
      * @static
@@ -376,8 +376,7 @@ YAHOO.util.Cookie = {
             throw new TypeError("Cookie.set(): Value cannot be undefined.");
         }
         
-        
-        var text /*:String*/ = this._createCookieString(name, value, ('encodeValue' in options) ? options.encodeValue : true, options);
+        var text /*:String*/ = this._createCookieString(name, value, (options.raw !== true), options);
         document.cookie = text;
         return text;
     },

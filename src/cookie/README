@@ -27,6 +27,7 @@ YUI Library - Cookie Utility - Release Notes
  
   * Changes formatting of date from toGMTString() to toUTCString() (trac# 2527892). 
   * Updated remove() so that it no longer modifies the options object that is passed in (trac# 2527838).
-  * Removing the last subcookie with removeSub() now removes the cookie, unless the removeIfEmpty option is set to false.
-  * Added encodeValue option to set(), set to false to disable.
-  * Changed get() to take an options parameter with decodeValue and converter function, if a function is passed then it is used as the converter for backward compatibility.
+  * Removing the last subcookie with removeSub() now removes the cookie if the removeIfEmpty option is set to true.
+  * Added option to disable url encoding/decoding by passing options.raw to set() and get().
+  * Changed get() to take an options object with raw and converter properties, if a function is passed instead of an object then it is used as the converter for backward compatibility.
+
