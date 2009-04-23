@@ -517,10 +517,11 @@ RS.prototype = {
      * @param fnSort {Function} Reference to a sort function.
      * @param desc {Boolean} True if sort direction is descending, false if sort
      * direction is ascending.
+     * @parm field {String} The field to sort by, from sortOptions.field
      * @return {YAHOO.widget.Record[]} Sorted array of Records.
      */
-    sortRecords : function(fnSort, desc) {
-        return this._records.sort(function(a, b) {return fnSort(a, b, desc);});
+    sortRecords : function(fnSort, desc, field) {
+        return this._records.sort(function(a, b) {return fnSort(a, b, desc, field);});
     },
 
     /**

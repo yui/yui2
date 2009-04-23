@@ -909,7 +909,7 @@ YAHOO.widget.Column.prototype = {
      * @default null
      */
     /**
-     * Custom sort handler.
+     * Custom sort handler. Signature: sortFunction(a, b, desc, field) where field is the sortOptions.field value
      *
      * @property sortOptions.sortFunction
      * @type Function
