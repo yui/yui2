@@ -152,7 +152,7 @@ YAHOO.test.cookie_test = (function(){
             ObjectAssert.hasProperty("undefined", cookies, "Cookie 'undefined' is missing.");
         },
         
-        /**
+        /*
          * Tests that the cookie utility deals with cookies that contain
          * an invalid encoding. It shouldn't error, but should treat the cookie
          * as if it doesn't exist (return null).
@@ -162,6 +162,17 @@ YAHOO.test.cookie_test = (function(){
             var cookies = YAHOO.util.Cookie._parseCookieString(cookieString);
             
             Assert.isNull(cookies["DetailInfoList"], "Cookie 'DetailInfoList' should not have a value.");
+        },
+        
+        /*
+         * Tests that a Boolean cookie, one without an equals sign of value,
+         * is represented as an empty string.
+         */
+        testParseCookieStringBooleanCookie: function(){
+            var cookieString = "info";
+            var cookies = YAHOO.util.Cookie._parseCookieString(cookieString);
+            
+            Assert.areEqual("", cookies["info"], "Cookie 'info' should be an empty string.");
         },
         
         testParseCookieStringWithHash : function(){
@@ -588,6 +599,7 @@ YAHOO.test.cookie_test = (function(){
             deleteCookie("name");
         },
         
+        /* Decided to let this be truthy or falsy
         testGetSimpleWithInvalidRaw : function(){
             setCookie("name", "Nicholas%20Zakas");
             
@@ -595,7 +607,7 @@ YAHOO.test.cookie_test = (function(){
             Assert.areEqual("Nicholas Zakas", value, "Retrieved cookie value is incorrect.");
             
             deleteCookie("name");
-        },
+        },*/
         
         testGetComplexWithFalseRaw : function(){
             setCookie("name", encodeURIComponent("as.bd ed|ieh,~!!@#$%^*=098345|}{<>?"));
@@ -617,8 +629,9 @@ YAHOO.test.cookie_test = (function(){
             
             deleteCookie("name");
             deleteCookie("name2");
-        },
+        }
         
+        /* Decided to let this be truthy or falsy
         testGetComplexWithInvalidRaw : function(){
             setCookie("name", encodeURIComponent("as.bd ed|ieh,~!!@#$%^*=098345|}{<>?"));
             
@@ -626,9 +639,49 @@ YAHOO.test.cookie_test = (function(){
             Assert.areEqual("as.bd ed|ieh,~!!@#$%^*=098345|}{<>?", value, "Retrieved cookie value is incorrect.");
             
             deleteCookie("name");
+        }*/
+        
+    }));
+    
+    //-------------------------------------------------------------------------
+    // Test Case for testing cookie existence
+    //-------------------------------------------------------------------------
+    
+    suite.add(new YAHOO.tool.TestCase({
+    
+        name : "Cookie Exists Tests",   
+
+        tearDown: function(){
+            deleteCookie("name");
+            document.cookie = "name; expires=" + (new Date(0)).toUTCString();
+        },
+
+        //---------------------------------------------------------------------
+        // Tests
+        //---------------------------------------------------------------------
+    
+        testExistsSimple : function(){
+        
+            setCookie("name", "Nicholas%20Zakas");
+            
+            var value = YAHOO.util.Cookie.exists("name");
+            Assert.isTrue(value, "Cookie 'name' should exist.");
+        },
+        
+        testExistsUnknown : function(){
+            var value = YAHOO.util.Cookie.exists("name3");
+            Assert.isFalse(value, "Cookie 'name3' should not exist.");
+        },
+        
+        testExistsBooleanCookie : function(){
+        
+            document.cookie = "info";            
+            var value = YAHOO.util.Cookie.exists("info");
+            Assert.isTrue(value, "Cookie 'info' should exist.");
         }
         
     }));
+    
 
     //-------------------------------------------------------------------------
     // Test Case for getting cookie hashes
@@ -957,11 +1010,12 @@ YAHOO.test.cookie_test = (function(){
             Assert.areEqual("", value, "Cookie string is incorrect.");
         },
         
+        /* Decided to let this value be truthy or falsy
         testRemoveLastSubWithInvalidRemoveIfEmpty : function() {
             YAHOO.util.Cookie.removeSub("info", "a", { removeIfEmpty: "blah" });
             var value = YAHOO.util.Cookie.get("info");
             Assert.areEqual("", value, "Cookie string is incorrect.");
-        },
+        },*/
         
         testRemoveNotLastSubWithTrueRemoveIfEmpty : function(){
             var value = YAHOO.util.Cookie.removeSub("data", "c", { removeIfEmpty: true });
@@ -1228,6 +1282,7 @@ YAHOO.test.cookie_test = (function(){
             Assert.areEqual(result, document.cookie, "Cookie was not set to document.");
         },
         
+        /* Decided to let this option be truthy or falsy.
         testSetComplexWithInvalidRaw : function(){
             var name = "c.f name";
             var value = "as.bd ed|ieh,~!!@#$%^*=098345|}{<>?";
@@ -1235,7 +1290,7 @@ YAHOO.test.cookie_test = (function(){
             var text = YAHOO.util.Cookie.set(name, value, { raw: "blah" });
             Assert.areEqual(result, text, "Cookie string is incorrect.");
             Assert.areEqual(result, document.cookie, "Cookie was not set to document.");
-        },
+        },*/
         
         testSetComplexWithPath : function(){
             var name = "c.f name";

@@ -128,31 +128,30 @@ YAHOO.util.Cookie = {
             
             var decodeValue = (decode === false ? function(s){return s;} : decodeURIComponent);
             
-            if (/[^=]+=[^=;]?(?:; [^=]+=[^=]?)?/.test(text)){
-                var cookieParts /*:Array*/ = text.split(/;\s/g),
-                    cookieName /*:String*/ = null,
-                    cookieValue /*:String*/ = null,
-                    cookieNameValue /*:Array*/ = null;
+            var cookieParts /*:Array*/ = text.split(/;\s/g),
+                cookieName /*:String*/ = null,
+                cookieValue /*:String*/ = null,
+                cookieNameValue /*:Array*/ = null;
+            
+            for (var i=0, len=cookieParts.length; i < len; i++){
                 
-                for (var i=0, len=cookieParts.length; i < len; i++){
-                    
-                    //check for normally-formatted cookie (name-value)
-                    cookieNameValue = cookieParts[i].match(/([^=]+)=/i);
-                    if (cookieNameValue instanceof Array){
-                        try {
-                            cookieName = decodeURIComponent(cookieNameValue[1]);
-                            cookieValue = decodeValue(cookieParts[i].substring(cookieNameValue[1].length+1));
-                        } catch (ex){
-                            //ignore the entire cookie - encoding is likely invalid
-                        }
-                    } else {
-                        //means the cookie does not have an "=", so treat it as a boolean flag
-                        cookieName = decodeURIComponent(cookieParts[i]);
-                        cookieValue = cookieName;
+                //check for normally-formatted cookie (name-value)
+                cookieNameValue = cookieParts[i].match(/([^=]+)=/i);
+                if (cookieNameValue instanceof Array){
+                    try {
+                        cookieName = decodeURIComponent(cookieNameValue[1]);
+                        cookieValue = decodeValue(cookieParts[i].substring(cookieNameValue[1].length+1));
+                    } catch (ex){
+                        //ignore the entire cookie - encoding is likely invalid
                     }
-                    cookies[cookieName] = cookieValue;
+                } else {
+                    //means the cookie does not have an "=", so treat it as a boolean flag
+                    cookieName = decodeURIComponent(cookieParts[i]);
+                    cookieValue = "";
                 }
+                cookies[cookieName] = cookieValue;
             }
+
         }
         
         return cookies;
@@ -161,6 +160,25 @@ YAHOO.util.Cookie = {
     //-------------------------------------------------------------------------
     // Public Methods
     //-------------------------------------------------------------------------
+    
+    /**
+     * Determines if the cookie with the given name exists. This is useful for
+     * Boolean cookies (those that do not follow the name=value convention).
+     * @param {String} name The name of the cookie to check.
+     * @return {Boolean} True if the cookie exists, false if not.
+     * @method exists
+     * @static
+     */
+    exists: function(name) {
+
+        if (!YAHOO.lang.isString(name) || name === ""){
+            throw new TypeError("Cookie.exists(): Cookie name must be a non-empty string.");
+        }
+
+        var cookies /*:Object*/ = this._parseCookieString(document.cookie, true);
+        
+        return cookies.hasOwnProperty(name);
+    },
     
     /**
      * Returns the cookie value for the given name.
@@ -179,7 +197,7 @@ YAHOO.util.Cookie = {
     get : function (name /*:String*/, options /*:Variant*/) /*:Variant*/{
         
         var lang = YAHOO.lang,
-        converter;
+            converter;
         
         if (lang.isFunction(options)) {
             converter = options;
@@ -190,7 +208,7 @@ YAHOO.util.Cookie = {
             options = {};
         }
         
-        var cookies /*:Object*/ = this._parseCookieString(document.cookie, (options.raw !== true));
+        var cookies /*:Object*/ = this._parseCookieString(document.cookie, !options.raw);
         
         if (!lang.isString(name) || name === ""){
             throw new TypeError("Cookie.get(): Cookie name must be a non-empty string.");
@@ -220,10 +238,10 @@ YAHOO.util.Cookie = {
      * @method getSub
      * @static
      */
-    getSub : function (name /*:String*/, subName /*:String*/, converter /*:Function*/) /*:Variant*/ {
+    getSub : function (name, subName, converter) {
         
         var lang = YAHOO.lang,
-        hash /*:Variant*/ = this.getSubs(name);
+            hash = this.getSubs(name);
         
         if (hash !== null) {
             
@@ -255,14 +273,16 @@ YAHOO.util.Cookie = {
      * @static
      */
     getSubs : function (name /*:String*/) /*:Object*/ {
+    
+        var isString = YAHOO.lang.isString;
         
         //check cookie name
-        if (!YAHOO.lang.isString(name) || name === ""){
+        if (!isString(name) || name === ""){
             throw new TypeError("Cookie.getSubs(): Cookie name must be a non-empty string.");
         }
         
         var cookies = this._parseCookieString(document.cookie, false);
-        if (YAHOO.lang.isString(cookies[name])){
+        if (isString(cookies[name])){
             return this._parseCookieHash(cookies[name]);
         }
         return null;
@@ -331,9 +351,10 @@ YAHOO.util.Cookie = {
         //delete the indicated subcookie
         if (lang.isObject(subs) && lang.hasOwnProperty(subs, subName)){
             delete subs[subName];
-            
-            if (options.removeIfEmpty !== true) {
+
+            if (!options.removeIfEmpty) {
                 //reset the cookie
+
                 return this.setSubs(name, subs, options);
             } else {
                 //reset the cookie if there are subcookies left, else remove
@@ -376,7 +397,7 @@ YAHOO.util.Cookie = {
             throw new TypeError("Cookie.set(): Value cannot be undefined.");
         }
         
-        var text /*:String*/ = this._createCookieString(name, value, (options.raw !== true), options);
+        var text /*:String*/ = this._createCookieString(name, value, !options.raw, options);
         document.cookie = text;
         return text;
     },
