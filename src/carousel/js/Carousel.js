@@ -53,14 +53,6 @@
      */
     var instances = {},
 
-    /**
-     * Reindex rows when carousel is in albumView and addItems or removeItmes
-     * is called. 
-     * @private
-     * @static
-     */
-	indexRows	= false,
-
     /*
      * Custom events of the Carousel component
      */
@@ -179,8 +171,8 @@
      * @event itemReplaced
      * @description Fires when an item has been replaced in the Carousel.
      * Passes back the content of the item that was replaced, the content 
-	 * of the new item, the index where the replacement occurred, and the event 
-	 * itself.  See
+     * of the new item, the index where the replacement occurred, and the event 
+     * itself.  See
      * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
      * for more information on listening for this event.
      * @type YAHOO.util.CustomEvent
@@ -391,7 +383,7 @@
                         getStyleIntVal(el, "marginTop")         +
                         getStyleIntVal(el, "marginBottom")      +
                         getStyleIntVal(el, "borderTopWidth")    +
-                        getStyleIntVal(el, "borderBottom") +
+                        getStyleIntVal(el, "borderBottomWidth") +
                         getStyleIntVal(el, "paddingTop")        +
                         getStyleIntVal(el, "paddingBottom");
             }
@@ -502,12 +494,11 @@
             size     = 0;
 
         itemSize = getCarouselItemSize.call(this);
-		
         size = itemSize * delta;
 
         // XXX: really, when the orientation is vertical, the scrolling
-        // is not exactly the number of elements into element size. However, it is when albumView is enabled.
-        if (this.get("isVertical") && !this.get("albumView")) {//this.get("albumView")
+        // is not exactly the number of elements into element size. However, it is when multirows is enabled.
+        if (this.get("isVertical") && !this._rows) {
             size -= delta;
         }
 
@@ -698,7 +689,7 @@
         if (!JS.isNumber(page)) {
             page = Math.ceil(carousel.get("selectedItem") / numVisible);
         }
-		
+        
         numPages = Math.ceil(carousel.get("numItems") / numVisible);
 
         carousel._pages.num = numPages;
@@ -721,7 +712,8 @@
      * @private
      */
     function syncUi(o) {
-        var carousel = this;
+        var carousel = this,
+            rows = carousel._rows;
 
         if (!JS.isObject(o)) {
             return;
@@ -734,9 +726,15 @@
         case itemRemovedEvent:
             carousel._syncUiForItemRemove(o);
             break;
+        case itemReplacedEvent:
+            carousel._syncUiForItemReplace(o.newItem, o.oldItem);
+            break;
         case loadItemsEvent:
             carousel._syncUiForLazyLoading(o);
             break;
+        }
+        if(rows) {//Re-index rows if multirows is enabled.
+            carousel._indexRows(); 
         }
 
         carousel.fireEvent(uiUpdateEvent);
@@ -764,6 +762,7 @@
 
         if (carousel.get("selectOnScroll")) {
             if (carousel.get("selectedItem") != carousel._selectedItem) {
+                console.log('selecting, ha!'); 
                 carousel.set("selectedItem", carousel._selectedItem);
             }
         }
@@ -800,6 +799,22 @@
         /*
          * Internal variables used within the Carousel component
          */
+         
+         /**
+         * Number of rows for a multirow carousel.
+         *
+         * @property _rows
+         * @private
+         */
+        _rows: null,
+        
+        /**
+         * Number of cols for a multirow carousel.
+         *
+         * @property _cols
+         * @private
+         */
+        _cols: null,
 
         /**
          * The Animation object.
@@ -832,14 +847,6 @@
          * @private
          */
         _firstItem: 0,
-
-        /**
-         * The current first row of the Carousel if albumView is enabled.
-         *
-         * @property _firstRow
-         * @private
-         */
-        _firstRow: 0,
 
         /**
          * Does the Carousel element have focus?
@@ -1122,18 +1129,17 @@
              * @default "yui-carousel-vertical"
              */
             VERTICAL: "yui-carousel-vertical",
-
-			/**
-             * The class name of an albumView Carousel.
+            
+            /**
+             * The class name of an multirow Carousel.
              *
              * @property ALBUM_VIEW
              * @default "yui-carousel-albumview"
              */
             ALBUM_VIEW: "yui-carousel-albumview",
-
-
-			/**
-             * The class name of a row in an albumView Carousel.
+            
+            /**
+             * The class name of a row in a multirow Carousel.
              *
              * @property ROW
              * @default "yui-carousel-new-row"
@@ -1238,7 +1244,7 @@
              * @property PAGER_PREFIX_TEXT
              * @default "Go to page "
              */
-            PAGER_PREFIX_TEXT: " ",
+            PAGER_PREFIX_TEXT: "Go to page ",
 
             /**
              * The previous navigation button name/text.
@@ -1256,9 +1262,9 @@
 
         /**
          * Insert or append an item to the Carousel.
-         * E.g. ({content:"Your Content", id:"", className:""}, index)
+         * E.g. if Object: ({content:"Your Content", id:"", className:""}, index)
          *
-		 * @method addItem
+         * @method addItem
          * @public
          * @param item {String | Object | HTMLElement} The item to be appended
          * to the Carousel. If the parameter is a string, it is assumed to be
@@ -1270,11 +1276,12 @@
          * @return {Boolean} Return true on success, false otherwise
          */
         addItem: function (item, index) { 
-			var carousel = this,
-				albumView = carousel.get("albumView"),
+            var carousel = this,
+                rows = carousel._rows,
                 className,
                 content,
                 elId,
+                newIndex, // Add newIndex as workaround for undefined pos
                 numItems = carousel.get("numItems");
 
             if (!item) {
@@ -1299,6 +1306,8 @@
                         className : className,
                         id        : elId
                 });
+                // Add newIndex as workaround for undefined pos
+                newIndex = carousel._itemsTable.items.length-1;
             } else {
                 if (index < 0 || index >= numItems) {
                     YAHOO.log("Index out of bounds", "error", WidgetName);
@@ -1316,24 +1325,21 @@
                 carousel.set("numItems", carousel._itemsTable.items.length);
             }
 
-            carousel.fireEvent(itemAddedEvent, { pos: index, ev: itemAddedEvent });
-
-			if(albumView && indexRows) {
-				carousel._indexRows();
-			}
+            // Add newPos as workaround for undefined pos
+            carousel.fireEvent(itemAddedEvent, { pos: index, ev: itemAddedEvent, newPos:newIndex });
 
             return true;
         },
 
         /**
          * Insert or append multiple items to the Carousel.
-		 * E.g. [[{content:'<img/>'}, index1], [{content:'<img/>'}, index2]] 
-		 * NOTE: item at index must already exist.
          *
          * @method addItems
          * @public
-         * @param items {Array} An array of items to be added with each item
-         * representing an item, index pair [{item, index}, ...]
+         * @param items {Array} An array containing an array of new items each linked to the 
+         * index where the insertion should take place. 
+         * E.g. [[{content:'<img/>'}, index1], [{content:'<img/>'}, index2]]
+         * NOTE: An item at index must already exist.
          * @return {Boolean} Return true on success, false otherwise
          */
         addItems: function (items) {
@@ -1369,7 +1375,7 @@
          * @method clearItems
          * public
          */        
-		clearItems: function () {
+         clearItems: function () {
             var carousel = this, n = carousel.get("numItems");
 
             while (n > 0) {
@@ -1379,7 +1385,7 @@
                 }
                 /*
                     For dynamic loading, the numItems may be much larger than
-                    the actual number of items in the table.  So, set the
+                    the actual number of items in the table. So, set the
                     numItems to zero, and break out of the loop if the table
                     is already empty.
                  */
@@ -1615,6 +1621,7 @@
              * @type Number
              */
             carousel.setAttributeConfig("numVisible", {
+                    setter    : carousel._numVisibleSetter,
                     method    : carousel._setNumVisible,
                     validator : carousel._validateNumVisible,
                     value     : attrs.numVisible || carousel.CONFIG.NUM_VISIBLE
@@ -1691,21 +1698,6 @@
                     value     : attrs.isVertical || false
             });
 
-			/**
-             * @attribute album view. Note: only works if isVertical is enabled. 
-             * @description Sets album carousel
-             * @default <br>
-             * { rows: 1, // number of item rows<br>
-             *   cols: 3 } // number of item columns
-             * @type Object
-             */
-            carousel.setAttributeConfig("albumView", {
-	 				method    : carousel._setAlbumView,
-                    validator : carousel._validateAlbumView,
-                    value     :
-                        attrs.albumView || null
-            });
-
             /**
              * @attribute navigation
              * @description The set of navigation controls for Carousel
@@ -1780,6 +1772,8 @@
             carousel.on(itemAddedEvent, syncUi);
 
             carousel.on(itemRemovedEvent, syncUi);
+
+            carousel.on(itemReplacedEvent, syncUi); 
 
             carousel.on(itemSelectedEvent, function () {
                 if (carousel._hasFocus) {
@@ -1970,6 +1964,29 @@
         },
 
         /**
+         * For a multirow carousel, return the number of rows specified by user.
+         *
+         * @method getItems
+         * @return {Number} Number of rows
+         * @public
+         */
+        getRows: function () {
+            return this._rows;
+        },
+
+        /**
+         * For a multirow carousel, return the number of cols specified by user.
+         * Note: we need cols (cols=x) in order to apply a break to every x LIs.
+         *
+         * @method getItems
+         * @return {Array} Return all items in the Carousel
+         * @public
+         */
+        getCols: function () {
+            return this._cols;
+        },
+
+        /**
          * Return the position of the Carousel item that has the id "id", or -1
          * if the id is not found.
          *
@@ -2024,7 +2041,7 @@
          */
         removeItem: function (index) {
             var carousel = this,
-				albumView = carousel.get("albumView"),
+                rows = carousel._rows,
                 item,
                 num      = carousel.get("numItems");
 
@@ -2040,23 +2057,18 @@
 
                 carousel.fireEvent(itemRemovedEvent,
                         { item: item[0], pos: index, ev: itemRemovedEvent });
-                
-				if(albumView && indexRows) {
-					carousel._indexRows();
-				}
-				
-				return true;
+                return true;
             }
 
             return false;
         },
 
         /**
-         * Replace an item at index from the Carousel.
+         * Replace an item at index witin Carousel.
          *
          * @method replaceItem
          * @public
-		 * @param item {String | Object | HTMLElement} The item to be appended
+         * @param item {String | Object | HTMLElement} The item to be appended
          * to the Carousel. If the parameter is a string, it is assumed to be
          * the content of the newly created item. If the parameter is an
          * object, it is assumed to supply the content and an optional class
@@ -2066,17 +2078,17 @@
          * @return {Boolean} Return true on success, false otherwise
          */
         replaceItem: function (item, index) {
-            var carousel   = this,
-				cssClass   = carousel.CLASSES,
-				albumView  = carousel.get("albumView"), 
-				content,
-				items;
-			
-			if (!item) {
-	        	return false;
-	        }	
-				
-			items = [carousel.getItem(index)];
+            var carousel = this,
+                rows = carousel._rows,
+                className,
+                content,
+                elId,
+                numItems = carousel.get("numItems"),
+                oel;
+
+            if (!item) {
+                return false;
+            }
 
             if (JS.isString(item) || item.nodeName) {
                 content = item.nodeName ? item.innerHTML : item;
@@ -2087,32 +2099,58 @@
                 return false;
             }
 
-			item = {
-				content:   content        || '', 
-				className: item.className || '', 
-				id:        item.id        || '' 
-			};
+            className = item.className || "";
+            elId      = item.id ? item.id : Dom.generateId();
 
-			if (!carousel.removeItem(index)) {
-	             YAHOO.log("Item could not be removed to be replaced",
-	             "warn", WidgetName);
-				return false;
-	       	}
-	
-			indexRows = true;
-			// Additem and make sure to preserve current classes (esp. AlbumView's yui-carousel-row)
- 			if (!carousel.addItem(item, index)) {
-	             YAHOO.log("Item could not be added to replace removed item",
-	             "warn", WidgetName);
-				return false;
-	       	}
-	
-			items.push(carousel.getItem(index));
-	
-			carousel.fireEvent(itemReplacedEvent,
-                    { items: items, pos: index, ev: itemReplacedEvent });	
+            if (JS.isUndefined(index)) {
+                YAHOO.log("Index must be defined for replaceItem", "error", WidgetName);
+                return false;
+            } else {
+                if (index < 0 || index >= numItems) {
+                    YAHOO.log("Index out of bounds", "error", WidgetName);
+                    return false;
+                }
+                
+                oel = carousel._itemsTable.items[index];
+                carousel._itemsTable.items.splice(index, 1, {
+                        item      : content,
+                        className : className,
+                        id        : elId
+                });
+                el = carousel._itemsTable.items[index];
+            }
+            carousel.fireEvent(itemReplacedEvent,
+                    { newItem: el, oldItem: oel, pos: index, ev: itemReplacedEvent });
+
             return true;
         },
+        
+        /**
+         * Replace multiple items at specified indexes.
+         * NOTE: item at index must already exist.
+         *
+         * @method replaceItems
+         * @public
+         * @param items {Array} An array containing an array of replacement items each linked to the 
+         * index where the substitution should take place. 
+         * E.g. [[{content:'<img/>'}, index1], [{content:'<img/>'}, index2]] 
+         * @return {Boolean} Return true on success, false otherwise
+         */
+         replaceItems: function (items) {
+             var i, n, rv = true;
+
+             if (!JS.isArray(items)) {
+                 return false;
+             }
+
+             for (i = 0, n = items.length; i < n; i++) {
+                 if (this.replaceItem(items[i][0], items[i][1]) === false) {
+                     rv = false;
+                 }
+             }
+
+             return rv;
+         },
 
         /**
          * Render the Carousel.
@@ -2126,7 +2164,7 @@
         render: function (appendTo) {
             var carousel  = this,
                 cssClass  = carousel.CLASSES,
-				albumView = carousel.get("albumView");
+                rows = carousel._rows;
 
             carousel.addClass(cssClass.CAROUSEL);
 
@@ -2150,10 +2188,10 @@
 
             if (carousel.get("isVertical")) {
                 carousel.addClass(cssClass.VERTICAL);
-				
-				if(albumView)	{
-					carousel.addClass(cssClass.ALBUM_VIEW);
-				}
+                
+                if(rows) {
+                    carousel.addClass(cssClass.ALBUM_VIEW);
+                }
             } else {
                 carousel.addClass(cssClass.HORIZONTAL);
             }
@@ -2165,10 +2203,10 @@
             }
 
             carousel._refreshUi();
-			
-			if(albumView)	{
-				carousel._indexRows();
-			}
+            
+            if(rows) {
+                carousel._indexRows();
+            }
 
             return true;
         },
@@ -2236,31 +2274,16 @@
         },
 
         /**
-         * Get the page containing the passed item.
-         *
-         * @method getPageForItem
-         * @public
-         * @param item {Number} The index of the element.
-         */
-		getPageForItem : function(index) {
-			var carousel = this;
-			return Math.ceil(
-				(index+1) / parseInt(carousel.get("numVisible"),10)
-			);
-		},
-
-        /**
-         * Scroll the Carousel to make the item the first visible item.
+         * Scroll the Carousel to make the item the first visible item. 
          *
          * @method scrollTo
          * @public
          * @param item Number The index of the element to position at.
          * @param dontSelect Boolean True if select should be avoided
          */
-        scrollTo: function (item, dontSelect) {	
-	
-			var carousel   = this,
-                animate, animCfg, isCircular, isVertical, albumView, delta, direction, firstItem, firstVisible, firstRow, row,
+        scrollTo: function (item, dontSelect) {
+            var carousel   = this,
+                animate, animCfg, isCircular, isVertical, rows, delta, direction, firstItem, firstVisible, row,
                 numItems, numPerPage, offset, page, pageForItem, rv, sentinel,
                 stopAutoScroll;
 
@@ -2271,25 +2294,19 @@
 
             animCfg        = carousel.get("animation");
             isCircular     = carousel.get("isCircular");
-			isVertical     = carousel.get("isVertical");
-			albumView      = carousel.get("albumView"); 
+            isVertical     = carousel.get("isVertical");
+            itemsPerCol    = carousel._cols; 
             firstItem      = carousel._firstItem;
-			firstRow       = carousel._firstRow;
             numItems       = carousel.get("numItems");
             numPerPage     = carousel.get("numVisible");
             page           = carousel.get("currentPage");
-			pageForItem	   = carousel.getPageForItem(item); 
-			firstVisible   = numPerPage * (pageForItem-1); 
+            firstVisible   = numPerPage * (pageForItem-1); 
             
-			stopAutoScroll = function () {
+            stopAutoScroll = function () {
                 if (carousel.isAutoPlayOn()) {
                     carousel.stopAutoPlay();
                 }
             };
-			
-			if(albumView) {
-				row = albumView.rows * (pageForItem-1); 				
-			}
 
             if (item < 0) {
                 if (isCircular) {
@@ -2318,15 +2335,14 @@
             }
 
             carousel.fireEvent(beforePageChangeEvent, { page: page });
-
-			if(albumView) {
-            	delta = firstRow - row; // yes, the delta is reverse
-			} else {
-				delta = firstItem - item; // yes, the delta is reverse
-			}
-			
+            
+            if(itemsPerCol) {
+                delta = (firstItem - item)/itemsPerCol;
+            } else {
+                delta = firstItem - item; // yes, the delta is reverse
+            }
+            
             carousel._firstItem = item;
-			carousel._firstRow = row;
             carousel.set("firstVisible", item);
 
             YAHOO.log("Scrolling to " + item + " delta = " + delta, WidgetName);
@@ -2722,7 +2738,7 @@
                 last       = 0,
                 numItems   = carousel.get("numItems"),
                 numVisible = carousel.get("numVisible"),
-                reveal     = carousel.get("revealAmount");			
+                reveal     = carousel.get("revealAmount");
 
             last = first + numVisible - 1 + (reveal ? 1 : 0);
             last = last > numItems - 1 ? numItems - 1 : last;
@@ -2833,23 +2849,22 @@
          */
         _parseCarouselItems: function () {
             var carousel = this,
-				cssClass = carousel.CLASSES,
-				i=0,
-				albumView,
+                cssClass = carousel.CLASSES,
+                i=0,
+                rows,
                 child,
                 domItemEl,
                 elId,
                 node,
                 parent   = carousel._carouselEl;
 
-			albumView = carousel.get("albumView");
+            rows = carousel._rows;
             domItemEl = carousel.get("carouselItemEl");
 
             for (child = parent.firstChild; child; child = child.nextSibling) {
                 if (child.nodeType == 1) {
                     node = child.nodeName;
                     if (node.toUpperCase() == domItemEl) {
-	
                         if (child.id) {
                             elId = child.id;
                         } else {
@@ -2863,42 +2878,40 @@
         },
 
         /**
-		 * Apply the CSS class indicating a new row correctly when carousel
-         * is in albumView mode. 
+         * Apply the CSS class indicating a new row correctly when carousel
+         * is in multirow mode. 
          * @method indexRows
          * @protected
          */
         _indexRows: function () {
             var carousel = this,
-				cssClass = carousel.CLASSES,
-				i=0,
-				albumView,
+                cssClass = carousel.CLASSES,
+                num      = carousel._itemsTable.numItems,
+                i=0,
+                rows,
+                cols,
                 child,
                 domItemEl,
                 elId,
                 node,
                 parent   = carousel._carouselEl;
-
-			albumView = carousel.get("albumView");
-						
-			if(albumView) {
-			
-	            domItemEl = carousel.get("carouselItemEl");
-
-	            for (child = parent.firstChild; child; child = child.nextSibling) {
-	                if (child.nodeType == 1) {
-	                    node = child.nodeName;
-	                    if (node.toUpperCase() == domItemEl) {						
-							
-								if(i && (i % albumView.cols)==0)	{
-									Dom.addClass(child, cssClass.ROW);
-								}
-								i++;
-							
-	                    }
-	                }
-	            }
-			}
+                
+            rows = carousel._rows;
+            cols = carousel._cols;
+            if(rows && cols) {
+                for (var i = 0; i < num; i++) {
+                    item = Dom.get(carousel._itemsTable.items[i].id); 
+                    if (Dom.hasClass(item, cssClass.ROW) && i % cols !== 0) {
+                        Dom.removeClass(item, cssClass.ROW);
+                        carousel._itemsTable.items.className = ""; 
+                    } else if (Dom.hasClass(item, cssClass.ROW) && i % cols === 0) {
+                        continue; 
+                    } else if (!Dom.hasClass(item, cssClass.ROW) && i % cols === 0){
+                        Dom.addClass(item, cssClass.ROW); 
+                        carousel._itemsTable.items.className = cssClass.ROW;
+                    }
+                }
+            }
         },
 
         /**
@@ -2929,7 +2942,8 @@
                                 el + (el.id ? " (#" + el.id + ")" : ""),
                                 WidgetName);
                         if (el.nodeName == "INPUT" ||
-                            el.nodeName == "BUTTON") {
+                            el.nodeName == "BUTTON" ||
+                            el.nodeName == "A") {//YUI^ File this bug!
                             carousel._navBtns.prev.push(el);
                         } else {
                             j = el.getElementsByTagName("INPUT");
@@ -2956,7 +2970,8 @@
                                 el + (el.id ? " (#" + el.id + ")" : ""),
                                 WidgetName);
                         if (el.nodeName == "INPUT" ||
-                            el.nodeName == "BUTTON") {
+                            el.nodeName == "BUTTON" ||
+                            el.nodeName == "A") {
                             carousel._navBtns.next.push(el);
                         } else {
                             j = el.getElementsByTagName("INPUT");
@@ -3013,8 +3028,7 @@
             which   = carousel.get("isVertical") ? "top" : "left";
 
             offset += offset !== 0 ? getStyle(carousel._carouselEl, which) : 0;
-            
-			Dom.setStyle(carousel._carouselEl, which, offset + "px");
+            Dom.setStyle(carousel._carouselEl, which, offset + "px");
         },
 
         /**
@@ -3119,12 +3133,11 @@
          */
         _setClipContainerSize: function (clip, num) {
             var carousel = this,
-                attr, currVal, isVertical, albumView, itemSize, reveal, size, which;
+                attr, currVal, isVertical, rows, itemSize, reveal, size, which;
 
-            
-			isVertical = carousel.get("isVertical");
-            albumView  = carousel.get("albumView"); 
-			reveal     = carousel.get("revealAmount");
+            isVertical = carousel.get("isVertical");
+            rows       = carousel._rows; 
+            reveal     = carousel.get("revealAmount");
             which      = isVertical ? "height" : "width";
             attr       = isVertical ? "top" : "left";
 
@@ -3132,7 +3145,6 @@
             if (!clip) {
                 return;
             }
-			
             num        = num  || carousel.get("numVisible");
             itemSize   = getCarouselItemSize.call(carousel, which);
             size       = itemSize * num;
@@ -3155,24 +3167,20 @@
             }
 
             if (isVertical) {
-	
-				if(albumView.rows > 1) {
-					size = itemSize * albumView.rows;
-				}
-				
-				size += getStyle(carousel._carouselEl, "marginTop")        +
-	                    getStyle(carousel._carouselEl, "marginBottom")     +
-	                    getStyle(carousel._carouselEl, "paddingTop")       +
-	                    getStyle(carousel._carouselEl, "paddingBottom")    +
-	                    getStyle(carousel._carouselEl, "borderTopWidth")   +
-	                    getStyle(carousel._carouselEl, "borderBottomWidth");
+                if(rows > 1) {
+                    size = itemSize * rows;
+                }
+                size += getStyle(carousel._carouselEl, "marginTop")        +
+                        getStyle(carousel._carouselEl, "marginBottom")     +
+                        getStyle(carousel._carouselEl, "paddingTop")       +
+                        getStyle(carousel._carouselEl, "paddingBottom")    +
+                        getStyle(carousel._carouselEl, "borderTopWidth")   +
+                        getStyle(carousel._carouselEl, "borderBottomWidth");
                 // XXX: for vertical Carousel
 
                 Dom.setStyle(clip, which, size + "px");
-			
             } else {
-				
-				size += getStyle(carousel._carouselEl, "marginLeft")      +
+                size += getStyle(carousel._carouselEl, "marginLeft")      +
                         getStyle(carousel._carouselEl, "marginRight")     +
                         getStyle(carousel._carouselEl, "paddingLeft")     +
                         getStyle(carousel._carouselEl, "paddingRight")    +
@@ -3197,11 +3205,13 @@
                 config   = carousel.CONFIG,
                 cssClass = carousel.CLASSES,
                 isVertical,
-				albumView,
+                rows,
+                cols,
                 size;
 
             isVertical = carousel.get("isVertical");
-			albumView = carousel.get("albumView");
+            rows       = carousel._rows;
+            cols       = carousel._cols;
             clip       = clip || carousel._clipEl;
             attr       = attr || (isVertical ? "height" : "width");
             size       = parseFloat(Dom.getStyle(clip, attr), 10);
@@ -3209,7 +3219,6 @@
             size = JS.isNumber(size) ? size : 0;
 
             if (isVertical) {
-				
                 size += getStyle(carousel._carouselEl, "marginTop")         +
                         getStyle(carousel._carouselEl, "marginBottom")      +
                         getStyle(carousel._carouselEl, "paddingTop")        +
@@ -3217,8 +3226,7 @@
                         getStyle(carousel._carouselEl, "borderTopWidth")    +
                         getStyle(carousel._carouselEl, "borderBottomWidth") +
                         getStyle(carousel._navEl, "height");
-				
-			} else {
+            } else {
                 size += getStyle(clip, "marginLeft")                    +
                         getStyle(clip, "marginRight")                   +
                         getStyle(clip, "paddingLeft")                   +
@@ -3238,25 +3246,19 @@
             // Additionally the width of the container should be set for
             // the vertical Carousel
             if (isVertical) {
-			
                 size = getCarouselItemSize.call(carousel, "width");
-
-				if(albumView.cols > 1)	{
-					size = size * albumView.cols; 
-				}
-				
+                if(cols > 1) {
+                    size = size * cols; 
+                }
                 if (size < config.VERT_MIN_WIDTH) {
                     size = config.VERT_MIN_WIDTH;
                     carousel.addClass(cssClass.MIN_WIDTH);
                 }
-			
                 carousel.setStyle("width",  size + "px");
-				
-				if(albumView) {//AlbumView bug fix for IEs.
-					Dom.setStyle(carousel._carouselEl, "width", size + "px"); 
-            	}
-				
-			}
+                if(cols) {//Bug fix for vertical carousel (might just need 3200px removed from style), and allows for multirows in IEs).
+                    Dom.setStyle(carousel._carouselEl, "width", size + "px"); 
+                }
+            }
         },
 
         /**
@@ -3296,19 +3298,39 @@
                 Event.on(cfg.next, "click", scrollPageForward, carousel);
             }
         },
-
+        
         /**
-         * Set the value for the number of visible items in the Carousel.
+         * Clip the container size every time numVisible is set.
          *
          * @method _setNumVisible
          * @param val {Number} The new value for numVisible
          * @return {Number} The new value that would be set
          * @protected
          */
-        _setNumVisible: function (val) {
+        _setNumVisible: function (val) { // TODO: _setNumVisible should just be reserved for setting numVisible. 
             var carousel = this;
-			
+            
             carousel._setClipContainerSize(carousel._clipEl, val);
+        },
+        
+        /**
+         * Set the value for the number of visible items in the Carousel.
+         *
+         * @method _numVisibleSetter
+         * @param val {Number} The new value for numVisible
+         * @return {Number} The new value that would be set
+         * @protected
+         */
+        _numVisibleSetter: function (val) {
+            var carousel = this, 
+                numVisible = val;
+
+            if(JS.isArray(val)) {
+                carousel._cols = val[0]; 
+                carousel._rows = val[1];
+                numVisible = val[0] *  val[1];
+            }
+            return numVisible;
         },
 
         /**
@@ -3340,20 +3362,6 @@
             }
 
             return val;
-        },
-
-        /**
-         * Set the value for the number of visible items in the Carousel.
-         *
-         * @method _setAlbumView
-         * @param val {Object} {cols:x, rows:y}
-         * @protected
-         */
-        _setAlbumView: function (val) {
-            var carousel = this,
-				numVisible = val.cols * val.rows; 
-			
-			carousel.set("numVisible", numVisible); 
         },
 
         /**
@@ -3481,7 +3489,7 @@
             }
 
             if (carousel.get("selectedItem") < 0) {
-	        	carousel.set("selectedItem", carousel.get("firstVisible"));
+                carousel.set("selectedItem", carousel.get("firstVisible"));
             }
         },
 
@@ -3507,14 +3515,37 @@
                 }
 
                 if (carousel.get("selectedItem") == pos) {
-					pos = pos >= num ? num - 1 : pos;
-			//Bug http://bug.corp.yahoo.com/show_bug.cgi?id=2610155	                    
-					setTimeout(function(){
-						carousel.set("selectedItem", pos);
-					}, 0); 
+                    pos = pos >= num ? num - 1 : pos;
                 }
             } else {
                 YAHOO.log("Unable to find item", "warn", WidgetName);
+            }
+        },
+
+        /**
+         * Synchronize and redraw the UI after an item is replaced.
+         *
+         * @method _syncUiForItemReplace
+         * @protected
+         */
+        _syncUiForItemReplace: function (newItem, oldItem) {
+            var carousel   = this, 
+                carouselEl = carousel._carouselEl,
+                itemsTable = carousel.itemsTable,
+                oel,
+                el;
+                
+            el = carousel._createCarouselItem({
+                className : newItem.className,
+                content   : newItem.item,
+                id        : newItem.id
+            });
+            
+            oel = Dom.get(oldItem.id);
+            Event.purgeElement(oel, true);
+            carouselEl.replaceChild(el, oel);
+            if (!carousel._hasRendered) {
+                carousel._refreshUi();
             }
         },
 
@@ -3597,72 +3628,62 @@
          * @method _updatePagerButtons
          * @protected
          */
-        _updatePagerButtons: function () {
-            var carousel = this,
-				nav = carousel.get("navigation"),
-                css      = carousel.CLASSES,
-                cur      = carousel._pages.cur, // current page
-                el,
-                html,
-                i,
-                item,
-                n        = carousel.get("numVisible"),
-                num      = carousel._pages.num, // total pages
-                pager    = carousel._pages.el;  // the pager container element
+         _updatePagerButtons: function () {
+             var carousel = this,
+                 css      = carousel.CLASSES,
+                 cur      = carousel._pages.cur, // current page
+                 el,
+                 html,
+                 i,
+                 item,
+                 n        = carousel.get("numVisible"),
+                 num      = carousel._pages.num, // total pages
+                 pager    = carousel._pages.el;  // the pager container element
 
-            if (num === 0 || !pager) {
-                return;         // don't do anything if number of pages is 0
-            }
+             if (num === 0 || !pager) {
+                 return;         // don't do anything if number of pages is 0
+             }
 
-            // Hide the pager before redrawing it
-            Dom.setStyle(pager, "visibility", "hidden");
+             // Hide the pager before redrawing it
+             Dom.setStyle(pager, "visibility", "hidden");
 
-            // Remove all nodes from the pager
-            while (pager.firstChild) {
-                pager.removeChild(pager.firstChild);
-            }
-			
-			nav.pagination = nav.pagination || [];
+             // Remove all nodes from the pager
+             while (pager.firstChild) {
+                 pager.removeChild(pager.firstChild);
+             }
 
-            for (i = 0; i < num; i++) {
-				
-                if (JS.isUndefined(carousel._itemsTable.items[i * n])) {
-                    Dom.setStyle(pager, "visibility", "visible");
-                }
-			
-                el   = document.createElement("LI");
-                if (!el) {
-                    Dom.setStyle(pager, "visibility", "visible");
-                    break;
-                }
+             for (i = 0; i < num; i++) {
+                 if (JS.isUndefined(carousel._itemsTable.items[i * n])) {
+                     Dom.setStyle(pager, "visibility", "visible");
+                     break;
+                 }
+                 item = carousel._itemsTable.items[i * n].id;
 
-                if (i === 0) {
-                    Dom.addClass(el, css.FIRST_PAGE);
-                }
-                if (i == cur) {
-                    Dom.addClass(el, css.SELECTED_NAV);
-                }
+                 el   = document.createElement("LI");
+                 if (!el) {
+                     Dom.setStyle(pager, "visibility", "visible");
+                     break;
+                 }
 
-                // TODO: use a template string for i18N compliance
-                html = '<a tabindex="0"><em>'   +
-                        carousel.STRINGS.PAGER_PREFIX_TEXT + ' ' + (i+1) +
-                        '</em></a>';
-                el.innerHTML = html;
+                 if (i === 0) {
+                     Dom.addClass(el, css.FIRST_PAGE);
+                 }
+                 if (i == cur) {
+                     Dom.addClass(el, css.SELECTED_NAV);
+                 }
 
-				// Using anchors causes problems with at least albumView. 
-				// TODO: Have carousel store el.
-				Event.on(el, "click", function(ev, item){
-					this.set('selectedItem', item);
-				}, i*n, this);
+                 // TODO: use a template string for i18N compliance
+                 html = "<a href=\"#" + item + "\" tabindex=\"0\"><em>"   +
+                         carousel.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1) +
+                         "</em></a>";
+                 el.innerHTML = html;
 
-				nav.pagination.push(el);
-				
-                pager.appendChild(el);
-            }
+                 pager.appendChild(el);
+             }
 
-            // Show the pager now
-            Dom.setStyle(pager, "visibility", "visible");
-        },
+             // Show the pager now
+             Dom.setStyle(pager, "visibility", "visible");
+         },
 
         /**
          * Update the UI for the pager menu based on the current page and
@@ -3809,35 +3830,6 @@
             return false;
         },
 
-		 /**
-	      * Validate albumView parameters.
-	      *
-	      * @method _validateAlbumView
-	      * @param cfg {Object} The albumView configuration
-	      * @return {Boolean} The status of the validation
-	      * @protected
-	      */
-		 _validateAlbumView : function (cfg) {
-			
-			var carousel = this;
-			
-			if (!carousel.get("isVertical"))	{
-                YAHOO.log("AlbumView only works if isVertical is enabled", "error", WidgetName);
-				return false;
-			}
-			
-            if (!JS.isObject(cfg)) {
-                return false;
-            }
-
-            if (!(JS.isNumber(cfg.rows) && JS.isNumber(cfg.cols))) {
-            	return false;
-            }
-
-            return true;
-        },
-
-
         /**
          * Validate and navigation parameters.
          *
@@ -3891,7 +3883,6 @@
          * @protected
          */
         _validateNumItems: function (val) {
-		
             return JS.isNumber(val) && (val >= 0);
         },
 
@@ -3905,11 +3896,15 @@
          */
         _validateNumVisible: function (val) {
             var rv = false;
-			
-            if (JS.isNumber(val) && !this.get("albumView")) {
+            
+            if (JS.isNumber(val)) {
                 rv = val > 0 && val <= this.get("numItems");
+            } else if (JS.isArray(val)) {
+                if (JS.isNumber(val[0]) && JS.isNumber(val[1])) {
+                    rv = val[0] * val[1] > 0 && val.length == 2;
+                }
             }
-
+            
             return rv;
         },
 

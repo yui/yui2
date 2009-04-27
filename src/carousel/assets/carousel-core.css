@@ -55,7 +55,7 @@
 
  
 .yui-carousel-vertical {
-    height: 32000px;
+	height:32000px;
     margin: 0 5px;
     width: auto;
 }
@@ -95,13 +95,13 @@
 
 .yui-carousel-albumview .yui-carousel-element li {
 	float:left;
-    /* IE 6 & 7 fix - throws off albumView rendering, add these attributes without shorthand and carefully. */
+    /* IE 6 & 7 fix - throws off albumview rendering, add these attributes without shorthand and carefully. */
 	*border:0;
 	*margin: 0;
 }
 
 .yui-carousel .yui-carousel-item-selected {
-    /* IE 6 & 7 fix - throws off albumView rendering, add these attributes without shorthand and carefully. */
+    /* IE 6 & 7 fix - throws off albumview rendering, add these attributes without shorthand and carefully. */
 	*border:0;
 	*margin: 0;
 }
