@@ -1308,6 +1308,18 @@ Paginator.ui.PageLinks.init = function (p) {
         value : function (page, paginator) { return page; },
         validator : l.isFunction
     });
+
+    /**
+     * Function used generate the title for each page link.  The
+     * function receives as parameters the page number and a reference to the
+     * paginator object.
+     * @attribute pageTitleBuilder
+     * @default function (page, paginator) { return page; }
+     */
+    p.setAttributeConfig('pageTitleBuilder', {
+        value : function (page, paginator) { return "Page " + page; },
+        validator : l.isFunction
+    });
 };
 
 /**
@@ -1410,6 +1422,7 @@ Paginator.ui.PageLinks.prototype = {
         // Replace content if there's been a change
         if (this.current !== currentPage || !currentPage || e.rebuild) {
             var labelBuilder = p.get('pageLabelBuilder'),
+								titleBuilder = p.get('pageTitleBuilder'),
                 range        = Paginator.ui.PageLinks.calculateRange(
                                 currentPage,
                                 p.getTotalPages(),
@@ -1417,19 +1430,25 @@ Paginator.ui.PageLinks.prototype = {
                 start        = range[0],
                 end          = range[1],
                 content      = '',
-                linkTemplate,i;
+                linkTemplate,i,spanTemplate;
 
-            linkTemplate = '<a href="#" class="' + p.get('pageLinkClass') +
-                           '" page="';
+            linkTemplate = '<a href="#" class="{class}" page="{page}" title="{title}">{label}</a>';
+						spanTemplate = '<span class="{class}">{label}</span>';
             for (i = start; i <= end; ++i) {
+
                 if (i === currentPage) {
-                    content +=
-                        '<span class="' + p.get('currentPageClass') + ' ' +
-                                          p.get('pageLinkClass') + '">' +
-                        labelBuilder(i,p) + '</span>';
+                    content += l.substitute(spanTemplate, {
+											'class' : p.get('currentPageClass') + ' ' + p.get('pageLinkClass'),
+											'label' : labelBuilder(i,p)
+										});
+
                 } else {
-                    content +=
-                        linkTemplate + i + '">' + labelBuilder(i,p) + '</a>';
+                    content += l.substitute(linkTemplate, {
+											'class' : p.get('pageLinkClass'),
+											'page' 	: i,
+											'label' : labelBuilder(i,p),
+											'title' : titleBuilder(i,p)
+										});
                 }
             }
 
@@ -1535,6 +1554,16 @@ Paginator.ui.FirstPageLink.init = function (p) {
         value : 'yui-pg-first',
         validator : l.isString
     });
+
+    /**
+     * Used as title for the first page link.
+     * @attribute firstPageLinkTitle
+     * @default 'First Page'
+     */
+    p.setAttributeConfig('firstPageLinkTitle', {
+        value : 'First Page',
+        validator : l.isString
+    });
 };
 
 // Instance members and methods
@@ -1574,7 +1603,8 @@ Paginator.ui.FirstPageLink.prototype = {
     render : function (id_base) {
         var p     = this.paginator,
             c     = p.get('firstPageLinkClass'),
-            label = p.get('firstPageLinkLabel');
+            label = p.get('firstPageLinkLabel'),
+						title = p.get('firstPageLinkTitle');
 
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
@@ -1583,6 +1613,7 @@ Paginator.ui.FirstPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
+				this.link.title 		= title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-first-span';
@@ -1697,6 +1728,17 @@ Paginator.ui.LastPageLink.init = function (p) {
         value : 'yui-pg-last',
         validator : l.isString
     });
+
+		/**
+     * Used as title for the last page link.
+     * @attribute lastPageLinkTitle
+     * @default 'Last Page'
+     */
+    p.setAttributeConfig('lastPageLinkTitle', {
+        value : 'Last Page',
+        validator : l.isString
+    });
+
 };
 
 Paginator.ui.LastPageLink.prototype = {
@@ -1746,7 +1788,8 @@ Paginator.ui.LastPageLink.prototype = {
         var p     = this.paginator,
             c     = p.get('lastPageLinkClass'),
             label = p.get('lastPageLinkLabel'),
-            last  = p.getTotalPages();
+            last  = p.getTotalPages(),
+						title = p.get('lastPageLinkTitle');
 
         this.link = document.createElement('a');
         this.span = document.createElement('span');
@@ -1756,6 +1799,7 @@ Paginator.ui.LastPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
+				this.link.title			= title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-last-span';
@@ -1883,6 +1927,17 @@ Paginator.ui.NextPageLink.init = function (p) {
         value : 'yui-pg-next',
         validator : l.isString
     });
+
+		/**
+     * Used as title for the next page link.
+     * @attribute nextPageLinkTitle
+     * @default 'Next Page'
+     */
+    p.setAttributeConfig('nextPageLinkTitle', {
+        value : 'Next Page',
+        validator : l.isString
+    });
+
 };
 
 Paginator.ui.NextPageLink.prototype = {
@@ -1923,7 +1978,8 @@ Paginator.ui.NextPageLink.prototype = {
         var p     = this.paginator,
             c     = p.get('nextPageLinkClass'),
             label = p.get('nextPageLinkLabel'),
-            last  = p.getTotalPages();
+            last  = p.getTotalPages(),
+						title = p.get('nextPageLinkTitle');
 
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
@@ -1932,6 +1988,7 @@ Paginator.ui.NextPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
+				this.link.title			= title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-next-span';
@@ -2048,6 +2105,17 @@ Paginator.ui.PreviousPageLink.init = function (p) {
         value : 'yui-pg-previous',
         validator : l.isString
     });
+
+		/**
+     * Used as title for the previous page link.
+     * @attribute previousPageLinkTitle
+     * @default 'Previous Page'
+     */
+    p.setAttributeConfig('previousPageLinkTitle', {
+        value : 'Previous Page',
+        validator : l.isString
+    });
+
 };
 
 Paginator.ui.PreviousPageLink.prototype = {
@@ -2087,7 +2155,8 @@ Paginator.ui.PreviousPageLink.prototype = {
     render : function (id_base) {
         var p     = this.paginator,
             c     = p.get('previousPageLinkClass'),
-            label = p.get('previousPageLinkLabel');
+            label = p.get('previousPageLinkLabel'),
+						title = p.get('previousPageLinkTitle');
 
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
@@ -2096,6 +2165,7 @@ Paginator.ui.PreviousPageLink.prototype = {
         this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
+				this.link.title			= title;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
         this.span.id        = id_base + '-prev-span';
