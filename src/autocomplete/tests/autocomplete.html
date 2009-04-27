@@ -133,6 +133,33 @@
             Assert.areSame(el.tagName.toLowerCase(), "ul", "Expected UL element");
         },
 
+        testExpandCollapseContainer: function() {
+            var ac = this.createInstance();
+            ac.setBody("BODY");
+            Assert.areSame(ac._elContent.style.display, "none", "Expected container to be closed");
+            ac.expandContainer();
+            Assert.areNotSame(ac._elContent.style.display, "none", "Expected container to be open");
+            ac.collapseContainer();
+            Assert.areSame(ac._elContent.style.display, "none", "Expected container to be closed again");
+        },
+
+        testClearList: function() {
+            var ac = this.createInstance();
+            ac.sendQuery("a");
+            
+            var els = ac.getListItems();
+            for(var i=0; i<3; i++) {
+                Assert.areNotSame(els[i].style.display, "none", "Expected suggestion items to be displayed");
+            }
+            for(i=3; i<els.length; i++) {
+                Assert.areSame(els[i].style.display, "none", "Expected rest of the list to not be displayed");
+            }
+            ac.clearList();
+            for(i=0; i<els.length; i++) {
+                Assert.areSame(els[i].style.display, "none", "Expected no items to be displayed");
+            }
+        },
+
         testGetListItems: function() { // deprecated
             var ac = this.createInstance();
             ac.sendQuery("a");
