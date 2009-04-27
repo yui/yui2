@@ -642,7 +642,7 @@ YAHOO.widget.AutoComplete.prototype.setHeader = function(sHeader) {
         var elHeader = this._elHeader;
         if(sHeader) {
             elHeader.innerHTML = sHeader;
-            elHeader.style.display = "block";
+            elHeader.style.display = "";
         }
         else {
             elHeader.innerHTML = "";
@@ -663,7 +663,7 @@ YAHOO.widget.AutoComplete.prototype.setFooter = function(sFooter) {
         var elFooter = this._elFooter;
         if(sFooter) {
                 elFooter.innerHTML = sFooter;
-                elFooter.style.display = "block";
+                elFooter.style.display = "";
         }
         else {
             elFooter.innerHTML = "";
@@ -685,7 +685,7 @@ YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
         YAHOO.util.Event.purgeElement(elBody, true);
         if(sBody) {
             elBody.innerHTML = sBody;
-            elBody.style.display = "block";
+            elBody.style.display = "";
         }
         else {
             elBody.innerHTML = "";
@@ -760,12 +760,34 @@ YAHOO.widget.AutoComplete.prototype.snapContainer = function() {
 };
 
 /**
+ * Expands container.
+ *
+ * @method expandContainer
+ */
+YAHOO.widget.AutoComplete.prototype.expandContainer = function() {
+    this._toggleContainer(true);
+};
+
+/**
  * Collapses container.
  *
  * @method collapseContainer
  */
 YAHOO.widget.AutoComplete.prototype.collapseContainer = function() {
     this._toggleContainer(false);
+};
+
+/**
+ * Clears entire list of suggestions.
+ *
+ * @method clearList
+ */
+YAHOO.widget.AutoComplete.prototype.clearList = function() {
+    var allItems = this._elList.childNodes,
+        i=allItems.length-1;
+    for(; i>-1; i--) {
+          allItems[i].style.display = "none";
+    }
 };
 
 /**
@@ -1584,10 +1606,10 @@ YAHOO.widget.AutoComplete.prototype._initContainerEl = function() {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._initListEl = function() {
-    var nListLength = this.maxResultsDisplayed;
+    var nListLength = this.maxResultsDisplayed,
+        elList = this._elList || document.createElement("ul"),
+        elListItem;
     
-    var elList = this._elList || document.createElement("ul");
-    var elListItem;
     while(elList.childNodes.length < nListLength) {
         elListItem = document.createElement("li");
         elListItem.style.display = "none";
@@ -1601,6 +1623,7 @@ YAHOO.widget.AutoComplete.prototype._initListEl = function() {
         this._elList = elBody.appendChild(elList);
     }
     
+    this._elBody.style.display = "";
 };
 
 /**
