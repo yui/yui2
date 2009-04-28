@@ -5,6 +5,7 @@
  *
  * @module imageloader
  * @namespace YAHOO.util
+ * @requires yahoo, dom, event
  */
 
 if (typeof(YAHOO.util.ImageLoader) == 'undefined') {
