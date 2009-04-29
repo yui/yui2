@@ -422,7 +422,7 @@ if (!YAHOO.util.Event) {
                         fn.call(s, "DOMReady", [], obj);
                     }, 0);
                 } else {
-                    this.DOMReadyEvent.subscribe(fn, obj, overrideContext);
+                    this.DOMReadyEvent.subscribe(fn, obj || this, overrideContext || true);
                 }
             },
 
@@ -1194,7 +1194,7 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
              * Custom event the fires when the dom is initially usable
              * @event DOMReadyEvent
              */
-            DOMReadyEvent: new YAHOO.util.CustomEvent("DOMReady", this),
+            DOMReadyEvent: new YAHOO.util.CustomEvent("DOMReady"),
 
             /**
              * hook up any deferred listeners
