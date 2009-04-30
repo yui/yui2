@@ -7,11 +7,95 @@
 
 	<title>Data Table with Expandable Rows</title>
 	
+	<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+	<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
+	<style>
+		body{ text-align: left; }
+	</style>
+	
 </head>
 
-<body>
+<body class=" yui-skin-sam">
 
-	<h1>Data Table with Expandable Rows</h1>
+
+<h1>Data Table with Expandable Rows</h1>
+
+<div class="exampleIntro">
+	<p>A demonstration of the DataTable's expandable row feature.</p>
+			
+</div>
+
+<div id="basic"></div>
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script> 
+<script type="text/javascript" src="data.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script> 
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
+<script type="text/javascript" src="../../build/element/element.js"></script> 
+<script type="text/javascript" src="../../build/datasource/datasource.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+
+<script type="text/javascript">
+
+YAHOO.util.Event.addListener(window, "load", function() {
+    YAHOO.example.Basic = function() {
+        var myColumnDefs = [
+        
+            {
+            	key:"id", 
+            	sortable:true, 
+            	resizeable:true
+            },
+            {
+            	key:"date", 
+            	formatter:YAHOO.widget.DataTable.formatDate, 
+            	sortable:true, 
+            	sortOptions:{
+            		defaultDir:YAHOO.widget.DataTable.CLASS_DESC
+            	},
+            	resizeable:true
+            },
+            {
+            	key:"quantity", 
+            	formatter:YAHOO.widget.DataTable.formatNumber, 
+            	sortable:true, 
+            	resizeable:true
+            },
+            {
+            	key:"amount", 
+            	formatter:YAHOO.widget.DataTable.formatCurrency, 
+            	sortable:true, 
+            	resizeable:true
+            },
+            {
+            	key:"title", 
+            	sortable:true, 
+            	resizeable:true
+            }
+            
+        ];
+
+        var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
+        myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+        myDataSource.responseSchema = {
+            fields: ["id","date","quantity","amount","title"]
+        };
+
+        var myDataTable = new YAHOO.widget.DataTable(
+        	"basic",
+            myColumnDefs, 
+            myDataSource
+        );
+                
+        return {
+            oDS: myDataSource,
+            oDT: myDataTable
+        };
+    }();
+});
+
+</script>
 
 </body>
 </html>
