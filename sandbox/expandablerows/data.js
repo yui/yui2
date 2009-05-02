@@ -91,13 +91,13 @@ YAHOO.example.Data = {
 
     bookorders: [
         {id:"po-0167", date:new Date(1980, 2, 24), quantity:1, amount:4, title:"A Book About Nothing",
-        description: "Lorem ipsum dolor sit amet consectetuer Quisque ipsum suscipit Aenean ligula. Accumsan molestie nibh dui orci vitae auctor nec pulvinar ligula elit."},
+        description: "Lorem ipsum dolor sit amet consectetuer Quisque ipsum suscipit Aenean ligula. Accumsan molestie nibh dui orci vitae auctor nec pulvinar ligula elit.",details:{image_url:"book1.gif"}},
         {id:"po-0783", date:new Date("January 3, 1983"), quantity:null, amount:12.12345, title:"The Meaning of Life",
-        description: "Vestibulum scelerisque wisi adipiscing turpis odio Phasellus euismod id orci tristique. Hendrerit sem dictum volutpat cursus pretium dui vitae tincidunt Vivamus Aenean."},
+        description: "Vestibulum scelerisque wisi adipiscing turpis odio Phasellus euismod id orci tristique. Hendrerit sem dictum volutpat cursus pretium dui vitae tincidunt Vivamus Aenean.",details:null},
         {id:"po-0297", date:new Date(1978, 11, 12), quantity:12, amount:1.25, title:"This Book Was Meant to Be Read Aloud",
-        description: "Malesuada pellentesque nibh magna nisl tincidunt wisi dui Nam nunc convallis. Adipiscing leo augue Nulla tellus nec eros metus cursus pretium Sed."},
+        description: "Malesuada pellentesque nibh magna nisl tincidunt wisi dui Nam nunc convallis. Adipiscing leo augue Nulla tellus nec eros metus cursus pretium Sed.",details:{image_url:"book2.gif"}},
         {id:"po-1482", date:new Date("March 11, 1985"), quantity:6, amount:3.5, title:"Read Me Twice",
-        description: "Libero justo pede nibh tincidunt ut tempus metus et Vestibulum vel. Sem justo morbi lacinia dui turpis In Lorem dictumst volutpat cursus."}
+        description: "Libero justo pede nibh tincidunt ut tempus metus et Vestibulum vel. Sem justo morbi lacinia dui turpis In Lorem dictumst volutpat cursus.",details:{image_url:"book3.gif"}}
     ],
     
     stateAbbrs: [

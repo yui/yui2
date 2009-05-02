@@ -38,6 +38,18 @@
 
 <script type="text/javascript">
 
+//Add prototype methods
+YAHOO.lang.augmentObject( 
+	YAHOO.widget.DataTable.prototype , 
+	{
+		expandRow : function(){
+			
+			console.log( 'Augmented' );
+			
+		}
+	}
+);
+
 YAHOO.util.Event.addListener(window, "load", function() {
     YAHOO.example.Basic = function() {
         var myColumnDefs = [
@@ -79,7 +91,7 @@ YAHOO.util.Event.addListener(window, "load", function() {
         var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
         myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
         myDataSource.responseSchema = {
-            fields: ["id","date","quantity","amount","title"]
+            fields: ["id","date","quantity","amount","title","details"]
         };
 
         var myDataTable = new YAHOO.widget.DataTable(
