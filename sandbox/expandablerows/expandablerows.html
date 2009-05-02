@@ -42,22 +42,136 @@
 YAHOO.lang.augmentObject( 
 	YAHOO.widget.DataTable.prototype , 
 	{
+		_initExpandableRows : function(){
+			
+			//Create state column
+			var records = this.getRecordSet().getRecords();
+			
+			//Augment records
+			for( var i=0, l=records.length; l > i; i++ ){
+				
+				var record = records[ i ];
+				
+				//Set row state
+				record.setData( 'yui_dt_state', {
+					expanded : false
+				} );
+				
+			}
+			
+		},
+		
 		expandRow : function(){
 			
-			console.log( 'Augmented' );
+			console.log( 'Augmented!' );
 			
 		}
 	}
 );
+
+YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, oData) {
+	
+	//TODO: Move this to expand function
+	if( !this._er ){
+		
+		this._er = true;
+		
+		this._initExpandableRows();
+		
+	}
+	
+	//Marker class for the formatted cell
+	YAHOO.util.Dom.addClass(el, 'yui-dt-expandablerow-trigger');
+	
+	//Dummy
+	el.innerHTML = "X";
+	
+/*
+
+
+    //Add click event
+    if (!STATE.expandRow.hasClickEvent) {
+
+        this.SATG_DATAGRID.subscribe(
+                "TbodyClick",
+                function(event, options) {
+
+                    var target = EVENT.getTarget(event.event),
+                            rowEl = DOM.getAncestorByTagName(
+                                    target,
+                                    'tr'
+                                    );
+
+
+                    if (
+                            DOM.hasClass(
+                                    target,
+                                    'yui-expandablerow-trigger'
+                                    )
+                            ) {
+
+                        this.SATG_DATAGRID.toggleExpandableRow(rowEl);
+
+                        if (DOM.hasClass(target, 'yui-closed')) {
+
+                            DOM.replaceClass(target, 'yui-closed', 'yui-open');
+
+                        } else {
+
+                            DOM.replaceClass(target, 'yui-open', 'yui-closed');
+
+                        }
+
+                    }
+
+                },
+        {element:el,state:STATE[ "expandRow" ]},
+                this
+                );
+
+        STATE.expandRow.hasClickEvent = true;
+
+    }
+
+    //Create custom events in the dataGrid scope
+    this.SATG_DATAGRID.createEvent('beforeExpandRow');
+    this.SATG_DATAGRID.createEvent('afterExpandRow');
+    this.SATG_DATAGRID.createEvent('beforeCollapseRow');
+    this.SATG_DATAGRID.createEvent('afterCollapseRow');
+
+    //Apply markup to cell if expandable row data exists
+    if (oColumn.formatterOptions && oColumn.formatterOptions.dataField && oRecord.getData()[oColumn.formatterOptions.dataField]) {
+
+        STATE[ "expandRow" ][ 'hasData' ] = true;
+
+        el.innerHTML = GridControl._markupStrings.expandableRowTrigger;
+
+    }
+
+    //Apply marker class to header and body cells
+    DOM.addClass(
+            [
+                DOM.getAncestorByTagName(el, 'td'),
+                oColumn.getThEl()
+            ],
+            GridControl.CLASS_EXPANDABLEROW_TRIGGER_CELL
+            );
+*/
+
+}
+
 
 YAHOO.util.Event.addListener(window, "load", function() {
     YAHOO.example.Basic = function() {
         var myColumnDefs = [
         
             {
-            	key:"id", 
-            	sortable:true, 
-            	resizeable:true
+            	key:"details",
+					label:"",
+					formatter:YAHOO.widget.DataTable.formatExpandRowTrigger,
+					formatterOptions:{
+						
+					}
             },
             {
             	key:"date", 
