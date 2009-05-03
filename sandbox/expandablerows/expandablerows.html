@@ -64,7 +64,7 @@ YAHOO.lang.augmentObject(
 				//Set row state
 				state_object.expanded = ( record.getData( field ) ) ? false : null //set expanded property to null if no data is available
 				
-			}
+			}//for
 			
 		},
 		
@@ -84,6 +84,9 @@ YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, o
 		this._er = true;
 		
 		this._initExpandableRows( oColumn.key );
+		
+		//Subscribe to a click event to bind to
+		this.subscribe( 'rowClickEvent', function(){ console.log(this) } );
 		
 	}
 	
