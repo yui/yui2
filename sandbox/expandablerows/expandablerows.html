@@ -42,7 +42,7 @@
 YAHOO.lang.augmentObject( 
 	YAHOO.widget.DataTable.prototype , 
 	{
-		_initExpandableRows : function(){
+		_initExpandableRows : function( field ){
 			
 			//Create state column
 			var records = this.getRecordSet().getRecords();
@@ -50,12 +50,19 @@ YAHOO.lang.augmentObject(
 			//Augment records
 			for( var i=0, l=records.length; l > i; i++ ){
 				
-				var record = records[ i ];
+				var	record = records[ i ]
+						state_object = record.getData( 'yui_dt_state' );
+				
+				//Create row object if needed
+				if( !state_object ){
+					
+					record.setData( 'yui_dt_state', {} );
+					var state_object = record.getData( 'yui_dt_state' );
+					
+				}
 				
 				//Set row state
-				record.setData( 'yui_dt_state', {
-					expanded : false
-				} );
+				state_object.expanded = ( record.getData( field ) ) ? false : null //set expanded property to null if no data is available
 				
 			}
 			
@@ -76,15 +83,29 @@ YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, o
 		
 		this._er = true;
 		
-		this._initExpandableRows();
+		this._initExpandableRows( oColumn.key );
 		
 	}
+	
+	var	state_object = oRecord.getData( 'yui_dt_state' );
 	
 	//Marker class for the formatted cell
 	YAHOO.util.Dom.addClass(el, 'yui-dt-expandablerow-trigger');
 	
-	//Dummy
-	el.innerHTML = "X";
+	//Set trigger
+	if( state_object && state_object.expanded === false ){ //Row is closed
+		
+		el.innerHTML = "X";
+		
+	} else if( state_object && state_object.expanded === true ){
+		
+		el.innerHTML = "L";
+		
+	}else{
+		
+		el.innerHTML = "_";
+		
+	}
 	
 /*
 
@@ -170,7 +191,6 @@ YAHOO.util.Event.addListener(window, "load", function() {
 					label:"",
 					formatter:YAHOO.widget.DataTable.formatExpandRowTrigger,
 					formatterOptions:{
-						
 					}
             },
             {
