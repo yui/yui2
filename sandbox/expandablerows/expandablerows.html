@@ -98,72 +98,103 @@ YAHOO.lang.augmentObject(
 		
 		expandRow : function( row ){
 			
-			//If id passed, get element
-			if( !YAHOO.lang.isObject( row ) ) {
-
-				row = DOM.get(row);
-
-			}
-			
-			//Fire custom event
-			this.fireEvent( "beforeExpandRow", { row : row } );
-			
-			var	row_data = this.getRecord( row ),
-					state = row_data.getData( 'yui_dt_state' ),
-					new_row = document.createElement('tr'),
-					column_length = this.getFirstTrEl().getElementsByTagName('td').length,
-					expanded_data = row_data.getData( state.expandable_datakey ),
-					expanded_content = null;
-					
-			//Construct expanded row body
-			if( state.expandable_template ){
+			if( !YAHOO.util.Dom.hasClass( YAHOO.util.Dom.getNextSibling( row ), 'yui-dt-expandablerow' ) ){
 				
-				expanded_content = YAHOO.lang.substitute( state.expandable_template, expanded_data );
-				
-			} else {
-				
-				expanded_content = expanded_data;
-				
-			}
-			
-			//set class name for new row		
-			new_row.className = 'yui-dt-expandablerow';
-			
-			var	new_column = document.createElement('td');
-			new_column.className = 'yui-dt-expandablerow-body';
-			new_column.setAttribute( "colSpan", column_length );
-			new_column.innerHTML = '<div class="satg-expandablerow-wrapper">' + expanded_content + '</div>';
-			new_row.appendChild( new_column );
-			
-			//Insert new row
-			newRow = YAHOO.util.Dom.insertAfter( new_row, row );
+				//If id passed, get element
+				if( !YAHOO.lang.isObject( row ) ) {
 
-			if (newRow.innerHTML.length) {
+					row = DOM.get(row);
 
-				state.expanded = true;
+				}
 
 				//Fire custom event
-				this.fireEvent( "afterExpandRow", { row : row, expanded_cell : new_column } );
+				this.fireEvent( "beforeExpandRow", { row : row } );
 
-				return true;
+				var	row_data = this.getRecord( row ),
+						state = row_data.getData( 'yui_dt_state' ),
+						new_row = document.createElement('tr'),
+						column_length = this.getFirstTrEl().getElementsByTagName('td').length,
+						expanded_data = row_data.getData( state.expandable_datakey ),
+						expanded_content = null;
 
-			} else {
+				//Construct expanded row body
+				if( state.expandable_template ){
 
-				//Fire custom event
-				this.fireEvent("afterExpandRow", { row : row } );
+					expanded_content = YAHOO.lang.substitute( state.expandable_template, expanded_data );
 
-				return false;
+				} else {
 
+					expanded_content = expanded_data;
+
+				}
+
+				//set class name for new row		
+				new_row.className = 'yui-dt-expandablerow';
+
+				var	new_column = document.createElement('td');
+				new_column.className = 'yui-dt-expandablerow-body';
+				new_column.setAttribute( "colSpan", column_length );
+				new_column.innerHTML = '<div class="satg-expandablerow-wrapper">' + expanded_content + '</div>';
+				new_row.appendChild( new_column );
+
+				//Insert new row
+				newRow = YAHOO.util.Dom.insertAfter( new_row, row );
+
+				if (newRow.innerHTML.length) {
+
+					state.expanded = true;
+
+					//Fire custom event
+					this.fireEvent( "afterExpandRow", { row : row, expanded_cell : new_column } );
+
+					return true;
+
+				} else {
+
+					//Fire custom event
+					this.fireEvent("afterExpandRow", { row : row } );
+
+					return false;
+
+				}	
+				
 			}
 			
 		},
 		
 		collapseRow : function( row ){
 			
-			var	state = this.getRecord( row ).getData( 'yui_dt_state' );
-			
-			state.expanded = false;
-			console.log( 'Collapse' );
+         //Fire custom event
+         this.fireEvent("beforeCollapseRow", { row : row } );
+
+         //If id passed, get element
+         if ( !YAHOO.lang.isObject( row ) ) {
+
+             row = DOM.get( row );
+
+         }
+
+			var	state = this.getRecord( row ).getData( 'yui_dt_state' ),
+					next_sibling = YAHOO.util.Dom.getNextSibling( row );
+
+         if( YAHOO.util.Dom.hasClass( next_sibling, 'yui-dt-expandablerow' ) ) {
+
+             next_sibling.parentNode.removeChild( next_sibling );
+             state.expanded = false;
+				
+             //Fire custom event
+             this.fireEvent( "afterCollapseRow", { row : row } );
+
+             return true
+
+         } else {
+				
+             //Fire custom event
+             this.fireEvent( "afterCollapseRow", { row : row } );
+
+             return false;
+
+         }
 			
 		}
 	}
