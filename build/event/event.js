@@ -1084,7 +1084,7 @@ if (!YAHOO.util.Event) {
             /**
              * Removes a blur event listener
              *
-             * @method removeListener
+             * @method removeBlurListener
              *
              * @param {String|HTMLElement|Array|NodeList} el An id, an element 
              *  reference, or a collection of ids and/or elements to remove
