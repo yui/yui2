@@ -11,6 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
 	<style>
 		body{ text-align: left; }
+		.yui-dt-expanded{background-color:#f00;}
 	</style>
 	
 </head>
@@ -68,15 +69,42 @@ YAHOO.lang.augmentObject(
 			
 		},
 		
-		expandRow : function(){
+		_expandableTriggerClickEvent : function( element ){
 			
-			console.log( 'Augmented!' );
+			if( YAHOO.util.Dom.hasClass( element, 'yui-dt-collapsed' ) ){
+				
+				this.expandRow( element );
+				
+			} else if( YAHOO.util.Dom.hasClass( element, 'yui-dt-expanded' ) ){
+				
+				this.collapseRow( element );
+				
+			}
+			
+		},
+		
+		expandRow : function( element ){
+			
+			console.log( 'Expand' );
+			console.log( element );
+			YAHOO.util.Dom.replaceClass( element, 'yui-dt-collapsed', 'yui-dt-expanded' );
+			
+		},
+		
+		collapseRow : function( element ){
+			
+			console.log( 'Collapse' );
+			console.log( element );
+			YAHOO.util.Dom.replaceClass( element, 'yui-dt-expanded', 'yui-dt-collapsed' );
 			
 		}
 	}
 );
 
 YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, oData) {
+	
+	var	Dom = YAHOO.util.Dom,
+			cell_element = Dom.getAncestorByTagName( el, 'td' );
 	
 	//TODO: Move this to expand function
 	if( !this._er ){
@@ -86,27 +114,33 @@ YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, o
 		this._initExpandableRows( oColumn.key );
 		
 		//Subscribe to a click event to bind to
-		this.subscribe( 'rowClickEvent', function(){ console.log(this) } );
+		this.subscribe( 'cellClickEvent', function( cell_click, args ){
+			
+			if( Dom.hasClass( cell_element, 'yui-dt-expandablerow-trigger' ) ){
+				
+				this._expandableTriggerClickEvent( cell_click.target );
+			
+			}
+		
+		} );
 		
 	}
 	
 	var	state_object = oRecord.getData( 'yui_dt_state' );
 	
 	//Marker class for the formatted cell
-	YAHOO.util.Dom.addClass(el, 'yui-dt-expandablerow-trigger');
+	Dom.addClass( cell_element, 'yui-dt-expandablerow-trigger' );
 	
 	//Set trigger
 	if( state_object && state_object.expanded === false ){ //Row is closed
 		
+		Dom.addClass( cell_element, 'yui-dt-collapsed' );
 		el.innerHTML = "X";
 		
 	} else if( state_object && state_object.expanded === true ){
 		
+		Dom.addClass( cell_element, 'yui-dt-expanded' );
 		el.innerHTML = "L";
-		
-	}else{
-		
-		el.innerHTML = "_";
 		
 	}
 	
