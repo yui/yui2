@@ -35,7 +35,7 @@
 <script type="text/javascript" src="../../build/element/element.js"></script> 
 <script type="text/javascript" src="../../build/datasource/datasource.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable.js"></script>
-<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<!--script type="text/javascript" src="../../build/logger/logger.js"></script-->
 
 <script type="text/javascript">
 
@@ -43,10 +43,16 @@
 YAHOO.lang.augmentObject( 
 	YAHOO.widget.DataTable.prototype , 
 	{
-		_initExpandableRows : function( field ){
+		_initExpandableRows : function( field, template ){
 			
 			//Create state column
 			var records = this.getRecordSet().getRecords();
+			
+			//Create custom events in the dataGrid scope
+		   this.createEvent('beforeExpandRow');
+		   this.createEvent('afterExpandRow');
+		   this.createEvent('beforeCollapseRow');
+		   this.createEvent('afterCollapseRow');
 			
 			//Augment records
 			for( var i=0, l=records.length; l > i; i++ ){
@@ -64,6 +70,8 @@ YAHOO.lang.augmentObject(
 				
 				//Set row state
 				state_object.expanded = ( record.getData( field ) ) ? false : null //set expanded property to null if no data is available
+				state_object.expandable_datakey = field;
+				state_object.expandable_template = template || null;
 				
 			}//for
 			
@@ -73,8 +81,6 @@ YAHOO.lang.augmentObject(
 			
 			var	row_element = YAHOO.util.Dom.getAncestorByTagName( element, 'tr' )
 					trigger_state = this.getRecord( row_element ).getData( 'yui_dt_state' ).expanded;
-			
-			console.log( 'expanded:' + trigger_state )
 			
 			if( trigger_state ){
 				
@@ -92,10 +98,63 @@ YAHOO.lang.augmentObject(
 		
 		expandRow : function( row ){
 			
-			var	state = this.getRecord( row ).getData( 'yui_dt_state' );
+			//If id passed, get element
+			if( !YAHOO.lang.isObject( row ) ) {
+
+				row = DOM.get(row);
+
+			}
 			
-			state.expanded = true;
-			console.log( 'Expand' );
+			//Fire custom event
+			this.fireEvent( "beforeExpandRow", { row : row } );
+			
+			var	row_data = this.getRecord( row ),
+					state = row_data.getData( 'yui_dt_state' ),
+					new_row = document.createElement('tr'),
+					column_length = this.getFirstTrEl().getElementsByTagName('td').length,
+					expanded_data = row_data.getData( state.expandable_datakey ),
+					expanded_content = null;
+					
+			//Construct expanded row body
+			if( state.expandable_template ){
+				
+				expanded_content = YAHOO.lang.substitute( state.expandable_template, expanded_data );
+				
+			} else {
+				
+				expanded_content = expanded_data;
+				
+			}
+			
+			//set class name for new row		
+			new_row.className = 'yui-dt-expandablerow';
+			
+			var	new_column = document.createElement('td');
+			new_column.className = 'yui-dt-expandablerow-body';
+			new_column.setAttribute( "colSpan", column_length );
+			new_column.innerHTML = '<div class="satg-expandablerow-wrapper">' + expanded_content + '</div>';
+			new_row.appendChild( new_column );
+			
+			//Insert new row
+			newRow = YAHOO.util.Dom.insertAfter( new_row, row );
+
+			if (newRow.innerHTML.length) {
+
+				state.expanded = true;
+
+				//Fire custom event
+				this.fireEvent( "afterExpandRow", { row : row, expanded_cell : new_column } );
+
+				return true;
+
+			} else {
+
+				//Fire custom event
+				this.fireEvent("afterExpandRow", { row : row } );
+
+				return false;
+
+			}
 			
 		},
 		
@@ -116,11 +175,11 @@ YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, o
 			cell_element = Dom.getAncestorByTagName( el, 'td' );
 	
 	//TODO: Move this to expand function
-	if( !this._er ){
+	if( !this._hasExpandedRows ){
 		
-		this._er = true;
+		this._hasExpandedRows = true;
 		
-		this._initExpandableRows( oColumn.key );
+		this._initExpandableRows( oColumn.key, '<img src="{image_url}" />' );
 		
 		//Subscribe to a click event to bind to
 		this.subscribe( 'cellClickEvent', function( cell_click, args ){
@@ -152,78 +211,6 @@ YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, o
 		el.innerHTML = "L";
 		
 	}
-	
-/*
-
-
-    //Add click event
-    if (!STATE.expandRow.hasClickEvent) {
-
-        this.SATG_DATAGRID.subscribe(
-                "TbodyClick",
-                function(event, options) {
-
-                    var target = EVENT.getTarget(event.event),
-                            rowEl = DOM.getAncestorByTagName(
-                                    target,
-                                    'tr'
-                                    );
-
-
-                    if (
-                            DOM.hasClass(
-                                    target,
-                                    'yui-expandablerow-trigger'
-                                    )
-                            ) {
-
-                        this.SATG_DATAGRID.toggleExpandableRow(rowEl);
-
-                        if (DOM.hasClass(target, 'yui-closed')) {
-
-                            DOM.replaceClass(target, 'yui-closed', 'yui-open');
-
-                        } else {
-
-                            DOM.replaceClass(target, 'yui-open', 'yui-closed');
-
-                        }
-
-                    }
-
-                },
-        {element:el,state:STATE[ "expandRow" ]},
-                this
-                );
-
-        STATE.expandRow.hasClickEvent = true;
-
-    }
-
-    //Create custom events in the dataGrid scope
-    this.SATG_DATAGRID.createEvent('beforeExpandRow');
-    this.SATG_DATAGRID.createEvent('afterExpandRow');
-    this.SATG_DATAGRID.createEvent('beforeCollapseRow');
-    this.SATG_DATAGRID.createEvent('afterCollapseRow');
-
-    //Apply markup to cell if expandable row data exists
-    if (oColumn.formatterOptions && oColumn.formatterOptions.dataField && oRecord.getData()[oColumn.formatterOptions.dataField]) {
-
-        STATE[ "expandRow" ][ 'hasData' ] = true;
-
-        el.innerHTML = GridControl._markupStrings.expandableRowTrigger;
-
-    }
-
-    //Apply marker class to header and body cells
-    DOM.addClass(
-            [
-                DOM.getAncestorByTagName(el, 'td'),
-                oColumn.getThEl()
-            ],
-            GridControl.CLASS_EXPANDABLEROW_TRIGGER_CELL
-            );
-*/
 
 }
 
