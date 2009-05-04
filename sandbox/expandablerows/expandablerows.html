@@ -71,31 +71,40 @@ YAHOO.lang.augmentObject(
 		
 		_expandableTriggerClickEvent : function( element ){
 			
-			if( YAHOO.util.Dom.hasClass( element, 'yui-dt-collapsed' ) ){
+			var	row_element = YAHOO.util.Dom.getAncestorByTagName( element, 'tr' )
+					trigger_state = this.getRecord( row_element ).getData( 'yui_dt_state' ).expanded;
+			
+			console.log( 'expanded:' + trigger_state )
+			
+			if( trigger_state ){
 				
-				this.expandRow( element );
+				this.collapseRow( row_element );
+				YAHOO.util.Dom.replaceClass( element, 'yui-dt-expanded', 'yui-dt-collapsed' );
 				
-			} else if( YAHOO.util.Dom.hasClass( element, 'yui-dt-expanded' ) ){
+			} else {
 				
-				this.collapseRow( element );
+				this.expandRow( row_element );
+				YAHOO.util.Dom.replaceClass( element, 'yui-dt-collapsed', 'yui-dt-expanded' );
 				
 			}
 			
 		},
 		
-		expandRow : function( element ){
+		expandRow : function( row ){
 			
+			var	state = this.getRecord( row ).getData( 'yui_dt_state' );
+			
+			state.expanded = true;
 			console.log( 'Expand' );
-			console.log( element );
-			YAHOO.util.Dom.replaceClass( element, 'yui-dt-collapsed', 'yui-dt-expanded' );
 			
 		},
 		
-		collapseRow : function( element ){
+		collapseRow : function( row ){
 			
+			var	state = this.getRecord( row ).getData( 'yui_dt_state' );
+			
+			state.expanded = false;
 			console.log( 'Collapse' );
-			console.log( element );
-			YAHOO.util.Dom.replaceClass( element, 'yui-dt-expanded', 'yui-dt-collapsed' );
 			
 		}
 	}
