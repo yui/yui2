@@ -3426,7 +3426,7 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
             s.position   = "absolute";
             s.visibility = "hidden";
             s.cursor     = "move";
-            s.border     = "2px solid #aaa";
+            s.border     = "2px solid black";
             s.zIndex     = 999;
             s.height     = "25px";
             s.width      = "25px";
