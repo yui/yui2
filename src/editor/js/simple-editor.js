@@ -943,6 +943,10 @@ var Dom = YAHOO.util.Dom,
         * @description This method is fired from _checkLoaded when the document is ready. It turns on designMode and set's up the listeners.
         */
         _initEditor: function() {
+            if (this._editorInit) {
+                return;
+            }
+            this._editorInit = true;
             if (this.browser.ie) {
                 this._getDoc().body.style.margin = '0';
             }
