@@ -80,7 +80,7 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     },
 
     /**
-     * Synchronizes the node.data, node.html, and the node's content
+     * Synchronizes the node.html, and the node's content
      * @property setHtml
      * @param o {object} An html string or object containing an html property
      */
