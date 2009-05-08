@@ -10,8 +10,8 @@
  * The treeview widget is a generic tree building tool.
  * @module treeview
  * @title TreeView Widget
- * @requires yahoo, event
- * @optional animation, json
+ * @requires yahoo, dom, event
+ * @optional animation, json, calendar
  * @namespace YAHOO.widget
  */
 
