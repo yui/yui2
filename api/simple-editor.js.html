@@ -992,6 +992,10 @@
 <span class="c">        * @description This method is fired from _checkLoaded when the document is ready. It turns on designMode and set&#39;s up the listeners.</span>
 <span class="c">        */</span>
         <span class="nx">_initEditor</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_editorInit</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_editorInit</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_getDoc</span><span class="o">().</span><span class="nx">body</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">margin</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="o">;</span>
             <span class="o">}</span>
