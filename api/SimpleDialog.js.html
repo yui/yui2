@@ -287,26 +287,28 @@
             <span class="k">var</span> <span class="nx">sIcon</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
                 <span class="nx">oBody</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">body</span><span class="o">,</span>
                 <span class="nx">sCSSClass</span> <span class="o">=</span> <span class="nx">SimpleDialog</span><span class="o">.</span><span class="nx">ICON_CSS_CLASSNAME</span><span class="o">,</span>
+				<span class="nx">aElements</span><span class="o">,</span>
                 <span class="nx">oIcon</span><span class="o">,</span>
                 <span class="nx">oIconParent</span><span class="o">;</span>
         
             <span class="k">if</span> <span class="o">(</span><span class="nx">sIcon</span> <span class="o">&amp;&amp;</span> <span class="nx">sIcon</span> <span class="o">!=</span> <span class="s2">&quot;none&quot;</span><span class="o">)</span> <span class="o">{</span>
 
-                <span class="nx">oIcon</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="nx">sCSSClass</span><span class="o">,</span> <span class="s2">&quot;*&quot;</span> <span class="o">,</span> <span class="nx">oBody</span><span class="o">);</span>
+                <span class="nx">aElements</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="nx">sCSSClass</span><span class="o">,</span> <span class="s2">&quot;*&quot;</span> <span class="o">,</span> <span class="nx">oBody</span><span class="o">);</span>
 
-                <span class="k">if</span> <span class="o">(</span><span class="nx">oIcon</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">if</span> <span class="o">(</span><span class="nx">aElements</span><span class="o">.</span><span class="nx">length</span> <span class="o">===</span> <span class="m">1</span><span class="o">)</span> <span class="o">{</span>
 
+					<span class="nx">oIcon</span> <span class="o">=</span> <span class="nx">aElements</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
                     <span class="nx">oIconParent</span> <span class="o">=</span> <span class="nx">oIcon</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
-                    
+
                     <span class="k">if</span> <span class="o">(</span><span class="nx">oIconParent</span><span class="o">)</span> <span class="o">{</span>
-                    
+
                         <span class="nx">oIconParent</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">oIcon</span><span class="o">);</span>
-                        
+
                         <span class="nx">oIcon</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-                    
+
                     <span class="o">}</span>
 
-                <span class="o">}</span>
+				<span class="o">}</span>
 
 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">sIcon</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;.&quot;</span><span class="o">)</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>

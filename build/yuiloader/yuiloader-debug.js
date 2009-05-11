@@ -2085,7 +2085,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'type': 'js',
             'path': 'treeview/treeview-min.js',
             'requires': ['event', 'dom'],
-            'optional': ['json'],
+            'optional': ['json', 'animation', 'calendar'],
             'skinnable': true
         },
 

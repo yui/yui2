@@ -683,7 +683,6 @@
     YAHOO.lang.augmentProto(Config, YAHOO.util.EventProvider);
 
 }());
-
 (function () {
 
     /**
@@ -1848,7 +1847,6 @@
     YAHOO.lang.augmentProto(Module, YAHOO.util.EventProvider);
 
 }());
-
 (function () {
 
     /**
@@ -4197,7 +4195,6 @@
 
     });
 }());
-
 (function () {
 
     /**
@@ -4806,7 +4803,6 @@
         }
     };
 }());
-
 (function () {
 
     /**
@@ -5192,5 +5188,4 @@
     YAHOO.lang.augmentProto(ContainerEffect, YAHOO.util.EventProvider);
 
 })();
-
 YAHOO.register("containercore", YAHOO.widget.Module, {version: "@VERSION@", build: "@BUILD@"});

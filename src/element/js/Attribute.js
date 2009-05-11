@@ -109,7 +109,7 @@ YAHOO.util.Attribute.prototype = {
         var val = this.value;
 
         if (this.getter) {
-            val = this.getter.call(this.owner, this.name);
+            val = this.getter.call(this.owner, this.name, val);
         }
 
         return val;

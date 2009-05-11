@@ -1,5 +1,7 @@
 Slider - Release Notes
 
+Development master
+
 2.7.0
     * Sliders with ticks no longer require YAHOO.util.Anim to be animated.
       Still need to set slider.animated = true, however.

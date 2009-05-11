@@ -5,7 +5,7 @@
 <title>Yahoo! UI Library - Tree Control</title>
 <link rel="stylesheet" type="text/css" href="css/screen.css">
 </head>
-<body onload="treeInit()">
+<body>
 
 <link rel="stylesheet" type="text/css" href="css/local/tree.css">
 
@@ -138,6 +138,9 @@
                 var n = tree.getNodeByElement(YAHOO.util.Event.getTarget(e));
                 YAHOO.log("TREE click on node: " + n.label, "warn");
             });
+
+
+    treeInit();
 
   </script>
 

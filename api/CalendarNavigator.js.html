@@ -892,8 +892,8 @@
 <span class="c">	 * @protected</span>
 <span class="c">	 */</span>
 	<span class="nx">_update</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">cal</span><span class="o">)</span> <span class="o">{</span>
-		<span class="nx">cal</span><span class="o">.</span><span class="nx">setYear</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getYear</span><span class="o">());</span>
-		<span class="nx">cal</span><span class="o">.</span><span class="nx">setMonth</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">());</span>
+		<span class="k">var</span> <span class="nx">date</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DateMath</span><span class="o">.</span><span class="nx">getDate</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getYear</span><span class="o">(),</span> <span class="k">this</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">(),</span> <span class="m">1</span><span class="o">);</span>
+		<span class="nx">cal</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;pagedate&quot;</span><span class="o">,</span> <span class="nx">date</span><span class="o">);</span>
 		<span class="nx">cal</span><span class="o">.</span><span class="nx">render</span><span class="o">();</span>
 	<span class="o">},</span>
 
