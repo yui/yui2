@@ -333,7 +333,6 @@ if(!document.getElementById && document.all)
 	document.getElementById = function(id) { return document.all[id]; };
 }
 
-
 /**
  * Wraps Flash embedding functionality and allows communication with SWF through
  * attributes.
@@ -733,7 +732,6 @@ YAHOO.widget.FlashAdapter.removeProxyFunction = function(funcName)
 	funcName = funcName.substr(26);
 	YAHOO.widget.FlashAdapter[funcName] = null;
 };
-
 /**
  * The Charts widget provides a Flash control for displaying data
  * graphically by series across A-grade browsers with Flash Player installed.
@@ -1406,7 +1404,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
  * @default "assets/charts.swf"
  */
 YAHOO.widget.Chart.SWFURL = "assets/charts.swf";
-
 /**
  * PieChart class for the YUI Charts widget.
  *
@@ -1512,7 +1509,6 @@ YAHOO.lang.extend(YAHOO.widget.PieChart, YAHOO.widget.Chart,
 		this._swf.setCategoryField(value);
 	}
 });
-
 /**
  * CartesianChart class for the YUI Charts widget.
  *
@@ -1756,7 +1752,6 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		this._swf.setVerticalAxis(clonedYAxis);
 	}
 });
-
 /**
  * LineChart class for the YUI Charts widget.
  *
@@ -1846,7 +1841,6 @@ YAHOO.widget.StackedBarChart = function(containerId, dataSource, attributes)
 };
 
 YAHOO.lang.extend(YAHOO.widget.StackedBarChart, YAHOO.widget.CartesianChart);
-
 /**
  * Defines a CartesianChart's vertical or horizontal axis.
  *
@@ -1901,7 +1895,6 @@ YAHOO.widget.Axis.prototype =
 	 */
 	title: null 
 };
-
 /**
  * A type of axis whose units are measured in numeric values.
  *
@@ -1994,9 +1987,16 @@ YAHOO.lang.extend(YAHOO.widget.NumericAxis, YAHOO.widget.Axis,
 	 * @property roundMajorUnit
 	 * @type Boolean
 	 */
-	roundMajorUnit: true 
+	roundMajorUnit: true, 
+	
+	/**
+	 * Indicates whether to factor in the size of the labels when calculating a major unit.
+	 *
+	 * @property calculateByLabelSize
+	 * @type Boolean
+	 */
+	calculateByLabelSize: true
 });
-
 /**
  * A type of axis whose units are measured in time-based values.
  *
@@ -2079,9 +2079,16 @@ YAHOO.lang.extend(YAHOO.widget.TimeAxis, YAHOO.widget.Axis,
 	 * @property stackingEnabled
 	 * @type Boolean
 	 */
-	stackingEnabled: false
-});
+	stackingEnabled: false,
 
+	/**
+	 * Indicates whether to factor in the size of the labels when calculating a major unit.
+	 *
+	 * @property calculateByLabelSize
+	 * @type Boolean
+	 */
+	calculateByLabelSize: true	
+});
 /**
  * A type of axis that displays items in categories.
  *
@@ -2116,7 +2123,6 @@ YAHOO.lang.extend(YAHOO.widget.CategoryAxis, YAHOO.widget.Axis,
 	 */
 	calculateCategoryCount: false 
 });
-
 /**
  * Functionality common to most series. Generally, a <code>Series</code> 
  * object shouldn't be instantiated directly. Instead, a subclass with a 
@@ -2316,5 +2322,4 @@ YAHOO.lang.extend(YAHOO.widget.StackedColumnSeries, YAHOO.widget.CartesianSeries
 {
 	type: "stackcolumn"
 });
-
 YAHOO.register("charts", YAHOO.widget.Chart, {version: "@VERSION@", build: "@BUILD@"});

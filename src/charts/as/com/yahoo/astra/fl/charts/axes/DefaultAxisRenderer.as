@@ -4,6 +4,8 @@ package com.yahoo.astra.fl.charts.axes
 	import com.yahoo.astra.utils.NumberUtil;
 	import com.yahoo.astra.display.BitmapText;
 	
+	import com.yahoo.astra.utils.DynamicRegistration;
+	
 	import fl.core.InvalidationType;
 	import fl.core.UIComponent;
 	
@@ -550,9 +552,6 @@ package com.yahoo.astra.fl.charts.axes
 				this.titleTextField.defaultTextFormat = textFormat;
 				this.titleTextField.embedFonts = embedFonts;
 				this.titleTextField.text = this.title;
-
-				var titleRotation:Number = this.getStyleValue("titleRotation") as Number;
-				this.titleTextField.rotation = Math.max(-90, Math.min(titleRotation, 90));;
 			}
 		}
 		
@@ -566,23 +565,26 @@ package com.yahoo.astra.fl.charts.axes
 			this.titleTextField.visible = showTitle;
 			if(showTitle)
 			{
-				var titleRotation:Number = this.titleTextField.rotation; 
+				var titleRotation:Number = this.getStyleValue("titleRotation") as Number;
+				titleRotation = Math.max(-90, Math.min(titleRotation, 90));
 				if(this.orientation == AxisOrientation.VERTICAL)
 				{
 					this.titleTextField.y = this.contentBounds.y + (this.contentBounds.height) / 2;
 					this.titleTextField.x = 0;
 					if(titleRotation > 0)
-					{						
-						this.titleTextField.x += this.titleTextField.textField.height * (titleRotation/90);
+					{	
+						this.titleTextField.rotation = titleRotation;
+						this.titleTextField.x += this.titleTextField.contentHeight * Math.sin(titleRotation * Math.PI/180);
 						this.titleTextField.y -= this.titleTextField.height/2;
 					}
 					else if(titleRotation < 0)
 					{	
+						this.titleTextField.rotation = titleRotation;						
 						this.titleTextField.y += this.titleTextField.height/2;
 					}
 					else
 					{
-						this.titleTextField.y -= this.titleTextField.height /2;
+						this.titleTextField.y -= this.titleTextField.height/2;
 					}
 				}
 				else //horizontal
@@ -591,18 +593,14 @@ package com.yahoo.astra.fl.charts.axes
 					this.titleTextField.y = this.y + this.height - this.titleTextField.height;
 					if(titleRotation > 0)
 					{
-						this.titleTextField.x += (-.5 + titleRotation/90) * this.titleTextField.width;
-													
+						this.titleTextField.rotation = titleRotation;
 					}
 					else if(titleRotation < 0)
 					{
-						this.titleTextField.x -= (this.titleTextField.width * (1 - Math.abs(titleRotation/180)))/2;
-						this.titleTextField.y += this.titleTextField.height - (Math.sin((90 - titleRotation) * Math.PI/180) * this.titleTextField.textField.height);						
+						this.titleTextField.rotation = titleRotation;
+						this.titleTextField.y += this.titleTextField.contentWidth * Math.sin(Math.abs(titleRotation)*Math.PI/180);
 					}
-					else
-					{
-						this.titleTextField.x -= this.titleTextField.width/2;					
-					}
+					this.titleTextField.x -= this.titleTextField.width/2;					
 				}	
 			}
 		}
@@ -793,73 +791,72 @@ package com.yahoo.astra.fl.charts.axes
 				label.rotation = 0;
 				var axisData:AxisData = AxisData(this.ticks[i]);
 				var position:Number = axisData.position;
+			
 				if(this.orientation == AxisOrientation.VERTICAL)
 				{
 					position += this.contentBounds.y;
-					
 					if(showLabels)
 					{
-						label.x = this.contentBounds.x - labelDistance - this.outerTickOffset;
-						label.y = position;
+						label.x = this.contentBounds.x - labelDistance - this.outerTickOffset - label.width;
+						label.y = position - label.height/2;
 					}
 					
-					label.rotation = labelRotation;
-					
-					if(labelRotation == 90)
+					if(labelRotation == 0)
 					{
-						label.y -= label.height/2;
+						//do nothing. already ideally positioned
 					}
-					else if (labelRotation == -90)
+					else if(labelRotation < 90 && labelRotation > 0)
 					{
-						label.x -= label.width;
-						label.y += label.height/2;						
+						label.x -= (label.height * labelRotation / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
 					}
-					else if (labelRotation >= 0 && labelRotation != 90)
+					else if(labelRotation > -90 && labelRotation < 0)
 					{
-						label.y -= label.height - 0.5 * Math.abs(label.textField.height*Math.cos(labelRotation*Math.PI/180));
-						label.x -= label.width - Math.abs(Math.sin(labelRotation*Math.PI/180)*label.textField.height);
-					}					
-					else if (labelRotation < 0 && labelRotation != -90)
-					{	
-						label.y += label.height - 1.5 * Math.abs(label.textField.height*Math.cos(labelRotation*Math.PI/180));
-						label.x -= label.width;
+						label.x -= (label.height * Math.abs(labelRotation) / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
 					}
-									
-					label.x = Math.round(label.x);
-					label.y = Math.round(label.y);
+					else if(labelRotation == -90)
+					{
+						label.y -= label.width / 2;
+						label.x -= (label.height * Math.abs(labelRotation) / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
+					}
+					else //90
+					{
+						label.y += label.width / 2;
+						label.x -= (label.height * Math.abs(labelRotation) / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
+					}
+
 				}
-				
 				else //horizontal
 				{
 					position += this.contentBounds.x;
-					
 					if(showLabels)
 					{
-						label.y = this.contentBounds.height + this.contentBounds.y + labelDistance + this.outerTickOffset;
+						label.y = this.contentBounds.y + this.contentBounds.height + labelDistance + this.outerTickOffset;
 					}
 					
 					if(labelRotation > 0)
 					{
 						label.x = position;
-						label.rotation = labelRotation;
-						label.x += label.textField.height * Math.sin(labelRotation * Math.PI/180)/2; 
+						label.y -= (label.height * labelRotation / 180);
+						DynamicRegistration.rotate(label, new Point(0, label.height / 2), labelRotation);
 					}
 					else if(labelRotation < 0)
-					{						
-						label.x = position;
-						label.rotation = labelRotation;
-						label.x -= label.width - Math.abs((label.textField.height * Math.sin(labelRotation*Math.PI/180)))/2; 
-						label.y += label.height - Math.abs((Math.cos(labelRotation*Math.PI/180) * label.textField.height));	
+					{
+						label.x = position - label.width;
+						label.y -= (label.height * Math.abs(labelRotation) / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
 					}
 					else //labelRotation == 0
 					{
 						label.x = position - label.width / 2;
 					}
-					label.x = Math.round(label.x);
-					label.y = Math.ceil(label.y);					
 				}
-
-				if(this.majorUnitSetByUser) this.handleOverlappingLabels();
+				label.x = Math.round(label.x);
+				label.y = Math.round(label.y);
+				this.handleOverlappingLabels();
 			}
 		}
 		
@@ -876,7 +873,7 @@ package com.yahoo.astra.fl.charts.axes
 			var labelRotation:Number = this.getStyleValue("labelRotation") as Number;
 			var label:BitmapText = new BitmapText();
 			label.selectable = false;
-			label.autoSize = labelRotation < 0 ? TextFieldAutoSize.RIGHT : TextFieldAutoSize.LEFT;
+			label.autoSize = TextFieldAutoSize.LEFT;
 			this.addChild(label);
 			return label;
 		}
@@ -896,85 +893,114 @@ package com.yahoo.astra.fl.charts.axes
 			
 			var labelRotation:Number = this.getStyleValue("labelRotation") as Number;
 			var lastVisibleLabel:BitmapText;
-			var labelCount:int = this.labelTextFields.length;
+ 			var labelCount:int = this.labelTextFields.length;
 			for(var i:int = 0; i < labelCount; i++)
 			{
+				var idealDistance:Number;
 				var index:int = labelRotation >= 0 ? i : (labelCount - i - 1);
 				var label:BitmapText = BitmapText(this.labelTextFields[index]);
 				label.visible = true;
 				if(lastVisibleLabel)
 				{
+					var diff:Number;
 					if(this.orientation == AxisOrientation.HORIZONTAL)
-					{
+					{		
+						var maxWidth:Number;
 						if(labelRotation >= 0)
 						{
-							var xDifference:Number = label.x - lastVisibleLabel.x;
-						}
-						else
-						{
-							xDifference = (lastVisibleLabel.x + lastVisibleLabel.textField.textWidth) - (label.x + label.textField.textWidth);
-						}
-						var textWidth:Number;
-
-						if(labelRotation == 0)
-						{
-							textWidth = lastVisibleLabel.textField.textWidth;
-						}
-						else if(Math.abs(labelRotation) == 90)
-						{
-							textWidth = lastVisibleLabel.textField.textHeight;
-						}
-						else
-						{
-							textWidth = label.width;
-						}
-						if(textWidth > xDifference)
-						{
-							var offset:Point = Point.polar(xDifference, GeomUtil.degreesToRadians(labelRotation));
-							if(Math.abs(offset.y) <= label.height)
+							diff = Math.abs(label.x - lastVisibleLabel.x);
+							maxWidth = lastVisibleLabel.rotationWidth;
+							if(labelRotation == 90)
 							{
-								label.visible = false;
+								idealDistance = lastVisibleLabel.textField.textHeight;
+							}
+							else if(labelRotation == 0)
+							{
+								idealDistance = lastVisibleLabel.textField.textWidth;
+							}
+							else
+							{
+								idealDistance = lastVisibleLabel.textField.textHeight / (Math.sin((Math.abs(labelRotation))*Math.PI/180));
+								idealDistance = Math.min(idealDistance, lastVisibleLabel.width);
 							}
 						}
+						else
+						{
+							diff = (lastVisibleLabel.x + lastVisibleLabel.width) - (label.x + label.width);
+							maxWidth = label.rotationWidth;
+							if(labelRotation == 90)
+							{
+								idealDistance = label.textField.textHeight;
+							}
+							else if(labelRotation == 0)
+							{
+								idealDistance = label.textField.textWidth;
+							}
+							else
+							{
+								idealDistance = label.textField.textHeight / (Math.sin((Math.abs(labelRotation))*Math.PI/180));
+								idealDistance = Math.min(idealDistance, label.width);
+							}							
+						}
+						if(idealDistance > diff)
+						{						
+							label.visible = false; 
+						}
+						 
 					}
 					else //vertical
 					{
-						if(labelRotation >= 0)
-						{
-							var yDifference:Number = Math.abs(lastVisibleLabel.y - label.y);
+						var offset:Point;
+						offset = new Point(0, 0);
+						var radians:Number = Math.abs(labelRotation) * Math.PI/180;
+ 
+						if(lastVisibleLabel.y > label.y)
+						{	
+							if(Math.abs(labelRotation) == 90)
+							{
+								idealDistance = label.textField.textWidth;
+							}
+							else if(labelRotation == 0)
+							{
+								idealDistance = label.textField.textHeight;
+							}
+							else
+							{
+								idealDistance = (label.textField.textHeight / (Math.cos((Math.abs(labelRotation))*Math.PI/180)));
+								idealDistance = Math.min(idealDistance, label.height);
+							}
+							if((label.y + label.height + idealDistance) > (lastVisibleLabel.y + lastVisibleLabel.height))
+							{
+								label.visible = false;								
+							}
 						}
 						else
 						{
-							yDifference = Math.abs((lastVisibleLabel.y + lastVisibleLabel.height) - (label.y + label.height));
-						}
-						var textHeight:Number;
-						
-						if(labelRotation == 0)
-						{
-							textHeight = lastVisibleLabel.textField.textHeight;
-						}
-						else if(Math.abs(labelRotation) == 90)
-						{
-							textHeight = lastVisibleLabel.textField.textWidth;
-						}
-						else
-						{
-							textHeight = lastVisibleLabel.height;
-						}
-						if(textHeight > yDifference)
-						{
-							offset = Point.polar(yDifference, GeomUtil.degreesToRadians(labelRotation));
-							if(offset.x <= label.width)
+							if(Math.abs(labelRotation) == 90)
+							{
+								idealDistance = lastVisibleLabel.textField.textWidth;
+							}
+							else if(labelRotation == 0)
+							{
+								idealDistance = lastVisibleLabel.textField.textHeight;
+							}
+							else
+							{
+								idealDistance = (lastVisibleLabel.textField.textHeight / (Math.cos((Math.abs(labelRotation))*Math.PI/180)));
+								idealDistance = Math.min(idealDistance, lastVisibleLabel.height);
+							}							
+							if((lastVisibleLabel.y + lastVisibleLabel.height + idealDistance) > (label.y + label.height)) 
 							{
 								label.visible = false;
 							}
+							
 						}
 					}
 				}
 				if(label.visible)
 				{
 					lastVisibleLabel = label;
-				}
+				}  
 			}
 		}		
 	}

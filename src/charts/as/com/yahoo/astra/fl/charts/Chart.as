@@ -289,7 +289,7 @@ package com.yahoo.astra.fl.charts
 		
 		[Inspectable(type=Array)]
 		/**
-		 * @inheritDoc
+		 * @copy com.yahoo.astra.fl.charts.IChart#dataProvider
 		 */
 		public function get dataProvider():Object
 		{

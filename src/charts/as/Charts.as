@@ -553,12 +553,12 @@ package
 		 * calls correctly!
 		 */
 		public function setStyles(styles:String):void
-		{
+		{ 
 			if(!styles) return;
 			var parsedStyles:Object = JSON.decode(styles);
 			for(var styleName:String in parsedStyles)
 			{
-					this.setStyle(styleName, parsedStyles[styleName], false);
+				this.setStyle(styleName, parsedStyles[styleName], false);
 			}
 		}
 		
@@ -1171,7 +1171,7 @@ package
 			
 			if(styles.size != null)
 			{
-				this.chart.setStyle(axisName + "AxisWeight", styles.size);
+				this.chart.setStyle(axisName + "AxisWeight", Number(styles.size));
 			}
 			
 			if(styles.showLabels != null)
@@ -1184,7 +1184,7 @@ package
 				this.chart.setStyle(axisName + "AxisHideOverlappingLabels", styles.hideOverlappingLabels);
 			}
 			
-			if(styles.labelRotation)
+			if(styles.labelRotation != null)
 			{
 				if(!isNaN(Number(styles.labelRotation)))
 				{
@@ -1196,22 +1196,22 @@ package
 				}
 			}
 			
-			if(styles.labelSpacing)
+			if(styles.labelSpacing != null)
 			{
 				this.chart.setStyle(axisName + "AxisLabelSpacing", styles.labelSpacing);
 			}
 			
-			if(styles.labelDistance)
+			if(styles.labelDistance != null)
 			{
-				this.chart.setStyle(axisName + "AxisLabelDistance", styles.labelDistance);	
+				this.chart.setStyle(axisName + "AxisLabelDistance", Number(styles.labelDistance));	
 			}
 			
-			if(styles.titleRotation)
+			if(styles.titleRotation != null)
 			{
 				this.chart.setStyle(axisName + "AxisTitleRotation", styles.titleRotation);
 			}
 			
-			if(styles.titleDistance)
+			if(styles.titleDistance != null)
 			{
 				this.chart.setStyle(axisName + "AxisTitleDistance", styles.titleDistance);
 			}

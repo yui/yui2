@@ -1,78 +1,70 @@
-package com.yahoo.astra.utils
-{
+﻿package com.yahoo.astra.utils
+{	
+	import flash.text.*;
+
 	/**
-	 * Used to estimate text field properties for strings
+	 * Utility class for text fields
 	 * 
 	 * @author Tripp Bridges
-	 */
-	
-	import com.yahoo.astra.display.BitmapText;
-	import flash.display.Sprite;
-	import flash.text.*;
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.PixelSnapping;
-	
+	 */	
 	public class TextUtil
-	{
+	{		
 		/**
-		 * Returns the potential width of a string when rendered in a text field. Takes into account 
-		 * the <code>TextFormat</code> settings and the rotation.
+		 * Returns the width of a text field based on a <code>TextFormat</code> object and a string to be displayed
 		 *
-		 * @param textValue The string that will be used.
-		 * @param tf		The TextFormat object that will be applied.
-		 * @param rotation	The rotation that will be applied
+		 * @param textValue The text 
+		 * @param tf 
 		 *
+		 * @return Number
 		 */
-		public static function getTextWidth(textValue:String, tf:TextFormat, rotation:Number = 0):Number
+		public static function getTextWidth(textValue:String, tf:TextFormat):Number
 		{
-			rotation = Math.max(-90, Math.min(rotation, 90));			
-			var textField:BitmapText = new BitmapText();
+			var textField:TextField = new TextField();
 			textField.selectable = false;
-			textField.autoSize = rotation < 0 ? TextFieldAutoSize.RIGHT : TextFieldAutoSize.LEFT;			
-			if(tf != null) textField.defaultTextFormat = tf;
+			textField.autoSize = TextFieldAutoSize.LEFT;			
 			textField.text = textValue;
-			textField.rotation = rotation;
-			return textField.width;
-		}
-		
-		/**
-		 * Returns the potential height of a string when rendered in a text field. Takes into account 
-		 * the <code>TextFormat</code> settings and the rotation.
-		 *
-		 * @param textValue The string that will be used.
-		 * @param tf		The TextFormat object that will be applied.
-		 * @param rotation	The rotation that will be applied		 
-		 */
-		public static function getTextHeight(textValue:String, tf:TextFormat, rotation:Number = 0):Number
-		{
-			rotation = Math.max(-90, Math.min(rotation, 90));
-			var textField:BitmapText = new BitmapText();
-			textField.selectable = false;
-			textField.autoSize = rotation < 0 ? TextFieldAutoSize.RIGHT : TextFieldAutoSize.LEFT;			
-			if(tf != null) textField.defaultTextFormat = tf;
-			textField.text = textValue;
-			textField.rotation = rotation;
-			return textField.height;
+			textField.setTextFormat(tf);
+			return Math.max(textField.textWidth, textField.width);
 			
 		}
 		
 		/**
-		 * Returns the dimensions of a text field if rotated.
+		 * Returns the height of a text field based on a <code>TextFormat</code> object and a string to be displayed
 		 *
-		 * @param textField		The text field to be used	
-		 * @param rotation		The rotation to be applied
+		 * @param textValue The text 
+		 * @param tf 
+		 *
+		 * @return Number
 		 */
-		public static function getBitmapTextSize(textField:TextField, rotation:Number):Object
+		public static function getTextHeight(textValue:String, tf:TextFormat):Number
 		{
-			var spr:Sprite = new Sprite();
-			var bitmapDataText:BitmapData = new BitmapData(textField.width, textField.height, true, 0);
-			bitmapDataText.draw(textField);
-			var bm:Bitmap = new Bitmap(bitmapDataText, PixelSnapping.AUTO, true);
-			spr.addChild(bm);
-			spr.rotation = rotation;
-			return {width:spr.width, height:spr.height};						
-		}
+			var textField:TextField = new TextField();
+			textField.selectable = false;
+			textField.autoSize = TextFieldAutoSize.LEFT;			
+			textField.text = textValue;
+			textField.setTextFormat(tf);
+			return textField.textHeight;
+		}	
+		
+		/**
+		 * Changes individual property of a <code>TextFormat</code> object
+		 */
+		public static function changeTextFormatProps(tf:TextFormat, tfProps:Object):TextFormat
+		{
+			for(var i:String in tfProps)
+			{
+				tf[i] = tfProps[i];
+			}
+			return tf;
+		}	
+		
+		/**
+		 * Creates a copy of a <code>TextFormat</code> object
+		 */
+		public static function cloneTextFormat(tf:TextFormat):TextFormat
+		{
+			return new TextFormat(tf.font, tf.size, tf.color, tf.bold, tf.italic, tf.underline, tf.url, tf.target, tf.align, tf.leftMargin, tf.rightMargin, tf.indent, tf.leading);
+		}		
 		
 	}
 }
