@@ -96,6 +96,7 @@ package com.yahoo.yui.charts
 				numericAxis.alwaysShowZero = input.alwaysShowZero;
 				numericAxis.scale = input.scale;
 				numericAxis.stackingEnabled = input.stackingEnabled;
+				numericAxis.calculateByLabelSize = input.calculateByLabelSize;
 			}
 			else if(axis is TimeAxis)
 			{
@@ -130,6 +131,7 @@ package com.yahoo.yui.charts
 				}
 				timeAxis.snapToUnits = input.snapToUnits;
 				timeAxis.stackingEnabled = input.stackingEnabled;
+				timeAxis.calculateByLabelSize = input.calculateByLabelSize;
 			}
 			else if(axis is CategoryAxis)
 			{

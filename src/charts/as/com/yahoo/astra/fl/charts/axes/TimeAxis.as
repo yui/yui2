@@ -4,7 +4,6 @@ package com.yahoo.astra.fl.charts.axes
 	import com.yahoo.astra.fl.charts.CartesianChart;
 	import com.yahoo.astra.utils.DateUtil;
 	import com.yahoo.astra.utils.TimeUnit;
-	import com.yahoo.astra.utils.TextUtil;
 	import fl.core.UIComponent;
 	import flash.text.TextFormat;
 
@@ -311,6 +310,52 @@ package com.yahoo.astra.fl.charts.axes
 			_minorUnitSetByUser = false;			
 		}
 		 
+		/**
+		 * @private
+		 * Holds value for idealPixels
+		 */
+		private var _idealPixels:Number = 60;
+		
+		/**
+		 * Desired distance between majorUnits. Used to calculate the major unit
+		 * when unspecified and <code>calculateByLabelSize</code> is set to false.
+		 */
+		public function get idealPixels():Number
+		{
+			return _idealPixels;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set idealPixels(value:Number):void
+		{
+			_idealPixels = value;
+		}
+		
+		/**
+		 * @private
+		 * Holds value for calculateByLabelSize
+		 */
+		private var _calculateByLabelSize:Boolean = false;
+		
+		/** 
+		 * Indicates whether to use the maximum size of an axis label 
+		 * when calculating the majorUnit.
+		 */
+		public function get calculateByLabelSize():Boolean
+		{
+			return _calculateByLabelSize;
+		}
+		
+		/** 
+		 * @private (setter)
+		 */
+		public function set calculateByLabelSize(value:Boolean):void
+		{
+			_calculateByLabelSize = value;
+		}
+				
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
@@ -354,6 +399,12 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				position = this.renderer.length - position;
 			}
+			
+			//the vertical axis has its origin on the bottom
+			if(this.renderer is ICartesianAxisRenderer && ICartesianAxisRenderer(this.renderer).orientation == AxisOrientation.VERTICAL)
+			{
+				position = this.renderer.length - position;
+			}			
 				
 			return position;
 		}
@@ -452,7 +503,7 @@ package com.yahoo.astra.fl.charts.axes
 				//stop at the maximum value.
 				if(date.valueOf() > this.maximum.valueOf())
 				{
-					if(!this._majorUnitSetByUser) break;
+					if(!this._majorUnitSetByUser && this.calculateByLabelSize) break;
 					date = new Date(this.maximum.valueOf());
 				}
 				//because Flash UIComponents round the position to the nearest pixel, we need to do the same.
@@ -467,7 +518,7 @@ package com.yahoo.astra.fl.charts.axes
 					break;
 				}
 			}
-			
+			if(this.reverse) data = data.reverse();
 			return data;
 		}
 
@@ -476,9 +527,9 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		public function getMaxLabel():String
 		{
-			var maxAbbrevDate:String = this.valueToLabel(new Date(5/30/2008));
-			var maxFullDate:String = this.valueToLabel(new Date(9/30/2008));
-			var maxDate:String = maxAbbrevDate.length > maxFullDate.length ? maxAbbrevDate : maxFullDate;
+			var maxAbbrevDate:String = this.valueToLabel(new Date(2008, 4, 30)) as String;
+			var maxFullDate:String = this.valueToLabel(new Date(2009, 8, 30)) as String;
+			var maxDate:String = maxAbbrevDate.length > maxFullDate.length ? maxAbbrevDate : maxFullDate; 
 			return maxDate;	
 		}			
 
@@ -607,26 +658,53 @@ package com.yahoo.astra.fl.charts.axes
 			}
 			
 			this.calculateMaximumAndMinimum();
-		
-			var approxLabelDistance:Number;
-			//Check to see if this axis is horizontal. Since the width of labels will be variable, we will need to apply a different alogrithm to determine the majorUnit.
-			if((this.chart as CartesianChart).horizontalAxis == this)
-			{
-				//extract the approximate width of the labels by getting the textWidth of the maximum date when rendered by the label function with the textFormat of the renderer.
-				approxLabelDistance = this.maxLabelWidth;
 			
-			}
-			else
+			var chart:CartesianChart = this.chart as CartesianChart;
+			var labelSpacing:Number = 0;
+			var overflow:Number = 0;
+			var approxLabelDistance:Number = this.idealPixels;
+			if(this.calculateByLabelSize)
 			{
-				approxLabelDistance = this.maxLabelHeight;	
+				var rotation:Number;
+				//Check to see if this axis is horizontal. Since the width of labels will be variable, we will need to apply a different alogrithm to determine the majorUnit.
+				if(chart.horizontalAxis == this)
+				{
+					//extract the approximate width of the labels by getting the textWidth of the maximum date when rendered by the label function with the textFormat of the renderer.
+					approxLabelDistance = this.maxLabelWidth;
+					rotation = chart.getHorizontalAxisStyle("labelRotation") as Number;
+					if(rotation == 0 || Math.abs(rotation) == 90)
+					{
+						if(!isNaN(chart.horizontalAxisLabelData.rightLabelOffset)) overflow += chart.horizontalAxisLabelData.rightLabelOffset as Number;
+						if(!isNaN(chart.horizontalAxisLabelData.leftLabelOffset)) overflow += chart.horizontalAxisLabelData.leftLabelOffset as Number;
+					}
+					else
+					{
+						if(rotation > 0 && !isNaN(chart.horizontalAxisLabelData.rightLabelOffset)) overflow += chart.horizontalAxisLabelData.rightLabelOffset as Number;
+						if(rotation < 0 && !isNaN(chart.horizontalAxisLabelData.leftLabelOffset)) overflow += chart.horizontalAxisLabelData.leftLabelOffset as Number;
+					}
+				}
+				else
+				{
+					approxLabelDistance = this.maxLabelHeight;	
+					rotation = chart.getVerticalAxisStyle("labelRotation") as Number;
+					if(rotation == 0 || Math.abs(rotation) ==90)
+					{
+						if(!isNaN(chart.verticalAxisLabelData.topLabelOffset)) overflow = chart.verticalAxisLabelData.topLabelOffset as Number;
+					}
+					else
+					{
+						if(rotation < 0 && !isNaN(chart.verticalAxisLabelData.bottomLabelOffset)) overflow += chart.verticalAxisLabelData.bottomLabelOffset as Number;
+						if(rotation > 0 && !isNaN(chart.verticalAxisLabelData.topLabelOffset)) overflow += chart.verticalAxisLabelData.topLabelOffset as Number;
+					}
+				}
+			 	labelSpacing = this.labelSpacing; 
+				approxLabelDistance += (labelSpacing*2);
 			}
-			var labelSpacing:Number = this.labelSpacing; 
-			approxLabelDistance += (labelSpacing*2);
-
+			
 			var dateDifference:Number = Math.round(DateUtil.getDateDifferenceByTimeUnit(this.minimum, this.maximum, this.majorTimeUnit));
 			var tempMajorUnit:Number = 0; 
-
-			var maxLabels:Number = Math.floor((this.renderer.length - labelSpacing)/approxLabelDistance);
+			
+			var maxLabels:Number = ((this.renderer.length + overflow) - labelSpacing)/approxLabelDistance;
 			
 			//If set by user, use specified number of labels unless its too many
 			if(this._numLabelsSetByUser)
@@ -634,13 +712,21 @@ package com.yahoo.astra.fl.charts.axes
 				maxLabels = Math.min(maxLabels, this.numLabels);
 			}
 			
-			tempMajorUnit = dateDifference/maxLabels;
+			var ratio:Number = overflow/this.renderer.length;
+			var overflowOffset:Number = Math.round(ratio*dateDifference);
+			if(isNaN(overflowOffset)) overflowOffset = 0;
+			tempMajorUnit = (dateDifference + overflowOffset)/maxLabels;
 			tempMajorUnit = Math.ceil(tempMajorUnit);
 			
-			if(tempMajorUnit > Math.round(dateDifference/2)) tempMajorUnit = dateDifference;
+			if(tempMajorUnit > Math.round(dateDifference/2)) 
+			{
+				tempMajorUnit = dateDifference;
+			}
+			
 			this._majorUnit = tempMajorUnit;
 			
-			if(dateDifference%tempMajorUnit != 0)
+			
+			if(dateDifference%tempMajorUnit != 0 && this.calculateByLabelSize)
 			{
 				var len:Number = Math.min(tempMajorUnit, ((dateDifference/2)-tempMajorUnit));
 				for(var i:int = 0;i < len; i++)
@@ -652,7 +738,7 @@ package com.yahoo.astra.fl.charts.axes
 						break;
 					}
 				}		
-			}
+			}	
 		}
 		
 		/**

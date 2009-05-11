@@ -4,7 +4,6 @@ package com.yahoo.astra.fl.charts.axes
 	import com.yahoo.astra.fl.charts.CartesianChart;
 	import fl.core.UIComponent;
 	import flash.text.TextFormat;	
-	import com.yahoo.astra.utils.TextUtil;
 	/**
 	 * An axis type representing a set of categories.
 	 * 
@@ -154,10 +153,6 @@ package com.yahoo.astra.fl.charts.axes
 			if(index >= 0)
 			{
 				var position:int = this.categorySize * index + (this.categorySize / 2);
-				if(this.reverse)
-				{
-					position = this.renderer.length - position;
-				}
 				return position;
 			}
 			return NaN;
@@ -268,10 +263,34 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		private function calculateMajorUnit():void
 		{
-			var maxLabelSize:Number = (this.chart as CartesianChart).horizontalAxis == this ? this.maxLabelWidth : this.maxLabelHeight;
+			var overflow:Number = 0;
+			var rotation:Number = 0;
+			var chart:CartesianChart = this.chart as CartesianChart;
+			var maxLabelSize:Number;
+			if(chart.horizontalAxis == this)
+			{
+				maxLabelSize = this.maxLabelWidth;
+				rotation = chart.getHorizontalAxisStyle("rotation") as Number;
+				if(rotation >= 0)
+				{
+					if(!isNaN(chart.horizontalAxisLabelData.rightLabelOffset)) overflow += chart.horizontalAxisLabelData.rightLabelOffset as Number;
+				}
+				if(rotation <= 0)
+				{
+					if(!isNaN(chart.horizontalAxisLabelData.leftLabelOffset)) overflow += chart.horizontalAxisLabelData.leftLabelOffset as Number;
+				}			
+			}
+			else
+			{
+				maxLabelSize = this.maxLabelHeight;
+				rotation = chart.getVerticalAxisStyle("rotation") as Number;
+				if(!isNaN(chart.verticalAxisLabelData.topLabelOffset)) overflow = chart.verticalAxisLabelData.topLabelOffset as Number;				
+			}
 			var labelSpacing:Number = this.labelSpacing; 
 			maxLabelSize += (labelSpacing*2);
 			var categoryCount:int = this.categoryNames.length;
+
+			
 			var maxNumLabels:Number = this.renderer.length/maxLabelSize;
 			
 			//If the user specified number of labels to display, attempt to show the correct number.
@@ -321,6 +340,7 @@ package com.yahoo.astra.fl.charts.axes
 		{
 			var ticks:Array = [];
 			var categoryCount:int = this.categoryNames.length;
+			if(this.reverse) this.categoryNames = this.categoryNames.reverse();
 			var currentCat:int = 0;
 			while(currentCat < categoryCount && !isNaN(categoryCount))
 			{
@@ -328,20 +348,9 @@ package com.yahoo.astra.fl.charts.axes
 				var position:Number = this.valueToLocal(category);
 				var label:String = this.valueToLabel(category);
 				var axisData:AxisData = new AxisData(position, category, label);
-				ticks.push(axisData);
-				currentCat += this._majorUnit;
-			}
-			
-			//If a major unit has been calculated, we are not plotting all categories.
-			//Adjust the postion of each tick.
-			if(this._majorUnit > 1)
-			{
-				categoryCount = ticks.length;
-				var categorySize:Number = this.renderer.length / categoryCount;
-				for(var i:int = 0; i < categoryCount; i++)
-				{
-					(ticks[i] as AxisData).position = categorySize * i + (categorySize/2);
-				}
+				
+				if(currentCat % this._majorUnit == 0) ticks.push(axisData);
+				currentCat += 1;
 			}
 			
 			this.renderer.ticks = ticks;
