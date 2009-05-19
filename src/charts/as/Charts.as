@@ -979,11 +979,11 @@ package
 				if(this.legend && this.legendDisplay != "none")
 				{
 					this.legend.visible = true;
-					//we need to draw because the legend resizes itself
-					this.legend.drawNow();
 					
 					if(this.legendDisplay == "left" || this.legendDisplay == "right")
 					{
+						this.legend.maxHeight = this.component.height;
+						this.legend.drawNow();
 						if(this.legendDisplay == "left")
 						{
 							this.legend.x = this.backgroundAndBorder.borderWeight + this.padding;
@@ -999,6 +999,8 @@ package
 					}
 					else //top or bottom
 					{
+						this.legend.maxWidth = this.component.width;
+						this.legend.drawNow();
 						if(this.legendDisplay == "top")
 						{
 							this.legend.y = this.backgroundAndBorder.borderWeight + this.padding;

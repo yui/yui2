@@ -1,7 +1,7 @@
 package com.yahoo.astra.fl.charts.legend
 {
 	import com.yahoo.astra.fl.utils.UIComponentUtil;
-	import com.yahoo.astra.layout.modes.BoxLayout;
+	import com.yahoo.astra.layout.modes.FlowLayout;
 	
 	import fl.core.InvalidationType;
 	import fl.core.UIComponent;
@@ -156,6 +156,51 @@ package com.yahoo.astra.fl.charts.legend
 			this.invalidate(InvalidationType.DATA);
 		}
 		
+		
+		/**
+		 * @private
+		 * Placeholder for maxWidth
+		 */
+		private var _maxWidth:Number = 0;
+		
+		/**
+		 * @copy com.yahoo.astra.fl.charts.legend.ILegend#maxWidth
+		 */
+		public function get maxWidth():Number
+		{
+			return _maxWidth;
+		}
+		
+		/** 
+		 * @private (setter)
+		 */
+		public function set maxWidth(value:Number):void
+		{
+			_maxWidth = value;
+		}
+		
+		/**
+		 * @private
+		 * Placeholder for maxHeight 
+		 */
+		private var _maxHeight:Number = 0;
+		
+		/** 
+		 * @copy com.yahoo.astra.fl.charts.legend.ILegend#maxHeight
+		 */
+		public function get maxHeight():Number
+		{
+			return _maxHeight;
+		}
+		
+		/** 
+		 * @private (setter)
+		 */
+		public function set maxHeight(value:Number):void
+		{
+			_maxHeight = value;
+		}				
+		
 	//--------------------------------------
 	//  Protected Methods
 	//--------------------------------------
@@ -271,14 +316,25 @@ package com.yahoo.astra.fl.charts.legend
 			
 			var contentPadding:Number = this.getStyleValue("contentPadding") as Number;
 			var direction:String = this.getStyleValue("direction") as String;
-			var gap:Number = this.getStyleValue("gap") as Number;
-		
-			var layout:BoxLayout = new BoxLayout();
+
+			var gap:Number = this.getStyleValue("gap") as Number;	
+			var bounds:Rectangle;
+			
+			var layout:FlowLayout = new FlowLayout();
 			layout.verticalGap = layout.horizontalGap = gap;
 			layout.direction = direction;
-			layout.paddingTop = layout.paddingRight = layout.paddingBottom = layout.paddingLeft = contentPadding
-			var bounds:Rectangle = layout.layoutObjects(this.legendItems, new Rectangle(0, 0, this.width, this.height));
-			
+			layout.paddingTop = layout.paddingRight = layout.paddingBottom = layout.paddingLeft = contentPadding;
+			if(layout.direction == "vertical") 
+			{
+				layout.verticalAlign = "middle";
+				bounds = layout.layoutObjects(this.legendItems, new Rectangle(0, 0, this.width, this.maxHeight));
+			}
+			if(layout.direction == "horizontal") 
+			{
+				layout.horizontalAlign = "center";
+				bounds = layout.layoutObjects(this.legendItems, new Rectangle(0, 0, this.maxWidth, this.height));
+			}
+					
 			this._width = bounds.width;
 			this._height = bounds.height;
 			
@@ -287,7 +343,6 @@ package com.yahoo.astra.fl.charts.legend
 			{
 				this.dispatchEvent(new ComponentEvent(ComponentEvent.RESIZE));
 			}
-		}
+		}		
 	}
-	
 }
