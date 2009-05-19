@@ -291,29 +291,18 @@ package com.yahoo.astra.fl.charts.axes
 			var categoryCount:int = this.categoryNames.length;
 
 			
-			var maxNumLabels:Number = this.renderer.length/maxLabelSize;
+			var maxNumLabels:Number = (this.renderer.length + overflow)/maxLabelSize;
 			
 			//If the user specified number of labels to display, attempt to show the correct number.
 			if(this._numLabelsSetByUser)
 			{
 				maxNumLabels = Math.min(maxNumLabels, this.numLabels);
 			}
-			
-			var tempMajorUnit:Number = Math.ceil(this.categoryNames.length/maxNumLabels);
-			this._majorUnit = tempMajorUnit;			
-			if(this.renderer.length%tempMajorUnit != 0 && !this._numLabelsSetByUser)
-			{
-				var len:Number = Math.min(tempMajorUnit, ((this.renderer.length/2)-tempMajorUnit));
-				for(var i:int = 0;i < len; i++)
-				{
-					tempMajorUnit++;
-					if(this.renderer.length%tempMajorUnit == 0)
-					{
-						this._majorUnit = tempMajorUnit;
-						break;
-					}
-				}
-			}	
+			var ratio:Number = overflow/this.renderer.length;
+			var overflowOffset:Number = ratio*this.categoryNames.length;
+			if(isNaN(overflowOffset)) overflowOffset = 0;		
+			var tempMajorUnit:Number = Math.round((this.categoryNames.length+overflowOffset)/maxNumLabels);
+			this._majorUnit = tempMajorUnit;				
 		}
 		
 		/**
