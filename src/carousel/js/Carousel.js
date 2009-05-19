@@ -2021,6 +2021,11 @@
 
             carousel._refreshUi();
 
+            // Finally display the widget.  Note that, the widget doesn't need
+            // the show() to be called unlike the previous versions.  This
+            // makes the Carousel inconsistent with the other YUI widgets.
+            carousel.show();
+
             return true;
         },
 
