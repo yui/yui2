@@ -82,11 +82,8 @@ YAHOO.lang.augmentObject(
 			var	row_data = this.getRecord( row ),
 					state = row_data.getData( 'yui_dt_state' );
 					
-			if( state[ key ] ){
-				
-				state[ key ] = value;
-				
-			}
+			state[ key ] = value;
+			return state[ key ];
 			
 		},
 		
@@ -278,6 +275,9 @@ YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, o
 		this._hasExpandedRows = true;
 		
 		this._initExpandableRows( oColumn.key, '<img src="{image_url}" />' );
+		
+		this.setRowState(1,'expandableRowTemplate','Hi');
+		console.log(this.getRowState(1,'expandableRowTemplate'));
 		
 		//Subscribe to a click event to bind to
 		this.subscribe( 'cellClickEvent', function( cell_click, args ){
