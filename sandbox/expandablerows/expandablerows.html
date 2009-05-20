@@ -77,7 +77,20 @@ YAHOO.lang.augmentObject(
 			
 		},
 		
-		_initExpandableRows : function( field, template ){
+		setRowState : function( row, key, value ){
+		
+			var	row_data = this.getRecord( row ),
+					state = row_data.getData( 'yui_dt_state' );
+					
+			if( state[ key ] ){
+				
+				state[ key ] = value;
+				
+			}
+			
+		},
+		
+		_initExpandableRows : function( field, template, rowConfigs ){
 			
 			//Create state column
 			var records = this.getRecordSet().getRecords();
