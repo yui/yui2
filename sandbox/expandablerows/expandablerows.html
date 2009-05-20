@@ -102,10 +102,13 @@ YAHOO.lang.augmentObject(
 					
 				}
 				
+				//Set table level state
+				this.rowExpansionTemplate = template || null;
+				
 				//Set row state
 				state_object.expanded = ( record.getData( field ) ) ? false : null //set expanded property to null if no data is available
 				state_object.expandable_datakey = field;
-				state_object.expandable_template = template || null;
+				state_object.expandable_template = null;
 				
 			}//for
 			
@@ -149,30 +152,44 @@ YAHOO.lang.augmentObject(
 						new_row = document.createElement('tr'),
 						column_length = this.getFirstTrEl().getElementsByTagName('td').length,
 						expanded_data = row_data.getData( state.expandable_datakey ),
-						expanded_content = null;
+						expanded_content = null,
+						template = state.expandable_template || this.rowExpansionTemplate;
 
 				//Construct expanded row body
-				if( state.expandable_template ){
-
-					expanded_content = YAHOO.lang.substitute( 
-						state.expandable_template, 
-						expanded_data 
-					);
-
-				} else {
-
-					expanded_content = expanded_data;
-
-				}
-
-				//set class name for new row		
+				//this.rowExpansionTemplate
+				
 				new_row.className = 'yui-dt-expandablerow';
-
 				var	new_column = document.createElement('td');
 				new_column.className = 'yui-dt-expandablerow-body';
 				new_column.setAttribute( "colSpan", column_length );
-				new_column.innerHTML = '<div class="satg-expandablerow-wrapper">' + expanded_content + '</div>';
+				
+				new_column.innerHTML = '<div class="satg-expandablerow-wrapper"></div>';
 				new_row.appendChild( new_column );
+				
+				var liner_element = new_row.getElementsByTagName( 'div' )[ 0 ];
+				
+				if( YAHOO.lang.isString( template ) ){
+
+					liner_element.innerHTML = YAHOO.lang.substitute( 
+						template, 
+						expanded_data 
+					);
+
+				} else if( YAHOO.lang.isFunction( template ) ) {
+					
+					template( { 
+						row_element : new_row,
+						liner_element : liner_element,
+						data : row_data, 
+						state : state 
+					
+					} );
+
+				} else {
+					
+					return false;
+					
+				}
 
 				//Insert new row
 				newRow = YAHOO.util.Dom.insertAfter( new_row, row );
