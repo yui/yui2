@@ -340,8 +340,8 @@ YAHOO.util.Event.addListener(window, "load", function() {
 				myDataTable.subscribe( 'cellClickEvent', function( cell_click, args ){
 
 					if( YAHOO.util.Dom.hasClass( cell_click.target, 'yui-dt-expandablerow-trigger' ) ){
-
-						var	row = YAHOO.util.Dom.getAncestorByTagName( cell_click.target, 'tr' );
+						
+						var	row = myDataTable.getTrEl(cell_click.target)
 
 						this.toggleRowExpansion( row );
 
