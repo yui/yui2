@@ -113,7 +113,7 @@ YAHOO.lang.augmentObject(
 				}
 				
 				//Set table level state
-				this.rowExpansionTemplate = template || null;
+				this.rowExpansionTemplate = state_object.expandable_template || template || null;
 				
 				//Set row state
 				state_object.expanded = ( record.getData( field ) ) ? false : null //set expanded property to null if no data is available
@@ -276,8 +276,7 @@ YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, o
 		
 		this._initExpandableRows( oColumn.key, '<img src="{image_url}" />' );
 		
-		this.setRowState(1,'expandableRowTemplate','Hi');
-		console.log(this.getRowState(1,'expandableRowTemplate'));
+		this.setRowState(2,'expandable_template','I am indeed a strange row <img src="{image_url}" />');
 		
 		//Subscribe to a click event to bind to
 		this.subscribe( 'cellClickEvent', function( cell_click, args ){
