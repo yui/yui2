@@ -11,7 +11,18 @@
 	<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
 	<style>
 		body{ text-align: left; }
-		.yui-dt-expanded{background-color:#f00;}
+		.yui-dt-expanded .yui-dt-expandablerow-trigger{
+			width:18px;
+			height:22px;
+			cursor:pointer;
+			background:url(http://yui.yahooapis.com/2.7.0/build/treeview/assets/skins/sam/treeview-sprite.gif) 0 -4000px no-repeat;
+		}
+		.yui-dt-expandablerow-trigger, .yui-dt-collapsed .yui-dt-expandablerow-trigger{
+			width:18px;
+			height:22px;
+			cursor:pointer;
+			background:url(http://yui.yahooapis.com/2.7.0/build/treeview/assets/skins/sam/treeview-sprite.gif) 0 -6400px no-repeat;
+		}
 	</style>
 	
 </head>
@@ -267,47 +278,13 @@ YAHOO.lang.augmentObject(
 YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, oData) {
 	
 	var	Dom = YAHOO.util.Dom,
-			cell_element = Dom.getAncestorByTagName( el, 'td' );
-	
-	//TODO: Move this to expand function
-	if( !this._hasExpandedRows ){
-		
-		this._hasExpandedRows = true;
-		
-		this._initExpandableRows( oColumn.key, '<img src="{image_url}" />' );
-		
-		this.setRowState(2,'expandable_template','I am indeed a strange row <img src="{image_url}" />');
-		
-		//Subscribe to a click event to bind to
-		this.subscribe( 'cellClickEvent', function( cell_click, args ){
-			
-			if( Dom.hasClass( cell_element, 'yui-dt-expandablerow-trigger' ) ){
-				
-				var	row = YAHOO.util.Dom.getAncestorByTagName( cell_click.target, 'tr' );
-				
-				this.toggleRowExpansion( row );
-			
-			}
-		
-		} );
-		
-	}
-	
-	var	state_object = oRecord.getData( 'yui_dt_state' );
-	
-	//Marker class for the formatted cell
-	Dom.addClass( cell_element, 'yui-dt-expandablerow-trigger' );
+			cell_element = Dom.getAncestorByTagName( el, 'td' ),
+			state_object = oRecord.getData( 'yui_dt_state' );
 	
 	//Set trigger
-	if( state_object && state_object.expanded === false ){ //Row is closed
+	if( oData ){ //Row is closed
 		
-		Dom.addClass( cell_element, 'yui-dt-collapsed' );
-		el.innerHTML = "X";
-		
-	} else if( state_object && state_object.expanded === true ){
-		
-		Dom.addClass( cell_element, 'yui-dt-expanded' );
-		el.innerHTML = "L";
+		Dom.addClass( cell_element, 'yui-dt-expandablerow-trigger' );
 		
 	}
 
@@ -321,9 +298,7 @@ YAHOO.util.Event.addListener(window, "load", function() {
             {
             	key:"details",
 					label:"",
-					formatter:YAHOO.widget.DataTable.formatExpandRowTrigger,
-					formatterOptions:{
-					}
+					formatter:YAHOO.widget.DataTable.formatExpandRowTrigger
             },
             {
             	key:"date", 
@@ -365,7 +340,33 @@ YAHOO.util.Event.addListener(window, "load", function() {
             myColumnDefs, 
             myDataSource
         );
-                
+
+				//Init expandable rows
+				myDataTable._initExpandableRows( 
+					'details', 
+					'<img src="{image_url}" />' 
+				);
+				
+				//Set row specific template
+				myDataTable.setRowState(
+					2,
+					'expandable_template',
+					'I am indeed a strange row <img src="{image_url}" />'
+				);
+				
+				//Subscribe to a click event to bind to
+				myDataTable.subscribe( 'cellClickEvent', function( cell_click, args ){
+
+					if( YAHOO.util.Dom.hasClass( cell_click.target, 'yui-dt-expandablerow-trigger' ) ){
+
+						var	row = YAHOO.util.Dom.getAncestorByTagName( cell_click.target, 'tr' );
+
+						this.toggleRowExpansion( row );
+
+					}
+
+				} );
+				
         return {
             oDS: myDataSource,
             oDT: myDataTable
