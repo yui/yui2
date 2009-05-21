@@ -847,6 +847,13 @@ package
 									this.log("The style " + styleName + " is only supported by series of type 'pie'.", LoggerCategory.WARN);
 								}
 								UIComponent(series).setStyle("textFormat", TextFormatSerializer.readTextFormat(style.font))
+								break;	
+							case "visibility":
+								if(!(series is PieSeries))
+								{
+									UIComponent(series).setStyle("visibility", style.visibility);   									
+									UIComponent(series).visible = style.visibility == "visible";
+								}
 								break;
 							default:
 								this.log("Unknown series style: " + styleName, LoggerCategory.WARN);
@@ -956,7 +963,7 @@ package
 			this.addChild(this.legend);
 		}
 		
-		/**
+		/** 
 		 * @private (protected)
 		 * Since Chart is a Flash CS3 component, we should call drawNow() to be sure it updates properly.
 		 */
@@ -1174,8 +1181,9 @@ package
 			if(styles.size != null)
 			{
 				this.chart.setStyle(axisName + "AxisWeight", Number(styles.size));
+				this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "Axis", styles.size > 0);
 			}
-			
+
 			if(styles.showLabels != null)
 			{
 				this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisLabels", styles.showLabels);
@@ -1216,6 +1224,12 @@ package
 			if(styles.titleDistance != null)
 			{
 				this.chart.setStyle(axisName + "AxisTitleDistance", styles.titleDistance);
+			}
+			
+			if(styles.titleFont != null)
+			{
+				var titleTextFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.titleFont);
+				this.chart.setStyle(axisName + "AxisTitleTextFormat", titleTextFormat);				
 			}
 			
 			if(styles.majorGridLines)

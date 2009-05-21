@@ -45,7 +45,7 @@ package com.yahoo.astra.fl.charts.series
 		 */
 		public static function getStyleDefinition():Object
 		{
-			return mergeStyles(defaultStyles, Series.getStyleDefinition());
+			return mergeStyles(defaultStyles, CartesianSeries.getStyleDefinition());
 		}
 		
 	//--------------------------------------
