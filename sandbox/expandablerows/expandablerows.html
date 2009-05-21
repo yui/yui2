@@ -103,12 +103,6 @@ YAHOO.lang.augmentObject(
 			//Create state column
 			var records = this.getRecordSet().getRecords();
 			
-			//Create custom events in the dataGrid scope
-		   this.createEvent('beforeExpandRow');
-		   this.createEvent('afterExpandRow');
-		   this.createEvent('beforeCollapseRow');
-		   this.createEvent('afterCollapseRow');
-			
 			//Augment records
 			for( var i=0, l=records.length; l > i; i++ ){
 				
@@ -167,7 +161,7 @@ YAHOO.lang.augmentObject(
 				}
 
 				//Fire custom event
-				this.fireEvent( "beforeExpandRow", { row : row } );
+				this.fireEvent( "rowExpandEvent", { row : row } );
 
 				var	row_data = this.getRecord( row ),
 						new_row = document.createElement('tr'),
@@ -219,15 +213,9 @@ YAHOO.lang.augmentObject(
 
 					state.expanded = true;
 
-					//Fire custom event
-					this.fireEvent( "afterExpandRow", { row : row, expanded_cell : new_column } );
-
 					return true;
 
 				} else {
-
-					//Fire custom event
-					this.fireEvent("afterExpandRow", { row : row } );
 
 					return false;
 
@@ -240,7 +228,7 @@ YAHOO.lang.augmentObject(
 		collapseRow : function( row ){
 			
          //Fire custom event
-         this.fireEvent("beforeCollapseRow", { row : row } );
+         this.fireEvent("rowCollapseEvent", { row : row } );
 
          //If id passed, get element
          if ( !YAHOO.lang.isObject( row ) ) {
@@ -256,16 +244,10 @@ YAHOO.lang.augmentObject(
 
              next_sibling.parentNode.removeChild( next_sibling );
              state.expanded = false;
-				
-             //Fire custom event
-             this.fireEvent( "afterCollapseRow", { row : row } );
 
              return true
 
          } else {
-				
-             //Fire custom event
-             this.fireEvent( "afterCollapseRow", { row : row } );
 
              return false;
 
