@@ -177,10 +177,10 @@ YAHOO.lang.augmentObject(
 				//Construct expanded row body
 				new_row.className = 'yui-dt-expandablerow';
 				var new_column = document.createElement('td');
-				new_column.className = 'yui-dt-expandablerow-body';
-				new_column.setAttribute( "colSpan", column_length );
+				new_column.className = 'yui-dt-expandablerow-cell';
+				new_column.colSpan = column_length;
 				
-				new_column.innerHTML = '<div class="satg-expandablerow-wrapper"></div>';
+				new_column.innerHTML = '<div class="yui-dt-expandablerow-liner"></div>';
 				new_row.appendChild( new_column );
 				
 				var liner_element = new_row.getElementsByTagName( 'div' )[ 0 ];
