@@ -160,7 +160,7 @@ YAHOO.lang.augmentObject(
 				//If id passed, get element
 				if( !YAHOO.lang.isObject( row ) ) {
 
-					row = DOM.get(row);
+					row = YAHOO.util.Dom.get(row);
 
 				}
 
@@ -235,34 +235,64 @@ YAHOO.lang.augmentObject(
 		
 		collapseRow : function( row ){
 			
-			//Fire custom event
-			this.fireEvent("rowCollapseEvent", { row : row } );
+			if( YAHOO.util.Dom.hasClass( row, 'yui-dt-expanded' ) ){
+				
+				//Fire custom event
+				this.fireEvent("rowCollapseEvent", { row : row } );
 
-			//If id passed, get element
-			if ( !YAHOO.lang.isObject( row ) ) {
+				//If id passed, get element
+				if ( !YAHOO.lang.isObject( row ) ) {
 
-				row = DOM.get( row );
-
-			}
-
-			var row_data = this.getRecord( row ),
-				state = row_data.getData( 'yui_dt_state' ),
-				next_sibling = YAHOO.util.Dom.getNextSibling( row ),
-				hash_index = this.a_rowExpansions.indexOf( row_data.getId() );
-
-				if( YAHOO.util.Dom.hasClass( next_sibling, 'yui-dt-expandablerow' ) ) {
-
-					next_sibling.parentNode.removeChild( next_sibling );
-					this.a_rowExpansions.splice( hash_index, 1 )
-					state.expanded = false;
-
-					return true
-
-				} else {
-
-					return false;
+					row = YAHOO.util.Dom.get( row );
 
 				}
+
+				var row_data = this.getRecord( row ),
+					state = row_data.getData( 'yui_dt_state' ),
+					next_sibling = YAHOO.util.Dom.getNextSibling( row ),
+					hash_index = this.a_rowExpansions.indexOf( row_data.getId() );
+
+					if( YAHOO.util.Dom.hasClass( next_sibling, 'yui-dt-expandablerow' ) ) {
+
+						next_sibling.parentNode.removeChild( next_sibling );
+						this.a_rowExpansions.splice( hash_index, 1 )
+						state.expanded = false;
+
+						return true
+
+					} else {
+
+						return false;
+
+					}
+				
+			}
+			
+		},
+		
+		collapseAllRows : function(){
+			
+			var expanded_rows = this.getElementsByClassName( 'yui-dt-expandablerow' );
+			
+			if( expanded_rows.length ){
+				
+				for( var i = 0, l = expanded_rows.length; l > i; i++ ){
+					
+					var parent_row = YAHOO.util.Dom.getPreviousSibling( expanded_rows[ i ] );
+					
+					if( parent_row ){
+						
+						this.collapseRow( parent_row );
+						
+					}
+					
+				}
+				
+			} else {
+				
+				return false;
+				
+			}
 			
 		},
 		
@@ -289,12 +319,24 @@ YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, o
 	
 	var Dom = YAHOO.util.Dom,
 			cell_element = Dom.getAncestorByTagName( el, 'td' ),
-			state_object = oRecord.getData( 'yui_dt_state' );
+			state_object = oRecord.getData( 'yui_dt_state' ),
+			this_static = YAHOO.widget.DataTable.formatExpandRowTrigger;
 	
 	//Set trigger
 	if( oData ){ //Row is closed
 		
 		Dom.addClass( cell_element, 'yui-dt-expandablerow-trigger' );
+		
+	}
+	
+	if( !this_static.hasCollapseEvent ){
+		
+		this.subscribe( 'rowCollapseEvent', function( args ){
+
+			YAHOO.util.Dom.removeClass( args.row, 'yui-dt-expanded' );
+
+		} );
+		this_static.hasCollapseEvent = true;
 		
 	}
 
