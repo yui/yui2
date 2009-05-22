@@ -84,12 +84,10 @@
 				if( state && state.expanded ){
 
 					this.collapseRow( row );
-					Dom.replaceClass( row, CLASS_EXPANDED, CLASS_COLLAPSED );
 
 				} else {
 
 					this.expandRow( row );
-					Dom.replaceClass( row, CLASS_COLLAPSED, CLASS_EXPANDED );
 
 				}
 
@@ -165,6 +163,8 @@
 
 						}
 
+						Dom.replaceClass( row, CLASS_COLLAPSED, CLASS_EXPANDED );
+
 						return true;
 
 					} else {
@@ -201,6 +201,8 @@
 							next_sibling.parentNode.removeChild( next_sibling );
 							this.a_rowExpansions.splice( hash_index, 1 )
 							state.expanded = false;
+							
+							Dom.replaceClass( row, CLASS_EXPANDED, CLASS_COLLAPSED );
 
 							return true
 
@@ -276,6 +278,7 @@
 			
 		}
 
+		/*
 		if( !this_static.hasCollapseEvent ){
 
 			this.subscribe( 'rowCollapseEvent', function( args ){
@@ -286,6 +289,7 @@
 			this_static.hasCollapseEvent = true;
 
 		}
+		*/
 
 	}
 	
