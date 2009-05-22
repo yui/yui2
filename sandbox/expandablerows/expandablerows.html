@@ -9,20 +9,10 @@
 	
 	<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
 	<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
+	<link rel="stylesheet" type="text/css" href="expandablerows.css" />
 	<style>
 		body{ text-align: left; }
-		.yui-dt-expanded .yui-dt-expandablerow-trigger{
-			width:18px;
-			height:22px;
-			cursor:pointer;
-			background:url(http://yui.yahooapis.com/2.7.0/build/treeview/assets/skins/sam/treeview-sprite.gif) 0 -4000px no-repeat;
-		}
-		.yui-dt-expandablerow-trigger, .yui-dt-collapsed .yui-dt-expandablerow-trigger{
-			width:18px;
-			height:22px;
-			cursor:pointer;
-			background:url(http://yui.yahooapis.com/2.7.0/build/treeview/assets/skins/sam/treeview-sprite.gif) 0 -6400px no-repeat;
-		}
+
 	</style>
 	
 </head>
@@ -46,302 +36,33 @@
 <script type="text/javascript" src="../../build/element/element.js"></script> 
 <script type="text/javascript" src="../../build/datasource/datasource.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable.js"></script>
-<!--script type="text/javascript" src="../../build/logger/logger.js"></script-->
+<script>
+	
+	YAHOO.widget.DataTable.prototype.getRecord = function(row) {
+		var oRecord = this._oRecordSet.getRecord(row);
+
+		if(!oRecord) {
+			// Validate TR element
+			var elRow = this.getTrEl(row);
+				if(elRow) {
+					// This is the line that changed
+					oRecord = this._oRecordSet.getRecord(elRow.id);
+				 }
+		 }
+
+		 if(oRecord instanceof YAHOO.widget.Record) {
+				 return this._oRecordSet.getRecord(oRecord);
+		 }
+		 else {
+				 YAHOO.log("Could not get Record for row at " + row, "info", this.toString());
+				 return null;
+		 }
+	};
+	
+</script>
+<script type="text/javascript" src="expandablerows.js"></script>
 
 <script>
-
-YAHOO.widget.DataTable.prototype.getRecord = function(row) {
-	var oRecord = this._oRecordSet.getRecord(row);
-
-	if(!oRecord) {
-		// Validate TR element
-		var elRow = this.getTrEl(row);
-			if(elRow) {
-				// This is the line that changed
-				oRecord = this._oRecordSet.getRecord(elRow.id);
-			 }
-	 }
-
-	 if(oRecord instanceof YAHOO.widget.Record) {
-			 return this._oRecordSet.getRecord(oRecord);
-	 }
-	 else {
-			 YAHOO.log("Could not get Record for row at " + row, "info", this.toString());
-			 return null;
-	 }
-};
-
-</script>
-
-<script type="text/javascript">
-
-//Add prototype methods
-YAHOO.lang.augmentObject( 
-	YAHOO.widget.DataTable.prototype , 
-	{
-		getRowState : function( row, key ){
-		
-			var row_data = this.getRecord( row ),
-					state = row_data.getData( 'yui_dt_state' );
-					
-			return ( state && key ) ? state[ key ] : state;
-			
-		},
-		
-		setRowState : function( row, key, value ){
-		
-			var row_data = this.getRecord( row ),
-					state = row_data.getData( 'yui_dt_state' );
-					
-			state[ key ] = value;
-			return state[ key ];
-			
-		},
-		
-		_initExpandableRows : function( field, template, rowConfigs ){
-			
-			//Create state column
-			var records = this.getRecordSet().getRecords();
-			
-			//Augment records
-			for( var i=0, l=records.length; l > i; i++ ){
-				
-				var record = records[ i ]
-						state_object = record.getData( 'yui_dt_state' );
-				
-				//Create row object if needed
-				if( !state_object ){
-					
-					record.setData( 'yui_dt_state', {} );
-					var state_object = record.getData( 'yui_dt_state' );
-					
-				}
-				
-				//Set row state
-				state_object.expanded = ( record.getData( field ) ) ? false : null //set expanded property to null if no data is available
-				state_object.expandable_datakey = field;
-				state_object.expandable_template = null;
-				
-			}//for
-			
-			//Set subscribe restore method
-			this.subscribe( 'postRenderEvent', function(){ this.restoreExpandedRows(); } )
-			
-			//Set table level state
-			this.rowExpansionTemplate = state_object.expandable_template || template || null;
-			this.a_rowExpansions = [];
-			
-		},
-		
-		toggleRowExpansion : function( row ){
-			
-			var state = this.getRowState( row );
-			
-			if( state && state.expanded ){
-				
-				this.collapseRow( row );
-				YAHOO.util.Dom.replaceClass( row, 'yui-dt-expanded', 'yui-dt-collapsed' );
-				
-			} else {
-				
-				this.expandRow( row );
-				YAHOO.util.Dom.replaceClass( row, 'yui-dt-collapsed', 'yui-dt-expanded' );
-				
-			}
-			
-		},
-		
-		expandRow : function( row, restore ){
-			
-			var state = this.getRowState( row );
-			
-			if( !state.expanded || restore ){
-				
-				//If id passed, get element
-				if( !YAHOO.lang.isObject( row ) ) {
-
-					row = YAHOO.util.Dom.get(row);
-
-				}
-
-				//Fire custom event
-				this.fireEvent( "rowExpandEvent", { row : row } );
-
-				var row_data = this.getRecord( row ),
-						new_row = document.createElement('tr'),
-						column_length = this.getFirstTrEl().getElementsByTagName('td').length,
-						expanded_data = row_data.getData( state.expandable_datakey ),
-						expanded_content = null,
-						template = state.expandable_template || this.rowExpansionTemplate;
-
-				//Construct expanded row body
-				new_row.className = 'yui-dt-expandablerow';
-				var new_column = document.createElement('td');
-				new_column.className = 'yui-dt-expandablerow-cell';
-				new_column.colSpan = column_length;
-				
-				new_column.innerHTML = '<div class="yui-dt-expandablerow-liner"></div>';
-				new_row.appendChild( new_column );
-				
-				var liner_element = new_row.getElementsByTagName( 'div' )[ 0 ];
-				
-				if( YAHOO.lang.isString( template ) ){
-
-					liner_element.innerHTML = YAHOO.lang.substitute( 
-						template, 
-						expanded_data 
-					);
-
-				} else if( YAHOO.lang.isFunction( template ) ) {
-					
-					template( { 
-						row_element : new_row,
-						liner_element : liner_element,
-						data : row_data, 
-						state : state 
-					
-					} );
-
-				} else {
-					
-					return false;
-					
-				}
-
-				//Insert new row
-				newRow = YAHOO.util.Dom.insertAfter( new_row, row );
-
-				if (newRow.innerHTML.length) {
-
-					state.expanded = true;
-					
-					if( !restore ){
-						
-						this.a_rowExpansions.push( row_data.getId() );
-						
-					}
-					
-					return true;
-
-				} else {
-
-					return false;
-
-				} 
-				
-			}
-			
-		},
-		
-		collapseRow : function( row ){
-			
-			if( YAHOO.util.Dom.hasClass( row, 'yui-dt-expanded' ) ){
-				
-				//Fire custom event
-				this.fireEvent("rowCollapseEvent", { row : row } );
-
-				//If id passed, get element
-				if ( !YAHOO.lang.isObject( row ) ) {
-
-					row = YAHOO.util.Dom.get( row );
-
-				}
-
-				var row_data = this.getRecord( row ),
-					state = row_data.getData( 'yui_dt_state' ),
-					next_sibling = YAHOO.util.Dom.getNextSibling( row ),
-					hash_index = this.a_rowExpansions.indexOf( row_data.getId() );
-
-					if( YAHOO.util.Dom.hasClass( next_sibling, 'yui-dt-expandablerow' ) ) {
-
-						next_sibling.parentNode.removeChild( next_sibling );
-						this.a_rowExpansions.splice( hash_index, 1 )
-						state.expanded = false;
-
-						return true
-
-					} else {
-
-						return false;
-
-					}
-				
-			}
-			
-		},
-		
-		collapseAllRows : function(){
-			
-			var expanded_rows = this.getElementsByClassName( 'yui-dt-expandablerow' );
-			
-			if( expanded_rows.length ){
-				
-				for( var i = 0, l = expanded_rows.length; l > i; i++ ){
-					
-					var parent_row = YAHOO.util.Dom.getPreviousSibling( expanded_rows[ i ] );
-					
-					if( parent_row ){
-						
-						this.collapseRow( parent_row );
-						
-					}
-					
-				}
-				
-			} else {
-				
-				return false;
-				
-			}
-			
-		},
-		
-		restoreExpandedRows : function(){
-			
-			var	expanded_rows = this.a_rowExpansions;
-			
-			if( this.a_rowExpansions.length ){
-				
-				for( var i = 0, l = expanded_rows.length; l > i; i++ ){
-					
-					this.expandRow( this.getRow( expanded_rows[ i ] ), true );
-					
-				}
-				
-			}
-			
-		}
-		
-	}
-);
-
-YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, oData) {
-	
-	var Dom = YAHOO.util.Dom,
-			cell_element = Dom.getAncestorByTagName( el, 'td' ),
-			state_object = oRecord.getData( 'yui_dt_state' ),
-			this_static = YAHOO.widget.DataTable.formatExpandRowTrigger;
-	
-	//Set trigger
-	if( oData ){ //Row is closed
-		
-		Dom.addClass( cell_element, 'yui-dt-expandablerow-trigger' );
-		
-	}
-	
-	if( !this_static.hasCollapseEvent ){
-		
-		this.subscribe( 'rowCollapseEvent', function( args ){
-
-			YAHOO.util.Dom.removeClass( args.row, 'yui-dt-expanded' );
-
-		} );
-		this_static.hasCollapseEvent = true;
-		
-	}
-
-}
-
 
 YAHOO.util.Event.addListener(window, "load", function() {
 		YAHOO.example.Basic = function() {
