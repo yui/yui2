@@ -119,6 +119,8 @@ YAHOO.lang.augmentObject(
 				
 				//Set table level state
 				this.rowExpansionTemplate = state_object.expandable_template || template || null;
+				this.a_rowExpansions = [];
+				
 				
 				//Set row state
 				state_object.expanded = ( record.getData( field ) ) ? false : null //set expanded property to null if no data is available
@@ -171,8 +173,6 @@ YAHOO.lang.augmentObject(
 						template = state.expandable_template || this.rowExpansionTemplate;
 
 				//Construct expanded row body
-				//this.rowExpansionTemplate
-				
 				new_row.className = 'yui-dt-expandablerow';
 				var	new_column = document.createElement('td');
 				new_column.className = 'yui-dt-expandablerow-body';
@@ -212,7 +212,7 @@ YAHOO.lang.augmentObject(
 				if (newRow.innerHTML.length) {
 
 					state.expanded = true;
-
+					this.a_rowExpansions.push( row_data.getId() );
 					return true;
 
 				} else {
@@ -237,12 +237,16 @@ YAHOO.lang.augmentObject(
 
          }
 
-			var	state = this.getRecord( row ).getData( 'yui_dt_state' ),
-					next_sibling = YAHOO.util.Dom.getNextSibling( row );
+			var	row_data = this.getRecord( row ),
+					state = row_data.getData( 'yui_dt_state' ),
+					next_sibling = YAHOO.util.Dom.getNextSibling( row ),
+					hash_index = this.a_rowExpansions.indexOf( row_data.getId() );
 
          if( YAHOO.util.Dom.hasClass( next_sibling, 'yui-dt-expandablerow' ) ) {
 
              next_sibling.parentNode.removeChild( next_sibling );
+						this.a_rowExpansions.splice( hash_index, 1 )
+						console.log(this.a_rowExpansions);
              state.expanded = false;
 
              return true
