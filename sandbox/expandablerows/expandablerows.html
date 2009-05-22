@@ -51,24 +51,24 @@
 <script>
 
 YAHOO.widget.DataTable.prototype.getRecord = function(row) {
-   var oRecord = this._oRecordSet.getRecord(row);
+	var oRecord = this._oRecordSet.getRecord(row);
 
-   if(!oRecord) {
-       // Validate TR element
-       var elRow = this.getTrEl(row);
-       if(elRow) {
-           // This is the line that changed
-           oRecord = this._oRecordSet.getRecord(elRow.id);
-       }
-   }
+	if(!oRecord) {
+		// Validate TR element
+		var elRow = this.getTrEl(row);
+			if(elRow) {
+				// This is the line that changed
+				oRecord = this._oRecordSet.getRecord(elRow.id);
+			 }
+	 }
 
-   if(oRecord instanceof YAHOO.widget.Record) {
-       return this._oRecordSet.getRecord(oRecord);
-   }
-   else {
-       YAHOO.log("Could not get Record for row at " + row, "info", this.toString());
-       return null;
-   }
+	 if(oRecord instanceof YAHOO.widget.Record) {
+			 return this._oRecordSet.getRecord(oRecord);
+	 }
+	 else {
+			 YAHOO.log("Could not get Record for row at " + row, "info", this.toString());
+			 return null;
+	 }
 };
 
 </script>
@@ -81,7 +81,7 @@ YAHOO.lang.augmentObject(
 	{
 		getRowState : function( row, key ){
 		
-			var	row_data = this.getRecord( row ),
+			var row_data = this.getRecord( row ),
 					state = row_data.getData( 'yui_dt_state' );
 					
 			return ( state && key ) ? state[ key ] : state;
@@ -90,7 +90,7 @@ YAHOO.lang.augmentObject(
 		
 		setRowState : function( row, key, value ){
 		
-			var	row_data = this.getRecord( row ),
+			var row_data = this.getRecord( row ),
 					state = row_data.getData( 'yui_dt_state' );
 					
 			state[ key ] = value;
@@ -106,7 +106,7 @@ YAHOO.lang.augmentObject(
 			//Augment records
 			for( var i=0, l=records.length; l > i; i++ ){
 				
-				var	record = records[ i ]
+				var record = records[ i ]
 						state_object = record.getData( 'yui_dt_state' );
 				
 				//Create row object if needed
@@ -117,11 +117,6 @@ YAHOO.lang.augmentObject(
 					
 				}
 				
-				//Set table level state
-				this.rowExpansionTemplate = state_object.expandable_template || template || null;
-				this.a_rowExpansions = [];
-				
-				
 				//Set row state
 				state_object.expanded = ( record.getData( field ) ) ? false : null //set expanded property to null if no data is available
 				state_object.expandable_datakey = field;
@@ -129,11 +124,18 @@ YAHOO.lang.augmentObject(
 				
 			}//for
 			
+			//Set subscribe restore method
+			this.subscribe( 'postRenderEvent', function(){ this.restoreExpandedRows(); } )
+			
+			//Set table level state
+			this.rowExpansionTemplate = state_object.expandable_template || template || null;
+			this.a_rowExpansions = [];
+			
 		},
 		
 		toggleRowExpansion : function( row ){
 			
-			var	state = this.getRowState( row );
+			var state = this.getRowState( row );
 			
 			if( state && state.expanded ){
 				
@@ -149,11 +151,11 @@ YAHOO.lang.augmentObject(
 			
 		},
 		
-		expandRow : function( row ){
+		expandRow : function( row, restore ){
 			
-			var	state = this.getRowState( row );
+			var state = this.getRowState( row );
 			
-			if( !state.expanded ){
+			if( !state.expanded || restore ){
 				
 				//If id passed, get element
 				if( !YAHOO.lang.isObject( row ) ) {
@@ -165,7 +167,7 @@ YAHOO.lang.augmentObject(
 				//Fire custom event
 				this.fireEvent( "rowExpandEvent", { row : row } );
 
-				var	row_data = this.getRecord( row ),
+				var row_data = this.getRecord( row ),
 						new_row = document.createElement('tr'),
 						column_length = this.getFirstTrEl().getElementsByTagName('td').length,
 						expanded_data = row_data.getData( state.expandable_datakey ),
@@ -174,7 +176,7 @@ YAHOO.lang.augmentObject(
 
 				//Construct expanded row body
 				new_row.className = 'yui-dt-expandablerow';
-				var	new_column = document.createElement('td');
+				var new_column = document.createElement('td');
 				new_column.className = 'yui-dt-expandablerow-body';
 				new_column.setAttribute( "colSpan", column_length );
 				
@@ -212,14 +214,20 @@ YAHOO.lang.augmentObject(
 				if (newRow.innerHTML.length) {
 
 					state.expanded = true;
-					this.a_rowExpansions.push( row_data.getId() );
+					
+					if( !restore ){
+						
+						this.a_rowExpansions.push( row_data.getId() );
+						
+					}
+					
 					return true;
 
 				} else {
 
 					return false;
 
-				}	
+				} 
 				
 			}
 			
@@ -227,43 +235,59 @@ YAHOO.lang.augmentObject(
 		
 		collapseRow : function( row ){
 			
-         //Fire custom event
-         this.fireEvent("rowCollapseEvent", { row : row } );
+			//Fire custom event
+			this.fireEvent("rowCollapseEvent", { row : row } );
 
-         //If id passed, get element
-         if ( !YAHOO.lang.isObject( row ) ) {
+			//If id passed, get element
+			if ( !YAHOO.lang.isObject( row ) ) {
 
-             row = DOM.get( row );
+				row = DOM.get( row );
 
-         }
+			}
 
-			var	row_data = this.getRecord( row ),
-					state = row_data.getData( 'yui_dt_state' ),
-					next_sibling = YAHOO.util.Dom.getNextSibling( row ),
-					hash_index = this.a_rowExpansions.indexOf( row_data.getId() );
+			var row_data = this.getRecord( row ),
+				state = row_data.getData( 'yui_dt_state' ),
+				next_sibling = YAHOO.util.Dom.getNextSibling( row ),
+				hash_index = this.a_rowExpansions.indexOf( row_data.getId() );
 
-         if( YAHOO.util.Dom.hasClass( next_sibling, 'yui-dt-expandablerow' ) ) {
+				if( YAHOO.util.Dom.hasClass( next_sibling, 'yui-dt-expandablerow' ) ) {
 
-             next_sibling.parentNode.removeChild( next_sibling );
-						this.a_rowExpansions.splice( hash_index, 1 )
-						console.log(this.a_rowExpansions);
-             state.expanded = false;
+					next_sibling.parentNode.removeChild( next_sibling );
+					this.a_rowExpansions.splice( hash_index, 1 )
+					state.expanded = false;
 
-             return true
+					return true
 
-         } else {
+				} else {
 
-             return false;
+					return false;
 
-         }
+				}
+			
+		},
+		
+		restoreExpandedRows : function(){
+			
+			var	expanded_rows = this.a_rowExpansions;
+			
+			if( this.a_rowExpansions.length ){
+				
+				for( var i = 0, l = expanded_rows.length; l > i; i++ ){
+					
+					this.expandRow( this.getRow( expanded_rows[ i ] ), true );
+					
+				}
+				
+			}
 			
 		}
+		
 	}
 );
 
 YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, oData) {
 	
-	var	Dom = YAHOO.util.Dom,
+	var Dom = YAHOO.util.Dom,
 			cell_element = Dom.getAncestorByTagName( el, 'td' ),
 			state_object = oRecord.getData( 'yui_dt_state' );
 	
@@ -278,54 +302,54 @@ YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, o
 
 
 YAHOO.util.Event.addListener(window, "load", function() {
-    YAHOO.example.Basic = function() {
-        var myColumnDefs = [
-        
-            {
-            	key:"details",
+		YAHOO.example.Basic = function() {
+				var myColumnDefs = [
+				
+						{
+							key:"details",
 					label:"",
 					formatter:YAHOO.widget.DataTable.formatExpandRowTrigger
-            },
-            {
-            	key:"date", 
-            	formatter:YAHOO.widget.DataTable.formatDate, 
-            	sortable:true, 
-            	sortOptions:{
-            		defaultDir:YAHOO.widget.DataTable.CLASS_DESC
-            	},
-            	resizeable:true
-            },
-            {
-            	key:"quantity", 
-            	formatter:YAHOO.widget.DataTable.formatNumber, 
-            	sortable:true, 
-            	resizeable:true
-            },
-            {
-            	key:"amount", 
-            	formatter:YAHOO.widget.DataTable.formatCurrency, 
-            	sortable:true, 
-            	resizeable:true
-            },
-            {
-            	key:"title", 
-            	sortable:true, 
-            	resizeable:true
-            }
-            
-        ];
+						},
+						{
+							key:"date", 
+							formatter:YAHOO.widget.DataTable.formatDate, 
+							sortable:true, 
+							sortOptions:{
+								defaultDir:YAHOO.widget.DataTable.CLASS_DESC
+							},
+							resizeable:true
+						},
+						{
+							key:"quantity", 
+							formatter:YAHOO.widget.DataTable.formatNumber, 
+							sortable:true, 
+							resizeable:true
+						},
+						{
+							key:"amount", 
+							formatter:YAHOO.widget.DataTable.formatCurrency, 
+							sortable:true, 
+							resizeable:true
+						},
+						{
+							key:"title", 
+							sortable:true, 
+							resizeable:true
+						}
+						
+				];
 
-        var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
-        myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-        myDataSource.responseSchema = {
-            fields: ["id","date","quantity","amount","title","details"]
-        };
+				var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
+				myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+				myDataSource.responseSchema = {
+						fields: ["id","date","quantity","amount","title","details"]
+				};
 
-        var myDataTable = new YAHOO.widget.DataTable(
-        	"basic",
-            myColumnDefs, 
-            myDataSource
-        );
+				var myDataTable = new YAHOO.widget.DataTable(
+					"basic",
+						myColumnDefs, 
+						myDataSource
+				);
 
 				//Init expandable rows
 				myDataTable._initExpandableRows( 
@@ -345,7 +369,7 @@ YAHOO.util.Event.addListener(window, "load", function() {
 
 					if( YAHOO.util.Dom.hasClass( cell_click.target, 'yui-dt-expandablerow-trigger' ) ){
 						
-						var	row = myDataTable.getTrEl(cell_click.target)
+						var row = myDataTable.getTrEl(cell_click.target)
 
 						this.toggleRowExpansion( row );
 
@@ -353,11 +377,11 @@ YAHOO.util.Event.addListener(window, "load", function() {
 
 				} );
 				
-        return {
-            oDS: myDataSource,
-            oDT: myDataTable
-        };
-    }();
+				return {
+						oDS: myDataSource,
+						oDT: myDataTable
+				};
+		}();
 });
 
 </script>
