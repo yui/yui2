@@ -17,7 +17,17 @@
 			CLASS_TRIGGER = 'yui-dt-expandablerow-trigger',
 			CLASS_NODATA = 'yui-dt-expandablerow-nodata',
 			CLASS_CELL = 'yui-dt-expandablerow-cell',
-			CLASS_LINER = 'yui-dt-expandablerow-liner';
+			CLASS_LINER = 'yui-dt-expandablerow-liner',
+			
+			indexOf = function(a, val) {
+				for (var i=0; i<a.length; i=i+1) {
+					if (a[i] === val) {
+						return i;
+					}
+				}
+
+				return -1;
+			};
 
 	//Add prototype methods
 	YAHOO.lang.augmentObject( 
@@ -178,7 +188,7 @@
 			},
 
 			collapseRow : function( row ){
-
+				
 				if( Dom.hasClass( row, CLASS_EXPANDED ) ){
 
 					//Fire custom event
@@ -192,10 +202,10 @@
 					}
 
 					var row_data = this.getRecord( row ),
-						state = row_data.getData( STRING_STATENAME ),
-						next_sibling = Dom.getNextSibling( row ),
-						hash_index = this.a_rowExpansions.indexOf( row_data.getId() );
-
+							state = row_data.getData( STRING_STATENAME ),
+							next_sibling = Dom.getNextSibling( row ),
+							hash_index = indexOf( this.a_rowExpansions, row_data.getId() );
+						
 						if( Dom.hasClass( next_sibling, CLASS_EXPANDABLEROW ) ) {
 
 							next_sibling.parentNode.removeChild( next_sibling );
