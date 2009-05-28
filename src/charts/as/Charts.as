@@ -633,6 +633,16 @@ package
 				case "legend":
 					this.setLegendStyles(value);
 					break;
+				case "seriesItemSpacing":
+					if(this.chart is BarChart || this.chart is ColumnChart)
+					{
+						this.chart.setStyle("seriesItemSpacing", Number(value));
+					}
+					else
+					{
+						this.log("The " + name + " style is only supported by Column and Bar Charts.");
+					}
+					break;
 				default:
 					this.log("Unknown style: " + name, LoggerCategory.WARN);
 			}
