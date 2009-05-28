@@ -128,8 +128,9 @@ package com.yahoo.astra.fl.charts.series
 			var totalMarkerSize:Number = this.calculateTotalMarkerSize(otherAxis, markerSizes);
 			var seriesIndex:int = allSeriesOfType.indexOf(this);
 			var markerSize:Number = markerSizes[seriesIndex] as Number;
-			var xOffset:Number = this.calculateXOffset(valueAxis, otherAxis, markerSizes, totalMarkerSize, allSeriesOfType);
-			
+			var xOffset:Number = this.calculateXOffset(valueAxis, otherAxis, markerSizes, totalMarkerSize, allSeriesOfType);			
+			var seriesItemSpacing:Number = UIComponentUtil.getStyleValue(UIComponent(this.chart), "seriesItemSpacing") as Number;
+
 			var startValues:Array = [];
 			var endValues:Array = [];
 			var itemCount:int = this.length;
@@ -139,8 +140,9 @@ package com.yahoo.astra.fl.charts.series
 				var originPosition:Number = valueAxis.valueToLocal(originValue);
 				
 				var position:Point = IChart(this.chart).itemToPosition(this, i);
+				position.x += (allSeriesOfType.length - 1) * seriesItemSpacing;
 				var marker:DisplayObject = this.markers[i] as DisplayObject;
-				
+
 				marker.x = position.x + xOffset;
 				
 				marker.width = markerSize;
@@ -212,7 +214,8 @@ package com.yahoo.astra.fl.charts.series
 		protected function calculateXOffset(valueAxis:IOriginAxis, otherAxis:IAxis, markerSizes:Array, totalMarkerSize:Number, allSeriesOfType:Array):Number
 		{
 			var seriesIndex:int = allSeriesOfType.indexOf(this);
-			
+			var seriesItemSpacing:Number = UIComponentUtil.getStyleValue(UIComponent(this.chart), "seriesItemSpacing") as Number;
+
 			//special case for axes that allow clustering
 			if(otherAxis is IClusteringAxis)
 			{
@@ -221,10 +224,11 @@ package com.yahoo.astra.fl.charts.series
 				{
 					xOffset += markerSizes[i] as Number;
 				}
+				xOffset -= (markerSizes.length - (i+1)) * seriesItemSpacing;
+
 				//center based on the sum of all marker sizes
 				return -(totalMarkerSize / 2) + xOffset;
 			}
-			
 			//center based on the marker size of this series
 			return -(markerSizes[seriesIndex] as Number) / 2;
 		}
@@ -238,10 +242,12 @@ package com.yahoo.astra.fl.charts.series
 			var totalMarkerSize:Number = 0;
 			var allSeriesOfType:Array = ChartUtil.findSeriesOfType(this, this.chart as IChart);
 			var seriesCount:int = allSeriesOfType.length;
+			var seriesItemSpacing:Number = UIComponentUtil.getStyleValue(UIComponent(this.chart), "seriesItemSpacing") as Number;
 			for(var i:int = 0; i < seriesCount; i++)
 			{
 				var series:ColumnSeries = ColumnSeries(allSeriesOfType[i]);
 				var markerSize:Number = this.calculateMarkerSize(series, axis);
+
 				sizes.push(markerSize);
 				if(axis is IClusteringAxis)
 				{
@@ -252,6 +258,7 @@ package com.yahoo.astra.fl.charts.series
 					totalMarkerSize = Math.max(totalMarkerSize, markerSize);
 				}
 			}
+			totalMarkerSize += seriesItemSpacing * (seriesCount-1);
 			return totalMarkerSize;
 		}
 		
@@ -276,10 +283,12 @@ package com.yahoo.astra.fl.charts.series
 		 */
 		protected function calculateMaximumAllowedMarkerSize(axis:IAxis):Number
 		{
+			var seriesItemSpacing:Number = UIComponentUtil.getStyleValue(UIComponent(this.chart), "seriesItemSpacing") as Number;
 			if(axis is IClusteringAxis)
 			{
 				var allSeriesOfType:Array = ChartUtil.findSeriesOfType(this, this.chart as IChart);
-				return (this.width / IClusteringAxis(axis).clusterCount) / allSeriesOfType.length;
+				var availableWidth:Number = this.width - (IClusteringAxis(axis).clusterCount * seriesItemSpacing *(allSeriesOfType.length - 1));
+				return ((availableWidth / IClusteringAxis(axis).clusterCount) / allSeriesOfType.length);			
 			}
 			return Number.POSITIVE_INFINITY;
 		}

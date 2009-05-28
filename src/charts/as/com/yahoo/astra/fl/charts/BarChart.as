@@ -5,6 +5,12 @@ package com.yahoo.astra.fl.charts
 	import com.yahoo.astra.fl.charts.series.BarSeries;
 	
 	/**
+	 * The amount of space between items within a series
+	 * @default 0
+	 */	
+	[Style(name="seriesItemSpacing", type="Number")]
+	
+	/**
 	 * A chart that displays its data points with horizontal bars.
 	 * 
 	 * @author Josh Tynjala
@@ -26,7 +32,8 @@ package com.yahoo.astra.fl.charts
 			showHorizontalAxisMinorTicks: true,
 			showVerticalAxisGridLines: false,
 			showVerticalAxisTicks: false,
-			showVerticalAxisMinorTicks: false
+			showVerticalAxisMinorTicks: false,
+			seriesItemSpacing:0
 		};
 		
 	//--------------------------------------
