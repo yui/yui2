@@ -1036,6 +1036,17 @@ TV.prototype = {
 
         return null;
     },
+	
+    /**
+     * When in singleNodeHighlight it returns the node highlighted
+	 * or null if none.  Returns null if singleNodeHighlight is false.
+     * @method getHighlightedNode
+     * @return {YAHOO.widget.Node} a node reference or null
+     */
+	getHighlightedNode: function() {
+		return this._currentlyHighlighted;
+	},
+		
 
     /**
      * Removes the node and its children, and optionally refreshes the 
