@@ -976,6 +976,27 @@ TV.prototype = {
         return (values.length) ? values : null;
     },
 
+
+    /**
+     * Returns a collection of nodes that have passed the test function
+	 * passed as its only argument.  
+	 * The function will receive a reference to each node to be tested.  
+     * @method getNodesBy
+     * @param {function} a boolean function that receives a Node instance and returns true to add the node to the results list
+     * @return {Array} the matching collection of nodes, null if no match
+     */
+    getNodesBy: function(fn) {
+        var values = [];
+        for (var i in this._nodes) {
+            if (this._nodes.hasOwnProperty(i)) {
+                var n = this._nodes[i];
+                if (fn(n)) {
+                    values.push(n);
+                }
+            }
+        }
+        return (values.length) ? values : null;
+    },
     /**
      * Returns the treeview node reference for an anscestor element
      * of the node, or null if it is not contained within any node
@@ -1018,7 +1039,7 @@ TV.prototype = {
 	getHighlightedNode: function() {
 		return this._currentlyHighlighted;
 	},
-		
+
 
     /**
      * Removes the node and its children, and optionally refreshes the 
