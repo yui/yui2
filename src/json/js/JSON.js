@@ -155,7 +155,7 @@ function _prepare(s) {
  * @static
  */
 function _isValid(str) {
-    return str && l.isString(str) &&
+    return l.isString(str) &&
             _INVALID.test(str.
             replace(_ESCAPES,'@').
             replace(_VALUES,']').
