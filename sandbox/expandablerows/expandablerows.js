@@ -45,14 +45,16 @@
 			setRowState : function( row, key, value ){
 
 				var row_data = this.getRecord( row ),
-						state = row_data.getData( STRING_STATENAME );
+					state = row_data.getData( STRING_STATENAME );
 
 				state[ key ] = value;
+				row_data.setData( state );
+
 				return state[ key ];
 
 			},
 
-			_initExpandableRows : function( field, template, rowConfigs ){
+			initExpandableRows : function( field, template, rowConfigs ){
 
 				//Create state column
 				var records = this.getRecordSet().getRecords();
@@ -120,11 +122,11 @@
 					this.fireEvent( "rowExpandEvent", { row : row } );
 
 					var row_data = this.getRecord( row ),
-							new_row = document.createElement('tr'),
-							column_length = this.getFirstTrEl().getElementsByTagName('td').length,
-							expanded_data = row_data.getData( state.expandable_datakey ),
-							expanded_content = null,
-							template = state.expandable_template || this.rowExpansionTemplate;
+						new_row = document.createElement('tr'),
+						column_length = this.getFirstTrEl().getElementsByTagName('td').length,
+						expanded_data = row_data.getData( state.expandable_datakey ),
+						expanded_content = null,
+						template = state.expandable_template || this.rowExpansionTemplate;
 
 					//Construct expanded row body
 					new_row.className = CLASS_EXPANDABLEROW;
