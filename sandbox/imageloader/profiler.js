@@ -1,5 +1,5 @@
 
-YAHOO.util.Event.onDOMReady(function() { var myConsole = new YAHOO.widget.LogReader(null, { width: '500px', height: '800px' }); });
+YAHOO.util.Event.onDOMReady(function() { var myConsole = new YAHOO.widget.LogReader(null, { width: '500px', height: '800px', newestOnTop: false }); });
 
 //YAHOO.widget.Logger.enableBrowserConsole();
 YAHOO.tool.Profiler.registerConstructor('YAHOO.util.ImageLoader.group');

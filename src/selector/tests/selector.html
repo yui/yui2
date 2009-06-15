@@ -32,6 +32,7 @@ onload = function() {
         name: 'Query All',
 
         testTest: function() {
+            Y.Assert.isTrue(Selector.test(Y.Dom.get('checkbox-unchecked'), '[type=checkbox], button'), '[type=checkbox], button');
             Y.Assert.isTrue(Selector.test(Y.Dom.get('test-lang-en-us'), '[lang|=en]'), '[lang|=en] (lang="en-us")');
             Y.Assert.isTrue(Selector.test(Y.Dom.get('test-lang-en'), '[lang|=en]'), '[lang|=en] (lang="en")');
             Y.Assert.isFalse(Selector.test(Y.Dom.get('test-lang-english'), '[lang|=en]'), '[lang|=en] (lang="en")');
