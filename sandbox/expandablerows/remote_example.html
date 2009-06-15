@@ -16,9 +16,16 @@ body {
 	margin:0;
 	padding:0;
 }
+.yui-log{
+	filter:alpha(opacity=50);
+	-moz-opacity:0.5;
+	-khtml-opacity: 0.5;
+	opacity: 0.5;
+}
 </style>
 
 <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/skins/sam/logger.css">
 <link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
 <link rel="stylesheet" type="text/css" href="expandablerows.css" />
 <!--there is no custom header content for this example-->
@@ -43,6 +50,10 @@ Local webservice.</p>
 <script type="text/javascript" src="../../build/connection/connection-min.js"></script>
 <script type="text/javascript" src="../../build/json/json-min.js"></script>
 <script type="text/javascript" src="../../build/element/element-min.js"></script>
+<script type="text/javascript" src="../../build/logger/logger-min.js"></script>
+<script type="text/javascript">
+var myLogReader = new YAHOO.widget.LogReader();
+</script>
 <script type="text/javascript" src="../../build/datasource/datasource-min.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-min.js"></script>
 <script>
@@ -99,6 +110,25 @@ YAHOO.util.Event.addListener(window, "load", function() {
 
         var myDataTable = new YAHOO.widget.DataTable("json", myColumnDefs,
                 myDataSource, {initialRequest:"query=pizza&zip=94089&results=10&output=json"});
+
+        			//Init expandable rows
+					myDataTable.initExpandableRows( 
+						'details', 
+						'<strong>{test}</strong>' 
+					);
+					
+					//Subscribe to a click event to bind to
+					myDataTable.subscribe( 'cellClickEvent', function( cell_click, args ){
+
+						if( YAHOO.util.Dom.hasClass( cell_click.target, 'yui-dt-expandablerow-trigger' ) ){
+
+							var row = myDataTable.getTrEl(cell_click.target)
+
+							this.toggleRowExpansion( row );
+
+						}
+
+					}, this );
 
         var mySuccessHandler = function() {
             this.set("sortedBy", null);

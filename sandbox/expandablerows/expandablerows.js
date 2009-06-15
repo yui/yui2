@@ -36,21 +36,30 @@
 			getRowState : function( row, key ){
 
 				var row_data = this.getRecord( row ),
-						state = row_data.getData( STRING_STATENAME );
+					row_state = row_data.getData( STRING_STATENAME );
 
-				return ( state && key ) ? state[ key ] : state;
+				var state_data = ( row_state && key ) ? row_state[ key ] : row_state;
+				
+				return state_data || {};
 
 			},
 
 			setRowState : function( row, key, value ){
 
 				var row_data = this.getRecord( row ),
-					state = row_data.getData( STRING_STATENAME );
+					merged_data = {};
+					
+				merged_data[ key ] = value;
 
-				state[ key ] = value;
-				row_data.setData( state );
+				if( row_data[ STRING_STATENAME ] ){
+					
+					merged_data = YAHOO.lang.merge( row_data[ STRING_STATENAME ], merged_data )
+					
+				}
+				
+				row_data.setData( STRING_STATENAME, merged_data );
 
-				return state[ key ];
+				return row_data.getData( STRING_STATENAME )[ key ];
 
 			},
 
@@ -63,7 +72,7 @@
 				for( var i=0, l=records.length; l > i; i++ ){
 
 					var record = records[ i ]
-							state_object = record.getData( STRING_STATENAME );
+						state_object = record.getData( STRING_STATENAME );
 
 					//Create row object if needed
 					if( !state_object ){
@@ -84,7 +93,7 @@
 				this.subscribe( 'postRenderEvent', function(){ this.restoreExpandedRows(); } )
 
 				//Set table level state
-				this.rowExpansionTemplate = state_object.expandable_template || template || null;
+				this.rowExpansionTemplate = state_object ? ( state_object.expandable_template || template || null ) : template || null;
 				this.a_rowExpansions = [];
 
 			},
@@ -98,7 +107,7 @@
 					this.collapseRow( row );
 
 				} else {
-
+					
 					this.expandRow( row );
 
 				}
@@ -110,7 +119,7 @@
 				var state = this.getRowState( row );
 
 				if( !state.expanded || restore ){
-
+					
 					//If id passed, get element
 					if( !YAHOO.lang.isObject( row ) ) {
 
@@ -161,13 +170,13 @@
 						return false;
 
 					}
-
+					
 					//Insert new row
 					newRow = Dom.insertAfter( new_row, row );
 
 					if (newRow.innerHTML.length) {
 
-						state.expanded = true;
+						this.setRowState( row, 'expanded', true );
 
 						if( !restore ){
 
@@ -211,8 +220,8 @@
 						if( Dom.hasClass( next_sibling, CLASS_EXPANDABLEROW ) ) {
 
 							next_sibling.parentNode.removeChild( next_sibling );
-							this.a_rowExpansions.splice( hash_index, 1 )
-							state.expanded = false;
+							this.a_rowExpansions.splice( hash_index, 1 );
+							this.setRowState( row, 'expanded', false );
 							
 							Dom.replaceClass( row, CLASS_EXPANDED, CLASS_COLLAPSED );
 
