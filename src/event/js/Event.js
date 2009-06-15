@@ -1619,8 +1619,7 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
          */     
         EU.onBlur = EU.addBlurListener;
 
-
-/*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller */
+/*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller/Diego Perini */
 
         // Internet Explorer: use the readyState of a defered script.
         // This isolates what appears to be a safe moment to manipulate
