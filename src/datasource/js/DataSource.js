@@ -132,6 +132,7 @@ util.DataSourceBase = function(oLiveData, oConfigs) {
      *
      * @event dataErrorEvent
      * @param oArgs.request {Object} The request object.
+     * @param oArgs.response {String} The response object (if available).
      * @param oArgs.callback {Object} The callback object.
      * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      * @param oArgs.message {String} The error message.
@@ -1067,7 +1068,7 @@ Math.max(oFullResponse.lastIndexOf("]"),oFullResponse.lastIndexOf("}"));
     }
 
     // Success
-    if(oParsedResponse && !oParsedResponse.error) {
+    if(!oParsedResponse.error) {
         // Last chance to touch the raw response or the parsed response
         oParsedResponse = this.doBeforeCallback(oRequest, oFullResponse, oParsedResponse, oCallback);
         this.fireEvent("responseParseEvent", {request:oRequest,
@@ -2281,7 +2282,7 @@ makeConnection : function(oRequest, oCallback, oCaller) {
         }
         // Error if no response
         else if(!oResponse) {
-            this.fireEvent("dataErrorEvent", {request:oRequest,
+            this.fireEvent("dataErrorEvent", {request:oRequest, response:null,
                     callback:oCallback, caller:oCaller,
                     message:DS.ERROR_DATANULL});
             YAHOO.log(DS.ERROR_DATANULL, "error", this.toString());
@@ -2321,7 +2322,7 @@ makeConnection : function(oRequest, oCallback, oCaller) {
      * @private
      */
     var _xhrFailure = function(oResponse) {
-        this.fireEvent("dataErrorEvent", {request:oRequest,
+        this.fireEvent("dataErrorEvent", {request:oRequest, response: oResponse,
                 callback:oCallback, caller:oCaller,
                 message:DS.ERROR_DATAINVALID});
         YAHOO.log(DS.ERROR_DATAINVALID + ": " +
