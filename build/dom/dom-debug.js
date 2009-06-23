@@ -558,7 +558,8 @@
          * @method getElementsByClassName
          * @param {String} className The class name to match against
          * @param {String} tag (optional) The tag name of the elements being collected
-         * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
+         * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point.
+         * This element is not included in the className scan.
          * @param {Function} apply (optional) A function to apply to each element when found 
          * @param {Any} o (optional) An optional arg that is passed to the supplied method
          * @param {Boolean} overrides (optional) Whether or not to override the scope of "method" with "o"

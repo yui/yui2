@@ -1761,7 +1761,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
         }
     }
     
-    if(this.responseStripAfter) {
+    if(this.dataSource.responseStripAfter) {
         this.dataSource.doBeforeParseData = this.preparseRawResponse;
     }
     if(this.applyLocalFilter) {
