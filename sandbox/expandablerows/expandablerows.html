@@ -119,13 +119,6 @@ YAHOO.util.Event.addListener(window, "load", function() {
 					'<img src="{image_url}" />' 
 				);
 				
-				//Set row specific template
-				myDataTable.setRowState(
-					2,
-					'expandable_template',
-					'I am indeed a strange row <img src="{image_url}" />'
-				);
-				
 				//Subscribe to a click event to bind to
 				myDataTable.subscribe( 'cellClickEvent', function( cell_click, args ){
 

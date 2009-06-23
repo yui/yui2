@@ -46,28 +46,30 @@
 
 			setRowState : function( row, key, value ){
 
-				var row_data = this.getRecord( row ),
+				var row_data = this.getRecord( row ).getData(),
 					merged_data = {};
 					
-				merged_data[ key ] = value;
 
-				if( row_data[ STRING_STATENAME ] ){
+				for( var i in row_data[ STRING_STATENAME ] ){
 					
-					merged_data = YAHOO.lang.merge( row_data[ STRING_STATENAME ], merged_data )
+					var item = row_data[ STRING_STATENAME ][ i ]
+					
+					merged_data[ i ] = item;
 					
 				}
 				
-				row_data.setData( STRING_STATENAME, merged_data );
-
-				return row_data.getData( STRING_STATENAME )[ key ];
+				merged_data[ key ] = value;
+				
+				this.getRecord( row ).setData( STRING_STATENAME, merged_data );
+				
+				return row_data[ key ];
 
 			},
 
-			initExpandableRows : function( field, template, rowConfigs ){
-
-				//Create state column
+			_setInitialState : function( field, template, rowConfigs ){
+				
 				var records = this.getRecordSet().getRecords();
-
+				
 				//Augment records
 				for( var i=0, l=records.length; l > i; i++ ){
 
@@ -83,17 +85,24 @@
 					}
 
 					//Set row state
-					state_object.expanded = ( record.getData( field ) ) ? false : null //set expanded property to null if no data is available
-					state_object.expandable_datakey = field;
-					state_object.expandable_template = null;
+					record.setData( STRING_STATENAME, {
+						expanded : ( record.getData( field ) ) ? false : null, //set expanded property to null if no data is available
+						expandable_datakey : field,
+						expandable_template : null
+					} );
 
 				}//for
+				
+				this.rowExpansionTemplate = state_object ? ( state_object.expandable_template || template || null ) : template || null;
+				
+			},
 
+			initExpandableRows : function( field, template, rowConfigs ){
+				
 				//Set subscribe restore method
-				this.subscribe( 'postRenderEvent', function(){ this.restoreExpandedRows(); } )
+				this.subscribe( 'postRenderEvent', function(){ this.restoreExpandedRows( field, template, rowConfigs ); } )
 
 				//Set table level state
-				this.rowExpansionTemplate = state_object ? ( state_object.expandable_template || template || null ) : template || null;
 				this.a_rowExpansions = [];
 
 			},
@@ -152,7 +161,7 @@
 
 						liner_element.innerHTML = YAHOO.lang.substitute( 
 							template, 
-							expanded_data 
+							expanded_data
 						);
 
 					} else if( YAHOO.lang.isFunction( template ) ) {
@@ -170,21 +179,22 @@
 						return false;
 
 					}
-					
+
 					//Insert new row
 					newRow = Dom.insertAfter( new_row, row );
-
+					
 					if (newRow.innerHTML.length) {
-
+						
 						this.setRowState( row, 'expanded', true );
-
+						
 						if( !restore ){
 
 							this.a_rowExpansions.push( row_data.getId() );
 
 						}
-
-						Dom.replaceClass( row, CLASS_COLLAPSED, CLASS_EXPANDED );
+						
+						Dom.removeClass( row, CLASS_COLLAPSED );
+						Dom.addClass( row, CLASS_EXPANDED );
 
 						return true;
 
@@ -211,27 +221,28 @@
 						row = Dom.get( row );
 
 					}
-
+					
 					var row_data = this.getRecord( row ),
-							state = row_data.getData( STRING_STATENAME ),
-							next_sibling = Dom.getNextSibling( row ),
-							hash_index = indexOf( this.a_rowExpansions, row_data.getId() );
+						state = row_data.getData( STRING_STATENAME ),
+						next_sibling = Dom.getNextSibling( row ),
+						hash_index = indexOf( this.a_rowExpansions, row_data.getId() );
 						
-						if( Dom.hasClass( next_sibling, CLASS_EXPANDABLEROW ) ) {
+					if( Dom.hasClass( next_sibling, CLASS_EXPANDABLEROW ) ) {
 
-							next_sibling.parentNode.removeChild( next_sibling );
-							this.a_rowExpansions.splice( hash_index, 1 );
-							this.setRowState( row, 'expanded', false );
-							
-							Dom.replaceClass( row, CLASS_EXPANDED, CLASS_COLLAPSED );
+						next_sibling.parentNode.removeChild( next_sibling );
+						this.a_rowExpansions.splice( hash_index, 1 );
+						this.setRowState( row, 'expanded', false );
+						
+						Dom.addClass( row, CLASS_COLLAPSED );
+						Dom.removeClass( row, CLASS_EXPANDED );
 
-							return true
+						return true
 
-						} else {
+					} else {
 
-							return false;
+						return false;
 
-						}
+					}
 
 				}
 
@@ -263,9 +274,16 @@
 
 			},
 
-			restoreExpandedRows : function(){
-
+			restoreExpandedRows : function( field, template, rowConfigs ){
+				
 				var	expanded_rows = this.a_rowExpansions;
+				
+				if( !expanded_rows.length ){
+					
+					this._setInitialState( field, template, rowConfigs );
+					return;
+					
+				}
 
 				if( this.a_rowExpansions.length ){
 
