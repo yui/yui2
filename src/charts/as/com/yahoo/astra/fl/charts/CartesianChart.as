@@ -1484,32 +1484,6 @@ package com.yahoo.astra.fl.charts
 		}
 		
 		/**
-		 * Sets a style on the horizontal axis.
-		 */
-		public function setHorizontalAxisStyle(name:String, value:Object):void
-		{
-			this.setComplexStyle("horizontalAxisStyles", name, value);
-		}
-		
-		/** 
-		 * Used to retrieve a horizontal axis style
-		 */
-		public function getHorizontalAxisStyle(name:String):Object
-		{
-			var obj:Object = this.getStyleValue("horizontalAxisStyles");
-			var style:Object;
-			if(obj[name] != null)
-			{
-				style =  obj[name];
-			}
-			else
-			{
-				style = this.getStyleValue(HORIZONTAL_AXIS_STYLES[name]);
-			}
-			return style;
-		}
-		
-		/**
 		 * Used to retrieve an axis style
 		 */
 		public function getAxisStyle(axisName:String, name:String):Object
@@ -1522,38 +1496,12 @@ package com.yahoo.astra.fl.charts
 			}
 			else
 			{
-				var defaultStyles:Object = axisName.indexOf("horizontal") > -1 ? HORIZONTAL_AXIS_STYLES : VERTICAL_AXIS_STYLES;
+				var defaultStyles:Object = (axisName).toLowerCase().indexOf("horizontal") > -1 ? HORIZONTAL_AXIS_STYLES : VERTICAL_AXIS_STYLES;
 				style = this.getStyleValue(defaultStyles[name]);
 			}
 			return style;
 		}
-		
-		/**
-		 * Used to retrieve a vertical axis style
-		 */
-		public function getVerticalAxisStyle(name:String):Object
-		{
-			var obj:Object = this.getStyleValue("verticalAxisStyles");
-			var style:Object;
-			if(obj[name] != null)
-			{
-				style = obj[name];	
-			}
-			else
-			{
-				style = this.getStyleValue(VERTICAL_AXIS_STYLES[name]);
-			}
-			return style;
-		}
-		
-		/**
-		 * Sets a style on the vertical axis.
-		 */
-		public function setVerticalAxisStyle(name:String, value:Object):void
-		{
-			this.setComplexStyle("verticalAxisStyles", name, value);
-		}
-		
+				
 		/**
 		 * Sets a style on the horizontal axis grid lines.
 		 */
@@ -1839,7 +1787,7 @@ package com.yahoo.astra.fl.charts
 			this.addChild(DisplayObject(this.horizontalAxisRenderer));
 			this.copyStylesToChild(UIComponent(this.horizontalAxisRenderer), CartesianChart.HORIZONTAL_AXIS_STYLES);
 			this.copyStyleObjectToChild(UIComponent(this.horizontalAxisRenderer), this.getStyleValue("horizontalAxisStyles"));
-			var horizontalAxisTextFormat:TextFormat = this.getHorizontalAxisStyle("textFormat") as TextFormat;
+			var horizontalAxisTextFormat:TextFormat = this.getAxisStyle("horizontal", "textFormat") as TextFormat;
 			if(horizontalAxisTextFormat)
 			{
 				UIComponent(this.horizontalAxisRenderer).setStyle("textFormat", horizontalAxisTextFormat);
@@ -1860,7 +1808,7 @@ package com.yahoo.astra.fl.charts
 			this.addChild(DisplayObject(this.verticalAxisRenderer));
 			this.copyStylesToChild(UIComponent(verticalAxisRenderer), CartesianChart.VERTICAL_AXIS_STYLES);
 			this.copyStyleObjectToChild(UIComponent(this.verticalAxisRenderer), this.getStyleValue("verticalAxisStyles"));
-			var verticalAxisTextFormat:TextFormat = this.getVerticalAxisStyle("textFormat") as TextFormat;
+			var verticalAxisTextFormat:TextFormat = this.getAxisStyle("vertical", "textFormat") as TextFormat;
 			if(verticalAxisTextFormat)
 			{
 				UIComponent(this.verticalAxisRenderer).setStyle("textFormat", verticalAxisTextFormat);
@@ -1885,7 +1833,8 @@ package com.yahoo.astra.fl.charts
 				this.copyStylesToChild(UIComponent(this.secondaryHorizontalAxisRenderer), CartesianChart.HORIZONTAL_AXIS_STYLES);
 				this.copyStyleObjectToChild(UIComponent(this.secondaryHorizontalAxisRenderer), this.getStyleValue("horizontalAxisStyles"));
 				this.copyStyleObjectToChild(UIComponent(this.secondaryHorizontalAxisRenderer), this.getStyleValue("secondaryHorizontalAxisStyles"));
-				var secondaryHorizontalAxisTextFormat:TextFormat = this.getHorizontalAxisStyle("textFormat") as TextFormat;
+				var secondaryHorizontalAxisTextFormat:TextFormat = this.getAxisStyle("secondaryHorizontal", "textFormat") as TextFormat;
+				if(!secondaryHorizontalAxisTextFormat) secondaryHorizontalAxisTextFormat = this.getAxisStyle("horizontal", "textFormat") as TextFormat;
 				if(secondaryHorizontalAxisTextFormat)
 				{
 					UIComponent(this.secondaryHorizontalAxisRenderer).setStyle("textFormat", secondaryHorizontalAxisTextFormat);
@@ -1909,7 +1858,9 @@ package com.yahoo.astra.fl.charts
 				this.addChild(DisplayObject(this.secondaryVerticalAxisRenderer));
 				this.copyStylesToChild(UIComponent(this.secondaryVerticalAxisRenderer), CartesianChart.VERTICAL_AXIS_STYLES);
 				this.copyStyleObjectToChild(UIComponent(this.secondaryVerticalAxisRenderer), this.getStyleValue("verticalAxisStyles"));
-				var secondaryVerticalAxisTextFormat:TextFormat = this.getHorizontalAxisStyle("textFormat") as TextFormat;
+				this.copyStyleObjectToChild(UIComponent(this.secondaryVerticalAxisRenderer), this.getStyleValue("secondaryVerticalAxisStyles"));
+				var secondaryVerticalAxisTextFormat:TextFormat = this.getAxisStyle("secondaryVertical", "textFormat") as TextFormat;
+				if(!secondaryVerticalAxisTextFormat) secondaryVerticalAxisTextFormat = this.getAxisStyle("vertical", "textFormat") as TextFormat;
 				if(secondaryVerticalAxisTextFormat)
 				{
 					UIComponent(this.secondaryVerticalAxisRenderer).setStyle("textFormat", secondaryVerticalAxisTextFormat);

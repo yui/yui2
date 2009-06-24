@@ -264,13 +264,12 @@ package com.yahoo.astra.fl.charts.axes
 		private function calculateMajorUnit():void
 		{
 			var overflow:Number = 0;
-			var rotation:Number = 0;
+			var rotation:Number = (this.renderer as UIComponent).getStyle("labelRotation") as Number;
 			var chart:CartesianChart = this.chart as CartesianChart;
 			var maxLabelSize:Number;
 			if(chart.horizontalAxis == this)
 			{
 				maxLabelSize = this.labelData.maxLabelWidth;
-				rotation = chart.getHorizontalAxisStyle("rotation") as Number;
 				if(rotation >= 0)
 				{
 					if(!isNaN(this.labelData.rightLabelOffset)) overflow += this.labelData.rightLabelOffset as Number;
@@ -283,7 +282,6 @@ package com.yahoo.astra.fl.charts.axes
 			else
 			{
 				maxLabelSize = this.labelData.maxLabelHeight;
-				rotation = chart.getVerticalAxisStyle("rotation") as Number;
 				if(!isNaN(this.labelData.topLabelOffset)) overflow = this.labelData.topLabelOffset as Number;				
 			}
 			var labelSpacing:Number = this.labelSpacing; 

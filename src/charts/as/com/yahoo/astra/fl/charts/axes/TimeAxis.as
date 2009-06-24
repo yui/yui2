@@ -666,13 +666,12 @@ package com.yahoo.astra.fl.charts.axes
 			var approxLabelDistance:Number = this.idealPixels;
 			if(this.calculateByLabelSize)
 			{
-				var rotation:Number;
+				var rotation:Number = (this.renderer as UIComponent).getStyle("labelRotation") as Number;
 				//Check to see if this axis is horizontal. Since the width of labels will be variable, we will need to apply a different alogrithm to determine the majorUnit.
 				if(chart.horizontalAxis == this)
 				{
 					//extract the approximate width of the labels by getting the textWidth of the maximum date when rendered by the label function with the textFormat of the renderer.
 					approxLabelDistance = this.maxLabelWidth;
-					rotation = chart.getHorizontalAxisStyle("labelRotation") as Number;
 					if(rotation == 0 || Math.abs(rotation) == 90)
 					{
 						if(!isNaN(this.labelData.rightLabelOffset)) overflow += this.labelData.rightLabelOffset as Number;
@@ -687,7 +686,6 @@ package com.yahoo.astra.fl.charts.axes
 				else
 				{
 					approxLabelDistance = this.maxLabelHeight;	
-					rotation = chart.getVerticalAxisStyle("labelRotation") as Number;
 					if(rotation == 0 || Math.abs(rotation) ==90)
 					{
 						if(!isNaN(this.labelData.topLabelOffset)) overflow = this.labelData.topLabelOffset as Number;

@@ -1680,9 +1680,10 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	},
 	
 	/**
-	 * 
+	 * Getter for axis
 	 *
-	 *
+	 * @method _getClonedAxis
+	 * @private
 	 */
 	_getClonedAxis: function(value)
 	{

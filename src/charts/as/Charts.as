@@ -630,6 +630,11 @@ package
 				case "yAxis":
 					this.setAxisStyles(value, "vertical");
 					break;
+				case "secondaryXAxis" : 
+					this.setAxisStyles(value, "secondaryHorizontal");
+					break;
+				case "secondaryYAxis" :
+					this.setAxisStyles(value, "secondaryVertical");
 				case "legend":
 					this.setLegendStyles(value);
 					break;
