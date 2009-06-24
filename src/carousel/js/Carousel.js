@@ -2468,16 +2468,17 @@
          * @protected
          */
         _itemClickHandler: function (ev) {
-            var carousel  = this,
-                container = carousel.get("element"),
+            var carousel     = this,
+                carouselItem = carousel.get("carouselItemEl"),
+                container    = carousel.get("element"),
                 el,
                 item,
-                target    = YAHOO.util.Event.getTarget(ev);
+                target       = Event.getTarget(ev);
 
             while (target && target != container &&
                    target.id != carousel._carouselEl) {
                 el = target.nodeName;
-                if (el.toUpperCase() == carousel.get("carouselItemEl")) {
+                if (el.toUpperCase() == carouselItem) {
                     break;
                 }
                 target = target.parentNode;
