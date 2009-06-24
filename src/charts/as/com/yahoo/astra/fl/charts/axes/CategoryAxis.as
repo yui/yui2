@@ -173,7 +173,7 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * @inheritDoc
 		 */
-		public function getMaxLabel():String
+		override public function getMaxLabel():String
 		{
 			var categoryCount:int = this.categoryNames.length;
 			var maxLength:Number = 0;
@@ -244,7 +244,7 @@ package com.yahoo.astra.fl.charts.axes
 			
 			//If the number of labels will not fit on the axis or the user has specified the number of labels to
 			//display, calculate the major unit. 
-			var maxLabelSize:Number = (this.chart as CartesianChart).horizontalAxis == this ? this.maxLabelWidth : this.maxLabelHeight;
+			var maxLabelSize:Number = (this.chart as CartesianChart).horizontalAxis == this ? this.labelData.maxLabelWidth : this.labelData.maxLabelHeight;
 			if((this.categorySize < maxLabelSize && this.calculateCategoryCount) || (this._numLabelsSetByUser && this.numLabels != categoryCount))
 			{
 				this.calculateMajorUnit();
@@ -269,22 +269,22 @@ package com.yahoo.astra.fl.charts.axes
 			var maxLabelSize:Number;
 			if(chart.horizontalAxis == this)
 			{
-				maxLabelSize = this.maxLabelWidth;
+				maxLabelSize = this.labelData.maxLabelWidth;
 				rotation = chart.getHorizontalAxisStyle("rotation") as Number;
 				if(rotation >= 0)
 				{
-					if(!isNaN(chart.horizontalAxisLabelData.rightLabelOffset)) overflow += chart.horizontalAxisLabelData.rightLabelOffset as Number;
+					if(!isNaN(this.labelData.rightLabelOffset)) overflow += this.labelData.rightLabelOffset as Number;
 				}
 				if(rotation <= 0)
 				{
-					if(!isNaN(chart.horizontalAxisLabelData.leftLabelOffset)) overflow += chart.horizontalAxisLabelData.leftLabelOffset as Number;
+					if(!isNaN(this.labelData.leftLabelOffset)) overflow += this.labelData.leftLabelOffset as Number;
 				}			
 			}
 			else
 			{
-				maxLabelSize = this.maxLabelHeight;
+				maxLabelSize = this.labelData.maxLabelHeight;
 				rotation = chart.getVerticalAxisStyle("rotation") as Number;
-				if(!isNaN(chart.verticalAxisLabelData.topLabelOffset)) overflow = chart.verticalAxisLabelData.topLabelOffset as Number;				
+				if(!isNaN(this.labelData.topLabelOffset)) overflow = this.labelData.topLabelOffset as Number;				
 			}
 			var labelSpacing:Number = this.labelSpacing; 
 			maxLabelSize += (labelSpacing*2);
@@ -344,6 +344,28 @@ package com.yahoo.astra.fl.charts.axes
 			
 			this.renderer.ticks = ticks;
 			this.renderer.minorTicks = [];				
-		}		
+		}	
+		
+		/**
+		 * @private
+		 */
+		override protected function parseDataProvider():void
+		{
+			var labelData:Object = getLabelData();			
+			if(ICartesianAxisRenderer(this.renderer).orientation == AxisOrientation.HORIZONTAL)
+			{
+				labelData.leftLabelOffset /= 2;
+				labelData.rightLabelOffset /= 2;
+			}
+			else
+			{
+				labelData.topLabelOffset /= 2;
+				labelData.bottomLabelOffset /=2;
+			}
+			for(var i:String in labelData)
+			{	
+				this.labelData[i] = labelData[i];
+			}
+		}			
 	}
 }

@@ -117,6 +117,11 @@ package com.yahoo.astra.fl.charts.series
 			}
 		}
 	
+		/**
+		 * Indicates whether the series is bound to a primary or secondary axis
+		 */
+		public var axis:String = "primary";
+		
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------

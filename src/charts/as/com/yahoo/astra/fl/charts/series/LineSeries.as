@@ -239,11 +239,14 @@ package com.yahoo.astra.fl.charts.series
 		private function drawMarkers(data:Array):void
 		{
 			var primaryIsVertical:Boolean = true;
-			var primaryAxis:NumericAxis = CartesianChart(this.chart).verticalAxis as NumericAxis;
+			var yAxis:String = this.axis == "primary" ? "verticalAxis" : "secondaryVerticalAxis";
+			var primaryAxis:NumericAxis = CartesianChart(this.chart)[yAxis] as NumericAxis;
+
 			if(!primaryAxis)
 			{
+				var xAxis:String = this.axis == "primary" ? "horizontalAxis" : "secondaryHorizontalAxis";
 				primaryIsVertical = false;
-				primaryAxis = CartesianChart(this.chart).horizontalAxis as NumericAxis;
+				primaryAxis = CartesianChart(this.chart)[xAxis] as NumericAxis;
 			}
 			
 			var originPosition:Number = primaryAxis.valueToLocal(primaryAxis.origin);

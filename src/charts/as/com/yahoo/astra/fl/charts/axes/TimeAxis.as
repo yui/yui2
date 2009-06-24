@@ -1,6 +1,7 @@
 package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.series.ISeries;
+	import com.yahoo.astra.fl.charts.series.CartesianSeries;
 	import com.yahoo.astra.fl.charts.CartesianChart;
 	import com.yahoo.astra.utils.DateUtil;
 	import com.yahoo.astra.utils.TimeUnit;
@@ -525,7 +526,7 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * @inheritDoc
 		 */
-		public function getMaxLabel():String
+		override public function getMaxLabel():String
 		{
 			var maxAbbrevDate:String = this.valueToLabel(new Date(2008, 4, 30)) as String;
 			var maxFullDate:String = this.valueToLabel(new Date(2009, 8, 30)) as String;
@@ -674,13 +675,13 @@ package com.yahoo.astra.fl.charts.axes
 					rotation = chart.getHorizontalAxisStyle("labelRotation") as Number;
 					if(rotation == 0 || Math.abs(rotation) == 90)
 					{
-						if(!isNaN(chart.horizontalAxisLabelData.rightLabelOffset)) overflow += chart.horizontalAxisLabelData.rightLabelOffset as Number;
-						if(!isNaN(chart.horizontalAxisLabelData.leftLabelOffset)) overflow += chart.horizontalAxisLabelData.leftLabelOffset as Number;
+						if(!isNaN(this.labelData.rightLabelOffset)) overflow += this.labelData.rightLabelOffset as Number;
+						if(!isNaN(this.labelData.leftLabelOffset)) overflow += this.labelData.leftLabelOffset as Number;
 					}
 					else
 					{
-						if(rotation > 0 && !isNaN(chart.horizontalAxisLabelData.rightLabelOffset)) overflow += chart.horizontalAxisLabelData.rightLabelOffset as Number;
-						if(rotation < 0 && !isNaN(chart.horizontalAxisLabelData.leftLabelOffset)) overflow += chart.horizontalAxisLabelData.leftLabelOffset as Number;
+						if(rotation > 0 && !isNaN(this.labelData.rightLabelOffset)) overflow += this.labelData.rightLabelOffset as Number;
+						if(rotation < 0 && !isNaN(this.labelData.leftLabelOffset)) overflow += this.labelData.leftLabelOffset as Number;
 					}
 				}
 				else
@@ -689,15 +690,15 @@ package com.yahoo.astra.fl.charts.axes
 					rotation = chart.getVerticalAxisStyle("labelRotation") as Number;
 					if(rotation == 0 || Math.abs(rotation) ==90)
 					{
-						if(!isNaN(chart.verticalAxisLabelData.topLabelOffset)) overflow = chart.verticalAxisLabelData.topLabelOffset as Number;
+						if(!isNaN(this.labelData.topLabelOffset)) overflow = this.labelData.topLabelOffset as Number;
 					}
 					else
 					{
-						if(rotation < 0 && !isNaN(chart.verticalAxisLabelData.bottomLabelOffset)) overflow += chart.verticalAxisLabelData.bottomLabelOffset as Number;
-						if(rotation > 0 && !isNaN(chart.verticalAxisLabelData.topLabelOffset)) overflow += chart.verticalAxisLabelData.topLabelOffset as Number;
+						if(rotation < 0 && !isNaN(this.labelData.bottomLabelOffset)) overflow += this.labelData.bottomLabelOffset as Number;
+						if(rotation > 0 && !isNaN(this.labelData.topLabelOffset)) overflow += this.labelData.topLabelOffset as Number;
 					}
 				}
-			 	labelSpacing = this.labelSpacing; 
+			 	labelSpacing = UIComponent(this.renderer).getStyle("labelSpacing") as Number; 
 				approxLabelDistance += (labelSpacing*2);
 			}
 			
@@ -977,6 +978,8 @@ package com.yahoo.astra.fl.charts.axes
 			for(var i:int = 0; i < seriesCount; i++)
 			{
 				var series:ISeries = ISeries(this.dataProvider[i]);
+				
+				
 				var seriesLength:int = series.length;
 				for(var j:int = 0; j < seriesLength; j++)
 				{
@@ -1014,6 +1017,8 @@ package com.yahoo.astra.fl.charts.axes
 			
 			this._dataMinimum = new Date(min);
 			this._dataMaximum = new Date(max);
+			
+			super.parseDataProvider();
 		}		
 	}
 }
