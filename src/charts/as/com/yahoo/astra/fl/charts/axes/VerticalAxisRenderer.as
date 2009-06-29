@@ -4,6 +4,12 @@ package com.yahoo.astra.fl.charts.axes
 	import com.yahoo.astra.utils.DynamicRegistration;	
 	import flash.geom.Point;
 
+	/**
+	 * The default vertical axis renderer for a cartesian chart.
+	 * 
+	 * @see com.yahoo.astra.fl.charts.CartesianChart
+	 * @author Tripp Bridges
+	 */
 	public class VerticalAxisRenderer extends DefaultAxisRenderer implements ICartesianAxisRenderer
 	{
 		
@@ -204,6 +210,7 @@ package com.yahoo.astra.fl.charts.axes
 				this.handleOverlappingLabels();
 			}
 		}
+		
 		/**
 		 * @private
 		 * If labels overlap, some may need to be hidden.

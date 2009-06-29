@@ -93,6 +93,7 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private (setter)
 		 */
 		function set maxLabelWidth(value:Number):void;
+		
 		/**
 		 * Gets or sets the maximum width of a label
 		 */

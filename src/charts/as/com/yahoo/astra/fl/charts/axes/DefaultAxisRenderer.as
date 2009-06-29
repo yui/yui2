@@ -185,8 +185,10 @@ package com.yahoo.astra.fl.charts.axes
 	[Style(name="titleTextFormat", type="TextFormat")]
 
 	/**
-	 * The default axis renderer for a cartesian chart.
+	 * The base axis renderer for a cartesian chart.
 	 * 
+     * <p>This class is not meant to be instantiated directly! It is an abstract base class.</p>
+     *
 	 * @see com.yahoo.astra.fl.charts.CartesianChart
 	 * @author Josh Tynjala
 	 */

@@ -4,13 +4,22 @@ package com.yahoo.astra.fl.charts.axes
 	import com.yahoo.astra.utils.DynamicRegistration;	
 	import flash.geom.Point;
 
+	/**
+	 * The default horizontal axis renderer for a cartesian chart.
+	 * 
+	 * @see com.yahoo.astra.fl.charts.CartesianChart
+	 * @author Tripp Bridges
+	 */
 	public class HorizontalAxisRenderer extends DefaultAxisRenderer implements ICartesianAxisRenderer
 	{
 
 	//--------------------------------------
 	//  Constructor
 	//--------------------------------------	
-		
+
+		/**
+		 * Constructor
+		 */
 		public function HorizontalAxisRenderer()
 		{
 			super();

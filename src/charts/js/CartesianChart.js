@@ -173,7 +173,8 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	},
 	
 	/**
-	 * Getter for axis
+	 * Receives an axis object, creates a proxy function for 
+	 * the labelFunction and returns the updated object. 
 	 *
 	 * @method _getClonedAxis
 	 * @private
@@ -242,6 +243,12 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		this._swf.setHorizontalAxis(value);
 	},
 	
+	/**
+	 * Setter for the xAxes attribute
+	 *
+	 * @method _setXAxes
+	 * @private
+	 */
 	_setXAxes: function(value)
 	{
 		this._removeAxisFunctions(this._xAxisLabelFunctions);
@@ -256,7 +263,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	},
 
 	/**
-	 * Getter for the yAxis attribute.
+	 * Setter for the yAxis attribute.
 	 *
 	 * @method _setYAxis
 	 * @private
@@ -269,6 +276,12 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		this._swf.setVerticalAxis(value);
 	},
 	
+	/**
+	 * Setter for the yAxes attribute.
+	 *
+	 * @method _setYAxes
+	 * @private
+	 */	
 	_setYAxes: function(value)
 	{
 		this._removeAxisFunctions(this._yAxisLabelFunctions);
