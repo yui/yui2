@@ -503,7 +503,7 @@ package
 		 * Updates the horizontal axis with a new type.
 		 */
 		public function setHorizontalAxis(value:Object):void
-		{
+		{		
 			var cartesianChart:CartesianChart = this.chart as CartesianChart;
 			if(cartesianChart)
 			{
@@ -630,6 +630,11 @@ package
 				case "yAxis":
 					this.setAxisStyles(value, "vertical");
 					break;
+				case "secondaryXAxis" : 
+					this.setAxisStyles(value, "secondaryHorizontal");
+					break;
+				case "secondaryYAxis" :
+					this.setAxisStyles(value, "secondaryVertical");
 				case "legend":
 					this.setLegendStyles(value);
 					break;
@@ -1183,32 +1188,35 @@ package
 		
 		protected function setAxisStyles(styles:Object, axisName:String):void
 		{
+			var cartesianChart:CartesianChart = this.chart as CartesianChart;
+			var axisStyle:String = axisName + "AxisStyles";
+			var gridLineStyle:String = axisName + "AxisGridLinesStyles";
 			if(styles.color != null)
 			{
-				this.chart.setStyle(axisName + "AxisColor", this.parseColor(styles.color));
+				cartesianChart.setComplexStyle(axisStyle, "axisColor", this.parseColor(styles.color));
 			}
 			
 			if(styles.size != null)
 			{
-				this.chart.setStyle(axisName + "AxisWeight", Number(styles.size));
-				this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "Axis", styles.size > 0);
+				cartesianChart.setComplexStyle(axisStyle, "axisWeight", Number(styles.size));
+				cartesianChart.setComplexStyle(axisStyle, "showAxis", styles.size > 0);
 			}
 
 			if(styles.showLabels != null)
 			{
-				this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisLabels", styles.showLabels);
+				cartesianChart.setComplexStyle(axisStyle, "showLabels", styles.showLabels);
 			}
 			
 			if(styles.hideOverlappingLabels != null)
 			{
-				this.chart.setStyle(axisName + "AxisHideOverlappingLabels", styles.hideOverlappingLabels);
+				cartesianChart.setComplexStyle(axisStyle, "hideOverlappingLabels", styles.hideOverlappingLabels);
 			}
 			
 			if(styles.labelRotation != null)
 			{
 				if(!isNaN(Number(styles.labelRotation)))
 				{
-					this.chart.setStyle(axisName + "AxisLabelRotation", Number(styles.labelRotation));
+					cartesianChart.setComplexStyle(axisStyle, "labelRotation", Number(styles.labelRotation));
 				}
 				else
 				{
@@ -1218,28 +1226,28 @@ package
 			
 			if(styles.labelSpacing != null)
 			{
-				this.chart.setStyle(axisName + "AxisLabelSpacing", styles.labelSpacing);
+				cartesianChart.setComplexStyle(axisStyle, "labelSpacing", Number(styles.labelSpacing));
 			}
 			
 			if(styles.labelDistance != null)
 			{
-				this.chart.setStyle(axisName + "AxisLabelDistance", Number(styles.labelDistance));	
+				cartesianChart.setComplexStyle(axisStyle, "labelDistance", Number(styles.labelDistance));
 			}
 			
 			if(styles.titleRotation != null)
 			{
-				this.chart.setStyle(axisName + "AxisTitleRotation", styles.titleRotation);
+				cartesianChart.setComplexStyle(axisStyle, "titleRotation", Number(styles.titleRotation));
 			}
 			
 			if(styles.titleDistance != null)
 			{
-				this.chart.setStyle(axisName + "AxisTitleDistance", styles.titleDistance);
+				cartesianChart.setComplexStyle(axisStyle, "titleDistance", Number(styles.titleDistance));
 			}
 			
 			if(styles.titleFont != null)
 			{
 				var titleTextFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.titleFont);
-				this.chart.setStyle(axisName + "AxisTitleTextFormat", titleTextFormat);				
+				cartesianChart.setComplexStyle(axisStyle, "titleTextFormat", titleTextFormat);			
 			}
 			
 			if(styles.majorGridLines)
@@ -1247,12 +1255,12 @@ package
 				var majorGridLines:Object = styles.majorGridLines;
 				if(majorGridLines.color != null)
 				{
-					this.chart.setStyle(axisName + "AxisGridLineColor", this.parseColor(majorGridLines.color));
+					cartesianChart.setComplexStyle(gridLineStyle, "lineColor", this.parseColor(majorGridLines.color));
 				}
 				if(majorGridLines.size != null)
 				{
-					this.chart.setStyle(axisName + "AxisGridLineWeight", majorGridLines.size);
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisGridLines", majorGridLines.size > 0);
+					cartesianChart.setComplexStyle(gridLineStyle, "lineWeight", majorGridLines.size);
+					cartesianChart.setComplexStyle(gridLineStyle, "showLines", majorGridLines.size > 0);
 				}
 			}
 			
@@ -1261,12 +1269,12 @@ package
 				var minorGridLines:Object = styles.minorGridLines;
 				if(minorGridLines.color != null)
 				{
-					this.chart.setStyle(axisName + "AxisMinorGridLineColor", this.parseColor(minorGridLines.color));
+					cartesianChart.setComplexStyle(gridLineStyle, "minorLineColor", this.parseColor(minorGridLines.color));
 				}
 				if(minorGridLines.size != null)
 				{
-					this.chart.setStyle(axisName + "AxisMinorGridLineWeight", minorGridLines.size);
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorGridLines", minorGridLines.size > 0);
+					cartesianChart.setComplexStyle(gridLineStyle, "minorLineWeight", minorGridLines.size);
+					cartesianChart.setComplexStyle(gridLineStyle, "showMinorLines", minorGridLines.size > 0);
 				}
 			}
 			
@@ -1275,12 +1283,12 @@ package
 				var zeroGridLine:Object = styles.zeroGridLine;
 				if(zeroGridLine.color != null)
 				{
-					this.chart.setStyle(axisName + "ZeroGridLineColor", this.parseColor(zeroGridLine.color));
+					cartesianChart.setComplexStyle(gridLineStyle, "zeroGridLineColor", zeroGridLine.color);
 				}
 				if(zeroGridLine.size != null)
 				{
-					this.chart.setStyle(axisName + "ZeroGridLineWeight", zeroGridLine.size);
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "ZeroGridLine", zeroGridLine.size > 0);
+					cartesianChart.setComplexStyle(gridLineStyle, "zeroGridLineWeight", zeroGridLine.size);
+					cartesianChart.setComplexStyle(gridLineStyle, "showZeroGridLine", zeroGridLine.size > 0);
 				}
 			}
 			
@@ -1289,22 +1297,22 @@ package
 				var majorTicks:Object = styles.majorTicks;
 				if(majorTicks.color != null)
 				{
-					this.chart.setStyle(axisName + "AxisTickColor", this.parseColor(majorTicks.color));
+					cartesianChart.setComplexStyle(axisStyle, "tickColor", this.parseColor(majorTicks.color));
 				}
 				if(majorTicks.size != null)
 				{
-					this.chart.setStyle(axisName + "AxisTickWeight", majorTicks.size);
+					cartesianChart.setComplexStyle(axisStyle, "tickWeight", majorTicks.size);
 				}
 				if(majorTicks.length != null)
 				{
-					this.chart.setStyle(axisName + "AxisTickLength", majorTicks.length);
+					cartesianChart.setComplexStyle(axisStyle, "tickLength", majorTicks.length);
 				}
 				if(majorTicks.display)
 				{
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisTicks", majorTicks.display != "none");
+					cartesianChart.setComplexStyle(axisStyle, "showTicks", majorTicks.display != "none" && majorTicks.size != 0);
 					if(majorTicks.display != "none")
 					{
-						this.chart.setStyle(axisName + "AxisTickPosition", majorTicks.display);
+						cartesianChart.setComplexStyle(axisStyle, "tickPosition", majorTicks.display);
 					}
 				}
 			}
@@ -1314,22 +1322,22 @@ package
 				var minorTicks:Object = styles.minorTicks;
 				if(minorTicks.color != null)
 				{
-					this.chart.setStyle(axisName + "AxisMinorTickColor", this.parseColor(minorTicks.color));
+					cartesianChart.setComplexStyle(axisStyle, "minorTickColor", this.parseColor(minorTicks.color));
 				}
 				if(minorTicks.size != null)
 				{
-					this.chart.setStyle(axisName + "AxisMinorTickWeight", minorTicks.size);
+					cartesianChart.setComplexStyle(axisStyle, "minorTickWeight", minorTicks.size);
 				}
 				if(minorTicks.length != null)
 				{
-					this.chart.setStyle(axisName + "AxisMinorTickLength", minorTicks.length);
+					cartesianChart.setComplexStyle(axisStyle, "minorTickLength", minorTicks.length);
 				}
 				if(minorTicks.display)
 				{
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorTicks", minorTicks.display != "none");
+					cartesianChart.setComplexStyle(axisStyle, "showMinorTicks", minorTicks.display != "none" && minorTicks.size != 0);
 					if(minorTicks.display != "none")
 					{
-						this.chart.setStyle(axisName + "AxisMinorTickPosition", minorTicks.display);
+						cartesianChart.setComplexStyle(axisStyle, "minorTickPosition", minorTicks.display);
 					}
 				}
 			}

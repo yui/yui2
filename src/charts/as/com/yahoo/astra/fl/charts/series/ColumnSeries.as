@@ -115,7 +115,8 @@ package com.yahoo.astra.fl.charts.series
 			
 			//grab the axes
 			var cartesianChart:CartesianChart = this.chart as CartesianChart;
-			var valueAxis:IOriginAxis = cartesianChart.verticalAxis as IOriginAxis;
+			var yAxis:String = this.axis == "primary" ? "verticalAxis" : "secondaryVerticalAxis";
+			var valueAxis:IOriginAxis = cartesianChart[yAxis] as IOriginAxis;
 			var otherAxis:IAxis = cartesianChart.horizontalAxis;
 			if(!valueAxis)
 			{
