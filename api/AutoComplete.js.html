@@ -1125,6 +1125,7 @@
 <span class="c"> * @event dataErrorEvent</span>
 <span class="c"> * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.</span>
 <span class="c"> * @param sQuery {String} The query string.</span>
+<span class="c"> * @param oResponse {Object} The response object, if available.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">AutoComplete</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">dataErrorEvent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
@@ -1810,7 +1811,7 @@
         <span class="o">}</span>
     <span class="o">}</span>
     
-    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">responseStripAfter</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dataSource</span><span class="o">.</span><span class="nx">responseStripAfter</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">dataSource</span><span class="o">.</span><span class="nx">doBeforeParseData</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">preparseRawResponse</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">applyLocalFilter</span><span class="o">)</span> <span class="o">{</span>
@@ -1969,7 +1970,7 @@
     <span class="o">}</span>
     <span class="c">// Error</span>
 <span class="c"></span>    <span class="k">else</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">dataErrorEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">dataErrorEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">oResponse</span><span class="o">);</span>
     <span class="o">}</span>
         
     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not populate list&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>    
