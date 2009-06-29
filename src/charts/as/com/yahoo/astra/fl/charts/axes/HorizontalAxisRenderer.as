@@ -21,9 +21,9 @@ package com.yahoo.astra.fl.charts.axes
 	// Properties
 	//--------------------------------------
 		/**
-	 	* @private
-	 	* Placeholder for position
-	 	*/	
+	 	 * @private
+	 	 * Placeholder for position.
+	 	 */		
 		private var _position:String = "left";
 		
 	//--------------------------------------
@@ -31,7 +31,7 @@ package com.yahoo.astra.fl.charts.axes
 	//--------------------------------------
 				
 		/**
-		 * @private
+ 		 * @private
 		 * Positions the title along the axis.
 		 */
 		override protected function positionTitle():void
@@ -42,15 +42,16 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				var titleRotation:Number = this.getStyleValue("titleRotation") as Number;
 				titleRotation = Math.max(-90, Math.min(titleRotation, 90));							
+					
+				this.titleTextField.rotation = titleRotation;
 				this.titleTextField.x = this.contentBounds.x + (this.contentBounds.width/2);
-				this.titleTextField.y = this.y + this.height - this.titleTextField.height;
-				if(titleRotation > 0)
+				
+				if(this.position != "top")
 				{
-					this.titleTextField.rotation = titleRotation;
+					this.titleTextField.y = this.y + this.height - this.titleTextField.height;
 				}
-				else if(titleRotation < 0)
+				if(titleRotation < 0)
 				{
-					this.titleTextField.rotation = titleRotation;
 					this.titleTextField.y += this.titleTextField.contentWidth * Math.sin(Math.abs(titleRotation)*Math.PI/180);
 				}
 				this.titleTextField.x -= this.titleTextField.width/2;						

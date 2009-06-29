@@ -33,17 +33,24 @@ package com.yahoo.astra.fl.charts.axes
 				var titleRotation:Number = this.getStyleValue("titleRotation") as Number;
 				titleRotation = Math.max(-90, Math.min(titleRotation, 90));
 
-				this.titleTextField.y = this.contentBounds.y + (this.contentBounds.height) / 2;
-				this.titleTextField.x = 0;
+				this.titleTextField.rotation = titleRotation;
+				if(this.position == "right")
+				{
+					this.titleTextField.y = this.contentBounds.y + (this.contentBounds.height) / 2;
+					this.titleTextField.x = this.width - (this.titleTextField.width + this.getStyleValue("titleDistance") as Number);
+				}
+				else
+				{
+					this.titleTextField.y = this.contentBounds.y + (this.contentBounds.height) / 2;
+					this.titleTextField.x = 0;
+				}
 				if(titleRotation > 0)
 				{	
-					this.titleTextField.rotation = titleRotation;
 					this.titleTextField.x += this.titleTextField.contentHeight * Math.sin(titleRotation * Math.PI/180);
 					this.titleTextField.y -= this.titleTextField.height/2;
 				}
 				else if(titleRotation < 0)
-				{	
-					this.titleTextField.rotation = titleRotation;						
+				{							
 					this.titleTextField.y += this.titleTextField.height/2;
 				}
 				else
@@ -137,24 +144,32 @@ package com.yahoo.astra.fl.charts.axes
 				position += this.contentBounds.y;		
 				var absRotation:Number = Math.abs(labelRotation);
 				var xRegistration:Number;
-				label.y = position - label.height/2;
+				label.y = position;
 
 				if(this.position == "left")
 				{
-					label.x = this.contentBounds.x - labelDistance - this.outerTickOffset - label.width;
+					label.x = this.contentBounds.x - labelDistance - this.outerTickOffset;
 					xRegistration = label.width - Math.min(label.height/2, Math.sin(absRotation * Math.PI/180) * label.height/4);
 					if(absRotation > 0 && absRotation < 90)
 					{
+						label.y -= label.height/2;
+						label.x -= label.width;
 						DynamicRegistration.rotate(label, new Point(xRegistration, label.height / 2), labelRotation);
 					}
 					else if(labelRotation == 90)
 					{
-						DynamicRegistration.rotate(label, new Point(xRegistration, label.height / 2), labelRotation);
-						label.y += label.height/2;
+						label.rotation = labelRotation;
+						label.y -= label.height/2;
 					}
 					else if(labelRotation == -90)
 					{
-						DynamicRegistration.rotate(label, new Point(xRegistration, label.height / 2), labelRotation);
+						label.rotation = labelRotation;
+						label.x -= label.width;
+						label.y += label.height/2;
+					}
+					else
+					{
+						label.x -= label.width;
 						label.y -= label.height/2;
 					}
 				}
@@ -164,18 +179,24 @@ package com.yahoo.astra.fl.charts.axes
 					xRegistration = Math.min(label.height/2, Math.sin(absRotation * Math.PI/180) * label.height/4);			
 					if(absRotation > 0 && absRotation < 90)
 					{
+						label.y -= label.height/2;
 						DynamicRegistration.rotate(label, new Point(xRegistration, label.height / 2), labelRotation);
 					}
 					else if(labelRotation == 90)
 					{
-						DynamicRegistration.rotate(label, new Point(xRegistration, label.height / 2), labelRotation);
+						label.rotation = labelRotation;
 						label.y -= label.height/2;
+						label.x += label.width; 						
 					}
 					else if(labelRotation == -90)
 					{
 						DynamicRegistration.rotate(label, new Point(xRegistration, label.height / 2), labelRotation);
 						label.y += label.height/2;
-					}							
+					}	
+					else
+					{
+						label.y -= label.height/2;
+					}						
 				}
 				
 				label.x = Math.round(label.x);

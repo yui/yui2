@@ -671,7 +671,7 @@ package com.yahoo.astra.fl.charts.axes
 				if(chart.horizontalAxis == this)
 				{
 					//extract the approximate width of the labels by getting the textWidth of the maximum date when rendered by the label function with the textFormat of the renderer.
-					approxLabelDistance = this.maxLabelWidth;
+					approxLabelDistance = this.labelData.maxLabelWidth;
 					if(rotation == 0 || Math.abs(rotation) == 90)
 					{
 						if(!isNaN(this.labelData.rightLabelOffset)) overflow += this.labelData.rightLabelOffset as Number;
@@ -685,7 +685,7 @@ package com.yahoo.astra.fl.charts.axes
 				}
 				else
 				{
-					approxLabelDistance = this.maxLabelHeight;	
+					approxLabelDistance = this.labelData.maxLabelHeight;	
 					if(rotation == 0 || Math.abs(rotation) ==90)
 					{
 						if(!isNaN(this.labelData.topLabelOffset)) overflow = this.labelData.topLabelOffset as Number;
@@ -714,6 +714,7 @@ package com.yahoo.astra.fl.charts.axes
 			var ratio:Number = overflow/this.renderer.length;
 			var overflowOffset:Number = Math.round(ratio*dateDifference);
 			if(isNaN(overflowOffset)) overflowOffset = 0;
+			
 			tempMajorUnit = (dateDifference + overflowOffset)/maxLabels;
 			tempMajorUnit = Math.ceil(tempMajorUnit);
 			

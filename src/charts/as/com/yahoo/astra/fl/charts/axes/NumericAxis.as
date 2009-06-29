@@ -481,8 +481,7 @@ package com.yahoo.astra.fl.charts.axes
 		 * @inheritDoc
 		 */
 		override public function getMaxLabel():String
-		{
-			
+		{			
 			var difference:Number = Math.round(this.maximum - this.minimum);
 			var maxString:String = this.valueToLabel(this.roundUnit(this.maximum));
 			var minString:String = this.valueToLabel(this.roundUnit(this.minimum));
@@ -600,6 +599,7 @@ package com.yahoo.astra.fl.charts.axes
 				else
 				{
 					approxLabelDistance = this.labelData.maxLabelHeight;
+					
 					if(rotation == 0 || Math.abs(rotation) == 90)
 					{
 						if(!isNaN(this.labelData.topLabelOffset)) overflow = this.labelData.topLabelOffset as Number;
@@ -611,32 +611,27 @@ package com.yahoo.astra.fl.charts.axes
 					}
 				}
 			}
-
+			
 			var maxLabels:Number = (this.renderer.length + overflow)/(approxLabelDistance+labelSpacing);
+								
 			if(this.calculateByLabelSize) 
 			{
-			//	maxLabels = Math.floor(maxLabels);
+				maxLabels = Math.floor(maxLabels);
 				//Adjust the max labels to account for potential maximum and minimum adjustments that may occur.
 				if(!this._maximumSetByUser && !this._minimumSetByUser && !(this.alwaysShowZero && this._minimum == 0)) 
 				{
-					//maxLabels -= 1;
+					maxLabels -= 1;
 				}
 			}
 
-			//If set by user, use specified number of labels unless its too many
-			if(this._numLabelsSetByUser)
-			{
-			//	maxLabels = Math.min(maxLabels, this.numLabels);
-			}
-
 			var ratio:Number = overflow/this.renderer.length;
-			var overflowOffset:Number = Math.round(ratio*difference);
+			var overflowOffset:Number = Math.round((overflow * difference)/this.renderer.length);
 			if(isNaN(overflowOffset)) overflowOffset = 0;
+		
 			tempMajorUnit = (difference + overflowOffset)/maxLabels;	
 
 			if(this.roundMajorUnit)
 			{
-				
 				tempMajorUnit = this.roundUnit(tempMajorUnit);
 				this.labelData.maxLabels = (difference/tempMajorUnit);
 			}
@@ -909,13 +904,18 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		private function roundUnit(unit:Number):Number
 		{
+			if(unit < 0)
+			{
+				return this.roundUnit(Math.abs(unit)) * -1;
+			}
+			
 			var order:Number = Math.ceil(Math.log(unit) * Math.LOG10E);
 			var roundedMajorUnit:Number = Math.pow(10, order);
-
+			
 			if (roundedMajorUnit / 2 >= unit) 
 			{
-				var roundedDiff:Number = Math.floor((roundedMajorUnit / 2 - unit) / (Math.pow(10,order-1)/2));
-			 	unit = roundedMajorUnit/2 - roundedDiff*Math.pow(10,order-1)/2;
+				var roundedDiff:Number = Math.floor((roundedMajorUnit / 2 - unit)/(Math.pow(10,order-1)/2));
+			 	unit = roundedMajorUnit/2 - roundedDiff * Math.pow(10, order - 1)/2;
 			}
 			else 
 			{

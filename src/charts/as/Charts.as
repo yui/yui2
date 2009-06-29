@@ -1226,7 +1226,7 @@ package
 			
 			if(styles.labelSpacing != null)
 			{
-				cartesianChart.setComplexStyle(axisStyle, "labelSpacing", styles.labelSpacing);
+				cartesianChart.setComplexStyle(axisStyle, "labelSpacing", Number(styles.labelSpacing));
 			}
 			
 			if(styles.labelDistance != null)
@@ -1236,12 +1236,12 @@ package
 			
 			if(styles.titleRotation != null)
 			{
-				cartesianChart.setComplexStyle(axisStyle, "titleRotation", styles.titleRotation);
+				cartesianChart.setComplexStyle(axisStyle, "titleRotation", Number(styles.titleRotation));
 			}
 			
 			if(styles.titleDistance != null)
 			{
-				cartesianChart.setComplexStyle(axisStyle, "titleDistance", styles.titleDistance);
+				cartesianChart.setComplexStyle(axisStyle, "titleDistance", Number(styles.titleDistance));
 			}
 			
 			if(styles.titleFont != null)
