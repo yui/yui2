@@ -43,7 +43,7 @@ package com.yahoo.astra.fl.charts.axes
 				if(this.position == "right")
 				{
 					this.titleTextField.y = this.contentBounds.y + (this.contentBounds.height) / 2;
-					this.titleTextField.x = this.width - (this.titleTextField.width + this.getStyleValue("titleDistance") as Number);
+					this.titleTextField.x = this.width - this.titleTextField.width;
 				}
 				else
 				{

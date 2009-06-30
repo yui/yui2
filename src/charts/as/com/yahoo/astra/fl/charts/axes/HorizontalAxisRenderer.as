@@ -153,11 +153,6 @@ package com.yahoo.astra.fl.charts.axes
 					label.y = this.contentBounds.y - labelDistance - this.outerTickOffset;
 					if(labelRotation > 0)
 					{
-						/*
-						label.x = position - label.width;
-						label.y -= label.height / 2;
-						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
-						*/
 						label.rotation = labelRotation;
 						label.x -= Math.cos(labelRotation * Math.PI/180) * label.contentWidth;
 						label.x += Math.sin(labelRotation * Math.PI/180) * label.contentHeight/2;
