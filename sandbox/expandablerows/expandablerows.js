@@ -87,13 +87,12 @@
 					//Set row state
 					record.setData( STRING_STATENAME, {
 						expanded : ( record.getData( field ) ) ? false : null, //set expanded property to null if no data is available
-						expandable_datakey : field,
-						expandable_template : null
+						expandable_datakey : field
 					} );
 
 				}//for
 				
-				this.rowExpansionTemplate = state_object ? ( state_object.expandable_template || template || null ) : template || null;
+				this.rowExpansionTemplate = template || null;
 				
 			},
 
@@ -144,7 +143,7 @@
 						column_length = this.getFirstTrEl().getElementsByTagName('td').length,
 						expanded_data = row_data.getData( state.expandable_datakey ),
 						expanded_content = null,
-						template = state.expandable_template || this.rowExpansionTemplate;
+						template = this.rowExpansionTemplate;
 
 					//Construct expanded row body
 					new_row.className = CLASS_EXPANDABLEROW;
