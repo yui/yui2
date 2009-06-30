@@ -1626,28 +1626,36 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
         // the DOM prior to when the document's readyState suggests
         // it is safe to do so.
         if (EU.isIE) {
+            if (window !== window.top) {
+                document.onreadystatechange = function() {
+                    if (document.readyState == 'complete') {
+                        document.onreadystatechange = null;
+                        EU._ready();
+                    }
+                };
+            } else {
 
-            // Process onAvailable/onContentReady items when the 
-            // DOM is ready.
-            YAHOO.util.Event.onDOMReady(
-                    YAHOO.util.Event._tryPreloadAttach,
-                    YAHOO.util.Event, true);
-            
-            var n = document.createElement('p');  
+                // Process onAvailable/onContentReady items when the 
+                // DOM is ready.
+                YAHOO.util.Event.onDOMReady(
+                        YAHOO.util.Event._tryPreloadAttach,
+                        YAHOO.util.Event, true);
+                
+                var n = document.createElement('p');  
 
-            EU._dri = setInterval(function() {
-                try {
-                    // throws an error if doc is not ready
-                    n.doScroll('left');
-                    clearInterval(EU._dri);
-                    EU._dri = null;
-                    EU._ready();
-                    n = null;
-                } catch (ex) { 
-                }
-            }, EU.POLL_INTERVAL); 
+                EU._dri = setInterval(function() {
+                    try {
+                        // throws an error if doc is not ready
+                        n.doScroll('left');
+                        clearInterval(EU._dri);
+                        EU._dri = null;
+                        EU._ready();
+                        n = null;
+                    } catch (ex) { 
+                    }
+                }, EU.POLL_INTERVAL); 
+            }
 
-        
         // The document's readyState in Safari currently will
         // change to loaded/complete before images are loaded.
         } else if (EU.webkit && EU.webkit < 525) {
