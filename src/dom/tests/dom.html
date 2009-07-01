@@ -8,7 +8,7 @@
 
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../../build/event/event.js"></script>
-<script type="text/javascript" src="../../../build/dom/dom.js"></script> 
+<script type="text/javascript" src="../../../build/dom/dom-min.js"></script> 
 <script type="text/javascript" src="../../../build/element/element.js"></script> 
 <script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
@@ -94,15 +94,15 @@
 (function() {
     var Y = YAHOO.util,
         tool = YAHOO.tool,
-        Assert = YAHOO.util.Assert,
-        ArrayAssert = YAHOO.util.ArrayAssert,
+        Assert = Y.Assert,
+        ArrayAssert = Y.ArrayAssert,
         suite = new tool.TestSuite("yuisuite");
 
     Y.Event.onDOMReady(function() {
         var logger = new YAHOO.tool.TestLogger(null, { height: '80%' });
 
         suite.add( new tool.TestCase({
-            name: 'YAHOO.util.Dom',
+            name: 'Y.Dom',
 
             test_get: function() {
                 Assert.areEqual(document.getElementById('doc'),
@@ -122,8 +122,8 @@
 
                 Assert.isNull(Y.Dom.get('search-r'), 'false match on "name"');
 
-                Assert.areEqual(document.getElementById('doc'), Y.Dom.get(new YAHOO.util.Element('doc')),
-                        "YAHOO.util.Element('doc')");
+                Assert.areEqual(document.getElementById('doc'), Y.Dom.get(new Y.Element('doc')),
+                        "Y.Element('doc')");
             },            
 
             test_getStyle: function() {
@@ -240,7 +240,7 @@
                 Assert.areEqual('yiv-required yiv-integer:[1]', el.className, "Y.Dom.replaceClass(el, new RegExp('yiv-integer:\\[1,(?:30|72|43200)\\]'), 'yiv-integer:[1]')");
 
                 el.className = 'satg-x';
-                YAHOO.util.Dom.replaceClass(el, /satg-(x|y|z)/, 'satg-y');
+                Y.Dom.replaceClass(el, /satg-(x|y|z)/, 'satg-y');
                 Assert.areEqual('satg-y', el.className, "Y.Dom.replaceClass(el, /satg-(x|y|z)/, 'satg-y')");
 
             },            
@@ -315,6 +315,11 @@
 
                 Assert.areEqual(document.getElementById('bd').offsetHeight, Y.Dom.getRegion('bd').height,
                         'getRegion failed for height');
+
+                Assert.isTrue(Y.Dom.getRegion('bd').left > 0, 'getRegion failed for left');
+                Assert.isTrue(Y.Dom.getRegion('bd').right > 0, 'getRegion failed for right');
+                Assert.isTrue(Y.Dom.getRegion('bd').top > 0, 'getRegion failed for top');
+                Assert.isTrue(Y.Dom.getRegion('bd').bottom > 0, 'getRegion failed for bottom');
             },            
 
             test_point: function() {
@@ -523,7 +528,7 @@
             },            
             test_insertBefore: function() {
                 var el = document.createElement('div');
-                YAHOO.util.Dom.insertBefore(el, 'bd');
+                Y.Dom.insertBefore(el, 'bd');
                 Assert.areEqual(
                     document.getElementById('bd').previousSibling,
                     el,
@@ -532,7 +537,7 @@
             },
             test_insertAfter: function() {
                 var el = document.createElement('div');
-                YAHOO.util.Dom.insertAfter(el, 'bd');
+                Y.Dom.insertAfter(el, 'bd');
                 Assert.areEqual(
                     document.getElementById('bd').nextSibling,
                     el,
@@ -555,8 +560,12 @@
                 Y.Dom.setAttribute(el, 'for', 'foo');                
                 Y.Dom.setAttribute(el, 'class', 'bar');                
 
-                Assert.areEqual('foo', YAHOO.util.Dom.getAttribute(el, 'for'), "Y.Dom.getAttribute(el, 'for')");
-                Assert.areEqual('bar', YAHOO.util.Dom.getAttribute(el, 'class'), "Y.Dom.setAttribute(el, 'class')");
+                Assert.areEqual('foo', Y.Dom.getAttribute(el, 'for'), "Y.Dom.getAttribute(el, 'for')");
+                Assert.areEqual('bar', Y.Dom.getAttribute(el, 'class'), "Y.Dom.setAttribute(el, 'class')");
+
+                var bodyEl = new Y.Element(Y.Dom.generateId(document.body));
+                Y.Dom.addClass(bodyEl, 'dummy');
+                Assert.isTrue(Y.Dom.hasClass(document.body, 'dummy'), 'Y.Dom.addClass(Element, "dummy")');
             }
 
         })); 

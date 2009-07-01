@@ -8,7 +8,27 @@ package com.yahoo.astra.fl.charts.axes
 	 * @author Josh Tynjala
 	 */
 	public interface IAxis
-	{
+	{	
+		/**
+		 * Total width of axis
+		 */
+		function get width():Number;
+		
+		/*
+		 * @private (setter)
+		 */
+		function set width(value:Number):void;
+		
+		/** 
+		 * Total height of axis
+		 */
+		function get height():Number;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set height(value:Number):void;
+		
 		/**
 		 * The chart in which this axis appears.
 		 */
@@ -73,6 +93,7 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private (setter)
 		 */
 		function set maxLabelWidth(value:Number):void;
+		
 		/**
 		 * Gets or sets the maximum width of a label
 		 */
@@ -112,6 +133,26 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private (setter)
 		 */
 		function set labelSpacing(value:Number):void; 
+		
+		/**
+		 * Maximum dimensions of axis labels
+		 */
+		function get labelData():AxisLabelData;
+		
+		/** 
+		 * @private (setter)
+		 */
+		function set labelData(value:AxisLabelData):void; 
+		
+		/**
+		 * Position of axis in relation to the chart
+		 */
+		function get position():String;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set position(value:String):void;
 		
 		/**
 		 * Determines the axis scale based on the input data set.

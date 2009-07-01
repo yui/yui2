@@ -98,5 +98,13 @@ YAHOO.lang.extend(YAHOO.widget.NumericAxis, YAHOO.widget.Axis,
 	 * @property calculateByLabelSize
 	 * @type Boolean
 	 */
-	calculateByLabelSize: true
+	calculateByLabelSize: true,
+	
+	/**
+	 * Indicates the position of the axis relative to the chart
+	 *
+	 * @property position
+	 * @type String
+	 */
+	position:"left"
 });

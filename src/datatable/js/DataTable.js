@@ -5386,22 +5386,26 @@ sortColumn : function(oColumn, sDir) {
                    
                 // Sort the Records
                 if(!bSorted || sDir || sortFnc) {
-                    // Get the field to sort
-                    var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
+                    // Shortcut for the frequently-used compare method
+                    var compare = YAHOO.util.Sort.compare;
 
                     // Default sort function if necessary
                     sortFnc = sortFnc || 
-                        function(a, b, desc) {
-                            var sorted = YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
+                        function(a, b, desc, field) {
+                            var sorted = compare(a.getData(field),b.getData(field), desc);
                             if(sorted === 0) {
-                                return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
+                                return compare(a.getCount(),b.getCount(), desc); // Bug 1932978
                             }
                             else {
                                 return sorted;
                             }
                         };
+
+                    // Get the field to sort
+                    var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
+
                     // Sort the Records        
-                    this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false));
+                    this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false), sField);
                 }
                 // Just reverse the Records
                 else {

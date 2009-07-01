@@ -1241,6 +1241,21 @@
             <span class="nx">DataTableAssert</span><span class="o">.</span><span class="nx">areSameRow</span><span class="o">(</span><span class="nx">elRow</span><span class="o">,</span> <span class="nx">oTestRecord</span><span class="o">,</span> <span class="nx">dt</span><span class="o">,</span> <span class="s2">&quot;Bottom desc: Row mismatch&quot;</span><span class="o">);</span>
         <span class="o">},</span>
 
+        <span class="nx">testSortCustomPassesField</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+          <span class="k">var</span> <span class="nx">dt</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createInstance</span><span class="o">();</span> 
+          <span class="k">var</span> <span class="nx">oColumn</span> <span class="o">=</span> <span class="nx">dt</span><span class="o">.</span><span class="nx">getColumn</span><span class="o">(</span><span class="m">1</span><span class="o">);</span>
+          <span class="nx">oColumn</span><span class="o">.</span><span class="nx">sortOptions</span> <span class="o">=</span> <span class="o">{</span> 
+            <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;ahasuerus&quot;</span><span class="o">,</span>
+            <span class="nx">sortFunction</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">a</span><span class="o">,</span> <span class="nx">b</span><span class="o">,</span> <span class="nx">desc</span><span class="o">,</span> <span class="nx">field</span><span class="o">)</span> <span class="o">{</span>
+              <span class="nx">Assert</span><span class="o">.</span><span class="nx">areSame</span><span class="o">(</span><span class="s2">&quot;ahasuerus&quot;</span><span class="o">,</span> <span class="nx">field</span><span class="o">,</span> <span class="s2">&quot;field is supposed to be passed to a custom sort routine!&quot;</span><span class="o">);</span>
+              <span class="k">return</span> <span class="m">0</span><span class="o">;</span>
+            <span class="o">}</span>
+          <span class="o">}</span>
+          <span class="nx">dt</span><span class="o">.</span><span class="nx">sortColumn</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">);</span>
+
+
+        <span class="o">},</span>
+
         <span class="nx">testInsertThenSort</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">dt</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">createInstance</span><span class="o">();</span>
             <span class="nx">dt</span><span class="o">.</span><span class="nx">addRow</span><span class="o">({</span><span class="nx">a</span><span class="o">:</span><span class="m">4</span><span class="o">,</span><span class="nx">b</span><span class="o">:</span><span class="s2">&quot;four&quot;</span><span class="o">},</span> <span class="m">0</span><span class="o">)</span>

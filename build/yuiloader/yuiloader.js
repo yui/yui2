@@ -2091,7 +2091,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'uploader': {
             'type': 'js',
-            'path': 'uploader/uploader.js',
+            'path': 'uploader/uploader-min.js',
             'requires': ['element']
         },
 

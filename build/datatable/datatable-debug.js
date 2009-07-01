@@ -1072,7 +1072,7 @@ YAHOO.widget.Column.prototype = {
      * @default null
      */
     /**
-     * Custom sort handler.
+     * Custom sort handler. Signature: sortFunction(a, b, desc, field) where field is the sortOptions.field value
      *
      * @property sortOptions.sortFunction
      * @type Function
@@ -2177,10 +2177,11 @@ RS.prototype = {
      * @param fnSort {Function} Reference to a sort function.
      * @param desc {Boolean} True if sort direction is descending, false if sort
      * direction is ascending.
+     * @parm field {String} The field to sort by, from sortOptions.field
      * @return {YAHOO.widget.Record[]} Sorted array of Records.
      */
-    sortRecords : function(fnSort, desc) {
-        return this._records.sort(function(a, b) {return fnSort(a, b, desc);});
+    sortRecords : function(fnSort, desc, field) {
+        return this._records.sort(function(a, b) {return fnSort(a, b, desc, field);});
     },
 
     /**
@@ -2579,7 +2580,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Initialize DOM elements
     var okDom = this._initDomElements(elContainer);
     if(!okDom) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
+        YAHOO.log("Could not instantiate DataTable due to an invalid DOM element", "error", this.toString());
         return;
     }
             
@@ -4564,7 +4565,6 @@ _initDomElements : function(elContainer) {
     this._initTbodyEl(this._elTable);
 
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
         return false;
     }
     else {
@@ -7884,22 +7884,26 @@ sortColumn : function(oColumn, sDir) {
                    
                 // Sort the Records
                 if(!bSorted || sDir || sortFnc) {
-                    // Get the field to sort
-                    var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
+                    // Shortcut for the frequently-used compare method
+                    var compare = YAHOO.util.Sort.compare;
 
                     // Default sort function if necessary
                     sortFnc = sortFnc || 
-                        function(a, b, desc) {
-                            var sorted = YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
+                        function(a, b, desc, field) {
+                            var sorted = compare(a.getData(field),b.getData(field), desc);
                             if(sorted === 0) {
-                                return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
+                                return compare(a.getCount(),b.getCount(), desc); // Bug 1932978
                             }
                             else {
                                 return sorted;
                             }
                         };
+
+                    // Get the field to sort
+                    var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
+
                     // Sort the Records        
-                    this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false));
+                    this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false), sField);
                 }
                 // Just reverse the Records
                 else {
@@ -15565,6 +15569,7 @@ _oDataTable : null,
  * @property _oColumn
  * @type YAHOO.widget.Column
  * @default null
+ * @private 
  */
 _oColumn : null,
 
