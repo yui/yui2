@@ -1063,6 +1063,7 @@ YAHOO.widget.AutoComplete.prototype.dataReturnEvent = null;
  * @event dataErrorEvent
  * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
  * @param sQuery {String} The query string.
+ * @param oResponse {Object} The response object, if available.
  */
 YAHOO.widget.AutoComplete.prototype.dataErrorEvent = null;
 
@@ -1898,7 +1899,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
     }
     // Error
     else {
-        this.dataErrorEvent.fire(this, sQuery);
+        this.dataErrorEvent.fire(this, sQuery, oResponse);
     }
         
 };

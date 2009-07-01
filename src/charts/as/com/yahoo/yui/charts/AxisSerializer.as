@@ -64,7 +64,12 @@ package com.yahoo.yui.charts
 			{
 				axis.labelFunction = JavaScriptUtil.createCallbackFunction(input.labelFunction).callback;
 			}
-			
+
+			if(input.position != null)
+			{
+				axis.position = input.position;
+			}
+						
 			if(axis is NumericAxis)
 			{
 				var numericAxis:NumericAxis = NumericAxis(axis);
@@ -92,6 +97,11 @@ package com.yahoo.yui.charts
 				{
 					numericAxis.roundMajorUnit = input.roundMajorUnit;
 				}
+				if(input.order != null)
+				{
+					numericAxis.order = input.order;
+				}
+
 				numericAxis.snapToUnits = input.snapToUnits;
 				numericAxis.alwaysShowZero = input.alwaysShowZero;
 				numericAxis.scale = input.scale;

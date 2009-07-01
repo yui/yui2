@@ -62,6 +62,17 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private (setter)
 		 */
 		function set majorUnitSetByUser(value:Boolean):void;
+		
+		/**
+		 * Indicates alignment of axis
+		 */
+		function get position():String;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set position(value:String):void;
+		
 	//--------------------------------------
 	//  Methods
 	//--------------------------------------

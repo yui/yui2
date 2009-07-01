@@ -351,7 +351,7 @@
 
         'uploader': {
             'type': 'js',
-            'path': 'uploader/uploader.js',
+            'path': 'uploader/uploader-min.js',
             'requires': ['element']
         },
 
