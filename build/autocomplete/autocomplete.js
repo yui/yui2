@@ -849,13 +849,13 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
         var oAC = oCallback.scope,
             oDS = this,
             allResults = oParsedResponse.results, // the array of results
-            filteredResults = [], // container for filtered results
-            bMatchFound = false,
+            filteredResults = [], // container for filtered results,
+            nMax = oAC.maxResultsDisplayed, // max to find
             bMatchCase = (oDS.queryMatchCase || oAC.queryMatchCase), // backward compat
             bMatchContains = (oDS.queryMatchContains || oAC.queryMatchContains); // backward compat
             
         // Loop through each result object...
-        for(var i = allResults.length-1; i >= 0; i--) {
+        for(var i=0, len=allResults.length; i<len; i++) {
             var oResult = allResults[i];
 
             // Grab the data to match against from the result object...
@@ -891,8 +891,13 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
                 // A CONTAINS match is when the query is found anywhere within the key string...
                 (bMatchContains && (sKeyIndex > -1))) {
                     // Stash the match
-                    filteredResults.unshift(oResult);
+                    filteredResults.push(oResult);
                 }
+            }
+            
+            // Filter no more if maxResultsDisplayed is reached
+            if(len>nMax && filteredResults.length===nMax) {
+                break;
             }
         }
         oParsedResponse.results = filteredResults;
