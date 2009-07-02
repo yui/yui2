@@ -1,6 +1,9 @@
 
 YUI Library - Event - Release Notes
 
+2.8.0
+  * Added onreadystatechange fork for IE onDOMReady when YUI is running in an iframe.
+
 2.7.0
   * unsubscribeAll return value fixed
 
