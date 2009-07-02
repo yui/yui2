@@ -103,7 +103,7 @@ YAHOO.extend(YAHOO.widget.SWF, YAHOO.util.Element, {
 	},	
 	callSWF: function (func, args)
 	{
-		this._swf[func].call(this._swf, args);
+		this._swf[func].apply(this._swf, args);
 	}
 });
 

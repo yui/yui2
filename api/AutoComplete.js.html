@@ -602,13 +602,13 @@
 <span class="o">};</span>
 
  <span class="c">/**</span>
-<span class="c"> * Returns true if widget instance is currently focused.</span>
+<span class="c"> * Returns true if widget instance is currently active.</span>
 <span class="c"> *</span>
 <span class="c"> * @method isFocused</span>
-<span class="c"> * @return {Boolean} Returns true if widget instance is currently focused.</span>
+<span class="c"> * @return {Boolean} Returns true if widget instance is currently active.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">AutoComplete</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">isFocused</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_bFocused</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_bFocused</span><span class="o">;</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_bFocused</span><span class="o">;</span>
 <span class="o">};</span>
 
  <span class="c">/**</span>
@@ -787,8 +787,8 @@
 <span class="c"> * @param sQuery {String} Query string.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">AutoComplete</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">sendQuery</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sQuery</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c">// Reset focus for a new interaction</span>
-<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_bFocused</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="c">// Activate focus for a new interaction</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_bFocused</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
     
     <span class="c">// Adjust programatically sent queries to look like they were input by user</span>
 <span class="c"></span>    <span class="c">// when delimiters are enabled</span>
@@ -1344,14 +1344,14 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">AutoComplete</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_elIFrame</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
 <span class="c">/**</span>
-<span class="c"> * Whether or not the input field is currently in focus. If query results come back</span>
+<span class="c"> * Whether or not the widget instance is currently active. If query results come back</span>
 <span class="c"> * but the user has already moved on, do not proceed with auto complete behavior.</span>
 <span class="c"> *</span>
 <span class="c"> * @property _bFocused</span>
 <span class="c"> * @type Boolean</span>
 <span class="c"> * @private</span>
 <span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">AutoComplete</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_bFocused</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">AutoComplete</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_bFocused</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
 
 <span class="c">/**</span>
 <span class="c"> * Animation instance for container expand/collapse.</span>
@@ -1857,9 +1857,8 @@
 <span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">ok</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oResponse</span><span class="o">.</span><span class="nx">error</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">dataReturnEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">sQuery</span><span class="o">,</span> <span class="nx">oResponse</span><span class="o">.</span><span class="nx">results</span><span class="o">);</span>
         
-        <span class="c">// Continue only if instance is still focused (i.e., user hasn&#39;t already moved on)</span>
-<span class="c"></span>        <span class="c">// Null indicates initialized state, which is ok too</span>
-<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_bFocused</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_bFocused</span> <span class="o">===</span> <span class="kc">null</span><span class="o">))</span> <span class="o">{</span>
+        <span class="c">// Continue only if instance is still active (i.e., user hasn&#39;t already moved on)</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_bFocused</span><span class="o">)</span> <span class="o">{</span>
             
             <span class="c">//TODO: is this still necessary?</span>
 <span class="c"></span>            <span class="c">/*var isOpera = (YAHOO.env.ua.opera);</span>
