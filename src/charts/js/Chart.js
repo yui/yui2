@@ -470,15 +470,8 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 	_loadHandler: function()
 	{
 		//the type is set separately because it must be first!
-		try
-		{
-		
 		this._swf.setType(this._type);
-		}
-		catch(e)
-		{
-			alert(e);
-		}
+
 
 		//set initial styles
 		if(this._attributes.style)
