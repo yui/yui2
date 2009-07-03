@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="c">/////////////////////////////////////////////////////////////////////////////</span>
+                        <div class="highlight" ><pre><span class="c">/////////////////////////////////////////////////////////////////////////////</span>
 <span class="c">//</span>
 <span class="c">// YAHOO.widget.DataSource Backwards Compatibility</span>
 <span class="c">//</span>
@@ -908,13 +908,13 @@
         <span class="k">var</span> <span class="nx">oAC</span> <span class="o">=</span> <span class="nx">oCallback</span><span class="o">.</span><span class="nx">scope</span><span class="o">,</span>
             <span class="nx">oDS</span> <span class="o">=</span> <span class="k">this</span><span class="o">,</span>
             <span class="nx">allResults</span> <span class="o">=</span> <span class="nx">oParsedResponse</span><span class="o">.</span><span class="nx">results</span><span class="o">,</span> <span class="c">// the array of results</span>
-<span class="c"></span>            <span class="nx">filteredResults</span> <span class="o">=</span> <span class="o">[],</span> <span class="c">// container for filtered results</span>
-<span class="c"></span>            <span class="nx">bMatchFound</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span>
-            <span class="nx">bMatchCase</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oDS</span><span class="o">.</span><span class="nx">queryMatchCase</span> <span class="o">||</span> <span class="nx">oAC</span><span class="o">.</span><span class="nx">queryMatchCase</span><span class="o">),</span> <span class="c">// backward compat</span>
+<span class="c"></span>            <span class="nx">filteredResults</span> <span class="o">=</span> <span class="o">[],</span> <span class="c">// container for filtered results,</span>
+<span class="c"></span>            <span class="nx">nMax</span> <span class="o">=</span> <span class="nx">oAC</span><span class="o">.</span><span class="nx">maxResultsDisplayed</span><span class="o">,</span> <span class="c">// max to find</span>
+<span class="c"></span>            <span class="nx">bMatchCase</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oDS</span><span class="o">.</span><span class="nx">queryMatchCase</span> <span class="o">||</span> <span class="nx">oAC</span><span class="o">.</span><span class="nx">queryMatchCase</span><span class="o">),</span> <span class="c">// backward compat</span>
 <span class="c"></span>            <span class="nx">bMatchContains</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oDS</span><span class="o">.</span><span class="nx">queryMatchContains</span> <span class="o">||</span> <span class="nx">oAC</span><span class="o">.</span><span class="nx">queryMatchContains</span><span class="o">);</span> <span class="c">// backward compat</span>
 <span class="c"></span>            
         <span class="c">// Loop through each result object...</span>
-<span class="c"></span>        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">allResults</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">--)</span> <span class="o">{</span>
+<span class="c"></span>        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">allResults</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">oResult</span> <span class="o">=</span> <span class="nx">allResults</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
 
             <span class="c">// Grab the data to match against from the result object...</span>
@@ -950,8 +950,13 @@
                 <span class="c">// A CONTAINS match is when the query is found anywhere within the key string...</span>
 <span class="c"></span>                <span class="o">(</span><span class="nx">bMatchContains</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">sKeyIndex</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)))</span> <span class="o">{</span>
                     <span class="c">// Stash the match</span>
-<span class="c"></span>                    <span class="nx">filteredResults</span><span class="o">.</span><span class="nx">unshift</span><span class="o">(</span><span class="nx">oResult</span><span class="o">);</span>
+<span class="c"></span>                    <span class="nx">filteredResults</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">oResult</span><span class="o">);</span>
                 <span class="o">}</span>
+            <span class="o">}</span>
+            
+            <span class="c">// Filter no more if maxResultsDisplayed is reached</span>
+<span class="c"></span>            <span class="k">if</span><span class="o">(</span><span class="nx">len</span><span class="o">&gt;</span><span class="nx">nMax</span> <span class="o">&amp;&amp;</span> <span class="nx">filteredResults</span><span class="o">.</span><span class="nx">length</span><span class="o">===</span><span class="nx">nMax</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">}</span>
         <span class="nx">oParsedResponse</span><span class="o">.</span><span class="nx">results</span> <span class="o">=</span> <span class="nx">filteredResults</span><span class="o">;</span>
@@ -3015,6 +3020,7 @@
     <span class="k">return</span> <span class="nx">copy</span><span class="o">;</span>
 <span class="o">};</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>
