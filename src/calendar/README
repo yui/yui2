@@ -13,6 +13,14 @@ Calendar Release Notes
 + Changed the few remaining hardcoded CSS class names to use default
   STYLES configuration.
 
++ The cells property is now populated by searching for tds by class 
+  name ("calcell") under the calendar's table element, as opposed to 
+  blindly picking up all td elements under the div container.
+
+  This fixes incorrect selection state related bugs in custom calendars,
+  where the customization introduces additional tables to the default 
+  calendar markup.
+
 *** version 2.7.0 ***
 
 + Fixed CalendarGroup page construction, so that the intial pagedate for 

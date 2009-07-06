@@ -3262,7 +3262,7 @@ Calendar.prototype = {
 		this.oDomContainer.innerHTML = html.join("\n");
 
 		this.applyListeners();
-		this.cells = this.oDomContainer.getElementsByTagName("td");
+		this.cells = Dom.getElementsByClassName(this.Style.CSS_CELL, "td", this.id);
 	
 		this.cfg.refireEvent(DEF_CFG.TITLE.key);
 		this.cfg.refireEvent(DEF_CFG.CLOSE.key);
