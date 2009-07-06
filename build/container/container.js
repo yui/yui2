@@ -6830,6 +6830,13 @@
                 }
 
                 var bDragOnly = (this.cfg.getProperty("dragonly") === true);
+
+                /**
+                 * The YAHOO.util.DD instance, used to implement the draggable header for the panel if draggable is enabled
+                 *
+                 * @property dd
+                 * @type YAHOO.util.DD
+                 */
                 this.dd = new Util.DD(this.element.id, this.id, {dragOnly: bDragOnly});
 
                 if (!this.header.id) {

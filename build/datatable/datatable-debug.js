@@ -15253,6 +15253,8 @@ reorderColumn : function(oColumn, index) {
 setColumnWidth : function(oColumn, nWidth) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
+        this._storeScrollPositions();
+
         // Validate new width against minWidth
         if(lang.isNumber(nWidth)) {
             nWidth = (nWidth > oColumn.minWidth) ? nWidth : oColumn.minWidth;
