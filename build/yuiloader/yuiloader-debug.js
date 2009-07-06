@@ -1826,6 +1826,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'type': 'js',
             'path': 'calendar/calendar-min.js',
             'requires': ['event', 'dom'],
+            supersedes: ['datemeth'],
             'skinnable': true
         },
 
@@ -1895,6 +1896,12 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'requires': ['element', 'datasource'],
             'optional': ['calendar', 'dragdrop', 'paginator'],
             'skinnable': true
+        },
+
+        datemath: {
+            'type': 'js',
+            'path': 'datemath/datemath-min.js',
+            'requires': ['yahoo']
         },
 
         'dom': {
