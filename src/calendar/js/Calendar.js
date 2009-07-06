@@ -165,14 +165,22 @@ Calendar.MEDIUM = "medium";
 Calendar.ONE_CHAR = "1char";
 
 /**
-* The set of default Config property keys and values for the Calendar
-* @property YAHOO.widget.Calendar._DEFAULT_CONFIG
-* @final
+* The set of default Config property keys and values for the Calendar.
+* 
+* <p>
+* NOTE: This property is made public in order to allow users to change 
+* the default values of configuration properties. Users should not 
+* modify the key string, unless they are overriding the Calendar implementation
+* </p>
+* 
+* @property YAHOO.widget.Calendar.DEFAULT_CONFIG
 * @static
-* @private
-* @type Object
+* @type Object An object with key/value pairs, the key being the 
+* uppercase configuration property name and the value being an objec 
+* literal with a key string property, and a value property, specifying the 
+* default value of the property 
 */
-Calendar._DEFAULT_CONFIG = {
+Calendar.DEFAULT_CONFIG = {
 	// Default values for pagedate and selected are not class level constants - they are set during instance creation 
 	PAGEDATE : {key:"pagedate", value:null},
 	SELECTED : {key:"selected", value:null},
@@ -223,7 +231,18 @@ Calendar._DEFAULT_CONFIG = {
 	}
 };
 
-var DEF_CFG = Calendar._DEFAULT_CONFIG;
+/**
+* The set of default Config property keys and values for the Calendar
+* @property YAHOO.widget.Calendar._DEFAULT_CONFIG
+* @deprecated Made public. See the public DEFAULT_CONFIG property for details
+* @final
+* @static
+* @private
+* @type Object
+*/
+Calendar._DEFAULT_CONFIG = Calendar.DEFAULT_CONFIG;
+
+var DEF_CFG = Calendar.DEFAULT_CONFIG;
 
 /**
 * The set of Custom Event types supported by the Calendar
@@ -259,13 +278,11 @@ Calendar._EVENT_TYPES = {
 
 /**
 * The set of default style constants for the Calendar
-* @property YAHOO.widget.Calendar._STYLES
-* @final
+* @property YAHOO.widget.Calendar.STYLES
 * @static
-* @private
-* @type Object
+* @type Object An object with name/value pairs for the class name identifier/value.
 */
-Calendar._STYLES = {
+Calendar.STYLES = {
 	CSS_ROW_HEADER: "calrowhead",
 	CSS_ROW_FOOTER: "calrowfoot",
 	CSS_CELL : "calcell",
@@ -297,8 +314,22 @@ Calendar._STYLES = {
 	CSS_CELL_HIGHLIGHT1 : "highlight1",
 	CSS_CELL_HIGHLIGHT2 : "highlight2",
 	CSS_CELL_HIGHLIGHT3 : "highlight3",
-	CSS_CELL_HIGHLIGHT4 : "highlight4"
+	CSS_CELL_HIGHLIGHT4 : "highlight4",
+	CSS_WITH_TITLE: "withtitle",
+	CSS_FIXED_SIZE: "fixedsize",
+	CSS_LINK_CLOSE: "link-close"
 };
+
+/**
+* The set of default style constants for the Calendar
+* @property YAHOO.widget.Calendar._STYLES
+* @deprecated Made public. See the public STYLES property for details
+* @final
+* @static
+* @private
+* @type Object
+*/
+Calendar._STYLES = Calendar.STYLES;
 
 Calendar.prototype = {
 
@@ -564,7 +595,7 @@ Calendar.prototype = {
 							Dom.setStyle(this.iframe, "opacity", "0");
 	
 							if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
-								Dom.addClass(this.iframe, "fixedsize");
+								Dom.addClass(this.iframe, this.Style.CSS_FIXED_SIZE);
 							}
 	
 							this.oDomContainer.insertBefore(this.iframe, this.oDomContainer.firstChild);
@@ -1505,7 +1536,7 @@ Calendar.prototype = {
 	*/
 	initStyles : function() {
 
-		var defStyle = Calendar._STYLES;
+		var defStyle = Calendar.STYLES;
 
 		this.Style = {
 			/**
@@ -1635,7 +1666,19 @@ Calendar.prototype = {
 			/**
 			* @property Style.CSS_CELL_HIGHLIGHT4
 			*/
-			CSS_CELL_HIGHLIGHT4 : defStyle.CSS_CELL_HIGHLIGHT4
+			CSS_CELL_HIGHLIGHT4 : defStyle.CSS_CELL_HIGHLIGHT4,
+			/**
+			 * @property Style.CSS_WITH_TITLE
+			 */
+			CSS_WITH_TITLE : defStyle.CSS_WITH_TITLE,
+             /**
+             * @property Style.CSS_FIXED_SIZE
+             */
+            CSS_FIXED_SIZE : defStyle.CSS_FIXED_SIZE,
+             /**
+             * @property Style.CSS_LINK_CLOSE
+             */
+            CSS_LINK_CLOSE : defStyle.CSS_LINK_CLOSE
 		};
 	},
 
@@ -1692,7 +1735,7 @@ Calendar.prototype = {
 		tDiv.innerHTML = strTitle;
 		this.oDomContainer.insertBefore(tDiv, this.oDomContainer.firstChild);
 	
-		Dom.addClass(this.oDomContainer, "withtitle");
+		Dom.addClass(this.oDomContainer, this.Style.CSS_WITH_TITLE);
 	
 		return tDiv;
 	},
@@ -1708,7 +1751,7 @@ Calendar.prototype = {
 			Event.purgeElement(tDiv);
 			this.oDomContainer.removeChild(tDiv);
 		}
-		Dom.removeClass(this.oDomContainer, "withtitle");
+		Dom.removeClass(this.oDomContainer, this.Style.CSS_WITH_TITLE);
 	},
 	
 	/**
@@ -1719,8 +1762,10 @@ Calendar.prototype = {
 	 */
 	createCloseButton : function() {
 		var cssClose = YAHOO.widget.CalendarGroup.CSS_2UPCLOSE,
+		    cssLinkClose = this.Style.CSS_LINK_CLOSE,
 			DEPR_CLOSE_PATH = "us/my/bn/x_d.gif",
-			lnk = Dom.getElementsByClassName("link-close", "a", this.oDomContainer)[0],
+			
+			lnk = Dom.getElementsByClassName(cssLinkClose, "a", this.oDomContainer)[0],
 			strings = this.cfg.getProperty(DEF_CFG.STRINGS.key),
 			closeStr = (strings && strings.close) ? strings.close : "";
 
@@ -1733,7 +1778,7 @@ Calendar.prototype = {
 		}
 
 		lnk.href = "#";
-		lnk.className = "link-close";
+		lnk.className = cssLinkClose;
 
 		if (Calendar.IMG_ROOT !== null) {
 			var img = Dom.getElementsByClassName(cssClose, "img", lnk)[0] || document.createElement("img");
@@ -1754,7 +1799,7 @@ Calendar.prototype = {
 	 * @method removeCloseButton
 	 */
 	removeCloseButton : function() {
-		var btn = Dom.getElementsByClassName("link-close", "a", this.oDomContainer)[0] || null;
+		var btn = Dom.getElementsByClassName(this.Style.CSS_LINK_CLOSE, "a", this.oDomContainer)[0] || null;
 		if (btn) {
 			Event.purgeElement(btn);
 			this.oDomContainer.removeChild(btn);
@@ -1864,7 +1909,7 @@ Calendar.prototype = {
 		}
 
 		for(var i=0;i < this.Locale.LOCALE_WEEKDAYS.length; ++i) {
-			html[html.length] = '<th class="calweekdaycell">' + this.Locale.LOCALE_WEEKDAYS[i] + '</th>';
+			html[html.length] = '<th class="' + this.Style.CSS_WEEKDAY_CELL + '">' + this.Locale.LOCALE_WEEKDAYS[i] + '</th>';
 		}
 
 		if (this.cfg.getProperty(DEF_CFG.SHOW_WEEK_FOOTER.key)) {
@@ -2329,7 +2374,7 @@ Calendar.prototype = {
 		cell.innerHTML = workingDate.getDate();
 		return Calendar.STOP_RENDER;
 	},
-	
+
 	/**
 	* Renders the row header for a week.
 	* @method renderRowHeader
@@ -2337,10 +2382,10 @@ Calendar.prototype = {
 	* @param {Array}	cell	The current working HTML array
 	*/
 	renderRowHeader : function(weekNum, html) {
-		html[html.length] = '<th class="calrowhead">' + weekNum + '</th>';
+		html[html.length] = '<th class="' + this.Style.CSS_ROW_HEADER + '">' + weekNum + '</th>';
 		return html;
 	},
-	
+
 	/**
 	* Renders the row footer for a week.
 	* @method renderRowFooter
@@ -2348,7 +2393,7 @@ Calendar.prototype = {
 	* @param {Array}	cell	The current working HTML array
 	*/
 	renderRowFooter : function(weekNum, html) {
-		html[html.length] = '<th class="calrowfoot">' + weekNum + '</th>';
+		html[html.length] = '<th class="' + this.Style.CSS_ROW_FOOTER + '">' + weekNum + '</th>';
 		return html;
 	},
 	
@@ -2425,7 +2470,7 @@ Calendar.prototype = {
 	renderCellStyleToday : function(workingDate, cell) {
 		Dom.addClass(cell, this.Style.CSS_CELL_TODAY);
 	},
-	
+
 	/**
 	* Applies the default style used for rendering selected dates to the current calendar cell
 	* @method renderCellStyleSelected
@@ -3392,7 +3437,7 @@ Calendar.prototype = {
 			Event.purgeElement(cal.oDomContainer, true);
 
 			// Generated markup/DOM - Not removing the container DIV since we didn't create it.
-			Dom.removeClass(cal.oDomContainer, "withtitle");
+			Dom.removeClass(cal.oDomContainer, cal.Style.CSS_WITH_TITLE);
 			Dom.removeClass(cal.oDomContainer, cal.Style.CSS_CONTAINER);
 			Dom.removeClass(cal.oDomContainer, cal.Style.CSS_SINGLE);
 			cal.oDomContainer.innerHTML = "";

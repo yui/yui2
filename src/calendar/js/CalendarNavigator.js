@@ -131,12 +131,11 @@ YAHOO.widget.CalendarNavigator = function(cal) {
 	 * <dt>monthFormat</dt><dd><em>String</em> : The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT. Defaults to YAHOO.widget.Calendar.LONG</dd>
 	 * <dt>initialFocus</dt><dd><em>String</em> : Either "year" or "month" specifying which input control should get initial focus. Defaults to "year"</dd>
 	 * </dl>
-	 * @property _DEFAULT_CFG
-	 * @protected
+	 * @property DEFAULT_CONFIG
 	 * @type Object
 	 * @static
 	 */
-	CN._DEFAULT_CFG = {
+	CN.DEFAULT_CONFIG = {
 		strings : {
 			month: "Month",
 			year: "Year",
@@ -147,6 +146,17 @@ YAHOO.widget.CalendarNavigator = function(cal) {
 		monthFormat: YAHOO.widget.Calendar.LONG,
 		initialFocus: "year"
 	};
+	
+    /**
+     * Object literal containing the default configuration values for the CalendarNavigator
+     * @property _DEFAULT_CFG
+     * @protected
+     * @deprecated Made public. See the public DEFAULT_CONFIG property
+     * @type Object
+     * @static
+     */
+	CN._DEFAULT_CFG = CN.DEFAULT_CONFIG;
+
 
 	/**
 	 * The suffix added to the Calendar/CalendarGroup's ID, to generate
@@ -1216,7 +1226,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * the parent Calendar/CalendarGroup's config value.
 	 * <p>
 	 * If it has not been set in the user provided configuration, the method will 
-	 * return the default value of the configuration property, as set in _DEFAULT_CFG
+	 * return the default value of the configuration property, as set in DEFAULT_CONFIG
 	 * </p>
 	 * @private
 	 * @method __getCfg
@@ -1225,7 +1235,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @return The value of the configuration property
 	 */
 	__getCfg : function(prop, bIsStr) {
-		var DEF_CFG = YAHOO.widget.CalendarNavigator._DEFAULT_CFG;
+		var DEF_CFG = YAHOO.widget.CalendarNavigator.DEFAULT_CONFIG;
 		var cfg = this.cal.cfg.getProperty("navigator");
 
 		if (bIsStr) {

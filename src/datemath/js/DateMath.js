@@ -255,8 +255,7 @@ YAHOO.widget.DateMath = {
 			startOfWeek = this.getFirstDayOfWeek(targetDate, firstDayOfWeek);
 		}
 
-		var startYear = startOfWeek.getFullYear(),
-			startTime = startOfWeek.getTime();
+		var startYear = startOfWeek.getFullYear();
 
 		// DST shouldn't be a problem here, math is quicker than setDate();
 		endOfWeek = new Date(startOfWeek.getTime() + 6*this.ONE_DAY_MS);

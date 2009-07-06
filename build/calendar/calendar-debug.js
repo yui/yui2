@@ -946,8 +946,7 @@ YAHOO.widget.DateMath = {
 			startOfWeek = this.getFirstDayOfWeek(targetDate, firstDayOfWeek);
 		}
 
-		var startYear = startOfWeek.getFullYear(),
-			startTime = startOfWeek.getTime();
+		var startYear = startOfWeek.getFullYear();
 
 		// DST shouldn't be a problem here, math is quicker than setDate();
 		endOfWeek = new Date(startOfWeek.getTime() + 6*this.ONE_DAY_MS);
@@ -1084,7 +1083,6 @@ YAHOO.widget.DateMath = {
 		return dt;
 	}
 };
-
 /**
 * The Calendar component is a UI control that enables users to choose one or more dates from a graphical calendar presented in a one-month or
 * multi-month interface. Calendars are generated entirely via script and can be navigated without any page refreshes.
@@ -1252,14 +1250,22 @@ Calendar.MEDIUM = "medium";
 Calendar.ONE_CHAR = "1char";
 
 /**
-* The set of default Config property keys and values for the Calendar
-* @property YAHOO.widget.Calendar._DEFAULT_CONFIG
-* @final
+* The set of default Config property keys and values for the Calendar.
+* 
+* <p>
+* NOTE: This property is made public in order to allow users to change 
+* the default values of configuration properties. Users should not 
+* modify the key string, unless they are overriding the Calendar implementation
+* </p>
+* 
+* @property YAHOO.widget.Calendar.DEFAULT_CONFIG
 * @static
-* @private
-* @type Object
+* @type Object An object with key/value pairs, the key being the 
+* uppercase configuration property name and the value being an objec 
+* literal with a key string property, and a value property, specifying the 
+* default value of the property 
 */
-Calendar._DEFAULT_CONFIG = {
+Calendar.DEFAULT_CONFIG = {
 	// Default values for pagedate and selected are not class level constants - they are set during instance creation 
 	PAGEDATE : {key:"pagedate", value:null},
 	SELECTED : {key:"selected", value:null},
@@ -1310,7 +1316,18 @@ Calendar._DEFAULT_CONFIG = {
 	}
 };
 
-var DEF_CFG = Calendar._DEFAULT_CONFIG;
+/**
+* The set of default Config property keys and values for the Calendar
+* @property YAHOO.widget.Calendar._DEFAULT_CONFIG
+* @deprecated Made public. See the public DEFAULT_CONFIG property for details
+* @final
+* @static
+* @private
+* @type Object
+*/
+Calendar._DEFAULT_CONFIG = Calendar.DEFAULT_CONFIG;
+
+var DEF_CFG = Calendar.DEFAULT_CONFIG;
 
 /**
 * The set of Custom Event types supported by the Calendar
@@ -1346,13 +1363,11 @@ Calendar._EVENT_TYPES = {
 
 /**
 * The set of default style constants for the Calendar
-* @property YAHOO.widget.Calendar._STYLES
-* @final
+* @property YAHOO.widget.Calendar.STYLES
 * @static
-* @private
-* @type Object
+* @type Object An object with name/value pairs for the class name identifier/value.
 */
-Calendar._STYLES = {
+Calendar.STYLES = {
 	CSS_ROW_HEADER: "calrowhead",
 	CSS_ROW_FOOTER: "calrowfoot",
 	CSS_CELL : "calcell",
@@ -1384,8 +1399,22 @@ Calendar._STYLES = {
 	CSS_CELL_HIGHLIGHT1 : "highlight1",
 	CSS_CELL_HIGHLIGHT2 : "highlight2",
 	CSS_CELL_HIGHLIGHT3 : "highlight3",
-	CSS_CELL_HIGHLIGHT4 : "highlight4"
+	CSS_CELL_HIGHLIGHT4 : "highlight4",
+	CSS_WITH_TITLE: "withtitle",
+	CSS_FIXED_SIZE: "fixedsize",
+	CSS_LINK_CLOSE: "link-close"
 };
+
+/**
+* The set of default style constants for the Calendar
+* @property YAHOO.widget.Calendar._STYLES
+* @deprecated Made public. See the public STYLES property for details
+* @final
+* @static
+* @private
+* @type Object
+*/
+Calendar._STYLES = Calendar.STYLES;
 
 Calendar.prototype = {
 
@@ -1651,7 +1680,7 @@ Calendar.prototype = {
 							Dom.setStyle(this.iframe, "opacity", "0");
 	
 							if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
-								Dom.addClass(this.iframe, "fixedsize");
+								Dom.addClass(this.iframe, this.Style.CSS_FIXED_SIZE);
 							}
 	
 							this.oDomContainer.insertBefore(this.iframe, this.oDomContainer.firstChild);
@@ -2592,7 +2621,7 @@ Calendar.prototype = {
 	*/
 	initStyles : function() {
 
-		var defStyle = Calendar._STYLES;
+		var defStyle = Calendar.STYLES;
 
 		this.Style = {
 			/**
@@ -2722,7 +2751,19 @@ Calendar.prototype = {
 			/**
 			* @property Style.CSS_CELL_HIGHLIGHT4
 			*/
-			CSS_CELL_HIGHLIGHT4 : defStyle.CSS_CELL_HIGHLIGHT4
+			CSS_CELL_HIGHLIGHT4 : defStyle.CSS_CELL_HIGHLIGHT4,
+			/**
+			 * @property Style.CSS_WITH_TITLE
+			 */
+			CSS_WITH_TITLE : defStyle.CSS_WITH_TITLE,
+             /**
+             * @property Style.CSS_FIXED_SIZE
+             */
+            CSS_FIXED_SIZE : defStyle.CSS_FIXED_SIZE,
+             /**
+             * @property Style.CSS_LINK_CLOSE
+             */
+            CSS_LINK_CLOSE : defStyle.CSS_LINK_CLOSE
 		};
 	},
 
@@ -2779,7 +2820,7 @@ Calendar.prototype = {
 		tDiv.innerHTML = strTitle;
 		this.oDomContainer.insertBefore(tDiv, this.oDomContainer.firstChild);
 	
-		Dom.addClass(this.oDomContainer, "withtitle");
+		Dom.addClass(this.oDomContainer, this.Style.CSS_WITH_TITLE);
 	
 		return tDiv;
 	},
@@ -2795,7 +2836,7 @@ Calendar.prototype = {
 			Event.purgeElement(tDiv);
 			this.oDomContainer.removeChild(tDiv);
 		}
-		Dom.removeClass(this.oDomContainer, "withtitle");
+		Dom.removeClass(this.oDomContainer, this.Style.CSS_WITH_TITLE);
 	},
 	
 	/**
@@ -2806,8 +2847,10 @@ Calendar.prototype = {
 	 */
 	createCloseButton : function() {
 		var cssClose = YAHOO.widget.CalendarGroup.CSS_2UPCLOSE,
+		    cssLinkClose = this.Style.CSS_LINK_CLOSE,
 			DEPR_CLOSE_PATH = "us/my/bn/x_d.gif",
-			lnk = Dom.getElementsByClassName("link-close", "a", this.oDomContainer)[0],
+			
+			lnk = Dom.getElementsByClassName(cssLinkClose, "a", this.oDomContainer)[0],
 			strings = this.cfg.getProperty(DEF_CFG.STRINGS.key),
 			closeStr = (strings && strings.close) ? strings.close : "";
 
@@ -2820,7 +2863,7 @@ Calendar.prototype = {
 		}
 
 		lnk.href = "#";
-		lnk.className = "link-close";
+		lnk.className = cssLinkClose;
 
 		if (Calendar.IMG_ROOT !== null) {
 			var img = Dom.getElementsByClassName(cssClose, "img", lnk)[0] || document.createElement("img");
@@ -2841,7 +2884,7 @@ Calendar.prototype = {
 	 * @method removeCloseButton
 	 */
 	removeCloseButton : function() {
-		var btn = Dom.getElementsByClassName("link-close", "a", this.oDomContainer)[0] || null;
+		var btn = Dom.getElementsByClassName(this.Style.CSS_LINK_CLOSE, "a", this.oDomContainer)[0] || null;
 		if (btn) {
 			Event.purgeElement(btn);
 			this.oDomContainer.removeChild(btn);
@@ -2951,7 +2994,7 @@ Calendar.prototype = {
 		}
 
 		for(var i=0;i < this.Locale.LOCALE_WEEKDAYS.length; ++i) {
-			html[html.length] = '<th class="calweekdaycell">' + this.Locale.LOCALE_WEEKDAYS[i] + '</th>';
+			html[html.length] = '<th class="' + this.Style.CSS_WEEKDAY_CELL + '">' + this.Locale.LOCALE_WEEKDAYS[i] + '</th>';
 		}
 
 		if (this.cfg.getProperty(DEF_CFG.SHOW_WEEK_FOOTER.key)) {
@@ -3416,7 +3459,7 @@ Calendar.prototype = {
 		cell.innerHTML = workingDate.getDate();
 		return Calendar.STOP_RENDER;
 	},
-	
+
 	/**
 	* Renders the row header for a week.
 	* @method renderRowHeader
@@ -3424,10 +3467,10 @@ Calendar.prototype = {
 	* @param {Array}	cell	The current working HTML array
 	*/
 	renderRowHeader : function(weekNum, html) {
-		html[html.length] = '<th class="calrowhead">' + weekNum + '</th>';
+		html[html.length] = '<th class="' + this.Style.CSS_ROW_HEADER + '">' + weekNum + '</th>';
 		return html;
 	},
-	
+
 	/**
 	* Renders the row footer for a week.
 	* @method renderRowFooter
@@ -3435,7 +3478,7 @@ Calendar.prototype = {
 	* @param {Array}	cell	The current working HTML array
 	*/
 	renderRowFooter : function(weekNum, html) {
-		html[html.length] = '<th class="calrowfoot">' + weekNum + '</th>';
+		html[html.length] = '<th class="' + this.Style.CSS_ROW_FOOTER + '">' + weekNum + '</th>';
 		return html;
 	},
 	
@@ -3512,7 +3555,7 @@ Calendar.prototype = {
 	renderCellStyleToday : function(workingDate, cell) {
 		Dom.addClass(cell, this.Style.CSS_CELL_TODAY);
 	},
-	
+
 	/**
 	* Applies the default style used for rendering selected dates to the current calendar cell
 	* @method renderCellStyleSelected
@@ -4479,7 +4522,7 @@ Calendar.prototype = {
 			Event.purgeElement(cal.oDomContainer, true);
 
 			// Generated markup/DOM - Not removing the container DIV since we didn't create it.
-			Dom.removeClass(cal.oDomContainer, "withtitle");
+			Dom.removeClass(cal.oDomContainer, cal.Style.CSS_WITH_TITLE);
 			Dom.removeClass(cal.oDomContainer, cal.Style.CSS_CONTAINER);
 			Dom.removeClass(cal.oDomContainer, cal.Style.CSS_SINGLE);
 			cal.oDomContainer.innerHTML = "";
@@ -4506,7 +4549,6 @@ YAHOO.widget.Calendar_Core = YAHOO.widget.Calendar;
 YAHOO.widget.Cal_Core = YAHOO.widget.Calendar;
 
 })();
-
 (function() {
 
 	var Dom = YAHOO.util.Dom,
@@ -4564,17 +4606,34 @@ function CalendarGroup(id, containerId, config) {
 }
 
 /**
+* The set of default Config property keys and values for the CalendarGroup.
+* 
+* <p>
+* NOTE: This property is made public in order to allow users to change 
+* the default values of configuration properties. Users should not 
+* modify the key string, unless they are overriding the Calendar implementation
+* </p>
+*
+* @property YAHOO.widget.CalendarGroup.DEFAULT_CONFIG
+* @static
+* @type Object An object with key/value pairs, the key being the 
+* uppercase configuration property name and the value being an objec 
+* literal with a key string property, and a value property, specifying the 
+* default value of the property 
+*/
+
+/**
 * The set of default Config property keys and values for the CalendarGroup
 * @property YAHOO.widget.CalendarGroup._DEFAULT_CONFIG
-* @final
-* @static
+* @deprecated Made public. See the public DEFAULT_CONFIG property for details
 * @private
+* @static
 * @type Object
 */
-CalendarGroup._DEFAULT_CONFIG = Calendar._DEFAULT_CONFIG;
-CalendarGroup._DEFAULT_CONFIG.PAGES = {key:"pages", value:2};
+CalendarGroup.DEFAULT_CONFIG = CalendarGroup._DEFAULT_CONFIG = Calendar.DEFAULT_CONFIG;
+CalendarGroup.DEFAULT_CONFIG.PAGES = {key:"pages", value:2};
 
-var DEF_CFG = CalendarGroup._DEFAULT_CONFIG;
+var DEF_CFG = CalendarGroup.DEFAULT_CONFIG;
 
 CalendarGroup.prototype = {
 
@@ -5922,7 +5981,6 @@ YAHOO.extend(YAHOO.widget.Calendar2up, CalendarGroup);
 YAHOO.widget.Cal2up = YAHOO.widget.Calendar2up;
 
 })();
-
 /**
  * The CalendarNavigator is used along with a Calendar/CalendarGroup to 
  * provide a Month/Year popup navigation control, allowing the user to navigate 
@@ -6056,12 +6114,11 @@ YAHOO.widget.CalendarNavigator = function(cal) {
 	 * <dt>monthFormat</dt><dd><em>String</em> : The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT. Defaults to YAHOO.widget.Calendar.LONG</dd>
 	 * <dt>initialFocus</dt><dd><em>String</em> : Either "year" or "month" specifying which input control should get initial focus. Defaults to "year"</dd>
 	 * </dl>
-	 * @property _DEFAULT_CFG
-	 * @protected
+	 * @property DEFAULT_CONFIG
 	 * @type Object
 	 * @static
 	 */
-	CN._DEFAULT_CFG = {
+	CN.DEFAULT_CONFIG = {
 		strings : {
 			month: "Month",
 			year: "Year",
@@ -6072,6 +6129,17 @@ YAHOO.widget.CalendarNavigator = function(cal) {
 		monthFormat: YAHOO.widget.Calendar.LONG,
 		initialFocus: "year"
 	};
+	
+    /**
+     * Object literal containing the default configuration values for the CalendarNavigator
+     * @property _DEFAULT_CFG
+     * @protected
+     * @deprecated Made public. See the public DEFAULT_CONFIG property
+     * @type Object
+     * @static
+     */
+	CN._DEFAULT_CFG = CN.DEFAULT_CONFIG;
+
 
 	/**
 	 * The suffix added to the Calendar/CalendarGroup's ID, to generate
@@ -7141,7 +7209,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * the parent Calendar/CalendarGroup's config value.
 	 * <p>
 	 * If it has not been set in the user provided configuration, the method will 
-	 * return the default value of the configuration property, as set in _DEFAULT_CFG
+	 * return the default value of the configuration property, as set in DEFAULT_CONFIG
 	 * </p>
 	 * @private
 	 * @method __getCfg
@@ -7150,7 +7218,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @return The value of the configuration property
 	 */
 	__getCfg : function(prop, bIsStr) {
-		var DEF_CFG = YAHOO.widget.CalendarNavigator._DEFAULT_CFG;
+		var DEF_CFG = YAHOO.widget.CalendarNavigator.DEFAULT_CONFIG;
 		var cfg = this.cal.cfg.getProperty("navigator");
 
 		if (bIsStr) {
@@ -7168,5 +7236,4 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	__isMac : (navigator.userAgent.toLowerCase().indexOf("macintosh") != -1)
 
 };
-
 YAHOO.register("calendar", YAHOO.widget.Calendar, {version: "@VERSION@", build: "@BUILD@"});
