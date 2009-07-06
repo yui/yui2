@@ -1,9 +1,11 @@
 package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.series.ISeries;
+	import com.yahoo.astra.fl.charts.series.CartesianSeries;
 	import com.yahoo.astra.fl.utils.UIComponentUtil;
 	import com.yahoo.astra.utils.NumberUtil;
 	import com.yahoo.astra.fl.charts.CartesianChart;	
+	import com.yahoo.astra.display.BitmapText;
 	
 	import flash.utils.Dictionary;
 	import fl.core.UIComponent;
@@ -196,7 +198,7 @@ package com.yahoo.astra.fl.charts.axes
 		{
 			return this._stackingEnabled;
 		}
-		
+
 		/**
 		 * @private
 		 */
@@ -391,6 +393,7 @@ package com.yahoo.astra.fl.charts.axes
 			_calculateByLabelSize = value;
 		}
 		
+		
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
@@ -477,16 +480,15 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * @inheritDoc
 		 */
-		public function getMaxLabel():String
-		{
+		override public function getMaxLabel():String
+		{			
 			var difference:Number = Math.round(this.maximum - this.minimum);
-			var maxString:String = this.valueToLabel(this.maximum);
-			var minString:String = this.valueToLabel(this.minimum);
+			var maxString:String = this.valueToLabel(this.roundUnit(this.maximum));
+			var minString:String = this.valueToLabel(this.roundUnit(this.minimum));
 			var halfString:String = this.valueToLabel(Math.round(difference/2));
-			var thirdString:String = this.valueToLabel(Math.round(difference/3));
 			if(maxString.length < minString.length) maxString = minString;
 			if(halfString.length > maxString.length) maxString = halfString;
-			if(thirdString.length > maxString.length) maxString = thirdString;
+
 			return maxString as String;	
 		}
 		
@@ -513,13 +515,18 @@ package com.yahoo.astra.fl.charts.axes
 				this._maximum = this._dataMaximum;
 			}
 			
+			
+			
 			this.checkMinLessThanMax();
 			
 			this.pinToOrigin();
 			
 			this.calculateMajorUnit();
-			this.adjustMinAndMaxFromMajorUnit();
-				
+			if(this.order == "primary") 
+			{
+				this.adjustMinAndMaxFromMajorUnit();
+				this.labelData.maxLabels = (this._maximum - this._minimum)/this._majorUnit;
+			}
 			this.correctLogScaleMinimum();
 			
 			//ensure that min != max
@@ -555,52 +562,58 @@ package com.yahoo.astra.fl.charts.axes
 				return;
 			}
 			
+			var difference:Number = this.maximum - this.minimum;
+			var tempMajorUnit:Number = 0; 	
+			if(this.order == "secondary")
+			{
+				this._majorUnit = difference/this.labelData.maxLabels;
+				return;
+			}			
+			
+			
 			var chart:CartesianChart = this.chart as CartesianChart;
 			var labelSpacing:Number = 0;
 			var approxLabelDistance:Number = this.idealPixels;
 			var overflow:Number = 0;
 			if(this.calculateByLabelSize)
 			{
-				var rotation:Number;
-				labelSpacing = this.labelSpacing;
+				var rotation:Number = (this.renderer as UIComponent).getStyle("labelRotation") as Number;
+				labelSpacing = UIComponent(this.renderer).getStyle("labelSpacing") as Number;
 				//Check to see if this axis is horizontal. Since the width of labels will be variable, we will need to apply a different alogrithm to determine the majorUnit.
 				if(chart.horizontalAxis == this)
 				{
 					//extract the approximate width of the labels by getting the textWidth of the maximum date when rendered by the label function with the textFormat of the renderer.
-					approxLabelDistance = this.maxLabelWidth;
-					rotation = chart.getHorizontalAxisStyle("labelRotation") as Number;
+					approxLabelDistance = this.labelData.maxLabelWidth;
+
 					if(rotation == 0 || Math.abs(rotation) == 90)
 					{
-						if(!isNaN(chart.horizontalAxisLabelData.rightLabelOffset)) overflow += chart.horizontalAxisLabelData.rightLabelOffset as Number;
-						if(!isNaN(chart.horizontalAxisLabelData.leftLabelOffset)) overflow += chart.horizontalAxisLabelData.leftLabelOffset as Number;
+						if(!isNaN(this.labelData.rightLabelOffset)) overflow += this.labelData.rightLabelOffset as Number;
+						if(!isNaN(this.labelData.leftLabelOffset)) overflow += this.labelData.leftLabelOffset as Number;
 					}
 					else
 					{
-						if(rotation > 0) overflow += chart.horizontalAxisLabelData.rightLabelOffset as Number;
-						if(rotation < 0) overflow += chart.horizontalAxisLabelData.leftLabelOffset as Number;
+						if(rotation > 0) overflow += this.labelData.rightLabelOffset as Number;
+						if(rotation < 0) overflow += this.labelData.leftLabelOffset as Number;
 					}
 				}
 				else
 				{
-					approxLabelDistance = this.maxLabelHeight;	
-					rotation = chart.getVerticalAxisStyle("labelRotation") as Number;
-					if(rotation == 0 || Math.abs(rotation) ==90)
+					approxLabelDistance = this.labelData.maxLabelHeight;
+					
+					if(rotation == 0 || Math.abs(rotation) == 90)
 					{
-						if(!isNaN(chart.verticalAxisLabelData.topLabelOffset)) overflow = chart.verticalAxisLabelData.topLabelOffset as Number;
+						if(!isNaN(this.labelData.topLabelOffset)) overflow = this.labelData.topLabelOffset as Number;
 					}
 					else
 					{
-						if(rotation < 0) overflow += chart.verticalAxisLabelData.bottomLabelOffset as Number;
-						if(rotation > 0) overflow += chart.verticalAxisLabelData.topLabelOffset as Number;
+						if(rotation < 0) overflow += this.labelData.bottomLabelOffset as Number;
+						if(rotation > 0) overflow += this.labelData.topLabelOffset as Number;
 					}
 				}
 			}
 			
-			var difference:Number = this.maximum - this.minimum;
-			var tempMajorUnit:Number = 0; 
-
-			var maxLabels:Number = ((this.renderer.length + overflow) - labelSpacing)/approxLabelDistance;
-
+			var maxLabels:Number = (this.renderer.length + overflow)/(approxLabelDistance+labelSpacing);
+								
 			if(this.calculateByLabelSize) 
 			{
 				maxLabels = Math.floor(maxLabels);
@@ -610,38 +623,20 @@ package com.yahoo.astra.fl.charts.axes
 					maxLabels -= 1;
 				}
 			}
-			
-			//If set by user, use specified number of labels unless its too many
-			if(this._numLabelsSetByUser)
-			{
-				maxLabels = Math.min(maxLabels, this.numLabels);
-			}
 
 			var ratio:Number = overflow/this.renderer.length;
-			var overflowOffset:Number = Math.round(ratio*difference);
+			var overflowOffset:Number = Math.round((overflow * difference)/this.renderer.length);
 			if(isNaN(overflowOffset)) overflowOffset = 0;
+		
 			tempMajorUnit = (difference + overflowOffset)/maxLabels;	
 
-			if(!this.calculateByLabelSize)
+			if(this.roundMajorUnit)
 			{
-				tempMajorUnit = this.niceNumber(tempMajorUnit);			
+				tempMajorUnit = this.roundUnit(tempMajorUnit);
+				this.labelData.maxLabels = (difference/tempMajorUnit);
 			}
-			else if(this.roundMajorUnit)
-			{
-				var order:Number = Math.ceil(Math.log(tempMajorUnit) * Math.LOG10E);
-				var roundedMajorUnit:Number = Math.pow(10, order);
 
-				if (roundedMajorUnit / 2 >= tempMajorUnit) 
-				{
-					var roundedDiff:Number = Math.floor((roundedMajorUnit / 2 - tempMajorUnit) / (Math.pow(10,order-1)/2));
-				 	tempMajorUnit = roundedMajorUnit/2 - roundedDiff*Math.pow(10,order-1)/2;
-				}
-				else 
-				{
-					tempMajorUnit = roundedMajorUnit;
-				}
-			}
-			if(!isNaN(tempMajorUnit)) this._majorUnit = tempMajorUnit;										
+			this._majorUnit = tempMajorUnit;										
 		}
 
 		/**
@@ -660,15 +655,7 @@ package com.yahoo.astra.fl.charts.axes
 
 			if(this._majorUnit != 1)
 			{
-				if(this._majorUnit % 2 == 0)
-				{
-					this._minorUnit = this._majorUnit / 2;
-				}
-				else if(this._majorUnit % 3 == 0)
-				{
-					this._minorUnit = this._majorUnit / 3;
-				}
-				else this._minorUnit = 0;
+				this._minorUnit = this._majorUnit / 2;
 			}
 		}
 		
@@ -812,54 +799,6 @@ package com.yahoo.astra.fl.charts.axes
 				}
 			}
 		}
-
-		/**
-		 * @private
-		 * Calculates a "nice" number for use with major or minor units
-		 * on the axis. Only returns numbers similar to 10, 20, 25, and 50.
-		 */
-		private function niceNumber(value:Number):Number
-		{
-			if(value == 0)
-			{
-				return 0;
-			}
-			
-			var count:int = 0;
-			while(value > 10.0e-8)
-			{
-				value /= 10;
-				count++;
-			}
-
-			//all that division in the while loop up there
-			//could cause rounding errors. Don't you hate that?
-			value = NumberUtil.roundToPrecision(value, 10);
-
-		    if(value > 4.0e-8)
-		    {
-		        value = 5.0e-8;
-		    }
-		    else if(value > 2.0e-8)
-		    {
-		        value = 2.5e-8;
-		    }
-		    else if(value > 1.0e-8)
-		    {
-		        value = 2.0e-8;
-		    }
-		    else
-		    {
-		        value = 1.0e-8;
-		    }
-					
-		    for(var i:int = count; i > 0; i--)
-		    {
-		    	value *= 10;
-		    }
-		
-		    return value;
-		}
 		
 		/**
 		 * @private
@@ -911,6 +850,7 @@ package com.yahoo.astra.fl.charts.axes
 			for(var i:int = 0; i < seriesCount; i++)
 			{
 				var series:ISeries = this.dataProvider[i] as ISeries;
+				if((series as CartesianSeries).axis != this.order) continue;
 				var seriesLength:int = series.length;
 				for(var j:int = 0; j < seriesLength; j++)
 				{
@@ -945,7 +885,7 @@ package com.yahoo.astra.fl.charts.axes
 				this._dataMinimum = 0;
 				this._dataMaximum = 1;
 			}
-			
+		
 			if(!this._minimumSetByUser)
 			{
 				this._minimum = this._dataMinimum;
@@ -953,7 +893,36 @@ package com.yahoo.astra.fl.charts.axes
 			if(!this._maximumSetByUser)
 			{
 				this._maximum = this._dataMaximum;
-			}												
-		}		
+			}	
+					
+			super.parseDataProvider();											
+		}
+		
+		/**
+		 * @private
+		 * Rounds a number to a nice size
+		 */
+		private function roundUnit(unit:Number):Number
+		{
+			if(unit < 0)
+			{
+				return this.roundUnit(Math.abs(unit)) * -1;
+			}
+			
+			var order:Number = Math.ceil(Math.log(unit) * Math.LOG10E);
+			var roundedMajorUnit:Number = Math.pow(10, order);
+			
+			if (roundedMajorUnit / 2 >= unit) 
+			{
+				var roundedDiff:Number = Math.floor((roundedMajorUnit / 2 - unit)/(Math.pow(10,order-1)/2));
+			 	unit = roundedMajorUnit/2 - roundedDiff * Math.pow(10, order - 1)/2;
+			}
+			else 
+			{
+				unit = roundedMajorUnit;
+			}			
+			return unit;
+		}
+		
 	}
 }

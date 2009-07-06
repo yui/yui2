@@ -546,13 +546,13 @@ YAHOO.widget.AutoComplete.prototype.getContainerEl = function() {
 };
 
  /**
- * Returns true if widget instance is currently focused.
+ * Returns true if widget instance is currently active.
  *
  * @method isFocused
- * @return {Boolean} Returns true if widget instance is currently focused.
+ * @return {Boolean} Returns true if widget instance is currently active.
  */
 YAHOO.widget.AutoComplete.prototype.isFocused = function() {
-    return (this._bFocused === null) ? false : this._bFocused;
+    return this._bFocused;
 };
 
  /**
@@ -731,8 +731,8 @@ YAHOO.widget.AutoComplete.prototype.generateRequest = function(sQuery) {
  * @param sQuery {String} Query string.
  */
 YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
-    // Reset focus for a new interaction
-    this._bFocused = null;
+    // Activate focus for a new interaction
+    this._bFocused = true;
     
     // Adjust programatically sent queries to look like they were input by user
     // when delimiters are enabled
@@ -849,13 +849,13 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
         var oAC = oCallback.scope,
             oDS = this,
             allResults = oParsedResponse.results, // the array of results
-            filteredResults = [], // container for filtered results
-            bMatchFound = false,
+            filteredResults = [], // container for filtered results,
+            nMax = oAC.maxResultsDisplayed, // max to find
             bMatchCase = (oDS.queryMatchCase || oAC.queryMatchCase), // backward compat
             bMatchContains = (oDS.queryMatchContains || oAC.queryMatchContains); // backward compat
             
         // Loop through each result object...
-        for(var i = allResults.length-1; i >= 0; i--) {
+        for(var i=0, len=allResults.length; i<len; i++) {
             var oResult = allResults[i];
 
             // Grab the data to match against from the result object...
@@ -891,8 +891,13 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
                 // A CONTAINS match is when the query is found anywhere within the key string...
                 (bMatchContains && (sKeyIndex > -1))) {
                     // Stash the match
-                    filteredResults.unshift(oResult);
+                    filteredResults.push(oResult);
                 }
+            }
+            
+            // Filter no more if maxResultsDisplayed is reached
+            if(len>nMax && filteredResults.length===nMax) {
+                break;
             }
         }
         oParsedResponse.results = filteredResults;
@@ -1282,14 +1287,14 @@ YAHOO.widget.AutoComplete.prototype._elShadow = null;
 YAHOO.widget.AutoComplete.prototype._elIFrame = null;
 
 /**
- * Whether or not the input field is currently in focus. If query results come back
+ * Whether or not the widget instance is currently active. If query results come back
  * but the user has already moved on, do not proceed with auto complete behavior.
  *
  * @property _bFocused
  * @type Boolean
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._bFocused = null;
+YAHOO.widget.AutoComplete.prototype._bFocused = false;
 
 /**
  * Animation instance for container expand/collapse.
@@ -1788,9 +1793,8 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
     if(ok && !oResponse.error) {
         this.dataReturnEvent.fire(this, sQuery, oResponse.results);
         
-        // Continue only if instance is still focused (i.e., user hasn't already moved on)
-        // Null indicates initialized state, which is ok too
-        if(this._bFocused || (this._bFocused === null)) {
+        // Continue only if instance is still active (i.e., user hasn't already moved on)
+        if(this._bFocused) {
             
             //TODO: is this still necessary?
             /*var isOpera = (YAHOO.env.ua.opera);

@@ -119,7 +119,8 @@
 			
 			//grab the axes
 			var cartesianChart:CartesianChart = this.chart as CartesianChart;
-			var valueAxis:IOriginAxis = cartesianChart.horizontalAxis as IOriginAxis;
+			var xAxis:String = this.axis == "primary" ? "horizontalAxis" : "secondaryHorizontalAxis";
+			var valueAxis:IOriginAxis = cartesianChart[xAxis] as IOriginAxis;			
 			var otherAxis:IAxis = cartesianChart.verticalAxis;
 			if(!valueAxis)
 			{
