@@ -1778,6 +1778,8 @@ Calendar.prototype = {
 		/**
 		* Fired when the Calendar page is changed
 		* @event changePageEvent
+		* @param {Date} prevDate The date before the page was changed
+		* @param {Date} newDate The date after the page was changed
 		*/
 		cal.changePageEvent = new CE(defEvents.CHANGE_PAGE);
 	
@@ -3602,7 +3604,7 @@ Calendar.prototype = {
 	// END BUILT-IN TABLE CELL RENDERERS
 	
 	// BEGIN MONTH NAVIGATION METHODS
-	
+
 	/**
 	* Adds the designated number of months to the current calendar month, and sets the current
 	* calendar page date to the new month.
@@ -3610,12 +3612,16 @@ Calendar.prototype = {
 	* @param {Number}	count	The number of months to add to the current calendar
 	*/
 	addMonths : function(count) {
-		var cfgPageDate = DEF_CFG.PAGEDATE.key;
-		this.cfg.setProperty(cfgPageDate, DateMath.add(this.cfg.getProperty(cfgPageDate), DateMath.MONTH, count));
+		var cfgPageDate = DEF_CFG.PAGEDATE.key,
+
+		prevDate = this.cfg.getProperty(cfgPageDate),
+		newDate = DateMath.add(prevDate, DateMath.MONTH, count);
+
+		this.cfg.setProperty(cfgPageDate, newDate);
 		this.resetRenderers();
-		this.changePageEvent.fire();
+		this.changePageEvent.fire(prevDate, newDate);
 	},
-	
+
 	/**
 	* Subtracts the designated number of months from the current calendar month, and sets the current
 	* calendar page date to the new month.
@@ -3623,10 +3629,7 @@ Calendar.prototype = {
 	* @param {Number}	count	The number of months to subtract from the current calendar
 	*/
 	subtractMonths : function(count) {
-		var cfgPageDate = DEF_CFG.PAGEDATE.key;
-		this.cfg.setProperty(cfgPageDate, DateMath.subtract(this.cfg.getProperty(cfgPageDate), DateMath.MONTH, count));
-		this.resetRenderers();
-		this.changePageEvent.fire();
+		this.addMonths(-1*count);
 	},
 
 	/**
@@ -3636,12 +3639,16 @@ Calendar.prototype = {
 	* @param {Number}	count	The number of years to add to the current calendar
 	*/
 	addYears : function(count) {
-		var cfgPageDate = DEF_CFG.PAGEDATE.key;
-		this.cfg.setProperty(cfgPageDate, DateMath.add(this.cfg.getProperty(cfgPageDate), DateMath.YEAR, count));
+		var cfgPageDate = DEF_CFG.PAGEDATE.key,
+
+		prevDate = this.cfg.getProperty(cfgPageDate),
+		newDate = DateMath.add(prevDate, DateMath.YEAR, count);
+
+		this.cfg.setProperty(cfgPageDate, newDate);
 		this.resetRenderers();
-		this.changePageEvent.fire();
+		this.changePageEvent.fire(prevDate, newDate);
 	},
-	
+
 	/**
 	* Subtcats the designated number of years from the current calendar, and sets the current
 	* calendar page date to the new month.
@@ -3649,12 +3656,9 @@ Calendar.prototype = {
 	* @param {Number}	count	The number of years to subtract from the current calendar
 	*/
 	subtractYears : function(count) {
-		var cfgPageDate = DEF_CFG.PAGEDATE.key;
-		this.cfg.setProperty(cfgPageDate, DateMath.subtract(this.cfg.getProperty(cfgPageDate), DateMath.YEAR, count));
-		this.resetRenderers();
-		this.changePageEvent.fire();
+		this.addYears(-1*count);
 	},
-	
+
 	/**
 	* Navigates to the next month page in the calendar widget.
 	* @method nextMonth
@@ -3668,7 +3672,7 @@ Calendar.prototype = {
 	* @method previousMonth
 	*/
 	previousMonth : function() {
-		this.subtractMonths(1);
+		this.addMonths(-1);
 	},
 	
 	/**
@@ -3684,9 +3688,9 @@ Calendar.prototype = {
 	* @method previousYear
 	*/
 	previousYear : function() {
-		this.subtractYears(1);
+		this.addYears(-1);
 	},
-	
+
 	// END MONTH NAVIGATION METHODS
 	
 	// BEGIN SELECTION METHODS

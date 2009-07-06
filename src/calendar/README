@@ -21,6 +21,25 @@ Calendar Release Notes
   where the customization introduces additional tables to the default 
   calendar markup.
 
++ Added prevDate and newDate arguments to the changePage event. These
+  are accessible through the arguments array (as with all custom events
+  created using the default LIST signature):
+
+  e.g:
+
+  changePageEvent.subscribe(function(type, args) {
+
+    var prevDate = args[0];
+    var newDate = args[1];
+
+    if (YAHOO.widget.DateMath.before(newDate, prevDate) {
+       // Moving back in time 
+    } else {
+       // Moving forward in time
+    }
+
+  });
+
 *** version 2.7.0 ***
 
 + Fixed CalendarGroup page construction, so that the intial pagedate for 
