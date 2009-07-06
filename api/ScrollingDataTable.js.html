@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                        <div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
 <span class="k">var</span> <span class="nx">lang</span>   <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
     <span class="nx">util</span>   <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">,</span>
@@ -1084,6 +1084,8 @@
 <span class="nx">setColumnWidth</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">,</span> <span class="nx">nWidth</span><span class="o">)</span> <span class="o">{</span>
     <span class="nx">oColumn</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getColumn</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">);</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">oColumn</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_storeScrollPositions</span><span class="o">();</span>
+
         <span class="c">// Validate new width against minWidth</span>
 <span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">nWidth</span><span class="o">))</span> <span class="o">{</span>
             <span class="nx">nWidth</span> <span class="o">=</span> <span class="o">(</span><span class="nx">nWidth</span> <span class="o">&gt;</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">minWidth</span><span class="o">)</span> <span class="o">?</span> <span class="nx">nWidth</span> <span class="o">:</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">minWidth</span><span class="o">;</span>
@@ -1288,6 +1290,7 @@
 
 <span class="o">})();</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>
