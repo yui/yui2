@@ -1141,9 +1141,9 @@
                 <span class="nx">nOptions</span><span class="o">,</span>
                 <span class="nx">aValues</span><span class="o">,</span>
                 <span class="nx">oOption</span><span class="o">,</span>
-                <span class="nx">sValue</span><span class="o">,</span>
                 <span class="nx">oRadio</span><span class="o">,</span>
                 <span class="nx">oCheckbox</span><span class="o">,</span>
+                <span class="nx">valueAttr</span><span class="o">,</span>
                 <span class="nx">i</span><span class="o">,</span>
                 <span class="nx">n</span><span class="o">;</span>    
     
@@ -1203,13 +1203,9 @@
     
                                     <span class="k">for</span> <span class="o">(</span><span class="nx">n</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">n</span> <span class="o">&lt;</span> <span class="nx">nOptions</span><span class="o">;</span> <span class="nx">n</span><span class="o">++)</span> <span class="o">{</span>
                                         <span class="nx">oOption</span> <span class="o">=</span> <span class="nx">aOptions</span><span class="o">[</span><span class="nx">n</span><span class="o">];</span>
-    
                                         <span class="k">if</span> <span class="o">(</span><span class="nx">oOption</span><span class="o">.</span><span class="nx">selected</span><span class="o">)</span> <span class="o">{</span>
-                                            <span class="nx">sValue</span> <span class="o">=</span> <span class="nx">oOption</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
-                                            <span class="k">if</span> <span class="o">(!</span><span class="nx">sValue</span> <span class="o">||</span> <span class="nx">sValue</span> <span class="o">===</span> <span class="s2">&quot;&quot;</span><span class="o">)</span> <span class="o">{</span>
-                                                <span class="nx">sValue</span> <span class="o">=</span> <span class="nx">oOption</span><span class="o">.</span><span class="nx">text</span><span class="o">;</span>
-                                            <span class="o">}</span>
-                                            <span class="nx">aValues</span><span class="o">[</span><span class="nx">aValues</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">sValue</span><span class="o">;</span>
+                                            <span class="nx">valueAttr</span> <span class="o">=</span> <span class="nx">oOption</span><span class="o">.</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">value</span><span class="o">;</span>
+                                            <span class="nx">aValues</span><span class="o">[</span><span class="nx">aValues</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="nx">valueAttr</span> <span class="o">&amp;&amp;</span> <span class="nx">valueAttr</span><span class="o">.</span><span class="nx">specified</span><span class="o">)</span> <span class="o">?</span> <span class="nx">oOption</span><span class="o">.</span><span class="nx">value</span> <span class="o">:</span> <span class="nx">oOption</span><span class="o">.</span><span class="nx">text</span><span class="o">;</span>
                                         <span class="o">}</span>
                                     <span class="o">}</span>
                                     <span class="nx">oData</span><span class="o">[</span><span class="nx">sName</span><span class="o">]</span> <span class="o">=</span> <span class="nx">aValues</span><span class="o">;</span>
