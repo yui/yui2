@@ -222,17 +222,18 @@ YAHOO.env.ua = function() {
     YAHOO.namespace("util", "widget", "example");
     /*global YAHOO_config*/
     if ("undefined" !== typeof YAHOO_config) {
-        var l=YAHOO_config.listener,ls=YAHOO.env.listeners,unique=true,i;
+        var l=YAHOO_config.listener, ls=YAHOO.env.listeners,unique=true, i;
         if (l) {
             // if YAHOO is loaded multiple times we need to check to see if
             // this is a new config object.  If it is, add the new component
             // load listener to the stack
-            for (i=0;i<ls.length;i=i+1) {
-                if (ls[i]==l) {
-                    unique=false;
+            for (i=0; i<ls.length; i++) {
+                if (ls[i] == l) {
+                    unique = false;
                     break;
                 }
             }
+
             if (unique) {
                 ls.push(l);
             }
