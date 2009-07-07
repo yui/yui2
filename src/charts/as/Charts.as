@@ -618,6 +618,7 @@ package
 					}
 					break;
 				case "font":
+					if(value.color) value.color = this.parseColor(value.color);
 					var textFormat:TextFormat = TextFormatSerializer.readTextFormat(value);
 					this.chart.setStyle("textFormat", textFormat);
 					break;
@@ -861,6 +862,7 @@ package
 								{
 									this.log("The style " + styleName + " is only supported by series of type 'pie'.", LoggerCategory.WARN);
 								}
+								if(style.font.color) style.font.color = this.parseColor(style.font.color); 
 								UIComponent(series).setStyle("textFormat", TextFormatSerializer.readTextFormat(style.font))
 								break;	
 							case "visibility":
@@ -1181,6 +1183,7 @@ package
 			
 			if(styles.font)
 			{
+				if(styles.font.color) styles.font.color = this.parseColor(styles.font.color);
 				var textFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.font);
 				this.chart.setStyle("dataTipTextFormat", textFormat);
 			}
@@ -1246,6 +1249,7 @@ package
 			
 			if(styles.titleFont != null)
 			{
+				if(styles.titleFont.color) styles.titleFont.color = this.parseColor(styles.titleFont.color);
 				var titleTextFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.titleFont);
 				cartesianChart.setComplexStyle(axisStyle, "titleTextFormat", titleTextFormat);			
 			}
@@ -1347,6 +1351,7 @@ package
 		{
 			if(styles.font)
 			{
+				if(styles.font.color) styles.font.color = this.parseColor(styles.font.color); 
 				var textFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.font);
 				this.legend.setStyle("textFormat", textFormat);
 			}
