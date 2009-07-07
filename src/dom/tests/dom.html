@@ -552,6 +552,11 @@
 
                 Assert.areEqual('foo', el.htmlFor, "Y.Dom.setAttribute(el, 'for', 'foo')");
                 Assert.areEqual('bar', el.className, "Y.Dom.setAttribute(el, 'class', 'bar')");
+
+                el = document.body.appendChild(document.createElement('input'));
+                Y.Dom.setAttribute(el, 'type', 'text');
+                Assert.areEqual('text', Y.Dom.getAttribute(el, 'type'), "Y.Dom.setAttribute(el, 'type', 'text')");
+                el.parentNode.removeChild(el);
             },
 
 

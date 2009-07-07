@@ -77,6 +77,8 @@
             'className': _CLASS
         },
 
+        DOT_ATTRIBUTES: {},
+
         /**
          * Returns an HTMLElement reference.
          * @method get
@@ -1285,8 +1287,12 @@
                 val = args.val;
 
             if (el && el.setAttribute) {
-                attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
-                el.setAttribute(attr, val);
+                if (Y.Dom.DOT_ATTRIBUTES[attr]) {
+                    el[attr] = val;
+                } else {
+                    attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
+                    el.setAttribute(attr, val);
+                }
             } else {
                 YAHOO.log('setAttribute method not available for ' + el, 'error', 'Dom');
             }
@@ -1397,6 +1403,10 @@
             return val;
         };
 
+    }
+
+    if (UA.ie && UA.ie >= 8 && document.documentElement.hasAttribute) { // IE 8 standards
+        Y.Dom.DOT_ATTRIBUTES.type = true; // IE 8 errors on input.setAttribute('type')
     }
 })();
 /**
