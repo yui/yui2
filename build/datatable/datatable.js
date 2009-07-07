@@ -1371,7 +1371,7 @@ if(YAHOO.util.DDProxy) {
             this.setYConstraint(10, 10);            
         },
         _resizeProxy: function() {
-            this.constructor.superclass._resizeProxy.apply(this, arguments);
+            YAHOO.widget.ColumnDD.superclass._resizeProxy.apply(this, arguments);
             var dragEl = this.getDragEl(),
                 el = this.getEl();
 
