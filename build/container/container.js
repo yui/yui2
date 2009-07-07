@@ -8179,9 +8179,9 @@
                 nOptions,
                 aValues,
                 oOption,
-                sValue,
                 oRadio,
                 oCheckbox,
+                valueAttr,
                 i,
                 n;    
     
@@ -8241,13 +8241,9 @@
     
                                     for (n = 0; n < nOptions; n++) {
                                         oOption = aOptions[n];
-    
                                         if (oOption.selected) {
-                                            sValue = oOption.value;
-                                            if (!sValue || sValue === "") {
-                                                sValue = oOption.text;
-                                            }
-                                            aValues[aValues.length] = sValue;
+                                            valueAttr = oOption.attributes.value;
+                                            aValues[aValues.length] = (valueAttr && valueAttr.specified) ? oOption.value : oOption.text;
                                         }
                                     }
                                     oData[sName] = aValues;
