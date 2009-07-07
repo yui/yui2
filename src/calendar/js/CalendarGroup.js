@@ -55,17 +55,34 @@ function CalendarGroup(id, containerId, config) {
 }
 
 /**
+* The set of default Config property keys and values for the CalendarGroup.
+* 
+* <p>
+* NOTE: This property is made public in order to allow users to change 
+* the default values of configuration properties. Users should not 
+* modify the key string, unless they are overriding the Calendar implementation
+* </p>
+*
+* @property YAHOO.widget.CalendarGroup.DEFAULT_CONFIG
+* @static
+* @type Object An object with key/value pairs, the key being the 
+* uppercase configuration property name and the value being an objec 
+* literal with a key string property, and a value property, specifying the 
+* default value of the property 
+*/
+
+/**
 * The set of default Config property keys and values for the CalendarGroup
 * @property YAHOO.widget.CalendarGroup._DEFAULT_CONFIG
-* @final
-* @static
+* @deprecated Made public. See the public DEFAULT_CONFIG property for details
 * @private
+* @static
 * @type Object
 */
-CalendarGroup._DEFAULT_CONFIG = Calendar._DEFAULT_CONFIG;
-CalendarGroup._DEFAULT_CONFIG.PAGES = {key:"pages", value:2};
+CalendarGroup.DEFAULT_CONFIG = CalendarGroup._DEFAULT_CONFIG = Calendar.DEFAULT_CONFIG;
+CalendarGroup.DEFAULT_CONFIG.PAGES = {key:"pages", value:2};
 
-var DEF_CFG = CalendarGroup._DEFAULT_CONFIG;
+var DEF_CFG = CalendarGroup.DEFAULT_CONFIG;
 
 CalendarGroup.prototype = {
 

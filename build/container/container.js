@@ -1501,6 +1501,10 @@
                 oHeader.innerHTML = headerContent;
             }
 
+            if (this._rendered) {
+                this._renderHeader();
+            }
+
             this.changeHeaderEvent.fire(headerContent);
             this.changeContentEvent.fire();
 
@@ -1552,6 +1556,10 @@
                 oBody.innerHTML = bodyContent;
             }
 
+            if (this._rendered) {
+                this._renderBody();
+            }
+
             this.changeBodyEvent.fire(bodyContent);
             this.changeContentEvent.fire();
         },
@@ -1601,6 +1609,10 @@
                 oFooter.appendChild(footerContent);
             } else {
                 oFooter.innerHTML = footerContent;
+            }
+
+            if (this._rendered) {
+                this._renderFooter();
             }
 
             this.changeFooterEvent.fire(footerContent);
@@ -1655,8 +1667,7 @@
         */
         render: function (appendToNode, moduleElement) {
 
-            var me = this,
-                firstChild;
+            var me = this;
 
             function appendTo(parentNode) {
                 if (typeof parentNode == "string") {
@@ -1684,33 +1695,78 @@
                 }
             }
 
+            this._renderHeader(moduleElement);
+            this._renderBody(moduleElement);
+            this._renderFooter(moduleElement);
+
+            this._rendered = true;
+
+            this.renderEvent.fire();
+            return true;
+        },
+
+        /**
+         * Renders the currently set header into it's proper position under the 
+         * module element. If the module element is not provided, "this.element" 
+         * is used.
+         * 
+         * @method _renderHeader
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element
+         */
+        _renderHeader: function(moduleElement){
+            moduleElement = moduleElement || this.element;
+
             // Need to get everything into the DOM if it isn't already
-            if (this.header && ! Dom.inDocument(this.header)) {
+            if (this.header && !Dom.inDocument(this.header)) {
                 // There is a header, but it's not in the DOM yet. Need to add it.
-                firstChild = moduleElement.firstChild;
+                var firstChild = moduleElement.firstChild;
                 if (firstChild) {
                     moduleElement.insertBefore(this.header, firstChild);
                 } else {
                     moduleElement.appendChild(this.header);
                 }
             }
+        },
 
-            if (this.body && ! Dom.inDocument(this.body)) {
-                // There is a body, but it's not in the DOM yet. Need to add it.		
-                if (this.footer && Dom.isAncestor(this.moduleElement, this.footer)) {
+        /**
+         * Renders the currently set body into it's proper position under the 
+         * module element. If the module element is not provided, "this.element" 
+         * is used.
+         * 
+         * @method _renderBody
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element.
+         */
+        _renderBody: function(moduleElement){
+            moduleElement = moduleElement || this.element;
+
+            if (this.body && !Dom.inDocument(this.body)) {
+                // There is a body, but it's not in the DOM yet. Need to add it.
+                if (this.footer && Dom.isAncestor(moduleElement, this.footer)) {
                     moduleElement.insertBefore(this.body, this.footer);
                 } else {
                     moduleElement.appendChild(this.body);
                 }
             }
+        },
 
-            if (this.footer && ! Dom.inDocument(this.footer)) {
+        /**
+         * Renders the currently set footer into it's proper position under the 
+         * module element. If the module element is not provided, "this.element" 
+         * is used.
+         * 
+         * @method _renderFooter
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element
+         */
+        _renderFooter: function(moduleElement){
+            moduleElement = moduleElement || this.element;
+
+            if (this.footer && !Dom.inDocument(this.footer)) {
                 // There is a footer, but it's not in the DOM yet. Need to add it.
                 moduleElement.appendChild(this.footer);
             }
-
-            this.renderEvent.fire();
-            return true;
         },
 
         /**
@@ -6830,6 +6886,13 @@
                 }
 
                 var bDragOnly = (this.cfg.getProperty("dragonly") === true);
+
+                /**
+                 * The YAHOO.util.DD instance, used to implement the draggable header for the panel if draggable is enabled
+                 *
+                 * @property dd
+                 * @type YAHOO.util.DD
+                 */
                 this.dd = new Util.DD(this.element.id, this.id, {dragOnly: bDragOnly});
 
                 if (!this.header.id) {
@@ -7034,10 +7097,49 @@
         * @return {boolean} Success or failure of the render
         */
         render: function (appendToNode) {
+            return Panel.superclass.render.call(this, appendToNode, this.innerElement);
+        },
 
-            return Panel.superclass.render.call(this, 
-                appendToNode, this.innerElement);
+        /**
+         * Renders the currently set header into it's proper position under the 
+         * module element. If the module element is not provided, "this.innerElement" 
+         * is used.
+         *
+         * @method _renderHeader
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element
+         */
+        _renderHeader: function(moduleElement){
+            moduleElement = moduleElement || this.innerElement;
+			Panel.superclass._renderHeader.call(this, moduleElement);
+        },
 
+        /**
+         * Renders the currently set body into it's proper position under the 
+         * module element. If the module element is not provided, "this.innerElement" 
+         * is used.
+         * 
+         * @method _renderBody
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element.
+         */
+        _renderBody: function(moduleElement){
+            moduleElement = moduleElement || this.innerElement;
+            Panel.superclass._renderBody.call(this, moduleElement);
+        },
+
+        /**
+         * Renders the currently set footer into it's proper position under the 
+         * module element. If the module element is not provided, "this.innerElement" 
+         * is used.
+         *
+         * @method _renderFooter
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element
+         */
+        _renderFooter: function(moduleElement){
+            moduleElement = moduleElement || this.innerElement;
+            Panel.superclass._renderFooter.call(this, moduleElement);
         },
         
         /**
@@ -8172,9 +8274,9 @@
                 nOptions,
                 aValues,
                 oOption,
-                sValue,
                 oRadio,
                 oCheckbox,
+                valueAttr,
                 i,
                 n;    
     
@@ -8234,13 +8336,9 @@
     
                                     for (n = 0; n < nOptions; n++) {
                                         oOption = aOptions[n];
-    
                                         if (oOption.selected) {
-                                            sValue = oOption.value;
-                                            if (!sValue || sValue === "") {
-                                                sValue = oOption.text;
-                                            }
-                                            aValues[aValues.length] = sValue;
+                                            valueAttr = oOption.attributes.value;
+                                            aValues[aValues.length] = (valueAttr && valueAttr.specified) ? oOption.value : oOption.text;
                                         }
                                     }
                                     oData[sName] = aValues;

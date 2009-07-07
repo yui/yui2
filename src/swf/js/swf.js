@@ -53,8 +53,8 @@ YAHOO.widget.SWF = function (p_oElement /*:String*/, swfURL /*:String*/, p_oAttr
 					objstring += 'type="' + FLASH_TYPE + '" data="' + flashURL + '" ';
 				}
 				
-                w = Dom.getStyle(oElement, "width");
-				h = Dom.getStyle(oElement, "height");
+                w = "100%";
+				h = "100%";
 				
 				objstring += 'width="' + w + '" height="' + h + '">';
 				

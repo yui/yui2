@@ -86,6 +86,7 @@
             'type': 'js',
             'path': 'calendar/calendar-min.js',
             'requires': ['event', 'dom'],
+            supersedes: ['datemeth'],
             'skinnable': true
         },
 
@@ -155,6 +156,12 @@
             'requires': ['element', 'datasource'],
             'optional': ['calendar', 'dragdrop', 'paginator'],
             'skinnable': true
+        },
+
+        datemath: {
+            'type': 'js',
+            'path': 'datemath/datemath-min.js',
+            'requires': ['yahoo']
         },
 
         'dom': {
