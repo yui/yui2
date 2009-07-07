@@ -1,5 +1,13 @@
 Container Release Notes
 
+*** version 2.8.0 ***
+
+Bug Fixes:
+----------
+
++ setHeader, setBody, setFooter will create the respective section element
+  and add it to the DOM if called after render has already been invoked.
+
 *** version 2.7.0 ***
 
 Changes:
