@@ -1101,15 +1101,20 @@ YAHOO.util.Get = function() {
      * @return {HTMLElement} the generated node
      * @private
      */
-    var _linkNode = function(url, win, charset) {
-        var c = charset || "utf-8";
-        return _node("link", {
-                "id":      "yui__dyn_" + (nidx++),
-                "type":    "text/css",
-                "charset": c,
-                "rel":     "stylesheet",
-                "href":    url
-            }, win);
+    var _linkNode = function(url, win, attributes) {
+
+        var o = {
+            id:   "yui__dyn_" + (nidx++),
+            type: "text/css",
+            rel:  "stylesheet",
+            href: url
+        };
+
+        if (attributes) {
+            lang.augmentObject(o, attributes);
+        }
+
+        return _node("link", o, win);
     };
 
     /**
@@ -1120,14 +1125,18 @@ YAHOO.util.Get = function() {
      * @return {HTMLElement} the generated node
      * @private
      */
-    var _scriptNode = function(url, win, charset) {
-        var c = charset || "utf-8";
-        return _node("script", {
-                "id":      "yui__dyn_" + (nidx++),
-                "type":    "text/javascript",
-                "charset": c,
-                "src":     url
-            }, win);
+    var _scriptNode = function(url, win, attributes) {
+        var o = {
+            id:   "yui__dyn_" + (nidx++),
+            type: "text/javascript",
+            src:  url
+        };
+
+        if (attributes) {
+            lang.augmentObject(o, attributes);
+        }
+
+        return _node("script", o, win);
     };
 
     /**
@@ -1262,7 +1271,7 @@ YAHOO.util.Get = function() {
                 // arbitrary timeout.  It is possible that the browser does
                 // block subsequent script execution in this case for a limited
                 // time.
-                var extra = _scriptNode(null, q.win, q.charset);
+                var extra = _scriptNode(null, q.win, q.attributes);
                 extra.innerHTML='YAHOO.util.Get._finalize("' + id + '");';
                 q.nodes.push(extra); h.appendChild(extra);
 
@@ -1289,9 +1298,9 @@ YAHOO.util.Get = function() {
         }
 
         if (q.type === "script") {
-            n = _scriptNode(url, w, q.charset);
+            n = _scriptNode(url, w, q.attributes);
         } else {
-            n = _linkNode(url, w, q.charset);
+            n = _linkNode(url, w, q.attributes);
         }
 
         // track this node's load progress
@@ -1401,6 +1410,11 @@ YAHOO.util.Get = function() {
         q.scope = q.scope || q.win;
         q.autopurge = ("autopurge" in q) ? q.autopurge : 
                       (type === "script") ? true : false;
+
+        if (opts.charset) {
+            q.attributes = q.attributes || {};
+            q.attributes.charset = opts.charset;
+        }
 
         lang.later(0, q, _next, id);
 
@@ -1659,8 +1673,8 @@ YAHOO.util.Get = function() {
          * <pre>
          * // assumes yahoo, dom, and event are already on the page
          * &nbsp;&nbsp;YAHOO.util.Get.script(
-         * &nbsp;&nbsp;["http://yui.yahooapis.com/2.3.1/build/dragdrop/dragdrop-min.js",
-         * &nbsp;&nbsp;&nbsp;"http://yui.yahooapis.com/2.3.1/build/animation/animation-min.js"], &#123;
+         * &nbsp;&nbsp;["http://yui.yahooapis.com/2.7.0/build/dragdrop/dragdrop-min.js",
+         * &nbsp;&nbsp;&nbsp;"http://yui.yahooapis.com/2.7.0/build/animation/animation-min.js"], &#123;
          * &nbsp;&nbsp;&nbsp;&nbsp;onSuccess: function(o) &#123;
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new YAHOO.util.DDProxy("dd1"); // also new o.reference("dd1"); would work
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log("won't cause error because YAHOO is the scope");
@@ -1722,10 +1736,10 @@ YAHOO.util.Get = function() {
          * <dd>Node charset, default utf-8</dd>
          * </dl>
          * <pre>
-         *      YAHOO.util.Get.css("http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css");
+         *      YAHOO.util.Get.css("http://yui.yahooapis.com/2.7.0/build/menu/assets/skins/sam/menu.css");
          * </pre>
          * <pre>
-         *      YAHOO.util.Get.css(["http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css",
+         *      YAHOO.util.Get.css(["http://yui.yahooapis.com/2.7.0/build/menu/assets/skins/sam/menu.css",
          * </pre>
          * @return {tId: string} an object containing info about the transaction
          */
