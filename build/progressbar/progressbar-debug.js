@@ -459,3 +459,5 @@ developped along version: 2.5.2 of YUI
     
 })();
 YAHOO.register('progressbar',YAHOO.widget.ProgressBar,{version: "2.5.2", build: "0"});
+
+YAHOO.register("progressbar", YAHOO.widget.ProgressBar, {version: "@VERSION@", build: "@BUILD@"});

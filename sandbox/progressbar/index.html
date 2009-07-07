@@ -3,15 +3,15 @@
 <head>
 <title>Progress Bar</title>
 <!-- css -->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/reset-fonts-grids/reset-fonts-grids.css">
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/base/base.css">
-<link rel="stylesheet" type="text/css" href="progressbar.css">
+<link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css">
+<link rel="stylesheet" type="text/css" href="../../build/base/base.css">
+<link rel="stylesheet" type="text/css" href="../../build/progressbar/assets/skins/sam/progressbar.css">
 <!-- js -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/animation/animation-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/element/element-beta.js"></script>
+<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
+<script type="text/javascript" src="../../build/element/element-min.js"></script>
 
-<script type="text/javascript" src="progressbar-debug.js"></script>
+<script type="text/javascript" src="../../build/progressbar/progressbar-debug.js"></script>
 
 <style type="text/css">
 /* Here I am using the id of each bar to set the masks and/or bar images for each one separately */
@@ -385,16 +385,6 @@ pbcopper.render('pbcopper');</pre>
 		// Then you call render and tell it where it is you want it rendered.
 		// You can also create the instance, change settings explicitly (as in the second bar with the height) and then render.
 		// I've provided id's in each of the bars so that the styles above could attach to each bar separately.
-		
-		var x = function () {
-		};
-		x.prototype.y = 42;
-		
-		var X = new x();
-		
-		x.prototype.z = 12;
-		
-		console.log(X);
 		
 		
 		pb = new YAHOO.widget.ProgressBar({height:'30px', width: 300, barColor:'green',backColor:'orange',border:'thin solid black'});
