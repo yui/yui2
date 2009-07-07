@@ -6854,6 +6854,13 @@
                 }
 
                 var bDragOnly = (this.cfg.getProperty("dragonly") === true);
+
+                /**
+                 * The YAHOO.util.DD instance, used to implement the draggable header for the panel if draggable is enabled
+                 *
+                 * @property dd
+                 * @type YAHOO.util.DD
+                 */
                 this.dd = new Util.DD(this.element.id, this.id, {dragOnly: bDragOnly});
 
                 if (!this.header.id) {
@@ -8196,9 +8203,9 @@
                 nOptions,
                 aValues,
                 oOption,
-                sValue,
                 oRadio,
                 oCheckbox,
+                valueAttr,
                 i,
                 n;    
     
@@ -8258,13 +8265,9 @@
     
                                     for (n = 0; n < nOptions; n++) {
                                         oOption = aOptions[n];
-    
                                         if (oOption.selected) {
-                                            sValue = oOption.value;
-                                            if (!sValue || sValue === "") {
-                                                sValue = oOption.text;
-                                            }
-                                            aValues[aValues.length] = sValue;
+                                            valueAttr = oOption.attributes.value;
+                                            aValues[aValues.length] = (valueAttr && valueAttr.specified) ? oOption.value : oOption.text;
                                         }
                                     }
                                     oData[sName] = aValues;
