@@ -742,6 +742,8 @@
 		<span class="c">/**</span>
 <span class="c">		* Fired when the Calendar page is changed</span>
 <span class="c">		* @event changePageEvent</span>
+<span class="c">		* @param {Date} prevDate The date before the page was changed</span>
+<span class="c">		* @param {Date} newDate The date after the page was changed</span>
 <span class="c">		*/</span>
 		<span class="nx">cal</span><span class="o">.</span><span class="nx">changePageEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CE</span><span class="o">(</span><span class="nx">defEvents</span><span class="o">.</span><span class="nx">CHANGE_PAGE</span><span class="o">);</span>
 	
@@ -2566,7 +2568,7 @@
 	<span class="c">// END BUILT-IN TABLE CELL RENDERERS</span>
 <span class="c"></span>	
 	<span class="c">// BEGIN MONTH NAVIGATION METHODS</span>
-<span class="c"></span>	
+<span class="c"></span>
 	<span class="c">/**</span>
 <span class="c">	* Adds the designated number of months to the current calendar month, and sets the current</span>
 <span class="c">	* calendar page date to the new month.</span>
@@ -2574,12 +2576,16 @@
 <span class="c">	* @param {Number}	count	The number of months to add to the current calendar</span>
 <span class="c">	*/</span>
 	<span class="nx">addMonths</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">count</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">var</span> <span class="nx">cfgPageDate</span> <span class="o">=</span> <span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">PAGEDATE</span><span class="o">.</span><span class="nx">key</span><span class="o">;</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">,</span> <span class="nx">DateMath</span><span class="o">.</span><span class="nx">add</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">),</span> <span class="nx">DateMath</span><span class="o">.</span><span class="nx">MONTH</span><span class="o">,</span> <span class="nx">count</span><span class="o">));</span>
+		<span class="k">var</span> <span class="nx">cfgPageDate</span> <span class="o">=</span> <span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">PAGEDATE</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span>
+
+		<span class="nx">prevDate</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">),</span>
+		<span class="nx">newDate</span> <span class="o">=</span> <span class="nx">DateMath</span><span class="o">.</span><span class="nx">add</span><span class="o">(</span><span class="nx">prevDate</span><span class="o">,</span> <span class="nx">DateMath</span><span class="o">.</span><span class="nx">MONTH</span><span class="o">,</span> <span class="nx">count</span><span class="o">);</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">,</span> <span class="nx">newDate</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">resetRenderers</span><span class="o">();</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">changePageEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">changePageEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">prevDate</span><span class="o">,</span> <span class="nx">newDate</span><span class="o">);</span>
 	<span class="o">},</span>
-	
+
 	<span class="c">/**</span>
 <span class="c">	* Subtracts the designated number of months from the current calendar month, and sets the current</span>
 <span class="c">	* calendar page date to the new month.</span>
@@ -2587,10 +2593,7 @@
 <span class="c">	* @param {Number}	count	The number of months to subtract from the current calendar</span>
 <span class="c">	*/</span>
 	<span class="nx">subtractMonths</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">count</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">var</span> <span class="nx">cfgPageDate</span> <span class="o">=</span> <span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">PAGEDATE</span><span class="o">.</span><span class="nx">key</span><span class="o">;</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">,</span> <span class="nx">DateMath</span><span class="o">.</span><span class="nx">subtract</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">),</span> <span class="nx">DateMath</span><span class="o">.</span><span class="nx">MONTH</span><span class="o">,</span> <span class="nx">count</span><span class="o">));</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">resetRenderers</span><span class="o">();</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">changePageEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">addMonths</span><span class="o">(-</span><span class="m">1</span><span class="o">*</span><span class="nx">count</span><span class="o">);</span>
 	<span class="o">},</span>
 
 	<span class="c">/**</span>
@@ -2600,12 +2603,16 @@
 <span class="c">	* @param {Number}	count	The number of years to add to the current calendar</span>
 <span class="c">	*/</span>
 	<span class="nx">addYears</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">count</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">var</span> <span class="nx">cfgPageDate</span> <span class="o">=</span> <span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">PAGEDATE</span><span class="o">.</span><span class="nx">key</span><span class="o">;</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">,</span> <span class="nx">DateMath</span><span class="o">.</span><span class="nx">add</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">),</span> <span class="nx">DateMath</span><span class="o">.</span><span class="nx">YEAR</span><span class="o">,</span> <span class="nx">count</span><span class="o">));</span>
+		<span class="k">var</span> <span class="nx">cfgPageDate</span> <span class="o">=</span> <span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">PAGEDATE</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span>
+
+		<span class="nx">prevDate</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">),</span>
+		<span class="nx">newDate</span> <span class="o">=</span> <span class="nx">DateMath</span><span class="o">.</span><span class="nx">add</span><span class="o">(</span><span class="nx">prevDate</span><span class="o">,</span> <span class="nx">DateMath</span><span class="o">.</span><span class="nx">YEAR</span><span class="o">,</span> <span class="nx">count</span><span class="o">);</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">,</span> <span class="nx">newDate</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">resetRenderers</span><span class="o">();</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">changePageEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">changePageEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">prevDate</span><span class="o">,</span> <span class="nx">newDate</span><span class="o">);</span>
 	<span class="o">},</span>
-	
+
 	<span class="c">/**</span>
 <span class="c">	* Subtcats the designated number of years from the current calendar, and sets the current</span>
 <span class="c">	* calendar page date to the new month.</span>
@@ -2613,12 +2620,9 @@
 <span class="c">	* @param {Number}	count	The number of years to subtract from the current calendar</span>
 <span class="c">	*/</span>
 	<span class="nx">subtractYears</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">count</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">var</span> <span class="nx">cfgPageDate</span> <span class="o">=</span> <span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">PAGEDATE</span><span class="o">.</span><span class="nx">key</span><span class="o">;</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">,</span> <span class="nx">DateMath</span><span class="o">.</span><span class="nx">subtract</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">cfgPageDate</span><span class="o">),</span> <span class="nx">DateMath</span><span class="o">.</span><span class="nx">YEAR</span><span class="o">,</span> <span class="nx">count</span><span class="o">));</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">resetRenderers</span><span class="o">();</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">changePageEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">addYears</span><span class="o">(-</span><span class="m">1</span><span class="o">*</span><span class="nx">count</span><span class="o">);</span>
 	<span class="o">},</span>
-	
+
 	<span class="c">/**</span>
 <span class="c">	* Navigates to the next month page in the calendar widget.</span>
 <span class="c">	* @method nextMonth</span>
@@ -2632,7 +2636,7 @@
 <span class="c">	* @method previousMonth</span>
 <span class="c">	*/</span>
 	<span class="nx">previousMonth</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">subtractMonths</span><span class="o">(</span><span class="m">1</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">addMonths</span><span class="o">(-</span><span class="m">1</span><span class="o">);</span>
 	<span class="o">},</span>
 	
 	<span class="c">/**</span>
@@ -2648,9 +2652,9 @@
 <span class="c">	* @method previousYear</span>
 <span class="c">	*/</span>
 	<span class="nx">previousYear</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">subtractYears</span><span class="o">(</span><span class="m">1</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">addYears</span><span class="o">(-</span><span class="m">1</span><span class="o">);</span>
 	<span class="o">},</span>
-	
+
 	<span class="c">// END MONTH NAVIGATION METHODS</span>
 <span class="c"></span>	
 	<span class="c">// BEGIN SELECTION METHODS</span>

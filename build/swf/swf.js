@@ -114,3 +114,4 @@ YAHOO.extend(YAHOO.widget.SWF, YAHOO.util.Element, {
 	
 })();
 YAHOO.register("swf", YAHOO.widget.SWF, {version: "2.7.0", build: "1796"});
+YAHOO.register("swf", YAHOO.widget.SWF, {version: "@VERSION@", build: "@BUILD@"});
