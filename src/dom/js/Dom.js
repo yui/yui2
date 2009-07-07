@@ -1354,7 +1354,7 @@
 
         _patterns: {
             ROOT_TAG: /^body|html$/i, // body for quirks mode, html for standards,
-            CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}])/g
+            CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}\\])/g
         },
 
 

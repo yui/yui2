@@ -45,7 +45,7 @@
 <body>
     <em class="my.class our(class" id="class-regex-one">lorem</em> 
     <em class="my-class" id="class-regex-two">ipsum</em>
-    <em class="yiv-integer:([{1,30}])^$?*+|" id="class-regex-three">dolor</em> 
+    <em class="yiv-integer:([{1,30}])^$?*+\|" id="class-regex-three">dolor</em> 
     <div id="computed-wrap">
         <div id="computed-test">test computed style</div>
     </div>
@@ -178,7 +178,7 @@
                 Assert.isTrue(Y.Dom.hasClass('class-regex-one', 'my.class'), 'my.class should match element with my.class');       
                 Assert.isTrue(Y.Dom.hasClass('class-regex-one', 'our(class'), 'our(class should match element with our(class');       
                 Assert.isTrue(Y.Dom.hasClass('class-regex-one', /our.clas+/), '/our.clas+/ should match element with our(class');  
-                Assert.isTrue(Y.Dom.hasClass('class-regex-three', 'yiv-integer:([{1,30}])^$?*+|'), '/our.clas+/ should match element with our(class');  
+                Assert.isTrue(Y.Dom.hasClass('class-regex-three', 'yiv-integer:([{1,30}])^$?*+\\|'), "special chars in className");  
             },            
 
             test_addClass: function() {
