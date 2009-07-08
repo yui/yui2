@@ -558,7 +558,6 @@
          * @return {Array} An array of elements that have the given class name
          */
         getElementsByClassName: function(className, tag, root, apply, o, overrides) {
-            className = lang.trim(className);
             tag = tag || '*';
             root = (root) ? Y.Dom.get(root) : null || document; 
             if (!root) {
@@ -1315,7 +1314,7 @@
 
         _patterns: {
             ROOT_TAG: /^body|html$/i, // body for quirks mode, html for standards,
-            CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}])/g
+            CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}\\])/g
         },
 
 
