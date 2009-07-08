@@ -28,16 +28,15 @@ YAHOO.util.CustomEvent = function(type, context, silent, signature) {
     this.type = type;
 
     /**
-     * The context the the event will fire from by default.  Defaults to the window 
-     * obj
+     * The context the event will fire from by default. Defaults to the window obj.
      * @property scope
      * @type object
      */
     this.scope = context || window;
 
     /**
-     * By default all custom events are logged in the debug build, set silent
-     * to true to disable debug outpu for this event.
+     * By default all custom events are logged in the debug build. Set silent to true 
+     * to disable debug output for this event.
      * @property silent
      * @type boolean
      */
@@ -91,14 +90,12 @@ YAHOO.util.CustomEvent = function(type, context, silent, signature) {
          *
          * @event subscribeEvent
          * @type YAHOO.util.CustomEvent
-         * @param {Function} fn The function to execute
-         * @param {Object}   obj An object to be passed along when the event 
-         *                       fires defaults to the custom event
-         * @param {boolean|Object}  override If true, the obj passed in becomes 
-         *                                   the execution context of the listener.
-         *                                   if an object, that object becomes the
-         *                                   the execution context. defaults to
-         *                                   the custom event
+         * @param fn {Function} The function to execute
+         * @param obj <Object> An object to be passed along when the event fires. 
+         * Defaults to the custom event.
+         * @param override <boolean|Object> If true, the obj passed in becomes the 
+         * execution context of the listener. If an object, that object becomes 
+         * the execution context. Defaults to the custom event.
          */
         this.subscribeEvent = 
                 new YAHOO.util.CustomEvent(onsubscribeType, this, true);
@@ -142,12 +139,9 @@ YAHOO.util.CustomEvent.prototype = {
      * Subscribes the caller to this event
      * @method subscribe
      * @param {Function} fn        The function to execute
-     * @param {Object}   obj       An object to be passed along when the event 
-     *                             fires
-     * @param {boolean|Object}  overrideContext If true, the obj passed in becomes 
-     *                                   the execution context of the listener.
-     *                                   if an object, that object becomes the
-     *                                   the execution context.
+     * @param {Object}   obj       An object to be passed along when the event fires.
+     * overrideContext <boolean|Object> If true, the obj passed in becomes the execution 
+     * context of the listener. If an object, that object becomes the execution context.
      */
     subscribe: function(fn, obj, overrideContext) {
 
