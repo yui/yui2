@@ -207,7 +207,7 @@
     <span class="c">/**</span>
 <span class="c">     * Sets up the animation for collapsing children</span>
 <span class="c">     * @method setCollapseAnim</span>
-<span class="c">     * @param {string} the type of animation (acceptable values defined in </span>
+<span class="c">     * @param {string} type of animation (acceptable values defined in </span>
 <span class="c">     * YAHOO.widget.TVAnim)</span>
 <span class="c">     */</span>
     <span class="nx">setCollapseAnim</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
@@ -320,7 +320,7 @@
 <span class="c">         * @event animStart</span>
 <span class="c">         * @type CustomEvent</span>
 <span class="c">         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing</span>
-<span class="c">         * @parm {String} type the type of animation (&quot;expand&quot; or &quot;collapse&quot;)</span>
+<span class="c">         * @param {String} type the type of animation (&quot;expand&quot; or &quot;collapse&quot;)</span>
 <span class="c">         */</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;animStart&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
 
@@ -433,7 +433,7 @@
 <span class="c">     * Depending on &lt;a href=&quot;YAHOO.widget.Node.html#property_propagateHighlight&quot;&gt;nodeRef.propagateHighlight&lt;/a&gt;, other nodes might have changed</span>
 <span class="c">     * @event highlightEvent</span>
 <span class="c">     * @type CustomEvent</span>
-<span class="c">        * @param node{YAHOO.widget.Node} the node that started the change in highlighting state</span>
+<span class="c">     * @param node {YAHOO.widget.Node} the node that started the change in highlighting state</span>
 <span class="c">    */</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;highlightEvent&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">);</span>
      
@@ -552,7 +552,7 @@
 <span class="c">     * If the &amp;lt;LI&amp;gt; element contains an attribute called &lt;code&gt;yuiConfig&lt;/code&gt;, its contents should be a JSON-encoded object</span>
 <span class="c">     * as the one used in method &lt;a href=&quot;#method_buildTreeFromObject&quot;&gt;buildTreeFromObject&lt;/a&gt;.</span>
 <span class="c">     * @method buildTreeFromMarkup</span>
-<span class="c">     * @param  id{string|HTMLElement} The id of the element that contains the markup or a reference to it.</span>
+<span class="c">     * @param  id {string|HTMLElement} The id of the element that contains the markup or a reference to it.</span>
 <span class="c">     */</span>
     <span class="nx">buildTreeFromMarkup</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Building tree from existing markup&#39;</span><span class="o">);</span>
@@ -1054,11 +1054,11 @@
     <span class="o">},</span>
 
     <span class="c">/**</span>
-<span class="c">     * Returns the treeview node reference for an anscestor element</span>
+<span class="c">     * Returns the treeview node reference for an ancestor element</span>
 <span class="c">     * of the node, or null if it is not contained within any node</span>
 <span class="c">     * in this tree.</span>
 <span class="c">     * @method getNodeByElement</span>
-<span class="c">     * @param {HTMLElement} the element to test</span>
+<span class="c">     * @param el {HTMLElement} the element to test</span>
 <span class="c">     * @return {YAHOO.widget.Node} a node reference or null</span>
 <span class="c">     */</span>
     <span class="nx">getNodeByElement</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
@@ -1090,7 +1090,7 @@
 <span class="c">     * Removes the node and its children, and optionally refreshes the </span>
 <span class="c">     * branch of the tree that was affected.</span>
 <span class="c">     * @method removeNode</span>
-<span class="c">     * @param {Node} The node to remove</span>
+<span class="c">     * @param {Node} node to remove</span>
 <span class="c">     * @param {boolean} autoRefresh automatically refreshes branch if true</span>
 <span class="c">     * @return {boolean} False is there was a problem, true otherwise.</span>
 <span class="c">     */</span>
@@ -1186,7 +1186,7 @@
 <span class="c">     * to make it possible to insert the branch into another part of the </span>
 <span class="c">     * tree, or another tree.</span>
 <span class="c">     * @method popNode</span>
-<span class="c">     * @param {Node} the node to remove</span>
+<span class="c">     * @param {Node} node to remove</span>
 <span class="c">     */</span>
     <span class="nx">popNode</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">node</span><span class="o">)</span> <span class="o">{</span> 
         <span class="k">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">node</span><span class="o">.</span><span class="nx">parent</span><span class="o">;</span>

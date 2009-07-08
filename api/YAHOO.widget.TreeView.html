@@ -1082,7 +1082,7 @@ as the one used in method <a href="#method_buildTreeFromObject">buildTreeFromObj
                                                         <code><span property="yui:name">id</span>
                                                         &lt;<span property="yui:type">string|HTMLElement</span>&gt;
                                                         </code>
-                                                        <span property="yui:description"> The id of the element that contains the markup or a reference to it.</span>
+                                                        <span property="yui:description">  The id of the element that contains the markup or a reference to it.</span>
                                                         </dd>
                                                 </dl>
 
@@ -1446,14 +1446,14 @@ will be expanded.
                                            (
                                                 
                                                         
-                                                         the
+                                                         el
                                                     
                                                 
                                             )
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Returns the treeview node reference for an anscestor element
+                                            Returns the treeview node reference for an ancestor element
 of the node, or null if it is not contained within any node
 in this tree.
                                         </div>
@@ -1463,10 +1463,10 @@ in this tree.
                                                 <dl rel="yui:parameters">
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">the</span>
+                                                        <code><span property="yui:name">el</span>
                                                         &lt;<span property="yui:type">HTMLElement</span>&gt;
                                                         </code>
-                                                        <span property="yui:description"> element to test</span>
+                                                        <span property="yui:description">  the element to test</span>
                                                         </dd>
                                                 </dl>
 
@@ -2039,7 +2039,7 @@ It returns false to prevent the default action.
                                            (
                                                 
                                                         
-                                                         the
+                                                         node
                                                     
                                                 
                                             )
@@ -2056,10 +2056,10 @@ tree, or another tree.
                                                 <dl rel="yui:parameters">
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">the</span>
+                                                        <code><span property="yui:name">node</span>
                                                         &lt;<span property="yui:type">Node</span>&gt;
                                                         </code>
-                                                        <span property="yui:description"> node to remove</span>
+                                                        <span property="yui:description"> to remove</span>
                                                         </dd>
                                                 </dl>
 
@@ -2197,7 +2197,7 @@ dynamically again.
                                            (
                                                 
                                                         
-                                                         The
+                                                         node
                                                     
                                                 
                                                         , 
@@ -2217,10 +2217,10 @@ branch of the tree that was affected.
                                                 <dl rel="yui:parameters">
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">The</span>
+                                                        <code><span property="yui:name">node</span>
                                                         &lt;<span property="yui:type">Node</span>&gt;
                                                         </code>
-                                                        <span property="yui:description"> node to remove</span>
+                                                        <span property="yui:description"> to remove</span>
                                                         </dd>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">autoRefresh</span>
@@ -2296,7 +2296,7 @@ branch of the tree that was affected.
                                            (
                                                 
                                                         
-                                                         the
+                                                         type
                                                     
                                                 
                                             )
@@ -2311,10 +2311,10 @@ branch of the tree that was affected.
                                                 <dl rel="yui:parameters">
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">the</span>
+                                                        <code><span property="yui:name">type</span>
                                                         &lt;<span property="yui:type">string</span>&gt;
                                                         </code>
-                                                        <span property="yui:description"> type of animation (acceptable values defined in 
+                                                        <span property="yui:description"> of animation (acceptable values defined in 
 YAHOO.widget.TVAnim)</span>
                                                         </dd>
                                                 </dl>
@@ -2796,6 +2796,10 @@ completes
                                                          node
                                                     
                                                 
+                                                        , 
+                                                         type
+                                                    
+                                                
                                             )
 
                                         </code>
@@ -2815,6 +2819,13 @@ starts
                                                                 &lt;<span property="yui:type">YAHOO.widget.Node</span>&gt;
                                                             </code>
                                                             <span property="yui:description"> the node that is expanding/collapsing</span>
+                                                        </dd>
+                                                        
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">type</span>
+                                                                &lt;<span property="yui:type">String</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description"> the type of animation ("expand" or "collapse")</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -3363,7 +3374,7 @@ Depending on <a href="YAHOO.widget.Node.html#property_propagateHighlight">nodeRe
                                                             <code><span property="yui:name">node</span>
                                                                 &lt;<span property="yui:type">YAHOO.widget.Node</span>&gt;
                                                             </code>
-                                                            <span property="yui:description"> the node that started the change in highlighting state</span>
+                                                            <span property="yui:description">  the node that started the change in highlighting state</span>
                                                         </dd>
                                                         
                                                 </dl>
