@@ -1398,46 +1398,8 @@ TV.getNode = function(treeId, nodeIndex) {
     */ 
 TV.FOCUS_CLASS_NAME = 'ygtvfocus';
 
-/**
- * Attempts to preload the images defined in the styles used to draw the tree by
- * rendering off-screen elements that use the styles.
- * @method YAHOO.widget.TreeView.preload
- * @param {string} prefix the prefix to use to generate the names of the
- * images to preload, default is ygtv
- * @static
- */
-TV.preload = function(e, prefix) {
-    prefix = prefix || "ygtv";
 
-    YAHOO.log("Preloading images: " + prefix, "info", "TreeView");
 
-    var styles = ["tn","tm","tmh","tp","tph","ln","lm","lmh","lp","lph","loading"];
-    // var styles = ["tp"];
-
-    var sb = [];
-    
-    // save the first one for the outer container
-    for (var i=1; i < styles.length; i=i+1) { 
-        sb[sb.length] = '<span class="' + prefix + styles[i] + '">&#160;</span>';
-    }
-
-    var f = document.createElement("div");
-    var s = f.style;
-    s.className = prefix + styles[0];
-    s.position = "absolute";
-    s.height = "1px";
-    s.width = "1px";
-    s.top = "-1000px";
-    s.left = "-1000px";
-    f.innerHTML = sb.join("");
-
-    document.body.appendChild(f);
-
-    Event.removeListener(window, "load", TV.preload);
-
-};
-
-Event.addListener(window,"load", TV.preload);
 })();
 
 (function () {
@@ -2535,7 +2497,7 @@ YAHOO.widget.Node.prototype = {
         this.logger.log("Generating html");
         var sb = [];
 
-        sb[sb.length] = '<table id="ygtvtableel' + this.index + '"border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
+        sb[sb.length] = '<table id="ygtvtableel' + this.index + '" border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
         if (this.enableHighlight) {
             sb[sb.length] = ' ygtv-highlight' + this.highlightState;
         }
