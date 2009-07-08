@@ -22,7 +22,7 @@
     overflow: hidden;
     padding: 0;
     position: relative;
-    width: 32000px;
+    width: 320000px;
     z-index: 1;
 }
  
@@ -75,7 +75,7 @@
 }
 
 .yui-carousel-vertical .yui-carousel-element {
-    height:32000px;
+    height:320000px;
     padding:0;
 }
 
