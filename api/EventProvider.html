@@ -164,6 +164,13 @@ silent: if true, the custom event will not generate log messages.
 This is false by default.
 </li>
 <li>
+fireOnce: if true, the custom event will only notify subscribers
+once regardless of the number of times the event is fired.  In
+addition, new subscribers will be executed immediately if the
+event has already fired.
+This is false by default.
+</li>
+<li>
 onSubscribeCallback: specifies a callback to execute when the
 event has a new subscriber.  This will fire immediately for
 each queued subscriber if any exist prior to the creation of
