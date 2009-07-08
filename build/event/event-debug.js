@@ -14,11 +14,15 @@
  *                  will receive. YAHOO.util.CustomEvent.LIST or 
  *                  YAHOO.util.CustomEvent.FLAT.  The default is
  *                  YAHOO.util.CustomEvent.LIST.
+ * @param fireOnce {boolean} If configured to fire once, the custom event 
+ * will only notify subscribers a single time regardless of how many times 
+ * the event is fired.  In addition, new subscribers will be notified 
+ * immediately if the event has already been fired.
  * @namespace YAHOO.util
  * @class CustomEvent
  * @constructor
  */
-YAHOO.util.CustomEvent = function(type, context, silent, signature) {
+YAHOO.util.CustomEvent = function(type, context, silent, signature, fireOnce) {
 
     /**
      * The type of event, returned to subscribers when the event fires
@@ -41,6 +45,33 @@ YAHOO.util.CustomEvent = function(type, context, silent, signature) {
      * @type boolean
      */
     this.silent = silent;
+
+    /**
+     * If configured to fire once, the custom event will only notify subscribers
+     * a single time regardless of how many times the event is fired.  In addition,
+     * new subscribers will be notified immediately if the event has already been
+     * fired.
+     * @property fireOnce
+     * @type boolean
+     * @default false
+     */
+    this.fireOnce = fireOnce;
+
+    /**
+     * Indicates whether or not this event has ever been fired.
+     * @property fired
+     * @type boolean
+     * @default false
+     */
+    this.fired = false;
+
+    /**
+     * For fireOnce events the arguments the event was fired with are stored
+     * so that new subscribers get the proper payload.
+     * @property firedWith
+     * @type Array
+     */
+    this.firedWith = null;
 
     /**
      * Custom events support two styles of arguments provided to the event
@@ -154,7 +185,13 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
             this.subscribeEvent.fire(fn, obj, overrideContext);
         }
 
-        this.subscribers.push( new YAHOO.util.Subscriber(fn, obj, overrideContext) );
+        var s = new YAHOO.util.Subscriber(fn, obj, overrideContext);
+
+        if (this.fireOnce && this.fired) {
+            this.notify(s, this.firedWith);
+        } else {
+            this.subscribers.push(s);
+        }
     },
 
     /**
@@ -210,12 +247,24 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
         var errors = [],
             len=this.subscribers.length;
 
+
+        var args=[].slice.call(arguments, 0), ret=true, i, rebuild=false;
+
+        if (this.fireOnce) {
+            if (this.fired) {
+                YAHOO.log('fireOnce event has already fired: ' + this.type);
+                return true;
+            } else {
+                this.firedWith = args;
+            }
+        }
+
+        this.fired = true;
+
         if (!len && this.silent) {
             //YAHOO.log('DEBUG no subscribers');
             return true;
         }
-
-        var args=[].slice.call(arguments, 0), ret=true, i, rebuild=false;
 
         if (!this.silent) {
             YAHOO.log( "Firing "       + this  + ", " + 
@@ -226,60 +275,67 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
 
         // make a copy of the subscribers so that there are
         // no index problems if one subscriber removes another.
-        var subs = this.subscribers.slice(), throwErrors = YAHOO.util.Event.throwErrors;
+        var subs = this.subscribers.slice();
 
         for (i=0; i<len; ++i) {
             var s = subs[i];
             if (!s) {
-                //YAHOO.log('DEBUG rebuilding array');
                 rebuild=true;
             } else {
-                if (!this.silent) {
-YAHOO.log( this.type + "->" + (i+1) + ": " +  s, "info", "Event" );
-                }
 
-                var scope = s.getScope(this.scope);
-
-                if (this.signature == YAHOO.util.CustomEvent.FLAT) {
-                    var param = null;
-                    if (args.length > 0) {
-                        param = args[0];
-                    }
-
-                    try {
-                        ret = s.fn.call(scope, param, s.obj);
-                    } catch(e) {
-                        this.lastError = e;
-                        // errors.push(e);
-YAHOO.log(this + " subscriber exception: " + e, "error", "Event");
-                        if (throwErrors) {
-                            throw e;
-                        }
-                    }
-                } else {
-                    try {
-                        ret = s.fn.call(scope, this.type, args, s.obj);
-                    } catch(ex) {
-                        this.lastError = ex;
-YAHOO.log(this + " subscriber exception: " + ex, "error", "Event");
-                        if (throwErrors) {
-                            throw ex;
-                        }
-                    }
-                }
+                ret = this.notify(s, args);
 
                 if (false === ret) {
                     if (!this.silent) {
-YAHOO.log("Event stopped, sub " + i + " of " + len, "info", "Event");
+                        YAHOO.log("Event stopped, sub " + i + " of " + len, "info", "Event");
                     }
 
                     break;
-                    // return false;
                 }
             }
         }
 
         return (ret !== false);
+    },
+
+    notify: function(s, args) {
+
+        var ret, param=null, scope = s.getScope(this.scope),
+                 throwErrors = YAHOO.util.Event.throwErrors;
+
+        if (!this.silent) {
+            YAHOO.log( this.type + "-> " + s, "info", "Event" );
+        }
+
+        if (this.signature == YAHOO.util.CustomEvent.FLAT) {
+
+            if (args.length > 0) {
+                param = args[0];
+            }
+
+            try {
+                ret = s.fn.call(scope, param, s.obj);
+            } catch(e) {
+                this.lastError = e;
+                // errors.push(e);
+                YAHOO.log(this + " subscriber exception: " + e, "error", "Event");
+                if (throwErrors) {
+                    throw e;
+                }
+            }
+        } else {
+            try {
+                ret = s.fn.call(scope, this.type, args, s.obj);
+            } catch(ex) {
+                this.lastError = ex;
+                YAHOO.log(this + " subscriber exception: " + ex, "error", "Event");
+                if (throwErrors) {
+                    throw ex;
+                }
+            }
+        }
+
+        return ret;
     },
 
     /**
@@ -2221,6 +2277,13 @@ YAHOO.util.EventProvider.prototype = {
      *      This is false by default.
      *    </li>
      *    <li>
+     *      fireOnce: if true, the custom event will only notify subscribers
+     *      once regardless of the number of times the event is fired.  In
+     *      addition, new subscribers will be executed immediately if the
+     *      event has already fired.
+     *      This is false by default.
+     *    </li>
+     *    <li>
      *      onSubscribeCallback: specifies a callback to execute when the
      *      event has a new subscriber.  This will fire immediately for
      *      each queued subscriber if any exist prior to the creation of
@@ -2234,18 +2297,16 @@ YAHOO.util.EventProvider.prototype = {
     createEvent: function(p_type, p_config) {
 
         this.__yui_events = this.__yui_events || {};
-        var opts = p_config || {};
-        var events = this.__yui_events;
+        var opts = p_config || {},
+            events = this.__yui_events, ce;
 
         if (events[p_type]) {
 YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
         } else {
 
-            var scope  = opts.scope  || this;
-            var silent = (opts.silent);
+            ce = new YAHOO.util.CustomEvent(p_type, opts.scope || this, opts.silent,
+                         YAHOO.util.CustomEvent.FLAT, opts.fireOnce);
 
-            var ce = new YAHOO.util.CustomEvent(p_type, scope, silent,
-                    YAHOO.util.CustomEvent.FLAT);
             events[p_type] = ce;
 
             if (opts.onSubscribeCallback) {
@@ -2282,7 +2343,7 @@ YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
      * @return {boolean} the return value from CustomEvent.fire
      *                   
      */
-    fireEvent: function(p_type, arg1, arg2, etc) {
+    fireEvent: function(p_type) {
 
         this.__yui_events = this.__yui_events || {};
         var ce = this.__yui_events[p_type];
