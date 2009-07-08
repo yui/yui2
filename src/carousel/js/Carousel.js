@@ -2929,7 +2929,7 @@
                 numItems   = carousel.get("numItems"),
                 numVisible = carousel.get("numVisible"),
                 reveal     = carousel.get("revealAmount"),
-                first      = carousel._itemsTable.items.length - 1;
+                first      = carousel._itemsTable.items.length;
 
             // adjust if going backwards
             if(first > last && last+1 >= numVisible){
