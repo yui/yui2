@@ -1519,10 +1519,10 @@ Paginator.ui.FirstPageLink.init = function (p) {
     /**
      * Used as innerHTML for the first page link/span.
      * @attribute firstPageLinkLabel
-     * @default '&lt;&lt;&nbsp;first'
+     * @default '&lt;&lt; first'
      */
     p.setAttributeConfig('firstPageLinkLabel', {
-        value : '&lt;&lt;&nbsp;first',
+        value : '&lt;&lt; first',
         validator : l.isString
     });
 
@@ -1681,10 +1681,10 @@ Paginator.ui.LastPageLink.init = function (p) {
     /**
      * Used as innerHTML for the last page link/span.
      * @attribute lastPageLinkLabel
-     * @default 'last&nbsp;&gt;&gt;'
+     * @default 'last &gt;&gt;'
      */
     p.setAttributeConfig('lastPageLinkLabel', {
-        value : 'last&nbsp;&gt;&gt;',
+        value : 'last &gt;&gt;',
         validator : l.isString
     });
 
@@ -1867,10 +1867,10 @@ Paginator.ui.NextPageLink.init = function (p) {
     /**
      * Used as innerHTML for the next page link/span.
      * @attribute nextPageLinkLabel
-     * @default 'next&nbsp;&gt;'
+     * @default 'next &gt;'
      */
     p.setAttributeConfig('nextPageLinkLabel', {
-        value : 'next&nbsp;&gt;',
+        value : 'next &gt;',
         validator : l.isString
     });
 
@@ -2032,10 +2032,10 @@ Paginator.ui.PreviousPageLink.init = function (p) {
     /**
      * Used as innerHTML for the previous page link/span.
      * @attribute previousPageLinkLabel
-     * @default '&lt;&nbsp;prev'
+     * @default '&lt; prev'
      */
     p.setAttributeConfig('previousPageLinkLabel', {
-        value : '&lt;&nbsp;prev',
+        value : '&lt; prev',
         validator : l.isString
     });
 
