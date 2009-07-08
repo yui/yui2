@@ -158,7 +158,7 @@ TV.prototype = {
     /**
      * Sets up the animation for collapsing children
      * @method setCollapseAnim
-     * @param {string} the type of animation (acceptable values defined in 
+     * @param {string} type of animation (acceptable values defined in 
      * YAHOO.widget.TVAnim)
      */
     setCollapseAnim: function(type) {
@@ -271,7 +271,7 @@ TV.prototype = {
          * @event animStart
          * @type CustomEvent
          * @param {YAHOO.widget.Node} node the node that is expanding/collapsing
-         * @parm {String} type the type of animation ("expand" or "collapse")
+         * @param {String} type the type of animation ("expand" or "collapse")
          */
         this.createEvent("animStart", this);
 
@@ -384,7 +384,7 @@ TV.prototype = {
      * Depending on <a href="YAHOO.widget.Node.html#property_propagateHighlight">nodeRef.propagateHighlight</a>, other nodes might have changed
      * @event highlightEvent
      * @type CustomEvent
-        * @param node{YAHOO.widget.Node} the node that started the change in highlighting state
+     * @param node {YAHOO.widget.Node} the node that started the change in highlighting state
     */
         this.createEvent("highlightEvent",this);
      
@@ -503,7 +503,7 @@ TV.prototype = {
      * If the &lt;LI&gt; element contains an attribute called <code>yuiConfig</code>, its contents should be a JSON-encoded object
      * as the one used in method <a href="#method_buildTreeFromObject">buildTreeFromObject</a>.
      * @method buildTreeFromMarkup
-     * @param  id{string|HTMLElement} The id of the element that contains the markup or a reference to it.
+     * @param  id {string|HTMLElement} The id of the element that contains the markup or a reference to it.
      */
     buildTreeFromMarkup: function (id) {
         this.logger.log('Building tree from existing markup');
@@ -1026,11 +1026,11 @@ TV.prototype = {
         return (values.length) ? values : null;
     },
     /**
-     * Returns the treeview node reference for an anscestor element
+     * Returns the treeview node reference for an ancestor element
      * of the node, or null if it is not contained within any node
      * in this tree.
      * @method getNodeByElement
-     * @param {HTMLElement} the element to test
+     * @param el {HTMLElement} the element to test
      * @return {YAHOO.widget.Node} a node reference or null
      */
     getNodeByElement: function(el) {
@@ -1073,7 +1073,7 @@ TV.prototype = {
      * Removes the node and its children, and optionally refreshes the 
      * branch of the tree that was affected.
      * @method removeNode
-     * @param {Node} The node to remove
+     * @param {Node} node to remove
      * @param {boolean} autoRefresh automatically refreshes branch if true
      * @return {boolean} False is there was a problem, true otherwise.
      */
@@ -1169,7 +1169,7 @@ TV.prototype = {
      * to make it possible to insert the branch into another part of the 
      * tree, or another tree.
      * @method popNode
-     * @param {Node} the node to remove
+     * @param {Node} node to remove
      */
     popNode: function(node) { 
         var p = node.parent;
@@ -1401,7 +1401,6 @@ TV.FOCUS_CLASS_NAME = 'ygtvfocus';
 
 
 })();
-
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -2879,7 +2878,6 @@ YAHOO.widget.Node.prototype = {
 
 YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
 })();
-
 /**
  * A custom YAHOO.widget.Node that handles the unique nature of 
  * the virtual, presentationless root node.
@@ -2964,7 +2962,6 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
     focus: function () {}
 
 });
-
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -3161,7 +3158,6 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
     
 });
 })();
-
 /**
  * A menu-specific implementation that differs from TextNode in that only 
  * one sibling can be expanded at a time.
@@ -3201,7 +3197,6 @@ YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
     _type: "MenuNode"
 
 });
-
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -3320,7 +3315,6 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     }
 });
 })();
-
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -3467,7 +3461,6 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 
 });
 })();
-
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang, 
@@ -3872,7 +3865,6 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         editorData.inputContainer.innerHTML = '';
     };
 })();
-
 /**
  * A static factory class for tree view expand/collapse animations
  * @class TVAnim
@@ -3925,7 +3917,6 @@ YAHOO.widget.TVAnim = function() {
         }
     };
 } ();
-
 /**
  * A 1/2 second fade-in animation.
  * @class TVFadeIn
@@ -3987,7 +3978,6 @@ YAHOO.widget.TVFadeIn.prototype = {
         return "TVFadeIn";
     }
 };
-
 /**
  * A 1/2 second fade out animation.
  * @class TVFadeOut
@@ -4047,5 +4037,4 @@ YAHOO.widget.TVFadeOut.prototype = {
         return "TVFadeOut";
     }
 };
-
 YAHOO.register("treeview", YAHOO.widget.TreeView, {version: "@VERSION@", build: "@BUILD@"});
