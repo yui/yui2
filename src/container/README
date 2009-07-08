@@ -8,6 +8,11 @@ Bug Fixes:
 + setHeader, setBody, setFooter will create the respective section element
   and add it to the DOM if called after render has already been invoked.
 
++ preventoverlap repositioning logic is now applied for cases where the 
+  constrained Overlay is larger than the viewport also, and takes 
+  precedence over the default behavior for constrained Overlays which are
+  larger than the viewport.
+
 *** version 2.7.0 ***
 
 Changes:
