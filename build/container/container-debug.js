@@ -4036,6 +4036,12 @@
 
             Module.textResizeEvent.unsubscribe(this._autoFillOnHeightChange);
 
+            if (this._contextTriggers) {
+                // Unsubscribe context triggers - to cover context triggers which listen for global
+                // events such as windowResize and windowScroll. Easier just to unsubscribe all
+                this._processTriggers(this._contextTriggers, _UNSUBSCRIBE, this._alignOnTrigger);
+            }
+
             Overlay.superclass.destroy.call(this);
         },
 
