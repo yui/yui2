@@ -154,8 +154,7 @@ caught.  The most recent exception is stored in this property
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            The context the the event will fire from by default.  Defaults to the window 
-obj
+                                            The context the event will fire from by default. Defaults to the window obj.
                                         </div>
                                     </div>
      
@@ -202,8 +201,8 @@ pass multiple parameters, use and array or object literal</li>
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            By default all custom events are logged in the debug build, set silent
-to true to disable debug outpu for this event.
+                                            By default all custom events are logged in the debug build. Set silent to true 
+to disable debug output for this event.
                                         </div>
                                     </div>
      
@@ -403,10 +402,6 @@ true otherwise</dd>
                                                          obj
                                                     
                                                 
-                                                        , 
-                                                         overrideContext
-                                                    
-                                                
                                             )
                                         </code>
                                         
@@ -428,17 +423,9 @@ true otherwise</dd>
                                                         <code><span property="yui:name">obj</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">       An object to be passed along when the event 
-fires</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">overrideContext</span>
-                                                        &lt;<span property="yui:type">boolean|Object</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> If true, the obj passed in becomes 
-the execution context of the listener.
-if an object, that object becomes the
-the execution context.</span>
+                                                        <span property="yui:description">       An object to be passed along when the event fires.
+overrideContext <boolean|Object> If true, the obj passed in becomes the execution 
+context of the listener. If an object, that object becomes the execution context.</span>
                                                         </dd>
                                                 </dl>
 
@@ -651,26 +638,24 @@ already fired has a new subscriber.
                                                             <code><span property="yui:name">fn</span>
                                                                 &lt;<span property="yui:type">Function</span>&gt;
                                                             </code>
-                                                            <span property="yui:description"> The function to execute</span>
+                                                            <span property="yui:description">  The function to execute</span>
                                                         </dd>
                                                         
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">obj</span>
-                                                                &lt;<span property="yui:type">Object</span>&gt;
+                                                                &lt;<span property="yui:type">object</span>&gt;
                                                             </code>
-                                                            <span property="yui:description"> An object to be passed along when the event 
-fires defaults to the custom event</span>
+                                                            <span property="yui:description"> <Object> An object to be passed along when the event fires. 
+Defaults to the custom event.</span>
                                                         </dd>
                                                         
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">override</span>
-                                                                &lt;<span property="yui:type">boolean|Object</span>&gt;
+                                                                &lt;<span property="yui:type">object</span>&gt;
                                                             </code>
-                                                            <span property="yui:description"> If true, the obj passed in becomes 
-the execution context of the listener.
-if an object, that object becomes the
-the execution context. defaults to
-the custom event</span>
+                                                            <span property="yui:description"> <boolean|Object> If true, the obj passed in becomes the 
+execution context of the listener. If an object, that object becomes 
+the execution context. Defaults to the custom event.</span>
                                                         </dd>
                                                         
                                                 </dl>

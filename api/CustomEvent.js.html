@@ -76,16 +76,15 @@
     <span class="k">this</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">type</span><span class="o">;</span>
 
     <span class="c">/**</span>
-<span class="c">     * The context the the event will fire from by default.  Defaults to the window </span>
-<span class="c">     * obj</span>
+<span class="c">     * The context the event will fire from by default. Defaults to the window obj.</span>
 <span class="c">     * @property scope</span>
 <span class="c">     * @type object</span>
 <span class="c">     */</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">scope</span> <span class="o">=</span> <span class="nx">context</span> <span class="o">||</span> <span class="nb">window</span><span class="o">;</span>
 
     <span class="c">/**</span>
-<span class="c">     * By default all custom events are logged in the debug build, set silent</span>
-<span class="c">     * to true to disable debug outpu for this event.</span>
+<span class="c">     * By default all custom events are logged in the debug build. Set silent to true </span>
+<span class="c">     * to disable debug output for this event.</span>
 <span class="c">     * @property silent</span>
 <span class="c">     * @type boolean</span>
 <span class="c">     */</span>
@@ -140,14 +139,12 @@
 <span class="c">         *</span>
 <span class="c">         * @event subscribeEvent</span>
 <span class="c">         * @type YAHOO.util.CustomEvent</span>
-<span class="c">         * @param {Function} fn The function to execute</span>
-<span class="c">         * @param {Object}   obj An object to be passed along when the event </span>
-<span class="c">         *                       fires defaults to the custom event</span>
-<span class="c">         * @param {boolean|Object}  override If true, the obj passed in becomes </span>
-<span class="c">         *                                   the execution context of the listener.</span>
-<span class="c">         *                                   if an object, that object becomes the</span>
-<span class="c">         *                                   the execution context. defaults to</span>
-<span class="c">         *                                   the custom event</span>
+<span class="c">         * @param fn {Function} The function to execute</span>
+<span class="c">         * @param obj &lt;Object&gt; An object to be passed along when the event fires. </span>
+<span class="c">         * Defaults to the custom event.</span>
+<span class="c">         * @param override &lt;boolean|Object&gt; If true, the obj passed in becomes the </span>
+<span class="c">         * execution context of the listener. If an object, that object becomes </span>
+<span class="c">         * the execution context. Defaults to the custom event.</span>
 <span class="c">         */</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">subscribeEvent</span> <span class="o">=</span> 
                 <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="nx">onsubscribeType</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
@@ -191,12 +188,9 @@
 <span class="c">     * Subscribes the caller to this event</span>
 <span class="c">     * @method subscribe</span>
 <span class="c">     * @param {Function} fn        The function to execute</span>
-<span class="c">     * @param {Object}   obj       An object to be passed along when the event </span>
-<span class="c">     *                             fires</span>
-<span class="c">     * @param {boolean|Object}  overrideContext If true, the obj passed in becomes </span>
-<span class="c">     *                                   the execution context of the listener.</span>
-<span class="c">     *                                   if an object, that object becomes the</span>
-<span class="c">     *                                   the execution context.</span>
+<span class="c">     * @param {Object}   obj       An object to be passed along when the event fires.</span>
+<span class="c">     * overrideContext &lt;boolean|Object&gt; If true, the obj passed in becomes the execution </span>
+<span class="c">     * context of the listener. If an object, that object becomes the execution context.</span>
 <span class="c">     */</span>
     <span class="nx">subscribe</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
 
