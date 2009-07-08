@@ -1038,7 +1038,7 @@ YAHOO.widget.Column.prototype = {
      * @default null
      */
     /**
-     * Custom sort handler.
+     * Custom sort handler. Signature: sortFunction(a, b, desc, field) where field is the sortOptions.field value
      *
      * @property sortOptions.sortFunction
      * @type Function
@@ -1371,7 +1371,7 @@ if(YAHOO.util.DDProxy) {
             this.setYConstraint(10, 10);            
         },
         _resizeProxy: function() {
-            this.constructor.superclass._resizeProxy.apply(this, arguments);
+            YAHOO.widget.ColumnDD.superclass._resizeProxy.apply(this, arguments);
             var dragEl = this.getDragEl(),
                 el = this.getEl();
 
@@ -2105,10 +2105,11 @@ RS.prototype = {
      * @param fnSort {Function} Reference to a sort function.
      * @param desc {Boolean} True if sort direction is descending, false if sort
      * direction is ascending.
+     * @parm field {String} The field to sort by, from sortOptions.field
      * @return {YAHOO.widget.Record[]} Sorted array of Records.
      */
-    sortRecords : function(fnSort, desc) {
-        return this._records.sort(function(a, b) {return fnSort(a, b, desc);});
+    sortRecords : function(fnSort, desc, field) {
+        return this._records.sort(function(a, b) {return fnSort(a, b, desc, field);});
     },
 
     /**
@@ -3765,7 +3766,7 @@ initAttributes : function(oConfigs) {
         value: function(oState, oSelf) {
             // Set defaults
             oState = oState || {pagination:null, sortedBy:null};
-            var sort = (oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey();
+            var sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey());
             var dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc";
             var startIndex = (oState.pagination) ? oState.pagination.recordOffset : 0;
             var results = (oState.pagination) ? oState.pagination.rowsPerPage : null;
@@ -7773,22 +7774,26 @@ sortColumn : function(oColumn, sDir) {
                    
                 // Sort the Records
                 if(!bSorted || sDir || sortFnc) {
-                    // Get the field to sort
-                    var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
+                    // Shortcut for the frequently-used compare method
+                    var compare = YAHOO.util.Sort.compare;
 
                     // Default sort function if necessary
                     sortFnc = sortFnc || 
-                        function(a, b, desc) {
-                            var sorted = YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
+                        function(a, b, desc, field) {
+                            var sorted = compare(a.getData(field),b.getData(field), desc);
                             if(sorted === 0) {
-                                return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
+                                return compare(a.getCount(),b.getCount(), desc); // Bug 1932978
                             }
                             else {
                                 return sorted;
                             }
                         };
+
+                    // Get the field to sort
+                    var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
+
                     // Sort the Records        
-                    this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false));
+                    this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false), sField);
                 }
                 // Just reverse the Records
                 else {
@@ -15028,6 +15033,8 @@ reorderColumn : function(oColumn, index) {
 setColumnWidth : function(oColumn, nWidth) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
+        this._storeScrollPositions();
+
         // Validate new width against minWidth
         if(lang.isNumber(nWidth)) {
             nWidth = (nWidth > oColumn.minWidth) ? nWidth : oColumn.minWidth;
@@ -15340,6 +15347,7 @@ _oDataTable : null,
  * @property _oColumn
  * @type YAHOO.widget.Column
  * @default null
+ * @private 
  */
 _oColumn : null,
 

@@ -818,6 +818,10 @@
                 oHeader.innerHTML = headerContent;
             }
 
+            if (this._rendered) {
+                this._renderHeader();
+            }
+
             this.changeHeaderEvent.fire(headerContent);
             this.changeContentEvent.fire();
 
@@ -869,6 +873,10 @@
                 oBody.innerHTML = bodyContent;
             }
 
+            if (this._rendered) {
+                this._renderBody();
+            }
+
             this.changeBodyEvent.fire(bodyContent);
             this.changeContentEvent.fire();
         },
@@ -918,6 +926,10 @@
                 oFooter.appendChild(footerContent);
             } else {
                 oFooter.innerHTML = footerContent;
+            }
+
+            if (this._rendered) {
+                this._renderFooter();
             }
 
             this.changeFooterEvent.fire(footerContent);
@@ -972,8 +984,7 @@
         */
         render: function (appendToNode, moduleElement) {
 
-            var me = this,
-                firstChild;
+            var me = this;
 
             function appendTo(parentNode) {
                 if (typeof parentNode == "string") {
@@ -1002,33 +1013,78 @@
                 }
             }
 
+            this._renderHeader(moduleElement);
+            this._renderBody(moduleElement);
+            this._renderFooter(moduleElement);
+
+            this._rendered = true;
+
+            this.renderEvent.fire();
+            return true;
+        },
+
+        /**
+         * Renders the currently set header into it's proper position under the 
+         * module element. If the module element is not provided, "this.element" 
+         * is used.
+         * 
+         * @method _renderHeader
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element
+         */
+        _renderHeader: function(moduleElement){
+            moduleElement = moduleElement || this.element;
+
             // Need to get everything into the DOM if it isn't already
-            if (this.header && ! Dom.inDocument(this.header)) {
+            if (this.header && !Dom.inDocument(this.header)) {
                 // There is a header, but it's not in the DOM yet. Need to add it.
-                firstChild = moduleElement.firstChild;
+                var firstChild = moduleElement.firstChild;
                 if (firstChild) {
                     moduleElement.insertBefore(this.header, firstChild);
                 } else {
                     moduleElement.appendChild(this.header);
                 }
             }
+        },
 
-            if (this.body && ! Dom.inDocument(this.body)) {
-                // There is a body, but it's not in the DOM yet. Need to add it.		
-                if (this.footer && Dom.isAncestor(this.moduleElement, this.footer)) {
+        /**
+         * Renders the currently set body into it's proper position under the 
+         * module element. If the module element is not provided, "this.element" 
+         * is used.
+         * 
+         * @method _renderBody
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element.
+         */
+        _renderBody: function(moduleElement){
+            moduleElement = moduleElement || this.element;
+
+            if (this.body && !Dom.inDocument(this.body)) {
+                // There is a body, but it's not in the DOM yet. Need to add it.
+                if (this.footer && Dom.isAncestor(moduleElement, this.footer)) {
                     moduleElement.insertBefore(this.body, this.footer);
                 } else {
                     moduleElement.appendChild(this.body);
                 }
             }
+        },
 
-            if (this.footer && ! Dom.inDocument(this.footer)) {
+        /**
+         * Renders the currently set footer into it's proper position under the 
+         * module element. If the module element is not provided, "this.element" 
+         * is used.
+         * 
+         * @method _renderFooter
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element
+         */
+        _renderFooter: function(moduleElement){
+            moduleElement = moduleElement || this.element;
+
+            if (this.footer && !Dom.inDocument(this.footer)) {
                 // There is a footer, but it's not in the DOM yet. Need to add it.
                 moduleElement.appendChild(this.footer);
             }
-
-            this.renderEvent.fire();
-            return true;
         },
 
         /**

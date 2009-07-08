@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * @module editor</span>
 <span class="c"> * @description &lt;p&gt;The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images. The Rich Text Editor&#39;s toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.&lt;/p&gt;</span>
 <span class="c"> * @namespace YAHOO.widget</span>
@@ -992,6 +992,10 @@
 <span class="c">        * @description This method is fired from _checkLoaded when the document is ready. It turns on designMode and set&#39;s up the listeners.</span>
 <span class="c">        */</span>
         <span class="nx">_initEditor</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_editorInit</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_editorInit</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_getDoc</span><span class="o">().</span><span class="nx">body</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">margin</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span><span class="o">;</span>
             <span class="o">}</span>
@@ -5195,6 +5199,7 @@
     
 <span class="o">})();</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>

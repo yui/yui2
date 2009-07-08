@@ -239,21 +239,24 @@ YAHOO.env.getVersion = function(name) {
  * @static
  */
 YAHOO.env.ua = function() {
-    var o={
+
+    var nav = navigator,
+
+        o = {
 
         /**
          * Internet Explorer version number or 0.  Example: 6
          * @property ie
          * @type float
          */
-        ie:0,
+        ie: 0,
 
         /**
          * Opera version number or 0.  Example: 9.2
          * @property opera
          * @type float
          */
-        opera:0,
+        opera: 0,
 
         /**
          * Gecko engine revision number.  Will evaluate to 1 if Gecko 
@@ -268,7 +271,7 @@ YAHOO.env.ua = function() {
          * @property gecko
          * @type float
          */
-        gecko:0,
+        gecko: 0,
 
         /**
          * AppleWebKit version.  KHTML browsers that are not WebKit browsers 
@@ -323,7 +326,7 @@ YAHOO.env.ua = function() {
          * @property caja
          * @type float
          */
-        caja: 0
+        caja: nav.cajaVersion
 
     },
 
@@ -383,11 +386,6 @@ YAHOO.env.ua = function() {
         }
     }
 
-    m=ua.match(/Caja\/([^\s]*)/);
-    if (m&&m[1]) {
-        o.caja=parseFloat(m[1]);
-    }
-    
     return o;
 }();
 
@@ -478,7 +476,7 @@ var L = YAHOO.lang,
      * @return {boolean} the result
      */
     isFunction: function(o) {
-        return OP.toString.apply(o) === FUNCTION_TOSTRING;
+        return (typeof o === 'function') || OP.toString.apply(o) === FUNCTION_TOSTRING;
     },
         
     /**
@@ -1103,15 +1101,20 @@ YAHOO.util.Get = function() {
      * @return {HTMLElement} the generated node
      * @private
      */
-    var _linkNode = function(url, win, charset) {
-        var c = charset || "utf-8";
-        return _node("link", {
-                "id":      "yui__dyn_" + (nidx++),
-                "type":    "text/css",
-                "charset": c,
-                "rel":     "stylesheet",
-                "href":    url
-            }, win);
+    var _linkNode = function(url, win, attributes) {
+
+        var o = {
+            id:   "yui__dyn_" + (nidx++),
+            type: "text/css",
+            rel:  "stylesheet",
+            href: url
+        };
+
+        if (attributes) {
+            lang.augmentObject(o, attributes);
+        }
+
+        return _node("link", o, win);
     };
 
     /**
@@ -1122,14 +1125,18 @@ YAHOO.util.Get = function() {
      * @return {HTMLElement} the generated node
      * @private
      */
-    var _scriptNode = function(url, win, charset) {
-        var c = charset || "utf-8";
-        return _node("script", {
-                "id":      "yui__dyn_" + (nidx++),
-                "type":    "text/javascript",
-                "charset": c,
-                "src":     url
-            }, win);
+    var _scriptNode = function(url, win, attributes) {
+        var o = {
+            id:   "yui__dyn_" + (nidx++),
+            type: "text/javascript",
+            src:  url
+        };
+
+        if (attributes) {
+            lang.augmentObject(o, attributes);
+        }
+
+        return _node("script", o, win);
     };
 
     /**
@@ -1264,7 +1271,7 @@ YAHOO.util.Get = function() {
                 // arbitrary timeout.  It is possible that the browser does
                 // block subsequent script execution in this case for a limited
                 // time.
-                var extra = _scriptNode(null, q.win, q.charset);
+                var extra = _scriptNode(null, q.win, q.attributes);
                 extra.innerHTML='YAHOO.util.Get._finalize("' + id + '");';
                 q.nodes.push(extra); h.appendChild(extra);
 
@@ -1291,9 +1298,9 @@ YAHOO.util.Get = function() {
         }
 
         if (q.type === "script") {
-            n = _scriptNode(url, w, q.charset);
+            n = _scriptNode(url, w, q.attributes);
         } else {
-            n = _linkNode(url, w, q.charset);
+            n = _linkNode(url, w, q.attributes);
         }
 
         // track this node's load progress
@@ -1403,6 +1410,11 @@ YAHOO.util.Get = function() {
         q.scope = q.scope || q.win;
         q.autopurge = ("autopurge" in q) ? q.autopurge : 
                       (type === "script") ? true : false;
+
+        if (opts.charset) {
+            q.attributes = q.attributes || {};
+            q.attributes.charset = opts.charset;
+        }
 
         lang.later(0, q, _next, id);
 
@@ -1661,8 +1673,8 @@ YAHOO.util.Get = function() {
          * <pre>
          * // assumes yahoo, dom, and event are already on the page
          * &nbsp;&nbsp;YAHOO.util.Get.script(
-         * &nbsp;&nbsp;["http://yui.yahooapis.com/2.3.1/build/dragdrop/dragdrop-min.js",
-         * &nbsp;&nbsp;&nbsp;"http://yui.yahooapis.com/2.3.1/build/animation/animation-min.js"], &#123;
+         * &nbsp;&nbsp;["http://yui.yahooapis.com/2.7.0/build/dragdrop/dragdrop-min.js",
+         * &nbsp;&nbsp;&nbsp;"http://yui.yahooapis.com/2.7.0/build/animation/animation-min.js"], &#123;
          * &nbsp;&nbsp;&nbsp;&nbsp;onSuccess: function(o) &#123;
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new YAHOO.util.DDProxy("dd1"); // also new o.reference("dd1"); would work
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log("won't cause error because YAHOO is the scope");
@@ -1724,10 +1736,10 @@ YAHOO.util.Get = function() {
          * <dd>Node charset, default utf-8</dd>
          * </dl>
          * <pre>
-         *      YAHOO.util.Get.css("http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css");
+         *      YAHOO.util.Get.css("http://yui.yahooapis.com/2.7.0/build/menu/assets/skins/sam/menu.css");
          * </pre>
          * <pre>
-         *      YAHOO.util.Get.css(["http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css",
+         *      YAHOO.util.Get.css(["http://yui.yahooapis.com/2.7.0/build/menu/assets/skins/sam/menu.css",
          * </pre>
          * @return {tId: string} an object containing info about the transaction
          */
@@ -1826,6 +1838,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'type': 'js',
             'path': 'calendar/calendar-min.js',
             'requires': ['event', 'dom'],
+            supersedes: ['datemeth'],
             'skinnable': true
         },
 
@@ -1895,6 +1908,12 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'requires': ['element', 'datasource'],
             'optional': ['calendar', 'dragdrop', 'paginator'],
             'skinnable': true
+        },
+
+        datemath: {
+            'type': 'js',
+            'path': 'datemath/datemath-min.js',
+            'requires': ['yahoo']
         },
 
         'dom': {
@@ -2085,13 +2104,13 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'type': 'js',
             'path': 'treeview/treeview-min.js',
             'requires': ['event', 'dom'],
-            'optional': ['json'],
+            'optional': ['json', 'animation', 'calendar'],
             'skinnable': true
         },
 
         'uploader': {
             'type': 'js',
-            'path': 'uploader/uploader.js',
+            'path': 'uploader/uploader-min.js',
             'requires': ['element']
         },
 

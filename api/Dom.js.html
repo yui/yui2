@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * The dom module provides helper methods for manipulating Dom elements.</span>
 <span class="c"> * @module dom</span>
 <span class="c"> *</span>
@@ -125,6 +125,8 @@
 <span class="c"></span>            <span class="s1">&#39;htmlFor&#39;</span><span class="o">:</span> <span class="s1">&#39;for&#39;</span><span class="o">,</span>
             <span class="s1">&#39;className&#39;</span><span class="o">:</span> <span class="nx">_CLASS</span>
         <span class="o">},</span>
+
+        <span class="nx">DOT_ATTRIBUTES</span><span class="o">:</span> <span class="o">{},</span>
 
         <span class="c">/**</span>
 <span class="c">         * Returns an HTMLElement reference.</span>
@@ -607,14 +609,14 @@
 <span class="c">         * @method getElementsByClassName</span>
 <span class="c">         * @param {String} className The class name to match against</span>
 <span class="c">         * @param {String} tag (optional) The tag name of the elements being collected</span>
-<span class="c">         * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point </span>
+<span class="c">         * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point.</span>
+<span class="c">         * This element is not included in the className scan.</span>
 <span class="c">         * @param {Function} apply (optional) A function to apply to each element when found </span>
 <span class="c">         * @param {Any} o (optional) An optional arg that is passed to the supplied method</span>
 <span class="c">         * @param {Boolean} overrides (optional) Whether or not to override the scope of &quot;method&quot; with &quot;o&quot;</span>
 <span class="c">         * @return {Array} An array of elements that have the given class name</span>
 <span class="c">         */</span>
         <span class="nx">getElementsByClassName</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">className</span><span class="o">,</span> <span class="nx">tag</span><span class="o">,</span> <span class="nx">root</span><span class="o">,</span> <span class="nx">apply</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="nx">overrides</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">className</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">trim</span><span class="o">(</span><span class="nx">className</span><span class="o">);</span>
             <span class="nx">tag</span> <span class="o">=</span> <span class="nx">tag</span> <span class="o">||</span> <span class="s1">&#39;*&#39;</span><span class="o">;</span>
             <span class="nx">root</span> <span class="o">=</span> <span class="o">(</span><span class="nx">root</span><span class="o">)</span> <span class="o">?</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">root</span><span class="o">)</span> <span class="o">:</span> <span class="kc">null</span> <span class="o">||</span> <span class="nb">document</span><span class="o">;</span> 
             <span class="k">if</span> <span class="o">(!</span><span class="nx">root</span><span class="o">)</span> <span class="o">{</span>
@@ -1333,8 +1335,12 @@
                 <span class="nx">val</span> <span class="o">=</span> <span class="nx">args</span><span class="o">.</span><span class="nx">val</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">attr</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">CUSTOM_ATTRIBUTES</span><span class="o">[</span><span class="nx">attr</span><span class="o">]</span> <span class="o">||</span> <span class="nx">attr</span><span class="o">;</span>
-                <span class="nx">el</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="nx">attr</span><span class="o">,</span> <span class="nx">val</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">DOT_ATTRIBUTES</span><span class="o">[</span><span class="nx">attr</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="nx">el</span><span class="o">[</span><span class="nx">attr</span><span class="o">]</span> <span class="o">=</span> <span class="nx">val</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="nx">attr</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">CUSTOM_ATTRIBUTES</span><span class="o">[</span><span class="nx">attr</span><span class="o">]</span> <span class="o">||</span> <span class="nx">attr</span><span class="o">;</span>
+                    <span class="nx">el</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="nx">attr</span><span class="o">,</span> <span class="nx">val</span><span class="o">);</span>
+                <span class="o">}</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;setAttribute method not available for &#39;</span> <span class="o">+</span> <span class="nx">el</span><span class="o">,</span> <span class="s1">&#39;error&#39;</span><span class="o">,</span> <span class="s1">&#39;Dom&#39;</span><span class="o">);</span>
             <span class="o">}</span>
@@ -1396,7 +1402,7 @@
 
         <span class="nx">_patterns</span><span class="o">:</span> <span class="o">{</span>
             <span class="nx">ROOT_TAG</span><span class="o">:</span> <span class="sr">/^body|html$/i</span><span class="o">,</span> <span class="c">// body for quirks mode, html for standards,</span>
-<span class="c"></span>            <span class="nx">CLASS_RE_TOKENS</span><span class="o">:</span> <span class="sr">/([\.\(\)\^\$\*\+\?\|\[\]\{\}])/g</span>
+<span class="c"></span>            <span class="nx">CLASS_RE_TOKENS</span><span class="o">:</span> <span class="sr">/([\.\(\)\^\$\*\+\?\|\[\]\{\}\\])/g</span>
         <span class="o">},</span>
 
 
@@ -1446,8 +1452,13 @@
         <span class="o">};</span>
 
     <span class="o">}</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span> <span class="o">&amp;&amp;</span> <span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span> <span class="o">&gt;=</span> <span class="m">8</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">.</span><span class="nx">hasAttribute</span><span class="o">)</span> <span class="o">{</span> <span class="c">// IE 8 standards</span>
+<span class="c"></span>        <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">DOT_ATTRIBUTES</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span> <span class="c">// IE 8 errors on input.setAttribute(&#39;type&#39;)</span>
+<span class="c"></span>    <span class="o">}</span>
 <span class="o">})();</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>

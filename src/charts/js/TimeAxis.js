@@ -80,5 +80,13 @@ YAHOO.lang.extend(YAHOO.widget.TimeAxis, YAHOO.widget.Axis,
 	 * @property stackingEnabled
 	 * @type Boolean
 	 */
-	stackingEnabled: false
+	stackingEnabled: false,
+
+	/**
+	 * Indicates whether to factor in the size of the labels when calculating a major unit.
+	 *
+	 * @property calculateByLabelSize
+	 * @type Boolean
+	 */
+	calculateByLabelSize: true	
 });

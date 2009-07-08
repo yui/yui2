@@ -36,13 +36,18 @@ package com.yahoo.astra.fl.charts.series
 	/**
 	 * The base color used by objects displayed in this series.
 	 */
-    [Style(name="fillColor", type="uint")]
+    [Style(name="color", type="uint")]
     
     /** 
      * The border color used by programatic skins in this series.
      */
     [Style(name="borderColor", type="uint")]
     
+	/**
+	 * The fill color used by programatic skins in this series.
+	 */
+	[Style(name="fillColor", type="uint")]
+	
 	/**
 	 * The Class used to instantiate each marker's skin.
 	 */

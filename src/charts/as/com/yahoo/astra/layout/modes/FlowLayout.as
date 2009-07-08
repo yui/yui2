@@ -250,7 +250,7 @@ package com.yahoo.astra.layout.modes
 				maxChildWidth = Math.max(maxChildWidth, child.width);
 				yPosition += child.height + this.verticalGap;
 			}
-			this.alignColumn(column, maxChildWidth, bounds);
+			if(column.length < childCount) this.alignColumn(column, maxChildWidth, bounds);
 		}
 		
 		/**
@@ -290,7 +290,7 @@ package com.yahoo.astra.layout.modes
 				maxChildHeight = Math.max(maxChildHeight, childHeight);
 				xPosition += child.width + this.horizontalGap;
 			}
-			this.alignRow(row, maxChildHeight, bounds);
+			if(row.length < childCount) this.alignRow(row, maxChildHeight, bounds);
 		}
 		
 		/**
@@ -303,7 +303,7 @@ package com.yahoo.astra.layout.modes
 			{
 				return;
 			}
-			
+
 			var lastChild:DisplayObject = DisplayObject(column[column.length - 1]);
 			var columnHeight:Number = (lastChild.y + lastChild.height) - bounds.y + this.paddingBottom;
 			var difference:Number = bounds.height - columnHeight;

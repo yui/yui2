@@ -3015,6 +3015,10 @@ var Dom = YAHOO.util.Dom,
         * @description This method is fired from _checkLoaded when the document is ready. It turns on designMode and set's up the listeners.
         */
         _initEditor: function() {
+            if (this._editorInit) {
+                return;
+            }
+            this._editorInit = true;
             if (this.browser.ie) {
                 this._getDoc().body.style.margin = '0';
             }
@@ -7425,146 +7429,150 @@ var Dom = YAHOO.util.Dom,
         init: function(p_oElement, p_oAttributes) {
             
             this._windows = {};
-            this._defaultToolbar = {
-                collapse: true,
-                titlebar: 'Text Editing Tools',
-                draggable: false,
-                buttonType: 'advanced',
-                buttons: [
-                    { group: 'fontstyle', label: 'Font Name and Size',
-                        buttons: [
-                            { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+            if (!this._defaultToolbar) {            
+                this._defaultToolbar = {
+                    collapse: true,
+                    titlebar: 'Text Editing Tools',
+                    draggable: false,
+                    buttonType: 'advanced',
+                    buttons: [
+                        { group: 'fontstyle', label: 'Font Name and Size',
+                            buttons: [
+                                { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+                                    menu: [
+                                        { text: 'Arial', checked: true },
+                                        { text: 'Arial Black' },
+                                        { text: 'Comic Sans MS' },
+                                        { text: 'Courier New' },
+                                        { text: 'Lucida Console' },
+                                        { text: 'Tahoma' },
+                                        { text: 'Times New Roman' },
+                                        { text: 'Trebuchet MS' },
+                                        { text: 'Verdana' }
+                                    ]
+                                },
+                                { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'textstyle', label: 'Font Style',
+                            buttons: [
+                                { type: 'push', label: 'Bold CTRL + SHIFT + B', value: 'bold' },
+                                { type: 'push', label: 'Italic CTRL + SHIFT + I', value: 'italic' },
+                                { type: 'push', label: 'Underline CTRL + SHIFT + U', value: 'underline' },
+                                { type: 'separator' },
+                                { type: 'push', label: 'Subscript', value: 'subscript', disabled: true },
+                                { type: 'push', label: 'Superscript', value: 'superscript', disabled: true }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'textstyle2', label: '&nbsp;',
+                            buttons: [
+                                { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
+                                { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true },
+                                { type: 'separator' },
+                                { type: 'push', label: 'Remove Formatting', value: 'removeformat', disabled: true },
+                                { type: 'push', label: 'Show/Hide Hidden Elements', value: 'hiddenelements' }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'undoredo', label: 'Undo/Redo',
+                            buttons: [
+                                { type: 'push', label: 'Undo', value: 'undo', disabled: true },
+                                { type: 'push', label: 'Redo', value: 'redo', disabled: true }
+                                
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'alignment', label: 'Alignment',
+                            buttons: [
+                                { type: 'push', label: 'Align Left CTRL + SHIFT + [', value: 'justifyleft' },
+                                { type: 'push', label: 'Align Center CTRL + SHIFT + |', value: 'justifycenter' },
+                                { type: 'push', label: 'Align Right CTRL + SHIFT + ]', value: 'justifyright' },
+                                { type: 'push', label: 'Justify', value: 'justifyfull' }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'parastyle', label: 'Paragraph Style',
+                            buttons: [
+                            { type: 'select', label: 'Normal', value: 'heading', disabled: true,
                                 menu: [
-                                    { text: 'Arial', checked: true },
-                                    { text: 'Arial Black' },
-                                    { text: 'Comic Sans MS' },
-                                    { text: 'Courier New' },
-                                    { text: 'Lucida Console' },
-                                    { text: 'Tahoma' },
-                                    { text: 'Times New Roman' },
-                                    { text: 'Trebuchet MS' },
-                                    { text: 'Verdana' }
+                                    { text: 'Normal', value: 'none', checked: true },
+                                    { text: 'Header 1', value: 'h1' },
+                                    { text: 'Header 2', value: 'h2' },
+                                    { text: 'Header 3', value: 'h3' },
+                                    { text: 'Header 4', value: 'h4' },
+                                    { text: 'Header 5', value: 'h5' },
+                                    { text: 'Header 6', value: 'h6' }
                                 ]
-                            },
-                            { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'textstyle', label: 'Font Style',
-                        buttons: [
-                            { type: 'push', label: 'Bold CTRL + SHIFT + B', value: 'bold' },
-                            { type: 'push', label: 'Italic CTRL + SHIFT + I', value: 'italic' },
-                            { type: 'push', label: 'Underline CTRL + SHIFT + U', value: 'underline' },
-                            { type: 'separator' },
-                            { type: 'push', label: 'Subscript', value: 'subscript', disabled: true },
-                            { type: 'push', label: 'Superscript', value: 'superscript', disabled: true }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'textstyle2', label: '&nbsp;',
-                        buttons: [
-                            { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
-                            { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true },
-                            { type: 'separator' },
-                            { type: 'push', label: 'Remove Formatting', value: 'removeformat', disabled: true },
-                            { type: 'push', label: 'Show/Hide Hidden Elements', value: 'hiddenelements' }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'undoredo', label: 'Undo/Redo',
-                        buttons: [
-                            { type: 'push', label: 'Undo', value: 'undo', disabled: true },
-                            { type: 'push', label: 'Redo', value: 'redo', disabled: true }
-                            
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'alignment', label: 'Alignment',
-                        buttons: [
-                            { type: 'push', label: 'Align Left CTRL + SHIFT + [', value: 'justifyleft' },
-                            { type: 'push', label: 'Align Center CTRL + SHIFT + |', value: 'justifycenter' },
-                            { type: 'push', label: 'Align Right CTRL + SHIFT + ]', value: 'justifyright' },
-                            { type: 'push', label: 'Justify', value: 'justifyfull' }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'parastyle', label: 'Paragraph Style',
-                        buttons: [
-                        { type: 'select', label: 'Normal', value: 'heading', disabled: true,
-                            menu: [
-                                { text: 'Normal', value: 'none', checked: true },
-                                { text: 'Header 1', value: 'h1' },
-                                { text: 'Header 2', value: 'h2' },
-                                { text: 'Header 3', value: 'h3' },
-                                { text: 'Header 4', value: 'h4' },
-                                { text: 'Header 5', value: 'h5' },
-                                { text: 'Header 6', value: 'h6' }
+                            }
+                            ]
+                        },
+                        { type: 'separator' },
+                        
+                        { group: 'indentlist2', label: 'Indenting and Lists',
+                            buttons: [
+                                { type: 'push', label: 'Indent', value: 'indent', disabled: true },
+                                { type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
+                                { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
+                                { type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist' }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'insertitem', label: 'Insert Item',
+                            buttons: [
+                                { type: 'push', label: 'HTML Link CTRL + SHIFT + L', value: 'createlink', disabled: true },
+                                { type: 'push', label: 'Insert Image', value: 'insertimage' }
                             ]
                         }
-                        ]
-                    },
-                    { type: 'separator' },
-                    
-                    { group: 'indentlist2', label: 'Indenting and Lists',
-                        buttons: [
-                            { type: 'push', label: 'Indent', value: 'indent', disabled: true },
-                            { type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
-                            { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
-                            { type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist' }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'insertitem', label: 'Insert Item',
-                        buttons: [
-                            { type: 'push', label: 'HTML Link CTRL + SHIFT + L', value: 'createlink', disabled: true },
-                            { type: 'push', label: 'Insert Image', value: 'insertimage' }
-                        ]
-                    }
-                ]
-            };
+                    ]
+                };
+            }
 
-            this._defaultImageToolbarConfig = {
-                buttonType: this._defaultToolbar.buttonType,
-                buttons: [
-                    { group: 'textflow', label: this.STR_IMAGE_TEXTFLOW + ':',
-                        buttons: [
-                            { type: 'push', label: 'Left', value: 'left' },
-                            { type: 'push', label: 'Inline', value: 'inline' },
-                            { type: 'push', label: 'Block', value: 'block' },
-                            { type: 'push', label: 'Right', value: 'right' }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'padding', label: this.STR_IMAGE_PADDING + ':',
-                        buttons: [
-                            { type: 'spin', label: '0', value: 'padding', range: [0, 50] }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'border', label: this.STR_IMAGE_BORDER + ':',
-                        buttons: [
-                            { type: 'select', label: this.STR_IMAGE_BORDER_SIZE, value: 'bordersize',
-                                menu: [
-                                    { text: 'none', value: '0', checked: true },
-                                    { text: '1px', value: '1' },
-                                    { text: '2px', value: '2' },
-                                    { text: '3px', value: '3' },
-                                    { text: '4px', value: '4' },
-                                    { text: '5px', value: '5' }
-                                ]
-                            },
-                            { type: 'select', label: this.STR_IMAGE_BORDER_TYPE, value: 'bordertype', disabled: true,
-                                menu: [
-                                    { text: 'Solid', value: 'solid', checked: true },
-                                    { text: 'Dashed', value: 'dashed' },
-                                    { text: 'Dotted', value: 'dotted' }
-                                ]
-                            },
-                            { type: 'color', label: 'Border Color', value: 'bordercolor', disabled: true }
-                        ]
-                    }
-                ]
-            };
+            if (!this._defaultImageToolbarConfig) {
+                this._defaultImageToolbarConfig = {
+                    buttonType: this._defaultToolbar.buttonType,
+                    buttons: [
+                        { group: 'textflow', label: this.STR_IMAGE_TEXTFLOW + ':',
+                            buttons: [
+                                { type: 'push', label: 'Left', value: 'left' },
+                                { type: 'push', label: 'Inline', value: 'inline' },
+                                { type: 'push', label: 'Block', value: 'block' },
+                                { type: 'push', label: 'Right', value: 'right' }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'padding', label: this.STR_IMAGE_PADDING + ':',
+                            buttons: [
+                                { type: 'spin', label: '0', value: 'padding', range: [0, 50] }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'border', label: this.STR_IMAGE_BORDER + ':',
+                            buttons: [
+                                { type: 'select', label: this.STR_IMAGE_BORDER_SIZE, value: 'bordersize',
+                                    menu: [
+                                        { text: 'none', value: '0', checked: true },
+                                        { text: '1px', value: '1' },
+                                        { text: '2px', value: '2' },
+                                        { text: '3px', value: '3' },
+                                        { text: '4px', value: '4' },
+                                        { text: '5px', value: '5' }
+                                    ]
+                                },
+                                { type: 'select', label: this.STR_IMAGE_BORDER_TYPE, value: 'bordertype', disabled: true,
+                                    menu: [
+                                        { text: 'Solid', value: 'solid', checked: true },
+                                        { text: 'Dashed', value: 'dashed' },
+                                        { text: 'Dotted', value: 'dotted' }
+                                    ]
+                                },
+                                { type: 'color', label: 'Border Color', value: 'bordercolor', disabled: true }
+                            ]
+                        }
+                    ]
+                };
+            }
 
             YAHOO.widget.Editor.superclass.init.call(this, p_oElement, p_oAttributes);
         },

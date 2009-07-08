@@ -10,8 +10,8 @@
  * The treeview widget is a generic tree building tool.
  * @module treeview
  * @title TreeView Widget
- * @requires yahoo, event
- * @optional animation, json
+ * @requires yahoo, dom, event
+ * @optional animation, json, calendar
  * @namespace YAHOO.widget
  */
 
@@ -21,16 +21,14 @@
  * @class TreeView
  * @uses YAHOO.util.EventProvider
  * @constructor
- * @param {string|HTMLElement} id The id of the element, or the element itself that the tree will be inserted into.  Existing markup in this element, if valid, will be used to build the tree
- * @param {Array|object|string}  oConfig (optional)  An array containing the definition of the tree.  (see buildTreeFromObject)
+ * @param {string|HTMLElement} id The id of the element, or the element itself that the tree will be inserted into.  
+ *        Existing markup in this element, if valid, will be used to build the tree
+ * @param {Array|Object|String}  oConfig (optional)  If present, it will be used to build the tree via method <a href="#method_buildTreeFromObject">buildTreeFromObject</a>
  * 
  */
 YAHOO.widget.TreeView = function(id, oConfig) {
     if (id) { this.init(id); }
     if (oConfig) {
-        if (!Lang.isArray(oConfig)) {
-            oConfig = [oConfig];
-        }
         this.buildTreeFromObject(oConfig);
     } else if (Lang.trim(this._el.innerHTML)) {
         this.buildTreeFromMarkup(id);
@@ -418,12 +416,15 @@ TV.prototype = {
      *  A tree can be described by an array of objects, each object corresponding to a node.
      *  Node descriptions may contain values for any property of a node plus the following extra properties: <ul>
      * <li>type:  can be one of the following:<ul>
-     *  <li> A shortname for a node type (<code>'text','menu','html'</code>) </li>
-     * <li>The name of a Node class under YAHOO.widget (<code>'TextNode', 'MenuNode', 'DateNode'</code>, etc) </li>
-     * <li>a reference to an actual class: <code>YAHOO.widget.DateNode</code></li></ul></li>
+     *    <li> A shortname for a node type (<code>'text','menu','html'</code>) </li>
+     *    <li>The name of a Node class under YAHOO.widget (<code>'TextNode', 'MenuNode', 'DateNode'</code>, etc) </li>
+     *    <li>a reference to an actual class: <code>YAHOO.widget.DateNode</code></li>
+	 * </ul></li>
      * <li>children: an array containing further node definitions</li></ul>
+	 * A string instead of an object will produce a node of type 'text' with the given string as its label.
      * @method buildTreeFromObject
-     * @param  oConfig {Array}  array containing a full description of the tree
+     * @param  oConfig {Array|Object|String}  array containing a full description of the tree.
+     *        An object or a string will be turned into an array with the given object or string as its only element.
      * 
      */
     buildTreeFromObject: function (oConfig) {
@@ -470,7 +471,10 @@ TV.prototype = {
                 }
             }
         };
-                            
+        if (!Lang.isArray(oConfig)) {
+            oConfig = [oConfig];
+        }
+
                     
         build(this.root,oConfig);
     },
@@ -755,18 +759,35 @@ TV.prototype = {
                 if (newNode) { newNode.focus();}
                 Event.preventDefault(ev);
                 break;
-            case KEY.RIGHT:
-                do {
-                    newNode.expand();
-                    if (newNode.children.length) {
-                        newNode = newNode.children[0];
-                    } else {
-                        newNode = newNode.nextSibling;
-                    }
-                } while (newNode && !newNode._canHaveFocus());
-                if (newNode) { newNode.focus();}
-                Event.preventDefault(ev);
-                break;
+			case KEY.RIGHT:
+				var self = this,
+					moveFocusRight,
+					focusOnExpand = function (newNode) {
+						self.unsubscribe('expandComplete',focusOnExpand);
+						moveFocusRight(newNode);
+					};
+				moveFocusRight = function (newNode) {
+					do {
+						if (newNode.isDynamic() && !newNode.childrenRendered) {
+							self.subscribe('expandComplete',focusOnExpand);
+							newNode.expand();
+							newNode = null;
+							break;
+						} else {
+							newNode.expand();
+							if (newNode.children.length) {
+								newNode = newNode.children[0];
+							} else {
+								newNode = newNode.nextSibling;
+							}
+						}
+					} while (newNode && !newNode._canHaveFocus());
+					if (newNode) { newNode.focus();}
+				};
+					
+				moveFocusRight(newNode);
+				Event.preventDefault(ev);
+				break;
             case KEY.ENTER:
                 if (node.href) {
                     if (node.target) {
@@ -2359,6 +2380,18 @@ YAHOO.widget.Node.prototype = {
      */
     loadComplete: function() {
         this.getChildrenEl().innerHTML = this.completeRender();
+		if (this.propagageHighlightDown) {
+			if (this.highlightState === 1 && !this.tree.singleNodeHighlight) {
+				for (var i = 0; i < this.children.length; i++) {
+				this.children[i].highlight(true);
+			}
+			} else if (this.highlightState === 0 || this.tree.singleNodeHighlight) {
+				for (i = 0; i < this.children.length; i++) {
+					this.children[i].unhighlight(true);
+				}
+			} // if (highlighState == 2) leave child nodes with whichever highlight state they are set
+		}
+				
         this.dynamicLoadComplete = true;
         this.isLoading = false;
         this.expand(true);
@@ -3189,7 +3222,7 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     },
 
     /**
-     * Synchronizes the node.data, node.html, and the node's content
+     * Synchronizes the node.html, and the node's content
      * @property setHtml
      * @param o {object} An html string or object containing an html property
      */

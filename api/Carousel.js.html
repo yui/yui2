@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * The Carousel module provides a widget for browsing among a set of like</span>
 <span class="c"> * objects represented pictorially.</span>
 <span class="c"> *</span>
@@ -2070,6 +2070,11 @@
 
             <span class="nx">carousel</span><span class="o">.</span><span class="nx">_refreshUi</span><span class="o">();</span>
 
+            <span class="c">// Finally display the widget.  Note that, the widget doesn&#39;t need</span>
+<span class="c"></span>            <span class="c">// the show() to be called unlike the previous versions.  This</span>
+<span class="c"></span>            <span class="c">// makes the Carousel inconsistent with the other YUI widgets.</span>
+<span class="c"></span>            <span class="nx">carousel</span><span class="o">.</span><span class="nx">show</span><span class="o">();</span>
+
             <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
         <span class="o">},</span>
 
@@ -3701,6 +3706,7 @@
 <span class="c">;;  End: **</span>
 <span class="c">*/</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>

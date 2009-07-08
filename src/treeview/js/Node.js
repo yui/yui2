@@ -1030,6 +1030,18 @@ YAHOO.widget.Node.prototype = {
     loadComplete: function() {
         this.logger.log(this.index + " loadComplete, children: " + this.children.length);
         this.getChildrenEl().innerHTML = this.completeRender();
+		if (this.propagageHighlightDown) {
+			if (this.highlightState === 1 && !this.tree.singleNodeHighlight) {
+				for (var i = 0; i < this.children.length; i++) {
+				this.children[i].highlight(true);
+			}
+			} else if (this.highlightState === 0 || this.tree.singleNodeHighlight) {
+				for (i = 0; i < this.children.length; i++) {
+					this.children[i].unhighlight(true);
+				}
+			} // if (highlighState == 2) leave child nodes with whichever highlight state they are set
+		}
+				
         this.dynamicLoadComplete = true;
         this.isLoading = false;
         this.expand(true);

@@ -1,4 +1,4 @@
-﻿package com.yahoo.astra.display
+package com.yahoo.astra.display
 {
 	import flash.display.Sprite;
 	import flash.text.*;
@@ -38,6 +38,11 @@
 		 * Sprite that holds the bitmap container
 		 */
 		private var _bitmapContainer:Sprite = new Sprite();
+		
+		public function get bitmapContainer():Sprite
+		{
+			return _bitmapContainer;
+		}
 	
 		/**
 		 * @private
@@ -47,13 +52,6 @@
 		 */
 		private var _width:Number = 0;
 
-		/**
-		 * @inheritDoc
-		 */
-		override public function get width():Number
-		{
-			return _width;
-		}
 
 		/**
 		 * @private
@@ -63,13 +61,6 @@
 		 */
 		private var _height:Number = 0;	
 	
-		/**
-		 * @inheritDoc
-		 */
-		override public function get height():Number
-		{
-			return _height;
-		}
 
 		/**
 		 * @private 
@@ -129,8 +120,10 @@
 		 */		
 		override public function set rotation(value:Number):void
 		{
+			super.rotation = 0;
 			_rotation = value;
 			setTextRotation(value);
+			super.rotation = value;
 		}
 	
 		/**
@@ -148,8 +141,8 @@
 		{
 			this.textField.text = value;
 			this.textField.visible = true;
-			_width = this.textField.width;
-			_height = this.textField.height;
+			this.contentWidth = _width = this.textField.width;
+			this.contentHeight = _height = this.textField.height;
 		}
 		
 		/**
@@ -206,8 +199,136 @@
 		public function set border(value:Boolean):void
 		{
 			this.textField.border = value;
+		}	
+		
+		/**
+		 * Gets the minimum distance for placement of labels of the same rotation on the x axis
+		 */
+		public function get rotationWidth():Number
+		{
+			var adjustedWidth:Number = this.contentHeight / (Math.sin((Math.abs(this.rotation))*Math.PI/180));
+			adjustedWidth = Math.min(adjustedWidth, this.width);
+			if(this.contentWidth > this.contentHeight) adjustedWidth = Math.min(adjustedWidth, this.contentWidth);
+			if(this.rotation == 0 || Math.abs(this.rotation) == 90)
+			{
+				adjustedWidth = this.width;
+			}
+			return Math.round(adjustedWidth);
+		}
+
+		/**
+		 * Gets the minimum distance for placement of labels of the same rotation on the y axis
+		 */
+		public function get rotationHeight():Number
+		{
+			var adjustedHeight:Number =  (this.contentHeight / (Math.cos((Math.abs(this.rotation))*Math.PI/180)));
+			adjustedHeight = Math.min(adjustedHeight, this.height);
+			if(this.contentWidth > this.contentHeight) adjustedHeight = Math.min(adjustedHeight, this.contentWidth);
+			if(this.rotation == 0 || Math.abs(this.rotation) == 90)
+			{
+				adjustedHeight = this.height;
+			}
+			return Math.round(adjustedHeight);
+		}
+		
+		/**
+		 * @private
+		 * Placeholder for contentWidth
+		 */
+		private var _contentWidth:Number = 0;
+		
+		/** 
+		 * Width of the text field without rotation.
+		 */
+		public function get contentWidth():Number
+		{
+			return _contentWidth;
+		}
+		
+		/** 
+		 * @private (setter)
+		 */
+		public function set contentWidth(value:Number):void
+		{
+			_contentWidth = value;
+		}
+		
+		/**
+		 * @private
+		 * Placeholder for contentHeight
+		 */
+		private var _contentHeight:Number = 0;
+		
+		/**
+		 * Height of the text field without rotation.
+		 */
+		public function get contentHeight():Number
+		{
+			return _contentHeight;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set contentHeight(value:Number):void
+		{
+			_contentHeight = value;
+		}
+		
+		/**
+		 * The width of the text in pixels
+		 */
+		public function get textWidth():Number
+		{
+			return this.textField.textWidth;
+		}
+		
+		/**
+		 * The height of the text in pixels
+		 */		
+		public function get textHeight():Number
+		{
+			return this.textField.textHeight;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function get width():Number
+		{
+			var width:Number = super.width;
+			var rotation:Number = Math.abs(this.rotation);
+			var radians:Number = rotation * Math.PI/180;
+			if(rotation == 90)
+			{
+				width = this.contentHeight;
+			}
+			else if(rotation > 0)
+			{
+				width = (this.contentWidth * Math.cos(radians)) + (this.contentHeight * Math.sin(radians));				
+			}
+			return width;
+		}	
+		
+		/**
+		 * @inheritDoc
+		 */		
+		override public function get height():Number
+		{
+			var height:Number = super.height;
+			var rotation:Number = Math.abs(this.rotation);
+			var radians:Number = rotation * Math.PI/180;
+			if(rotation == 90)
+			{
+				height = this.contentWidth;
+			}
+			else if(rotation > 0)
+			{
+				height = (this.contentWidth * Math.sin(radians)) + (this.contentHeight * Math.cos(radians));
+			}
+			return height;
 		}		
-	
+		
 		/**
 		 * @private
 		 *
@@ -217,36 +338,36 @@
 		 */
 		private function setTextRotation(value:Number):void
 		{
+			if(this.text == null || this.text == "") return;
 			if(value == 0 || this.embedFonts) 
 			{
-				this.textField.rotation = value;
+				this.contentWidth = this.textField.width;
+				this.contentHeight = this.textField.height;
 				this.textField.visible = true;
+				this.textField.x = 0;
+				this.textField.y = 0;
 				_bitmapContainer.visible = false;
-				_width = this.textField.width;
-				_height = this.textField.height;
-				return;
 			}
-			if(this.text == null || this.text == "") return;
-			
-			var smoothing:Boolean = Math.abs(value)%90 != 0;
-
-			var matrix:Matrix = new Matrix();
-			//Have to move text over if it is right-aligned. Need to add an extra 5 pixels to the x value. We will also add 5 pixels to 
-			//the width argument of the bitmap data. Depending on the letters, the left-most letters get cut-off. The additional 5 pixels
-			//prevents this from happening.
-			matrix.translate(-Math.ceil(this.textField.x)+5, -Math.ceil(this.textField.y));
-			var bitmapDataText:BitmapData = new BitmapData(Math.ceil(this.textField.width)+5, Math.ceil(this.textField.height), true, 0x000000);
-			bitmapDataText.draw(textField, matrix, null, null, null, smoothing);
-			_bitmap = new Bitmap(bitmapDataText);
-			_bitmap.smoothing = smoothing;
-			if(_bitmapContainer.numChildren > 0) _bitmapContainer.removeChildAt(0);
-			
-			this.textField.visible = false;
-			_bitmapContainer.addChild(_bitmap);
-			_bitmapContainer.rotation = value;
-			_bitmapContainer.visible = true;
-			_width = _bitmapContainer.width;
-			_height = _bitmapContainer.height;
-		}	
+			else
+			{
+				var smoothing:Boolean = Math.abs(value)%90 != 0;
+				var matrix:Matrix = new Matrix();
+				//Have to move text over if it is right-aligned. Need to add an extra 5 pixels to the x value. We will also add 5 pixels to 
+				//the width argument of the bitmap data. Depending on the letters, the left-most letters get cut-off. The additional 5 pixels
+				//prevents this from happening.
+				if(this.autoSize == TextFieldAutoSize.RIGHT) matrix.translate(-Math.ceil(this.textField.x)+5, -Math.ceil(this.textField.y));
+				var wid:Number = this.autoSize == TextFieldAutoSize.RIGHT ? (this.textField.width) + 5 : this.textField.width; 
+				var bitmapDataText:BitmapData = new BitmapData(Math.ceil(wid), Math.ceil(this.textField.height), true, 0x000000);
+				bitmapDataText.draw(textField, matrix, null, null, null, smoothing);
+				_bitmap = new Bitmap(bitmapDataText);
+				_bitmap.smoothing = smoothing;
+				if(_bitmapContainer.numChildren > 0) _bitmapContainer.removeChildAt(0);
+				this.textField.visible = false;
+				_bitmapContainer.addChild(_bitmap);
+				this.contentWidth = _bitmapContainer.width;
+				this.contentHeight = _bitmapContainer.height;		
+				_bitmapContainer.visible = true;	
+			}
+		}
 	}
 }

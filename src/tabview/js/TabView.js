@@ -100,6 +100,8 @@
             
             index = (index === undefined) ? tabs.length : index;
             
+            tabs.splice(index, 0, tab);
+
             if ( before ) {
                 tabParent.insertBefore(tabElement, before.get(ELEMENT));
             } else {
@@ -114,11 +116,10 @@
                 tab.set('contentVisible', false, true); /* hide if not active */
             } else {
                 this.set(ACTIVE_TAB, tab, true);
-                
+                this.set('activeIndex', index, true);
             }
 
             this._initTabEvents(tab);
-            tabs.splice(index, 0, tab);
         },
 
         _initTabEvents: function(tab) {
@@ -322,8 +323,6 @@
              */
             this.setAttributeConfig(ACTIVE_INDEX, {
                 value: attr.activeIndex,
-                method: function(value) {
-                },
                 validator: function(value) {
                     var ret = true;
                     if (value && this.getTab(value).get('disabled')) { // cannot activate if disabled

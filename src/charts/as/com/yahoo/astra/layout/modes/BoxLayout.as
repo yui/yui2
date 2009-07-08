@@ -1,4 +1,4 @@
-package com.yahoo.astra.layout.modes
+﻿package com.yahoo.astra.layout.modes
 {
 	import com.yahoo.astra.layout.events.LayoutEvent;
 	import com.yahoo.astra.utils.DisplayObjectUtil;
@@ -254,14 +254,14 @@ package com.yahoo.astra.layout.modes
 			
 			//determine the available horizontal space
 			var hSpaceForChildren:Number = bounds.width - this.paddingLeft - this.paddingRight;
-			if(hSpaceForChildren == Number.POSITIVE_INFINITY)
+			if((hSpaceForChildren == Infinity)||(hSpaceForChildren >9000))
 			{
 				hSpaceForChildren = DEFAULT_MAX_WIDTH;
 			}
 			
 			//determine the available vertical space
 			var vSpaceForChildren:Number = bounds.height - this.paddingTop - this.paddingBottom;
-			if(vSpaceForChildren == Number.POSITIVE_INFINITY)
+			if((vSpaceForChildren == Infinity)||(vSpaceForChildren >9000))
 			{
 				vSpaceForChildren = DEFAULT_MAX_HEIGHT;
 			}
@@ -297,7 +297,7 @@ package com.yahoo.astra.layout.modes
 			else
 			{
 				this.layoutChildrenHorizontally(childrenInLayout, bounds);
-			}
+			}		
 			
 			bounds = LayoutModeUtil.calculateChildBounds(childrenInLayout);
 			bounds.width += this.paddingRight;
@@ -343,6 +343,7 @@ package com.yahoo.astra.layout.modes
 			{
 				var middleStart:Number = (bounds.height - totalHeight) / 2;
 				var rightStart:Number = bounds.height - totalHeight - bounds.y;
+				rightStart = (rightStart == Infinity)?DEFAULT_MAX_HEIGHT:rightStart;				
 				
 				for(i = 0; i < childCount; i++)
 				{
@@ -379,12 +380,14 @@ package com.yahoo.astra.layout.modes
 			var childCount:int = children.length;
 			for(var i:int = 0; i < childCount; i++)
 			{
+				
 				var child:DisplayObject = DisplayObject(children[i]);
 				
 				child.x = xPosition;
 				child.y = yPosition;
 				
 				DisplayObjectUtil.align(child, new Rectangle(child.x, child.y, child.width, maxYPosition), null, this.verticalAlign);
+				
 				
 				xPosition += child.width + this.horizontalGap;
 			}
@@ -393,10 +396,12 @@ package com.yahoo.astra.layout.modes
 			//is less than the total width specified in the bounds,
 			//then we can align horizontally as well!
 			var totalWidth:Number = xPosition - this.horizontalGap - bounds.x + this.paddingRight;
+
 			if(totalWidth < bounds.width)
 			{
 				var middleStart:Number = (bounds.width - totalWidth) / 2;
 				var rightStart:Number = bounds.width - totalWidth;
+				rightStart = (rightStart == Infinity)?DEFAULT_MAX_WIDTH:rightStart;
 				
 				for(i = 0; i < childCount; i++)
 				{

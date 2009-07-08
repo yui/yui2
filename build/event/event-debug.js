@@ -839,7 +839,7 @@ if (!YAHOO.util.Event) {
                         fn.call(s, "DOMReady", [], obj);
                     }, 0);
                 } else {
-                    this.DOMReadyEvent.subscribe(fn, obj, overrideContext);
+                    this.DOMReadyEvent.subscribe(fn, obj || this, overrideContext || true);
                 }
             },
 
@@ -1053,7 +1053,7 @@ if (!YAHOO.util.Event) {
             /**
              * Removes a focus event listener
              *
-             * @method removeListener
+             * @method removeFocusListener
              *
              * @param {String|HTMLElement|Array|NodeList} el An id, an element 
              *  reference, or a collection of ids and/or elements to remove
@@ -1098,7 +1098,7 @@ if (!YAHOO.util.Event) {
             /**
              * Removes a blur event listener
              *
-             * @method removeListener
+             * @method removeBlurListener
              *
              * @param {String|HTMLElement|Array|NodeList} el An id, an element 
              *  reference, or a collection of ids and/or elements to remove
@@ -1611,7 +1611,7 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
              * Custom event the fires when the dom is initially usable
              * @event DOMReadyEvent
              */
-            DOMReadyEvent: new YAHOO.util.CustomEvent("DOMReady", this),
+            DOMReadyEvent: new YAHOO.util.CustomEvent("DOMReady"),
 
             /**
              * hook up any deferred listeners
@@ -2036,36 +2036,43 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
          */     
         EU.onBlur = EU.addBlurListener;
 
-
-/*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller */
+/*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller/Diego Perini */
 
         // Internet Explorer: use the readyState of a defered script.
         // This isolates what appears to be a safe moment to manipulate
         // the DOM prior to when the document's readyState suggests
         // it is safe to do so.
         if (EU.isIE) {
+            if (window !== window.top) {
+                document.onreadystatechange = function() {
+                    if (document.readyState == 'complete') {
+                        document.onreadystatechange = null;
+                        EU._ready();
+                    }
+                };
+            } else {
 
-            // Process onAvailable/onContentReady items when the 
-            // DOM is ready.
-            YAHOO.util.Event.onDOMReady(
-                    YAHOO.util.Event._tryPreloadAttach,
-                    YAHOO.util.Event, true);
-            
-            var n = document.createElement('p');  
+                // Process onAvailable/onContentReady items when the 
+                // DOM is ready.
+                YAHOO.util.Event.onDOMReady(
+                        YAHOO.util.Event._tryPreloadAttach,
+                        YAHOO.util.Event, true);
+                
+                var n = document.createElement('p');  
 
-            EU._dri = setInterval(function() {
-                try {
-                    // throws an error if doc is not ready
-                    n.doScroll('left');
-                    clearInterval(EU._dri);
-                    EU._dri = null;
-                    EU._ready();
-                    n = null;
-                } catch (ex) { 
-                }
-            }, EU.POLL_INTERVAL); 
+                EU._dri = setInterval(function() {
+                    try {
+                        // throws an error if doc is not ready
+                        n.doScroll('left');
+                        clearInterval(EU._dri);
+                        EU._dri = null;
+                        EU._ready();
+                        n = null;
+                    } catch (ex) { 
+                    }
+                }, EU.POLL_INTERVAL); 
+            }
 
-        
         // The document's readyState in Safari currently will
         // change to loaded/complete before images are loaded.
         } else if (EU.webkit && EU.webkit < 525) {

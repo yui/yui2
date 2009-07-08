@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                        <div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
 <span class="k">var</span> <span class="nx">lang</span>   <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
     <span class="nx">util</span>   <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">,</span>
@@ -181,6 +181,7 @@
 <span class="c">     *</span>
 <span class="c">     * @event dataErrorEvent</span>
 <span class="c">     * @param oArgs.request {Object} The request object.</span>
+<span class="c">     * @param oArgs.response {String} The response object (if available).</span>
 <span class="c">     * @param oArgs.callback {Object} The callback object.</span>
 <span class="c">     * @param oArgs.caller {Object} (deprecated) Use callback.scope.</span>
 <span class="c">     * @param oArgs.message {String} The error message.</span>
@@ -1116,7 +1117,7 @@
     <span class="o">}</span>
 
     <span class="c">// Success</span>
-<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">oParsedResponse</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oParsedResponse</span><span class="o">.</span><span class="nx">error</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(!</span><span class="nx">oParsedResponse</span><span class="o">.</span><span class="nx">error</span><span class="o">)</span> <span class="o">{</span>
         <span class="c">// Last chance to touch the raw response or the parsed response</span>
 <span class="c"></span>        <span class="nx">oParsedResponse</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">doBeforeCallback</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oFullResponse</span><span class="o">,</span> <span class="nx">oParsedResponse</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;responseParseEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span>
@@ -2330,7 +2331,7 @@
         <span class="o">}</span>
         <span class="c">// Error if no response</span>
 <span class="c"></span>        <span class="k">else</span> <span class="k">if</span><span class="o">(!</span><span class="nx">oResponse</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">response</span><span class="o">:</span><span class="kc">null</span><span class="o">,</span>
                     <span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span> <span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span>
                     <span class="nx">message</span><span class="o">:</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">});</span>
             <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
@@ -2370,7 +2371,7 @@
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="k">var</span> <span class="nx">_xhrFailure</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oResponse</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">response</span><span class="o">:</span> <span class="nx">oResponse</span><span class="o">,</span>
                 <span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span> <span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span>
                 <span class="nx">message</span><span class="o">:</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATAINVALID</span><span class="o">});</span>
         <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATAINVALID</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span>
@@ -2563,6 +2564,7 @@
 
 <span class="o">})();</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>

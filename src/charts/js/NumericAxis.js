@@ -90,5 +90,21 @@ YAHOO.lang.extend(YAHOO.widget.NumericAxis, YAHOO.widget.Axis,
 	 * @property roundMajorUnit
 	 * @type Boolean
 	 */
-	roundMajorUnit: true 
+	roundMajorUnit: true, 
+	
+	/**
+	 * Indicates whether to factor in the size of the labels when calculating a major unit.
+	 *
+	 * @property calculateByLabelSize
+	 * @type Boolean
+	 */
+	calculateByLabelSize: true,
+	
+	/**
+	 * Indicates the position of the axis relative to the chart
+	 *
+	 * @property position
+	 * @type String
+	 */
+	position:"left"
 });

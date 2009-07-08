@@ -909,7 +909,7 @@ YAHOO.widget.Column.prototype = {
      * @default null
      */
     /**
-     * Custom sort handler.
+     * Custom sort handler. Signature: sortFunction(a, b, desc, field) where field is the sortOptions.field value
      *
      * @property sortOptions.sortFunction
      * @type Function
@@ -1253,7 +1253,7 @@ if(YAHOO.util.DDProxy) {
             this.setYConstraint(10, 10);            
         },
         _resizeProxy: function() {
-            this.constructor.superclass._resizeProxy.apply(this, arguments);
+            YAHOO.widget.ColumnDD.superclass._resizeProxy.apply(this, arguments);
             var dragEl = this.getDragEl(),
                 el = this.getEl();
 

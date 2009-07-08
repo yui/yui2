@@ -5,6 +5,14 @@ package com.yahoo.astra.fl.charts.series
 	import fl.core.InvalidationType;
 	
 	import flash.events.Event;
+	//--------------------------------------
+	//  Styles
+	//--------------------------------------
+	
+	/**
+	 * Indicates the value of the visible property
+	 */
+	[Style(name="visibility", type="String")]
 
 	/**
 	 * Functionality common to most series appearing in cartesian charts.
@@ -16,6 +24,28 @@ package com.yahoo.astra.fl.charts.series
 	 */
 	public class CartesianSeries extends Series implements ILegendItemSeries
 	{
+	//--------------------------------------
+	//  Class Variables
+	//--------------------------------------
+		/**
+		 * @private
+		 */
+		private static var defaultStyles:Object =
+		{
+			visibility:"visible"
+		};		
+
+	//--------------------------------------
+	//  Class Methods
+	//--------------------------------------		
+		/**
+		 * @copy fl.core.UIComponent#getStyleDefinition()
+		 */
+		public static function getStyleDefinition():Object
+		{
+			return mergeStyles(defaultStyles, Series.getStyleDefinition());
+		}		
+		
 		
 	//--------------------------------------
 	//  Constructor
@@ -87,6 +117,11 @@ package com.yahoo.astra.fl.charts.series
 			}
 		}
 	
+		/**
+		 * Indicates whether the series is bound to a primary or secondary axis
+		 */
+		public var axis:String = "primary";
+		
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------

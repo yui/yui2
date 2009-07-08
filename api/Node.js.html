@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                        <div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
         <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
         <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span>
@@ -1079,6 +1079,18 @@
     <span class="nx">loadComplete</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot; loadComplete, children: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">getChildrenEl</span><span class="o">().</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">completeRender</span><span class="o">();</span>
+		<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">propagageHighlightDown</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">highlightState</span> <span class="o">===</span> <span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">singleNodeHighlight</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">highlight</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">highlightState</span> <span class="o">===</span> <span class="m">0</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">singleNodeHighlight</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
+					<span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">unhighlight</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+				<span class="o">}</span>
+			<span class="o">}</span> <span class="c">// if (highlighState == 2) leave child nodes with whichever highlight state they are set</span>
+<span class="c"></span>		<span class="o">}</span>
+				
         <span class="k">this</span><span class="o">.</span><span class="nx">dynamicLoadComplete</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">isLoading</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">expand</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
@@ -1513,6 +1525,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">augment</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Node</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">);</span>
 <span class="o">})();</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>

@@ -239,21 +239,24 @@ YAHOO.env.getVersion = function(name) {
  * @static
  */
 YAHOO.env.ua = function() {
-    var o={
+
+    var nav = navigator,
+
+        o = {
 
         /**
          * Internet Explorer version number or 0.  Example: 6
          * @property ie
          * @type float
          */
-        ie:0,
+        ie: 0,
 
         /**
          * Opera version number or 0.  Example: 9.2
          * @property opera
          * @type float
          */
-        opera:0,
+        opera: 0,
 
         /**
          * Gecko engine revision number.  Will evaluate to 1 if Gecko 
@@ -268,7 +271,7 @@ YAHOO.env.ua = function() {
          * @property gecko
          * @type float
          */
-        gecko:0,
+        gecko: 0,
 
         /**
          * AppleWebKit version.  KHTML browsers that are not WebKit browsers 
@@ -323,7 +326,7 @@ YAHOO.env.ua = function() {
          * @property caja
          * @type float
          */
-        caja: 0
+        caja: nav.cajaVersion
 
     },
 
@@ -383,11 +386,6 @@ YAHOO.env.ua = function() {
         }
     }
 
-    m=ua.match(/Caja\/([^\s]*)/);
-    if (m&&m[1]) {
-        o.caja=parseFloat(m[1]);
-    }
-    
     return o;
 }();
 
@@ -478,7 +476,7 @@ var L = YAHOO.lang,
      * @return {boolean} the result
      */
     isFunction: function(o) {
-        return OP.toString.apply(o) === FUNCTION_TOSTRING;
+        return (typeof o === 'function') || OP.toString.apply(o) === FUNCTION_TOSTRING;
     },
         
     /**

@@ -10,8 +10,8 @@
  * The treeview widget is a generic tree building tool.
  * @module treeview
  * @title TreeView Widget
- * @requires yahoo, event
- * @optional animation, json
+ * @requires yahoo, dom, event
+ * @optional animation, json, calendar
  * @namespace YAHOO.widget
  */
 
@@ -21,16 +21,14 @@
  * @class TreeView
  * @uses YAHOO.util.EventProvider
  * @constructor
- * @param {string|HTMLElement} id The id of the element, or the element itself that the tree will be inserted into.  Existing markup in this element, if valid, will be used to build the tree
- * @param {Array|object|string}  oConfig (optional)  An array containing the definition of the tree.  (see buildTreeFromObject)
+ * @param {string|HTMLElement} id The id of the element, or the element itself that the tree will be inserted into.  
+ *        Existing markup in this element, if valid, will be used to build the tree
+ * @param {Array|Object|String}  oConfig (optional)  If present, it will be used to build the tree via method <a href="#method_buildTreeFromObject">buildTreeFromObject</a>
  * 
  */
 YAHOO.widget.TreeView = function(id, oConfig) {
     if (id) { this.init(id); }
     if (oConfig) {
-        if (!Lang.isArray(oConfig)) {
-            oConfig = [oConfig];
-        }
         this.buildTreeFromObject(oConfig);
     } else if (Lang.trim(this._el.innerHTML)) {
         this.buildTreeFromMarkup(id);
@@ -160,7 +158,7 @@ TV.prototype = {
     /**
      * Sets up the animation for collapsing children
      * @method setCollapseAnim
-     * @param {string} the type of animation (acceptable values defined in 
+     * @param {string} type of animation (acceptable values defined in 
      * YAHOO.widget.TVAnim)
      */
     setCollapseAnim: function(type) {
@@ -273,7 +271,7 @@ TV.prototype = {
          * @event animStart
          * @type CustomEvent
          * @param {YAHOO.widget.Node} node the node that is expanding/collapsing
-         * @parm {String} type the type of animation ("expand" or "collapse")
+         * @param {String} type the type of animation ("expand" or "collapse")
          */
         this.createEvent("animStart", this);
 
@@ -386,7 +384,7 @@ TV.prototype = {
      * Depending on <a href="YAHOO.widget.Node.html#property_propagateHighlight">nodeRef.propagateHighlight</a>, other nodes might have changed
      * @event highlightEvent
      * @type CustomEvent
-        * @param node{YAHOO.widget.Node} the node that started the change in highlighting state
+     * @param node {YAHOO.widget.Node} the node that started the change in highlighting state
     */
         this.createEvent("highlightEvent",this);
      
@@ -424,12 +422,15 @@ TV.prototype = {
      *  A tree can be described by an array of objects, each object corresponding to a node.
      *  Node descriptions may contain values for any property of a node plus the following extra properties: <ul>
      * <li>type:  can be one of the following:<ul>
-     *  <li> A shortname for a node type (<code>'text','menu','html'</code>) </li>
-     * <li>The name of a Node class under YAHOO.widget (<code>'TextNode', 'MenuNode', 'DateNode'</code>, etc) </li>
-     * <li>a reference to an actual class: <code>YAHOO.widget.DateNode</code></li></ul></li>
+     *    <li> A shortname for a node type (<code>'text','menu','html'</code>) </li>
+     *    <li>The name of a Node class under YAHOO.widget (<code>'TextNode', 'MenuNode', 'DateNode'</code>, etc) </li>
+     *    <li>a reference to an actual class: <code>YAHOO.widget.DateNode</code></li>
+	 * </ul></li>
      * <li>children: an array containing further node definitions</li></ul>
+	 * A string instead of an object will produce a node of type 'text' with the given string as its label.
      * @method buildTreeFromObject
-     * @param  oConfig {Array}  array containing a full description of the tree
+     * @param  oConfig {Array|Object|String}  array containing a full description of the tree.
+     *        An object or a string will be turned into an array with the given object or string as its only element.
      * 
      */
     buildTreeFromObject: function (oConfig) {
@@ -481,7 +482,10 @@ TV.prototype = {
                 }
             }
         };
-                            
+        if (!Lang.isArray(oConfig)) {
+            oConfig = [oConfig];
+        }
+
                     
         build(this.root,oConfig);
     },
@@ -499,7 +503,7 @@ TV.prototype = {
      * If the &lt;LI&gt; element contains an attribute called <code>yuiConfig</code>, its contents should be a JSON-encoded object
      * as the one used in method <a href="#method_buildTreeFromObject">buildTreeFromObject</a>.
      * @method buildTreeFromMarkup
-     * @param  id{string|HTMLElement} The id of the element that contains the markup or a reference to it.
+     * @param  id {string|HTMLElement} The id of the element that contains the markup or a reference to it.
      */
     buildTreeFromMarkup: function (id) {
         this.logger.log('Building tree from existing markup');
@@ -773,19 +777,36 @@ TV.prototype = {
                 if (newNode) { newNode.focus();}
                 Event.preventDefault(ev);
                 break;
-            case KEY.RIGHT:
-                this.logger.log('RIGHT');
-                do {
-                    newNode.expand();
-                    if (newNode.children.length) {
-                        newNode = newNode.children[0];
-                    } else {
-                        newNode = newNode.nextSibling;
-                    }
-                } while (newNode && !newNode._canHaveFocus());
-                if (newNode) { newNode.focus();}
-                Event.preventDefault(ev);
-                break;
+			case KEY.RIGHT:
+				this.logger.log('RIGHT');
+				var self = this,
+					moveFocusRight,
+					focusOnExpand = function (newNode) {
+						self.unsubscribe('expandComplete',focusOnExpand);
+						moveFocusRight(newNode);
+					};
+				moveFocusRight = function (newNode) {
+					do {
+						if (newNode.isDynamic() && !newNode.childrenRendered) {
+							self.subscribe('expandComplete',focusOnExpand);
+							newNode.expand();
+							newNode = null;
+							break;
+						} else {
+							newNode.expand();
+							if (newNode.children.length) {
+								newNode = newNode.children[0];
+							} else {
+								newNode = newNode.nextSibling;
+							}
+						}
+					} while (newNode && !newNode._canHaveFocus());
+					if (newNode) { newNode.focus();}
+				};
+					
+				moveFocusRight(newNode);
+				Event.preventDefault(ev);
+				break;
             case KEY.ENTER:
                 this.logger.log('ENTER: ' + newNode.href);
                 if (node.href) {
@@ -984,11 +1005,11 @@ TV.prototype = {
     },
 
     /**
-     * Returns the treeview node reference for an anscestor element
+     * Returns the treeview node reference for an ancestor element
      * of the node, or null if it is not contained within any node
      * in this tree.
      * @method getNodeByElement
-     * @param {HTMLElement} the element to test
+     * @param el {HTMLElement} the element to test
      * @return {YAHOO.widget.Node} a node reference or null
      */
     getNodeByElement: function(el) {
@@ -1020,7 +1041,7 @@ TV.prototype = {
      * Removes the node and its children, and optionally refreshes the 
      * branch of the tree that was affected.
      * @method removeNode
-     * @param {Node} The node to remove
+     * @param {Node} node to remove
      * @param {boolean} autoRefresh automatically refreshes branch if true
      * @return {boolean} False is there was a problem, true otherwise.
      */
@@ -1116,7 +1137,7 @@ TV.prototype = {
      * to make it possible to insert the branch into another part of the 
      * tree, or another tree.
      * @method popNode
-     * @param {Node} the node to remove
+     * @param {Node} node to remove
      */
     popNode: function(node) { 
         var p = node.parent;
