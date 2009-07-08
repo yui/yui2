@@ -446,6 +446,7 @@
     function getCarouselItemSize(which) {
         var carousel = this,
             child,
+            item,
             size     = 0,
             vertical = false;
 
@@ -459,11 +460,13 @@
             }
         }
 
-        if (JS.isUndefined(carousel._itemsTable.items[0])) {
+        item = carousel._itemsTable.items[carousel.get("firstVisible")];
+        
+        if (JS.isUndefined(item)) {
             return 0;
         }
 
-        child = Dom.get(carousel._itemsTable.items[0].id);
+        child = Dom.get(item.id);
 
         if (typeof which == "undefined") {
             vertical = carousel.get("isVertical");
@@ -494,7 +497,6 @@
      */
     function getFirstVisibleForPosition(pos) {
         var num = this.get("numVisible");
-
         return Math.floor(pos / num) * num;
     }
 
@@ -975,6 +977,14 @@
         _pages: null,
 
         /**
+         * The Carousel pagination structure.
+         *
+         * @property _pagination
+         * @private
+         */
+        _pagination: {},
+
+        /**
          * Status of the previous navigation item.
          *
          * @property _prevEnabled
@@ -1135,6 +1145,14 @@
              * @default "yui-carousel-buttons"
              */
             NAV_CONTAINER: "yui-carousel-buttons",
+
+            /**
+             * The class name for the pagination container
+             *
+             * @property PAGINATION
+             * @default "yui-carousel-pagination"
+             */
+            PAGINATION: "yui-carousel-pagination",
 
             /**
              * The class name of the focussed page navigation.  This class is
@@ -1330,6 +1348,7 @@
                 className,
                 content,
                 elId,
+                replaceItems = 0,
                 newIndex, // Add newIndex as workaround for undefined pos
                 numItems = carousel.get("numItems");
 
@@ -1362,7 +1381,14 @@
                     YAHOO.log("Index out of bounds", "error", WidgetName);
                     return false;
                 }
-                carousel._itemsTable.items.splice(index, 0, {
+                
+                // make sure we splice into the correct position
+                if(!carousel._itemsTable.items[index]){
+                    carousel._itemsTable.items[index] = undefined;
+                    replaceItems = 1;
+                }
+                
+                carousel._itemsTable.items.splice(index, replaceItems, {
                         item      : content,
                         className : className,
                         id        : elId
@@ -1533,7 +1559,8 @@
         init: function (el, attrs) {
             var carousel = this,
                 elId     = el,  // save for a rainy day
-                parse    = false;
+                parse    = false,
+                selected;
 
             if (!el) {
                 YAHOO.log(el + " is neither an HTML element, nor a string",
@@ -1544,6 +1571,7 @@
             carousel._hasRendered = false;
             carousel._navBtns     = { prev: [], next: [] };
             carousel._pages       = { el: null, num: 0, cur: 0 };
+            carousel._pagination  = {  };
             carousel._itemsTable  = { loading: {}, numItems: 0,
                                       items: [], size: 0 };
 
@@ -1558,6 +1586,12 @@
             }
 
             Carousel.superclass.init.call(carousel, el, attrs);
+
+            // check if we're starting somewhere in the middle
+            selected = carousel.get("selectedItem");
+            if(selected > 0){
+                carousel.set("firstVisible",getFirstVisibleForPosition.call(carousel,selected));
+            }
 
             if (el) {
                 if (!el.id) {   // in case the HTML element is passed
@@ -1578,6 +1612,11 @@
                 carousel._parseCarouselItems();
             }
 
+            // add the selected class
+            if(selected > 0){
+                setItemSelection.call(carousel,selected,0);
+            }
+
             if (!attrs || typeof attrs.isVertical == "undefined") {
                 carousel.set("isVertical", false);
             }
@@ -1586,8 +1625,7 @@
             carousel._navEl = carousel._setupCarouselNavigation();
 
             instances[elId] = { object: carousel };
-
-            carousel._loadItems(carousel.get("numVisible")-1);
+            carousel._loadItems(Math.min(carousel.get("firstVisible")+carousel.get("numVisible"),carousel.get("numItems"))-1);
         },
 
         /**
@@ -1704,6 +1742,7 @@
              * @type Number
              */
             carousel.setAttributeConfig("selectedItem", {
+                    setter    : carousel._selectedItemSetter,
                     method    : carousel._setSelectedItem,
                     validator : JS.isNumber,
                     value     : -1
@@ -1800,6 +1839,16 @@
                     validator : JS.isNumber,
                     value     : attrs.autoPlayInterval || 0
             });
+
+            /**
+             * @attribute numPages
+             * @description The number of pages in the carousel.
+             * @type Number
+             */
+            carousel.setAttributeConfig("numPages", {
+                    readOnly  : true,
+                    getter    : carousel._getNumPages
+            });
         },
 
         /**
@@ -1840,7 +1889,9 @@
             carousel.on(pageChangeEvent, syncPagerUi, carousel);
 
             carousel.on(renderEvent, function (ev) {
-                carousel.set("selectedItem", carousel.get("firstVisible"));
+                if(carousel.get("selectedItem") === null){
+                    carousel.set("selectedItem", carousel.get("firstVisible"));
+                }
                 syncNavigation.call(carousel, ev);
                 syncPagerUi.call(carousel, ev);
                 carousel._setClipContainerSize();
@@ -1948,11 +1999,8 @@
                 return null;
             }
 
-            // TODO: may be cache the item
-            if (carousel._itemsTable.numItems > index) {
-                if (!JS.isUndefined(carousel._itemsTable.items[index])) {
-                    return Dom.get(carousel._itemsTable.items[index].id);
-                }
+            if (carousel._itemsTable.items[index]) {
+                return Dom.get(carousel._itemsTable.items[index].id);
             }
 
             return null;
@@ -2042,13 +2090,15 @@
          * @public
          */
         getItemPositionById: function (id) {
-            var carousel = this, i = 0, n = carousel._itemsTable.numItems;
+            var carousel = this,
+                n = carousel.get("numItems"),
+                i = 0,
+                item;
 
             while (i < n) {
-                if (!JS.isUndefined(carousel._itemsTable.items[i])) {
-                    if (carousel._itemsTable.items[i].id == id) {
-                        return i;
-                    }
+                item = carousel._itemsTable.items[i] || {};
+                if(item.id == id) {
+                    return i;
                 }
                 i++;
             }
@@ -2335,7 +2385,7 @@
         scrollTo: function (item, dontSelect) {
             var carousel   = this,
                 animate, animCfg, isCircular, isVertical, rows, delta, direction, firstItem, lastItem, itemsPerCol,
-                itemsPerRow, numItems, numPerPage, offset, page, rv, sentinel,
+                itemsPerRow, numItems, numPerPage, offset, page, rv, sentinel, index,
                 stopAutoScroll;
 
             if (JS.isUndefined(item) || item == carousel._firstItem ||
@@ -2386,27 +2436,35 @@
             }
 
             carousel.fireEvent(beforePageChangeEvent, { page: page });
+
+            // call loaditems to check if we have all the items to display
+            lastItem = item + numPerPage - 1;
+            carousel._loadItems(lastItem > numItems - 1 ? numItems - 1 : lastItem);
             
+            // calculate the delta relative to the first item, the delta is always negative
+            delta = 0 - item;
             if(itemsPerRow) {
             	// offset calculations for multirow Carousel
                 if(isVertical) {
-                    delta = (firstItem - item)/itemsPerCol;
+                    delta = parseInt(delta/itemsPerCol,10);
                 } else {
-                    delta = (firstItem - item)/itemsPerRow;
+                    delta = parseInt(delta/itemsPerRow,10);
                 }
-            } else {
-                delta = firstItem - item; // yes, the delta is reverse
+            }
+            
+            // adjust for items not yet loaded
+            index = 0;
+            while(delta < 0 && index < item+numPerPage-1 && index < numItems){
+                if(JS.isUndefined(carousel._itemsTable.items[index]) && JS.isUndefined(carousel._itemsTable.loading[index])){
+                    delta++;
+                }
+                index += itemsPerRow ? itemsPerRow : 1;
             }
             
             carousel._firstItem = item;
             carousel.set("firstVisible", item);
 
             YAHOO.log("Scrolling to " + item + " delta = " + delta, WidgetName);
-
-            // do we have all the items to display?
-            lastItem = item + numPerPage - 1;
-
-            carousel._loadItems(lastItem > numItems - 1 ? numItems - 1 : lastItem);
 
             sentinel  = item + numPerPage;
             sentinel  = (sentinel > numItems - 1) ? numItems - 1 : sentinel;
@@ -2531,6 +2589,66 @@
         },
 
         /**
+         * Update interface's pagination data within a registered template.
+         *
+         * @method updatePagination
+         * @public
+         */
+        updatePagination: function () {
+            var carousel = this,
+                pagination = carousel._pagination;
+            if(!pagination.el){ return false; }
+            
+            var numItems = carousel.get('numItems'),
+                numVisible = carousel.get('numVisible'),
+                firstVisible = carousel.get('firstVisible')+1,
+                currentPage = carousel.get('currentPage')+1,
+                numPages = carousel.get('numPages'),
+                replacements = {
+                    'numVisible' : numVisible,
+                    'numPages' : numPages,
+                    'numItems' : numItems,
+                    'selectedItem' : carousel.get('selectedItem')+1,
+                    'currentPage' : currentPage,
+                    'firstVisible' : firstVisible,
+                    'lastVisible' : currentPage == numPages ? numItems : firstVisible + numVisible - 1
+                },
+                cb = pagination.callback || {},
+                scope = cb.scope && cb.obj ? cb.obj : carousel;
+            
+            pagination.el.innerHTML = JS.isFunction(cb.fn) ? cb.fn.apply(scope, [pagination.template, replacements]) : YAHOO.lang.substitute(pagination.template, replacements);
+        },
+
+        /**
+         * Register carousels pagination template, append to interface, and populate.
+         *
+         * @method registerPagination
+         * @param template {String} Pagination template as passed to lang.substitute
+         * @public
+         */
+        registerPagination: function (tpl, pos, cb) {
+            var carousel = this;
+            
+            carousel._pagination.template = tpl;
+            carousel._pagination.callback = cb || {};
+            
+            if(!carousel._pagination.el){
+                carousel._pagination.el = createElement('DIV', {className:carousel.CLASSES.PAGINATION});
+                
+                if(pos == "before"){
+                    carousel._navEl.insertBefore(carousel._pagination.el, carousel._navEl.firstChild);
+                } else {
+                    carousel._navEl.appendChild(carousel._pagination.el);
+                }
+                
+                carousel.on('itemSelected', carousel.updatePagination);
+                carousel.on('pageChange', carousel.updatePagination);
+            }
+            
+            carousel.updatePagination();
+        },
+
+        /**
          * Return the string representation of the Carousel.
          *
          * @method toString
@@ -2562,11 +2680,11 @@
 
             if (carousel.get("isVertical")) {
                 animObj = new YAHOO.util.Motion(carousel._carouselEl,
-                        { points: { by: [0, offset] } },
+                        { points: { to: [0, offset] } },
                         animCfg.speed, animCfg.effect);
             } else {
                 animObj = new YAHOO.util.Motion(carousel._carouselEl,
-                        { points: { by: [offset, 0] } },
+                        { points: { to: [offset, 0] } },
                         animCfg.speed, animCfg.effect);
             }
 
@@ -2811,12 +2929,12 @@
                 numItems   = carousel.get("numItems"),
                 numVisible = carousel.get("numVisible"),
                 reveal     = carousel.get("revealAmount"),
-                first      = carousel._itemsTable.items.length;
+                first      = carousel._itemsTable.items.length - 1;
 
             // adjust if going backwards
-            if(first >= last){
+            if(first > last && last+1 >= numVisible){
                 // need to get first a bit differently for the last page
-                first = last % numVisible ? last - last % numVisible : last - numVisible;
+                first = last % numVisible ? last - last % numVisible : last - numVisible + 1;
             }
 
             if(reveal && last < numItems - 1){ last++; }
@@ -2938,6 +3056,7 @@
                 domItemEl,
                 elId,
                 node,
+                index = carousel.get("firstVisible"),
                 parent   = carousel._carouselEl;
 
             rows = carousel._rows;
@@ -2953,7 +3072,8 @@
                             elId = Dom.generateId();
                             child.setAttribute("id", elId);
                         }
-                        carousel.addItem(child);
+                        carousel.addItem(child,index);
+                        index++;
                     }
                 }
             }
@@ -3147,7 +3267,6 @@
             var carousel = this, which;
 
             which   = carousel.get("isVertical") ? "top" : "left";
-            offset += offset !== 0 ? getStyle(carousel._carouselEl, which) : 0;
             Dom.setStyle(carousel._carouselEl, which, offset + "px");
         },
 
@@ -3457,7 +3576,20 @@
             }
             return numVisible;
         },
-
+        
+        /**
+         * Set the value for selectedItem.
+         *
+         * @method _selectedItemSetter
+         * @param val {Number} The new value for selectedItem
+         * @return {Number} The new value that would be set
+         * @protected
+         */
+        _selectedItemSetter: function (val) {
+            var carousel = this;
+            return (val < carousel.get("numItems")) ? val : 0;
+        },
+        
         /**
          * Set the number of items in the Carousel.
          * Warning: Setting this to a lower number than the current removes
@@ -3543,6 +3675,18 @@
         },
 
         /**
+         * Get the total number of pages.
+         *
+         * @method _getNumPages
+         * @protected
+         */
+        _getNumPages: function () {
+            return Math.ceil(
+                parseInt(this.get("numItems"),10) / parseInt(this.get("numVisible"),10)
+            );
+        },
+
+        /**
          * Synchronize and redraw the UI after an item is added.
          *
          * @method _syncUiForItemAdd
@@ -3558,7 +3702,7 @@
                 pos,
                 sibling;
                 
-            pos  = JS.isUndefined(obj.pos) ? itemsTable.numItems - 1 : obj.pos;
+            pos  = JS.isUndefined(obj.pos) ? obj.newPos || itemsTable.numItems - 1 : obj.pos;
             
             if (!JS.isUndefined(itemsTable.items[pos])) {
                 item = itemsTable.items[pos];
@@ -3655,6 +3799,7 @@
                     delete itemsTable.loading[pos];
                 }
             }
+            // TODO: should we add the item if oel is undefined?
             
             if (!carousel._hasRendered) {
                 carousel._refreshUi();
@@ -3699,21 +3844,31 @@
         _syncUiForLazyLoading: function (obj) {
             var carousel   = this,
                 carouselEl = carousel._carouselEl,
-                el,
-                i,
                 itemsTable = carousel._itemsTable,
-                sibling;
-
-            for (i = obj.first; i <= obj.last; i++) {
-                if(JS.isUndefined(itemsTable.loading[i])){
+                len = itemsTable.items.length,
+                sibling = itemsTable.items[obj.last + 1],
+                el,
+                j;
+                
+            // attempt to find the next closest sibling
+            if(!sibling && obj.last < len){
+                j = obj.first;
+                do {
+                    sibling = itemsTable.items[j];
+                    j++;
+                } while (j<len && !sibling);
+            }
+            
+            for (var i = obj.first; i <= obj.last; i++) {
+                if(JS.isUndefined(itemsTable.loading[i]) && JS.isUndefined(itemsTable.items[i])){
                     el = carousel._createCarouselItem({
                             className : carousel.CLASSES.ITEM_LOADING,
                             content   : carousel.STRINGS.ITEM_LOADING_CONTENT,
                             id        : Dom.generateId()
                     });
                     if (el) {
-                        if (!JS.isUndefined(itemsTable.items[obj.last + 1])) {
-                            sibling = Dom.get(itemsTable.items[obj.last + 1].id);
+                        if (sibling) {
+                            sibling = Dom.get(sibling.id);
                             if (sibling) {
                                 carouselEl.insertBefore(el, sibling);
                             } else {
