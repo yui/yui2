@@ -12,6 +12,7 @@
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Lang = YAHOO.lang;
+		
 	
 	/**
 	 * A Progress Bar providing various visual options, animation, it can grow vertically or horizontally in any direction
@@ -30,15 +31,132 @@
 	};
 	
 	YAHOO.widget.ProgressBar = Prog;
+
+    /**
+     * Class name assigned to ProgressBar container.
+     *
+     * @property ProgressBar.CLASS_PROGBAR
+     * @type String
+     * @static
+     * @final
+     * @default "yui-pb"
+     */
+	Prog.CLASS_PROGBAR = 'yui-pb';
+    /**
+     * Class name assigned to the mask element.
+     *
+     * @property ProgressBar.CLASS_MASK
+     * @type String
+     * @static
+     * @final
+     * @default "yui-pb-mask"
+     */
+	Prog.CLASS_MASK = Prog.CLASS_PROGBAR + '-mask';
+    /**
+     * Class name assigned to the bar element.
+     *
+     * @property ProgressBar.CLASS_BAR
+     * @type String
+     * @static
+     * @final
+     * @default "yui-pb-bar"
+     */
+	Prog.CLASS_BAR = Prog.CLASS_PROGBAR + '-bar';
+    /**
+     * Class name assigned to the element showing the current value.
+     *
+     * @property ProgressBar.CLASS_CAPTION
+     * @type String
+     * @static
+     * @final
+     * @default "yui-pb-value"
+     */
+	Prog.CLASS_CAPTION = Prog.CLASS_PROGBAR + '-value';
+    /**
+     * Class name assigned to the bar while animated.
+     *
+     * @property ProgressBar.CLASS_ANIM
+     * @type String
+     * @static
+     * @final
+     * @default "yui-pb-anim"
+     */
+	Prog.CLASS_ANIM = Prog.CLASS_PROGBAR + '-anim';
+    /**
+     * Class name assigned to the top-left cuadrant of the mask.
+     *
+     * @property ProgressBar.CLASS_TL
+     * @type String
+     * @static
+     * @final
+     * @default "yui-pb-tl"
+     */
+	Prog.CLASS_TL = Prog.CLASS_PROGBAR + '-tl';
+    /**
+     * Class name assigned to the top-right cuadrant of the mask.
+     *
+     * @property ProgressBar.CLASS_TR
+     * @type String
+     * @static
+     * @final
+     * @default "yui-pb-tr"
+     */
+	Prog.CLASS_TR = Prog.CLASS_PROGBAR + '-tr';
+    /**
+     * Class name assigned to the bottom-left cuadrant of the mask.
+     *
+     * @property ProgressBar.CLASS_BL
+     * @type String
+     * @static
+     * @final
+     * @default "yui-pb-bl"
+     */
+	Prog.CLASS_BL = Prog.CLASS_PROGBAR + '-bl';
+    /**
+     * Class name assigned to the bottom-right cuadrant of the mask.
+     *
+     * @property ProgressBar.CLASS_BR
+     * @type String
+     * @static
+     * @final
+     * @default "yui-pb-br"
+     */
+	Prog.CLASS_BR = Prog.CLASS_PROGBAR + '-br';
+    /**
+     * String containing the HTML string which is the basis for the Progress Bar.
+     *
+     * @property ProgressBar.MARKUP
+     * @type String
+     * @static
+     * @final
+     * @default (too long)
+     */
+	Prog.MARKUP = [
+		'<div class="',
+		Prog.CLASS_BAR,
+		'"></div><div class="',
+		Prog.CLASS_CAPTION,
+		'"></div><table class="',
+		Prog.CLASS_MASK,
+		'"><tbody><tr><td class="',
+		Prog.CLASS_TL,
+		'"></td><td class="',
+		Prog.CLASS_TR,
+		'"></td></tr><tr><td class="',
+		Prog.CLASS_BL,
+		'"></td><td class="',
+		Prog.CLASS_BR,
+		'"></td></tr></tbody></table>'
+	].join('');
 	
 	Lang.extend(Prog, YAHOO.util.Element, {
 		/**
-		 * Initialization code for the widget, separate from the constructor to allow for overriding/patching
+		 * Initialization code for the widget, separate from the constructor to allow for overriding/patching.
+		 * It is called after <a href="#method_initAttributes">initAttributes</a>
 		 *
 		 * @method _init
 		 * @param oConfigs {Object} (Optional) Object literal definition of configuration values.  
-		 *        Not used internally, available for overrides.
-		 * @private
+		 * @protected
 		 */	
 		 _init: function (oConfigs) {
 			/**
@@ -79,10 +197,9 @@
 		    Prog.superclass.initAttributes.call(this, oConfigs);
 
 			var el = this.get('element');
-			el.innerHTML = 	'<div class="yui-pb-bar"></div><table class="yui-pb-mask"><tbody><tr><td class="yui-pb-tl"></td><td class="yui-pb-tr"></td></tr><tr><td class="yui-pb-bl"></td><td class="yui-pb-br"></td></tr></tbody></table>';
-			var barEl  = el.firstChild,
-				maskEl = barEl.nextSibling;
-				
+			el.innerHTML = 	Prog.MARKUP;
+			var barEl  = Dom.getElementsByClassName(Prog.CLASS_BAR, undefined,el)[0],
+				maskEl = Dom.getElementsByClassName(Prog.CLASS_MASK, undefined,el)[0];				
 			/**
 			 * @attribute barEl
 			 * @description Reference to the HTML object that makes the moving bar (read-only)
@@ -105,20 +222,34 @@
 		    });
 			
 			/**
+			 * @attribute captionEl
+			 * @description Reference to the HTML object that contains the value displayed over the bar.
+			 * @type HTMLElement or String
+			 */			
+		    this.setAttributeConfig('captionEl', {
+		        value: Dom.getElementsByClassName(Prog.CLASS_CAPTION, undefined,el)[0],
+				validator: function (value) {
+					return (Lang.isString(value) && Dom.get(value)) || (Lang.isObject(value) && value.ownerDocument == document);
+				},
+				setter: function (value) {
+					return Dom.get(value);
+				}
+		    });
+			
+			/**
 			 * @attribute direction
 			 * @description Direction of movement of the bar.  
 			 *    It can be any of 'ltr' (left to right), 'rtl' (the reverse) , 'ttb' (top to bottom) or 'btt'.
-			 *    Case-insensitive when setting, it will always be returned in lower case
 			 *    Can only be set once and only before rendering.
-			 * @default 'lr'
-			 * @type String
+			 * @default 'ltr'
+			 * @type String (any of "ltr", "rtl", "ttb" or "btt")
 			 */			
 			this.setAttributeConfig('direction', {
 				writeOnce: true,
 				value:'ltr',
 				validator:function(value) {
 					if (this._rendered) { return false; }
-					switch (value.toLowerCase()) {
+					switch (value) {
 						case 'ltr':
 						case 'rtl':
 						case 'ttb':
@@ -127,11 +258,9 @@
 						default:
 							return false;
 					}
-				},
-				setter: function(value) {
-					return value.toLowerCase();
 				}
 			});
+			
 			/**
 			 * @attribute maxValue
 			 * @description Represents the top value for the bar. 
@@ -243,30 +372,31 @@
 				}
 			});
 			
+	
 			/**
-			 * @attribute border
-			 * @description CSS attributes for the border.
-			 * @default 'none'
-			 * @type String - CSS border specification
+			 * @attribute ariaTemplate
+			 * @description The text to be voiced by screen readers.  
+			 *     The text is processed by YAHOO.lang.substitute.  
+			 *     It can use the palceholders {value}, {minValue} and {maxValue}
+			 * @default '{value}'
+			 * @type String
 			 */				
-			this.setAttributeConfig('border', {
-				value:'none',
-				method: function (value) {
-					YAHOO.log('Setting border: ' + value,'info','ProgressBar');
-					this.setStyle('border', value);
-				}
+			this.setAttributeConfig('ariaTemplate', {
+				value:'{value}'
 			});
 			
 			/**
-			 * @attribute ariaText
-			 * @description The text to be voiced by screen readers.  
-			 *     The text should contain a vertical bar character where the current  value of the bar should be inserted.
-			 * @default '|'
+			 * @attribute captionTemplate
+			 * @description Text to be shown overlapping the bar
+			 *     The text is processed by YAHOO.lang.substitute.  
+			 *     It can use the palceholders {value}, {minValue} and {maxValue}
+			 * @default ''
 			 * @type String
 			 */				
-			this.setAttributeConfig('ariaText', {
-				value:'|'
+			this.setAttributeConfig('captionTemplate', {
+				value:''
 			});
+			
 			/**
 			 * @attribute value
 			 * @description The value for the bar.  
@@ -281,14 +411,16 @@
 				},
 				method: this._valueChange
 		    });
+			
 			/**
 			 * @attribute anim
 			 * @description A reference to the YAHOO.util.Anim instance attached to the bar.  (ReadOnly)  
-			 *   If the Animation utility is loaded, it will be automatically used.  
+			 *   It will be set if the <a href="#config_animate">animate</a> configuration attribute is true
+			 *   and the YAHOO.util.Animation utility is loaded.
+			 *   It can be used to set the animation parameters such as easing methods or duration.
 			 * @default null
 			 * @type {instance of YAHOO.util.Anim}
-			 */			
-			
+			 */						
 			this.setAttributeConfig('anim', {
 				getter:function() {
 					return this._anim;
@@ -298,6 +430,12 @@
 				}
 			});
 			
+			/**
+			 * @attribute animate
+			 * @description Activates the animation of the bar.  It requires the animation utility to be loaded.
+			 * @default false
+			 * @type boolean
+			 */						
 			this.setAttributeConfig('animate', {
 				value: false,
 				validator: function(value) {
@@ -331,13 +469,12 @@
 			if (this._rendered) { return; }
 			this._rendered = true;
 
-			this.addClass('yui-pb');
+			this.addClass(Prog.CLASS_PROGBAR);
 			var container = this.get('element');
 			container.tabIndex = 0;
 			container.setAttribute('role','progressbar');
 			container.setAttribute('aria-valuemin',this.get('minValue'));
 			container.setAttribute('aria-valuemax',this.get('maxValue'));
-			this._setAriaValue();
 
 			this.appendTo(el,before);
 			
@@ -349,11 +486,10 @@
 		 *  It will recalculate the bar size and position and redraw it
 		 * @method redraw
 		 * @return  void
-		 * @private
 		 */
 		redraw: function () {
 			this._recalculateConstants();
-			this.refresh('value',true);
+			this._valueChange(this.get('value'));
 		},
 			
 		/** 
@@ -393,7 +529,21 @@
 		 */
 		_barFactor:1,
 		
+		/**
+		 * The instance of the animation utility attached to the bar
+		 * @property _anim
+		 * @type YAHOO.util.Anim
+		 * @private
+		 * @default  null
+		 */
 		_anim:null,
+		/**
+		 * A flag to signal that rendering has already happened
+		 * @property _rendered
+		 * @type boolean
+		 * @private
+		 * @default  false
+		 */
 		_rendered:false,
 		
 		/** 
@@ -423,6 +573,13 @@
 			this._barFactor = this._barSpace / (this.get('maxValue') - this._mn)  || 1;
 		},
 		
+		/** 
+		 * Called in response to a change in the <a href="#config_animate">animate</a> attribute.
+		 * It creates and sets up or destroys the instance of the animation utility that will move the bar
+		 * @method _animateChange
+		 * @return  void
+		 * @private
+		 */		
 		_animateChange: function (value) {
 			var anim, barEl = this.get('barEl');
 			if (value) {
@@ -432,25 +589,34 @@
 				},this,true);
 				anim.onComplete.subscribe(function(ev) {
 					this.fireEvent('complete',this._previousValue = this.get('value'));
-					Dom.removeClass(barEl,'yui-pb-anim');
+					Dom.removeClass(barEl,Prog.CLASS_ANIM);
 				},this,true);
 			} else {
 				anim = this._anim;
 				anim.onTween.unsubscribeAll();
 				anim.onComplete.unsubscribeAll();
+				this._anim = null;
 			}
 		},
+		
+		/** 
+		 * Called in response to a change in the <a href="#config_value">value</a> attribute.
+		 * Moves the bar to reflect the new value
+		 * @method _valueChange
+		 * @return  void
+		 * @private
+		 */		
 		_valueChange: function (value) {
 			YAHOO.log('set value: ' + value,'info','ProgressBar');
 			var anim = this._anim,
 				pixelValue = Math.floor((value - this._mn) * this._barFactor),
 				barEl = this.get('barEl');
 			
-			this._setAriaValue();
+			this._showTextualValues(value);
 			this.fireEvent('start',this._previousValue);
 			if (anim) {
 				if (anim.isAnimated) { anim.stop(); }
-				Dom.addClass(barEl,'yui-pb-anim');
+				Dom.addClass(barEl,Prog.CLASS_ANIM);
 				this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 				switch (this.get('direction')) {
 					case 'ltr':
@@ -494,14 +660,27 @@
 				this.fireEvent('complete',value);
 			}
 		},
-		_setAriaValue: function() {
-			var container = this.get('element');
-			container.setAttribute('aria-valuenow',this.get('value'));
-			container.setAttribute('aria-valuetext',Lang.substitute(this.get('ariaText'),{
-				value:this.get('value'),
-				minValue:this.get('minValue'),
-				maxValue:this.get('maxValue')
-			}));
+
+		/** 
+		 * Utility method to set the ARIA value attributes and caption
+		 * @method _showTextualValues
+		 * @return  void
+		 * @private
+		 */
+		 _showTextualValues: function(value) {
+			var container = this.get('element'),
+				captionEl = this.get('captionEl'),
+				objValues = {
+					value:value,
+					minValue:this.get('minValue'),
+					maxValue:this.get('maxValue')
+				};
+			
+			container.setAttribute('aria-valuenow',value);
+			container.setAttribute('aria-valuetext',Lang.substitute(this.get('ariaTemplate'),objValues));
+			if (captionEl) {
+				captionEl.innerHTML = Lang.substitute(this.get('captionTemplate'),objValues);
+			}
 		}
 	});
 })();
