@@ -765,11 +765,18 @@
                         <span class="nx">db</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">oIFrame</span><span class="o">);</span>
                     <span class="o">}</span>
 
+                    <span class="c">// Setting the background color fixes an issue with IE6/IE7, where</span>
+<span class="c"></span>                    <span class="c">// elements in the DOM, with -ve margin-top which positioned them </span>
+<span class="c"></span>                    <span class="c">// offscreen (so they would be overlapped by the iframe and its -ve top</span>
+<span class="c"></span>                    <span class="c">// setting), would have their -ve margin-top ignored, when the iframe </span>
+<span class="c"></span>                    <span class="c">// was added.</span>
+<span class="c"></span>                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="s2">&quot;transparent&quot;</span><span class="o">;</span>
+
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">borderWidth</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span><span class="o">;</span>
                     <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s2">&quot;2em&quot;</span><span class="o">;</span>
                     <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="s2">&quot;2em&quot;</span><span class="o">;</span>
-                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="o">(-</span><span class="m">1</span> <span class="o">*</span> <span class="o">(</span><span class="nx">oIFrame</span><span class="o">.</span><span class="nx">offsetHeight</span> <span class="o">+</span> <span class="nx">Module</span><span class="o">.</span><span class="nx">RESIZE_MONITOR_BUFFER</span><span class="o">))</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
                     <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span><span class="o">;</span>
-                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">borderWidth</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="o">(-</span><span class="m">1</span> <span class="o">*</span> <span class="o">(</span><span class="nx">oIFrame</span><span class="o">.</span><span class="nx">offsetHeight</span> <span class="o">+</span> <span class="nx">Module</span><span class="o">.</span><span class="nx">RESIZE_MONITOR_BUFFER</span><span class="o">))</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
                     <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">&quot;visible&quot;</span><span class="o">;</span>
 
                     <span class="c">/*</span>
