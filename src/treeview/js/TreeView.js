@@ -1004,6 +1004,27 @@ TV.prototype = {
         return (values.length) ? values : null;
     },
 
+
+    /**
+     * Returns a collection of nodes that have passed the test function
+	 * passed as its only argument.  
+	 * The function will receive a reference to each node to be tested.  
+     * @method getNodesBy
+     * @param {function} a boolean function that receives a Node instance and returns true to add the node to the results list
+     * @return {Array} the matching collection of nodes, null if no match
+     */
+    getNodesBy: function(fn) {
+        var values = [];
+        for (var i in this._nodes) {
+            if (this._nodes.hasOwnProperty(i)) {
+                var n = this._nodes[i];
+                if (fn(n)) {
+                    values.push(n);
+                }
+            }
+        }
+        return (values.length) ? values : null;
+    },
     /**
      * Returns the treeview node reference for an ancestor element
      * of the node, or null if it is not contained within any node
@@ -1036,6 +1057,17 @@ TV.prototype = {
 
         return null;
     },
+	
+    /**
+     * When in singleNodeHighlight it returns the node highlighted
+	 * or null if none.  Returns null if singleNodeHighlight is false.
+     * @method getHighlightedNode
+     * @return {YAHOO.widget.Node} a node reference or null
+     */
+	getHighlightedNode: function() {
+		return this._currentlyHighlighted;
+	},
+
 
     /**
      * Removes the node and its children, and optionally refreshes the 
@@ -1366,44 +1398,6 @@ TV.getNode = function(treeId, nodeIndex) {
     */ 
 TV.FOCUS_CLASS_NAME = 'ygtvfocus';
 
-/**
- * Attempts to preload the images defined in the styles used to draw the tree by
- * rendering off-screen elements that use the styles.
- * @method YAHOO.widget.TreeView.preload
- * @param {string} prefix the prefix to use to generate the names of the
- * images to preload, default is ygtv
- * @static
- */
-TV.preload = function(e, prefix) {
-    prefix = prefix || "ygtv";
 
-    YAHOO.log("Preloading images: " + prefix, "info", "TreeView");
 
-    var styles = ["tn","tm","tmh","tp","tph","ln","lm","lmh","lp","lph","loading"];
-    // var styles = ["tp"];
-
-    var sb = [];
-    
-    // save the first one for the outer container
-    for (var i=1; i < styles.length; i=i+1) { 
-        sb[sb.length] = '<span class="' + prefix + styles[i] + '">&#160;</span>';
-    }
-
-    var f = document.createElement("div");
-    var s = f.style;
-    s.className = prefix + styles[0];
-    s.position = "absolute";
-    s.height = "1px";
-    s.width = "1px";
-    s.top = "-1000px";
-    s.left = "-1000px";
-    f.innerHTML = sb.join("");
-
-    document.body.appendChild(f);
-
-    Event.removeListener(window, "load", TV.preload);
-
-};
-
-Event.addListener(window,"load", TV.preload);
 })();
