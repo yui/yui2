@@ -3,15 +3,15 @@
 <head>
 <title>Progress Bar</title>
 <!-- css -->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/reset-fonts-grids/reset-fonts-grids.css">
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/base/base.css">
-<link rel="stylesheet" type="text/css" href="progressbar.css">
+<link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css">
+<link rel="stylesheet" type="text/css" href="../../build/base/base.css">
+<link rel="stylesheet" type="text/css" href="../../build/progressbar/assets/skins/sam/progressbar.css">
 <!-- js -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/animation/animation-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/element/element-beta.js"></script>
+<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
+<script type="text/javascript" src="../../build/element/element-min.js"></script>
 
-<script type="text/javascript" src="progressbar-debug.js"></script>
+<script type="text/javascript" src="../../build/progressbar/progressbar-debug.js"></script>
 
 <style type="text/css">
 /* Here I am using the id of each bar to set the masks and/or bar images for each one separately */
@@ -93,6 +93,15 @@
 	margin: 0 10px;
 }
 
+#rankings .yui-pb {
+	width:100px;
+	height:16px;
+}
+
+#rankings .yui-pb-bar  {
+	background-image: url(stars.png);
+}
+
 
 /* Just a little decoration for the page, not relevant to the usage of the progress bar */
 hr {
@@ -126,7 +135,7 @@ pre, code {
 		<input id="newValue" value="50" maxlength="3" size="3" /><button id="setValue">Set</button>
 	</div>
 
-	<div id="doc"> 	<p align="right"><a href="../../index.html">Back to the index of articles and examples</a></p>
+	<div id="doc">
 		<div id="hd">
 			<h1>Progress Bar</h1>
 			<p>The following examples of the ProgressBar show several of its features.  
@@ -216,6 +225,16 @@ pbplain.on('completeEvent',function (value) {
 			</div>
 		
 			<hr/>
+			<p>The ProgressBar is not limited to show only progress of an operation, 
+			it can show anything a bar can show.  It can be tricked to show discontinuous values
+			such as this example of song rankings, where the bar is actually a set of discreet 
+			stars which can show values in half a star increments.</p>
+			<table width="100%" id="rankings"><tr><th>Song</th><th>Artist</th><th>Ranking</th></tr>
+			<tr><td>Carolan's Frolic</td><td>Richard Searles</td><td id="song123"></td></tr>
+			<tr><td>Jeux d'enfants</td><td>Cirque Du Soleil</td><td id="song456"></td></tr>
+			<tr><td>Foliada dos Aires da Terra</td><td>Carlos Núñez</td><td id="song789"></td></tr>
+			</table>
+			<hr/>
 			<div id="pbthin"></div>
 			<p>The mask for this bar has some fancy caps at both top and bottom ends, those blue rounded things at each side. 
 			The bar cannot go from edge to edge of the ProgressBar container because it would hide behind the areas taken
@@ -231,13 +250,13 @@ pbplain.on('completeEvent',function (value) {
 			<div>
 			<div style="float:left;margin-right:1em;" id="pbcopper"></div>
 			<p>ProgressBars can grow in any direction, as set by the <code>direction</code> attribute,
-			which can take values <code>'lr'</code> (left to right, the default), <code>'rl'</code>, <code>'tb'</code> 
-			(top to bottom) or <code>'bt'</code>, as in this sample.</p>
+			which can take values <code>'ltr'</code> (left to right, the default), <code>'rtl'</code>, <code>'ttb'</code> 
+			(top to bottom) or <code>'btt'</code>, as in this sample.</p>
 			<p>If the Animation utility is available, ProgressBar will use it.  
 			The instance of Animation in use is available in the <code>anim</code> attribute.  
 			You can set the attributes of the animation like <code>duration</code> or <code>method</code>.</p>
 			<p>This is the code for this bar:</p>
-			<pre>pbcopper = new YAHOO.widget.ProgressBar({id:'copper',direction:'bt'});
+			<pre>pbcopper = new YAHOO.widget.ProgressBar({id:'copper',direction:'btt',animate:true});
 pbcopper.get('anim').duration = 3;
 pbcopper.get('anim').method = YAHOO.util.Easing.bounceBoth;
 pbcopper.render('pbcopper');</pre>
@@ -295,7 +314,7 @@ pbcopper.render('pbcopper');</pre>
 				<dt><code>width</code> and <code>height</code></dt>
 				<dd>Any valid CSS width specification, defaults 200 wide, 20 high, a string including standard CSS units or any numeric value (which will be interpreted as pixel sizes</dd>
 				<dt><code>direction</code></dt>
-				<dd>Either 'lr' (default), 'rl', 'tb', 'bt', sets in which direction the bar will grow from (left, right, top or bottom) in which direction. 
+				<dd>Either 'ltr' (default), 'rtl', 'ttb', 'btt', sets in which direction the bar will grow from (left, right, top or bottom) in which direction. 
 				Once set it cannot be changed</dd>
 				<dt><code>anim</code></dt>
 				<dd>Read only.  If the YUI Animation utility has been loaded, it will contain the instance of <code>YAHOO.util.Anim</code> that this ProgressBar uses.
@@ -386,16 +405,6 @@ pbcopper.render('pbcopper');</pre>
 		// You can also create the instance, change settings explicitly (as in the second bar with the height) and then render.
 		// I've provided id's in each of the bars so that the styles above could attach to each bar separately.
 		
-		var x = function () {
-		};
-		x.prototype.y = 42;
-		
-		var X = new x();
-		
-		x.prototype.z = 12;
-		
-		console.log(X);
-		
 		
 		pb = new YAHOO.widget.ProgressBar({height:'30px', width: 300, barColor:'green',backColor:'orange',border:'thin solid black'});
 		pb.render('pb');
@@ -403,14 +412,14 @@ pbcopper.render('pbcopper');</pre>
 		pbplain = new YAHOO.widget.ProgressBar({id:'plain'});
 		pbplain.render('pbplain');
 		
-		pbg = new YAHOO.widget.ProgressBar({id:'grid',direction:'rl'});
+		pbg = new YAHOO.widget.ProgressBar({id:'grid',direction:'rtl'});
 		pbg.set('height',30);
 		pbg.render('pbg');
 
 		pbr = new YAHOO.widget.ProgressBar({id:'ruler'});
 		pbr.render('pbr');
 
-		pbcopper = new YAHOO.widget.ProgressBar({id:'copper',direction:'bt'});
+		pbcopper = new YAHOO.widget.ProgressBar({id:'copper',direction:'btt',animate:true});
 		pbcopper.get('anim').duration = 3;
 		pbcopper.get('anim').method = YAHOO.util.Easing.bounceBoth;
 		pbcopper.render('pbcopper');
@@ -420,23 +429,32 @@ pbcopper.render('pbcopper');</pre>
 		// This is meant to show how you can listen to animation events and show the numeric values of the bar as it grows or shrinks
 		var settingEl = YAHOO.util.Dom.get('setting');
 		// This one shows it while moving
-		pbplain.on('changingEvent',function (value) {
+		pbcopper.on('changing',function (value) {
 			settingEl.innerHTML = value + ' ... moving ...';
 		});
 		// This will show at the end (even if there is no animation at all)
-		pbplain.on('completeEvent',function (value) {
+		pbcopper.on('complete',function (value) {
 			settingEl.innerHTML = value;
 		});
-		Event.on('setValue','click',function() {
-			var newVal = parseInt(Dom.get('newValue').value,10);
-
+		
+		var setValue = function (newVal) {
 			pb.set('value',newVal);
 			pbplain.set('value',newVal);
 			pbg.set('value',newVal);
 			pbr.set('value',newVal);
 			pbcopper.set('value',newVal);
 			pbthin.set('value',newVal);
+		};
+		
+		setValue(50);
+		
+		Event.on('setValue','click',function() {
+			setValue(parseInt(Dom.get('newValue').value,10));
 		});
+		
+		(new YAHOO.widget.ProgressBar({value:1.5,maxValue:5})).render('song123');
+		(new YAHOO.widget.ProgressBar({value:3,maxValue:5})).render('song456');
+		(new YAHOO.widget.ProgressBar({value:4.5,maxValue:5})).render('song789');
 
 	});
 </script>
