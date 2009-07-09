@@ -1093,7 +1093,7 @@ YAHOO.widget.Node.prototype = {
         this.logger.log("Generating html");
         var sb = [];
 
-        sb[sb.length] = '<table id="ygtvtableel' + this.index + '"border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
+        sb[sb.length] = '<table id="ygtvtableel' + this.index + '" border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
         if (this.enableHighlight) {
             sb[sb.length] = ' ygtv-highlight' + this.highlightState;
         }

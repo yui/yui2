@@ -123,6 +123,13 @@ YAHOO.util.EventProvider.prototype = {
      *      This is false by default.
      *    </li>
      *    <li>
+     *      fireOnce: if true, the custom event will only notify subscribers
+     *      once regardless of the number of times the event is fired.  In
+     *      addition, new subscribers will be executed immediately if the
+     *      event has already fired.
+     *      This is false by default.
+     *    </li>
+     *    <li>
      *      onSubscribeCallback: specifies a callback to execute when the
      *      event has a new subscriber.  This will fire immediately for
      *      each queued subscriber if any exist prior to the creation of
@@ -136,18 +143,16 @@ YAHOO.util.EventProvider.prototype = {
     createEvent: function(p_type, p_config) {
 
         this.__yui_events = this.__yui_events || {};
-        var opts = p_config || {};
-        var events = this.__yui_events;
+        var opts = p_config || {},
+            events = this.__yui_events, ce;
 
         if (events[p_type]) {
 YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
         } else {
 
-            var scope  = opts.scope  || this;
-            var silent = (opts.silent);
+            ce = new YAHOO.util.CustomEvent(p_type, opts.scope || this, opts.silent,
+                         YAHOO.util.CustomEvent.FLAT, opts.fireOnce);
 
-            var ce = new YAHOO.util.CustomEvent(p_type, scope, silent,
-                    YAHOO.util.CustomEvent.FLAT);
             events[p_type] = ce;
 
             if (opts.onSubscribeCallback) {
@@ -184,7 +189,7 @@ YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
      * @return {boolean} the return value from CustomEvent.fire
      *                   
      */
-    fireEvent: function(p_type, arg1, arg2, etc) {
+    fireEvent: function(p_type) {
 
         this.__yui_events = this.__yui_events || {};
         var ce = this.__yui_events[p_type];
