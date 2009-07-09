@@ -255,7 +255,7 @@
                 Assert.areEqual(0, Y.Dom.getElementsByClassName('mod', 'div', 'fake-id').length, 'getByClassName failed for #fake-id div.mod'); 
 
                 Assert.areEqual(2, Y.Dom.getElementsByClassName('hd', 'div').length, 'getByClassName("hd") '); 
-                Assert.areEqual(2, Y.Dom.getElementsByClassName(/hd/, 'div').length, 'getByClassName("hd") '); 
+                Assert.areEqual(3, Y.Dom.getElementsByClassName(/hd/, 'div').length, 'getByClassName("hd") '); 
             },
 
             test_getElementsBy: function() {

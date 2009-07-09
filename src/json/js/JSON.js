@@ -249,9 +249,6 @@ function _stringify(h,key,d,w,pstack) {
                             }
                         }
                     }
-
-                    // sort object keys for easier readability
-                    a.sort();
                 }
             }
 
@@ -376,10 +373,11 @@ return {
      * @return {Date}
      */
     stringToDate : function (str) {
-        if (/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/.test(str)) {
+        var m = str.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/);
+        if (m) {
             var d = new Date();
-            d.setUTCFullYear(RegExp.$1, (RegExp.$2|0)-1, RegExp.$3);
-            d.setUTCHours(RegExp.$4, RegExp.$5, RegExp.$6);
+            d.setUTCFullYear(m[1], m[2]-1, m[3]);
+            d.setUTCHours(m[4], m[5], m[6]);
             return d;
         }
         return str;
