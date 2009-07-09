@@ -1314,7 +1314,7 @@
             attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
 
             if (el && el.getAttribute) {
-                val = el.getAttribute(attr);
+                val = el.getAttribute(attr, 2);
             } else {
                 YAHOO.log('getAttribute method not available for ' + el, 'error', 'Dom');
             }
