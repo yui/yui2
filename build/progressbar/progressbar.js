@@ -183,7 +183,6 @@
 			 */
 			// No actual creation required, event will be created when listened to
 			//this.createEvent('complete');
-
 		},
 		/**
 		 * Implementation of Element's abstract method. Sets up config values.
@@ -195,11 +194,23 @@
 		initAttributes: function (oConfigs) {
 
 		    Prog.superclass.initAttributes.call(this, oConfigs);
+			this.set('innerHTML',Prog.MARKUP);
+			this.addClass(Prog.CLASS_PROGBAR);
+			
+			// I need to apply at least the following styles, if present in oConfigs, 
+			// to the ProgressBar so when it later reads the width and height, 
+			// they are already set to the correct values.
+			// id is important because it can be used as a CSS selector.
+			var key, presets = ['id','width','height','class','style'];
+			while((key = presets.pop())) {
+				if (key in oConfigs) {
+					this.set(key,oConfigs[key]);
+				}
+			}
+			
 
-			var el = this.get('element');
-			el.innerHTML = 	Prog.MARKUP;
-			var barEl  = Dom.getElementsByClassName(Prog.CLASS_BAR, undefined,el)[0],
-				maskEl = Dom.getElementsByClassName(Prog.CLASS_MASK, undefined,el)[0];				
+			var barEl  = this.getElementsByClassName(Prog.CLASS_BAR)[0],
+				maskEl = this.getElementsByClassName(Prog.CLASS_MASK)[0];				
 			/**
 			 * @attribute barEl
 			 * @description Reference to the HTML object that makes the moving bar (read-only)
@@ -227,7 +238,7 @@
 			 * @type HTMLElement or String
 			 */			
 		    this.setAttributeConfig('captionEl', {
-		        value: Dom.getElementsByClassName(Prog.CLASS_CAPTION, undefined,el)[0],
+		        value: this.getElementsByClassName(Prog.CLASS_CAPTION)[0],
 				validator: function (value) {
 					return (Lang.isString(value) && Dom.get(value)) || (Lang.isObject(value) && value.ownerDocument == document);
 				},
@@ -308,7 +319,7 @@
 			 */				
 
 		    this.setAttributeConfig('width', {
-		        value: '200px',
+		        value: this.getStyle('width'),
 				method: function(value) {
 					if (Lang.isNumber(value)) {
 						value += 'px';
@@ -329,7 +340,7 @@
 			 * @type Number or String
 			 */				
 		    this.setAttributeConfig('height', {
-		        value: '20px',
+		        value: this.getStyle('height'),
 				method: function(value) {
 					if (Lang.isNumber(value)) {
 						value += 'px';
@@ -347,7 +358,7 @@
 			 * @type String - CSS color specification
 			 */				
 			this.setAttributeConfig('barColor', {
-				value:'blue',
+				value:Dom.getStyle(barEl,'background-color'),
 				method: function (value) {
 					Dom.setStyle(barEl,'background-color', value);
 					Dom.setStyle(barEl,'background-image', 'none');
@@ -361,7 +372,7 @@
 			 * @type String - CSS color specification
 			 */				
 			this.setAttributeConfig('backColor', {
-				value:'white',
+				value:this.getStyle('background-color'),
 				method: function (value) {
 					this.setStyle('background-color', value);
 					this.setStyle('background-image', 'none');
@@ -461,10 +472,10 @@
 		 * @chainable
 		 */
 		render: function(el,before) {
+
 			if (this._rendered) { return; }
 			this._rendered = true;
 
-			this.addClass(Prog.CLASS_PROGBAR);
 			var container = this.get('element');
 			container.tabIndex = 0;
 			container.setAttribute('role','progressbar');
