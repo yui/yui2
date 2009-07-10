@@ -96,13 +96,13 @@
                 if (typeof el === 'string') { // id
                     id = el;
                     el = document.getElementById(el);
-                    if (el && el.id === id) { // IE: avoid false match on "name" attribute
+                    if (el && el.getAttribute('id') === id) { // IE: avoid false match on "name" attribute
                     return el;
                     } else if (el && document.all) { // filter by name
                         el = null;
                         nodes = document.all[id];
                         for (i = 0, len = nodes.length; i < len; ++i) {
-                            if (nodes[i].id === id) {
+                            if (nodes[i].getAttribute('id') === id) {
                                 return nodes[i];
                             }
                         }
