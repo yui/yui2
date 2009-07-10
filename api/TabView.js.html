@@ -149,6 +149,8 @@
             
             <span class="nx">index</span> <span class="o">=</span> <span class="o">(</span><span class="nx">index</span> <span class="o">===</span> <span class="kc">undefined</span><span class="o">)</span> <span class="o">?</span> <span class="nx">tabs</span><span class="o">.</span><span class="nx">length</span> <span class="o">:</span> <span class="nx">index</span><span class="o">;</span>
             
+            <span class="nx">tabs</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="nx">tab</span><span class="o">);</span>
+
             <span class="k">if</span> <span class="o">(</span> <span class="nx">before</span> <span class="o">)</span> <span class="o">{</span>
                 <span class="nx">tabParent</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="nx">tabElement</span><span class="o">,</span> <span class="nx">before</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">ELEMENT</span><span class="o">));</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
@@ -163,11 +165,10 @@
                 <span class="nx">tab</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;contentVisible&#39;</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span> <span class="c">/* hide if not active */</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="nx">ACTIVE_TAB</span><span class="o">,</span> <span class="nx">tab</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-                
+                <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;activeIndex&#39;</span><span class="o">,</span> <span class="nx">index</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
             <span class="o">}</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">_initTabEvents</span><span class="o">(</span><span class="nx">tab</span><span class="o">);</span>
-            <span class="nx">tabs</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="nx">tab</span><span class="o">);</span>
         <span class="o">},</span>
 
         <span class="nx">_initTabEvents</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>
@@ -371,8 +372,6 @@
 <span class="c">             */</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="nx">ACTIVE_INDEX</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">activeIndex</span><span class="o">,</span>
-                <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
-                <span class="o">},</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTab</span><span class="o">(</span><span class="nx">value</span><span class="o">).</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;disabled&#39;</span><span class="o">))</span> <span class="o">{</span> <span class="c">// cannot activate if disabled</span>
