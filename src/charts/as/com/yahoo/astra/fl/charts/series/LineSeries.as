@@ -342,17 +342,13 @@ package com.yahoo.astra.fl.charts.series
 							var y2:Number = yPosition;
 							if(yPosition > bottom)
 							{	
+								marker.visible = false;
 								if(lastValidPosition.y == yPosition)
 								{
-									this.graphics.lineStyle(0, 0, 0);
 									this.graphics.lineTo(xPosition, bottom);
 								}
 								else
 								{
-									if(lastValidPosition.y > bottom) 
-									{
-										this.graphics.lineStyle(0, 0, 0);
-									}
 									if(lastValidPosition.y < seriesBounds.y) 
 									{
 										newX = x2 - ((y2 - seriesBounds.y)*(x2-x1)/(y2-y1));
@@ -362,32 +358,33 @@ package com.yahoo.astra.fl.charts.series
 									var newX:Number = x2 - ((y2 - bottom)*(x2-x1)/(y2-y1));
 									this.graphics.lineTo(newX, bottom);
 								}
+								this.graphics.lineStyle(0, 0, 0);
 							}
 							else if(yPosition < seriesBounds.y)
 							{
+								marker.visible = false;
 								if(lastValidPosition.y == yPosition)
 								{
-									this.graphics.lineStyle(0, 0, 0);
 									this.graphics.lineTo(xPosition, seriesBounds.y);
 								}
 								else
-								{
+								{										
 									if(lastValidPosition.y > bottom) 
 									{
 										newX = x2 - ((y2 - bottom)*(x2-x1)/(y2-y1));	
-
 										this.graphics.lineTo(newX, bottom);
 										this.setPrimaryLineStyle();
-									}				
+									}
+													
 									newX = x2 - ((y2 - seriesBounds.y)*(x2-x1)/(y2-y1));
 									if(lastValidPosition.y < seriesBounds.y) this.graphics.lineStyle(0, 0, 0);
-									if(lastValidPosition.y > bottom) this.setPrimaryLineStyle();	
 									this.graphics.lineTo(newX, seriesBounds.y);
 								}
-							
+								this.graphics.lineStyle(0, 0, 0);
 							}
 							else
 							{	
+								marker.visible = true;
 								if(lastValidPosition.y > bottom) 
 								{
 									newX = x2 - ((y2 - bottom)*(x2-x1)/(y2-y1));	
@@ -468,7 +465,7 @@ package com.yahoo.astra.fl.charts.series
 			var lineWeight:int = this.getStyleValue("lineWeight") as int;
 			var lineColor:uint = this.getStyleValue("lineColor") != null ? this.getStyleValue("lineColor") as uint : this.getStyleValue("color") as uint;
 			var lineAlpha:Number = this.getStyleValue("lineAlpha") as Number;
-			this.graphics.lineStyle(lineWeight, lineColor, lineAlpha);
+			this.graphics.lineStyle(lineWeight, lineColor, lineAlpha, false, "normal", "none");
 		}
 		
 		/**
