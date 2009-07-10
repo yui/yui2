@@ -32,6 +32,14 @@
 #plain.yui-pb .yui-pb-anim {
 	background-image:url(animbar.gif);
 }
+#test {
+	border: thin solid black;
+}
+
+#margins .yui-pb-bar {
+	margin: 5px 10px 15px 20px;
+}
+
 </style>
 </head>
 <body class="yui-skin-sam">
@@ -84,6 +92,15 @@
             pb = new PB();
 			pb.render('test');
 			t = getEls();
+			A.areEqual(0,pb.get('value'),'reported value');
+			A.areEqual(0,pb.get('minValue'),'reported minValue');
+			A.areEqual(100,pb.get('maxValue'),'reported maxValue');
+			A.areEqual(false,pb.get('animate'),'reported animate');
+			A.isNull(pb.get('anim'),'reported anim');
+			A.areEqual('{value}',pb.get('ariaTemplate'),'reported ariaTemplate');
+			A.areEqual('',pb.get('captionTemplate'),'reported captionTemplate');
+			A.areEqual('ltr',pb.get('direction'),'reported direction');
+			
 			A.areEqual('200px',pb.get('width'),'reported width');
 			A.areEqual('20px',pb.get('height'),'reported height');
 			A.areEqual('200px',Dom.getStyle(t.pb,'width'),'widget width');
@@ -101,9 +118,17 @@
         },
 
         testSetupByCode : function () {
-            pb = new PB({height:'30px', width: 300, barColor:'green',backColor:'orange',border:'thin solid black'});
+            pb = new PB({height:'30px', width: 300, barColor:'green',backColor:'orange'});
 			pb.render('test');
 			t = getEls();
+			A.areEqual(0,pb.get('value'),'reported value');
+			A.areEqual(0,pb.get('minValue'),'reported minValue');
+			A.areEqual(100,pb.get('maxValue'),'reported maxValue');
+			A.areEqual(false,pb.get('animate'),'reported animate');
+			A.isNull(pb.get('anim'),'reported anim');
+			A.areEqual('{value}',pb.get('ariaTemplate'),'reported ariaTemplate');
+			A.areEqual('',pb.get('captionTemplate'),'reported captionTemplate');
+			A.areEqual('ltr',pb.get('direction'),'reported direction');
 			A.areEqual('300',pb.get('width'),'reported width');
 			A.areEqual('30px',pb.get('height'),'reported height');
 			A.areEqual('300px',Dom.getStyle(t.pb,'width'),'widget width');
@@ -124,6 +149,14 @@
 			pb = new PB({id:'plain'});
 			pb.render('test');		
 			t = getEls();
+			A.areEqual(0,pb.get('value'),'reported value');
+			A.areEqual(0,pb.get('minValue'),'reported minValue');
+			A.areEqual(100,pb.get('maxValue'),'reported maxValue');
+			A.areEqual(false,pb.get('animate'),'reported animate');
+			A.isNull(pb.get('anim'),'reported anim');
+			A.areEqual('{value}',pb.get('ariaTemplate'),'reported ariaTemplate');
+			A.areEqual('',pb.get('captionTemplate'),'reported captionTemplate');
+			A.areEqual('ltr',pb.get('direction'),'reported direction');
 			A.areEqual('250px',pb.get('width'),'reported width');
 			A.areEqual('25px',pb.get('height'),'reported height');
 			A.areEqual('250px',Dom.getStyle(t.pb,'width'),'widget width');
@@ -141,11 +174,325 @@
 		}
     }));
 
+	oSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "value test",
+		setUp : function () {
+        },
+    
+        tearDown : function () {
+			pb.destroy();
+        },
+       
+        test30onInit : function () {
+			pb = new PB({value:30});
+			pb.render('test');
+			t = getEls();
+			A.areEqual(30,pb.get('value'),'reported value');
+			A.areEqual('60px',Dom.getStyle(t.b,'width'),'bar width');
+		},
+        test30beforeRender : function () {
+			pb = new PB();
+			pb.set('value',30);
+			pb.render('test');
+			t = getEls();
+			A.areEqual(30,pb.get('value'),'reported value');
+			A.areEqual('60px',Dom.getStyle(t.b,'width'),'bar width');
+		},
+        test30afterRender : function () {
+			pb = new PB();
+			pb.render('test');
+			pb.set('value',30);
+			t = getEls();
+			A.areEqual(30,pb.get('value'),'reported value');
+			A.areEqual('60px',Dom.getStyle(t.b,'width'),'bar width');
+		},
+        test70onInit : function () {
+			pb = new PB({value:70});
+			pb.render('test');
+			t = getEls();
+			A.areEqual(70,pb.get('value'),'reported value');
+			A.areEqual('140px',Dom.getStyle(t.b,'width'),'bar width');
+		},
+        test70beforeRender : function () {
+			pb = new PB();
+			pb.set('value',70);
+			pb.render('test');
+			t = getEls();
+			A.areEqual(70,pb.get('value'),'reported value');
+			A.areEqual('140px',Dom.getStyle(t.b,'width'),'bar width');
+		},
+        test70afterRender : function () {
+			pb = new PB();
+			pb.render('test');
+			pb.set('value',70);
+			t = getEls();
+			A.areEqual(70,pb.get('value'),'reported value');
+			A.areEqual('140px',Dom.getStyle(t.b,'width'),'bar width');
+		},
+        test30_50_80_onInit : function () {
+			pb = new PB({value:50,minValue:30,maxValue:80});
+			pb.render('test');
+			t = getEls();
+			A.areEqual(50,pb.get('value'),'reported value');
+			A.areEqual('80px',Dom.getStyle(t.b,'width'),'bar width');
+		},
+        test30_50_80_beforeRender : function () {
+			pb = new PB();
+			pb.set('value',50);
+			pb.set('minValue',30);
+			pb.set('maxValue',80);
+			pb.render('test');
+			t = getEls();
+			A.areEqual(50,pb.get('value'),'reported value');
+			A.areEqual('80px',Dom.getStyle(t.b,'width'),'bar width');
+		},
+        test30_50_80_afterRender : function () {
+			pb = new PB();
+			pb.render('test');
+			t = getEls();
+
+			pb.set('value',50);
+			A.areEqual('100px',Dom.getStyle(t.b,'width'),'bar width - initial');
+
+			pb.set('minValue',30);
+			A.areEqual('57px',Dom.getStyle(t.b,'width'),'bar width - after minValue');
+
+			pb.set('maxValue',80);
+			A.areEqual('80px',Dom.getStyle(t.b,'width'),'bar width - after maxValue');
+			A.areEqual(50,pb.get('value'),'reported value');
+		}
+    }));
+	
+	oSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "Direction test",
+		setUp : function () {
+
+        },
+    
+        tearDown : function () {
+			pb.destroy();
+        },
+       
+        testRtl : function () {
+			pb = new PB({direction:'rtl', value:30});
+			pb.render('test');
+			t = getEls();
+			A.areEqual(30,pb.get('value'),'reported value');
+			A.areEqual('60px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('140px',Dom.getStyle(t.b,'left'),'bar left');
+			A.areEqual('20px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
+		},
+       
+        testTtb : function () {
+			pb = new PB({direction:'ttb', value:30,width:'40px',height:'100px'});
+			pb.render('test');
+			t = getEls();
+			A.areEqual(30,pb.get('value'),'reported value');
+			A.areEqual('40px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
+			A.areEqual('30px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
+		},
+       
+        testBtt : function () {
+			pb = new PB({direction:'btt', value:30,width:'40px',height:'100px'});
+			pb.render('test');
+			t = getEls();
+			A.areEqual(30,pb.get('value'),'reported value');
+			A.areEqual('40px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
+			A.areEqual('30px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('70px',Dom.getStyle(t.b,'top'),'bar top');
+		}
+    }));
+
+	
+	oSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "ARIA and caption test",
+		setUp : function () {
+			pb = new PB();
+			pb.render('test');
+
+        },
+    
+        tearDown : function () {
+			pb.destroy();
+        },
+       
+        testAria : function () {
+			t = getEls();
+			A.areEqual('progressbar',t.pb.getAttribute('role'),'ARIA role');
+			A.areEqual('0',t.pb.getAttribute('aria-valuemin'),'ARIA minValue');
+			A.areEqual('100',t.pb.getAttribute('aria-valuemax'),'ARIA maxValue');
+			A.areEqual('0',t.pb.getAttribute('aria-valuenow'),'ARIA value');
+			A.areEqual('0',t.pb.getAttribute('aria-valuetext'),'ARIA text');
+
+			pb.set('value',30);
+			A.areEqual('0',t.pb.getAttribute('aria-valuemin'),'ARIA minValue');
+			A.areEqual('100',t.pb.getAttribute('aria-valuemax'),'ARIA maxValue');
+			A.areEqual('30',t.pb.getAttribute('aria-valuenow'),'ARIA value 30');
+			A.areEqual('30',t.pb.getAttribute('aria-valuetext'),'ARIA text 30');
+			
+			// changing the ariaTemplate doesn't have an immediate effect 
+			// until the next redraw or value change
+			pb.set('ariaTemplate','|{minValue}=>{value}<={maxValue}|');
+			pb.redraw();
+			A.areEqual('|0=>30<=100|',t.pb.getAttribute('aria-valuetext'),'ARIA text 0-30-100');
+			pb.set('value',50);
+			pb.set('minValue',30);
+			pb.set('maxValue',80);
+			A.areEqual('|30=>50<=80|',t.pb.getAttribute('aria-valuetext'),'ARIA text 30-50-80');
+		},
+
+		testCaption: function () {
+			t = getEls();
+			A.areEqual('',t.c.innerHTML,'Caption 0 before');
+			pb.set('value',30);
+			A.areEqual('',t.c.innerHTML,'Caption 30 before');
+			pb.set('captionTemplate','{value}');
+			pb.set('value',60);
+			A.areEqual('60',t.c.innerHTML,'Caption 60 after');
+			pb.set('value',30);
+			A.areEqual('30',t.c.innerHTML,'Caption 30 after');
+		}
+			
+
+    }));
+
+	oSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "Bar with margins",
+		setUp : function () {
+        },
+    
+        tearDown : function () {
+			pb.destroy();
+        },
+       
+        testLtr30 : function () {
+			pb = new PB({id:'margins',direction:'ltr', value:30,width:'200px',height:'100px'});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('51px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
+			A.areEqual('100px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
+		},
+
+        testLtr70 : function () {
+			pb = new PB({id:'margins',direction:'ltr', value:70,width:'200px',height:'100px'});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('119px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
+			A.areEqual('100px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
+		},
+
+        testRtl30 : function () {
+			pb = new PB({id:'margins',direction:'rtl', value:30,width:'200px',height:'100px'});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('51px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('119px',Dom.getStyle(t.b,'left'),'bar left');
+			A.areEqual('100px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
+		},
+
+        testRtl70 : function () {
+			pb = new PB({id:'margins',direction:'rtl', value:70,width:'200px',height:'100px'});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('119px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('51px',Dom.getStyle(t.b,'left'),'bar left');
+			A.areEqual('100px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
+		},
+		
+        testBtt30 : function () {
+			pb = new PB({id:'margins',direction:'btt', value:30,width:'200px',height:'100px'});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('200px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
+			A.areEqual('24px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('56px',Dom.getStyle(t.b,'top'),'bar top');
+		},
+
+        testBtt70 : function () {
+			pb = new PB({id:'margins',direction:'btt', value:70,width:'200px',height:'100px'});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('200px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
+			A.areEqual('56px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('24px',Dom.getStyle(t.b,'top'),'bar top');
+		},
+        testTtb30 : function () {
+			pb = new PB({id:'margins',direction:'ttb', value:30,width:'200px',height:'100px'});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('200px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
+			A.areEqual('24px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
+		},
+
+        testTtb70 : function () {
+			pb = new PB({id:'margins',direction:'ttb', value:70,width:'200px',height:'100px'});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('200px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
+			A.areEqual('56px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
+		},
+    }));
+	
+	oSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "Miscellaneous test",
+		setUp : function () {
+
+        },
+    
+        tearDown : function () {
+			pb.destroy();
+        },
+       
+        testRenderTwice : function () {
+			pb = new PB({direction:'rtl', value:30});
+			A.areEqual(0,Dom.get('test').children.length,'before render nothing');
+			pb.render('test');
+			A.areEqual(1,Dom.get('test').children.length,'first render');
+			pb.render('test');
+			A.areEqual(1,Dom.get('test').children.length,'second render ignored');
+		},
+
+    }));
+
     YAHOO.tool.TestRunner.add(oSuite);
 	
 	Event.onDOMReady(function (){
         var logger = new YAHOO.tool.TestLogger("testLogger");
-        YAHOO.tool.TestRunner.run();
+		if (1) {
+			YAHOO.tool.TestRunner.run();
+		} else {
+			pb = new PB({direction:'rtl', value:30});
+			pb.render('test');
+		}
     });
 })();
     

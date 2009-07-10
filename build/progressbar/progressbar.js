@@ -71,7 +71,7 @@
      * @final
      * @default "yui-pb-value"
      */
-	Prog.CLASS_CAPTION = Prog.CLASS_PROGBAR + '-value';
+	Prog.CLASS_CAPTION = Prog.CLASS_PROGBAR + '-caption';
     /**
      * Class name assigned to the bar while animated.
      *
@@ -183,6 +183,9 @@
 			 */
 			// No actual creation required, event will be created when listened to
 			//this.createEvent('complete');
+			
+			this.on('minValueChange',this.redraw);
+			this.on('maxValueChange',this.redraw);
 		},
 		/**
 		 * Implementation of Element's abstract method. Sets up config values.
@@ -285,8 +288,6 @@
 				validator: Lang.isNumber,
 				method: function (value) {
 					this.get('element').setAttribute('aria-valuemax',value);
-					this._recalculateConstants();
-					this.redraw();
 				}
 		    });
 			
@@ -304,8 +305,6 @@
 				validator: Lang.isNumber,
 				method: function (value) {
 					this.get('element').setAttribute('aria-valuemin',value);
-					this._recalculateConstants();
-					this.redraw();
 				}
 		    });
 			/**
@@ -384,7 +383,7 @@
 			 * @attribute ariaTemplate
 			 * @description The text to be voiced by screen readers.  
 			 *     The text is processed by YAHOO.lang.substitute.  
-			 *     It can use the palceholders {value}, {minValue} and {maxValue}
+			 *     It can use the placeholders {value}, {minValue} and {maxValue}
 			 * @default '{value}'
 			 * @type String
 			 */				
@@ -394,10 +393,10 @@
 			
 			/**
 			 * @attribute captionTemplate
-			 * @description Text to be shown overlapping the bar
+			 * @description Text to be shown overlapping the bar.
 			 *     The text is processed by YAHOO.lang.substitute.  
-			 *     It can use the palceholders {value}, {minValue} and {maxValue}
-			 * @default ''
+			 *     It can use the placeholders {value}, {minValue} and {maxValue}
+			 * @default ""
 			 * @type String
 			 */				
 			this.setAttributeConfig('captionTemplate', {
@@ -426,6 +425,7 @@
 			 *   and the YAHOO.util.Animation utility is loaded.
 			 *   It can be used to set the animation parameters such as easing methods or duration.
 			 * @default null
+			 * @readonly
 			 * @type {instance of YAHOO.util.Anim}
 			 */						
 			this.setAttributeConfig('anim', {
@@ -461,8 +461,8 @@
 			
 		},
 		/** 
-		 *  It will render the ProgressBar into the given container.  
-		 *  If the container has other content, the ProgressBar will be appended to them.
+		 *  Renders the ProgressBar into the given container.  
+		 *  If the container has other content, the ProgressBar will be appended to it.
 		 *  If the second argument is provided, the ProgressBar will be inserted before the given child.
 		 * The method is chainable since it returns a reference to this instance.
 		 * @method render
@@ -489,7 +489,7 @@
 		},
 
 		/** 
-		 *  It will recalculate the bar size and position and redraw it
+		 * Recalculate the bar size and position and redraws it
 		 * @method redraw
 		 * @return  void
 		 */
@@ -499,7 +499,7 @@
 		},
 			
 		/** 
-		 *  It will destroy the ProgressBar, related objects and unsubscribe all events
+		 * Destroys the ProgressBar, related objects and unsubscribes from all events
 		 * @method destroy
 		 * @return  void
 		 */

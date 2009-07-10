@@ -61,10 +61,11 @@
 	z-index:1;
 }
 
-.yui-pb-value {
+.yui-pb-caption {
 	height:100%;
 	position:absolute;
 	text-align:center;
+	vertical-align:center;
 	width:100%;
 	z-index:3;
 }
