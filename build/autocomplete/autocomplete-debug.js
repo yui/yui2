@@ -66,7 +66,7 @@ YAHOO.widget.DS_XHR.TYPE_FLAT = YAHOO.util.DataSourceBase.TYPE_TEXT;
 YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
     if(elInput && elContainer && oDataSource) {
         // Validate DataSource
-        if(oDataSource instanceof YAHOO.util.DataSourceBase) {
+        if(oDataSource && YAHOO.lang.isFunction(oDataSource.sendRequest)) {
             this.dataSource = oDataSource;
         }
         else {

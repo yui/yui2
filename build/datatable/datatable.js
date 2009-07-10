@@ -4405,7 +4405,7 @@ _initColumnSet : function(aColumnDefs) {
  */
 _initDataSource : function(oDataSource) {
     this._oDataSource = null;
-    if(oDataSource && (oDataSource instanceof DS)) {
+    if(oDataSource && (lang.isFunction(oDataSource.sendRequest))) {
         this._oDataSource = oDataSource;
     }
     // Backward compatibility
