@@ -448,6 +448,7 @@
             child,
             item,
             size     = 0,
+            first = carousel.get("firstVisible"),
             vertical = false;
 
         if (carousel._itemsTable.numItems === 0) {
@@ -460,7 +461,7 @@
             }
         }
 
-        item = carousel._itemsTable.items[carousel.get("firstVisible")];
+        item = carousel._itemsTable.items[first] || carousel._itemsTable.loading[first];
         
         if (JS.isUndefined(item)) {
             return 0;
@@ -1849,6 +1850,16 @@
                     readOnly  : true,
                     getter    : carousel._getNumPages
             });
+
+            /**
+             * @attribute lastVisible
+             * @description The last item visible in the carousel.
+             * @type Number
+             */
+            carousel.setAttributeConfig("lastVisible", {
+                    readOnly  : true,
+                    getter    : carousel._getLastVisible
+            });
         },
 
         /**
@@ -2611,7 +2622,7 @@
                     'selectedItem' : carousel.get('selectedItem')+1,
                     'currentPage' : currentPage,
                     'firstVisible' : firstVisible,
-                    'lastVisible' : currentPage == numPages ? numItems : firstVisible + numVisible - 1
+                    'lastVisible' : carousel.get("lastVisible")
                 },
                 cb = pagination.callback || {},
                 scope = cb.scope && cb.obj ? cb.obj : carousel;
@@ -2925,16 +2936,17 @@
          * @protected
          */
         _loadItems: function(last) {
-            var carousel   = this,
-                numItems   = carousel.get("numItems"),
-                numVisible = carousel.get("numVisible"),
-                reveal     = carousel.get("revealAmount"),
-                first      = carousel._itemsTable.items.length;
+            var carousel    = this,
+                numItems    = carousel.get("numItems"),
+                numVisible  = carousel.get("numVisible"),
+                reveal      = carousel.get("revealAmount"),
+                first       = carousel._itemsTable.items.length,
+                lastVisible = carousel.get("lastVisible");
 
             // adjust if going backwards
             if(first > last && last+1 >= numVisible){
                 // need to get first a bit differently for the last page
-                first = last % numVisible ? last - last % numVisible : last - numVisible + 1;
+                first = last % numVisible || last == lastVisible ? last - last % numVisible : last - numVisible + 1;
             }
 
             if(reveal && last < numItems - 1){ last++; }
@@ -3684,6 +3696,19 @@
             return Math.ceil(
                 parseInt(this.get("numItems"),10) / parseInt(this.get("numVisible"),10)
             );
+        },
+
+        /**
+         * Get the last visible item.
+         *
+         * @method _getLastVisible
+         * @protected
+         */
+        _getLastVisible: function () {
+            var carousel = this;
+            return carousel.get("currentPage") + 1 == carousel.get("numPages") ?
+                   carousel.get("numItems") - 1:
+                   carousel.get("firstVisible") + carousel.get("numVisible");
         },
 
         /**

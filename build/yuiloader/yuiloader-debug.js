@@ -1667,7 +1667,9 @@ YAHOO.util.Get = function() {
          * <dd>node or node id that will become the new node's nextSibling</dd>
          * </dl>
          * <dt>charset</dt>
-         * <dd>Node charset, default utf-8</dd>
+         * <dd>Node charset, deprecated, use 'attributes'</dd>
+         * <dt>attributes</dt>
+         * <dd>A hash of attributes to apply to dynamic nodes.</dd>
          * <dt>timeout</dt>
          * <dd>Number of milliseconds to wait before aborting and firing the timeout event</dd>
          * <pre>
@@ -1733,7 +1735,9 @@ YAHOO.util.Get = function() {
          * <dt>insertBefore</dt>
          * <dd>node or node id that will become the new node's nextSibling</dd>
          * <dt>charset</dt>
-         * <dd>Node charset, default utf-8</dd>
+         * <dd>Node charset, deprecated, use 'attributes'</dd>
+         * <dt>attributes</dt>
+         * <dd>A hash of attributes to apply to dynamic nodes.</dd>
          * </dl>
          * <pre>
          *      YAHOO.util.Get.css("http://yui.yahooapis.com/2.7.0/build/menu/assets/skins/sam/menu.css");
@@ -1949,6 +1953,12 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'requires': ['yahoo']
         },
 
+        'event-simulate': {
+            'type': 'js',
+            'path': 'event-simulate/event-simulate-min.js',
+            'requires': ['event']
+        },
+
         'fonts': {
             'type': 'css',
             'path': 'fonts/fonts-min.css'
@@ -2150,6 +2160,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'type': 'js',
             'path': 'yuitest/yuitest-min.js',
             'requires': ['logger'],
+            'optional': ['event-simulate'],
             'skinnable': true
         }
     }
