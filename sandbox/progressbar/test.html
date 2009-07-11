@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="../../build/base/base.css">
 <link rel="stylesheet" type="text/css" href="../../build/logger/assets/logger.css">
 <link rel="stylesheet" type="text/css" href="../../build/yuitest/assets/testlogger.css">
+<link rel="stylesheet" type="text/css" href="../../build/progressbar/assets/progressbar-core.css">
 <link rel="stylesheet" type="text/css" href="../../build/progressbar/assets/skins/sam/progressbar.css">
 <!-- js -->
 <script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
@@ -60,7 +61,7 @@
 			test = Dom.get('test');
 		return {
 			pb: get(PB.CLASS_PROGBAR,'div',test)[0],
-			m : get(PB.CLASS_MASK,'table',test)[0],
+			m : get(PB.CLASS_MASK,'div',test)[0],
 			b : get(PB.CLASS_BAR,'div',test)[0],
 			c : get(PB.CLASS_CAPTION,'div',test)[0]
 		};
@@ -95,7 +96,6 @@
 			A.areEqual(0,pb.get('value'),'reported value');
 			A.areEqual(0,pb.get('minValue'),'reported minValue');
 			A.areEqual(100,pb.get('maxValue'),'reported maxValue');
-			A.areEqual(false,pb.get('animate'),'reported animate');
 			A.isNull(pb.get('anim'),'reported anim');
 			A.areEqual('{value}',pb.get('ariaTemplate'),'reported ariaTemplate');
 			A.areEqual('',pb.get('captionTemplate'),'reported captionTemplate');
@@ -124,7 +124,6 @@
 			A.areEqual(0,pb.get('value'),'reported value');
 			A.areEqual(0,pb.get('minValue'),'reported minValue');
 			A.areEqual(100,pb.get('maxValue'),'reported maxValue');
-			A.areEqual(false,pb.get('animate'),'reported animate');
 			A.isNull(pb.get('anim'),'reported anim');
 			A.areEqual('{value}',pb.get('ariaTemplate'),'reported ariaTemplate');
 			A.areEqual('',pb.get('captionTemplate'),'reported captionTemplate');
@@ -152,7 +151,6 @@
 			A.areEqual(0,pb.get('value'),'reported value');
 			A.areEqual(0,pb.get('minValue'),'reported minValue');
 			A.areEqual(100,pb.get('maxValue'),'reported maxValue');
-			A.areEqual(false,pb.get('animate'),'reported animate');
 			A.isNull(pb.get('anim'),'reported anim');
 			A.areEqual('{value}',pb.get('ariaTemplate'),'reported ariaTemplate');
 			A.areEqual('',pb.get('captionTemplate'),'reported captionTemplate');
@@ -458,7 +456,7 @@
 			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
 			A.areEqual('56px',Dom.getStyle(t.b,'height'),'bar height');
 			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
-		},
+		}
     }));
 	
 	oSuite.add(new YAHOO.tool.TestCase({
@@ -479,7 +477,7 @@
 			A.areEqual(1,Dom.get('test').children.length,'first render');
 			pb.render('test');
 			A.areEqual(1,Dom.get('test').children.length,'second render ignored');
-		},
+		}
 
     }));
 
@@ -487,6 +485,7 @@
 	
 	Event.onDOMReady(function (){
         var logger = new YAHOO.tool.TestLogger("testLogger");
+		logger.hideCategory('info');
 		if (1) {
 			YAHOO.tool.TestRunner.run();
 		} else {

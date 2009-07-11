@@ -21,7 +21,7 @@
 #plain.yui-pb {
 	height:25px;
 }
-#plain .yui-pb-mask td {
+#plain .yui-pb-mask div {
 	/* if you don't provide a mask, the bar will be a completely rectangular thing  with no borders */
 	background-image: url(mask.gif);
 }
@@ -36,7 +36,7 @@
 }
 
 
-#grid .yui-pb-mask td  {
+#grid .yui-pb-mask div  {
 	background-image: url(grid.gif);
 }
 
@@ -46,7 +46,7 @@
 	height: 100px;
 }
 
-#ruler .yui-pb-mask td  {
+#ruler .yui-pb-mask div  {
 	background-image: url(ruler.gif);
 }
 
@@ -69,7 +69,7 @@
 	height: 200px;
 }
 
-#copper .yui-pb-mask td  {
+#copper .yui-pb-mask div  {
 	background-image: url(coppermaskV.gif);
 }
 
@@ -91,7 +91,7 @@
 	height: 12px;
 }
 
-#thin .yui-pb-mask td  {
+#thin .yui-pb-mask div  {
 	background-image: url(thinmask.gif);
 }
 
@@ -169,7 +169,7 @@ pbplain.render('pbplain');</pre>
 			<pre>#plain.yui-pb {
 	height:25px;
 }
-#plain .yui-pb-mask td {
+#plain .yui-pb-mask div {
 	background-image: url(mask.gif);
 }
 
@@ -193,11 +193,11 @@ pbplain.render('pbplain');</pre>
 			<div id="setting" style="font-size:larget;font-weight:bold"></div>
 			<p>This is done with the following code:</p>
 			<pre>var settingEl = YAHOO.util.Dom.get('setting');
-pbplain.on('changingEvent',function (value) {
+pbplain.on('progress',function (value) {
 	settingEl.innerHTML = value + ' ... moving ...';
 });
 
-pbplain.on('completeEvent',function (value) {
+pbplain.on('complete',function (value) {
 	settingEl.innerHTML = value;
 });</pre>
 			
@@ -280,7 +280,7 @@ pbcopper.render('pbcopper');</pre>
 			from bottom up, are:</p><ol>
 			<li><code>#copper.yui-pb           </code>/* The area within the transparent section of the mask not covered by the bar */</li>
 			<li><code>#copper .yui-pb-bar      </code>/* The bar itself */</li>
-			<li><code>#copper .yui-pb-mask td  </code>/* The mask that will let the bar be seen through its transparencies */</li>
+			<li><code>#copper .yui-pb-mask div  </code>/* The mask that will let the bar be seen through its transparencies */</li>
 			</ol>
 			<p>There is a further selector to set the image of the bar while it is moving (provided the Animation utility is loaded)
 			which is selected via the selector:</p>
@@ -362,7 +362,7 @@ pbcopper.render('pbcopper');</pre>
 			<tr><td class="selector">.yui-pb-bar</td><td>background-image<br/>background-color</td><td>Image or color to use for the bar</td></tr>
 			<tr><td class="selector">.yui-pb-bar</td><td>margin</td><td>offset from the edge of the ProgressBar to where the mask transparency starts.  If the bar goes into this area, it would be hidden behind the mask.</td></tr>
 			<tr><td class="selector">.yui-pb .yui-pb-anim</td><td>background-image<br/>background-color</td><td>Image or color to use for the bar while it is changing</td></tr>
-			<tr><td class="selector">.yui-pb-mask td</td><td>background-image</td><td>mask with transparencies to allow the bar to show through</td></tr>
+			<tr><td class="selector">.yui-pb-mask div</td><td>background-image</td><td>mask with transparencies to allow the bar to show through</td></tr>
 			</table>
 			<h2>How it works</h2>
 			<div style="float:left"><img src="diagrama.png" /></div><p>The diagram to the left shows the layers of the ProgressBar.</p> 
@@ -413,8 +413,7 @@ pbcopper.render('pbcopper');</pre>
 		// I've provided id's in each of the bars so that the styles above could attach to each bar separately.
 		
 		
-//		pb = new YAHOO.widget.ProgressBar({height:'30px', width: 300, barColor:'green',backColor:'orange',border:'thin solid black'});
-		pb = new YAHOO.widget.ProgressBar();
+		pb = new YAHOO.widget.ProgressBar({height:'30px', width: 300, barColor:'green',backColor:'orange',border:'thin solid black'});
 		pb.render('pb');
 
 		pbplain = new YAHOO.widget.ProgressBar({id:'plain'});
@@ -439,7 +438,7 @@ pbcopper.render('pbcopper');</pre>
 		// This is meant to show how you can listen to animation events and show the numeric values of the bar as it grows or shrinks
 		var settingEl = YAHOO.util.Dom.get('setting');
 		// This one shows it while moving
-		pbcopper.on('changing',function (value) {
+		pbcopper.on('progress',function (value) {
 			settingEl.innerHTML = value + ' ... moving ...';
 		});
 		// This will show at the end (even if there is no animation at all)
