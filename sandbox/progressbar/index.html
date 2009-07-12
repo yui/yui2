@@ -9,7 +9,7 @@
 <!-- js -->
 <script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="../../build/animation/animation-min.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
+<script type="text/javascript" src="../../build/element/element.js"></script>
 
 <script type="text/javascript" src="../../build/progressbar/progressbar-debug.js"></script>
 
@@ -109,10 +109,22 @@
 	background-image: url(stars.png);
 }
 
+#vumeter div{
+	float:left;
+	margin:3px;
+}
+#vumeter .yui-pb-caption {
+	display:none;
+}
+
+#vumeter .yui-pb-bar  {
+	background-image: url(vumeter.png);
+}
 
 /* Just a little decoration for the page, not relevant to the usage of the progress bar */
 hr {
 	margin:1em 0;
+	clear:both;
 }
 
 #bd {
@@ -289,6 +301,9 @@ pbcopper.render('pbcopper');</pre>
 			actually, have been forced by the way the widget is drawn.  Many alternatives to make them as easy as possible
 			have been explored, these are the best choices found.</p>
 			
+			<div id="vumeter"></div>
+			<hr/>
+			
 			</div>
 			<h2>WAI-ARIA support</h2>
 			<p>The ProgressBar supports WAI-ARIA as specified for the "progressbar" role, see: <a href="http://www.w3.org/TR/wai-aria/#progressbar">W3C spec</a>.
@@ -428,7 +443,7 @@ pbcopper.render('pbcopper');</pre>
 		pbr = new YAHOO.widget.ProgressBar({id:'ruler',captionTemplate:'{value}%'});
 		pbr.render('pbr');
 
-		pbcopper = new YAHOO.widget.ProgressBar({id:'copper',direction:'btt',animate:true});
+		pbcopper = new YAHOO.widget.ProgressBar({id:'copper',direction:'btt',anim:true});
 		pbcopper.get('anim').duration = 3;
 		pbcopper.get('anim').method = YAHOO.util.Easing.bounceBoth;
 		pbcopper.render('pbcopper');
@@ -464,6 +479,24 @@ pbcopper.render('pbcopper');</pre>
 		(new YAHOO.widget.ProgressBar({value:1.5,maxValue:5})).render('song123');
 		(new YAHOO.widget.ProgressBar({value:3,maxValue:5})).render('song456');
 		(new YAHOO.widget.ProgressBar({value:4.5,maxValue:5})).render('song789');
+		
+		var pbvu = [],i,NUM_BARS= 8;
+		for (i = 0; i < NUM_BARS;i++) {
+			pbvu[i] = new YAHOO.widget.ProgressBar({direction:'btt',width:20,height:80,anim:true,duration:0.3}).render('vumeter');
+		}
+		var redrawVUs = function() {
+			var points = [],i;
+			for (i=0;i<4;i++) {
+				points[i] = [i,Math.random() * 100];
+			}
+			for (i = 0;i < NUM_BARS;i++) {
+				pbvu[i].set('value',YAHOO.util.Bezier.getPosition(points,i/(NUM_BARS-1))[1]);
+			}
+		};
+			
+		pbvu[NUM_BARS -1].on('complete',redrawVUs);
+		redrawVUs();
+			
 
 	});
 </script>

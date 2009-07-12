@@ -152,6 +152,7 @@
 		'"></div></div>'
 	].join('');
 	
+	
 	Lang.extend(Prog, YAHOO.util.Element, {
 		/**
 		 * Initialization code for the widget, separate from the constructor to allow for overriding/patching.
@@ -386,27 +387,15 @@
 			
 	
 			/**
-			 * @attribute ariaTemplate
-			 * @description The text to be voiced by screen readers.  
-			 *     The text is processed by <a href="YAHOO.lang.html#method_substitute">YAHOO.lang.substitute</a>.  
-			 *     It can use the placeholders {value}, {minValue} and {maxValue}
-			 * @default '{value}'
-			 * @type String
-			 */				
-			this.setAttributeConfig('ariaTemplate', {
-				value:'{value}'
-			});
-			
-			/**
-			 * @attribute captionTemplate
-			 * @description Text to be shown usually overlapping the bar.
+			 * @attribute textTemplate
+			 * @description Text to be shown usually overlapping the bar and to be voiced by screen readers.
 			 *     The text is processed by <a href="YAHOO.lang.html#method_substitute">YAHOO.lang.substitute</a>.  
 			 *     It can use the placeholders {value}, {minValue} and {maxValue}
 			 * @default ""
 			 * @type String
 			 */				
-			this.setAttributeConfig('captionTemplate', {
-				value:''
+			this.setAttributeConfig('textTemplate', {
+				value:'{value}'
 			});
 			
 			/**
@@ -467,6 +456,16 @@
 			container.setAttribute('aria-valuemax',this.get('maxValue'));
 
 			this.appendTo(el,before);
+			
+			switch(this.get('direction')) {
+				case DIRECTION_BTT:
+					Dom.setStyle(this.get('barEl'),'background-position','left bottom');
+					break;
+				case DIRECTION_RTL:
+					Dom.setStyle(this.get('barEl'),'background-position','right');
+					break;
+			}
+					
 			
 			this._barSizeFunction = this._barSizeFunctions[this.get('anim')?1:0][this.get('direction')];
 			this.redraw();
@@ -675,12 +674,12 @@
 			this._previousValue = value;
 			this.fireEvent('complete', value);
 			Dom.removeClass(this.get('barEl'),Prog.CLASS_ANIM);
-			this._showCaptionValues(value);
+			this._showTemplates(value,true);
 		},
 		_animOnTween:function (ev) {
 			var value = Math.floor(this._tweenFactor * this.get('anim').currentFrame + this._previousValue);
 			this.fireEvent('progress',value);
-			this._showCaptionValues();
+			this._showTemplates(value,false);
 		},
 		
 		/** 
@@ -695,8 +694,7 @@
 				pixelValue = Math.floor((value - this._mn) * this._barFactor),
 				barEl = this.get('barEl');
 			
-			this._showAriaValues(value);
-			this._showCaptionValues(value);
+			this._showTemplates(value,true);
 			if (this._rendered) {
 				this.fireEvent('start',this._previousValue);
 				this._barSizeFunction(value, pixelValue, barEl, anim);
@@ -705,34 +703,24 @@
 
 		/** 
 		 * Utility method to set the ARIA value attributes
-		 * @method _showAriaValues
+		 * @method _showTemplates
 		 * @return  void
 		 * @private
 		 */
-		 _showAriaValues: function(value) {
-			var container = this.get('element');
-			
-			container.setAttribute('aria-valuenow',value);
-			container.setAttribute('aria-valuetext',Lang.substitute(this.get('ariaTemplate'),{
-				value:value,
-				minValue:this.get('minValue'),
-				maxValue:this.get('maxValue')
-			}));
-		},
-		/** 
-		 * Utility method to set the caption
-		 * @method _showCaptionValues
-		 * @return  void
-		 * @private
-		 */
-		 _showCaptionValues: function(value) {
-			var captionEl = this.get('captionEl');
-			if (captionEl) {
-				captionEl.innerHTML = Lang.substitute(this.get('captionTemplate'),{
+		 _showTemplates: function(value, aria) {
+			var captionEl = this.get('captionEl'),
+				container = this.get('element'),
+				text = Lang.substitute(this.get('textTemplate'),{
 					value:value,
 					minValue:this.get('minValue'),
 					maxValue:this.get('maxValue')
 				});
+			if (aria) {
+				container.setAttribute('aria-valuenow',value);
+				container.setAttribute('aria-valuetext',text);
+			}
+			if (captionEl) {
+				captionEl.innerHTML = text;
 			}
 		}
 	});

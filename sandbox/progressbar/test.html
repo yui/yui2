@@ -97,14 +97,13 @@
 			A.areEqual(0,pb.get('minValue'),'reported minValue');
 			A.areEqual(100,pb.get('maxValue'),'reported maxValue');
 			A.isNull(pb.get('anim'),'reported anim');
-			A.areEqual('{value}',pb.get('ariaTemplate'),'reported ariaTemplate');
-			A.areEqual('',pb.get('captionTemplate'),'reported captionTemplate');
+			A.areEqual('{value}',pb.get('textTemplate'),'reported textTemplate');
 			A.areEqual('ltr',pb.get('direction'),'reported direction');
 			
-			A.areEqual('200px',pb.get('width'),'reported width');
-			A.areEqual('20px',pb.get('height'),'reported height');
 			A.areEqual('200px',Dom.getStyle(t.pb,'width'),'widget width');
 			A.areEqual('20px',Dom.getStyle(t.pb,'height'),'widget height');
+			A.areEqual('200px',pb.get('width'),'reported width');
+			A.areEqual('20px',pb.get('height'),'reported height');
 			A.areEqual('200px',Dom.getStyle(t.m,'width'),'mask width');
 			A.areEqual('20px',Dom.getStyle(t.m,'height'),'mask height');
 			A.areEqual('0px',Dom.getStyle(t.b,'width'),'bar width');
@@ -125,13 +124,12 @@
 			A.areEqual(0,pb.get('minValue'),'reported minValue');
 			A.areEqual(100,pb.get('maxValue'),'reported maxValue');
 			A.isNull(pb.get('anim'),'reported anim');
-			A.areEqual('{value}',pb.get('ariaTemplate'),'reported ariaTemplate');
-			A.areEqual('',pb.get('captionTemplate'),'reported captionTemplate');
+			A.areEqual('{value}',pb.get('textTemplate'),'reported textTemplate');
 			A.areEqual('ltr',pb.get('direction'),'reported direction');
-			A.areEqual('300',pb.get('width'),'reported width');
-			A.areEqual('30px',pb.get('height'),'reported height');
 			A.areEqual('300px',Dom.getStyle(t.pb,'width'),'widget width');
 			A.areEqual('30px',Dom.getStyle(t.pb,'height'),'widget height');
+			A.areEqual('300',pb.get('width'),'reported width');
+			A.areEqual('30px',pb.get('height'),'reported height');
 			A.areEqual('300px',Dom.getStyle(t.m,'width'),'mask width');
 			A.areEqual('30px',Dom.getStyle(t.m,'height'),'mask height');
 			A.areEqual('0px',Dom.getStyle(t.b,'width'),'bar width');
@@ -152,8 +150,7 @@
 			A.areEqual(0,pb.get('minValue'),'reported minValue');
 			A.areEqual(100,pb.get('maxValue'),'reported maxValue');
 			A.isNull(pb.get('anim'),'reported anim');
-			A.areEqual('{value}',pb.get('ariaTemplate'),'reported ariaTemplate');
-			A.areEqual('',pb.get('captionTemplate'),'reported captionTemplate');
+			A.areEqual('{value}',pb.get('textTemplate'),'reported textTemplate');
 			A.areEqual('ltr',pb.get('direction'),'reported direction');
 			A.areEqual('250px',pb.get('width'),'reported width');
 			A.areEqual('25px',pb.get('height'),'reported height');
@@ -335,9 +332,9 @@
 			A.areEqual('30',t.pb.getAttribute('aria-valuenow'),'ARIA value 30');
 			A.areEqual('30',t.pb.getAttribute('aria-valuetext'),'ARIA text 30');
 			
-			// changing the ariaTemplate doesn't have an immediate effect 
+			// changing the textTemplate doesn't have an immediate effect 
 			// until the next redraw or value change
-			pb.set('ariaTemplate','|{minValue}=>{value}<={maxValue}|');
+			pb.set('textTemplate','|{minValue}=>{value}<={maxValue}|');
 			pb.redraw();
 			A.areEqual('|0=>30<=100|',t.pb.getAttribute('aria-valuetext'),'ARIA text 0-30-100');
 			pb.set('value',50);
@@ -348,14 +345,11 @@
 
 		testCaption: function () {
 			t = getEls();
-			A.areEqual('',t.c.innerHTML,'Caption 0 before');
+			A.areEqual('0',t.c.innerHTML,'Caption 0');
 			pb.set('value',30);
-			A.areEqual('',t.c.innerHTML,'Caption 30 before');
-			pb.set('captionTemplate','{value}');
+			A.areEqual('30',t.c.innerHTML,'Caption 30');
 			pb.set('value',60);
 			A.areEqual('60',t.c.innerHTML,'Caption 60 after');
-			pb.set('value',30);
-			A.areEqual('30',t.c.innerHTML,'Caption 30 after');
 		}
 			
 
