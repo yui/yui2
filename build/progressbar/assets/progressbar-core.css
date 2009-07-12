@@ -16,6 +16,7 @@
 	top:0;
 	left:0;
 }
+
 .yui-pb-mask {
 	position:absolute;
 	top:0;
@@ -28,7 +29,7 @@
 	z-index:2;
 }
 
-.yui-pb-mask td {
+.yui-pb-mask div {
 	width:50%;
 	height:50%;
 	background-repeat:no-repeat;
@@ -37,20 +38,23 @@
 }
 
 .yui-pb-tl {
+	float: left;
 	background-position: top left;
 }
 .yui-pb-tr {
 	background-position: top right;
+	float:right;
 }
 .yui-pb-bl {
+	float:left;
 	background-position: bottom left;
 }
 .yui-pb-br {
 	background-position: bottom right;
+	float:right;
 }
 
 .yui-pb-bar {
-	background-color: blue;
 	width:100%;
 	height:100%;
 	margin:0;
@@ -65,7 +69,7 @@
 	height:100%;
 	position:absolute;
 	text-align:center;
-	vertical-align:center;
+	vertical-align:middle;
 	width:100%;
 	z-index:3;
 }
