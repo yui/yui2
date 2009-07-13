@@ -3860,7 +3860,7 @@ var Dom = YAHOO.util.Dom,
                 exec = false;
             } else {
                 if (this._getDoc().queryCommandEnabled(action)) {
-                    this._getDoc().execCommand('insertimage', false, value);
+                    this._getDoc().execCommand(action, false, value);
                     var imgs = this._getDoc().getElementsByTagName('img');
                     for (var i = 0; i < imgs.length; i++) {
                         if (!YAHOO.util.Dom.hasClass(imgs[i], 'yui-img')) {
