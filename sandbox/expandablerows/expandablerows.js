@@ -103,12 +103,12 @@
 
 					//Fire custom event
 					this.fireEvent( "rowExpandEvent", { row : row } );
-
+					
 					var row_data = this.getRecord( record_id ),
 						row = this.getRow( row_data ),
 						new_row = document.createElement('tr'),
 						column_length = this.getFirstTrEl().getElementsByTagName( 'td' ).length,
-						expanded_data = row_data.getData( this.a_expandable_datakey ),
+						expanded_data = row_data.getData(),
 						expanded_content = null,
 						template = this.rowExpansionTemplate;
 
@@ -241,8 +241,6 @@
 				
 				if( !expanded_rows.length ){
 					
-					this.a_expandable_datakey = field;
-					
 					return;
 					
 				}
@@ -262,11 +260,11 @@
 		}
 	);
 
-	YAHOO.widget.DataTable.formatExpandRowTrigger = function(el, oRecord, oColumn, oData) {
+	YAHOO.widget.DataTable.ExpansionFormatter = function(el, oRecord, oColumn, oData) {
 
 		var cell_element = Dom.getAncestorByTagName( el, 'td' ),
-				state_object = oRecord.getData( STRING_STATENAME ),
-				this_static = YAHOO.widget.DataTable.formatExpandRowTrigger;
+			state_object = oRecord.getData( STRING_STATENAME ),
+			this_static = YAHOO.widget.DataTable.formatExpandRowTrigger;
 
 		//Set trigger
 		if( oData ){ //Row is closed

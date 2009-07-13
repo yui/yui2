@@ -6,7 +6,7 @@
       "ResultSetMapUrl":"http:\/\/maps.yahoo.com\/broadband\/?q1=Sunnyvale%2C+CA+94089&tt=pizza&tp=1",
       "Result":[
          {
-            "details":{"test":"Test Text"},
+            "test":"Test Text",
             "Title":"Giovannis Pizzeria",
             "Address":"1127 N Lawrence Expy",
             "City":"Sunnyvale",

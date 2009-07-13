@@ -68,9 +68,9 @@ YAHOO.util.Event.addListener(window, "load", function() {
 				var myColumnDefs = [
 				
 						{
-							key:"details",
+							key:"image_url",
 							label:"",
-							formatter:YAHOO.widget.DataTable.formatExpandRowTrigger
+							formatter:YAHOO.widget.DataTable.ExpansionFormatter
 						},
 						{
 							key:"date", 
@@ -104,7 +104,7 @@ YAHOO.util.Event.addListener(window, "load", function() {
 				var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
 				myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
 				myDataSource.responseSchema = {
-					fields: ["id","date","quantity","amount","title","details"]
+					fields: ["id","date","quantity","amount","title","image_url"]
 				};
 
 				var myDataTable = new YAHOO.widget.DataTable(
