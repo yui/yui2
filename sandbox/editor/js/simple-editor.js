@@ -5125,18 +5125,21 @@ YAHOO.widget.EditorInfo = {
     * @param {HTMLElement} form The form to check if this Editor instance belongs to
     */
     saveAll: function(form) {
-        var i = 0, e, len = YAHOO.widget.EditorInfo._instances.length,
-            items = YAHOO.widget.EditorInfo._instances;
+        var i, e, items = YAHOO.widget.EditorInfo._instances;
         if (form) {
-            for (i = 0; i < len; i++) {
-                e = items[i];
-                if (e.get('element').form && (e.get('element').form == form)) {
-                    e.saveHTML();
+            for (i in items) {
+                if (Lang.hasOwnProperty(items, i)) {
+                    e = items[i];
+                    if (e.get('element').form && (e.get('element').form == form)) {
+                        e.saveHTML();
+                    }
                 }
             }
         } else {
-            for (i = 0; i < len; i++) {
-                items[i].saveHTML();
+            for (i in items) {
+                if (Lang.hasOwnProperty(items, i)) {
+                    items[i].saveHTML();
+                }
             }
         }
     },
