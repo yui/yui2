@@ -622,23 +622,14 @@ var Dom = YAHOO.util.Dom,
         */
         _getDoc: function() {
             var value = false;
-            if (this.get) {
-                if (this.get('iframe')) {
-                    if (this.get('iframe').get) {
-                        if (this.get('iframe').get('element')) {
-                            try {
-                                if (this.get('iframe').get('element').contentWindow) {
-                                    if (this.get('iframe').get('element').contentWindow.document) {
-                                        value = this.get('iframe').get('element').contentWindow.document;
-                                        return value;
-                                    }
-                                }
-                            } catch (e) {}
-                        }
-                    }
+            try {
+                if (this.get('iframe').get('element').contentWindow.document) {
+                    value = this.get('iframe').get('element').contentWindow.document;
+                    return value;
                 }
+            } catch (e) {
+                return false;
             }
-            return false;
         },
         /**
         * @private
@@ -824,13 +815,8 @@ var Dom = YAHOO.util.Dom,
         */
         _setDesignMode: function(state) {
             try {
-                var set = true;
-                //SourceForge Bug #1807057
-                if (this.browser.ie && (state.toLowerCase() == 'off')) {
-                    set = false;
-                }
-                if (set) {
-                    this._getDoc().designMode = state;
+                if (this._getDoc() && this._getDoc().body) {
+                    this._getDoc().body.contentEditable = ((state.toLowerCase() == 'off') ? false : true);
                 }
             } catch(e) { }
         },
@@ -841,11 +827,8 @@ var Dom = YAHOO.util.Dom,
         * @return {String} The state that it was set to.
         */
         _toggleDesignMode: function() {
-            var _dMode = this._getDoc().designMode.toLowerCase(),
-                _state = 'on';
-            if (_dMode == 'on') {
-                _state = 'off';
-            }
+            var _dMode = this._getDoc().body.contentEditable,
+                _state = ((_dMode) ? 'on' : 'off');
             this._setDesignMode(_state);
             return _state;
         },
@@ -1046,8 +1029,7 @@ var Dom = YAHOO.util.Dom,
             var value = ((this._textarea) ? this.get('element').value : this.get('element').innerHTML),
                 doc = null;
 
-            if ((value === '') && this.browser.gecko) {
-                //It seems that Gecko doesn't like an empty body so we have to give it something..
+            if (value === '') {
                 value = '<br>';
             }
 
