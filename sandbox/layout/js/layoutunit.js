@@ -863,6 +863,11 @@
             */
             this.setAttributeConfig('minWidth', {
                 value: attr.minWidth || false,
+                method: function(v) {
+                    if (this._resize) {
+                        this._resize.set('minWidth', v);
+                    }
+                },
                 validator: YAHOO.lang.isNumber
             });
 
@@ -873,6 +878,11 @@
             */
             this.setAttributeConfig('maxWidth', {
                 value: attr.maxWidth || false,
+                method: function(v) {
+                    if (this._resize) {
+                        this._resize.set('maxWidth', v);
+                    }
+                },
                 validator: YAHOO.lang.isNumber
             });
 
@@ -883,6 +893,11 @@
             */
             this.setAttributeConfig('minHeight', {
                 value: attr.minHeight || false,
+                method: function(v) {
+                    if (this._resize) {
+                        this._resize.set('minHeight', v);
+                    }
+                },
                 validator: YAHOO.lang.isNumber
             });
 
@@ -893,6 +908,11 @@
             */
             this.setAttributeConfig('maxHeight', {
                 value: attr.maxHeight || false,
+                method: function(v) {
+                    if (this._resize) {
+                        this._resize.set('maxHeight', v);
+                    }
+                },
                 validator: YAHOO.lang.isNumber
             });
 

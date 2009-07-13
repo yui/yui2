@@ -136,6 +136,12 @@
                 }
             }
             if (set) {
+                if (h < 0) {
+                    h = 0;
+                }
+                if (w < 0) {
+                    w = 0;
+                }
                 Dom.setStyle(this._doc, 'height', h + 'px');
                 Dom.setStyle(this._doc, 'width', w + 'px');
             }
@@ -560,6 +566,9 @@
                 value: attr.height || false,
                 validator: YAHOO.lang.isNumber,
                 method: function(h) {
+                    if (h < 0) {
+                        h = 0;
+                    }
                     this.setStyle('height', h + 'px');
                 }
             });
@@ -573,6 +582,9 @@
                 value: attr.width || false,
                 validator: YAHOO.lang.isNumber,
                 method: function(w) {
+                    if (w < 0) {
+                        w = 0;
+                    }
                     this.setStyle('width', w + 'px');
                 }
             });
