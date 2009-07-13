@@ -810,7 +810,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @private
         * @method _setDesignMode
-        * @description Sets the designMode of the iFrame document.
+        * @description Sets the contentEditable property of the iFrame document's body.
         * @param {String} state This should be either on or off
         */
         _setDesignMode: function(state) {
@@ -823,7 +823,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @private
         * @method _toggleDesignMode
-        * @description Toggles the designMode of the iFrame document on and off.
+        * @description Toggles the contentEditable property of the iFrame document's body on and off.
         * @return {String} The state that it was set to.
         */
         _toggleDesignMode: function() {
