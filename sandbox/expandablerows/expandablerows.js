@@ -66,32 +66,13 @@
 
 			},
 
-			_setInitialState : function( field, template, rowConfigs ){
-				
-				var records = this.getRecordSet().getRecords();
-				
-				//Augment records
-				for( var i=0, l=records.length; l > i; i++ ){
-
-					var record = records[ i ]
-						state_object = record.getData( STRING_STATENAME ) || {};
-
-					//Set row state
-					record.setData( STRING_STATENAME, {
-						expanded : ( record.getData( field ) ) ? false : null, //set expanded property to null if no data is available
-						expandable_datakey : field
-					} );
-
-				}//for
-				
-				this.rowExpansionTemplate = template || null;
-				
-			},
-
 			initExpandableRows : function( field, template, rowConfigs ){
 				
 				//Set subscribe restore method
 				this.subscribe( 'postRenderEvent', function(){ this.restoreExpandedRows( field, template, rowConfigs ); } )
+
+				//Setup template
+				this.rowExpansionTemplate = template || null;
 
 				//Set table level state
 				this.a_rowExpansions = [];
@@ -127,7 +108,7 @@
 						row = this.getRow( row_data ),
 						new_row = document.createElement('tr'),
 						column_length = this.getFirstTrEl().getElementsByTagName( 'td' ).length,
-						expanded_data = row_data.getData( state.expandable_datakey ),
+						expanded_data = row_data.getData( this.a_expandable_datakey ),
 						expanded_content = null,
 						template = this.rowExpansionTemplate;
 
@@ -260,7 +241,8 @@
 				
 				if( !expanded_rows.length ){
 					
-					this._setInitialState( field, template, rowConfigs );
+					this.a_expandable_datakey = field;
+					
 					return;
 					
 				}
