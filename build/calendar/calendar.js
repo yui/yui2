@@ -690,392 +690,392 @@
 * @class DateMath
 */
 YAHOO.widget.DateMath = {
-	/**
-	* Constant field representing Day
-	* @property DAY
-	* @static
-	* @final
-	* @type String
-	*/
-	DAY : "D",
+    /**
+    * Constant field representing Day
+    * @property DAY
+    * @static
+    * @final
+    * @type String
+    */
+    DAY : "D",
 
-	/**
-	* Constant field representing Week
-	* @property WEEK
-	* @static
-	* @final
-	* @type String
-	*/
-	WEEK : "W",
+    /**
+    * Constant field representing Week
+    * @property WEEK
+    * @static
+    * @final
+    * @type String
+    */
+    WEEK : "W",
 
-	/**
-	* Constant field representing Year
-	* @property YEAR
-	* @static
-	* @final
-	* @type String
-	*/
-	YEAR : "Y",
+    /**
+    * Constant field representing Year
+    * @property YEAR
+    * @static
+    * @final
+    * @type String
+    */
+    YEAR : "Y",
 
-	/**
-	* Constant field representing Month
-	* @property MONTH
-	* @static
-	* @final
-	* @type String
-	*/
-	MONTH : "M",
+    /**
+    * Constant field representing Month
+    * @property MONTH
+    * @static
+    * @final
+    * @type String
+    */
+    MONTH : "M",
 
-	/**
-	* Constant field representing one day, in milliseconds
-	* @property ONE_DAY_MS
-	* @static
-	* @final
-	* @type Number
-	*/
-	ONE_DAY_MS : 1000*60*60*24,
-	
-	/**
-	 * Constant field representing the date in first week of January
-	 * which identifies the first week of the year.
-	 * <p>
-	 * In the U.S, Jan 1st is normally used based on a Sunday start of week.
-	 * ISO 8601, used widely throughout Europe, uses Jan 4th, based on a Monday start of week.
-	 * </p>
-	 * @property WEEK_ONE_JAN_DATE
-	 * @static
-	 * @type Number
-	 */
-	WEEK_ONE_JAN_DATE : 1,
+    /**
+    * Constant field representing one day, in milliseconds
+    * @property ONE_DAY_MS
+    * @static
+    * @final
+    * @type Number
+    */
+    ONE_DAY_MS : 1000*60*60*24,
+    
+    /**
+     * Constant field representing the date in first week of January
+     * which identifies the first week of the year.
+     * <p>
+     * In the U.S, Jan 1st is normally used based on a Sunday start of week.
+     * ISO 8601, used widely throughout Europe, uses Jan 4th, based on a Monday start of week.
+     * </p>
+     * @property WEEK_ONE_JAN_DATE
+     * @static
+     * @type Number
+     */
+    WEEK_ONE_JAN_DATE : 1,
 
-	/**
-	* Adds the specified amount of time to the this instance.
-	* @method add
-	* @param {Date} date	The JavaScript Date object to perform addition on
-	* @param {String} field	The field constant to be used for performing addition.
-	* @param {Number} amount	The number of units (measured in the field constant) to add to the date.
-	* @return {Date} The resulting Date object
-	*/
-	add : function(date, field, amount) {
-		var d = new Date(date.getTime());
-		switch (field) {
-			case this.MONTH:
-				var newMonth = date.getMonth() + amount;
-				var years = 0;
+    /**
+    * Adds the specified amount of time to the this instance.
+    * @method add
+    * @param {Date} date The JavaScript Date object to perform addition on
+    * @param {String} field The field constant to be used for performing addition.
+    * @param {Number} amount The number of units (measured in the field constant) to add to the date.
+    * @return {Date} The resulting Date object
+    */
+    add : function(date, field, amount) {
+        var d = new Date(date.getTime());
+        switch (field) {
+            case this.MONTH:
+                var newMonth = date.getMonth() + amount;
+                var years = 0;
 
-				if (newMonth < 0) {
-					while (newMonth < 0) {
-						newMonth += 12;
-						years -= 1;
-					}
-				} else if (newMonth > 11) {
-					while (newMonth > 11) {
-						newMonth -= 12;
-						years += 1;
-					}
-				}
+                if (newMonth < 0) {
+                    while (newMonth < 0) {
+                        newMonth += 12;
+                        years -= 1;
+                    }
+                } else if (newMonth > 11) {
+                    while (newMonth > 11) {
+                        newMonth -= 12;
+                        years += 1;
+                    }
+                }
 
-				d.setMonth(newMonth);
-				d.setFullYear(date.getFullYear() + years);
-				break;
-			case this.DAY:
-				this._addDays(d, amount);
-				// d.setDate(date.getDate() + amount);
-				break;
-			case this.YEAR:
-				d.setFullYear(date.getFullYear() + amount);
-				break;
-			case this.WEEK:
-				this._addDays(d, (amount * 7));
-				// d.setDate(date.getDate() + (amount * 7));
-				break;
-		}
-		return d;
-	},
+                d.setMonth(newMonth);
+                d.setFullYear(date.getFullYear() + years);
+                break;
+            case this.DAY:
+                this._addDays(d, amount);
+                // d.setDate(date.getDate() + amount);
+                break;
+            case this.YEAR:
+                d.setFullYear(date.getFullYear() + amount);
+                break;
+            case this.WEEK:
+                this._addDays(d, (amount * 7));
+                // d.setDate(date.getDate() + (amount * 7));
+                break;
+        }
+        return d;
+    },
 
-	/**
-	 * Private helper method to account for bug in Safari 2 (webkit < 420)
-	 * when Date.setDate(n) is called with n less than -128 or greater than 127.
-	 * <p>
-	 * Fix approach and original findings are available here:
-	 * http://brianary.blogspot.com/2006/03/safari-date-bug.html
-	 * </p>
-	 * @method _addDays
-	 * @param {Date} d JavaScript date object
-	 * @param {Number} nDays The number of days to add to the date object (can be negative)
-	 * @private
-	 */
-	_addDays : function(d, nDays) {
-		if (YAHOO.env.ua.webkit && YAHOO.env.ua.webkit < 420) {
-			if (nDays < 0) {
-				// Ensure we don't go below -128 (getDate() is always 1 to 31, so we won't go above 127)
-				for(var min = -128; nDays < min; nDays -= min) {
-					d.setDate(d.getDate() + min);
-				}
-			} else {
-				// Ensure we don't go above 96 + 31 = 127
-				for(var max = 96; nDays > max; nDays -= max) {
-					d.setDate(d.getDate() + max);
-				}
-			}
-			// nDays should be remainder between -128 and 96
-		}
-		d.setDate(d.getDate() + nDays);
-	},
+    /**
+     * Private helper method to account for bug in Safari 2 (webkit < 420)
+     * when Date.setDate(n) is called with n less than -128 or greater than 127.
+     * <p>
+     * Fix approach and original findings are available here:
+     * http://brianary.blogspot.com/2006/03/safari-date-bug.html
+     * </p>
+     * @method _addDays
+     * @param {Date} d JavaScript date object
+     * @param {Number} nDays The number of days to add to the date object (can be negative)
+     * @private
+     */
+    _addDays : function(d, nDays) {
+        if (YAHOO.env.ua.webkit && YAHOO.env.ua.webkit < 420) {
+            if (nDays < 0) {
+                // Ensure we don't go below -128 (getDate() is always 1 to 31, so we won't go above 127)
+                for(var min = -128; nDays < min; nDays -= min) {
+                    d.setDate(d.getDate() + min);
+                }
+            } else {
+                // Ensure we don't go above 96 + 31 = 127
+                for(var max = 96; nDays > max; nDays -= max) {
+                    d.setDate(d.getDate() + max);
+                }
+            }
+            // nDays should be remainder between -128 and 96
+        }
+        d.setDate(d.getDate() + nDays);
+    },
 
-	/**
-	* Subtracts the specified amount of time from the this instance.
-	* @method subtract
-	* @param {Date} date	The JavaScript Date object to perform subtraction on
-	* @param {Number} field	The this field constant to be used for performing subtraction.
-	* @param {Number} amount	The number of units (measured in the field constant) to subtract from the date.
-	* @return {Date} The resulting Date object
-	*/
-	subtract : function(date, field, amount) {
-		return this.add(date, field, (amount*-1));
-	},
+    /**
+    * Subtracts the specified amount of time from the this instance.
+    * @method subtract
+    * @param {Date} date The JavaScript Date object to perform subtraction on
+    * @param {Number} field The this field constant to be used for performing subtraction.
+    * @param {Number} amount The number of units (measured in the field constant) to subtract from the date.
+    * @return {Date} The resulting Date object
+    */
+    subtract : function(date, field, amount) {
+        return this.add(date, field, (amount*-1));
+    },
 
-	/**
-	* Determines whether a given date is before another date on the calendar.
-	* @method before
-	* @param {Date} date		The Date object to compare with the compare argument
-	* @param {Date} compareTo	The Date object to use for the comparison
-	* @return {Boolean} true if the date occurs before the compared date; false if not.
-	*/
-	before : function(date, compareTo) {
-		var ms = compareTo.getTime();
-		if (date.getTime() < ms) {
-			return true;
-		} else {
-			return false;
-		}
-	},
+    /**
+    * Determines whether a given date is before another date on the calendar.
+    * @method before
+    * @param {Date} date  The Date object to compare with the compare argument
+    * @param {Date} compareTo The Date object to use for the comparison
+    * @return {Boolean} true if the date occurs before the compared date; false if not.
+    */
+    before : function(date, compareTo) {
+        var ms = compareTo.getTime();
+        if (date.getTime() < ms) {
+            return true;
+        } else {
+            return false;
+        }
+    },
 
-	/**
-	* Determines whether a given date is after another date on the calendar.
-	* @method after
-	* @param {Date} date		The Date object to compare with the compare argument
-	* @param {Date} compareTo	The Date object to use for the comparison
-	* @return {Boolean} true if the date occurs after the compared date; false if not.
-	*/
-	after : function(date, compareTo) {
-		var ms = compareTo.getTime();
-		if (date.getTime() > ms) {
-			return true;
-		} else {
-			return false;
-		}
-	},
+    /**
+    * Determines whether a given date is after another date on the calendar.
+    * @method after
+    * @param {Date} date  The Date object to compare with the compare argument
+    * @param {Date} compareTo The Date object to use for the comparison
+    * @return {Boolean} true if the date occurs after the compared date; false if not.
+    */
+    after : function(date, compareTo) {
+        var ms = compareTo.getTime();
+        if (date.getTime() > ms) {
+            return true;
+        } else {
+            return false;
+        }
+    },
 
-	/**
-	* Determines whether a given date is between two other dates on the calendar.
-	* @method between
-	* @param {Date} date		The date to check for
-	* @param {Date} dateBegin	The start of the range
-	* @param {Date} dateEnd		The end of the range
-	* @return {Boolean} true if the date occurs between the compared dates; false if not.
-	*/
-	between : function(date, dateBegin, dateEnd) {
-		if (this.after(date, dateBegin) && this.before(date, dateEnd)) {
-			return true;
-		} else {
-			return false;
-		}
-	},
-	
-	/**
-	* Retrieves a JavaScript Date object representing January 1 of any given year.
-	* @method getJan1
-	* @param {Number} calendarYear		The calendar year for which to retrieve January 1
-	* @return {Date}	January 1 of the calendar year specified.
-	*/
-	getJan1 : function(calendarYear) {
-		return this.getDate(calendarYear,0,1);
-	},
+    /**
+    * Determines whether a given date is between two other dates on the calendar.
+    * @method between
+    * @param {Date} date  The date to check for
+    * @param {Date} dateBegin The start of the range
+    * @param {Date} dateEnd  The end of the range
+    * @return {Boolean} true if the date occurs between the compared dates; false if not.
+    */
+    between : function(date, dateBegin, dateEnd) {
+        if (this.after(date, dateBegin) && this.before(date, dateEnd)) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    
+    /**
+    * Retrieves a JavaScript Date object representing January 1 of any given year.
+    * @method getJan1
+    * @param {Number} calendarYear  The calendar year for which to retrieve January 1
+    * @return {Date} January 1 of the calendar year specified.
+    */
+    getJan1 : function(calendarYear) {
+        return this.getDate(calendarYear,0,1);
+    },
 
-	/**
-	* Calculates the number of days the specified date is from January 1 of the specified calendar year.
-	* Passing January 1 to this function would return an offset value of zero.
-	* @method getDayOffset
-	* @param {Date}	date	The JavaScript date for which to find the offset
-	* @param {Number} calendarYear	The calendar year to use for determining the offset
-	* @return {Number}	The number of days since January 1 of the given year
-	*/
-	getDayOffset : function(date, calendarYear) {
-		var beginYear = this.getJan1(calendarYear); // Find the start of the year. This will be in week 1.
-		
-		// Find the number of days the passed in date is away from the calendar year start
-		var dayOffset = Math.ceil((date.getTime()-beginYear.getTime()) / this.ONE_DAY_MS);
-		return dayOffset;
-	},
+    /**
+    * Calculates the number of days the specified date is from January 1 of the specified calendar year.
+    * Passing January 1 to this function would return an offset value of zero.
+    * @method getDayOffset
+    * @param {Date} date The JavaScript date for which to find the offset
+    * @param {Number} calendarYear The calendar year to use for determining the offset
+    * @return {Number} The number of days since January 1 of the given year
+    */
+    getDayOffset : function(date, calendarYear) {
+        var beginYear = this.getJan1(calendarYear); // Find the start of the year. This will be in week 1.
+        
+        // Find the number of days the passed in date is away from the calendar year start
+        var dayOffset = Math.ceil((date.getTime()-beginYear.getTime()) / this.ONE_DAY_MS);
+        return dayOffset;
+    },
 
-	/**
-	* Calculates the week number for the given date. Can currently support standard
-	* U.S. week numbers, based on Jan 1st defining the 1st week of the year, and 
-	* ISO8601 week numbers, based on Jan 4th defining the 1st week of the year.
-	* 
-	* @method getWeekNumber
-	* @param {Date}	date The JavaScript date for which to find the week number
-	* @param {Number} firstDayOfWeek The index of the first day of the week (0 = Sun, 1 = Mon ... 6 = Sat).
-	* Defaults to 0
-	* @param {Number} janDate The date in the first week of January which defines week one for the year
-	* Defaults to the value of YAHOO.widget.DateMath.WEEK_ONE_JAN_DATE, which is 1 (Jan 1st). 
-	* For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first week of the year.
-	* 
-	* @return {Number} The number of the week containing the given date.
-	*/
-	getWeekNumber : function(date, firstDayOfWeek, janDate) {
+    /**
+    * Calculates the week number for the given date. Can currently support standard
+    * U.S. week numbers, based on Jan 1st defining the 1st week of the year, and 
+    * ISO8601 week numbers, based on Jan 4th defining the 1st week of the year.
+    * 
+    * @method getWeekNumber
+    * @param {Date} date The JavaScript date for which to find the week number
+    * @param {Number} firstDayOfWeek The index of the first day of the week (0 = Sun, 1 = Mon ... 6 = Sat).
+    * Defaults to 0
+    * @param {Number} janDate The date in the first week of January which defines week one for the year
+    * Defaults to the value of YAHOO.widget.DateMath.WEEK_ONE_JAN_DATE, which is 1 (Jan 1st). 
+    * For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first week of the year.
+    * 
+    * @return {Number} The number of the week containing the given date.
+    */
+    getWeekNumber : function(date, firstDayOfWeek, janDate) {
 
-		// Setup Defaults
-		firstDayOfWeek = firstDayOfWeek || 0;
-		janDate = janDate || this.WEEK_ONE_JAN_DATE;
+        // Setup Defaults
+        firstDayOfWeek = firstDayOfWeek || 0;
+        janDate = janDate || this.WEEK_ONE_JAN_DATE;
 
-		var targetDate = this.clearTime(date),
-			startOfWeek,
-			endOfWeek;
+        var targetDate = this.clearTime(date),
+            startOfWeek,
+            endOfWeek;
 
-		if (targetDate.getDay() === firstDayOfWeek) { 
-			startOfWeek = targetDate;
-		} else {
-			startOfWeek = this.getFirstDayOfWeek(targetDate, firstDayOfWeek);
-		}
+        if (targetDate.getDay() === firstDayOfWeek) { 
+            startOfWeek = targetDate;
+        } else {
+            startOfWeek = this.getFirstDayOfWeek(targetDate, firstDayOfWeek);
+        }
 
-		var startYear = startOfWeek.getFullYear();
+        var startYear = startOfWeek.getFullYear();
 
-		// DST shouldn't be a problem here, math is quicker than setDate();
-		endOfWeek = new Date(startOfWeek.getTime() + 6*this.ONE_DAY_MS);
+        // DST shouldn't be a problem here, math is quicker than setDate();
+        endOfWeek = new Date(startOfWeek.getTime() + 6*this.ONE_DAY_MS);
 
-		var weekNum;
-		if (startYear !== endOfWeek.getFullYear() && endOfWeek.getDate() >= janDate) {
-			// If years don't match, endOfWeek is in Jan. and if the 
-			// week has WEEK_ONE_JAN_DATE in it, it's week one by definition.
-			weekNum = 1;
-		} else {
-			// Get the 1st day of the 1st week, and 
-			// find how many days away we are from it.
-			var weekOne = this.clearTime(this.getDate(startYear, 0, janDate)),
-				weekOneDayOne = this.getFirstDayOfWeek(weekOne, firstDayOfWeek);
+        var weekNum;
+        if (startYear !== endOfWeek.getFullYear() && endOfWeek.getDate() >= janDate) {
+            // If years don't match, endOfWeek is in Jan. and if the 
+            // week has WEEK_ONE_JAN_DATE in it, it's week one by definition.
+            weekNum = 1;
+        } else {
+            // Get the 1st day of the 1st week, and 
+            // find how many days away we are from it.
+            var weekOne = this.clearTime(this.getDate(startYear, 0, janDate)),
+                weekOneDayOne = this.getFirstDayOfWeek(weekOne, firstDayOfWeek);
 
-			// Round days to smoothen out 1 hr DST diff
-			var daysDiff  = Math.round((targetDate.getTime() - weekOneDayOne.getTime())/this.ONE_DAY_MS);
+            // Round days to smoothen out 1 hr DST diff
+            var daysDiff  = Math.round((targetDate.getTime() - weekOneDayOne.getTime())/this.ONE_DAY_MS);
 
-			// Calc. Full Weeks
-			var rem = daysDiff % 7;
-			var weeksDiff = (daysDiff - rem)/7;
-			weekNum = weeksDiff + 1;
-		}
-		return weekNum;
-	},
+            // Calc. Full Weeks
+            var rem = daysDiff % 7;
+            var weeksDiff = (daysDiff - rem)/7;
+            weekNum = weeksDiff + 1;
+        }
+        return weekNum;
+    },
 
-	/**
-	 * Get the first day of the week, for the give date. 
-	 * @param {Date} dt The date in the week for which the first day is required.
-	 * @param {Number} startOfWeek The index for the first day of the week, 0 = Sun, 1 = Mon ... 6 = Sat (defaults to 0)
-	 * @return {Date} The first day of the week
-	 */
-	getFirstDayOfWeek : function (dt, startOfWeek) {
-		startOfWeek = startOfWeek || 0;
-		var dayOfWeekIndex = dt.getDay(),
-			dayOfWeek = (dayOfWeekIndex - startOfWeek + 7) % 7;
+    /**
+     * Get the first day of the week, for the give date. 
+     * @param {Date} dt The date in the week for which the first day is required.
+     * @param {Number} startOfWeek The index for the first day of the week, 0 = Sun, 1 = Mon ... 6 = Sat (defaults to 0)
+     * @return {Date} The first day of the week
+     */
+    getFirstDayOfWeek : function (dt, startOfWeek) {
+        startOfWeek = startOfWeek || 0;
+        var dayOfWeekIndex = dt.getDay(),
+            dayOfWeek = (dayOfWeekIndex - startOfWeek + 7) % 7;
 
-		return this.subtract(dt, this.DAY, dayOfWeek);
-	},
+        return this.subtract(dt, this.DAY, dayOfWeek);
+    },
 
-	/**
-	* Determines if a given week overlaps two different years.
-	* @method isYearOverlapWeek
-	* @param {Date}	weekBeginDate	The JavaScript Date representing the first day of the week.
-	* @return {Boolean}	true if the date overlaps two different years.
-	*/
-	isYearOverlapWeek : function(weekBeginDate) {
-		var overlaps = false;
-		var nextWeek = this.add(weekBeginDate, this.DAY, 6);
-		if (nextWeek.getFullYear() != weekBeginDate.getFullYear()) {
-			overlaps = true;
-		}
-		return overlaps;
-	},
+    /**
+    * Determines if a given week overlaps two different years.
+    * @method isYearOverlapWeek
+    * @param {Date} weekBeginDate The JavaScript Date representing the first day of the week.
+    * @return {Boolean} true if the date overlaps two different years.
+    */
+    isYearOverlapWeek : function(weekBeginDate) {
+        var overlaps = false;
+        var nextWeek = this.add(weekBeginDate, this.DAY, 6);
+        if (nextWeek.getFullYear() != weekBeginDate.getFullYear()) {
+            overlaps = true;
+        }
+        return overlaps;
+    },
 
-	/**
-	* Determines if a given week overlaps two different months.
-	* @method isMonthOverlapWeek
-	* @param {Date}	weekBeginDate	The JavaScript Date representing the first day of the week.
-	* @return {Boolean}	true if the date overlaps two different months.
-	*/
-	isMonthOverlapWeek : function(weekBeginDate) {
-		var overlaps = false;
-		var nextWeek = this.add(weekBeginDate, this.DAY, 6);
-		if (nextWeek.getMonth() != weekBeginDate.getMonth()) {
-			overlaps = true;
-		}
-		return overlaps;
-	},
+    /**
+    * Determines if a given week overlaps two different months.
+    * @method isMonthOverlapWeek
+    * @param {Date} weekBeginDate The JavaScript Date representing the first day of the week.
+    * @return {Boolean} true if the date overlaps two different months.
+    */
+    isMonthOverlapWeek : function(weekBeginDate) {
+        var overlaps = false;
+        var nextWeek = this.add(weekBeginDate, this.DAY, 6);
+        if (nextWeek.getMonth() != weekBeginDate.getMonth()) {
+            overlaps = true;
+        }
+        return overlaps;
+    },
 
-	/**
-	* Gets the first day of a month containing a given date.
-	* @method findMonthStart
-	* @param {Date}	date	The JavaScript Date used to calculate the month start
-	* @return {Date}		The JavaScript Date representing the first day of the month
-	*/
-	findMonthStart : function(date) {
-		var start = this.getDate(date.getFullYear(), date.getMonth(), 1);
-		return start;
-	},
+    /**
+    * Gets the first day of a month containing a given date.
+    * @method findMonthStart
+    * @param {Date} date The JavaScript Date used to calculate the month start
+    * @return {Date}  The JavaScript Date representing the first day of the month
+    */
+    findMonthStart : function(date) {
+        var start = this.getDate(date.getFullYear(), date.getMonth(), 1);
+        return start;
+    },
 
-	/**
-	* Gets the last day of a month containing a given date.
-	* @method findMonthEnd
-	* @param {Date}	date	The JavaScript Date used to calculate the month end
-	* @return {Date}		The JavaScript Date representing the last day of the month
-	*/
-	findMonthEnd : function(date) {
-		var start = this.findMonthStart(date);
-		var nextMonth = this.add(start, this.MONTH, 1);
-		var end = this.subtract(nextMonth, this.DAY, 1);
-		return end;
-	},
+    /**
+    * Gets the last day of a month containing a given date.
+    * @method findMonthEnd
+    * @param {Date} date The JavaScript Date used to calculate the month end
+    * @return {Date}  The JavaScript Date representing the last day of the month
+    */
+    findMonthEnd : function(date) {
+        var start = this.findMonthStart(date);
+        var nextMonth = this.add(start, this.MONTH, 1);
+        var end = this.subtract(nextMonth, this.DAY, 1);
+        return end;
+    },
 
-	/**
-	* Clears the time fields from a given date, effectively setting the time to 12 noon.
-	* @method clearTime
-	* @param {Date}	date	The JavaScript Date for which the time fields will be cleared
-	* @return {Date}		The JavaScript Date cleared of all time fields
-	*/
-	clearTime : function(date) {
-		date.setHours(12,0,0,0);
-		return date;
-	},
+    /**
+    * Clears the time fields from a given date, effectively setting the time to 12 noon.
+    * @method clearTime
+    * @param {Date} date The JavaScript Date for which the time fields will be cleared
+    * @return {Date}  The JavaScript Date cleared of all time fields
+    */
+    clearTime : function(date) {
+        date.setHours(12,0,0,0);
+        return date;
+    },
 
-	/**
-	 * Returns a new JavaScript Date object, representing the given year, month and date. Time fields (hr, min, sec, ms) on the new Date object
-	 * are set to 0. The method allows Date instances to be created with the a year less than 100. "new Date(year, month, date)" implementations 
-	 * set the year to 19xx if a year (xx) which is less than 100 is provided.
-	 * <p>
-	 * <em>NOTE:</em>Validation on argument values is not performed. It is the caller's responsibility to ensure
-	 * arguments are valid as per the ECMAScript-262 Date object specification for the new Date(year, month[, date]) constructor.
-	 * </p>
-	 * @method getDate
-	 * @param {Number} y Year.
-	 * @param {Number} m Month index from 0 (Jan) to 11 (Dec).
-	 * @param {Number} d (optional) Date from 1 to 31. If not provided, defaults to 1.
-	 * @return {Date} The JavaScript date object with year, month, date set as provided.
-	 */
-	getDate : function(y, m, d) {
-		var dt = null;
-		if (YAHOO.lang.isUndefined(d)) {
-			d = 1;
-		}
-		if (y >= 100) {
-			dt = new Date(y, m, d);
-		} else {
-			dt = new Date();
-			dt.setFullYear(y);
-			dt.setMonth(m);
-			dt.setDate(d);
-			dt.setHours(0,0,0,0);
-		}
-		return dt;
-	}
+    /**
+     * Returns a new JavaScript Date object, representing the given year, month and date. Time fields (hr, min, sec, ms) on the new Date object
+     * are set to 0. The method allows Date instances to be created with the a year less than 100. "new Date(year, month, date)" implementations 
+     * set the year to 19xx if a year (xx) which is less than 100 is provided.
+     * <p>
+     * <em>NOTE:</em>Validation on argument values is not performed. It is the caller's responsibility to ensure
+     * arguments are valid as per the ECMAScript-262 Date object specification for the new Date(year, month[, date]) constructor.
+     * </p>
+     * @method getDate
+     * @param {Number} y Year.
+     * @param {Number} m Month index from 0 (Jan) to 11 (Dec).
+     * @param {Number} d (optional) Date from 1 to 31. If not provided, defaults to 1.
+     * @return {Date} The JavaScript date object with year, month, date set as provided.
+     */
+    getDate : function(y, m, d) {
+        var dt = null;
+        if (YAHOO.lang.isUndefined(d)) {
+            d = 1;
+        }
+        if (y >= 100) {
+            dt = new Date(y, m, d);
+        } else {
+            dt = new Date();
+            dt.setFullYear(y);
+            dt.setMonth(m);
+            dt.setDate(d);
+            dt.setHours(0,0,0,0);
+        }
+        return dt;
+    }
 };
 /**
 * The Calendar component is a UI control that enables users to choose one or more dates from a graphical calendar presented in a one-month or
@@ -1099,9 +1099,9 @@ YAHOO.widget.DateMath = {
 * months and years.
 * <p>To construct the placeholder for the calendar widget, the code is as
 * follows:
-*	<xmp>
-*		<div id="calContainer"></div>
-*	</xmp>
+*   <xmp>
+*       <div id="calContainer"></div>
+*   </xmp>
 * </p>
 * <p>
 * <strong>NOTE: As of 2.4.0, the constructor's ID argument is optional.</strong>
@@ -1110,14 +1110,14 @@ YAHOO.widget.DateMath = {
 * in the document).
 * 
 * E.g.:
-*	<xmp>
-*		var c = new YAHOO.widget.Calendar("calContainer", configOptions);
-*	</xmp>
+*   <xmp>
+*       var c = new YAHOO.widget.Calendar("calContainer", configOptions);
+*   </xmp>
 * or:
 *   <xmp>
 *       var containerDiv = YAHOO.util.Dom.get("calContainer");
-*		var c = new YAHOO.widget.Calendar(containerDiv, configOptions);
-*	</xmp>
+*       var c = new YAHOO.widget.Calendar(containerDiv, configOptions);
+*   </xmp>
 * </p>
 * <p>
 * If not provided, the ID will be generated from the container DIV ID by adding an "_t" suffix.
@@ -1139,7 +1139,7 @@ function Calendar(id, containerId, config) {
 * The path to be used for images loaded for the Calendar
 * @property YAHOO.widget.Calendar.IMG_ROOT
 * @static
-* @deprecated	You can now customize images by overriding the calclose, calnavleft and calnavright default CSS classes for the close icon, left arrow and right arrow respectively
+* @deprecated   You can now customize images by overriding the calclose, calnavleft and calnavright default CSS classes for the close icon, left arrow and right arrow respectively
 * @type String
 */
 Calendar.IMG_ROOT = null;
@@ -1427,7 +1427,7 @@ Calendar.prototype = {
     * The parent CalendarGroup, only to be set explicitly by the parent group
     * @property parent
     * @type CalendarGroup
-    */	
+    */ 
     parent : null,
 
     /**
@@ -1751,7 +1751,7 @@ Calendar.prototype = {
         /**
         * Fired when a date selection is made
         * @event selectEvent
-        * @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].
+        * @param {Array} Array of Date field arrays in the format [YYYY, MM, DD].
         */
         cal.selectEvent = new CE(defEvents.SELECT);
 
@@ -1764,7 +1764,7 @@ Calendar.prototype = {
         /**
         * Fired when a date or set of dates is deselected
         * @event deselectEvent
-        * @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].
+        * @param {Array} Array of Date field arrays in the format [YYYY, MM, DD].
         */
         cal.deselectEvent = new CE(defEvents.DESELECT);
     
@@ -1891,8 +1891,8 @@ Calendar.prototype = {
     * The default event handler for clicks on the "Previous Month" navigation UI
     *
     * @method doPreviousMonthNav
-    * @param {DOMEvent} e	The DOM event
-    * @param {Calendar} cal	A reference to the calendar
+    * @param {DOMEvent} e The DOM event
+    * @param {Calendar} cal A reference to the calendar
     */
     doPreviousMonthNav : function(e, cal) {
         Event.preventDefault(e);
@@ -1918,8 +1918,8 @@ Calendar.prototype = {
      * The default event handler for clicks on the "Next Month" navigation UI
      *
      * @method doNextMonthNav
-     * @param {DOMEvent} e	The DOM event
-     * @param {Calendar} cal	A reference to the calendar
+     * @param {DOMEvent} e The DOM event
+     * @param {Calendar} cal A reference to the calendar
      */
     doNextMonthNav : function(e, cal) {
         Event.preventDefault(e);
@@ -1941,8 +1941,8 @@ Calendar.prototype = {
     * the Calendar's bounding box, referenced by it's <a href="#property_oDomContainer">oDomContainer</a> property.
     *
     * @method doSelectCell
-    * @param {DOMEvent} e	The DOM event
-    * @param {Calendar} cal	A reference to the calendar
+    * @param {DOMEvent} e The DOM event
+    * @param {Calendar} cal A reference to the calendar
     */
     doSelectCell : function(e, cal) {
         var cell, d, date, index;
@@ -1990,11 +1990,11 @@ Calendar.prototype = {
                         var cellDate = cal.cellDates[index];
                         var cellDateIndex = cal._indexOfSelectedFieldArray(cellDate);
 
-                        if (cellDateIndex > -1) {	
+                        if (cellDateIndex > -1) { 
                             cal.deselectCell(index);
                         } else {
                             cal.selectCell(index);
-                        }	
+                        } 
 
                     } else {
                         link = cell.getElementsByTagName("a")[0];
@@ -2011,8 +2011,8 @@ Calendar.prototype = {
     /**
     * The event that is executed when the user hovers over a cell
     * @method doCellMouseOver
-    * @param {DOMEvent} e	The event
-    * @param {Calendar} cal	A reference to the calendar passed by the Event utility
+    * @param {DOMEvent} e The event
+    * @param {Calendar} cal A reference to the calendar passed by the Event utility
     */
     doCellMouseOver : function(e, cal) {
         var target;
@@ -2037,8 +2037,8 @@ Calendar.prototype = {
     /**
     * The event that is executed when the user moves the mouse out of a cell
     * @method doCellMouseOut
-    * @param {DOMEvent} e	The event
-    * @param {Calendar} cal	A reference to the calendar passed by the Event utility
+    * @param {DOMEvent} e The event
+    * @param {Calendar} cal A reference to the calendar passed by the Event utility
     */
     doCellMouseOut : function(e, cal) {
         var target;
@@ -2140,7 +2140,7 @@ Calendar.prototype = {
         * @type Boolean
         * @default false
         */
-        cfg.addProperty(DEF_CFG.MULTI_SELECT.key,	{ value:DEF_CFG.MULTI_SELECT.value, handler:this.configOptions, validator:cfg.checkBoolean } );
+        cfg.addProperty(DEF_CFG.MULTI_SELECT.key, { value:DEF_CFG.MULTI_SELECT.value, handler:this.configOptions, validator:cfg.checkBoolean } );
 
         /**
         * The weekday the week begins on. Default is 0 (Sunday = 0, Monday = 1 ... Saturday = 6).
@@ -2148,7 +2148,7 @@ Calendar.prototype = {
         * @type number
         * @default 0
         */
-        cfg.addProperty(DEF_CFG.START_WEEKDAY.key,	{ value:DEF_CFG.START_WEEKDAY.value, handler:this.configOptions, validator:cfg.checkNumber  } );
+        cfg.addProperty(DEF_CFG.START_WEEKDAY.key, { value:DEF_CFG.START_WEEKDAY.value, handler:this.configOptions, validator:cfg.checkNumber  } );
     
         /**
         * True if the Calendar should show weekday labels. True by default.
@@ -2156,7 +2156,7 @@ Calendar.prototype = {
         * @type Boolean
         * @default true
         */
-        cfg.addProperty(DEF_CFG.SHOW_WEEKDAYS.key,	{ value:DEF_CFG.SHOW_WEEKDAYS.value, handler:this.configOptions, validator:cfg.checkBoolean  } );
+        cfg.addProperty(DEF_CFG.SHOW_WEEKDAYS.key, { value:DEF_CFG.SHOW_WEEKDAYS.value, handler:this.configOptions, validator:cfg.checkBoolean  } );
     
         /**
         * True if the Calendar should show week row headers. False by default.
@@ -2171,7 +2171,7 @@ Calendar.prototype = {
         * @config SHOW_WEEK_FOOTER
         * @type Boolean
         * @default false
-        */	
+        */ 
         cfg.addProperty(DEF_CFG.SHOW_WEEK_FOOTER.key,{ value:DEF_CFG.SHOW_WEEK_FOOTER.value, handler:this.configOptions, validator:cfg.checkBoolean } );
     
         /**
@@ -2179,25 +2179,25 @@ Calendar.prototype = {
         * @config HIDE_BLANK_WEEKS
         * @type Boolean
         * @default false
-        */	
+        */ 
         cfg.addProperty(DEF_CFG.HIDE_BLANK_WEEKS.key, { value:DEF_CFG.HIDE_BLANK_WEEKS.value, handler:this.configOptions, validator:cfg.checkBoolean } );
         
         /**
         * The image that should be used for the left navigation arrow.
         * @config NAV_ARROW_LEFT
         * @type String
-        * @deprecated	You can customize the image by overriding the default CSS class for the left arrow - "calnavleft"  
+        * @deprecated You can customize the image by overriding the default CSS class for the left arrow - "calnavleft"  
         * @default null
-        */	
-        cfg.addProperty(DEF_CFG.NAV_ARROW_LEFT.key,	{ value:DEF_CFG.NAV_ARROW_LEFT.value, handler:this.configOptions } );
+        */ 
+        cfg.addProperty(DEF_CFG.NAV_ARROW_LEFT.key, { value:DEF_CFG.NAV_ARROW_LEFT.value, handler:this.configOptions } );
     
         /**
         * The image that should be used for the right navigation arrow.
         * @config NAV_ARROW_RIGHT
         * @type String
-        * @deprecated	You can customize the image by overriding the default CSS class for the right arrow - "calnavright"
+        * @deprecated You can customize the image by overriding the default CSS class for the right arrow - "calnavright"
         * @default null
-        */	
+        */ 
         cfg.addProperty(DEF_CFG.NAV_ARROW_RIGHT.key, { value:DEF_CFG.NAV_ARROW_RIGHT.value, handler:this.configOptions } );
     
         // Locale properties
@@ -2208,47 +2208,47 @@ Calendar.prototype = {
         * @type String[]
         * @default ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         */
-        cfg.addProperty(DEF_CFG.MONTHS_SHORT.key,	{ value:DEF_CFG.MONTHS_SHORT.value, handler:this.configLocale } );
+        cfg.addProperty(DEF_CFG.MONTHS_SHORT.key, { value:DEF_CFG.MONTHS_SHORT.value, handler:this.configLocale } );
         
         /**
         * The long month labels for the current locale.
         * @config MONTHS_LONG
         * @type String[]
         * @default ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-        */	
-        cfg.addProperty(DEF_CFG.MONTHS_LONG.key,		{ value:DEF_CFG.MONTHS_LONG.value, handler:this.configLocale } );
+        */ 
+        cfg.addProperty(DEF_CFG.MONTHS_LONG.key,  { value:DEF_CFG.MONTHS_LONG.value, handler:this.configLocale } );
 
         /**
         * The 1-character weekday labels for the current locale.
         * @config WEEKDAYS_1CHAR
         * @type String[]
         * @default ["S", "M", "T", "W", "T", "F", "S"]
-        */	
-        cfg.addProperty(DEF_CFG.WEEKDAYS_1CHAR.key,	{ value:DEF_CFG.WEEKDAYS_1CHAR.value, handler:this.configLocale } );
+        */ 
+        cfg.addProperty(DEF_CFG.WEEKDAYS_1CHAR.key, { value:DEF_CFG.WEEKDAYS_1CHAR.value, handler:this.configLocale } );
         
         /**
         * The short weekday labels for the current locale.
         * @config WEEKDAYS_SHORT
         * @type String[]
         * @default ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
-        */	
-        cfg.addProperty(DEF_CFG.WEEKDAYS_SHORT.key,	{ value:DEF_CFG.WEEKDAYS_SHORT.value, handler:this.configLocale } );
+        */ 
+        cfg.addProperty(DEF_CFG.WEEKDAYS_SHORT.key, { value:DEF_CFG.WEEKDAYS_SHORT.value, handler:this.configLocale } );
         
         /**
         * The medium weekday labels for the current locale.
         * @config WEEKDAYS_MEDIUM
         * @type String[]
         * @default ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-        */	
-        cfg.addProperty(DEF_CFG.WEEKDAYS_MEDIUM.key,	{ value:DEF_CFG.WEEKDAYS_MEDIUM.value, handler:this.configLocale } );
+        */ 
+        cfg.addProperty(DEF_CFG.WEEKDAYS_MEDIUM.key, { value:DEF_CFG.WEEKDAYS_MEDIUM.value, handler:this.configLocale } );
         
         /**
         * The long weekday labels for the current locale.
         * @config WEEKDAYS_LONG
         * @type String[]
         * @default ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-        */	
-        cfg.addProperty(DEF_CFG.WEEKDAYS_LONG.key,	{ value:DEF_CFG.WEEKDAYS_LONG.value, handler:this.configLocale } );
+        */ 
+        cfg.addProperty(DEF_CFG.WEEKDAYS_LONG.key, { value:DEF_CFG.WEEKDAYS_LONG.value, handler:this.configLocale } );
 
         /**
         * Refreshes the locale values used to build the Calendar.
@@ -2273,16 +2273,16 @@ Calendar.prototype = {
         * @config LOCALE_MONTHS
         * @type String
         * @default "long"
-        */	
-        cfg.addProperty(DEF_CFG.LOCALE_MONTHS.key,	{ value:DEF_CFG.LOCALE_MONTHS.value, handler:this.configLocaleValues } );
+        */ 
+        cfg.addProperty(DEF_CFG.LOCALE_MONTHS.key, { value:DEF_CFG.LOCALE_MONTHS.value, handler:this.configLocaleValues } );
         
         /**
         * The setting that determines which length of weekday labels should be used. Possible values are "1char", "short", "medium", and "long".
         * @config LOCALE_WEEKDAYS
         * @type String
         * @default "short"
-        */	
-        cfg.addProperty(DEF_CFG.LOCALE_WEEKDAYS.key,	{ value:DEF_CFG.LOCALE_WEEKDAYS.value, handler:this.configLocaleValues } );
+        */ 
+        cfg.addProperty(DEF_CFG.LOCALE_WEEKDAYS.key, { value:DEF_CFG.LOCALE_WEEKDAYS.value, handler:this.configLocaleValues } );
 
         /**
         * The positive or negative year offset from the Gregorian calendar year (assuming a January 1st rollover) to 
@@ -2300,15 +2300,15 @@ Calendar.prototype = {
         * @config DATE_DELIMITER
         * @type String
         * @default ","
-        */	
-        cfg.addProperty(DEF_CFG.DATE_DELIMITER.key,		{ value:DEF_CFG.DATE_DELIMITER.value, handler:this.configLocale } );
+        */ 
+        cfg.addProperty(DEF_CFG.DATE_DELIMITER.key,  { value:DEF_CFG.DATE_DELIMITER.value, handler:this.configLocale } );
     
         /**
         * The value used to delimit date fields in a date string passed to various Calendar functions.
         * @config DATE_FIELD_DELIMITER
         * @type String
         * @default "/"
-        */	
+        */ 
         cfg.addProperty(DEF_CFG.DATE_FIELD_DELIMITER.key, { value:DEF_CFG.DATE_FIELD_DELIMITER.value, handler:this.configLocale } );
     
         /**
@@ -2325,7 +2325,7 @@ Calendar.prototype = {
         * @type Number
         * @default 1
         */
-        cfg.addProperty(DEF_CFG.MY_MONTH_POSITION.key,	{ value:DEF_CFG.MY_MONTH_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
+        cfg.addProperty(DEF_CFG.MY_MONTH_POSITION.key, { value:DEF_CFG.MY_MONTH_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
     
         /**
         * The position of the year in a month/year date string
@@ -2333,7 +2333,7 @@ Calendar.prototype = {
         * @type Number
         * @default 2
         */
-        cfg.addProperty(DEF_CFG.MY_YEAR_POSITION.key,	{ value:DEF_CFG.MY_YEAR_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
+        cfg.addProperty(DEF_CFG.MY_YEAR_POSITION.key, { value:DEF_CFG.MY_YEAR_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
     
         /**
         * The position of the month in a month/day date string
@@ -2341,7 +2341,7 @@ Calendar.prototype = {
         * @type Number
         * @default 1
         */
-        cfg.addProperty(DEF_CFG.MD_MONTH_POSITION.key,	{ value:DEF_CFG.MD_MONTH_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
+        cfg.addProperty(DEF_CFG.MD_MONTH_POSITION.key, { value:DEF_CFG.MD_MONTH_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
     
         /**
         * The position of the day in a month/year date string
@@ -2349,7 +2349,7 @@ Calendar.prototype = {
         * @type Number
         * @default 2
         */
-        cfg.addProperty(DEF_CFG.MD_DAY_POSITION.key,		{ value:DEF_CFG.MD_DAY_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
+        cfg.addProperty(DEF_CFG.MD_DAY_POSITION.key,  { value:DEF_CFG.MD_DAY_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
     
         /**
         * The position of the month in a month/day/year date string
@@ -2357,7 +2357,7 @@ Calendar.prototype = {
         * @type Number
         * @default 1
         */
-        cfg.addProperty(DEF_CFG.MDY_MONTH_POSITION.key,	{ value:DEF_CFG.MDY_MONTH_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
+        cfg.addProperty(DEF_CFG.MDY_MONTH_POSITION.key, { value:DEF_CFG.MDY_MONTH_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
     
         /**
         * The position of the day in a month/day/year date string
@@ -2365,7 +2365,7 @@ Calendar.prototype = {
         * @type Number
         * @default 2
         */
-        cfg.addProperty(DEF_CFG.MDY_DAY_POSITION.key,	{ value:DEF_CFG.MDY_DAY_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
+        cfg.addProperty(DEF_CFG.MDY_DAY_POSITION.key, { value:DEF_CFG.MDY_DAY_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
     
         /**
         * The position of the year in a month/day/year date string
@@ -2373,7 +2373,7 @@ Calendar.prototype = {
         * @type Number
         * @default 3
         */
-        cfg.addProperty(DEF_CFG.MDY_YEAR_POSITION.key,	{ value:DEF_CFG.MDY_YEAR_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
+        cfg.addProperty(DEF_CFG.MDY_YEAR_POSITION.key, { value:DEF_CFG.MDY_YEAR_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
         
         /**
         * The position of the month in the month year label string used as the Calendar header
@@ -2381,7 +2381,7 @@ Calendar.prototype = {
         * @type Number
         * @default 1
         */
-        cfg.addProperty(DEF_CFG.MY_LABEL_MONTH_POSITION.key,	{ value:DEF_CFG.MY_LABEL_MONTH_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
+        cfg.addProperty(DEF_CFG.MY_LABEL_MONTH_POSITION.key, { value:DEF_CFG.MY_LABEL_MONTH_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
     
         /**
         * The position of the year in the month year label string used as the Calendar header
@@ -2389,7 +2389,7 @@ Calendar.prototype = {
         * @type Number
         * @default 2
         */
-        cfg.addProperty(DEF_CFG.MY_LABEL_YEAR_POSITION.key,	{ value:DEF_CFG.MY_LABEL_YEAR_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
+        cfg.addProperty(DEF_CFG.MY_LABEL_YEAR_POSITION.key, { value:DEF_CFG.MY_LABEL_YEAR_POSITION.value, handler:this.configLocale, validator:cfg.checkNumber } );
         
         /**
         * The suffix used after the month when rendering the Calendar header
@@ -2397,7 +2397,7 @@ Calendar.prototype = {
         * @type String
         * @default " "
         */
-        cfg.addProperty(DEF_CFG.MY_LABEL_MONTH_SUFFIX.key,	{ value:DEF_CFG.MY_LABEL_MONTH_SUFFIX.value, handler:this.configLocale } );
+        cfg.addProperty(DEF_CFG.MY_LABEL_MONTH_SUFFIX.key, { value:DEF_CFG.MY_LABEL_MONTH_SUFFIX.value, handler:this.configLocale } );
         
         /**
         * The suffix used after the year when rendering the Calendar header
@@ -2438,15 +2438,15 @@ Calendar.prototype = {
         * <p>E.g.</p>
         * <pre>
         * var navConfig = {
-        *	  strings: {
-        *		  month:"Calendar Month",
-        *		  year:"Calendar Year",
-        *		  submit: "Submit",
-        *		  cancel: "Cancel",
-        *		  invalidYear: "Please enter a valid year"
-        *	  },
-        *	  monthFormat: YAHOO.widget.Calendar.SHORT,
-        *	  initialFocus: "month"
+        *   strings: {
+        *    month:"Calendar Month",
+        *    year:"Calendar Year",
+        *    submit: "Submit",
+        *    cancel: "Cancel",
+        *    invalidYear: "Please enter a valid year"
+        *   },
+        *   monthFormat: YAHOO.widget.Calendar.SHORT,
+        *   initialFocus: "month"
         * }
         * </pre>
         * @config navigator
@@ -2804,7 +2804,7 @@ Calendar.prototype = {
     * Builds the date label that will be displayed in the calendar header or
     * footer, depending on configuration.
     * @method buildMonthLabel
-    * @return	{String}	The formatted calendar month label
+    * @return {String} The formatted calendar month label
     */
     buildMonthLabel : function() {
         return this._buildMonthLabel(this.cfg.getProperty(DEF_CFG.PAGEDATE.key));
@@ -2820,7 +2820,7 @@ Calendar.prototype = {
      * @return {String} Formated month, year string
      */
     _buildMonthLabel : function(date) {
-        var	monthLabel  = this.Locale.LOCALE_MONTHS[date.getMonth()] + this.Locale.MY_LABEL_MONTH_SUFFIX,
+        var monthLabel  = this.Locale.LOCALE_MONTHS[date.getMonth()] + this.Locale.MY_LABEL_MONTH_SUFFIX,
             yearLabel = (date.getFullYear() + this.Locale.YEAR_OFFSET) + this.Locale.MY_LABEL_YEAR_SUFFIX;
 
         if (this.Locale.MY_LABEL_MONTH_POSITION == 2 || this.Locale.MY_LABEL_YEAR_POSITION == 1) {
@@ -2833,8 +2833,8 @@ Calendar.prototype = {
     /**
     * Builds the date digit that will be displayed in calendar cells
     * @method buildDayLabel
-    * @param {Date}	workingDate	The current working date
-    * @return	{String}	The formatted day label
+    * @param {Date} workingDate The current working date
+    * @return {String} The formatted day label
     */
     buildDayLabel : function(workingDate) {
         return workingDate.getDate();
@@ -2927,7 +2927,7 @@ Calendar.prototype = {
     /**
     * Renders the calendar header.
     * @method renderHeader
-    * @param {Array}	html	The current working HTML array
+    * @param {Array} html The current working HTML array
     * @return {Array} The current working HTML array
     */
     renderHeader : function(html) {
@@ -2952,9 +2952,9 @@ Calendar.prototype = {
         }
 
         html[html.length] = "<thead>";
-        html[html.length] =		"<tr>";
-        html[html.length] =			'<th colspan="' + colSpan + '" class="' + this.Style.CSS_HEADER_TEXT + '">';
-        html[html.length] =				'<div class="' + this.Style.CSS_HEADER + '">';
+        html[html.length] =  "<tr>";
+        html[html.length] =   '<th colspan="' + colSpan + '" class="' + this.Style.CSS_HEADER_TEXT + '">';
+        html[html.length] =    '<div class="' + this.Style.CSS_HEADER + '">';
 
         var renderLeft, renderRight = false;
 
@@ -3000,7 +3000,7 @@ Calendar.prototype = {
             html[html.length] = '<a class="' + this.Style.CSS_NAV_RIGHT + '"' + rightStyle + ' href="#">' + nextStr + ' (' + monthLabel + ')' + '</a>';
         }
 
-        html[html.length] =	'</div>\n</th>\n</tr>';
+        html[html.length] = '</div>\n</th>\n</tr>';
 
         if (cfg.getProperty(DEF_CFG.SHOW_WEEKDAYS.key)) {
             html = this.buildWeekdays(html);
@@ -3014,7 +3014,7 @@ Calendar.prototype = {
     /**
     * Renders the Calendar's weekday headers.
     * @method buildWeekdays
-    * @param {Array}	html	The current working HTML array
+    * @param {Array} html The current working HTML array
     * @return {Array} The current working HTML array
     */
     buildWeekdays : function(html) {
@@ -3041,8 +3041,8 @@ Calendar.prototype = {
     /**
     * Renders the calendar body.
     * @method renderBody
-    * @param {Date}	workingDate	The current working Date being used for the render process
-    * @param {Array}	html	The current working HTML array
+    * @param {Date} workingDate The current working Date being used for the render process
+    * @param {Array} html The current working HTML array
     * @return {Array} The current working HTML array
     */
     renderBody : function(workingDate, html) {
@@ -3121,9 +3121,9 @@ Calendar.prototype = {
                     cell.className = this.Style.CSS_CELL;
                     cell.id = this.id + cellPrefix + i;
 
-                    if (workingDate.getDate()		== todayDate && 
-                        workingDate.getMonth()		== todayMonth &&
-                        workingDate.getFullYear()	== todayYear) {
+                    if (workingDate.getDate()  == todayDate && 
+                        workingDate.getMonth()  == todayMonth &&
+                        workingDate.getFullYear() == todayYear) {
                         cellRenderers[cellRenderers.length]=cal.renderCellStyleToday;
                     }
 
@@ -3218,7 +3218,7 @@ Calendar.prototype = {
                         cellRenderers[cellRenderers.length]=cal.renderOutOfBoundsDate;
                     } else {
                         cellRenderers[cellRenderers.length]=cal.styleCellDefault;
-                        cellRenderers[cellRenderers.length]=cal.renderCellDefault;	
+                        cellRenderers[cellRenderers.length]=cal.renderCellDefault; 
                     }
 
                     for (var x=0; x < cellRenderers.length; ++x) {
@@ -3272,7 +3272,7 @@ Calendar.prototype = {
     * Renders the calendar footer. In the default implementation, there is
     * no footer.
     * @method renderFooter
-    * @param {Array}	html	The current working HTML array
+    * @param {Array} html The current working HTML array
     * @return {Array} The current working HTML array
     */
     renderFooter : function(html) { return html; },
@@ -3344,7 +3344,7 @@ Calendar.prototype = {
 
         if (this.domEventMap) {
             var el,elements;
-            for (var cls in this.domEventMap) {	
+            for (var cls in this.domEventMap) { 
                 if (Lang.hasOwnProperty(this.domEventMap, cls)) {
                     var items = this.domEventMap[cls];
     
@@ -3352,7 +3352,7 @@ Calendar.prototype = {
                         items = [items];
                     }
     
-                    for (var i=0;i<items.length;i++)	{
+                    for (var i=0;i<items.length;i++) {
                         var item = items[i];
                         elements = Dom.getElementsByClassName(cls, item.tag, this.oDomContainer);
     
@@ -3397,7 +3397,7 @@ Calendar.prototype = {
     /**
     * Retrieves the Date object for the specified Calendar cell
     * @method getDateByCellId
-    * @param {String}	id	The id of the cell
+    * @param {String} id The id of the cell
     * @return {Date} The Date object for the specified Calendar cell
     */
     getDateByCellId : function(id) {
@@ -3408,8 +3408,8 @@ Calendar.prototype = {
     /**
     * Retrieves the Date object for the specified Calendar cell
     * @method getDateFieldsByCellId
-    * @param {String}	id	The id of the cell
-    * @return {Array}	The array of Date fields for the specified Calendar cell
+    * @param {String} id The id of the cell
+    * @return {Array} The array of Date fields for the specified Calendar cell
     */
     getDateFieldsByCellId : function(id) {
         id = this.getIndexFromId(id);
@@ -3475,10 +3475,10 @@ Calendar.prototype = {
     * Renders a cell that falls before the minimum date or after the maximum date.
     * widget class.
     * @method renderOutOfBoundsDate
-    * @param {Date}					workingDate		The current working Date object being used to generate the calendar
-    * @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+    * @param {Date}     workingDate  The current working Date object being used to generate the calendar
+    * @param {HTMLTableCellElement} cell   The current working cell in the calendar
     * @return {String} YAHOO.widget.Calendar.STOP_RENDER if rendering should stop with this style, null or nothing if rendering
-    *			should not be terminated
+    *   should not be terminated
     */
     renderOutOfBoundsDate : function(workingDate, cell) {
         Dom.addClass(cell, this.Style.CSS_CELL_OOB);
@@ -3489,8 +3489,8 @@ Calendar.prototype = {
     /**
     * Renders the row header for a week.
     * @method renderRowHeader
-    * @param {Number}	weekNum	The week number of the current row
-    * @param {Array}	cell	The current working HTML array
+    * @param {Number} weekNum The week number of the current row
+    * @param {Array} cell The current working HTML array
     */
     renderRowHeader : function(weekNum, html) {
         html[html.length] = '<th class="' + this.Style.CSS_ROW_HEADER + '">' + weekNum + '</th>';
@@ -3500,8 +3500,8 @@ Calendar.prototype = {
     /**
     * Renders the row footer for a week.
     * @method renderRowFooter
-    * @param {Number}	weekNum	The week number of the current row
-    * @param {Array}	cell	The current working HTML array
+    * @param {Number} weekNum The week number of the current row
+    * @param {Array} cell The current working HTML array
     */
     renderRowFooter : function(weekNum, html) {
         html[html.length] = '<th class="' + this.Style.CSS_ROW_FOOTER + '">' + weekNum + '</th>';
@@ -3514,8 +3514,8 @@ Calendar.prototype = {
     * encapsulated in this method, and must be accounted for when extending the
     * widget class.
     * @method renderCellDefault
-    * @param {Date}					workingDate		The current working Date object being used to generate the calendar
-    * @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+    * @param {Date}     workingDate  The current working Date object being used to generate the calendar
+    * @param {HTMLTableCellElement} cell   The current working cell in the calendar
     */
     renderCellDefault : function(workingDate, cell) {
         cell.innerHTML = '<a href="#" class="' + this.Style.CSS_CELL_SELECTOR + '">' + this.buildDayLabel(workingDate) + "</a>";
@@ -3524,8 +3524,8 @@ Calendar.prototype = {
     /**
     * Styles a selectable cell.
     * @method styleCellDefault
-    * @param {Date}					workingDate		The current working Date object being used to generate the calendar
-    * @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+    * @param {Date}     workingDate  The current working Date object being used to generate the calendar
+    * @param {HTMLTableCellElement} cell   The current working cell in the calendar
     */
     styleCellDefault : function(workingDate, cell) {
         Dom.addClass(cell, this.Style.CSS_CELL_SELECTABLE);
@@ -3535,8 +3535,8 @@ Calendar.prototype = {
     /**
     * Renders a single standard calendar cell using the CSS hightlight1 style
     * @method renderCellStyleHighlight1
-    * @param {Date}					workingDate		The current working Date object being used to generate the calendar
-    * @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+    * @param {Date}     workingDate  The current working Date object being used to generate the calendar
+    * @param {HTMLTableCellElement} cell   The current working cell in the calendar
     */
     renderCellStyleHighlight1 : function(workingDate, cell) {
         Dom.addClass(cell, this.Style.CSS_CELL_HIGHLIGHT1);
@@ -3545,8 +3545,8 @@ Calendar.prototype = {
     /**
     * Renders a single standard calendar cell using the CSS hightlight2 style
     * @method renderCellStyleHighlight2
-    * @param {Date}					workingDate		The current working Date object being used to generate the calendar
-    * @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+    * @param {Date}     workingDate  The current working Date object being used to generate the calendar
+    * @param {HTMLTableCellElement} cell   The current working cell in the calendar
     */
     renderCellStyleHighlight2 : function(workingDate, cell) {
         Dom.addClass(cell, this.Style.CSS_CELL_HIGHLIGHT2);
@@ -3555,8 +3555,8 @@ Calendar.prototype = {
     /**
     * Renders a single standard calendar cell using the CSS hightlight3 style
     * @method renderCellStyleHighlight3
-    * @param {Date}					workingDate		The current working Date object being used to generate the calendar
-    * @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+    * @param {Date}     workingDate  The current working Date object being used to generate the calendar
+    * @param {HTMLTableCellElement} cell   The current working cell in the calendar
     */
     renderCellStyleHighlight3 : function(workingDate, cell) {
         Dom.addClass(cell, this.Style.CSS_CELL_HIGHLIGHT3);
@@ -3565,8 +3565,8 @@ Calendar.prototype = {
     /**
     * Renders a single standard calendar cell using the CSS hightlight4 style
     * @method renderCellStyleHighlight4
-    * @param {Date}					workingDate		The current working Date object being used to generate the calendar
-    * @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+    * @param {Date}     workingDate  The current working Date object being used to generate the calendar
+    * @param {HTMLTableCellElement} cell   The current working cell in the calendar
     */
     renderCellStyleHighlight4 : function(workingDate, cell) {
         Dom.addClass(cell, this.Style.CSS_CELL_HIGHLIGHT4);
@@ -3575,8 +3575,8 @@ Calendar.prototype = {
     /**
     * Applies the default style used for rendering today's date to the current calendar cell
     * @method renderCellStyleToday
-    * @param {Date}					workingDate		The current working Date object being used to generate the calendar
-    * @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+    * @param {Date}     workingDate  The current working Date object being used to generate the calendar
+    * @param {HTMLTableCellElement} cell   The current working cell in the calendar
     */
     renderCellStyleToday : function(workingDate, cell) {
         Dom.addClass(cell, this.Style.CSS_CELL_TODAY);
@@ -3585,10 +3585,10 @@ Calendar.prototype = {
     /**
     * Applies the default style used for rendering selected dates to the current calendar cell
     * @method renderCellStyleSelected
-    * @param {Date}					workingDate		The current working Date object being used to generate the calendar
-    * @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+    * @param {Date}     workingDate  The current working Date object being used to generate the calendar
+    * @param {HTMLTableCellElement} cell   The current working cell in the calendar
     * @return {String} YAHOO.widget.Calendar.STOP_RENDER if rendering should stop with this style, null or nothing if rendering
-    *			should not be terminated
+    *   should not be terminated
     */
     renderCellStyleSelected : function(workingDate, cell) {
         Dom.addClass(cell, this.Style.CSS_CELL_SELECTED);
@@ -3598,10 +3598,10 @@ Calendar.prototype = {
     * Applies the default style used for rendering dates that are not a part of the current
     * month (preceding or trailing the cells for the current month)
     * @method renderCellNotThisMonth
-    * @param {Date}					workingDate		The current working Date object being used to generate the calendar
-    * @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+    * @param {Date}     workingDate  The current working Date object being used to generate the calendar
+    * @param {HTMLTableCellElement} cell   The current working cell in the calendar
     * @return {String} YAHOO.widget.Calendar.STOP_RENDER if rendering should stop with this style, null or nothing if rendering
-    *			should not be terminated
+    *   should not be terminated
     */
     renderCellNotThisMonth : function(workingDate, cell) {
         Dom.addClass(cell, this.Style.CSS_CELL_OOM);
@@ -3613,10 +3613,10 @@ Calendar.prototype = {
     * Renders the current calendar cell as a non-selectable "black-out" date using the default
     * restricted style.
     * @method renderBodyCellRestricted
-    * @param {Date}					workingDate		The current working Date object being used to generate the calendar
-    * @param {HTMLTableCellElement}	cell			The current working cell in the calendar
+    * @param {Date}     workingDate  The current working Date object being used to generate the calendar
+    * @param {HTMLTableCellElement} cell   The current working cell in the calendar
     * @return {String} YAHOO.widget.Calendar.STOP_RENDER if rendering should stop with this style, null or nothing if rendering
-    *			should not be terminated
+    *   should not be terminated
     */
     renderBodyCellRestricted : function(workingDate, cell) {
         Dom.addClass(cell, this.Style.CSS_CELL);
@@ -3633,7 +3633,7 @@ Calendar.prototype = {
     * Adds the designated number of months to the current calendar month, and sets the current
     * calendar page date to the new month.
     * @method addMonths
-    * @param {Number}	count	The number of months to add to the current calendar
+    * @param {Number} count The number of months to add to the current calendar
     */
     addMonths : function(count) {
         var cfgPageDate = DEF_CFG.PAGEDATE.key,
@@ -3650,7 +3650,7 @@ Calendar.prototype = {
     * Subtracts the designated number of months from the current calendar month, and sets the current
     * calendar page date to the new month.
     * @method subtractMonths
-    * @param {Number}	count	The number of months to subtract from the current calendar
+    * @param {Number} count The number of months to subtract from the current calendar
     */
     subtractMonths : function(count) {
         this.addMonths(-1*count);
@@ -3660,7 +3660,7 @@ Calendar.prototype = {
     * Adds the designated number of years to the current calendar, and sets the current
     * calendar page date to the new month.
     * @method addYears
-    * @param {Number}	count	The number of years to add to the current calendar
+    * @param {Number} count The number of years to add to the current calendar
     */
     addYears : function(count) {
         var cfgPageDate = DEF_CFG.PAGEDATE.key,
@@ -3677,7 +3677,7 @@ Calendar.prototype = {
     * Subtcats the designated number of years from the current calendar, and sets the current
     * calendar page date to the new month.
     * @method subtractYears
-    * @param {Number}	count	The number of years to subtract from the current calendar
+    * @param {Number} count The number of years to subtract from the current calendar
     */
     subtractYears : function(count) {
         this.addYears(-1*count);
@@ -3752,11 +3752,11 @@ Calendar.prototype = {
     * If all dates are OOB, the no state change will occur; beforeSelect and select events will not be fired.
     *
     * @method select
-    * @param	{String/Date/Date[]}	date	The date string of dates to select in the current calendar. Valid formats are
-    *								individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
-    *								Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
-    *								This method can also take a JavaScript Date object or an array of Date objects.
-    * @return	{Date[]}			Array of JavaScript Date objects representing all individual dates that are currently selected.
+    * @param {String/Date/Date[]} date The date string of dates to select in the current calendar. Valid formats are
+    *        individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
+    *        Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
+    *        This method can also take a JavaScript Date object or an array of Date objects.
+    * @return {Date[]}   Array of JavaScript Date objects representing all individual dates that are currently selected.
     */
     select : function(date) {
 
@@ -3805,8 +3805,8 @@ Calendar.prototype = {
     * or out of bounds cells), it will not be selected and in such a case beforeSelect and select events will not be fired.
     * 
     * @method selectCell
-    * @param	{Number}	cellIndex	The index of the cell to select in the current calendar. 
-    * @return	{Date[]}	Array of JavaScript Date objects representing all individual dates that are currently selected.
+    * @param {Number} cellIndex The index of the cell to select in the current calendar. 
+    * @return {Date[]} Array of JavaScript Date objects representing all individual dates that are currently selected.
     */
     selectCell : function(cellIndex) {
 
@@ -3836,7 +3836,7 @@ Calendar.prototype = {
             this.renderCellStyleSelected(dCellDate,cell);
             this.selectEvent.fire([selectDate]);
     
-            this.doCellMouseOut.call(cell, null, this);		
+            this.doCellMouseOut.call(cell, null, this);  
         }
     
         return this.getSelectedDates();
@@ -3853,11 +3853,11 @@ Calendar.prototype = {
     * If all dates are OOB, beforeDeselect and deselect events will not be fired.
     * 
     * @method deselect
-    * @param	{String/Date/Date[]}	date	The date string of dates to deselect in the current calendar. Valid formats are
-    *								individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
-    *								Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
-    *								This method can also take a JavaScript Date object or an array of Date objects.	
-    * @return	{Date[]}			Array of JavaScript Date objects representing all individual dates that are currently selected.
+    * @param {String/Date/Date[]} date The date string of dates to deselect in the current calendar. Valid formats are
+    *        individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
+    *        Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
+    *        This method can also take a JavaScript Date object or an array of Date objects. 
+    * @return {Date[]}   Array of JavaScript Date objects representing all individual dates that are currently selected.
     */
     deselect : function(date) {
 
@@ -3880,7 +3880,7 @@ Calendar.prototype = {
                 validDates.push(toDeselect);
     
                 var index = this._indexOfSelectedFieldArray(toDeselect);
-                if (index != -1) {	
+                if (index != -1) { 
                     selected.splice(index,1);
                 }
             }
@@ -3909,8 +3909,8 @@ Calendar.prototype = {
     * deselect events will not be fired.
     * 
     * @method deselectCell
-    * @param	{Number}	cellIndex	The index of the cell to deselect in the current calendar. 
-    * @return	{Date[]}	Array of JavaScript Date objects representing all individual dates that are currently selected.
+    * @param {Number} cellIndex The index of the cell to deselect in the current calendar. 
+    * @return {Date[]} Array of JavaScript Date objects representing all individual dates that are currently selected.
     */
     deselectCell : function(cellIndex) {
         var cell = this.cells[cellIndex],
@@ -3950,10 +3950,10 @@ Calendar.prototype = {
     /**
     * Deselects all dates on the current calendar.
     * @method deselectAll
-    * @return {Date[]}		Array of JavaScript Date objects representing all individual dates that are currently selected.
-    *						Assuming that this function executes properly, the return value should be an empty array.
-    *						However, the empty array is returned for the sake of being able to check the selection status
-    *						of the calendar.
+    * @return {Date[]}  Array of JavaScript Date objects representing all individual dates that are currently selected.
+    *      Assuming that this function executes properly, the return value should be an empty array.
+    *      However, the empty array is returned for the sake of being able to check the selection status
+    *      of the calendar.
     */
     deselectAll : function() {
         this.beforeDeselectEvent.fire();
@@ -3985,11 +3985,11 @@ Calendar.prototype = {
     * used to represent dates: [[yyyy,mm,dd],[yyyy,mm,dd]].
     * @method _toFieldArray
     * @private
-    * @param	{String/Date/Date[]}	date	The date string of dates to deselect in the current calendar. Valid formats are
-    *								individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
-    *								Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
-    *								This method can also take a JavaScript Date object or an array of Date objects.	
-    * @return {Array[](Number[])}	Array of date field arrays
+    * @param {String/Date/Date[]} date The date string of dates to deselect in the current calendar. Valid formats are
+    *        individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
+    *        Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
+    *        This method can also take a JavaScript Date object or an array of Date objects. 
+    * @return {Array[](Number[])} Array of date field arrays
     */
     _toFieldArray : function(date) {
         var returnDate = [];
@@ -4013,8 +4013,8 @@ Calendar.prototype = {
     * is the format in which dates are as provided as arguments to selectEvent and deselectEvent listeners.
     * 
     * @method toDate
-    * @param	{Number[]}	dateFieldArray	The date field array to convert to a JavaScript Date.
-    * @return	{Date}	JavaScript Date object representing the date field array.
+    * @param {Number[]} dateFieldArray The date field array to convert to a JavaScript Date.
+    * @return {Date} JavaScript Date object representing the date field array.
     */
     toDate : function(dateFieldArray) {
         return this._toDate(dateFieldArray);
@@ -4025,8 +4025,8 @@ Calendar.prototype = {
     * @method _toDate
     * @private
     * @deprecated Made public, toDate 
-    * @param	{Number[]}		dateFieldArray	The date field array to convert to a JavaScript Date.
-    * @return	{Date}	JavaScript Date object representing the date field array
+    * @param {Number[]}  dateFieldArray The date field array to convert to a JavaScript Date.
+    * @return {Date} JavaScript Date object representing the date field array
     */
     _toDate : function(dateFieldArray) {
         if (dateFieldArray instanceof Date) {
@@ -4044,15 +4044,15 @@ Calendar.prototype = {
     * Determines if 2 field arrays are equal.
     * @method _fieldArraysAreEqual
     * @private
-    * @param	{Number[]}	array1	The first date field array to compare
-    * @param	{Number[]}	array2	The first date field array to compare
-    * @return	{Boolean}	The boolean that represents the equality of the two arrays
+    * @param {Number[]} array1 The first date field array to compare
+    * @param {Number[]} array2 The first date field array to compare
+    * @return {Boolean} The boolean that represents the equality of the two arrays
     */
     _fieldArraysAreEqual : function(array1, array2) {
         var match = false;
     
         if (array1[0]==array2[0]&&array1[1]==array2[1]&&array1[2]==array2[2]) {
-            match=true;	
+            match=true; 
         }
     
         return match;
@@ -4060,11 +4060,11 @@ Calendar.prototype = {
     
     /**
     * Gets the index of a date field array [yyyy,mm,dd] in the current list of selected dates.
-    * @method	_indexOfSelectedFieldArray
+    * @method _indexOfSelectedFieldArray
     * @private
-    * @param	{Number[]}		find	The date field array to search for
-    * @return	{Number}			The index of the date field array within the collection of selected dates.
-    *								-1 will be returned if the date is not found.
+    * @param {Number[]}  find The date field array to search for
+    * @return {Number}   The index of the date field array within the collection of selected dates.
+    *        -1 will be returned if the date is not found.
     */
     _indexOfSelectedFieldArray : function(find) {
         var selected = -1,
@@ -4083,9 +4083,9 @@ Calendar.prototype = {
     
     /**
     * Determines whether a given date is OOM (out of month).
-    * @method	isDateOOM
-    * @param	{Date}	date	The JavaScript Date object for which to check the OOM status
-    * @return	{Boolean}	true if the date is OOM
+    * @method isDateOOM
+    * @param {Date} date The JavaScript Date object for which to check the OOM status
+    * @return {Boolean} true if the date is OOM
     */
     isDateOOM : function(date) {
         return (date.getMonth() != this.cfg.getProperty(DEF_CFG.PAGEDATE.key).getMonth());
@@ -4094,9 +4094,9 @@ Calendar.prototype = {
     /**
     * Determines whether a given date is OOB (out of bounds - less than the mindate or more than the maxdate).
     *
-    * @method	isDateOOB
-    * @param	{Date}	date	The JavaScript Date object for which to check the OOB status
-    * @return	{Boolean}	true if the date is OOB
+    * @method isDateOOB
+    * @param {Date} date The JavaScript Date object for which to check the OOB status
+    * @return {Boolean} true if the date is OOB
     */
     isDateOOB : function(date) {
         var minDate = this.cfg.getProperty(DEF_CFG.MINDATE.key),
@@ -4119,10 +4119,10 @@ Calendar.prototype = {
     /**
      * Parses a pagedate configuration property value. The value can either be specified as a string of form "mm/yyyy" or a Date object 
      * and is parsed into a Date object normalized to the first day of the month. If no value is passed in, the month and year from today's date are used to create the Date object 
-     * @method	_parsePageDate
+     * @method _parsePageDate
      * @private
-     * @param {Date|String}	date	Pagedate value which needs to be parsed
-     * @return {Date}	The Date object representing the pagedate
+     * @param {Date|String} date Pagedate value which needs to be parsed
+     * @return {Date} The Date object representing the pagedate
      */
     _parsePageDate : function(date) {
         var parsedDate;
@@ -4166,7 +4166,7 @@ Calendar.prototype = {
     
     /**
     * Event executed when a date is selected in the calendar widget.
-    * @param	{Array}	selected	An array of date field arrays representing which date or dates were selected. Example: [ [2006,8,6],[2006,8,7],[2006,8,8] ]
+    * @param {Array} selected An array of date field arrays representing which date or dates were selected. Example: [ [2006,8,6],[2006,8,7],[2006,8,8] ]
     * @deprecated Event handlers for this event should be susbcribed to selectEvent.
     */
     onSelect : function(selected) { },
@@ -4179,7 +4179,7 @@ Calendar.prototype = {
     
     /**
     * Event executed when a date is deselected in the calendar widget.
-    * @param	{Array}	selected	An array of date field arrays representing which date or dates were deselected. Example: [ [2006,8,6],[2006,8,7],[2006,8,8] ]
+    * @param {Array} selected An array of date field arrays representing which date or dates were deselected. Example: [ [2006,8,6],[2006,8,7],[2006,8,8] ]
     * @deprecated Event handlers for this event should be susbcribed to deselectEvent.
     */
     onDeselect : function(deselected) { },
@@ -4213,7 +4213,7 @@ Calendar.prototype = {
     /**
     * Validates the calendar widget. This method has no default implementation
     * and must be extended by subclassing the widget.
-    * @return	Should return true if the widget validates, and false if
+    * @return Should return true if the widget validates, and false if
     * it doesn't.
     * @type Boolean
     */
@@ -4226,8 +4226,8 @@ Calendar.prototype = {
     /**
     * Converts a date string to a date field array
     * @private
-    * @param	{String}	sDate			Date string. Valid formats are mm/dd and mm/dd/yyyy.
-    * @return				A date field array representing the string passed to the method
+    * @param {String} sDate   Date string. Valid formats are mm/dd and mm/dd/yyyy.
+    * @return    A date field array representing the string passed to the method
     * @type Array[](Number[])
     */
     _parseDate : function(sDate) {
@@ -4252,8 +4252,8 @@ Calendar.prototype = {
     /**
     * Converts a multi or single-date string to an array of date field arrays
     * @private
-    * @param	{String}	sDates		Date string with one or more comma-delimited dates. Valid formats are mm/dd, mm/dd/yyyy, mm/dd/yyyy-mm/dd/yyyy
-    * @return							An array of date field arrays
+    * @param {String} sDates  Date string with one or more comma-delimited dates. Valid formats are mm/dd, mm/dd/yyyy, mm/dd/yyyy-mm/dd/yyyy
+    * @return       An array of date field arrays
     * @type Array[](Number[])
     */
     _parseDates : function(sDates) {
@@ -4283,9 +4283,9 @@ Calendar.prototype = {
     /**
     * Converts a date range to the full list of included dates
     * @private
-    * @param	{Number[]}	startDate	Date field array representing the first date in the range
-    * @param	{Number[]}	endDate		Date field array representing the last date in the range
-    * @return							An array of date field arrays
+    * @param {Number[]} startDate Date field array representing the first date in the range
+    * @param {Number[]} endDate  Date field array representing the last date in the range
+    * @return       An array of date field arrays
     * @type Array[](Number[])
     */
     _parseRange : function(startDate, endDate) {
@@ -4325,7 +4325,7 @@ Calendar.prototype = {
     /**
     * Clears the inner HTML, CSS class and style information from the specified cell.
     * @method clearElement
-    * @param	{HTMLTableCellElement} cell The cell to clear
+    * @param {HTMLTableCellElement} cell The cell to clear
     */ 
     clearElement : function(cell) {
         cell.innerHTML = "&#160;";
@@ -4336,9 +4336,9 @@ Calendar.prototype = {
     * Adds a renderer to the render stack. The function reference passed to this method will be executed
     * when a date cell matches the conditions specified in the date string for this renderer.
     * @method addRenderer
-    * @param	{String}	sDates		A date string to associate with the specified renderer. Valid formats
-    *									include date (12/24/2005), month/day (12/24), and range (12/1/2004-1/1/2005)
-    * @param	{Function}	fnRender	The function executed to render cells that match the render rules for this renderer.
+    * @param {String} sDates  A date string to associate with the specified renderer. Valid formats
+    *         include date (12/24/2005), month/day (12/24), and range (12/1/2004-1/1/2005)
+    * @param {Function} fnRender The function executed to render cells that match the render rules for this renderer.
     */
     addRenderer : function(sDates, fnRender) {
         var aDates = this._parseDates(sDates);
@@ -4362,16 +4362,16 @@ Calendar.prototype = {
     * This method is called by other methods that set the renderer type prior to the method call.
     * @method _addRenderer
     * @private
-    * @param	{String}	type		The type string that indicates the type of date renderer being added.
-    *									Values are YAHOO.widget.Calendar.DATE, YAHOO.widget.Calendar.MONTH_DAY, YAHOO.widget.Calendar.WEEKDAY,
-    *									YAHOO.widget.Calendar.RANGE, YAHOO.widget.Calendar.MONTH
-    * @param	{Array}		aDates		An array of dates used to construct the renderer. The format varies based
-    *									on the renderer type
-    * @param	{Function}	fnRender	The function executed to render cells that match the render rules for this renderer.
+    * @param {String} type  The type string that indicates the type of date renderer being added.
+    *         Values are YAHOO.widget.Calendar.DATE, YAHOO.widget.Calendar.MONTH_DAY, YAHOO.widget.Calendar.WEEKDAY,
+    *         YAHOO.widget.Calendar.RANGE, YAHOO.widget.Calendar.MONTH
+    * @param {Array}  aDates  An array of dates used to construct the renderer. The format varies based
+    *         on the renderer type
+    * @param {Function} fnRender The function executed to render cells that match the render rules for this renderer.
     */
     _addRenderer : function(type, aDates, fnRender) {
         var add = [type,aDates,fnRender];
-        this.renderStack.unshift(add);	
+        this.renderStack.unshift(add); 
         this._renderStack = this.renderStack.concat();
     },
 
@@ -4379,8 +4379,8 @@ Calendar.prototype = {
     * Adds a month to the render stack. The function reference passed to this method will be executed
     * when a date cell matches the month passed to this method.
     * @method addMonthRenderer
-    * @param	{Number}	month		The month (1-12) to associate with this renderer
-    * @param	{Function}	fnRender	The function executed to render cells that match the render rules for this renderer.
+    * @param {Number} month  The month (1-12) to associate with this renderer
+    * @param {Function} fnRender The function executed to render cells that match the render rules for this renderer.
     */
     addMonthRenderer : function(month, fnRender) {
         this._addRenderer(Calendar.MONTH,[month],fnRender);
@@ -4390,8 +4390,8 @@ Calendar.prototype = {
     * Adds a weekday to the render stack. The function reference passed to this method will be executed
     * when a date cell matches the weekday passed to this method.
     * @method addWeekdayRenderer
-    * @param	{Number}	weekday		The weekday (Sunday = 1, Monday = 2 ... Saturday = 7) to associate with this renderer
-    * @param	{Function}	fnRender	The function executed to render cells that match the render rules for this renderer.
+    * @param {Number} weekday  The weekday (Sunday = 1, Monday = 2 ... Saturday = 7) to associate with this renderer
+    * @param {Function} fnRender The function executed to render cells that match the render rules for this renderer.
     */
     addWeekdayRenderer : function(weekday, fnRender) {
         this._addRenderer(Calendar.WEEKDAY,[weekday],fnRender);
@@ -4404,7 +4404,7 @@ Calendar.prototype = {
     /**
     * Removes all styles from all body cells in the current calendar table.
     * @method clearAllBodyCellStyles
-    * @param	{style}	style The CSS class name to remove from all calendar body cells
+    * @param {style} style The CSS class name to remove from all calendar body cells
     */
     clearAllBodyCellStyles : function(style) {
         for (var c=0;c<this.cells.length;++c) {
@@ -4418,7 +4418,7 @@ Calendar.prototype = {
     /**
     * Sets the calendar's month explicitly
     * @method setMonth
-    * @param {Number}	month		The numeric month, from 0 (January) to 11 (December)
+    * @param {Number} month  The numeric month, from 0 (January) to 11 (December)
     */
     setMonth : function(month) {
         var cfgPageDate = DEF_CFG.PAGEDATE.key,
@@ -4430,7 +4430,7 @@ Calendar.prototype = {
     /**
     * Sets the calendar's year explicitly.
     * @method setYear
-    * @param {Number}	year		The numeric 4-digit year
+    * @param {Number} year  The numeric 4-digit year
     */
     setYear : function(year) {
         var cfgPageDate = DEF_CFG.PAGEDATE.key,
@@ -4510,7 +4510,7 @@ Calendar.prototype = {
     /**
     * Returns a string representation of the object.
     * @method toString
-    * @return {String}	A string representation of the Calendar object.
+    * @return {String} A string representation of the Calendar object.
     */
     toString : function() {
         return "Calendar " + this.id;
@@ -4584,12 +4584,12 @@ YAHOO.widget.Cal_Core = YAHOO.widget.Calendar;
 * The calendar group instance will refer to each of its elements using a 0-based index.
 * For example, to construct the placeholder for a calendar group widget with id "cal1" and
 * containerId of "cal1Container", the markup would be as follows:
-*	<xmp>
-*		<div id="cal1Container_0"></div>
-*		<div id="cal1Container_1"></div>
-*	</xmp>
+*   <xmp>
+*       <div id="cal1Container_0"></div>
+*       <div id="cal1Container_1"></div>
+*   </xmp>
 * The tables for the calendars ("cal1_0" and "cal1_1") will be inserted into those containers.
-* 
+*
 * <p>
 * <strong>NOTE: As of 2.4.0, the constructor's ID argument is optional.</strong>
 * The CalendarGroup can be constructed by simply providing a container ID string, 
@@ -4597,14 +4597,14 @@ YAHOO.widget.Cal_Core = YAHOO.widget.Calendar;
 * in the document).
 * 
 * E.g.:
-*	<xmp>
-*		var c = new YAHOO.widget.CalendarGroup("calContainer", configOptions);
-*	</xmp>
+*   <xmp>
+*       var c = new YAHOO.widget.CalendarGroup("calContainer", configOptions);
+*   </xmp>
 * or:
 *   <xmp>
 *       var containerDiv = YAHOO.util.Dom.get("calContainer");
-*		var c = new YAHOO.widget.CalendarGroup(containerDiv, configOptions);
-*	</xmp>
+*       var c = new YAHOO.widget.CalendarGroup(containerDiv, configOptions);
+*   </xmp>
 * </p>
 * <p>
 * If not provided, the ID will be generated from the container DIV ID by adding an "_t" suffix.
@@ -4846,30 +4846,30 @@ CalendarGroup.prototype = {
         * @type Boolean
         * @default false
         */
-        cfg.addProperty(DEF_CFG.MULTI_SELECT.key,	{ value:DEF_CFG.MULTI_SELECT.value, handler:this.delegateConfig, validator:cfg.checkBoolean } );
+        cfg.addProperty(DEF_CFG.MULTI_SELECT.key, { value:DEF_CFG.MULTI_SELECT.value, handler:this.delegateConfig, validator:cfg.checkBoolean } );
 
         /**
         * The weekday the week begins on. Default is 0 (Sunday).
         * @config START_WEEKDAY
         * @type number
         * @default 0
-        */	
-        cfg.addProperty(DEF_CFG.START_WEEKDAY.key,	{ value:DEF_CFG.START_WEEKDAY.value, handler:this.delegateConfig, validator:cfg.checkNumber  } );
+        */ 
+        cfg.addProperty(DEF_CFG.START_WEEKDAY.key, { value:DEF_CFG.START_WEEKDAY.value, handler:this.delegateConfig, validator:cfg.checkNumber  } );
         
         /**
         * True if the Calendar should show weekday labels. True by default.
         * @config SHOW_WEEKDAYS
         * @type Boolean
         * @default true
-        */	
-        cfg.addProperty(DEF_CFG.SHOW_WEEKDAYS.key,	{ value:DEF_CFG.SHOW_WEEKDAYS.value, handler:this.delegateConfig, validator:cfg.checkBoolean } );
+        */ 
+        cfg.addProperty(DEF_CFG.SHOW_WEEKDAYS.key, { value:DEF_CFG.SHOW_WEEKDAYS.value, handler:this.delegateConfig, validator:cfg.checkBoolean } );
         
         /**
         * True if the Calendar should show week row headers. False by default.
         * @config SHOW_WEEK_HEADER
         * @type Boolean
         * @default false
-        */	
+        */ 
         cfg.addProperty(DEF_CFG.SHOW_WEEK_HEADER.key,{ value:DEF_CFG.SHOW_WEEK_HEADER.value, handler:this.delegateConfig, validator:cfg.checkBoolean } );
         
         /**
@@ -4885,26 +4885,26 @@ CalendarGroup.prototype = {
         * @config HIDE_BLANK_WEEKS
         * @type Boolean
         * @default false
-        */		
+        */  
         cfg.addProperty(DEF_CFG.HIDE_BLANK_WEEKS.key,{ value:DEF_CFG.HIDE_BLANK_WEEKS.value, handler:this.delegateConfig, validator:cfg.checkBoolean } );
         
         /**
         * The image that should be used for the left navigation arrow.
         * @config NAV_ARROW_LEFT
         * @type String
-        * @deprecated	You can customize the image by overriding the default CSS class for the left arrow - "calnavleft"
+        * @deprecated You can customize the image by overriding the default CSS class for the left arrow - "calnavleft"
         * @default null
-        */		
-        cfg.addProperty(DEF_CFG.NAV_ARROW_LEFT.key,	{ value:DEF_CFG.NAV_ARROW_LEFT.value, handler:this.delegateConfig } );
+        */  
+        cfg.addProperty(DEF_CFG.NAV_ARROW_LEFT.key, { value:DEF_CFG.NAV_ARROW_LEFT.value, handler:this.delegateConfig } );
         
         /**
         * The image that should be used for the right navigation arrow.
         * @config NAV_ARROW_RIGHT
         * @type String
-        * @deprecated	You can customize the image by overriding the default CSS class for the right arrow - "calnavright"
+        * @deprecated You can customize the image by overriding the default CSS class for the right arrow - "calnavright"
         * @default null
-        */		
-        cfg.addProperty(DEF_CFG.NAV_ARROW_RIGHT.key,	{ value:DEF_CFG.NAV_ARROW_RIGHT.value, handler:this.delegateConfig } );
+        */  
+        cfg.addProperty(DEF_CFG.NAV_ARROW_RIGHT.key, { value:DEF_CFG.NAV_ARROW_RIGHT.value, handler:this.delegateConfig } );
     
         // Locale properties
         
@@ -4914,47 +4914,47 @@ CalendarGroup.prototype = {
         * @type String[]
         * @default ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         */
-        cfg.addProperty(DEF_CFG.MONTHS_SHORT.key,	{ value:DEF_CFG.MONTHS_SHORT.value, handler:this.delegateConfig } );
+        cfg.addProperty(DEF_CFG.MONTHS_SHORT.key, { value:DEF_CFG.MONTHS_SHORT.value, handler:this.delegateConfig } );
         
         /**
         * The long month labels for the current locale.
         * @config MONTHS_LONG
         * @type String[]
         * @default ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-        */		
-        cfg.addProperty(DEF_CFG.MONTHS_LONG.key,		{ value:DEF_CFG.MONTHS_LONG.value, handler:this.delegateConfig } );
+        */  
+        cfg.addProperty(DEF_CFG.MONTHS_LONG.key,  { value:DEF_CFG.MONTHS_LONG.value, handler:this.delegateConfig } );
         
         /**
         * The 1-character weekday labels for the current locale.
         * @config WEEKDAYS_1CHAR
         * @type String[]
         * @default ["S", "M", "T", "W", "T", "F", "S"]
-        */		
-        cfg.addProperty(DEF_CFG.WEEKDAYS_1CHAR.key,	{ value:DEF_CFG.WEEKDAYS_1CHAR.value, handler:this.delegateConfig } );
+        */  
+        cfg.addProperty(DEF_CFG.WEEKDAYS_1CHAR.key, { value:DEF_CFG.WEEKDAYS_1CHAR.value, handler:this.delegateConfig } );
         
         /**
         * The short weekday labels for the current locale.
         * @config WEEKDAYS_SHORT
         * @type String[]
         * @default ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
-        */		
-        cfg.addProperty(DEF_CFG.WEEKDAYS_SHORT.key,	{ value:DEF_CFG.WEEKDAYS_SHORT.value, handler:this.delegateConfig } );
+        */  
+        cfg.addProperty(DEF_CFG.WEEKDAYS_SHORT.key, { value:DEF_CFG.WEEKDAYS_SHORT.value, handler:this.delegateConfig } );
         
         /**
         * The medium weekday labels for the current locale.
         * @config WEEKDAYS_MEDIUM
         * @type String[]
         * @default ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-        */		
-        cfg.addProperty(DEF_CFG.WEEKDAYS_MEDIUM.key,	{ value:DEF_CFG.WEEKDAYS_MEDIUM.value, handler:this.delegateConfig } );
+        */  
+        cfg.addProperty(DEF_CFG.WEEKDAYS_MEDIUM.key, { value:DEF_CFG.WEEKDAYS_MEDIUM.value, handler:this.delegateConfig } );
         
         /**
         * The long weekday labels for the current locale.
         * @config WEEKDAYS_LONG
         * @type String[]
         * @default ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-        */		
-        cfg.addProperty(DEF_CFG.WEEKDAYS_LONG.key,	{ value:DEF_CFG.WEEKDAYS_LONG.value, handler:this.delegateConfig } );
+        */  
+        cfg.addProperty(DEF_CFG.WEEKDAYS_LONG.key, { value:DEF_CFG.WEEKDAYS_LONG.value, handler:this.delegateConfig } );
     
         /**
         * The setting that determines which length of month labels should be used. Possible values are "short" and "long".
@@ -4962,15 +4962,15 @@ CalendarGroup.prototype = {
         * @type String
         * @default "long"
         */
-        cfg.addProperty(DEF_CFG.LOCALE_MONTHS.key,	{ value:DEF_CFG.LOCALE_MONTHS.value, handler:this.delegateConfig } );
+        cfg.addProperty(DEF_CFG.LOCALE_MONTHS.key, { value:DEF_CFG.LOCALE_MONTHS.value, handler:this.delegateConfig } );
     
         /**
         * The setting that determines which length of weekday labels should be used. Possible values are "1char", "short", "medium", and "long".
         * @config LOCALE_WEEKDAYS
         * @type String
         * @default "short"
-        */	
-        cfg.addProperty(DEF_CFG.LOCALE_WEEKDAYS.key,	{ value:DEF_CFG.LOCALE_WEEKDAYS.value, handler:this.delegateConfig } );
+        */ 
+        cfg.addProperty(DEF_CFG.LOCALE_WEEKDAYS.key, { value:DEF_CFG.LOCALE_WEEKDAYS.value, handler:this.delegateConfig } );
     
         /**
         * The value used to delimit individual dates in a date string passed to various Calendar functions.
@@ -4978,14 +4978,14 @@ CalendarGroup.prototype = {
         * @type String
         * @default ","
         */
-        cfg.addProperty(DEF_CFG.DATE_DELIMITER.key,		{ value:DEF_CFG.DATE_DELIMITER.value, handler:this.delegateConfig } );
+        cfg.addProperty(DEF_CFG.DATE_DELIMITER.key,  { value:DEF_CFG.DATE_DELIMITER.value, handler:this.delegateConfig } );
     
         /**
         * The value used to delimit date fields in a date string passed to various Calendar functions.
         * @config DATE_FIELD_DELIMITER
         * @type String
         * @default "/"
-        */	
+        */ 
         cfg.addProperty(DEF_CFG.DATE_FIELD_DELIMITER.key,{ value:DEF_CFG.DATE_FIELD_DELIMITER.value, handler:this.delegateConfig } );
     
         /**
@@ -5002,55 +5002,55 @@ CalendarGroup.prototype = {
         * @type Number
         * @default 1
         */
-        cfg.addProperty(DEF_CFG.MY_MONTH_POSITION.key,	{ value:DEF_CFG.MY_MONTH_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
+        cfg.addProperty(DEF_CFG.MY_MONTH_POSITION.key, { value:DEF_CFG.MY_MONTH_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
         
         /**
         * The position of the year in a month/year date string
         * @config MY_YEAR_POSITION
         * @type Number
         * @default 2
-        */	
-        cfg.addProperty(DEF_CFG.MY_YEAR_POSITION.key,	{ value:DEF_CFG.MY_YEAR_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
+        */ 
+        cfg.addProperty(DEF_CFG.MY_YEAR_POSITION.key, { value:DEF_CFG.MY_YEAR_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
         
         /**
         * The position of the month in a month/day date string
         * @config MD_MONTH_POSITION
         * @type Number
         * @default 1
-        */	
-        cfg.addProperty(DEF_CFG.MD_MONTH_POSITION.key,	{ value:DEF_CFG.MD_MONTH_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
+        */ 
+        cfg.addProperty(DEF_CFG.MD_MONTH_POSITION.key, { value:DEF_CFG.MD_MONTH_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
         
         /**
         * The position of the day in a month/year date string
         * @config MD_DAY_POSITION
         * @type Number
         * @default 2
-        */	
-        cfg.addProperty(DEF_CFG.MD_DAY_POSITION.key,		{ value:DEF_CFG.MD_DAY_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
+        */ 
+        cfg.addProperty(DEF_CFG.MD_DAY_POSITION.key,  { value:DEF_CFG.MD_DAY_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
         
         /**
         * The position of the month in a month/day/year date string
         * @config MDY_MONTH_POSITION
         * @type Number
         * @default 1
-        */	
-        cfg.addProperty(DEF_CFG.MDY_MONTH_POSITION.key,	{ value:DEF_CFG.MDY_MONTH_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
+        */ 
+        cfg.addProperty(DEF_CFG.MDY_MONTH_POSITION.key, { value:DEF_CFG.MDY_MONTH_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
         
         /**
         * The position of the day in a month/day/year date string
         * @config MDY_DAY_POSITION
         * @type Number
         * @default 2
-        */	
-        cfg.addProperty(DEF_CFG.MDY_DAY_POSITION.key,	{ value:DEF_CFG.MDY_DAY_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
+        */ 
+        cfg.addProperty(DEF_CFG.MDY_DAY_POSITION.key, { value:DEF_CFG.MDY_DAY_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
         
         /**
         * The position of the year in a month/day/year date string
         * @config MDY_YEAR_POSITION
         * @type Number
         * @default 3
-        */	
-        cfg.addProperty(DEF_CFG.MDY_YEAR_POSITION.key,	{ value:DEF_CFG.MDY_YEAR_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
+        */ 
+        cfg.addProperty(DEF_CFG.MDY_YEAR_POSITION.key, { value:DEF_CFG.MDY_YEAR_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
     
         /**
         * The position of the month in the month year label string used as the Calendar header
@@ -5058,7 +5058,7 @@ CalendarGroup.prototype = {
         * @type Number
         * @default 1
         */
-        cfg.addProperty(DEF_CFG.MY_LABEL_MONTH_POSITION.key,	{ value:DEF_CFG.MY_LABEL_MONTH_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
+        cfg.addProperty(DEF_CFG.MY_LABEL_MONTH_POSITION.key, { value:DEF_CFG.MY_LABEL_MONTH_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
     
         /**
         * The position of the year in the month year label string used as the Calendar header
@@ -5066,7 +5066,7 @@ CalendarGroup.prototype = {
         * @type Number
         * @default 2
         */
-        cfg.addProperty(DEF_CFG.MY_LABEL_YEAR_POSITION.key,	{ value:DEF_CFG.MY_LABEL_YEAR_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
+        cfg.addProperty(DEF_CFG.MY_LABEL_YEAR_POSITION.key, { value:DEF_CFG.MY_LABEL_YEAR_POSITION.value, handler:this.delegateConfig, validator:cfg.checkNumber } );
 
         /**
         * The suffix used after the month when rendering the Calendar header
@@ -5074,7 +5074,7 @@ CalendarGroup.prototype = {
         * @type String
         * @default " "
         */
-        cfg.addProperty(DEF_CFG.MY_LABEL_MONTH_SUFFIX.key,	{ value:DEF_CFG.MY_LABEL_MONTH_SUFFIX.value, handler:this.delegateConfig } );
+        cfg.addProperty(DEF_CFG.MY_LABEL_MONTH_SUFFIX.key, { value:DEF_CFG.MY_LABEL_MONTH_SUFFIX.value, handler:this.delegateConfig } );
         
         /**
         * The suffix used after the year when rendering the Calendar header
@@ -5128,9 +5128,9 @@ CalendarGroup.prototype = {
         * Proxy subscriber to subscribe to the CalendarGroup's child Calendars' CustomEvents
         * @method sub
         * @private
-        * @param {Function} fn	The function to subscribe to this CustomEvent
-        * @param {Object}	obj	The CustomEvent's scope object
-        * @param {Boolean}	bOverride	Whether or not to apply scope correction
+        * @param {Function} fn The function to subscribe to this CustomEvent
+        * @param {Object} obj The CustomEvent's scope object
+        * @param {Boolean} bOverride Whether or not to apply scope correction
         */
         var sub = function(fn, obj, bOverride) {
             for (var p=0;p<me.pages.length;++p) {
@@ -5143,8 +5143,8 @@ CalendarGroup.prototype = {
         * Proxy unsubscriber to unsubscribe from the CalendarGroup's child Calendars' CustomEvents
         * @method unsub
         * @private
-        * @param {Function} fn	The function to subscribe to this CustomEvent
-        * @param {Object}	obj	The CustomEvent's scope object
+        * @param {Function} fn The function to subscribe to this CustomEvent
+        * @param {Object} obj The CustomEvent's scope object
         */
         var unsub = function(fn, obj) {
             for (var p=0;p<me.pages.length;++p) {
@@ -5165,7 +5165,7 @@ CalendarGroup.prototype = {
         /**
         * Fired when a date selection is made
         * @event selectEvent
-        * @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].
+        * @param {Array} Array of Date field arrays in the format [YYYY, MM, DD].
         */
         me.selectEvent = new CE(defEvents.SELECT); 
         me.selectEvent.subscribe = sub; me.selectEvent.unsubscribe = unsub;
@@ -5180,7 +5180,7 @@ CalendarGroup.prototype = {
         /**
         * Fired when a date or set of dates has been deselected
         * @event deselectEvent
-        * @param {Array}	Array of Date field arrays in the format [YYYY, MM, DD].
+        * @param {Array} Array of Date field arrays in the format [YYYY, MM, DD].
         */
         me.deselectEvent = new CE(defEvents.DESELECT); 
         me.deselectEvent.subscribe = sub; me.deselectEvent.unsubscribe = unsub;
@@ -5301,9 +5301,9 @@ CalendarGroup.prototype = {
     /**
     * The default Config handler for the "pages" property
     * @method configPages
-    * @param {String} type	The CustomEvent type (usually the property name)
-    * @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
-    * @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+    * @param {String} type The CustomEvent type (usually the property name)
+    * @param {Object[]} args The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+    * @param {Object} obj The scope object. For configuration handlers, this will usually equal the owner.
     */
     configPages : function(type, args, obj) {
         var pageCount = args[0],
@@ -5354,9 +5354,9 @@ CalendarGroup.prototype = {
     /**
     * The default Config handler for the "pagedate" property
     * @method configPageDate
-    * @param {String} type	The CustomEvent type (usually the property name)
-    * @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
-    * @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+    * @param {String} type The CustomEvent type (usually the property name)
+    * @param {Object[]} args The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+    * @param {Object} obj The scope object. For configuration handlers, this will usually equal the owner.
     */
     configPageDate : function(type, args, obj) {
         var val = args[0],
@@ -5380,9 +5380,9 @@ CalendarGroup.prototype = {
     /**
     * The default Config handler for the CalendarGroup "selected" property
     * @method configSelected
-    * @param {String} type	The CustomEvent type (usually the property name)
-    * @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
-    * @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+    * @param {String} type The CustomEvent type (usually the property name)
+    * @param {Object[]} args The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+    * @param {Object} obj The scope object. For configuration handlers, this will usually equal the owner.
     */
     configSelected : function(type, args, obj) {
         var cfgSelected = DEF_CFG.SELECTED.key;
@@ -5395,9 +5395,9 @@ CalendarGroup.prototype = {
     /**
     * Delegates a configuration property to the CustomEvents associated with the CalendarGroup's children
     * @method delegateConfig
-    * @param {String} type	The CustomEvent type (usually the property name)
-    * @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
-    * @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+    * @param {String} type The CustomEvent type (usually the property name)
+    * @param {Object[]} args The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+    * @param {Object} obj The scope object. For configuration handlers, this will usually equal the owner.
     */
     delegateConfig : function(type, args, obj) {
         var val = args[0];
@@ -5412,8 +5412,8 @@ CalendarGroup.prototype = {
     /**
     * Adds a function to all child Calendars within this CalendarGroup.
     * @method setChildFunction
-    * @param {String}		fnName		The name of the function
-    * @param {Function}		fn			The function to apply to each Calendar page object
+    * @param {String}  fnName  The name of the function
+    * @param {Function}  fn   The function to apply to each Calendar page object
     */
     setChildFunction : function(fnName, fn) {
         var pageCount = this.cfg.getProperty(DEF_CFG.PAGES.key);
@@ -5426,8 +5426,8 @@ CalendarGroup.prototype = {
     /**
     * Calls a function within all child Calendars within this CalendarGroup.
     * @method callChildFunction
-    * @param {String}		fnName		The name of the function
-    * @param {Array}		args		The arguments to pass to the function
+    * @param {String}  fnName  The name of the function
+    * @param {Array}  args  The arguments to pass to the function
     */
     callChildFunction : function(fnName, args) {
         var pageCount = this.cfg.getProperty(DEF_CFG.PAGES.key);
@@ -5438,17 +5438,17 @@ CalendarGroup.prototype = {
                 var fn = page[fnName];
                 fn.call(page, args);
             }
-        }	
+        } 
     },
 
     /**
     * Constructs a child calendar. This method can be overridden if a subclassed version of the default
     * calendar is to be used.
     * @method constructChild
-    * @param {String}	id			The id of the table element that will represent the calendar widget
-    * @param {String}	containerId	The id of the container div element that will wrap the calendar table
-    * @param {Object}	config		The configuration object containing the Calendar's arguments
-    * @return {YAHOO.widget.Calendar}	The YAHOO.widget.Calendar instance that is constructed
+    * @param {String} id   The id of the table element that will represent the calendar widget
+    * @param {String} containerId The id of the container div element that will wrap the calendar table
+    * @param {Object} config  The configuration object containing the Calendar's arguments
+    * @return {YAHOO.widget.Calendar} The YAHOO.widget.Calendar instance that is constructed
     */
     constructChild : function(id,containerId,config) {
         var container = document.getElementById(containerId);
@@ -5464,7 +5464,7 @@ CalendarGroup.prototype = {
     * Sets the calendar group's month explicitly. This month will be set into the first
     * page of the multi-page calendar, and all other months will be iterated appropriately.
     * @method setMonth
-    * @param {Number}	month		The numeric month, from 0 (January) to 11 (December)
+    * @param {Number} month  The numeric month, from 0 (January) to 11 (December)
     */
     setMonth : function(month) {
         month = parseInt(month, 10);
@@ -5489,7 +5489,7 @@ CalendarGroup.prototype = {
     * Sets the calendar group's year explicitly. This year will be set into the first
     * page of the multi-page calendar, and all other months will be iterated appropriately.
     * @method setYear
-    * @param {Number}	year		The numeric 4-digit year
+    * @param {Number} year  The numeric 4-digit year
     */
     setYear : function(year) {
     
@@ -5525,11 +5525,11 @@ CalendarGroup.prototype = {
     * does not call the render method explicitly. Once selection has completed, render must be 
     * called for the changes to be reflected visually.
     * @method select
-    * @param	{String/Date/Date[]}	date	The date string of dates to select in the current calendar. Valid formats are
-    *								individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
-    *								Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
-    *								This method can also take a JavaScript Date object or an array of Date objects.
-    * @return	{Date[]}			Array of JavaScript Date objects representing all individual dates that are currently selected.
+    * @param    {String/Date/Date[]}    date    The date string of dates to select in the current calendar. Valid formats are
+    *                               individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
+    *                               Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
+    *                               This method can also take a JavaScript Date object or an array of Date objects.
+    * @return {Date[]} Array of JavaScript Date objects representing all individual dates that are currently selected.
     */
     select : function(date) {
         for (var p=0;p<this.pages.length;++p) {
@@ -5547,8 +5547,8 @@ CalendarGroup.prototype = {
     *    <li>If MULTI_SELECT is true, selectCell will select the cell at the specified index, on each displayed Calendar page.</li>
     * </ul>
     * @method selectCell
-    * @param	{Number}	cellIndex	The index of the cell to be selected. 
-    * @return	{Date[]}	Array of JavaScript Date objects representing all individual dates that are currently selected.
+    * @param {Number} cellIndex The index of the cell to be selected. 
+    * @return {Date[]} Array of JavaScript Date objects representing all individual dates that are currently selected.
     */
     selectCell : function(cellIndex) {
         for (var p=0;p<this.pages.length;++p) {
@@ -5563,11 +5563,11 @@ CalendarGroup.prototype = {
     * does not call the render method explicitly. Once deselection has completed, render must be 
     * called for the changes to be reflected visually.
     * @method deselect
-    * @param	{String/Date/Date[]}	date	The date string of dates to deselect in the current calendar. Valid formats are
-    *								individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
-    *								Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
-    *								This method can also take a JavaScript Date object or an array of Date objects.	
-    * @return	{Date[]}			Array of JavaScript Date objects representing all individual dates that are currently selected.
+    * @param {String/Date/Date[]} date The date string of dates to deselect in the current calendar. Valid formats are
+    *        individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
+    *        Multiple comma-delimited dates can also be passed to this method (12/24/2005,12/11/2005-12/13/2005).
+    *        This method can also take a JavaScript Date object or an array of Date objects. 
+    * @return {Date[]}   Array of JavaScript Date objects representing all individual dates that are currently selected.
     */
     deselect : function(date) {
         for (var p=0;p<this.pages.length;++p) {
@@ -5580,10 +5580,10 @@ CalendarGroup.prototype = {
     /**
     * Deselects all dates on the current calendar.
     * @method deselectAll
-    * @return {Date[]}		Array of JavaScript Date objects representing all individual dates that are currently selected.
-    *						Assuming that this function executes properly, the return value should be an empty array.
-    *						However, the empty array is returned for the sake of being able to check the selection status
-    *						of the calendar.
+    * @return {Date[]}  Array of JavaScript Date objects representing all individual dates that are currently selected.
+    *      Assuming that this function executes properly, the return value should be an empty array.
+    *      However, the empty array is returned for the sake of being able to check the selection status
+    *      of the calendar.
     */
     deselectAll : function() {
         for (var p=0;p<this.pages.length;++p) {
@@ -5598,8 +5598,8 @@ CalendarGroup.prototype = {
     * deselectCell will deselect the cell at the specified index on each displayed Calendar page.
     *
     * @method deselectCell
-    * @param	{Number}	cellIndex	The index of the cell to deselect. 
-    * @return	{Date[]}	Array of JavaScript Date objects representing all individual dates that are currently selected.
+    * @param {Number} cellIndex The index of the cell to deselect. 
+    * @return {Date[]} Array of JavaScript Date objects representing all individual dates that are currently selected.
     */
     deselectCell : function(cellIndex) {
         for (var p=0;p<this.pages.length;++p) {
@@ -5683,7 +5683,7 @@ CalendarGroup.prototype = {
 
     /**
     * Gets the list of currently selected dates from the calendar.
-    * @return			An array of currently selected JavaScript Date objects.
+    * @return   An array of currently selected JavaScript Date objects.
     * @type Date[]
     */
     getSelectedDates : function() { 
@@ -5704,9 +5704,9 @@ CalendarGroup.prototype = {
     * Adds a renderer to the render stack. The function reference passed to this method will be executed
     * when a date cell matches the conditions specified in the date string for this renderer.
     * @method addRenderer
-    * @param	{String}	sDates		A date string to associate with the specified renderer. Valid formats
-    *									include date (12/24/2005), month/day (12/24), and range (12/1/2004-1/1/2005)
-    * @param	{Function}	fnRender	The function executed to render cells that match the render rules for this renderer.
+    * @param {String} sDates  A date string to associate with the specified renderer. Valid formats
+    *         include date (12/24/2005), month/day (12/24), and range (12/1/2004-1/1/2005)
+    * @param {Function} fnRender The function executed to render cells that match the render rules for this renderer.
     */
     addRenderer : function(sDates, fnRender) {
         for (var p=0;p<this.pages.length;++p) {
@@ -5719,8 +5719,8 @@ CalendarGroup.prototype = {
     * Adds a month to the render stack. The function reference passed to this method will be executed
     * when a date cell matches the month passed to this method.
     * @method addMonthRenderer
-    * @param	{Number}	month		The month (1-12) to associate with this renderer
-    * @param	{Function}	fnRender	The function executed to render cells that match the render rules for this renderer.
+    * @param {Number} month  The month (1-12) to associate with this renderer
+    * @param {Function} fnRender The function executed to render cells that match the render rules for this renderer.
     */
     addMonthRenderer : function(month, fnRender) {
         for (var p=0;p<this.pages.length;++p) {
@@ -5733,8 +5733,8 @@ CalendarGroup.prototype = {
     * Adds a weekday to the render stack. The function reference passed to this method will be executed
     * when a date cell matches the weekday passed to this method.
     * @method addWeekdayRenderer
-    * @param	{Number}	weekday		The weekday (1-7) to associate with this renderer. 1=Sunday, 2=Monday etc.
-    * @param	{Function}	fnRender	The function executed to render cells that match the render rules for this renderer.
+    * @param {Number} weekday  The weekday (1-7) to associate with this renderer. 1=Sunday, 2=Monday etc.
+    * @param {Function} fnRender The function executed to render cells that match the render rules for this renderer.
     */
     addWeekdayRenderer : function(weekday, fnRender) {
         for (var p=0;p<this.pages.length;++p) {
@@ -5775,7 +5775,7 @@ CalendarGroup.prototype = {
     * Adds the designated number of months to the current calendar month, and sets the current
     * calendar page date to the new month.
     * @method addMonths
-    * @param {Number}	count	The number of months to add to the current calendar
+    * @param {Number} count The number of months to add to the current calendar
     */
     addMonths : function(count) {
         this.callChildFunction("addMonths", count);
@@ -5785,7 +5785,7 @@ CalendarGroup.prototype = {
     * Subtracts the designated number of months from the current calendar month, and sets the current
     * calendar page date to the new month.
     * @method subtractMonths
-    * @param {Number}	count	The number of months to subtract from the current calendar
+    * @param {Number} count The number of months to subtract from the current calendar
     */
     subtractMonths : function(count) {
         this.callChildFunction("subtractMonths", count);
@@ -5795,7 +5795,7 @@ CalendarGroup.prototype = {
     * Adds the designated number of years to the current calendar, and sets the current
     * calendar page date to the new month.
     * @method addYears
-    * @param {Number}	count	The number of years to add to the current calendar
+    * @param {Number} count The number of years to add to the current calendar
     */
     addYears : function(count) {
         this.callChildFunction("addYears", count);
@@ -5805,7 +5805,7 @@ CalendarGroup.prototype = {
     * Subtcats the designated number of years from the current calendar, and sets the current
     * calendar page date to the new month.
     * @method subtractYears
-    * @param {Number}	count	The number of years to subtract from the current calendar
+    * @param {Number} count The number of years to subtract from the current calendar
     */
     subtractYears : function(count) {
         this.callChildFunction("subtractYears", count);
@@ -5841,10 +5841,10 @@ CalendarGroup.prototype = {
     /**
     * Sets the month on a Date object, taking into account year rollover if the month is less than 0 or greater than 11.
     * The Date object passed in is modified. It should be cloned before passing it into this method if the original value needs to be maintained
-    * @method	_setMonthOnDate
+    * @method _setMonthOnDate
     * @private
-    * @param	{Date}	date	The Date object on which to set the month index
-    * @param	{Number}	iMonth	The month index to set
+    * @param {Date} date The Date object on which to set the month index
+    * @param {Number} iMonth The month index to set
     */
     _setMonthOnDate : function(date, iMonth) {
         // Bug in Safari 1.3, 2.0 (WebKit build < 420), Date.setMonth does not work consistently if iMonth is not 0-11
@@ -5875,7 +5875,7 @@ CalendarGroup.prototype = {
     /**
     * Returns a string representation of the object.
     * @method toString
-    * @return {String}	A string representation of the CalendarGroup object.
+    * @return {String} A string representation of the CalendarGroup object.
     */
     toString : function() {
         return "CalendarGroup " + this.id;
@@ -5959,8 +5959,8 @@ CalendarGroup.CSS_2UPTITLE = "title";
 * @property YAHOO.widget.CalendarGroup.CSS_2UPCLOSE
 * @static
 * @final
-* @deprecated	Along with Calendar.IMG_ROOT and NAV_ARROW_LEFT, NAV_ARROW_RIGHT configuration properties.
-*					Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE</a> property now represents the CSS class used to render the close icon
+* @deprecated Along with Calendar.IMG_ROOT and NAV_ARROW_LEFT, NAV_ARROW_RIGHT configuration properties.
+*     Calendar's <a href="YAHOO.widget.Calendar.html#Style.CSS_CLOSE">Style.CSS_CLOSE</a> property now represents the CSS class used to render the close icon
 * @type String
 */
 CalendarGroup.CSS_2UPCLOSE = "close-icon";
