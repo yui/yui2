@@ -33,9 +33,9 @@
 	YAHOO.lang.augmentObject( 
 		YAHOO.widget.DataTable.prototype , 
 		{
-			getRowState : function( row, key ){
+			_getRecordState : function( record_id, key ){
 
-				var row_data = this.getRecord( row ),
+				var row_data = this.getRecord( record_id ),
 					row_state = row_data.getData( STRING_STATENAME );
 
 				var state_data = ( row_state && key ) ? row_state[ key ] : row_state;
@@ -44,9 +44,9 @@
 
 			},
 
-			setRowState : function( row, key, value ){
+			_setRecordState : function( record_id, key, value ){
 
-				var row_data = this.getRecord( row ).getData(),
+				var row_data = this.getRecord( record_id ).getData(),
 					merged_data = {};
 					
 
@@ -60,7 +60,7 @@
 				
 				merged_data[ key ] = value;
 				
-				this.getRecord( row ).setData( STRING_STATENAME, merged_data );
+				this.getRecord( record_id ).setData( STRING_STATENAME, merged_data );
 				
 				return row_data[ key ];
 
@@ -74,15 +74,7 @@
 				for( var i=0, l=records.length; l > i; i++ ){
 
 					var record = records[ i ]
-						state_object = record.getData( STRING_STATENAME );
-
-					//Create row object if needed
-					if( !state_object ){
-
-						record.setData( STRING_STATENAME, {} );
-						var state_object = record.getData( STRING_STATENAME );
-
-					}
+						state_object = record.getData( STRING_STATENAME ) || {};
 
 					//Set row state
 					record.setData( STRING_STATENAME, {
@@ -106,48 +98,42 @@
 
 			},
 
-			toggleRowExpansion : function( row ){
+			toggleRowExpansion : function( record_id ){
 
-				var state = this.getRowState( row );
+				var state = this._getRecordState( record_id );
 
 				if( state && state.expanded ){
 
-					this.collapseRow( row );
+					this.collapseRow( record_id );
 
 				} else {
 					
-					this.expandRow( row );
+					this.expandRow( record_id );
 
 				}
 
 			},
 
-			expandRow : function( row, restore ){
+			expandRow : function( record_id, restore ){
 
-				var state = this.getRowState( row );
+				var state = this._getRecordState( record_id );
 
 				if( !state.expanded || restore ){
-					
-					//If id passed, get element
-					if( !YAHOO.lang.isObject( row ) ) {
-
-						row = Dom.get(row);
-
-					}
 
 					//Fire custom event
 					this.fireEvent( "rowExpandEvent", { row : row } );
 
-					var row_data = this.getRecord( row ),
+					var row_data = this.getRecord( record_id ),
+						row = this.getRow( row_data ),
 						new_row = document.createElement('tr'),
-						column_length = this.getFirstTrEl().getElementsByTagName('td').length,
+						column_length = this.getFirstTrEl().getElementsByTagName( 'td' ).length,
 						expanded_data = row_data.getData( state.expandable_datakey ),
 						expanded_content = null,
 						template = this.rowExpansionTemplate;
 
 					//Construct expanded row body
 					new_row.className = CLASS_EXPANDABLEROW;
-					var new_column = document.createElement('td');
+					var new_column = document.createElement( 'td' );
 					new_column.className = CLASS_CELL;
 					new_column.colSpan = column_length;
 
@@ -184,7 +170,7 @@
 					
 					if (newRow.innerHTML.length) {
 						
-						this.setRowState( row, 'expanded', true );
+						this._setRecordState( record_id, 'expanded', true );
 						
 						if( !restore ){
 
@@ -207,19 +193,14 @@
 
 			},
 
-			collapseRow : function( row ){
+			collapseRow : function( record_id ){
+				
+				var row = Dom.get( this.getRecord( record_id ).getId() )
 				
 				if( Dom.hasClass( row, CLASS_EXPANDED ) ){
 
 					//Fire custom event
 					this.fireEvent("rowCollapseEvent", { row : row } );
-
-					//If id passed, get element
-					if ( !YAHOO.lang.isObject( row ) ) {
-
-						row = Dom.get( row );
-
-					}
 					
 					var row_data = this.getRecord( row ),
 						state = row_data.getData( STRING_STATENAME ),
@@ -230,7 +211,7 @@
 
 						next_sibling.parentNode.removeChild( next_sibling );
 						this.a_rowExpansions.splice( hash_index, 1 );
-						this.setRowState( row, 'expanded', false );
+						this._setRecordState( record_id, 'expanded', false );
 						
 						Dom.addClass( row, CLASS_COLLAPSED );
 						Dom.removeClass( row, CLASS_EXPANDED );
@@ -288,7 +269,7 @@
 
 					for( var i = 0, l = expanded_rows.length; l > i; i++ ){
 
-						this.expandRow( this.getRow( expanded_rows[ i ] ), true );
+						this.expandRow( expanded_rows[ i ] , true );
 
 					}
 
@@ -315,19 +296,6 @@
 			Dom.addClass( cell_element, CLASS_NODATA );
 			
 		}
-
-		/*
-		if( !this_static.hasCollapseEvent ){
-
-			this.subscribe( 'rowCollapseEvent', function( args ){
-
-				Dom.removeClass( args.row, CLASS_EXPANDED );
-
-			} );
-			this_static.hasCollapseEvent = true;
-
-		}
-		*/
 
 	}
 	
