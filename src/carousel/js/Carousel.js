@@ -3281,6 +3281,15 @@
                     }
                 }
             }
+
+            // This fixes the widget to auto-adjust height/width for absolute
+            // positioned children.
+            item = carousel._itemsTable.items[0].id;
+            sz   = isVertical ? getStyle(item, "width") :
+                    getStyle(item, "height");
+            Dom.setStyle(carousel._carouselEl,
+                         isVertical ? "width" : "height", sz + "px");
+
             // Set the rendered state appropriately.
             carousel._hasRendered = true;
             carousel.fireEvent(renderEvent);
