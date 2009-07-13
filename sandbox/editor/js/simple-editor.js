@@ -483,6 +483,12 @@ var Dom = YAHOO.util.Dom,
         _contentTimer: null,
         /**
         * @private
+        * @property _contentTimerMax
+        * @description The number of times the loaded content should be checked before giving up. Default: 500
+        */
+        _contentTimerMax: 500,
+        /**
+        * @private
         * @property _contentTimerCounter
         * @description Counter to check the number of times the body is polled for before giving up
         * @type Number
@@ -942,6 +948,7 @@ var Dom = YAHOO.util.Dom,
             if (!this._getDoc().body) {
                 YAHOO.log('Body is null, check again', 'error', 'SimpleEditor');
                 this._contentTimerCounter = 0;
+                this._editorInit = false;
                 this._checkLoaded();
                 return false;
             }
@@ -981,11 +988,12 @@ var Dom = YAHOO.util.Dom,
         * @description Called from a setTimeout loop to check if the iframes body.onload event has fired, then it will init the editor.
         */
         _checkLoaded: function() {
+            this._editorInit = false;
             this._contentTimerCounter++;
             if (this._contentTimer) {
                 clearTimeout(this._contentTimer);
             }
-            if (this._contentTimerCounter > 500) {
+            if (this._contentTimerCounter > this._contentTimerMax) {
                 YAHOO.log('ERROR: Body Did Not load', 'error', 'SimpleEditor');
                 return false;
             }
