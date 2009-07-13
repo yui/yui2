@@ -1204,7 +1204,7 @@
                         YAHOO.log('Position center unit cannot have close', 'error', 'LayoutUnit');
                         return false;
                     }
-                    if (!this.header) {
+                    if (!this.header && close) {
                         this._createHeader();
                     }
                     var c = Dom.getElementsByClassName('close', 'div', this.header)[0];
@@ -1220,7 +1220,7 @@
                             Event.on(c, 'click', this.close, this, true);
                         }
                         c.title = this.STR_CLOSE;
-                    } else if (c) {
+                    } else if (c && c.parentNode) {
                         Event.purgeElement(c);
                         c.parentNode.removeChild(c);
                     }
@@ -1241,7 +1241,7 @@
                         YAHOO.log('Position center unit cannot have collapse', 'error', 'LayoutUnit');
                         return false;
                     }
-                    if (!this.header) {
+                    if (!this.header && collapse) {
                         this._createHeader();
                     }
                     var c = Dom.getElementsByClassName('collapse', 'div', this.header)[0];
@@ -1257,7 +1257,7 @@
                         }
                         c.title = this.STR_COLLAPSE;
                         c.className = 'collapse' + ((this.get('close')) ? ' collapse-close' : '');
-                    } else if (c) {
+                    } else if (c && c.parentNode) {
                         Event.purgeElement(c);
                         c.parentNode.removeChild(c);
                     }
