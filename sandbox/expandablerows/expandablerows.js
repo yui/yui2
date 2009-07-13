@@ -69,7 +69,7 @@
 			initExpandableRows : function( field, template, rowConfigs ){
 				
 				//Set subscribe restore method
-				this.subscribe( 'postRenderEvent', function(){ this.restoreExpandedRows( field, template, rowConfigs ); } )
+				this.subscribe( 'postRenderEvent', this.restoreExpandedRows )
 
 				//Setup template
 				this.rowExpansionTemplate = template || null;
@@ -176,15 +176,15 @@
 
 			collapseRow : function( record_id ){
 				
-				var row = Dom.get( this.getRecord( record_id ).getId() )
+				var row_data = this.getRecord( record_id ),
+					row = Dom.get( row_data.getId() );
 				
 				if( Dom.hasClass( row, CLASS_EXPANDED ) ){
 
 					//Fire custom event
-					this.fireEvent("rowCollapseEvent", { row : row } );
+					this.fireEvent("rowCollapseEvent", { row : row_data } );
 					
-					var row_data = this.getRecord( row ),
-						state = row_data.getData( STRING_STATENAME ),
+					var state = row_data.getData( STRING_STATENAME ),
 						next_sibling = Dom.getNextSibling( row ),
 						hash_index = indexOf( this.a_rowExpansions, row_data.getId() );
 						
@@ -235,7 +235,7 @@
 
 			},
 
-			restoreExpandedRows : function( field, template, rowConfigs ){
+			restoreExpandedRows : function(){
 				
 				var	expanded_rows = this.a_rowExpansions;
 				

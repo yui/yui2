@@ -124,9 +124,10 @@ YAHOO.util.Event.addListener(window, "load", function() {
 
 					if( YAHOO.util.Dom.hasClass( cell_click.target, 'yui-dt-expandablerow-trigger' ) ){
 						
-						var row = myDataTable.getTrEl(cell_click.target)
+						//TODO: change this to just target after you normalize
+						var row_element = cell_click.target;
 
-						this.toggleRowExpansion( row );
+						this.toggleRowExpansion( row_element );
 
 					}
 

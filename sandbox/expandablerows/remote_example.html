@@ -122,9 +122,9 @@ YAHOO.util.Event.addListener(window, "load", function() {
 
 						if( YAHOO.util.Dom.hasClass( cell_click.target, 'yui-dt-expandablerow-trigger' ) ){
 
-							var row = myDataTable.getRecordIndex(cell_click.target);
+							var row_element = cell_click.target;
 
-							this.toggleRowExpansion( row );
+							this.toggleRowExpansion( row_element );
 
 						}
 
