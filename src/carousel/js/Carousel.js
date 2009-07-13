@@ -170,8 +170,8 @@
     /**
      * @event itemReplaced
      * @description Fires when an item has been replaced in the Carousel.
-     * Passes back the content of the item that was replaced, the content 
-     * of the new item, the index where the replacement occurred, and the event 
+     * Passes back the content of the item that was replaced, the content
+     * of the new item, the index where the replacement occurred, and the event
      * itself.  See
      * <a href="YAHOO.util.Element.html#addListener">Element.addListener</a>
      * for more information on listening for this event.
@@ -286,7 +286,7 @@
      */
      function setStyles(el, styles) {
          for (var which in styles) {
-             Dom.setStyle(el, which, styles[which]); 
+             Dom.setStyle(el, which, styles[which]);
          }
      }
 
@@ -308,10 +308,10 @@
         if (attrs.className) {
             Dom.addClass(newEl, attrs.className);
         }
-        
+
         if (attrs.styles) {
-            setStyles(newEl, attrs.styles); 
-        } 
+            setStyles(newEl, attrs.styles);
+        }
 
         if (attrs.parent) {
             attrs.parent.appendChild(newEl);
@@ -462,7 +462,7 @@
         }
 
         item = carousel._itemsTable.items[first] || carousel._itemsTable.loading[first];
-        
+
         if (JS.isUndefined(item)) {
             return 0;
         }
@@ -709,7 +709,7 @@
         if (!JS.isNumber(page)) {
             page = Math.ceil(carousel.get("selectedItem") / numVisible);
         }
-            
+
         numPages = Math.ceil(carousel.get("numItems") / numVisible);
 
         carousel._pages.num = numPages;
@@ -721,7 +721,7 @@
             carousel._updatePagerButtons();
         }
     }
-    
+
     /**
      * Get full dimensions of an element.
      *
@@ -770,9 +770,9 @@
         if (!JS.isObject(o)) {
             return;
         }
-        
+
         if(rows) {//Re-index rows if multirows is enabled.
-            carousel._indexRows(); 
+            carousel._indexRows();
         }
 
         switch (o.ev) {
@@ -851,7 +851,7 @@
         /*
          * Internal variables used within the Carousel component
          */
-         
+
          /**
          * Number of rows for a multirow carousel.
          *
@@ -859,7 +859,7 @@
          * @private
          */
         _rows: null,
-        
+
         /**
          * Number of cols for a multirow carousel.
          *
@@ -1197,7 +1197,7 @@
              * @default "yui-carousel-vertical"
              */
             VERTICAL: "yui-carousel-vertical",
-            
+
             /**
              * The class name of a multirow Carousel.
              *
@@ -1205,7 +1205,7 @@
              * @default "yui-carousel-multi-row"
              */
             MULTI_ROW: "yui-carousel-multi-row",
-            
+
             /**
              * The class name of a row in a multirow Carousel.
              *
@@ -1343,7 +1343,7 @@
          * (starts from zero).
          * @return {Boolean} Return true on success, false otherwise
          */
-        addItem: function (item, index) { 
+        addItem: function (item, index) {
             var carousel = this,
                 rows = carousel._rows,
                 className,
@@ -1382,13 +1382,13 @@
                     YAHOO.log("Index out of bounds", "error", WidgetName);
                     return false;
                 }
-                
+
                 // make sure we splice into the correct position
                 if(!carousel._itemsTable.items[index]){
                     carousel._itemsTable.items[index] = undefined;
                     replaceItems = 1;
                 }
-                
+
                 carousel._itemsTable.items.splice(index, replaceItems, {
                         item      : content,
                         className : className,
@@ -1412,8 +1412,8 @@
          *
          * @method addItems
          * @public
-         * @param items {Array} An array containing an array of new items each linked to the 
-         * index where the insertion should take place. 
+         * @param items {Array} An array containing an array of new items each linked to the
+         * index where the insertion should take place.
          * E.g. [[{content:'<img/>'}, index1], [{content:'<img/>'}, index2]]
          * NOTE: An item at index must already exist.
          * @return {Boolean} Return true on success, false otherwise
@@ -1881,7 +1881,7 @@
 
             carousel.on(itemRemovedEvent, syncUi);
 
-            carousel.on(itemReplacedEvent, syncUi); 
+            carousel.on(itemReplacedEvent, syncUi);
 
             carousel.on(itemSelectedEvent, function () {
                 if (carousel._hasFocus) {
@@ -2216,19 +2216,19 @@
                     YAHOO.log("Index out of bounds", "error", WidgetName);
                     return false;
                 }
-                
+
                 oel = carousel._itemsTable.items[index];
                 if(!oel){
                     oel = carousel._itemsTable.loading[index];
                     carousel._itemsTable.items[index] = undefined;
                 }
-                
+
                 carousel._itemsTable.items.splice(index, 1, {
                     item      : content,
                     className : item.className || "",
                     id        : Dom.generateId()
                 });
-                
+
                 el = carousel._itemsTable.items[index];
             }
             carousel.fireEvent(itemReplacedEvent,
@@ -2236,16 +2236,16 @@
 
             return true;
         },
-        
+
         /**
          * Replace multiple items at specified indexes.
          * NOTE: item at index must already exist.
          *
          * @method replaceItems
          * @public
-         * @param items {Array} An array containing an array of replacement items each linked to the 
-         * index where the substitution should take place. 
-         * E.g. [[{content:'<img/>'}, index1], [{content:'<img/>'}, index2]] 
+         * @param items {Array} An array containing an array of replacement items each linked to the
+         * index where the substitution should take place.
+         * E.g. [[{content:'<img/>'}, index1], [{content:'<img/>'}, index2]]
          * @return {Boolean} Return true on success, false otherwise
          */
          replaceItems: function (items) {
@@ -2315,7 +2315,7 @@
             }
 
             carousel._refreshUi();
-            
+
             if(rows) {
                 carousel._indexRows();
             }
@@ -2386,7 +2386,7 @@
         },
 
         /**
-         * Scroll the Carousel to make the item the first visible item. 
+         * Scroll the Carousel to make the item the first visible item.
          *
          * @method scrollTo
          * @public
@@ -2407,13 +2407,13 @@
             animCfg        = carousel.get("animation");
             isCircular     = carousel.get("isCircular");
             isVertical     = carousel.get("isVertical");
-            itemsPerCol    = carousel._cols; 
-            itemsPerRow    = carousel._rows; 
+            itemsPerCol    = carousel._cols;
+            itemsPerRow    = carousel._rows;
             firstItem      = carousel._firstItem;
             numItems       = carousel.get("numItems");
             numPerPage     = carousel.get("numVisible");
             page           = carousel.get("currentPage");
-            
+
             stopAutoScroll = function () {
                 if (carousel.isAutoPlayOn()) {
                     carousel.stopAutoPlay();
@@ -2451,7 +2451,7 @@
             // call loaditems to check if we have all the items to display
             lastItem = item + numPerPage - 1;
             carousel._loadItems(lastItem > numItems - 1 ? numItems - 1 : lastItem);
-            
+
             // calculate the delta relative to the first item, the delta is always negative
             delta = 0 - item;
             if(itemsPerRow) {
@@ -2462,7 +2462,7 @@
                     delta = parseInt(delta/itemsPerRow,10);
                 }
             }
-            
+
             // adjust for items not yet loaded
             index = 0;
             while(delta < 0 && index < item+numPerPage-1 && index < numItems){
@@ -2471,7 +2471,7 @@
                 }
                 index += itemsPerRow ? itemsPerRow : 1;
             }
-            
+
             carousel._firstItem = item;
             carousel.set("firstVisible", item);
 
@@ -2609,7 +2609,7 @@
             var carousel = this,
                 pagination = carousel._pagination;
             if(!pagination.el){ return false; }
-            
+
             var numItems = carousel.get('numItems'),
                 numVisible = carousel.get('numVisible'),
                 firstVisible = carousel.get('firstVisible')+1,
@@ -2626,7 +2626,7 @@
                 },
                 cb = pagination.callback || {},
                 scope = cb.scope && cb.obj ? cb.obj : carousel;
-            
+
             pagination.el.innerHTML = JS.isFunction(cb.fn) ? cb.fn.apply(scope, [pagination.template, replacements]) : YAHOO.lang.substitute(pagination.template, replacements);
         },
 
@@ -2639,23 +2639,23 @@
          */
         registerPagination: function (tpl, pos, cb) {
             var carousel = this;
-            
+
             carousel._pagination.template = tpl;
             carousel._pagination.callback = cb || {};
-            
+
             if(!carousel._pagination.el){
                 carousel._pagination.el = createElement('DIV', {className:carousel.CLASSES.PAGINATION});
-                
+
                 if(pos == "before"){
                     carousel._navEl.insertBefore(carousel._pagination.el, carousel._navEl.firstChild);
                 } else {
                     carousel._navEl.appendChild(carousel._pagination.el);
                 }
-                
+
                 carousel.on('itemSelected', carousel.updatePagination);
                 carousel.on('pageChange', carousel.updatePagination);
             }
-            
+
             carousel.updatePagination();
         },
 
@@ -2958,7 +2958,7 @@
                         num: last - first + 1
                 });
             }
-            
+
         },
 
         /**
@@ -2971,15 +2971,15 @@
         _pagerClickHandler: function (ev) {
             var carousel = this,
                 page,
-                pos, 
+                pos,
                 target = Event.getTarget(ev),
                 val;
-            
+
             function getPagerNode(el) {
-                
-                var itemEl = carousel.get("carouselItemEl"), 
+
+                var itemEl = carousel.get("carouselItemEl"),
                     elNode = el.nodeName.toUpperCase();
-                                                 
+
                 if (elNode == itemEl.toUpperCase()) {
                     el = Dom.getChildrenBy(el, function (node) {
                         // either an anchor or select at least
@@ -2989,7 +2989,7 @@
                         el = el[0];
                     }
                 } else if (elNode == "EM") {
-                    el = el.parentNode;// item is an em and not an anchor (when text is visible)          
+                    el = el.parentNode;// item is an em and not an anchor (when text is visible)
                 }
 
                 return el.href || el.value ? el : null;
@@ -3002,7 +3002,7 @@
                 }
                 val = target.href || target.value;
                 if (JS.isString(val) && val) {
-                    pos = val.lastIndexOf("#"); 
+                    pos = val.lastIndexOf("#");
                     page =  parseInt(val.substring(pos+1), 10);
                     if (page != -1) {
                         val = (page - 1) * carousel.get("numVisible");
@@ -3094,14 +3094,14 @@
 
         /**
          * Position items for multirow Carousel.
-         *  
+         *
          * @method indexRows
          * @protected
          */
         _indexRows: function () {
             var carousel    = this,
-                isVertical  = carousel.get("isVertical"), 
-                numVisible  = carousel.get("numVisible"), 
+                isVertical  = carousel.get("isVertical"),
+                numVisible  = carousel.get("numVisible"),
                 table       = carousel._itemsTable,
                 loading     = table.loading,
                 items       = table.items,
@@ -3115,51 +3115,51 @@
                 col,
                 itemHeight,
                 itemWidth;
-                                        
+
             if(rows && cols) {
-                
+
                 row = 0;
                 col = 0;
                 itemHeight = getCarouselItemSize.call(carousel, "height");
                 itemWidth  = getCarouselItemSize.call(carousel, "width");
-                
+
                 for (var i = 0; i < num; i++) {
                     item = items[i] ? Dom.get(items[i].id) : loading[i];
-                    
-                    if(item) {   
-                        
+
+                    if(item) {
+
                         if(isVertical) {
-                           
-                            col++;// shifts item by one col. 
-                                        
-                            if (i % cols === 0) {                            
-                                delta = Math.floor(i/numVisible);// find page item belongs on. 
-                                //col = delta * cols;// shifts cols to appropriate page.  
+
+                            col++;// shifts item by one col.
+
+                            if (i % cols === 0) {
+                                delta = Math.floor(i/numVisible);// find page item belongs on.
+                                //col = delta * cols;// shifts cols to appropriate page.
                                 // break row
                                 col = 0;
                                 if(i !== 0) {
                                     row++;
-                                }    
-                            } 
-                            
+                                }
+                            }
+
                         } else {
-                                             
-                            col++;// shifts item by one col. 
-                                        
-                            if (i % cols === 0) {                            
-                                delta = Math.floor(i/numVisible);// find page item belongs on. 
-                                col = delta * cols;// shifts cols to appropriate page.  
+
+                            col++;// shifts item by one col.
+
+                            if (i % cols === 0) {
+                                delta = Math.floor(i/numVisible);// find page item belongs on.
+                                col = delta * cols;// shifts cols to appropriate page.
                                 row++;// breaks a row.
-                            } 
-                
+                            }
+
                             if (i % numVisible === 0) {
                                 row = 0;// shifts row back to top of page.
                             }
-                        
-                        }  
-                                          
+
+                        }
+
                         items[i].styles = {
-                            /*position absolute applied via stylesheet */       
+                            /*position absolute applied via stylesheet */
                             left     : (col * itemWidth) + "px",
                             top      : (row * itemHeight) + "px"
                         };
@@ -3263,8 +3263,24 @@
          * @protected
          */
         _refreshUi: function () {
-            var carousel = this;
+            var carousel = this, i, isVertical, item, n, sz;
 
+            isVertical = carousel.get("isVertical");
+            sz = getCarouselItemSize.call(carousel,
+                    isVertical ? "height" : "width");
+            for (i = 0, n = carousel._itemsTable.numItems; i < n; i++) {
+                if (JS.isUndefined(carousel._itemsTable.items[i].pos)) {
+                    item = carousel._itemsTable.items[i].id;
+                    carousel._itemsTable.items[i].pos = i * sz;
+                    if (isVertical) {
+                        Dom.setStyle(item, "left", "0");
+                        Dom.setStyle(item, "top",  (i*sz) + "px");
+                    } else {
+                        Dom.setStyle(item, "left", (i*sz) + "px");
+                        Dom.setStyle(item, "top",  "0");
+                    }
+                }
+            }
             // Set the rendered state appropriately.
             carousel._hasRendered = true;
             carousel.fireEvent(renderEvent);
@@ -3384,9 +3400,9 @@
          * @protected
          */
         _setClipContainerSize: function (clip, num) {
-            var carousel   = this, 
+            var carousel   = this,
                 isVertical = carousel.get("isVertical"),
-                rows       = carousel._rows, 
+                rows       = carousel._rows,
                 cols       = carousel._cols,
                 reveal     = carousel.get("revealAmount"),
                 which      = isVertical ? "height" : "width",
@@ -3394,30 +3410,30 @@
                 clip       = clip || carousel._clipEl,
                 itemHeight      = getCarouselItemSize.call(carousel, "height"),
                 itemWidth       = getCarouselItemSize.call(carousel, "width"),
-                containerHeight,  
-                containerWidth; 
-                
+                containerHeight,
+                containerWidth;
+
             if(rows) {
-                 containerHeight = itemHeight * rows;  
+                 containerHeight = itemHeight * rows;
                  containerWidth  = itemWidth * cols;
             } else {
                 num = num || carousel.get("numVisible");
                 if(isVertical) {
-                    containerHeight = itemHeight * num;   
+                    containerHeight = itemHeight * num;
                 } else {
                     containerWidth = itemWidth * num;
                 }
             }
-                            
+
             // TODO: try to re-use the _hasRendered indicator
-            
+
             carousel._recomputeSize = (containerHeight === 0); // bleh!
             if (carousel._recomputeSize) {
                 carousel._hasRendered = false;
                 return;             // no use going further, bail out!
             }
 
-            if (reveal > 0) {               
+            if (reveal > 0) {
                 if(isVertical) {
                     reveal = itemHeight * (reveal / 100) * 2;
                     containerHeight += reveal;
@@ -3425,31 +3441,31 @@
                     reveal = itemWidth * (reveal / 100) * 2;
                     containerWidth += reveal;
                 }
-                
+
                 // TODO: set the Carousel's initial offset somwehere
                 currVal = parseFloat(Dom.getStyle(carousel._carouselEl, attr));
                 currVal = JS.isNumber(currVal) ? currVal : 0;
                 Dom.setStyle(carousel._carouselEl,
                              attr, currVal + (reveal / 2) + "px");
             }
-        
+
             if (isVertical) {
-                containerHeight += getDimensions(carousel._carouselEl, "height"); 
+                containerHeight += getDimensions(carousel._carouselEl, "height");
                 Dom.setStyle(clip, "height", containerHeight + "px");
                 // For multi-row Carousel
-                if(cols) { 
-                    containerWidth += getDimensions(carousel._carouselEl, "width");                
+                if(cols) {
+                    containerWidth += getDimensions(carousel._carouselEl, "width");
                     Dom.setStyle(clip, "width", containerWidth + (0) + "px");
                 }
-                
+
             } else {
                 containerWidth += getDimensions(carousel._carouselEl, "width");
-                Dom.setStyle(clip, "width", containerWidth + "px"); 
+                Dom.setStyle(clip, "width", containerWidth + "px");
                 // For multi-row Carousel
-                if(rows) { 
-                    containerHeight += getDimensions(carousel._carouselEl, "height");                
+                if(rows) {
+                    containerHeight += getDimensions(carousel._carouselEl, "height");
                     Dom.setStyle(clip, "height", containerHeight + "px");
-                }                
+                }
             }
 
             carousel._setContainerSize(clip); // adjust the container size too
@@ -3503,16 +3519,16 @@
                 if(cols) {
                     size = size * cols;
                 }
-                Dom.setStyle(carousel._carouselEl, "width", size + "px");// Bug fix for vertical carousel (goes in conjunction with .yui-carousel-element {... 3200px removed from styles), and allows for multirows in IEs). 
+                Dom.setStyle(carousel._carouselEl, "width", size + "px");// Bug fix for vertical carousel (goes in conjunction with .yui-carousel-element {... 3200px removed from styles), and allows for multirows in IEs).
                 if (size < config.VERT_MIN_WIDTH) {
                     size = config.VERT_MIN_WIDTH;
                     carousel.addClass(cssClass.MIN_WIDTH);// set a min width on vertical carousel, don't see why this shouldn't always be set...
                 }
-                carousel.setStyle("width",  size + "px");   
+                carousel.setStyle("width",  size + "px");
             } else {
                 if(rows) {
                     size = getCarouselItemSize.call(carousel, "height");
-                    size = size * rows; 
+                    size = size * rows;
                     Dom.setStyle(carousel._carouselEl, "height", size + "px");
                 }
             }
@@ -3555,7 +3571,7 @@
                 Event.on(cfg.next, "click", scrollPageForward, carousel);
             }
         },
-        
+
         /**
          * Clip the container size every time numVisible is set.
          *
@@ -3564,12 +3580,12 @@
          * @return {Number} The new value that would be set
          * @protected
          */
-        _setNumVisible: function (val) { // TODO: _setNumVisible should just be reserved for setting numVisible. 
+        _setNumVisible: function (val) { // TODO: _setNumVisible should just be reserved for setting numVisible.
             var carousel = this;
-            
+
             carousel._setClipContainerSize(carousel._clipEl, val);
         },
-        
+
         /**
          * Set the value for the number of visible items in the Carousel.
          *
@@ -3579,17 +3595,17 @@
          * @protected
          */
         _numVisibleSetter: function (val) {
-            var carousel = this, 
+            var carousel = this,
                 numVisible = val;
 
             if(JS.isArray(val)) {
-                carousel._cols = val[0]; 
+                carousel._cols = val[0];
                 carousel._rows = val[1];
                 numVisible = val[0] *  val[1];
             }
             return numVisible;
         },
-        
+
         /**
          * Set the value for selectedItem.
          *
@@ -3602,7 +3618,7 @@
             var carousel = this;
             return (val < carousel.get("numItems")) ? val : 0;
         },
-        
+
         /**
          * Set the number of items in the Carousel.
          * Warning: Setting this to a lower number than the current removes
@@ -3727,16 +3743,16 @@
                 oel,
                 pos,
                 sibling;
-                
+
             pos  = JS.isUndefined(obj.pos) ? obj.newPos || itemsTable.numItems - 1 : obj.pos;
-            
+
             if (!JS.isUndefined(itemsTable.items[pos])) {
                 item = itemsTable.items[pos];
                 if (item) {
                     if(item.id) {
-                        oel  = Dom.get(item.id); 
-                        if(item.styles) { 
-                            setStyles(oel, item.styles); 
+                        oel  = Dom.get(item.id);
+                        if(item.styles) {
+                            setStyles(oel, item.styles);
                         }
                     }
                 }
@@ -3746,7 +3762,7 @@
                         className : item.className,
                         styles    : item.styles,
                         content   : item.item,
-                        id        : item.id 
+                        id        : item.id
                 });
                 if (JS.isUndefined(obj.pos)) {
                     if (!JS.isUndefined(itemsTable.loading[pos])) {
@@ -3802,21 +3818,21 @@
          * @protected
          */
         _syncUiForItemReplace: function (o) {
-            var carousel   = this, 
+            var carousel   = this,
                 carouselEl = carousel._carouselEl,
                 itemsTable = carousel._itemsTable,
                 pos        = o.pos,
                 item       = o.newItem,
                 oel        = o.oldItem,
                 el;
-            
+
             el = carousel._createCarouselItem({
                 className : item.className,
                 styles    : item.styles,
                 content   : item.item,
                 id        : item.id
             });
-            
+
             if(el && oel) {
                 Event.purgeElement(oel, true);
                 carouselEl.replaceChild(el, oel);
@@ -3826,7 +3842,7 @@
                 }
             }
             // TODO: should we add the item if oel is undefined?
-            
+
             if (!carousel._hasRendered) {
                 carousel._refreshUi();
             }
@@ -3875,7 +3891,7 @@
                 sibling = itemsTable.items[obj.last + 1],
                 el,
                 j;
-                
+
             // attempt to find the next closest sibling
             if(!sibling && obj.last < len){
                 j = obj.first;
@@ -3884,7 +3900,7 @@
                     j++;
                 } while (j<len && !sibling);
             }
-            
+
             for (var i = obj.first; i <= obj.last; i++) {
                 if(JS.isUndefined(itemsTable.loading[i]) && JS.isUndefined(itemsTable.items[i])){
                     el = carousel._createCarouselItem({
@@ -3963,7 +3979,7 @@
                  n        = carousel.get("numVisible"),
                  num      = carousel._pages.num, // total pages
                  pager    = carousel._pages.el;  // the pager container element
-                 
+
              if (num === 0 || !pager) {
                  return;         // don't do anything if number of pages is 0
              }
@@ -3977,18 +3993,18 @@
              }
 
              for (i = 0; i < num; i++) {
-                
+
                 /* ommitted or else pager buttons won't show all pages
                 if (JS.isUndefined(carousel._itemsTable.items[i * n])) {
                      Dom.setStyle(pager, "visibility", "visible");
                     break;
                  }
-                 
+
                  item = carousel._itemsTable.items[i * n].id;
                  */
 
                  el   = document.createElement("LI");
-                
+
                  /*if (!el) {// redundant check
                      Dom.setStyle(pager, "visibility", "visible");
                      break;
@@ -4054,15 +4070,15 @@
             }
 
             for (i = 0; i < num; i++) {
-                
+
                 /* ommitted or else pager menu won't show all pages
                 if (JS.isUndefined(carousel._itemsTable.items[i * n])) {
-                    Dom.setStyle(pager, "visibility", "visible");  
-                }               
+                    Dom.setStyle(pager, "visibility", "visible");
+                }
                 item = carousel._itemsTable.items[i * n].id;*/
 
                 el   = document.createElement("OPTION");
-                
+
                 /*
                 if (!el) {// redundant check
                     YAHOO.log("Unable to create an OPTION pager menu", "error",
@@ -4070,8 +4086,8 @@
                     Dom.setStyle(pager, "visibility", "visible");
                     break;
                 }
-                */ 
-                
+                */
+
                 el.value     = "#" + i;
                 // TODO: use a template string for i18N compliance
                 el.innerHTML = carousel.STRINGS.PAGER_PREFIX_TEXT+" "+(i+1);
@@ -4230,7 +4246,7 @@
          */
         _validateNumVisible: function (val) {
             var rv = false;
-            
+
             if (JS.isNumber(val)) {
                 rv = val > 0 && val <= this.get("numItems");
             } else if (JS.isArray(val)) {
@@ -4238,7 +4254,7 @@
                     rv = val[0] * val[1] > 0 && val.length == 2;
                 }
             }
-            
+
             return rv;
         },
 
