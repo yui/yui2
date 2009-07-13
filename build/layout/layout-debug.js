@@ -136,6 +136,12 @@
                 }
             }
             if (set) {
+                if (h < 0) {
+                    h = 0;
+                }
+                if (w < 0) {
+                    w = 0;
+                }
                 Dom.setStyle(this._doc, 'height', h + 'px');
                 Dom.setStyle(this._doc, 'width', w + 'px');
             }
@@ -560,6 +566,9 @@
                 value: attr.height || false,
                 validator: YAHOO.lang.isNumber,
                 method: function(h) {
+                    if (h < 0) {
+                        h = 0;
+                    }
                     this.setStyle('height', h + 'px');
                 }
             });
@@ -573,6 +582,9 @@
                 value: attr.width || false,
                 validator: YAHOO.lang.isNumber,
                 method: function(w) {
+                    if (w < 0) {
+                        w = 0;
+                    }
                     this.setStyle('width', w + 'px');
                 }
             });
@@ -977,7 +989,7 @@
                 i1 = 1;
                 i2 = 3;
             }
-            if (this.browser.ie && !this.browser.standardsMode) {
+            if ((this.browser.ie < 8) && !this.browser.standardsMode) {
                 //Internet Explorer - Quirks Mode
                 var b = this._getBorderSizes(el),
                     bp = this._getBorderSizes(el.parentNode);
@@ -1528,6 +1540,11 @@
             */
             this.setAttributeConfig('minWidth', {
                 value: attr.minWidth || false,
+                method: function(v) {
+                    if (this._resize) {
+                        this._resize.set('minWidth', v);
+                    }
+                },
                 validator: YAHOO.lang.isNumber
             });
 
@@ -1538,6 +1555,11 @@
             */
             this.setAttributeConfig('maxWidth', {
                 value: attr.maxWidth || false,
+                method: function(v) {
+                    if (this._resize) {
+                        this._resize.set('maxWidth', v);
+                    }
+                },
                 validator: YAHOO.lang.isNumber
             });
 
@@ -1548,6 +1570,11 @@
             */
             this.setAttributeConfig('minHeight', {
                 value: attr.minHeight || false,
+                method: function(v) {
+                    if (this._resize) {
+                        this._resize.set('minHeight', v);
+                    }
+                },
                 validator: YAHOO.lang.isNumber
             });
 
@@ -1558,6 +1585,11 @@
             */
             this.setAttributeConfig('maxHeight', {
                 value: attr.maxHeight || false,
+                method: function(v) {
+                    if (this._resize) {
+                        this._resize.set('maxHeight', v);
+                    }
+                },
                 validator: YAHOO.lang.isNumber
             });
 
@@ -1849,7 +1881,7 @@
                         YAHOO.log('Position center unit cannot have close', 'error', 'LayoutUnit');
                         return false;
                     }
-                    if (!this.header) {
+                    if (!this.header && close) {
                         this._createHeader();
                     }
                     var c = Dom.getElementsByClassName('close', 'div', this.header)[0];
@@ -1865,7 +1897,7 @@
                             Event.on(c, 'click', this.close, this, true);
                         }
                         c.title = this.STR_CLOSE;
-                    } else if (c) {
+                    } else if (c && c.parentNode) {
                         Event.purgeElement(c);
                         c.parentNode.removeChild(c);
                     }
@@ -1886,7 +1918,7 @@
                         YAHOO.log('Position center unit cannot have collapse', 'error', 'LayoutUnit');
                         return false;
                     }
-                    if (!this.header) {
+                    if (!this.header && collapse) {
                         this._createHeader();
                     }
                     var c = Dom.getElementsByClassName('collapse', 'div', this.header)[0];
@@ -1902,7 +1934,7 @@
                         }
                         c.title = this.STR_COLLAPSE;
                         c.className = 'collapse' + ((this.get('close')) ? ' collapse-close' : '');
-                    } else if (c) {
+                    } else if (c && c.parentNode) {
                         Event.purgeElement(c);
                         c.parentNode.removeChild(c);
                     }
