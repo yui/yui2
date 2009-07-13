@@ -2286,7 +2286,8 @@ Calendar.prototype = {
 
         /**
         * The positive or negative year offset from the Gregorian calendar year (assuming a January 1st rollover) to 
-        * be used when displaying and parsing dates.
+        * be used when displaying and parsing dates. NOTE: All JS Date objects returned by methods, or expected as input by
+        * methods will always represent the Gregorian year, in order to maintain date/month/week values. 
         *
         * @config year_offset
         * @type Number
@@ -4759,7 +4760,8 @@ CalendarGroup.prototype = {
 
         /**
         * The positive or negative year offset from the Gregorian calendar year (assuming a January 1st rollover) to 
-        * be used when displaying or parsing dates
+        * be used when displaying or parsing dates.  NOTE: All JS Date objects returned by methods, or expected as input by
+        * methods will always represent the Gregorian year, in order to maintain date/month/week values.
         *
         * @config year_offset
         * @type Number
@@ -6871,7 +6873,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
      * @protected
      */
     _update : function(cal) {
-        var date = YAHOO.widget.DateMath.getDate(this.getYear() - cal.Locale.YEAR_OFFSET, this.getMonth(), 1);
+        var date = YAHOO.widget.DateMath.getDate(this.getYear() - cal.cfg.getProperty("YEAR_OFFSET"), this.getMonth(), 1);
         cal.cfg.setProperty("pagedate", date);
         cal.render();
     },

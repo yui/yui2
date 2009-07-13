@@ -853,7 +853,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
      * @protected
      */
     _update : function(cal) {
-        var date = YAHOO.widget.DateMath.getDate(this.getYear() - cal.Locale.YEAR_OFFSET, this.getMonth(), 1);
+        var date = YAHOO.widget.DateMath.getDate(this.getYear() - cal.cfg.getProperty("YEAR_OFFSET"), this.getMonth(), 1);
         cal.cfg.setProperty("pagedate", date);
         cal.render();
     },

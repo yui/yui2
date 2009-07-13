@@ -1211,7 +1211,8 @@ Calendar.prototype = {
 
         /**
         * The positive or negative year offset from the Gregorian calendar year (assuming a January 1st rollover) to 
-        * be used when displaying and parsing dates.
+        * be used when displaying and parsing dates. NOTE: All JS Date objects returned by methods, or expected as input by
+        * methods will always represent the Gregorian year, in order to maintain date/month/week values. 
         *
         * @config year_offset
         * @type Number
