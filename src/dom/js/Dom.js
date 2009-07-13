@@ -77,6 +77,8 @@
             'className': _CLASS
         },
 
+        DOT_ATTRIBUTES: {},
+
         /**
          * Returns an HTMLElement reference.
          * @method get
@@ -94,13 +96,13 @@
                 if (typeof el === 'string') { // id
                     id = el;
                     el = document.getElementById(el);
-                    if (el && el.id === id) { // IE: avoid false match on "name" attribute
+                    if (el && el.getAttribute('id') === id) { // IE: avoid false match on "name" attribute
                     return el;
                     } else if (el && document.all) { // filter by name
                         el = null;
                         nodes = document.all[id];
                         for (i = 0, len = nodes.length; i < len; ++i) {
-                            if (nodes[i].id === id) {
+                            if (nodes[i].getAttribute('id') === id) {
                                 return nodes[i];
                             }
                         }
@@ -566,7 +568,6 @@
          * @return {Array} An array of elements that have the given class name
          */
         getElementsByClassName: function(className, tag, root, apply, o, overrides) {
-            className = lang.trim(className);
             tag = tag || '*';
             root = (root) ? Y.Dom.get(root) : null || document; 
             if (!root) {
@@ -1285,8 +1286,12 @@
                 val = args.val;
 
             if (el && el.setAttribute) {
-                attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
-                el.setAttribute(attr, val);
+                if (Y.Dom.DOT_ATTRIBUTES[attr]) {
+                    el[attr] = val;
+                } else {
+                    attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
+                    el.setAttribute(attr, val);
+                }
             } else {
                 YAHOO.log('setAttribute method not available for ' + el, 'error', 'Dom');
             }
@@ -1309,7 +1314,7 @@
             attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
 
             if (el && el.getAttribute) {
-                val = el.getAttribute(attr);
+                val = el.getAttribute(attr, 2);
             } else {
                 YAHOO.log('getAttribute method not available for ' + el, 'error', 'Dom');
             }
@@ -1348,7 +1353,7 @@
 
         _patterns: {
             ROOT_TAG: /^body|html$/i, // body for quirks mode, html for standards,
-            CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}])/g
+            CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}\\])/g
         },
 
 
@@ -1397,5 +1402,9 @@
             return val;
         };
 
+    }
+
+    if (UA.ie && UA.ie >= 8 && document.documentElement.hasAttribute) { // IE 8 standards
+        Y.Dom.DOT_ATTRIBUTES.type = true; // IE 8 errors on input.setAttribute('type')
     }
 })();

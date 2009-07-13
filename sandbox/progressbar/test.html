@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Progress Bar Tests</title>
+<!-- css -->
+<link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css">
+<link rel="stylesheet" type="text/css" href="../../build/base/base.css">
+<link rel="stylesheet" type="text/css" href="../../build/logger/assets/logger.css">
+<link rel="stylesheet" type="text/css" href="../../build/yuitest/assets/testlogger.css">
+<link rel="stylesheet" type="text/css" href="../../build/progressbar/assets/skins/sam/progressbar.css">
+<!-- js -->
+<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
+<script type="text/javascript" src="../../build/element/element-min.js"></script>
+<script type="text/javascript" src="../../build/logger/logger-min.js"></script>
+
+<script type="text/javascript" src="../../build/yuitest/yuitest-min.js"></script>
+<script type="text/javascript" src="../../build/progressbar/progressbar-debug.js"></script>
+
+<style type="text/css">
+#plain.yui-pb {
+	height:25px;
+	width:250px;
+}
+#plain .yui-pb-mask td {
+	background-image: url(mask.gif);
+}
+
+#plain .yui-pb-bar {
+	background-image:url(bar.gif);
+}
+#plain.yui-pb .yui-pb-anim {
+	background-image:url(animbar.gif);
+}
+</style>
+</head>
+<body class="yui-skin-sam">
+<div id="testLogger"></div>
+<div id="test"></div>
+
+<script  type="text/javascript">
+(function () {
+	var pb, t,
+	PB = YAHOO.widget.ProgressBar,
+	Dom = YAHOO.util.Dom,
+	Event = YAHOO.util.Event,
+	Lang = YAHOO.lang,
+	A = YAHOO.util.Assert;
+	
+	var getEls = function() {
+		var get = Dom.getElementsByClassName,
+			test = Dom.get('test');
+		return {
+			pb: get(PB.CLASS_PROGBAR,'div',test)[0],
+			m : get(PB.CLASS_MASK,'table',test)[0],
+			b : get(PB.CLASS_BAR,'div',test)[0],
+			c : get(PB.CLASS_CAPTION,'div',test)[0]
+		};
+	};
+	
+	var parseColor = function(color) {
+		var c = YAHOO.util.ColorAnim.prototype.parseColor(color);
+		if (Lang.isNull(c)) {
+			return YAHOO.util.ColorAnim.prototype.patterns.transparent.test(color)?'transparent':color;
+		}
+		return c;
+	};
+	
+    var oSuite = new YAHOO.tool.TestSuite("ProgressBar testing");
+    
+    //add a test case
+    oSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "Initialization test",
+		setUp : function () {
+
+        },
+    
+        tearDown : function () {
+			pb.destroy();
+        },
+       
+        testDefault : function () {
+            pb = new PB();
+			pb.render('test');
+			t = getEls();
+			A.areEqual('200px',pb.get('width'),'reported width');
+			A.areEqual('20px',pb.get('height'),'reported height');
+			A.areEqual('200px',Dom.getStyle(t.pb,'width'),'widget width');
+			A.areEqual('20px',Dom.getStyle(t.pb,'height'),'widget height');
+			A.areEqual('200px',Dom.getStyle(t.m,'width'),'mask width');
+			A.areEqual('20px',Dom.getStyle(t.m,'height'),'mask height');
+			A.areEqual('0px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('20px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('200px',Dom.getStyle(t.c,'width'),'caption width');
+			A.areEqual('20px',Dom.getStyle(t.c,'height'),'caption height');
+			A.areEqual('0,0,255',parseColor(pb.get('barColor')),'reported barColor');
+			A.areEqual('0,0,255',parseColor(Dom.getStyle(t.b,'background-color')),'actual barColor');
+			A.areEqual('transparent',parseColor(pb.get('backColor')),'reported backColor');
+			A.areEqual('transparent',parseColor(Dom.getStyle(t.pb,'background-color')),'actual backColor');
+        },
+
+        testSetupByCode : function () {
+            pb = new PB({height:'30px', width: 300, barColor:'green',backColor:'orange',border:'thin solid black'});
+			pb.render('test');
+			t = getEls();
+			A.areEqual('300',pb.get('width'),'reported width');
+			A.areEqual('30px',pb.get('height'),'reported height');
+			A.areEqual('300px',Dom.getStyle(t.pb,'width'),'widget width');
+			A.areEqual('30px',Dom.getStyle(t.pb,'height'),'widget height');
+			A.areEqual('300px',Dom.getStyle(t.m,'width'),'mask width');
+			A.areEqual('30px',Dom.getStyle(t.m,'height'),'mask height');
+			A.areEqual('0px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('30px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('300px',Dom.getStyle(t.c,'width'),'caption width');
+			A.areEqual('30px',Dom.getStyle(t.c,'height'),'caption height');
+			A.areEqual('green',parseColor(pb.get('barColor')),'reported barColor');
+			A.areEqual('green',parseColor(Dom.getStyle(t.b,'background-color')),'actual barColor');
+			A.areEqual('orange',parseColor(pb.get('backColor')),'reported backColor');
+			A.areEqual('orange',parseColor(Dom.getStyle(t.pb,'background-color')),'actual backColor');
+        },
+		
+		testSetupByStyle: function () {
+			pb = new PB({id:'plain'});
+			pb.render('test');		
+			t = getEls();
+			A.areEqual('250px',pb.get('width'),'reported width');
+			A.areEqual('25px',pb.get('height'),'reported height');
+			A.areEqual('250px',Dom.getStyle(t.pb,'width'),'widget width');
+			A.areEqual('25px',Dom.getStyle(t.pb,'height'),'widget height');
+			A.areEqual('250px',Dom.getStyle(t.m,'width'),'mask width');
+			A.areEqual('25px',Dom.getStyle(t.m,'height'),'mask height');
+			A.areEqual('0px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('25px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('250px',Dom.getStyle(t.c,'width'),'caption width');
+			A.areEqual('25px',Dom.getStyle(t.c,'height'),'caption height');
+			A.areEqual('0,0,255',parseColor(pb.get('barColor')),'reported barColor');
+			A.areEqual('0,0,255',parseColor(Dom.getStyle(t.b,'background-color')),'actual barColor');
+			A.areEqual('transparent',parseColor(pb.get('backColor')),'reported backColor');
+			A.areEqual('transparent',parseColor(Dom.getStyle(t.pb,'background-color')),'actual backColor');
+		}
+    }));
+
+    YAHOO.tool.TestRunner.add(oSuite);
+	
+	Event.onDOMReady(function (){
+        var logger = new YAHOO.tool.TestLogger("testLogger");
+        YAHOO.tool.TestRunner.run();
+    });
+})();
+    
+
+</script>
+</body>
+</html>

@@ -1,5 +1,8 @@
 get - Release Notes
 
+2.8.0
+    * Added 'attributes' config, which is a hash of attributes to apply to dynamic nodes.  deprecated charset
+
 2.7.0
     * Fixed execution context for timeout listeners
 

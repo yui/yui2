@@ -1052,7 +1052,7 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
         }
 
         this.thumb.autoOffset();
-        this.resetThumbConstraints();
+        this.baselinePos = [];
     },
 
     /**

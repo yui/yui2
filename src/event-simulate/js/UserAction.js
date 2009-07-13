@@ -1,4 +1,10 @@
-YAHOO.namespace("util");
+
+/**
+ * DOM event simulation utility
+ * @module event-simulate
+ * @namespace YAHOO.util
+ * @requires yahoo,dom,event
+ */
 
 /**
  * The UserAction object provides functions that simulate events occurring in

@@ -45,7 +45,7 @@
 <body>
     <em class="my.class our(class" id="class-regex-one">lorem</em> 
     <em class="my-class" id="class-regex-two">ipsum</em>
-    <em class="yiv-integer:([{1,30}])^$?*+|" id="class-regex-three">dolor</em> 
+    <em class="yiv-integer:([{1,30}])^$?*+\|" id="class-regex-three">dolor</em> 
     <div id="computed-wrap">
         <div id="computed-test">test computed style</div>
     </div>
@@ -78,6 +78,7 @@
                                     <input type="text" name="search-p">
                                     <input type="text" name="search-p" id="search-p">
                                     <input type="text" name="search-p">
+                                    <input type="text" name="id">
                                     <input type="submit" value="search">
                             </fieldset>
                         </form>
@@ -124,6 +125,9 @@
 
                 Assert.areEqual(document.getElementById('doc'), Y.Dom.get(new Y.Element('doc')),
                         "Y.Element('doc')");
+
+                Assert.areEqual(document.getElementById('search'), Y.Dom.get('search'),
+                        "Y.Dom.get('search')");
             },            
 
             test_getStyle: function() {
@@ -178,7 +182,7 @@
                 Assert.isTrue(Y.Dom.hasClass('class-regex-one', 'my.class'), 'my.class should match element with my.class');       
                 Assert.isTrue(Y.Dom.hasClass('class-regex-one', 'our(class'), 'our(class should match element with our(class');       
                 Assert.isTrue(Y.Dom.hasClass('class-regex-one', /our.clas+/), '/our.clas+/ should match element with our(class');  
-                Assert.isTrue(Y.Dom.hasClass('class-regex-three', 'yiv-integer:([{1,30}])^$?*+|'), '/our.clas+/ should match element with our(class');  
+                Assert.isTrue(Y.Dom.hasClass('class-regex-three', 'yiv-integer:([{1,30}])^$?*+\\|'), "special chars in className");  
             },            
 
             test_addClass: function() {
@@ -255,6 +259,7 @@
                 Assert.areEqual(0, Y.Dom.getElementsByClassName('mod', 'div', 'fake-id').length, 'getByClassName failed for #fake-id div.mod'); 
 
                 Assert.areEqual(2, Y.Dom.getElementsByClassName('hd', 'div').length, 'getByClassName("hd") '); 
+                Assert.areEqual(3, Y.Dom.getElementsByClassName(/hd/, 'div').length, 'getByClassName("hd") '); 
             },
 
             test_getElementsBy: function() {
@@ -552,6 +557,11 @@
 
                 Assert.areEqual('foo', el.htmlFor, "Y.Dom.setAttribute(el, 'for', 'foo')");
                 Assert.areEqual('bar', el.className, "Y.Dom.setAttribute(el, 'class', 'bar')");
+
+                el = document.body.appendChild(document.createElement('input'));
+                Y.Dom.setAttribute(el, 'type', 'text');
+                Assert.areEqual('text', Y.Dom.getAttribute(el, 'type'), "Y.Dom.setAttribute(el, 'type', 'text')");
+                el.parentNode.removeChild(el);
             },
 
 

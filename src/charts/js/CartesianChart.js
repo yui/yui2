@@ -19,7 +19,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 {
 	/**
 	 * Stores a reference to the xAxis labelFunction created by
-	 * YAHOO.widget.FlashAdapter.createProxyFunction()
+	 * YAHOO.widget.Chart.createProxyFunction()
 	 * @property _xAxisLabelFunctions
 	 * @type String
 	 * @private
@@ -28,7 +28,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	
 	/**
 	 * Stores a reference to the yAxis labelFunctions created by
-	 * YAHOO.widget.FlashAdapter.createProxyFunction()
+	 * YAHOO.widget.Chart.createProxyFunction()
 	 * @property _yAxisLabelFunctions
 	 * @type Array
 	 * @private
@@ -125,7 +125,17 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		this.setAttributeConfig("yAxes",
 		{
 			method: this._setYAxes
-		});		
+		});	
+		
+		/**
+		 * @attribute constrainViewport
+		 * @description Determines whether the viewport is constrained to prevent series data from overflow.
+		 * @type Boolean
+		 */
+		this.setAttributeConfig("constrainViewport",
+		{
+			method: this._setConstrainViewport
+		});	
 	},
 
 	/**
@@ -190,7 +200,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 				{
 					if(typeof value.labelFunction == "function")
 					{
-						clonedAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
+						clonedAxis.labelFunction = YAHOO.widget.Chart.createProxyFunction(value.labelFunction);
 					}
 					else
 					{
@@ -221,7 +231,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 			{
 				if(axisFunctions[i] !== null)
 				{
-					YAHOO.widget.FlashAdapter.removeProxyFunction(axisFunctions[i]);
+					YAHOO.widget.Chart.removeProxyFunction(axisFunctions[i]);
 				}
 			}
 			axisFunctions = [];
@@ -292,5 +302,16 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 			if(value[i].labelFunction) this._yAxisLabelFunctions.push(value[i].labelFunction);
 			this._swf.setVerticalAxis(value[i]);
 		}		
+	},
+	
+	/**
+	 * Setter for the constrainViewport attribute
+	 *
+	 * @method _setConstrainViewport
+	 * @private
+	 */
+	_setConstrainViewport: function(value)
+	{
+			this._swf.setConstrainViewport(value);
 	}
 });

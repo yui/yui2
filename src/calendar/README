@@ -1,5 +1,45 @@
 Calendar Release Notes
 
+*** version 2.8.0 ***
+
++ DateMath extracted to standalone module. However, it continues to
+  be included in the calendar module, so no change is required to
+  existing pages which use calendar.
+
++ Made default configuration property values (DEFAULT_CONFIG) public.
+
++ Made default class names (STYLES) used for CSS classes, public.
+
++ Changed the few remaining hardcoded CSS class names to use default
+  STYLES configuration.
+
++ The cells property is now populated by searching for tds by class 
+  name ("calcell") under the calendar's table element, as opposed to 
+  blindly picking up all td elements under the div container.
+
+  This fixes incorrect selection state related bugs in custom calendars,
+  where the customization introduces additional tables to the default 
+  calendar markup.
+
++ Added prevDate and newDate arguments to the changePage event. These
+  are accessible through the arguments array (as with all custom events
+  created using the default LIST signature):
+
+  e.g:
+
+  changePageEvent.subscribe(function(type, args) {
+
+    var prevDate = args[0];
+    var newDate = args[1];
+
+    if (YAHOO.widget.DateMath.before(newDate, prevDate) {
+       // Moving back in time 
+    } else {
+       // Moving forward in time
+    }
+
+  });
+
 *** version 2.7.0 ***
 
 + Fixed CalendarGroup page construction, so that the intial pagedate for 

@@ -656,7 +656,7 @@ Element.prototype = {
                     self.fireEvent(type, e);
                 }, obj, scope);
             }
-            this.createEvent(type, this);
+            this.createEvent(type, {scope: this});
         }
         
         return YAHOO.util.EventProvider.prototype.subscribe.apply(this, arguments); // notify via customEvent
@@ -881,7 +881,7 @@ Element.prototype = {
         AttributeProvider.prototype.setAttributeConfig.apply(this, arguments);
     },
 
-    createEvent: function(type, scope) {
+    createEvent: function(type, config) {
         this._events[type] = true;
         return AttributeProvider.prototype.createEvent.apply(this, arguments);
     },

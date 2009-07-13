@@ -1428,6 +1428,29 @@ package com.yahoo.astra.fl.charts
 			}
 		}
 		
+		/**
+		 * @private
+		 * Storage for constrainViewport property.
+		 */
+		private var _constrainViewport:Boolean = true;
+		
+		/**
+		 * Determines whether a scrollRect is set on a series to constrain the viewport
+		 */
+		public function get constrainViewport():Boolean
+		{
+			return this._constrainViewport;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set constrainViewport(value:Boolean):void
+		{
+			this._constrainViewport = value;
+		}
+		
+		
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
@@ -1748,11 +1771,18 @@ package com.yahoo.astra.fl.charts
 			var seriesWidth:Number = this._contentBounds.width - (contentPadding * 2);
 			var seriesHeight:Number = this._contentBounds.height - (contentPadding *2);
 			
-			var contentScrollRect:Rectangle = new Rectangle(0, 0, seriesWidth, seriesHeight);
+			if(this.constrainViewport)
+			{
+				var contentScrollRect:Rectangle = new Rectangle(0, 0, seriesWidth, seriesHeight);
+				this.content.scrollRect = contentScrollRect;
+			}
+			else
+			{
+				this.content.scrollRect = null;
+			}
+			
 			this.content.x = contentPadding + this._contentBounds.x;
 			this.content.y = contentPadding + this._contentBounds.y;
-			
-			this.content.scrollRect = contentScrollRect;
 			
 			var seriesCount:int = this.series.length;
 			for(var i:int = 0; i < seriesCount; i++)

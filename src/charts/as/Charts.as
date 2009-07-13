@@ -548,6 +548,14 @@ package
 		}
 		
 		/**
+		 * Determines whether the viewport is constrained
+		 */
+		public function setConstrainViewport(value:Boolean):void
+		{
+			if(this.chart is CartesianChart) (this.chart as CartesianChart).constrainViewport = value; 
+		}
+		
+		/**
 		 * Accepts a JSON-encoded set of styles for the chart itself.
 		 * Flash Player versions below 9.0.60 don't encode ExternalInterface
 		 * calls correctly!
@@ -618,6 +626,7 @@ package
 					}
 					break;
 				case "font":
+					if(value.color) value.color = this.parseColor(value.color);
 					var textFormat:TextFormat = TextFormatSerializer.readTextFormat(value);
 					this.chart.setStyle("textFormat", textFormat);
 					break;
@@ -861,6 +870,7 @@ package
 								{
 									this.log("The style " + styleName + " is only supported by series of type 'pie'.", LoggerCategory.WARN);
 								}
+								if(style.font.color) style.font.color = this.parseColor(style.font.color); 
 								UIComponent(series).setStyle("textFormat", TextFormatSerializer.readTextFormat(style.font))
 								break;	
 							case "visibility":
@@ -955,6 +965,7 @@ package
 				ExternalInterface.addCallback("setVerticalField", setVerticalField);
 				ExternalInterface.addCallback("setHorizontalAxis", setHorizontalAxis);
 				ExternalInterface.addCallback("setVerticalAxis", setVerticalAxis);
+				ExternalInterface.addCallback("setConstrainViewport", setConstrainViewport);
 				
 				//PieChart
 				ExternalInterface.addCallback("getDataField", getDataField);
@@ -1181,6 +1192,7 @@ package
 			
 			if(styles.font)
 			{
+				if(styles.font.color) styles.font.color = this.parseColor(styles.font.color);
 				var textFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.font);
 				this.chart.setStyle("dataTipTextFormat", textFormat);
 			}
@@ -1246,6 +1258,7 @@ package
 			
 			if(styles.titleFont != null)
 			{
+				if(styles.titleFont.color) styles.titleFont.color = this.parseColor(styles.titleFont.color);
 				var titleTextFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.titleFont);
 				cartesianChart.setComplexStyle(axisStyle, "titleTextFormat", titleTextFormat);			
 			}
@@ -1347,6 +1360,7 @@ package
 		{
 			if(styles.font)
 			{
+				if(styles.font.color) styles.font.color = this.parseColor(styles.font.color); 
 				var textFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.font);
 				this.legend.setStyle("textFormat", textFormat);
 			}
