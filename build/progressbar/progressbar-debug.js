@@ -339,7 +339,6 @@
 				}
 		    });
 		
-				
 
 			/**
 			 * @attribute height
@@ -365,39 +364,6 @@
 				}
 		    });
 			
-			/**
-			 * @attribute barColor
-			 * @description Color for the bar.  It can be any valid CSS color value.
-			 * @default 'blue'
-			 * @type String - CSS color specification
-			 */				
-			this.setAttributeConfig('barColor', {
-				getter: function() {
-					return Dom.getStyle(barEl,'background-color');
-				},
-				method: function (value) {
-					YAHOO.log('Setting bar color: ' + value,'info','ProgressBar');
-					Dom.setStyle(barEl,'background-color', value);
-					Dom.setStyle(barEl,'background-image', 'none');
-				}
-			});
-
-			/**
-			 * @attribute backColor
-			 * @description Color for the background.  It can be any valid CSS color value.
-			 * @default 'transparent'
-			 * @type String - CSS color specification
-			 */				
-			this.setAttributeConfig('backColor', {
-				getter:function () {
-					return this.getStyle('background-color');
-				},
-				method: function (value) {
-					YAHOO.log('Setting background color: ' + value,'info','ProgressBar');
-					this.setStyle('background-color', value);
-					this.setStyle('background-image', 'none');
-				}
-			});
 			
 	
 			/**
@@ -587,14 +553,14 @@
 			},
 			{
 				ltr: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated) { anim.stop(true); }
+					if (anim.isAnimated) { anim.stop(); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {width:{ to: pixelValue }}; 
 					anim.animate();
 				},
 				rtl: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated) { anim.stop(true); }
+					if (anim.isAnimated) { anim.stop(); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {
@@ -604,14 +570,14 @@
 					anim.animate();
 				},
 				ttb: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated) { anim.stop(true); }
+					if (anim.isAnimated) { anim.stop(); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {height:{to: pixelValue}};
 					anim.animate();
 				},
 				btt: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated) { anim.stop(true); }
+					if (anim.isAnimated) { anim.stop(); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {

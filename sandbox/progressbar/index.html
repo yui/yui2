@@ -175,33 +175,17 @@ pre, code {
 		<div id="hd">
 			<h1>Progress Bar</h1>
 			<p>The following examples of the ProgressBar show several of its features.  
-			The Animation utility has been loaded so all bars move smoothly, otherwise they would respond
-			immediately to changes in value.  The values set in the floating box to the left will
+			The values set in the floating box to the left will
 			affect all of the bars below.  All bars have the properties <code>minValue</code> and <code>maxValue</code>
 			left in its default of 0 and 100.  Values outside of this range will be ignored.</p>
 		</div>
 		<div id="bd">
-			<div id="pb"></div>
-			<p>This is the most plain ProgressBar, it has been created by the following code:</p>
-			<textarea name="code" class="JScript" cols="60" rows="1">
-				pb = new YAHOO.widget.ProgressBar({
-					height:'30px', 
-					width: 300, 
-					barColor:'green',
-					backColor:'orange',
-					border:'thin solid black'
-				});
-				pb.render('pb');
-			</textarea>
-			<p>The argument to the <code>render</code> method is the <code>id</code> of the container where the bar will render. 
-			Size attributes can be given as strings with explicit units or numbers which will be interpreted as pixel sizes.
-			Color attributes can be anything that a CSS color definition would take.</p>
-			<hr/>
 			<div id="pbplain"></div>
-			<p>This is a more elaborate version.  It was created by the following statements:</p>
+			<p>This bar was created by the following statements:</p>
 			<textarea name="code" class="JScript" cols="60" rows="1">
 				var pbplain = new YAHOO.widget.ProgressBar({className:'plain'});
 				pbplain.render('pbplain');</textarea>
+			<p>The argument to the <code>render</code> method is the <code>id</code> of the container where the bar will render.</p> 
 			<p>The shape and colors are the result of style definitions.  That is why I provided a <code>className</code> attribute to be assigned
 			to the ProgressBar, so that I can qualify the CSS selectors to have them applied to this instance.</p>
 			<textarea name="code" class="CSS" cols="60" rows="1">
@@ -215,19 +199,32 @@ pre, code {
 				.plain .yui-pb-bar {
 					background-image:url(bar.gif);
 				}
-
-				.plain.yui-pb .yui-pb-anim {
-					background-image:url(animbar.gif);
-				}
 			</textarea>
-			<p>In the first one I'm changing the default height, leaving the width to the internal default (200px).
-			The second definition sets the image that provides the rounded corners to contain the bar.  
-			This image can be stretched and shrunk as needed.  
+			<p>In the first one I'm changing the default height, leaving the width to the internal default (200px). 
+			The CSS selector <code>.plain.yui-pb</code> is redundant, <code>.plain</code> would be enough.</p>
+			<p>The second definition sets the image that provides the rounded corners to contain the bar, the mask.  
+			The image needs to be in a format that supports transparency, either GIF or PNG. 
+			The image is layered over the bar so it needs to be transparent wherever the bar is to show through.</p>
+			<p>The mask can be stretched and shrunk as needed.  
 			The actual <code>mask.gif</code> image is 400*32px but here it is shown in 200*25px, the ProgressBar handles the scaling.
 			The third definition provides the image to be used for the bar.  
-			It will be tiled to fit the space needed so it needs to be designed with a repeating tileable pattern.
-			Finally, the last definition provides an image that will be displayed alternatively while the bar
-			is moving.</p>
+			It will be tiled to fit the space needed so it needs to be designed with a repeating tileable pattern.</p>
+			<hr/>
+			<div id="pb"></div>
+			<p>You have access to the actual HTML elements that make up the ProgressBar so you can do some limited
+			styling via code:</p>
+			<textarea name="code" class="JScript" cols="60" rows="1">
+				pb = new YAHOO.widget.ProgressBar({height:'30px', width: 300});
+				pb.render('pb');
+				pb.get('barEl').style.backgroundColor = 'green';
+				pb.setStyle('backgroundColor','orange');
+				pb.setStyle('border','thin solid black');			
+			</textarea>
+			<p>Size attributes can be given as strings with explicit units or numbers which will be interpreted as pixel sizes.
+			Once the ProgressBar is rendered, the individual elements can be styled.  
+			We set the background color of the bar element to green.  
+			The whole ProgressBar is an instance of YAHOO.util.Element so, for the overall container of the widget, we can set the style
+			by using Element's own methods like <code>setStyle</code></p>
 			<hr/>
 			<p>The ProgressBar is not limited to show only progress of an operation, 
 			it can show anything a bar can show.  It can be tricked to show discontinuous values
@@ -278,7 +275,9 @@ pre, code {
 			The mask should be a GIF or PNG file with transparency where you want the bar to show through.
 			The mask can be opaque in the corners and transparent in the center, as in previous examples
 			or you can also play with transparency and opaqueness anywhere in the graphics like the bar above.</p>
-			<p>The ProgressBar cuts the given mask vertically and horizontally right through the center of it
+			<p>The ProgressBar does not scale the mask via the width and height attributes of the <code>img</code> tag.  
+			For very fine detail, like thin lines, edges, grids and borders, this scaling gives poor results.
+			Instead, it cuts the given mask vertically and horizontally right through the center of it
 			and uses each corner separately.  These four sectors slide to and from the center lines.
 			If the mask has a repeating pattern, as this one has, you have to make sure that the width and height
 			given are integer multiples of the basic pattern, otherwise it will not tile correctly.
@@ -333,12 +332,13 @@ pre, code {
 			<p>ProgressBars can grow in any direction, as set by the <code>direction</code> attribute,
 			which can take values <code>'ltr'</code> (left to right, the default), <code>'rtl'</code>, <code>'ttb'</code> 
 			(top to bottom) or <code>'btt'</code>, as in this sample.</p>
-			<p>If the Animation utility is available, the <code>anim</code> attribute can be set to enable it.  
+			<p>If the Animation utility is available, the <code>anim</code> attribute can be set to true to enable it.  
 			The instance of Animation in use is available in the <code>anim</code> attribute.  
 			You can set the attributes of the animation like <code>duration</code> or <code>method</code>.</p>
 			<p>The caption for the bar can be shown anywhere, not just overlapping the bar.  
 			Any suitable container can hold the caption, which needs to be assigned to property <code>captionEl</code>,
-			like right here: <span id="pbCCaption"></span>.   The text shown on the caption can also be altered
+			like right here: <span id="pbCCaption"></span>.  Change the value of the bar in the box in the left-top box and see it change.</p>
+			<p>The text shown on the caption can also be altered
 			by setting the <code>textTemplate</code> configuration attribute.  This attribute will be processed
 			via YAHOO.lang.substitute.  The ProgressBar makes the values of <code>minValue</code>, <code>maxValue</code> and <code>value</code>
 			available for replacement.</p>
@@ -351,9 +351,9 @@ pre, code {
 				pbcopper.set('textTemplate','{value} of {maxValue}');
 				pbcopper.render('pbcopper');
 			</textarea>
-			<p>These setting make the bar grow from bottom to top, to last 3 seconds to make any changes and
+			<p>These settings make the bar grow from bottom to top, to last 3 seconds to make any changes and
 			use the <code>bounceBoth</code> easing method.</p>
-			<p style="cle ar:both">The space left blank by the bar is not transparent 
+			<p>The space left blank by the bar is not transparent 
 			as in the previous examples.  I have set a further background which shows in the 'empty' area. 
 			This was set through the following style:</p>
 			<textarea name="code" class="CSS" cols="60" rows="1">
@@ -377,7 +377,9 @@ pre, code {
 				});
 			</textarea>
 			<p>We could have almost achieved the same simply by using the caption container and text template.
-			We did it this way just to make some visible changes to reflect the events.</p>
+			We did it this way just to make some visible changes to reflect the events.
+			An obvious target of these events might be the color of the ProgressBar elements themselves,
+			such as the bar, as has been shown in a previous example, according to the value.</p>
 			
 			<hr/>
 			<p>So, in the end, we have four layered levels in the ProgressBar, the CSS selectors for each of the layers,
@@ -390,6 +392,8 @@ pre, code {
 			<p>There is a further selector to set the image of the bar while it is moving (provided the Animation utility is loaded)
 			which is selected via the selector:</p>
 			<ul><li><code>.yui-pb .yui-pb-anim</code></li></ul>
+			<p>The composite selector is to give it higher priority over the normal <code>.yui-pb-bar</code> selector for the bar.  
+			The <code>!important</code> declaration can be used instead.</p>
 						
 			</div>
 			<h2>WAI-ARIA support</h2>
@@ -412,12 +416,6 @@ pre, code {
 				<dd>Numeric, default: 0, the minimum value for the bar.  Settings of <code>value</code> below this will be ignored</dd>
 				<dt><code>maxValue</code></dt>
 				<dd>Numeric, default: 100, the maximum value for the bar.  Settings of <code>value</code> above this will be ignored</dd>
-				<dt><code>barColor</code></dt>
-				<dd>Any valid CSS color specification, default 'blue' it will apply to the body of the bar. 
-				It will override settings done via StyleSheets</dd>
-				<dt><code>backColor</code></dt>
-				<dd>Any valid CSS color specification, default {not set} it will apply to the area left uncovered by the bar. 
-				It will override settings done via StyleSheets</dd>
 				<dt><code>width</code> and <code>height</code></dt>
 				<dd>Any valid CSS width specification, defaults 200px wide, 20px high, a string including standard CSS units or any numeric value (which will be interpreted as pixel sizes</dd>
 				<dt><code>direction</code></dt>
@@ -430,8 +428,8 @@ pre, code {
 				The <code>duration</code> and <code>method</code> properties are the most important to use.</dd>
 				<dt><code>element</code>, <code>barEl</code> and <code>maskEl</code></dt>
 				<dd>Read only.  They contain references to the actual elements making up the ProgressBar. 
-				<code>element</code> is the overall container.  Their use is discouraged</dd>
-				<dt><code>captionElelement</code></dt>
+				<code>element</code> is the overall container. </dd>
+				<dt><code>captionEl</code></dt>
 				<dd>Contains a reference to the container of the caption text.  
 				It defaults to the built-in container which overlaps the ProgressBar, 
 				but can be set to any other container anywhere on the page</dd>
@@ -455,7 +453,8 @@ pre, code {
 				<dt><code>destroy()</code></dt>
 				<dd>Deletes the HTML code created and removes any event listeners attached to them</dd>
 			</dl>
-			<p>ProgressBar inherits from YAHOO.util.Element and inherits other methods from it, such as <code>get</code> and <code>set</code></p>
+			<p>ProgressBar inherits from YAHOO.util.Element and inherits other methods from it, 
+			such as <code>get</code>, <code>set</code>, <code>getStyle</code> and <code>setStyle</code>.</p>
 			<h3>CSS styles</h3>
 			<p>To make it easy to draw the most basic ProgressBar a few settings relating to presentation are provided.
 			However, the code and presentation of the widget have been kept separate as much as possible.  
@@ -470,8 +469,7 @@ pre, code {
 			<tr><td class="selector">.yui-pb-bar</td><td>margin</td><td>offset from the edge of the ProgressBar to where the mask transparency starts.  
 				If the bar goes into this area, it would be hidden behind the mask.
 				This setting makes the bar use only the inner, transparent part of the mask.</td></tr>
-			<tr><td class="selector">.yui-pb .yui-pb-anim</td><td>background-image<br/>background-color</td><td>Image or color to use for the bar while it is changing.
-				The composite selector is to give it higher priority over the normal bar.  The <code>!important</code> pseudo style can be used instead</td></tr>
+			<tr><td class="selector">.yui-pb .yui-pb-anim</td><td>background-image<br/>background-color</td><td>Image or color to use for the bar while it is changing.</td></tr>
 			<tr><td class="selector">.yui-pb-mask div</td><td>background-image</td><td>mask with transparencies to allow the bar to show through</td></tr>
 			<tr><td class="selector">.yui-pb-caption</td><td>display</td><td>the caption is normally hidden, it needs to be shown by setting <code>display:inline</code></td></tr>
 			<tr><td class="selector">.yui-pb-caption</td><td>font and others</td><td>the caption is normally shown centered in the normal font, which is unlikely to be satisfying</td></tr>
@@ -526,8 +524,11 @@ pre, code {
 		// I've provided className's in each of the bars so that the styles above could attach to each bar separately.
 		
 		
-		pb = new YAHOO.widget.ProgressBar({height:'30px', width: 300, barColor:'green',backColor:'orange',border:'thin solid black'});
+		pb = new YAHOO.widget.ProgressBar({height:'30px', width: 300});
 		pb.render('pb');
+		pb.get('barEl').style.backgroundColor = 'green';
+		pb.setStyle('backgroundColor','orange');
+		pb.setStyle('border','thin solid black');
 
 		pbplain = new YAHOO.widget.ProgressBar({className:'plain'});
 		pbplain.render('pbplain');

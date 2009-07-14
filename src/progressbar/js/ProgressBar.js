@@ -339,7 +339,6 @@
 				}
 		    });
 		
-				
 
 			/**
 			 * @attribute height
@@ -365,39 +364,6 @@
 				}
 		    });
 			
-			/**
-			 * @attribute barColor
-			 * @description Color for the bar.  It can be any valid CSS color value.
-			 * @default 'blue'
-			 * @type String - CSS color specification
-			 */				
-			this.setAttributeConfig('barColor', {
-				getter: function() {
-					return Dom.getStyle(barEl,'background-color');
-				},
-				method: function (value) {
-					YAHOO.log('Setting bar color: ' + value,'info','ProgressBar');
-					Dom.setStyle(barEl,'background-color', value);
-					Dom.setStyle(barEl,'background-image', 'none');
-				}
-			});
-
-			/**
-			 * @attribute backColor
-			 * @description Color for the background.  It can be any valid CSS color value.
-			 * @default 'transparent'
-			 * @type String - CSS color specification
-			 */				
-			this.setAttributeConfig('backColor', {
-				getter:function () {
-					return this.getStyle('background-color');
-				},
-				method: function (value) {
-					YAHOO.log('Setting background color: ' + value,'info','ProgressBar');
-					this.setStyle('background-color', value);
-					this.setStyle('background-image', 'none');
-				}
-			});
 			
 	
 			/**

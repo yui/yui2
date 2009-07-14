@@ -77,14 +77,6 @@
 	};
 		
 	
-	var parseColor = function(color) {
-		var c = YAHOO.util.ColorAnim.prototype.parseColor(color);
-		if (Lang.isNull(c)) {
-			return YAHOO.util.ColorAnim.prototype.patterns.transparent.test(color)?'transparent':(color=='blue'?'0,0,255':color);
-		}
-		return c;
-	};
-	
     var oSuite = new YAHOO.tool.TestSuite("ProgressBar testing");
     
     //add a test case
@@ -120,14 +112,10 @@
 			A.areEqual('20px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('200px',getStyle(t.c,'width'),'caption width');
 			A.areEqual('20px',getStyle(t.c,'height'),'caption height');
-			A.areEqual('0,0,255',parseColor(pb.get('barColor')),'reported barColor');
-			A.areEqual('0,0,255',parseColor(Dom.getStyle(t.b,'background-color')),'actual barColor');
-			A.areEqual('transparent',parseColor(pb.get('backColor')),'reported backColor');
-			A.areEqual('transparent',parseColor(Dom.getStyle(t.pb,'background-color')),'actual backColor');
         },
 
         testSetupByCode : function () {
-            pb = new PB({height:'30px', width: 300, barColor:'green',backColor:'orange'});
+            pb = new PB({height:'30px', width: 300});
 			pb.render('test');
 			t = getEls();
 			A.areEqual(0,pb.get('value'),'reported value');
@@ -146,10 +134,6 @@
 			A.areEqual('30px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('300px',getStyle(t.c,'width'),'caption width');
 			A.areEqual('30px',getStyle(t.c,'height'),'caption height');
-			A.areEqual('green',parseColor(pb.get('barColor')),'reported barColor');
-			A.areEqual('green',parseColor(Dom.getStyle(t.b,'background-color')),'actual barColor');
-			A.areEqual('orange',parseColor(pb.get('backColor')),'reported backColor');
-			A.areEqual('orange',parseColor(Dom.getStyle(t.pb,'background-color')),'actual backColor');
         },
 		
 		testSetupByStyle: function () {
@@ -172,10 +156,6 @@
 			A.areEqual('25px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('250px',getStyle(t.c,'width'),'caption width');
 			A.areEqual('25px',getStyle(t.c,'height'),'caption height');
-			A.areEqual('0,0,255',parseColor(pb.get('barColor')),'reported barColor');
-			A.areEqual('0,0,255',parseColor(Dom.getStyle(t.b,'background-color')),'actual barColor');
-			A.areEqual('transparent',parseColor(pb.get('backColor')),'reported backColor');
-			A.areEqual('transparent',parseColor(Dom.getStyle(t.pb,'background-color')),'actual backColor');
 		}
     }));
 
