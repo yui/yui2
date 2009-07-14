@@ -613,6 +613,12 @@ var Dom = YAHOO.util.Dom,
         */
         STR_COLLAPSE: 'Collapse Toolbar',
         /** 
+        * @property STR_EXPAND
+        * @description String for Toolbar Collapse Button - Expand
+        * @type String
+        */
+        STR_EXPAND: 'Expand Toolbar',
+        /** 
         * @property STR_SPIN_LABEL
         * @description String for spinbutton dynamic label. Note the {VALUE} will be replaced with YAHOO.lang.substitute
         * @type String
@@ -2027,11 +2033,13 @@ var Dom = YAHOO.util.Dom,
                 Dom.removeClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed');
                 if (el[0]) {
                     Dom.removeClass(el[0], 'collapsed');
+                    el[0].title = this.STR_COLLAPSE;
                 }
                 this.fireEvent('toolbarExpanded', { type: 'toolbarExpanded', target: this });
             } else {
                 if (el[0]) {
                     Dom.addClass(el[0], 'collapsed');
+                    el[0].title = this.STR_EXPAND;
                 }
                 Dom.addClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed');
                 this.fireEvent('toolbarCollapsed', { type: 'toolbarCollapsed', target: this });
@@ -2560,6 +2568,12 @@ var Dom = YAHOO.util.Dom,
         _contentTimer: null,
         /**
         * @private
+        * @property _contentTimerMax
+        * @description The number of times the loaded content should be checked before giving up. Default: 500
+        */
+        _contentTimerMax: 500,
+        /**
+        * @private
         * @property _contentTimerCounter
         * @description Counter to check the number of times the body is polled for before giving up
         * @type Number
@@ -2903,7 +2917,7 @@ var Dom = YAHOO.util.Dom,
         */
         _toggleDesignMode: function() {
             var _dMode = this._getDoc().body.contentEditable,
-                _state = ((_dMode) ? 'on' : 'off');
+                _state = ((_dMode == 'true') ? 'off' : 'on');
             this._setDesignMode(_state);
             return _state;
         },
@@ -3006,13 +3020,12 @@ var Dom = YAHOO.util.Dom,
                 this._getDoc().body.style.margin = '0';
             }
             if (!this.get('disabled')) {
-                if (this._getDoc().designMode.toLowerCase() != 'on') {
-                    this._setDesignMode('on');
-                    this._contentTimerCounter = 0;
-                }
+                this._setDesignMode('on');
+                this._contentTimerCounter = 0;
             }
             if (!this._getDoc().body) {
                 this._contentTimerCounter = 0;
+                this._editorInit = false;
                 this._checkLoaded();
                 return false;
             }
@@ -3050,11 +3063,12 @@ var Dom = YAHOO.util.Dom,
         * @description Called from a setTimeout loop to check if the iframes body.onload event has fired, then it will init the editor.
         */
         _checkLoaded: function() {
+            this._editorInit = false;
             this._contentTimerCounter++;
             if (this._contentTimer) {
                 clearTimeout(this._contentTimer);
             }
-            if (this._contentTimerCounter > 500) {
+            if (this._contentTimerCounter > this._contentTimerMax) {
                 return false;
             }
             var init = false;
@@ -3749,6 +3763,7 @@ var Dom = YAHOO.util.Dom,
                 }
                 this._listFix(ev);
             }
+            this._fixListDupIds();
             this.fireEvent('editorKeyPress', { type: 'editorKeyPress', target: this, ev: ev });
         },
         /**
@@ -3982,6 +3997,39 @@ var Dom = YAHOO.util.Dom,
                 this.nodeChange();
             }
             this.fireEvent('editorKeyDown', { type: 'editorKeyDown', target: this, ev: ev });
+        },
+        /**
+        * @private
+        * @property _fixListRunning
+        * @type Boolean
+        * @description Keeps more than one _fixListDupIds from running at the same time.
+        */
+        _fixListRunning: null,
+        /**
+        * @private
+        * @method _fixListDupIds
+        * @description Some browsers will duplicate the id of an LI when created in designMode.
+        * This method will fix the duplicate id issue. However it will only preserve the first element 
+        * in the document list with the unique id. 
+        */
+        _fixListDupIds: function() {
+            if (this._fixListRunning) {
+                return false;
+            }
+            if (this._getDoc()) {
+                this._fixListRunning = true;
+                var lis = this._getDoc().body.getElementsByTagName('li'),
+                    i = 0, ids = {};
+                for (i = 0; i < lis.length; i++) {
+                    if (lis[i].id) {
+                        if (ids[lis[i].id]) {
+                            lis[i].id = '';
+                        }
+                        ids[lis[i].id] = true;
+                    }
+                }
+                this._fixListRunning = false;
+            }
         },
         /**
         * @private
@@ -7126,6 +7174,30 @@ YAHOO.widget.EditorInfo = {
             return this._instances[id];
         }
         return false;
+    },
+    /**
+    * @method saveAll
+    * @description Saves all Editor instances on the page. If a form reference is passed, only Editor's bound to this form will be saved.
+    * @param {HTMLElement} form The form to check if this Editor instance belongs to
+    */
+    saveAll: function(form) {
+        var i, e, items = YAHOO.widget.EditorInfo._instances;
+        if (form) {
+            for (i in items) {
+                if (Lang.hasOwnProperty(items, i)) {
+                    e = items[i];
+                    if (e.get('element').form && (e.get('element').form == form)) {
+                        e.saveHTML();
+                    }
+                }
+            }
+        } else {
+            for (i in items) {
+                if (Lang.hasOwnProperty(items, i)) {
+                    items[i].saveHTML();
+                }
+            }
+        }
     },
     /**
     * @method toString
