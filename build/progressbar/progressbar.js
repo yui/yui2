@@ -151,7 +151,7 @@
 		Prog.CLASS_BR,
 		'"></div></div>'
 	].join('');
-	
+
 	
 	Lang.extend(Prog, YAHOO.util.Element, {
 		/**
@@ -325,7 +325,9 @@
 			 */				
 
 		    this.setAttributeConfig('width', {
-		        value: this.getStyle('width'),
+				getter: function() {
+					return this.getStyle('width');
+				},
 				method: function(value) {
 					if (Lang.isNumber(value)) {
 						value += 'px';
@@ -335,6 +337,7 @@
 					this.redraw();
 				}
 		    });
+		
 
 			/**
 			 * @attribute height
@@ -346,7 +349,9 @@
 			 * @type Number or String
 			 */				
 		    this.setAttributeConfig('height', {
-		        value: this.getStyle('height'),
+				getter:function() {
+					return this.getStyle('height');
+				},
 				method: function(value) {
 					if (Lang.isNumber(value)) {
 						value += 'px';
@@ -357,33 +362,6 @@
 				}
 		    });
 			
-			/**
-			 * @attribute barColor
-			 * @description Color for the bar.  It can be any valid CSS color value.
-			 * @default 'blue'
-			 * @type String - CSS color specification
-			 */				
-			this.setAttributeConfig('barColor', {
-				value:Dom.getStyle(barEl,'background-color'),
-				method: function (value) {
-					Dom.setStyle(barEl,'background-color', value);
-					Dom.setStyle(barEl,'background-image', 'none');
-				}
-			});
-
-			/**
-			 * @attribute backColor
-			 * @description Color for the background.  It can be any valid CSS color value.
-			 * @default 'transparent'
-			 * @type String - CSS color specification
-			 */				
-			this.setAttributeConfig('backColor', {
-				value:this.getStyle('background-color'),
-				method: function (value) {
-					this.setStyle('background-color', value);
-					this.setStyle('background-image', 'none');
-				}
-			});
 			
 	
 			/**
@@ -444,10 +422,15 @@
 		 * @return {YAHOO.widget.ProgressBar}
 		 * @chainable
 		 */
-		render: function(el,before) {
+		render: function(parent,before) {
 
 			if (this._rendered) { return; }
 			this._rendered = true;
+
+			// If the developer set a className attribute on initialization, 
+			// Element would have wiped out my own className
+			// So I need to insist on it.
+			this.addClass(Prog.CLASS_PROGBAR);
 
 			var container = this.get('element');
 			container.tabIndex = 0;
@@ -455,7 +438,7 @@
 			container.setAttribute('aria-valuemin',this.get('minValue'));
 			container.setAttribute('aria-valuemax',this.get('maxValue'));
 
-			this.appendTo(el,before);
+			this.appendTo(parent,before);
 			
 			switch(this.get('direction')) {
 				case DIRECTION_BTT:
@@ -626,13 +609,13 @@
 			switch (this.get('direction')) {
 				case DIRECTION_LTR:
 				case DIRECTION_RTL:
-					this._barSpace = parseInt((this.getStyle('width') || this.get('width')),10) - 
+					this._barSpace = parseInt(this.get('width'),10) - 
 						parseInt(Dom.getStyle(barEl,'marginLeft'),10)  -
 						Math.abs(parseInt(Dom.getStyle(barEl,'marginRight'),10));
 					break;
 				case DIRECTION_TTB:
 				case DIRECTION_BTT:
-					this._barSpace = parseInt((this.getStyle('height') || this.get('height')),10) -
+					this._barSpace = parseInt(this.get('height'),10) -
 						parseInt(Dom.getStyle(barEl,'marginTop'),10) -
 						parseInt(Dom.getStyle(barEl,'marginBottom'),10); 
 					break;

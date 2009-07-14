@@ -243,7 +243,7 @@ YAHOO.env.ua = function() {
         var numberfy = function(s) {
             var c = 0;
             return parseFloat(s.replace(/\./g, function() {
-                return (c++ > 0) ? '' : '.';
+                return (c++ == 1) ? '' : '.';
             }));
         },
 
