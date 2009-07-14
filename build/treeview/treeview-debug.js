@@ -192,10 +192,10 @@ TV.prototype = {
 
             return true;
         }
-		var s = el.style;
-        s.display = "none";
-        s.opacity = 1;
-        s.filter = "alpha(opacity=100)";
+		// var s = el.style;
+        // s.display = "none";
+        // s.opacity = 1;
+        // s.filter = "alpha(opacity=100)";
 
         return false;
     },
