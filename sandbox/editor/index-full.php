@@ -50,7 +50,8 @@
             <option value="xhtml"> XHTML </option>
             <option value="css"> CSS </option>
             <option value="default"> Default </option>
-        </select><a href="#" id="editorHTML">Editor HTML</a><br>
+        </select><br>
+        <a href="#" id="editorHTML">Editor HTML</a><br>
         <a href="#" id="editorSE">Editor Selected Element</a><br>
         <a href="#" id="editorToggle">Toggle Design Mode</a><br>
         <a href="#" id="editorDisable">Toggle Disable</a><br>
