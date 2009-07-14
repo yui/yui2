@@ -1420,9 +1420,6 @@ var Dom = YAHOO.util.Dom,
             panel.editor_header.firstChild.innerHTML = win.header;
             if (win.footer !== null) {
                 panel.setFooter(win.footer);
-                Dom.addClass(panel.footer, 'open');
-            } else {
-                Dom.removeClass(panel.footer, 'open');
             }
             panel.cfg.setProperty('width', win.attrs.width);
 
