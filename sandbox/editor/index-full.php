@@ -23,6 +23,7 @@
         <form method="post" action="index-full.php" id="form1" class="yui-skin-sam">
         <textarea id="editor" name="editor" rows="20" cols="75">
         This is a test.<br>
+        A {$'} B
         <ol>
             <li id="foo">Item 1</li>
         </ol>
