@@ -192,10 +192,6 @@ TV.prototype = {
 
             return true;
         }
-		// var s = el.style;
-        // s.display = "none";
-        // s.opacity = 1;
-        // s.filter = "alpha(opacity=100)";
 
         return false;
     },
@@ -274,8 +270,8 @@ TV.prototype = {
          * starts
          * @event animStart
          * @type CustomEvent
-         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing
-         * @param {String} type the type of animation ("expand" or "collapse")
+         * @param {YAHOO.widget.Node} oArgs.node the node that is expanding/collapsing
+         * @param {String} oArgs.type the type of animation ("expand" or "collapse")
          */
         this.createEvent("animStart", this);
 
@@ -284,8 +280,8 @@ TV.prototype = {
          * completes
          * @event animComplete
          * @type CustomEvent
-         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing
-         * @parm {String} type the type of animation ("expand" or "collapse")
+         * @param {YAHOO.widget.Node} oArgs.node the node that is expanding/collapsing
+         * @param {String} oArgs.type the type of animation ("expand" or "collapse")
          */
         this.createEvent("animComplete", this);
 
