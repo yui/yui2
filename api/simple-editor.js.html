@@ -671,23 +671,14 @@
 <span class="c">        */</span>
         <span class="nx">_getDoc</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;iframe&#39;</span><span class="o">))</span> <span class="o">{</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;iframe&#39;</span><span class="o">).</span><span class="nx">get</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;iframe&#39;</span><span class="o">).</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">))</span> <span class="o">{</span>
-                            <span class="k">try</span> <span class="o">{</span>
-                                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;iframe&#39;</span><span class="o">).</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">contentWindow</span><span class="o">)</span> <span class="o">{</span>
-                                    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;iframe&#39;</span><span class="o">).</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">contentWindow</span><span class="o">.</span><span class="nb">document</span><span class="o">)</span> <span class="o">{</span>
-                                        <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;iframe&#39;</span><span class="o">).</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">contentWindow</span><span class="o">.</span><span class="nb">document</span><span class="o">;</span>
-                                        <span class="k">return</span> <span class="nx">value</span><span class="o">;</span>
-                                    <span class="o">}</span>
-                                <span class="o">}</span>
-                            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{}</span>
-                        <span class="o">}</span>
-                    <span class="o">}</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;iframe&#39;</span><span class="o">).</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">contentWindow</span><span class="o">.</span><span class="nb">document</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;iframe&#39;</span><span class="o">).</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">contentWindow</span><span class="o">.</span><span class="nb">document</span><span class="o">;</span>
+                    <span class="k">return</span> <span class="nx">value</span><span class="o">;</span>
                 <span class="o">}</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
             <span class="o">}</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
         <span class="o">},</span>
         <span class="c">/**</span>
 <span class="c">        * @private</span>
@@ -868,33 +859,25 @@
         <span class="c">/**</span>
 <span class="c">        * @private</span>
 <span class="c">        * @method _setDesignMode</span>
-<span class="c">        * @description Sets the designMode of the iFrame document.</span>
+<span class="c">        * @description Sets the contentEditable property of the iFrame document&#39;s body.</span>
 <span class="c">        * @param {String} state This should be either on or off</span>
 <span class="c">        */</span>
         <span class="nx">_setDesignMode</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">state</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">try</span> <span class="o">{</span>
-                <span class="k">var</span> <span class="nx">set</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-                <span class="c">//SourceForge Bug #1807057</span>
-<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">browser</span><span class="o">.</span><span class="nx">ie</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">state</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;off&#39;</span><span class="o">))</span> <span class="o">{</span>
-                    <span class="nx">set</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-                <span class="o">}</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">_getDoc</span><span class="o">().</span><span class="nx">designMode</span> <span class="o">=</span> <span class="nx">state</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_getDoc</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDoc</span><span class="o">().</span><span class="nx">body</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_getDoc</span><span class="o">().</span><span class="nx">body</span><span class="o">.</span><span class="nx">contentEditable</span> <span class="o">=</span> <span class="o">((</span><span class="nx">state</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;off&#39;</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
         <span class="o">},</span>
         <span class="c">/**</span>
 <span class="c">        * @private</span>
 <span class="c">        * @method _toggleDesignMode</span>
-<span class="c">        * @description Toggles the designMode of the iFrame document on and off.</span>
+<span class="c">        * @description Toggles the contentEditable property of the iFrame document&#39;s body on and off.</span>
 <span class="c">        * @return {String} The state that it was set to.</span>
 <span class="c">        */</span>
         <span class="nx">_toggleDesignMode</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">_dMode</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDoc</span><span class="o">().</span><span class="nx">designMode</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">(),</span>
-                <span class="nx">_state</span> <span class="o">=</span> <span class="s1">&#39;on&#39;</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="nx">_dMode</span> <span class="o">==</span> <span class="s1">&#39;on&#39;</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">_state</span> <span class="o">=</span> <span class="s1">&#39;off&#39;</span><span class="o">;</span>
-            <span class="o">}</span>
+            <span class="k">var</span> <span class="nx">_dMode</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDoc</span><span class="o">().</span><span class="nx">body</span><span class="o">.</span><span class="nx">contentEditable</span><span class="o">,</span>
+                <span class="nx">_state</span> <span class="o">=</span> <span class="o">((</span><span class="nx">_dMode</span><span class="o">)</span> <span class="o">?</span> <span class="s1">&#39;on&#39;</span> <span class="o">:</span> <span class="s1">&#39;off&#39;</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_setDesignMode</span><span class="o">(</span><span class="nx">_state</span><span class="o">);</span>
             <span class="k">return</span> <span class="nx">_state</span><span class="o">;</span>
         <span class="o">},</span>
@@ -1095,9 +1078,8 @@
             <span class="k">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">_textarea</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">value</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">innerHTML</span><span class="o">),</span>
                 <span class="nx">doc</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
-            <span class="k">if</span> <span class="o">((</span><span class="nx">value</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">browser</span><span class="o">.</span><span class="nx">gecko</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c">//It seems that Gecko doesn&#39;t like an empty body so we have to give it something..</span>
-<span class="c"></span>                <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">value</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="o">;</span>
             <span class="o">}</span>
 
             <span class="k">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">substitute</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;html&#39;</span><span class="o">),</span> <span class="o">{</span>
@@ -3909,7 +3891,7 @@
                 <span class="nx">exec</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_getDoc</span><span class="o">().</span><span class="nx">queryCommandEnabled</span><span class="o">(</span><span class="nx">action</span><span class="o">))</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">_getDoc</span><span class="o">().</span><span class="nx">execCommand</span><span class="o">(</span><span class="s1">&#39;insertimage&#39;</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="nx">value</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_getDoc</span><span class="o">().</span><span class="nx">execCommand</span><span class="o">(</span><span class="nx">action</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="nx">value</span><span class="o">);</span>
                     <span class="k">var</span> <span class="nx">imgs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDoc</span><span class="o">().</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s1">&#39;img&#39;</span><span class="o">);</span>
                     <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">imgs</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
                         <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">imgs</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="s1">&#39;yui-img&#39;</span><span class="o">))</span> <span class="o">{</span>
