@@ -240,7 +240,14 @@ YAHOO.env.getVersion = function(name) {
  */
 YAHOO.env.ua = function() {
 
-    var nav = navigator,
+        var numberfy = function(s) {
+            var c = 0;
+            return parseFloat(s.replace(/\./g, function() {
+                return (c++ == 1) ? '' : '.';
+            }));
+        },
+
+        nav = navigator,
 
         o = {
 
@@ -341,7 +348,7 @@ YAHOO.env.ua = function() {
     // Modern WebKit browsers are at least X-Grade
     m=ua.match(/AppleWebKit\/([^\s]*)/);
     if (m&&m[1]) {
-        o.webkit=parseFloat(m[1]);
+        o.webkit=numberfy(m[1]);
 
         // Mobile browser check
         if (/ Mobile\//.test(ua)) {
@@ -364,7 +371,7 @@ YAHOO.env.ua = function() {
         // @todo check Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1316; fi; U; ssr)
         m=ua.match(/Opera[\s\/]([^\s]*)/);
         if (m&&m[1]) {
-            o.opera=parseFloat(m[1]);
+            o.opera=numberfy(m[1]);
             m=ua.match(/Opera Mini[^;]*/);
             if (m) {
                 o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
@@ -372,14 +379,14 @@ YAHOO.env.ua = function() {
         } else { // not opera or webkit
             m=ua.match(/MSIE\s([^;]*)/);
             if (m&&m[1]) {
-                o.ie=parseFloat(m[1]);
+                o.ie=numberfy(m[1]);
             } else { // not opera, webkit, or ie
                 m=ua.match(/Gecko\/([^\s]*)/);
                 if (m) {
                     o.gecko=1; // Gecko detected, look for revision
                     m=ua.match(/rv:([^\s\)]*)/);
                     if (m&&m[1]) {
-                        o.gecko=parseFloat(m[1]);
+                        o.gecko=numberfy(m[1]);
                     }
                 }
             }
@@ -401,17 +408,18 @@ YAHOO.env.ua = function() {
     YAHOO.namespace("util", "widget", "example");
     /*global YAHOO_config*/
     if ("undefined" !== typeof YAHOO_config) {
-        var l=YAHOO_config.listener,ls=YAHOO.env.listeners,unique=true,i;
+        var l=YAHOO_config.listener, ls=YAHOO.env.listeners,unique=true, i;
         if (l) {
             // if YAHOO is loaded multiple times we need to check to see if
             // this is a new config object.  If it is, add the new component
             // load listener to the stack
-            for (i=0;i<ls.length;i=i+1) {
-                if (ls[i]==l) {
-                    unique=false;
+            for (i=0; i<ls.length; i++) {
+                if (ls[i] == l) {
+                    unique = false;
                     break;
                 }
             }
+
             if (unique) {
                 ls.push(l);
             }

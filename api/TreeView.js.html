@@ -319,8 +319,8 @@
 <span class="c">         * starts</span>
 <span class="c">         * @event animStart</span>
 <span class="c">         * @type CustomEvent</span>
-<span class="c">         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing</span>
-<span class="c">         * @param {String} type the type of animation (&quot;expand&quot; or &quot;collapse&quot;)</span>
+<span class="c">         * @param {YAHOO.widget.Node} oArgs.node the node that is expanding/collapsing</span>
+<span class="c">         * @param {String} oArgs.type the type of animation (&quot;expand&quot; or &quot;collapse&quot;)</span>
 <span class="c">         */</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;animStart&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
 
@@ -329,8 +329,8 @@
 <span class="c">         * completes</span>
 <span class="c">         * @event animComplete</span>
 <span class="c">         * @type CustomEvent</span>
-<span class="c">         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing</span>
-<span class="c">         * @parm {String} type the type of animation (&quot;expand&quot; or &quot;collapse&quot;)</span>
+<span class="c">         * @param {YAHOO.widget.Node} oArgs.node the node that is expanding/collapsing</span>
+<span class="c">         * @param {String} oArgs.type the type of animation (&quot;expand&quot; or &quot;collapse&quot;)</span>
 <span class="c">         */</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;animComplete&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
 

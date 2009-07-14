@@ -2,7 +2,9 @@ YUI Library - YUITest - Release Notes
 
 Development Master
 
-  * No changes
+2.8.0
+
+  * UserAction moved into a new module: event-simulate
 
 2.7.0
 

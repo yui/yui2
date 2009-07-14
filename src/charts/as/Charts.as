@@ -548,6 +548,14 @@ package
 		}
 		
 		/**
+		 * Determines whether the viewport is constrained
+		 */
+		public function setConstrainViewport(value:Boolean):void
+		{
+			if(this.chart is CartesianChart) (this.chart as CartesianChart).constrainViewport = value; 
+		}
+		
+		/**
 		 * Accepts a JSON-encoded set of styles for the chart itself.
 		 * Flash Player versions below 9.0.60 don't encode ExternalInterface
 		 * calls correctly!
@@ -957,6 +965,7 @@ package
 				ExternalInterface.addCallback("setVerticalField", setVerticalField);
 				ExternalInterface.addCallback("setHorizontalAxis", setHorizontalAxis);
 				ExternalInterface.addCallback("setVerticalAxis", setVerticalAxis);
+				ExternalInterface.addCallback("setConstrainViewport", setConstrainViewport);
 				
 				//PieChart
 				ExternalInterface.addCallback("getDataField", getDataField);

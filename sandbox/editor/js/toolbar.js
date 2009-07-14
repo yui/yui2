@@ -298,6 +298,12 @@ var Dom = YAHOO.util.Dom,
         */
         STR_COLLAPSE: 'Collapse Toolbar',
         /** 
+        * @property STR_EXPAND
+        * @description String for Toolbar Collapse Button - Expand
+        * @type String
+        */
+        STR_EXPAND: 'Expand Toolbar',
+        /** 
         * @property STR_SPIN_LABEL
         * @description String for spinbutton dynamic label. Note the {VALUE} will be replaced with YAHOO.lang.substitute
         * @type String
@@ -1726,11 +1732,13 @@ var Dom = YAHOO.util.Dom,
                 Dom.removeClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed');
                 if (el[0]) {
                     Dom.removeClass(el[0], 'collapsed');
+                    el[0].title = this.STR_COLLAPSE;
                 }
                 this.fireEvent('toolbarExpanded', { type: 'toolbarExpanded', target: this });
             } else {
                 if (el[0]) {
                     Dom.addClass(el[0], 'collapsed');
+                    el[0].title = this.STR_EXPAND;
                 }
                 Dom.addClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed');
                 this.fireEvent('toolbarCollapsed', { type: 'toolbarCollapsed', target: this });
