@@ -5120,6 +5120,30 @@ YAHOO.widget.EditorInfo = {
         return false;
     },
     /**
+    * @method saveAll
+    * @description Saves all Editor instances on the page. If a form reference is passed, only Editor's bound to this form will be saved.
+    * @param {HTMLElement} form The form to check if this Editor instance belongs to
+    */
+    saveAll: function(form) {
+        var i, e, items = YAHOO.widget.EditorInfo._instances;
+        if (form) {
+            for (i in items) {
+                if (Lang.hasOwnProperty(items, i)) {
+                    e = items[i];
+                    if (e.get('element').form && (e.get('element').form == form)) {
+                        e.saveHTML();
+                    }
+                }
+            }
+        } else {
+            for (i in items) {
+                if (Lang.hasOwnProperty(items, i)) {
+                    items[i].saveHTML();
+                }
+            }
+        }
+    },
+    /**
     * @method toString
     * @description Returns a string representing the EditorInfo.
     * @return {String}
