@@ -834,7 +834,7 @@ var Dom = YAHOO.util.Dom,
         */
         _toggleDesignMode: function() {
             var _dMode = this._getDoc().body.contentEditable,
-                _state = ((_dMode) ? 'on' : 'off');
+                _state = ((_dMode == 'true') ? 'off' : 'on');
             this._setDesignMode(_state);
             return _state;
         },
@@ -940,10 +940,8 @@ var Dom = YAHOO.util.Dom,
                 this._getDoc().body.style.margin = '0';
             }
             if (!this.get('disabled')) {
-                if (this._getDoc().designMode.toLowerCase() != 'on') {
-                    this._setDesignMode('on');
-                    this._contentTimerCounter = 0;
-                }
+                this._setDesignMode('on');
+                this._contentTimerCounter = 0;
             }
             if (!this._getDoc().body) {
                 YAHOO.log('Body is null, check again', 'error', 'SimpleEditor');
