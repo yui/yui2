@@ -270,8 +270,8 @@ TV.prototype = {
          * starts
          * @event animStart
          * @type CustomEvent
-         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing
-         * @param {String} type the type of animation ("expand" or "collapse")
+         * @param {YAHOO.widget.Node} oArgs.node the node that is expanding/collapsing
+         * @param {String} oArgs.type the type of animation ("expand" or "collapse")
          */
         this.createEvent("animStart", this);
 
@@ -280,8 +280,8 @@ TV.prototype = {
          * completes
          * @event animComplete
          * @type CustomEvent
-         * @param {YAHOO.widget.Node} node the node that is expanding/collapsing
-         * @parm {String} type the type of animation ("expand" or "collapse")
+         * @param {YAHOO.widget.Node} oArgs.node the node that is expanding/collapsing
+         * @param {String} oArgs.type the type of animation ("expand" or "collapse")
          */
         this.createEvent("animComplete", this);
 
@@ -1401,6 +1401,7 @@ TV.FOCUS_CLASS_NAME = 'ygtvfocus';
 
 
 })();
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -2878,6 +2879,7 @@ YAHOO.widget.Node.prototype = {
 
 YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
 })();
+
 /**
  * A custom YAHOO.widget.Node that handles the unique nature of 
  * the virtual, presentationless root node.
@@ -2962,6 +2964,7 @@ YAHOO.extend(YAHOO.widget.RootNode, YAHOO.widget.Node, {
     focus: function () {}
 
 });
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -3158,6 +3161,7 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
     
 });
 })();
+
 /**
  * A menu-specific implementation that differs from TextNode in that only 
  * one sibling can be expanded at a time.
@@ -3197,6 +3201,7 @@ YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
     _type: "MenuNode"
 
 });
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -3315,6 +3320,7 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     }
 });
 })();
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang,
@@ -3461,6 +3467,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
 
 });
 })();
+
 (function () {
     var Dom = YAHOO.util.Dom,
         Lang = YAHOO.lang, 
@@ -3865,6 +3872,7 @@ YAHOO.extend(YAHOO.widget.DateNode, YAHOO.widget.TextNode, {
         editorData.inputContainer.innerHTML = '';
     };
 })();
+
 /**
  * A static factory class for tree view expand/collapse animations
  * @class TVAnim
@@ -3917,6 +3925,7 @@ YAHOO.widget.TVAnim = function() {
         }
     };
 } ();
+
 /**
  * A 1/2 second fade-in animation.
  * @class TVFadeIn
@@ -3978,6 +3987,7 @@ YAHOO.widget.TVFadeIn.prototype = {
         return "TVFadeIn";
     }
 };
+
 /**
  * A 1/2 second fade out animation.
  * @class TVFadeOut
@@ -4023,7 +4033,7 @@ YAHOO.widget.TVFadeOut.prototype = {
     onComplete: function() {
         var s = this.el.style;
         s.display = "none";
-        // s.opacity = 1;
+        s.opacity = 1;
         s.filter = "alpha(opacity=100)";
         this.callback();
     },
@@ -4037,4 +4047,5 @@ YAHOO.widget.TVFadeOut.prototype = {
         return "TVFadeOut";
     }
 };
+
 YAHOO.register("treeview", YAHOO.widget.TreeView, {version: "@VERSION@", build: "@BUILD@"});

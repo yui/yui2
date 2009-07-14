@@ -67,13 +67,15 @@
 		};
 	};
 	
-	var parseColor = function(color) {
-		var c = YAHOO.util.ColorAnim.prototype.parseColor(color);
-		if (Lang.isNull(c)) {
-			return YAHOO.util.ColorAnim.prototype.patterns.transparent.test(color)?'transparent':color;
+	var getStyle = function(el,style) {
+		var st = Dom.getStyle(el,style);
+		while (st == '100%' && el) {
+			el = el.parentNode;
+			st = Dom.getStyle(el,style);
 		}
-		return c;
+		return st;
 	};
+		
 	
     var oSuite = new YAHOO.tool.TestSuite("ProgressBar testing");
     
@@ -100,24 +102,20 @@
 			A.areEqual('{value}',pb.get('textTemplate'),'reported textTemplate');
 			A.areEqual('ltr',pb.get('direction'),'reported direction');
 			
-			A.areEqual('200px',Dom.getStyle(t.pb,'width'),'widget width');
-			A.areEqual('20px',Dom.getStyle(t.pb,'height'),'widget height');
+			A.areEqual('200px',getStyle(t.pb,'width'),'widget width');
+			A.areEqual('20px',getStyle(t.pb,'height'),'widget height');
 			A.areEqual('200px',pb.get('width'),'reported width');
 			A.areEqual('20px',pb.get('height'),'reported height');
-			A.areEqual('200px',Dom.getStyle(t.m,'width'),'mask width');
-			A.areEqual('20px',Dom.getStyle(t.m,'height'),'mask height');
-			A.areEqual('0px',Dom.getStyle(t.b,'width'),'bar width');
-			A.areEqual('20px',Dom.getStyle(t.b,'height'),'bar height');
-			A.areEqual('200px',Dom.getStyle(t.c,'width'),'caption width');
-			A.areEqual('20px',Dom.getStyle(t.c,'height'),'caption height');
-			A.areEqual('0,0,255',parseColor(pb.get('barColor')),'reported barColor');
-			A.areEqual('0,0,255',parseColor(Dom.getStyle(t.b,'background-color')),'actual barColor');
-			A.areEqual('transparent',parseColor(pb.get('backColor')),'reported backColor');
-			A.areEqual('transparent',parseColor(Dom.getStyle(t.pb,'background-color')),'actual backColor');
+			A.areEqual('200px',getStyle(t.m,'width'),'mask width');
+			A.areEqual('20px',getStyle(t.m,'height'),'mask height');
+			A.areEqual('0px',getStyle(t.b,'width'),'bar width');
+			A.areEqual('20px',getStyle(t.b,'height'),'bar height');
+			A.areEqual('200px',getStyle(t.c,'width'),'caption width');
+			A.areEqual('20px',getStyle(t.c,'height'),'caption height');
         },
 
         testSetupByCode : function () {
-            pb = new PB({height:'30px', width: 300, barColor:'green',backColor:'orange'});
+            pb = new PB({height:'30px', width: 300});
 			pb.render('test');
 			t = getEls();
 			A.areEqual(0,pb.get('value'),'reported value');
@@ -126,20 +124,16 @@
 			A.isNull(pb.get('anim'),'reported anim');
 			A.areEqual('{value}',pb.get('textTemplate'),'reported textTemplate');
 			A.areEqual('ltr',pb.get('direction'),'reported direction');
-			A.areEqual('300px',Dom.getStyle(t.pb,'width'),'widget width');
-			A.areEqual('30px',Dom.getStyle(t.pb,'height'),'widget height');
-			A.areEqual('300',pb.get('width'),'reported width');
+			A.areEqual('300px',getStyle(t.pb,'width'),'widget width');
+			A.areEqual('30px',getStyle(t.pb,'height'),'widget height');
+			A.areEqual('300px',pb.get('width'),'reported width');
 			A.areEqual('30px',pb.get('height'),'reported height');
-			A.areEqual('300px',Dom.getStyle(t.m,'width'),'mask width');
-			A.areEqual('30px',Dom.getStyle(t.m,'height'),'mask height');
-			A.areEqual('0px',Dom.getStyle(t.b,'width'),'bar width');
-			A.areEqual('30px',Dom.getStyle(t.b,'height'),'bar height');
-			A.areEqual('300px',Dom.getStyle(t.c,'width'),'caption width');
-			A.areEqual('30px',Dom.getStyle(t.c,'height'),'caption height');
-			A.areEqual('green',parseColor(pb.get('barColor')),'reported barColor');
-			A.areEqual('green',parseColor(Dom.getStyle(t.b,'background-color')),'actual barColor');
-			A.areEqual('orange',parseColor(pb.get('backColor')),'reported backColor');
-			A.areEqual('orange',parseColor(Dom.getStyle(t.pb,'background-color')),'actual backColor');
+			A.areEqual('300px',getStyle(t.m,'width'),'mask width');
+			A.areEqual('30px',getStyle(t.m,'height'),'mask height');
+			A.areEqual('0px',getStyle(t.b,'width'),'bar width');
+			A.areEqual('30px',getStyle(t.b,'height'),'bar height');
+			A.areEqual('300px',getStyle(t.c,'width'),'caption width');
+			A.areEqual('30px',getStyle(t.c,'height'),'caption height');
         },
 		
 		testSetupByStyle: function () {
@@ -154,18 +148,14 @@
 			A.areEqual('ltr',pb.get('direction'),'reported direction');
 			A.areEqual('250px',pb.get('width'),'reported width');
 			A.areEqual('25px',pb.get('height'),'reported height');
-			A.areEqual('250px',Dom.getStyle(t.pb,'width'),'widget width');
-			A.areEqual('25px',Dom.getStyle(t.pb,'height'),'widget height');
-			A.areEqual('250px',Dom.getStyle(t.m,'width'),'mask width');
-			A.areEqual('25px',Dom.getStyle(t.m,'height'),'mask height');
-			A.areEqual('0px',Dom.getStyle(t.b,'width'),'bar width');
-			A.areEqual('25px',Dom.getStyle(t.b,'height'),'bar height');
-			A.areEqual('250px',Dom.getStyle(t.c,'width'),'caption width');
-			A.areEqual('25px',Dom.getStyle(t.c,'height'),'caption height');
-			A.areEqual('0,0,255',parseColor(pb.get('barColor')),'reported barColor');
-			A.areEqual('0,0,255',parseColor(Dom.getStyle(t.b,'background-color')),'actual barColor');
-			A.areEqual('transparent',parseColor(pb.get('backColor')),'reported backColor');
-			A.areEqual('transparent',parseColor(Dom.getStyle(t.pb,'background-color')),'actual backColor');
+			A.areEqual('250px',getStyle(t.pb,'width'),'widget width');
+			A.areEqual('25px',getStyle(t.pb,'height'),'widget height');
+			A.areEqual('250px',getStyle(t.m,'width'),'mask width');
+			A.areEqual('25px',getStyle(t.m,'height'),'mask height');
+			A.areEqual('0px',getStyle(t.b,'width'),'bar width');
+			A.areEqual('25px',getStyle(t.b,'height'),'bar height');
+			A.areEqual('250px',getStyle(t.c,'width'),'caption width');
+			A.areEqual('25px',getStyle(t.c,'height'),'caption height');
 		}
     }));
 
@@ -192,7 +182,7 @@
 			pb.render('test');
 			t = getEls();
 			A.areEqual(30,pb.get('value'),'reported value');
-			A.areEqual('60px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('60px',getStyle(t.b,'width'),'bar width');
 		},
         test30afterRender : function () {
 			pb = new PB();
@@ -200,14 +190,14 @@
 			pb.set('value',30);
 			t = getEls();
 			A.areEqual(30,pb.get('value'),'reported value');
-			A.areEqual('60px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('60px',getStyle(t.b,'width'),'bar width');
 		},
         test70onInit : function () {
 			pb = new PB({value:70});
 			pb.render('test');
 			t = getEls();
 			A.areEqual(70,pb.get('value'),'reported value');
-			A.areEqual('140px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('140px',getStyle(t.b,'width'),'bar width');
 		},
         test70beforeRender : function () {
 			pb = new PB();
@@ -215,7 +205,7 @@
 			pb.render('test');
 			t = getEls();
 			A.areEqual(70,pb.get('value'),'reported value');
-			A.areEqual('140px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('140px',getStyle(t.b,'width'),'bar width');
 		},
         test70afterRender : function () {
 			pb = new PB();
@@ -223,14 +213,14 @@
 			pb.set('value',70);
 			t = getEls();
 			A.areEqual(70,pb.get('value'),'reported value');
-			A.areEqual('140px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('140px',getStyle(t.b,'width'),'bar width');
 		},
         test30_50_80_onInit : function () {
 			pb = new PB({value:50,minValue:30,maxValue:80});
 			pb.render('test');
 			t = getEls();
 			A.areEqual(50,pb.get('value'),'reported value');
-			A.areEqual('80px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('80px',getStyle(t.b,'width'),'bar width');
 		},
         test30_50_80_beforeRender : function () {
 			pb = new PB();
@@ -240,7 +230,7 @@
 			pb.render('test');
 			t = getEls();
 			A.areEqual(50,pb.get('value'),'reported value');
-			A.areEqual('80px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('80px',getStyle(t.b,'width'),'bar width');
 		},
         test30_50_80_afterRender : function () {
 			pb = new PB();
@@ -248,13 +238,13 @@
 			t = getEls();
 
 			pb.set('value',50);
-			A.areEqual('100px',Dom.getStyle(t.b,'width'),'bar width - initial');
+			A.areEqual('100px',getStyle(t.b,'width'),'bar width - initial');
 
 			pb.set('minValue',30);
-			A.areEqual('57px',Dom.getStyle(t.b,'width'),'bar width - after minValue');
+			A.areEqual('57px',getStyle(t.b,'width'),'bar width - after minValue');
 
 			pb.set('maxValue',80);
-			A.areEqual('80px',Dom.getStyle(t.b,'width'),'bar width - after maxValue');
+			A.areEqual('80px',getStyle(t.b,'width'),'bar width - after maxValue');
 			A.areEqual(50,pb.get('value'),'reported value');
 		}
     }));
@@ -275,9 +265,9 @@
 			pb.render('test');
 			t = getEls();
 			A.areEqual(30,pb.get('value'),'reported value');
-			A.areEqual('60px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('60px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('140px',Dom.getStyle(t.b,'left'),'bar left');
-			A.areEqual('20px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('20px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
 		},
        
@@ -286,9 +276,9 @@
 			pb.render('test');
 			t = getEls();
 			A.areEqual(30,pb.get('value'),'reported value');
-			A.areEqual('40px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('40px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
-			A.areEqual('30px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('30px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
 		},
        
@@ -297,9 +287,9 @@
 			pb.render('test');
 			t = getEls();
 			A.areEqual(30,pb.get('value'),'reported value');
-			A.areEqual('40px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('40px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
-			A.areEqual('30px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('30px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('70px',Dom.getStyle(t.b,'top'),'bar top');
 		}
     }));
@@ -370,9 +360,9 @@
 			pb.render('test');
 			t = getEls();
 
-			A.areEqual('51px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('51px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
-			A.areEqual('100px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('100px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
 		},
 
@@ -381,9 +371,9 @@
 			pb.render('test');
 			t = getEls();
 
-			A.areEqual('119px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('119px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
-			A.areEqual('100px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('100px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
 		},
 
@@ -392,9 +382,9 @@
 			pb.render('test');
 			t = getEls();
 
-			A.areEqual('51px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('51px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('119px',Dom.getStyle(t.b,'left'),'bar left');
-			A.areEqual('100px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('100px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
 		},
 
@@ -403,9 +393,9 @@
 			pb.render('test');
 			t = getEls();
 
-			A.areEqual('119px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('119px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('51px',Dom.getStyle(t.b,'left'),'bar left');
-			A.areEqual('100px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('100px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
 		},
 		
@@ -414,9 +404,9 @@
 			pb.render('test');
 			t = getEls();
 
-			A.areEqual('200px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('200px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
-			A.areEqual('24px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('24px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('56px',Dom.getStyle(t.b,'top'),'bar top');
 		},
 
@@ -425,9 +415,9 @@
 			pb.render('test');
 			t = getEls();
 
-			A.areEqual('200px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('200px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
-			A.areEqual('56px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('56px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('24px',Dom.getStyle(t.b,'top'),'bar top');
 		},
         testTtb30 : function () {
@@ -435,9 +425,9 @@
 			pb.render('test');
 			t = getEls();
 
-			A.areEqual('200px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('200px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
-			A.areEqual('24px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('24px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
 		},
 
@@ -446,9 +436,9 @@
 			pb.render('test');
 			t = getEls();
 
-			A.areEqual('200px',Dom.getStyle(t.b,'width'),'bar width');
+			A.areEqual('200px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left');
-			A.areEqual('56px',Dom.getStyle(t.b,'height'),'bar height');
+			A.areEqual('56px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top');
 		}
     }));
