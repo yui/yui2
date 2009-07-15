@@ -5,8 +5,7 @@ var editor = null;
         Tool = YAHOO.tool,
         Suite = new Tool.TestSuite('yuisuite'),
         Assert = YAHOO.util.Assert,
-        eFocus = null,
-        eBlur = null;
+        eFocus = null;
 
 
 
@@ -45,20 +44,15 @@ var editor = null;
                     Assert.areEqual(document.getElementById('editor_editor').contentWindow.document, editor._getDoc(), 'Document object is not right');
                 },
                 test_focus: function() {
-                    YAHOO.util.UserAction.mousedown(document);
+                    YAHOO.util.UserAction.click(document);
 
                     editor.on('editorWindowFocus', function() {
                         eFocus = true;
                     });
-                    editor.on('editorWindowBlur', function() {
-                        eBlur = true;
-                    });
-                    editor._focusWindow();
-                    Assert.areEqual(true, eFocus, 'Editor focus event FAILED');
-                    
+                    editor.focus();
                     editor.afterElement.focus();
-                    Assert.areEqual(true, eBlur, 'Editor blur event FAILED');
-                    
+
+                    Assert.areEqual(true, eFocus, 'Editor focus event FAILED');
                 },
                 test_regex: function() {
                     editor.setEditorHTML(Dom.get('testRegEx').innerHTML);

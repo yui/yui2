@@ -33,7 +33,15 @@ package
 	 */
 	public class Charts extends YUIAdapter
 	{
-		
+				
+	/**
+	 * @private	
+	 * Path for all skin classes
+
+
+	 */
+	private static const SKIN_NAMESPACE:String = "com.yahoo.astra.fl.charts.skins::";
+				
 	//--------------------------------------
 	//  Constructor
 	//--------------------------------------
@@ -880,6 +888,20 @@ package
 									UIComponent(series).visible = style.visibility == "visible";
 								}
 								break;
+							case "skin":
+								if(series is LineSeries)
+								{
+									try
+									{
+										skin = getDefinitionByName(SKIN_NAMESPACE + style.skin) as Class;	
+									}
+									catch(e:Error)
+									{
+										this.log(style.skin + " is not a valid skin class", LoggerCategory.WARN);
+									}
+								}
+								break;
+		
 							default:
 								this.log("Unknown series style: " + styleName, LoggerCategory.WARN);
 						}
@@ -1434,7 +1456,7 @@ package
 		
 	//--------------------------------------
 	//  Private Methods
-	//--------------------------------------
+	//--------------------------------------	
 		
 		/**
 		 * @private
