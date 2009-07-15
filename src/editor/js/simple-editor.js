@@ -4733,15 +4733,6 @@ var Dom = YAHOO.util.Dom,
                 html = html.replace(/  /gi, ' '); //Replace all double spaces and replace with a single
             }
             
-            //First empty span
-            if (html.substring(0, 6).toLowerCase() == '<span>')  {
-                html = html.substring(6);
-                //Last empty span
-                if (html.substring(html.length - 7, html.length).toLowerCase() == '</span>')  {
-                    html = html.substring(0, html.length - 7);
-                }
-            }
-
             for (var v in this.invalidHTML) {
                 if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
                     if (Lang.isObject(v) && v.keepContents) {
@@ -4751,6 +4742,24 @@ var Dom = YAHOO.util.Dom,
                     }
                 }
             }
+
+            /* LATER -- Add DOM manipulation
+            console.log(html);
+            var frag = document.createDocumentFragment();
+            frag.innerHTML = html;
+
+            var ps = frag.getElementsByTagName('p'),
+                len = ps.length;
+            for (var i = 0; i < len; i++) {
+                var ps2 = ps[i].getElementsByTagName('p');
+                if (ps2.length) {
+                    
+                }
+                
+            }
+            html = frag.innerHTML;
+            console.log(html);
+            */
 
             this.fireEvent('cleanHTML', { type: 'cleanHTML', target: this, html: html });
 
