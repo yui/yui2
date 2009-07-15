@@ -94,6 +94,7 @@ if (!$_GET['non']) {
                 { position: 'right', header: 'Right Side Header with extra long long long long title', width: 300, gutter: '15px', footer: 'Footer', collapse: true, scroll: true, body: 'right1', animate: false, useShim: true, resize: true },
                 { position: 'bottom', header: 'Bottom', height: 100, resize: true, body: 'bottom1', gutter: '5px', collapse: true },
                 { position: 'left', width: 200, body: 'left1', gutter: '15px', collapse: true, close: true, collapseSize: 50, scroll: true, animate: false, resize: true },
+                //{ position: 'left', width: 200, body: 'left1', gutter: '15px', collapse: false, close: false, collapseSize: 50, scroll: true, animate: false, resize: true },
                 { position: 'center', body: 'center1', header: 'center', collapse: true, close: true, resize: true, height: 200, width: 200, scroll: true }
             ]
         });

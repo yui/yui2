@@ -2786,7 +2786,11 @@ tree html.
                                             (
                                                 
                                                         
-                                                         node
+                                                         oArgs.node
+                                                    
+                                                
+                                                        , 
+                                                         oArgs.type
                                                     
                                                 
                                             )
@@ -2804,10 +2808,17 @@ completes
                                                 <dl rel="yui:parameters">
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">node</span>
+                                                            <code><span property="yui:name">oArgs.node</span>
                                                                 &lt;<span property="yui:type">YAHOO.widget.Node</span>&gt;
                                                             </code>
                                                             <span property="yui:description"> the node that is expanding/collapsing</span>
+                                                        </dd>
+                                                        
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">oArgs.type</span>
+                                                                &lt;<span property="yui:type">String</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description"> the type of animation ("expand" or "collapse")</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2831,11 +2842,11 @@ completes
                                             (
                                                 
                                                         
-                                                         node
+                                                         oArgs.node
                                                     
                                                 
                                                         , 
-                                                         type
+                                                         oArgs.type
                                                     
                                                 
                                             )
@@ -2853,14 +2864,14 @@ starts
                                                 <dl rel="yui:parameters">
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">node</span>
+                                                            <code><span property="yui:name">oArgs.node</span>
                                                                 &lt;<span property="yui:type">YAHOO.widget.Node</span>&gt;
                                                             </code>
                                                             <span property="yui:description"> the node that is expanding/collapsing</span>
                                                         </dd>
                                                         
                                                         <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">type</span>
+                                                            <code><span property="yui:name">oArgs.type</span>
                                                                 &lt;<span property="yui:type">String</span>&gt;
                                                             </code>
                                                             <span property="yui:description"> the type of animation ("expand" or "collapse")</span>

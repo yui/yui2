@@ -349,6 +349,7 @@
 .yui-editor-panel .height-width span.info {
     font-size: 70%;
     margin-top: 3px;
+    float: none;
 }
 
 /* Border Size/Type button widths */

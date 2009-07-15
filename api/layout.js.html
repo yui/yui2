@@ -185,6 +185,12 @@
                 <span class="o">}</span>
             <span class="o">}</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">h</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">h</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">w</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">w</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+                <span class="o">}</span>
                 <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">,</span> <span class="s1">&#39;height&#39;</span><span class="o">,</span> <span class="nx">h</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">);</span>
                 <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_doc</span><span class="o">,</span> <span class="s1">&#39;width&#39;</span><span class="o">,</span> <span class="nx">w</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">);</span>
             <span class="o">}</span>
@@ -417,11 +423,21 @@
         <span class="o">},</span>
         <span class="c">/**</span>
 <span class="c">        * @method resize</span>
-<span class="c">        * @param {Boolean} set If set to false, it will NOT set the size, just perform the calculations (used for collapsing units)</span>
+<span class="c">        * @param Boolean/Event set If set to false, it will NOT set the size, just perform the calculations (used for collapsing units). This can also have an attribute event passed to it.</span>
 <span class="c">        * @description Starts the chain of resize routines that will resize all the units.</span>
 <span class="c">        * @return {&lt;a href=&quot;YAHOO.widget.Layout.html&quot;&gt;YAHOO.widget.Layout&lt;/a&gt;} The Layout instance</span>
 <span class="c">        */</span>
         <span class="nx">resize</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">/*</span>
+<span class="c">            * Fixes bug #2528175</span>
+<span class="c">            * If the event comes from an attribute and the value hasn&#39;t changed, don&#39;t process it.</span>
+<span class="c">            */</span>
+            <span class="k">var</span> <span class="nx">ev</span> <span class="o">=</span> <span class="nx">set</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span><span class="o">.</span><span class="nx">prevValue</span> <span class="o">&amp;&amp;</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">newValue</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span><span class="o">.</span><span class="nx">prevValue</span> <span class="o">==</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">newValue</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">set</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
             <span class="nx">set</span> <span class="o">=</span> <span class="o">((</span><span class="nx">set</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span><span class="o">);</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">retVal</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;beforeResize&#39;</span><span class="o">);</span>
@@ -440,7 +456,7 @@
             <span class="o">}</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_setBodySize</span><span class="o">(</span><span class="nx">set</span><span class="o">);</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;resize&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">target</span><span class="o">:</span> <span class="k">this</span><span class="o">,</span> <span class="nx">sizes</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span> <span class="o">});</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;resize&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">target</span><span class="o">:</span> <span class="k">this</span><span class="o">,</span> <span class="nx">sizes</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sizes</span><span class="o">,</span> <span class="nx">event</span><span class="o">:</span> <span class="nx">ev</span> <span class="o">});</span>
             <span class="o">}</span>
             <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
         <span class="o">},</span>
@@ -609,6 +625,9 @@
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">height</span> <span class="o">||</span> <span class="kc">false</span><span class="o">,</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">,</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">h</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">h</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">h</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+                    <span class="o">}</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">,</span> <span class="nx">h</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">});</span>
@@ -622,6 +641,9 @@
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">width</span> <span class="o">||</span> <span class="kc">false</span><span class="o">,</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">,</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">w</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">w</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">w</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+                    <span class="o">}</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">,</span> <span class="nx">w</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">});</span>

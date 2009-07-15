@@ -37,6 +37,8 @@ package
 	/**
 	 * @private	
 	 * Path for all skin classes
+
+
 	 */
 	private static const SKIN_NAMESPACE:String = "com.yahoo.astra.fl.charts.skins::";
 				
