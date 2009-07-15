@@ -878,7 +878,7 @@ if (!YAHOO.util.Event) {
              */
             // onDOMReady: function(fn, obj, overrideContext) {
             onDOMReady: function() {
-                this.DOMReadyEvent.subscribe.apply(this, arguments);
+                this.DOMReadyEvent.subscribe.apply(this.DOMReadyEvent, arguments);
             },
 
 
