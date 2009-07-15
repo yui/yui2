@@ -306,6 +306,29 @@ package com.yahoo.astra.fl.charts.series
 			return 0;
 		}
 		
+		/**
+		 * @private
+		 * Storage for dataTipFunction
+		 */
+		private var _dataTipFunction:Function;
+		
+		/**
+		 * @copy com.yahoo.astra.fl.charts.ISeries#dataTipFunction
+		 */
+		public function get dataTipFunction():Function
+		{
+			return this._dataTipFunction;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set dataTipFunction(value:Function):void
+		{
+			this._dataTipFunction = value;
+		}
+		
+		
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
