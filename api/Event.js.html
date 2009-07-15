@@ -458,22 +458,9 @@
 <span class="c">             *</span>
 <span class="c">             * @static</span>
 <span class="c">             */</span>
-            <span class="nx">onDOMReady</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">DOMReady</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-                        <span class="k">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nb">window</span><span class="o">;</span>
-                        <span class="k">if</span> <span class="o">(</span><span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
-                            <span class="k">if</span> <span class="o">(</span><span class="nx">overrideContext</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
-                                <span class="nx">s</span> <span class="o">=</span> <span class="nx">obj</span><span class="o">;</span>
-                            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                                <span class="nx">s</span> <span class="o">=</span> <span class="nx">overrideContext</span><span class="o">;</span>
-                            <span class="o">}</span>
-                        <span class="o">}</span>
-                        <span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">s</span><span class="o">,</span> <span class="s2">&quot;DOMReady&quot;</span><span class="o">,</span> <span class="o">[],</span> <span class="nx">obj</span><span class="o">);</span>
-                    <span class="o">},</span> <span class="m">0</span><span class="o">);</span>
-                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">DOMReadyEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span> <span class="o">||</span> <span class="k">this</span><span class="o">,</span> <span class="nx">overrideContext</span> <span class="o">||</span> <span class="kc">true</span><span class="o">);</span>
-                <span class="o">}</span>
+            <span class="c">// onDOMReady: function(fn, obj, overrideContext) {</span>
+<span class="c"></span>            <span class="nx">onDOMReady</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">DOMReadyEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
             <span class="o">},</span>
 
 
@@ -1244,7 +1231,7 @@
 <span class="c">             * Custom event the fires when the dom is initially usable</span>
 <span class="c">             * @event DOMReadyEvent</span>
 <span class="c">             */</span>
-            <span class="nx">DOMReadyEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;DOMReady&quot;</span><span class="o">),</span>
+            <span class="nx">DOMReadyEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;DOMReady&quot;</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="m">1</span><span class="o">),</span>
 
             <span class="c">/**</span>
 <span class="c">             * hook up any deferred listeners</span>
