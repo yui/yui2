@@ -876,22 +876,9 @@ if (!YAHOO.util.Event) {
              *
              * @static
              */
-            onDOMReady: function(fn, obj, overrideContext) {
-                if (this.DOMReady) {
-                    setTimeout(function() {
-                        var s = window;
-                        if (overrideContext) {
-                            if (overrideContext === true) {
-                                s = obj;
-                            } else {
-                                s = overrideContext;
-                            }
-                        }
-                        fn.call(s, "DOMReady", [], obj);
-                    }, 0);
-                } else {
-                    this.DOMReadyEvent.subscribe(fn, obj || this, overrideContext || true);
-                }
+            // onDOMReady: function(fn, obj, overrideContext) {
+            onDOMReady: function() {
+                this.DOMReadyEvent.subscribe.apply(this, arguments);
             },
 
 
@@ -1662,7 +1649,7 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
              * Custom event the fires when the dom is initially usable
              * @event DOMReadyEvent
              */
-            DOMReadyEvent: new YAHOO.util.CustomEvent("DOMReady"),
+            DOMReadyEvent: new YAHOO.util.CustomEvent("DOMReady", YAHOO, 0, 0, 1),
 
             /**
              * hook up any deferred listeners
