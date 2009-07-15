@@ -85,7 +85,9 @@ var myConfig = {
                     { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true },
                     { type: 'separator' },
                     { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
-                    { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true }
+                    { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true },
+                    { type: 'separator' },
+                    { type: 'push', label: 'Insert Image', value: 'insertimage' }
                 ]
             }
         ]
@@ -123,7 +125,9 @@ var myConfig2 = {
                     { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true },
                     { type: 'separator' },
                     { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
-                    { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true }
+                    { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true },
+                    { type: 'separator' },
+                    { type: 'push', label: 'Insert Image', value: 'insertimage' }
                 ]
             }
         ]
