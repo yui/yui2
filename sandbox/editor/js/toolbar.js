@@ -1663,7 +1663,7 @@ var Dom = YAHOO.util.Dom,
             if (!Lang.isObject(_ex)) {
                 _ex = {};
             }
-            if (this.get('disabled')) {
+            if (this.get('disabled') || !this._buttonList) {
                 return false;
             }
             var len = this._buttonList.length;

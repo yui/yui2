@@ -1964,7 +1964,7 @@ var Dom = YAHOO.util.Dom,
             if (!Lang.isObject(_ex)) {
                 _ex = {};
             }
-            if (this.get('disabled')) {
+            if (this.get('disabled') || !this._buttonList) {
                 return false;
             }
             var len = this._buttonList.length;
@@ -6886,7 +6886,8 @@ var Dom = YAHOO.util.Dom,
 		            html = html.replace(/<div([^>]*)>/g, '<p$1>');
 				    html = html.replace(/<\/div>/gi, '</p>');
                 } else {
-                    html = html.replace(/<div>/gi, '<br>');
+                    //html = html.replace(/<div>/gi, '<br>');
+                    html = html.replace(/<div([^>]*)>([ tnr]*)<\/div>/gi, '<br>');
 				    html = html.replace(/<\/div>/gi, '');
                 }
             }
