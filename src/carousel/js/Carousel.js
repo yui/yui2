@@ -1378,7 +1378,7 @@
                 // Add newIndex as workaround for undefined pos
                 newIndex = carousel._itemsTable.items.length-1;
             } else {
-                if (index < 0 || index >= numItems) {
+                if (index < 0 || index > numItems) {
                     YAHOO.log("Index out of bounds", "error", WidgetName);
                     return false;
                 }

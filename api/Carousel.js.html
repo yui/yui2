@@ -1427,7 +1427,7 @@
                 <span class="c">// Add newIndex as workaround for undefined pos</span>
 <span class="c"></span>                <span class="nx">newIndex</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_itemsTable</span><span class="o">.</span><span class="nx">items</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">index</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="nx">index</span> <span class="o">&gt;=</span> <span class="nx">numItems</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">index</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">||</span> <span class="nx">index</span> <span class="o">&gt;</span> <span class="nx">numItems</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Index out of bounds&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="nx">WidgetName</span><span class="o">);</span>
                     <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
                 <span class="o">}</span>
