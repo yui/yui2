@@ -315,10 +315,15 @@ var editor = null;
                     editor.execCommand('fontname', 'Verdana');
                     editor.execCommand('selectall', '');
                     editor.execCommand('forecolor', '#bebebe');
-                    var el = editor._getDoc().body.firstChild;
-                    var color = editor.filter_rgb(el.style.color);
+                    var el = editor._getDoc().body.firstChild,
+                        testel = el;
+                    
+                    if (Dom.getFirstChild(el)) {
+                        testel = el.firstChild;
+                    }
+                    var color = editor.filter_rgb(testel.style.color);
                     Assert.areEqual(color, '#bebebe', 'Fore Colors do not match');
-                    Assert.areEqual(el.style.fontFamily, 'Verdana', 'Font Names do not match');
+                    Assert.areEqual(testel.style.fontFamily, 'Verdana', 'Font Names do not match');
                     Assert.areEqual(el.tagName.toLowerCase(), 'b', 'Elements do not match');
                 },
                 test_disable: function() {
