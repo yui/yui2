@@ -731,7 +731,6 @@ var Dom = YAHOO.util.Dom,
         */
         init: function(p_oElement, p_oAttributes) {
             YAHOO.widget.Toolbar.superclass.init.call(this, p_oElement, p_oAttributes);
-
         },
         /**
         * @method initAttributes
@@ -1769,6 +1768,9 @@ var Dom = YAHOO.util.Dom,
         */
         getButtonByValue: function(value) {
             var _buttons = this.get('buttons');
+            if (!_buttons) {
+                return false;
+            }
             var len = _buttons.length;
             for (var i = 0; i < len; i++) {
                 if (_buttons[i].group !== undefined) {
@@ -2899,25 +2901,25 @@ var Dom = YAHOO.util.Dom,
         /**
         * @private
         * @method _setDesignMode
-        * @description Sets the contentEditable property of the iFrame document's body.
+        * @description Sets the designMode property of the iFrame document's body.
         * @param {String} state This should be either on or off
         */
         _setDesignMode: function(state) {
-            try {
-                if (this._getDoc() && this._getDoc().body) {
-                    this._getDoc().body.contentEditable = ((state.toLowerCase() == 'off') ? false : true);
-                }
-            } catch(e) { }
+            if (this.get('setDesignMode')) {
+                try {
+                    this._getDoc().designMode = ((state.toLowerCase() == 'off') ? 'off' : 'on');
+                } catch(e) { }
+            }
         },
         /**
         * @private
         * @method _toggleDesignMode
-        * @description Toggles the contentEditable property of the iFrame document's body on and off.
+        * @description Toggles the designMode property of the iFrame document on and off.
         * @return {String} The state that it was set to.
         */
         _toggleDesignMode: function() {
-            var _dMode = this._getDoc().body.contentEditable,
-                _state = ((_dMode == 'true') ? 'off' : 'on');
+            var _dMode = this._getDoc().designMode,
+                _state = ((_dMode.toLowerCase() == 'on') ? 'off' : 'on');
             this._setDesignMode(_state);
             return _state;
         },
@@ -3009,9 +3011,10 @@ var Dom = YAHOO.util.Dom,
         /**
         * @private
         * @method _initEditor
+        * @param {Boolean} raw Don't add events.
         * @description This method is fired from _checkLoaded when the document is ready. It turns on designMode and set's up the listeners.
         */
-        _initEditor: function() {
+        _initEditor: function(raw) {
             if (this._editorInit) {
                 return;
             }
@@ -3030,13 +3033,19 @@ var Dom = YAHOO.util.Dom,
                 return false;
             }
             
-            this.toolbar.on('buttonClick', this._handleToolbarClick, this, true);
+            if (!raw) {
+                this.toolbar.on('buttonClick', this._handleToolbarClick, this, true);
+            }
             if (!this.get('disabled')) {
                 this._initEditorEvents();
                 this.toolbar.set('disabled', false);
             }
 
-            this.fireEvent('editorContentLoaded', { type: 'editorLoaded', target: this });
+            if (raw) {
+                this.fireEvent('editorContentReloaded', { type: 'editorreloaded', target: this });
+            } else {
+                this.fireEvent('editorContentLoaded', { type: 'editorLoaded', target: this });
+            }
             this._fixWebkitDivs();
             if (this.get('dompath')) {
                 var self = this;
@@ -3060,9 +3069,10 @@ var Dom = YAHOO.util.Dom,
         /**
         * @private
         * @method _checkLoaded
+        * @param {Boolean} raw Don't add events.
         * @description Called from a setTimeout loop to check if the iframes body.onload event has fired, then it will init the editor.
         */
-        _checkLoaded: function() {
+        _checkLoaded: function(raw) {
             this._editorInit = false;
             this._contentTimerCounter++;
             if (this._contentTimer) {
@@ -3090,20 +3100,21 @@ var Dom = YAHOO.util.Dom,
 
             if (init === true) {
                 //The onload event has fired, clean up after ourselves and fire the _initEditor method
-                this._initEditor();
+                this._initEditor(raw);
             } else {
                 var self = this;
                 this._contentTimer = setTimeout(function() {
-                    self._checkLoaded.call(self);
+                    self._checkLoaded.call(self, raw);
                 }, 20);
             }
         },
         /**
         * @private
         * @method _setInitialContent
+        * @param {Boolean} raw Don't add events.
         * @description This method will open the iframes content document and write the textareas value into it, then start the body.onload checking.
         */
-        _setInitialContent: function() {
+        _setInitialContent: function(raw) {
 
             var value = ((this._textarea) ? this.get('element').value : this.get('element').innerHTML),
                 doc = null;
@@ -3120,6 +3131,10 @@ var Dom = YAHOO.util.Dom,
                 EXTRA_CSS: ((this.get('extracss')) ? this.get('extracss') : '/* No Extra CSS */')
             }),
             check = true;
+
+            html = html.replace(/RIGHT_BRACKET/gi, '{');
+            html = html.replace(/LEFT_BRACKET/gi, '}');
+
             if (document.compatMode != 'BackCompat') {
                 html = this._docType + "\n" + html;
             } else {
@@ -3156,7 +3171,7 @@ var Dom = YAHOO.util.Dom,
             }
             this.get('iframe').setStyle('visibility', '');
             if (check) {
-                this._checkLoaded();
+                this._checkLoaded(raw);
             }            
         },
         /**
@@ -4407,28 +4422,71 @@ var Dom = YAHOO.util.Dom,
         * @description Creates a mask to place over the Editor.
         */
         _disableEditor: function(disabled) {
+            var iframe, par, html, height;
+            if (!this.get('disabled_iframe')) {
+                iframe = this._createIframe();
+                iframe.set('id', 'disabled_' + this.get('iframe').get('id'));
+                iframe.setStyle('height', '100%');
+                iframe.setStyle('display', 'none');
+                iframe.setStyle('visibility', 'visible');
+                this.set('disabled_iframe', iframe);
+                par = this.get('iframe').get('parentNode');
+                par.appendChild(iframe.get('element'));
+            }
+            if (!iframe) {
+                iframe = this.get('disabled_iframe');
+            }
             if (disabled) {
-                this._removeEditorEvents();
+                this._orgIframe = this.get('iframe');
+
+                if (this.toolbar) {
+                    this.toolbar.set('disabled', true);
+                }
+
+                html = this.getEditorHTML();
+                height = this.get('iframe').get('offsetHeight');
+                iframe.setStyle('visibility', '');
+                iframe.setStyle('position', '');
+                iframe.setStyle('top', '');
+                iframe.setStyle('left', '');
+                this._orgIframe.setStyle('visibility', 'hidden');
+                this._orgIframe.setStyle('position', 'absolute');
+                this._orgIframe.setStyle('top', '-99999px');
+                this._orgIframe.setStyle('left', '-99999px');
+                this.set('iframe', iframe);
+                this._setInitialContent(true);
+                
                 if (!this._mask) {
-                    if (!!this.browser.ie) {
-                        this._setDesignMode('off');
-                    }
-                    if (this.toolbar) {
-                        this.toolbar.set('disabled', true);
-                    }
                     this._mask = document.createElement('DIV');
                     Dom.addClass(this._mask, 'yui-editor-masked');
+                    if (this.browser.ie) {
+                        this._mask.style.height = height + 'px';
+                    }
                     this.get('iframe').get('parentNode').appendChild(this._mask);
                 }
+                this.on('editorContentReloaded', function() {
+                    this._getDoc().body._rteLoaded = false;
+                    this.setEditorHTML(html);
+                    iframe.setStyle('display', 'block');
+                    this.unsubscribeAll('editorContentReloaded');
+                });
             } else {
-                this._initEditorEvents();
                 if (this._mask) {
                     this._mask.parentNode.removeChild(this._mask);
                     this._mask = null;
                     if (this.toolbar) {
                         this.toolbar.set('disabled', false);
                     }
-                    this._setDesignMode('on');
+                    iframe.setStyle('visibility', 'hidden');
+                    iframe.setStyle('position', 'absolute');
+                    iframe.setStyle('top', '-99999px');
+                    iframe.setStyle('left', '-99999px');
+                    this._orgIframe.setStyle('visibility', '');
+                    this._orgIframe.setStyle('position', '');
+                    this._orgIframe.setStyle('top', '');
+                    this._orgIframe.setStyle('left', '');
+                    this.set('iframe', this._orgIframe);
+
                     this.focus();
                     var self = this;
                     window.setTimeout(function() {
@@ -4633,10 +4691,19 @@ var Dom = YAHOO.util.Dom,
             var self = this;
 
             /**
-            * @config nodeChangeDelay
-            * @description Do we wrap the nodeChange method in a timeout for performance, default: true.
+            * @config setDesignMode
+            * @description Should the Editor set designMode on the document. Default: true.
             * @default true
-            * @type Number
+            * @type Boolean
+            */
+            this.setAttributeConfig('setDesignMode', {
+                value: ((attr.setDesignMode === false) ? false : true)
+            });
+            /**
+            * @config nodeChangeDelay
+            * @description Do we wrap the nodeChange method in a timeout for performance. Default: true.
+            * @default true
+            * @type Boolean
             */
             this.setAttributeConfig('nodeChangeDelay', {
                 value: ((attr.nodeChangeDelay === false) ? false : true)
@@ -4723,6 +4790,16 @@ var Dom = YAHOO.util.Dom,
             * @type HTMLElement
             */
             this.setAttributeConfig('iframe', {
+                value: null
+            });
+            /**
+            * @private
+            * @config disabled_iframe
+            * @description Internal config for holding the iframe element used when disabling the Editor.
+            * @default null
+            * @type HTMLElement
+            */
+            this.setAttributeConfig('disabled_iframe', {
                 value: null
             });
             /**
@@ -6444,6 +6521,8 @@ var Dom = YAHOO.util.Dom,
         */
         setEditorHTML: function(incomingHTML) {
             var html = this._cleanIncomingHTML(incomingHTML);
+            html = html.replace(/RIGHT_BRACKET/gi, '{');
+            html = html.replace(/LEFT_BRACKET/gi, '}');
             this._getDoc().body.innerHTML = html;
             this.nodeChange();
         },
@@ -6452,11 +6531,15 @@ var Dom = YAHOO.util.Dom,
         * @description Gets the unprocessed/unfiltered HTML from the editor
         */
         getEditorHTML: function() {
-            var b = this._getDoc().body;
-            if (b === null) {
-                return null;
+            try {
+                var b = this._getDoc().body;
+                if (b === null) {
+                    return null;
+                }
+                return this._getDoc().body.innerHTML;
+            } catch (e) {
+                return '';
             }
-            return this._getDoc().body.innerHTML;
         },
         /**
         * @method show
@@ -6510,6 +6593,9 @@ var Dom = YAHOO.util.Dom,
         * @return {String} The filtered HTML
         */
         _cleanIncomingHTML: function(html) {
+            html = html.replace(/{/gi, 'RIGHT_BRACKET');
+            html = html.replace(/}/gi, 'LEFT_BRACKET');
+
             html = html.replace(/<strong([^>]*)>/gi, '<b$1>');
             html = html.replace(/<\/strong>/gi, '</b>');   
 
@@ -6660,10 +6746,14 @@ var Dom = YAHOO.util.Dom,
 		    html = html.replace(/<YUI_EMBED([^>]*)>/g, '<embed$1>');
 		    html = html.replace(/<\/YUI_EMBED>/g, '<\/embed>');
             
-            //This should fix &amp;s in URL's
-            html = html.replace(/ &amp; /gi, 'YUI_AMP');
+            //This should fix &amp;'s in URL's
+            html = html.replace(/ &amp; /gi, ' YUI_AMP ');
+            html = html.replace(/ &amp;/gi, ' YUI_AMP_F ');
+            html = html.replace(/&amp; /gi, ' YUI_AMP_R ');
             html = html.replace(/&amp;/gi, '&');
-            html = html.replace(/YUI_AMP/gi, ' &amp; ');
+            html = html.replace(/ YUI_AMP /gi, ' &amp; ');
+            html = html.replace(/ YUI_AMP_F /gi, ' &amp;');
+            html = html.replace(/ YUI_AMP_R /gi, '&amp; ');
 
             //Trim the output, removing whitespace from the beginning and end
             html = YAHOO.lang.trim(html);

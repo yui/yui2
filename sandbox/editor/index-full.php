@@ -23,6 +23,7 @@
         <form method="post" action="index-full.php" id="form1" class="yui-skin-sam">
         <textarea id="editor" name="editor" rows="20" cols="75">
         This is a test.<br>
+        A {$'} B
         <ol>
             <li id="foo">Item 1</li>
         </ol>
@@ -50,9 +51,9 @@
             <option value="xhtml"> XHTML </option>
             <option value="css"> CSS </option>
             <option value="default"> Default </option>
-        </select><a href="#" id="editorHTML">Editor HTML</a><br>
+        </select><br>
+        <a href="#" id="editorHTML">Editor HTML</a><br>
         <a href="#" id="editorSE">Editor Selected Element</a><br>
-        <a href="#" id="editorToggle">Toggle Design Mode</a><br>
         <a href="#" id="editorDisable">Toggle Disable</a><br>
         <a href="#" id="editorFocus">Focus Window</a><br>
         </p>
@@ -141,13 +142,6 @@ YAHOO.util.Event.onAvailable('editorHTML', function() {
     });
 });
 
-YAHOO.util.Event.onAvailable('editorToggle', function() {
-    YAHOO.util.Event.addListener('editorToggle', 'click', function(ev) {
-        var state = myEditor._toggleDesignMode();
-        alert('Set designMode to: ' + state);
-        YAHOO.util.Event.stopEvent(ev);
-    });
-});
 YAHOO.util.Event.onAvailable('editorDisable', function() {
     YAHOO.util.Event.addListener('editorDisable', 'click', function(ev) {
         if (myEditor.get('disabled')) {
@@ -155,6 +149,7 @@ YAHOO.util.Event.onAvailable('editorDisable', function() {
         } else {
             myEditor.set('disabled', true);
         }
+        YAHOO.util.Event.stopEvent(ev);
     });
 });
 YAHOO.util.Event.onAvailable('editorSE', function() {
