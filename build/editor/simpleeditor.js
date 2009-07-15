@@ -411,11 +411,19 @@ var Dom = YAHOO.util.Dom,
         oConfig.attributes.element = oConfig.element;
         oConfig.attributes.id = oConfig.element.id;
 
+        this._configuredButtons = [];
+
         YAHOO.widget.Toolbar.superclass.constructor.call(this, oConfig.element, oConfig.attributes);
          
     };
 
     YAHOO.extend(YAHOO.widget.Toolbar, YAHOO.util.Element, {
+        /**
+        * @protected
+        * @property _configuredButtons
+        * @type Array
+        */
+        _configuredButtons: null,
         /**
         * @method _addMenuClasses
         * @private
@@ -797,14 +805,27 @@ var Dom = YAHOO.util.Dom,
                 value: [],
                 writeOnce: true,
                 method: function(data) {
-                    for (var i in data) {
+                    var i, button, buttons, len, b;
+                    for (i in data) {
                         if (Lang.hasOwnProperty(data, i)) {
                             if (data[i].type == 'separator') {
                                 this.addSeparator();
                             } else if (data[i].group !== undefined) {
-                                this.addButtonGroup(data[i]);
+                                buttons = this.addButtonGroup(data[i]);
+                                if (buttons) {
+                                    len = buttons.length;
+                                    for(b = 0; b < len; b++) {
+                                        if (buttons[b]) {
+                                            this._configuredButtons[this._configuredButtons.length] = buttons[b].id;
+                                        }
+                                    }
+                                }
+                                
                             } else {
-                                this.addButton(data[i]);
+                                button = this.addButton(data[i]);
+                                if (button) {
+                                    this._configuredButtons[this._configuredButtons.length] = button.id;
+                                }
                             }
                         }
                     }
@@ -1054,6 +1075,12 @@ var Dom = YAHOO.util.Dom,
             
             this._buttonGroupList[oGroup.group] = ul;
 
+            //An array of the button ids added to this group
+            //This is used for destruction later...
+            var addedButtons = [],
+                button;
+            
+
             for (var i = 0; i < oGroup.buttons.length; i++) {
                 var li = document.createElement('li');
                 li.className = this.CLASS_PREFIX + '-groupitem';
@@ -1062,9 +1089,13 @@ var Dom = YAHOO.util.Dom,
                     this.addSeparator(li);
                 } else {
                     oGroup.buttons[i].container = li;
-                    this.addButton(oGroup.buttons[i]);
+                    button = this.addButton(oGroup.buttons[i]);
+                    if (button) {
+                        addedButtons[addedButtons.length]  = button.id;
+                    }
                 }
             }
+            return addedButtons;
         },
         /**
         * @method addButtonToGroup
@@ -1075,8 +1106,9 @@ var Dom = YAHOO.util.Dom,
         * @param {HTMLElement} after Optional HTML element to insert this button after in the DOM.
         */
         addButtonToGroup: function(oButton, group, after) {
-            var groupCont = this._buttonGroupList[group];
-            var li = document.createElement('li');
+            var groupCont = this._buttonGroupList[group],
+                li = document.createElement('li');
+
             li.className = this.CLASS_PREFIX + '-groupitem';
             oButton.container = li;
             this.addButton(oButton, after);
@@ -1209,9 +1241,13 @@ var Dom = YAHOO.util.Dom,
                 if (oButton.type == 'select') {
                     if (tmp._button.tagName.toLowerCase() == 'select') {
                         icon.parentNode.removeChild(icon);
-                        var iel = tmp._button;
-                        var parEl = tmp.get('element');
+                        var iel = tmp._button,
+                            parEl = tmp.get('element');
                         parEl.parentNode.replaceChild(iel, parEl);
+                        //The 'element' value is currently the orphaned element
+                        //In order for "destroy" to execute we need to get('element') to reference the correct node.
+                        //I'm not sure if there is a direct approach to setting this value.
+                        tmp._configs.element.value = iel;
                     } else {
                         //Don't put a class on it if it's a real select element
                         tmp.addClass(this.CLASS_PREFIX + '-select');
@@ -1995,15 +2031,19 @@ var Dom = YAHOO.util.Dom,
         destroyButton: function(id) {
             var button = getButton.call(this, id);
             if (button) {
-                var thisID = button.get('id');
-                button.destroy();
+                var thisID = button.get('id'),
+                    new_list = [], i = 0,
+                    len = this._buttonList.length;
 
-                var len = this._buttonList.length;
-                for (var i = 0; i < len; i++) {
-                    if (this._buttonList[i] && this._buttonList[i].get('id') == thisID) {
-                        this._buttonList[i] = null;
+                button.destroy();
+                
+                for (i = 0; i < len; i++) {
+                    if (this._buttonList[i].get('id') != thisID) {
+                        new_list[new_list.length]= this._buttonList[i];
                     }
                 }
+
+                this._buttonList = new_list;
             } else {
                 return false;
             }
@@ -2014,10 +2054,17 @@ var Dom = YAHOO.util.Dom,
         * @return {Boolean}
         */
         destroy: function() {
+            var len = this._configuredButtons.length, j, i;
+            for(b = 0; b < len; b++) {
+                this.destroyButton(this._configuredButtons[b]);
+            }
+
+            this._configuredButtons = null;
+        
             this.get('element').innerHTML = '';
             this.get('element').className = '';
             //Brutal Object Destroy
-            for (var i in this) {
+            for (i in this) {
                 if (Lang.hasOwnProperty(this, i)) {
                     this[i] = null;
                 }
@@ -2440,6 +2487,13 @@ var Dom = YAHOO.util.Dom,
         * @type Number
         */
         _nodeChangeTimer: null,
+        /**
+        * @property _nodeChangeDelayTimer
+        * @private
+        * @description Holds a reference to the nodeChangeDelay setTimeout call
+        * @type Number
+        */
+        _nodeChangeDelayTimer: null,
         /**
         * @property _lastNodeChangeEvent
         * @private
@@ -3453,34 +3507,36 @@ var Dom = YAHOO.util.Dom,
         * @description Fix href and imgs as well as remove invalid HTML.
         */
         _fixNodes: function() {
-            var doc = this._getDoc(),
-                els = [];
+            try {
+                var doc = this._getDoc(),
+                    els = [];
 
-            for (var v in this.invalidHTML) {
-                if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
-                    if (v.toLowerCase() != 'span') {
-                        var tags = doc.body.getElementsByTagName(v);
-                        if (tags.length) {
-                            for (var i = 0; i < tags.length; i++) {
-                                els.push(tags[i]);
+                for (var v in this.invalidHTML) {
+                    if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
+                        if (v.toLowerCase() != 'span') {
+                            var tags = doc.body.getElementsByTagName(v);
+                            if (tags.length) {
+                                for (var i = 0; i < tags.length; i++) {
+                                    els.push(tags[i]);
+                                }
                             }
                         }
                     }
                 }
-            }
-            for (var h = 0; h < els.length; h++) {
-                if (els[h].parentNode) {
-                    if (Lang.isObject(this.invalidHTML[els[h].tagName.toLowerCase()]) && this.invalidHTML[els[h].tagName.toLowerCase()].keepContents) {
-                        this._swapEl(els[h], 'span', function(el) {
-                            el.className = 'yui-non';
-                        });
-                    } else {
-                        els[h].parentNode.removeChild(els[h]);
+                for (var h = 0; h < els.length; h++) {
+                    if (els[h].parentNode) {
+                        if (Lang.isObject(this.invalidHTML[els[h].tagName.toLowerCase()]) && this.invalidHTML[els[h].tagName.toLowerCase()].keepContents) {
+                            this._swapEl(els[h], 'span', function(el) {
+                                el.className = 'yui-non';
+                            });
+                        } else {
+                            els[h].parentNode.removeChild(els[h]);
+                        }
                     }
                 }
-            }
-            var imgs = this._getDoc().getElementsByTagName('img');
-            Dom.addClass(imgs, 'yui-img');   
+                var imgs = this._getDoc().getElementsByTagName('img');
+                Dom.addClass(imgs, 'yui-img');
+            } catch(e) {}
         },
         /**
         * @private
@@ -4163,7 +4219,8 @@ var Dom = YAHOO.util.Dom,
             var NCself = this;
             this._storeUndo();
             if (this.get('nodeChangeDelay')) {
-                window.setTimeout(function() {
+                this._nodeChangeDelayTimer = window.setTimeout(function() {
+                    NCself._nodeChangeDelayTimer = null;
                     NCself._nodeChange.apply(NCself, arguments);
                 }, 0);
             } else {
@@ -7053,6 +7110,11 @@ var Dom = YAHOO.util.Dom,
         * @return {Boolean}
         */
         destroy: function() {
+            if (this._nodeChangeDelayTimer) {
+                clearTimeout(this._nodeChangeDelayTimer);
+            }
+            this.hide();
+        
             if (this.resize) {
                 this.resize.destroy();
             }

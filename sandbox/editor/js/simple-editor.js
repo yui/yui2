@@ -1390,34 +1390,36 @@ var Dom = YAHOO.util.Dom,
         * @description Fix href and imgs as well as remove invalid HTML.
         */
         _fixNodes: function() {
-            var doc = this._getDoc(),
-                els = [];
+            try {
+                var doc = this._getDoc(),
+                    els = [];
 
-            for (var v in this.invalidHTML) {
-                if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
-                    if (v.toLowerCase() != 'span') {
-                        var tags = doc.body.getElementsByTagName(v);
-                        if (tags.length) {
-                            for (var i = 0; i < tags.length; i++) {
-                                els.push(tags[i]);
+                for (var v in this.invalidHTML) {
+                    if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
+                        if (v.toLowerCase() != 'span') {
+                            var tags = doc.body.getElementsByTagName(v);
+                            if (tags.length) {
+                                for (var i = 0; i < tags.length; i++) {
+                                    els.push(tags[i]);
+                                }
                             }
                         }
                     }
                 }
-            }
-            for (var h = 0; h < els.length; h++) {
-                if (els[h].parentNode) {
-                    if (Lang.isObject(this.invalidHTML[els[h].tagName.toLowerCase()]) && this.invalidHTML[els[h].tagName.toLowerCase()].keepContents) {
-                        this._swapEl(els[h], 'span', function(el) {
-                            el.className = 'yui-non';
-                        });
-                    } else {
-                        els[h].parentNode.removeChild(els[h]);
+                for (var h = 0; h < els.length; h++) {
+                    if (els[h].parentNode) {
+                        if (Lang.isObject(this.invalidHTML[els[h].tagName.toLowerCase()]) && this.invalidHTML[els[h].tagName.toLowerCase()].keepContents) {
+                            this._swapEl(els[h], 'span', function(el) {
+                                el.className = 'yui-non';
+                            });
+                        } else {
+                            els[h].parentNode.removeChild(els[h]);
+                        }
                     }
                 }
-            }
-            var imgs = this._getDoc().getElementsByTagName('img');
-            Dom.addClass(imgs, 'yui-img');   
+                var imgs = this._getDoc().getElementsByTagName('img');
+                Dom.addClass(imgs, 'yui-img');
+            } catch(e) {}
         },
         /**
         * @private
