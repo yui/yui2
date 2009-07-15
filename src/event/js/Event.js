@@ -305,9 +305,10 @@ if (!YAHOO.util.Event) {
              */
             startInterval: function() {
                 if (!this._interval) {
-                    var self = this;
-                    var callback = function() { self._tryPreloadAttach(); };
-                    this._interval = setInterval(callback, this.POLL_INTERVAL);
+                    // var self = this;
+                    // var callback = function() { self._tryPreloadAttach(); };
+                    // this._interval = setInterval(callback, this.POLL_INTERVAL);
+                    this._interval = YAHOO.lang.later(this.POLL_INTERVAL, this, this._tryPreloadAttach, true);
                 }
             },
 
@@ -1253,7 +1254,8 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                 if (onAvailStack.length === 0) {
                     retryCount = 0;
                     if (this._interval) {
-                        clearInterval(this._interval);
+                        // clearInterval(this._interval);
+                        this._interval.cancel();
                         this._interval = null;
                     } 
                     return;
@@ -1344,7 +1346,8 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                     this.startInterval();
                 } else {
                     if (this._interval) {
-                        clearInterval(this._interval);
+                        // clearInterval(this._interval);
+                        this._interval.cancel();
                         this._interval = null;
                     }
                 }
