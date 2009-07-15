@@ -861,7 +861,9 @@ package com.yahoo.astra.fl.charts.axes
 					}
 					
 					//automatically calculates stacked values
-					var value:Number = Number(this.chart.itemToAxisValue(series, j, this));
+					var objValue:Object = this.chart.itemToAxisValue(series, j, this);
+					var value:Number;
+					if(objValue != null) value = Number(this.chart.itemToAxisValue(series, j, this));
 					if(isNaN(value))
 					{
 						continue; //skip bad data

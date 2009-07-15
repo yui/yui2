@@ -722,7 +722,11 @@ package com.yahoo.astra.fl.charts
 			var index:int = series.itemRendererToIndex(this._lastDataTipRenderer);
 			
 			var dataTipText:String = "";
-			if(this.dataTipFunction != null)
+			if(series.dataTipFunction != null)
+			{
+				dataTipText = series.dataTipFunction(item, index, series.clone());
+			}
+			else if(this.dataTipFunction != null)
 			{
 				dataTipText = this.dataTipFunction(item, index, series);
 			}

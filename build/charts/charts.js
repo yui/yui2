@@ -177,13 +177,13 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 	_dataTipFunction: null,
 	
 	/**
-	 * Stores references to series labelFunction values created by
+	 * Stores references to series function values created by
 	 * YAHOO.widget.Chart.createProxyFunction()
-	 * @property _seriesLabelFunctions
+	 * @property _seriesFunctions
 	 * @type Array
 	 * @private
 	 */
-	_seriesLabelFunctions: null,
+	_seriesFunctions: null,
 
 	/**
 	 * Public accessor to the unique name of the Chart instance.
@@ -536,16 +536,16 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 			else
 			{
 				var i;
-				if(this._seriesLabelFunctions)
+				if(this._seriesFunctions)
 				{
-					var count = this._seriesLabelFunctions.length;
+					var count = this._seriesFunctions.length;
 					for(i = 0; i < count; i++)
 					{
-						YAHOO.widget.Chart.removeProxyFunction(this._seriesLabelFunctions[i]);
+						YAHOO.widget.Chart.removeProxyFunction(this._seriesFunctions[i]);
 					}
-					this._seriesLabelFunction = null;
+					this._seriesFunctions = null;
 				}
-				this._seriesLabelFunctions = [];
+				this._seriesFunctions = [];
 
 				//make a copy of the series definitions so that we aren't
 				//editing them directly.
@@ -577,9 +577,19 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 										typeof currentSeries.labelFunction == "function")
 									{
 										clonedSeries.labelFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.labelFunction);
-										this._seriesLabelFunctions.push(clonedSeries.labelFunction);
+										this._seriesFunctions.push(clonedSeries.labelFunction);
 									}
 								}
+
+								else if(prop == "dataTipFunction")
+								{
+									if(currentSeries.dataTipFunction !== null &&
+										typeof currentSeries.dataTipFunction == "function")
+									{
+										clonedSeries.dataTipFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.dataTipFunction);
+										this._seriesFunctions.push(clonedSeries.dataTipFunction);
+									}	
+								}								
 
 								else
 								{

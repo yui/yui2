@@ -354,6 +354,13 @@ var Dom = YAHOO.util.Dom,
         */
         _nodeChangeTimer: null,
         /**
+        * @property _nodeChangeDelayTimer
+        * @private
+        * @description Holds a reference to the nodeChangeDelay setTimeout call
+        * @type Number
+        */
+        _nodeChangeDelayTimer: null,
+        /**
         * @property _lastNodeChangeEvent
         * @private
         * @description Flag to determine the last event that fired a node change
@@ -1383,34 +1390,36 @@ var Dom = YAHOO.util.Dom,
         * @description Fix href and imgs as well as remove invalid HTML.
         */
         _fixNodes: function() {
-            var doc = this._getDoc(),
-                els = [];
+            try {
+                var doc = this._getDoc(),
+                    els = [];
 
-            for (var v in this.invalidHTML) {
-                if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
-                    if (v.toLowerCase() != 'span') {
-                        var tags = doc.body.getElementsByTagName(v);
-                        if (tags.length) {
-                            for (var i = 0; i < tags.length; i++) {
-                                els.push(tags[i]);
+                for (var v in this.invalidHTML) {
+                    if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
+                        if (v.toLowerCase() != 'span') {
+                            var tags = doc.body.getElementsByTagName(v);
+                            if (tags.length) {
+                                for (var i = 0; i < tags.length; i++) {
+                                    els.push(tags[i]);
+                                }
                             }
                         }
                     }
                 }
-            }
-            for (var h = 0; h < els.length; h++) {
-                if (els[h].parentNode) {
-                    if (Lang.isObject(this.invalidHTML[els[h].tagName.toLowerCase()]) && this.invalidHTML[els[h].tagName.toLowerCase()].keepContents) {
-                        this._swapEl(els[h], 'span', function(el) {
-                            el.className = 'yui-non';
-                        });
-                    } else {
-                        els[h].parentNode.removeChild(els[h]);
+                for (var h = 0; h < els.length; h++) {
+                    if (els[h].parentNode) {
+                        if (Lang.isObject(this.invalidHTML[els[h].tagName.toLowerCase()]) && this.invalidHTML[els[h].tagName.toLowerCase()].keepContents) {
+                            this._swapEl(els[h], 'span', function(el) {
+                                el.className = 'yui-non';
+                            });
+                        } else {
+                            els[h].parentNode.removeChild(els[h]);
+                        }
                     }
                 }
-            }
-            var imgs = this._getDoc().getElementsByTagName('img');
-            Dom.addClass(imgs, 'yui-img');   
+                var imgs = this._getDoc().getElementsByTagName('img');
+                Dom.addClass(imgs, 'yui-img');
+            } catch(e) {}
         },
         /**
         * @private
@@ -2108,7 +2117,8 @@ var Dom = YAHOO.util.Dom,
             var NCself = this;
             this._storeUndo();
             if (this.get('nodeChangeDelay')) {
-                window.setTimeout(function() {
+                this._nodeChangeDelayTimer = window.setTimeout(function() {
+                    NCself._nodeChangeDelayTimer = null;
                     NCself._nodeChange.apply(NCself, arguments);
                 }, 0);
             } else {
@@ -4733,15 +4743,6 @@ var Dom = YAHOO.util.Dom,
                 html = html.replace(/  /gi, ' '); //Replace all double spaces and replace with a single
             }
             
-            //First empty span
-            if (html.substring(0, 6).toLowerCase() == '<span>')  {
-                html = html.substring(6);
-                //Last empty span
-                if (html.substring(html.length - 7, html.length).toLowerCase() == '</span>')  {
-                    html = html.substring(0, html.length - 7);
-                }
-            }
-
             for (var v in this.invalidHTML) {
                 if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
                     if (Lang.isObject(v) && v.keepContents) {
@@ -4751,6 +4752,24 @@ var Dom = YAHOO.util.Dom,
                     }
                 }
             }
+
+            /* LATER -- Add DOM manipulation
+            console.log(html);
+            var frag = document.createDocumentFragment();
+            frag.innerHTML = html;
+
+            var ps = frag.getElementsByTagName('p'),
+                len = ps.length;
+            for (var i = 0; i < len; i++) {
+                var ps2 = ps[i].getElementsByTagName('p');
+                if (ps2.length) {
+                    
+                }
+                
+            }
+            html = frag.innerHTML;
+            console.log(html);
+            */
 
             this.fireEvent('cleanHTML', { type: 'cleanHTML', target: this, html: html });
 
@@ -4847,7 +4866,8 @@ var Dom = YAHOO.util.Dom,
 		            html = html.replace(/<div([^>]*)>/g, '<p$1>');
 				    html = html.replace(/<\/div>/gi, '</p>');
                 } else {
-                    html = html.replace(/<div>/gi, '<br>');
+                    //html = html.replace(/<div>/gi, '<br>');
+                    html = html.replace(/<div([^>]*)>([ tnr]*)<\/div>/gi, '<br>');
 				    html = html.replace(/<\/div>/gi, '');
                 }
             }
@@ -5013,6 +5033,11 @@ var Dom = YAHOO.util.Dom,
         * @return {Boolean}
         */
         destroy: function() {
+            if (this._nodeChangeDelayTimer) {
+                clearTimeout(this._nodeChangeDelayTimer);
+            }
+            this.hide();
+        
             YAHOO.log('Destroying Editor', 'warn', 'SimpleEditor');
             if (this.resize) {
                 YAHOO.log('Destroying Resize', 'warn', 'SimpleEditor');

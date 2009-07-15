@@ -354,9 +354,10 @@
 <span class="c">             */</span>
             <span class="nx">startInterval</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
-                    <span class="k">var</span> <span class="nx">callback</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="nx">self</span><span class="o">.</span><span class="nx">_tryPreloadAttach</span><span class="o">();</span> <span class="o">};</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="o">(</span><span class="nx">callback</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">POLL_INTERVAL</span><span class="o">);</span>
+                    <span class="c">// var self = this;</span>
+<span class="c"></span>                    <span class="c">// var callback = function() { self._tryPreloadAttach(); };</span>
+<span class="c"></span>                    <span class="c">// this._interval = setInterval(callback, this.POLL_INTERVAL);</span>
+<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">later</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">POLL_INTERVAL</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_tryPreloadAttach</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">},</span>
 
@@ -1302,7 +1303,8 @@
                 <span class="k">if</span> <span class="o">(</span><span class="nx">onAvailStack</span><span class="o">.</span><span class="nx">length</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">retryCount</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
                     <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">clearInterval</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">);</span>
+                        <span class="c">// clearInterval(this._interval);</span>
+<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">.</span><span class="nx">cancel</span><span class="o">();</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
                     <span class="o">}</span> 
                     <span class="k">return</span><span class="o">;</span>
@@ -1393,7 +1395,8 @@
                     <span class="k">this</span><span class="o">.</span><span class="nx">startInterval</span><span class="o">();</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">clearInterval</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">);</span>
+                        <span class="c">// clearInterval(this._interval);</span>
+<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">.</span><span class="nx">cancel</span><span class="o">();</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
