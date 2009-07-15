@@ -4782,15 +4782,6 @@
                 <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/  /gi</span><span class="o">,</span> <span class="s1">&#39; &#39;</span><span class="o">);</span> <span class="c">//Replace all double spaces and replace with a single</span>
 <span class="c"></span>            <span class="o">}</span>
             
-            <span class="c">//First empty span</span>
-<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">html</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="m">6</span><span class="o">).</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;&lt;span&gt;&#39;</span><span class="o">)</span>  <span class="o">{</span>
-                <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">6</span><span class="o">);</span>
-                <span class="c">//Last empty span</span>
-<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">html</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="nx">html</span><span class="o">.</span><span class="nx">length</span> <span class="o">-</span> <span class="m">7</span><span class="o">,</span> <span class="nx">html</span><span class="o">.</span><span class="nx">length</span><span class="o">).</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;&lt;/span&gt;&#39;</span><span class="o">)</span>  <span class="o">{</span>
-                    <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">html</span><span class="o">.</span><span class="nx">length</span> <span class="o">-</span> <span class="m">7</span><span class="o">);</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-
             <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">v</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">invalidHTML</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">invalidHTML</span><span class="o">,</span> <span class="nx">v</span><span class="o">))</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">v</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">v</span><span class="o">.</span><span class="nx">keepContents</span><span class="o">)</span> <span class="o">{</span>
@@ -4800,6 +4791,24 @@
                     <span class="o">}</span>
                 <span class="o">}</span>
             <span class="o">}</span>
+
+            <span class="c">/* LATER -- Add DOM manipulation</span>
+<span class="c">            console.log(html);</span>
+<span class="c">            var frag = document.createDocumentFragment();</span>
+<span class="c">            frag.innerHTML = html;</span>
+<span class="c"></span>
+<span class="c">            var ps = frag.getElementsByTagName(&#39;p&#39;),</span>
+<span class="c">                len = ps.length;</span>
+<span class="c">            for (var i = 0; i &lt; len; i++) {</span>
+<span class="c">                var ps2 = ps[i].getElementsByTagName(&#39;p&#39;);</span>
+<span class="c">                if (ps2.length) {</span>
+<span class="c">                    </span>
+<span class="c">                }</span>
+<span class="c">                </span>
+<span class="c">            }</span>
+<span class="c">            html = frag.innerHTML;</span>
+<span class="c">            console.log(html);</span>
+<span class="c">            */</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;cleanHTML&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;cleanHTML&#39;</span><span class="o">,</span> <span class="nx">target</span><span class="o">:</span> <span class="k">this</span><span class="o">,</span> <span class="nx">html</span><span class="o">:</span> <span class="nx">html</span> <span class="o">});</span>
 
