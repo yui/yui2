@@ -453,8 +453,9 @@
 			}
 					
 			
-			this._barSizeFunction = this._barSizeFunctions[this.get('anim')?1:0][this.get('direction')];
+			this._barSizeFunction = this._barSizeFunctions[0][this.get('direction')];
 			this.redraw();
+			this._barSizeFunction = this._barSizeFunctions[this.get('anim')?1:0][this.get('direction')];
 
 			this.on('minValueChange',this.redraw);
 			this.on('maxValueChange',this.redraw);
