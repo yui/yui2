@@ -1467,6 +1467,9 @@ var Dom = YAHOO.util.Dom,
         */
         getButtonByValue: function(value) {
             var _buttons = this.get('buttons');
+            if (!_buttons) {
+                return false;
+            }
             var len = _buttons.length;
             for (var i = 0; i < len; i++) {
                 if (_buttons[i].group !== undefined) {
