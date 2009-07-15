@@ -27,6 +27,7 @@
 	 * @constructor
 	 */        
 	var Prog = function(oConfigs) {
+		YAHOO.log('Creating ProgressBar instance','info','ProgressBar');
         
 		Prog.superclass.constructor.call(this, document.createElement('div') , oConfigs);
 		this._init(oConfigs);
@@ -198,6 +199,7 @@
 		 * @private
 		 */	
 		initAttributes: function (oConfigs) {
+			YAHOO.log('Initializing configuration attributes','info','ProgressBar');
 
 		    Prog.superclass.initAttributes.call(this, oConfigs);
 			this.set('innerHTML',Prog.MARKUP);
@@ -332,7 +334,6 @@
 					if (Lang.isNumber(value)) {
 						value += 'px';
 					}
-					YAHOO.log('Setting width: ' + value,'info','ProgressBar');
 					this.setStyle('width',value);
 					Dom.setStyle(maskEl,'width', value);
 					this.redraw();
@@ -357,7 +358,6 @@
 					if (Lang.isNumber(value)) {
 						value += 'px';
 					}
-					YAHOO.log('Setting height: ' + value,'info','ProgressBar');
 					this.setStyle('height',value);
 					Dom.setStyle(maskEl,'height', value);
 					this.redraw();
@@ -469,6 +469,7 @@
 		 * @return  void
 		 */
 		redraw: function () {
+			YAHOO.log('Redraw','info','ProgressBar');
 			this._recalculateConstants();
 			this._valueChange(this.get('value'));
 		},
@@ -554,14 +555,14 @@
 			},
 			{
 				ltr: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated) { anim.stop(); }
+					if (anim.isAnimated()) { anim.stop(true); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {width:{ to: pixelValue }}; 
 					anim.animate();
 				},
 				rtl: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated) { anim.stop(); }
+					if (anim.isAnimated()) { anim.stop(true); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {
@@ -571,14 +572,14 @@
 					anim.animate();
 				},
 				ttb: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated) { anim.stop(); }
+					if (anim.isAnimated()) { anim.stop(true); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {height:{to: pixelValue}};
 					anim.animate();
 				},
 				btt: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated) { anim.stop(); }
+					if (anim.isAnimated()) { anim.stop(true); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {
@@ -608,6 +609,7 @@
 		 * @private
 		 */		
 		_recalculateConstants: function() {
+			YAHOO.log('Recalculating auxiliary factors','info','ProgressBar');
 			var barEl = this.get('barEl');
 			this._mn = this.get('minValue') || 0;
 
@@ -638,6 +640,7 @@
 		_animSetter: function (value) {
 			var anim, barEl = this.get('barEl');
 			if (value) {
+				YAHOO.log('Turning animation on','info','ProgressBar');
 				if (value instanceof YAHOO.util.Anim) {
 					anim = value;
 				} else {
@@ -646,6 +649,7 @@
 				anim.onTween.subscribe(this._animOnTween,this,true);
 				anim.onComplete.subscribe(this._animComplete,this,true);
 			} else {
+				YAHOO.log('Turning animation off','info','ProgressBar');
 				anim = this.get('anim');
 				if (anim) {
 					anim.onTween.unsubscribeAll();
@@ -658,6 +662,7 @@
 		},
 		
 		_animComplete: function(ev) {
+			YAHOO.log('Animation completed','info','ProgressBar');
 			var value = this.get('value');
 			this._previousValue = value;
 			this.fireEvent('complete', value);
@@ -666,6 +671,7 @@
 		},
 		_animOnTween:function (ev) {
 			var value = Math.floor(this._tweenFactor * this.get('anim').currentFrame + this._previousValue);
+			YAHOO.log('Animation onTween at: ' + value,'info','ProgressBar');
 			this.fireEvent('progress',value);
 			this._showTemplates(value,false);
 		},
@@ -697,6 +703,8 @@
 		 * @private
 		 */
 		 _showTemplates: function(value, aria) {
+ 			YAHOO.log('Show template','info','ProgressBar');
+
 			var captionEl = this.get('captionEl'),
 				container = this.get('element'),
 				text = Lang.substitute(this.get('textTemplate'),{
