@@ -14,6 +14,20 @@ package com.yahoo.astra.fl.charts.series
 	{
 		
 	//--------------------------------------
+	//  Properties
+	//--------------------------------------		
+	
+		/**
+		 * When a Legend is present, indicates whether the series will show in the legend.
+		 */
+		function get showInLegend():Boolean;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set showInLegend(value:Boolean):void;		
+		
+	//--------------------------------------
 	//  Methods
 	//--------------------------------------
 	

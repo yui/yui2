@@ -412,6 +412,29 @@ package com.yahoo.astra.fl.charts
 			this._legend = value;
 			this.invalidate();
 		}
+		
+		/**
+		 * @private 
+		 * Storage for legendLabelFunction
+		 */
+		private var _legendLabelFunction:Function;
+		
+		/**
+		 * If defined, the chart will call the input function to determine the text displayed in 
+		 * in the chart's legend.
+		 */
+		public function get legendLabelFunction():Function
+		{
+			return this._legendLabelFunction;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set legendLabelFunction(value:Function):void
+		{
+			this._legendLabelFunction = value;
+		}
 	
 	//--------------------------------------
 	//  Public Methods
@@ -660,8 +683,17 @@ package com.yahoo.astra.fl.charts
 				var series:ISeries = ISeries(this.series[i]);
 				if(series is ILegendItemSeries)
 				{
+					if(!(series as ILegendItemSeries).showInLegend) continue;
 					var itemData:LegendItemData = ILegendItemSeries(series).createLegendItemData();
 					itemData.label = itemData.label ? itemData.label : i.toString();
+					if(series.legendLabelFunction != null && series.legendLabelFunction is Function)
+					{
+						itemData.label = series.legendLabelFunction(itemData.label);
+					}
+					else if(this.legendLabelFunction != null && this.legendLabelFunction is Function)
+					{
+						itemData.label = this.legendLabelFunction(itemData.label);
+					}
 					legendData.push(itemData);
 				}
 				else if(series is ICategorySeries)

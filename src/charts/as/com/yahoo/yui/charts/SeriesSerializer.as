@@ -85,6 +85,11 @@ package com.yahoo.yui.charts
 			{
 				series.dataTipFunction = JavaScriptUtil.createCallbackFunction(input.dataTipFunction).callback;
 			}
+			
+			if(input.legendLabelFunction)
+			{
+				series.legendLabelFunction = JavaScriptUtil.createCallbackFunction(input.legendLabelFunction).callback;
+			}
 						
 			series.dataProvider = input.dataProvider;
 			series.displayName = input.displayName;
@@ -93,10 +98,12 @@ package com.yahoo.yui.charts
 				var cartesianSeries:CartesianSeries = CartesianSeries(series);
 				cartesianSeries.verticalField = input.yField;
 				cartesianSeries.horizontalField = input.xField;
+				cartesianSeries.showInLegend = input.showInLegend == false ? false : true;	
+				
 				if(input.axis)
 				{
 					cartesianSeries.axis = input.axis;
-				}
+				}			
 			}
 			else if(series is PieSeries)
 			{
