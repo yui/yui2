@@ -23,10 +23,9 @@
         <form method="post" action="index-full.php" id="form1" class="yui-skin-sam">
         <textarea id="editor" name="editor" rows="20" cols="75">
         This is a test.<br>
-        A {$'} B
-        <ol>
-            <li id="foo">Item 1</li>
-        </ol>
+        This is a test.<br>
+        This is a test.<br>
+        This is a test.<br>
         </textarea>
         <!--This is a test<br><strong>Strong Tag</strong> <em>Em Tag</em> <span style="font-weight: bold">Style Bold</span>
         <p class="yui-noedit">This is some test text. And a <a href="#">test link</a>. <a href="nada"><img src="pics/Photo1.jpg" align="right"/></a></p>
@@ -98,7 +97,7 @@ var myConfig = {
     animate: true,
     dompath: true,
     handleSubmit: true,
-    ptags: true,
+    //ptags: true,
     drag: true,
     resize: true,
     //extracss: 'body { font-size: 11px; }',

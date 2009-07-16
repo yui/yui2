@@ -4078,16 +4078,20 @@ var Dom = YAHOO.util.Dom,
                         if (this.browser.webkit) {
                             tar = this._getSelectedElement();
                             if (!this._hasParent(tar, 'li')) {
-                                this.execCommand('inserthtml', '<var id="yui-br"></var>');
-                                var holder = this._getDoc().getElementById('yui-br'),
-                                    br = this._getDoc().createElement('br'),
-                                    caret = this._getDoc().createElement('span');
+                                if (this.browser.webkit4) {
+                                    this.execCommand('insertlinebreak');
+                                } else {
+                                    this.execCommand('inserthtml', '<var id="yui-br"></var>');
+                                    var holder = this._getDoc().getElementById('yui-br'),
+                                        br = this._getDoc().createElement('br'),
+                                        caret = this._getDoc().createElement('span');
 
-                                holder.parentNode.replaceChild(br, holder);
-                                caret.className = 'yui-non';
-                                caret.innerHTML = '&nbsp;';
-                                Dom.insertAfter(caret, br);
-                                this._selectNode(caret);
+                                    holder.parentNode.replaceChild(br, holder);
+                                    caret.className = 'yui-non';
+                                    caret.innerHTML = '&nbsp;';
+                                    Dom.insertAfter(caret, br);
+                                    this._selectNode(caret);
+                                }
                                 Event.stopEvent(ev);
                             }
                         }
@@ -4714,6 +4718,11 @@ var Dom = YAHOO.util.Dom,
                 br.webkit3 = br.webkit;
             } else {
                 br.webkit3 = 0;
+            }
+            if (br.webkit >= 530) {
+                br.webkit4 = br.webkit;
+            } else {
+                br.webkit4 = 0;
             }
             br.mac = false;
             //Check for Mac
@@ -6206,7 +6215,7 @@ var Dom = YAHOO.util.Dom,
             * 2.6.0: Seems there are still some issues with List Creation and Safari 3, reverting to previously working Safari 2.x code
             */
             //if ((this.browser.webkit && !this._getDoc().queryCommandEnabled(action))) {
-            if (this.browser.webkit) {
+            if (this.browser.webkit && !this.browser.webkit4) {
                 if (this._isElement(selEl, 'li') && this._isElement(selEl.parentNode, tag)) {
                     YAHOO.log('We already have a list, undo it', 'info', 'SimpleEditor');
                     el = selEl.parentNode;
