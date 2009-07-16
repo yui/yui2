@@ -100,9 +100,6 @@
 				var state = this._getRecordState( record_id );
 
 				if( !state.expanded || restore ){
-
-					//Fire custom event
-					this.fireEvent( "rowExpandEvent", { row : row } );
 					
 					var row_data = this.getRecord( record_id ),
 						row = this.getRow( row_data ),
@@ -111,6 +108,9 @@
 						expanded_data = row_data.getData(),
 						expanded_content = null,
 						template = this.rowExpansionTemplate;
+
+					//Fire custom event
+					this.fireEvent( "rowExpandEvent", { row : row } );
 
 					//Construct expanded row body
 					new_row.className = CLASS_EXPANDABLEROW;
