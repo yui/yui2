@@ -54,6 +54,34 @@ var editor = null;
 
                     Assert.areEqual(true, eFocus, 'Editor focus event FAILED');
                 },
+                test_ol_list_create_inline: function() {
+                    var html = 'Item1<br>Item2<br>Item3<br>Item4<br>';
+                    editor.setEditorHTML(html);
+                    editor.execCommand('selectall');
+                    editor.execCommand('insertorderedlist', '');
+                    var ol = editor._getDoc().getElementsByTagName('ol');
+                    Assert.areEqual(ol.length, 1, 'Failed to create list from source');
+                    var lis = editor._getDoc().getElementsByTagName('li');
+                    Assert.areEqual(lis.length, 4, 'Failed to create list items from source');
+                    editor.execCommand('selectall');
+                    editor.execCommand('insertorderedlist', '');
+                    var lis = editor._getDoc().getElementsByTagName('li');
+                    Assert.areEqual(lis.length, 0, 'Failed to remove list items from source');
+                },
+                test_ul_list_create_inline: function() {
+                    var html = 'Item1<br>Item2<br>Item3<br>Item4<br>Item5<br>Item6<br>Item7';
+                    editor.setEditorHTML(html);
+                    editor.execCommand('selectall');
+                    editor.execCommand('insertunorderedlist', '');
+                    var ul = editor._getDoc().getElementsByTagName('ul');
+                    Assert.areEqual(ul.length, 1, 'Failed to create list from source');
+                    var lis = editor._getDoc().getElementsByTagName('li');
+                    Assert.areEqual(lis.length, 7, 'Failed to create list items from source');
+                    editor.execCommand('selectall');
+                    editor.execCommand('insertunorderedlist', '');
+                    var lis = editor._getDoc().getElementsByTagName('li');
+                    Assert.areEqual(lis.length, 0, 'Failed to remove list items from source');
+                },
                 test_regex: function() {
                     editor.setEditorHTML(Dom.get('testRegEx').innerHTML);
                     //editor._getDoc().body.innerHTML = Dom.get('testRegEx').innerHTML;
