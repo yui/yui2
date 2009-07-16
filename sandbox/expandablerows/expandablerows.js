@@ -155,7 +155,7 @@
 						
 						if( !restore ){
 
-							this.a_rowExpansions.push( row_data.getId() );
+							this.a_rowExpansions.push( record_id );
 
 						}
 						
@@ -177,16 +177,16 @@
 			collapseRow : function( record_id ){
 				
 				var row_data = this.getRecord( record_id ),
-					row = Dom.get( row_data.getId() );
+					row = Dom.get( row_data.getId() ),
+					state = row_data.getData( STRING_STATENAME );
 				
-				if( Dom.hasClass( row, CLASS_EXPANDED ) ){
+				if( state && state.expanded ){
 
 					//Fire custom event
 					this.fireEvent("rowCollapseEvent", { row : row_data } );
 					
-					var state = row_data.getData( STRING_STATENAME ),
-						next_sibling = Dom.getNextSibling( row ),
-						hash_index = indexOf( this.a_rowExpansions, row_data.getId() );
+					var next_sibling = Dom.getNextSibling( row ),
+						hash_index = indexOf( this.a_rowExpansions, record_id );
 						
 					if( Dom.hasClass( next_sibling, CLASS_EXPANDABLEROW ) ) {
 
