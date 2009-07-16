@@ -110,7 +110,7 @@
 						template = this.rowExpansionTemplate;
 
 					//Fire custom event
-					this.fireEvent( "rowExpandEvent", { row : row } );
+					this.fireEvent( "rowExpandEvent", { record_id : record_id } );
 
 					//Construct expanded row body
 					new_row.className = CLASS_EXPANDABLEROW;
@@ -183,7 +183,7 @@
 				if( state && state.expanded ){
 
 					//Fire custom event
-					this.fireEvent("rowCollapseEvent", { row : row_data } );
+					this.fireEvent("rowCollapseEvent", { record_id : row_data } );
 					
 					var next_sibling = Dom.getNextSibling( row ),
 						hash_index = indexOf( this.a_rowExpansions, record_id );
