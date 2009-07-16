@@ -376,7 +376,7 @@
             * If the event comes from an attribute and the value hasn't changed, don't process it.
             */
             var ev = set;
-            if (ev.prevValue && ev.newValue) {
+            if (ev && ev.prevValue && ev.newValue) {
                 if (ev.prevValue == ev.newValue) {
                     set = false;
                 }
