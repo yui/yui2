@@ -16,7 +16,6 @@
 			CLASS_EXPANDABLEROW = 'yui-dt-expandablerow'
 			CLASS_TRIGGER = 'yui-dt-expandablerow-trigger',
 			CLASS_NODATA = 'yui-dt-expandablerow-nodata',
-			CLASS_CELL = 'yui-dt-expandablerow-cell',
 			CLASS_LINER = 'yui-dt-expandablerow-liner',
 			
 			//From YUI 3
@@ -116,7 +115,6 @@
 					//Construct expanded row body
 					new_row.className = CLASS_EXPANDABLEROW;
 					var new_column = document.createElement( 'td' );
-					new_column.className = CLASS_CELL;
 					new_column.colSpan = column_length;
 
 					new_column.innerHTML = '<div class="'+ CLASS_LINER +'"></div>';
@@ -251,7 +249,7 @@
 
 	YAHOO.widget.DataTable.ExpansionFormatter = function(el, oRecord, oColumn, oData) {
 
-		var cell_element = Dom.getAncestorByTagName( el, 'td' ),
+		var cell_element = this.getTdEl(el),
 			state_object = oRecord.getData( STRING_STATENAME ),
 			this_static = YAHOO.widget.DataTable.formatExpandRowTrigger;
 
