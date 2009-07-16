@@ -257,10 +257,6 @@
 		if( oData ){ //Row is closed
 
 			Dom.addClass( cell_element, CLASS_TRIGGER );
-
-		} else {
-			
-			Dom.addClass( cell_element, CLASS_NODATA );
 			
 		}
 
