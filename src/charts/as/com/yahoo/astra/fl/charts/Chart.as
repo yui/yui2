@@ -756,7 +756,7 @@ package com.yahoo.astra.fl.charts
 			var dataTipText:String = "";
 			if(series.dataTipFunction != null)
 			{
-				dataTipText = series.dataTipFunction(item, index, series.clone());
+				dataTipText = series.dataTipFunction(item, index, series);
 			}
 			else if(this.dataTipFunction != null)
 			{

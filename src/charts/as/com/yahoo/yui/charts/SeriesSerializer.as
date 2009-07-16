@@ -83,7 +83,7 @@ package com.yahoo.yui.charts
 			
 			if(input.dataTipFunction)
 			{
-				series.dataTipFunction = JavaScriptUtil.createCallbackFunction(input.dataTipFunction).callback;
+				series.dataTipFunction = getDataTipFunction(input.dataTipFunction);
 			}
 			
 			if(input.legendLabelFunction)
@@ -116,5 +116,16 @@ package com.yahoo.yui.charts
 			}
 			return series;
 		}
+		
+		private static function getDataTipFunction(value:String):Function
+		{
+			var delegate:Object = {dataTipFunction: JavaScriptUtil.createCallbackFunction(value).callback};
+			delegate.callback = function(item:Object, index:int, series:ISeries):String
+			{
+				return delegate.dataTipFunction(item, index, SeriesSerializer.writeSeries(series));
+			}
+			
+			return delegate.callback;
+		}		
 	}
 }
