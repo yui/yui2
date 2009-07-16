@@ -80,6 +80,12 @@ package com.yahoo.yui.charts
 				var SeriesType:Class = shortNameToSeriesTypeHash[input.type];
 				series = new SeriesType()
 			}
+			
+			if(input.dataTipFunction)
+			{
+				series.dataTipFunction = JavaScriptUtil.createCallbackFunction(input.dataTipFunction).callback;
+			}
+						
 			series.dataProvider = input.dataProvider;
 			series.displayName = input.displayName;
 			if(series is CartesianSeries)

@@ -550,14 +550,14 @@
 			},
 			{
 				ltr: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated) { anim.stop(); }
+					if (anim.isAnimated()) { anim.stop(true); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {width:{ to: pixelValue }}; 
 					anim.animate();
 				},
 				rtl: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated) { anim.stop(); }
+					if (anim.isAnimated()) { anim.stop(true); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {
@@ -567,14 +567,14 @@
 					anim.animate();
 				},
 				ttb: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated) { anim.stop(); }
+					if (anim.isAnimated()) { anim.stop(true); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {height:{to: pixelValue}};
 					anim.animate();
 				},
 				btt: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated) { anim.stop(); }
+					if (anim.isAnimated()) { anim.stop(true); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {
@@ -692,6 +692,7 @@
 		 * @private
 		 */
 		 _showTemplates: function(value, aria) {
+
 			var captionEl = this.get('captionEl'),
 				container = this.get('element'),
 				text = Lang.substitute(this.get('textTemplate'),{
