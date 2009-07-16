@@ -490,30 +490,32 @@ var Dom = YAHOO.util.Dom,
         */
         _fixNodes: function() {
             YAHOO.widget.Editor.superclass._fixNodes.call(this);
-            var url = '';
+            try {
+                var url = '';
 
-            var imgs = this._getDoc().getElementsByTagName('img');
-            for (var im = 0; im < imgs.length; im++) {
-                if (imgs[im].getAttribute('href', 2)) {
-                    url = imgs[im].getAttribute('src', 2);
-                    if (this._isLocalFile(url)) {
-                        Dom.addClass(imgs[im], this.CLASS_LOCAL_FILE);
-                    } else {
-                        Dom.removeClass(imgs[im], this.CLASS_LOCAL_FILE);
+                var imgs = this._getDoc().getElementsByTagName('img');
+                for (var im = 0; im < imgs.length; im++) {
+                    if (imgs[im].getAttribute('href', 2)) {
+                        url = imgs[im].getAttribute('src', 2);
+                        if (this._isLocalFile(url)) {
+                            Dom.addClass(imgs[im], this.CLASS_LOCAL_FILE);
+                        } else {
+                            Dom.removeClass(imgs[im], this.CLASS_LOCAL_FILE);
+                        }
                     }
                 }
-            }
-            var fakeAs = this._getDoc().body.getElementsByTagName('a');
-            for (var a = 0; a < fakeAs.length; a++) {
-                if (fakeAs[a].getAttribute('href', 2)) {
-                    url = fakeAs[a].getAttribute('href', 2);
-                    if (this._isLocalFile(url)) {
-                        Dom.addClass(fakeAs[a], this.CLASS_LOCAL_FILE);
-                    } else {
-                        Dom.removeClass(fakeAs[a], this.CLASS_LOCAL_FILE);
+                var fakeAs = this._getDoc().body.getElementsByTagName('a');
+                for (var a = 0; a < fakeAs.length; a++) {
+                    if (fakeAs[a].getAttribute('href', 2)) {
+                        url = fakeAs[a].getAttribute('href', 2);
+                        if (this._isLocalFile(url)) {
+                            Dom.addClass(fakeAs[a], this.CLASS_LOCAL_FILE);
+                        } else {
+                            Dom.removeClass(fakeAs[a], this.CLASS_LOCAL_FILE);
+                        }
                     }
                 }
-            }
+            } catch(e) {}
         },
         /**
         * @private

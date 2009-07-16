@@ -64,6 +64,16 @@ package com.yahoo.astra.fl.charts.series
 		 */
 		function get length():int;
 		
+		/**
+		 * DataTip Function for series
+		 */
+		function get dataTipFunction():Function;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set dataTipFunction(value:Function):void;		
+		
 	//--------------------------------------
 	//  Methods
 	//--------------------------------------

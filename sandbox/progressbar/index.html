@@ -106,20 +106,21 @@
 
 .rankings .yui-pb {
 	width:100px;
-	height:16px;
+	height:20px;
 }
 
 .rankings .yui-pb-bar  {
-	background-image: url(stars.png);
+	background-image: url(star.png);
 }
 
 #vumeter {
 	padding:3px;
-	margin:3px;
+	margin:10px;
 	border: medium ridge silver;
+	float:left;
 }
 
-#vumeter div{
+#vumeter .yui-pb {
 	float:left;
 	margin:3px;
 }
@@ -239,7 +240,7 @@ pre, code {
 			<textarea name="code" class="JScript" cols="60" rows="1">
 				(new YAHOO.widget.ProgressBar({value:1.5,maxValue:5})).render('song123');
 			</textarea>
-			<p>and the bar background image has been set to an image with 5 stars.</p>
+			<p>and the bar background image has been set to an image with a single star which is tiled as needed.</p>
 			<hr/>
 			<p>Progress bars don't need to be static either.  They certainly cannot replace the Chart utility
 			but you can do some decent graphics with them, even animated ones.</p>
@@ -594,8 +595,8 @@ pre, code {
 				pbvu[i].set('value',YAHOO.util.Bezier.getPosition(points,i/(NUM_BARS-1))[1]);
 			}
 		};
-			
-		pbvu[NUM_BARS -1].on('complete',redrawVUs);
+		window.setInterval(redrawVUs,350);	
+		//pbvu[NUM_BARS -1].on('complete',redrawVUs);
 		redrawVUs();
 			
 
