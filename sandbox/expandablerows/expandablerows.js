@@ -19,6 +19,7 @@
 			CLASS_CELL = 'yui-dt-expandablerow-cell',
 			CLASS_LINER = 'yui-dt-expandablerow-liner',
 			
+			//From YUI 3
 			indexOf = function(a, val) {
 				for (var i=0; i<a.length; i=i+1) {
 					if (a[i] === val) {
