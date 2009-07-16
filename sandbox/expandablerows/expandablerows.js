@@ -72,7 +72,7 @@
 				this.subscribe( 'postRenderEvent', this.restoreExpandedRows )
 
 				//Setup template
-				this.rowExpansionTemplate = template || null;
+				this.rowExpansionTemplate = template;
 
 				//Set table level state
 				this.a_rowExpansions = [];
