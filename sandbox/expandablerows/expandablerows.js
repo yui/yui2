@@ -212,27 +212,15 @@
 
 			collapseAllRows : function(){
 
-				var expanded_rows = this.getElementsByClassName( CLASS_EXPANDABLEROW );
+				var rows = this.a_rowExpansions;
 
-				if( expanded_rows.length ){
+				for( var i = 0, l = rows.length; l > i; i++ ){
 
-					for( var i = 0, l = expanded_rows.length; l > i; i++ ){
-
-						var parent_row = Dom.getPreviousSibling( expanded_rows[ i ] );
-
-						if( parent_row ){
-
-							this.collapseRow( parent_row );
-
-						}
-
-					}
-
-				} else {
-
-					return false;
+					this.collapseRow( rows[ i ] );
 
 				}
+
+				a_rowExpansions = [];
 
 			},
 
