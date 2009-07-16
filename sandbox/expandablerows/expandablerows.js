@@ -121,7 +121,7 @@
 					new_column.innerHTML = '<div class="'+ CLASS_LINER +'"></div>';
 					new_row.appendChild( new_column );
 
-					var liner_element = new_row.getElementsByTagName( 'div' )[ 0 ];
+					var liner_element = new_row.firstChild.firstChild;
 
 					if( YAHOO.lang.isString( template ) ){
 
