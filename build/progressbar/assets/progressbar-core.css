@@ -35,23 +35,24 @@
 	background-repeat:no-repeat;
 	border:0;
 	padding:0;
+	position: absolute;
 }
 
 .yui-pb-tl {
-	float: left;
 	background-position: top left;
 }
 .yui-pb-tr {
 	background-position: top right;
-	float:right;
+	left:50%;
 }
 .yui-pb-bl {
-	float:left;
 	background-position: bottom left;
+	top:50%;
 }
 .yui-pb-br {
 	background-position: bottom right;
-	float:right;
+	left:50%;
+	top:50%;
 }
 
 .yui-pb-bar {

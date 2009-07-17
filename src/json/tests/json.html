@@ -158,6 +158,8 @@ JSON_STRING = '[\
 /*****************************/
 /*     Tests begin here      */
 /*****************************/
+// wrapped in a function to allow repeating tests with native behavior disabled
+function addTests() {
 suite.add(new TestCase({
     name : "parse",
 
@@ -441,14 +443,11 @@ suite.add(new TestCase({
     name : "stringify",
         
     _should : {
-        /*
-         * YUI 2 implementation of stringify does not throw errors
         error : {
             test_failOnStringifyCyclicalRef1    : true,
             test_failOnStringifyCyclicalRef2    : true,
             test_failOnStringifyCyclicalRef3    : true
         }
-        */
     },
 
     test_stringifyNatives: function () {
@@ -638,8 +637,6 @@ suite.add(new TestCase({
 
 }));
 
-/*
- * YUI 2 implementation does not support formatting arg
 suite.add(new TestCase({
     name : "formatting",
 
@@ -655,6 +652,7 @@ suite.add(new TestCase({
                 }]
             },null,0));
 
+        /* commented out because FF3.5 hangs on negative values
         Assert.areSame('{"foo-4":[2,{"bar":[4,{"baz":[6,{"deep enough":7}]}]}]}',
             JSON.stringify({
                 "foo-4" : [ 2, {
@@ -665,6 +663,7 @@ suite.add(new TestCase({
                     }]
                 }]
             },null,-4));
+        */
 
         Assert.areSame('{"foo_false":[2,{"bar":[4,{"baz":[6,{"deep enough":7}]}]}]}',
             JSON.stringify({
@@ -749,7 +748,6 @@ Xo]\n\
             },null,"Xo"));
     }
 }));
-*/
 
 suite.add(new TestCase({
     name : "reviver",
@@ -841,9 +839,10 @@ suite.add(new TestCase({
                         return v;
                     }
                 }));
+    },
 
-        /*
         // replacer works in conjunction with indent
+    test_replacerPlusIndent : function () {
         Assert.areSame("{\n_\"num\": 2,\n_\"alpha\": \"ABC\",\n_\"obj\": {\n__\"nested_num\": 100,\n__\"alpha\": \"abc\"\n_},\n_\"arr\": [\n__2,\n__null,\n__4\n_]\n}",
             JSON.stringify({
                     num: 1,
@@ -880,7 +879,6 @@ suite.add(new TestCase({
                         return v;
                     }
                 },'_'));
-         */
     }
 }));
 
@@ -893,6 +891,20 @@ suite.add(new TestCase({
     },
 }));
 */
+}
+
+addTests();
+// If native JSON is available, run the tests again without native calls
+if (JSON.useNativeParse) {
+    suite.add(new TestCase({
+        test_disableNative : function () {
+            JSON.useNativeParse = false;
+            JSON.useNativeStringify = false;
+            YAHOO.log("Rerunning tests without native JSON API","section","TestRunner");
+        }
+    }));
+    addTests();
+}
 
 var logger = new TestLogger("log");
 logger.hideCategory('info');
@@ -911,6 +923,7 @@ YAHOO.log("Tests","section","TestRunner");
 TestRunner.add(suite);
 
 TestRunner.run();
+
 
 })();
 </script>

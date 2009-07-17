@@ -73,8 +73,9 @@
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            Third step in the validation.  Regex used to remove all open square
-brackets following a colon, comma, or at the beginning of the string.
+                                            Third step in the safety evaluation.  Regex used to remove all open
+square brackets following a colon, comma, or at the beginning of the
+string.
                                         </div>
                                     </div>
      
@@ -104,24 +105,8 @@ brackets following a colon, comma, or at the beginning of the string.
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            First step in the validation.  Regex used to replace all escape
+                                            First step in the safety evaluation.  Regex used to replace all escape
 sequences (i.e. "\\", etc) with '@' characters (a non-JSON character).
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__INVALID">
-                                    <h4><a name="property__INVALID" property="yui:name">_INVALID</a>
-                                        - <code>private static <span property="yui:type">{RegExp}</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Final step in the validation.  Regex used to test the string left after
-all previous replacements for invalid characters.
                                         </div>
                                     </div>
      
@@ -165,18 +150,76 @@ found.
 
                                     <hr />
                                     </div>
+                                    <div class="private" rel="yui:property" resource="#property__UNSAFE">
+                                    <h4><a name="property__UNSAFE" property="yui:name">_UNSAFE</a>
+                                        - <code>private static <span property="yui:type">{RegExp}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Final step in the safety evaluation.  Regex used to test the string left
+after all previous replacements for invalid characters.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
                                     <div class="private" rel="yui:property" resource="#property__VALUES">
                                     <h4><a name="property__VALUES" property="yui:name">_VALUES</a>
                                         - <code>private static <span property="yui:type">{RegExp}</span></code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            Second step in the validation.  Regex used to replace all simple
+                                            Second step in the safety evaluation.  Regex used to replace all simple
 values with ']' characters.
                                         </div>
                                     </div>
      
                                         
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_JSON.useNativeParse">
+                                    <h4><a name="property_JSON.useNativeParse" property="yui:name">JSON.useNativeParse</a>
+                                        - <code>static <span property="yui:type">Boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Leverage native JSON parse if the browser has a native implementation.
+In general, this is a good idea.  See the Known Issues section in the
+JSON user guide for caveats.  The default value is true for browsers with
+native JSON support.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: true
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_JSON.useNativeStringify">
+                                    <h4><a name="property_JSON.useNativeStringify" property="yui:name">JSON.useNativeStringify</a>
+                                        - <code>static <span property="yui:type">Boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Leverage native JSON stringify if the browser has a native
+implementation.  In general, this is a good idea.  See the Known Issues
+section in the JSON user guide for caveats.  The default value is true
+for browsers with native JSON support.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: true
+                                    </div>        
 
 
                                     <hr />
@@ -190,111 +233,6 @@ values with ']' characters.
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
-                                    <div class="" rel="yui:method" resource="#method__char">
-                                    <h4>
-                                        <a name="method__char">_char</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                        
-                                        
-                                        
-                                        String
-                                            <strong property="yui:name">_char</strong>
-                                           (
-                                                
-                                                        
-                                                         c
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Escapes a special character to a safe Unicode representation
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">c</span>
-                                                        &lt;<span property="yui:type">String</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  single character to escape</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        String
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">safe Unicode escape</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:method" resource="#method__isValid">
-                                    <h4>
-                                        <a name="method__isValid">_isValid</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                        
-                                         static 
-                                        
-                                        boolean
-                                            <strong property="yui:name">_isValid</strong>
-                                           (
-                                                
-                                                        
-                                                         str
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Four step determination whether a string is valid JSON.  In three steps,
-escape sequences, safe values, and properly placed open square brackets
-are replaced with placeholders or removed.  Then in the final step, the
-result of all these replacements is checked for invalid characters.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">str</span>
-                                                        &lt;<span property="yui:type">String</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  JSON string to be tested</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        boolean
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">is the string safe for eval?</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="private" rel="yui:method" resource="#method__prepare">
                                     <h4>
                                         <a name="method__prepare">_prepare</a></h4>
@@ -411,27 +349,31 @@ undefined, the key will be omitted from the returned object.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="private" rel="yui:method" resource="#method__string">
+                                    <div class=" deprecated" rel="yui:method" resource="#method_isValid">
                                     <h4>
-                                        <a name="method__string">_string</a></h4>
+                                        <a name="method_isValid">isValid</a></h4>
                                     <div class="detail" >
                                         <code>
-                                         private 
                                         
+                                         static 
                                         
-                                        String
-                                            <strong property="yui:name">_string</strong>
+                                        boolean
+                                            <strong property="yui:name">isValid</strong>
                                            (
                                                 
                                                         
-                                                         s
+                                                         str
                                                     
                                                 
                                             )
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Enclose escaped strings in quotes
+                                            <p>Four step determination whether a string is safe to eval. In three steps,
+escape sequences, safe values, and properly placed open square brackets
+are replaced with placeholders or removed.  Then in the final step, the
+result of all these replacements is checked for invalid characters.</p>
+<p>This is an alias for isSafe.</p>
                                         </div>
 
                                         <div class="description">
@@ -439,130 +381,42 @@ undefined, the key will be omitted from the returned object.
                                                 <dl rel="yui:parameters">
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">s</span>
+                                                        <code><span property="yui:name">str</span>
                                                         &lt;<span property="yui:type">String</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  string to wrap</span>
+                                                        <span property="yui:description">  JSON string to be tested</span>
                                                         </dd>
                                                 </dl>
 
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        String
+                                                        boolean
                                                     </code></dt>
-                                                    <dd property="yui:returnInfo">'"'+s+'"' after s has had special characters escaped</dd>
+                                                    <dd property="yui:returnInfo">is the string safe for eval?</dd>
                                                 </dl>
 
 
              
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use isSafe
+                                            </div>        
 
                                         </div>
 
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:method" resource="#method__stringify">
+                                    <div class="" rel="yui:method" resource="#method_JSON.dateToString">
                                     <h4>
-                                        <a name="method__stringify">_stringify</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                        
-                                        
-                                        
-                                        String
-                                            <strong property="yui:name">_stringify</strong>
-                                           (
-                                                
-                                                        
-                                                         h
-                                                    
-                                                
-                                                        , 
-                                                         key
-                                                    
-                                                
-                                                        , 
-                                                         depth
-                                                    
-                                                
-                                                        , 
-                                                         w
-                                                    
-                                                
-                                                        , 
-                                                         pstack
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Worker function used by public stringify.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">h</span>
-                                                        &lt;<span property="yui:type">Object</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  object holding the key</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">key</span>
-                                                        &lt;<span property="yui:type">String</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  String key in object h to serialize</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">depth</span>
-                                                        &lt;<span property="yui:type">Number</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  depth to serialize</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">w</span>
-                                                        &lt;<span property="yui:type">Array|Function</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  array of whitelisted keys OR replacer function</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">pstack</span>
-                                                        &lt;<span property="yui:type">Array</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  used to protect against recursion</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        String
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">serialized version of o</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:method" resource="#method_dateToString">
-                                    <h4>
-                                        <a name="method_dateToString">dateToString</a></h4>
+                                        <a name="method_JSON.dateToString">JSON.dateToString</a></h4>
                                     <div class="detail" >
                                         <code>
                                         
                                          static 
                                         
                                         String
-                                            <strong property="yui:name">dateToString</strong>
+                                            <strong property="yui:name">JSON.dateToString</strong>
                                            (
                                                 
                                                         
@@ -606,16 +460,16 @@ different format.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:method" resource="#method_isValid">
+                                    <div class="" rel="yui:method" resource="#method_JSON.isSafe">
                                     <h4>
-                                        <a name="method_isValid">isValid</a></h4>
+                                        <a name="method_JSON.isSafe">JSON.isSafe</a></h4>
                                     <div class="detail" >
                                         <code>
                                         
                                          static 
                                         
                                         boolean
-                                            <strong property="yui:name">isValid</strong>
+                                            <strong property="yui:name">JSON.isSafe</strong>
                                            (
                                                 
                                                         
@@ -626,7 +480,7 @@ different format.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Four step determination whether a string is valid JSON.  In three steps,
+                                            Four step determination whether a string is safe to eval. In three steps,
 escape sequences, safe values, and properly placed open square brackets
 are replaced with placeholders or removed.  Then in the final step, the
 result of all these replacements is checked for invalid characters.
@@ -660,16 +514,16 @@ result of all these replacements is checked for invalid characters.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:method" resource="#method_parse">
+                                    <div class="" rel="yui:method" resource="#method_JSON.parse">
                                     <h4>
-                                        <a name="method_parse">parse</a></h4>
+                                        <a name="method_JSON.parse">JSON.parse</a></h4>
                                     <div class="detail" >
                                         <code>
                                         
                                          static 
                                         
                                         MIXED
-                                            <strong property="yui:name">parse</strong>
+                                            <strong property="yui:name">JSON.parse</strong>
                                            (
                                                 
                                                         
@@ -684,8 +538,12 @@ result of all these replacements is checked for invalid characters.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Parse a JSON string, returning the native JavaScript representation.
-Only minor modifications from http://www.json.org/json2.js.
+                                            <p>Parse a JSON string, returning the native JavaScript
+representation.</p>
+<p>When lang.JSON.useNativeParse is true, this will defer to the native
+JSON.parse if the browser has a native implementation.  Otherwise, a
+JavaScript implementation based on http://www.json.org/json2.js
+is used.</p>
                                         </div>
 
                                         <div class="description">
@@ -723,16 +581,16 @@ pair of object literals, allowing pruning or altering values</span>
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:method" resource="#method_stringify">
+                                    <div class="" rel="yui:method" resource="#method_JSON.stringify">
                                     <h4>
-                                        <a name="method_stringify">stringify</a></h4>
+                                        <a name="method_JSON.stringify">JSON.stringify</a></h4>
                                     <div class="detail" >
                                         <code>
                                         
                                          static 
                                         
                                         string
-                                            <strong property="yui:name">stringify</strong>
+                                            <strong property="yui:name">JSON.stringify</strong>
                                            (
                                                 
                                                         
@@ -744,18 +602,28 @@ pair of object literals, allowing pruning or altering values</span>
                                                     
                                                 
                                                         , 
-                                                         d
+                                                         space
                                                     
                                                 
                                             )
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Converts an arbitrary value to a JSON string representation.
-Cyclical object or array references are replaced with null.
-If a whitelist is provided, only matching object keys will be included.
-If a depth limit is provided, objects and arrays at that depth will
-be stringified as empty.
+                                            <p>Converts an arbitrary value to a JSON string representation.</p>
+<p>Objects with cyclical references will trigger an exception.</p>
+<p>If a whitelist is provided, only matching object keys will be
+included.  Alternately, a replacer function may be passed as the
+second parameter.  This function is executed on every value in the
+input, and its return value will be used in place of the original value.
+This is useful to serialize specialized objects or class instances.</p>
+<p>If a positive integer or non-empty string is passed as the third
+parameter, the output will be formatted with carriage returns and
+indentation for readability.  If a String is passed (such as "\t") it
+will be used once for each indentation level.  If a number is passed,
+that number of spaces will be used.</p>
+<p>When lang.JSON.useNativeStringify is true, this will defer to the
+native JSON.stringify if the browser has a native implementation.
+Otherwise, a JavaScript implementation is used.</p>
                                         </div>
 
                                         <div class="description">
@@ -772,13 +640,16 @@ be stringified as empty.
                                                         <code><span property="yui:name">w</span>
                                                         &lt;<span property="yui:type">Array|Function</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  (optional) whitelist of acceptable object keys to include OR a function(value,key) to alter values before serialization</span>
+                                                        <span property="yui:description">  (optional) whitelist of acceptable object keys
+to include OR a function(value,key) to alter values
+before serialization</span>
                                                         </dd>
                                                         <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">d</span>
-                                                        &lt;<span property="yui:type">number</span>&gt;
+                                                        <code><span property="yui:name">space</span>
+                                                        &lt;<span property="yui:type">Number|String</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  (optional) depth limit to recurse objects/arrays (practical minimum 1)</span>
+                                                        <span property="yui:description">  (optional) indentation character(s) or
+depthy of spaces to format the output</span>
                                                         </dd>
                                                 </dl>
 
@@ -798,16 +669,16 @@ be stringified as empty.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:method" resource="#method_stringToDate">
+                                    <div class="" rel="yui:method" resource="#method_JSON.stringToDate">
                                     <h4>
-                                        <a name="method_stringToDate">stringToDate</a></h4>
+                                        <a name="method_JSON.stringToDate">JSON.stringToDate</a></h4>
                                     <div class="detail" >
                                         <code>
                                         
                                         
                                         
                                         Date
-                                            <strong property="yui:name">stringToDate</strong>
+                                            <strong property="yui:name">JSON.stringToDate</strong>
                                            (
                                                 
                                                         
@@ -934,27 +805,26 @@ parse operation.
                                 <li class="private"><a href="#property__BRACKETS" title="_BRACKETS">_BRACKETS</a></li>
                                 <li class="private"><a href="#property__CHARS" title="_CHARS">_CHARS</a></li>
                                 <li class="private"><a href="#property__ESCAPES" title="_ESCAPES">_ESCAPES</a></li>
-                                <li class="private"><a href="#property__INVALID" title="_INVALID">_INVALID</a></li>
                                 <li class="private"><a href="#property__SPECIAL_CHARS" title="_SPECIAL_CHARS">_SPECIAL_CHARS</a></li>
                                 <li class="private"><a href="#property__UNICODE_EXCEPTIONS" title="_UNICODE_EXCEPTIONS">_UNICODE_EXCEPTIONS</a></li>
+                                <li class="private"><a href="#property__UNSAFE" title="_UNSAFE">_UNSAFE</a></li>
                                 <li class="private"><a href="#property__VALUES" title="_VALUES">_VALUES</a></li>
+                                <li class=""><a href="#property_JSON.useNativeParse" title="JSON.useNativeParse">JSON.useNativeParse</a></li>
+                                <li class=""><a href="#property_JSON.useNativeStringify" title="JSON.useNativeStringify">JSON.useNativeStringify</a></li>
                         </ul>
                     </div>
 
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li class=""><a href="#method__char" title="_char">_char</a></li>
-                                <li class=""><a href="#method__isValid" title="_isValid">_isValid</a></li>
                                 <li class="private"><a href="#method__prepare" title="_prepare">_prepare</a></li>
                                 <li class="private"><a href="#method__revive" title="_revive">_revive</a></li>
-                                <li class="private"><a href="#method__string" title="_string">_string</a></li>
-                                <li class=""><a href="#method__stringify" title="_stringify">_stringify</a></li>
-                                <li class=""><a href="#method_dateToString" title="dateToString">dateToString</a></li>
-                                <li class=""><a href="#method_isValid" title="isValid">isValid</a></li>
-                                <li class=""><a href="#method_parse" title="parse">parse</a></li>
-                                <li class=""><a href="#method_stringify" title="stringify">stringify</a></li>
-                                <li class=""><a href="#method_stringToDate" title="stringToDate">stringToDate</a></li>
+                                <li class=" deprecated"><a href="#method_isValid" title="isValid">isValid</a></li>
+                                <li class=""><a href="#method_JSON.dateToString" title="JSON.dateToString">JSON.dateToString</a></li>
+                                <li class=""><a href="#method_JSON.isSafe" title="JSON.isSafe">JSON.isSafe</a></li>
+                                <li class=""><a href="#method_JSON.parse" title="JSON.parse">JSON.parse</a></li>
+                                <li class=""><a href="#method_JSON.stringify" title="JSON.stringify">JSON.stringify</a></li>
+                                <li class=""><a href="#method_JSON.stringToDate" title="JSON.stringToDate">JSON.stringToDate</a></li>
                         </ul>
                     </div>
 
@@ -969,7 +839,7 @@ parse operation.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "private", "host": "JSON", "name": "_BRACKETS", "url": "JSON.html#property__BRACKETS", "type": "property"}, {"access": "", "host": "JSON", "name": "_char", "url": "JSON.html#method__char", "type": "method"}, {"access": "private", "host": "JSON", "name": "_CHARS", "url": "JSON.html#property__CHARS", "type": "property"}, {"access": "", "host": "JSON", "name": "dateToString", "url": "JSON.html#method_dateToString", "type": "method"}, {"access": "private", "host": "JSON", "name": "_ESCAPES", "url": "JSON.html#property__ESCAPES", "type": "property"}, {"access": "private", "host": "JSON", "name": "_INVALID", "url": "JSON.html#property__INVALID", "type": "property"}, {"access": "", "host": "JSON", "name": "_isValid", "url": "JSON.html#method__isValid", "type": "method"}, {"access": "", "host": "JSON", "name": "isValid", "url": "JSON.html#method_isValid", "type": "method"}, {"access": "", "host": "JSON", "name": "parse", "url": "JSON.html#method_parse", "type": "method"}, {"access": "private", "host": "JSON", "name": "_prepare", "url": "JSON.html#method__prepare", "type": "method"}, {"access": "private", "host": "JSON", "name": "_revive", "url": "JSON.html#method__revive", "type": "method"}, {"access": "private", "host": "JSON", "name": "_SPECIAL_CHARS", "url": "JSON.html#property__SPECIAL_CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_string", "url": "JSON.html#method__string", "type": "method"}, {"access": "", "host": "JSON", "name": "_stringify", "url": "JSON.html#method__stringify", "type": "method"}, {"access": "", "host": "JSON", "name": "stringify", "url": "JSON.html#method_stringify", "type": "method"}, {"access": "", "host": "JSON", "name": "stringToDate", "url": "JSON.html#method_stringToDate", "type": "method"}, {"access": "private", "host": "JSON", "name": "_UNICODE_EXCEPTIONS", "url": "JSON.html#property__UNICODE_EXCEPTIONS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_VALUES", "url": "JSON.html#property__VALUES", "type": "property"}];
+    ALL_YUI_PROPS = [{"access": "private", "host": "JSON", "name": "_BRACKETS", "url": "JSON.html#property__BRACKETS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_CHARS", "url": "JSON.html#property__CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_ESCAPES", "url": "JSON.html#property__ESCAPES", "type": "property"}, {"access": "", "host": "JSON", "name": "isValid", "url": "JSON.html#method_isValid", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.dateToString", "url": "JSON.html#method_JSON.dateToString", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.isSafe", "url": "JSON.html#method_JSON.isSafe", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.parse", "url": "JSON.html#method_JSON.parse", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.stringify", "url": "JSON.html#method_JSON.stringify", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.stringToDate", "url": "JSON.html#method_JSON.stringToDate", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.useNativeParse", "url": "JSON.html#property_JSON.useNativeParse", "type": "property"}, {"access": "", "host": "JSON", "name": "JSON.useNativeStringify", "url": "JSON.html#property_JSON.useNativeStringify", "type": "property"}, {"access": "private", "host": "JSON", "name": "_prepare", "url": "JSON.html#method__prepare", "type": "method"}, {"access": "private", "host": "JSON", "name": "_revive", "url": "JSON.html#method__revive", "type": "method"}, {"access": "private", "host": "JSON", "name": "_SPECIAL_CHARS", "url": "JSON.html#property__SPECIAL_CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_UNICODE_EXCEPTIONS", "url": "JSON.html#property__UNICODE_EXCEPTIONS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_UNSAFE", "url": "JSON.html#property__UNSAFE", "type": "property"}, {"access": "private", "host": "JSON", "name": "_VALUES", "url": "JSON.html#property__VALUES", "type": "property"}];
 </script>
 </body>
 </html>

@@ -77,12 +77,12 @@
 	};
 		
 	
-    var oSuite = new YAHOO.tool.TestSuite("ProgressBar testing");
+    var oSuite = new YAHOO.tool.TestSuite("ProgressBar");
     
     //add a test case
     oSuite.add(new YAHOO.tool.TestCase({
     
-        name: "Initialization test",
+        name: "Initialization",
 		setUp : function () {
 
         },
@@ -161,7 +161,7 @@
 
 	oSuite.add(new YAHOO.tool.TestCase({
     
-        name: "value test",
+        name: "value",
 		setUp : function () {
         },
     
@@ -251,7 +251,7 @@
 	
 	oSuite.add(new YAHOO.tool.TestCase({
     
-        name: "Direction test",
+        name: "Direction",
 		setUp : function () {
 
         },
@@ -297,7 +297,7 @@
 	
 	oSuite.add(new YAHOO.tool.TestCase({
     
-        name: "ARIA and caption test",
+        name: "ARIA and caption",
 		setUp : function () {
 			pb = new PB();
 			pb.render('test');
@@ -445,7 +445,7 @@
 	
 	oSuite.add(new YAHOO.tool.TestCase({
     
-        name: "Miscellaneous test",
+        name: "Miscellaneous",
 		setUp : function () {
 
         },
@@ -465,6 +465,211 @@
 
     }));
 
+	oSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "Animation",
+		setUp : function () {
+        },
+    
+        tearDown : function () {
+			pb.destroy();
+        },
+       
+        testLtr : function () {
+			pb = new PB({direction:'ltr',anim:true});
+			pb.render('test');
+			t = getEls();
+			A.areEqual(0,pb.get('value'),'reported value before');
+			A.areEqual('0px',getStyle(t.b,'width'),'bar width before');
+			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left before');
+			A.areEqual('20px',getStyle(t.b,'height'),'bar height before');
+			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top before');
+			pb.set('value',30);
+			this.wait(function() {
+				A.areEqual(30,pb.get('value'),'reported value 30');
+				A.areEqual('60px',getStyle(t.b,'width'),'bar width 30');
+				A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 30');
+				A.areEqual('20px',getStyle(t.b,'height'),'bar height 30');
+				A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 30');
+				pb.set('value',60);
+				this.wait(function() {
+					A.areEqual(60,pb.get('value'),'reported value 60');
+					A.areEqual('120px',getStyle(t.b,'width'),'bar width 60');
+					A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 60');
+					A.areEqual('20px',getStyle(t.b,'height'),'bar height 60');
+					A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 60');
+					pb.set('value',100);
+					this.wait(function() {
+						A.areEqual(100,pb.get('value'),'reported value 100');
+						A.areEqual('200px',getStyle(t.b,'width'),'bar width 100');
+						A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 100');
+						A.areEqual('20px',getStyle(t.b,'height'),'bar height 100');
+						A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 100');
+						pb.set('value',0);
+						this.wait(function() {
+							A.areEqual(0,pb.get('value'),'reported value 0');
+							A.areEqual('0px',getStyle(t.b,'width'),'bar width 0');
+							A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 0');
+							A.areEqual('20px',getStyle(t.b,'height'),'bar height 0');
+							A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 0');
+						},1100);
+					},1100);
+				},1100);
+			},1100);
+		},
+        testRtl : function () {
+			pb = new PB({direction:'rtl',anim:true});
+			pb.render('test');
+			t = getEls();
+			A.areEqual(0,pb.get('value'),'reported value before');
+			A.areEqual('0px',getStyle(t.b,'width'),'bar width before');
+			A.areEqual('200px',Dom.getStyle(t.b,'left'),'bar left before');
+			A.areEqual('20px',getStyle(t.b,'height'),'bar height before');
+			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top before');
+			pb.set('value',30);
+			this.wait(function() {
+				A.areEqual(30,pb.get('value'),'reported value 30');
+				A.areEqual('60px',getStyle(t.b,'width'),'bar width 30');
+				A.areEqual('140px',Dom.getStyle(t.b,'left'),'bar left 30');
+				A.areEqual('20px',getStyle(t.b,'height'),'bar height 30');
+				A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 30');
+				pb.set('value',60);
+				this.wait(function() {
+					A.areEqual(60,pb.get('value'),'reported value 60');
+					A.areEqual('120px',getStyle(t.b,'width'),'bar width 60');
+					A.areEqual('80px',Dom.getStyle(t.b,'left'),'bar left 60');
+					A.areEqual('20px',getStyle(t.b,'height'),'bar height 60');
+					A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 60');
+					pb.set('value',100);
+					this.wait(function() {
+						A.areEqual(100,pb.get('value'),'reported value 100');
+						A.areEqual('200px',getStyle(t.b,'width'),'bar width 100');
+						A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 100');
+						A.areEqual('20px',getStyle(t.b,'height'),'bar height 100');
+						A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 100');
+						pb.set('value',0);
+						this.wait(function() {
+							A.areEqual(0,pb.get('value'),'reported value 0');
+							A.areEqual('0px',getStyle(t.b,'width'),'bar width 0');
+							A.areEqual('200px',Dom.getStyle(t.b,'left'),'bar left 0');
+							A.areEqual('20px',getStyle(t.b,'height'),'bar height 0');
+							A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 0');
+						},1100);
+					},1100);
+				},1100);
+			},1100);
+		},
+		testTtb : function () {
+			pb = new PB({direction:'ttb',anim:true,width:20,height:200});
+			pb.render('test');
+			t = getEls();
+			A.areEqual(0,pb.get('value'),'reported value before');
+			A.areEqual('20px',getStyle(t.b,'width'),'bar width before');
+			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left before');
+			A.areEqual('0px',getStyle(t.b,'height'),'bar height before');
+			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top before');
+			pb.set('value',30);
+			this.wait(function() {
+				A.areEqual(30,pb.get('value'),'reported value 30');
+				A.areEqual('20px',getStyle(t.b,'width'),'bar width 30');
+				A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 30');
+				A.areEqual('60px',getStyle(t.b,'height'),'bar height 30');
+				A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 30');
+				pb.set('value',60);
+				this.wait(function() {
+					A.areEqual(60,pb.get('value'),'reported value 60');
+					A.areEqual('20px',getStyle(t.b,'width'),'bar width 60');
+					A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 60');
+					A.areEqual('120px',getStyle(t.b,'height'),'bar height 60');
+					A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 60');
+					pb.set('value',100);
+					this.wait(function() {
+						A.areEqual(100,pb.get('value'),'reported value 100');
+						A.areEqual('20px',getStyle(t.b,'width'),'bar width 100');
+						A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 100');
+						A.areEqual('200px',getStyle(t.b,'height'),'bar height 100');
+						A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 100');
+						pb.set('value',0);
+						this.wait(function() {
+							A.areEqual(0,pb.get('value'),'reported value 0');
+							A.areEqual('20px',getStyle(t.b,'width'),'bar width 0');
+							A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 0');
+							A.areEqual('0px',getStyle(t.b,'height'),'bar height 0');
+							A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 0');
+						},1100);
+					},1100);
+				},1100);
+			},1100);
+		},
+        testBtt : function () {
+			pb = new PB({direction:'btt',anim:true,width:20,height:200});
+			pb.render('test');
+			t = getEls();
+			A.areEqual(0,pb.get('value'),'reported value before');
+			A.areEqual('20px',getStyle(t.b,'width'),'bar width before');
+			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left before');
+			A.areEqual('0px',getStyle(t.b,'height'),'bar height before');
+			A.areEqual('200px',Dom.getStyle(t.b,'top'),'bar top before');
+			pb.set('value',30);
+			this.wait(function() {
+				A.areEqual(30,pb.get('value'),'reported value 30');
+				A.areEqual('20px',getStyle(t.b,'width'),'bar width 30');
+				A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 30');
+				A.areEqual('60px',getStyle(t.b,'height'),'bar height 30');
+				A.areEqual('140px',Dom.getStyle(t.b,'top'),'bar top 30');
+				pb.set('value',60);
+				this.wait(function() {
+					A.areEqual(60,pb.get('value'),'reported value 60');
+					A.areEqual('20px',getStyle(t.b,'width'),'bar width 60');
+					A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 60');
+					A.areEqual('120px',getStyle(t.b,'height'),'bar height 60');
+					A.areEqual('80px',Dom.getStyle(t.b,'top'),'bar top 60');
+					pb.set('value',100);
+					this.wait(function() {
+						A.areEqual(100,pb.get('value'),'reported value 100');
+						A.areEqual('20px',getStyle(t.b,'width'),'bar width 100');
+						A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 100');
+						A.areEqual('200px',getStyle(t.b,'height'),'bar height 100');
+						A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top 100');
+						pb.set('value',0);
+						this.wait(function() {
+							A.areEqual(0,pb.get('value'),'reported value 0');
+							A.areEqual('20px',getStyle(t.b,'width'),'bar width 0');
+							A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left 0');
+							A.areEqual('0px',getStyle(t.b,'height'),'bar height 0');
+							A.areEqual('200px',Dom.getStyle(t.b,'top'),'bar top 0');
+						},1100);
+					},1100);
+				},1100);
+			},1100);
+		},
+		testCancel : function () {
+			pb = new PB({anim:true});
+			pb.get('anim').duration = 2;
+			pb.render('test');
+			t = getEls();
+			A.areEqual(0,pb.get('value'),'reported value before');
+			A.areEqual('0px',getStyle(t.b,'width'),'bar width before');
+			A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left before');
+			A.areEqual('20px',getStyle(t.b,'height'),'bar height before');
+			A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top before');
+			pb.set('value',80);
+			this.wait(function() {
+				pb.set('value',25);
+				this.wait(function() {
+					A.areEqual(25,pb.get('value'),'reported value after');
+					A.areEqual('50px',getStyle(t.b,'width'),'bar width after');
+					A.areEqual('0px',Dom.getStyle(t.b,'left'),'bar left after');
+					A.areEqual('20px',getStyle(t.b,'height'),'bar height after');
+					A.areEqual('0px',Dom.getStyle(t.b,'top'),'bar top after');
+				
+				},2100);
+			},1000);
+		}
+
+
+    }));
+
     YAHOO.tool.TestRunner.add(oSuite);
 	
 	Event.onDOMReady(function (){
@@ -473,8 +678,9 @@
 		if (1) {
 			YAHOO.tool.TestRunner.run();
 		} else {
-			pb = new PB({direction:'rtl', value:30});
+            pb = new PB({height:'30px', width: 300});
 			pb.render('test');
+
 		}
     });
 })();

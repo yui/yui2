@@ -177,13 +177,22 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 	_dataTipFunction: null,
 	
 	/**
-	 * Stores references to series labelFunction values created by
+	 * Stores a reference to the legendLabelFunction created by
 	 * YAHOO.widget.Chart.createProxyFunction()
-	 * @property _seriesLabelFunctions
+	 * @property _legendLabelFunction
+	 * @type String
+	 * @private
+	 */
+	_legendLabelFunction: null,	
+	
+	/**
+	 * Stores references to series function values created by
+	 * YAHOO.widget.Chart.createProxyFunction()
+	 * @property _seriesFunctions
 	 * @type Array
 	 * @private
 	 */
-	_seriesLabelFunctions: null,
+	_seriesFunctions: null,
 
 	/**
 	 * Public accessor to the unique name of the Chart instance.
@@ -258,6 +267,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		if(this._dataTipFunction)
 		{
 			YAHOO.widget.Chart.removeProxyFunction(this._dataTipFunction);
+		}
+		
+		if(this._legendLabelFunction)
+		{
+			YAHOO.widget.Chart.removeProxyFunction(this._legendLabelFunction);
 		}
 		
 		//kill the Flash Player instance
@@ -419,6 +433,22 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		{
 			method: this._setDataTipFunction
 		});
+		
+		/**
+		 * @attribute legendLabelFunction
+		 * @description The string representation of a globally-accessible function
+		 * that may be called by the SWF to format the labels of a Chart's legend.
+		 * @type String
+		 */
+		this.getAttributeConfig("legendLabelFunction",
+		{
+			method: this._legendLabelFunction
+		});
+		
+		this.setAttributeConfig("legendLabelFunction",
+		{
+			method: this._setLegendLabelFunction
+		});
 
 		/**
 		 * @attribute polling
@@ -536,16 +566,16 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 			else
 			{
 				var i;
-				if(this._seriesLabelFunctions)
+				if(this._seriesFunctions)
 				{
-					var count = this._seriesLabelFunctions.length;
+					var count = this._seriesFunctions.length;
 					for(i = 0; i < count; i++)
 					{
-						YAHOO.widget.Chart.removeProxyFunction(this._seriesLabelFunctions[i]);
+						YAHOO.widget.Chart.removeProxyFunction(this._seriesFunctions[i]);
 					}
-					this._seriesLabelFunction = null;
+					this._seriesFunctions = null;
 				}
-				this._seriesLabelFunctions = [];
+				this._seriesFunctions = [];
 
 				//make a copy of the series definitions so that we aren't
 				//editing them directly.
@@ -577,9 +607,29 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 										typeof currentSeries.labelFunction == "function")
 									{
 										clonedSeries.labelFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.labelFunction);
-										this._seriesLabelFunctions.push(clonedSeries.labelFunction);
+										this._seriesFunctions.push(clonedSeries.labelFunction);
 									}
 								}
+
+								else if(prop == "dataTipFunction")
+								{
+									if(currentSeries.dataTipFunction !== null &&
+										typeof currentSeries.dataTipFunction == "function")
+									{
+										clonedSeries.dataTipFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.dataTipFunction);
+										this._seriesFunctions.push(clonedSeries.dataTipFunction);
+									}	
+								}
+								
+								else if(prop == "legendLabelFunction")
+								{
+									if(currentSeries.legendLabelFunction !== null &&
+										typeof currentSeries.legendLabelFunction == "function")
+									{
+										clonedSeries.legendLabelFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.legendLabelFunction);
+										this._seriesFunctions.push(clonedSeries.legendLabelFunction); 
+									}	
+								}								
 
 								else
 								{
@@ -747,6 +797,27 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 			this._dataTipFunction = value;
 		}
 		this._swf.setDataTipFunction(value);
+	},
+	
+	/**
+	 * Setter for the legendLabelFunction attribute.
+	 *
+	 * @method _setLegendLabelFunction
+	 * @private
+	 */
+	_setLegendLabelFunction: function(value)
+	{
+		if(this._legendLabelFunction)
+		{
+			YAHOO.widget.Chart.removeProxyFunction(this._legendLabelFunction);
+		}
+		
+		if(value && typeof value == "function")
+		{
+			value = YAHOO.widget.Chart.createProxyFunction(value);
+			this._legendLabelFunction = value;
+		}
+		this._swf.setLegendLabelFunction(value);
 	},
 
 	/**
@@ -1820,7 +1891,15 @@ YAHOO.lang.extend(YAHOO.widget.CartesianSeries, YAHOO.widget.Series,
 	 * @property
 	 * @type String
 	 */
-	axis: "primary"
+	axis: "primary",
+	
+	/**
+	 * When a Legend is present, indicates whether the series will show in the legend.
+	 * 
+	 * @property
+	 * @type Boolean
+	 */
+	showInLegend: true
 });
 
 /**

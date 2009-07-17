@@ -122,6 +122,29 @@ package com.yahoo.astra.fl.charts.series
 		 */
 		public var axis:String = "primary";
 		
+		/**
+		 * @private
+		 * Storage for showInLegend property
+		 */
+		private var _showInLegend:Boolean = true;
+		
+		/**
+		 * @copy com.yahoo.astra.fl.charts.series.ILegendItemSeries#showInLegend
+		 */
+		public function get showInLegend():Boolean
+		{
+			return this._showInLegend;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set showInLegend(value:Boolean):void
+		{
+			this._showInLegend = value;
+		}		
+		
+		
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
