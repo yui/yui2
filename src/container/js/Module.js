@@ -716,11 +716,18 @@
                         db.appendChild(oIFrame);
                     }
 
+                    // Setting the background color fixes an issue with IE6/IE7, where
+                    // elements in the DOM, with -ve margin-top which positioned them 
+                    // offscreen (so they would be overlapped by the iframe and its -ve top
+                    // setting), would have their -ve margin-top ignored, when the iframe 
+                    // was added.
+                    oIFrame.style.backgroundColor = "transparent";
+
+                    oIFrame.style.borderWidth = "0";
                     oIFrame.style.width = "2em";
                     oIFrame.style.height = "2em";
-                    oIFrame.style.top = (-1 * (oIFrame.offsetHeight + Module.RESIZE_MONITOR_BUFFER)) + "px";
                     oIFrame.style.left = "0";
-                    oIFrame.style.borderWidth = "0";
+                    oIFrame.style.top = (-1 * (oIFrame.offsetHeight + Module.RESIZE_MONITOR_BUFFER)) + "px";
                     oIFrame.style.visibility = "visible";
 
                     /*

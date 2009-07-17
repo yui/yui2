@@ -197,6 +197,12 @@
             'requires': ['yahoo']
         },
 
+        'event-simulate': {
+            'type': 'js',
+            'path': 'event-simulate/event-simulate-min.js',
+            'requires': ['event']
+        },
+
         'fonts': {
             'type': 'css',
             'path': 'fonts/fonts-min.css'
@@ -398,6 +404,7 @@
             'type': 'js',
             'path': 'yuitest/yuitest-min.js',
             'requires': ['logger'],
+            'optional': ['event-simulate'],
             'skinnable': true
         }
     }

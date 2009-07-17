@@ -490,30 +490,32 @@ var Dom = YAHOO.util.Dom,
         */
         _fixNodes: function() {
             YAHOO.widget.Editor.superclass._fixNodes.call(this);
-            var url = '';
+            try {
+                var url = '';
 
-            var imgs = this._getDoc().getElementsByTagName('img');
-            for (var im = 0; im < imgs.length; im++) {
-                if (imgs[im].getAttribute('href', 2)) {
-                    url = imgs[im].getAttribute('src', 2);
-                    if (this._isLocalFile(url)) {
-                        Dom.addClass(imgs[im], this.CLASS_LOCAL_FILE);
-                    } else {
-                        Dom.removeClass(imgs[im], this.CLASS_LOCAL_FILE);
+                var imgs = this._getDoc().getElementsByTagName('img');
+                for (var im = 0; im < imgs.length; im++) {
+                    if (imgs[im].getAttribute('href', 2)) {
+                        url = imgs[im].getAttribute('src', 2);
+                        if (this._isLocalFile(url)) {
+                            Dom.addClass(imgs[im], this.CLASS_LOCAL_FILE);
+                        } else {
+                            Dom.removeClass(imgs[im], this.CLASS_LOCAL_FILE);
+                        }
                     }
                 }
-            }
-            var fakeAs = this._getDoc().body.getElementsByTagName('a');
-            for (var a = 0; a < fakeAs.length; a++) {
-                if (fakeAs[a].getAttribute('href', 2)) {
-                    url = fakeAs[a].getAttribute('href', 2);
-                    if (this._isLocalFile(url)) {
-                        Dom.addClass(fakeAs[a], this.CLASS_LOCAL_FILE);
-                    } else {
-                        Dom.removeClass(fakeAs[a], this.CLASS_LOCAL_FILE);
+                var fakeAs = this._getDoc().body.getElementsByTagName('a');
+                for (var a = 0; a < fakeAs.length; a++) {
+                    if (fakeAs[a].getAttribute('href', 2)) {
+                        url = fakeAs[a].getAttribute('href', 2);
+                        if (this._isLocalFile(url)) {
+                            Dom.addClass(fakeAs[a], this.CLASS_LOCAL_FILE);
+                        } else {
+                            Dom.removeClass(fakeAs[a], this.CLASS_LOCAL_FILE);
+                        }
                     }
                 }
-            }
+            } catch(e) {}
         },
         /**
         * @private
@@ -795,12 +797,6 @@ var Dom = YAHOO.util.Dom,
                 var hw = document.createElement('div');
                 hw.className = 'yui-toolbar-group yui-toolbar-group-height-width height-width';
                 hw.innerHTML = '<h3>' + this.STR_IMAGE_SIZE + ':</h3>';
-                /*
-                var orgSize = '';
-                if ((height != oheight) || (width != owidth)) {
-                    orgSize = '<span class="info">' + this.STR_IMAGE_ORIG_SIZE + '<br>'+ owidth +' x ' + oheight + '</span>';
-                }
-                */
                 hw.innerHTML += '<span tabIndex="-1"><input type="text" size="3" value="" id="' + this.get('id') + '_insertimage_width"> x <input type="text" size="3" value="" id="' + this.get('id') + '_insertimage_height"></span>';
                 cont.insertBefore(hw, cont.firstChild);
 
@@ -937,7 +933,9 @@ var Dom = YAHOO.util.Dom,
                 }
 
                 Event.on(this.get('id') + '_insertimage_url', 'blur', function() {
-                    var url = Dom.get(this.get('id') + '_insertimage_url');
+                    var url = Dom.get(this.get('id') + '_insertimage_url'),
+                        el = this.currentElement[0];
+
                     if (url.value && el) {
                         if (url.value == el.getAttribute('src', 2)) {
                             YAHOO.log('Images are the same, bail on blur handler', 'info', 'Editor');
@@ -1070,14 +1068,16 @@ var Dom = YAHOO.util.Dom,
                     if (el.style.margin) {
                         padding = parseInt(el.style.margin, 10);
                     }
-                    if (!el._height) {
-                        el._height = height;
+                    if (!blankimage) {
+                        if (!el._height) {
+                            el._height = height;
+                        }
+                        if (!el._width) {
+                            el._width = width;
+                        }
+                        oheight = el._height;
+                        owidth = el._width;
                     }
-                    if (!el._width) {
-                        el._width = width;
-                    }
-                    oheight = el._height;
-                    owidth = el._width;
                 }
                 if (this._windows.insertimage && this._windows.insertimage.body) {
                     body = this._windows.insertimage.body;
@@ -1146,8 +1146,7 @@ var Dom = YAHOO.util.Dom,
                 Dom.get(this.get('id') + '_insertimage_height').value = height;
 
 
-                var orgSize = '';
-                if ((height != oheight) || (width != owidth)) {
+                if (((height != oheight) || (width != owidth)) && (!blankimage)) {
                     var s = document.createElement('span');
                     s.className = 'info';
                     s.innerHTML = this.STR_IMAGE_ORIG_SIZE + ': ('+ owidth +' x ' + oheight + ')';
@@ -1420,9 +1419,6 @@ var Dom = YAHOO.util.Dom,
             panel.editor_header.firstChild.innerHTML = win.header;
             if (win.footer !== null) {
                 panel.setFooter(win.footer);
-                Dom.addClass(panel.footer, 'open');
-            } else {
-                Dom.removeClass(panel.footer, 'open');
             }
             panel.cfg.setProperty('width', win.attrs.width);
 

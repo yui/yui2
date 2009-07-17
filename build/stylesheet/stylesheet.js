@@ -422,23 +422,29 @@ _toCssText = function (css,base) {
 
     workerStyle.cssText = base || '';
 
-    if (f && !css[floatAttr]) {
-        css = lang.merge(css);
-        delete css.styleFloat; delete css.cssFloat; delete css['float'];
-        css[floatAttr] = f;
-    }
+    if (lang.isString(css)) {
+        // There is a danger here of incremental memory consumption in Opera
+        workerStyle.cssText += ';' + css;
+    } else {
+        if (f && !css[floatAttr]) {
+            css = lang.merge(css);
+            delete css.styleFloat; delete css.cssFloat; delete css['float'];
+            css[floatAttr] = f;
+        }
 
-    for (prop in css) {
-        if (css.hasOwnProperty(prop)) {
-            try {
-                // IE throws Invalid Value errors and doesn't like whitespace
-                // in values ala ' red' or 'red '
-                workerStyle[prop] = lang.trim(css[prop]);
-            }
-            catch (e) {
+        for (prop in css) {
+            if (css.hasOwnProperty(prop)) {
+                try {
+                    // IE throws Invalid Value errors and doesn't like whitespace
+                    // in values ala ' red' or 'red '
+                    workerStyle[prop] = lang.trim(css[prop]);
+                }
+                catch (e) {
+                }
             }
         }
     }
+
     return workerStyle.cssText;
 };
 
@@ -463,7 +469,7 @@ lang.augmentObject(StyleSheet, {
         // input will be copied twice in IE.  Is there a way to avoid this
         // without increasing the byte count?
         function (css, cssText) {
-            if ('opacity' in css) {
+            if (lang.isObject(css) && 'opacity' in css) {
                 css = lang.merge(css,{
                         filter: 'alpha(opacity='+(css.opacity*100)+')'
                       });

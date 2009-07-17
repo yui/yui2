@@ -8,6 +8,17 @@ Bug Fixes:
 + setHeader, setBody, setFooter will create the respective section element
   and add it to the DOM if called after render has already been invoked.
 
++ preventoverlap repositioning logic is now applied for cases where the 
+  constrained Overlay is larger than the viewport also, and takes 
+  precedence over the default behavior for constrained Overlays which are
+  larger than the viewport.
+
++ Overlay unsubcribes all context trigger listeners on destroy. Trigger
+  listeners bound to global custom events such as windowScroll and 
+  windowResize cause JS execptions if left attached after the 
+  Overlay was destroy. 
+  
+
 *** version 2.7.0 ***
 
 Changes:

@@ -197,6 +197,10 @@ YAHOO.widget.Chart.createProxyFunction()
                                         <a class="private" href="YAHOO.widget.Chart.html#property__initialized" property="yui:name" title="_initialized">_initialized</a><span class="private">,</span>
                                         </span>
                                     
+                                        <span rel="yui:property" resource="YAHOO.widget.Chart.html#property__legendLabelFunction">
+                                        <a class="private" href="YAHOO.widget.Chart.html#property__legendLabelFunction" property="yui:name" title="_legendLabelFunction">_legendLabelFunction</a><span class="private">,</span>
+                                        </span>
+                                    
                                         <span rel="yui:property" resource="YAHOO.widget.Chart.html#property__pollingID">
                                         <a class="private" href="YAHOO.widget.Chart.html#property__pollingID" property="yui:name" title="_pollingID">_pollingID</a><span class="private">,</span>
                                         </span>
@@ -213,8 +217,8 @@ YAHOO.widget.Chart.createProxyFunction()
                                         <a class="private" href="YAHOO.widget.Chart.html#property__seriesDefs" property="yui:name" title="_seriesDefs">_seriesDefs</a><span class="private">,</span>
                                         </span>
                                     
-                                        <span rel="yui:property" resource="YAHOO.widget.Chart.html#property__seriesLabelFunctions">
-                                        <a class="private" href="YAHOO.widget.Chart.html#property__seriesLabelFunctions" property="yui:name" title="_seriesLabelFunctions">_seriesLabelFunctions</a><span class="private">,</span>
+                                        <span rel="yui:property" resource="YAHOO.widget.Chart.html#property__seriesFunctions">
+                                        <a class="private" href="YAHOO.widget.Chart.html#property__seriesFunctions" property="yui:name" title="_seriesFunctions">_seriesFunctions</a><span class="private">,</span>
                                         </span>
                                     
                                         <span rel="yui:property" resource="YAHOO.widget.Chart.html#property__swf">
@@ -420,6 +424,43 @@ the labelFunction and returns the updated object.
                                         
                                         <div class="description" property="yui:description">
                                             Removes axis functions contained in an array
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method__setConstrainViewport">
+                                    <h4>
+                                        <a name="method__setConstrainViewport">_setConstrainViewport</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">_setConstrainViewport</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Setter for the constrainViewport attribute
                                         </div>
 
                                         <div class="description">
@@ -716,6 +757,9 @@ the labelFunction and returns the updated object.
                                             <span rel="yui:method" resource="YAHOO.widget.Chart.html#method__setDataTipFunction">                                        
                                             <a class="private" href="YAHOO.widget.Chart.html#method__setDataTipFunction" property="yui:name" title="_setDataTipFunction">_setDataTipFunction</a><span class="private">,</span>
                                             </span>
+                                            <span rel="yui:method" resource="YAHOO.widget.Chart.html#method__setLegendLabelFunction">                                        
+                                            <a class="private" href="YAHOO.widget.Chart.html#method__setLegendLabelFunction" property="yui:name" title="_setLegendLabelFunction">_setLegendLabelFunction</a><span class="private">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.widget.Chart.html#method__setPolling">                                        
                                             <a class="private" href="YAHOO.widget.Chart.html#method__setPolling" property="yui:name" title="_setPolling">_setPolling</a><span class="private">,</span>
                                             </span>
@@ -796,6 +840,50 @@ the labelFunction and returns the updated object.
                         <div class="section method details">
                             <h3 id="events">Events</h3>
                             <div class="content">
+                                    <div class="" rel="yui:event" resource="#event_beforeConstrainViewportChange">
+                                    <h4>
+                                        <a name="event_beforeConstrainViewportChange">beforeConstrainViewportChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">beforeConstrainViewportChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires before the value for the configuration attribute 'constrainViewport' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:event" resource="#event_beforeXAxesChange">
                                     <h4>
                                         <a name="event_beforeXAxesChange">beforeXAxesChange</a></h4>
@@ -1038,6 +1126,50 @@ the labelFunction and returns the updated object.
                                         
                                         <div class="description" property="yui:description">
                                             Fires before the value for the configuration attribute 'yField' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:event" resource="#event_constrainViewportChange">
+                                    <h4>
+                                        <a name="event_constrainViewportChange">constrainViewportChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">constrainViewportChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires when the value for the configuration attribute 'constrainViewport' changes.
                                         </div>
 
                                         <div class="description">
@@ -1357,6 +1489,9 @@ the labelFunction and returns the updated object.
                                                                             <span rel="yui:event" resource="YAHOO.widget.Chart.html#event_beforeExpressInstallChange">
                                         <a class="" href="YAHOO.widget.Chart.html#event_beforeExpressInstallChange" property="yui:name" title="beforeExpressInstallChange">beforeExpressInstallChange</a><span class="">,</span>
                                         </span>
+                                                                            <span rel="yui:event" resource="YAHOO.widget.Chart.html#event_beforeLegendLabelFunctionChange">
+                                        <a class="" href="YAHOO.widget.Chart.html#event_beforeLegendLabelFunctionChange" property="yui:name" title="beforeLegendLabelFunctionChange">beforeLegendLabelFunctionChange</a><span class="">,</span>
+                                        </span>
                                                                             <span rel="yui:event" resource="YAHOO.widget.Chart.html#event_beforePollingChange">
                                         <a class="" href="YAHOO.widget.Chart.html#event_beforePollingChange" property="yui:name" title="beforePollingChange">beforePollingChange</a><span class="">,</span>
                                         </span>
@@ -1364,7 +1499,7 @@ the labelFunction and returns the updated object.
                                         <a class="" href="YAHOO.widget.Chart.html#event_beforeRequestChange" property="yui:name" title="beforeRequestChange">beforeRequestChange</a><span class="">,</span>
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.widget.Chart.html#event_beforeSeriesChange">
-                                        <a class="" href="YAHOO.widget.Chart.html#event_beforeSeriesChange" property="yui:name" title="beforeSeriesChange">beforeSeriesChange</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Chart.html#event_beforeSeriesChange" property="yui:name" title="beforeSeriesChange">beforeSeriesChange</a>
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.widget.Chart.html#event_beforeSwfURLChange">
                                         <a class="" href="YAHOO.widget.Chart.html#event_beforeSwfURLChange" property="yui:name" title="beforeSwfURLChange">beforeSwfURLChange</a>
@@ -1411,6 +1546,9 @@ the labelFunction and returns the updated object.
                                                                             <span rel="yui:event" resource="YAHOO.widget.Chart.html#event_itemMouseOverEvent">
                                         <a class="" href="YAHOO.widget.Chart.html#event_itemMouseOverEvent" property="yui:name" title="itemMouseOverEvent">itemMouseOverEvent</a>
                                         </span>
+                                                                            <span rel="yui:event" resource="YAHOO.widget.Chart.html#event_legendLabelFunctionChange">
+                                        <a class="" href="YAHOO.widget.Chart.html#event_legendLabelFunctionChange" property="yui:name" title="legendLabelFunctionChange">legendLabelFunctionChange</a>
+                                        </span>
                                                                             <span rel="yui:event" resource="YAHOO.widget.Chart.html#event_pollingChange">
                                         <a class="" href="YAHOO.widget.Chart.html#event_pollingChange" property="yui:name" title="pollingChange">pollingChange</a>
                                         </span>
@@ -1440,6 +1578,20 @@ the labelFunction and returns the updated object.
                         <div class="section field details">
                             <h3 id="configattributes">Configuration Attributes</h3>
                             <div class="content">
+                                    <div class="" rel="yui:attribute" resource="#config_constrainViewport">
+                                    <h4><a name="config_constrainViewport">constrainViewport</a>
+                                        <code>- <span property="yui:type">Boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Determines whether the viewport is constrained to prevent series data from overflow.
+                                        </div>
+                                    </div>
+ 
+     
+
+                                    <hr />
+                                    </div>        
                                     <div class="" rel="yui:attribute" resource="#config_xAxes">
                                     <h4><a name="config_xAxes">xAxes</a>
                                         <code>- <span property="yui:type">Array</span></code>
@@ -1551,6 +1703,9 @@ the labelFunction and returns the updated object.
                                                                                 <span rel="yui:attribute" resource="YAHOO.widget.Chart.html#config_expressInstall">                                        
                                         <a class="" href="YAHOO.widget.Chart.html#config_expressInstall" property="yui:name" title="expressInstall">expressInstall</a><span class="">,</span>
                                         </span>
+                                                                                <span rel="yui:attribute" resource="YAHOO.widget.Chart.html#config_legendLabelFunction">                                        
+                                        <a class="" href="YAHOO.widget.Chart.html#config_legendLabelFunction" property="yui:name" title="legendLabelFunction">legendLabelFunction</a><span class="">,</span>
+                                        </span>
                                                                                 <span rel="yui:attribute" resource="YAHOO.widget.Chart.html#config_polling">                                        
                                         <a class="" href="YAHOO.widget.Chart.html#config_polling" property="yui:name" title="polling">polling</a><span class="">,</span>
                                         </span>
@@ -1564,7 +1719,7 @@ the labelFunction and returns the updated object.
                                         <a class="" href="YAHOO.widget.Chart.html#config_swfURL" property="yui:name" title="swfURL">swfURL</a><span class="">,</span>
                                         </span>
                                                                                 <span rel="yui:attribute" resource="YAHOO.widget.Chart.html#config_version">                                        
-                                        <a class="" href="YAHOO.widget.Chart.html#config_version" property="yui:name" title="version">version</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Chart.html#config_version" property="yui:name" title="version">version</a>
                                         </span>
                                                                                 <span rel="yui:attribute" resource="YAHOO.widget.Chart.html#config_wmode">                                        
                                         <a class="" href="YAHOO.widget.Chart.html#config_wmode" property="yui:name" title="wmode">wmode</a>
@@ -1682,6 +1837,7 @@ the labelFunction and returns the updated object.
                                 <li class="private"><a href="#method__getYField" title="_getYField">_getYField</a></li>
                                 <li class="private"><a href="#method__initAttributes" title="_initAttributes">_initAttributes</a></li>
                                 <li class="private"><a href="#method__removeAxisFunctions" title="_removeAxisFunctions">_removeAxisFunctions</a></li>
+                                <li class="private"><a href="#method__setConstrainViewport" title="_setConstrainViewport">_setConstrainViewport</a></li>
                                 <li class="private"><a href="#method__setXAxes" title="_setXAxes">_setXAxes</a></li>
                                 <li class="private"><a href="#method__setXAxis" title="_setXAxis">_setXAxis</a></li>
                                 <li class="private"><a href="#method__setXField" title="_setXField">_setXField</a></li>
@@ -1694,12 +1850,14 @@ the labelFunction and returns the updated object.
                     <div id="eventsList" class="module">
                         <h4>Events</h4>
                         <ul class="content">        
+                                <li class=""><a href="#event_beforeConstrainViewportChange" title="beforeConstrainViewportChange">beforeConstrainViewportChange</a></li>
                                 <li class=""><a href="#event_beforeXAxesChange" title="beforeXAxesChange">beforeXAxesChange</a></li>
                                 <li class=""><a href="#event_beforeXAxisChange" title="beforeXAxisChange">beforeXAxisChange</a></li>
                                 <li class=""><a href="#event_beforeXFieldChange" title="beforeXFieldChange">beforeXFieldChange</a></li>
                                 <li class=""><a href="#event_beforeYAxesChange" title="beforeYAxesChange">beforeYAxesChange</a></li>
                                 <li class=""><a href="#event_beforeYAxisChange" title="beforeYAxisChange">beforeYAxisChange</a></li>
                                 <li class=""><a href="#event_beforeYFieldChange" title="beforeYFieldChange">beforeYFieldChange</a></li>
+                                <li class=""><a href="#event_constrainViewportChange" title="constrainViewportChange">constrainViewportChange</a></li>
                                 <li class=""><a href="#event_xAxesChange" title="xAxesChange">xAxesChange</a></li>
                                 <li class=""><a href="#event_xAxisChange" title="xAxisChange">xAxisChange</a></li>
                                 <li class=""><a href="#event_xFieldChange" title="xFieldChange">xFieldChange</a></li>
@@ -1712,6 +1870,7 @@ the labelFunction and returns the updated object.
                     <div id="configList" class="module">
                         <h4>Configuration Attributes</h4>
                         <ul class="content">        
+                                <li class=""><a href="#config_constrainViewport" title="constrainViewport">constrainViewport</a></li>
                                 <li class=""><a href="#config_xAxes" title="xAxes">xAxes</a></li>
                                 <li class=""><a href="#config_xAxis" title="xAxis">xAxis</a></li>
                                 <li class=""><a href="#config_xField" title="xField">xField</a></li>
@@ -1730,7 +1889,7 @@ the labelFunction and returns the updated object.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "", "url": "YAHOO.widget.CartesianSeries.html#property_", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "alwaysShowZero", "url": "YAHOO.widget.NumericAxis.html#property_alwaysShowZero", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "beforeCategoryFieldChange", "url": "YAHOO.widget.PieChart.html#event_beforeCategoryFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "beforeDataFieldChange", "url": "YAHOO.widget.PieChart.html#event_beforeDataFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeXAxesChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeXAxesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeXAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeXAxisChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeXFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeXFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeYAxesChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeYAxesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeYAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeYAxisChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeYFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeYFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CategoryAxis", "name": "calcualateCategoryCount", "url": "YAHOO.widget.CategoryAxis.html#property_calcualateCategoryCount", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "calculateByLabelSize", "url": "YAHOO.widget.TimeAxis.html#property_calculateByLabelSize", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "calculateByLabelSize", "url": "YAHOO.widget.NumericAxis.html#property_calculateByLabelSize", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "categoryField", "url": "YAHOO.widget.PieChart.html#config_categoryField", "type": "config"}, {"access": "", "host": "YAHOO.widget.PieSeries", "name": "categoryField", "url": "YAHOO.widget.PieSeries.html#property_categoryField", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "categoryFieldChange", "url": "YAHOO.widget.PieChart.html#event_categoryFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CategoryAxis", "name": "categoryNames", "url": "YAHOO.widget.CategoryAxis.html#property_categoryNames", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "dataField", "url": "YAHOO.widget.PieChart.html#config_dataField", "type": "config"}, {"access": "", "host": "YAHOO.widget.PieSeries", "name": "dataField", "url": "YAHOO.widget.PieSeries.html#property_dataField", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "dataFieldChange", "url": "YAHOO.widget.PieChart.html#event_dataFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Series", "name": "displayName", "url": "YAHOO.widget.Series.html#property_displayName", "type": "property"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_getCategoryField", "url": "YAHOO.widget.PieChart.html#method__getCategoryField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_getClonedAxis", "url": "YAHOO.widget.CartesianChart.html#method__getClonedAxis", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_getDataField", "url": "YAHOO.widget.PieChart.html#method__getDataField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_getXField", "url": "YAHOO.widget.CartesianChart.html#method__getXField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_getYField", "url": "YAHOO.widget.CartesianChart.html#method__getYField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_initAttributes", "url": "YAHOO.widget.PieChart.html#method__initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_initAttributes", "url": "YAHOO.widget.CartesianChart.html#method__initAttributes", "type": "method"}, {"access": "", "host": "YAHOO.widget.PieSeries", "name": "labelFunction", "url": "YAHOO.widget.PieSeries.html#property_labelFunction", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "majorTimeUnit", "url": "YAHOO.widget.TimeAxis.html#property_majorTimeUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "majorUnit", "url": "YAHOO.widget.TimeAxis.html#property_majorUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "majorUnit", "url": "YAHOO.widget.NumericAxis.html#property_majorUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "maximum", "url": "YAHOO.widget.TimeAxis.html#property_maximum", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "maximum", "url": "YAHOO.widget.NumericAxis.html#property_maximum", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "minimum", "url": "YAHOO.widget.TimeAxis.html#property_minimum", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "minimum", "url": "YAHOO.widget.NumericAxis.html#property_minimum", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "minorUnit", "url": "YAHOO.widget.NumericAxis.html#property_minorUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "position", "url": "YAHOO.widget.NumericAxis.html#property_position", "type": "property"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_removeAxisFunctions", "url": "YAHOO.widget.CartesianChart.html#method__removeAxisFunctions", "type": "method"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "roundMajorUnit", "url": "YAHOO.widget.NumericAxis.html#property_roundMajorUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "scale", "url": "YAHOO.widget.NumericAxis.html#property_scale", "type": "property"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_setCategoryField", "url": "YAHOO.widget.PieChart.html#method__setCategoryField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_setDataField", "url": "YAHOO.widget.PieChart.html#method__setDataField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setXAxes", "url": "YAHOO.widget.CartesianChart.html#method__setXAxes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setXAxis", "url": "YAHOO.widget.CartesianChart.html#method__setXAxis", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setXField", "url": "YAHOO.widget.CartesianChart.html#method__setXField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setYAxes", "url": "YAHOO.widget.CartesianChart.html#method__setYAxes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setYAxis", "url": "YAHOO.widget.CartesianChart.html#method__setYAxis", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setYField", "url": "YAHOO.widget.CartesianChart.html#method__setYField", "type": "method"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "snapToUnits", "url": "YAHOO.widget.TimeAxis.html#property_snapToUnits", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "snapToUnits", "url": "YAHOO.widget.NumericAxis.html#property_snapToUnits", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "stackingEnabled", "url": "YAHOO.widget.TimeAxis.html#property_stackingEnabled", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "stackingEnabled", "url": "YAHOO.widget.NumericAxis.html#property_stackingEnabled", "type": "property"}, {"access": "", "host": "YAHOO.widget.Series", "name": "type", "url": "YAHOO.widget.Series.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xAxes", "url": "YAHOO.widget.CartesianChart.html#config_xAxes", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xAxesChange", "url": "YAHOO.widget.CartesianChart.html#event_xAxesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xAxis", "url": "YAHOO.widget.CartesianChart.html#config_xAxis", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_xAxisChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_xAxisLabelFunctions", "url": "YAHOO.widget.CartesianChart.html#property__xAxisLabelFunctions", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "xField", "url": "YAHOO.widget.CartesianSeries.html#property_xField", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xField", "url": "YAHOO.widget.CartesianChart.html#config_xField", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_xFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yAxes", "url": "YAHOO.widget.CartesianChart.html#config_yAxes", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yAxesChange", "url": "YAHOO.widget.CartesianChart.html#event_yAxesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yAxis", "url": "YAHOO.widget.CartesianChart.html#config_yAxis", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_yAxisChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_yAxisLabelFunctions", "url": "YAHOO.widget.CartesianChart.html#property__yAxisLabelFunctions", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "yField", "url": "YAHOO.widget.CartesianSeries.html#property_yField", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yField", "url": "YAHOO.widget.CartesianChart.html#config_yField", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_yFieldChange", "type": "event"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "", "url": "YAHOO.widget.CartesianSeries.html#property_", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "alwaysShowZero", "url": "YAHOO.widget.NumericAxis.html#property_alwaysShowZero", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "beforeCategoryFieldChange", "url": "YAHOO.widget.PieChart.html#event_beforeCategoryFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeConstrainViewportChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeConstrainViewportChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "beforeDataFieldChange", "url": "YAHOO.widget.PieChart.html#event_beforeDataFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeXAxesChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeXAxesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeXAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeXAxisChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeXFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeXFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeYAxesChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeYAxesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeYAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeYAxisChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "beforeYFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_beforeYFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CategoryAxis", "name": "calcualateCategoryCount", "url": "YAHOO.widget.CategoryAxis.html#property_calcualateCategoryCount", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "calculateByLabelSize", "url": "YAHOO.widget.TimeAxis.html#property_calculateByLabelSize", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "calculateByLabelSize", "url": "YAHOO.widget.NumericAxis.html#property_calculateByLabelSize", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "categoryField", "url": "YAHOO.widget.PieChart.html#config_categoryField", "type": "config"}, {"access": "", "host": "YAHOO.widget.PieSeries", "name": "categoryField", "url": "YAHOO.widget.PieSeries.html#property_categoryField", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "categoryFieldChange", "url": "YAHOO.widget.PieChart.html#event_categoryFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CategoryAxis", "name": "categoryNames", "url": "YAHOO.widget.CategoryAxis.html#property_categoryNames", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "constrainViewport", "url": "YAHOO.widget.CartesianChart.html#config_constrainViewport", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "constrainViewportChange", "url": "YAHOO.widget.CartesianChart.html#event_constrainViewportChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "dataField", "url": "YAHOO.widget.PieChart.html#config_dataField", "type": "config"}, {"access": "", "host": "YAHOO.widget.PieSeries", "name": "dataField", "url": "YAHOO.widget.PieSeries.html#property_dataField", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "dataFieldChange", "url": "YAHOO.widget.PieChart.html#event_dataFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Series", "name": "displayName", "url": "YAHOO.widget.Series.html#property_displayName", "type": "property"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_getCategoryField", "url": "YAHOO.widget.PieChart.html#method__getCategoryField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_getClonedAxis", "url": "YAHOO.widget.CartesianChart.html#method__getClonedAxis", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_getDataField", "url": "YAHOO.widget.PieChart.html#method__getDataField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_getXField", "url": "YAHOO.widget.CartesianChart.html#method__getXField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_getYField", "url": "YAHOO.widget.CartesianChart.html#method__getYField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_initAttributes", "url": "YAHOO.widget.PieChart.html#method__initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_initAttributes", "url": "YAHOO.widget.CartesianChart.html#method__initAttributes", "type": "method"}, {"access": "", "host": "YAHOO.widget.PieSeries", "name": "labelFunction", "url": "YAHOO.widget.PieSeries.html#property_labelFunction", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "majorTimeUnit", "url": "YAHOO.widget.TimeAxis.html#property_majorTimeUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "majorUnit", "url": "YAHOO.widget.TimeAxis.html#property_majorUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "majorUnit", "url": "YAHOO.widget.NumericAxis.html#property_majorUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "maximum", "url": "YAHOO.widget.TimeAxis.html#property_maximum", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "maximum", "url": "YAHOO.widget.NumericAxis.html#property_maximum", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "minimum", "url": "YAHOO.widget.TimeAxis.html#property_minimum", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "minimum", "url": "YAHOO.widget.NumericAxis.html#property_minimum", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "minorUnit", "url": "YAHOO.widget.NumericAxis.html#property_minorUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "position", "url": "YAHOO.widget.NumericAxis.html#property_position", "type": "property"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_removeAxisFunctions", "url": "YAHOO.widget.CartesianChart.html#method__removeAxisFunctions", "type": "method"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "roundMajorUnit", "url": "YAHOO.widget.NumericAxis.html#property_roundMajorUnit", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "scale", "url": "YAHOO.widget.NumericAxis.html#property_scale", "type": "property"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_setCategoryField", "url": "YAHOO.widget.PieChart.html#method__setCategoryField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setConstrainViewport", "url": "YAHOO.widget.CartesianChart.html#method__setConstrainViewport", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_setDataField", "url": "YAHOO.widget.PieChart.html#method__setDataField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setXAxes", "url": "YAHOO.widget.CartesianChart.html#method__setXAxes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setXAxis", "url": "YAHOO.widget.CartesianChart.html#method__setXAxis", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setXField", "url": "YAHOO.widget.CartesianChart.html#method__setXField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setYAxes", "url": "YAHOO.widget.CartesianChart.html#method__setYAxes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setYAxis", "url": "YAHOO.widget.CartesianChart.html#method__setYAxis", "type": "method"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_setYField", "url": "YAHOO.widget.CartesianChart.html#method__setYField", "type": "method"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "snapToUnits", "url": "YAHOO.widget.TimeAxis.html#property_snapToUnits", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "snapToUnits", "url": "YAHOO.widget.NumericAxis.html#property_snapToUnits", "type": "property"}, {"access": "", "host": "YAHOO.widget.TimeAxis", "name": "stackingEnabled", "url": "YAHOO.widget.TimeAxis.html#property_stackingEnabled", "type": "property"}, {"access": "", "host": "YAHOO.widget.NumericAxis", "name": "stackingEnabled", "url": "YAHOO.widget.NumericAxis.html#property_stackingEnabled", "type": "property"}, {"access": "", "host": "YAHOO.widget.Series", "name": "type", "url": "YAHOO.widget.Series.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xAxes", "url": "YAHOO.widget.CartesianChart.html#config_xAxes", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xAxesChange", "url": "YAHOO.widget.CartesianChart.html#event_xAxesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xAxis", "url": "YAHOO.widget.CartesianChart.html#config_xAxis", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_xAxisChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_xAxisLabelFunctions", "url": "YAHOO.widget.CartesianChart.html#property__xAxisLabelFunctions", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "xField", "url": "YAHOO.widget.CartesianSeries.html#property_xField", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xField", "url": "YAHOO.widget.CartesianChart.html#config_xField", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "xFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_xFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yAxes", "url": "YAHOO.widget.CartesianChart.html#config_yAxes", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yAxesChange", "url": "YAHOO.widget.CartesianChart.html#event_yAxesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yAxis", "url": "YAHOO.widget.CartesianChart.html#config_yAxis", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yAxisChange", "url": "YAHOO.widget.CartesianChart.html#event_yAxisChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.CartesianChart", "name": "_yAxisLabelFunctions", "url": "YAHOO.widget.CartesianChart.html#property__yAxisLabelFunctions", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "yField", "url": "YAHOO.widget.CartesianSeries.html#property_yField", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yField", "url": "YAHOO.widget.CartesianChart.html#config_yField", "type": "config"}, {"access": "", "host": "YAHOO.widget.CartesianChart", "name": "yFieldChange", "url": "YAHOO.widget.CartesianChart.html#event_yFieldChange", "type": "event"}];
 </script>
 </body>
 </html>

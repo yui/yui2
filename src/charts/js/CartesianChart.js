@@ -125,7 +125,17 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		this.setAttributeConfig("yAxes",
 		{
 			method: this._setYAxes
-		});		
+		});	
+		
+		/**
+		 * @attribute constrainViewport
+		 * @description Determines whether the viewport is constrained to prevent series data from overflow.
+		 * @type Boolean
+		 */
+		this.setAttributeConfig("constrainViewport",
+		{
+			method: this._setConstrainViewport
+		});	
 	},
 
 	/**
@@ -292,5 +302,16 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 			if(value[i].labelFunction) this._yAxisLabelFunctions.push(value[i].labelFunction);
 			this._swf.setVerticalAxis(value[i]);
 		}		
+	},
+	
+	/**
+	 * Setter for the constrainViewport attribute
+	 *
+	 * @method _setConstrainViewport
+	 * @private
+	 */
+	_setConstrainViewport: function(value)
+	{
+			this._swf.setConstrainViewport(value);
 	}
 });

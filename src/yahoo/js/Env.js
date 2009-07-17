@@ -61,7 +61,14 @@ YAHOO.env.getVersion = function(name) {
  */
 YAHOO.env.ua = function() {
 
-    var nav = navigator,
+        var numberfy = function(s) {
+            var c = 0;
+            return parseFloat(s.replace(/\./g, function() {
+                return (c++ == 1) ? '' : '.';
+            }));
+        },
+
+        nav = navigator,
 
         o = {
 
@@ -147,60 +154,92 @@ YAHOO.env.ua = function() {
          * @property caja
          * @type float
          */
-        caja: nav.cajaVersion
+        caja: nav.cajaVersion,
+
+        /**
+         * Set to true if the page appears to be in SSL
+         * @property secure
+         * @type boolean
+         * @static
+         */
+        secure: false,
+
+        /**
+         * The operating system.  Currently only detecting windows or macintosh
+         * @property os
+         * @type string
+         * @static
+         */
+        os: null
 
     },
 
-    ua = navigator.userAgent, 
+    ua = navigator && navigator.userAgent, 
+    
+    loc = window && window.location,
+
+    href = loc && loc.href,
     
     m;
 
-    // Modern KHTML browsers should qualify as Safari X-Grade
-    if ((/KHTML/).test(ua)) {
-        o.webkit=1;
-    }
-    // Modern WebKit browsers are at least X-Grade
-    m=ua.match(/AppleWebKit\/([^\s]*)/);
-    if (m&&m[1]) {
-        o.webkit=parseFloat(m[1]);
+    o.secure = href && (href.toLowerCase().indexOf("https") === 0);
 
-        // Mobile browser check
-        if (/ Mobile\//.test(ua)) {
-            o.mobile = "Apple"; // iPhone or iPod Touch
-        } else {
-            m=ua.match(/NokiaN[^\/]*/);
-            if (m) {
-                o.mobile = m[0]; // Nokia N-series, ex: NokiaN95
-            }
+    if (ua) {
+
+        if ((/windows|win32/i).test(ua)) {
+            o.os = 'windows';
+        } else if ((/macintosh/i).test(ua)) {
+            o.os = 'macintosh';
+        }
+    
+        // Modern KHTML browsers should qualify as Safari X-Grade
+        if ((/KHTML/).test(ua)) {
+            o.webkit=1;
         }
 
-        m=ua.match(/AdobeAIR\/([^\s]*)/);
-        if (m) {
-            o.air = m[0]; // Adobe AIR 1.0 or better
-        }
-
-    }
-
-    if (!o.webkit) { // not webkit
-        // @todo check Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1316; fi; U; ssr)
-        m=ua.match(/Opera[\s\/]([^\s]*)/);
+        // Modern WebKit browsers are at least X-Grade
+        m=ua.match(/AppleWebKit\/([^\s]*)/);
         if (m&&m[1]) {
-            o.opera=parseFloat(m[1]);
-            m=ua.match(/Opera Mini[^;]*/);
-            if (m) {
-                o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
-            }
-        } else { // not opera or webkit
-            m=ua.match(/MSIE\s([^;]*)/);
-            if (m&&m[1]) {
-                o.ie=parseFloat(m[1]);
-            } else { // not opera, webkit, or ie
-                m=ua.match(/Gecko\/([^\s]*)/);
+            o.webkit=numberfy(m[1]);
+
+            // Mobile browser check
+            if (/ Mobile\//.test(ua)) {
+                o.mobile = "Apple"; // iPhone or iPod Touch
+            } else {
+                m=ua.match(/NokiaN[^\/]*/);
                 if (m) {
-                    o.gecko=1; // Gecko detected, look for revision
-                    m=ua.match(/rv:([^\s\)]*)/);
-                    if (m&&m[1]) {
-                        o.gecko=parseFloat(m[1]);
+                    o.mobile = m[0]; // Nokia N-series, ex: NokiaN95
+                }
+            }
+
+            m=ua.match(/AdobeAIR\/([^\s]*)/);
+            if (m) {
+                o.air = m[0]; // Adobe AIR 1.0 or better
+            }
+
+        }
+
+        if (!o.webkit) { // not webkit
+            // @todo check Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1316; fi; U; ssr)
+            m=ua.match(/Opera[\s\/]([^\s]*)/);
+            if (m&&m[1]) {
+                o.opera=numberfy(m[1]);
+                m=ua.match(/Opera Mini[^;]*/);
+                if (m) {
+                    o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
+                }
+            } else { // not opera or webkit
+                m=ua.match(/MSIE\s([^;]*)/);
+                if (m&&m[1]) {
+                    o.ie=numberfy(m[1]);
+                } else { // not opera, webkit, or ie
+                    m=ua.match(/Gecko\/([^\s]*)/);
+                    if (m) {
+                        o.gecko=1; // Gecko detected, look for revision
+                        m=ua.match(/rv:([^\s\)]*)/);
+                        if (m&&m[1]) {
+                            o.gecko=numberfy(m[1]);
+                        }
                     }
                 }
             }

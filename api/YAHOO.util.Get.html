@@ -954,14 +954,16 @@ loaded.
 <dt>insertBefore</dt>
 <dd>node or node id that will become the new node's nextSibling</dd>
 <dt>charset</dt>
-<dd>Node charset, default utf-8</dd>
+<dd>Node charset, deprecated, use 'attributes'</dd>
+<dt>attributes</dt>
+<dd>A hash of attributes to apply to dynamic nodes.</dd>
 </dl>
 <pre>
-YAHOO.util.Get.css("http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css");
+YAHOO.util.Get.css("http://yui.yahooapis.com/2.7.0/build/menu/assets/skins/sam/menu.css");
 </pre>
 <pre>
-YAHOO.util.Get.css(["http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css",
-"http://yui.yahooapis.com/2.3.1/build/logger/assets/skins/sam/logger.css"]);
+YAHOO.util.Get.css(["http://yui.yahooapis.com/2.7.0/build/menu/assets/skins/sam/menu.css",
+"http://yui.yahooapis.com/2.7.0/build/logger/assets/skins/sam/logger.css"]);
 </pre></span>
                                                         </dd>
                                                 </dl>
@@ -1183,14 +1185,16 @@ each script.
 <dd>node or node id that will become the new node's nextSibling</dd>
 </dl>
 <dt>charset</dt>
-<dd>Node charset, default utf-8</dd>
+<dd>Node charset, deprecated, use 'attributes'</dd>
+<dt>attributes</dt>
+<dd>A hash of attributes to apply to dynamic nodes.</dd>
 <dt>timeout</dt>
 <dd>Number of milliseconds to wait before aborting and firing the timeout event</dd>
 <pre>
 // assumes yahoo, dom, and event are already on the page
 &nbsp;&nbsp;YAHOO.util.Get.script(
-&nbsp;&nbsp;["http://yui.yahooapis.com/2.3.1/build/dragdrop/dragdrop-min.js",
-&nbsp;&nbsp;&nbsp;"http://yui.yahooapis.com/2.3.1/build/animation/animation-min.js"], &#123;
+&nbsp;&nbsp;["http://yui.yahooapis.com/2.7.0/build/dragdrop/dragdrop-min.js",
+&nbsp;&nbsp;&nbsp;"http://yui.yahooapis.com/2.7.0/build/animation/animation-min.js"], &#123;
 &nbsp;&nbsp;&nbsp;&nbsp;onSuccess: function(o) &#123;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YAHOO.log(o.data); // foo
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new YAHOO.util.DDProxy("dd1"); // also new o.reference("dd1"); would work

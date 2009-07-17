@@ -43,7 +43,7 @@ YAHOO.widget.TVFadeOut.prototype = {
     onComplete: function() {
         var s = this.el.style;
         s.display = "none";
-        // s.opacity = 1;
+        s.opacity = 1;
         s.filter = "alpha(opacity=100)";
         this.callback();
     },

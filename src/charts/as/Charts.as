@@ -33,7 +33,15 @@ package
 	 */
 	public class Charts extends YUIAdapter
 	{
-		
+				
+	/**
+	 * @private	
+	 * Path for all skin classes
+
+
+	 */
+	private static const SKIN_NAMESPACE:String = "com.yahoo.astra.fl.charts.skins::";
+				
 	//--------------------------------------
 	//  Constructor
 	//--------------------------------------
@@ -548,6 +556,28 @@ package
 		}
 		
 		/**
+		 * Sets the JavaScript function to call to format legend labels
+		 */
+		public function setLegendLabelFunction(value:String):void
+		{
+			var delegate:Object = {legendLabelFunction: JavaScriptUtil.createCallbackFunction(value).callback};
+			delegate.callback = function(value:String):String
+			{
+				return delegate.legendLabelFunction(value);
+			}
+			
+			this.chart.legendLabelFunction = delegate.callback;
+		}
+		
+		/**
+		 * Determines whether the viewport is constrained
+		 */
+		public function setConstrainViewport(value:Boolean):void
+		{
+			if(this.chart is CartesianChart) (this.chart as CartesianChart).constrainViewport = value; 
+		}
+		
+		/**
 		 * Accepts a JSON-encoded set of styles for the chart itself.
 		 * Flash Player versions below 9.0.60 don't encode ExternalInterface
 		 * calls correctly!
@@ -872,6 +902,20 @@ package
 									UIComponent(series).visible = style.visibility == "visible";
 								}
 								break;
+							case "skin":
+								if(series is LineSeries)
+								{
+									try
+									{
+										skin = getDefinitionByName(SKIN_NAMESPACE + style.skin) as Class;	
+									}
+									catch(e:Error)
+									{
+										this.log(style.skin + " is not a valid skin class", LoggerCategory.WARN);
+									}
+								}
+								break;
+		
 							default:
 								this.log("Unknown series style: " + styleName, LoggerCategory.WARN);
 						}
@@ -949,6 +993,7 @@ package
 				ExternalInterface.addCallback("setDataTipFunction", setDataTipFunction);
 				ExternalInterface.addCallback("getCategoryNames", getCategoryNames);
 				ExternalInterface.addCallback("setCategoryNames", setCategoryNames);
+				ExternalInterface.addCallback("setLegendLabelFunction", setLegendLabelFunction);
 				
 				//CartesianChart
 				ExternalInterface.addCallback("getHorizontalField", getHorizontalField);
@@ -957,6 +1002,7 @@ package
 				ExternalInterface.addCallback("setVerticalField", setVerticalField);
 				ExternalInterface.addCallback("setHorizontalAxis", setHorizontalAxis);
 				ExternalInterface.addCallback("setVerticalAxis", setVerticalAxis);
+				ExternalInterface.addCallback("setConstrainViewport", setConstrainViewport);
 				
 				//PieChart
 				ExternalInterface.addCallback("getDataField", getDataField);
@@ -1425,7 +1471,7 @@ package
 		
 	//--------------------------------------
 	//  Private Methods
-	//--------------------------------------
+	//--------------------------------------	
 		
 		/**
 		 * @private
