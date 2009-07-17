@@ -328,14 +328,7 @@
 				getter: function() {
 					return this.getStyle('width');
 				},
-				method: function(value) {
-					if (Lang.isNumber(value)) {
-						value += 'px';
-					}
-					this.setStyle('width',value);
-					Dom.setStyle(maskEl,'width', value);
-					this.redraw();
-				}
+				method: this._widthChange
 		    });
 		
 
@@ -352,14 +345,7 @@
 				getter:function() {
 					return this.getStyle('height');
 				},
-				method: function(value) {
-					if (Lang.isNumber(value)) {
-						value += 'px';
-					}
-					this.setStyle('height',value);
-					Dom.setStyle(maskEl,'height', value);
-					this.redraw();
-				}
+				method: this._heightChange
 		    });
 			
 			
@@ -452,6 +438,7 @@
 			
 			this._barSizeFunction = this._barSizeFunctions[0][this.get('direction')];
 			this.redraw();
+			this._fixEdges();
 			this._barSizeFunction = this._barSizeFunctions[this.get('anim')?1:0][this.get('direction')];
 
 			this.on('minValueChange',this.redraw);
@@ -550,14 +537,14 @@
 			},
 			{
 				ltr: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated()) { anim.stop(true); }
+					if (anim.isAnimated()) { anim.stop(); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {width:{ to: pixelValue }}; 
 					anim.animate();
 				},
 				rtl: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated()) { anim.stop(true); }
+					if (anim.isAnimated()) { anim.stop(); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {
@@ -567,14 +554,14 @@
 					anim.animate();
 				},
 				ttb: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated()) { anim.stop(true); }
+					if (anim.isAnimated()) { anim.stop(); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {height:{to: pixelValue}};
 					anim.animate();
 				},
 				btt: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated()) { anim.stop(true); }
+					if (anim.isAnimated()) { anim.stop(); }
 					Dom.addClass(barEl,Prog.CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {
@@ -597,6 +584,44 @@
 		 */		
 		_barSizeFunction: null,
 		
+		_heightChange: function(value) {
+			if (Lang.isNumber(value)) {
+				value += 'px';
+			}
+			this.setStyle('height',value);
+			Dom.setStyle(this.get('maskEl'),'height', value);
+			this._fixEdges();
+			this.redraw();
+		},
+		_widthChange: function(value) {
+			if (Lang.isNumber(value)) {
+				value += 'px';
+			}
+			this.setStyle('width',value);
+			Dom.setStyle(this.get('maskEl'),'width', value);
+			this._fixEdges();
+			this.redraw();
+		},
+		_fixEdges:function() {
+			if (!this.rendered) { return; }
+			var maskEl = this.get('maskEl'),
+				tlEl = Dom.getElementsByClassName(Prog.CLASS_TL,undefined,maskEl)[0],
+				trEl = Dom.getElementsByClassName(Prog.CLASS_TR,undefined,maskEl)[0],
+				blEl = Dom.getElementsByClassName(Prog.CLASS_BL,undefined,maskEl)[0],
+				brEl = Dom.getElementsByClassName(Prog.CLASS_BR,undefined,maskEl)[0],
+				newSize = (parseInt(Dom.getStyle(maskEl,'height'),10) -
+				parseInt(Dom.getStyle(tlEl,'height'),10)) + 'px';
+				
+			Dom.setStyle(blEl,'height',newSize);
+			Dom.setStyle(brEl,'height',newSize);
+			newSize = (parseInt(Dom.getStyle(maskEl,'width'),10) -
+				parseInt(Dom.getStyle(tlEl,'width'),10)) + 'px';
+			Dom.setStyle(trEl,'width',newSize);
+			Dom.setStyle(brEl,'width',newSize);
+		},
+					
+				
+		
 		/** 
 		 * Calculates some auxiliary values to make the rendering faster
 		 * @method _recalculateConstants
@@ -611,14 +636,14 @@
 				case DIRECTION_LTR:
 				case DIRECTION_RTL:
 					this._barSpace = parseInt(this.get('width'),10) - 
-						parseInt(Dom.getStyle(barEl,'marginLeft'),10)  -
-						Math.abs(parseInt(Dom.getStyle(barEl,'marginRight'),10));
+						(parseInt(Dom.getStyle(barEl,'marginLeft'),10) || 0) -
+						(parseInt(Dom.getStyle(barEl,'marginRight'),10) || 0);
 					break;
 				case DIRECTION_TTB:
 				case DIRECTION_BTT:
 					this._barSpace = parseInt(this.get('height'),10) -
-						parseInt(Dom.getStyle(barEl,'marginTop'),10) -
-						parseInt(Dom.getStyle(barEl,'marginBottom'),10); 
+						(parseInt(Dom.getStyle(barEl,'marginTop'),10) || 0)-
+						(parseInt(Dom.getStyle(barEl,'marginBottom'),10) || 0); 
 					break;
 			}
 			this._barFactor = this._barSpace / (this.get('maxValue') - this._mn)  || 1;

@@ -19,7 +19,7 @@
 <!-- js -->
 <script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="../../build/animation/animation-debug.js"></script>
-<script type="text/javascript" src="../../build/element/element-debug.js"></script>
+<script type="text/javascript" src="../../build/element/element-min.js"></script>
 
 <script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script>
 <script type="text/javascript" src="../../build/logger/logger-min.js"></script>
@@ -131,7 +131,7 @@ pre, code {
 
 	YAHOO.util.Event.onAvailable('vumeter', function () {
 	
-		// var myLogReader = new YAHOO.widget.LogReader(); 
+		var myLogReader = new YAHOO.widget.LogReader(); 
 		
 		var pbvu = [],i,NUM_BARS= 8, hold = false;
 		for (i = 0; i < NUM_BARS;i++) {
@@ -148,7 +148,11 @@ pre, code {
 				if (i === hold) {
 					debugger;
 					var anim = pbvu[i].get('anim');
-					if (anim.isAnimated()) { anim.stop(true); }
+					if (anim.isAnimated()) { 
+						anim.stop(true); 
+						anim._onComplete.fire();
+						hold = false;
+					}
 				}
 				pbvu[i].set('value',newValue);
 			}
