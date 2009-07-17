@@ -68,7 +68,15 @@ YAHOO.lang.extend(YAHOO.widget.CartesianSeries, YAHOO.widget.Series,
 	 * @property
 	 * @type String
 	 */
-	axis: "primary"
+	axis: "primary",
+	
+	/**
+	 * When a Legend is present, indicates whether the series will show in the legend.
+	 * 
+	 * @property
+	 * @type Boolean
+	 */
+	showInLegend: true
 });
 
 /**
