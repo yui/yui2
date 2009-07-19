@@ -966,6 +966,67 @@ output more compact (less readable).
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="protected" rel="yui:method" resource="#method__init">
+                                    <h4>
+                                        <a name="method__init">_init</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">_init</strong>
+                                           (
+                                                
+                                                        
+                                                         container
+                                                    
+                                                
+                                                        , 
+                                                         config
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Initializes the instance's message buffer, start time, etc
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">container</span>
+                                                        &lt;<span property="yui:type">String|HTMLElement</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  (optional) the render target</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">config</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  (optional) instance configuration</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="private" rel="yui:method" resource="#method__initCategories">
                                     <h4>
                                         <a name="method__initCategories">_initCategories</a></h4>
@@ -1051,11 +1112,6 @@ output more compact (less readable).
                                         void
                                             <strong property="yui:name">_initContainerEl</strong>
                                            (
-                                                
-                                                        
-                                                         elContainer
-                                                    
-                                                
                                             )
                                         </code>
                                         
@@ -1065,15 +1121,6 @@ output more compact (less readable).
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">elContainer</span>
-                                                        &lt;<span property="yui:type">HTMLElement</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  Container element by reference or string ID.</span>
-                                                        </dd>
-                                                </dl>
 
                                                 <dl>
                                                     <dt>Returns:
@@ -1994,6 +2041,44 @@ actually delete log messages.
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:method" resource="#method_destroy">
+                                    <h4>
+                                        <a name="method_destroy">destroy</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">destroy</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Removes the UI from the DOM entirely and detaches all event listeners.
+Implementers should note that Logger will still accumulate messages.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_expand">
                                     <h4>
                                         <a name="method_expand">expand</a></h4>
@@ -2421,6 +2506,44 @@ get saved to a buffer and then output upon resume of LogReader.
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:method" resource="#method_render">
+                                    <h4>
+                                        <a name="method_render">render</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">render</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Adds the UI to the DOM, attaches event listeners, and bootstraps initial
+UI state.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_resume">
                                     <h4>
                                         <a name="method_resume">resume</a></h4>
@@ -2824,6 +2947,7 @@ have been saved to buffer while paused.
                                 <li class="private"><a href="#method__createCategoryCheckbox" title="_createCategoryCheckbox">_createCategoryCheckbox</a></li>
                                 <li class="private"><a href="#method__createSourceCheckbox" title="_createSourceCheckbox">_createSourceCheckbox</a></li>
                                 <li class="private"><a href="#method__filterLogs" title="_filterLogs">_filterLogs</a></li>
+                                <li class="protected"><a href="#method__init" title="_init">_init</a></li>
                                 <li class="private"><a href="#method__initCategories" title="_initCategories">_initCategories</a></li>
                                 <li class="private"><a href="#method__initConsoleEl" title="_initConsoleEl">_initConsoleEl</a></li>
                                 <li class="private"><a href="#method__initContainerEl" title="_initContainerEl">_initContainerEl</a></li>
@@ -2844,6 +2968,7 @@ have been saved to buffer while paused.
                                 <li class="private"><a href="#method__printToConsole" title="_printToConsole">_printToConsole</a></li>
                                 <li class=""><a href="#method_clearConsole" title="clearConsole">clearConsole</a></li>
                                 <li class=""><a href="#method_collapse" title="collapse">collapse</a></li>
+                                <li class=""><a href="#method_destroy" title="destroy">destroy</a></li>
                                 <li class=""><a href="#method_expand" title="expand">expand</a></li>
                                 <li class=""><a href="#method_getCategories" title="getCategories">getCategories</a></li>
                                 <li class=""><a href="#method_getCheckbox" title="getCheckbox">getCheckbox</a></li>
@@ -2854,6 +2979,7 @@ have been saved to buffer while paused.
                                 <li class=""><a href="#method_hideSource" title="hideSource">hideSource</a></li>
                                 <li class="private"><a href="#method_html2Text" title="html2Text">html2Text</a></li>
                                 <li class=""><a href="#method_pause" title="pause">pause</a></li>
+                                <li class=""><a href="#method_render" title="render">render</a></li>
                                 <li class=""><a href="#method_resume" title="resume">resume</a></li>
                                 <li class=""><a href="#method_setTitle" title="setTitle">setTitle</a></li>
                                 <li class=""><a href="#method_show" title="show">show</a></li>
@@ -2874,7 +3000,7 @@ have been saved to buffer while paused.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "LogReader", "name": "BASIC_TEMPLATE", "url": "LogReader.html#property_BASIC_TEMPLATE", "type": "property"}, {"access": "", "host": "LogReader", "name": "bottom", "url": "LogReader.html#property_bottom", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_btnClear", "url": "LogReader.html#property__btnClear", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_btnCollapse", "url": "LogReader.html#property__btnCollapse", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_btnPause", "url": "LogReader.html#property__btnPause", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_buffer", "url": "LogReader.html#property__buffer", "type": "property"}, {"access": "", "host": "LogMsg", "name": "category", "url": "LogMsg.html#property_category", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_categoryFilters", "url": "LogReader.html#property__categoryFilters", "type": "property"}, {"access": "", "host": "LogReader", "name": "clearConsole", "url": "LogReader.html#method_clearConsole", "type": "method"}, {"access": "", "host": "LogReader", "name": "collapse", "url": "LogReader.html#method_collapse", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_consoleMsgCount", "url": "LogReader.html#property__consoleMsgCount", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_createCategoryCheckbox", "url": "LogReader.html#method__createCategoryCheckbox", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_createSourceCheckbox", "url": "LogReader.html#method__createSourceCheckbox", "type": "method"}, {"access": "", "host": "LogReader", "name": "draggable", "url": "LogReader.html#property_draggable", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elBtns", "url": "LogReader.html#property__elBtns", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elCategoryFilters", "url": "LogReader.html#property__elCategoryFilters", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elCollapse", "url": "LogReader.html#property__elCollapse", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elConsole", "url": "LogReader.html#property__elConsole", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elContainer", "url": "LogReader.html#property__elContainer", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elDefaultContainer", "url": "LogReader.html#property__elDefaultContainer", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elFt", "url": "LogReader.html#property__elFt", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elHd", "url": "LogReader.html#property__elHd", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elSourceFilters", "url": "LogReader.html#property__elSourceFilters", "type": "property"}, {"access": "", "host": "LogReader", "name": "entryFormat", "url": "LogReader.html#property_entryFormat", "type": "property"}, {"access": "", "host": "LogReader", "name": "ENTRY_TEMPLATE", "url": "LogReader.html#property_ENTRY_TEMPLATE", "type": "property"}, {"access": "", "host": "LogReader", "name": "expand", "url": "LogReader.html#method_expand", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_filterCheckboxes", "url": "LogReader.html#property__filterCheckboxes", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_filterLogs", "url": "LogReader.html#method__filterLogs", "type": "method"}, {"access": "", "host": "LogReader", "name": "fontSize", "url": "LogReader.html#property_fontSize", "type": "property"}, {"access": "", "host": "LogReader", "name": "footerEnabled", "url": "LogReader.html#property_footerEnabled", "type": "property"}, {"access": "", "host": "LogReader", "name": "getCategories", "url": "LogReader.html#method_getCategories", "type": "method"}, {"access": "", "host": "LogReader", "name": "getCheckbox", "url": "LogReader.html#method_getCheckbox", "type": "method"}, {"access": "", "host": "LogReader", "name": "getLastTime", "url": "LogReader.html#method_getLastTime", "type": "method"}, {"access": "", "host": "LogWriter", "name": "getSource", "url": "LogWriter.html#method_getSource", "type": "method"}, {"access": "", "host": "LogReader", "name": "getSources", "url": "LogReader.html#method_getSources", "type": "method"}, {"access": "", "host": "LogReader", "name": "height", "url": "LogReader.html#property_height", "type": "property"}, {"access": "", "host": "LogReader", "name": "hide", "url": "LogReader.html#method_hide", "type": "method"}, {"access": "", "host": "LogReader", "name": "hideCategory", "url": "LogReader.html#method_hideCategory", "type": "method"}, {"access": "", "host": "LogReader", "name": "hideSource", "url": "LogReader.html#method_hideSource", "type": "method"}, {"access": "private", "host": "LogReader", "name": "html2Text", "url": "LogReader.html#method_html2Text", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initCategories", "url": "LogReader.html#method__initCategories", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initConsoleEl", "url": "LogReader.html#method__initConsoleEl", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initContainerEl", "url": "LogReader.html#method__initContainerEl", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initDragDrop", "url": "LogReader.html#method__initDragDrop", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initFooterEl", "url": "LogReader.html#method__initFooterEl", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initHeaderEl", "url": "LogReader.html#method__initHeaderEl", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initSources", "url": "LogReader.html#method__initSources", "type": "method"}, {"access": "", "host": "LogReader", "name": "isCollapsed", "url": "LogReader.html#property_isCollapsed", "type": "property"}, {"access": "", "host": "LogReader", "name": "isPaused", "url": "LogReader.html#property_isPaused", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_lastTime", "url": "LogReader.html#property__lastTime", "type": "property"}, {"access": "", "host": "LogReader", "name": "left", "url": "LogReader.html#property_left", "type": "property"}, {"access": "", "host": "LogWriter", "name": "log", "url": "LogWriter.html#method_log", "type": "method"}, {"access": "", "host": "LogReader", "name": "logReaderEnabled", "url": "LogReader.html#property_logReaderEnabled", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_memberName", "url": "LogReader.html#property__memberName", "type": "property"}, {"access": "", "host": "LogMsg", "name": "msg", "url": "LogMsg.html#property_msg", "type": "property"}, {"access": "", "host": "LogReader", "name": "newestOnTop", "url": "LogReader.html#property_newestOnTop", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_onCategoryCreate", "url": "LogReader.html#method__onCategoryCreate", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onCheckCategory", "url": "LogReader.html#method__onCheckCategory", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onCheckSource", "url": "LogReader.html#method__onCheckSource", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onClickClearBtn", "url": "LogReader.html#method__onClickClearBtn", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onClickCollapseBtn", "url": "LogReader.html#method__onClickCollapseBtn", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onClickPauseBtn", "url": "LogReader.html#method__onClickPauseBtn", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onNewLog", "url": "LogReader.html#method__onNewLog", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onReset", "url": "LogReader.html#method__onReset", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onSourceCreate", "url": "LogReader.html#method__onSourceCreate", "type": "method"}, {"access": "", "host": "LogReader", "name": "outputBuffer", "url": "LogReader.html#property_outputBuffer", "type": "property"}, {"access": "", "host": "LogReader", "name": "pause", "url": "LogReader.html#method_pause", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_printBuffer", "url": "LogReader.html#method__printBuffer", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_printToConsole", "url": "LogReader.html#method__printToConsole", "type": "method"}, {"access": "", "host": "LogReader", "name": "resume", "url": "LogReader.html#method_resume", "type": "method"}, {"access": "", "host": "LogReader", "name": "right", "url": "LogReader.html#property_right", "type": "property"}, {"access": "", "host": "LogWriter", "name": "setSource", "url": "LogWriter.html#method_setSource", "type": "method"}, {"access": "", "host": "LogReader", "name": "setTitle", "url": "LogReader.html#method_setTitle", "type": "method"}, {"access": "", "host": "LogReader", "name": "show", "url": "LogReader.html#method_show", "type": "method"}, {"access": "", "host": "LogReader", "name": "showCategory", "url": "LogReader.html#method_showCategory", "type": "method"}, {"access": "", "host": "LogReader", "name": "showSource", "url": "LogReader.html#method_showSource", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_sName", "url": "LogReader.html#property__sName", "type": "property"}, {"access": "", "host": "LogMsg", "name": "source", "url": "LogMsg.html#property_source", "type": "property"}, {"access": "private", "host": "LogWriter", "name": "_source", "url": "LogWriter.html#property__source", "type": "property"}, {"access": "", "host": "LogMsg", "name": "sourceDetail", "url": "LogMsg.html#property_sourceDetail", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_sourceFilters", "url": "LogReader.html#property__sourceFilters", "type": "property"}, {"access": "", "host": "LogReader", "name": "thresholdMax", "url": "LogReader.html#property_thresholdMax", "type": "property"}, {"access": "", "host": "LogReader", "name": "thresholdMin", "url": "LogReader.html#property_thresholdMin", "type": "property"}, {"access": "", "host": "LogMsg", "name": "time", "url": "LogMsg.html#property_time", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_timeout", "url": "LogReader.html#property__timeout", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_title", "url": "LogReader.html#property__title", "type": "property"}, {"access": "", "host": "LogReader", "name": "top", "url": "LogReader.html#property_top", "type": "property"}, {"access": "", "host": "LogWriter", "name": "toString", "url": "LogWriter.html#method_toString", "type": "method"}, {"access": "", "host": "LogReader", "name": "toString", "url": "LogReader.html#method_toString", "type": "method"}, {"access": "", "host": "LogReader", "name": "verboseOutput", "url": "LogReader.html#property_verboseOutput", "type": "property"}, {"access": "", "host": "LogReader", "name": "VERBOSE_TEMPLATE", "url": "LogReader.html#property_VERBOSE_TEMPLATE", "type": "property"}, {"access": "", "host": "LogReader", "name": "width", "url": "LogReader.html#property_width", "type": "property"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "LogReader", "name": "BASIC_TEMPLATE", "url": "LogReader.html#property_BASIC_TEMPLATE", "type": "property"}, {"access": "", "host": "LogReader", "name": "bottom", "url": "LogReader.html#property_bottom", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_btnClear", "url": "LogReader.html#property__btnClear", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_btnCollapse", "url": "LogReader.html#property__btnCollapse", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_btnPause", "url": "LogReader.html#property__btnPause", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_buffer", "url": "LogReader.html#property__buffer", "type": "property"}, {"access": "", "host": "LogMsg", "name": "category", "url": "LogMsg.html#property_category", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_categoryFilters", "url": "LogReader.html#property__categoryFilters", "type": "property"}, {"access": "", "host": "LogReader", "name": "clearConsole", "url": "LogReader.html#method_clearConsole", "type": "method"}, {"access": "", "host": "LogReader", "name": "collapse", "url": "LogReader.html#method_collapse", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_consoleMsgCount", "url": "LogReader.html#property__consoleMsgCount", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_createCategoryCheckbox", "url": "LogReader.html#method__createCategoryCheckbox", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_createSourceCheckbox", "url": "LogReader.html#method__createSourceCheckbox", "type": "method"}, {"access": "", "host": "LogReader", "name": "destroy", "url": "LogReader.html#method_destroy", "type": "method"}, {"access": "", "host": "LogReader", "name": "draggable", "url": "LogReader.html#property_draggable", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elBtns", "url": "LogReader.html#property__elBtns", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elCategoryFilters", "url": "LogReader.html#property__elCategoryFilters", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elCollapse", "url": "LogReader.html#property__elCollapse", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elConsole", "url": "LogReader.html#property__elConsole", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elContainer", "url": "LogReader.html#property__elContainer", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elDefaultContainer", "url": "LogReader.html#property__elDefaultContainer", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elFt", "url": "LogReader.html#property__elFt", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elHd", "url": "LogReader.html#property__elHd", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_elSourceFilters", "url": "LogReader.html#property__elSourceFilters", "type": "property"}, {"access": "", "host": "LogReader", "name": "entryFormat", "url": "LogReader.html#property_entryFormat", "type": "property"}, {"access": "", "host": "LogReader", "name": "ENTRY_TEMPLATE", "url": "LogReader.html#property_ENTRY_TEMPLATE", "type": "property"}, {"access": "", "host": "LogReader", "name": "expand", "url": "LogReader.html#method_expand", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_filterCheckboxes", "url": "LogReader.html#property__filterCheckboxes", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_filterLogs", "url": "LogReader.html#method__filterLogs", "type": "method"}, {"access": "", "host": "LogReader", "name": "fontSize", "url": "LogReader.html#property_fontSize", "type": "property"}, {"access": "", "host": "LogReader", "name": "footerEnabled", "url": "LogReader.html#property_footerEnabled", "type": "property"}, {"access": "", "host": "LogReader", "name": "getCategories", "url": "LogReader.html#method_getCategories", "type": "method"}, {"access": "", "host": "LogReader", "name": "getCheckbox", "url": "LogReader.html#method_getCheckbox", "type": "method"}, {"access": "", "host": "LogReader", "name": "getLastTime", "url": "LogReader.html#method_getLastTime", "type": "method"}, {"access": "", "host": "LogWriter", "name": "getSource", "url": "LogWriter.html#method_getSource", "type": "method"}, {"access": "", "host": "LogReader", "name": "getSources", "url": "LogReader.html#method_getSources", "type": "method"}, {"access": "", "host": "LogReader", "name": "height", "url": "LogReader.html#property_height", "type": "property"}, {"access": "", "host": "LogReader", "name": "hide", "url": "LogReader.html#method_hide", "type": "method"}, {"access": "", "host": "LogReader", "name": "hideCategory", "url": "LogReader.html#method_hideCategory", "type": "method"}, {"access": "", "host": "LogReader", "name": "hideSource", "url": "LogReader.html#method_hideSource", "type": "method"}, {"access": "private", "host": "LogReader", "name": "html2Text", "url": "LogReader.html#method_html2Text", "type": "method"}, {"access": "protected", "host": "LogReader", "name": "_init", "url": "LogReader.html#method__init", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initCategories", "url": "LogReader.html#method__initCategories", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initConsoleEl", "url": "LogReader.html#method__initConsoleEl", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initContainerEl", "url": "LogReader.html#method__initContainerEl", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initDragDrop", "url": "LogReader.html#method__initDragDrop", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initFooterEl", "url": "LogReader.html#method__initFooterEl", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initHeaderEl", "url": "LogReader.html#method__initHeaderEl", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_initSources", "url": "LogReader.html#method__initSources", "type": "method"}, {"access": "", "host": "LogReader", "name": "isCollapsed", "url": "LogReader.html#property_isCollapsed", "type": "property"}, {"access": "", "host": "LogReader", "name": "isPaused", "url": "LogReader.html#property_isPaused", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_lastTime", "url": "LogReader.html#property__lastTime", "type": "property"}, {"access": "", "host": "LogReader", "name": "left", "url": "LogReader.html#property_left", "type": "property"}, {"access": "", "host": "LogWriter", "name": "log", "url": "LogWriter.html#method_log", "type": "method"}, {"access": "", "host": "LogReader", "name": "logReaderEnabled", "url": "LogReader.html#property_logReaderEnabled", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_memberName", "url": "LogReader.html#property__memberName", "type": "property"}, {"access": "", "host": "LogMsg", "name": "msg", "url": "LogMsg.html#property_msg", "type": "property"}, {"access": "", "host": "LogReader", "name": "newestOnTop", "url": "LogReader.html#property_newestOnTop", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_onCategoryCreate", "url": "LogReader.html#method__onCategoryCreate", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onCheckCategory", "url": "LogReader.html#method__onCheckCategory", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onCheckSource", "url": "LogReader.html#method__onCheckSource", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onClickClearBtn", "url": "LogReader.html#method__onClickClearBtn", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onClickCollapseBtn", "url": "LogReader.html#method__onClickCollapseBtn", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onClickPauseBtn", "url": "LogReader.html#method__onClickPauseBtn", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onNewLog", "url": "LogReader.html#method__onNewLog", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onReset", "url": "LogReader.html#method__onReset", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_onSourceCreate", "url": "LogReader.html#method__onSourceCreate", "type": "method"}, {"access": "", "host": "LogReader", "name": "outputBuffer", "url": "LogReader.html#property_outputBuffer", "type": "property"}, {"access": "", "host": "LogReader", "name": "pause", "url": "LogReader.html#method_pause", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_printBuffer", "url": "LogReader.html#method__printBuffer", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_printToConsole", "url": "LogReader.html#method__printToConsole", "type": "method"}, {"access": "", "host": "LogReader", "name": "render", "url": "LogReader.html#method_render", "type": "method"}, {"access": "", "host": "LogReader", "name": "resume", "url": "LogReader.html#method_resume", "type": "method"}, {"access": "", "host": "LogReader", "name": "right", "url": "LogReader.html#property_right", "type": "property"}, {"access": "", "host": "LogWriter", "name": "setSource", "url": "LogWriter.html#method_setSource", "type": "method"}, {"access": "", "host": "LogReader", "name": "setTitle", "url": "LogReader.html#method_setTitle", "type": "method"}, {"access": "", "host": "LogReader", "name": "show", "url": "LogReader.html#method_show", "type": "method"}, {"access": "", "host": "LogReader", "name": "showCategory", "url": "LogReader.html#method_showCategory", "type": "method"}, {"access": "", "host": "LogReader", "name": "showSource", "url": "LogReader.html#method_showSource", "type": "method"}, {"access": "private", "host": "LogReader", "name": "_sName", "url": "LogReader.html#property__sName", "type": "property"}, {"access": "", "host": "LogMsg", "name": "source", "url": "LogMsg.html#property_source", "type": "property"}, {"access": "private", "host": "LogWriter", "name": "_source", "url": "LogWriter.html#property__source", "type": "property"}, {"access": "", "host": "LogMsg", "name": "sourceDetail", "url": "LogMsg.html#property_sourceDetail", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_sourceFilters", "url": "LogReader.html#property__sourceFilters", "type": "property"}, {"access": "", "host": "LogReader", "name": "thresholdMax", "url": "LogReader.html#property_thresholdMax", "type": "property"}, {"access": "", "host": "LogReader", "name": "thresholdMin", "url": "LogReader.html#property_thresholdMin", "type": "property"}, {"access": "", "host": "LogMsg", "name": "time", "url": "LogMsg.html#property_time", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_timeout", "url": "LogReader.html#property__timeout", "type": "property"}, {"access": "private", "host": "LogReader", "name": "_title", "url": "LogReader.html#property__title", "type": "property"}, {"access": "", "host": "LogReader", "name": "top", "url": "LogReader.html#property_top", "type": "property"}, {"access": "", "host": "LogWriter", "name": "toString", "url": "LogWriter.html#method_toString", "type": "method"}, {"access": "", "host": "LogReader", "name": "toString", "url": "LogReader.html#method_toString", "type": "method"}, {"access": "", "host": "LogReader", "name": "verboseOutput", "url": "LogReader.html#property_verboseOutput", "type": "property"}, {"access": "", "host": "LogReader", "name": "VERBOSE_TEMPLATE", "url": "LogReader.html#property_VERBOSE_TEMPLATE", "type": "property"}, {"access": "", "host": "LogReader", "name": "width", "url": "LogReader.html#property_width", "type": "property"}];
 </script>
 </body>
 </html>
