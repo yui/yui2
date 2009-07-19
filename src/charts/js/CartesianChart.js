@@ -202,6 +202,15 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 					{
 						clonedAxis.labelFunction = YAHOO.widget.Chart.createProxyFunction(value.labelFunction);
 					}
+					else if(value.labelFunction.func && typeof value.labelFunction.func == "function")
+					{
+						var args = [value.labelFunction.func];
+						if(value.labelFunction.scope && typeof value.labelFunction.scope == "object")
+						{
+							args.push(value.labelFunction.scope);
+						}
+						clonedAxis.labelFunction = YAHOO.widget.Chart.createProxyFunction.apply(this, args);
+					}
 					else
 					{
 						clonedAxis.labelFunction = value.labelFunction;

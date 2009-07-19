@@ -605,31 +605,66 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 
 								else if(prop == "labelFunction")
 								{
-									if(currentSeries.labelFunction !== null &&
-										typeof currentSeries.labelFunction == "function")
+									if(currentSeries.labelFunction !== null)
 									{
-										clonedSeries.labelFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.labelFunction);
-										this._seriesFunctions.push(clonedSeries.labelFunction);
+										if(typeof currentSeries.labelFunction == "function")
+										{
+											clonedSeries.labelFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.labelFunction);
+											this._seriesFunctions.push(clonedSeries.labelFunction);
+										}
+										else if(currentSeries.labelFunction.func && typeof currentSeries.labelFunction.func == "function")
+										{
+											var args = [currentSeries.labelFunction.func];
+											if(currentSeries.labelFunction.scope && typeof currentSeries.labelFunction.scope == "object")
+											{
+												args.push(currentSeries.labelFunction.scope);
+											}
+											clonedSeries.labelFunction = YAHOO.widget.Chart.createProxyFunction.apply(this, args);
+											this._seriesFunctions.push(clonedSeries.labelFunction);
+										}
 									}
 								}
 
 								else if(prop == "dataTipFunction")
 								{
-									if(currentSeries.dataTipFunction !== null &&
-										typeof currentSeries.dataTipFunction == "function")
+									if(currentSeries.dataTipFunction !== null)
 									{
-										clonedSeries.dataTipFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.dataTipFunction);
-										this._seriesFunctions.push(clonedSeries.dataTipFunction);
+										if(typeof currentSeries.dataTipFunction == "function")
+										{
+											clonedSeries.dataTipFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.dataTipFunction);
+											this._seriesFunctions.push(clonedSeries.dataTipFunction);
+										}
+										else if(currentSeries.dataTipFunction.func && typeof currentSeries.dataTipFunction.func == "function")
+										{
+											args = [currentSeries.dataTipFunction.func];
+											if(currentSeries.dataTipFunction.scope && typeof currentSeries.dataTipFunction.scope == "object")
+											{
+												args.push(currentSeries.dataTipFunction.scope);
+											}
+											clonedSeries.dataTipFunction = YAHOO.widget.Chart.createProxyFunction.apply(this, args);
+											this._seriesFunctions.push(clonedSeries.dataTipFunction);
+										}
 									}	
 								}
 								
 								else if(prop == "legendLabelFunction")
 								{
-									if(currentSeries.legendLabelFunction !== null &&
-										typeof currentSeries.legendLabelFunction == "function")
+									if(currentSeries.legendLabelFunction !== null)
 									{
-										clonedSeries.legendLabelFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.legendLabelFunction);
-										this._seriesFunctions.push(clonedSeries.legendLabelFunction); 
+										if(typeof currentSeries.legendLabelFunction == "function")
+										{
+											clonedSeries.legendLabelFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.legendLabelFunction);
+											this._seriesFunctions.push(clonedSeries.legendLabelFunction); 
+										}
+										else if(curentSeries.legendLabelFunction.func && typeof currentSeries.legendLabelFunction.func == "function")
+										{
+											args = [currentSeries.legendLabelFunction];
+											if(currentSeries.legendLabelFunction.scope && typeof currentSeries.legendLabelFunction.scope == "object")
+											{
+												args.push(currentSeries.legendLabelFunction.scope);
+											}
+											clonedSeries.legendLabelFunction = YAHOO.widget.Chart.createProxyFunction.apply(this, args);
+										}
 									}	
 								}								
 
@@ -793,10 +828,23 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 			YAHOO.widget.Chart.removeProxyFunction(this._dataTipFunction);
 		}
 		
-		if(value && typeof value == "function")
+		if(value)
 		{
-			value = YAHOO.widget.Chart.createProxyFunction(value);
-			this._dataTipFunction = value;
+			if(typeof value == "function")
+			{
+				value = YAHOO.widget.Chart.createProxyFunction(value);
+				this._dataTipFunction = value;
+			}
+			else if(value.func && typeof value.func == "function")
+			{
+				var args = [value.func];
+				if(value.scope && typeof value.scope == "object")
+				{
+					args.push(value.scope);
+				}
+				value = YAHOO.widget.Chart.createProxyFunction.apply(this, args);
+				this._dataTipFunction = value;
+			}
 		}
 		this._swf.setDataTipFunction(value);
 	},
@@ -814,10 +862,23 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 			YAHOO.widget.Chart.removeProxyFunction(this._legendLabelFunction);
 		}
 		
-		if(value && typeof value == "function")
+		if(value)
 		{
-			value = YAHOO.widget.Chart.createProxyFunction(value);
-			this._legendLabelFunction = value;
+			if(typeof value == "function")
+			{
+				value = YAHOO.widget.Chart.createProxyFunction(value);
+				this._legendLabelFunction = value;
+			}
+			else if(value.func && typeof value.func == "function")
+			{
+				var args = [value.func];
+				if(value.scope && typeof value.scope == "object")
+				{
+					args.push(value.scope);
+				}
+				value = YAHOO.widget.Chart.createProxyFunction.apply(this, args);
+				this._legendLabelFunction = value;
+			}
 		}
 		this._swf.setLegendLabelFunction(value);
 	},
@@ -982,12 +1043,13 @@ YAHOO.widget.Chart.proxyFunctionCount = 0;
  * @static
  * @private
  */
-YAHOO.widget.Chart.createProxyFunction = function(func)
+YAHOO.widget.Chart.createProxyFunction = function(func, scope)
 {
+	var scope = scope || null;
 	var index = YAHOO.widget.Chart.proxyFunctionCount;
 	YAHOO.widget.Chart["proxyFunction" + index] = function()
 	{
-		return func.apply(null, arguments);
+		return func.apply(scope, arguments);
 	};
 	YAHOO.widget.Chart.proxyFunctionCount++;
 	return "YAHOO.widget.Chart.proxyFunction" + index.toString();
