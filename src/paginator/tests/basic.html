@@ -157,8 +157,10 @@ YAHOO.util.Event.onDOMReady(function () {
         containers    :'ex',
         template      : YAHOO.widget.Paginator.TEMPLATE_ROWS_PER_PAGE,
         pageLinks     : 5,
-        rowsPerPageOptions : [3,10,17],
-        updateOnChange:true
+        rowsPerPageOptions : [3,10,17]
+    });
+    p.subscribe('changeRequest', function (state) {
+        this.setState(state);
     });
     p.subscribe('totalRecordsChange',function (e) {
         if (window.console) {

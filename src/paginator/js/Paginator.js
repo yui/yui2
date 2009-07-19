@@ -336,6 +336,7 @@ Paginator.prototype = {
          * @attribute updateOnChange
          * @type boolean
          * @default false
+         * @deprecated use changeRequest listener that calls setState
          */
         this.setAttributeConfig('updateOnChange', {
             value     : false,
@@ -1029,7 +1030,7 @@ Paginator.prototype = {
             this._pageChanged = false;
 
             for (var k in state) {
-                if (state.hasOwnProperty(k)) {
+                if (state.hasOwnProperty(k) && this._configs.hasOwnProperty(k)) {
                     this.set(k,state[k]);
                 }
             }
