@@ -7543,7 +7543,7 @@ getRecord : function(row) {
         // Validate TR element
         var elRow = this.getTrEl(row);
         if(elRow) {
-            oRecord = this._oRecordSet.getRecord(this.getRecordIndex(elRow.sectionRowIndex));
+            oRecord = this._oRecordSet.getRecord(elRow.id);
         }
     }
 
@@ -9222,7 +9222,7 @@ deleteRow : function(row) {
                         this._oChainRender.add({
                             method: function() {
                                 if((this instanceof DT) && this._sId) {
-                                    var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex);
+                                    var isLast = (nRecordIndex === this._oRecordSet.getLength());//(nTrIndex == this.getLastTrEl().sectionRowIndex);
                                     this._deleteTrEl(nTrIndex);
                     
                                     // Post-delete tasks
