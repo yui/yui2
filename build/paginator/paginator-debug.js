@@ -553,7 +553,7 @@ Paginator.prototype = {
      */
     render : function () {
         if (this.get('rendered')) {
-            return;
+            return this;
         }
 
         var totalRecords   = this.get('totalRecords'),
@@ -582,6 +582,8 @@ Paginator.prototype = {
             // For backward compatibility
             this.fireEvent('rendered', state);
         }
+
+        return this;
     },
 
     /**
