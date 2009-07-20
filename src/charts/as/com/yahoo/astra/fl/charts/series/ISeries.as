@@ -74,6 +74,17 @@ package com.yahoo.astra.fl.charts.series
 		 */
 		function set dataTipFunction(value:Function):void;		
 		
+		/**
+		 * If defined, the chart will call the input function to determine the text displayed in 
+		 * in the chart's legend.
+		 */
+		function get legendLabelFunction():Function;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set legendLabelFunction(value:Function):void;
+		
 	//--------------------------------------
 	//  Methods
 	//--------------------------------------

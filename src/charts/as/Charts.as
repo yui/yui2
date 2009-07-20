@@ -556,6 +556,20 @@ package
 		}
 		
 		/**
+		 * Sets the JavaScript function to call to format legend labels
+		 */
+		public function setLegendLabelFunction(value:String):void
+		{
+			var delegate:Object = {legendLabelFunction: JavaScriptUtil.createCallbackFunction(value).callback};
+			delegate.callback = function(value:String):String
+			{
+				return delegate.legendLabelFunction(value);
+			}
+			
+			this.chart.legendLabelFunction = delegate.callback;
+		}
+		
+		/**
 		 * Determines whether the viewport is constrained
 		 */
 		public function setConstrainViewport(value:Boolean):void
@@ -979,6 +993,7 @@ package
 				ExternalInterface.addCallback("setDataTipFunction", setDataTipFunction);
 				ExternalInterface.addCallback("getCategoryNames", getCategoryNames);
 				ExternalInterface.addCallback("setCategoryNames", setCategoryNames);
+				ExternalInterface.addCallback("setLegendLabelFunction", setLegendLabelFunction);
 				
 				//CartesianChart
 				ExternalInterface.addCallback("getHorizontalField", getHorizontalField);

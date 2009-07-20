@@ -328,6 +328,28 @@ package com.yahoo.astra.fl.charts.series
 			this._dataTipFunction = value;
 		}
 		
+		/**
+		 * @private 
+		 * Storage for legendLabelFunction
+		 */
+		private var _legendLabelFunction:Function = null;
+		
+		/** 
+		 * @copy com.yahoo.astra.fl.charts.series.ISeries#legendLabelFunction
+		 */
+		public function get legendLabelFunction():Function
+		{
+			return this._legendLabelFunction;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set legendLabelFunction(value:Function):void
+		{
+			this._legendLabelFunction = value;
+		}	
+		
 		
 	//--------------------------------------
 	//  Public Methods

@@ -68,6 +68,36 @@
 	background-position: bottom right;
 	float:right;
 }
+
+
+#pb3 .yui-pb-mask {
+	margin:0;
+}
+
+#pb3 .yui-pb-mask td {
+	background-image: url(BnW.gif);
+}
+
+#pb3 .yui-pb-mask td {
+	width:50%;
+	height:50%;
+	background-repeat:no-repeat;
+	border:0;
+	padding:0;
+}
+
+#pb3 .yui-pb-tl {
+	background-position: top left;
+}
+#pb3 .yui-pb-tr {
+	background-position: top right;
+}
+#pb3 .yui-pb-bl {
+	background-position: bottom left;
+}
+#pb3 .yui-pb-br {
+	background-position: bottom right;
+}
 </style>
 </head>
 <body class="yui-skin-sam">
@@ -83,6 +113,8 @@
 			<div id="pb1"></div>
 			<hr />
 			<div id="pb2"></div>
+			<hr />
+			<div id="pb3"></div>
 		</div>
 	</div>
 	
@@ -102,12 +134,35 @@
 		
 		var pb2 = new YAHOO.widget.ProgressBar({value:100});
 		pb2.render('pb2');
+		
+		var Prog = YAHOO.widget.ProgressBar;
+		Prog.MARKUP = [
+			'<div class="',
+			Prog.CLASS_BAR,
+			'"></div><div class="',
+			Prog.CLASS_CAPTION,
+			'"></div><table class="',
+			Prog.CLASS_MASK,
+			'"><tbody><tr><td class="',
+			Prog.CLASS_TL,
+			'"></td><td class="',
+			Prog.CLASS_TR,
+			'"></td></tr><tr><td class="',
+			Prog.CLASS_BL,
+			'"></td><td class="',
+			Prog.CLASS_BR,
+			'"></td></tr></tbody></table>'
+		].join('');
+
+		var pb3 = new YAHOO.widget.ProgressBar({value:100});
+		pb3.render('pb3');
 
 		Event.on('setValue','click',function() {
 			var newValue = parseInt(Dom.get('newValue').value,10);
 			pb.set('value',newValue);
 			pb1.set('value',newValue);
 			pb2.set('value',newValue);
+			pb3.set('value',newValue);
 		});
 	});
 </script>
