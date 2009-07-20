@@ -34,6 +34,10 @@
 <div id="p7-1"></div>
 <div id="p7"></div>
 
+<h2>rpp:10, tot:93, progressive enhance container and specific el</h2>
+<div id="p8-container"></div>
+<span id="p8-component" class="yui-pg-ui-NextPageLink"></span>
+
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../../build/event/event.js"></script>
@@ -116,6 +120,20 @@ p7.subscribe('render', function () {
 });
 
 p7.render();
+
+var p8 = new Paginator({
+    containers : document.createElement('div'),
+    template: '',
+    rowsPerPage: 10,
+    totalRecords: 93,
+    rowsPerPageOptions: [10,25,50]
+});
+p8.render();
+p8.on('changeRequest',update);
+p8._renderTemplate(document.getElementById('p8-container'),
+    "{PageLinks} {RowsPerPageDropdown} {LastPageLink}",
+    "p8_manual");
+p8._renderUIComponent(document.getElementById('p8-component'), 'p8_component');
 
 });
 </script>
