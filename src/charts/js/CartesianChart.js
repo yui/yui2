@@ -196,25 +196,9 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		{
 			if(prop == "labelFunction")
 			{
-				if(value.labelFunction !== null)
+				if(value.labelFunction && value.labelFunction !== null)
 				{
-					if(typeof value.labelFunction == "function")
-					{
-						clonedAxis.labelFunction = YAHOO.widget.Chart.createProxyFunction(value.labelFunction);
-					}
-					else if(value.labelFunction.func && typeof value.labelFunction.func == "function")
-					{
-						var args = [value.labelFunction.func];
-						if(value.labelFunction.scope && typeof value.labelFunction.scope == "object")
-						{
-							args.push(value.labelFunction.scope);
-						}
-						clonedAxis.labelFunction = YAHOO.widget.Chart.createProxyFunction.apply(this, args);
-					}
-					else
-					{
-						clonedAxis.labelFunction = value.labelFunction;
-					}
+					clonedAxis.labelFunction = YAHOO.widget.Chart.getFunctionReference(value.labelFunction);
 				}
 			}
 			else
