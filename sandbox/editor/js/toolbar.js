@@ -991,11 +991,13 @@ var Dom = YAHOO.util.Dom,
                             YAHOO.util.Event.stopEvent(ev);
                         });
                         tmp.on('change', function(ev) {
-                            if (!oButton.menucmd) {
-                                oButton.menucmd = oButton.value;
+                            if (!ev.target) {
+                                if (!oButton.menucmd) {
+                                    oButton.menucmd = oButton.value;
+                                }
+                                oButton.value = ev.value;
+                                this._buttonClick(ev, oButton);
                             }
-                            oButton.value = ev.value;
-                            this._buttonClick(ev, oButton);
                         }, this, true);
 
                         var self = this;

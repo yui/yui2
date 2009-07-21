@@ -1553,7 +1553,7 @@ package com.yahoo.astra.fl.charts
 			var dataInvalid:Boolean = this.isInvalid(InvalidationType.DATA);
 			var stylesInvalid:Boolean = this.isInvalid(InvalidationType.STYLES);
 			var sizeInvalid:Boolean = this.isInvalid(InvalidationType.SIZE);
-			var axesInvalid:Boolean = this.isInvalid("axes")
+			var axesInvalid:Boolean = this.isInvalid("axes");
 			
 			super.draw();
 			
@@ -1562,7 +1562,7 @@ package com.yahoo.astra.fl.charts
 				this.updateRenderers();
 			}
 
-			if(sizeInvalid || dataInvalid || stylesInvalid || axesInvalid)
+			if((sizeInvalid || dataInvalid || stylesInvalid || axesInvalid) && this.width > 0 && this.height > 0)
 			{
 				this.drawAxes();
 					
