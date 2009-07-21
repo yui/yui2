@@ -66,7 +66,7 @@ YAHOO.widget.DS_XHR.TYPE_FLAT = YAHOO.util.DataSourceBase.TYPE_TEXT;
 YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
     if(elInput && elContainer && oDataSource) {
         // Validate DataSource
-        if(oDataSource instanceof YAHOO.util.DataSourceBase) {
+        if(oDataSource && YAHOO.lang.isFunction(oDataSource.sendRequest)) {
             this.dataSource = oDataSource;
         }
         else {
@@ -326,8 +326,9 @@ YAHOO.widget.AutoComplete.prototype.queryDelay = 0.2;
 YAHOO.widget.AutoComplete.prototype.typeAheadDelay = 0.5;
 
 /**
- * When IME usage is detected, AutoComplete will switch to querying the input
- * value at the given interval rather than per key event.
+ * When IME usage is detected or interval detection is explicitly enabled,
+ * AutoComplete will detect the input value at the given interval and send a
+ * query if the value has changed.
  *
  * @property queryInterval
  * @type Number
@@ -1665,6 +1666,19 @@ YAHOO.widget.AutoComplete.prototype._enableIntervalDetection = function() {
 };
 
 /**
+ * Enables interval detection for a less performant but brute force mechanism to
+ * detect input values at an interval set by queryInterval and send queries if
+ * input value has changed. Needed to support right-click+paste or shift+insert
+ * edge cases. Please note that intervals are cleared at the end of each interaction,
+ * so enableIntervalDetection must be called for each new interaction. The
+ * recommended approach is to call it in response to textboxFocusEvent.
+ *
+ * @method enableIntervalDetection
+ */
+YAHOO.widget.AutoComplete.prototype.enableIntervalDetection =
+    YAHOO.widget.AutoComplete.prototype._enableIntervalDetection;
+
+/**
  * Enables query triggers based on text input detection by intervals (rather
  * than by key events).
  *
@@ -2792,9 +2806,6 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     }
 
     // Clear previous timeout
-    /*if(oSelf._nTypeAheadDelayID != -1) {
-        clearTimeout(oSelf._nTypeAheadDelayID);
-    }*/
     if(oSelf._nDelayID != -1) {
         clearTimeout(oSelf._nDelayID);
     }
@@ -2803,12 +2814,6 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     oSelf._nDelayID = setTimeout(function(){
             oSelf._sendQuery(sText);
         },(oSelf.queryDelay * 1000));
-
-     //= nDelayID;
-    //else {
-        // No delay so send request immediately
-        //oSelf._sendQuery(sText);
-   //}
 };
 
 /**
