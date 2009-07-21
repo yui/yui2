@@ -4491,7 +4491,7 @@ _initColumnSet : function(aColumnDefs) {
  */
 _initDataSource : function(oDataSource) {
     this._oDataSource = null;
-    if(oDataSource && (oDataSource instanceof DS)) {
+    if(oDataSource && (lang.isFunction(oDataSource.sendRequest))) {
         this._oDataSource = oDataSource;
     }
     // Backward compatibility
@@ -7651,7 +7651,7 @@ getRecord : function(row) {
         // Validate TR element
         var elRow = this.getTrEl(row);
         if(elRow) {
-            oRecord = this._oRecordSet.getRecord(this.getRecordIndex(elRow.sectionRowIndex));
+            oRecord = this._oRecordSet.getRecord(elRow.id);
         }
     }
 
@@ -9380,7 +9380,7 @@ deleteRow : function(row) {
                         this._oChainRender.add({
                             method: function() {
                                 if((this instanceof DT) && this._sId) {
-                                    var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex);
+                                    var isLast = (nRecordIndex === this._oRecordSet.getLength());//(nTrIndex == this.getLastTrEl().sectionRowIndex);
                                     this._deleteTrEl(nTrIndex);
                     
                                     // Post-delete tasks
@@ -9596,16 +9596,16 @@ deleteRows : function(row, count) {
  * Outputs markup into the given TD based on given Record.
  *
  * @method formatCell
- * @param elCell {HTMLElement} The liner DIV element within the TD.
+ * @param elLiner {HTMLElement} The liner DIV element within the TD.
  * @param oRecord {YAHOO.widget.Record} (Optional) Record instance.
  * @param oColumn {YAHOO.widget.Column} (Optional) Column instance.
  */
-formatCell : function(elCell, oRecord, oColumn) {
+formatCell : function(elLiner, oRecord, oColumn) {
     if(!oRecord) {
-        oRecord = this.getRecord(elCell);
+        oRecord = this.getRecord(elLiner);
     }
     if(!oColumn) {
-        oColumn = this.getColumn(elCell.parentNode.cellIndex);
+        oColumn = this.getColumn(elLiner.parentNode.cellIndex);
     }
 
     if(oRecord && oColumn) {
@@ -9619,16 +9619,16 @@ formatCell : function(elCell, oRecord, oColumn) {
 
         // Apply special formatter
         if(fnFormatter) {
-            fnFormatter.call(this, elCell, oRecord, oColumn, oData);
+            fnFormatter.call(this, elLiner, oRecord, oColumn, oData);
         }
         else {
-            elCell.innerHTML = oData;
+            elLiner.innerHTML = oData;
         }
 
-        this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:oColumn.key, el:elCell});
+        this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:oColumn.key, el:elLiner});
     }
     else {
-        YAHOO.log("Could not format cell " + elCell, "error", this.toString());
+        YAHOO.log("Could not format cell " + elLiner, "error", this.toString());
     }
 },
 

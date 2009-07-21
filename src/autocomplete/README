@@ -11,6 +11,7 @@ elements, such as labels and submit buttons. By default, autoSnapContainer is
 true, but implementers can disable this feature if they do not use inline
 elements and they want to eliminate the overhead of positioning the container
 element before each time it expands.
+* Added enableIntervalDetection().
 
 
 

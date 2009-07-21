@@ -678,12 +678,9 @@
 		if (1) {
 			YAHOO.tool.TestRunner.run();
 		} else {
-			pb = new PB({direction:'ltr',anim:true});
-			pb.get('anim').duration = 2;
+            pb = new PB({height:'30px', width: 300});
 			pb.render('test');
-			t = getEls();
-			console.log(getStyle(t.b,'width'));
-			//debugger;
+
 		}
     });
 })();

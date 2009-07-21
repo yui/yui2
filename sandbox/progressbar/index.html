@@ -592,11 +592,11 @@ pre, code {
 				points[i] = [i,Math.random() * 100];
 			}
 			for (i = 0;i < NUM_BARS;i++) {
-				pbvu[i].set('value',YAHOO.util.Bezier.getPosition(points,i/(NUM_BARS-1))[1]);
+				pbvu[i].set('value',Math.floor(YAHOO.util.Bezier.getPosition(points,i/(NUM_BARS-1))[1]));
 			}
 		};
-		window.setInterval(redrawVUs,350);	
-		//pbvu[NUM_BARS -1].on('complete',redrawVUs);
+		//window.setInterval(redrawVUs,350);	
+		pbvu[NUM_BARS -1].on('complete',redrawVUs);
 		redrawVUs();
 			
 
