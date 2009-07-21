@@ -6868,8 +6868,12 @@ getTdEl : function(cell) {
         else {
             elCell = el;
         }
-
-        return elCell;
+        
+        // Make sure the TD is in this TBODY
+        if(elCell && (elCell.parentNode.parentNode == this._elTbody)) {
+            // Now we can return the TD element
+            return elCell;
+        }
     }
     else if(cell) {
         var oRecord, nColKeyIndex;
