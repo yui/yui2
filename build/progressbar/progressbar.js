@@ -263,7 +263,6 @@
 			 * @type String (any of "ltr", "rtl", "ttb" or "btt")
 			 */			
 			this.setAttributeConfig('direction', {
-				writeOnce: true,
 				value:DIRECTION_LTR,
 				validator:function(value) {
 					if (this._rendered) { return false; }
@@ -584,6 +583,13 @@
 		 */		
 		_barSizeFunction: null,
 		
+		/** 
+		 * Method called when the height attribute is changed
+		 * @method _heightChange
+		 * @param {int or string} value New height, in pixels if int or string including units
+		 * @return void
+		 * @private
+		 */
 		_heightChange: function(value) {
 			if (Lang.isNumber(value)) {
 				value += 'px';
@@ -593,6 +599,14 @@
 			this._fixEdges();
 			this.redraw();
 		},
+
+		/** 
+		 * Method called when the height attribute is changed
+		 * @method _widthChange
+		 * @param {int or string} value New width, in pixels if int or string including units
+		 * @return void
+		 * @private
+		 */
 		_widthChange: function(value) {
 			if (Lang.isNumber(value)) {
 				value += 'px';
@@ -602,8 +616,17 @@
 			this._fixEdges();
 			this.redraw();
 		},
+		
+		/** 
+		 * Due to rounding differences, some browsers fail to cover the whole area 
+		 * with the mask quadrants when the width or height is odd.  This method
+		 * stretches the lower and/or right quadrants to make the difference.
+		 * @method _fixEdges
+		 * @return void
+		 * @private
+		 */
 		_fixEdges:function() {
-			if (!this.rendered) { return; }
+			if (!this._rendered || YAHOO.env.ua.ie || YAHOO.env.ua.gecko ) { return; }
 			var maskEl = this.get('maskEl'),
 				tlEl = Dom.getElementsByClassName(Prog.CLASS_TL,undefined,maskEl)[0],
 				trEl = Dom.getElementsByClassName(Prog.CLASS_TR,undefined,maskEl)[0],
