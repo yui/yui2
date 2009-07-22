@@ -191,7 +191,10 @@
 <span class="c">     * @return {Chain} the Chain instance</span>
 <span class="c">     */</span>
     <span class="nx">pause</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="nx">clearTimeout</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
+        <span class="c">// Conditional added for Caja compatibility</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">clearTimeout</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
+        <span class="o">}</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
         <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
     <span class="o">},</span>

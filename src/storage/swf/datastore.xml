@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<url-policy>
+	<!-- Be sure to include any url / directory here that you'll be running this in-->
+    <allow-access-from url="http://localhost" />
+    <allow-access-from url="http://test.localhost" />
+    <allow-access-from url="http://core.localhost/tests/" />
+
+</url-policy> 
