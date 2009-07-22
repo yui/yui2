@@ -7150,8 +7150,8 @@ formatCell : function(elLiner, oRecord, oColumn) {
 updateCell : function(oRecord, oColumn, oData) {    
     // Validate Column and Record
     oColumn = (oColumn instanceof YAHOO.widget.Column) ? oColumn : this.getColumn(oColumn);
-    if(oColumn && oColumn.getKey() && (oRecord instanceof YAHOO.widget.Record)) {
-        var sKey = oColumn.getKey(),
+    if(oColumn && oColumn.getField() && (oRecord instanceof YAHOO.widget.Record)) {
+        var sKey = oColumn.getField(),
         
         // Copy data from the Record for the event that gets fired later
         //var oldData = YAHOO.widget.DataTable._cloneObject(oRecord.getData());
