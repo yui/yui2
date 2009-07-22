@@ -27,6 +27,14 @@
 YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 {
 	this._attributes = attributes;
+	if(attributes.version && attributes.version != null && attributes.version != undefined && attributes.version != "undefined")
+	{
+		this._attributes.version = /\w*.\w*/.exec(((attributes.version).toString()).replace(/.0./g, "."));
+	}
+	else
+	{
+		this._attributes.version = "9.45";
+	}
 	this._swfEmbed = new YAHOO.widget.SWF(containerId, YAHOO.widget.Chart.SWFURL, attributes);
 	
 	this._swf = this._swfEmbed.swf;
