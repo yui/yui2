@@ -2291,7 +2291,8 @@ YAHOO.widget.Node.prototype = {
             return false;
         } else {
             return ( this.children.length > 0 || 
-(checkForLazyLoad && this.isDynamic() && !this.dynamicLoadComplete) );
+				(checkForLazyLoad && this.isDynamic() && !this.dynamicLoadComplete) 
+			);
         }
     },
 
@@ -2434,7 +2435,7 @@ YAHOO.widget.Node.prototype = {
     loadComplete: function() {
         this.logger.log(this.index + " loadComplete, children: " + this.children.length);
         this.getChildrenEl().innerHTML = this.completeRender();
-		if (this.propagageHighlightDown) {
+		if (this.propagateHighlightDown) {
 			if (this.highlightState === 1 && !this.tree.singleNodeHighlight) {
 				for (var i = 0; i < this.children.length; i++) {
 				this.children[i].highlight(true);

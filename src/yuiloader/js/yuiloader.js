@@ -340,11 +340,36 @@
             'skinnable': true
         },
 
+        'storage': {
+            'type': 'js',
+            'path': 'storage/storage-min.js',
+            'requires': ['yahoo', 'event', 'cookie'],
+            'optional': ['swfstore']
+        },
+
          'stylesheet': {
             'type': 'js',
             'path': 'stylesheet/stylesheet-min.js',
             'requires': ['yahoo']
          },
+
+        'swf': {
+            'type': 'js',
+            'path': 'swf/swf-min.js',
+            'requires': ['yahoo', 'dom', 'event', 'element']
+        },
+
+        'swfdetect': {
+            'type': 'js',
+            'path': 'swfdetect/swfdetect-min.js',
+            'requires': ['yahoo']
+        },
+
+        'swfstore': {
+            'type': 'js',
+            'path': 'swfstore/swfstore-min.js',
+            'requires': ['yahoo', 'dom', 'event', 'element', 'cookie']
+        },
 
         'tabview': {
             'type': 'js',
@@ -1989,3 +2014,4 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
     };
 
 })();
+

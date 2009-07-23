@@ -349,6 +349,7 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		override protected function parseDataProvider():void
 		{
+			if(!this._categoryNamesSetByUser) this.autoDetectCategories(this.dataProvider);
 			var labelData:Object = getLabelData();			
 			if(ICartesianAxisRenderer(this.renderer).orientation == AxisOrientation.HORIZONTAL)
 			{

@@ -1,6 +1,24 @@
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
+(function () {
+var Logger = YAHOO.widget.Logger,
+    u      = YAHOO.util,
+    Dom    = u.Dom,
+    Event  = u.Event,
+    d      = document;
+
+function make(el,props) {
+    el = d.createElement(el);
+    if (props) {
+        for (var p in props) {
+            if (props.hasOwnProperty(p)) {
+                el[p] = props[p];
+            }
+        }
+    }
+    return el;
+}
 
 /**
  * The LogReader class provides UI to read messages logged to YAHOO.widget.Logger.
@@ -11,57 +29,23 @@
  * @param elContainer {String} (optional) String ID of an existing DIV.
  * @param oConfigs {Object} (optional) Object literal of configuration params.
  */
-YAHOO.widget.LogReader = function(elContainer, oConfigs) {
-    this._sName = YAHOO.widget.LogReader._index;
-    YAHOO.widget.LogReader._index++;
+function LogReader(elContainer, oConfigs) {
+    this._sName = LogReader._index;
+    LogReader._index++;
     
-    // Internal vars
-    this._buffer = []; // output buffer
-    this._filterCheckboxes = {}; // pointers to checkboxes
-    this._lastTime = YAHOO.widget.Logger.getStartTime(); // timestamp of last log message to console
+    this._init.apply(this,arguments);
 
-    // Parse config vars here
-    if (oConfigs && (oConfigs.constructor == Object)) {
-        for(var param in oConfigs) {
-            if (oConfigs.hasOwnProperty(param)) {
-                this[param] = oConfigs[param];
-            }
-        }
+    if (this.autoRender !== false) {
+        this.render();
     }
-
-    this._initContainerEl(elContainer);
-    if(!this._elContainer) {
-        YAHOO.log("Could not instantiate LogReader due to an invalid container element " +
-                elContainer, "error", this.toString());
-        return;
-    }
-    
-    this._initHeaderEl();
-    this._initConsoleEl();
-    this._initFooterEl();
-
-    this._initDragDrop();
-
-    this._initCategories();
-    this._initSources();
-
-    // Subscribe to Logger custom events
-    YAHOO.widget.Logger.newLogEvent.subscribe(this._onNewLog, this);
-    YAHOO.widget.Logger.logResetEvent.subscribe(this._onReset, this);
-
-    YAHOO.widget.Logger.categoryCreateEvent.subscribe(this._onCategoryCreate, this);
-    YAHOO.widget.Logger.sourceCreateEvent.subscribe(this._onSourceCreate, this);
-
-    this._filterLogs();
-    YAHOO.log("LogReader initialized", null, this.toString());
-};
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Static member variables
 //
 /////////////////////////////////////////////////////////////////////////////
-YAHOO.lang.augmentObject(YAHOO.widget.LogReader, {
+YAHOO.lang.augmentObject(LogReader, {
     /**
      * Internal class member to index multiple LogReader instances.
      *
@@ -81,9 +65,7 @@ YAHOO.lang.augmentObject(YAHOO.widget.LogReader, {
      * @default PRE.yui-log-entry element
      */
     ENTRY_TEMPLATE : (function () {
-        var t = document.createElement('pre');
-        YAHOO.util.Dom.addClass(t,'yui-log-entry');
-        return t;
+        return make('pre',{ className: 'yui-log-entry' });
     })(),
 
     /**
@@ -109,7 +91,7 @@ YAHOO.lang.augmentObject(YAHOO.widget.LogReader, {
 //
 /////////////////////////////////////////////////////////////////////////////
 
-YAHOO.widget.LogReader.prototype = {
+LogReader.prototype = {
     /**
      * Whether or not LogReader is enabled to output log messages.
      *
@@ -321,6 +303,54 @@ YAHOO.widget.LogReader.prototype = {
         if (this._btnPause) {
             this._btnPause.value = "Pause";
         }
+    },
+
+    /**
+     * Adds the UI to the DOM, attaches event listeners, and bootstraps initial
+     * UI state.
+     *
+     * @method render
+     */
+    render : function () {
+        if (this.rendered) {
+            return;
+        }
+
+        this._initContainerEl();
+        
+        this._initHeaderEl();
+        this._initConsoleEl();
+        this._initFooterEl();
+
+        this._initCategories();
+        this._initSources();
+
+        this._initDragDrop();
+
+        // Subscribe to Logger custom events
+        Logger.newLogEvent.subscribe(this._onNewLog, this);
+        Logger.logResetEvent.subscribe(this._onReset, this);
+
+        Logger.categoryCreateEvent.subscribe(this._onCategoryCreate, this);
+        Logger.sourceCreateEvent.subscribe(this._onSourceCreate, this);
+
+        this.rendered = true;
+
+        this._filterLogs();
+    },
+
+    /**
+     * Removes the UI from the DOM entirely and detaches all event listeners.
+     * Implementers should note that Logger will still accumulate messages.
+     *
+     * @method destroy
+     */
+    destroy : function () {
+        Event.purgeElement(this._elContainer,true);
+        this._elContainer.innerHTML = '';
+        this._elContainer.parentNode.removeChild(this._elContainer);
+
+        this.rendered = false;
     },
 
     /**
@@ -544,9 +574,8 @@ YAHOO.widget.LogReader.prototype = {
     },
 
     formatMsg : function (entry) {
-        var Static      = YAHOO.widget.LogReader,
-            entryFormat = this.entryFormat || (this.verboseOutput ?
-                          Static.VERBOSE_TEMPLATE : Static.BASIC_TEMPLATE),
+        var entryFormat = this.entryFormat || (this.verboseOutput ?
+                          LogReader.VERBOSE_TEMPLATE : LogReader.BASIC_TEMPLATE),
             info        = {
                 category : entry.category,
 
@@ -573,17 +602,19 @@ YAHOO.widget.LogReader.prototype = {
             // in the stack
             info.elapsedTime = entry.time.getTime() - this.getLastTime();
 
-            info.totalTime = entry.time.getTime() -
-                               YAHOO.widget.Logger.getStartTime();
+            info.totalTime = entry.time.getTime() - Logger.getStartTime();
         }
 
-        var msg = Static.ENTRY_TEMPLATE.cloneNode(true);
+        var msg = LogReader.ENTRY_TEMPLATE.cloneNode(true);
         if (this.verboseOutput) {
             msg.className += ' yui-log-verbose';
         }
 
         // Bug 2061169: Workaround for YAHOO.lang.substitute()
-        msg.innerHTML = entryFormat.replace(/\{(\w+)\}/g, function (x, placeholder) { return (placeholder in info) ? info[placeholder] : ''; });
+        msg.innerHTML = entryFormat.replace(/\{(\w+)\}/g,
+            function (x, placeholder) {
+                return (placeholder in info) ? info[placeholder] : '';
+            });
 
         return msg;
     },
@@ -598,7 +629,9 @@ YAHOO.widget.LogReader.prototype = {
     html2Text : function(sHtml) {
         if(sHtml) {
             sHtml += "";
-            return sHtml.replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
+            return sHtml.replace(/&/g, "&#38;").
+                         replace(/</g, "&#60;").
+                         replace(/>/g, "&#62;");
         }
         return "";
     },
@@ -809,56 +842,75 @@ YAHOO.widget.LogReader.prototype = {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
+     * Initializes the instance's message buffer, start time, etc
+     *
+     * @method _init
+     * @param container {String|HTMLElement} (optional) the render target
+     * @param config {Object} (optional) instance configuration
+     * @protected
+     */
+    _init : function (container, config) {
+        // Internal vars
+        this._buffer = []; // output buffer
+        this._filterCheckboxes = {}; // pointers to checkboxes
+        this._lastTime = Logger.getStartTime(); // timestamp of last log message to console
+
+        // Parse config vars here
+        if (config && (config.constructor == Object)) {
+            for(var param in config) {
+                if (config.hasOwnProperty(param)) {
+                    this[param] = config[param];
+                }
+            }
+        }
+
+        this._elContainer = Dom.get(container);
+
+        YAHOO.log("LogReader initialized", null, this.toString());
+    },
+
+    /**
      * Initializes the primary container element.
      *
      * @method _initContainerEl
-     * @param elContainer {HTMLElement} Container element by reference or string ID.
      * @private
      */
-    _initContainerEl : function(elContainer) {
-        // Validate container
-        elContainer = YAHOO.util.Dom.get(elContainer);
-        // Attach to existing container...
-        if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {
-            this._elContainer = elContainer;
-            YAHOO.util.Dom.addClass(this._elContainer,"yui-log");
+    _initContainerEl : function() {
+
+        // Default the container if unset or not a div
+        if(!this._elContainer || !/div$/i.test(this._elContainer.tagName)) {
+            this._elContainer = d.body.insertBefore(make("div"),d.body.firstChild);
         }
-        // ...or create container from scratch
-        else {
-            this._elContainer = document.body.appendChild(document.createElement("div"));
-            //this._elContainer.id = "yui-log" + this._sName;
-            YAHOO.util.Dom.addClass(this._elContainer,"yui-log");
-            YAHOO.util.Dom.addClass(this._elContainer,"yui-log-container");
 
-            //YAHOO.widget.LogReader._elDefaultContainer = this._elContainer;
+        Dom.addClass(this._elContainer,"yui-log");
+        Dom.addClass(this._elContainer,"yui-log-container");
 
-            // If implementer has provided container values, trust and set those
-            var containerStyle = this._elContainer.style;
-            if(this.width) {
-                containerStyle.width = this.width;
-            }
-            if(this.right) {
-                containerStyle.right = this.right;
-            }
-            if(this.top) {
-                containerStyle.top = this.top;
-            }
-             if(this.left) {
-                containerStyle.left = this.left;
-                containerStyle.right = "auto";
-            }
-            if(this.bottom) {
-                containerStyle.bottom = this.bottom;
-                containerStyle.top = "auto";
-            }
-           if(this.fontSize) {
-                containerStyle.fontSize = this.fontSize;
-            }
-            // For Opera
-            if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
-                document.body.style += '';
+        // If implementer has provided container values, trust and set those
+        var style = this._elContainer.style,
+            styleProps = ['width','right','top','fontSize'],
+            prop,i;
+
+        for (i = styleProps.length - 1; i >= 0; --i) {
+            prop = styleProps[i];
+            if (this[prop]){ 
+                style[prop] = this[prop];
             }
         }
+
+        if(this.left) {
+            style.left  = this.left;
+            style.right = "auto";
+        }
+        if(this.bottom) {
+            style.bottom = this.bottom;
+            style.top    = "auto";
+        }
+
+        // Opera needs a little prodding to reflow sometimes
+        if (YAHOO.env.ua.opera) {
+            d.body.style += '';
+        }
+
     },
 
     /**
@@ -868,37 +920,38 @@ YAHOO.widget.LogReader.prototype = {
      * @private
      */
     _initHeaderEl : function() {
-        var oSelf = this;
-
-        // Destroy header
+        // Destroy header if present
         if(this._elHd) {
             // Unhook DOM events
-            YAHOO.util.Event.purgeElement(this._elHd, true);
+            Event.purgeElement(this._elHd, true);
 
             // Remove DOM elements
             this._elHd.innerHTML = "";
         }
         
         // Create header
-        this._elHd = this._elContainer.appendChild(document.createElement("div"));
-        this._elHd.id = "yui-log-hd" + this._sName;
-        this._elHd.className = "yui-log-hd";
+        // TODO: refactor this into an innerHTML
+        this._elHd = make("div",{
+            id: 'yui-log-hd' + this._sName,
+            className: "yui-log-hd"
+        });
 
-        this._elCollapse = this._elHd.appendChild(document.createElement("div"));
-        this._elCollapse.className = "yui-log-btns";
+        this._elCollapse = make("div",{ className: 'yui-log-btns' });
 
-        this._btnCollapse = document.createElement("input");
-        this._btnCollapse.type = "button";
-        //this._btnCollapse.style.fontSize =
-        //    YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
-        this._btnCollapse.className = "yui-log-button";
-        this._btnCollapse.value = "Collapse";
-        this._btnCollapse = this._elCollapse.appendChild(this._btnCollapse);
-        YAHOO.util.Event.addListener(
-            oSelf._btnCollapse,'click',oSelf._onClickCollapseBtn,oSelf);
+        this._btnCollapse = make("input",{
+            type: 'button',
+            className: 'yui-log-button',
+            value: 'Collapse'
+        });
+        Event.on(this._btnCollapse,'click',this._onClickCollapseBtn,this);
 
-        this._title = this._elHd.appendChild(document.createElement("h4"));
-        this._title.innerHTML = "Logger Console";
+
+        this._title = make("h4",{ innerHTML : "Logger Console" });
+
+        this._elCollapse.appendChild(this._btnCollapse);
+        this._elHd.appendChild(this._elCollapse);
+        this._elHd.appendChild(this._title);
+        this._elContainer.appendChild(this._elHd);
     },
 
     /**
@@ -911,20 +964,21 @@ YAHOO.widget.LogReader.prototype = {
         // Destroy console
         if(this._elConsole) {
             // Unhook DOM events
-            YAHOO.util.Event.purgeElement(this._elConsole, true);
+            Event.purgeElement(this._elConsole, true);
 
             // Remove DOM elements
             this._elConsole.innerHTML = "";
         }
 
         // Ceate console
-        this._elConsole = this._elContainer.appendChild(document.createElement("div"));
-        this._elConsole.className = "yui-log-bd";
+        this._elConsole = make("div", { className: "yui-log-bd" });
 
         // If implementer has provided console, trust and set those
         if(this.height) {
             this._elConsole.style.height = this.height;
         }
+
+        this._elContainer.appendChild(this._elConsole);
     },
 
     /**
@@ -934,49 +988,45 @@ YAHOO.widget.LogReader.prototype = {
      * @private
      */
     _initFooterEl : function() {
-        var oSelf = this;
-
         // Don't create footer elements if footer is disabled
         if(this.footerEnabled) {
             // Destroy console
             if(this._elFt) {
                 // Unhook DOM events
-                YAHOO.util.Event.purgeElement(this._elFt, true);
+                Event.purgeElement(this._elFt, true);
 
                 // Remove DOM elements
                 this._elFt.innerHTML = "";
             }
 
-            this._elFt = this._elContainer.appendChild(document.createElement("div"));
-            this._elFt.className = "yui-log-ft";
+            // TODO: use innerHTML
+            this._elFt = make("div",{ className: "yui-log-ft" });
+            this._elBtns = make("div", { className: "yui-log-btns" });
+            this._btnPause = make("input", {
+                type: "button",
+                className: "yui-log-button",
+                value: "Pause"
+            });
 
-            this._elBtns = this._elFt.appendChild(document.createElement("div"));
-            this._elBtns.className = "yui-log-btns";
+            Event.on(this._btnPause,'click',this._onClickPauseBtn,this);
 
-            this._btnPause = document.createElement("input");
-            this._btnPause.type = "button";
-            //this._btnPause.style.fontSize =
-            //    YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
-            this._btnPause.className = "yui-log-button";
-            this._btnPause.value = "Pause";
-            this._btnPause = this._elBtns.appendChild(this._btnPause);
-            YAHOO.util.Event.addListener(
-                oSelf._btnPause,'click',oSelf._onClickPauseBtn,oSelf);
+            this._btnClear = make("input", {
+                type: "button",
+                className: "yui-log-button",
+                value: "Clear"
+            });
 
-            this._btnClear = document.createElement("input");
-            this._btnClear.type = "button";
-            //this._btnClear.style.fontSize =
-            //    YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
-            this._btnClear.className = "yui-log-button";
-            this._btnClear.value = "Clear";
-            this._btnClear = this._elBtns.appendChild(this._btnClear);
-            YAHOO.util.Event.addListener(
-                oSelf._btnClear,'click',oSelf._onClickClearBtn,oSelf);
+            Event.on(this._btnClear,'click',this._onClickClearBtn,this);
 
-            this._elCategoryFilters = this._elFt.appendChild(document.createElement("div"));
-            this._elCategoryFilters.className = "yui-log-categoryfilters";
-            this._elSourceFilters = this._elFt.appendChild(document.createElement("div"));
-            this._elSourceFilters.className = "yui-log-sourcefilters";
+            this._elCategoryFilters = make("div", { className: "yui-log-categoryfilters" });
+            this._elSourceFilters = make("div", { className: "yui-log-sourcefilters" });
+
+            this._elBtns.appendChild(this._btnPause);
+            this._elBtns.appendChild(this._btnClear);
+            this._elFt.appendChild(this._elBtns);
+            this._elFt.appendChild(this._elCategoryFilters);
+            this._elFt.appendChild(this._elSourceFilters);
+            this._elContainer.appendChild(this._elFt);
         }
     },
 
@@ -990,8 +1040,8 @@ YAHOO.widget.LogReader.prototype = {
         // If Drag and Drop utility is available...
         // ...and draggable is true...
         // ...then make the header draggable
-        if(YAHOO.util.DD && this.draggable && this._elHd) {
-            var ylog_dd = new YAHOO.util.DD(this._elContainer);
+        if(u.DD && this.draggable && this._elHd) {
+            var ylog_dd = new u.DD(this._elContainer);
             ylog_dd.setHandleElId(this._elHd.id);
             //TODO: use class name
             this._elHd.style.cursor = "move";
@@ -1007,7 +1057,7 @@ YAHOO.widget.LogReader.prototype = {
     _initCategories : function() {
         // Initialize category filters
         this._categoryFilters = [];
-        var aInitialCategories = YAHOO.widget.Logger.categories;
+        var aInitialCategories = Logger.categories;
 
         for(var j=0; j < aInitialCategories.length; j++) {
             var sCategory = aInitialCategories[j];
@@ -1031,7 +1081,7 @@ YAHOO.widget.LogReader.prototype = {
     _initSources : function() {
         // Initialize source filters
         this._sourceFilters = [];
-        var aInitialSources = YAHOO.widget.Logger.sources;
+        var aInitialSources = Logger.sources;
 
         for(var j=0; j < aInitialSources.length; j++) {
             var sSource = aInitialSources[j];
@@ -1054,33 +1104,32 @@ YAHOO.widget.LogReader.prototype = {
      * @private
      */
     _createCategoryCheckbox : function(sCategory) {
-        var oSelf = this;
-
         if(this._elFt) {
-            var elParent = this._elCategoryFilters;
-            var elFilter = elParent.appendChild(document.createElement("span"));
-            elFilter.className = "yui-log-filtergrp";
+            var filter = make("span",{ className: "yui-log-filtergrp" }),
+                check  = make("input", {
+                    id: "yui-log-filter-" + sCategory + this._sName,
+                    className: "yui-log-filter-" + sCategory,
+                    type: "checkbox",
+                    category: sCategory
+                }),
+                label  = make("label", {
+                    htmlFor: check.id,
+                    className: sCategory,
+                    innerHTML: sCategory
+                });
             
-            // Append el at the end so IE 5.5 can set "type" attribute
-            // and THEN set checked property
-            var chkCategory = document.createElement("input");
-            chkCategory.id = "yui-log-filter-" + sCategory + this._sName;
-            chkCategory.className = "yui-log-filter-" + sCategory;
-            chkCategory.type = "checkbox";
-            chkCategory.category = sCategory;
-            chkCategory = elFilter.appendChild(chkCategory);
-            chkCategory.checked = true;
 
             // Subscribe to the click event
-            YAHOO.util.Event.addListener(chkCategory,'click',oSelf._onCheckCategory,oSelf);
+            Event.on(check,'click',this._onCheckCategory,this);
 
-            // Create and class the text label
-            var lblCategory = elFilter.appendChild(document.createElement("label"));
-            lblCategory.htmlFor = chkCategory.id;
-            lblCategory.className = sCategory;
-            lblCategory.innerHTML = sCategory;
-            
-            this._filterCheckboxes[sCategory] = chkCategory;
+            this._filterCheckboxes[sCategory] = check;
+
+            // Append el at the end so IE 5.5 can set "type" attribute
+            // and THEN set checked property
+            filter.appendChild(check);
+            filter.appendChild(label);
+            this._elCategoryFilters.appendChild(filter);
+            check.checked = true;
         }
     },
 
@@ -1092,33 +1141,32 @@ YAHOO.widget.LogReader.prototype = {
      * @private
      */
     _createSourceCheckbox : function(sSource) {
-        var oSelf = this;
-
         if(this._elFt) {
-            var elParent = this._elSourceFilters;
-            var elFilter = elParent.appendChild(document.createElement("span"));
-            elFilter.className = "yui-log-filtergrp";
+            var filter = make("span",{ className: "yui-log-filtergrp" }),
+                check  = make("input", {
+                    id: "yui-log-filter-" + sSource + this._sName,
+                    className: "yui-log-filter-" + sSource,
+                    type: "checkbox",
+                    source: sSource
+                }),
+                label  = make("label", {
+                    htmlFor: check.id,
+                    className: sSource,
+                    innerHTML: sSource
+                });
+            
+
+            // Subscribe to the click event
+            Event.on(check,'click',this._onCheckSource,this);
+
+            this._filterCheckboxes[sSource] = check;
 
             // Append el at the end so IE 5.5 can set "type" attribute
             // and THEN set checked property
-            var chkSource = document.createElement("input");
-            chkSource.id = "yui-log-filter" + sSource + this._sName;
-            chkSource.className = "yui-log-filter" + sSource;
-            chkSource.type = "checkbox";
-            chkSource.source = sSource;
-            chkSource = elFilter.appendChild(chkSource);
-            chkSource.checked = true;
-
-            // Subscribe to the click event
-            YAHOO.util.Event.addListener(chkSource,'click',oSelf._onCheckSource,oSelf);
-
-            // Create and class the text label
-            var lblSource = elFilter.appendChild(document.createElement("label"));
-            lblSource.htmlFor = chkSource.id;
-            lblSource.className = sSource;
-            lblSource.innerHTML = sSource;
-            
-            this._filterCheckboxes[sSource] = chkSource;
+            filter.appendChild(check);
+            filter.appendChild(label);
+            this._elSourceFilters.appendChild(filter);
+            check.checked = true;
         }
     },
 
@@ -1132,7 +1180,7 @@ YAHOO.widget.LogReader.prototype = {
         // Reprint stack with new filters
         if (this._elConsole !== null) {
             this.clearConsole();
-            this._printToConsole(YAHOO.widget.Logger.getStack());
+            this._printToConsole(Logger.getStack());
         }
     },
 
@@ -1177,7 +1225,7 @@ YAHOO.widget.LogReader.prototype = {
     _printToConsole : function(aEntries) {
         // Manage the number of messages displayed in the console
         var entriesLen         = aEntries.length,
-            df                 = document.createDocumentFragment(),
+            df                 = d.createDocumentFragment(),
             msgHTML            = [],
             thresholdMin       = this.thresholdMin,
             sourceFiltersLen   = this._sourceFilters.length,
@@ -1193,13 +1241,11 @@ YAHOO.widget.LogReader.prototype = {
         // Iterate through all log entries 
         for(i=entriesStartIndex; i<entriesLen; i++) {
             // Print only the ones that filter through
-            var okToPrint = false;
-            var okToFilterCats = false;
-
-            // Get log message details
-            var entry = aEntries[i];
-            var source = entry.source;
-            var category = entry.category;
+            var okToPrint = false,
+                okToFilterCats = false,
+                entry = aEntries[i],
+                source = entry.source,
+                category = entry.category;
 
             for(j=0; j<sourceFiltersLen; j++) {
                 if(source == this._sourceFilters[j]) {
@@ -1403,3 +1449,7 @@ YAHOO.widget.LogReader.prototype = {
         oSelf._filterLogs();
     }
 };
+
+YAHOO.widget.LogReader = LogReader;
+
+})();
