@@ -5047,6 +5047,29 @@
 <span class="o">},</span>
 
 
+<span class="nx">_doItemSubmenuSubscribe</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="k">var</span> <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
+        <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_SUBMENU</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">},</span>
+
+
+<span class="nx">_doSubmenuSubscribe</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">)</span> <span class="o">{</span> 
+
+    <span class="k">var</span> <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_SUBMENU</span><span class="o">);</span>
+    
+    <span class="k">if</span> <span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">},</span>
+
+
 <span class="c">/**</span>
 <span class="c">* Adds the specified CustomEvent subscriber to the menu and each of </span>
 <span class="c">* its submenus.</span>
@@ -5060,35 +5083,12 @@
 <span class="c">*/</span>
 <span class="nx">subscribe</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
-    <span class="k">function</span> <span class="nx">onItemAdded</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">)</span> <span class="o">{</span>
+	<span class="c">//	Subscribe to the event for this Menu instance</span>
+<span class="c"></span>    <span class="nx">Menu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
 
-        <span class="k">var</span> <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="o">[</span><span class="m">0</span><span class="o">],</span>
-            <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_SUBMENU</span><span class="o">);</span>
-
-        <span class="k">if</span> <span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
-
-            <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">);</span>
-
-        <span class="o">}</span>
-    
-    <span class="o">}</span>
-
-
-    <span class="k">function</span> <span class="nx">onSubmenuAdded</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">)</span> <span class="o">{</span> 
-    
-        <span class="k">var</span> <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_SUBMENU</span><span class="o">);</span>
-        
-        <span class="k">if</span> <span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
-
-            <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">,</span> <span class="nx">p_oObject</span><span class="o">);</span>
-        
-        <span class="o">}</span>
-    
-    <span class="o">}</span>
-
-
-    <span class="nx">Menu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
-    <span class="nx">Menu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">_ITEM_ADDED</span><span class="o">,</span> <span class="nx">onItemAdded</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
+	<span class="c">//	Subscribe to the &quot;itemAdded&quot; event so that all future submenus</span>
+<span class="c"></span>	<span class="c">//	also subscribe to this event</span>
+<span class="c"></span>    <span class="nx">Menu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">_ITEM_ADDED</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_doItemSubmenuSubscribe</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
 
 
     <span class="k">var</span> <span class="nx">aItems</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getItems</span><span class="o">(),</span>
@@ -5109,18 +5109,60 @@
             <span class="k">do</span> <span class="o">{</span>
 
                 <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">aItems</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
-                
                 <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_SUBMENU</span><span class="o">);</span>
                 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
-                
                     <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
-                
                 <span class="o">}</span>
                 <span class="k">else</span> <span class="o">{</span>
+                    <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">subscribeToConfigEvent</span><span class="o">(</span><span class="nx">_SUBMENU</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_doSubmenuSubscribe</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
+                <span class="o">}</span>
+
+            <span class="o">}</span>
+            <span class="k">while</span> <span class="o">(</span><span class="nx">i</span><span class="o">--);</span>
+        
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+
+<span class="o">},</span>
+
+
+<span class="nx">unsubscribe</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+
+	<span class="c">//	Remove the event for this Menu instance</span>
+<span class="c"></span>    <span class="nx">Menu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
+
+	<span class="c">//	Remove the &quot;itemAdded&quot; event so that all future submenus don&#39;t have </span>
+<span class="c"></span>	<span class="c">//	the event handler</span>
+<span class="c"></span>    <span class="nx">Menu</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">_ITEM_ADDED</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_doItemSubmenuSubscribe</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
+
+
+    <span class="k">var</span> <span class="nx">aItems</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getItems</span><span class="o">(),</span>
+        <span class="nx">nItems</span><span class="o">,</span>
+        <span class="nx">oItem</span><span class="o">,</span>
+        <span class="nx">oSubmenu</span><span class="o">,</span>
+        <span class="nx">i</span><span class="o">;</span>
+        
+
+    <span class="k">if</span> <span class="o">(</span><span class="nx">aItems</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="nx">nItems</span> <span class="o">=</span> <span class="nx">aItems</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
+        
+        <span class="k">if</span> <span class="o">(</span><span class="nx">nItems</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+        
+            <span class="nx">i</span> <span class="o">=</span> <span class="nx">nItems</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
+            
+            <span class="k">do</span> <span class="o">{</span>
+
+                <span class="nx">oItem</span> <span class="o">=</span> <span class="nx">aItems</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="nx">oSubmenu</span> <span class="o">=</span> <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_SUBMENU</span><span class="o">);</span>
                 
-                    <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">subscribeToConfigEvent</span><span class="o">(</span><span class="nx">_SUBMENU</span><span class="o">,</span> <span class="nx">onSubmenuAdded</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
-                
+                <span class="k">if</span> <span class="o">(</span><span class="nx">oSubmenu</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">oSubmenu</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">oSubmenu</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="k">else</span> <span class="o">{</span>
+                    <span class="nx">oItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">unsubscribeFromConfigEvent</span><span class="o">(</span><span class="nx">_SUBMENU</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_doSubmenuSubscribe</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
                 <span class="o">}</span>
 
             <span class="o">}</span>
