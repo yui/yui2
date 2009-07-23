@@ -69,7 +69,12 @@
 <span class="c">*/</span>
 <span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">_DIV</span> <span class="o">=</span> <span class="s2">&quot;DIV&quot;</span><span class="o">,</span>
+    <span class="k">var</span> <span class="nx">UA</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">,</span>
+		<span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
+	    <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+	    <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
+
+		<span class="nx">_DIV</span> <span class="o">=</span> <span class="s2">&quot;DIV&quot;</span><span class="o">,</span>
     	<span class="nx">_HD</span> <span class="o">=</span> <span class="s2">&quot;hd&quot;</span><span class="o">,</span>
     	<span class="nx">_BD</span> <span class="o">=</span> <span class="s2">&quot;bd&quot;</span><span class="o">,</span>
     	<span class="nx">_FT</span> <span class="o">=</span> <span class="s2">&quot;ft&quot;</span><span class="o">,</span>
@@ -79,7 +84,8 @@
 		<span class="nx">_MOUSEOUT</span> <span class="o">=</span> <span class="s2">&quot;mouseout&quot;</span><span class="o">,</span>
 		<span class="nx">_MOUSEDOWN</span> <span class="o">=</span> <span class="s2">&quot;mousedown&quot;</span><span class="o">,</span>
 		<span class="nx">_MOUSEUP</span> <span class="o">=</span> <span class="s2">&quot;mouseup&quot;</span><span class="o">,</span>
-		<span class="nx">_FOCUS</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">?</span> <span class="s2">&quot;focusin&quot;</span> <span class="o">:</span> <span class="s2">&quot;focus&quot;</span><span class="o">,</span>		
+		
+		<span class="nx">_FOCUS</span> <span class="o">=</span> <span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span> <span class="o">?</span> <span class="s2">&quot;focusin&quot;</span> <span class="o">:</span> <span class="s2">&quot;focus&quot;</span><span class="o">,</span>		
 		<span class="nx">_CLICK</span> <span class="o">=</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span>
 		<span class="nx">_KEYDOWN</span> <span class="o">=</span> <span class="s2">&quot;keydown&quot;</span><span class="o">,</span>
 		<span class="nx">_KEYUP</span> <span class="o">=</span> <span class="s2">&quot;keyup&quot;</span><span class="o">,</span>
@@ -91,12 +97,7 @@
 		<span class="nx">_SELECTED</span> <span class="o">=</span> <span class="s2">&quot;selected&quot;</span><span class="o">,</span>
 		<span class="nx">_VISIBLE</span> <span class="o">=</span> <span class="s2">&quot;visible&quot;</span><span class="o">,</span>
 		<span class="nx">_UL</span> <span class="o">=</span> <span class="s2">&quot;UL&quot;</span><span class="o">,</span>
-		<span class="nx">_MENUMANAGER</span> <span class="o">=</span> <span class="s2">&quot;MenuManager&quot;</span><span class="o">,</span>
-    	
-    
-    	<span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
-        <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
-        <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">;</span>
+		<span class="nx">_MENUMANAGER</span> <span class="o">=</span> <span class="s2">&quot;MenuManager&quot;</span><span class="o">;</span>
 
 
     <span class="c">/**</span>
@@ -257,6 +258,8 @@
             <span class="c">// See if the target of the event was a menu, or a menu item</span>
 <span class="c"></span>    
             <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">getMenuRootElement</span><span class="o">(</span><span class="nx">oTarget</span><span class="o">),</span>
+			<span class="nx">bFireEvent</span> <span class="o">=</span> <span class="kc">true</span><span class="o">,</span>
+			<span class="nx">sEventType</span> <span class="o">=</span> <span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">type</span><span class="o">,</span>
             <span class="nx">sCustomEventType</span><span class="o">,</span>
             <span class="nx">sTagName</span><span class="o">,</span>
             <span class="nx">sId</span><span class="o">,</span>
@@ -295,21 +298,50 @@
     
             <span class="k">if</span> <span class="o">(</span><span class="nx">oMenu</span><span class="o">)</span> <span class="o">{</span>
     
-                <span class="nx">sCustomEventType</span> <span class="o">=</span> <span class="nx">m_oEventTypes</span><span class="o">[</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">type</span><span class="o">];</span>
-    
+                <span class="nx">sCustomEventType</span> <span class="o">=</span> <span class="nx">m_oEventTypes</span><span class="o">[</span><span class="nx">sEventType</span><span class="o">];</span>
+
+				<span class="c">/*</span>
+<span class="c">					There is an inconsistency between Firefox for Mac OS X and </span>
+<span class="c">					Firefox Windows &amp; Linux regarding the triggering of the </span>
+<span class="c">					display of the browser&#39;s context menu and the subsequent </span>
+<span class="c">					firing of the &quot;click&quot; event. In Firefox for Windows &amp; Linux, </span>
+<span class="c">					when the user triggers the display of the browser&#39;s context </span>
+<span class="c">					menu the &quot;click&quot; event also fires for the document object, </span>
+<span class="c">					even though the &quot;click&quot; event did not fire for the element </span>
+<span class="c">					that was the original target of the &quot;contextmenu&quot; event. </span>
+<span class="c">					This is unique to Firefox on Windows &amp; Linux.  For all </span>
+<span class="c">					other A-Grade browsers, including Firefox for Mac OS X, the </span>
+<span class="c">					&quot;click&quot; event doesn&#39;t fire for the document object. </span>
+<span class="c"></span>
+<span class="c">					This bug in Firefox for Windows affects Menu, as Menu </span>
+<span class="c">					instances listen for events at the document level and </span>
+<span class="c">					dispatches Custom Events of the same name.  Therefore users</span>
+<span class="c">					of Menu will get an unwanted firing of the &quot;click&quot; </span>
+<span class="c">					custom event.  The following line fixes this bug.</span>
+<span class="c">				*/</span>
+				
+
+
+				<span class="k">if</span> <span class="o">(</span><span class="nx">sEventType</span> <span class="o">==</span> <span class="s2">&quot;click&quot;</span> <span class="o">&amp;&amp;</span> 
+					<span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">&amp;&amp;</span> <span class="nx">oMenu</span><span class="o">.</span><span class="nx">platform</span> <span class="o">!=</span> <span class="s2">&quot;mac&quot;</span><span class="o">)</span> <span class="o">&amp;&amp;</span> 
+					<span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">button</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+
+					<span class="nx">bFireEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+				<span class="o">}</span>
     
                 <span class="c">// Fire the Custom Event that corresponds the current DOM event    </span>
 <span class="c"></span>        
-                <span class="k">if</span> <span class="o">(</span><span class="nx">oMenuItem</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oMenuItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_DISABLED</span><span class="o">))</span> <span class="o">{</span>
-    
+                <span class="k">if</span> <span class="o">(</span><span class="nx">bFireEvent</span> <span class="o">&amp;&amp;</span> <span class="nx">oMenuItem</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oMenuItem</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_DISABLED</span><span class="o">))</span> <span class="o">{</span>
                     <span class="nx">oMenuItem</span><span class="o">[</span><span class="nx">sCustomEventType</span><span class="o">].</span><span class="nx">fire</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">);</span>                   
-    
                 <span class="o">}</span>
         
-                <span class="nx">oMenu</span><span class="o">[</span><span class="nx">sCustomEventType</span><span class="o">].</span><span class="nx">fire</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">,</span> <span class="nx">oMenuItem</span><span class="o">);</span>
+				<span class="k">if</span> <span class="o">(</span><span class="nx">bFireEvent</span><span class="o">)</span> <span class="o">{</span>
+                	<span class="nx">oMenu</span><span class="o">[</span><span class="nx">sCustomEventType</span><span class="o">].</span><span class="nx">fire</span><span class="o">(</span><span class="nx">p_oEvent</span><span class="o">,</span> <span class="nx">oMenuItem</span><span class="o">);</span>
+				<span class="o">}</span>
             
             <span class="o">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="nx">_MOUSEDOWN</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">sEventType</span> <span class="o">==</span> <span class="nx">_MOUSEDOWN</span><span class="o">)</span> <span class="o">{</span>
     
                 <span class="c">/*</span>
 <span class="c">                    If the target of the event wasn&#39;t a menu, hide all </span>
@@ -354,7 +386,7 @@
                 <span class="o">}</span> 
     
             <span class="o">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="nx">_FOCUS</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">sEventType</span> <span class="o">==</span> <span class="nx">_FOCUS</span><span class="o">)</span> <span class="o">{</span>
             
             	<span class="nx">m_oFocusedElement</span> <span class="o">=</span> <span class="nx">oTarget</span><span class="o">;</span>
             
