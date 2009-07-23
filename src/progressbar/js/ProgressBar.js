@@ -296,6 +296,7 @@
 				validator: Lang.isNumber,
 				method: function (value) {
 					this.get('element').setAttribute('aria-valuemax',value);
+					if (this.get('value') > value) { this.set('value',value); }
 				}
 		    });
 			
@@ -313,6 +314,7 @@
 				validator: Lang.isNumber,
 				method: function (value) {
 					this.get('element').setAttribute('aria-valuemin',value);
+					if (this.get('value') < value) { this.set('value',value); }
 				}
 		    });
 			/**
