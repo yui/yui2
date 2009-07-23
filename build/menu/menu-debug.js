@@ -5905,6 +5905,29 @@ hasFocus: function () {
 },
 
 
+_doItemSubmenuSubscribe: function (p_sType, p_aArgs, p_oObject) {
+
+    var oItem = p_aArgs[0],
+        oSubmenu = oItem.cfg.getProperty(_SUBMENU);
+
+    if (oSubmenu) {
+        oSubmenu.subscribe.apply(oSubmenu, p_oObject);
+    }
+
+},
+
+
+_doSubmenuSubscribe: function (p_sType, p_aArgs, p_oObject) { 
+
+    var oSubmenu = this.cfg.getProperty(_SUBMENU);
+    
+    if (oSubmenu) {
+        oSubmenu.subscribe.apply(oSubmenu, p_oObject);
+    }
+
+},
+
+
 /**
 * Adds the specified CustomEvent subscriber to the menu and each of 
 * its submenus.
@@ -5918,35 +5941,12 @@ hasFocus: function () {
 */
 subscribe: function () {
 
-    function onItemAdded(p_sType, p_aArgs, p_oObject) {
-
-        var oItem = p_aArgs[0],
-            oSubmenu = oItem.cfg.getProperty(_SUBMENU);
-
-        if (oSubmenu) {
-
-            oSubmenu.subscribe.apply(oSubmenu, p_oObject);
-
-        }
-    
-    }
-
-
-    function onSubmenuAdded(p_sType, p_aArgs, p_oObject) { 
-    
-        var oSubmenu = this.cfg.getProperty(_SUBMENU);
-        
-        if (oSubmenu) {
-
-            oSubmenu.subscribe.apply(oSubmenu, p_oObject);
-        
-        }
-    
-    }
-
-
+	//	Subscribe to the event for this Menu instance
     Menu.superclass.subscribe.apply(this, arguments);
-    Menu.superclass.subscribe.call(this, _ITEM_ADDED, onItemAdded, arguments);
+
+	//	Subscribe to the "itemAdded" event so that all future submenus
+	//	also subscribe to this event
+    Menu.superclass.subscribe.call(this, _ITEM_ADDED, this._doItemSubmenuSubscribe, arguments);
 
 
     var aItems = this.getItems(),
@@ -5967,18 +5967,60 @@ subscribe: function () {
             do {
 
                 oItem = aItems[i];
-                
                 oSubmenu = oItem.cfg.getProperty(_SUBMENU);
                 
                 if (oSubmenu) {
-                
                     oSubmenu.subscribe.apply(oSubmenu, arguments);
-                
                 }
                 else {
+                    oItem.cfg.subscribeToConfigEvent(_SUBMENU, this._doSubmenuSubscribe, arguments);
+                }
+
+            }
+            while (i--);
+        
+        }
+
+    }
+
+},
+
+
+unsubscribe: function () {
+
+	//	Remove the event for this Menu instance
+    Menu.superclass.unsubscribe.apply(this, arguments);
+
+	//	Remove the "itemAdded" event so that all future submenus don't have 
+	//	the event handler
+    Menu.superclass.unsubscribe.call(this, _ITEM_ADDED, this._doItemSubmenuSubscribe, arguments);
+
+
+    var aItems = this.getItems(),
+        nItems,
+        oItem,
+        oSubmenu,
+        i;
+        
+
+    if (aItems) {
+
+        nItems = aItems.length;
+        
+        if (nItems > 0) {
+        
+            i = nItems - 1;
+            
+            do {
+
+                oItem = aItems[i];
+                oSubmenu = oItem.cfg.getProperty(_SUBMENU);
                 
-                    oItem.cfg.subscribeToConfigEvent(_SUBMENU, onSubmenuAdded, arguments);
-                
+                if (oSubmenu) {
+                    oSubmenu.unsubscribe.apply(oSubmenu, arguments);
+                }
+                else {
+                    oItem.cfg.unsubscribeFromConfigEvent(_SUBMENU, this._doSubmenuSubscribe, arguments);
                 }
 
             }
