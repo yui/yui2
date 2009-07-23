@@ -1,3 +1,19 @@
 .yui-pb-bar {
-	background-color: blue;
+	background-color:blue;
+}
+
+.yui-pb-classic {
+	background: transparent url(../../../../../build/assets/skins/sam/sprite.png) repeat-x scroll 0 0;
+	border: solid #808080;
+	border-width:1px 0;
+}
+
+.yui-pb-classic .yui-pb-bar {
+	background:transparent url(../../../../../build/assets/skins/sam/sprite.png) repeat-x scroll 0 -1400px
+}
+
+.yui-pb-classic .yui-pb-mask {
+	border: solid #808080;
+	border-width:0 1px;
+	margin: 0 -1px;
 }
