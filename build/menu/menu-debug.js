@@ -4324,6 +4324,7 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         case _MONITOR_RESIZE:
         case _SHADOW:
         case _PREVENT_CONTEXT_OVERLAP:
+		case _KEEP_OPEN:
 
             p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                 
@@ -4390,7 +4391,9 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 
 			preventcontextoverlap: oParentCfg.getProperty(_PREVENT_CONTEXT_OVERLAP),
             
-            monitorresize: oParentCfg.getProperty(_MONITOR_RESIZE)
+            monitorresize: oParentCfg.getProperty(_MONITOR_RESIZE),
+
+			keepopen: oParentCfg.getProperty(_KEEP_OPEN)
 
         },
         
