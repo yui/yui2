@@ -57,6 +57,9 @@ Changes:
   The default class names are "yui-overlay-positioned" and 
   "yui-overlay-iframe-positioned" respectively.
 
++ Users can now prevent Dialog form submission by returning false from a beforeSubmit 
+  event subscriber  
+
 *** version 2.7.0 ***
 
 Changes:
