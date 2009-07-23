@@ -38,10 +38,10 @@ Paginator.ui.PreviousPageLink.init = function (p) {
     /**
      * Used as innerHTML for the previous page link/span.
      * @attribute previousPageLinkLabel
-     * @default '&lt;&nbsp;prev'
+     * @default '&lt; prev'
      */
     p.setAttributeConfig('previousPageLinkLabel', {
-        value : '&lt;&nbsp;prev',
+        value : '&lt; prev',
         validator : l.isString
     });
 

@@ -1351,7 +1351,7 @@ initAttributes : function(oConfigs) {
         value: function(oState, oSelf) {
             // Set defaults
             oState = oState || {pagination:null, sortedBy:null};
-            var sort = (oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey();
+            var sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey());
             var dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc";
             var startIndex = (oState.pagination) ? oState.pagination.recordOffset : 0;
             var results = (oState.pagination) ? oState.pagination.rowsPerPage : null;
@@ -1993,7 +1993,7 @@ _initColumnSet : function(aColumnDefs) {
  */
 _initDataSource : function(oDataSource) {
     this._oDataSource = null;
-    if(oDataSource && (oDataSource instanceof DS)) {
+    if(oDataSource && (lang.isFunction(oDataSource.sendRequest))) {
         this._oDataSource = oDataSource;
     }
     // Backward compatibility
@@ -4370,8 +4370,12 @@ getTdEl : function(cell) {
         else {
             elCell = el;
         }
-
-        return elCell;
+        
+        // Make sure the TD is in this TBODY
+        if(elCell && (elCell.parentNode.parentNode == this._elTbody)) {
+            // Now we can return the TD element
+            return elCell;
+        }
     }
     else if(cell) {
         var oRecord, nColKeyIndex;
@@ -5153,7 +5157,7 @@ getRecord : function(row) {
         // Validate TR element
         var elRow = this.getTrEl(row);
         if(elRow) {
-            oRecord = this._oRecordSet.getRecord(this.getRecordIndex(elRow.sectionRowIndex));
+            oRecord = this._oRecordSet.getRecord(elRow.id);
         }
     }
 
@@ -5386,22 +5390,26 @@ sortColumn : function(oColumn, sDir) {
                    
                 // Sort the Records
                 if(!bSorted || sDir || sortFnc) {
-                    // Get the field to sort
-                    var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
+                    // Shortcut for the frequently-used compare method
+                    var compare = YAHOO.util.Sort.compare;
 
                     // Default sort function if necessary
                     sortFnc = sortFnc || 
-                        function(a, b, desc) {
-                            var sorted = YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
+                        function(a, b, desc, field) {
+                            var sorted = compare(a.getData(field),b.getData(field), desc);
                             if(sorted === 0) {
-                                return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
+                                return compare(a.getCount(),b.getCount(), desc); // Bug 1932978
                             }
                             else {
                                 return sorted;
                             }
                         };
+
+                    // Get the field to sort
+                    var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
+
                     // Sort the Records        
-                    this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false));
+                    this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false), sField);
                 }
                 // Just reverse the Records
                 else {
@@ -6878,7 +6886,7 @@ deleteRow : function(row) {
                         this._oChainRender.add({
                             method: function() {
                                 if((this instanceof DT) && this._sId) {
-                                    var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex);
+                                    var isLast = (nRecordIndex === this._oRecordSet.getLength());//(nTrIndex == this.getLastTrEl().sectionRowIndex);
                                     this._deleteTrEl(nTrIndex);
                     
                                     // Post-delete tasks
@@ -7094,16 +7102,16 @@ deleteRows : function(row, count) {
  * Outputs markup into the given TD based on given Record.
  *
  * @method formatCell
- * @param elCell {HTMLElement} The liner DIV element within the TD.
+ * @param elLiner {HTMLElement} The liner DIV element within the TD.
  * @param oRecord {YAHOO.widget.Record} (Optional) Record instance.
  * @param oColumn {YAHOO.widget.Column} (Optional) Column instance.
  */
-formatCell : function(elCell, oRecord, oColumn) {
+formatCell : function(elLiner, oRecord, oColumn) {
     if(!oRecord) {
-        oRecord = this.getRecord(elCell);
+        oRecord = this.getRecord(elLiner);
     }
     if(!oColumn) {
-        oColumn = this.getColumn(elCell.parentNode.cellIndex);
+        oColumn = this.getColumn(elLiner.parentNode.cellIndex);
     }
 
     if(oRecord && oColumn) {
@@ -7117,16 +7125,16 @@ formatCell : function(elCell, oRecord, oColumn) {
 
         // Apply special formatter
         if(fnFormatter) {
-            fnFormatter.call(this, elCell, oRecord, oColumn, oData);
+            fnFormatter.call(this, elLiner, oRecord, oColumn, oData);
         }
         else {
-            elCell.innerHTML = oData;
+            elLiner.innerHTML = oData;
         }
 
-        this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:oColumn.key, el:elCell});
+        this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:oColumn.key, el:elLiner});
     }
     else {
-        YAHOO.log("Could not format cell " + elCell, "error", this.toString());
+        YAHOO.log("Could not format cell " + elLiner, "error", this.toString());
     }
 },
 
@@ -7142,8 +7150,8 @@ formatCell : function(elCell, oRecord, oColumn) {
 updateCell : function(oRecord, oColumn, oData) {    
     // Validate Column and Record
     oColumn = (oColumn instanceof YAHOO.widget.Column) ? oColumn : this.getColumn(oColumn);
-    if(oColumn && oColumn.getKey() && (oRecord instanceof YAHOO.widget.Record)) {
-        var sKey = oColumn.getKey(),
+    if(oColumn && oColumn.getField() && (oRecord instanceof YAHOO.widget.Record)) {
+        var sKey = oColumn.getField(),
         
         // Copy data from the Record for the event that gets fired later
         //var oldData = YAHOO.widget.DataTable._cloneObject(oRecord.getData());

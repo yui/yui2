@@ -125,7 +125,6 @@ YAHOO.namespace("tool");
     };
 
 })();
-
 YAHOO.namespace("tool");
 
 
@@ -205,7 +204,6 @@ YAHOO.tool.TestSuite.prototype = {
     }
     
 };
-
 YAHOO.namespace("tool");
 
 /**
@@ -213,6 +211,7 @@ YAHOO.namespace("tool");
  * @module yuitest
  * @namespace YAHOO.tool
  * @requires yahoo,dom,event,logger
+ * @optional event-simulte
  */
 
 
@@ -892,7 +891,6 @@ YAHOO.tool.TestRunner = (function(){
     return new TestRunner();
     
 })();
-
 YAHOO.namespace("util");
 
 //-----------------------------------------------------------------------------
@@ -1514,7 +1512,6 @@ YAHOO.util.UnexpectedError = function (cause /*:Object*/){
 
 //inherit methods
 YAHOO.lang.extend(YAHOO.util.UnexpectedError, YAHOO.util.AssertionError);
-
 //-----------------------------------------------------------------------------
 // ArrayAssert object
 //-----------------------------------------------------------------------------
@@ -1851,7 +1848,6 @@ YAHOO.util.ArrayAssert = {
     }
     
 };
-
 YAHOO.namespace("util");
 
 
@@ -1926,7 +1922,6 @@ YAHOO.util.ObjectAssert = {
         }     
     }
 };
-
 //-----------------------------------------------------------------------------
 // DateAssert object
 //-----------------------------------------------------------------------------
@@ -1981,5 +1976,4 @@ YAHOO.util.DateAssert = {
     }
     
 };
-
 YAHOO.register("yuitest_core", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});

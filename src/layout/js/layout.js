@@ -136,6 +136,12 @@
                 }
             }
             if (set) {
+                if (h < 0) {
+                    h = 0;
+                }
+                if (w < 0) {
+                    w = 0;
+                }
                 Dom.setStyle(this._doc, 'height', h + 'px');
                 Dom.setStyle(this._doc, 'width', w + 'px');
             }
@@ -368,11 +374,21 @@
         },
         /**
         * @method resize
-        * @param {Boolean} set If set to false, it will NOT set the size, just perform the calculations (used for collapsing units)
+        * @param Boolean/Event set If set to false, it will NOT set the size, just perform the calculations (used for collapsing units). This can also have an attribute event passed to it.
         * @description Starts the chain of resize routines that will resize all the units.
         * @return {<a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>} The Layout instance
         */
         resize: function(set) {
+            /*
+            * Fixes bug #2528175
+            * If the event comes from an attribute and the value hasn't changed, don't process it.
+            */
+            var ev = set;
+            if (ev && ev.prevValue && ev.newValue) {
+                if (ev.prevValue == ev.newValue) {
+                    set = false;
+                }
+            }
             set = ((set === false) ? false : true);
             if (set) {
                 var retVal = this.fireEvent('beforeResize');
@@ -391,7 +407,7 @@
             }
             this._setBodySize(set);
             if (set) {
-                this.fireEvent('resize', { target: this, sizes: this._sizes });
+                this.fireEvent('resize', { target: this, sizes: this._sizes, event: ev });
             }
             return this;
         },
@@ -560,6 +576,9 @@
                 value: attr.height || false,
                 validator: YAHOO.lang.isNumber,
                 method: function(h) {
+                    if (h < 0) {
+                        h = 0;
+                    }
                     this.setStyle('height', h + 'px');
                 }
             });
@@ -573,6 +592,9 @@
                 value: attr.width || false,
                 validator: YAHOO.lang.isNumber,
                 method: function(w) {
+                    if (w < 0) {
+                        w = 0;
+                    }
                     this.setStyle('width', w + 'px');
                 }
             });

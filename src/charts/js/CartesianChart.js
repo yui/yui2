@@ -19,37 +19,28 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 {
 	/**
 	 * Stores a reference to the xAxis labelFunction created by
-	 * YAHOO.widget.FlashAdapter.createProxyFunction()
-	 * @property _xAxisLabelFunction
+	 * YAHOO.widget.Chart.createProxyFunction()
+	 * @property _xAxisLabelFunctions
 	 * @type String
 	 * @private
 	 */
-	_xAxisLabelFunction: null,
+	_xAxisLabelFunctions: [],
 	
 	/**
-	 * Stores a reference to the yAxis labelFunction created by
-	 * YAHOO.widget.FlashAdapter.createProxyFunction()
-	 * @property _yAxisLabelFunction
-	 * @type String
+	 * Stores a reference to the yAxis labelFunctions created by
+	 * YAHOO.widget.Chart.createProxyFunction()
+	 * @property _yAxisLabelFunctions
+	 * @type Array
 	 * @private
 	 */
-	_yAxisLabelFunction: null,
+	_yAxisLabelFunctions: [],
 	
 	destroy: function()
 	{
 		//remove proxy functions
-		if(this._xAxisLabelFunction)
-		{
-			YAHOO.widget.FlashAdapter.removeProxyFunction(this._xAxisLabelFunction);
-			this._xAxisLabelFunction = null;
-		}
+		this._removeAxisFunctions(this._xAxisLabelFunctions);
+		this._removeAxisFunctions(this._yAxisLabelFunctions);
 		
-		if(this._yAxisLabelFunction)
-		{
-			YAHOO.widget.FlashAdapter.removeProxyFunction(this._yAxisLabelFunction);
-			this._yAxisLabelFunction = null;
-		}
-	
 		//call last
 		YAHOO.widget.CartesianChart.superclass.destroy.call(this);
 	},
@@ -63,7 +54,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	_initAttributes: function(attributes)
 	{	
 		YAHOO.widget.CartesianChart.superclass._initAttributes.call(this, attributes);
-
+		
 		/**
 		 * @attribute xField
 		 * @description The field in each item that corresponds to a value on the x axis.
@@ -105,6 +96,16 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		{
 			method: this._setXAxis
 		});
+		
+		/**
+		 * @attribute xAxes
+		 * @description Custom configurations for the horizontal x axes.
+		 * @type Array
+		 */		
+		this.setAttributeConfig("xAxes",
+		{
+			method: this._setXAxes
+		});	
 
 		/**
 		 * @attribute yAxis
@@ -115,6 +116,26 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		{
 			method: this._setYAxis
 		});
+		
+		/**
+		 * @attribute yAxes
+		 * @description Custom configurations for the vertical y axes.
+		 * @type Array
+		 */		
+		this.setAttributeConfig("yAxes",
+		{
+			method: this._setYAxes
+		});	
+		
+		/**
+		 * @attribute constrainViewport
+		 * @description Determines whether the viewport is constrained to prevent series data from overflow.
+		 * @type Boolean
+		 */
+		this.setAttributeConfig("constrainViewport",
+		{
+			method: this._setConstrainViewport
+		});	
 	},
 
 	/**
@@ -162,6 +183,55 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	},
 	
 	/**
+	 * Receives an axis object, creates a proxy function for 
+	 * the labelFunction and returns the updated object. 
+	 *
+	 * @method _getClonedAxis
+	 * @private
+	 */
+	_getClonedAxis: function(value)
+	{
+		var clonedAxis = {};
+		for(var prop in value)
+		{
+			if(prop == "labelFunction")
+			{
+				if(value.labelFunction && value.labelFunction !== null)
+				{
+					clonedAxis.labelFunction = YAHOO.widget.Chart.getFunctionReference(value.labelFunction);
+				}
+			}
+			else
+			{
+				clonedAxis[prop] = value[prop];
+			}
+		}
+		return clonedAxis;
+	},
+	
+	/**
+	 * Removes axis functions contained in an array
+	 * 
+	 * @method _removeAxisFunctions
+	 * @private
+	 */
+	_removeAxisFunctions: function(axisFunctions)
+	{
+		if(axisFunctions && axisFunctions.length > 0)
+		{
+			var len = axisFunctions.length;
+			for(var i = 0; i < len; i++)
+			{
+				if(axisFunctions[i] !== null)
+				{
+					YAHOO.widget.Chart.removeProxyFunction(axisFunctions[i]);
+				}
+			}
+			axisFunctions = [];
+		}
+	},	
+	
+	/**
 	 * Setter for the xAxis attribute.
 	 *
 	 * @method _setXAxis
@@ -169,75 +239,72 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	 */
 	_setXAxis: function(value)
 	{
-		if(this._xAxisLabelFunction !== null)
+		if(value.position != "bottom" && value.position != "top") value.position = "bottom";
+		this._removeAxisFunctions(this._xAxisLabelFunctions);
+		value = this._getClonedAxis(value);
+		this._xAxisLabelFunctions.push(value.labelFunction);
+		this._swf.setHorizontalAxis(value);
+	},
+	
+	/**
+	 * Setter for the xAxes attribute
+	 *
+	 * @method _setXAxes
+	 * @private
+	 */
+	_setXAxes: function(value)
+	{
+		this._removeAxisFunctions(this._xAxisLabelFunctions);
+		var len = value.length;
+		for(var i = 0; i < len; i++)
 		{
-			YAHOO.widget.FlashAdapter.removeProxyFunction(this._xAxisLabelFunction);
-			this._xAxisLabelFunction = null;
+			if(value[i].position == "left") value[i].position = "bottom";
+			value[i] = this._getClonedAxis(value[i]);
+			if(value[i].labelFunction) this._xAxisLabelFunctions.push(value[i].labelFunction);
+			this._swf.setHorizontalAxis(value[i]);
 		}
-		
-		var clonedXAxis = {};
-		for(var prop in value)
-		{
-			if(prop == "labelFunction")
-			{
-				if(value.labelFunction !== null)
-				{
-					if(typeof value.labelFunction == "function")
-					{
-						clonedXAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
-					}
-					else
-					{
-						clonedXAxis.labelFunction = value.labelFunction;
-					}
-					this._xAxisLabelFunction = clonedXAxis.labelFunction;
-				}
-			}
-			else
-			{
-				clonedXAxis[prop] = value[prop];
-			}
-		}
-		this._swf.setHorizontalAxis(clonedXAxis);
 	},
 
 	/**
-	 * Getter for the yAxis attribute.
+	 * Setter for the yAxis attribute.
 	 *
 	 * @method _setYAxis
 	 * @private
 	 */
 	_setYAxis: function(value)
 	{
-		if(this._yAxisLabelFunction !== null)
+		this._removeAxisFunctions(this._yAxisLabelFunctions);
+		value = this._getClonedAxis(value);
+		this._yAxisLabelFunctions.push(value.labelFunction);		
+		this._swf.setVerticalAxis(value);
+	},
+	
+	/**
+	 * Setter for the yAxes attribute.
+	 *
+	 * @method _setYAxes
+	 * @private
+	 */	
+	_setYAxes: function(value)
+	{
+		this._removeAxisFunctions(this._yAxisLabelFunctions);
+		var len = value.length;
+		for(var i = 0; i < len; i++)
 		{
-			YAHOO.widget.FlashAdapter.removeProxyFunction(this._yAxisLabelFunction);
-			this._yAxisLabelFunction = null;
-		}
-
-		var clonedYAxis = {};
-		for(var prop in value)
-		{
-			if(prop == "labelFunction")
-			{
-				if(value.labelFunction !== null)
-				{
-					if(typeof value.labelFunction == "function")
-					{
-						clonedYAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
-					}
-					else
-					{
-						clonedYAxis.labelFunction = value.labelFunction;
-					}
-					this._yAxisLabelFunction = clonedYAxis.labelFunction;
-				}
-			}
-			else
-			{
-				clonedYAxis[prop] = value[prop];
-			}
-		}
-		this._swf.setVerticalAxis(clonedYAxis);
+			value[i] = this._getClonedAxis(value[i]);
+			if(value[i].labelFunction) this._yAxisLabelFunctions.push(value[i].labelFunction);
+			this._swf.setVerticalAxis(value[i]);
+		}		
+	},
+	
+	/**
+	 * Setter for the constrainViewport attribute
+	 *
+	 * @method _setConstrainViewport
+	 * @private
+	 */
+	_setConstrainViewport: function(value)
+	{
+			this._swf.setConstrainViewport(value);
 	}
 });

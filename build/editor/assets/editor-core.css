@@ -179,7 +179,7 @@
 /* Setup the position and style for the up and down arrows */
 .yui-toolbar-container .yui-toolbar-spinbutton a.up, .yui-toolbar-container .yui-toolbar-spinbutton a.down {
     position: absolute;
-    display: block
+    display: block;
     right: 0;
     cursor: pointer;
     z-index: 1;
@@ -349,6 +349,7 @@
 .yui-editor-panel .height-width span.info {
     font-size: 70%;
     margin-top: 3px;
+    float: none;
 }
 
 /* Border Size/Type button widths */

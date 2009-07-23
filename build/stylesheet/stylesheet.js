@@ -121,12 +121,6 @@ function StyleSheet(seed, name) {
         return new arguments.callee(seed,name);
     }
 
-    head = d.getElementsByTagName('head')[0];
-    if (!head) {
-        // TODO: do something. Preferably something smart
-        throw new Error('HEAD element not found to append STYLE node');
-    }
-
     // capture the DOM node if the string is an id
     node = seed && (seed.nodeName ? seed : d.getElementById(seed));
 
@@ -158,7 +152,8 @@ function StyleSheet(seed, name) {
         }
     }
 
-    if (node.parentNode !== head) {
+    if (!node.parentNode || node.parentNode.nodeName.toLowerCase() !== 'head') {
+        head = (node.ownerDocument || d).getElementsByTagName('head')[0];
         // styleSheet isn't available on the style node in FF2 until appended
         // to the head element.  style nodes appended to body do not affect
         // change in Safari.
@@ -427,23 +422,29 @@ _toCssText = function (css,base) {
 
     workerStyle.cssText = base || '';
 
-    if (f && !css[floatAttr]) {
-        css = lang.merge(css);
-        delete css.styleFloat; delete css.cssFloat; delete css['float'];
-        css[floatAttr] = f;
-    }
+    if (lang.isString(css)) {
+        // There is a danger here of incremental memory consumption in Opera
+        workerStyle.cssText += ';' + css;
+    } else {
+        if (f && !css[floatAttr]) {
+            css = lang.merge(css);
+            delete css.styleFloat; delete css.cssFloat; delete css['float'];
+            css[floatAttr] = f;
+        }
 
-    for (prop in css) {
-        if (css.hasOwnProperty(prop)) {
-            try {
-                // IE throws Invalid Value errors and doesn't like whitespace
-                // in values ala ' red' or 'red '
-                workerStyle[prop] = lang.trim(css[prop]);
-            }
-            catch (e) {
+        for (prop in css) {
+            if (css.hasOwnProperty(prop)) {
+                try {
+                    // IE throws Invalid Value errors and doesn't like whitespace
+                    // in values ala ' red' or 'red '
+                    workerStyle[prop] = lang.trim(css[prop]);
+                }
+                catch (e) {
+                }
             }
         }
     }
+
     return workerStyle.cssText;
 };
 
@@ -468,7 +469,7 @@ lang.augmentObject(StyleSheet, {
         // input will be copied twice in IE.  Is there a way to avoid this
         // without increasing the byte count?
         function (css, cssText) {
-            if ('opacity' in css) {
+            if (lang.isObject(css) && 'opacity' in css) {
                 css = lang.merge(css,{
                         filter: 'alpha(opacity='+(css.opacity*100)+')'
                       });

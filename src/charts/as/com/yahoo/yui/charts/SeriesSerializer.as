@@ -58,6 +58,7 @@ package com.yahoo.yui.charts
 				var cartesianSeries:CartesianSeries = CartesianSeries(input);
 				series.yField = cartesianSeries.verticalField;
 				series.xField = cartesianSeries.horizontalField;
+				series.axis = cartesianSeries.axis;
 			}
 			else if(input is PieSeries)
 			{
@@ -79,6 +80,17 @@ package com.yahoo.yui.charts
 				var SeriesType:Class = shortNameToSeriesTypeHash[input.type];
 				series = new SeriesType()
 			}
+			
+			if(input.dataTipFunction)
+			{
+				series.dataTipFunction = getDataTipFunction(input.dataTipFunction);
+			}
+			
+			if(input.legendLabelFunction)
+			{
+				series.legendLabelFunction = JavaScriptUtil.createCallbackFunction(input.legendLabelFunction).callback;
+			}
+						
 			series.dataProvider = input.dataProvider;
 			series.displayName = input.displayName;
 			if(series is CartesianSeries)
@@ -86,6 +98,12 @@ package com.yahoo.yui.charts
 				var cartesianSeries:CartesianSeries = CartesianSeries(series);
 				cartesianSeries.verticalField = input.yField;
 				cartesianSeries.horizontalField = input.xField;
+				cartesianSeries.showInLegend = input.showInLegend == false ? false : true;	
+				
+				if(input.axis)
+				{
+					cartesianSeries.axis = input.axis;
+				}			
 			}
 			else if(series is PieSeries)
 			{
@@ -98,5 +116,16 @@ package com.yahoo.yui.charts
 			}
 			return series;
 		}
+		
+		private static function getDataTipFunction(value:String):Function
+		{
+			var delegate:Object = {dataTipFunction: JavaScriptUtil.createCallbackFunction(value).callback};
+			delegate.callback = function(item:Object, index:int, series:ISeries):String
+			{
+				return delegate.dataTipFunction(item, index, SeriesSerializer.writeSeries(series));
+			}
+			
+			return delegate.callback;
+		}		
 	}
 }

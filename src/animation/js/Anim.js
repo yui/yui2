@@ -88,7 +88,7 @@ Anim.prototype = {
             val = (val > 0) ? val : 0;
         }
 
-        if (attr in el && !('style' in el)) {
+        if (attr in el && !('style' in el && attr in el.style)) {
             el[attr] = val;
         } else {
             Y.Dom.setStyle(el, attr, val + unit);

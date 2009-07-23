@@ -1,5 +1,62 @@
 Container Release Notes
 
+*** version 2.8.0 ***
+
+Bug Fixes:
+----------
+
++ setHeader, setBody, setFooter will create the respective section element
+  and add it to the DOM if called after render has already been invoked.
+
++ preventoverlap repositioning logic is now applied for cases where the 
+  constrained Overlay is larger than the viewport also, and takes 
+  precedence over the default behavior for constrained Overlays which are
+  larger than the viewport.
+
++ Overlay unsubcribes all context trigger listeners on destroy. Trigger
+  listeners bound to global custom events such as windowScroll and 
+  windowResize cause JS execptions if left attached after the 
+  Overlay was destroy.
+
+New Features:
+-------------
+
++ Added support for an xy offset parameter to the context argument array.
+
+  This allows the user to offset the Overlay by an XY pixel value in cases
+  where they don't want precise alignment, e.g.:
+
+     context:["contextEl", "tl", "tr", ["beforeShow"]]
+ 
+  Would align the overlays top left corner with the top right corner of the 
+  context element exactly.
+
+  Using the offset parameter, the Overlay can be offset by a pixel amount 
+  if desired, e.g.:  
+
+     context:["contextEl", "tl", "tr", ["beforeShow"], [5, 0]]
+
+  Would align the overlay's top left corner with the top right corner of the
+  context element, but offset it along the X axis by 5 pixels, providing a gap
+  between the overlay and context element edges.
+
++ Added support for an "xyoffset" parameter to Tooltip, to configure the 
+  offset from the mouse XY position at which the Tooltip should be displayed.
+
+Changes:
+--------
+
++ Overlay (and the iframe shim if enabled), now have a CSS class applied to them
+  which is removed just before the overlay (and iframe shim) is moved using using
+  YAHOO.util.Dom.setX or setY methods.
+
+  These classes can be used to apply margins, padding or borders to the Overlay 
+  element (and iframe shim), without having Dom.setXY positioning compensate for
+  them when positioning the Overlay.
+
+  The default class names are "yui-overlay-positioned" and 
+  "yui-overlay-iframe-positioned" respectively.
+
 *** version 2.7.0 ***
 
 Changes:

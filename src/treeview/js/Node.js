@@ -887,7 +887,8 @@ YAHOO.widget.Node.prototype = {
             return false;
         } else {
             return ( this.children.length > 0 || 
-(checkForLazyLoad && this.isDynamic() && !this.dynamicLoadComplete) );
+				(checkForLazyLoad && this.isDynamic() && !this.dynamicLoadComplete) 
+			);
         }
     },
 
@@ -1030,6 +1031,18 @@ YAHOO.widget.Node.prototype = {
     loadComplete: function() {
         this.logger.log(this.index + " loadComplete, children: " + this.children.length);
         this.getChildrenEl().innerHTML = this.completeRender();
+		if (this.propagateHighlightDown) {
+			if (this.highlightState === 1 && !this.tree.singleNodeHighlight) {
+				for (var i = 0; i < this.children.length; i++) {
+				this.children[i].highlight(true);
+			}
+			} else if (this.highlightState === 0 || this.tree.singleNodeHighlight) {
+				for (i = 0; i < this.children.length; i++) {
+					this.children[i].unhighlight(true);
+				}
+			} // if (highlighState == 2) leave child nodes with whichever highlight state they are set
+		}
+				
         this.dynamicLoadComplete = true;
         this.isLoading = false;
         this.expand(true);
@@ -1081,7 +1094,7 @@ YAHOO.widget.Node.prototype = {
         this.logger.log("Generating html");
         var sb = [];
 
-        sb[sb.length] = '<table id="ygtvtableel' + this.index + '"border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
+        sb[sb.length] = '<table id="ygtvtableel' + this.index + '" border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
         if (this.enableHighlight) {
             sb[sb.length] = ' ygtv-highlight' + this.highlightState;
         }
@@ -1213,7 +1226,7 @@ YAHOO.widget.Node.prototype = {
 
         Dom.getElementsBy  ( 
             function (el) {
-                return /ygtv(([tl][pmn]h?)|(content))/.test(el.className);
+                return (/ygtv(([tl][pmn]h?)|(content))/).test(el.className);
             } ,
             'td' , 
             self.getEl().firstChild , 
@@ -1363,16 +1376,18 @@ YAHOO.widget.Node.prototype = {
             }
             this.highlightState = 1;
             this._setHighlightClassName();
-            if (this.propagateHighlightDown) {
-                for (var i = 0;i < this.children.length;i++) {
-                    this.children[i].highlight(true);
-                }
-            }
-            if (this.propagateHighlightUp) {
-                if (this.parent) {
-                    this.parent._childrenHighlighted();
-                }
-            }
+            if (!this.tree.singleNodeHighlight) {
+				if (this.propagateHighlightDown) {
+					for (var i = 0;i < this.children.length;i++) {
+						this.children[i].highlight(true);
+					}
+				}
+				if (this.propagateHighlightUp) {
+					if (this.parent) {
+						this.parent._childrenHighlighted();
+					}
+				}
+			}
             if (!_silent) {
                 this.tree.fireEvent('highlightEvent',this);
             }
@@ -1385,18 +1400,22 @@ YAHOO.widget.Node.prototype = {
     */
     unhighlight: function(_silent) {
         if (this.enableHighlight) {
+			// might have checked singleNodeHighlight but it wouldn't really matter either way
+            this.tree._currentlyHighlighted = null;
             this.highlightState = 0;
             this._setHighlightClassName();
-            if (this.propagateHighlightDown) {
-                for (var i = 0;i < this.children.length;i++) {
-                    this.children[i].unhighlight(true);
-                }
-            }
-            if (this.propagateHighlightUp) {
-                if (this.parent) {
-                    this.parent._childrenHighlighted();
-                }
-            }
+            if (!this.tree.singleNodeHighlight) {
+				if (this.propagateHighlightDown) {
+					for (var i = 0;i < this.children.length;i++) {
+						this.children[i].unhighlight(true);
+					}
+				}
+				if (this.propagateHighlightUp) {
+					if (this.parent) {
+						this.parent._childrenHighlighted();
+					}
+				}
+			}
             if (!_silent) {
                 this.tree.fireEvent('highlightEvent',this);
             }

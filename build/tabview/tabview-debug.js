@@ -100,6 +100,8 @@
             
             index = (index === undefined) ? tabs.length : index;
             
+            tabs.splice(index, 0, tab);
+
             if ( before ) {
                 tabParent.insertBefore(tabElement, before.get(ELEMENT));
             } else {
@@ -114,11 +116,10 @@
                 tab.set('contentVisible', false, true); /* hide if not active */
             } else {
                 this.set(ACTIVE_TAB, tab, true);
-                
+                this.set('activeIndex', index, true);
             }
 
             this._initTabEvents(tab);
-            tabs.splice(index, 0, tab);
         },
 
         _initTabEvents: function(tab) {
@@ -322,8 +323,6 @@
              */
             this.setAttributeConfig(ACTIVE_INDEX, {
                 value: attr.activeIndex,
-                method: function(value) {
-                },
                 validator: function(value) {
                     var ret = true;
                     if (value && this.getTab(value).get('disabled')) { // cannot activate if disabled
@@ -533,7 +532,7 @@
      * @extends YAHOO.util.Element
      * @constructor
      * @param element {HTMLElement | String} (optional) The html element that 
-     * represents the TabView. An element will be created if none provided.
+     * represents the Tab. An element will be created if none provided.
      * @param {Object} properties A key map of initial properties
      */
     Tab = function(el, attr) {
@@ -579,9 +578,9 @@
         
         /**
          * The class name applied to active tabs.
-         * @property ACTIVE_CLASSNAME
+         * @property HIDDEN_CLASSNAME
          * @type String
-         * @default "selected"
+         * @default "yui-hidden"
          */
         HIDDEN_CLASSNAME: 'yui-hidden',
         
@@ -638,7 +637,7 @@
         },
         
         /**
-         * setAttributeConfigs TabView specific properties.
+         * setAttributeConfigs Tab specific properties.
          * @method initAttributes
          * @param {Object} attr Hash of initial attributes
          */
@@ -710,7 +709,7 @@
                             return false; // already set
                         }
                         if (!this.get('selected')) {
-                            Dom.addClass(value, 'yui-hidden');
+                            Dom.addClass(value, this.HIDDEN_CLASSNAME);
                         }
                         current.parentNode.replaceChild(value, current);
                         this.set(CONTENT, value.innerHTML);

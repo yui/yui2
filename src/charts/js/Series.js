@@ -1,4 +1,4 @@
-/**
+ /**
  * Functionality common to most series. Generally, a <code>Series</code> 
  * object shouldn't be instantiated directly. Instead, a subclass with a 
  * concrete implementation should be used.
@@ -60,7 +60,23 @@ YAHOO.lang.extend(YAHOO.widget.CartesianSeries, YAHOO.widget.Series,
 	 * @property yField
 	 * @type String
 	 */
-	yField: null
+	yField: null,
+	
+	/**
+	 * Indicates which axis the series will bind to
+	 *
+	 * @property
+	 * @type String
+	 */
+	axis: "primary",
+	
+	/**
+	 * When a Legend is present, indicates whether the series will show in the legend.
+	 * 
+	 * @property
+	 * @type Boolean
+	 */
+	showInLegend: true
 });
 
 /**

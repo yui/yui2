@@ -1,5 +1,8 @@
 Paginator Release Notes
 
+Development master
+
+
 2.7.0
     * Code trimming and restructure for better compression
     * Added support for numeric strings pag.set('totalRecords','100');

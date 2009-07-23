@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                        <div class="highlight" ><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 
 <span class="k">var</span> <span class="nx">Y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">;</span>
 
@@ -137,7 +137,7 @@
             <span class="nx">val</span> <span class="o">=</span> <span class="o">(</span><span class="nx">val</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="nx">val</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
         <span class="o">}</span>
 
-        <span class="k">if</span> <span class="o">(</span><span class="nx">attr</span> <span class="k">in</span> <span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="o">!(</span><span class="s1">&#39;style&#39;</span> <span class="k">in</span> <span class="nx">el</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">attr</span> <span class="k">in</span> <span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="o">!(</span><span class="s1">&#39;style&#39;</span> <span class="k">in</span> <span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">attr</span> <span class="k">in</span> <span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">))</span> <span class="o">{</span>
             <span class="nx">el</span><span class="o">[</span><span class="nx">attr</span><span class="o">]</span> <span class="o">=</span> <span class="nx">val</span><span class="o">;</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
             <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">attr</span><span class="o">,</span> <span class="nx">val</span> <span class="o">+</span> <span class="nx">unit</span><span class="o">);</span>
@@ -519,6 +519,7 @@
     <span class="nx">Y</span><span class="o">.</span><span class="nx">Anim</span> <span class="o">=</span> <span class="nx">Anim</span><span class="o">;</span>
 <span class="o">})();</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>

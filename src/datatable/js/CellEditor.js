@@ -524,7 +524,7 @@ attach : function(oDataTable, elCell) {
                 var oRecord = oDataTable.getRecord(elCell);
                 if(oRecord) {
                     this._oRecord = oRecord;
-                    var value = oRecord.getData(this.getColumn().getKey());
+                    var value = oRecord.getData(this.getColumn().getField());
                     this.value = (value !== undefined) ? value : this.defaultValue;
                     return true;
                 }
@@ -1151,7 +1151,7 @@ lang.augmentObject(widget.DateCellEditor, BCE);
  */
 widget.DropdownCellEditor = function(oConfigs) {
     this._sId = "yui-dropdownceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    widget.DropdownCellEditor.superclass.constructor.call(this, "dropdown", oConfigs); 
+    widget.DropdownCellEditor.superclass.constructor.call(this, "dropdown", oConfigs);
 };
 
 // DropdownCellEditor extends BaseCellEditor
@@ -1163,7 +1163,7 @@ lang.extend(widget.DropdownCellEditor, BCE, {
 //
 /////////////////////////////////////////////////////////////////////////////
 /**
- * Array of dropdown values. Can either be a simple array (e.g., 
+ * Array of dropdown values. Can either be a simple array (e.g.,
  * ["Alabama","Alaska","Arizona","Arkansas"]) or a an array of objects (e.g., 
  * [{label:"Alabama", value:"AL"}, {label:"Alaska", value:"AK"},
  * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]). 
@@ -1181,6 +1181,21 @@ dropdownOptions : null,
  */
 dropdown : null,
 
+/**
+ * Enables multi-select.
+ *
+ * @property multiple
+ * @type Boolean
+ */
+multiple : false,
+
+/**
+ * Specifies number of visible options.
+ *
+ * @property size
+ * @type Number
+ */
+size : null,
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1196,6 +1211,12 @@ dropdown : null,
 renderForm : function() {
     var elDropdown = this.getContainerEl().appendChild(document.createElement("select"));
     elDropdown.style.zoom = 1;
+    if(this.multiple) {
+        elDropdown.multiple = "multiple";
+    }
+    if(lang.isNumber(this.size)) {
+        elDropdown.size = this.size;
+    }
     this.dropdown = elDropdown;
     
     if(lang.isArray(this.dropdownOptions)) {
@@ -1223,10 +1244,20 @@ renderForm : function() {
  * @method handleDisabledBtns
  */
 handleDisabledBtns : function() {
-    Ev.addListener(this.dropdown, "change", function(v){
-        // Save on change
-        this.save();
-    }, this, true);        
+    // Save on blur for multi-select
+    if(this.multiple) {
+        Ev.addListener(this.dropdown, "blur", function(v){
+            // Save on change
+            this.save();
+        }, this, true);
+    }
+    // Save on change for single-select
+    else {
+        Ev.addListener(this.dropdown, "change", function(v){
+            // Save on change
+            this.save();
+        }, this, true);
+    }
 },
 
 /**
@@ -1235,11 +1266,33 @@ handleDisabledBtns : function() {
  * @method resetForm
  */
 resetForm : function() {
-    for(var i=0, j=this.dropdown.options.length; i<j; i++) {
-        if(this.value === this.dropdown.options[i].value) {
-            this.dropdown.options[i].selected = true;
+    var allOptions = this.dropdown.options,
+        i=0, j=allOptions.length;
+
+    // Look for multi-select selections
+    if(lang.isArray(this.value)) {
+        var allValues = this.value,
+            m=0, n=allValues.length,
+            hash = {};
+        // Reset all selections and stash options in a value hash
+        for(; i<j; i++) {
+            allOptions[i].selected = false;
+            hash[allOptions[i].value] = allOptions[i];
         }
-    }    
+        for(; m<n; m++) {
+            if(hash[allValues[m]]) {
+                hash[allValues[m]].selected = true;
+            }
+        }
+    }
+    // Only need to look for a single selection
+    else {
+        for(; i<j; i++) {
+            if(this.value === allOptions[i].value) {
+                allOptions[i].selected = true;
+            }
+        }
+    }
 },
 
 /**
@@ -1257,7 +1310,23 @@ focus : function() {
  * @method getInputValue
  */
 getInputValue : function() {
-    return this.dropdown.options[this.dropdown.options.selectedIndex].value;
+    var allOptions = this.dropdown.options;
+    
+    // Look for multiple selections
+    if(this.multiple) {
+        var values = [],
+            i=0, j=allOptions.length;
+        for(; i<j; i++) {
+            if(allOptions[i].selected) {
+                values.push(allOptions[i].value);
+            }
+        }
+        return values;
+    }
+    // Only need to look for single selection
+    else {
+        return allOptions[allOptions.selectedIndex].value;
+    }
 }
 
 });

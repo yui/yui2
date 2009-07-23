@@ -83,6 +83,9 @@ that can be subscribed to by one or more independent component.
 
                                                 , 
                                                 signature
+
+                                                , 
+                                                fireOnce
                                     )
                                 </code>
                                 <div class="description">
@@ -119,6 +122,15 @@ will receive. YAHOO.util.CustomEvent.LIST or
 YAHOO.util.CustomEvent.FLAT.  The default is
 YAHOO.util.CustomEvent.LIST.</span>
                                                 </dd>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">fireOnce</span>
+                                                    &lt;<span property="yui:type">boolean</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description">  If configured to fire once, the custom event 
+will only notify subscribers a single time regardless of how many times 
+the event is fired.  In addition, new subscribers will be notified 
+immediately if the event has already been fired.</span>
+                                                </dd>
                                         </dl>
                                     
                                     
@@ -131,6 +143,61 @@ YAHOO.util.CustomEvent.LIST.</span>
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
+                                    <div class="" rel="yui:property" resource="#property_fired">
+                                    <h4><a name="property_fired" property="yui:name">fired</a>
+                                        - <code><span property="yui:type">boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Indicates whether or not this event has ever been fired.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_firedWith">
+                                    <h4><a name="property_firedWith" property="yui:name">firedWith</a>
+                                        - <code><span property="yui:type">Array</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            For fireOnce events the arguments the event was fired with are stored
+so that new subscribers get the proper payload.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_fireOnce">
+                                    <h4><a name="property_fireOnce" property="yui:name">fireOnce</a>
+                                        - <code><span property="yui:type">boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            If configured to fire once, the custom event will only notify subscribers
+a single time regardless of how many times the event is fired.  In addition,
+new subscribers will be notified immediately if the event has already been
+fired.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:property" resource="#property_lastError">
                                     <h4><a name="property_lastError" property="yui:name">lastError</a>
                                         - <code><span property="yui:type">Error</span></code>
@@ -154,8 +221,7 @@ caught.  The most recent exception is stored in this property
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            The context the the event will fire from by default.  Defaults to the window 
-obj
+                                            The context the event will fire from by default. Defaults to the window obj.
                                         </div>
                                     </div>
      
@@ -202,8 +268,8 @@ pass multiple parameters, use and array or object literal</li>
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            By default all custom events are logged in the debug build, set silent
-to true to disable debug outpu for this event.
+                                            By default all custom events are logged in the debug build. Set silent to true 
+to disable debug output for this event.
                                         </div>
                                     </div>
      
@@ -403,10 +469,6 @@ true otherwise</dd>
                                                          obj
                                                     
                                                 
-                                                        , 
-                                                         overrideContext
-                                                    
-                                                
                                             )
                                         </code>
                                         
@@ -428,17 +490,9 @@ true otherwise</dd>
                                                         <code><span property="yui:name">obj</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">       An object to be passed along when the event 
-fires</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">overrideContext</span>
-                                                        &lt;<span property="yui:type">boolean|Object</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> If true, the obj passed in becomes 
-the execution context of the listener.
-if an object, that object becomes the
-the execution context.</span>
+                                                        <span property="yui:description">       An object to be passed along when the event fires.
+overrideContext <boolean|Object> If true, the obj passed in becomes the execution 
+context of the listener. If an object, that object becomes the execution context.</span>
                                                         </dd>
                                                 </dl>
 
@@ -651,26 +705,24 @@ already fired has a new subscriber.
                                                             <code><span property="yui:name">fn</span>
                                                                 &lt;<span property="yui:type">Function</span>&gt;
                                                             </code>
-                                                            <span property="yui:description"> The function to execute</span>
+                                                            <span property="yui:description">  The function to execute</span>
                                                         </dd>
                                                         
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">obj</span>
-                                                                &lt;<span property="yui:type">Object</span>&gt;
+                                                                &lt;<span property="yui:type">object</span>&gt;
                                                             </code>
-                                                            <span property="yui:description"> An object to be passed along when the event 
-fires defaults to the custom event</span>
+                                                            <span property="yui:description"> <Object> An object to be passed along when the event fires. 
+Defaults to the custom event.</span>
                                                         </dd>
                                                         
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">override</span>
-                                                                &lt;<span property="yui:type">boolean|Object</span>&gt;
+                                                                &lt;<span property="yui:type">object</span>&gt;
                                                             </code>
-                                                            <span property="yui:description"> If true, the obj passed in becomes 
-the execution context of the listener.
-if an object, that object becomes the
-the execution context. defaults to
-the custom event</span>
+                                                            <span property="yui:description"> <boolean|Object> If true, the obj passed in becomes the 
+execution context of the listener. If an object, that object becomes 
+the execution context. Defaults to the custom event.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -764,6 +816,9 @@ the custom event</span>
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
+                                <li class=""><a href="#property_fired" title="fired">fired</a></li>
+                                <li class=""><a href="#property_firedWith" title="firedWith">firedWith</a></li>
+                                <li class=""><a href="#property_fireOnce" title="fireOnce">fireOnce</a></li>
                                 <li class=""><a href="#property_lastError" title="lastError">lastError</a></li>
                                 <li class=""><a href="#property_scope" title="scope">scope</a></li>
                                 <li class=""><a href="#property_signature" title="signature">signature</a></li>
@@ -804,7 +859,7 @@ the custom event</span>
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "EventProvider", "name": "createEvent", "url": "EventProvider.html#method_createEvent", "type": "method"}, {"access": "private", "host": "YAHOO.util.CustomEvent", "name": "_delete", "url": "YAHOO.util.CustomEvent.html#method__delete", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "disable", "url": "YAHOO.util.KeyListener.html#method_disable", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "disabledEvent", "url": "YAHOO.util.KeyListener.html#event_disabledEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enable", "url": "YAHOO.util.KeyListener.html#method_enable", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enabled", "url": "YAHOO.util.KeyListener.html#property_enabled", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enabledEvent", "url": "YAHOO.util.KeyListener.html#event_enabledEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fire", "url": "YAHOO.util.CustomEvent.html#method_fire", "type": "method"}, {"access": "", "host": "EventProvider", "name": "fireEvent", "url": "EventProvider.html#method_fireEvent", "type": "method"}, {"access": "private", "host": "YAHOO.util.KeyListener", "name": "handleKeyPress", "url": "YAHOO.util.KeyListener.html#method_handleKeyPress", "type": "method"}, {"access": "", "host": "EventProvider", "name": "hasEvent", "url": "EventProvider.html#method_hasEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "KEY", "url": "YAHOO.util.KeyListener.html#property_KEY", "type": "property"}, {"access": "private", "host": "YAHOO.util.KeyListener", "name": "keyEvent", "url": "YAHOO.util.KeyListener.html#event_keyEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "lastError", "url": "YAHOO.util.CustomEvent.html#property_lastError", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "scope", "url": "YAHOO.util.CustomEvent.html#property_scope", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "signature", "url": "YAHOO.util.CustomEvent.html#property_signature", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "silent", "url": "YAHOO.util.CustomEvent.html#property_silent", "type": "property"}, {"access": "", "host": "EventProvider", "name": "subscribe", "url": "EventProvider.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribe", "url": "YAHOO.util.CustomEvent.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribeEvent", "url": "YAHOO.util.CustomEvent.html#event_subscribeEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribers", "url": "YAHOO.util.CustomEvent.html#property_subscribers", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "toString", "url": "YAHOO.util.KeyListener.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "toString", "url": "YAHOO.util.CustomEvent.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "type", "url": "YAHOO.util.CustomEvent.html#property_type", "type": "property"}, {"access": "", "host": "EventProvider", "name": "unsubscribe", "url": "EventProvider.html#method_unsubscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribe", "url": "YAHOO.util.CustomEvent.html#method_unsubscribe", "type": "method"}, {"access": "", "host": "EventProvider", "name": "unsubscribeAll", "url": "EventProvider.html#method_unsubscribeAll", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribeAll", "url": "YAHOO.util.CustomEvent.html#method_unsubscribeAll", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.FLAT", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.FLAT", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.LIST", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.LIST", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "YAHOO.util.KeyListener.KEYDOWN", "url": "YAHOO.util.KeyListener.html#property_YAHOO.util.KeyListener.KEYDOWN", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "YAHOO.util.KeyListener.KEYUP", "url": "YAHOO.util.KeyListener.html#property_YAHOO.util.KeyListener.KEYUP", "type": "property"}, {"access": "private", "host": "EventProvider", "name": "__yui_events", "url": "EventProvider.html#property___yui_events", "type": "property"}, {"access": "private", "host": "EventProvider", "name": "__yui_subscribers", "url": "EventProvider.html#property___yui_subscribers", "type": "property"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "EventProvider", "name": "createEvent", "url": "EventProvider.html#method_createEvent", "type": "method"}, {"access": "private", "host": "YAHOO.util.CustomEvent", "name": "_delete", "url": "YAHOO.util.CustomEvent.html#method__delete", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "disable", "url": "YAHOO.util.KeyListener.html#method_disable", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "disabledEvent", "url": "YAHOO.util.KeyListener.html#event_disabledEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enable", "url": "YAHOO.util.KeyListener.html#method_enable", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enabled", "url": "YAHOO.util.KeyListener.html#property_enabled", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enabledEvent", "url": "YAHOO.util.KeyListener.html#event_enabledEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fire", "url": "YAHOO.util.CustomEvent.html#method_fire", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fired", "url": "YAHOO.util.CustomEvent.html#property_fired", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "firedWith", "url": "YAHOO.util.CustomEvent.html#property_firedWith", "type": "property"}, {"access": "", "host": "EventProvider", "name": "fireEvent", "url": "EventProvider.html#method_fireEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fireOnce", "url": "YAHOO.util.CustomEvent.html#property_fireOnce", "type": "property"}, {"access": "private", "host": "YAHOO.util.KeyListener", "name": "handleKeyPress", "url": "YAHOO.util.KeyListener.html#method_handleKeyPress", "type": "method"}, {"access": "", "host": "EventProvider", "name": "hasEvent", "url": "EventProvider.html#method_hasEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "KEY", "url": "YAHOO.util.KeyListener.html#property_KEY", "type": "property"}, {"access": "private", "host": "YAHOO.util.KeyListener", "name": "keyEvent", "url": "YAHOO.util.KeyListener.html#event_keyEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "lastError", "url": "YAHOO.util.CustomEvent.html#property_lastError", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "scope", "url": "YAHOO.util.CustomEvent.html#property_scope", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "signature", "url": "YAHOO.util.CustomEvent.html#property_signature", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "silent", "url": "YAHOO.util.CustomEvent.html#property_silent", "type": "property"}, {"access": "", "host": "EventProvider", "name": "subscribe", "url": "EventProvider.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribe", "url": "YAHOO.util.CustomEvent.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribeEvent", "url": "YAHOO.util.CustomEvent.html#event_subscribeEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribers", "url": "YAHOO.util.CustomEvent.html#property_subscribers", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "toString", "url": "YAHOO.util.KeyListener.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "toString", "url": "YAHOO.util.CustomEvent.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "type", "url": "YAHOO.util.CustomEvent.html#property_type", "type": "property"}, {"access": "", "host": "EventProvider", "name": "unsubscribe", "url": "EventProvider.html#method_unsubscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribe", "url": "YAHOO.util.CustomEvent.html#method_unsubscribe", "type": "method"}, {"access": "", "host": "EventProvider", "name": "unsubscribeAll", "url": "EventProvider.html#method_unsubscribeAll", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribeAll", "url": "YAHOO.util.CustomEvent.html#method_unsubscribeAll", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.FLAT", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.FLAT", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.LIST", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.LIST", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "YAHOO.util.KeyListener.KEYDOWN", "url": "YAHOO.util.KeyListener.html#property_YAHOO.util.KeyListener.KEYDOWN", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "YAHOO.util.KeyListener.KEYUP", "url": "YAHOO.util.KeyListener.html#property_YAHOO.util.KeyListener.KEYUP", "type": "property"}, {"access": "private", "host": "EventProvider", "name": "__yui_events", "url": "EventProvider.html#property___yui_events", "type": "property"}, {"access": "private", "host": "EventProvider", "name": "__yui_subscribers", "url": "EventProvider.html#property___yui_subscribers", "type": "property"}];
 </script>
 </body>
 </html>

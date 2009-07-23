@@ -5097,6 +5097,15 @@ execution scope of the listener</span>
                                             <span rel="yui:method" resource="YAHOO.widget.Module.html#method__initResizeMonitor">                                        
                                             <a class="protected" href="YAHOO.widget.Module.html#method__initResizeMonitor" property="yui:name" title="_initResizeMonitor">_initResizeMonitor</a><span class="protected">,</span>
                                             </span>
+                                            <span rel="yui:method" resource="YAHOO.widget.Module.html#method__renderBody">                                        
+                                            <a class="protected" href="YAHOO.widget.Module.html#method__renderBody" property="yui:name" title="_renderBody">_renderBody</a><span class="protected">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.widget.Module.html#method__renderFooter">                                        
+                                            <a class="protected" href="YAHOO.widget.Module.html#method__renderFooter" property="yui:name" title="_renderFooter">_renderFooter</a><span class="protected">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.widget.Module.html#method__renderHeader">                                        
+                                            <a class="protected" href="YAHOO.widget.Module.html#method__renderHeader" property="yui:name" title="_renderHeader">_renderHeader</a><span class="protected">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.widget.Module.html#method__supportsCWResize">                                        
                                             <a class="private" href="YAHOO.widget.Module.html#method__supportsCWResize" property="yui:name" title="_supportsCWResize">_supportsCWResize</a><span class="private">,</span>
                                             </span>
@@ -5173,8 +5182,14 @@ execution scope of the listener</span>
                                             <span rel="yui:method" resource="YAHOO.widget.Overlay.html#method__getComputedHeight">                                        
                                             <a class="private" href="YAHOO.widget.Overlay.html#method__getComputedHeight" property="yui:name" title="_getComputedHeight">_getComputedHeight</a><span class="private">,</span>
                                             </span>
+                                            <span rel="yui:method" resource="YAHOO.widget.Overlay.html#method__getConstrainedPos">                                        
+                                            <a class="protected" href="YAHOO.widget.Overlay.html#method__getConstrainedPos" property="yui:name" title="_getConstrainedPos">_getConstrainedPos</a><span class="protected">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.widget.Overlay.html#method__getPreciseHeight">                                        
                                             <a class="private" href="YAHOO.widget.Overlay.html#method__getPreciseHeight" property="yui:name" title="_getPreciseHeight">_getPreciseHeight</a><span class="private">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.widget.Overlay.html#method__preventOverlap">                                        
+                                            <a class="protected" href="YAHOO.widget.Overlay.html#method__preventOverlap" property="yui:name" title="_preventOverlap">_preventOverlap</a><span class="protected">,</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.widget.Overlay.html#method__primeXYFromDOM">                                        
                                             <a class="protected" href="YAHOO.widget.Overlay.html#method__primeXYFromDOM" property="yui:name" title="_primeXYFromDOM">_primeXYFromDOM</a><span class="protected">,</span>
@@ -5647,7 +5662,7 @@ over the menu.  Passes back the DOM Event object as an argument.
                                         <a class="" href="YAHOO.widget.Module.html#event_destroyEvent" property="yui:name" title="destroyEvent">destroyEvent</a><span class="">,</span>
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.widget.Module.html#event_hideEvent">
-                                        <a class="" href="YAHOO.widget.Module.html#event_hideEvent" property="yui:name" title="hideEvent">hideEvent</a>
+                                        <a class="" href="YAHOO.widget.Module.html#event_hideEvent" property="yui:name" title="hideEvent">hideEvent</a><span class="">,</span>
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.widget.Module.html#event_initEvent">
                                         <a class="" href="YAHOO.widget.Module.html#event_initEvent" property="yui:name" title="initEvent">initEvent</a>
@@ -5800,7 +5815,7 @@ rendered into.
                                             Array of context arguments for context-sensitive positioning.  
 The format is: [id or element, element corner, context corner]. 
 For example, setting this property to ["img1", "tl", "bl"] would 
-align the Mnu's top left corner to the context element's 
+align the Menu's top left corner to the context element's 
 bottom left corner.  This property is only applied when the "position" 
 configuration property is set to dynamic.
                                         </div>
@@ -5939,7 +5954,7 @@ to all submenus.
                                     <div class="detail">
                                         <div class="description" property="yui:description">
                                             Number defining the maximum height (in pixels) for a menu's 
-body element (<code>&#60;div class="bd"&#60;</code>).  Once a menu's body 
+body element (<code>&#60;div class="bd"&#62;</code>).  Once a menu's body 
 exceeds this height, the contents of the body are scrolled to maintain 
 this value.  This value cannot be set lower than the value of the 
 "minscrollheight" configuration property.

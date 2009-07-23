@@ -12,6 +12,7 @@ var L = YAHOO.lang,
     ARRAY_TOSTRING = '[object Array]',
     FUNCTION_TOSTRING = '[object Function]',
     OP = Object.prototype,
+    NOTHING = [],
 
     // ADD = ["toString", "valueOf", "hasOwnProperty"],
     ADD = ["toString", "valueOf"],
@@ -56,7 +57,7 @@ var L = YAHOO.lang,
      * @return {boolean} the result
      */
     isFunction: function(o) {
-        return OP.toString.apply(o) === FUNCTION_TOSTRING;
+        return (typeof o === 'function') || OP.toString.apply(o) === FUNCTION_TOSTRING;
     },
         
     /**
@@ -476,12 +477,12 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             throw new TypeError("method undefined");
         }
 
-        if (!L.isArray(d)) {
+        if (d && !L.isArray(d)) {
             d = [data];
         }
 
         f = function() {
-            m.apply(o, d);
+            m.apply(o, d || NOTHING);
         };
 
         r = (periodic) ? setInterval(f, when) : setTimeout(f, when);

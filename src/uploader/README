@@ -1,5 +1,11 @@
 YUI Library - Uploader - Release Notes
 
+2.7.0
+  * Bug fixes
+     * All global variables were converted to member variables of YAHOO
+     * Changes in how the specific instances of uploader are tracked when events are dispatched from Flash (to avoid initialization race conditions particularly visible in Firefox 3 with AdBlock)
+  * New optional forceTransparent argument was added to the Uploader constructor: if true, it forces Flash to render the Flash app as transparent even if it's running in the "button" mode (for use with non-rectangular PNG buttons with transparency).
+
 2.6.0
   * Changes due to new security rules in Flash Player 10:
      * Browse() function has been eliminated; the uploader now has to have an internal Flash UI.

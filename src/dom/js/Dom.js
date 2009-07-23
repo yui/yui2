@@ -5,9 +5,10 @@
  */
 
 (function() {
-    YAHOO.env._id_counter = YAHOO.env._id_counter || 0;     // for use with generateId (global to save state if Dom is overwritten)
+    // for use with generateId (global to save state if Dom is overwritten)
+    YAHOO.env._id_counter = YAHOO.env._id_counter || 0;
 
-        // internal shorthand
+    // internal shorthand
     var Y = YAHOO.util,
         lang = YAHOO.lang,
         UA = YAHOO.env.ua,
@@ -76,6 +77,8 @@
             'className': _CLASS
         },
 
+        DOT_ATTRIBUTES: {},
+
         /**
          * Returns an HTMLElement reference.
          * @method get
@@ -93,13 +96,13 @@
                 if (typeof el === 'string') { // id
                     id = el;
                     el = document.getElementById(el);
-                    if (el && el.id === id) { // IE: avoid false match on "name" attribute
+                    if (el && el.getAttribute('id') === id) { // IE: avoid false match on "name" attribute
                     return el;
                     } else if (el && document.all) { // filter by name
                         el = null;
                         nodes = document.all[id];
                         for (i = 0, len = nodes.length; i < len; ++i) {
-                            if (nodes[i].id === id) {
+                            if (nodes[i].getAttribute('id') === id) {
                                 return nodes[i];
                             }
                         }
@@ -107,7 +110,7 @@
                     return el;
                 }
                 
-                if (el.DOM_EVENTS) { // YAHOO.util.Element
+                if (YAHOO.util.Element && el instanceof YAHOO.util.Element) {
                     el = el.get('element');
                 }
 
@@ -283,8 +286,6 @@
                             off1 = 2;
                             off2 = 2;
                             mode = doc[COMPAT_MODE];
-                            bLeft = _getComputedStyle(doc[DOCUMENT_ELEMENT], BORDER_LEFT_WIDTH);
-                            bTop = _getComputedStyle(doc[DOCUMENT_ELEMENT], BORDER_TOP_WIDTH);
 
                             if (UA.ie === 6) {
                                 if (mode !== _BACK_COMPAT) {
@@ -293,7 +294,9 @@
                                 }
                             }
                             
-                            if ((mode == _BACK_COMPAT)) {
+                            if ((mode === _BACK_COMPAT)) {
+                                bLeft = _getComputedStyle(doc[DOCUMENT_ELEMENT], BORDER_LEFT_WIDTH);
+                                bTop = _getComputedStyle(doc[DOCUMENT_ELEMENT], BORDER_TOP_WIDTH);
                                 if (bLeft !== MEDIUM) {
                                     off1 = parseInt(bLeft, 10);
                                 }
@@ -548,7 +551,7 @@
         },
 
         /**
-         * Returns a array of HTMLElements with the given class.
+         * Returns an array of HTMLElements with the given class.
          * For optimized performance, include a tag and/or root node when possible.
          * Note: This method operates against a live collection, so modifying the 
          * collection in the callback (removing/appending nodes, etc.) will have
@@ -557,14 +560,14 @@
          * @method getElementsByClassName
          * @param {String} className The class name to match against
          * @param {String} tag (optional) The tag name of the elements being collected
-         * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
+         * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point.
+         * This element is not included in the className scan.
          * @param {Function} apply (optional) A function to apply to each element when found 
          * @param {Any} o (optional) An optional arg that is passed to the supplied method
          * @param {Boolean} overrides (optional) Whether or not to override the scope of "method" with "o"
          * @return {Array} An array of elements that have the given class name
          */
         getElementsByClassName: function(className, tag, root, apply, o, overrides) {
-            className = lang.trim(className);
             tag = tag || '*';
             root = (root) ? Y.Dom.get(root) : null || document; 
             if (!root) {
@@ -604,7 +607,7 @@
                 current;
             
             if (el && className) {
-                current = Y.Dom.getAttribute(el, CLASS_NAME) || EMPTY;
+                current = Y.Dom._getAttribute(el, CLASS_NAME) || EMPTY;
                 if (className.exec) {
                     ret = className.test(current);
                 } else {
@@ -634,7 +637,7 @@
                 current;
 
             if (el && className) {
-                current = Y.Dom.getAttribute(el, CLASS_NAME) || EMPTY;
+                current = Y.Dom._getAttribute(el, CLASS_NAME) || EMPTY;
                 if ( !Y.Dom._hasClass(el, className) ) {
                     Y.Dom.setAttribute(el, CLASS_NAME, trim(current + SPACE + className));
                     ret = true;
@@ -664,15 +667,15 @@
                 attr;
 
             if (el && className) {
-                current = Y.Dom.getAttribute(el, CLASS_NAME) || EMPTY;
+                current = Y.Dom._getAttribute(el, CLASS_NAME) || EMPTY;
                 Y.Dom.setAttribute(el, CLASS_NAME, current.replace(Y.Dom._getClassRegex(className), EMPTY));
 
-                newClass = Y.Dom.getAttribute(el, CLASS_NAME);
+                newClass = Y.Dom._getAttribute(el, CLASS_NAME);
                 if (current !== newClass) { // else nothing changed
                     Y.Dom.setAttribute(el, CLASS_NAME, trim(newClass)); // trim after comparing to current class
                     ret = true;
 
-                    if (Y.Dom.getAttribute(el, CLASS_NAME) === '') { // remove class attribute if empty
+                    if (Y.Dom._getAttribute(el, CLASS_NAME) === '') { // remove class attribute if empty
                         attr = (el.hasAttribute && el.hasAttribute(_CLASS)) ? _CLASS : CLASS_NAME;
                         YAHOO.log('removeClass removing empty class attribute', 'info', 'Dom');
                         el.removeAttribute(attr);
@@ -716,7 +719,7 @@
                     ret = Y.Dom._addClass(el, classObj.to);
                 } else if (from !== to) { // else nothing to replace
                     // May need to lead with DBLSPACE?
-                    current = Y.Dom.getAttribute(el, CLASS_NAME) || EMPTY;
+                    current = Y.Dom._getAttribute(el, CLASS_NAME) || EMPTY;
                     className = (SPACE + current.replace(Y.Dom._getClassRegex(from), SPACE + to)).
                                split(Y.Dom._getClassRegex(to));
 
@@ -752,7 +755,7 @@
                 YAHOO.log('generateId generating ' + id, 'info', 'Dom');
 
                 if (el) {
-                    if (el[OWNER_DOCUMENT].getElementById(id)) { // in case one already exists
+                    if (el[OWNER_DOCUMENT] && el[OWNER_DOCUMENT].getElementById(id)) { // in case one already exists
                         // use failed id plus prefix to help ensure uniqueness
                         return Y.Dom.generateId(el, id + prefix);
                     }
@@ -816,7 +819,7 @@
         },
         
         /**
-         * Returns a array of HTMLElements that pass the test applied by supplied boolean method.
+         * Returns an array of HTMLElements that pass the test applied by supplied boolean method.
          * For optimized performance, include a tag and/or root node when possible.
          * Note: This method operates against a live collection, so modifying the 
          * collection in the callback (removing/appending nodes, etc.) will have
@@ -1275,10 +1278,24 @@
          * @param {String} val The value of the attribute.
          */
         setAttribute: function(el, attr, val) {
-            attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
-            el.setAttribute(attr, val);
+            Y.Dom.batch(el, Y.Dom._setAttribute, { attr: attr, val: val });
         },
 
+        _setAttribute: function(el, args) {
+            var attr = Y.Dom._toCamel(args.attr),
+                val = args.val;
+
+            if (el && el.setAttribute) {
+                if (Y.Dom.DOT_ATTRIBUTES[attr]) {
+                    el[attr] = val;
+                } else {
+                    attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
+                    el.setAttribute(attr, val);
+                }
+            } else {
+                YAHOO.log('setAttribute method not available for ' + el, 'error', 'Dom');
+            }
+        },
 
         /**
          * Provides a normalized attribute interface. 
@@ -1288,8 +1305,21 @@
          * @return {String} The current value of the attribute. 
          */
         getAttribute: function(el, attr) {
+            return Y.Dom.batch(el, Y.Dom._getAttribute, attr);
+        },
+
+
+        _getAttribute: function(el, attr) {
+            var val;
             attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
-            return el.getAttribute(attr);
+
+            if (el && el.getAttribute) {
+                val = el.getAttribute(attr, 2);
+            } else {
+                YAHOO.log('getAttribute method not available for ' + el, 'error', 'Dom');
+            }
+
+            return val;
         },
 
         _toCamel: function(property) {
@@ -1323,7 +1353,7 @@
 
         _patterns: {
             ROOT_TAG: /^body|html$/i, // body for quirks mode, html for standards,
-            CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}])/g
+            CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}\\])/g
         },
 
 
@@ -1372,5 +1402,9 @@
             return val;
         };
 
+    }
+
+    if (UA.ie && UA.ie >= 8 && document.documentElement.hasAttribute) { // IE 8 standards
+        Y.Dom.DOT_ATTRIBUTES.type = true; // IE 8 errors on input.setAttribute('type')
     }
 })();
