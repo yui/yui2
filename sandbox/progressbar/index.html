@@ -24,17 +24,15 @@
 .plain.yui-pb {
 	height:25px;
 }
+
 .plain .yui-pb-mask div {
-	/* if you don't provide a mask, the bar will be a completely rectangular thing  with no borders */
 	background-image: url(mask.gif);
 }
 
 .plain .yui-pb-bar {
-	/* if you omit the image of the bar, it will be shown as a flat thing of the color given in attribute 'barColor' */
 	background-image:url(bar.gif);
 }
 .plain.yui-pb .yui-pb-anim {
-	/* if you omit the image of the bar, it will be shown as a flat thing of the color given in attribute 'barColor' */
 	background-image:url(animbar.gif);
 }
 
@@ -85,7 +83,7 @@
 }
 
 #pbthin  {
-	padding:.5em;
+	padding:0.5em;
 	background-color: rgb(192,192,192);
 }
 
@@ -164,12 +162,12 @@ pre, code {
 </style>
 </head>
 <body class="yui-skin-sam">
-	<div style="position:fixed;left:0;top:0;border:thin solid silver">
+	<div style="position:fixed;left:0;top:0;border:thin solid silver;">
 		You can use this box<br/>
 		to change the value<br/>
 		of the bar.<br/>
 		Range: 0 - 100<br/>
-		<input id="newValue" value="50" maxlength="3" size="3" /><button id="setValue">Set</button>
+		<input type="text" id="newValue" value="50" maxlength="3" size="3" /><button id="setValue">Set</button>
 	</div>
 
 	<div id="doc">
@@ -234,7 +232,7 @@ pre, code {
 			<table width="100%" class="rankings"><tr><th>Song</th><th>Artist</th><th>Ranking</th></tr>
 			<tr><td>Carolan's Frolic</td><td>Richard Searles</td><td id="song123"></td></tr>
 			<tr><td>Jeux d'enfants</td><td>Cirque Du Soleil</td><td id="song456"></td></tr>
-			<tr><td>Foliada dos Aires da Terra</td><td>Carlos Núñez</td><td id="song789"></td></tr>
+			<tr><td>Foliada dos Aires da Terra</td><td>Carlos N&uacute;&ntilde;ez</td><td id="song789"></td></tr>
 			</table>
 			<p>The code for the first cell is:</p>
 			<textarea name="code" class="JScript" cols="60" rows="1">

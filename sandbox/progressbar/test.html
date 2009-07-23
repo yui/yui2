@@ -605,6 +605,48 @@
 
 	oSuite.add(new YAHOO.tool.TestCase({
     
+        name: "Change of end values on a rendered widget",
+		setUp : function () {
+
+        },
+    
+        tearDown : function () {
+			pb.destroy();
+        },
+		testMaxValue: function() {
+            pb = new PB({value:30});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('60px',getStyle(t.b,'width'),'bar width before');
+			
+			pb.set('maxValue',50);
+			A.areEqual('120px',getStyle(t.b,'width'),'bar width maxValue 50');
+			pb.set('maxValue',30);
+			A.areEqual('200px',getStyle(t.b,'width'),'bar width maxValue 30');
+			pb.set('maxValue',20);
+			A.areEqual('200px',getStyle(t.b,'width'),'bar width maxValue 20');
+			A.areEqual(20,pb.get('value'),'value should be cropped to maxValue');
+		},
+		testMinValue: function() {
+            pb = new PB({value:50});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('100px',getStyle(t.b,'width'),'bar width before');
+			
+			pb.set('minValue',20);
+			A.areEqual('75px',getStyle(t.b,'width'),'bar width minValue 20');
+			pb.set('minValue',50);
+			A.areEqual('0px',getStyle(t.b,'width'),'bar width minValue 50');
+			pb.set('minValue',80);
+			A.areEqual('0px',getStyle(t.b,'width'),'bar width minValue 80');
+			A.areEqual(80,pb.get('value'),'value should be cropped to minValue');
+		}
+	}));
+
+	oSuite.add(new YAHOO.tool.TestCase({
+    
         name: "Animation",
 		setUp : function () {
         },
