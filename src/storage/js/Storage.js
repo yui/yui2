@@ -304,6 +304,10 @@ if (! YU.Storage) {
 	};
 
 	YL.augmentProto(YU.Storage, YU.EventProvider);
+<<<<<<< HEAD:src/storage/js/Storage.js
 }
+=======
+};
+>>>>>>> upstream/master:src/storage/js/Storage.js
 
 }());
