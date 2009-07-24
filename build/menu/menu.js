@@ -22,7 +22,12 @@
 */
 (function () {
 
-    var _DIV = "DIV",
+    var UA = YAHOO.env.ua,
+		Dom = YAHOO.util.Dom,
+	    Event = YAHOO.util.Event,
+	    Lang = YAHOO.lang,
+
+		_DIV = "DIV",
     	_HD = "hd",
     	_BD = "bd",
     	_FT = "ft",
@@ -32,7 +37,8 @@
 		_MOUSEOUT = "mouseout",
 		_MOUSEDOWN = "mousedown",
 		_MOUSEUP = "mouseup",
-		_FOCUS = YAHOO.env.ua.ie ? "focusin" : "focus",		
+		
+		_FOCUS = UA.ie ? "focusin" : "focus",		
 		_CLICK = "click",
 		_KEYDOWN = "keydown",
 		_KEYUP = "keyup",
@@ -44,12 +50,7 @@
 		_SELECTED = "selected",
 		_VISIBLE = "visible",
 		_UL = "UL",
-		_MENUMANAGER = "MenuManager",
-    	
-    
-    	Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event,
-        Lang = YAHOO.lang;
+		_MENUMANAGER = "MenuManager";
 
 
     /**
@@ -210,6 +211,8 @@
             // See if the target of the event was a menu, or a menu item
     
             oElement = getMenuRootElement(oTarget),
+			bFireEvent = true,
+			sEventType = p_oEvent.type,
             sCustomEventType,
             sTagName,
             sId,
@@ -248,21 +251,50 @@
     
             if (oMenu) {
     
-                sCustomEventType = m_oEventTypes[p_oEvent.type];
-    
+                sCustomEventType = m_oEventTypes[sEventType];
+
+				/*
+					There is an inconsistency between Firefox for Mac OS X and 
+					Firefox Windows & Linux regarding the triggering of the 
+					display of the browser's context menu and the subsequent 
+					firing of the "click" event. In Firefox for Windows & Linux, 
+					when the user triggers the display of the browser's context 
+					menu the "click" event also fires for the document object, 
+					even though the "click" event did not fire for the element 
+					that was the original target of the "contextmenu" event. 
+					This is unique to Firefox on Windows & Linux.  For all 
+					other A-Grade browsers, including Firefox for Mac OS X, the 
+					"click" event doesn't fire for the document object. 
+
+					This bug in Firefox for Windows affects Menu, as Menu 
+					instances listen for events at the document level and 
+					dispatches Custom Events of the same name.  Therefore users
+					of Menu will get an unwanted firing of the "click" 
+					custom event.  The following line fixes this bug.
+				*/
+				
+
+
+				if (sEventType == "click" && 
+					(UA.gecko && oMenu.platform != "mac") && 
+					p_oEvent.button > 0) {
+
+					bFireEvent = false;
+
+				}
     
                 // Fire the Custom Event that corresponds the current DOM event    
         
-                if (oMenuItem && !oMenuItem.cfg.getProperty(_DISABLED)) {
-    
+                if (bFireEvent && oMenuItem && !oMenuItem.cfg.getProperty(_DISABLED)) {
                     oMenuItem[sCustomEventType].fire(p_oEvent);                   
-    
                 }
         
-                oMenu[sCustomEventType].fire(p_oEvent, oMenuItem);
+				if (bFireEvent) {
+                	oMenu[sCustomEventType].fire(p_oEvent, oMenuItem);
+				}
             
             }
-            else if (p_oEvent.type == _MOUSEDOWN) {
+            else if (sEventType == _MOUSEDOWN) {
     
                 /*
                     If the target of the event wasn't a menu, hide all 
@@ -307,7 +339,7 @@
                 } 
     
             }
-            else if (p_oEvent.type == _FOCUS) {
+            else if (sEventType == _FOCUS) {
             
             	m_oFocusedElement = oTarget;
             
@@ -925,7 +957,6 @@
 		_DYNAMIC = "dynamic",
 		_STATIC = "static",
 		_DYNAMIC_STATIC = _DYNAMIC + "," + _STATIC,
-		_WINDOWS = "windows",
 		_URL = "url",
 		_HASH = "#",
 		_TARGET = "target",
@@ -2860,42 +2891,20 @@ _onClick: function (p_sType, p_aArgs) {
 
 
 	var hide = function () {
-
-		/*
-			There is an inconsistency between Firefox for Mac OS X and Firefox Windows 
-			regarding the triggering of the display of the browser's context menu and the 
-			subsequent firing of the "click" event. In Firefox for Windows, when the user 
-			triggers the display of the browser's context menu the "click" event also fires 
-			for the document object, even though the "click" event did not fire for the 
-			element that was the original target of the "contextmenu" event. This is unique 
-			to Firefox on Windows. For all other A-Grade browsers, including Firefox for 
-			Mac OS X, the "click" event doesn't fire for the document object. 
-
-			This bug in Firefox for Windows affects Menu as Menu instances listen for 
-			events at the document level and have an internal "click" event handler they 
-			use to hide themselves when clicked. As a result, in Firefox for Windows a 
-			Menu will hide when the user right clicks on a MenuItem to raise the browser's 
-			default context menu, because its internal "click" event handler ends up 
-			getting called.  The following line fixes this bug.
-		*/
-
-		if (!((UA.gecko && this.platform == _WINDOWS) && oEvent.button > 0)) {
 		
-			oRoot = this.getRoot();
+		oRoot = this.getRoot();
 
-			if (oRoot instanceof YAHOO.widget.MenuBar || 
-				oRoot.cfg.getProperty(_POSITION) == _STATIC) {
+		if (oRoot instanceof YAHOO.widget.MenuBar || 
+			oRoot.cfg.getProperty(_POSITION) == _STATIC) {
 
-				oRoot.clearActiveItem();
+			oRoot.clearActiveItem();
 
-			}
-			else {
+		}
+		else {
 
-				oRoot.hide();
-			
-			}
+			oRoot.hide();
 		
-		}	
+		}
 	
 	};
 
@@ -4280,6 +4289,7 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         case _MONITOR_RESIZE:
         case _SHADOW:
         case _PREVENT_CONTEXT_OVERLAP:
+		case _KEEP_OPEN:
 
             p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                 
@@ -4346,7 +4356,9 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 
 			preventcontextoverlap: oParentCfg.getProperty(_PREVENT_CONTEXT_OVERLAP),
             
-            monitorresize: oParentCfg.getProperty(_MONITOR_RESIZE)
+            monitorresize: oParentCfg.getProperty(_MONITOR_RESIZE),
+
+			keepopen: oParentCfg.getProperty(_KEEP_OPEN)
 
         },
         
