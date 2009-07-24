@@ -3434,6 +3434,7 @@
         <span class="nx">case</span> <span class="nx">_MONITOR_RESIZE</span><span class="o">:</span>
         <span class="nx">case</span> <span class="nx">_SHADOW</span><span class="o">:</span>
         <span class="nx">case</span> <span class="nx">_PREVENT_CONTEXT_OVERLAP</span><span class="o">:</span>
+		<span class="nx">case</span> <span class="nx">_KEEP_OPEN</span><span class="o">:</span>
 
             <span class="nx">p_oSubmenu</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="nx">sPropertyName</span><span class="o">,</span> <span class="nx">oPropertyValue</span><span class="o">);</span>
                 
@@ -3500,7 +3501,9 @@
 
 			<span class="nx">preventcontextoverlap</span><span class="o">:</span> <span class="nx">oParentCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_PREVENT_CONTEXT_OVERLAP</span><span class="o">),</span>
             
-            <span class="nx">monitorresize</span><span class="o">:</span> <span class="nx">oParentCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_MONITOR_RESIZE</span><span class="o">)</span>
+            <span class="nx">monitorresize</span><span class="o">:</span> <span class="nx">oParentCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_MONITOR_RESIZE</span><span class="o">),</span>
+
+			<span class="nx">keepopen</span><span class="o">:</span> <span class="nx">oParentCfg</span><span class="o">.</span><span class="nx">getProperty</span><span class="o">(</span><span class="nx">_KEEP_OPEN</span><span class="o">)</span>
 
         <span class="o">},</span>
         
