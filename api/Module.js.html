@@ -752,7 +752,7 @@
 <span class="c">                        Need to set &quot;position&quot; property before inserting the </span>
 <span class="c">                        iframe into the document or Safari&#39;s status bar will </span>
 <span class="c">                        forever indicate the iframe is loading </span>
-<span class="c">                        (See SourceForge bug #1723064)</span>
+<span class="c">                        (See YUILibrary bug #1723064)</span>
 <span class="c">                    */</span>
                     <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span><span class="o">;</span>
                     <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">;</span>
@@ -781,7 +781,7 @@
 
                     <span class="c">/*</span>
 <span class="c">                       Don&#39;t open/close the document for Gecko like we used to, since it</span>
-<span class="c">                       leads to duplicate cookies. (See SourceForge bug #1721755)</span>
+<span class="c">                       leads to duplicate cookies. (See YUILibrary bug #1721755)</span>
 <span class="c">                    */</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">webkit</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">oDoc</span> <span class="o">=</span> <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">.</span><span class="nb">document</span><span class="o">;</span>
