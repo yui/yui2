@@ -579,7 +579,7 @@
             * hidden. <em>This fix is only applied to draggable Panels in IE 6 
             * (Strict Mode and Quirks Mode) and IE 7 (Quirks Mode)</em>. For 
             * more information on this issue see:
-            * SourceForge bugs #1726972 and #1589210.
+            * YUILibrary bugs #1726972 and #1589210.
             * @config draggable
             * @type Boolean
             * @default true
@@ -625,7 +625,7 @@
             * is initially made visible.  For Gecko-based browsers on Mac
             * OS X the underlay elment is always created as it is used as a 
             * shim to prevent Aqua scrollbars below a Panel instance from poking 
-            * through it (See SourceForge bug #836476).
+            * through it (See YUILibrary bug #1723530).
             * @config underlay
             * @type String
             * @default shadow
