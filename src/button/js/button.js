@@ -2492,7 +2492,8 @@
                 oButtonParent = oButtonElement.parentNode,
 				oMenu = this._menu,
                 oMenuElement = oMenu.element,
-				oSrcElement = oMenu.srcElement;
+				oSrcElement = oMenu.srcElement,
+				oItem;
         
         
             if (oButtonParent != oMenuElement.parentNode) {
@@ -2511,8 +2512,20 @@
 					oSrcElement.nodeName.toLowerCase() === "select" && 
 					oSrcElement.value) {
 				
-				this.set("selectedMenuItem", 
-							oMenu.getItem(oSrcElement.selectedIndex));
+				
+				oItem = oMenu.getItem(oSrcElement.selectedIndex);
+				
+				//	Set the value of the "selectedMenuItem" attribute
+				//	silently since this is the initial set--synchronizing 
+				//	the value of the source <SELECT> element in the DOM with 
+				//	its corresponding Menu instance.
+
+				this.set("selectedMenuItem", oItem, true);
+				
+				//	Call the "_onSelectedMenuItemChange" method since the 
+				//	attribute was set silently.
+
+				this._onSelectedMenuItemChange({ newValue: oItem });
 				
 			}
 
