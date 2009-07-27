@@ -416,11 +416,14 @@
 			YAHOO.log('start render','info','ProgressBar');
 			if (this._rendered) { return; }
 			this._rendered = true;
+			
+			var direction = this.get('direction');
 
 			// If the developer set a className attribute on initialization, 
-			// Element would have wiped out my own className
-			// So I need to insist on it.
+			// Element would have wiped out my own classNames
+			// So I need to insist on them, plus add the one for direction.
 			this.addClass(Prog.CLASS_PROGBAR);
+			this.addClass(Prog.CLASS_PROGBAR + '-' + direction);
 
 			var container = this.get('element');
 			container.tabIndex = 0;
@@ -430,7 +433,7 @@
 
 			this.appendTo(parent,before);
 			
-			switch(this.get('direction')) {
+			switch(direction) {
 				case DIRECTION_BTT:
 					Dom.setStyle(this.get('barEl'),'background-position','left bottom');
 					break;
@@ -439,11 +442,14 @@
 					break;
 			}
 					
-			
-			this._barSizeFunction = this._barSizeFunctions[0][this.get('direction')];
+			// I need to use the non-animated bar resizing function for initial redraw
+			this._barSizeFunction = this._barSizeFunctions[0][direction];
 			this.redraw();
 			this._fixEdges();
-			this._barSizeFunction = this._barSizeFunctions[this.get('anim')?1:0][this.get('direction')];
+			// I can now set the correct bar resizer
+			if (this.get('anim')) {
+				this._barSizeFunction = this._barSizeFunctions[1][direction];
+			}
 
 			this.on('minValueChange',this.redraw);
 			this.on('maxValueChange',this.redraw);
