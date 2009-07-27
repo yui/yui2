@@ -558,21 +558,18 @@ Paginator.prototype = {
 
         var totalRecords   = this.get('totalRecords'),
             template       = this.get('template'),
-            hide           = false,
             state          = this.getState(),
             // ex. yui-pg0-1 (first paginator, second container)
             id_base        = Paginator.ID_BASE + this.get('id') + '-',
             i, len;
 
-        if (totalRecords !== Paginator.VALUE_UNLIMITED &&
-            totalRecords < this.get('rowsPerPage') &&
-            !this.get('alwaysVisible')) {
-            hide = true;
+        // Assemble the containers, keeping them hidden
+        for (i = 0, len = this._containers.length; i < len; ++i) {
+            this._renderTemplate(this._containers[i],template,id_base+i,true);
         }
 
-        for (i = 0, len = this._containers.length; i < len; ++i) {
-            this._renderTemplate(this._containers[i],template,id_base+i,hide);
-        }
+        // Show the containers if appropriate
+        this.updateVisibility();
 
         // Set render attribute manually to support its readOnly contract
         if (this._containers.length) {
@@ -593,7 +590,7 @@ Paginator.prototype = {
      * @param container {HTMLElement} where to add the ui components
      * @param template {String} the template to use as a guide for rendering
      * @param id_base {String} id base for the container's ui components
-     * @param hide {Boolean} leave the container hidden
+     * @param hide {Boolean} leave the container hidden after assembly
      * @protected
      */
     _renderTemplate : function (container, template, id_base, hide) {
@@ -672,7 +669,7 @@ Paginator.prototype = {
         var alwaysVisible = this.get('alwaysVisible'),
             totalRecords,visible,rpp,rppOptions,i,len;
 
-        if (e.type === 'alwaysVisibleChange' || !alwaysVisible) {
+        if (!e || e.type === 'alwaysVisibleChange' || !alwaysVisible) {
             totalRecords = this.get('totalRecords');
             visible      = true;
             rpp          = this.get('rowsPerPage');

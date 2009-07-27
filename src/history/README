@@ -13,12 +13,12 @@ YUI Library - History - Release Notes
 
   * Fixed bug involving the escaping/unescaping of state and module names.
   * In initialize method, do case insensitive string comparison of tagName
-    (See SourceForge Bug #1868730)
+    (See YUILibrary Bug #1868730)
 
 2.4.0
 
   * Added onReady method (similar to the Event utility's DOMReady method)
-  * Fixed SourceForge bugs 1794347, 1490803, 1490818 and 1420015.
+  * Fixed YUILibrary bugs 1794347, 1490803, 1490818 and 1420015.
   * Starting with YUI 2.4.0, the necessary markup (see documentation) must be
     statically created in the HTML document, and passed to the Browser History
     Manager initialize method. This has two major benefits over older versions:
@@ -31,12 +31,12 @@ YUI Library - History - Release Notes
 2.3.0
 
   * The Browser History Manager now works on IE if used inside an IFrame
-    (See SourceForge Bug #1729569)
+    (See YUILibrary Bug #1729569)
   * Added multiNavigate method, which allows changing the state of several
     modules at once, without introducing intermediate history entries
-    (See SourceForge Bug #1713236)
+    (See YUILibrary Bug #1713236)
   * Do not raise an exception when re-registering a module
-    (See SourceForge Bug #1708840)
+    (See YUILibrary Bug #1708840)
 
 2.2.1
 

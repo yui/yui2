@@ -4370,8 +4370,12 @@ getTdEl : function(cell) {
         else {
             elCell = el;
         }
-
-        return elCell;
+        
+        // Make sure the TD is in this TBODY
+        if(elCell && (elCell.parentNode.parentNode == this._elTbody)) {
+            // Now we can return the TD element
+            return elCell;
+        }
     }
     else if(cell) {
         var oRecord, nColKeyIndex;
@@ -7146,8 +7150,8 @@ formatCell : function(elLiner, oRecord, oColumn) {
 updateCell : function(oRecord, oColumn, oData) {    
     // Validate Column and Record
     oColumn = (oColumn instanceof YAHOO.widget.Column) ? oColumn : this.getColumn(oColumn);
-    if(oColumn && oColumn.getKey() && (oRecord instanceof YAHOO.widget.Record)) {
-        var sKey = oColumn.getKey(),
+    if(oColumn && oColumn.getField() && (oRecord instanceof YAHOO.widget.Record)) {
+        var sKey = oColumn.getField(),
         
         // Copy data from the Record for the event that gets fired later
         //var oldData = YAHOO.widget.DataTable._cloneObject(oRecord.getData());

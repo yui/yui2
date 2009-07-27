@@ -1122,6 +1122,7 @@ YAHOO.util.Connect =
 		    io = document.getElementById(frameId),
 		    oConn = this,
 			args = (callback && callback.argument)?callback.argument:null,
+			ie8 = (document.documentMode && (document.documentMode === 8))?true:false,
             oElements,i,prop,obj;
 
 		// Track original HTML form attribute values.
@@ -1138,7 +1139,7 @@ YAHOO.util.Connect =
 		this._formNode.setAttribute('method', 'POST');
 		this._formNode.setAttribute('target', frameId);
 
-		if(YAHOO.env.ua.ie){
+		if(YAHOO.env.ua.ie && !ie8){
 			// IE does not respect property enctype for HTML forms.
 			// Instead it uses the property - "encoding".
 			this._formNode.setAttribute('encoding', uploadEncoding);

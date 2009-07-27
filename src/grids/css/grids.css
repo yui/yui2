@@ -305,7 +305,7 @@ body {
 	width: 48.1%;
 }
 
-/*SF 1927599 from 1.14 to 2.6.0*/
+/* YUILibrary bug #1927599 from 1.14 to 2.6.0*/
 .yui-g .yui-gb div.first,
 	.yui-gb .yui-gb div.first {
 	*margin-right: 0;
