@@ -2295,6 +2295,10 @@
                 !Dom.isAncestor(oMenuElement, oTarget)) {
         
                 this._hideMenu();
+
+				if (UA.ie && oTarget.focus) {
+					oTarget.setActive();
+				}
         
                 Event.removeListener(document, "mousedown", 
                     this._onDocumentMouseDown);    
@@ -2374,8 +2378,7 @@
         */
         _onMenuHide: function (p_sType) {
             
-            var oMenu = this._menu,
-                sTitle,
+            var sTitle,
                 sState;
         
             
