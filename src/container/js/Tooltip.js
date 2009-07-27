@@ -408,7 +408,7 @@
             * before it is made visible.  The original value will be 
             * restored when the Tooltip is hidden. This ensures the Tooltip is 
             * rendered at a usable width.  For more information see 
-            * SourceForge bug #1685496 and SourceForge 
+            * YUILibrary bug #1685496 and YUILibrary 
             * bug #1735423.
             * @config width
             * @type String

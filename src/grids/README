@@ -8,15 +8,15 @@ Version 2.7.0
 
 Version 2.6.0
 
-  * Removed extraneous "s" typo per Bugzilla #1826435 and SF #1921958
+  * Removed extraneous "s" typo per YUILibrary bug #1921958
   * Added .yui-g .yui-u .yui-g {width:100%;} so nested grids work 
-    more consistently; BZ:2156128, SF:2060556
-  * Added provision for better g>g>u gutters per SF:1927599
+    more consistently; YUILibrary bug #2060556
+  * Added provision for better g>g>u gutters per YUILibrary bug #1927599
 
 Version 2.5.1
 
   * Added more specific selectors to allow nesting on "yui-gd" grids 
-    within "yui-ge" for Bugzilla #1779582, Sourceforge #1897741 
+    within "yui-ge" for YUILibrary bug #1897741 
   * Modified Page Width and Template Preset values for IE
   * Reordered several rules; formatted file and added more comments
   * Modified width and margin values for "thirds" nesting grid
@@ -34,7 +34,7 @@ Version 2.4.0
 Version 2.3.1
 
   * Fixed bug in 2.3.0 that transposed the columns in deeply-
-    nested grids. Sourceforge #1765553, Bugzilla #1419885    
+    nested grids. YUILibrary bug #1765553    
   * Improved precision and consistency of margins in nested grids.
 
 Version 2.3.0
