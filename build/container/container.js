@@ -1386,7 +1386,7 @@
                         Need to set "position" property before inserting the 
                         iframe into the document or Safari's status bar will 
                         forever indicate the iframe is loading 
-                        (See SourceForge bug #1723064)
+                        (See YUILibrary bug #1723064)
                     */
                     oIFrame.style.position = "absolute";
                     oIFrame.style.visibility = "hidden";
@@ -1415,7 +1415,7 @@
 
                     /*
                        Don't open/close the document for Gecko like we used to, since it
-                       leads to duplicate cookies. (See SourceForge bug #1721755)
+                       leads to duplicate cookies. (See YUILibrary bug #1721755)
                     */
                     if (UA.webkit) {
                         oDoc = oIFrame.contentWindow.document;
@@ -5182,7 +5182,7 @@
             * before it is made visible.  The original value will be 
             * restored when the Tooltip is hidden. This ensures the Tooltip is 
             * rendered at a usable width.  For more information see 
-            * SourceForge bug #1685496 and SourceForge 
+            * YUILibrary bug #1685496 and YUILibrary 
             * bug #1735423.
             * @config width
             * @type String
@@ -6207,7 +6207,7 @@
             * hidden. <em>This fix is only applied to draggable Panels in IE 6 
             * (Strict Mode and Quirks Mode) and IE 7 (Quirks Mode)</em>. For 
             * more information on this issue see:
-            * SourceForge bugs #1726972 and #1589210.
+            * YUILibrary bugs #1726972 and #1589210.
             * @config draggable
             * @type Boolean
             * @default true
@@ -6253,7 +6253,7 @@
             * is initially made visible.  For Gecko-based browsers on Mac
             * OS X the underlay elment is always created as it is used as a 
             * shim to prevent Aqua scrollbars below a Panel instance from poking 
-            * through it (See SourceForge bug #836476).
+            * through it (See YUILibrary bug #1723530).
             * @config underlay
             * @type String
             * @default shadow

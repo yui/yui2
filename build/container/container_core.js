@@ -1386,7 +1386,7 @@
                         Need to set "position" property before inserting the 
                         iframe into the document or Safari's status bar will 
                         forever indicate the iframe is loading 
-                        (See SourceForge bug #1723064)
+                        (See YUILibrary bug #1723064)
                     */
                     oIFrame.style.position = "absolute";
                     oIFrame.style.visibility = "hidden";
@@ -1415,7 +1415,7 @@
 
                     /*
                        Don't open/close the document for Gecko like we used to, since it
-                       leads to duplicate cookies. (See SourceForge bug #1721755)
+                       leads to duplicate cookies. (See YUILibrary bug #1721755)
                     */
                     if (UA.webkit) {
                         oDoc = oIFrame.contentWindow.document;
