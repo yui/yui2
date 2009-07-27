@@ -2316,6 +2316,22 @@
                 !Dom.isAncestor(oMenuElement, oTarget)) {
         
                 this._hideMenu();
+
+				//	In IE when the user mouses down on a focusable element
+				//	that element will be focused and become the "activeElement".
+				//	(http://msdn.microsoft.com/en-us/library/ms533065(VS.85).aspx)
+				//	However, there is a bug in IE where if there is a  
+				//	positioned element with a focused descendant that is 
+				//	hidden in response to the mousedown event, the target of 
+				//	the mousedown event will appear to have focus, but will 
+				//	not be set as the activeElement.  This will result 
+				//	in the element not firing key events, even though it
+				//	appears to have focus.	The following call to "setActive"
+				//	fixes this bug.
+
+				if (UA.ie && oTarget.focus) {
+					oTarget.setActive();
+				}
         
                 Event.removeListener(document, "mousedown", 
                     this._onDocumentMouseDown);    
@@ -2395,8 +2411,7 @@
         */
         _onMenuHide: function (p_sType) {
             
-            var oMenu = this._menu,
-                sTitle,
+            var sTitle,
                 sState;
         
             
