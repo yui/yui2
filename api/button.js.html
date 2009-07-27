@@ -2541,7 +2541,8 @@
                 <span class="nx">oButtonParent</span> <span class="o">=</span> <span class="nx">oButtonElement</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">,</span>
 				<span class="nx">oMenu</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_menu</span><span class="o">,</span>
                 <span class="nx">oMenuElement</span> <span class="o">=</span> <span class="nx">oMenu</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span>
-				<span class="nx">oSrcElement</span> <span class="o">=</span> <span class="nx">oMenu</span><span class="o">.</span><span class="nx">srcElement</span><span class="o">;</span>
+				<span class="nx">oSrcElement</span> <span class="o">=</span> <span class="nx">oMenu</span><span class="o">.</span><span class="nx">srcElement</span><span class="o">,</span>
+				<span class="nx">oItem</span><span class="o">;</span>
         
         
             <span class="k">if</span> <span class="o">(</span><span class="nx">oButtonParent</span> <span class="o">!=</span> <span class="nx">oMenuElement</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">)</span> <span class="o">{</span>
@@ -2560,8 +2561,20 @@
 					<span class="nx">oSrcElement</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">===</span> <span class="s2">&quot;select&quot;</span> <span class="o">&amp;&amp;</span> 
 					<span class="nx">oSrcElement</span><span class="o">.</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
 				
-				<span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;selectedMenuItem&quot;</span><span class="o">,</span> 
-							<span class="nx">oMenu</span><span class="o">.</span><span class="nx">getItem</span><span class="o">(</span><span class="nx">oSrcElement</span><span class="o">.</span><span class="nx">selectedIndex</span><span class="o">));</span>
+				
+				<span class="nx">oItem</span> <span class="o">=</span> <span class="nx">oMenu</span><span class="o">.</span><span class="nx">getItem</span><span class="o">(</span><span class="nx">oSrcElement</span><span class="o">.</span><span class="nx">selectedIndex</span><span class="o">);</span>
+				
+				<span class="c">//	Set the value of the &quot;selectedMenuItem&quot; attribute</span>
+<span class="c"></span>				<span class="c">//	silently since this is the initial set--synchronizing </span>
+<span class="c"></span>				<span class="c">//	the value of the source &lt;SELECT&gt; element in the DOM with </span>
+<span class="c"></span>				<span class="c">//	its corresponding Menu instance.</span>
+<span class="c"></span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;selectedMenuItem&quot;</span><span class="o">,</span> <span class="nx">oItem</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+				
+				<span class="c">//	Call the &quot;_onSelectedMenuItemChange&quot; method since the </span>
+<span class="c"></span>				<span class="c">//	attribute was set silently.</span>
+<span class="c"></span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">_onSelectedMenuItemChange</span><span class="o">({</span> <span class="nx">newValue</span><span class="o">:</span> <span class="nx">oItem</span> <span class="o">});</span>
 				
 			<span class="o">}</span>
 
