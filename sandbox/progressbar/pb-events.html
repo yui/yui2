@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<!--CSS file (default YUI Sam Skin) -->
+<title>Progress Bar examples - Events</title>
+<!-- css -->
+<link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css">
+<link rel="stylesheet" type="text/css" href="../../build/base/base.css">
+
+<link rel="stylesheet" type="text/css" href="../../build/slider/assets/skins/sam/slider.css" />
+
+<link rel="stylesheet" type="text/css" href="../../build/progressbar/assets/skins/sam/progressbar.css">
+
+<link rel="stylesheet" type="text/css" href="http://developer.yahoo.com/yui/assets/dpSyntaxHighlighter.css">
+
+<!-- js -->
+<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
+<script type="text/javascript" src="../../build/element/element-min.js"></script>
+
+<script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="../../build/slider/slider-min.js"></script>
+
+
+<script type="text/javascript" src="../../build/progressbar/progressbar-debug.js"></script>
+
+<style type="text/css">
+
+fieldset {
+	border: thin solid silver;
+	background-color:#F0F0F0;
+	padding:1em;
+	margin:1em;
+}
+#pbContainer {
+	clear:left;
+	float:left;
+	width:40%;
+	margin: 2em;
+	padding:2em;
+}
+
+#captionContainer {
+	font-weight:bold;
+}
+
+#pbContainer .yui-pb-bar {
+	background: transparent none;
+}
+
+#valueSet {
+	float:right;
+	width:210px;
+}
+
+legend {
+	font-weight:bold;
+	margin:0 0.5em;
+	padding:0 0.2em;
+}
+
+code {
+	background-color:#e0e0e0;
+	border:thin solid #c0c0c0;
+	white-space:pre;
+	font-size:10px;
+}
+
+.dp-highlighter th, .dp-highlighter td {
+	border:0;
+	padding:0;
+}
+.dp-highlighter .line1, .dp-highlighter  .line2 {
+	padding-left:10px;
+	white-space:nowrap;
+}
+
+</style>
+</head>
+<body class="yui-skin-sam">
+
+	<div id="doc">
+		<div id="hd">
+			<h1>Progress Bar examples - Events</h1>
+			<p>This example shows how you can use the events that ProgressBar fires.</p>
+		</div>
+		<div id="bd">
+			<div id="pbContainer" ></div>
+			<fieldset id="valueSet">
+				<legend>Value</legend>
+				<div id="sliderValue" class="yui-h-slider" tabindex="-1" title="Value slider">
+					<div id="sliderValueThumb" class="yui-slider-thumb"><img src="../../build/slider/assets/thumb-n.gif"></div>
+				</div>
+				<p><label>Set: <span id="value">50</span></label></p>
+			</fieldset>
+		</div>
+		<div id="ft">
+			<p>We have created a ProgressBar and then set listeners for the events it fires.  
+			We have also provided a slider to make the ProgressBar change and so to fire those events.
+			Leaving aside the code to set and respond to the Slider control, the code for the ProgressBar is:</p>
+			<textarea name="code" class="JScript" cols="60" rows="1">
+				var pb = new YAHOO.widget.ProgressBar({
+					value:127,
+					anim:true,
+					maxValue:255,
+					captionEl:'captionContainer',
+					textTemplate:'We are at {value} in between {minValue} and {maxValue}'
+				}).render('pbContainer');
+				var anim = pb.get('anim');
+				anim.duration = 3;
+				anim.method = YAHOO.util.Easing.bounceBoth;
+				
+				pb.on('start',function (value) {
+					Dom.setStyle('pbContainer','backgroundColor','cyan');
+				});
+				
+				pb.on('progress',function (value) {
+					Dom.setStyle(this.get('barEl'),'backgroundColor','rgb(' + value + ',' + value + ',127)');
+				});
+				
+				pb.on('complete',function (value) {
+					Dom.setStyle(this.get('barEl'),'backgroundColor','rgb(' + value + ',' + value + ',127)');
+					Dom.setStyle('pbContainer','backgroundColor','white');
+				});
+			</textarea>
+			<p>We are instantiating the ProgressBar and configuring it so that the initial value is 127,
+			it will be animated, it will go up to 255 from the default minimum of 0, it will show its state 
+			using the text given in the template and it will do it right here: 
+			<span id="captionContainer"></span> (you will see it change while the bar moves).</p>
+			
+			<p>The ProgressBar uses the Animation utility so to configure it we have to fetch the instance the ProgressBar
+			uses and set its duration and easing method.  We are using an animated ProgressBar with a long duration
+			so we can see the events firing, otherwise, it all happens too fast. We are listening to all three events, 
+			the one that signals the start of the movement, one that is fired several times while it is moving and the 
+			one that signals the completion of the movement.  Without animation, the <code>complete</code> event
+			fires immediately after the <code>start</code> event with no <code>progress</code> ever fired.</p>
+			
+			<p>We are doing simple actions with the events. We set the background of the container upon receiving the
+			<code>start</code> event, we change the color of the bar itself according to the <code>value</code>
+			received in <code>progress</code> (all events provide the <code>value</code>) and finally, in the
+			<code>complete</code> event we are setting the final color of the bar and setting the background to white once again.
+			The <code>value</code> argument provides the nominal value of the ProgresBar, not the size of the bar itself.
+			A value of 50 will always be halfway in a range o 0 to 100, whether the ProgressBar is 100 or 500 pixels wide.
+			We set the range of this bar in between 0 to 255 so that they translate directly into color values.</p>
+			
+			<p>We need to confirm the color value of the bar on completion of the animation.  The <code>progress</code> event
+			is unreliable, it is derived from the <code>onTween</code> event fired by the animation.  Animation will try
+			to complete the animation within the time limit given, on a busy machine it might be able to do less
+			steps than on a faster machine.  It will fire <code>onTween</code> for each step, but how many steps
+			it will be able to fit within the <code>duration</code> given cannot be predicted.  You cannot trust
+			that there will be a <code>progress</code> event close in time to the final point to leave things properly set
+			so we need to confirm the final state in the <code>complete</code> event.  Besides, at a later stage in the project, 
+			the animation might be dropped and there wouldn't be any more <code>progress</code> events.</p>
+			
+			<p>Just as we have the <code>barEl</code> configuration attribute, which we used here, we have attributes holding the references
+			to the main elements that make the ProgressBar.  They are all read-only except for <code>captionEl</code>
+			which can be set to a reference or id of any DOM element in the page.  We have set this attribute
+			to point to a &lt;span&gt; element a few paragraphs above.  This element is filled with the text
+			produced based on the <code>textTemplate</code> both on each <code>progress</code> and <code>complete</code> event.
+			By default, <code>captionEl</code> is set to a container right at the center of the ProgressBar itself,
+			that has its <code>display</code> CSS attribute set to <code>none</code>.  If you set the <code>captionEl</code>
+			to some other container, it will follow the style of this new container.</p>
+			
+		</div>
+	</div>
+	
+<script  type="text/javascript">
+
+
+	YAHOO.util.Event.onDOMReady( function () {
+		var Dom = YAHOO.util.Dom;
+			
+		var pb = new YAHOO.widget.ProgressBar({
+			value:127,
+			anim:true,
+			maxValue:255,
+			captionEl:'captionContainer',
+			textTemplate:'We are at {value} in between {minValue} and {maxValue}'
+		}).render('pbContainer');
+		var anim = pb.get('anim');
+		anim.duration = 3;
+		anim.method = YAHOO.util.Easing.bounceBoth;
+		
+		pb.on('start',function (value) {
+			Dom.setStyle('pbContainer','backgroundColor','cyan');
+		});
+		
+		pb.on('progress',function (value) {
+			Dom.setStyle(this.get('barEl'),'backgroundColor','rgb(' + value + ',' + value + ',127)');
+		});
+		
+		pb.on('complete',function (value) {
+			Dom.setStyle(this.get('barEl'),'backgroundColor','rgb(' + value + ',' + value + ',127)');
+			Dom.setStyle('pbContainer','backgroundColor','white');
+		});
+	
+		var valueSlider = YAHOO.widget.Slider.getHorizSlider('sliderValue',  
+            'sliderValueThumb', 0, 200, 0
+		);
+		valueSlider.setValue(100);
+		
+		valueSlider.subscribe("change", function(offsetFromStart) {
+			var value = Math.round(offsetFromStart  * 1.275);
+			Dom.get('value').innerHTML = value;
+		});
+		
+		valueSlider.subscribe("slideEnd", function() {
+			var value = Math.round(valueSlider.getValue() * 1.275);
+			pb.set('value',value);
+		});
+	});
+</script>
+<script type="text/javascript" src="http://developer.yahoo.com/yui/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript" language="javascript">dp.SyntaxHighlighter.HighlightAll('code');</script>
+</body>
+</html>
+	
