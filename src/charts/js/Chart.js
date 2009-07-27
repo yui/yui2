@@ -27,13 +27,27 @@
 YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 {
 	this._attributes = attributes;
+	
 	if(attributes.version && attributes.version != null && attributes.version != undefined && attributes.version != "undefined")
-	{
-		this._attributes.version = /\w*.\w*/.exec(((attributes.version).toString()).replace(/.0./g, "."));
+	{ 
+		var version = (/\w*.\w*/.exec(((attributes.version).toString()).replace(/.0./g, "."))).toString();
+		var verSplit = version.split(".");
+		version = verSplit[0] + ".";
+		switch((verSplit[1].toString()).length)
+		{
+			case 1: 
+				version += "00";
+			break;
+			case 2:
+				version += "0";
+			break;	
+		} 
+		version += verSplit[1];
+		this._attributes.version = parseFloat(version); 
 	}
 	else
 	{
-		this._attributes.version = "9.45";
+		this._attributes.version = 9.045;
 	}
 	this._swfEmbed = new YAHOO.widget.SWF(containerId, YAHOO.widget.Chart.SWFURL, attributes);
 	

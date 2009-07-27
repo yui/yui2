@@ -1546,7 +1546,7 @@ package
 			try
 			{
 				var versionString:String = Capabilities.version;		
-				var version:Number = Number(/\w*.\w*/.exec((versionString.replace(/MAC|UNIX|PC|\s/gi, "")).replace(/,0,/g, ".")));
+				var version:Number = Number(/\w*.\w*/.exec((versionString.replace(/MAC|UNIX|PC|WIN\s/gi, "")).replace(/,0,/g, ".")));
 				if(version >= 10) 
 				{
 					var imageExport:ImageExport = new ImageExport(this);
