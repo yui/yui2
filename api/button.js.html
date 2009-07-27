@@ -2365,6 +2365,22 @@
                 <span class="o">!</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">isAncestor</span><span class="o">(</span><span class="nx">oMenuElement</span><span class="o">,</span> <span class="nx">oTarget</span><span class="o">))</span> <span class="o">{</span>
         
                 <span class="k">this</span><span class="o">.</span><span class="nx">_hideMenu</span><span class="o">();</span>
+
+				<span class="c">//	In IE when the user mouses down on a focusable element</span>
+<span class="c"></span>				<span class="c">//	that element will be focused and become the &quot;activeElement&quot;.</span>
+<span class="c"></span>				<span class="c">//	(http://msdn.microsoft.com/en-us/library/ms533065(VS.85).aspx)</span>
+<span class="c"></span>				<span class="c">//	However, there is a bug in IE where if there is a  </span>
+<span class="c"></span>				<span class="c">//	positioned element with a focused descendant that is </span>
+<span class="c"></span>				<span class="c">//	hidden in response to the mousedown event, the target of </span>
+<span class="c"></span>				<span class="c">//	the mousedown event will appear to have focus, but will </span>
+<span class="c"></span>				<span class="c">//	not be set as the activeElement.  This will result </span>
+<span class="c"></span>				<span class="c">//	in the element not firing key events, even though it</span>
+<span class="c"></span>				<span class="c">//	appears to have focus.	The following call to &quot;setActive&quot;</span>
+<span class="c"></span>				<span class="c">//	fixes this bug.</span>
+<span class="c"></span>
+				<span class="k">if</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">ie</span> <span class="o">&amp;&amp;</span> <span class="nx">oTarget</span><span class="o">.</span><span class="nx">focus</span><span class="o">)</span> <span class="o">{</span>
+					<span class="nx">oTarget</span><span class="o">.</span><span class="nx">setActive</span><span class="o">();</span>
+				<span class="o">}</span>
         
                 <span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">&quot;mousedown&quot;</span><span class="o">,</span> 
                     <span class="k">this</span><span class="o">.</span><span class="nx">_onDocumentMouseDown</span><span class="o">);</span>    
@@ -2444,8 +2460,7 @@
 <span class="c">        */</span>
         <span class="nx">_onMenuHide</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">p_sType</span><span class="o">)</span> <span class="o">{</span>
             
-            <span class="k">var</span> <span class="nx">oMenu</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_menu</span><span class="o">,</span>
-                <span class="nx">sTitle</span><span class="o">,</span>
+            <span class="k">var</span> <span class="nx">sTitle</span><span class="o">,</span>
                 <span class="nx">sState</span><span class="o">;</span>
         
             
