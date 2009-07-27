@@ -179,6 +179,7 @@
     function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
     
         var sSrcElementNodeName = p_oElement.nodeName.toUpperCase(),
+			sClass = (this.CLASS_NAME_PREFIX + this.CSS_CLASS_NAME),
             me = this,
             oAttribute,
             oRootNode,
@@ -282,13 +283,13 @@
 
             oRootNode = p_oElement.parentNode.parentNode;
 
-            if (Dom.hasClass(oRootNode, this.CSS_CLASS_NAME + "-checked")) {
+            if (Dom.hasClass(oRootNode, sClass + "-checked")) {
             
                 p_oAttributes.checked = true;
             
             }
 
-            if (Dom.hasClass(oRootNode, this.CSS_CLASS_NAME + "-disabled")) {
+            if (Dom.hasClass(oRootNode, sClass + "-disabled")) {
 
                 p_oAttributes.disabled = true;
             
@@ -634,6 +635,15 @@
 
 
         // Constants
+
+        /**
+        * @property CLASS_NAME_PREFIX
+        * @description Prefix used for all class names applied to a Button.
+        * @default "yui-"
+        * @final
+        * @type String
+        */
+        CLASS_NAME_PREFIX: "yui-",
         
         
         /**
@@ -684,11 +694,11 @@
         * @property CSS_CLASS_NAME
         * @description String representing the CSS class(es) to be applied to  
         * the button's root element.
-        * @default "yui-button"
+        * @default "button"
         * @final
         * @type String
         */
-        CSS_CLASS_NAME: "yui-button",
+        CSS_CLASS_NAME: "button",
         
         
         /**
@@ -845,7 +855,7 @@
             
             if (nGeckoVersion && nGeckoVersion < 1.9 && Dom.inDocument(this.get("element"))) {
             
-                sClass = this.CSS_CLASS_NAME;                
+                sClass = (this.CLASS_NAME_PREFIX + this.CSS_CLASS_NAME);
 
                 this.removeClass(sClass);
                 
@@ -1105,7 +1115,7 @@
 				if (oMenu) {
 
 					Dom.addClass(oMenu.element, this.get("menuclassname"));
-					Dom.addClass(oMenu.element, "yui-" + this.get("type") + "-button-menu");
+					Dom.addClass(oMenu.element, this.CLASS_NAME_PREFIX + this.get("type") + "-button-menu");
 
 					oMenu.showEvent.subscribe(this._onMenuShow, null, this);
 					oMenu.hideEvent.subscribe(this._onMenuHide, null, this);
@@ -2350,7 +2360,7 @@
         */
         _onOption: function (p_oEvent) {
         
-            if (this.hasClass("yui-split-button-activeoption")) {
+            if (this.hasClass(this.CLASS_NAME_PREFIX + "split-button-activeoption")) {
         
                 this._hideMenu();
         
@@ -2553,14 +2563,15 @@
 		_onSelectedMenuItemChange: function (event) {
 		
 			var oSelected = event.prevValue,
-				oItem = event.newValue;
+				oItem = event.newValue,
+				sPrefix = this.CLASS_NAME_PREFIX;
 
 			if (oSelected) {
-				Dom.removeClass(oSelected.element, "yui-button-selectedmenuitem");
+				Dom.removeClass(oSelected.element, (sPrefix + "button-selectedmenuitem"));
 			}
 			
 			if (oItem) {
-				Dom.addClass(oItem.element, "yui-button-selectedmenuitem");
+				Dom.addClass(oItem.element, (sPrefix + "button-selectedmenuitem"));
 			}
 			
 		},        
@@ -2598,17 +2609,18 @@
         */
         addStateCSSClasses: function (p_sState) {
         
-            var sType = this.get("type");
+            var sType = this.get("type"),
+				sPrefix = this.CLASS_NAME_PREFIX;
         
             if (Lang.isString(p_sState)) {
         
                 if (p_sState != "activeoption" && p_sState != "hoveroption") {
         
-                    this.addClass(this.CSS_CLASS_NAME + ("-" + p_sState));
+                    this.addClass(sPrefix + this.CSS_CLASS_NAME + ("-" + p_sState));
         
                 }
         
-                this.addClass("yui-" + sType + ("-button-" + p_sState));
+                this.addClass(sPrefix + sType + ("-button-" + p_sState));
             
             }
         
@@ -2622,12 +2634,13 @@
         */
         removeStateCSSClasses: function (p_sState) {
         
-            var sType = this.get("type");
+            var sType = this.get("type"),
+				sPrefix = this.CLASS_NAME_PREFIX;
         
             if (Lang.isString(p_sState)) {
         
-                this.removeClass(this.CSS_CLASS_NAME + ("-" + p_sState));
-                this.removeClass("yui-" + sType + ("-button-" + p_sState));
+                this.removeClass(sPrefix + this.CSS_CLASS_NAME + ("-" + p_sState));
+                this.removeClass(sPrefix + sType + ("-button-" + p_sState));
             
             }
         
@@ -2982,10 +2995,11 @@
         
 
             m_oButtons[sId] = this;
-        
 
-            this.addClass(this.CSS_CLASS_NAME);
-            this.addClass("yui-" + this.get("type") + "-button");
+        	var sPrefix = this.CLASS_NAME_PREFIX;
+
+            this.addClass(sPrefix + this.CSS_CLASS_NAME);
+            this.addClass(sPrefix + this.get("type") + "-button");
         
             Event.on(this._button, "focus", this._onFocus, null, this);
             this.on("mouseover", this._onMouseOver);
@@ -3384,7 +3398,7 @@
             */
             this.setAttributeConfig("menuclassname", {
         
-                value: (oAttributes.menuclassname || "yui-button-menu"),
+                value: (oAttributes.menuclassname || (this.CLASS_NAME_PREFIX + "button-menu")),
                 validator: Lang.isString,
                 method: this._setMenuClassName,
                 writeOnce: true
@@ -3546,7 +3560,7 @@
         */
         isActive: function () {
         
-            return this.hasClass(this.CSS_CLASS_NAME + "-active");
+            return this.hasClass(this.CLASS_NAME_PREFIX + this.CSS_CLASS_NAME + "-active");
         
         },
         
@@ -3662,7 +3676,9 @@
         
             delete m_oButtons[this.get("id")];
 
-            aButtons = Dom.getElementsByClassName(this.CSS_CLASS_NAME, 
+			var sClass = (this.CLASS_NAME_PREFIX + this.CSS_CLASS_NAME);
+
+            aButtons = Dom.getElementsByClassName(sClass, 
                                 this.NODE_NAME, oForm); 
 
             if (Lang.isArray(aButtons) && aButtons.length === 0) {
@@ -3871,8 +3887,9 @@
     */
     YAHOO.widget.Button.addHiddenFieldsToForm = function (p_oForm) {
     
-        var aButtons = Dom.getElementsByClassName(
-                            YAHOO.widget.Button.prototype.CSS_CLASS_NAME, 
+        var proto = YAHOO.widget.Button.prototype,
+			aButtons = Dom.getElementsByClassName(
+							(proto.CLASS_NAME_PREFIX + proto.CSS_CLASS_NAME), 
                             "*", 
                             p_oForm),
     
