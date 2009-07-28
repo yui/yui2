@@ -13,8 +13,7 @@
 			
 			CLASS_EXPANDED = 'yui-dt-expanded',
 			CLASS_COLLAPSED = 'yui-dt-collapsed',
-			CLASS_EXPANSION = 'yui-dt-expansion'
-			CLASS_TRIGGER = 'yui-dt-expandablerow-trigger',
+			CLASS_EXPANSION = 'yui-dt-expansion',
 			CLASS_LINER = 'yui-dt-expandablerow-liner',
 			
 			//From YUI 3
