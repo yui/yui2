@@ -14,7 +14,7 @@
 			CLASS_EXPANDED = 'yui-dt-expanded',
 			CLASS_COLLAPSED = 'yui-dt-collapsed',
 			CLASS_EXPANSION = 'yui-dt-expansion',
-			CLASS_LINER = 'yui-dt-expandablerow-liner',
+			CLASS_LINER = 'yui-dt-liner',
 			
 			//From YUI 3
 			indexOf = function(a, val) {
