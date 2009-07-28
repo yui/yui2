@@ -2568,6 +2568,19 @@
 			
 		},        
         
+
+		_onLabelClick: function (event) {
+
+			this.focus();
+
+			var sType = this.get("type");
+
+			if (sType == "radio" || sType == "checkbox") {
+				this.set("checked", (!this.get("checked")));						
+			}
+			
+		},
+
         
         // Public methods
         
@@ -3010,7 +3023,11 @@
 
             if (oLabel) {
             
-				this.on("appendTo", setLabel);     
+				this.on("appendTo", setLabel); 
+				
+				Event.on(oLabel, "click", this._onLabelClick, null, this);
+
+				this._label = oLabel;
             
             }
             
@@ -3614,8 +3631,9 @@
         
         
             var oElement = this.get("element"),
-                oParentNode = oElement.parentNode,
                 oMenu = this._menu,
+				oLabel = this._label,
+                oParentNode,
                 aButtons;
         
             if (oMenu) {
@@ -3637,6 +3655,16 @@
             Event.removeListener(document, "mouseup", this._onDocumentMouseUp);
             Event.removeListener(document, "keyup", this._onDocumentKeyUp);
             Event.removeListener(document, "mousedown", this._onDocumentMouseDown);
+
+
+			if (oLabel) {
+
+            	Event.removeListener(oLabel, "click", this._onLabelClick);
+				
+				oParentNode = oLabel.parentNode;
+				oParentNode.removeChild(oLabel);
+				
+			}
         
         
             var oForm = this.getForm();
@@ -3650,6 +3678,8 @@
 
 
             this.unsubscribeAll();
+
+			oParentNode = oElement.parentNode;
 
             if (oParentNode) {
 

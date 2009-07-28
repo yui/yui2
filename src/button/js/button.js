@@ -2589,6 +2589,26 @@
 			
 		},        
         
+
+        /**
+        * @method _onLabelClick
+        * @description "click" event handler for the Button's
+		* <code>&#60;label&#62;</code> element.
+        * @param {Event} event Object representing the DOM event object  
+        * passed back by the event utility (YAHOO.util.Event).
+        */
+		_onLabelClick: function (event) {
+
+			this.focus();
+
+			var sType = this.get("type");
+
+			if (sType == "radio" || sType == "checkbox") {
+				this.set("checked", (!this.get("checked")));						
+			}
+			
+		},
+
         
         // Public methods
         
@@ -3033,7 +3053,11 @@
 
             if (oLabel) {
             
-				this.on("appendTo", setLabel);     
+				this.on("appendTo", setLabel); 
+				
+				Event.on(oLabel, "click", this._onLabelClick, null, this);
+
+				this._label = oLabel;
             
             }
             
@@ -3639,8 +3663,9 @@
             YAHOO.log("Destroying ...", "info", this.toString());
         
             var oElement = this.get("element"),
-                oParentNode = oElement.parentNode,
                 oMenu = this._menu,
+				oLabel = this._label,
+                oParentNode,
                 aButtons;
         
             if (oMenu) {
@@ -3664,6 +3689,16 @@
             Event.removeListener(document, "mouseup", this._onDocumentMouseUp);
             Event.removeListener(document, "keyup", this._onDocumentKeyUp);
             Event.removeListener(document, "mousedown", this._onDocumentMouseDown);
+
+
+			if (oLabel) {
+
+            	Event.removeListener(oLabel, "click", this._onLabelClick);
+				
+				oParentNode = oLabel.parentNode;
+				oParentNode.removeChild(oLabel);
+				
+			}
         
         
             var oForm = this.getForm();
@@ -3678,6 +3713,8 @@
             YAHOO.log("Removing CustomEvent listeners.", "info", this.toString());
 
             this.unsubscribeAll();
+
+			oParentNode = oElement.parentNode;
 
             if (oParentNode) {
 
