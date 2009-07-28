@@ -3028,13 +3028,29 @@
 
             this.on("dblclick", this._onDblClick);
 
+
+			var oParentNode;
+
             if (oLabel) {
             
-				this.on("appendTo", setLabel); 
-				
-				Event.on(oLabel, "click", this._onLabelClick, null, this);
+				if (this.get("replaceLabel")) {
 
-				this._label = oLabel;
+					this.set("label", oLabel.innerHTML);
+					
+					oParentNode = oLabel.parentNode;
+					
+					oParentNode.removeChild(oLabel);
+					
+				}
+				else {
+
+					this.on("appendTo", setLabel); 
+
+					Event.on(oLabel, "click", this._onLabelClick, null, this);
+
+					this._label = oLabel;
+					
+				}
             
             }
             
@@ -3044,8 +3060,7 @@
 
             var oContainer = this.get("container"),
                 oElement = this.get("element"),
-                bElInDoc = Dom.inDocument(oElement),
-                oParentNode;
+                bElInDoc = Dom.inDocument(oElement);
 
 
             if (oContainer) {
@@ -3514,6 +3529,24 @@
         
                 value: (oAttributes.focusmenu === false ? false : true),
                 validator: Lang.isBoolean
+        
+            });
+
+
+            /**
+            * @attribute replaceLabel
+            * @description Boolean indicating whether or not the text of the 
+			* button's <code>&#60;label&#62;</code> element should be used as
+			* the source for the button's label configuration attribute and 
+			* removed from the DOM.
+            * @type Boolean
+            * @default true
+            */
+            this.setAttributeConfig("replaceLabel", {
+        
+                value: false,
+                validator: Lang.isBoolean,
+                writeOnce: true
         
             });
 
