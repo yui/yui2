@@ -2590,6 +2590,13 @@
 		},        
         
 
+        /**
+        * @method _onLabelClick
+        * @description "click" event handler for the Button's
+		* <code>&#60;label&#62;</code> element.
+        * @param {Event} event Object representing the DOM event object  
+        * passed back by the event utility (YAHOO.util.Event).
+        */
 		_onLabelClick: function (event) {
 
 			this.focus();
