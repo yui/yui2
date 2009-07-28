@@ -103,11 +103,6 @@
             "blur": "blurEvent",
             "focusout": "blurEvent"
         },
-
-
-    	// The element in the DOM that currently has focus
-    
-		m_oFocusedElement = null,
     
     
         m_oFocusedMenuItem = null;
@@ -310,8 +305,12 @@
                         if (oMenu.cfg.getProperty(_CLICK_TO_HIDE) && 
                             !(oMenu instanceof YAHOO.widget.MenuBar) && 
                             oMenu.cfg.getProperty(_POSITION) == _DYNAMIC) {
-        
+
                             oMenu.hide();
+
+							if (UA.ie && oTarget.focus) {
+								oTarget.setActive();
+							}
         
                         }
                         else {
@@ -338,11 +337,6 @@
         
                 } 
     
-            }
-            else if (sEventType == _FOCUS) {
-            
-            	m_oFocusedElement = oTarget;
-            
             }
             
         }
@@ -405,68 +399,7 @@
             m_oFocusedMenuItem = null;
     
         }
-    
 
-        /**
-        * @method onMenuHide
-        * @description "hide" event handler for a Menu instance.
-        * @private
-        * @param {String} p_sType String representing the name of the event  
-        * that was fired.
-        * @param {Array} p_aArgs Array of arguments sent when the event 
-        * was fired.
-		* @param <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-		* level-one-html.html#ID-58190037">p_oFocusedElement</a> The HTML element that had focus
-		* prior to the Menu being made visible
-        */    
-    	function onMenuHide(p_sType, p_aArgs, p_oFocusedElement) {
-
-			/*
-				Restore focus to the element in the DOM that had focus prior to the Menu 
-				being made visible
-			*/
-
-			if (p_oFocusedElement && p_oFocusedElement.focus) {
-			
-				try {
-					p_oFocusedElement.focus();
-				}
-				catch(ex) {
-				}
-			
-			}
-			
-    		this.hideEvent.unsubscribe(onMenuHide, p_oFocusedElement);
-    	
-    	}
-    
-
-        /**
-        * @method onMenuShow
-        * @description "show" event handler for a MenuItem instance.
-        * @private
-        * @param {String} p_sType String representing the name of the event  
-        * that was fired.
-        * @param {Array} p_aArgs Array of arguments sent when the event 
-        * was fired.
-        */    	
-    	function onMenuShow(p_sType, p_aArgs) {
-
-			/*
-				Dynamically positioned, root Menus focus themselves when visible, and will then, 
-				when hidden, restore focus to the UI control that had focus before the Menu was 
-				made visible
-			*/ 
-
-			if (this === this.getRoot() && this.cfg.getProperty(_POSITION) === _DYNAMIC) {
-    	
-				this.hideEvent.subscribe(onMenuHide, m_oFocusedElement);
-				this.focus();
-			
-			}
-    	
-    	}    
-    
     
         /**
         * @method onMenuVisibleConfigChange
@@ -622,7 +555,6 @@
                     p_oMenu.itemAddedEvent.subscribe(onItemAdded);
                     p_oMenu.focusEvent.subscribe(onMenuFocus);
                     p_oMenu.blurEvent.subscribe(onMenuBlur);
-                    p_oMenu.showEvent.subscribe(onMenuShow);
         
         
                 }
@@ -1085,6 +1017,10 @@ var Dom = YAHOO.util.Dom,
     
     m_oShadowTemplate,
 
+	bFocusListenerInitialized = false,
+
+	oFocusedElement,
+
 	EVENT_TYPES = [
     
 		["mouseOverEvent", _MOUSEOVER],
@@ -1225,6 +1161,13 @@ var Dom = YAHOO.util.Dom,
 		value: false, 
 		validator: Lang.isBoolean
 	};
+
+
+function onDocFocus(event) {
+
+	oFocusedElement = Event.getTarget(event);
+
+}
 
 
 
@@ -1655,15 +1598,21 @@ init: function (p_oElement, p_oConfig) {
         this.beforeRenderEvent.subscribe(this._onBeforeRender);
         this.renderEvent.subscribe(this._onRender);
         this.beforeShowEvent.subscribe(this._onBeforeShow);
-        this.hideEvent.subscribe(this._onHide);
+//        this.hideEvent.subscribe(this._onHide);
         this.showEvent.subscribe(this._onShow);
-        this.beforeHideEvent.subscribe(this._onBeforeHide);
+//        this.beforeHideEvent.subscribe(this._onBeforeHide);
         this.mouseOverEvent.subscribe(this._onMouseOver);
         this.mouseOutEvent.subscribe(this._onMouseOut);
         this.clickEvent.subscribe(this._onClick);
         this.keyDownEvent.subscribe(this._onKeyDown);
         this.keyPressEvent.subscribe(this._onKeyPress);
         this.blurEvent.subscribe(this._onBlur);
+
+
+		if (!bFocusListenerInitialized) {
+			Event.onFocus(document, onDocFocus);
+			bFocusListenerInitialized = true;
+		}
 
 
 		//	Fixes an issue in Firefox 2 and Webkit where Dom's "getX" and "getY" 
@@ -1686,7 +1635,7 @@ init: function (p_oElement, p_oConfig) {
         // Register the Menu instance with the MenuManager
 
         MenuManager.addMenu(this);
-        
+
 
         this.initEvent.fire(Menu);
 
@@ -3026,7 +2975,8 @@ _onKeyDown: function (p_sType, p_aArgs) {
         nItems,
         nNextItemOffsetTop,
         nScrollTarget,
-        oParentMenu;
+        oParentMenu,
+		oFocusedEl;
 
 
 	if (this._useHideDelay) {
@@ -3291,6 +3241,22 @@ _onKeyDown: function (p_sType, p_aArgs) {
                 this.parent.focus();
             
             }
+			else {
+				// Focus the element that previously had focus
+
+				oFocusedEl = this._focusedElement;
+
+				if (oFocusedEl && oFocusedEl.focus) {
+
+					try {
+						oFocusedEl.focus();
+					}
+					catch(ex) {
+					}
+
+				}
+				
+			}
 
         }
         else if (this.activeItem) {
@@ -4198,6 +4164,22 @@ _onShow: function (p_sType, p_aArgs) {
 		}
 
     }
+
+
+	/*
+		Dynamically positioned, root Menus focus themselves when visible, and 
+		will then, when hidden, restore focus to the UI control that had focus 
+		before the Menu was made visible.
+	*/ 
+
+	if (this === this.getRoot() && this.cfg.getProperty(_POSITION) === _DYNAMIC) {
+
+		this._focusedElement = oFocusedElement;
+		
+		this.focus();
+	
+	}
+
 
 },
 
