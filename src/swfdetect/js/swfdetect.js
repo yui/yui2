@@ -21,7 +21,18 @@ var sF = "ShockwaveFlash";
 		      if ((eP = mF.enabledPlugin)) {
 				 var vS = [];
 		         vS = eP.description.replace(/\s[rd]/g, '.').replace(/[A-Za-z\s]+/g, '').split('.');
-		         version = parseFloat(vS[0] + '.' + vS[2]);
+		        version = vS[0] + '.';
+				switch((vS[2].toString()).length)
+				{
+					case 1:
+					version += "00";
+					break;
+					case 2: 
+					version += "0";
+					break;
+				}
+		 		version +=  vS[2];
+				version = parseFloat(version);
 		      }
 		   }
 		}
@@ -44,7 +55,19 @@ var sF = "ShockwaveFlash";
 		        var ax  = new ActiveXObject(sF + "." + sF);
 		       	var vS = [];
 		        vS = ax.GetVariable("$version").replace(/[A-Za-z\s]+/g, '').split(',');
-		        version = parseFloat(vS[0] + '.' + vS[2]);
+		        version = vS[0] + '.';
+				switch((vS[2].toString()).length)
+				{
+					case 1:
+					version += "00";
+					break;
+					case 2: 
+					version += "0";
+					break;
+				}
+		 		version +=  vS[2];
+				version = parseFloat(version);
+				
 		    } catch (e) {}
 		    }
 		}
@@ -57,9 +80,9 @@ YAHOO.util.SWFDetect = {
 		},
 		
 		isFlashVersionAtLeast : function (ver) {
-			return (version >= ver);
+			return version >= ver;
 		}	
-		};
+	};
 })();
 
 YAHOO.register("swfdetect", YAHOO.util.SWFDetect, {version: "2.7.0", build: "1796"});

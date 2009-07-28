@@ -12,6 +12,8 @@ package
 	import com.yahoo.yui.LoggerCategory;
 	import com.yahoo.yui.YUIAdapter;
 	import com.yahoo.yui.charts.*;
+	import com.yahoo.util.ImageExport;
+	
 	
 	import fl.core.UIComponent;
 	
@@ -24,6 +26,8 @@ package
 	import flash.text.TextFormat;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
+	
+	import flash.system.Capabilities;
 
 	[SWF(backgroundColor=0xffffff)]
 	/**
@@ -52,6 +56,7 @@ package
 		public function Charts()
 		{
 			super();
+			this.setImageExport();
 		}
 		
 	//--------------------------------------
@@ -1532,5 +1537,27 @@ package
 			}
 			return uint(value);
 		}
+		
+		/**
+		 * @private
+		 */
+		private function setImageExport():void
+		{
+			try
+			{
+				var versionString:String = Capabilities.version;		
+				var version:Number = Number(/\w*.\w*/.exec((versionString.replace(/MAC|UNIX|PC|WIN\s/gi, "")).replace(/,0,/g, ".")));
+				if(version >= 10) 
+				{
+					var imageExport:ImageExport = new ImageExport(this);
+					imageExport.addImageType("jpg", "Chart");
+					imageExport.addImageType("png", "Chart");
+				}
+			}
+			catch(e:Error)
+			{
+				//just trapping potential error
+			}
+		}		
 	}
 }
