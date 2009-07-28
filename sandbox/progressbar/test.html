@@ -19,6 +19,10 @@
 <script type="text/javascript" src="../../build/progressbar/progressbar-debug.js"></script>
 
 <style type="text/css">
+.yui-pb-caption {
+	display:block;
+}
+
 #plain.yui-pb {
 	height:25px;
 	width:250px;
@@ -452,6 +456,7 @@
     
         tearDown : function () {
 			pb.destroy();
+			Dom.get('test').innerHTML = '';
         },
        
         testRenderTwice : function () {
@@ -461,9 +466,184 @@
 			A.areEqual(1,Dom.get('test').children.length,'first render');
 			pb.render('test');
 			A.areEqual(1,Dom.get('test').children.length,'second render ignored');
-		}
+		},
+		
+		testDirection: function() {
+			pb = new PB({direction:'rtl', value:30});
+			A.areEqual(true,pb.set('direction','btt'),'before rendering changing direction is fine');
+			A.areSame(pb,pb.render('test'),'render should return PB instance');
+			A.areEqual(false,pb.set('direction','ttb'),'after rendering you cannot change direction');
+			A.areEqual('btt',pb.get('direction'),'direction can be set until render is done');
+		
+		},
+		testRenderBefore: function () {
+			var testEl = Dom.get('test');
+			testEl.innerHTML = '<p id="pepe">something</p>';
+			pb = new PB().render('test');
+			A.areEqual('pepe',testEl.firstChild.id,'first child must be pepe');
+			A.areSame(testEl.firstChild.nextSibling,pb.get('element'),'second element must be bar');
+			var pb1 = new PB().render('test','pepe');
+			A.areSame(testEl.firstChild,pb1.get('element'),'first element must be bar');
+			A.areEqual('pepe',testEl.firstChild.nextSibling.id,'second child must be pepe');
+			A.areSame(testEl.firstChild.nextSibling.nextSibling,pb.get('element'),'third element must be bar');
+			pb1.destroy();
+		}/*  Attribute override test
+		,
+		testAttributeOverride: function () {
+			pb = new PB();
+			var config = pb.getAttributeConfig('direction');
+			YAHOO.log(config.validator.toString(),'qq','qq');
+			pb.setAttributeConfig('direction',{
+				validator:function(value) {
+					if (this._rendered) { return false; }
+					switch (value) {
+						case 'qqq':
+						case 'ltr':
+							return true;
+						default:
+							return false;
+					}
+				}
+			});
+			A.areEqual(true,pb.set('direction','qqq'),'direction override qqq');
+			A.areEqual(false,pb.set('direction','rtl'),'direction override rtl');
+			A.areEqual(true,pb.set('direction','ltr'),'direction override ltr');
+			pb.render('test');
+		}*/
+	}));
+	oSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "Change width or height of rendered widget",
+		setUp : function () {
 
-    }));
+        },
+    
+        tearDown : function () {
+			pb.destroy();
+        },
+		testWidthChangeLtr: function() {
+            pb = new PB({value:30});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('60px',getStyle(t.b,'width'),'bar width before');
+			A.areEqual('20px',getStyle(t.b,'height'),'bar height');
+			
+			pb.set('width','300px');
+			A.areEqual('300px',getStyle(t.pb,'width'),'widget width');
+			A.areEqual('20px',getStyle(t.pb,'height'),'widget height');
+			A.areEqual('300px',pb.get('width'),'reported width');
+			A.areEqual('20px',pb.get('height'),'reported height');
+			A.areEqual('300px',getStyle(t.m,'width'),'mask width');
+			A.areEqual('20px',getStyle(t.m,'height'),'mask height');
+			A.areEqual('90px',getStyle(t.b,'width'),'bar width after');
+			A.areEqual('20px',getStyle(t.b,'height'),'bar height');
+			A.areEqual('300px',getStyle(t.c,'width'),'caption width');
+			A.areEqual('20px',getStyle(t.c,'height'),'caption height');
+		},
+		testHeightChangeLtr: function() {
+            pb = new PB({value:30});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('60px',getStyle(t.b,'width'),'bar width');
+			A.areEqual('20px',getStyle(t.b,'height'),'bar height');
+			
+			pb.set('height','50px');
+			A.areEqual('200px',getStyle(t.pb,'width'),'widget width');
+			A.areEqual('50px',getStyle(t.pb,'height'),'widget height');
+			A.areEqual('200px',pb.get('width'),'reported width');
+			A.areEqual('50px',pb.get('height'),'reported height');
+			A.areEqual('200px',getStyle(t.m,'width'),'mask width');
+			A.areEqual('50px',getStyle(t.m,'height'),'mask height');
+			A.areEqual('60px',getStyle(t.b,'width'),'bar width');
+			A.areEqual('50px',getStyle(t.b,'height'),'bar height');
+			A.areEqual('200px',getStyle(t.c,'width'),'caption width');
+			A.areEqual('50px',getStyle(t.c,'height'),'caption height');
+		},
+		testWidthChangeTtb: function() {
+            pb = new PB({value:30,direction:'ttb',height:100});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('200px',getStyle(t.b,'width'),'bar width');
+			A.areEqual('30px',getStyle(t.b,'height'),'bar height');
+			
+			pb.set('width','300px');
+			A.areEqual('300px',getStyle(t.pb,'width'),'widget width');
+			A.areEqual('100px',getStyle(t.pb,'height'),'widget height');
+			A.areEqual('300px',pb.get('width'),'reported width');
+			A.areEqual('100px',pb.get('height'),'reported height');
+			A.areEqual('300px',getStyle(t.m,'width'),'mask width');
+			A.areEqual('100px',getStyle(t.m,'height'),'mask height');
+			A.areEqual('300px',getStyle(t.b,'width'),'bar width');
+			A.areEqual('30px',getStyle(t.b,'height'),'bar height');
+			A.areEqual('300px',getStyle(t.c,'width'),'caption width');
+			A.areEqual('100px',getStyle(t.c,'height'),'caption height');
+		},
+		testHeightChangeTtb: function() {
+            pb = new PB({value:30,direction:'ttb',height:100});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('200px',getStyle(t.b,'width'),'bar width');
+			A.areEqual('30px',getStyle(t.b,'height'),'bar height');
+			
+			pb.set('height','150px');
+			A.areEqual('200px',getStyle(t.pb,'width'),'widget width');
+			A.areEqual('150px',getStyle(t.pb,'height'),'widget height');
+			A.areEqual('200px',pb.get('width'),'reported width');
+			A.areEqual('150px',pb.get('height'),'reported height');
+			A.areEqual('200px',getStyle(t.m,'width'),'mask width');
+			A.areEqual('150px',getStyle(t.m,'height'),'mask height');
+			A.areEqual('200px',getStyle(t.b,'width'),'bar width');
+			A.areEqual('45px',getStyle(t.b,'height'),'bar height');
+			A.areEqual('200px',getStyle(t.c,'width'),'caption width');
+			A.areEqual('150px',getStyle(t.c,'height'),'caption height');
+		}
+	}));
+
+	oSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "Change of end values on a rendered widget",
+		setUp : function () {
+
+        },
+    
+        tearDown : function () {
+			pb.destroy();
+        },
+		testMaxValue: function() {
+            pb = new PB({value:30});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('60px',getStyle(t.b,'width'),'bar width before');
+			
+			pb.set('maxValue',50);
+			A.areEqual('120px',getStyle(t.b,'width'),'bar width maxValue 50');
+			pb.set('maxValue',30);
+			A.areEqual('200px',getStyle(t.b,'width'),'bar width maxValue 30');
+			pb.set('maxValue',20);
+			A.areEqual('200px',getStyle(t.b,'width'),'bar width maxValue 20');
+			A.areEqual(20,pb.get('value'),'value should be cropped to maxValue');
+		},
+		testMinValue: function() {
+            pb = new PB({value:50});
+			pb.render('test');
+			t = getEls();
+
+			A.areEqual('100px',getStyle(t.b,'width'),'bar width before');
+			
+			pb.set('minValue',20);
+			A.areEqual('75px',getStyle(t.b,'width'),'bar width minValue 20');
+			pb.set('minValue',50);
+			A.areEqual('0px',getStyle(t.b,'width'),'bar width minValue 50');
+			pb.set('minValue',80);
+			A.areEqual('0px',getStyle(t.b,'width'),'bar width minValue 80');
+			A.areEqual(80,pb.get('value'),'value should be cropped to minValue');
+		}
+	}));
 
 	oSuite.add(new YAHOO.tool.TestCase({
     
@@ -678,8 +858,10 @@
 		if (1) {
 			YAHOO.tool.TestRunner.run();
 		} else {
+			// This section is for running individual tests.  Set previous if to false.
             pb = new PB({height:'30px', width: 300});
 			pb.render('test');
+			t = getEls();
 
 		}
     });

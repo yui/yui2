@@ -56,11 +56,8 @@ var Y = YAHOO.util,
 			case Y.StorageManager.LOCATION_LOCAL:
 			case Y.StorageManager.LOCATION_SESSION:
 				return location;
-			break;
 
-			default:
-				return Y.StorageManager.LOCATION_SESSION;
-			break;
+			default: return Y.StorageManager.LOCATION_SESSION;
 		}
 	};
 
