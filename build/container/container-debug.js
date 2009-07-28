@@ -1394,7 +1394,7 @@
                         Need to set "position" property before inserting the 
                         iframe into the document or Safari's status bar will 
                         forever indicate the iframe is loading 
-                        (See SourceForge bug #1723064)
+                        (See YUILibrary bug #1723064)
                     */
                     oIFrame.style.position = "absolute";
                     oIFrame.style.visibility = "hidden";
@@ -1407,16 +1407,23 @@
                         db.appendChild(oIFrame);
                     }
 
+                    // Setting the background color fixes an issue with IE6/IE7, where
+                    // elements in the DOM, with -ve margin-top which positioned them 
+                    // offscreen (so they would be overlapped by the iframe and its -ve top
+                    // setting), would have their -ve margin-top ignored, when the iframe 
+                    // was added.
                     oIFrame.style.backgroundColor = "transparent";
+
                     oIFrame.style.borderWidth = "0";
                     oIFrame.style.width = "2em";
                     oIFrame.style.height = "2em";
                     oIFrame.style.left = "0";
                     oIFrame.style.top = (-1 * (oIFrame.offsetHeight + Module.RESIZE_MONITOR_BUFFER)) + "px";
                     oIFrame.style.visibility = "visible";
+
                     /*
                        Don't open/close the document for Gecko like we used to, since it
-                       leads to duplicate cookies. (See SourceForge bug #1721755)
+                       leads to duplicate cookies. (See YUILibrary bug #1721755)
                     */
                     if (UA.webkit) {
                         oDoc = oIFrame.contentWindow.document;
@@ -2144,6 +2151,58 @@
     Overlay.CSS_OVERLAY = "yui-overlay";
 
     /**
+    * Constant representing the default hidden CSS class used for an Overlay. This class is 
+    * applied to the overlay's outer DIV whenever it's hidden.
+    *
+    * @property YAHOO.widget.Overlay.CSS_HIDDEN
+    * @static
+    * @final
+    * @type String
+    */
+    Overlay.CSS_HIDDEN = "yui-overlay-hidden";
+
+    /**
+    * Constant representing the default positioned CSS class used for an Overlay. This class is
+    * applied to the overlay's outer DIV whenever it's positioned at a specific XY co-ordinate.
+    * <p>
+    * The class is automatically removed just before the overlay is moved, and re-applied after 
+    * the overlay is repositioned, and can be used to apply margins to overlay (applying margins to the overlay
+    * using the yui-overlay class, will not have any effect, since YAHOO.util.Dom.setXY and getXY 
+    * attempts to account for margins when positioning the overlay at a specific XY co-ordinate).   
+    * </p>
+    * @property YAHOO.widget.Overlay.CSS_POSITIONED
+    * @static
+    * @final
+    * @type String
+    */
+    Overlay.CSS_POSITIONED = "yui-overlay-positioned";
+
+    /**
+    * Constant representing the default CSS class used for an Overlay iframe shim.
+    * 
+    * @property YAHOO.widget.Overlay.CSS_IFRAME
+    * @static
+    * @final
+    * @type String
+    */
+    Overlay.CSS_IFRAME = "yui-overlay-iframe";
+
+    /**
+    * Constant representing the default positioned CSS class used for an Overlay iframe shim. This class is
+    * applied to the overlay's iframe shime whenever it's positioned at a specific XY co-ordinate.
+    * <p>
+    * The class is automatically removed just before the iframe position is sync'd with the overlay 
+    * and re-applied after the sync is complete. It can be used when using the CSS_POSITIONED
+    * class for the Overlay div, to apply similar margins to the iframe shim.   
+    * </p>
+    * @property YAHOO.widget.Overlay.CSS_IFRAME_POSITIONED
+    * @static
+    * @final
+    * @type String
+    */
+    Overlay.CSS_IFRAME_POSITIONED = "yui-overlay-iframe-positioned";
+
+    /**
      * Constant representing the names of the standard module elements
      * used in the overlay.
      * @property YAHOO.widget.Overlay.STD_MOD_RE
@@ -2424,8 +2483,8 @@
             * </p>
             *
             * <p>
-            * The format of the array is: <code>[contextElementOrId, overlayCorner, contextCorner, arrayOfTriggerEvents (optional)]</code>, the
-            * the 4 array elements described in detail below:
+            * The format of the array is: <code>[contextElementOrId, overlayCorner, contextCorner, arrayOfTriggerEvents (optional), xyOffset (optional)]</code>, the
+            * the 5 array elements described in detail below:
             * </p>
             *
             * <dl>
@@ -2449,6 +2508,11 @@
             * 3 static container event types are also currently supported : <code>"windowResize", "windowScroll", "textResize"</code> (defined in <a href="#property__TRIGGER_MAP">_TRIGGER_MAP</a> private property).
             * </p>
             * </dd>
+            * <dt>xyOffset &#60;Number[]&#62;</dt>
+            * <dd>
+            * A 2 element Array specifying the X and Y pixel amounts by which the Overlay should be offset from the aligned corner. e.g. [5,0] offsets the Overlay 5 pixels to the left, <em>after</em> aligning the given context corners.
+            * NOTE: If using this property and no triggers need to be defined, the arrayOfTriggerEvents property should be set to null to maintain correct array positions for the arguments. 
+            * </dd>
             * </dl>
             *
             * <p>
@@ -2457,7 +2521,12 @@
             * context element with id "img1".
             * </p>
             * <p>
-            * Adding the optional trigger values: <code>["img1", "tl", "bl", ["beforeShow", "windowResize"]]</code>,
+            * Setting this property to <code>["img1", "tl", "bl", null, [0,5]</code> will 
+            * align the Overlay's top left corner to the bottom left corner of the
+            * context element with id "img1", and then offset it by 5 pixels on the Y axis (providing a 5 pixel gap between the bottom of the context element and top of the overlay).
+            * </p>
+            * <p>
+            * Adding the optional trigger values: <code>["img1", "tl", "bl", ["beforeShow", "windowResize"], [0,5]]</code>,
             * will re-align the overlay position, whenever the "beforeShow" or "windowResize" events are fired.
             * </p>
             *
@@ -2662,11 +2731,12 @@
          */
         _setDomVisibility : function(show) {
             Dom.setStyle(this.element, "visibility", (show) ? "visible" : "hidden");
+            var hiddenClass = Overlay.CSS_HIDDEN;
 
             if (show) {
-                Dom.removeClass(this.element, "yui-overlay-hidden");
+                Dom.removeClass(this.element, hiddenClass);
             } else {
-                Dom.addClass(this.element, "yui-overlay-hidden");
+                Dom.addClass(this.element, hiddenClass);
             }
         },
 
@@ -3041,7 +3111,8 @@
         configX: function (type, args, obj) {
 
             var x = args[0],
-                y = this.cfg.getProperty("y");
+                y = this.cfg.getProperty("y"),
+                positionedClass = Overlay.CSS_POSITIONED;
 
             this.cfg.setProperty("x", x, true);
             this.cfg.setProperty("y", y, true);
@@ -3050,8 +3121,10 @@
 
             x = this.cfg.getProperty("x");
             y = this.cfg.getProperty("y");
-            
+
+            Dom.removeClass(this.element, positionedClass);
             Dom.setX(this.element, x, true);
+            Dom.addClass(this.element, positionedClass);
 
             this.cfg.setProperty("xy", [x, y], true);
 
@@ -3071,7 +3144,8 @@
         configY: function (type, args, obj) {
 
             var x = this.cfg.getProperty("x"),
-                y = args[0];
+                y = args[0],
+                positionedClass = Overlay.CSS_POSITIONED;
 
             this.cfg.setProperty("x", x, true);
             this.cfg.setProperty("y", y, true);
@@ -3081,7 +3155,9 @@
             x = this.cfg.getProperty("x");
             y = this.cfg.getProperty("y");
 
+            Dom.removeClass(this.element, positionedClass);
             Dom.setY(this.element, y, true);
+            Dom.addClass(this.element, positionedClass);
 
             this.cfg.setProperty("xy", [x, y], true);
 
@@ -3143,7 +3219,9 @@
                     this.syncPosition();
                     aXY = this.cfg.getProperty("xy");
                 }
+                Dom.removeClass(oIFrame, Overlay.CSS_IFRAME_POSITIONED);
                 Dom.setXY(oIFrame, [(aXY[0] - nOffset), (aXY[1] - nOffset)]);
+                Dom.addClass(oIFrame, Overlay.CSS_IFRAME_POSITIONED);
             }
         },
 
@@ -3221,9 +3299,11 @@
                         m_oIFrameTemplate.style.padding = "0";
                         m_oIFrameTemplate.style.display = "none";
                         m_oIFrameTemplate.tabIndex = -1;
+                        m_oIFrameTemplate.className = Overlay.CSS_IFRAME;
                     }
 
                     oIFrame = m_oIFrameTemplate.cloneNode(false);
+                    oIFrame.id = this.id + "_f";
                     oParent = oElement.parentNode;
 
                     var parentNode = oParent || document.body;
@@ -3336,7 +3416,7 @@
          /**
         * The default event handler fired when the "context" property
         * is changed.
-        * 
+        *
         * @method configContext
         * @param {String} type The CustomEvent type (usually the property name)
         * @param {Object[]} args The CustomEvent arguments. For configuration 
@@ -3351,6 +3431,7 @@
                 elementMagnetCorner,
                 contextMagnetCorner,
                 triggers,
+                offset,
                 defTriggers = this.CONTEXT_TRIGGERS;
 
             if (contextArgs) {
@@ -3359,6 +3440,7 @@
                 elementMagnetCorner = contextArgs[1];
                 contextMagnetCorner = contextArgs[2];
                 triggers = contextArgs[3];
+                offset = contextArgs[4];
 
                 if (defTriggers && defTriggers.length > 0) {
                     triggers = (triggers || []).concat(defTriggers);
@@ -3370,12 +3452,13 @@
                                 document.getElementById(contextEl), 
                                 elementMagnetCorner,
                                 contextMagnetCorner,
-                                triggers ],
+                                triggers,
+                                offset],
                                 true);
                     }
 
                     if (elementMagnetCorner && contextMagnetCorner) {
-                        this.align(elementMagnetCorner, contextMagnetCorner);
+                        this.align(elementMagnetCorner, contextMagnetCorner, offset);
                     }
 
                     if (this._contextTriggers) {
@@ -3467,8 +3550,11 @@
         * the Overlay that should be aligned to the context element
         * @param {String} contextAlign  The corner of the context element 
         * that the elementAlign corner should stick to.
+        * @param {Number[]} xyOffset Optional. A 2 element array specifying the x and y pixel offsets which should be applied
+        * after aligning the element and context corners. For example, passing in [5, -10] for this value, would offset the 
+        * Overlay by 5 pixels along the X axis (horizontally) and -10 pixels along the Y axis (vertically) after aligning the specified corners.
         */
-        align: function (elementAlign, contextAlign) {
+        align: function (elementAlign, contextAlign, xyOffset) {
 
             var contextArgs = this.cfg.getProperty("context"),
                 me = this,
@@ -3477,68 +3563,81 @@
                 contextRegion;
 
             function doAlign(v, h) {
-    
+
+                var alignX = null, alignY = null;
+
                 switch (elementAlign) {
     
-                case Overlay.TOP_LEFT:
-                    me.moveTo(h, v);
-                    break;
-    
-                case Overlay.TOP_RIGHT:
-                    me.moveTo((h - element.offsetWidth), v);
-                    break;
-    
-                case Overlay.BOTTOM_LEFT:
-                    me.moveTo(h, (v - element.offsetHeight));
-                    break;
-    
-                case Overlay.BOTTOM_RIGHT:
-                    me.moveTo((h - element.offsetWidth), 
-                        (v - element.offsetHeight));
-                    break;
+                    case Overlay.TOP_LEFT:
+                        alignX = h;
+                        alignY = v;
+                        break;
+        
+                    case Overlay.TOP_RIGHT:
+                        alignX = h - element.offsetWidth;
+                        alignY = v;
+                        break;
+        
+                    case Overlay.BOTTOM_LEFT:
+                        alignX = h;
+                        alignY = v - element.offsetHeight;
+                        break;
+        
+                    case Overlay.BOTTOM_RIGHT:
+                        alignX = h - element.offsetWidth; 
+                        alignY = v - element.offsetHeight;
+                        break;
+                }
+
+                if (alignX !== null && alignY !== null) {
+                    if (xyOffset) {
+                        alignX += xyOffset[0];
+                        alignY += xyOffset[1];
+                    }
+                    me.moveTo(alignX, alignY);
                 }
             }
-    
+
             if (contextArgs) {
-            
                 context = contextArgs[0];
                 element = this.element;
                 me = this;
-                
+
                 if (! elementAlign) {
                     elementAlign = contextArgs[1];
                 }
-                
+
                 if (! contextAlign) {
                     contextAlign = contextArgs[2];
                 }
-                
+
+                if (!xyOffset && contextArgs[4]) {
+                    xyOffset = contextArgs[4];
+                }
+
                 if (element && context) {
                     contextRegion = Dom.getRegion(context);
 
                     switch (contextAlign) {
     
-                    case Overlay.TOP_LEFT:
-                        doAlign(contextRegion.top, contextRegion.left);
-                        break;
-    
-                    case Overlay.TOP_RIGHT:
-                        doAlign(contextRegion.top, contextRegion.right);
-                        break;
-    
-                    case Overlay.BOTTOM_LEFT:
-                        doAlign(contextRegion.bottom, contextRegion.left);
-                        break;
-    
-                    case Overlay.BOTTOM_RIGHT:
-                        doAlign(contextRegion.bottom, contextRegion.right);
-                        break;
+                        case Overlay.TOP_LEFT:
+                            doAlign(contextRegion.top, contextRegion.left);
+                            break;
+        
+                        case Overlay.TOP_RIGHT:
+                            doAlign(contextRegion.top, contextRegion.right);
+                            break;
+        
+                        case Overlay.BOTTOM_LEFT:
+                            doAlign(contextRegion.bottom, contextRegion.left);
+                            break;
+        
+                        case Overlay.BOTTOM_RIGHT:
+                            doAlign(contextRegion.bottom, contextRegion.right);
+                            break;
                     }
-    
                 }
-    
             }
-            
         },
 
         /**
@@ -3623,7 +3722,7 @@
          * context element (used when preventcontextoverlap is enabled)
          *
          * @method _preventOverlap
-         * @private
+         * @protected
          * @param {String} pos The coordinate to prevent overlap for, either "x" or "y".
          * @param {HTMLElement} contextEl The context element
          * @param {Number} overlaySize The related overlay dimension value (for "x", the width, for "y", the height)
@@ -4761,6 +4860,12 @@
                 key: "disabled",
                 value: false,
                 suppressEvent: true
+            },
+
+            "XY_OFFSET": {
+                key: "xyoffset",
+                value: [0, 25],
+                suppressEvent: true
             }
         },
 
@@ -5057,6 +5162,19 @@
             });
 
             /**
+            * Specifies the XY offset from the mouse position, where the tooltip should be displayed, specified
+            * as a 2 element array (e.g. [10, 20]); 
+            *
+            * @config xyoffset
+            * @type Array
+            * @default [0, 25]
+            */
+            this.cfg.addProperty(DEFAULT_CONFIG.XY_OFFSET.key, {
+                value: DEFAULT_CONFIG.XY_OFFSET.value.concat(),
+                supressEvent: DEFAULT_CONFIG.XY_OFFSET.suppressEvent 
+            });
+
+            /**
             * Specifies the element or elements that the Tooltip should be 
             * anchored to on mouseover.
             * @config context
@@ -5075,7 +5193,7 @@
             * before it is made visible.  The original value will be 
             * restored when the Tooltip is hidden. This ensures the Tooltip is 
             * rendered at a usable width.  For more information see 
-            * SourceForge bug #1685496 and SourceForge 
+            * YUILibrary bug #1685496 and YUILibrary 
             * bug #1735423.
             * @config width
             * @type String
@@ -5304,7 +5422,9 @@
         */
         doShow: function (e, context) {
 
-            var yOffset = 25,
+            var offset = this.cfg.getProperty("xyoffset"),
+                xOffset = offset[0],
+                yOffset = offset[1],
                 me = this;
 
             if (UA.opera && context.tagName && 
@@ -5324,7 +5444,7 @@
                 }
 
                 me.logger.log("Show tooltip", "time");
-                me.moveTo(me.pageX, me.pageY + yOffset);
+                me.moveTo(me.pageX + xOffset, me.pageY + yOffset);
 
                 if (me.cfg.getProperty("preventoverlap")) {
                     me.preventOverlap(me.pageX, me.pageY);
@@ -6109,7 +6229,7 @@
             * hidden. <em>This fix is only applied to draggable Panels in IE 6 
             * (Strict Mode and Quirks Mode) and IE 7 (Quirks Mode)</em>. For 
             * more information on this issue see:
-            * SourceForge bugs #1726972 and #1589210.
+            * YUILibrary bugs #1726972 and #1589210.
             * @config draggable
             * @type Boolean
             * @default true
@@ -6155,7 +6275,7 @@
             * is initially made visible.  For Gecko-based browsers on Mac
             * OS X the underlay elment is always created as it is used as a 
             * shim to prevent Aqua scrollbars below a Panel instance from poking 
-            * through it (See SourceForge bug #836476).
+            * through it (See YUILibrary bug #1723530).
             * @config underlay
             * @type String
             * @default shadow
@@ -8056,7 +8176,7 @@
         validate: function () {
             return true;
         },
-        
+
         /**
         * Executes a submit of the Dialog if validation 
         * is successful. By default the Dialog is hidden
@@ -8068,15 +8188,18 @@
         */
         submit: function () {
             if (this.validate()) {
-                this.beforeSubmitEvent.fire();
-                this.doSubmit();
-                this.submitEvent.fire();
-
-                if (this.cfg.getProperty("hideaftersubmit")) {
-                    this.hide();
+                if (this.beforeSubmitEvent.fire()) {
+                    this.doSubmit();
+                    this.submitEvent.fire();
+    
+                    if (this.cfg.getProperty("hideaftersubmit")) {
+                        this.hide();
+                    }
+    
+                    return true;
+                } else {
+                    return false;
                 }
-
-                return true;
             } else {
                 return false;
             }

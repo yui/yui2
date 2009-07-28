@@ -22,7 +22,12 @@
 */
 (function () {
 
-    var _DIV = "DIV",
+    var UA = YAHOO.env.ua,
+		Dom = YAHOO.util.Dom,
+	    Event = YAHOO.util.Event,
+	    Lang = YAHOO.lang,
+
+		_DIV = "DIV",
     	_HD = "hd",
     	_BD = "bd",
     	_FT = "ft",
@@ -32,7 +37,6 @@
 		_MOUSEOUT = "mouseout",
 		_MOUSEDOWN = "mousedown",
 		_MOUSEUP = "mouseup",
-		_FOCUS = YAHOO.env.ua.ie ? "focusin" : "focus",		
 		_CLICK = "click",
 		_KEYDOWN = "keydown",
 		_KEYUP = "keyup",
@@ -44,12 +48,7 @@
 		_SELECTED = "selected",
 		_VISIBLE = "visible",
 		_UL = "UL",
-		_MENUMANAGER = "MenuManager",
-    	
-    
-    	Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event,
-        Lang = YAHOO.lang;
+		_MENUMANAGER = "MenuManager";
 
 
     /**
@@ -102,11 +101,6 @@
             "blur": "blurEvent",
             "focusout": "blurEvent"
         },
-
-
-    	// The element in the DOM that currently has focus
-    
-		m_oFocusedElement = null,
     
     
         m_oFocusedMenuItem = null;
@@ -210,6 +204,8 @@
             // See if the target of the event was a menu, or a menu item
     
             oElement = getMenuRootElement(oTarget),
+			bFireEvent = true,
+			sEventType = p_oEvent.type,
             sCustomEventType,
             sTagName,
             sId,
@@ -248,21 +244,50 @@
     
             if (oMenu) {
     
-                sCustomEventType = m_oEventTypes[p_oEvent.type];
-    
+                sCustomEventType = m_oEventTypes[sEventType];
+
+				/*
+					There is an inconsistency between Firefox for Mac OS X and 
+					Firefox Windows & Linux regarding the triggering of the 
+					display of the browser's context menu and the subsequent 
+					firing of the "click" event. In Firefox for Windows & Linux, 
+					when the user triggers the display of the browser's context 
+					menu the "click" event also fires for the document object, 
+					even though the "click" event did not fire for the element 
+					that was the original target of the "contextmenu" event. 
+					This is unique to Firefox on Windows & Linux.  For all 
+					other A-Grade browsers, including Firefox for Mac OS X, the 
+					"click" event doesn't fire for the document object. 
+
+					This bug in Firefox for Windows affects Menu, as Menu 
+					instances listen for events at the document level and 
+					dispatches Custom Events of the same name.  Therefore users
+					of Menu will get an unwanted firing of the "click" 
+					custom event.  The following line fixes this bug.
+				*/
+				
+
+
+				if (sEventType == "click" && 
+					(UA.gecko && oMenu.platform != "mac") && 
+					p_oEvent.button > 0) {
+
+					bFireEvent = false;
+
+				}
     
                 // Fire the Custom Event that corresponds the current DOM event    
         
-                if (oMenuItem && !oMenuItem.cfg.getProperty(_DISABLED)) {
-    
+                if (bFireEvent && oMenuItem && !oMenuItem.cfg.getProperty(_DISABLED)) {
                     oMenuItem[sCustomEventType].fire(p_oEvent);                   
-    
                 }
         
-                oMenu[sCustomEventType].fire(p_oEvent, oMenuItem);
+				if (bFireEvent) {
+                	oMenu[sCustomEventType].fire(p_oEvent, oMenuItem);
+				}
             
             }
-            else if (p_oEvent.type == _MOUSEDOWN) {
+            else if (sEventType == _MOUSEDOWN) {
     
                 /*
                     If the target of the event wasn't a menu, hide all 
@@ -278,8 +303,26 @@
                         if (oMenu.cfg.getProperty(_CLICK_TO_HIDE) && 
                             !(oMenu instanceof YAHOO.widget.MenuBar) && 
                             oMenu.cfg.getProperty(_POSITION) == _DYNAMIC) {
-        
+
                             oMenu.hide();
+
+							//	In IE when the user mouses down on a focusable 
+							//	element that element will be focused and become 
+							//	the "activeElement".
+							//	(http://msdn.microsoft.com/en-us/library/ms533065(VS.85).aspx)
+							//	However, there is a bug in IE where if there is 
+							//	a positioned element with a focused descendant 
+							//	that is hidden in response to the mousedown 
+							//	event, the target of the mousedown event will 
+							//	appear to have focus, but will not be set as 
+							//	the activeElement.  This will result in the 
+							//	element not firing key events, even though it
+							//	appears to have focus.  The following call to 
+							//	"setActive" fixes this bug.
+
+							if (UA.ie && oTarget.focus) {
+								oTarget.setActive();
+							}
         
                         }
                         else {
@@ -306,11 +349,6 @@
         
                 } 
     
-            }
-            else if (p_oEvent.type == _FOCUS) {
-            
-            	m_oFocusedElement = oTarget;
-            
             }
             
         }
@@ -373,68 +411,7 @@
             m_oFocusedMenuItem = null;
     
         }
-    
 
-        /**
-        * @method onMenuHide
-        * @description "hide" event handler for a Menu instance.
-        * @private
-        * @param {String} p_sType String representing the name of the event  
-        * that was fired.
-        * @param {Array} p_aArgs Array of arguments sent when the event 
-        * was fired.
-		* @param <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-		* level-one-html.html#ID-58190037">p_oFocusedElement</a> The HTML element that had focus
-		* prior to the Menu being made visible
-        */    
-    	function onMenuHide(p_sType, p_aArgs, p_oFocusedElement) {
-
-			/*
-				Restore focus to the element in the DOM that had focus prior to the Menu 
-				being made visible
-			*/
-
-			if (p_oFocusedElement && p_oFocusedElement.focus) {
-			
-				try {
-					p_oFocusedElement.focus();
-				}
-				catch(ex) {
-				}
-			
-			}
-			
-    		this.hideEvent.unsubscribe(onMenuHide, p_oFocusedElement);
-    	
-    	}
-    
-
-        /**
-        * @method onMenuShow
-        * @description "show" event handler for a MenuItem instance.
-        * @private
-        * @param {String} p_sType String representing the name of the event  
-        * that was fired.
-        * @param {Array} p_aArgs Array of arguments sent when the event 
-        * was fired.
-        */    	
-    	function onMenuShow(p_sType, p_aArgs) {
-
-			/*
-				Dynamically positioned, root Menus focus themselves when visible, and will then, 
-				when hidden, restore focus to the UI control that had focus before the Menu was 
-				made visible
-			*/ 
-
-			if (this === this.getRoot() && this.cfg.getProperty(_POSITION) === _DYNAMIC) {
-    	
-				this.hideEvent.subscribe(onMenuHide, m_oFocusedElement);
-				this.focus();
-			
-			}
-    	
-    	}    
-    
     
         /**
         * @method onMenuVisibleConfigChange
@@ -597,7 +574,6 @@
                     p_oMenu.itemAddedEvent.subscribe(onItemAdded);
                     p_oMenu.focusEvent.subscribe(onMenuFocus);
                     p_oMenu.blurEvent.subscribe(onMenuBlur);
-                    p_oMenu.showEvent.subscribe(onMenuShow);
         
                     YAHOO.log(p_oMenu + " successfully registered.", "info", _MENUMANAGER);
         

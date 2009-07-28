@@ -27,12 +27,32 @@
 YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 {
 	this._attributes = attributes;
+	
+	if(attributes.version && attributes.version != null && attributes.version != undefined && attributes.version != "undefined")
+	{ 
+		var version = (/\w*.\w*/.exec(((attributes.version).toString()).replace(/.0./g, "."))).toString();
+		var verSplit = version.split(".");
+		version = verSplit[0] + ".";
+		switch((verSplit[1].toString()).length)
+		{
+			case 1: 
+				version += "00";
+			break;
+			case 2:
+				version += "0";
+			break;	
+		} 
+		version += verSplit[1];
+		this._attributes.version = parseFloat(version); 
+	}
+	else
+	{
+		this._attributes.version = 9.045;
+	}
 	this._swfEmbed = new YAHOO.widget.SWF(containerId, YAHOO.widget.Chart.SWFURL, attributes);
 	
 	this._swf = this._swfEmbed.swf;
-	//this._swfEmbed.on("swfReady", this._eventHandler);
 	this._swfEmbed.addListener("swfReady", this._eventHandler, null, this);
-	//this._swfEmbed.on("log", this._eventHandler);
 	
 	this._type = type;
 	this._dataSource = dataSource;
@@ -605,30 +625,27 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 
 								else if(prop == "labelFunction")
 								{
-									if(currentSeries.labelFunction !== null &&
-										typeof currentSeries.labelFunction == "function")
-									{
-										clonedSeries.labelFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.labelFunction);
+									if(currentSeries.labelFunction !== null)
+									{	
+										clonedSeries.labelFunction = YAHOO.widget.Chart.getFunctionReference(currentSeries.labelFunction);
 										this._seriesFunctions.push(clonedSeries.labelFunction);
 									}
 								}
 
 								else if(prop == "dataTipFunction")
 								{
-									if(currentSeries.dataTipFunction !== null &&
-										typeof currentSeries.dataTipFunction == "function")
+									if(currentSeries.dataTipFunction !== null)
 									{
-										clonedSeries.dataTipFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.dataTipFunction);
+										clonedSeries.dataTipFunction = YAHOO.widget.Chart.getFunctionReference(currentSeries.dataTipFunction);
 										this._seriesFunctions.push(clonedSeries.dataTipFunction);
 									}	
 								}
 								
 								else if(prop == "legendLabelFunction")
 								{
-									if(currentSeries.legendLabelFunction !== null &&
-										typeof currentSeries.legendLabelFunction == "function")
+									if(currentSeries.legendLabelFunction !== null)
 									{
-										clonedSeries.legendLabelFunction = YAHOO.widget.Chart.createProxyFunction(currentSeries.legendLabelFunction);
+										clonedSeries.legendLabelFunction = YAHOO.widget.Chart.getFunctionReference(currentSeries.legendLabelFunction);
 										this._seriesFunctions.push(clonedSeries.legendLabelFunction); 
 									}	
 								}								
@@ -793,10 +810,9 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 			YAHOO.widget.Chart.removeProxyFunction(this._dataTipFunction);
 		}
 		
-		if(value && typeof value == "function")
+		if(value)
 		{
-			value = YAHOO.widget.Chart.createProxyFunction(value);
-			this._dataTipFunction = value;
+			this._dataTipFunction = value = YAHOO.widget.Chart.getFunctionReference(value);
 		}
 		this._swf.setDataTipFunction(value);
 	},
@@ -814,10 +830,9 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 			YAHOO.widget.Chart.removeProxyFunction(this._legendLabelFunction);
 		}
 		
-		if(value && typeof value == "function")
+		if(value)
 		{
-			value = YAHOO.widget.Chart.createProxyFunction(value);
-			this._legendLabelFunction = value;
+			this._legendLabelFunction = value = YAHOO.widget.Chart.getFunctionReference(value);
 		}
 		this._swf.setLegendLabelFunction(value);
 	},
@@ -982,16 +997,43 @@ YAHOO.widget.Chart.proxyFunctionCount = 0;
  * @static
  * @private
  */
-YAHOO.widget.Chart.createProxyFunction = function(func)
+YAHOO.widget.Chart.createProxyFunction = function(func, scope)
 {
+	var scope = scope || null;
 	var index = YAHOO.widget.Chart.proxyFunctionCount;
 	YAHOO.widget.Chart["proxyFunction" + index] = function()
 	{
-		return func.apply(null, arguments);
+		return func.apply(scope, arguments);
 	};
 	YAHOO.widget.Chart.proxyFunctionCount++;
 	return "YAHOO.widget.Chart.proxyFunction" + index.toString();
 };
+
+/**
+ * Uses YAHOO.widget.Chart.createProxyFunction to return string
+ * reference to a function. 
+ *
+ * @method YAHOO.widget.Chart.getFunctionReference
+ * @static
+ * @private
+ */
+YAHOO.widget.Chart.getFunctionReference = function(value)
+{
+	if(typeof value == "function")
+	{
+		value = YAHOO.widget.Chart.createProxyFunction(value);
+	}
+	else if(value.func && typeof value.func == "function")
+	{
+		var args = [value.func];
+		if(value.scope && typeof value.scope == "object")
+		{
+			args.push(value.scope);
+		}
+		value = YAHOO.widget.Chart.createProxyFunction.apply(this, args);
+	}
+	return value;	
+}
 
 /**
  * Removes a function created with createProxyFunction()
@@ -1325,16 +1367,9 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		{
 			if(prop == "labelFunction")
 			{
-				if(value.labelFunction !== null)
+				if(value.labelFunction && value.labelFunction !== null)
 				{
-					if(typeof value.labelFunction == "function")
-					{
-						clonedAxis.labelFunction = YAHOO.widget.Chart.createProxyFunction(value.labelFunction);
-					}
-					else
-					{
-						clonedAxis.labelFunction = value.labelFunction;
-					}
+					clonedAxis.labelFunction = YAHOO.widget.Chart.getFunctionReference(value.labelFunction);
 				}
 			}
 			else

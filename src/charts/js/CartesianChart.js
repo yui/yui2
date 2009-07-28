@@ -196,16 +196,9 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		{
 			if(prop == "labelFunction")
 			{
-				if(value.labelFunction !== null)
+				if(value.labelFunction && value.labelFunction !== null)
 				{
-					if(typeof value.labelFunction == "function")
-					{
-						clonedAxis.labelFunction = YAHOO.widget.Chart.createProxyFunction(value.labelFunction);
-					}
-					else
-					{
-						clonedAxis.labelFunction = value.labelFunction;
-					}
+					clonedAxis.labelFunction = YAHOO.widget.Chart.getFunctionReference(value.labelFunction);
 				}
 			}
 			else

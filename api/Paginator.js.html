@@ -607,21 +607,18 @@
 
         <span class="k">var</span> <span class="nx">totalRecords</span>   <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">),</span>
             <span class="nx">template</span>       <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;template&#39;</span><span class="o">),</span>
-            <span class="nx">hide</span>           <span class="o">=</span> <span class="kc">false</span><span class="o">,</span>
             <span class="nx">state</span>          <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">(),</span>
             <span class="c">// ex. yui-pg0-1 (first paginator, second container)</span>
 <span class="c"></span>            <span class="nx">id_base</span>        <span class="o">=</span> <span class="nx">Paginator</span><span class="o">.</span><span class="nx">ID_BASE</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span><span class="o">,</span>
             <span class="nx">i</span><span class="o">,</span> <span class="nx">len</span><span class="o">;</span>
 
-        <span class="k">if</span> <span class="o">(</span><span class="nx">totalRecords</span> <span class="o">!==</span> <span class="nx">Paginator</span><span class="o">.</span><span class="nx">VALUE_UNLIMITED</span> <span class="o">&amp;&amp;</span>
-            <span class="nx">totalRecords</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
-            <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;alwaysVisible&#39;</span><span class="o">))</span> <span class="o">{</span>
-            <span class="nx">hide</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="c">// Assemble the containers, keeping them hidden</span>
+<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_containers</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_renderTemplate</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_containers</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span><span class="nx">template</span><span class="o">,</span><span class="nx">id_base</span><span class="o">+</span><span class="nx">i</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
         <span class="o">}</span>
 
-        <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_containers</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_renderTemplate</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_containers</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span><span class="nx">template</span><span class="o">,</span><span class="nx">id_base</span><span class="o">+</span><span class="nx">i</span><span class="o">,</span><span class="nx">hide</span><span class="o">);</span>
-        <span class="o">}</span>
+        <span class="c">// Show the containers if appropriate</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">updateVisibility</span><span class="o">();</span>
 
         <span class="c">// Set render attribute manually to support its readOnly contract</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_containers</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
@@ -642,7 +639,7 @@
 <span class="c">     * @param container {HTMLElement} where to add the ui components</span>
 <span class="c">     * @param template {String} the template to use as a guide for rendering</span>
 <span class="c">     * @param id_base {String} id base for the container&#39;s ui components</span>
-<span class="c">     * @param hide {Boolean} leave the container hidden</span>
+<span class="c">     * @param hide {Boolean} leave the container hidden after assembly</span>
 <span class="c">     * @protected</span>
 <span class="c">     */</span>
     <span class="nx">_renderTemplate</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">container</span><span class="o">,</span> <span class="nx">template</span><span class="o">,</span> <span class="nx">id_base</span><span class="o">,</span> <span class="nx">hide</span><span class="o">)</span> <span class="o">{</span>
@@ -721,7 +718,7 @@
         <span class="k">var</span> <span class="nx">alwaysVisible</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;alwaysVisible&#39;</span><span class="o">),</span>
             <span class="nx">totalRecords</span><span class="o">,</span><span class="nx">visible</span><span class="o">,</span><span class="nx">rpp</span><span class="o">,</span><span class="nx">rppOptions</span><span class="o">,</span><span class="nx">i</span><span class="o">,</span><span class="nx">len</span><span class="o">;</span>
 
-        <span class="k">if</span> <span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;alwaysVisibleChange&#39;</span> <span class="o">||</span> <span class="o">!</span><span class="nx">alwaysVisible</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">e</span> <span class="o">||</span> <span class="nx">e</span><span class="o">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;alwaysVisibleChange&#39;</span> <span class="o">||</span> <span class="o">!</span><span class="nx">alwaysVisible</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">totalRecords</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">);</span>
             <span class="nx">visible</span>      <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
             <span class="nx">rpp</span>          <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">);</span>
