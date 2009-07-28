@@ -680,110 +680,6 @@
         CSS_CLASS_NAME: "button",
         
         
-        /**
-        * @property RADIO_DEFAULT_TITLE
-        * @description String representing the default title applied to buttons 
-        * of type "radio." 
-        * @default "Unchecked.  Click to check."
-        * @final
-        * @type String
-        */
-        RADIO_DEFAULT_TITLE: "Unchecked.  Click to check.",
-        
-        
-        /**
-        * @property RADIO_CHECKED_TITLE
-        * @description String representing the title applied to buttons of 
-        * type "radio" when checked.
-        * @default "Checked.  Click another button to uncheck"
-        * @final
-        * @type String
-        */
-        RADIO_CHECKED_TITLE: "Checked.  Click another button to uncheck",
-        
-        
-        /**
-        * @property CHECKBOX_DEFAULT_TITLE
-        * @description String representing the default title applied to 
-        * buttons of type "checkbox." 
-        * @default "Unchecked.  Click to check."
-        * @final
-        * @type String
-        */
-        CHECKBOX_DEFAULT_TITLE: "Unchecked.  Click to check.",
-        
-        
-        /**
-        * @property CHECKBOX_CHECKED_TITLE
-        * @description String representing the title applied to buttons of type 
-        * "checkbox" when checked.
-        * @default "Checked.  Click to uncheck."
-        * @final
-        * @type String
-        */
-        CHECKBOX_CHECKED_TITLE: "Checked.  Click to uncheck.",
-        
-        
-        /**
-        * @property MENUBUTTON_DEFAULT_TITLE
-        * @description String representing the default title applied to 
-        * buttons of type "menu." 
-        * @default "Menu collapsed.  Click to expand."
-        * @final
-        * @type String
-        */
-        MENUBUTTON_DEFAULT_TITLE: "Menu collapsed.  Click to expand.",
-        
-        
-        /**
-        * @property MENUBUTTON_MENU_VISIBLE_TITLE
-        * @description String representing the title applied to buttons of type 
-        * "menu" when the button's menu is visible. 
-        * @default "Menu expanded.  Click or press Esc to collapse."
-        * @final
-        * @type String
-        */
-        MENUBUTTON_MENU_VISIBLE_TITLE: 
-            "Menu expanded.  Click or press Esc to collapse.",
-        
-        
-        /**
-        * @property SPLITBUTTON_DEFAULT_TITLE
-        * @description  String representing the default title applied to 
-        * buttons of type "split." 
-        * @default "Menu collapsed.  Click inside option region or press 
-        * Ctrl + Shift + M to show the menu."
-        * @final
-        * @type String
-        */
-        SPLITBUTTON_DEFAULT_TITLE: ("Menu collapsed.  Click inside option " + 
-            "region or press down arrow key to show the menu."),
-        
-        
-        /**
-        * @property SPLITBUTTON_OPTION_VISIBLE_TITLE
-        * @description String representing the title applied to buttons of type 
-        * "split" when the button's menu is visible. 
-        * @default "Menu expanded.  Press Esc or Ctrl + Shift + M to hide 
-        * the menu."
-        * @final
-        * @type String
-        */
-        SPLITBUTTON_OPTION_VISIBLE_TITLE: 
-            "Menu expanded.  Press Esc to hide the menu.",
-        
-        
-        /**
-        * @property SUBMIT_TITLE
-        * @description String representing the title applied to buttons of 
-        * type "submit." 
-        * @default "Click to submit form."
-        * @final
-        * @type String
-        */
-        SUBMIT_TITLE: "Click to submit form.",
-        
-        
         
         // Protected attribute setter methods
         
@@ -868,49 +764,9 @@
         */
         _setTitle: function (p_sTitle) {
         
-            var sTitle = p_sTitle;
-        
             if (this.get("type") != "link") {
         
-                if (!sTitle) {
-        
-                    switch (this.get("type")) {
-        
-                    case "radio":
-    
-                        sTitle = this.RADIO_DEFAULT_TITLE;
-    
-                        break;
-    
-                    case "checkbox":
-    
-                        sTitle = this.CHECKBOX_DEFAULT_TITLE;
-    
-                        break;
-                    
-                    case "menu":
-    
-                        sTitle = this.MENUBUTTON_DEFAULT_TITLE;
-    
-                        break;
-    
-                    case "split":
-    
-                        sTitle = this.SPLITBUTTON_DEFAULT_TITLE;
-    
-                        break;
-    
-                    case "submit":
-    
-                        sTitle = this.SUBMIT_TITLE;
-    
-                        break;
-        
-                    }
-        
-                }
-        
-                this._button.title = sTitle;
+                this._button.title = p_sTitle;
         
             }
         
@@ -1009,35 +865,15 @@
         */
         _setChecked: function (p_bChecked) {
         
-            var sType = this.get("type"),
-                sTitle;
+            var sType = this.get("type");
         
             if (sType == "checkbox" || sType == "radio") {
         
                 if (p_bChecked) {
-        
                     this.addStateCSSClasses("checked");
-                    
-                    sTitle = (sType == "radio") ? 
-                                this.RADIO_CHECKED_TITLE : 
-                                this.CHECKBOX_CHECKED_TITLE;
-                
                 }
                 else {
-
                     this.removeStateCSSClasses("checked");
-        
-                    sTitle = (sType == "radio") ? 
-                                this.RADIO_DEFAULT_TITLE : 
-                                this.CHECKBOX_DEFAULT_TITLE;
-                
-                }
-
-
-        		if (!this._hasDefaultTitle) {
-        
-                	this.set("title", sTitle);
-                
                 }
         
             }
@@ -2096,39 +1932,12 @@
         _onClick: function (p_oEvent) {
         
             var sType = this.get("type"),
-                sTitle,
                 oForm,
                 oSrcElement,
                 bReturnVal;
         
 
 			switch (sType) {
-
-			case "radio":
-			case "checkbox":
-
-				if (!this._hasDefaultTitle) {
-
-					if (this.get("checked")) {
-
-						sTitle = (sType == "radio") ? 
-									this.RADIO_CHECKED_TITLE : 
-									this.CHECKBOX_CHECKED_TITLE;
-
-					}
-					else {
-
-						sTitle = (sType == "radio") ? 
-									this.RADIO_DEFAULT_TITLE : 
-									this.CHECKBOX_DEFAULT_TITLE;
-
-					}
-
-					this.set("title", sTitle);
-
-				}
-
-				break;
 
 			case "submit":
 
@@ -2152,15 +1961,6 @@
 
 				break;
 
-			case "menu":
-
-				sTitle = this._menu.cfg.getProperty("visible") ? 
-								this.MENUBUTTON_MENU_VISIBLE_TITLE : 
-								this.MENUBUTTON_DEFAULT_TITLE;
-
-				this.set("title", sTitle);
-
-				break;
 
 			case "split":
 
@@ -2184,12 +1984,6 @@
 					}
 
 				}
-
-				sTitle = this._menu.cfg.getProperty("visible") ? 
-								this.SPLITBUTTON_OPTION_VISIBLE_TITLE : 
-								this.SPLITBUTTON_DEFAULT_TITLE;
-
-				this.set("title", sTitle);
 
 				break;
 
@@ -2369,24 +2163,9 @@
             Event.on(document, "mousedown", this._onDocumentMouseDown, 
                 null, this);
         
-            var sTitle,
-                sState;
-            
-            if (this.get("type") == "split") {
-        
-                sTitle = this.SPLITBUTTON_OPTION_VISIBLE_TITLE;
-                sState = "activeoption";
-            
-            }
-            else {
-        
-                sTitle = this.MENUBUTTON_MENU_VISIBLE_TITLE;        
-                sState = "active";
-        
-            }
+            var sState = (this.get("type") == "split") ? "activeoption" : "active";
         
             this.addStateCSSClasses(sState);
-            this.set("title", sTitle);
         
         },
         
@@ -2400,25 +2179,9 @@
         */
         _onMenuHide: function (p_sType) {
             
-            var sTitle,
-                sState;
-        
-            
-            if (this.get("type") == "split") {
-        
-                sTitle = this.SPLITBUTTON_DEFAULT_TITLE;
-                sState = "activeoption";
-        
-            }
-            else {
-        
-                sTitle = this.MENUBUTTON_DEFAULT_TITLE;        
-                sState = "active";
-            }
-        
+            var sState = (this.get("type") == "split") ? "activeoption" : "active";
         
             this.removeStateCSSClasses(sState);
-            this.set("title", sTitle);
         
         
             if (this.get("type") == "split") {
@@ -2956,12 +2719,6 @@
 
             this._button = oButton;
 
-            /*
-				Capture if the button has a value for the title attribute.  If so, we won't 
-				override it for type of "checkbox" or "radio".
-            */
-            
-            this._hasDefaultTitle = (p_oAttributes.title && p_oAttributes.title.length > 0);
 
             YAHOO.widget.Button.superclass.init.call(this, p_oElement, p_oAttributes);
 
@@ -3540,7 +3297,7 @@
 			* the source for the button's label configuration attribute and 
 			* removed from the DOM.
             * @type Boolean
-            * @default true
+            * @default false
             */
             this.setAttributeConfig("replaceLabel", {
         
