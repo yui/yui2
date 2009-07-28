@@ -65,12 +65,28 @@
 
 YAHOO.util.Event.addListener(window, "load", function() {
 		YAHOO.example.Basic = function() {
+
+				var expansionFormatter = function(el, oRecord, oColumn, oData) {
+
+					var	cell_element = this.getTdEl(el),
+							state_object = oRecord.getData( STRING_STATENAME ),
+							this_static = YAHOO.widget.DataTable.formatExpandRowTrigger;
+
+					//Set trigger
+					if( oData ){ //Row is closed
+
+						YAHOO.util.Dom.addClass( cell_element, CLASS_TRIGGER );
+
+					}
+
+				};
+
 				var myColumnDefs = [
 				
 						{
 							key:"image_url",
 							label:"",
-							formatter:YAHOO.widget.DataTable.ExpansionFormatter
+							formatter:expansionFormatter
 						},
 						{
 							key:"date", 
@@ -105,6 +121,21 @@ YAHOO.util.Event.addListener(window, "load", function() {
 				myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
 				myDataSource.responseSchema = {
 					fields: ["id","date","quantity","amount","title","image_url"]
+				};
+
+				YAHOO.widget.DataTable.ExpansionFormatter = function(el, oRecord, oColumn, oData) {
+
+					var cell_element = this.getTdEl(el),
+						state_object = oRecord.getData( STRING_STATENAME ),
+						this_static = YAHOO.widget.DataTable.formatExpandRowTrigger;
+
+					//Set trigger
+					if( oData ){ //Row is closed
+
+						Dom.addClass( cell_element, CLASS_TRIGGER );
+
+					}
+
 				};
 
 				var myDataTable = new YAHOO.widget.DataTable(

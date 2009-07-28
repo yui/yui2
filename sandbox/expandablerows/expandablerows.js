@@ -13,7 +13,7 @@
 			
 			CLASS_EXPANDED = 'yui-dt-expanded',
 			CLASS_COLLAPSED = 'yui-dt-collapsed',
-			CLASS_EXPANDABLEROW = 'yui-dt-expandablerow'
+			CLASS_EXPANSION = 'yui-dt-expansion'
 			CLASS_TRIGGER = 'yui-dt-expandablerow-trigger',
 			CLASS_NODATA = 'yui-dt-expandablerow-nodata',
 			CLASS_LINER = 'yui-dt-expandablerow-liner',
@@ -113,7 +113,7 @@
 					this.fireEvent( "rowExpandEvent", { record_id : record_id } );
 
 					//Construct expanded row body
-					new_row.className = CLASS_EXPANDABLEROW;
+					new_row.className = CLASS_EXPANSION;
 					var new_column = document.createElement( 'td' );
 					new_column.colSpan = column_length;
 
@@ -187,7 +187,7 @@
 					var next_sibling = Dom.getNextSibling( row ),
 						hash_index = indexOf( this.a_rowExpansions, record_id );
 						
-					if( Dom.hasClass( next_sibling, CLASS_EXPANDABLEROW ) ) {
+					if( Dom.hasClass( next_sibling, CLASS_EXPANSION ) ) {
 
 						next_sibling.parentNode.removeChild( next_sibling );
 						this.a_rowExpansions.splice( hash_index, 1 );
@@ -246,20 +246,5 @@
 
 		}
 	);
-
-	YAHOO.widget.DataTable.ExpansionFormatter = function(el, oRecord, oColumn, oData) {
-
-		var cell_element = this.getTdEl(el),
-			state_object = oRecord.getData( STRING_STATENAME ),
-			this_static = YAHOO.widget.DataTable.formatExpandRowTrigger;
-
-		//Set trigger
-		if( oData ){ //Row is closed
-
-			Dom.addClass( cell_element, CLASS_TRIGGER );
-			
-		}
-
-	}
 	
 })();

@@ -88,11 +88,26 @@ YAHOO.util.Event.addListener(window, "load", function() {
             elCell.innerHTML = "<a href='" + oRecord.getData("ClickUrl") + "' target='_blank'>" + sData + "</a>";
         };
 
+			var expansionFormatter = function(el, oRecord, oColumn, oData) {
+
+				var cell_element = this.getTdEl(el),
+					state_object = oRecord.getData( STRING_STATENAME ),
+					this_static = YAHOO.widget.DataTable.formatExpandRowTrigger;
+
+				//Set trigger
+				if( oData ){ //Row is closed
+
+					YAHOO.util.Dom.addClass( cell_element, CLASS_TRIGGER );
+
+				}
+
+			};
+
         var myColumnDefs = [
 				{
 					key:"test",
 					label:"",
-					formatter:YAHOO.widget.DataTable.ExpansionFormatter
+					formatter:expansionFormatter
 				},
             {key:"Title", label:"Name", sortable:true, formatter:formatUrl},
             {key:"Phone"},
