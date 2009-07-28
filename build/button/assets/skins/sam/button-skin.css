@@ -87,13 +87,6 @@
 
 }
 
-/*.yui-skin-sam .yui-button-focus button, 
-.yui-skin-sam .yui-button-focus a {
-
-    color: #000;
-
-}*/
-
 .yui-skin-sam .yui-split-button-focus button {
 
     background-image: url(split-button-arrow-focus.png);
@@ -116,13 +109,6 @@
 
 }
 
-/*.yui-skin-sam .yui-button-hover button, 
-.yui-skin-sam .yui-button-hover a {
-
-    color: #000;
-
-}*/
-
 .yui-skin-sam .yui-split-button-hover button {
 
     background-image: url(split-button-arrow-hover.png);
@@ -144,13 +130,6 @@
     border-color: #7D98B8;
 
 }
-
-/*.yui-skin-sam .yui-button-active button, 
-.yui-skin-sam .yui-button-active a {
-
-    color: #000;
-
-}*/
 
 .yui-skin-sam .yui-split-button-activeoption {
 
