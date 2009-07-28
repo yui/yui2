@@ -76,6 +76,28 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">dataSource</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">)</span>
 <span class="o">{</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">;</span>
+	
+	<span class="k">if</span><span class="o">(</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">&amp;&amp;</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">!=</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">!=</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span>
+	<span class="o">{</span> 
+		<span class="k">var</span> <span class="nx">version</span> <span class="o">=</span> <span class="o">(</span><span class="sr">/\w*.\w*/</span><span class="o">.</span><span class="nx">exec</span><span class="o">(((</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span><span class="o">).</span><span class="nx">toString</span><span class="o">()).</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/.0./g</span><span class="o">,</span> <span class="s2">&quot;.&quot;</span><span class="o">))).</span><span class="nx">toString</span><span class="o">();</span>
+		<span class="k">var</span> <span class="nx">verSplit</span> <span class="o">=</span> <span class="nx">version</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;.&quot;</span><span class="o">);</span>
+		<span class="nx">version</span> <span class="o">=</span> <span class="nx">verSplit</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="o">;</span>
+		<span class="nx">switch</span><span class="o">((</span><span class="nx">verSplit</span><span class="o">[</span><span class="m">1</span><span class="o">].</span><span class="nx">toString</span><span class="o">()).</span><span class="nx">length</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="nx">case</span> <span class="m">1</span><span class="o">:</span> 
+				<span class="nx">version</span> <span class="o">+=</span> <span class="s2">&quot;00&quot;</span><span class="o">;</span>
+			<span class="k">break</span><span class="o">;</span>
+			<span class="nx">case</span> <span class="m">2</span><span class="o">:</span>
+				<span class="nx">version</span> <span class="o">+=</span> <span class="s2">&quot;0&quot;</span><span class="o">;</span>
+			<span class="k">break</span><span class="o">;</span>	
+		<span class="o">}</span> 
+		<span class="nx">version</span> <span class="o">+=</span> <span class="nx">verSplit</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="o">(</span><span class="nx">version</span><span class="o">);</span> 
+	<span class="o">}</span>
+	<span class="k">else</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="m">9</span><span class="o">.</span><span class="m">045</span><span class="o">;</span>
+	<span class="o">}</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">_swfEmbed</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SWF</span><span class="o">(</span><span class="nx">containerId</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">SWFURL</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">);</span>
 	
 	<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_swfEmbed</span><span class="o">.</span><span class="nx">swf</span><span class="o">;</span>
