@@ -33,6 +33,12 @@
 
 }
 
+.yui-skin-sam .yuimenubaritemlabel:visited {
+
+	color: #000;
+
+}
+
 .yui-skin-sam .yuimenubarnav .yuimenubaritemlabel {
 
     padding-right: 20px;
@@ -82,7 +88,8 @@
 
 /* Disabled  MenuBarItem */
 
-.yui-skin-sam .yuimenubaritemlabel-disabled {
+.yui-skin-sam .yuimenubaritemlabel-disabled,
+.yui-skin-sam .yuimenubaritemlabel-disabled:visited {
 
     cursor: default;
     color: #A6A6A6;
@@ -240,6 +247,12 @@
 
 }
 
+.yui-skin-sam .yuimenuitemlabel:visited {
+
+    color: #000;
+	
+}
+
 .yui-skin-sam .yuimenuitemlabel .helptext {
 
     margin-top: -1.5em;
@@ -299,7 +312,8 @@
 
 /* Disabled MenuItem */
 
-.yui-skin-sam .yuimenuitemlabel-disabled {
+.yui-skin-sam .yuimenuitemlabel-disabled,
+.yui-skin-sam .yuimenuitemlabel-disabled:visited {
 
     cursor: default;
     color: #A6A6A6;

@@ -608,7 +608,6 @@
 				value += 'px';
 			}
 			this.setStyle('height',value);
-			Dom.setStyle(this.get('maskEl'),'height', value);
 			this._fixEdges();
 			this.redraw();
 		},
@@ -625,7 +624,6 @@
 				value += 'px';
 			}
 			this.setStyle('width',value);
-			Dom.setStyle(this.get('maskEl'),'width', value);
 			this._fixEdges();
 			this.redraw();
 		},
@@ -770,12 +768,12 @@
 					minValue:this.get('minValue'),
 					maxValue:this.get('maxValue')
 				});
-			if (aria) {
-				container.setAttribute('aria-valuenow',value);
-				container.setAttribute('aria-valuetext',text);
-			}
 			if (captionEl) {
 				captionEl.innerHTML = text;
+			}
+			if (aria) {
+				container.setAttribute('aria-valuenow',value);
+				container.setAttribute('aria-valuetext',captionEl.textContent);
 			}
 		}
 	});
