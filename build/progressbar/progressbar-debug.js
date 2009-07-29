@@ -13,8 +13,17 @@
 		DIRECTION_LTR = 'ltr',
 		DIRECTION_RTL = 'rtl',
 		DIRECTION_TTB = 'ttb',
-		DIRECTION_BTT = 'btt';
+		DIRECTION_BTT = 'btt',
 		
+		CLASS_PROGBAR = 'yui-pb',
+		CLASS_MASK = CLASS_PROGBAR + '-mask',
+		CLASS_BAR = CLASS_PROGBAR + '-bar',
+		CLASS_CAPTION = CLASS_PROGBAR + '-caption',
+		CLASS_ANIM = CLASS_PROGBAR + '-anim',
+		CLASS_TL = CLASS_PROGBAR + '-tl',
+		CLASS_TR = CLASS_PROGBAR + '-tr',
+		CLASS_BL = CLASS_PROGBAR + '-bl',
+		CLASS_BR = CLASS_PROGBAR + '-br';
 	
 	/**
 	 * The ProgressBar widget provides an easy way to draw a bar depicting progress of an operation,
@@ -37,96 +46,6 @@
 	YAHOO.widget.ProgressBar = Prog;
 
     /**
-     * Class name assigned to ProgressBar container.
-     *
-     * @property ProgressBar.CLASS_PROGBAR
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb"
-     */
-	Prog.CLASS_PROGBAR = 'yui-pb';
-    /**
-     * Class name assigned to the mask element.
-     *
-     * @property ProgressBar.CLASS_MASK
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-mask"
-     */
-	Prog.CLASS_MASK = Prog.CLASS_PROGBAR + '-mask';
-    /**
-     * Class name assigned to the bar element.
-     *
-     * @property ProgressBar.CLASS_BAR
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-bar"
-     */
-	Prog.CLASS_BAR = Prog.CLASS_PROGBAR + '-bar';
-    /**
-     * Class name assigned to the element showing the current value.
-     *
-     * @property ProgressBar.CLASS_CAPTION
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-value"
-     */
-	Prog.CLASS_CAPTION = Prog.CLASS_PROGBAR + '-caption';
-    /**
-     * Class name assigned to the bar while animated.
-     *
-     * @property ProgressBar.CLASS_ANIM
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-anim"
-     */
-	Prog.CLASS_ANIM = Prog.CLASS_PROGBAR + '-anim';
-    /**
-     * Class name assigned to the top-left cuadrant of the mask.
-     *
-     * @property ProgressBar.CLASS_TL
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-tl"
-     */
-	Prog.CLASS_TL = Prog.CLASS_PROGBAR + '-tl';
-    /**
-     * Class name assigned to the top-right cuadrant of the mask.
-     *
-     * @property ProgressBar.CLASS_TR
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-tr"
-     */
-	Prog.CLASS_TR = Prog.CLASS_PROGBAR + '-tr';
-    /**
-     * Class name assigned to the bottom-left cuadrant of the mask.
-     *
-     * @property ProgressBar.CLASS_BL
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-bl"
-     */
-	Prog.CLASS_BL = Prog.CLASS_PROGBAR + '-bl';
-    /**
-     * Class name assigned to the bottom-right cuadrant of the mask.
-     *
-     * @property ProgressBar.CLASS_BR
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-br"
-     */
-	Prog.CLASS_BR = Prog.CLASS_PROGBAR + '-br';
-    /**
      * String containing the HTML string which is the basis for the Progress Bar.
      *
      * @property ProgressBar.MARKUP
@@ -137,19 +56,19 @@
      */
 	Prog.MARKUP = [
 		'<div class="',
-		Prog.CLASS_BAR,
+		CLASS_BAR,
 		'"></div><div class="',
-		Prog.CLASS_CAPTION,
+		CLASS_CAPTION,
 		'"></div><div class="',
-		Prog.CLASS_MASK,
+		CLASS_MASK,
 		'"><div class="',
-		Prog.CLASS_TL,
+		CLASS_TL,
 		'"></div><div class="',
-		Prog.CLASS_TR,
+		CLASS_TR,
 		'"></div><div class="',
-		Prog.CLASS_BL,
+		CLASS_BL,
 		'"></div><div class="',
-		Prog.CLASS_BR,
+		CLASS_BR,
 		'"></div></div>'
 	].join('');
 
@@ -203,7 +122,7 @@
 
 		    Prog.superclass.initAttributes.call(this, oConfigs);
 			this.set('innerHTML',Prog.MARKUP);
-			this.addClass(Prog.CLASS_PROGBAR);
+			this.addClass(CLASS_PROGBAR);
 			
 			// I need to apply at least the following styles, if present in oConfigs, 
 			// to the ProgressBar so when it later reads the width and height, 
@@ -217,8 +136,6 @@
 			}
 			
 
-			var barEl  = this.getElementsByClassName(Prog.CLASS_BAR)[0],
-				maskEl = this.getElementsByClassName(Prog.CLASS_MASK)[0];				
 			/**
 			 * @attribute barEl
 			 * @description Reference to the HTML object that makes the moving bar (read-only)
@@ -227,7 +144,7 @@
 			 */			
 		    this.setAttributeConfig('barEl', {
 		        readOnly: true,
-		        value: barEl
+		        value: this.getElementsByClassName(CLASS_BAR)[0]
 		    });
 			/**
 			 * @attribute maskEl
@@ -237,7 +154,7 @@
 			 */			
 		    this.setAttributeConfig('maskEl', {
 		        readOnly: true,
-		        value: maskEl
+		        value: this.getElementsByClassName(CLASS_MASK)[0]
 		    });
 			
 			/**
@@ -247,7 +164,7 @@
 			 * @default a container placed centered over the progress bar.
 			 */			
 		    this.setAttributeConfig('captionEl', {
-		        value: this.getElementsByClassName(Prog.CLASS_CAPTION)[0],
+		        value: this.getElementsByClassName(CLASS_CAPTION)[0],
 				validator: function (value) {
 					return (Lang.isString(value) && Dom.get(value)) || (Lang.isObject(value) && value.ownerDocument == document);
 				},
@@ -422,8 +339,8 @@
 			// If the developer set a className attribute on initialization, 
 			// Element would have wiped out my own classNames
 			// So I need to insist on them, plus add the one for direction.
-			this.addClass(Prog.CLASS_PROGBAR);
-			this.addClass(Prog.CLASS_PROGBAR + '-' + direction);
+			this.addClass(CLASS_PROGBAR);
+			this.addClass(CLASS_PROGBAR + '-' + direction);
 
 			var container = this.get('element');
 			container.tabIndex = 0;
@@ -433,14 +350,6 @@
 
 			this.appendTo(parent,before);
 			
-			switch(direction) {
-				case DIRECTION_BTT:
-					Dom.setStyle(this.get('barEl'),'background-position','left bottom');
-					break;
-				case DIRECTION_RTL:
-					Dom.setStyle(this.get('barEl'),'background-position','right');
-					break;
-			}
 					
 			// I need to use the non-animated bar resizing function for initial redraw
 			this._barSizeFunction = this._barSizeFunctions[0][direction];
@@ -550,14 +459,14 @@
 			{
 				ltr: function(value, pixelValue, barEl, anim) {
 					if (anim.isAnimated()) { anim.stop(); }
-					Dom.addClass(barEl,Prog.CLASS_ANIM);
+					Dom.addClass(barEl,CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {width:{ to: pixelValue }}; 
 					anim.animate();
 				},
 				rtl: function(value, pixelValue, barEl, anim) {
 					if (anim.isAnimated()) { anim.stop(); }
-					Dom.addClass(barEl,Prog.CLASS_ANIM);
+					Dom.addClass(barEl,CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {
 						width:{ to: pixelValue },
@@ -567,14 +476,14 @@
 				},
 				ttb: function(value, pixelValue, barEl, anim) {
 					if (anim.isAnimated()) { anim.stop(); }
-					Dom.addClass(barEl,Prog.CLASS_ANIM);
+					Dom.addClass(barEl,CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {height:{to: pixelValue}};
 					anim.animate();
 				},
 				btt: function(value, pixelValue, barEl, anim) {
 					if (anim.isAnimated()) { anim.stop(); }
-					Dom.addClass(barEl,Prog.CLASS_ANIM);
+					Dom.addClass(barEl,CLASS_ANIM);
 					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 					anim.attributes = {
 						height:{to: pixelValue},
@@ -639,10 +548,10 @@
 		_fixEdges:function() {
 			if (!this._rendered || YAHOO.env.ua.ie || YAHOO.env.ua.gecko ) { return; }
 			var maskEl = this.get('maskEl'),
-				tlEl = Dom.getElementsByClassName(Prog.CLASS_TL,undefined,maskEl)[0],
-				trEl = Dom.getElementsByClassName(Prog.CLASS_TR,undefined,maskEl)[0],
-				blEl = Dom.getElementsByClassName(Prog.CLASS_BL,undefined,maskEl)[0],
-				brEl = Dom.getElementsByClassName(Prog.CLASS_BR,undefined,maskEl)[0],
+				tlEl = Dom.getElementsByClassName(CLASS_TL,undefined,maskEl)[0],
+				trEl = Dom.getElementsByClassName(CLASS_TR,undefined,maskEl)[0],
+				blEl = Dom.getElementsByClassName(CLASS_BL,undefined,maskEl)[0],
+				brEl = Dom.getElementsByClassName(CLASS_BR,undefined,maskEl)[0],
 				newSize = (parseInt(Dom.getStyle(maskEl,'height'),10) -
 				parseInt(Dom.getStyle(tlEl,'height'),10)) + 'px';
 				
@@ -720,7 +629,7 @@
 			var value = this.get('value');
 			this._previousValue = value;
 			this.fireEvent('complete', value);
-			Dom.removeClass(this.get('barEl'),Prog.CLASS_ANIM);
+			Dom.removeClass(this.get('barEl'),CLASS_ANIM);
 			this._showTemplates(value,true);
 		},
 		_animOnTween:function (ev) {
