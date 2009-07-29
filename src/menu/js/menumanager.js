@@ -37,8 +37,6 @@
 		_MOUSEOUT = "mouseout",
 		_MOUSEDOWN = "mousedown",
 		_MOUSEUP = "mouseup",
-		
-		_FOCUS = UA.ie ? "focusin" : "focus",		
 		_CLICK = "click",
 		_KEYDOWN = "keydown",
 		_KEYUP = "keyup",
