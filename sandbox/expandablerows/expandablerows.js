@@ -90,13 +90,14 @@
 
 				if( !state.expanded || restore ){
 					
-					var row_data = this.getRecord( record_id ),
-						row = this.getRow( row_data ),
-						new_row = document.createElement('tr'),
-						column_length = this.getFirstTrEl().getElementsByTagName( 'td' ).length,
-						expanded_data = row_data.getData(),
-						expanded_content = null,
-						template = this.rowExpansionTemplate;
+					var	row_data					= this.getRecord( record_id ),
+							row 							= this.getRow( row_data ),
+							new_row 					= document.createElement('tr'),
+							column_length			= this.getFirstTrEl().childNodes.length,
+							expanded_data			= row_data.getData(),
+							expanded_content	= null,
+							template 					= this.rowExpansionTemplate,
+							next_sibling			= Dom.getNextSibling( row );
 
 					//Fire custom event
 					this.fireEvent( "rowExpandEvent", { record_id : row_data.getId() } );
