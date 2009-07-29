@@ -11,10 +11,11 @@
             position: absolute;
             top: 200px;
             left: 400px;
-            width: 10px;
-            height: 10px;
+            width: 30px;
+            height: 30px;
             border: 1px solid black;
             background-color: red;
+            cursor: move;
         }
 	</style>
 </head>
@@ -23,11 +24,28 @@
 <div id="test"></div>
 
 <script type="text/javascript">
+var drag = null,
+deltas = [];
 window.onload = function() {
-    document.getElementById('test').onclick = function(e) {
+    document.getElementById('test').onmousedown = function(e) {
         var rect = document.getElementById('test').getBoundingClientRect();
-        console.log(e);
-        console.log([e.pageX, e.pageY], [rect.left, rect.top]);
+        deltas = [e.pageX - rect.left, e.pageY - rect.top];
+        console.log('mousedown: ', [e.pageX, e.pageY], [rect.left, rect.top]);
+        document.getElementById('test').style.top = e.pageY - deltas[1] + 'px';
+        document.getElementById('test').style.left = e.pageX - deltas[0] + 'px';
+        drag = true;
+        return false;
+    };
+    document.onmouseup = function(e) {
+        drag = false;
+    };
+    document.onmousemove = function(e) {
+        var rect = document.getElementById('test').getBoundingClientRect();
+        if (drag) {
+            document.getElementById('test').style.top = e.pageY - deltas[1] + 'px';
+            document.getElementById('test').style.left = e.pageX - deltas[0] + 'px';
+        }
+        console.log('over:', [e.pageX, e.pageY], [rect.left, rect.top]);
     };
 };
 </script>
