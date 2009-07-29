@@ -7,15 +7,15 @@
 
 (function(){
 	
-	var	Dom = YAHOO.util.Dom
+	var	Dom 							= YAHOO.util.Dom
 	
-			STRING_STATENAME = 'yui_dt_state',
-			
-			CLASS_EXPANDED = 'yui-dt-expanded',
-			CLASS_COLLAPSED = 'yui-dt-collapsed',
-			CLASS_EXPANSION = 'yui-dt-expansion',
-			CLASS_LINER = 'yui-dt-liner',
-			
+			STRING_STATENAME	= 'yui_dt_state',
+
+			CLASS_EXPANDED		= 'yui-dt-expanded',
+			CLASS_COLLAPSED		= 'yui-dt-collapsed',
+			CLASS_EXPANSION		= 'yui-dt-expansion',
+			CLASS_LINER				= 'yui-dt-liner',
+
 			//From YUI 3
 			indexOf = function(a, val) {
 				for (var i=0; i<a.length; i=i+1) {
@@ -33,10 +33,9 @@
 		{
 			_getRecordState : function( record_id, key ){
 
-				var row_data = this.getRecord( record_id ),
-					row_state = row_data.getData( STRING_STATENAME );
-
-				var state_data = ( row_state && key ) ? row_state[ key ] : row_state;
+				var	row_data		= this.getRecord( record_id ),
+						row_state		= row_data.getData( STRING_STATENAME ),
+						state_data	= ( row_state && key ) ? row_state[ key ] : row_state;
 				
 				return state_data || {};
 
@@ -165,14 +164,14 @@
 
 			collapseRow : function( record_id ){
 				
-				var row_data = this.getRecord( record_id ),
-					row = Dom.get( row_data.getId() ),
-					state = row_data.getData( STRING_STATENAME );
+				var	row_data		= this.getRecord( record_id ),
+						row					= Dom.get( row_data.getId() ),
+						state				= row_data.getData( STRING_STATENAME );
 				
 				if( state && state.expanded ){
 
-					var next_sibling = Dom.getNextSibling( row ),
-						hash_index = indexOf( this.a_rowExpansions, record_id );
+					var	next_sibling		= Dom.getNextSibling( row ),
+							hash_index			= indexOf( this.a_rowExpansions, record_id );
 						
 					if( Dom.hasClass( next_sibling, CLASS_EXPANSION ) ) {
 
