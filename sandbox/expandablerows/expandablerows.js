@@ -44,23 +44,14 @@
 
 			_setRecordState : function( record_id, key, value ){
 
-				var row_data = this.getRecord( record_id ).getData(),
-					merged_data = {};
+				var	row_data			= this.getRecord( record_id ).getData(),
+						merged_data 	= row_data[ STRING_STATENAME ] || {};
 					
-
-				for( var i in row_data[ STRING_STATENAME ] ){
-					
-					var item = row_data[ STRING_STATENAME ][ i ]
-					
-					merged_data[ i ] = item;
-					
-				}
-				
 				merged_data[ key ] = value;
-				
+
 				this.getRecord( record_id ).setData( STRING_STATENAME, merged_data );
-				
-				return row_data[ key ];
+
+				return merged_data;
 
 			},
 
