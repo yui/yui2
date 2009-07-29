@@ -58,7 +58,7 @@
 			initExpandableRows : function( field, template ){
 				
 				//Set subscribe restore method
-				this.subscribe( 'postRenderEvent', this.restoreExpandedRows )
+				this.subscribe( 'postRenderEvent', this.onEventRestoreExpandableRows )
 
 				//Setup template
 				this.rowExpansionTemplate = template;
@@ -98,9 +98,6 @@
 							expanded_content	= null,
 							template 					= this.rowExpansionTemplate,
 							next_sibling			= Dom.getNextSibling( row );
-
-					//Fire custom event
-					this.fireEvent( "rowExpandEvent", { record_id : row_data.getId() } );
 
 					//Construct expanded row body
 					new_row.className = CLASS_EXPANSION;
@@ -151,6 +148,9 @@
 						Dom.removeClass( row, CLASS_COLLAPSED );
 						Dom.addClass( row, CLASS_EXPANDED );
 
+						//Fire custom event
+						this.fireEvent( "rowExpandEvent", { record_id : row_data.getId() } );
+
 						return true;
 
 					} else {
@@ -171,9 +171,6 @@
 				
 				if( state && state.expanded ){
 
-					//Fire custom event
-					this.fireEvent("rowCollapseEvent", { record_id : row_data.getId() } );
-					
 					var next_sibling = Dom.getNextSibling( row ),
 						hash_index = indexOf( this.a_rowExpansions, record_id );
 						
@@ -186,7 +183,10 @@
 						Dom.addClass( row, CLASS_COLLAPSED );
 						Dom.removeClass( row, CLASS_EXPANDED );
 
-						return true
+						//Fire custom event
+						this.fireEvent("rowCollapseEvent", { record_id : row_data.getId() } );
+
+						return true;
 
 					} else {
 
@@ -217,9 +217,9 @@
 				var	expanded_rows = this.a_rowExpansions;
 				
 				if( !expanded_rows.length ){
-					
+
 					return;
-					
+
 				}
 
 				if( this.a_rowExpansions.length ){
@@ -231,6 +231,12 @@
 					}
 
 				}
+
+			},
+
+			onEventRestoreExpandableRows : function( oArgs ){
+
+				this.restoreExpandedRows();
 
 			}
 
