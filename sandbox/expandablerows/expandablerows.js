@@ -58,7 +58,7 @@
 			initExpandableRows : function( field, template ){
 				
 				//Set subscribe restore method
-				this.subscribe( 'postRenderEvent', this.onEventRestoreExpandableRows )
+				this.subscribe( 'postRenderEvent', this.onEventRestoreExpandableRows );
 
 				//Setup template
 				this.rowExpansionTemplate = template;
