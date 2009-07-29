@@ -9,9 +9,10 @@ YAHOO.lang = YAHOO.lang || {};
 
 var L = YAHOO.lang,
 
+    OP = Object.prototype,
     ARRAY_TOSTRING = '[object Array]',
     FUNCTION_TOSTRING = '[object Function]',
-    OP = Object.prototype,
+    OBJECT_TOSTRING = '[object Object]',
     NOTHING = [],
 
     // ADD = ["toString", "valueOf", "hasOwnProperty"],
@@ -337,7 +338,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     substitute: function (s, o, f) {
         var i, j, k, key, v, meta, saved=[], token, 
             DUMP='dump', SPACE=' ', LBRACE='{', RBRACE='}',
-            dump;
+            dump, objstr;
 
 
         for (;;) {
@@ -380,12 +381,14 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
                         meta = meta.substring(4);
                     }
 
+                    objstr = v.toString();
+
                     // use the toString if it is not the Object toString 
                     // and the 'dump' meta info was not found
-                    if (v.toString===OP.toString || dump>-1) {
+                    if (objstr === OBJECT_TOSTRING || dump > -1) {
                         v = L.dump(v, parseInt(meta, 10));
                     } else {
-                        v = v.toString();
+                        v = objstr;
                     }
                 }
             } else if (!L.isString(v) && !L.isNumber(v)) {
