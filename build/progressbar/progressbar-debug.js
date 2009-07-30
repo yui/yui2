@@ -608,7 +608,6 @@
 				value += 'px';
 			}
 			this.setStyle('height',value);
-			// Dom.setStyle(this.get('maskEl'),'height', value);
 			this._fixEdges();
 			this.redraw();
 		},
@@ -625,7 +624,6 @@
 				value += 'px';
 			}
 			this.setStyle('width',value);
-			// Dom.setStyle(this.get('maskEl'),'width', value);
 			this._fixEdges();
 			this.redraw();
 		},
@@ -639,9 +637,7 @@
 		 * @private
 		 */
 		_fixEdges:function() {
-		//return;
 			if (!this._rendered || YAHOO.env.ua.ie || YAHOO.env.ua.gecko ) { return; }
-			debugger;
 			var maskEl = this.get('maskEl'),
 				tlEl = Dom.getElementsByClassName(Prog.CLASS_TL,undefined,maskEl)[0],
 				trEl = Dom.getElementsByClassName(Prog.CLASS_TR,undefined,maskEl)[0],
@@ -772,12 +768,12 @@
 					minValue:this.get('minValue'),
 					maxValue:this.get('maxValue')
 				});
-			if (aria) {
-				container.setAttribute('aria-valuenow',value);
-				container.setAttribute('aria-valuetext',text);
-			}
 			if (captionEl) {
 				captionEl.innerHTML = text;
+			}
+			if (aria) {
+				container.setAttribute('aria-valuenow',value);
+				container.setAttribute('aria-valuetext',captionEl.textContent);
 			}
 		}
 	});

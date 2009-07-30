@@ -2,7 +2,9 @@
 <url-policy>
 	<!-- Be sure to include any url / directory here that you'll be running this in-->
     <allow-access-from url="http://localhost" />
-    <allow-access-from url="http://test.localhost" />
-    <allow-access-from url="http://core.localhost/tests/" />
+    <allow-access-from url="http://yui.localhost" />
+    <allow-access-from url="http://yui.localhost/src/storage" />
+    <allow-access-from url="http://yui.localhost/src/storage/tests" />
+    <allow-access-from url="http://yui.localhost/src/storage/swf" />
 
 </url-policy> 

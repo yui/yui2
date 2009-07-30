@@ -744,9 +744,9 @@ init: function (p_oElement, p_oConfig) {
         this.beforeRenderEvent.subscribe(this._onBeforeRender);
         this.renderEvent.subscribe(this._onRender);
         this.beforeShowEvent.subscribe(this._onBeforeShow);
-//        this.hideEvent.subscribe(this._onHide);
+		this.hideEvent.subscribe(this._onHide);
         this.showEvent.subscribe(this._onShow);
-//        this.beforeHideEvent.subscribe(this._onBeforeHide);
+		this.beforeHideEvent.subscribe(this._onBeforeHide);
         this.mouseOverEvent.subscribe(this._onMouseOver);
         this.mouseOutEvent.subscribe(this._onMouseOut);
         this.clickEvent.subscribe(this._onClick);

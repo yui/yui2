@@ -37,8 +37,6 @@
 		_MOUSEOUT = "mouseout",
 		_MOUSEDOWN = "mousedown",
 		_MOUSEUP = "mouseup",
-		
-		_FOCUS = UA.ie ? "focusin" : "focus",		
 		_CLICK = "click",
 		_KEYDOWN = "keydown",
 		_KEYUP = "keyup",
@@ -307,6 +305,20 @@
                             oMenu.cfg.getProperty(_POSITION) == _DYNAMIC) {
 
                             oMenu.hide();
+
+							//	In IE when the user mouses down on a focusable 
+							//	element that element will be focused and become 
+							//	the "activeElement".
+							//	(http://msdn.microsoft.com/en-us/library/ms533065(VS.85).aspx)
+							//	However, there is a bug in IE where if there is 
+							//	a positioned element with a focused descendant 
+							//	that is hidden in response to the mousedown 
+							//	event, the target of the mousedown event will 
+							//	appear to have focus, but will not be set as 
+							//	the activeElement.  This will result in the 
+							//	element not firing key events, even though it
+							//	appears to have focus.  The following call to 
+							//	"setActive" fixes this bug.
 
 							if (UA.ie && oTarget.focus) {
 								oTarget.setActive();
@@ -1598,9 +1610,9 @@ init: function (p_oElement, p_oConfig) {
         this.beforeRenderEvent.subscribe(this._onBeforeRender);
         this.renderEvent.subscribe(this._onRender);
         this.beforeShowEvent.subscribe(this._onBeforeShow);
-//        this.hideEvent.subscribe(this._onHide);
+		this.hideEvent.subscribe(this._onHide);
         this.showEvent.subscribe(this._onShow);
-//        this.beforeHideEvent.subscribe(this._onBeforeHide);
+		this.beforeHideEvent.subscribe(this._onBeforeHide);
         this.mouseOverEvent.subscribe(this._onMouseOver);
         this.mouseOutEvent.subscribe(this._onMouseOut);
         this.clickEvent.subscribe(this._onClick);

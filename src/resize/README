@@ -9,10 +9,10 @@
     * Added support for the new useShim config on Resize objects    
 
     Bug Fixes:
- 	    * 2000116 - [SF 1993048] YAHOO.util.Easing is undefined (without opt...
-	    * 2086450 - [SF 2020779] [doc] endResize event for Resize component ...
-	    * 2119091 - [SF 2034517] Bottom drifts on top drag in IE7/FF3
-	    * 2166985 - [SF 2074283] Splitter fails when dragged over richtext e...
+ 	    * 1993048 YAHOO.util.Easing is undefined (without opt...
+	    * 2020779 [doc] endResize event for Resize component ...
+	    * 2034517 Bottom drifts on top drag in IE7/FF3
+	    * 2074283 Splitter fails when dragged over richtext e...
         
 
 **** version 2.5.2 ***
@@ -21,8 +21,8 @@
 **** version 2.5.1 ***
     
     Bug Fixes
-        * 1766923 - [SF 1899888] Resize.destroy() not removing status
-        * 1784371 - Status div tracks on resize cancel
+        * 1899888 Resize.destroy() not removing status
+        * Status div tracks on resize cancel
 
 **** version 2.5.0 ***
 

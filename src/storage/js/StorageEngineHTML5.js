@@ -5,7 +5,8 @@
 
 /*
  * HTML limitations:
- *  - only 100,000 bytes of data can be stored this way
+ *  - 5MB in FF and Safari, 10MB in IE 8
+ *  - only FF 3.5 recovers session storage after a browser crash
  *
  * Thoughts:
  *  - how can we not use cookies to handle session
@@ -13,7 +14,27 @@
 (function() {
 		// internal shorthand
     var Y = YAHOO.util,
-		YL = YAHOO.lang;
+		YL = YAHOO.lang,
+		
+		/**
+		 * Required for IE 8 to make synchronous.
+		 * @method _beginTransaction
+		 * @param engine {Object} Required. The storage engine.
+		 * @private
+		 */
+		_beginTransaction = function(engine) {
+			if (engine.begin) {engine.begin();}
+		},
+		
+		/**
+		 * Required for IE 8 to make synchronous.
+		 * @method _commitTransaction
+		 * @param engine {Object} Required. The storage engine.
+		 * @private
+		 */
+		_commitTransaction = function(engine) {
+			if (engine.commit) {engine.commit();}
+		};
 
 	/**
 	 * The StorageEngineHTML5 class implements the HTML5 storage engine.
@@ -42,13 +63,28 @@
 		 * Implementation to clear the values from the storage engine.
 		 * @see YAHOO.util.Storage._clear
 		 */
-		_clear: function() {this._engine.clear();},
+		_clear: function() {
+			var _this = this;
+			if (_this._engine.clear) {
+				_this._engine.clear();
+			}
+			// for FF 3, fixed in FF 3.5
+			else {
+				for (var i = _this.length, key; 0 <= i; i -= 1) {
+					key = _this._key(i);
+					_this._removeItem(key);
+				}
+			}
+		},
 
 		/*
 		 * Implementation to fetch an item from the storage engine.
 		 * @see YAHOO.util.Storage._getItem
 		 */
-		_getItem: function(key) {return this._engine.getItem(key);},
+		_getItem: function(key) {
+			var o = this._engine.getItem(key);
+			return YL.isObject(o) ? o.value : o; // for FF 3, fixed in FF 3.5
+		},
 
 		/*
 		 * Implementation to fetch a key from the storage engine.
@@ -61,8 +97,11 @@
 		 * @see YAHOO.util.Storage._removeItem
 		 */
 		_removeItem: function(key) {
-			this._engine.removeItem(key);
-			this.length = this._engine.length;
+			var _this = this;
+			_beginTransaction(_this._engine);
+			_this._engine.removeItem(key);
+			_commitTransaction(_this._engine);
+			_this.length = _this._engine.length;
 		},
 
 		/*
@@ -70,9 +109,13 @@
 		 * @see YAHOO.util.Storage._setItem
 		 */
 		_setItem: function(key, value) {
+			var _this = this;
+			
 			try {
-				this._engine.setItem(key, value);
-				this.length = this._engine.length;
+				_beginTransaction(_this._engine);
+				_this._engine.setItem(key, value);
+				_commitTransaction(_this._engine);
+				_this.length = _this._engine.length;
 				return true;
 			}
 			catch (e) {
