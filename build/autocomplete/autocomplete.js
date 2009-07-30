@@ -1783,6 +1783,19 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
 };
 
 /**
+ * Populates the given &lt;li&gt; element with return value from formatResult().
+ *
+ * @method _populateListItem
+ * @param elListItem {HTMLElement} The LI element.
+ * @param oResult {Object} The result object.
+ * @param sCurQuery {String} The query string.
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._populateListItem = function(elListItem, oResult, sQuery) {
+    elListItem.innerHTML = this.formatResult(oResult, sQuery, elListItem._sResultMatch);
+};
+
+/**
  * Populates the array of &lt;li&gt; elements in the container with query
  * results.
  *
@@ -1809,13 +1822,6 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
         
         // Continue only if instance is still active (i.e., user hasn't already moved on)
         if(this._bFocused) {
-            
-            //TODO: is this still necessary?
-            /*var isOpera = (YAHOO.env.ua.opera);
-            var contentStyle = this._elContent.style;
-            contentStyle.width = (!isOpera) ? null : "";
-            contentStyle.height = (!isOpera) ? null : "";*/
-        
             // Store state for this interaction
             var sCurQuery = decodeURIComponent(sQuery);
             this._sCurQuery = sCurQuery;
@@ -1873,7 +1879,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
                     // The matching value, including backward compatibility for array format and safety net
                     elListItem._sResultMatch = (YAHOO.lang.isString(oResult)) ? oResult : (YAHOO.lang.isArray(oResult)) ? oResult[0] : (oResult[sMatchKey] || "");
                     elListItem._oResultData = oResult; // Additional data
-                    elListItem.innerHTML = this.formatResult(oResult, sCurQuery, elListItem._sResultMatch);
+                    this._populateListItem(elListItem, oResult, sCurQuery);
                     elListItem.style.display = "";
                 }
         
