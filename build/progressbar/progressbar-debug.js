@@ -18,7 +18,10 @@
 		CLASS_PROGBAR = 'yui-pb',
 		CLASS_MASK = CLASS_PROGBAR + '-mask',
 		CLASS_BAR = CLASS_PROGBAR + '-bar',
+		CLASS_BAR_TABLE = CLASS_BAR + '-table',
+		CLASS_BAR_CONTAINER = CLASS_BAR + '-container',
 		CLASS_CAPTION = CLASS_PROGBAR + '-caption',
+		CLASS_CAPTION_CONTAINER = CLASS_CAPTION + '-container',
 		CLASS_ANIM = CLASS_PROGBAR + '-anim',
 		CLASS_TL = CLASS_PROGBAR + '-tl',
 		CLASS_TR = CLASS_PROGBAR + '-tr',
@@ -56,10 +59,16 @@
      */
 	Prog.MARKUP = [
 		'<div class="',
+		CLASS_BAR_TABLE,
+		'"><div class="',
+		CLASS_BAR_CONTAINER,
+		'"><div class="',
 		CLASS_BAR,
-		'"></div><div class="',
+		'"></div></div></div><div class="',
+		CLASS_CAPTION_CONTAINER,
+		'"><div class="',
 		CLASS_CAPTION,
-		'"></div><div class="',
+		'"></div></div><div class="',
 		CLASS_MASK,
 		'"><div class="',
 		CLASS_TL,
@@ -424,75 +433,6 @@
 		 */
 		_rendered:false,
 		
-		/**
-		 * Collection of functions used by to calculate the size of the bar.
-		 * One of this will be used depending on direction and whether animation is active.
-		 * @property _barSizeFunctions
-		 * @type {collection of functions}
-		 * @private
-		 */
-		_barSizeFunctions: [
-			{
-				ltr: function(value, pixelValue, barEl, anim) {
-					Dom.setStyle(barEl,'width',  pixelValue + 'px');
-					this.fireEvent('progress',value);
-					this.fireEvent('complete',value);
-				},
-				rtl: function(value, pixelValue, barEl, anim) {
-					Dom.setStyle(barEl,'width',  pixelValue + 'px');
-					Dom.setStyle(barEl,'left',(this._barSpace - pixelValue) + 'px');
-					this.fireEvent('progress',value);
-					this.fireEvent('complete',value);
-				},
-				ttb: function(value, pixelValue, barEl, anim) {
-					Dom.setStyle(barEl,'height',  pixelValue + 'px');
-					this.fireEvent('progress',value);
-					this.fireEvent('complete',value);
-				},
-				btt: function(value, pixelValue, barEl, anim) {
-					Dom.setStyle(barEl,'height',  pixelValue + 'px');
-					Dom.setStyle(barEl,'top',  (this._barSpace - pixelValue) + 'px');
-					this.fireEvent('progress',value);
-					this.fireEvent('complete',value);
-				}
-			},
-			{
-				ltr: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated()) { anim.stop(); }
-					Dom.addClass(barEl,CLASS_ANIM);
-					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
-					anim.attributes = {width:{ to: pixelValue }}; 
-					anim.animate();
-				},
-				rtl: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated()) { anim.stop(); }
-					Dom.addClass(barEl,CLASS_ANIM);
-					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
-					anim.attributes = {
-						width:{ to: pixelValue },
-						left:{to: this._barSpace - pixelValue}
-					}; 
-					anim.animate();
-				},
-				ttb: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated()) { anim.stop(); }
-					Dom.addClass(barEl,CLASS_ANIM);
-					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
-					anim.attributes = {height:{to: pixelValue}};
-					anim.animate();
-				},
-				btt: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated()) { anim.stop(); }
-					Dom.addClass(barEl,CLASS_ANIM);
-					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
-					anim.attributes = {
-						height:{to: pixelValue},
-						top:{to: this._barSpace - pixelValue}
-					};
-					anim.animate();
-				}
-			}
-		],
 		
 		/**
 		 * Function to be used to calculate bar size.  
@@ -573,25 +513,29 @@
 		 */		
 		_recalculateConstants: function() {
 			YAHOO.log('Recalculating auxiliary factors','info','ProgressBar');
+			
+			//var cont = this.getElementsByClassName(CLASS_BAR_TABLE)[0];
 			var barEl = this.get('barEl');
-			this._mn = this.get('minValue') || 0;
 
 			switch (this.get('direction')) {
 				case DIRECTION_LTR:
 				case DIRECTION_RTL:
-					this._barSpace = parseInt(this.get('width'),10) - 
+					this._barSpace = (parseInt(this.get('width'),10) || 200) - 
 						(parseInt(Dom.getStyle(barEl,'marginLeft'),10) || 0) -
 						(parseInt(Dom.getStyle(barEl,'marginRight'),10) || 0);
+						// this._barSpace = parseInt(Dom.getStyle(cont,'width'),10);
 					break;
 				case DIRECTION_TTB:
 				case DIRECTION_BTT:
-					this._barSpace = parseInt(this.get('height'),10) -
-						(parseInt(Dom.getStyle(barEl,'marginTop'),10) || 0)-
+					this._barSpace = (parseInt(this.get('height'),10) || 20) -
+						(parseInt(Dom.getStyle(barEl,'marginTop'),10) || 0) -
 						(parseInt(Dom.getStyle(barEl,'marginBottom'),10) || 0); 
+						// this._barSpace = parseInt(Dom.getStyle(cont,'height'),10);
 					break;
 			}
-			this._barFactor = this._barSpace / (this.get('maxValue') - this._mn)  || 1;
+			this._barFactor = this._barSpace / (this.get('maxValue') - (this.get('minValue') || 0))  || 1;
 		},
+		
 		
 		/** 
 		 * Called in response to a change in the <a href="#config_anim">anim</a> attribute.
@@ -649,14 +593,19 @@
 		 */		
 		_valueChange: function (value) {
 			YAHOO.log('set value: ' + value,'info','ProgressBar');
-			var anim = this.get('anim'),
-				pixelValue = Math.floor((value - this._mn) * this._barFactor),
-				barEl = this.get('barEl');
-			
+			var pixelValue = Math.floor((value - this.get('minValue')) * this._barFactor),
+				barEl = this.get('barEl'),
+				dim = 'width';
+			switch(this.get('direction')) {
+				case DIRECTION_TTB:
+				case DIRECTION_BTT:
+					dim = 'height';
+			}
+				
 			this._showTemplates(value,true);
 			if (this._rendered) {
 				this.fireEvent('start',this._previousValue);
-				this._barSizeFunction(value, pixelValue, barEl, anim);
+				this._barSizeFunction(value, pixelValue, barEl, dim);
 			}
 		},
 
@@ -686,6 +635,32 @@
 			}
 		}
 	});
+	/**
+	 * Collection of functions used by to calculate the size of the bar.
+	 * One of this will be used depending on direction and whether animation is active.
+	 * @property _barSizeFunctions
+	 * @type {collection of functions}
+	 * @private
+	 */
+	var b = [{},{}];
+	Prog.prototype._barSizeFunctions = b;
+	b[0][DIRECTION_LTR] = b[0][DIRECTION_RTL] = 
+	b[0][DIRECTION_TTB] = b[0][DIRECTION_BTT] = function(value, pixelValue, barEl, dim) {
+		Dom.setStyle(barEl,dim,  pixelValue + 'px');
+		this.fireEvent('progress',value);
+		this.fireEvent('complete',value);
+		this._previousValue = value;
+	};
+	b[1][DIRECTION_LTR] = b[1][DIRECTION_RTL] = 
+	b[1][DIRECTION_TTB] = b[1][DIRECTION_BTT] = function(value, pixelValue, barEl, dim) {
+		var anim = this.get('anim');
+		if (anim.isAnimated()) { anim.stop(); }
+		Dom.addClass(barEl,CLASS_ANIM);
+		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
+		anim.attributes = {}; 
+		anim.attributes[dim] = { to: pixelValue }; 
+		anim.animate();
+	};
 })();
 
 YAHOO.register("progressbar", YAHOO.widget.ProgressBar, {version: "@VERSION@", build: "@BUILD@"});
