@@ -1415,6 +1415,15 @@ YAHOO.widget.AutoComplete.prototype._sInitInputValue = null;
 YAHOO.widget.AutoComplete.prototype._elCurListItem = null;
 
 /**
+ * Pointer to the currently pre-highlighted &lt;li&gt; element in the container.
+ *
+ * @property _elCurPrehighlightItem
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._elCurPrehighlightItem = null;
+
+/**
  * Whether or not an item has been selected since the container was populated
  * with results. Reset to false by _populateList, and set to true when item is
  * selected.
@@ -2310,7 +2319,8 @@ YAHOO.widget.AutoComplete.prototype._toggleHighlight = function(elNewListItem, s
 };
 
 /**
- * Toggles the pre-highlight on or off for an item in the container.
+ * Toggles the pre-highlight on or off for an item in the container, and also cleans
+ * up pre-highlighting of any previous item.
  *
  * @method _togglePrehighlight
  * @param elNewListItem {HTMLElement} The &lt;li&gt; element item to receive highlight behavior.
@@ -2318,14 +2328,19 @@ YAHOO.widget.AutoComplete.prototype._toggleHighlight = function(elNewListItem, s
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._togglePrehighlight = function(elNewListItem, sType) {
+    var sPrehighlight = this.prehighlightClassName;
+
+    if(this._elCurPrehighlightItem) {
+        YAHOO.util.Dom.removeClass(this._elCurPrehighlightItem, sPrehighlight);
+    }
     if(elNewListItem == this._elCurListItem) {
         return;
     }
 
-    var sPrehighlight = this.prehighlightClassName;
     if((sType == "mouseover") && sPrehighlight) {
         // Apply prehighlight to new item
         YAHOO.util.Dom.addClass(elNewListItem, sPrehighlight);
+        this._elCurPrehighlightItem = elNewListItem;
     }
     else {
         // Remove prehighlight from old item
