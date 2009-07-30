@@ -1905,12 +1905,14 @@
             carousel.on(pageChangeEvent, syncPagerUi, carousel);
 
             carousel.on(renderEvent, function (ev) {
-                if(carousel.get("selectedItem") === null){
+                if (carousel.get("selectedItem") === null ||
+                    carousel.get("selectedItem") < 0) { // in either case
                     carousel.set("selectedItem", carousel.get("firstVisible"));
                 }
                 syncNavigation.call(carousel, ev);
                 syncPagerUi.call(carousel, ev);
                 carousel._setClipContainerSize();
+                carousel.show();
             });
 
             carousel.on("selectedItemChange", function (ev) {
@@ -2294,7 +2296,7 @@
                 carousel.appendChild(carousel._clipEl);
             }
 
-            if(rows) {
+            if (rows) {
                 Dom.addClass(carousel._clipEl, cssClass.MULTI_ROW);
             }
 
@@ -2310,7 +2312,7 @@
 
             carousel._refreshUi();
 
-            if(rows) {
+            if (rows) {
                 carousel._indexRows();
             }
 
@@ -3265,6 +3267,9 @@
                 }
             }
 
+            if (carousel._itemsTable.numItems < 1) {
+                return;
+            }
             // This fixes the widget to auto-adjust height/width for absolute
             // positioned children.
             item = carousel._itemsTable.items[0].id;
