@@ -1415,6 +1415,15 @@ YAHOO.widget.AutoComplete.prototype._sInitInputValue = null;
 YAHOO.widget.AutoComplete.prototype._elCurListItem = null;
 
 /**
+ * Pointer to the currently pre-highlighted &lt;li&gt; element in the container.
+ *
+ * @property _elCurPrehighlightItem
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._elCurPrehighlightItem = null;
+
+/**
  * Whether or not an item has been selected since the container was populated
  * with results. Reset to false by _populateList, and set to true when item is
  * selected.
@@ -1803,6 +1812,19 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
 };
 
 /**
+ * Populates the given &lt;li&gt; element with return value from formatResult().
+ *
+ * @method _populateListItem
+ * @param elListItem {HTMLElement} The LI element.
+ * @param oResult {Object} The result object.
+ * @param sCurQuery {String} The query string.
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._populateListItem = function(elListItem, oResult, sQuery) {
+    elListItem.innerHTML = this.formatResult(oResult, sQuery, elListItem._sResultMatch);
+};
+
+/**
  * Populates the array of &lt;li&gt; elements in the container with query
  * results.
  *
@@ -1829,13 +1851,6 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
         
         // Continue only if instance is still active (i.e., user hasn't already moved on)
         if(this._bFocused) {
-            
-            //TODO: is this still necessary?
-            /*var isOpera = (YAHOO.env.ua.opera);
-            var contentStyle = this._elContent.style;
-            contentStyle.width = (!isOpera) ? null : "";
-            contentStyle.height = (!isOpera) ? null : "";*/
-        
             // Store state for this interaction
             var sCurQuery = decodeURIComponent(sQuery);
             this._sCurQuery = sCurQuery;
@@ -1893,7 +1908,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
                     // The matching value, including backward compatibility for array format and safety net
                     elListItem._sResultMatch = (YAHOO.lang.isString(oResult)) ? oResult : (YAHOO.lang.isArray(oResult)) ? oResult[0] : (oResult[sMatchKey] || "");
                     elListItem._oResultData = oResult; // Additional data
-                    elListItem.innerHTML = this.formatResult(oResult, sCurQuery, elListItem._sResultMatch);
+                    this._populateListItem(elListItem, oResult, sCurQuery);
                     elListItem.style.display = "";
                 }
         
@@ -2304,7 +2319,8 @@ YAHOO.widget.AutoComplete.prototype._toggleHighlight = function(elNewListItem, s
 };
 
 /**
- * Toggles the pre-highlight on or off for an item in the container.
+ * Toggles the pre-highlight on or off for an item in the container, and also cleans
+ * up pre-highlighting of any previous item.
  *
  * @method _togglePrehighlight
  * @param elNewListItem {HTMLElement} The &lt;li&gt; element item to receive highlight behavior.
@@ -2312,14 +2328,19 @@ YAHOO.widget.AutoComplete.prototype._toggleHighlight = function(elNewListItem, s
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._togglePrehighlight = function(elNewListItem, sType) {
+    var sPrehighlight = this.prehighlightClassName;
+
+    if(this._elCurPrehighlightItem) {
+        YAHOO.util.Dom.removeClass(this._elCurPrehighlightItem, sPrehighlight);
+    }
     if(elNewListItem == this._elCurListItem) {
         return;
     }
 
-    var sPrehighlight = this.prehighlightClassName;
     if((sType == "mouseover") && sPrehighlight) {
         // Apply prehighlight to new item
         YAHOO.util.Dom.addClass(elNewListItem, sPrehighlight);
+        this._elCurPrehighlightItem = elNewListItem;
     }
     else {
         // Remove prehighlight from old item
