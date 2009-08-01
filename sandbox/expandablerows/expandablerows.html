@@ -89,8 +89,7 @@ YAHOO.util.Event.addListener(window, "load", function() {
 							formatter:expansionFormatter
 						},
 						{
-							key:"date", 
-							formatter:YAHOO.widget.DataTable.formatDate, 
+							key:"date",
 							sortable:true, 
 							sortOptions:{
 								defaultDir:YAHOO.widget.DataTable.CLASS_DESC
@@ -141,15 +140,10 @@ YAHOO.util.Event.addListener(window, "load", function() {
 				var myDataTable = new YAHOO.widget.DataTable(
 					"basic",
 					myColumnDefs, 
-					myDataSource
+					myDataSource,
+					{ rowExpansionTemplate : '<img src="{image_url}" />' }
 				);
 
-				//Init expandable rows
-				myDataTable.initExpandableRows( 
-					'details', 
-					'<img src="{image_url}" />' 
-				);
-				
 				//Subscribe to a click event to bind to
 				myDataTable.subscribe( 'cellClickEvent', function( cell_click, args ){
 

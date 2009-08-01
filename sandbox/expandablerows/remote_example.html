@@ -124,14 +124,8 @@ YAHOO.util.Event.addListener(window, "load", function() {
         };
 
         var myDataTable = new YAHOO.widget.DataTable("json", myColumnDefs,
-                myDataSource, {initialRequest:"query=pizza&zip=94089&results=10&output=json"});
+                myDataSource, {initialRequest:"query=pizza&zip=94089&results=10&output=json", rowExpansionTemplate : '<strong>{test}</strong>' });
 
-        			//Init expandable rows
-					myDataTable.initExpandableRows( 
-						'details', 
-						'<strong>{test}</strong>' 
-					);
-					
 					//Subscribe to a click event to bind to
 					myDataTable.subscribe( 'cellClickEvent', function( cell_click, args ){
 

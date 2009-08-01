@@ -31,6 +31,32 @@
 	YAHOO.lang.augmentObject( 
 		YAHOO.widget.DataTable.prototype , 
 		{
+			initAttributes : function( oConfigs ) {
+
+				oConfigs = oConfigs || {};
+
+				YAHOO.widget.DataTable.superclass.initAttributes.call( this, oConfigs );
+
+			    /**
+			    * @attribute rowExpansionTemplate
+			    * @description Value for the rowExpansionTemplate attribute.
+			    * @type String or Function
+			    * @default ""
+			    */
+
+			    this.setAttributeConfig("rowExpansionTemplate", {
+			        value: "",
+			        validator: function( template ){
+								return (
+									YAHOO.lang.isString( template ) ||
+									YAHOO.lang.isFunction( template )
+								);
+							},
+			        method: this.initExpandableRows
+			    });
+
+			},
+
 			_getRecordState : function( record_id, key ){
 
 				var	row_data		= this.getRecord( record_id ),
@@ -54,8 +80,8 @@
 
 			},
 
-			initExpandableRows : function( field, template ){
-				
+			initExpandableRows : function( template ){
+
 				//Set subscribe restore method
 				this.subscribe( 'postRenderEvent', this.onEventRestoreExpandableRows );
 
@@ -239,7 +265,7 @@
 
 			}
 
-		}
+		}, true
 	);
 	
 })();
