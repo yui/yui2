@@ -203,6 +203,18 @@
             'requires': ['event']
         },
 
+        'event-delegate': {
+            'type': 'js',
+            'path': 'event-delegate/event-delegate-min.js',
+            'requires': ['event']
+        },
+
+        'event-mouseenter': {
+            'type': 'js',
+            'path': 'event-mouseenter/event-mouseenter-min.js',
+            'requires': ['event']
+        },
+
         'fonts': {
             'type': 'css',
             'path': 'fonts/fonts-min.css'
