@@ -91,6 +91,7 @@
 <span class="c">         */</span>
         <span class="k">var</span> <span class="nx">listeners</span> <span class="o">=</span> <span class="o">[];</span>
 
+
         <span class="c">/**</span>
 <span class="c">         * User-defined unload function that will be fired before all events</span>
 <span class="c">         * are detached</span>
@@ -149,6 +150,7 @@
         <span class="c">// String constants used by the addFocusListener and removeFocusListener methods</span>
 <span class="c"></span>        <span class="k">var</span> <span class="nx">_FOCUS</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">?</span> <span class="s2">&quot;focusin&quot;</span> <span class="o">:</span> <span class="s2">&quot;focus&quot;</span><span class="o">;</span>
         <span class="k">var</span> <span class="nx">_BLUR</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">?</span> <span class="s2">&quot;focusout&quot;</span> <span class="o">:</span> <span class="s2">&quot;blur&quot;</span><span class="o">;</span>      
+
 
         <span class="k">return</span> <span class="o">{</span>
 
@@ -248,6 +250,9 @@
 <span class="c">             * @final</span>
 <span class="c">             */</span>
             <span class="nx">OVERRIDE</span><span class="o">:</span> <span class="m">6</span><span class="o">,</span>
+
+
+			<span class="nx">CAPTURE</span><span class="o">:</span> <span class="m">7</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * addListener/removeListener can throw errors in unexpected scenarios.</span>
@@ -496,7 +501,7 @@
                     <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                         <span class="c">// defer adding the event until the element is available</span>
 <span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">onAvailable</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-                           <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">);</span>
+                           <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">_addListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">,</span> <span class="nx">bCapture</span><span class="o">);</span>
                         <span class="o">});</span>
 
                         <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
@@ -541,7 +546,7 @@
                                 <span class="nx">obj</span><span class="o">);</span>
                     <span class="o">};</span>
 
-                <span class="k">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="o">[</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">wrappedFn</span><span class="o">,</span> <span class="nx">context</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">];</span>
+                <span class="k">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="o">[</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">wrappedFn</span><span class="o">,</span> <span class="nx">context</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">,</span> <span class="nx">bCapture</span><span class="o">];</span>
                 <span class="k">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">listeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
                 <span class="c">// cache the listener so we can try to automatically unload</span>
 <span class="c"></span>                <span class="nx">listeners</span><span class="o">[</span><span class="nx">index</span><span class="o">]</span> <span class="o">=</span> <span class="nx">li</span><span class="o">;</span>
@@ -742,7 +747,7 @@
 <span class="c"></span>                <span class="k">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">arguments</span><span class="o">[</span><span class="m">3</span><span class="o">];</span>
   
                 <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;undefined&quot;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">index</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getCacheIndex</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
+                    <span class="nx">index</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getCacheIndex</span><span class="o">(</span><span class="nx">listeners</span><span class="o">,</span> <span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
                 <span class="o">}</span>
 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">index</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
@@ -756,8 +761,10 @@
 
                 <span class="c">// this.logger.debug(&quot;Removing handler: &quot; + el + &quot;, &quot; + sType);</span>
 <span class="c"></span>
+				<span class="k">var</span> <span class="nx">bCapture</span> <span class="o">=</span> <span class="nx">cacheItem</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">CAPTURE</span><span class="o">]</span> <span class="o">===</span> <span class="kc">true</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="o">;</span>
+
                 <span class="k">try</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">cacheItem</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">],</span> <span class="kc">false</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">cacheItem</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">],</span> <span class="nx">bCapture</span><span class="o">);</span>
                 <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">ex</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">lastError</span> <span class="o">=</span> <span class="nx">ex</span><span class="o">;</span>
                     <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
@@ -996,9 +1003,9 @@
 <span class="c">             * @static</span>
 <span class="c">             * @private</span>
 <span class="c">             */</span>
-            <span class="nx">_getCacheIndex</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">l</span><span class="o">=</span><span class="nx">listeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="nx">listeners</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+            <span class="nx">_getCacheIndex</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">a</span><span class="o">,</span> <span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">l</span><span class="o">=</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
                     <span class="k">if</span> <span class="o">(</span> <span class="nx">li</span>                 <span class="o">&amp;&amp;</span> 
                          <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">FN</span><span class="o">]</span> <span class="o">==</span> <span class="nx">fn</span>  <span class="o">&amp;&amp;</span> 
                          <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">EL</span><span class="o">]</span> <span class="o">==</span> <span class="nx">el</span>  <span class="o">&amp;&amp;</span> 
