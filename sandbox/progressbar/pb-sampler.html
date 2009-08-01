@@ -62,6 +62,7 @@
 	margin: 32px 0;
 }
 
+
 .yui-skin-sam #pbr .yui-pb {
 	width:401px;
 	height: 100px;
@@ -147,12 +148,14 @@ hr {
 			<textarea name="code" class="CSS" cols="60" rows="1">
 				.yui-skin-sam #pbr .yui-pb, 
 				.yui-skin-sam #pbcopper .yui-pb  {
-					background:transparent none;
+					background-color:transparent;
+					background-image:none;
 					border:none;
 				}
 				.yui-skin-sam #pbr .yui-pb-bar,
 				.yui-skin-sam #pbcopper .yui-pb-bar {
-					background:transparent none;
+					background-color:transparent;
+					background-image:none;
 				}
 
 				.yui-skin-sam #pbr .yui-pb-mask, 
@@ -192,6 +195,9 @@ hr {
 
 				.yui-skin-sam #pbcopper .yui-pb-bar {
 					background-image: url(copperbarV.gif);
+				}
+
+				.yui-skin-sam #pbcopper .yui-pb-bar {
 					margin: 32px 0;
 				}
 			</textarea>
@@ -241,12 +247,12 @@ hr {
 				.yui-skin-sam #pbr .yui-pb-caption {
 					font-size: large;
 					font-weight:bold;
-					display:block;
+					visibility:visible;
 				}
 			</textarea>
 			<p>The ProgressBar has been further suplemented with the current value.  The ProgressBar 
 			always generates the caption, but the container assigned to hold it is normally hidden.  
-			To make it show, it just needs to be displayed and possibly assign a suitable font,
+			To make it show, it just needs to be made visible and possibly assign a suitable font,
 			as we did in the bottom declaration above. The percent sign has been produced by asigning
 			a suitable template for the caption in the <code>textTemplate</code> configuration attribute.</p>
 			<p>The bar itself was created with the following code:</p>
@@ -264,14 +270,15 @@ hr {
 				var pbrange = new YAHOO.widget.ProgressBar({
 					value:50,
 					textTemplate:'<span style="float:left">{minValue}</span> {value} ' +
-						'<spam style="float:right">{maxValue}</span>' 
+						'<span style="float:right">{maxValue}</span>' 
 				}).render('pbrange');
 			</textarea>
 			<p>There is nothing preventing the <code>textTemplate</code> from containing HTML markup.  We have used it to place
 			the two end values at the edges of the bar.  In contrast to the values placed outside, which are hard-coded into the
 			HTML, these would be updated automatically as the template uses the <code>{minValue}</code> and <code>{maxValue}</code>
-			placeholders.  A note of warning, this same template is used to produce the value for the <code>aria-valuetext</code> 
-			attribute to be used by screen readers, the use of HTML markup might be disruptive.</p>
+			placeholders.  Since this same template is used to produce the value for the <code>aria-valuetext</code> 
+			attribute to be used by screen readers any markup contained in the template is deleted when copied into <code>aria-valuetext</code>.</p>
+			
 			<p>Should the value of any attribute be presented to the user elsewhere, we can use the events fired by the
 			YUI Element utility from which the ProgressBar inherits from:</p>
 			<textarea name="code" class="JScript" cols="60" rows="1">
@@ -298,7 +305,7 @@ hr {
 
 		var pbrange = new YAHOO.widget.ProgressBar({
 			value:50,
-			textTemplate:'<span style="float:left">{minValue}</span> {value} <spam style="float:right">{maxValue}</span>' 
+			textTemplate:'<span style="float:left">{minValue}</span> {value} <span style="float:right">{maxValue}</span>' 
 		}).render('pbrange');
 		
 		YAHOO.util.Event.on('go','click',function(ev) {
