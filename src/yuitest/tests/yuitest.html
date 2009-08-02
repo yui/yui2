@@ -7,6 +7,7 @@
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../../build/event/event.js"></script>
+<script type="text/javascript" src="../../../build/event-simulate/event-simulate.js"></script>
 <script type="text/javascript" src="../../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../../build/json/json.js"></script>
 <script type="text/javascript" src="../../../build/yuitest/yuitest.js"></script>
@@ -666,7 +667,7 @@ YAHOO.test.YUITest_test = (function(){
         },
         
         
-        testJsonFormat : function(){
+        /*testJsonFormat : function(){
             var json = YAHOO.tool.TestFormat.JSON(this.report);
             var expectedJson = 
             "{\"passed\":2,\"failed\":2,\"ignored\":1,\"total\":5,\"type\":\"report\",\"name\":\"YUI Test Results\"," +
@@ -681,7 +682,7 @@ YAHOO.test.YUITest_test = (function(){
                 "}" +
             "}";
             Assert.areEqual(expectedJson, json, "JSON formatting is incorrect.");        
-        },
+        },*/
         
         testXmlFormat : function(){
             var xml = YAHOO.tool.TestFormat.XML(this.report);
@@ -1329,6 +1330,104 @@ YAHOO.test.YUITest_test = (function(){
         }
     }));
     
+    arrayAssertSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "itemsAreSame Assert Tests",
+        
+        _should: {
+            fail: {
+                testMissingItem: new YAHOO.util.AssertionError("Values in position 3 are not the same."),
+                testArrayAgainstObject: new YAHOO.util.AssertionError("Values in position 0 are not the same.")
+            }
+        },
+        
+        setUp: function(){
+            this.testArray = ["1", 0, false, "text"];
+        },
+        
+        tearDown: function(){
+            delete this.testArray;
+        },
+        
+        testItemsAreSame: function () {
+            ArrayAssert.itemsAreSame(this.testArray,["1", 0, false, "text"]);
+        },
+        
+        testMissingItem: function() {
+            ArrayAssert.itemsAreSame(this.testArray, ["1", 0, false]);
+        },
+        
+        testArrayAgainstObject: function(){
+            ArrayAssert.itemsAreSame(this.testArray, {});
+        }
+    }));
+    arrayAssertSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "itemsAreEqual Assert Tests",
+        
+        _should: {
+            fail: {
+                testMissingItem: new YAHOO.util.AssertionError("Values in position 3 are not equal."),
+                testArrayAgainstObject: new YAHOO.util.AssertionError("Values in position 0 are not equal.")
+            }
+        },
+        
+        setUp: function(){
+            this.testArray = ["1", 0, false, "text"];
+        },
+        
+        tearDown: function(){
+            delete this.testArray;
+        },
+        
+        testItemsAreEqual: function () {
+            ArrayAssert.itemsAreEqual(this.testArray,["1", 0, false, "text"]);
+        },
+        
+        testMissingItem: function() {
+            ArrayAssert.itemsAreEqual(this.testArray, ["1", 0, false]);
+        },
+        
+        testArrayAgainstObject: function(){
+            ArrayAssert.itemsAreEqual(this.testArray, {});
+        }
+    }));  
+  
+    arrayAssertSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "itemsAreEquivalent Assert Tests",
+        
+        _should: {
+            fail: {
+                testMissingItem: new YAHOO.util.AssertionError("Values in position 3 are not equal."),
+                testArrayAgainstObject: new YAHOO.util.AssertionError("Values in position 0 are not equal.")
+            }
+        },
+        
+        setUp: function(){
+            this.testArray = ["1", 0, false, "text"];
+            this.comparator = function(a,b){
+                return a == b;
+            };
+        },
+        
+        tearDown: function(){
+            delete this.testArray;
+            delete this.comparator;
+        },
+        
+        testItemsAreEqual: function () {
+            ArrayAssert.itemsAreEquivalent(this.testArray,["1", 0, false, "text"], this.comparator);
+        },
+        
+        testMissingItem: function() {
+            ArrayAssert.itemsAreEquivalent(this.testArray, ["1", 0, false], this.comparator);
+        },
+        
+        testArrayAgainstObject: function(){
+            ArrayAssert.itemsAreEquivalent(this.testArray, {}, this.comparator);
+        }
+    }));   
   
     //-------------------------------------------------------------------------
     // UserAction Tests
