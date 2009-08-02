@@ -42,6 +42,7 @@ if (!YAHOO.util.Event) {
          */
         var listeners = [];
 
+
         /**
          * User-defined unload function that will be fired before all events
          * are detached
@@ -51,23 +52,6 @@ if (!YAHOO.util.Event) {
          * @private
          */
         var unloadListeners = [];
-
-        /**
-         * Cache of DOM0 event handlers to work around issues with DOM2 events
-         * in Safari
-         * @property legacyEvents
-         * @static
-         * @private
-         */
-        var legacyEvents = [];
-
-        /**
-         * Listener stack for DOM0 events
-         * @property legacyHandlers
-         * @static
-         * @private
-         */
-        var legacyHandlers = [];
 
         /**
          * The number of times to poll after window.onload.  This number is
@@ -86,14 +70,6 @@ if (!YAHOO.util.Event) {
          * @private
          */
         var onAvailStack = [];
-
-        /**
-         * Lookup table for legacy events
-         * @property legacyMap
-         * @static
-         * @private
-         */
-        var legacyMap = [];
 
         /**
          * Counter for auto id generation
@@ -125,6 +101,7 @@ if (!YAHOO.util.Event) {
         // String constants used by the addFocusListener and removeFocusListener methods
         var _FOCUS = YAHOO.env.ua.ie ? "focusin" : "focus";
         var _BLUR = YAHOO.env.ua.ie ? "focusout" : "blur";      
+
 
         return {
 
@@ -225,6 +202,9 @@ if (!YAHOO.util.Event) {
              */
             OVERRIDE: 6,
 
+
+			CAPTURE: 7,
+
             /**
              * addListener/removeListener can throw errors in unexpected scenarios.
              * These errors are suppressed, the method returns false, and this property
@@ -305,9 +285,10 @@ if (!YAHOO.util.Event) {
              */
             startInterval: function() {
                 if (!this._interval) {
-                    var self = this;
-                    var callback = function() { self._tryPreloadAttach(); };
-                    this._interval = setInterval(callback, this.POLL_INTERVAL);
+                    // var self = this;
+                    // var callback = function() { self._tryPreloadAttach(); };
+                    // this._interval = setInterval(callback, this.POLL_INTERVAL);
+                    this._interval = YAHOO.lang.later(this.POLL_INTERVAL, this, this._tryPreloadAttach, true);
                 }
             },
 
@@ -408,22 +389,9 @@ if (!YAHOO.util.Event) {
              *
              * @static
              */
-            onDOMReady: function(fn, obj, overrideContext) {
-                if (this.DOMReady) {
-                    setTimeout(function() {
-                        var s = window;
-                        if (overrideContext) {
-                            if (overrideContext === true) {
-                                s = obj;
-                            } else {
-                                s = overrideContext;
-                            }
-                        }
-                        fn.call(s, "DOMReady", [], obj);
-                    }, 0);
-                } else {
-                    this.DOMReadyEvent.subscribe(fn, obj, overrideContext);
-                }
+            // onDOMReady: function(fn, obj, overrideContext) {
+            onDOMReady: function() {
+                this.DOMReadyEvent.subscribe.apply(this.DOMReadyEvent, arguments);
             },
 
 
@@ -484,7 +452,7 @@ if (!YAHOO.util.Event) {
                     } else {
                         // defer adding the event until the element is available
                         this.onAvailable(el, function() {
-                           YAHOO.util.Event.on(el, sType, fn, obj, overrideContext);
+                           YAHOO.util.Event._addListener(el, sType, fn, obj, overrideContext, bCapture);
                         });
 
                         return true;
@@ -529,50 +497,19 @@ if (!YAHOO.util.Event) {
                                 obj);
                     };
 
-                var li = [el, sType, fn, wrappedFn, context, obj, overrideContext];
+                var li = [el, sType, fn, wrappedFn, context, obj, overrideContext, bCapture];
                 var index = listeners.length;
                 // cache the listener so we can try to automatically unload
                 listeners[index] = li;
 
-                if (this.useLegacyEvent(el, sType)) {
-                    var legacyIndex = this.getLegacyIndex(el, sType);
-
-                    // Add a new dom0 wrapper if one is not detected for this
-                    // element
-                    if ( legacyIndex == -1 || 
-                                el != legacyEvents[legacyIndex][0] ) {
-
-                        legacyIndex = legacyEvents.length;
-                        legacyMap[el.id + sType] = legacyIndex;
-
-                        // cache the signature for the DOM0 event, and 
-                        // include the existing handler for the event, if any
-                        legacyEvents[legacyIndex] = 
-                            [el, sType, el["on" + sType]];
-                        legacyHandlers[legacyIndex] = [];
-
-                        el["on" + sType] = 
-                            function(e) {
-                                YAHOO.util.Event.fireLegacyEvent(
-                                    YAHOO.util.Event.getEvent(e), legacyIndex);
-                            };
-                    }
-
-                    // add a reference to the wrapped listener to our custom
-                    // stack of events
-                    //legacyHandlers[legacyIndex].push(index);
-                    legacyHandlers[legacyIndex].push(li);
-
-                } else {
-                    try {
-                        this._simpleAdd(el, sType, wrappedFn, bCapture);
-                    } catch(ex) {
-                        // handle an error trying to attach an event.  If it fails
-                        // we need to clean up the cache
-                        this.lastError = ex;
-                        this.removeListener(el, sType, fn);
-                        return false;
-                    }
+                try {
+                    this._simpleAdd(el, sType, wrappedFn, bCapture);
+                } catch(ex) {
+                    // handle an error trying to attach an event.  If it fails
+                    // we need to clean up the cache
+                    this.lastError = ex;
+                    this.removeListener(el, sType, fn);
+                    return false;
                 }
 
                 return true;
@@ -681,7 +618,7 @@ if (!YAHOO.util.Event) {
             /**
              * Removes a blur event listener
              *
-             * @method removeListener
+             * @method removeBlurListener
              *
              * @param {String|HTMLElement|Array|NodeList} el An id, an element 
              *  reference, or a collection of ids and/or elements to remove
@@ -699,68 +636,6 @@ if (!YAHOO.util.Event) {
             
             },
 
-            /**
-             * When using legacy events, the handler is routed to this object
-             * so we can fire our custom listener stack.
-             * @method fireLegacyEvent
-             * @static
-             * @private
-             */
-            fireLegacyEvent: function(e, legacyIndex) {
-                // this.logger.debug("fireLegacyEvent " + legacyIndex);
-                var ok=true, le, lh, li, context, ret;
-                
-                lh = legacyHandlers[legacyIndex].slice();
-                for (var i=0, len=lh.length; i<len; ++i) {
-                // for (var i in lh.length) {
-                    li = lh[i];
-                    if ( li && li[this.WFN] ) {
-                        context = li[this.ADJ_SCOPE];
-                        ret = li[this.WFN].call(context, e);
-                        ok = (ok && ret);
-                    }
-                }
-
-                // Fire the original handler if we replaced one.  We fire this
-                // after the other events to keep stopPropagation/preventDefault
-                // that happened in the DOM0 handler from touching our DOM2
-                // substitute
-                le = legacyEvents[legacyIndex];
-                if (le && le[2]) {
-                    le[2](e);
-                }
-                
-                return ok;
-            },
-
-            /**
-             * Returns the legacy event index that matches the supplied 
-             * signature
-             * @method getLegacyIndex
-             * @static
-             * @private
-             */
-            getLegacyIndex: function(el, sType) {
-                var key = this.generateId(el) + sType;
-                if (typeof legacyMap[key] == "undefined") { 
-                    return -1;
-                } else {
-                    return legacyMap[key];
-                }
-            },
-
-            /**
-             * Logic that determines when we should automatically use legacy
-             * events instead of DOM2 events.  Currently this is limited to old
-             * Safari browsers with a broken preventDefault
-             * @method useLegacyEvent
-             * @static
-             * @private
-             */
-            useLegacyEvent: function(el, sType) {
-return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType));
-            },
-                    
             /**
              * Removes an event listener
              *
@@ -823,7 +698,7 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                 var index = arguments[3];
   
                 if ("undefined" === typeof index) {
-                    index = this._getCacheIndex(el, sType, fn);
+                    index = this._getCacheIndex(listeners, el, sType, fn);
                 }
 
                 if (index >= 0) {
@@ -837,31 +712,13 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
 
                 // this.logger.debug("Removing handler: " + el + ", " + sType);
 
-                if (this.useLegacyEvent(el, sType)) {
-                    var legacyIndex = this.getLegacyIndex(el, sType);
-                    var llist = legacyHandlers[legacyIndex];
-                    if (llist) {
-                        for (i=0, len=llist.length; i<len; ++i) {
-                        // for (i in llist.length) {
-                            li = llist[i];
-                            if (li && 
-                                li[this.EL] == el && 
-                                li[this.TYPE] == sType && 
-                                li[this.FN] == fn) {
-                                    llist.splice(i, 1);
-                                    // llist[i]=null;
-                                    break;
-                            }
-                        }
-                    }
+				var bCapture = cacheItem[this.CAPTURE] === true ? true : false;
 
-                } else {
-                    try {
-                        this._simpleRemove(el, sType, cacheItem[this.WFN], false);
-                    } catch(ex) {
-                        this.lastError = ex;
-                        return false;
-                    }
+                try {
+                    this._simpleRemove(el, sType, cacheItem[this.WFN], bCapture);
+                } catch(ex) {
+                    this.lastError = ex;
+                    return false;
                 }
 
                 // removed the wrapped handler
@@ -1097,9 +954,9 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
              * @static
              * @private
              */
-            _getCacheIndex: function(el, sType, fn) {
-                for (var i=0, l=listeners.length; i<l; i=i+1) {
-                    var li = listeners[i];
+            _getCacheIndex: function(a, el, sType, fn) {
+                for (var i=0, l=a.length; i<l; i=i+1) {
+                    var li = a[i];
                     if ( li                 && 
                          li[this.FN] == fn  && 
                          li[this.EL] == el  && 
@@ -1194,7 +1051,7 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
              * Custom event the fires when the dom is initially usable
              * @event DOMReadyEvent
              */
-            DOMReadyEvent: new YAHOO.util.CustomEvent("DOMReady", this),
+            DOMReadyEvent: new YAHOO.util.CustomEvent("DOMReady", YAHOO, 0, 0, 1),
 
             /**
              * hook up any deferred listeners
@@ -1253,7 +1110,8 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                 if (onAvailStack.length === 0) {
                     retryCount = 0;
                     if (this._interval) {
-                        clearInterval(this._interval);
+                        // clearInterval(this._interval);
+                        this._interval.cancel();
                         this._interval = null;
                     } 
                     return;
@@ -1344,7 +1202,8 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                     this.startInterval();
                 } else {
                     if (this._interval) {
-                        clearInterval(this._interval);
+                        // clearInterval(this._interval);
+                        this._interval.cancel();
                         this._interval = null;
                     }
                 }
@@ -1467,8 +1326,6 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                 unloadListeners = null;
 
                 // Remove listeners to handle IE memory leaks
-                //if (YAHOO.env.ua.ie && listeners && listeners.length > 0) {
-                
                 // 2.5.0 listeners are removed for all browsers again.  FireFox preserves
                 // at least some listeners between page refreshes, potentially causing
                 // errors during page load (mouseover listeners firing before they
@@ -1482,8 +1339,6 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                     }
                     l=null;
                 }
-
-                legacyEvents = null;
 
                 EU._simpleRemove(window, "unload", EU._unload);
 
@@ -1535,9 +1390,7 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
              * @static
              * @deprecated still here for backwards compatibility
              */
-            regCE: function() {
-                // does nothing
-            },
+            regCE: function() {},
 
             /**
              * Adds a DOM event directly without the caching, cleanup, context adj, etc
@@ -1619,36 +1472,43 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
          */     
         EU.onBlur = EU.addBlurListener;
 
-
-/*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller */
+/*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller/Diego Perini */
 
         // Internet Explorer: use the readyState of a defered script.
         // This isolates what appears to be a safe moment to manipulate
         // the DOM prior to when the document's readyState suggests
         // it is safe to do so.
         if (EU.isIE) {
+            if (window !== window.top) {
+                document.onreadystatechange = function() {
+                    if (document.readyState == 'complete') {
+                        document.onreadystatechange = null;
+                        EU._ready();
+                    }
+                };
+            } else {
 
-            // Process onAvailable/onContentReady items when the 
-            // DOM is ready.
-            YAHOO.util.Event.onDOMReady(
-                    YAHOO.util.Event._tryPreloadAttach,
-                    YAHOO.util.Event, true);
-            
-            var n = document.createElement('p');  
+                // Process onAvailable/onContentReady items when the 
+                // DOM is ready.
+                YAHOO.util.Event.onDOMReady(
+                        YAHOO.util.Event._tryPreloadAttach,
+                        YAHOO.util.Event, true);
+                
+                var n = document.createElement('p');  
 
-            EU._dri = setInterval(function() {
-                try {
-                    // throws an error if doc is not ready
-                    n.doScroll('left');
-                    clearInterval(EU._dri);
-                    EU._dri = null;
-                    EU._ready();
-                    n = null;
-                } catch (ex) { 
-                }
-            }, EU.POLL_INTERVAL); 
+                EU._dri = setInterval(function() {
+                    try {
+                        // throws an error if doc is not ready
+                        n.doScroll('left');
+                        clearInterval(EU._dri);
+                        EU._dri = null;
+                        EU._ready();
+                        n = null;
+                    } catch (ex) { 
+                    }
+                }, EU.POLL_INTERVAL); 
+            }
 
-        
         // The document's readyState in Safari currently will
         // change to loaded/complete before images are loaded.
         } else if (EU.webkit && EU.webkit < 525) {

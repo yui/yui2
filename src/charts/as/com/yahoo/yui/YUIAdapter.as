@@ -57,7 +57,6 @@ package com.yahoo.yui
 			if(ExternalInterface.available)
 			{
 				this.initializeComponent();
-				
 				var swfReady:Object = {type: "swfReady"};
 				this.dispatchEventToJavaScript(swfReady);
 			}
@@ -152,8 +151,8 @@ package com.yahoo.yui
 		 */
 		protected function initializeComponent():void
 		{	
-			this.elementID = this.loaderInfo.parameters.elementID;
-			this.javaScriptEventHandler = this.loaderInfo.parameters.eventHandler;
+			this.elementID = this.loaderInfo.parameters.YUISwfId;
+			this.javaScriptEventHandler = this.loaderInfo.parameters.YUIBridgeCallback;
 			
 			var allowedDomain:String = this.loaderInfo.parameters.allowedDomain;
 			if(allowedDomain)

@@ -2,11 +2,16 @@ AutoComplete Release Notes
 
 *** version 2.NEXT ***
 
+* Refactored the "isFocused" model to more simply and accurately describe if
+the widget instance is active or inactive.
+* Added expandContainer() and clearList() to support 'always show footer when
+widget is active' feature.
 * Added the property autoSnapContainer for better out-of-the-box support for inline
 elements, such as labels and submit buttons. By default, autoSnapContainer is
 true, but implementers can disable this feature if they do not use inline
 elements and they want to eliminate the overhead of positioning the container
 element before each time it expands.
+* Added enableIntervalDetection().
 
 
 

@@ -36,13 +36,18 @@ package com.yahoo.astra.fl.charts.series
 	/**
 	 * The base color used by objects displayed in this series.
 	 */
-    [Style(name="fillColor", type="uint")]
+    [Style(name="color", type="uint")]
     
     /** 
      * The border color used by programatic skins in this series.
      */
     [Style(name="borderColor", type="uint")]
     
+	/**
+	 * The fill color used by programatic skins in this series.
+	 */
+	[Style(name="fillColor", type="uint")]
+	
 	/**
 	 * The Class used to instantiate each marker's skin.
 	 */
@@ -300,6 +305,51 @@ package com.yahoo.astra.fl.charts.series
 			
 			return 0;
 		}
+		
+		/**
+		 * @private
+		 * Storage for dataTipFunction
+		 */
+		private var _dataTipFunction:Function;
+		
+		/**
+		 * @copy com.yahoo.astra.fl.charts.ISeries#dataTipFunction
+		 */
+		public function get dataTipFunction():Function
+		{
+			return this._dataTipFunction;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set dataTipFunction(value:Function):void
+		{
+			this._dataTipFunction = value;
+		}
+		
+		/**
+		 * @private 
+		 * Storage for legendLabelFunction
+		 */
+		private var _legendLabelFunction:Function = null;
+		
+		/** 
+		 * @copy com.yahoo.astra.fl.charts.series.ISeries#legendLabelFunction
+		 */
+		public function get legendLabelFunction():Function
+		{
+			return this._legendLabelFunction;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set legendLabelFunction(value:Function):void
+		{
+			this._legendLabelFunction = value;
+		}	
+		
 		
 	//--------------------------------------
 	//  Public Methods

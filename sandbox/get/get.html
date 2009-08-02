@@ -43,7 +43,7 @@
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
 -->
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
-<script type="text/javascript" src="../src/js/Get.js"></script>
+<script type="text/javascript" src="../../build/get/get.js"></script>
 
 
 <style id="styleoverrides">
@@ -76,12 +76,15 @@ function checkDragDrop(callback, win) {
         };
 
 function loadReset() {
-    for (var i=0; i<20; i=i+1) {
-        YAHOO.util.Get.css("../../build/reset/reset.js",
-                {
-            autopurge: true
-        });
+    for (var i=0; i<50; i=i+1) {
+        // YAHOO.util.Get.css("../../build/reset/reset.css", {
+        //     autopurge: true
+        // });
+
+        YAHOO.util.Get.script("../../build/cookie/cookie-min.js");
+
     }
+
 }
 
 YAHOO.util.Event.on("btnLoad", "click", loadReset);
@@ -109,7 +112,7 @@ YAHOO.util.Event.on(window, "load", function() {
     //alert(document.getElementById("frame1").contentWindow);
 
     // the path is relative to the win src
-    YAHOO.util.Get.css(["../../../build/reset-fonts-grids/reset-fonts-grids.css"], {
+    YAHOO.util.Get.css(["../../build/reset-fonts-grids/reset-fonts-grids.css"], {
             //win: document.getElementById("frame1").contentWindow
             //win: frame1
             insertBefore: "styleoverrides",
@@ -121,7 +124,7 @@ YAHOO.util.Event.on(window, "load", function() {
     YAHOO.log("css2 executed");
 
     var o = YAHOO.util.Get.script([
-            "../../build/ahoo-dom-event/yahoo-dom-event.js",
+            "../../build/yahoo-dom-event/yahoo-dom-event.js",
             //"../../build/yahoo/yahoo.js",
             //"../../build/dom/dom.js",
             //"../../build/event/event.js",
@@ -150,6 +153,10 @@ YAHOO.util.Event.on(window, "load", function() {
             varName: ["YAHOO.util.Event", "YAHOO.util.DDProxy"],
             scope: YAHOO,
             charset: "ascii",
+            attributes: {
+                media: 'screen',
+                foo: 'bar'
+            },
             autopurge: true,
             onTimeout: function(o) {
                 YAHOO.log('Timeout');
@@ -169,7 +176,7 @@ YAHOO.util.Event.on(window, "load", function() {
 
 <input type="button" name="btnLoad" id="btnLoad" value="Load a bunch"></input>
 
-<iframe name="frame1" onload="YAHOO.log('frame1 loaded (inline)', 'warn')" id="frame1" src="../../build/get/assets/blank.html" height="20" width="400">old browser</iframe>
+<iframe name="frame1" onload="YAHOO.log('frame1 loaded (inline)', 'warn')" id="frame1" src="../../build/history/assets/blank.html" height="20" width="400">old browser</iframe>
 
 <h1>header</h1>
 <p>YAHOO is already on the page.  We will instantiate a YUILoader instance to load

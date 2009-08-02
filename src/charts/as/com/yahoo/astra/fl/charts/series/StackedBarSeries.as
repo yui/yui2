@@ -4,6 +4,7 @@ package com.yahoo.astra.fl.charts.series
 	import com.yahoo.astra.fl.charts.ChartUtil;
 	import com.yahoo.astra.fl.charts.axes.IAxis;
 	import com.yahoo.astra.fl.charts.axes.IOriginAxis;
+	import com.yahoo.astra.fl.charts.axes.IClusteringAxis;
 	
 	/**
 	 * A bar series type that stacks.
@@ -71,9 +72,10 @@ package com.yahoo.astra.fl.charts.series
 		 */
 		override protected function calculateMaximumAllowedMarkerSize(axis:IAxis):Number
 		{
-			if(!ChartUtil.isStackingAllowed(axis, this))
+			if(axis is IClusteringAxis)
 			{
-				return super.calculateMaximumAllowedMarkerSize(axis);
+				var allSeriesOfType:Array = ChartUtil.findSeriesOfType(this, this.chart as IChart);
+				return (this.height / IClusteringAxis(axis).clusterCount);
 			}
 			return Number.POSITIVE_INFINITY;
 		}
@@ -95,10 +97,32 @@ package com.yahoo.astra.fl.charts.series
 			if(seriesIndex > 0)
 			{
 				var previousSeries:StackedBarSeries = StackedBarSeries(allSeriesOfType[seriesIndex - 1]);
-				originValue = IChart(this.chart).itemToAxisValue(previousSeries, index, axis);
+				
+				var isPositive:Boolean = IChart(this.chart).itemToAxisValue(this, index, axis) >= 0;
+					
+				for(var i:int = seriesIndex - 1; i > -1; i--)					
+				{
+					if(isPositive)
+					{
+						if(IChart(this.chart).itemToAxisValue(StackedBarSeries(allSeriesOfType[i]), index, axis) > 0)
+						{
+							originValue = IChart(this.chart).itemToAxisValue(StackedBarSeries(allSeriesOfType[i]), index, axis);
+							break;								
+						}							
+					}
+					else
+					{
+						if(IChart(this.chart).itemToAxisValue(StackedBarSeries(allSeriesOfType[i]), index, axis) < 0)
+						{
+							originValue = IChart(this.chart).itemToAxisValue(StackedBarSeries(allSeriesOfType[i]), index, axis);
+							break;
+						}
+					}
+				}
 			}
 			return originValue;
 		}
+			
 		
 	}
 }

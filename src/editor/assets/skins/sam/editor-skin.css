@@ -94,6 +94,10 @@
 .yui-skin-sam .yui-toolbar-container .collapse {
     background: url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -400px;
 }
+/* Set the image for the collapse button on the toolbar */
+.yui-skin-sam .yui-toolbar-container .collapsed {
+    background: url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -350px;
+}
 /* Position the image and the container */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar span.collapse {
     cursor: pointer;

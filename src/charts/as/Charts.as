@@ -12,6 +12,8 @@ package
 	import com.yahoo.yui.LoggerCategory;
 	import com.yahoo.yui.YUIAdapter;
 	import com.yahoo.yui.charts.*;
+	import com.yahoo.util.ImageExport;
+	
 	
 	import fl.core.UIComponent;
 	
@@ -24,6 +26,8 @@ package
 	import flash.text.TextFormat;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
+	
+	import flash.system.Capabilities;
 
 	[SWF(backgroundColor=0xffffff)]
 	/**
@@ -33,7 +37,15 @@ package
 	 */
 	public class Charts extends YUIAdapter
 	{
-		
+				
+	/**
+	 * @private	
+	 * Path for all skin classes
+
+
+	 */
+	private static const SKIN_NAMESPACE:String = "com.yahoo.astra.fl.charts.skins::";
+				
 	//--------------------------------------
 	//  Constructor
 	//--------------------------------------
@@ -44,6 +56,7 @@ package
 		public function Charts()
 		{
 			super();
+			this.setImageExport();
 		}
 		
 	//--------------------------------------
@@ -503,7 +516,7 @@ package
 		 * Updates the horizontal axis with a new type.
 		 */
 		public function setHorizontalAxis(value:Object):void
-		{
+		{		
 			var cartesianChart:CartesianChart = this.chart as CartesianChart;
 			if(cartesianChart)
 			{
@@ -548,17 +561,39 @@ package
 		}
 		
 		/**
+		 * Sets the JavaScript function to call to format legend labels
+		 */
+		public function setLegendLabelFunction(value:String):void
+		{
+			var delegate:Object = {legendLabelFunction: JavaScriptUtil.createCallbackFunction(value).callback};
+			delegate.callback = function(value:String):String
+			{
+				return delegate.legendLabelFunction(value);
+			}
+			
+			this.chart.legendLabelFunction = delegate.callback;
+		}
+		
+		/**
+		 * Determines whether the viewport is constrained
+		 */
+		public function setConstrainViewport(value:Boolean):void
+		{
+			if(this.chart is CartesianChart) (this.chart as CartesianChart).constrainViewport = value; 
+		}
+		
+		/**
 		 * Accepts a JSON-encoded set of styles for the chart itself.
 		 * Flash Player versions below 9.0.60 don't encode ExternalInterface
 		 * calls correctly!
 		 */
 		public function setStyles(styles:String):void
-		{
+		{ 
 			if(!styles) return;
 			var parsedStyles:Object = JSON.decode(styles);
 			for(var styleName:String in parsedStyles)
 			{
-					this.setStyle(styleName, parsedStyles[styleName], false);
+				this.setStyle(styleName, parsedStyles[styleName], false);
 			}
 		}
 		
@@ -618,6 +653,7 @@ package
 					}
 					break;
 				case "font":
+					if(value.color) value.color = this.parseColor(value.color);
 					var textFormat:TextFormat = TextFormatSerializer.readTextFormat(value);
 					this.chart.setStyle("textFormat", textFormat);
 					break;
@@ -630,8 +666,23 @@ package
 				case "yAxis":
 					this.setAxisStyles(value, "vertical");
 					break;
+				case "secondaryXAxis" : 
+					this.setAxisStyles(value, "secondaryHorizontal");
+					break;
+				case "secondaryYAxis" :
+					this.setAxisStyles(value, "secondaryVertical");
 				case "legend":
 					this.setLegendStyles(value);
+					break;
+				case "seriesItemSpacing":
+					if(this.chart is BarChart || this.chart is ColumnChart)
+					{
+						this.chart.setStyle("seriesItemSpacing", Number(value));
+					}
+					else
+					{
+						this.log("The " + name + " style is only supported by Column and Bar Charts.");
+					}
 					break;
 				default:
 					this.log("Unknown style: " + name, LoggerCategory.WARN);
@@ -846,8 +897,30 @@ package
 								{
 									this.log("The style " + styleName + " is only supported by series of type 'pie'.", LoggerCategory.WARN);
 								}
+								if(style.font.color) style.font.color = this.parseColor(style.font.color); 
 								UIComponent(series).setStyle("textFormat", TextFormatSerializer.readTextFormat(style.font))
+								break;	
+							case "visibility":
+								if(!(series is PieSeries))
+								{
+									UIComponent(series).setStyle("visibility", style.visibility);   									
+									UIComponent(series).visible = style.visibility == "visible";
+								}
 								break;
+							case "skin":
+								if(series is LineSeries)
+								{
+									try
+									{
+										skin = getDefinitionByName(SKIN_NAMESPACE + style.skin) as Class;	
+									}
+									catch(e:Error)
+									{
+										this.log(style.skin + " is not a valid skin class", LoggerCategory.WARN);
+									}
+								}
+								break;
+		
 							default:
 								this.log("Unknown series style: " + styleName, LoggerCategory.WARN);
 						}
@@ -925,6 +998,7 @@ package
 				ExternalInterface.addCallback("setDataTipFunction", setDataTipFunction);
 				ExternalInterface.addCallback("getCategoryNames", getCategoryNames);
 				ExternalInterface.addCallback("setCategoryNames", setCategoryNames);
+				ExternalInterface.addCallback("setLegendLabelFunction", setLegendLabelFunction);
 				
 				//CartesianChart
 				ExternalInterface.addCallback("getHorizontalField", getHorizontalField);
@@ -933,6 +1007,7 @@ package
 				ExternalInterface.addCallback("setVerticalField", setVerticalField);
 				ExternalInterface.addCallback("setHorizontalAxis", setHorizontalAxis);
 				ExternalInterface.addCallback("setVerticalAxis", setVerticalAxis);
+				ExternalInterface.addCallback("setConstrainViewport", setConstrainViewport);
 				
 				//PieChart
 				ExternalInterface.addCallback("getDataField", getDataField);
@@ -956,7 +1031,7 @@ package
 			this.addChild(this.legend);
 		}
 		
-		/**
+		/** 
 		 * @private (protected)
 		 * Since Chart is a Flash CS3 component, we should call drawNow() to be sure it updates properly.
 		 */
@@ -979,11 +1054,11 @@ package
 				if(this.legend && this.legendDisplay != "none")
 				{
 					this.legend.visible = true;
-					//we need to draw because the legend resizes itself
-					this.legend.drawNow();
 					
 					if(this.legendDisplay == "left" || this.legendDisplay == "right")
 					{
+						this.legend.maxHeight = this.component.height;
+						this.legend.drawNow();
 						if(this.legendDisplay == "left")
 						{
 							this.legend.x = this.backgroundAndBorder.borderWeight + this.padding;
@@ -999,6 +1074,8 @@ package
 					}
 					else //top or bottom
 					{
+						this.legend.maxWidth = this.component.width;
+						this.legend.drawNow();
 						if(this.legendDisplay == "top")
 						{
 							this.legend.y = this.backgroundAndBorder.borderWeight + this.padding;
@@ -1157,6 +1234,7 @@ package
 			
 			if(styles.font)
 			{
+				if(styles.font.color) styles.font.color = this.parseColor(styles.font.color);
 				var textFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.font);
 				this.chart.setStyle("dataTipTextFormat", textFormat);
 			}
@@ -1164,31 +1242,35 @@ package
 		
 		protected function setAxisStyles(styles:Object, axisName:String):void
 		{
+			var cartesianChart:CartesianChart = this.chart as CartesianChart;
+			var axisStyle:String = axisName + "AxisStyles";
+			var gridLineStyle:String = axisName + "AxisGridLinesStyles";
 			if(styles.color != null)
 			{
-				this.chart.setStyle(axisName + "AxisColor", this.parseColor(styles.color));
+				cartesianChart.setComplexStyle(axisStyle, "axisColor", this.parseColor(styles.color));
 			}
 			
 			if(styles.size != null)
 			{
-				this.chart.setStyle(axisName + "AxisWeight", styles.size);
+				cartesianChart.setComplexStyle(axisStyle, "axisWeight", Number(styles.size));
+				cartesianChart.setComplexStyle(axisStyle, "showAxis", styles.size > 0);
 			}
-			
+
 			if(styles.showLabels != null)
 			{
-				this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisLabels", styles.showLabels);
+				cartesianChart.setComplexStyle(axisStyle, "showLabels", styles.showLabels);
 			}
 			
 			if(styles.hideOverlappingLabels != null)
 			{
-				this.chart.setStyle(axisName + "AxisHideOverlappingLabels", styles.hideOverlappingLabels);
+				cartesianChart.setComplexStyle(axisStyle, "hideOverlappingLabels", styles.hideOverlappingLabels);
 			}
 			
-			if(styles.labelRotation)
+			if(styles.labelRotation != null)
 			{
 				if(!isNaN(Number(styles.labelRotation)))
 				{
-					this.chart.setStyle(axisName + "AxisLabelRotation", Number(styles.labelRotation));
+					cartesianChart.setComplexStyle(axisStyle, "labelRotation", Number(styles.labelRotation));
 				}
 				else
 				{
@@ -1196,24 +1278,31 @@ package
 				}
 			}
 			
-			if(styles.labelSpacing)
+			if(styles.labelSpacing != null)
 			{
-				this.chart.setStyle(axisName + "AxisLabelSpacing", styles.labelSpacing);
+				cartesianChart.setComplexStyle(axisStyle, "labelSpacing", Number(styles.labelSpacing));
 			}
 			
-			if(styles.labelDistance)
+			if(styles.labelDistance != null)
 			{
-				this.chart.setStyle(axisName + "AxisLabelDistance", styles.labelDistance);	
+				cartesianChart.setComplexStyle(axisStyle, "labelDistance", Number(styles.labelDistance));
 			}
 			
-			if(styles.titleRotation)
+			if(styles.titleRotation != null)
 			{
-				this.chart.setStyle(axisName + "AxisTitleRotation", styles.titleRotation);
+				cartesianChart.setComplexStyle(axisStyle, "titleRotation", Number(styles.titleRotation));
 			}
 			
-			if(styles.titleDistance)
+			if(styles.titleDistance != null)
 			{
-				this.chart.setStyle(axisName + "AxisTitleDistance", styles.titleDistance);
+				cartesianChart.setComplexStyle(axisStyle, "titleDistance", Number(styles.titleDistance));
+			}
+			
+			if(styles.titleFont != null)
+			{
+				if(styles.titleFont.color) styles.titleFont.color = this.parseColor(styles.titleFont.color);
+				var titleTextFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.titleFont);
+				cartesianChart.setComplexStyle(axisStyle, "titleTextFormat", titleTextFormat);			
 			}
 			
 			if(styles.majorGridLines)
@@ -1221,12 +1310,12 @@ package
 				var majorGridLines:Object = styles.majorGridLines;
 				if(majorGridLines.color != null)
 				{
-					this.chart.setStyle(axisName + "AxisGridLineColor", this.parseColor(majorGridLines.color));
+					cartesianChart.setComplexStyle(gridLineStyle, "lineColor", this.parseColor(majorGridLines.color));
 				}
 				if(majorGridLines.size != null)
 				{
-					this.chart.setStyle(axisName + "AxisGridLineWeight", majorGridLines.size);
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisGridLines", majorGridLines.size > 0);
+					cartesianChart.setComplexStyle(gridLineStyle, "lineWeight", majorGridLines.size);
+					cartesianChart.setComplexStyle(gridLineStyle, "showLines", majorGridLines.size > 0);
 				}
 			}
 			
@@ -1235,12 +1324,12 @@ package
 				var minorGridLines:Object = styles.minorGridLines;
 				if(minorGridLines.color != null)
 				{
-					this.chart.setStyle(axisName + "AxisMinorGridLineColor", this.parseColor(minorGridLines.color));
+					cartesianChart.setComplexStyle(gridLineStyle, "minorLineColor", this.parseColor(minorGridLines.color));
 				}
 				if(minorGridLines.size != null)
 				{
-					this.chart.setStyle(axisName + "AxisMinorGridLineWeight", minorGridLines.size);
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorGridLines", minorGridLines.size > 0);
+					cartesianChart.setComplexStyle(gridLineStyle, "minorLineWeight", minorGridLines.size);
+					cartesianChart.setComplexStyle(gridLineStyle, "showMinorLines", minorGridLines.size > 0);
 				}
 			}
 			
@@ -1249,12 +1338,12 @@ package
 				var zeroGridLine:Object = styles.zeroGridLine;
 				if(zeroGridLine.color != null)
 				{
-					this.chart.setStyle(axisName + "ZeroGridLineColor", this.parseColor(zeroGridLine.color));
+					cartesianChart.setComplexStyle(gridLineStyle, "zeroGridLineColor", zeroGridLine.color);
 				}
 				if(zeroGridLine.size != null)
 				{
-					this.chart.setStyle(axisName + "ZeroGridLineWeight", zeroGridLine.size);
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "ZeroGridLine", zeroGridLine.size > 0);
+					cartesianChart.setComplexStyle(gridLineStyle, "zeroGridLineWeight", zeroGridLine.size);
+					cartesianChart.setComplexStyle(gridLineStyle, "showZeroGridLine", zeroGridLine.size > 0);
 				}
 			}
 			
@@ -1263,22 +1352,22 @@ package
 				var majorTicks:Object = styles.majorTicks;
 				if(majorTicks.color != null)
 				{
-					this.chart.setStyle(axisName + "AxisTickColor", this.parseColor(majorTicks.color));
+					cartesianChart.setComplexStyle(axisStyle, "tickColor", this.parseColor(majorTicks.color));
 				}
 				if(majorTicks.size != null)
 				{
-					this.chart.setStyle(axisName + "AxisTickWeight", majorTicks.size);
+					cartesianChart.setComplexStyle(axisStyle, "tickWeight", majorTicks.size);
 				}
 				if(majorTicks.length != null)
 				{
-					this.chart.setStyle(axisName + "AxisTickLength", majorTicks.length);
+					cartesianChart.setComplexStyle(axisStyle, "tickLength", majorTicks.length);
 				}
 				if(majorTicks.display)
 				{
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisTicks", majorTicks.display != "none");
+					cartesianChart.setComplexStyle(axisStyle, "showTicks", majorTicks.display != "none" && majorTicks.size != 0);
 					if(majorTicks.display != "none")
 					{
-						this.chart.setStyle(axisName + "AxisTickPosition", majorTicks.display);
+						cartesianChart.setComplexStyle(axisStyle, "tickPosition", majorTicks.display);
 					}
 				}
 			}
@@ -1288,22 +1377,22 @@ package
 				var minorTicks:Object = styles.minorTicks;
 				if(minorTicks.color != null)
 				{
-					this.chart.setStyle(axisName + "AxisMinorTickColor", this.parseColor(minorTicks.color));
+					cartesianChart.setComplexStyle(axisStyle, "minorTickColor", this.parseColor(minorTicks.color));
 				}
 				if(minorTicks.size != null)
 				{
-					this.chart.setStyle(axisName + "AxisMinorTickWeight", minorTicks.size);
+					cartesianChart.setComplexStyle(axisStyle, "minorTickWeight", minorTicks.size);
 				}
 				if(minorTicks.length != null)
 				{
-					this.chart.setStyle(axisName + "AxisMinorTickLength", minorTicks.length);
+					cartesianChart.setComplexStyle(axisStyle, "minorTickLength", minorTicks.length);
 				}
 				if(minorTicks.display)
 				{
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorTicks", minorTicks.display != "none");
+					cartesianChart.setComplexStyle(axisStyle, "showMinorTicks", minorTicks.display != "none" && minorTicks.size != 0);
 					if(minorTicks.display != "none")
 					{
-						this.chart.setStyle(axisName + "AxisMinorTickPosition", minorTicks.display);
+						cartesianChart.setComplexStyle(axisStyle, "minorTickPosition", minorTicks.display);
 					}
 				}
 			}
@@ -1313,6 +1402,7 @@ package
 		{
 			if(styles.font)
 			{
+				if(styles.font.color) styles.font.color = this.parseColor(styles.font.color); 
 				var textFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.font);
 				this.legend.setStyle("textFormat", textFormat);
 			}
@@ -1386,7 +1476,7 @@ package
 		
 	//--------------------------------------
 	//  Private Methods
-	//--------------------------------------
+	//--------------------------------------	
 		
 		/**
 		 * @private
@@ -1447,5 +1537,27 @@ package
 			}
 			return uint(value);
 		}
+		
+		/**
+		 * @private
+		 */
+		private function setImageExport():void
+		{
+			try
+			{
+				var versionString:String = Capabilities.version;		
+				var version:Number = Number(/\w*.\w*/.exec((versionString.replace(/MAC|UNIX|PC|WIN\s/gi, "")).replace(/,0,/g, ".")));
+				if(version >= 10) 
+				{
+					var imageExport:ImageExport = new ImageExport(this);
+					imageExport.addImageType("jpg", "Chart");
+					imageExport.addImageType("png", "Chart");
+				}
+			}
+			catch(e:Error)
+			{
+				//just trapping potential error
+			}
+		}		
 	}
 }

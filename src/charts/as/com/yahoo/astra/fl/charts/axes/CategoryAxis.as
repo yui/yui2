@@ -4,7 +4,6 @@ package com.yahoo.astra.fl.charts.axes
 	import com.yahoo.astra.fl.charts.CartesianChart;
 	import fl.core.UIComponent;
 	import flash.text.TextFormat;	
-	import com.yahoo.astra.utils.TextUtil;
 	/**
 	 * An axis type representing a set of categories.
 	 * 
@@ -154,10 +153,6 @@ package com.yahoo.astra.fl.charts.axes
 			if(index >= 0)
 			{
 				var position:int = this.categorySize * index + (this.categorySize / 2);
-				if(this.reverse)
-				{
-					position = this.renderer.length - position;
-				}
 				return position;
 			}
 			return NaN;
@@ -178,7 +173,7 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * @inheritDoc
 		 */
-		public function getMaxLabel():String
+		override public function getMaxLabel():String
 		{
 			var categoryCount:int = this.categoryNames.length;
 			var maxLength:Number = 0;
@@ -249,7 +244,7 @@ package com.yahoo.astra.fl.charts.axes
 			
 			//If the number of labels will not fit on the axis or the user has specified the number of labels to
 			//display, calculate the major unit. 
-			var maxLabelSize:Number = (this.chart as CartesianChart).horizontalAxis == this ? this.maxLabelWidth : this.maxLabelHeight;
+			var maxLabelSize:Number = (this.chart as CartesianChart).horizontalAxis == this ? this.labelData.maxLabelWidth : this.labelData.maxLabelHeight;
 			if((this.categorySize < maxLabelSize && this.calculateCategoryCount) || (this._numLabelsSetByUser && this.numLabels != categoryCount))
 			{
 				this.calculateMajorUnit();
@@ -268,33 +263,44 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		private function calculateMajorUnit():void
 		{
-			var maxLabelSize:Number = (this.chart as CartesianChart).horizontalAxis == this ? this.maxLabelWidth : this.maxLabelHeight;
+			var overflow:Number = 0;
+			var rotation:Number = (this.renderer as UIComponent).getStyle("labelRotation") as Number;
+			var chart:CartesianChart = this.chart as CartesianChart;
+			var maxLabelSize:Number;
+			if(chart.horizontalAxis == this)
+			{
+				maxLabelSize = this.labelData.maxLabelWidth;
+				if(rotation >= 0)
+				{
+					if(!isNaN(this.labelData.rightLabelOffset)) overflow += this.labelData.rightLabelOffset as Number;
+				}
+				if(rotation <= 0)
+				{
+					if(!isNaN(this.labelData.leftLabelOffset)) overflow += this.labelData.leftLabelOffset as Number;
+				}			
+			}
+			else
+			{
+				maxLabelSize = this.labelData.maxLabelHeight;
+				if(!isNaN(this.labelData.topLabelOffset)) overflow = this.labelData.topLabelOffset as Number;				
+			}
 			var labelSpacing:Number = this.labelSpacing; 
 			maxLabelSize += (labelSpacing*2);
 			var categoryCount:int = this.categoryNames.length;
-			var maxNumLabels:Number = this.renderer.length/maxLabelSize;
+
+			
+			var maxNumLabels:Number = (this.renderer.length + overflow)/maxLabelSize;
 			
 			//If the user specified number of labels to display, attempt to show the correct number.
 			if(this._numLabelsSetByUser)
 			{
 				maxNumLabels = Math.min(maxNumLabels, this.numLabels);
 			}
-			
-			var tempMajorUnit:Number = Math.ceil(this.categoryNames.length/maxNumLabels);
-			this._majorUnit = tempMajorUnit;			
-			if(this.renderer.length%tempMajorUnit != 0 && !this._numLabelsSetByUser)
-			{
-				var len:Number = Math.min(tempMajorUnit, ((this.renderer.length/2)-tempMajorUnit));
-				for(var i:int = 0;i < len; i++)
-				{
-					tempMajorUnit++;
-					if(this.renderer.length%tempMajorUnit == 0)
-					{
-						this._majorUnit = tempMajorUnit;
-						break;
-					}
-				}
-			}	
+			var ratio:Number = overflow/this.renderer.length;
+			var overflowOffset:Number = ratio*this.categoryNames.length;
+			if(isNaN(overflowOffset)) overflowOffset = 0;		
+			var tempMajorUnit:Number = Math.round((this.categoryNames.length+overflowOffset)/maxNumLabels);
+			this._majorUnit = tempMajorUnit;				
 		}
 		
 		/**
@@ -321,6 +327,7 @@ package com.yahoo.astra.fl.charts.axes
 		{
 			var ticks:Array = [];
 			var categoryCount:int = this.categoryNames.length;
+			if(this.reverse) this.categoryNames = this.categoryNames.reverse();
 			var currentCat:int = 0;
 			while(currentCat < categoryCount && !isNaN(categoryCount))
 			{
@@ -328,24 +335,36 @@ package com.yahoo.astra.fl.charts.axes
 				var position:Number = this.valueToLocal(category);
 				var label:String = this.valueToLabel(category);
 				var axisData:AxisData = new AxisData(position, category, label);
-				ticks.push(axisData);
-				currentCat += this._majorUnit;
-			}
-			
-			//If a major unit has been calculated, we are not plotting all categories.
-			//Adjust the postion of each tick.
-			if(this._majorUnit > 1)
-			{
-				categoryCount = ticks.length;
-				var categorySize:Number = this.renderer.length / categoryCount;
-				for(var i:int = 0; i < categoryCount; i++)
-				{
-					(ticks[i] as AxisData).position = categorySize * i + (categorySize/2);
-				}
+				
+				if(currentCat % this._majorUnit == 0) ticks.push(axisData);
+				currentCat += 1;
 			}
 			
 			this.renderer.ticks = ticks;
 			this.renderer.minorTicks = [];				
-		}		
+		}	
+		
+		/**
+		 * @private
+		 */
+		override protected function parseDataProvider():void
+		{
+			if(!this._categoryNamesSetByUser) this.autoDetectCategories(this.dataProvider);
+			var labelData:Object = getLabelData();			
+			if(ICartesianAxisRenderer(this.renderer).orientation == AxisOrientation.HORIZONTAL)
+			{
+				labelData.leftLabelOffset /= 2;
+				labelData.rightLabelOffset /= 2;
+			}
+			else
+			{
+				labelData.topLabelOffset /= 2;
+				labelData.bottomLabelOffset /=2;
+			}
+			for(var i:String in labelData)
+			{	
+				this.labelData[i] = labelData[i];
+			}
+		}			
 	}
 }

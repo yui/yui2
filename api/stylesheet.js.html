@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * The StyleSheet component is a utility for managing css rules at the</span>
 <span class="c"> * stylesheet level</span>
 <span class="c"> *</span>
@@ -472,25 +472,31 @@
 
     <span class="nx">workerStyle</span><span class="o">.</span><span class="nx">cssText</span> <span class="o">=</span> <span class="nx">base</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="o">;</span>
 
-    <span class="k">if</span> <span class="o">(</span><span class="nx">f</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">css</span><span class="o">[</span><span class="nx">floatAttr</span><span class="o">])</span> <span class="o">{</span>
-        <span class="nx">css</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">merge</span><span class="o">(</span><span class="nx">css</span><span class="o">);</span>
-        <span class="nx">delete</span> <span class="nx">css</span><span class="o">.</span><span class="nx">styleFloat</span><span class="o">;</span> <span class="nx">delete</span> <span class="nx">css</span><span class="o">.</span><span class="nx">cssFloat</span><span class="o">;</span> <span class="nx">delete</span> <span class="nx">css</span><span class="o">[</span><span class="s1">&#39;float&#39;</span><span class="o">];</span>
-        <span class="nx">css</span><span class="o">[</span><span class="nx">floatAttr</span><span class="o">]</span> <span class="o">=</span> <span class="nx">f</span><span class="o">;</span>
-    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">css</span><span class="o">))</span> <span class="o">{</span>
+        <span class="c">// There is a danger here of incremental memory consumption in Opera</span>
+<span class="c"></span>        <span class="nx">workerStyle</span><span class="o">.</span><span class="nx">cssText</span> <span class="o">+=</span> <span class="s1">&#39;;&#39;</span> <span class="o">+</span> <span class="nx">css</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">f</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">css</span><span class="o">[</span><span class="nx">floatAttr</span><span class="o">])</span> <span class="o">{</span>
+            <span class="nx">css</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">merge</span><span class="o">(</span><span class="nx">css</span><span class="o">);</span>
+            <span class="nx">delete</span> <span class="nx">css</span><span class="o">.</span><span class="nx">styleFloat</span><span class="o">;</span> <span class="nx">delete</span> <span class="nx">css</span><span class="o">.</span><span class="nx">cssFloat</span><span class="o">;</span> <span class="nx">delete</span> <span class="nx">css</span><span class="o">[</span><span class="s1">&#39;float&#39;</span><span class="o">];</span>
+            <span class="nx">css</span><span class="o">[</span><span class="nx">floatAttr</span><span class="o">]</span> <span class="o">=</span> <span class="nx">f</span><span class="o">;</span>
+        <span class="o">}</span>
 
-    <span class="k">for</span> <span class="o">(</span><span class="nx">prop</span> <span class="k">in</span> <span class="nx">css</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">css</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">prop</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="c">// IE throws Invalid Value errors and doesn&#39;t like whitespace</span>
-<span class="c"></span>                <span class="c">// in values ala &#39; red&#39; or &#39;red &#39;</span>
-<span class="c"></span>                <span class="nx">workerStyle</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">trim</span><span class="o">(</span><span class="nx">css</span><span class="o">[</span><span class="nx">prop</span><span class="o">]);</span>
-            <span class="o">}</span>
-            <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Error assigning property &quot;&#39;</span><span class="o">+</span><span class="nx">prop</span><span class="o">+</span><span class="s1">&#39;&quot; to &quot;&#39;</span><span class="o">+</span><span class="nx">css</span><span class="o">[</span><span class="nx">prop</span><span class="o">]+</span>
-                          <span class="s2">&quot;\&quot; (ignored):\n&quot;</span><span class="o">+</span><span class="nx">e</span><span class="o">.</span><span class="nx">message</span><span class="o">,</span><span class="s1">&#39;warn&#39;</span><span class="o">,</span><span class="s1">&#39;StyleSheet&#39;</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nx">prop</span> <span class="k">in</span> <span class="nx">css</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">css</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">prop</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="c">// IE throws Invalid Value errors and doesn&#39;t like whitespace</span>
+<span class="c"></span>                    <span class="c">// in values ala &#39; red&#39; or &#39;red &#39;</span>
+<span class="c"></span>                    <span class="nx">workerStyle</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">trim</span><span class="o">(</span><span class="nx">css</span><span class="o">[</span><span class="nx">prop</span><span class="o">]);</span>
+                <span class="o">}</span>
+                <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Error assigning property &quot;&#39;</span><span class="o">+</span><span class="nx">prop</span><span class="o">+</span><span class="s1">&#39;&quot; to &quot;&#39;</span><span class="o">+</span><span class="nx">css</span><span class="o">[</span><span class="nx">prop</span><span class="o">]+</span>
+                              <span class="s2">&quot;\&quot; (ignored):\n&quot;</span><span class="o">+</span><span class="nx">e</span><span class="o">.</span><span class="nx">message</span><span class="o">,</span><span class="s1">&#39;warn&#39;</span><span class="o">,</span><span class="s1">&#39;StyleSheet&#39;</span><span class="o">);</span>
+                <span class="o">}</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">}</span>
+
     <span class="k">return</span> <span class="nx">workerStyle</span><span class="o">.</span><span class="nx">cssText</span><span class="o">;</span>
 <span class="o">};</span>
 
@@ -515,7 +521,7 @@
 <span class="c"></span>        <span class="c">// input will be copied twice in IE.  Is there a way to avoid this</span>
 <span class="c"></span>        <span class="c">// without increasing the byte count?</span>
 <span class="c"></span>        <span class="k">function</span> <span class="o">(</span><span class="nx">css</span><span class="o">,</span> <span class="nx">cssText</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="s1">&#39;opacity&#39;</span> <span class="k">in</span> <span class="nx">css</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">css</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;opacity&#39;</span> <span class="k">in</span> <span class="nx">css</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">css</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">merge</span><span class="o">(</span><span class="nx">css</span><span class="o">,{</span>
                         <span class="nx">filter</span><span class="o">:</span> <span class="s1">&#39;alpha(opacity=&#39;</span><span class="o">+(</span><span class="nx">css</span><span class="o">.</span><span class="nx">opacity</span><span class="o">*</span><span class="m">100</span><span class="o">)+</span><span class="s1">&#39;)&#39;</span>
                       <span class="o">});</span>
@@ -677,6 +683,7 @@
 <span class="c"> * IE6-8 addRule(&#39;.foo&#39;,&#39;&#39;,n) throws an error.  Must supply *some* cssText</span>
 <span class="c">*/</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>

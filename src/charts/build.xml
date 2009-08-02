@@ -7,13 +7,14 @@
     <import file="${builddir}/2.x/bootstrap.xml" description="Default Build Properties and Targets" />
 
     <!-- custom properties -->
+
     <property name="astra.srcdir" value="${component.basedir}/as"/>
     
     <target name="build" depends="YuiModuleTargets.build, swfbuild" />
     <target name="deploybuild" depends="YuiSharedTargets.deploybuild, swfdeploy" />
 
     <target name="swfbuild" description="Charts Override to Build SWF" depends="build-swc">
-		<exec executable="${flexbin}/mxmlc.exe" failonerror="true">
+		<exec executable="${flexbin}/mxmlc" failonerror="true">
 
 			<!-- start with the classes from the SWC -->
 			<arg line="--library-path+='${astra.srcdir}'"/>
@@ -27,14 +28,14 @@
     </target>
 
     <target name="build-swc" description="builds the SWC required for the Charts SWF">
-        <exec executable="${flexbin}/compc.exe" failonerror="true">
+        <exec executable="${flexbin}/compc" failonerror="true">
 
             <!-- Flash Platform Source Files -->
             <arg line="--source-path+='${astra.srcdir}'"/>
 
             <!-- Core Flash CS3 Source Files -->
-            <arg line="--source-path+='${flashbin}/en/Configuration/ActionScript 3.0/Classes'"/>
-            <arg line="--source-path+='${flashbin}/en/Configuration/Component Source/ActionScript 3.0/User Interface'"/>
+            <arg line="--source-path+='${flashbin}/Configuration/ActionScript 3.0/Classes'"/>
+            <arg line="--source-path+='${flashbin}/Configuration/Component Source/ActionScript 3.0/User Interface'"/>
 
             <!-- Main Classes to Include (will also add dependencies) -->
             <arg line="--include-classes com.yahoo.astra.fl.charts.LineChart"/>

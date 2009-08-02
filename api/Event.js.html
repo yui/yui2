@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * The Event Utility provides utilities for managing DOM Events and tools</span>
 <span class="c"> * for building event systems</span>
 <span class="c"> *</span>
@@ -91,6 +91,7 @@
 <span class="c">         */</span>
         <span class="k">var</span> <span class="nx">listeners</span> <span class="o">=</span> <span class="o">[];</span>
 
+
         <span class="c">/**</span>
 <span class="c">         * User-defined unload function that will be fired before all events</span>
 <span class="c">         * are detached</span>
@@ -100,23 +101,6 @@
 <span class="c">         * @private</span>
 <span class="c">         */</span>
         <span class="k">var</span> <span class="nx">unloadListeners</span> <span class="o">=</span> <span class="o">[];</span>
-
-        <span class="c">/**</span>
-<span class="c">         * Cache of DOM0 event handlers to work around issues with DOM2 events</span>
-<span class="c">         * in Safari</span>
-<span class="c">         * @property legacyEvents</span>
-<span class="c">         * @static</span>
-<span class="c">         * @private</span>
-<span class="c">         */</span>
-        <span class="k">var</span> <span class="nx">legacyEvents</span> <span class="o">=</span> <span class="o">[];</span>
-
-        <span class="c">/**</span>
-<span class="c">         * Listener stack for DOM0 events</span>
-<span class="c">         * @property legacyHandlers</span>
-<span class="c">         * @static</span>
-<span class="c">         * @private</span>
-<span class="c">         */</span>
-        <span class="k">var</span> <span class="nx">legacyHandlers</span> <span class="o">=</span> <span class="o">[];</span>
 
         <span class="c">/**</span>
 <span class="c">         * The number of times to poll after window.onload.  This number is</span>
@@ -135,14 +119,6 @@
 <span class="c">         * @private</span>
 <span class="c">         */</span>
         <span class="k">var</span> <span class="nx">onAvailStack</span> <span class="o">=</span> <span class="o">[];</span>
-
-        <span class="c">/**</span>
-<span class="c">         * Lookup table for legacy events</span>
-<span class="c">         * @property legacyMap</span>
-<span class="c">         * @static</span>
-<span class="c">         * @private</span>
-<span class="c">         */</span>
-        <span class="k">var</span> <span class="nx">legacyMap</span> <span class="o">=</span> <span class="o">[];</span>
 
         <span class="c">/**</span>
 <span class="c">         * Counter for auto id generation</span>
@@ -174,6 +150,7 @@
         <span class="c">// String constants used by the addFocusListener and removeFocusListener methods</span>
 <span class="c"></span>        <span class="k">var</span> <span class="nx">_FOCUS</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">?</span> <span class="s2">&quot;focusin&quot;</span> <span class="o">:</span> <span class="s2">&quot;focus&quot;</span><span class="o">;</span>
         <span class="k">var</span> <span class="nx">_BLUR</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">?</span> <span class="s2">&quot;focusout&quot;</span> <span class="o">:</span> <span class="s2">&quot;blur&quot;</span><span class="o">;</span>      
+
 
         <span class="k">return</span> <span class="o">{</span>
 
@@ -274,6 +251,9 @@
 <span class="c">             */</span>
             <span class="nx">OVERRIDE</span><span class="o">:</span> <span class="m">6</span><span class="o">,</span>
 
+
+			<span class="nx">CAPTURE</span><span class="o">:</span> <span class="m">7</span><span class="o">,</span>
+
             <span class="c">/**</span>
 <span class="c">             * addListener/removeListener can throw errors in unexpected scenarios.</span>
 <span class="c">             * These errors are suppressed, the method returns false, and this property</span>
@@ -354,9 +334,10 @@
 <span class="c">             */</span>
             <span class="nx">startInterval</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
-                    <span class="k">var</span> <span class="nx">callback</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="nx">self</span><span class="o">.</span><span class="nx">_tryPreloadAttach</span><span class="o">();</span> <span class="o">};</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="o">(</span><span class="nx">callback</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">POLL_INTERVAL</span><span class="o">);</span>
+                    <span class="c">// var self = this;</span>
+<span class="c"></span>                    <span class="c">// var callback = function() { self._tryPreloadAttach(); };</span>
+<span class="c"></span>                    <span class="c">// this._interval = setInterval(callback, this.POLL_INTERVAL);</span>
+<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">later</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">POLL_INTERVAL</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_tryPreloadAttach</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">},</span>
 
@@ -457,22 +438,9 @@
 <span class="c">             *</span>
 <span class="c">             * @static</span>
 <span class="c">             */</span>
-            <span class="nx">onDOMReady</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">DOMReady</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-                        <span class="k">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nb">window</span><span class="o">;</span>
-                        <span class="k">if</span> <span class="o">(</span><span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
-                            <span class="k">if</span> <span class="o">(</span><span class="nx">overrideContext</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
-                                <span class="nx">s</span> <span class="o">=</span> <span class="nx">obj</span><span class="o">;</span>
-                            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                                <span class="nx">s</span> <span class="o">=</span> <span class="nx">overrideContext</span><span class="o">;</span>
-                            <span class="o">}</span>
-                        <span class="o">}</span>
-                        <span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">s</span><span class="o">,</span> <span class="s2">&quot;DOMReady&quot;</span><span class="o">,</span> <span class="o">[],</span> <span class="nx">obj</span><span class="o">);</span>
-                    <span class="o">},</span> <span class="m">0</span><span class="o">);</span>
-                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">DOMReadyEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">);</span>
-                <span class="o">}</span>
+            <span class="c">// onDOMReady: function(fn, obj, overrideContext) {</span>
+<span class="c"></span>            <span class="nx">onDOMReady</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">DOMReadyEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">DOMReadyEvent</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
             <span class="o">},</span>
 
 
@@ -533,7 +501,7 @@
                     <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                         <span class="c">// defer adding the event until the element is available</span>
 <span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">onAvailable</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-                           <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">);</span>
+                           <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">_addListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">,</span> <span class="nx">bCapture</span><span class="o">);</span>
                         <span class="o">});</span>
 
                         <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
@@ -578,50 +546,19 @@
                                 <span class="nx">obj</span><span class="o">);</span>
                     <span class="o">};</span>
 
-                <span class="k">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="o">[</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">wrappedFn</span><span class="o">,</span> <span class="nx">context</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">];</span>
+                <span class="k">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="o">[</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">wrappedFn</span><span class="o">,</span> <span class="nx">context</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">,</span> <span class="nx">bCapture</span><span class="o">];</span>
                 <span class="k">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">listeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
                 <span class="c">// cache the listener so we can try to automatically unload</span>
 <span class="c"></span>                <span class="nx">listeners</span><span class="o">[</span><span class="nx">index</span><span class="o">]</span> <span class="o">=</span> <span class="nx">li</span><span class="o">;</span>
 
-                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">useLegacyEvent</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">))</span> <span class="o">{</span>
-                    <span class="k">var</span> <span class="nx">legacyIndex</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getLegacyIndex</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">);</span>
-
-                    <span class="c">// Add a new dom0 wrapper if one is not detected for this</span>
-<span class="c"></span>                    <span class="c">// element</span>
-<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span> <span class="nx">legacyIndex</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span> <span class="o">||</span> 
-                                <span class="nx">el</span> <span class="o">!=</span> <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">][</span><span class="m">0</span><span class="o">]</span> <span class="o">)</span> <span class="o">{</span>
-
-                        <span class="nx">legacyIndex</span> <span class="o">=</span> <span class="nx">legacyEvents</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
-                        <span class="nx">legacyMap</span><span class="o">[</span><span class="nx">el</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">]</span> <span class="o">=</span> <span class="nx">legacyIndex</span><span class="o">;</span>
-
-                        <span class="c">// cache the signature for the DOM0 event, and </span>
-<span class="c"></span>                        <span class="c">// include the existing handler for the event, if any</span>
-<span class="c"></span>                        <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">]</span> <span class="o">=</span> 
-                            <span class="o">[</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">el</span><span class="o">[</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">]];</span>
-                        <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">]</span> <span class="o">=</span> <span class="o">[];</span>
-
-                        <span class="nx">el</span><span class="o">[</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">]</span> <span class="o">=</span> 
-                            <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-                                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">fireLegacyEvent</span><span class="o">(</span>
-                                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getEvent</span><span class="o">(</span><span class="nx">e</span><span class="o">),</span> <span class="nx">legacyIndex</span><span class="o">);</span>
-                            <span class="o">};</span>
-                    <span class="o">}</span>
-
-                    <span class="c">// add a reference to the wrapped listener to our custom</span>
-<span class="c"></span>                    <span class="c">// stack of events</span>
-<span class="c"></span>                    <span class="c">//legacyHandlers[legacyIndex].push(index);</span>
-<span class="c"></span>                    <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">].</span><span class="nx">push</span><span class="o">(</span><span class="nx">li</span><span class="o">);</span>
-
-                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="k">try</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">wrappedFn</span><span class="o">,</span> <span class="nx">bCapture</span><span class="o">);</span>
-                    <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">ex</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="c">// handle an error trying to attach an event.  If it fails</span>
-<span class="c"></span>                        <span class="c">// we need to clean up the cache</span>
-<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">lastError</span> <span class="o">=</span> <span class="nx">ex</span><span class="o">;</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
-                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-                    <span class="o">}</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">wrappedFn</span><span class="o">,</span> <span class="nx">bCapture</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">ex</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c">// handle an error trying to attach an event.  If it fails</span>
+<span class="c"></span>                    <span class="c">// we need to clean up the cache</span>
+<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">lastError</span> <span class="o">=</span> <span class="nx">ex</span><span class="o">;</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
+                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
                 <span class="o">}</span>
 
                 <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
@@ -730,7 +667,7 @@
             <span class="c">/**</span>
 <span class="c">             * Removes a blur event listener</span>
 <span class="c">             *</span>
-<span class="c">             * @method removeListener</span>
+<span class="c">             * @method removeBlurListener</span>
 <span class="c">             *</span>
 <span class="c">             * @param {String|HTMLElement|Array|NodeList} el An id, an element </span>
 <span class="c">             *  reference, or a collection of ids and/or elements to remove</span>
@@ -748,68 +685,6 @@
             
             <span class="o">},</span>
 
-            <span class="c">/**</span>
-<span class="c">             * When using legacy events, the handler is routed to this object</span>
-<span class="c">             * so we can fire our custom listener stack.</span>
-<span class="c">             * @method fireLegacyEvent</span>
-<span class="c">             * @static</span>
-<span class="c">             * @private</span>
-<span class="c">             */</span>
-            <span class="nx">fireLegacyEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">legacyIndex</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c">// this.logger.debug(&quot;fireLegacyEvent &quot; + legacyIndex);</span>
-<span class="c"></span>                <span class="k">var</span> <span class="nx">ok</span><span class="o">=</span><span class="kc">true</span><span class="o">,</span> <span class="nx">le</span><span class="o">,</span> <span class="nx">lh</span><span class="o">,</span> <span class="nx">li</span><span class="o">,</span> <span class="nx">context</span><span class="o">,</span> <span class="nx">ret</span><span class="o">;</span>
-                
-                <span class="nx">lh</span> <span class="o">=</span> <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">].</span><span class="nx">slice</span><span class="o">();</span>
-                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">lh</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c">// for (var i in lh.length) {</span>
-<span class="c"></span>                    <span class="nx">li</span> <span class="o">=</span> <span class="nx">lh</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
-                    <span class="k">if</span> <span class="o">(</span> <span class="nx">li</span> <span class="o">&amp;&amp;</span> <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">]</span> <span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">context</span> <span class="o">=</span> <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ADJ_SCOPE</span><span class="o">];</span>
-                        <span class="nx">ret</span> <span class="o">=</span> <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">].</span><span class="nx">call</span><span class="o">(</span><span class="nx">context</span><span class="o">,</span> <span class="nx">e</span><span class="o">);</span>
-                        <span class="nx">ok</span> <span class="o">=</span> <span class="o">(</span><span class="nx">ok</span> <span class="o">&amp;&amp;</span> <span class="nx">ret</span><span class="o">);</span>
-                    <span class="o">}</span>
-                <span class="o">}</span>
-
-                <span class="c">// Fire the original handler if we replaced one.  We fire this</span>
-<span class="c"></span>                <span class="c">// after the other events to keep stopPropagation/preventDefault</span>
-<span class="c"></span>                <span class="c">// that happened in the DOM0 handler from touching our DOM2</span>
-<span class="c"></span>                <span class="c">// substitute</span>
-<span class="c"></span>                <span class="nx">le</span> <span class="o">=</span> <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">];</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">le</span> <span class="o">&amp;&amp;</span> <span class="nx">le</span><span class="o">[</span><span class="m">2</span><span class="o">])</span> <span class="o">{</span>
-                    <span class="nx">le</span><span class="o">[</span><span class="m">2</span><span class="o">](</span><span class="nx">e</span><span class="o">);</span>
-                <span class="o">}</span>
-                
-                <span class="k">return</span> <span class="nx">ok</span><span class="o">;</span>
-            <span class="o">},</span>
-
-            <span class="c">/**</span>
-<span class="c">             * Returns the legacy event index that matches the supplied </span>
-<span class="c">             * signature</span>
-<span class="c">             * @method getLegacyIndex</span>
-<span class="c">             * @static</span>
-<span class="c">             * @private</span>
-<span class="c">             */</span>
-            <span class="nx">getLegacyIndex</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">;</span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">legacyMap</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span> <span class="o">{</span> 
-                    <span class="k">return</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
-                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="k">return</span> <span class="nx">legacyMap</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
-                <span class="o">}</span>
-            <span class="o">},</span>
-
-            <span class="c">/**</span>
-<span class="c">             * Logic that determines when we should automatically use legacy</span>
-<span class="c">             * events instead of DOM2 events.  Currently this is limited to old</span>
-<span class="c">             * Safari browsers with a broken preventDefault</span>
-<span class="c">             * @method useLegacyEvent</span>
-<span class="c">             * @static</span>
-<span class="c">             * @private</span>
-<span class="c">             */</span>
-            <span class="nx">useLegacyEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
-<span class="k">return</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">&lt;</span> <span class="m">419</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="s2">&quot;click&quot;</span><span class="o">==</span><span class="nx">sType</span> <span class="o">||</span> <span class="s2">&quot;dblclick&quot;</span><span class="o">==</span><span class="nx">sType</span><span class="o">));</span>
-            <span class="o">},</span>
-                    
             <span class="c">/**</span>
 <span class="c">             * Removes an event listener</span>
 <span class="c">             *</span>
@@ -872,7 +747,7 @@
 <span class="c"></span>                <span class="k">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">arguments</span><span class="o">[</span><span class="m">3</span><span class="o">];</span>
   
                 <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;undefined&quot;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">index</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getCacheIndex</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
+                    <span class="nx">index</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getCacheIndex</span><span class="o">(</span><span class="nx">listeners</span><span class="o">,</span> <span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
                 <span class="o">}</span>
 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">index</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
@@ -886,31 +761,13 @@
 
                 <span class="c">// this.logger.debug(&quot;Removing handler: &quot; + el + &quot;, &quot; + sType);</span>
 <span class="c"></span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">useLegacyEvent</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">))</span> <span class="o">{</span>
-                    <span class="k">var</span> <span class="nx">legacyIndex</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getLegacyIndex</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">);</span>
-                    <span class="k">var</span> <span class="nx">llist</span> <span class="o">=</span> <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">];</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="nx">llist</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">llist</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="c">// for (i in llist.length) {</span>
-<span class="c"></span>                            <span class="nx">li</span> <span class="o">=</span> <span class="nx">llist</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
-                            <span class="k">if</span> <span class="o">(</span><span class="nx">li</span> <span class="o">&amp;&amp;</span> 
-                                <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">EL</span><span class="o">]</span> <span class="o">==</span> <span class="nx">el</span> <span class="o">&amp;&amp;</span> 
-                                <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">TYPE</span><span class="o">]</span> <span class="o">==</span> <span class="nx">sType</span> <span class="o">&amp;&amp;</span> 
-                                <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">FN</span><span class="o">]</span> <span class="o">==</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
-                                    <span class="nx">llist</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span>
-                                    <span class="c">// llist[i]=null;</span>
-<span class="c"></span>                                    <span class="k">break</span><span class="o">;</span>
-                            <span class="o">}</span>
-                        <span class="o">}</span>
-                    <span class="o">}</span>
+				<span class="k">var</span> <span class="nx">bCapture</span> <span class="o">=</span> <span class="nx">cacheItem</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">CAPTURE</span><span class="o">]</span> <span class="o">===</span> <span class="kc">true</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="o">;</span>
 
-                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="k">try</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">cacheItem</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">],</span> <span class="kc">false</span><span class="o">);</span>
-                    <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">ex</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">lastError</span> <span class="o">=</span> <span class="nx">ex</span><span class="o">;</span>
-                        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-                    <span class="o">}</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">cacheItem</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">WFN</span><span class="o">],</span> <span class="nx">bCapture</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">ex</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">lastError</span> <span class="o">=</span> <span class="nx">ex</span><span class="o">;</span>
+                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
                 <span class="o">}</span>
 
                 <span class="c">// removed the wrapped handler</span>
@@ -1146,9 +1003,9 @@
 <span class="c">             * @static</span>
 <span class="c">             * @private</span>
 <span class="c">             */</span>
-            <span class="nx">_getCacheIndex</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">l</span><span class="o">=</span><span class="nx">listeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="nx">listeners</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+            <span class="nx">_getCacheIndex</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">a</span><span class="o">,</span> <span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">l</span><span class="o">=</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
                     <span class="k">if</span> <span class="o">(</span> <span class="nx">li</span>                 <span class="o">&amp;&amp;</span> 
                          <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">FN</span><span class="o">]</span> <span class="o">==</span> <span class="nx">fn</span>  <span class="o">&amp;&amp;</span> 
                          <span class="nx">li</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">EL</span><span class="o">]</span> <span class="o">==</span> <span class="nx">el</span>  <span class="o">&amp;&amp;</span> 
@@ -1243,7 +1100,7 @@
 <span class="c">             * Custom event the fires when the dom is initially usable</span>
 <span class="c">             * @event DOMReadyEvent</span>
 <span class="c">             */</span>
-            <span class="nx">DOMReadyEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;DOMReady&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">),</span>
+            <span class="nx">DOMReadyEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;DOMReady&quot;</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="m">1</span><span class="o">),</span>
 
             <span class="c">/**</span>
 <span class="c">             * hook up any deferred listeners</span>
@@ -1302,7 +1159,8 @@
                 <span class="k">if</span> <span class="o">(</span><span class="nx">onAvailStack</span><span class="o">.</span><span class="nx">length</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">retryCount</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
                     <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">clearInterval</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">);</span>
+                        <span class="c">// clearInterval(this._interval);</span>
+<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">.</span><span class="nx">cancel</span><span class="o">();</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
                     <span class="o">}</span> 
                     <span class="k">return</span><span class="o">;</span>
@@ -1393,7 +1251,8 @@
                     <span class="k">this</span><span class="o">.</span><span class="nx">startInterval</span><span class="o">();</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">clearInterval</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">);</span>
+                        <span class="c">// clearInterval(this._interval);</span>
+<span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span><span class="o">.</span><span class="nx">cancel</span><span class="o">();</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">_interval</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
@@ -1516,9 +1375,7 @@
                 <span class="nx">unloadListeners</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
                 <span class="c">// Remove listeners to handle IE memory leaks</span>
-<span class="c"></span>                <span class="c">//if (YAHOO.env.ua.ie &amp;&amp; listeners &amp;&amp; listeners.length &gt; 0) {</span>
-<span class="c"></span>                
-                <span class="c">// 2.5.0 listeners are removed for all browsers again.  FireFox preserves</span>
+<span class="c"></span>                <span class="c">// 2.5.0 listeners are removed for all browsers again.  FireFox preserves</span>
 <span class="c"></span>                <span class="c">// at least some listeners between page refreshes, potentially causing</span>
 <span class="c"></span>                <span class="c">// errors during page load (mouseover listeners firing before they</span>
 <span class="c"></span>                <span class="c">// should if the user moves the mouse at the correct moment).</span>
@@ -1531,8 +1388,6 @@
                     <span class="o">}</span>
                     <span class="nx">l</span><span class="o">=</span><span class="kc">null</span><span class="o">;</span>
                 <span class="o">}</span>
-
-                <span class="nx">legacyEvents</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
                 <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s2">&quot;unload&quot;</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_unload</span><span class="o">);</span>
 
@@ -1584,9 +1439,7 @@
 <span class="c">             * @static</span>
 <span class="c">             * @deprecated still here for backwards compatibility</span>
 <span class="c">             */</span>
-            <span class="nx">regCE</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-                <span class="c">// does nothing</span>
-<span class="c"></span>            <span class="o">},</span>
+            <span class="nx">regCE</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{},</span>
 
             <span class="c">/**</span>
 <span class="c">             * Adds a DOM event directly without the caching, cleanup, context adj, etc</span>
@@ -1668,36 +1521,43 @@
 <span class="c">         */</span>     
         <span class="nx">EU</span><span class="o">.</span><span class="nx">onBlur</span> <span class="o">=</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">addBlurListener</span><span class="o">;</span>
 
-
-<span class="c">/*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller */</span>
+<span class="c">/*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller/Diego Perini */</span>
 
         <span class="c">// Internet Explorer: use the readyState of a defered script.</span>
 <span class="c"></span>        <span class="c">// This isolates what appears to be a safe moment to manipulate</span>
 <span class="c"></span>        <span class="c">// the DOM prior to when the document&#39;s readyState suggests</span>
 <span class="c"></span>        <span class="c">// it is safe to do so.</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">EU</span><span class="o">.</span><span class="nx">isIE</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nb">window</span> <span class="o">!==</span> <span class="nb">window</span><span class="o">.</span><span class="nx">top</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nb">document</span><span class="o">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="s1">&#39;complete&#39;</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nb">document</span><span class="o">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                        <span class="nx">EU</span><span class="o">.</span><span class="nx">_ready</span><span class="o">();</span>
+                    <span class="o">}</span>
+                <span class="o">};</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
 
-            <span class="c">// Process onAvailable/onContentReady items when the </span>
-<span class="c"></span>            <span class="c">// DOM is ready.</span>
-<span class="c"></span>            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">onDOMReady</span><span class="o">(</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">_tryPreloadAttach</span><span class="o">,</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            
-            <span class="k">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;p&#39;</span><span class="o">);</span>  
+                <span class="c">// Process onAvailable/onContentReady items when the </span>
+<span class="c"></span>                <span class="c">// DOM is ready.</span>
+<span class="c"></span>                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">onDOMReady</span><span class="o">(</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">_tryPreloadAttach</span><span class="o">,</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                
+                <span class="k">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;p&#39;</span><span class="o">);</span>  
 
-            <span class="nx">EU</span><span class="o">.</span><span class="nx">_dri</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-                <span class="k">try</span> <span class="o">{</span>
-                    <span class="c">// throws an error if doc is not ready</span>
-<span class="c"></span>                    <span class="nx">n</span><span class="o">.</span><span class="nx">doScroll</span><span class="o">(</span><span class="s1">&#39;left&#39;</span><span class="o">);</span>
-                    <span class="nx">clearInterval</span><span class="o">(</span><span class="nx">EU</span><span class="o">.</span><span class="nx">_dri</span><span class="o">);</span>
-                    <span class="nx">EU</span><span class="o">.</span><span class="nx">_dri</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-                    <span class="nx">EU</span><span class="o">.</span><span class="nx">_ready</span><span class="o">();</span>
-                    <span class="nx">n</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">ex</span><span class="o">)</span> <span class="o">{</span> 
-                <span class="o">}</span>
-            <span class="o">},</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">POLL_INTERVAL</span><span class="o">);</span> 
+                <span class="nx">EU</span><span class="o">.</span><span class="nx">_dri</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                        <span class="c">// throws an error if doc is not ready</span>
+<span class="c"></span>                        <span class="nx">n</span><span class="o">.</span><span class="nx">doScroll</span><span class="o">(</span><span class="s1">&#39;left&#39;</span><span class="o">);</span>
+                        <span class="nx">clearInterval</span><span class="o">(</span><span class="nx">EU</span><span class="o">.</span><span class="nx">_dri</span><span class="o">);</span>
+                        <span class="nx">EU</span><span class="o">.</span><span class="nx">_dri</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                        <span class="nx">EU</span><span class="o">.</span><span class="nx">_ready</span><span class="o">();</span>
+                        <span class="nx">n</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">ex</span><span class="o">)</span> <span class="o">{</span> 
+                    <span class="o">}</span>
+                <span class="o">},</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">POLL_INTERVAL</span><span class="o">);</span> 
+            <span class="o">}</span>
 
-        
         <span class="c">// The document&#39;s readyState in Safari currently will</span>
 <span class="c"></span>        <span class="c">// change to loaded/complete before images are loaded.</span>
 <span class="c"></span>        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">EU</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">&lt;</span> <span class="m">525</span><span class="o">)</span> <span class="o">{</span>
@@ -1728,6 +1588,7 @@
 
 <span class="o">}</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>
@@ -1812,7 +1673,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Event", "name": "addBlurListener", "url": "YAHOO.util.Event.html#method_addBlurListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "addFocusListener", "url": "YAHOO.util.Event.html#method_addFocusListener", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_addListener", "url": "YAHOO.util.Event.html#method__addListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "addListener", "url": "YAHOO.util.Event.html#method_addListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "ADJ_SCOPE", "url": "YAHOO.util.Event.html#property_ADJ_SCOPE", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "clearCache", "url": "YAHOO.util.Event.html#method_clearCache", "type": "method"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "contains", "url": "YAHOO.util.Subscriber.html#method_contains", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "counter", "url": "YAHOO.util.Event.html#property_counter", "type": "property"}, {"access": "", "host": "EventProvider", "name": "createEvent", "url": "EventProvider.html#method_createEvent", "type": "method"}, {"access": "private", "host": "YAHOO.util.CustomEvent", "name": "_delete", "url": "YAHOO.util.CustomEvent.html#method__delete", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "disable", "url": "YAHOO.util.KeyListener.html#method_disable", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "disabledEvent", "url": "YAHOO.util.KeyListener.html#event_disabledEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.Event", "name": "DOMReady", "url": "YAHOO.util.Event.html#property_DOMReady", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "DOMReadyEvent", "url": "YAHOO.util.Event.html#event_DOMReadyEvent", "type": "event"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_dri", "url": "YAHOO.util.Event.html#property__dri", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "EL", "url": "YAHOO.util.Event.html#property_EL", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "elCache\nDOM element cache", "url": "YAHOO.util.Event.html#property_elCache\nDOM element cache", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enable", "url": "YAHOO.util.KeyListener.html#method_enable", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enabled", "url": "YAHOO.util.KeyListener.html#property_enabled", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enabledEvent", "url": "YAHOO.util.KeyListener.html#event_enabledEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fire", "url": "YAHOO.util.CustomEvent.html#method_fire", "type": "method"}, {"access": "", "host": "EventProvider", "name": "fireEvent", "url": "EventProvider.html#method_fireEvent", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "fireLegacyEvent", "url": "YAHOO.util.Event.html#method_fireLegacyEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "fn", "url": "YAHOO.util.Subscriber.html#property_fn", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "FN", "url": "YAHOO.util.Event.html#property_FN", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "generateId", "url": "YAHOO.util.Event.html#method_generateId", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getCacheIndex", "url": "YAHOO.util.Event.html#method__getCacheIndex", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getCharCode", "url": "YAHOO.util.Event.html#method_getCharCode", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "getEl", "url": "YAHOO.util.Event.html#method_getEl", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getEvent", "url": "YAHOO.util.Event.html#method_getEvent", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "getLegacyIndex", "url": "YAHOO.util.Event.html#method_getLegacyIndex", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getListeners", "url": "YAHOO.util.Event.html#method_getListeners", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getPageX", "url": "YAHOO.util.Event.html#method_getPageX", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getPageY", "url": "YAHOO.util.Event.html#method_getPageY", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getRelatedTarget", "url": "YAHOO.util.Event.html#method_getRelatedTarget", "type": "method"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "getScope", "url": "YAHOO.util.Subscriber.html#method_getScope", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getScroll", "url": "YAHOO.util.Event.html#method__getScroll", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getScrollLeft", "url": "YAHOO.util.Event.html#method__getScrollLeft", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getScrollTop", "url": "YAHOO.util.Event.html#method__getScrollTop", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getTarget", "url": "YAHOO.util.Event.html#method_getTarget", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getTime", "url": "YAHOO.util.Event.html#method_getTime", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getXY", "url": "YAHOO.util.Event.html#method_getXY", "type": "method"}, {"access": "private", "host": "YAHOO.util.KeyListener", "name": "handleKeyPress", "url": "YAHOO.util.KeyListener.html#method_handleKeyPress", "type": "method"}, {"access": "", "host": "EventProvider", "name": "hasEvent", "url": "EventProvider.html#method_hasEvent", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_interval", "url": "YAHOO.util.Event.html#property__interval", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "isIE", "url": "YAHOO.util.Event.html#property_isIE", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "isSafari", "url": "YAHOO.util.Event.html#property_isSafari", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_isValidCollection", "url": "YAHOO.util.Event.html#method__isValidCollection", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "KEY", "url": "YAHOO.util.KeyListener.html#property_KEY", "type": "property"}, {"access": "private", "host": "YAHOO.util.KeyListener", "name": "keyEvent", "url": "YAHOO.util.KeyListener.html#event_keyEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "lastError", "url": "YAHOO.util.CustomEvent.html#property_lastError", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "lastError", "url": "YAHOO.util.Event.html#property_lastError", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "legacyEvents", "url": "YAHOO.util.Event.html#property_legacyEvents", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "legacyHandlers", "url": "YAHOO.util.Event.html#property_legacyHandlers", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "legacyMap", "url": "YAHOO.util.Event.html#property_legacyMap", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "listeners", "url": "YAHOO.util.Event.html#property_listeners", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_load", "url": "YAHOO.util.Event.html#method__load", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "loadComplete", "url": "YAHOO.util.Event.html#property_loadComplete", "type": "property"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "obj", "url": "YAHOO.util.Subscriber.html#property_obj", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "OBJ", "url": "YAHOO.util.Event.html#property_OBJ", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "on", "url": "YAHOO.util.Event.html#method_on", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onAvailable", "url": "YAHOO.util.Event.html#method_onAvailable", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "onAvailStack", "url": "YAHOO.util.Event.html#property_onAvailStack", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "onBlur", "url": "YAHOO.util.Event.html#method_onBlur", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onContentReady", "url": "YAHOO.util.Event.html#method_onContentReady", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onDOMReady", "url": "YAHOO.util.Event.html#method_onDOMReady", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "OVERRIDE", "url": "YAHOO.util.Event.html#property_OVERRIDE", "type": "property"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "overrideContext", "url": "YAHOO.util.Subscriber.html#property_overrideContext", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "POLL_INTERVAL", "url": "YAHOO.util.Event.html#property_POLL_INTERVAL", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "POLL_RETRYS", "url": "YAHOO.util.Event.html#property_POLL_RETRYS", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "preventDefault", "url": "YAHOO.util.Event.html#method_preventDefault", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "purgeElement", "url": "YAHOO.util.Event.html#method_purgeElement", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_ready", "url": "YAHOO.util.Event.html#method__ready", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "regCE", "url": "YAHOO.util.Event.html#method_regCE", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeFocusListener", "url": "YAHOO.util.Event.html#method_removeFocusListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeListener", "url": "YAHOO.util.Event.html#method_removeListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "resolveTextNode", "url": "YAHOO.util.Event.html#method_resolveTextNode", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "retryCount", "url": "YAHOO.util.Event.html#property_retryCount", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "scope", "url": "YAHOO.util.CustomEvent.html#property_scope", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "signature", "url": "YAHOO.util.CustomEvent.html#property_signature", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "silent", "url": "YAHOO.util.CustomEvent.html#property_silent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_simpleAdd", "url": "YAHOO.util.Event.html#method__simpleAdd", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_simpleRemove", "url": "YAHOO.util.Event.html#method__simpleRemove", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "startInterval", "url": "YAHOO.util.Event.html#method_startInterval", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "stopEvent", "url": "YAHOO.util.Event.html#method_stopEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "stopPropagation", "url": "YAHOO.util.Event.html#method_stopPropagation", "type": "method"}, {"access": "", "host": "EventProvider", "name": "subscribe", "url": "EventProvider.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribe", "url": "YAHOO.util.CustomEvent.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribeEvent", "url": "YAHOO.util.CustomEvent.html#event_subscribeEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribers", "url": "YAHOO.util.CustomEvent.html#property_subscribers", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "throwErrors", "url": "YAHOO.util.Event.html#property_throwErrors", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "toString", "url": "YAHOO.util.KeyListener.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "toString", "url": "YAHOO.util.CustomEvent.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "toString", "url": "YAHOO.util.Subscriber.html#method_toString", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_tryPreloadAttach", "url": "YAHOO.util.Event.html#method__tryPreloadAttach", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "type", "url": "YAHOO.util.CustomEvent.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "TYPE", "url": "YAHOO.util.Event.html#property_TYPE", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_unload", "url": "YAHOO.util.Event.html#method__unload", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "unloadListeners", "url": "YAHOO.util.Event.html#property_unloadListeners", "type": "property"}, {"access": "", "host": "EventProvider", "name": "unsubscribe", "url": "EventProvider.html#method_unsubscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribe", "url": "YAHOO.util.CustomEvent.html#method_unsubscribe", "type": "method"}, {"access": "", "host": "EventProvider", "name": "unsubscribeAll", "url": "EventProvider.html#method_unsubscribeAll", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribeAll", "url": "YAHOO.util.CustomEvent.html#method_unsubscribeAll", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "useLegacyEvent", "url": "YAHOO.util.Event.html#method_useLegacyEvent", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "webkit", "url": "YAHOO.util.Event.html#property_webkit", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "webkitKeymap", "url": "YAHOO.util.Event.html#property_webkitKeymap", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "WFN", "url": "YAHOO.util.Event.html#property_WFN", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.FLAT", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.FLAT", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.LIST", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.LIST", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "YAHOO.util.KeyListener.KEYDOWN", "url": "YAHOO.util.KeyListener.html#property_YAHOO.util.KeyListener.KEYDOWN", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "YAHOO.util.KeyListener.KEYUP", "url": "YAHOO.util.KeyListener.html#property_YAHOO.util.KeyListener.KEYUP", "type": "property"}, {"access": "private", "host": "EventProvider", "name": "__yui_events", "url": "EventProvider.html#property___yui_events", "type": "property"}, {"access": "private", "host": "EventProvider", "name": "__yui_subscribers", "url": "EventProvider.html#property___yui_subscribers", "type": "property"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Event", "name": "addBlurListener", "url": "YAHOO.util.Event.html#method_addBlurListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "addFocusListener", "url": "YAHOO.util.Event.html#method_addFocusListener", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_addListener", "url": "YAHOO.util.Event.html#method__addListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "addListener", "url": "YAHOO.util.Event.html#method_addListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "ADJ_SCOPE", "url": "YAHOO.util.Event.html#property_ADJ_SCOPE", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "clearCache", "url": "YAHOO.util.Event.html#method_clearCache", "type": "method"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "contains", "url": "YAHOO.util.Subscriber.html#method_contains", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "counter", "url": "YAHOO.util.Event.html#property_counter", "type": "property"}, {"access": "", "host": "EventProvider", "name": "createEvent", "url": "EventProvider.html#method_createEvent", "type": "method"}, {"access": "private", "host": "YAHOO.util.CustomEvent", "name": "_delete", "url": "YAHOO.util.CustomEvent.html#method__delete", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "disable", "url": "YAHOO.util.KeyListener.html#method_disable", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "disabledEvent", "url": "YAHOO.util.KeyListener.html#event_disabledEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.Event", "name": "DOMReady", "url": "YAHOO.util.Event.html#property_DOMReady", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "DOMReadyEvent", "url": "YAHOO.util.Event.html#event_DOMReadyEvent", "type": "event"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_dri", "url": "YAHOO.util.Event.html#property__dri", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "EL", "url": "YAHOO.util.Event.html#property_EL", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "elCache\nDOM element cache", "url": "YAHOO.util.Event.html#property_elCache\nDOM element cache", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enable", "url": "YAHOO.util.KeyListener.html#method_enable", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enabled", "url": "YAHOO.util.KeyListener.html#property_enabled", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "enabledEvent", "url": "YAHOO.util.KeyListener.html#event_enabledEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fire", "url": "YAHOO.util.CustomEvent.html#method_fire", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fired", "url": "YAHOO.util.CustomEvent.html#property_fired", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "firedWith", "url": "YAHOO.util.CustomEvent.html#property_firedWith", "type": "property"}, {"access": "", "host": "EventProvider", "name": "fireEvent", "url": "EventProvider.html#method_fireEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "fireOnce", "url": "YAHOO.util.CustomEvent.html#property_fireOnce", "type": "property"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "fn", "url": "YAHOO.util.Subscriber.html#property_fn", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "FN", "url": "YAHOO.util.Event.html#property_FN", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "generateId", "url": "YAHOO.util.Event.html#method_generateId", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getCacheIndex", "url": "YAHOO.util.Event.html#method__getCacheIndex", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getCharCode", "url": "YAHOO.util.Event.html#method_getCharCode", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "getEl", "url": "YAHOO.util.Event.html#method_getEl", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getEvent", "url": "YAHOO.util.Event.html#method_getEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getListeners", "url": "YAHOO.util.Event.html#method_getListeners", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getPageX", "url": "YAHOO.util.Event.html#method_getPageX", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getPageY", "url": "YAHOO.util.Event.html#method_getPageY", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getRelatedTarget", "url": "YAHOO.util.Event.html#method_getRelatedTarget", "type": "method"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "getScope", "url": "YAHOO.util.Subscriber.html#method_getScope", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getScroll", "url": "YAHOO.util.Event.html#method__getScroll", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getScrollLeft", "url": "YAHOO.util.Event.html#method__getScrollLeft", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_getScrollTop", "url": "YAHOO.util.Event.html#method__getScrollTop", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getTarget", "url": "YAHOO.util.Event.html#method_getTarget", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getTime", "url": "YAHOO.util.Event.html#method_getTime", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "getXY", "url": "YAHOO.util.Event.html#method_getXY", "type": "method"}, {"access": "private", "host": "YAHOO.util.KeyListener", "name": "handleKeyPress", "url": "YAHOO.util.KeyListener.html#method_handleKeyPress", "type": "method"}, {"access": "", "host": "EventProvider", "name": "hasEvent", "url": "EventProvider.html#method_hasEvent", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_interval", "url": "YAHOO.util.Event.html#property__interval", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "isIE", "url": "YAHOO.util.Event.html#property_isIE", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "isSafari", "url": "YAHOO.util.Event.html#property_isSafari", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_isValidCollection", "url": "YAHOO.util.Event.html#method__isValidCollection", "type": "method"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "KEY", "url": "YAHOO.util.KeyListener.html#property_KEY", "type": "property"}, {"access": "private", "host": "YAHOO.util.KeyListener", "name": "keyEvent", "url": "YAHOO.util.KeyListener.html#event_keyEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "lastError", "url": "YAHOO.util.CustomEvent.html#property_lastError", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "lastError", "url": "YAHOO.util.Event.html#property_lastError", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "listeners", "url": "YAHOO.util.Event.html#property_listeners", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_load", "url": "YAHOO.util.Event.html#method__load", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "loadComplete", "url": "YAHOO.util.Event.html#property_loadComplete", "type": "property"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "obj", "url": "YAHOO.util.Subscriber.html#property_obj", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "OBJ", "url": "YAHOO.util.Event.html#property_OBJ", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "on", "url": "YAHOO.util.Event.html#method_on", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onAvailable", "url": "YAHOO.util.Event.html#method_onAvailable", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "onAvailStack", "url": "YAHOO.util.Event.html#property_onAvailStack", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "onBlur", "url": "YAHOO.util.Event.html#method_onBlur", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onContentReady", "url": "YAHOO.util.Event.html#method_onContentReady", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "onDOMReady", "url": "YAHOO.util.Event.html#method_onDOMReady", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "OVERRIDE", "url": "YAHOO.util.Event.html#property_OVERRIDE", "type": "property"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "overrideContext", "url": "YAHOO.util.Subscriber.html#property_overrideContext", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "POLL_INTERVAL", "url": "YAHOO.util.Event.html#property_POLL_INTERVAL", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "POLL_RETRYS", "url": "YAHOO.util.Event.html#property_POLL_RETRYS", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "preventDefault", "url": "YAHOO.util.Event.html#method_preventDefault", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "purgeElement", "url": "YAHOO.util.Event.html#method_purgeElement", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_ready", "url": "YAHOO.util.Event.html#method__ready", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "regCE", "url": "YAHOO.util.Event.html#method_regCE", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeBlurListener", "url": "YAHOO.util.Event.html#method_removeBlurListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeFocusListener", "url": "YAHOO.util.Event.html#method_removeFocusListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "removeListener", "url": "YAHOO.util.Event.html#method_removeListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "resolveTextNode", "url": "YAHOO.util.Event.html#method_resolveTextNode", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "retryCount", "url": "YAHOO.util.Event.html#property_retryCount", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "scope", "url": "YAHOO.util.CustomEvent.html#property_scope", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "signature", "url": "YAHOO.util.CustomEvent.html#property_signature", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "silent", "url": "YAHOO.util.CustomEvent.html#property_silent", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_simpleAdd", "url": "YAHOO.util.Event.html#method__simpleAdd", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_simpleRemove", "url": "YAHOO.util.Event.html#method__simpleRemove", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "startInterval", "url": "YAHOO.util.Event.html#method_startInterval", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "stopEvent", "url": "YAHOO.util.Event.html#method_stopEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Event", "name": "stopPropagation", "url": "YAHOO.util.Event.html#method_stopPropagation", "type": "method"}, {"access": "", "host": "EventProvider", "name": "subscribe", "url": "EventProvider.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribe", "url": "YAHOO.util.CustomEvent.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribeEvent", "url": "YAHOO.util.CustomEvent.html#event_subscribeEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "subscribers", "url": "YAHOO.util.CustomEvent.html#property_subscribers", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "throwErrors", "url": "YAHOO.util.Event.html#property_throwErrors", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "toString", "url": "YAHOO.util.KeyListener.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "toString", "url": "YAHOO.util.CustomEvent.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.Subscriber", "name": "toString", "url": "YAHOO.util.Subscriber.html#method_toString", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_tryPreloadAttach", "url": "YAHOO.util.Event.html#method__tryPreloadAttach", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "type", "url": "YAHOO.util.CustomEvent.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "TYPE", "url": "YAHOO.util.Event.html#property_TYPE", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "_unload", "url": "YAHOO.util.Event.html#method__unload", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "unloadListeners", "url": "YAHOO.util.Event.html#property_unloadListeners", "type": "property"}, {"access": "", "host": "EventProvider", "name": "unsubscribe", "url": "EventProvider.html#method_unsubscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribe", "url": "YAHOO.util.CustomEvent.html#method_unsubscribe", "type": "method"}, {"access": "", "host": "EventProvider", "name": "unsubscribeAll", "url": "EventProvider.html#method_unsubscribeAll", "type": "method"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "unsubscribeAll", "url": "YAHOO.util.CustomEvent.html#method_unsubscribeAll", "type": "method"}, {"access": "private", "host": "YAHOO.util.Event", "name": "webkit", "url": "YAHOO.util.Event.html#property_webkit", "type": "property"}, {"access": "private", "host": "YAHOO.util.Event", "name": "webkitKeymap", "url": "YAHOO.util.Event.html#property_webkitKeymap", "type": "property"}, {"access": "", "host": "YAHOO.util.Event", "name": "WFN", "url": "YAHOO.util.Event.html#property_WFN", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.FLAT", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.FLAT", "type": "property"}, {"access": "", "host": "YAHOO.util.CustomEvent", "name": "YAHOO.util.CustomEvent.LIST", "url": "YAHOO.util.CustomEvent.html#property_YAHOO.util.CustomEvent.LIST", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "YAHOO.util.KeyListener.KEYDOWN", "url": "YAHOO.util.KeyListener.html#property_YAHOO.util.KeyListener.KEYDOWN", "type": "property"}, {"access": "", "host": "YAHOO.util.KeyListener", "name": "YAHOO.util.KeyListener.KEYUP", "url": "YAHOO.util.KeyListener.html#property_YAHOO.util.KeyListener.KEYUP", "type": "property"}, {"access": "private", "host": "EventProvider", "name": "__yui_events", "url": "EventProvider.html#property___yui_events", "type": "property"}, {"access": "private", "host": "EventProvider", "name": "__yui_subscribers", "url": "EventProvider.html#property___yui_subscribers", "type": "property"}];
 </script>
 </body>
 </html>

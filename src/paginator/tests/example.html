@@ -34,6 +34,10 @@
 <div id="p7-1"></div>
 <div id="p7"></div>
 
+<h2>rpp:10, tot:93, progressive enhance container and specific el</h2>
+<div id="p8-container"></div>
+<span id="p8-component" class="yui-pg-ui-NextPageLink"></span>
+
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../../build/event/event.js"></script>
@@ -42,73 +46,94 @@
 <script type="text/javascript">
 YAHOO.util.Event.onDOMReady(function () {
 
-var Paginator = YAHOO.widget.Paginator;
+var Paginator = YAHOO.widget.Paginator,
+    p;
 
-new Paginator({
+function update(state) { this.setState(state); }
+
+var p = new Paginator({
     rowsPerPage   :10,
     totalRecords  :93,
-    containers    :'p1',
-    updateOnChange:true // for interaction testing
-}).render();
+    containers    :'p1'
+});
+p.on('changeRequest',update);
+p.render();
 
-new Paginator({
+p = new Paginator({
     rowsPerPage   :10,
     totalRecords  :3,
-    containers    :'p2',
-    updateOnChange:true // for interaction testing
-}).render();
+    containers    :'p2'
+});
+p.on('changeRequest',update);
+p.render();
 
-new Paginator({
+p = new Paginator({
     rowsPerPage   :10,
     totalRecords  :93,
     containers    :'p3',
-    pageLinks     :5,
-    updateOnChange:true // for interaction testing
-}).render();
+    pageLinks     :5
+});
+p.on('changeRequest',update);
+p.render();
 
-new Paginator({
+p = new Paginator({
     rowsPerPage   :10,
     totalRecords  :93,
     containers    :'p4',
     recordOffset  :20,
     template      :Paginator.TEMPLATE_ROWS_PER_PAGE,
-    rowsPerPageOptions: [10,25,50,'All'],
-    updateOnChange:true // for interaction testing
-}).render();
+    rowsPerPageOptions: [10,25,50,'All']
+});
+p.on('changeRequest',update);
+p.render();
 
-new Paginator({
+p = new Paginator({
     rowsPerPage   :10,
     totalRecords  :133,
     containers    :'p5',
-    template : "{PreviousPageLink} <strong>{CurrentPageReport}</strong> {NextPageLink}",
-    updateOnChange:true // for interaction testing
-}).render();
+    template : "{PreviousPageLink} <strong>{CurrentPageReport}</strong> {NextPageLink}"
+});
+p.on('changeRequest',update);
+p.render();
 
 var p6 = document.getElementById('p6'),
     p6_pag = new Paginator({
         rowsPerPage : 10,
         totalRecords : Paginator.VALUE_UNLIMITED,
-        updateOnChange : true, // for interaction testing
-
         initialPage : 5,
         pageReportTemplate : "<strong>{currentPage}</strong>",
         nextPageLinkLabel : '&gt;'
     });
+p6_pag.on('changeRequest',update);
 p6.appendChild(new Paginator.ui.CurrentPageReport(p6_pag).render('p6'));
 p6.appendChild(new Paginator.ui.NextPageLink(p6_pag).render('p6'));
 
 var p7 = new Paginator({
     rowsPerPage   :10,
     totalRecords  :93,
-    containers    :'p7',
-    updateOnChange:true // for interaction testing
+    containers    :'p7'
 });
+p7.on('changeRequest',update);
 p7.subscribe('render', function () {
     document.getElementById('p7-1').appendChild(
         new Paginator.ui.CurrentPageReport(p7).render('p7'));
 });
 
 p7.render();
+
+var p8 = new Paginator({
+    containers : document.createElement('div'),
+    template: '',
+    rowsPerPage: 10,
+    totalRecords: 93,
+    rowsPerPageOptions: [10,25,50]
+});
+p8.render();
+p8.on('changeRequest',update);
+p8._renderTemplate(document.getElementById('p8-container'),
+    "{PageLinks} {RowsPerPageDropdown} {LastPageLink}",
+    "p8_manual");
+p8._renderUIComponent(document.getElementById('p8-component'), 'p8_component');
 
 });
 </script>

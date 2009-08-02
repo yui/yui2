@@ -183,7 +183,7 @@ PLEASE NOTE:
 ** For more information on this issue, see:
 
    + https://bugzilla.mozilla.org/show_bug.cgi?id=187435
-   + SourceForge bug #1723530
+   + YUILibrary bug #1723530
 
 */
 
@@ -367,7 +367,9 @@ when one of its submenus is visible.
 }
 
 .yuimenuitemlabel,
-.yuimenubaritemlabel {
+.yuimenuitemlabel:visited,
+.yuimenubaritemlabel,
+.yuimenubaritemlabel:visited {
 
     font-size: 85%;
     color: #000;
@@ -436,7 +438,9 @@ when one of its submenus is visible.
 }
 
 .yuimenubaritemlabel-selected,
-.yuimenuitemlabel-selected {
+.yuimenubaritemlabel-selected:visited,
+.yuimenuitemlabel-selected,
+.yuimenuitemlabel-selected:visited {
 
     text-decoration: underline;
     color: #fff;
@@ -465,7 +469,9 @@ when one of its submenus is visible.
 /* Disabled MenuItem */
 
 .yuimenubaritemlabel-disabled,
-.yuimenuitemlabel-disabled {
+.yuimenubaritemlabel-disabled:visited,
+.yuimenuitemlabel-disabled,
+.yuimenuitemlabel-disabled:visited {
 
     cursor: default;
     color: #b9b9b9;

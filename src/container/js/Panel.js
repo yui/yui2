@@ -579,7 +579,7 @@
             * hidden. <em>This fix is only applied to draggable Panels in IE 6 
             * (Strict Mode and Quirks Mode) and IE 7 (Quirks Mode)</em>. For 
             * more information on this issue see:
-            * SourceForge bugs #1726972 and #1589210.
+            * YUILibrary bugs #1726972 and #1589210.
             * @config draggable
             * @type Boolean
             * @default true
@@ -625,7 +625,7 @@
             * is initially made visible.  For Gecko-based browsers on Mac
             * OS X the underlay elment is always created as it is used as a 
             * shim to prevent Aqua scrollbars below a Panel instance from poking 
-            * through it (See SourceForge bug #836476).
+            * through it (See YUILibrary bug #1723530).
             * @config underlay
             * @type String
             * @default shadow
@@ -1195,6 +1195,13 @@
                 }
 
                 var bDragOnly = (this.cfg.getProperty("dragonly") === true);
+
+                /**
+                 * The YAHOO.util.DD instance, used to implement the draggable header for the panel if draggable is enabled
+                 *
+                 * @property dd
+                 * @type YAHOO.util.DD
+                 */
                 this.dd = new Util.DD(this.element.id, this.id, {dragOnly: bDragOnly});
 
                 if (!this.header.id) {
@@ -1399,10 +1406,49 @@
         * @return {boolean} Success or failure of the render
         */
         render: function (appendToNode) {
+            return Panel.superclass.render.call(this, appendToNode, this.innerElement);
+        },
 
-            return Panel.superclass.render.call(this, 
-                appendToNode, this.innerElement);
+        /**
+         * Renders the currently set header into it's proper position under the 
+         * module element. If the module element is not provided, "this.innerElement" 
+         * is used.
+         *
+         * @method _renderHeader
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element
+         */
+        _renderHeader: function(moduleElement){
+            moduleElement = moduleElement || this.innerElement;
+			Panel.superclass._renderHeader.call(this, moduleElement);
+        },
 
+        /**
+         * Renders the currently set body into it's proper position under the 
+         * module element. If the module element is not provided, "this.innerElement" 
+         * is used.
+         * 
+         * @method _renderBody
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element.
+         */
+        _renderBody: function(moduleElement){
+            moduleElement = moduleElement || this.innerElement;
+            Panel.superclass._renderBody.call(this, moduleElement);
+        },
+
+        /**
+         * Renders the currently set footer into it's proper position under the 
+         * module element. If the module element is not provided, "this.innerElement" 
+         * is used.
+         *
+         * @method _renderFooter
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element
+         */
+        _renderFooter: function(moduleElement){
+            moduleElement = moduleElement || this.innerElement;
+            Panel.superclass._renderFooter.call(this, moduleElement);
         },
         
         /**

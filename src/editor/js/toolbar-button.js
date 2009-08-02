@@ -186,6 +186,7 @@ var Dom = YAHOO.util.Dom,
                         case 'select':
                         case 'menu':
                             el = document.createElement('select');
+                            el.id = this.get('id');
                             var menu = this.get('menu');
                             for (var i = 0; i < menu.length; i++) {
                                 opt = document.createElement('option');
@@ -219,7 +220,7 @@ var Dom = YAHOO.util.Dom,
                         this.removeClass('yui-button-disabled');
                         this.removeClass('yui-' + this.get('type') + '-button-disabled');
                     }
-                    if (this.get('type') == 'menu') {
+                    if ((this.get('type') == 'menu') || (this.get('type') == 'select')) {
                         this._button.disabled = disabled;
                     }
                 }

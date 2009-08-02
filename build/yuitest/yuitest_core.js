@@ -213,6 +213,7 @@ YAHOO.namespace("tool");
  * @module yuitest
  * @namespace YAHOO.tool
  * @requires yahoo,dom,event,logger
+ * @optional event-simulte
  */
 
 

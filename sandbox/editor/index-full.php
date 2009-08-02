@@ -23,6 +23,9 @@
         <form method="post" action="index-full.php" id="form1" class="yui-skin-sam">
         <textarea id="editor" name="editor" rows="20" cols="75">
         This is a test.<br>
+        This is a test.<br>
+        This is a test.<br>
+        This is a test.<br>
         </textarea>
         <!--This is a test<br><strong>Strong Tag</strong> <em>Em Tag</em> <span style="font-weight: bold">Style Bold</span>
         <p class="yui-noedit">This is some test text. And a <a href="#">test link</a>. <a href="nada"><img src="pics/Photo1.jpg" align="right"/></a></p>
@@ -47,9 +50,10 @@
             <option value="xhtml"> XHTML </option>
             <option value="css"> CSS </option>
             <option value="default"> Default </option>
-        </select><a href="#" id="editorHTML">Editor HTML</a><br>
+        </select><br>
+        <a href="#" id="editorHTML">Editor HTML</a><br>
         <a href="#" id="editorSE">Editor Selected Element</a><br>
-        <a href="#" id="editorToggle">Toggle Design Mode</a><br>
+        <a href="#" id="editorDisable">Toggle Disable</a><br>
         <a href="#" id="editorFocus">Focus Window</a><br>
         </p>
         <textarea rows="20" cols="75" id="afterHTML" style="display: none;"></textarea>
@@ -93,7 +97,7 @@ var myConfig = {
     animate: true,
     dompath: true,
     handleSubmit: true,
-    ptags: true,
+    //ptags: true,
     drag: true,
     resize: true,
     //extracss: 'body { font-size: 11px; }',
@@ -137,10 +141,13 @@ YAHOO.util.Event.onAvailable('editorHTML', function() {
     });
 });
 
-YAHOO.util.Event.onAvailable('editorToggle', function() {
-    YAHOO.util.Event.addListener('editorToggle', 'click', function(ev) {
-        var state = myEditor._toggleDesignMode();
-        alert('Set designMode to: ' + state);
+YAHOO.util.Event.onAvailable('editorDisable', function() {
+    YAHOO.util.Event.addListener('editorDisable', 'click', function(ev) {
+        if (myEditor.get('disabled')) {
+            myEditor.set('disabled', false);
+        } else {
+            myEditor.set('disabled', true);
+        }
         YAHOO.util.Event.stopEvent(ev);
     });
 });

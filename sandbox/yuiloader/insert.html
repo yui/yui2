@@ -115,6 +115,27 @@ YAHOO.example.tabviewinit = function( ){
 
     log(loader.sorted);
 
+    var loader = new YAHOO.util.YUILoader();                                                                                                                                    
+                                                                                                                                                                            
+//Add the modules to YUILoader                                                                                                                                              
+loader.addModule({                                                                                                                                                          
+    name: "urlGenerator",                                                                                                                                                   
+    type: "js",                                                                                                                                                             
+    fullpath: "/1.js",                                                                                                         
+    varName: "URLGENERATOR"                                                                                                                                                 
+                                                                                                                                                                            
+});                                                                                                                                                                         
+                                                                                                                                                                            
+loader.addModule({                                                                                                                                                          
+    name: "builder",                                                                                                                                                        
+    type: "js",                                                                                                                                                             
+    fullpath: "/2.js",                                                                                                              
+    varName: "BUILDER"                                                                                                                                                      
+});                                                                                                                                                                         
+                                                                                                                                                                            
+loader.require(["urlGenerator","builder"]);                                                                                                                                 
+loader.insert(); 
+
 
 </script>
 <h1>header</h1>

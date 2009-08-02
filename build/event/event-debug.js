@@ -14,11 +14,15 @@
  *                  will receive. YAHOO.util.CustomEvent.LIST or 
  *                  YAHOO.util.CustomEvent.FLAT.  The default is
  *                  YAHOO.util.CustomEvent.LIST.
+ * @param fireOnce {boolean} If configured to fire once, the custom event 
+ * will only notify subscribers a single time regardless of how many times 
+ * the event is fired.  In addition, new subscribers will be notified 
+ * immediately if the event has already been fired.
  * @namespace YAHOO.util
  * @class CustomEvent
  * @constructor
  */
-YAHOO.util.CustomEvent = function(type, context, silent, signature) {
+YAHOO.util.CustomEvent = function(type, context, silent, signature, fireOnce) {
 
     /**
      * The type of event, returned to subscribers when the event fires
@@ -28,20 +32,46 @@ YAHOO.util.CustomEvent = function(type, context, silent, signature) {
     this.type = type;
 
     /**
-     * The context the the event will fire from by default.  Defaults to the window 
-     * obj
+     * The context the event will fire from by default. Defaults to the window obj.
      * @property scope
      * @type object
      */
     this.scope = context || window;
 
     /**
-     * By default all custom events are logged in the debug build, set silent
-     * to true to disable debug outpu for this event.
+     * By default all custom events are logged in the debug build. Set silent to true 
+     * to disable debug output for this event.
      * @property silent
      * @type boolean
      */
     this.silent = silent;
+
+    /**
+     * If configured to fire once, the custom event will only notify subscribers
+     * a single time regardless of how many times the event is fired.  In addition,
+     * new subscribers will be notified immediately if the event has already been
+     * fired.
+     * @property fireOnce
+     * @type boolean
+     * @default false
+     */
+    this.fireOnce = fireOnce;
+
+    /**
+     * Indicates whether or not this event has ever been fired.
+     * @property fired
+     * @type boolean
+     * @default false
+     */
+    this.fired = false;
+
+    /**
+     * For fireOnce events the arguments the event was fired with are stored
+     * so that new subscribers get the proper payload.
+     * @property firedWith
+     * @type Array
+     */
+    this.firedWith = null;
 
     /**
      * Custom events support two styles of arguments provided to the event
@@ -92,14 +122,12 @@ YAHOO.util.CustomEvent = function(type, context, silent, signature) {
          *
          * @event subscribeEvent
          * @type YAHOO.util.CustomEvent
-         * @param {Function} fn The function to execute
-         * @param {Object}   obj An object to be passed along when the event 
-         *                       fires defaults to the custom event
-         * @param {boolean|Object}  override If true, the obj passed in becomes 
-         *                                   the execution context of the listener.
-         *                                   if an object, that object becomes the
-         *                                   the execution context. defaults to
-         *                                   the custom event
+         * @param fn {Function} The function to execute
+         * @param obj <Object> An object to be passed along when the event fires. 
+         * Defaults to the custom event.
+         * @param override <boolean|Object> If true, the obj passed in becomes the 
+         * execution context of the listener. If an object, that object becomes 
+         * the execution context. Defaults to the custom event.
          */
         this.subscribeEvent = 
                 new YAHOO.util.CustomEvent(onsubscribeType, this, true);
@@ -143,12 +171,9 @@ YAHOO.util.CustomEvent.prototype = {
      * Subscribes the caller to this event
      * @method subscribe
      * @param {Function} fn        The function to execute
-     * @param {Object}   obj       An object to be passed along when the event 
-     *                             fires
-     * @param {boolean|Object}  overrideContext If true, the obj passed in becomes 
-     *                                   the execution context of the listener.
-     *                                   if an object, that object becomes the
-     *                                   the execution context.
+     * @param {Object}   obj       An object to be passed along when the event fires.
+     * overrideContext <boolean|Object> If true, the obj passed in becomes the execution 
+     * context of the listener. If an object, that object becomes the execution context.
      */
     subscribe: function(fn, obj, overrideContext) {
 
@@ -160,7 +185,13 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
             this.subscribeEvent.fire(fn, obj, overrideContext);
         }
 
-        this.subscribers.push( new YAHOO.util.Subscriber(fn, obj, overrideContext) );
+        var s = new YAHOO.util.Subscriber(fn, obj, overrideContext);
+
+        if (this.fireOnce && this.fired) {
+            this.notify(s, this.firedWith);
+        } else {
+            this.subscribers.push(s);
+        }
     },
 
     /**
@@ -216,12 +247,24 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
         var errors = [],
             len=this.subscribers.length;
 
+
+        var args=[].slice.call(arguments, 0), ret=true, i, rebuild=false;
+
+        if (this.fireOnce) {
+            if (this.fired) {
+                YAHOO.log('fireOnce event has already fired: ' + this.type);
+                return true;
+            } else {
+                this.firedWith = args;
+            }
+        }
+
+        this.fired = true;
+
         if (!len && this.silent) {
             //YAHOO.log('DEBUG no subscribers');
             return true;
         }
-
-        var args=[].slice.call(arguments, 0), ret=true, i, rebuild=false;
 
         if (!this.silent) {
             YAHOO.log( "Firing "       + this  + ", " + 
@@ -232,60 +275,67 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
 
         // make a copy of the subscribers so that there are
         // no index problems if one subscriber removes another.
-        var subs = this.subscribers.slice(), throwErrors = YAHOO.util.Event.throwErrors;
+        var subs = this.subscribers.slice();
 
         for (i=0; i<len; ++i) {
             var s = subs[i];
             if (!s) {
-                //YAHOO.log('DEBUG rebuilding array');
                 rebuild=true;
             } else {
-                if (!this.silent) {
-YAHOO.log( this.type + "->" + (i+1) + ": " +  s, "info", "Event" );
-                }
 
-                var scope = s.getScope(this.scope);
-
-                if (this.signature == YAHOO.util.CustomEvent.FLAT) {
-                    var param = null;
-                    if (args.length > 0) {
-                        param = args[0];
-                    }
-
-                    try {
-                        ret = s.fn.call(scope, param, s.obj);
-                    } catch(e) {
-                        this.lastError = e;
-                        // errors.push(e);
-YAHOO.log(this + " subscriber exception: " + e, "error", "Event");
-                        if (throwErrors) {
-                            throw e;
-                        }
-                    }
-                } else {
-                    try {
-                        ret = s.fn.call(scope, this.type, args, s.obj);
-                    } catch(ex) {
-                        this.lastError = ex;
-YAHOO.log(this + " subscriber exception: " + ex, "error", "Event");
-                        if (throwErrors) {
-                            throw ex;
-                        }
-                    }
-                }
+                ret = this.notify(s, args);
 
                 if (false === ret) {
                     if (!this.silent) {
-YAHOO.log("Event stopped, sub " + i + " of " + len, "info", "Event");
+                        YAHOO.log("Event stopped, sub " + i + " of " + len, "info", "Event");
                     }
 
                     break;
-                    // return false;
                 }
             }
         }
 
         return (ret !== false);
+    },
+
+    notify: function(s, args) {
+
+        var ret, param=null, scope = s.getScope(this.scope),
+                 throwErrors = YAHOO.util.Event.throwErrors;
+
+        if (!this.silent) {
+            YAHOO.log( this.type + "-> " + s, "info", "Event" );
+        }
+
+        if (this.signature == YAHOO.util.CustomEvent.FLAT) {
+
+            if (args.length > 0) {
+                param = args[0];
+            }
+
+            try {
+                ret = s.fn.call(scope, param, s.obj);
+            } catch(e) {
+                this.lastError = e;
+                // errors.push(e);
+                YAHOO.log(this + " subscriber exception: " + e, "error", "Event");
+                if (throwErrors) {
+                    throw e;
+                }
+            }
+        } else {
+            try {
+                ret = s.fn.call(scope, this.type, args, s.obj);
+            } catch(ex) {
+                this.lastError = ex;
+                YAHOO.log(this + " subscriber exception: " + ex, "error", "Event");
+                if (throwErrors) {
+                    throw ex;
+                }
+            }
+        }
+
+        return ret;
     },
 
     /**
@@ -459,6 +509,7 @@ if (!YAHOO.util.Event) {
          */
         var listeners = [];
 
+
         /**
          * User-defined unload function that will be fired before all events
          * are detached
@@ -468,23 +519,6 @@ if (!YAHOO.util.Event) {
          * @private
          */
         var unloadListeners = [];
-
-        /**
-         * Cache of DOM0 event handlers to work around issues with DOM2 events
-         * in Safari
-         * @property legacyEvents
-         * @static
-         * @private
-         */
-        var legacyEvents = [];
-
-        /**
-         * Listener stack for DOM0 events
-         * @property legacyHandlers
-         * @static
-         * @private
-         */
-        var legacyHandlers = [];
 
         /**
          * The number of times to poll after window.onload.  This number is
@@ -503,14 +537,6 @@ if (!YAHOO.util.Event) {
          * @private
          */
         var onAvailStack = [];
-
-        /**
-         * Lookup table for legacy events
-         * @property legacyMap
-         * @static
-         * @private
-         */
-        var legacyMap = [];
 
         /**
          * Counter for auto id generation
@@ -542,6 +568,7 @@ if (!YAHOO.util.Event) {
         // String constants used by the addFocusListener and removeFocusListener methods
         var _FOCUS = YAHOO.env.ua.ie ? "focusin" : "focus";
         var _BLUR = YAHOO.env.ua.ie ? "focusout" : "blur";      
+
 
         return {
 
@@ -642,6 +669,9 @@ if (!YAHOO.util.Event) {
              */
             OVERRIDE: 6,
 
+
+			CAPTURE: 7,
+
             /**
              * addListener/removeListener can throw errors in unexpected scenarios.
              * These errors are suppressed, the method returns false, and this property
@@ -722,9 +752,10 @@ if (!YAHOO.util.Event) {
              */
             startInterval: function() {
                 if (!this._interval) {
-                    var self = this;
-                    var callback = function() { self._tryPreloadAttach(); };
-                    this._interval = setInterval(callback, this.POLL_INTERVAL);
+                    // var self = this;
+                    // var callback = function() { self._tryPreloadAttach(); };
+                    // this._interval = setInterval(callback, this.POLL_INTERVAL);
+                    this._interval = YAHOO.lang.later(this.POLL_INTERVAL, this, this._tryPreloadAttach, true);
                 }
             },
 
@@ -825,22 +856,9 @@ if (!YAHOO.util.Event) {
              *
              * @static
              */
-            onDOMReady: function(fn, obj, overrideContext) {
-                if (this.DOMReady) {
-                    setTimeout(function() {
-                        var s = window;
-                        if (overrideContext) {
-                            if (overrideContext === true) {
-                                s = obj;
-                            } else {
-                                s = overrideContext;
-                            }
-                        }
-                        fn.call(s, "DOMReady", [], obj);
-                    }, 0);
-                } else {
-                    this.DOMReadyEvent.subscribe(fn, obj, overrideContext);
-                }
+            // onDOMReady: function(fn, obj, overrideContext) {
+            onDOMReady: function() {
+                this.DOMReadyEvent.subscribe.apply(this.DOMReadyEvent, arguments);
             },
 
 
@@ -901,7 +919,7 @@ if (!YAHOO.util.Event) {
                     } else {
                         // defer adding the event until the element is available
                         this.onAvailable(el, function() {
-                           YAHOO.util.Event.on(el, sType, fn, obj, overrideContext);
+                           YAHOO.util.Event._addListener(el, sType, fn, obj, overrideContext, bCapture);
                         });
 
                         return true;
@@ -946,50 +964,19 @@ if (!YAHOO.util.Event) {
                                 obj);
                     };
 
-                var li = [el, sType, fn, wrappedFn, context, obj, overrideContext];
+                var li = [el, sType, fn, wrappedFn, context, obj, overrideContext, bCapture];
                 var index = listeners.length;
                 // cache the listener so we can try to automatically unload
                 listeners[index] = li;
 
-                if (this.useLegacyEvent(el, sType)) {
-                    var legacyIndex = this.getLegacyIndex(el, sType);
-
-                    // Add a new dom0 wrapper if one is not detected for this
-                    // element
-                    if ( legacyIndex == -1 || 
-                                el != legacyEvents[legacyIndex][0] ) {
-
-                        legacyIndex = legacyEvents.length;
-                        legacyMap[el.id + sType] = legacyIndex;
-
-                        // cache the signature for the DOM0 event, and 
-                        // include the existing handler for the event, if any
-                        legacyEvents[legacyIndex] = 
-                            [el, sType, el["on" + sType]];
-                        legacyHandlers[legacyIndex] = [];
-
-                        el["on" + sType] = 
-                            function(e) {
-                                YAHOO.util.Event.fireLegacyEvent(
-                                    YAHOO.util.Event.getEvent(e), legacyIndex);
-                            };
-                    }
-
-                    // add a reference to the wrapped listener to our custom
-                    // stack of events
-                    //legacyHandlers[legacyIndex].push(index);
-                    legacyHandlers[legacyIndex].push(li);
-
-                } else {
-                    try {
-                        this._simpleAdd(el, sType, wrappedFn, bCapture);
-                    } catch(ex) {
-                        // handle an error trying to attach an event.  If it fails
-                        // we need to clean up the cache
-                        this.lastError = ex;
-                        this.removeListener(el, sType, fn);
-                        return false;
-                    }
+                try {
+                    this._simpleAdd(el, sType, wrappedFn, bCapture);
+                } catch(ex) {
+                    // handle an error trying to attach an event.  If it fails
+                    // we need to clean up the cache
+                    this.lastError = ex;
+                    this.removeListener(el, sType, fn);
+                    return false;
                 }
 
                 return true;
@@ -1053,7 +1040,7 @@ if (!YAHOO.util.Event) {
             /**
              * Removes a focus event listener
              *
-             * @method removeListener
+             * @method removeFocusListener
              *
              * @param {String|HTMLElement|Array|NodeList} el An id, an element 
              *  reference, or a collection of ids and/or elements to remove
@@ -1098,7 +1085,7 @@ if (!YAHOO.util.Event) {
             /**
              * Removes a blur event listener
              *
-             * @method removeListener
+             * @method removeBlurListener
              *
              * @param {String|HTMLElement|Array|NodeList} el An id, an element 
              *  reference, or a collection of ids and/or elements to remove
@@ -1116,68 +1103,6 @@ if (!YAHOO.util.Event) {
             
             },
 
-            /**
-             * When using legacy events, the handler is routed to this object
-             * so we can fire our custom listener stack.
-             * @method fireLegacyEvent
-             * @static
-             * @private
-             */
-            fireLegacyEvent: function(e, legacyIndex) {
-                // this.logger.debug("fireLegacyEvent " + legacyIndex);
-                var ok=true, le, lh, li, context, ret;
-                
-                lh = legacyHandlers[legacyIndex].slice();
-                for (var i=0, len=lh.length; i<len; ++i) {
-                // for (var i in lh.length) {
-                    li = lh[i];
-                    if ( li && li[this.WFN] ) {
-                        context = li[this.ADJ_SCOPE];
-                        ret = li[this.WFN].call(context, e);
-                        ok = (ok && ret);
-                    }
-                }
-
-                // Fire the original handler if we replaced one.  We fire this
-                // after the other events to keep stopPropagation/preventDefault
-                // that happened in the DOM0 handler from touching our DOM2
-                // substitute
-                le = legacyEvents[legacyIndex];
-                if (le && le[2]) {
-                    le[2](e);
-                }
-                
-                return ok;
-            },
-
-            /**
-             * Returns the legacy event index that matches the supplied 
-             * signature
-             * @method getLegacyIndex
-             * @static
-             * @private
-             */
-            getLegacyIndex: function(el, sType) {
-                var key = this.generateId(el) + sType;
-                if (typeof legacyMap[key] == "undefined") { 
-                    return -1;
-                } else {
-                    return legacyMap[key];
-                }
-            },
-
-            /**
-             * Logic that determines when we should automatically use legacy
-             * events instead of DOM2 events.  Currently this is limited to old
-             * Safari browsers with a broken preventDefault
-             * @method useLegacyEvent
-             * @static
-             * @private
-             */
-            useLegacyEvent: function(el, sType) {
-return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType));
-            },
-                    
             /**
              * Removes an event listener
              *
@@ -1240,7 +1165,7 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                 var index = arguments[3];
   
                 if ("undefined" === typeof index) {
-                    index = this._getCacheIndex(el, sType, fn);
+                    index = this._getCacheIndex(listeners, el, sType, fn);
                 }
 
                 if (index >= 0) {
@@ -1254,31 +1179,13 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
 
                 // this.logger.debug("Removing handler: " + el + ", " + sType);
 
-                if (this.useLegacyEvent(el, sType)) {
-                    var legacyIndex = this.getLegacyIndex(el, sType);
-                    var llist = legacyHandlers[legacyIndex];
-                    if (llist) {
-                        for (i=0, len=llist.length; i<len; ++i) {
-                        // for (i in llist.length) {
-                            li = llist[i];
-                            if (li && 
-                                li[this.EL] == el && 
-                                li[this.TYPE] == sType && 
-                                li[this.FN] == fn) {
-                                    llist.splice(i, 1);
-                                    // llist[i]=null;
-                                    break;
-                            }
-                        }
-                    }
+				var bCapture = cacheItem[this.CAPTURE] === true ? true : false;
 
-                } else {
-                    try {
-                        this._simpleRemove(el, sType, cacheItem[this.WFN], false);
-                    } catch(ex) {
-                        this.lastError = ex;
-                        return false;
-                    }
+                try {
+                    this._simpleRemove(el, sType, cacheItem[this.WFN], bCapture);
+                } catch(ex) {
+                    this.lastError = ex;
+                    return false;
                 }
 
                 // removed the wrapped handler
@@ -1514,9 +1421,9 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
              * @static
              * @private
              */
-            _getCacheIndex: function(el, sType, fn) {
-                for (var i=0, l=listeners.length; i<l; i=i+1) {
-                    var li = listeners[i];
+            _getCacheIndex: function(a, el, sType, fn) {
+                for (var i=0, l=a.length; i<l; i=i+1) {
+                    var li = a[i];
                     if ( li                 && 
                          li[this.FN] == fn  && 
                          li[this.EL] == el  && 
@@ -1611,7 +1518,7 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
              * Custom event the fires when the dom is initially usable
              * @event DOMReadyEvent
              */
-            DOMReadyEvent: new YAHOO.util.CustomEvent("DOMReady", this),
+            DOMReadyEvent: new YAHOO.util.CustomEvent("DOMReady", YAHOO, 0, 0, 1),
 
             /**
              * hook up any deferred listeners
@@ -1670,7 +1577,8 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                 if (onAvailStack.length === 0) {
                     retryCount = 0;
                     if (this._interval) {
-                        clearInterval(this._interval);
+                        // clearInterval(this._interval);
+                        this._interval.cancel();
                         this._interval = null;
                     } 
                     return;
@@ -1761,7 +1669,8 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                     this.startInterval();
                 } else {
                     if (this._interval) {
-                        clearInterval(this._interval);
+                        // clearInterval(this._interval);
+                        this._interval.cancel();
                         this._interval = null;
                     }
                 }
@@ -1884,8 +1793,6 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                 unloadListeners = null;
 
                 // Remove listeners to handle IE memory leaks
-                //if (YAHOO.env.ua.ie && listeners && listeners.length > 0) {
-                
                 // 2.5.0 listeners are removed for all browsers again.  FireFox preserves
                 // at least some listeners between page refreshes, potentially causing
                 // errors during page load (mouseover listeners firing before they
@@ -1899,8 +1806,6 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
                     }
                     l=null;
                 }
-
-                legacyEvents = null;
 
                 EU._simpleRemove(window, "unload", EU._unload);
 
@@ -1952,9 +1857,7 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
              * @static
              * @deprecated still here for backwards compatibility
              */
-            regCE: function() {
-                // does nothing
-            },
+            regCE: function() {},
 
             /**
              * Adds a DOM event directly without the caching, cleanup, context adj, etc
@@ -2036,36 +1939,43 @@ return (this.webkit && this.webkit < 419 && ("click"==sType || "dblclick"==sType
          */     
         EU.onBlur = EU.addBlurListener;
 
-
-/*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller */
+/*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller/Diego Perini */
 
         // Internet Explorer: use the readyState of a defered script.
         // This isolates what appears to be a safe moment to manipulate
         // the DOM prior to when the document's readyState suggests
         // it is safe to do so.
         if (EU.isIE) {
+            if (window !== window.top) {
+                document.onreadystatechange = function() {
+                    if (document.readyState == 'complete') {
+                        document.onreadystatechange = null;
+                        EU._ready();
+                    }
+                };
+            } else {
 
-            // Process onAvailable/onContentReady items when the 
-            // DOM is ready.
-            YAHOO.util.Event.onDOMReady(
-                    YAHOO.util.Event._tryPreloadAttach,
-                    YAHOO.util.Event, true);
-            
-            var n = document.createElement('p');  
+                // Process onAvailable/onContentReady items when the 
+                // DOM is ready.
+                YAHOO.util.Event.onDOMReady(
+                        YAHOO.util.Event._tryPreloadAttach,
+                        YAHOO.util.Event, true);
+                
+                var n = document.createElement('p');  
 
-            EU._dri = setInterval(function() {
-                try {
-                    // throws an error if doc is not ready
-                    n.doScroll('left');
-                    clearInterval(EU._dri);
-                    EU._dri = null;
-                    EU._ready();
-                    n = null;
-                } catch (ex) { 
-                }
-            }, EU.POLL_INTERVAL); 
+                EU._dri = setInterval(function() {
+                    try {
+                        // throws an error if doc is not ready
+                        n.doScroll('left');
+                        clearInterval(EU._dri);
+                        EU._dri = null;
+                        EU._ready();
+                        n = null;
+                    } catch (ex) { 
+                    }
+                }, EU.POLL_INTERVAL); 
+            }
 
-        
         // The document's readyState in Safari currently will
         // change to loaded/complete before images are loaded.
         } else if (EU.webkit && EU.webkit < 525) {
@@ -2220,6 +2130,13 @@ YAHOO.util.EventProvider.prototype = {
      *      This is false by default.
      *    </li>
      *    <li>
+     *      fireOnce: if true, the custom event will only notify subscribers
+     *      once regardless of the number of times the event is fired.  In
+     *      addition, new subscribers will be executed immediately if the
+     *      event has already fired.
+     *      This is false by default.
+     *    </li>
+     *    <li>
      *      onSubscribeCallback: specifies a callback to execute when the
      *      event has a new subscriber.  This will fire immediately for
      *      each queued subscriber if any exist prior to the creation of
@@ -2233,18 +2150,16 @@ YAHOO.util.EventProvider.prototype = {
     createEvent: function(p_type, p_config) {
 
         this.__yui_events = this.__yui_events || {};
-        var opts = p_config || {};
-        var events = this.__yui_events;
+        var opts = p_config || {},
+            events = this.__yui_events, ce;
 
         if (events[p_type]) {
 YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
         } else {
 
-            var scope  = opts.scope  || this;
-            var silent = (opts.silent);
+            ce = new YAHOO.util.CustomEvent(p_type, opts.scope || this, opts.silent,
+                         YAHOO.util.CustomEvent.FLAT, opts.fireOnce);
 
-            var ce = new YAHOO.util.CustomEvent(p_type, scope, silent,
-                    YAHOO.util.CustomEvent.FLAT);
             events[p_type] = ce;
 
             if (opts.onSubscribeCallback) {
@@ -2281,7 +2196,7 @@ YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
      * @return {boolean} the return value from CustomEvent.fire
      *                   
      */
-    fireEvent: function(p_type, arg1, arg2, etc) {
+    fireEvent: function(p_type) {
 
         this.__yui_events = this.__yui_events || {};
         var ce = this.__yui_events[p_type];
