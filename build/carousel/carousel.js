@@ -516,6 +516,32 @@
     }
 
     /**
+     * Compute and return the position of a Carousel item based on its
+     * position.
+     *
+     * @method getCarouselItemPosition
+     * @param position {Number} The position of the Carousel item.
+     * @private
+     */
+    function getCarouselItemPosition(pos) {
+        var carousel = this, isVertical, styles = {}, sz, rsz;
+
+        isVertical = carousel.get("isVertical");
+        sz  = getCarouselItemSize.call(carousel,
+                isVertical ? "height" : "width");
+        rsz = getRevealSize.call(carousel);
+        if (isVertical) {
+            styles.left = 0;
+            styles.top  = ((pos * sz) + rsz) + "px";
+        } else {
+            styles.top  = 0;
+            styles.left = ((pos * sz) + rsz) + "px";
+        }
+
+        return styles;
+    }
+
+    /**
      * Return the scrolling offset size given the number of elements to
      * scroll.
      *
@@ -2783,7 +2809,17 @@
          * @protected
          */
         _createCarouselItem: function (obj) {
-            return createElement(this.get("carouselItemEl"), {
+            var attr, carousel = this,
+                styles = getCarouselItemPosition.call(carousel, obj.pos);
+
+            obj.styles = obj.styles || {};
+            for (attr in styles) {
+                if (styles.hasOwnProperty(attr)) {
+                    obj.styles[attr] = styles[attr];
+                }
+            }
+
+            return createElement(carousel.get("carouselItemEl"), {
                     className : obj.className,
                     styles    : obj.styles,
                     content   : obj.content,
@@ -3249,27 +3285,12 @@
         _refreshUi: function () {
             var carousel = this, i, isVertical, item, n, rsz, sz;
 
-            isVertical = carousel.get("isVertical");
-            sz  = getCarouselItemSize.call(carousel,
-                    isVertical ? "height" : "width");
-            rsz = getRevealSize.call(carousel);
-            for (i = 0, n = carousel._itemsTable.numItems; i < n; i++) {
-                if (JS.isUndefined(carousel._itemsTable.items[i].pos)) {
-                    item = carousel._itemsTable.items[i].id;
-                    carousel._itemsTable.items[i].pos = (i * sz) + rsz;
-                    if (isVertical) {
-                        Dom.setStyle(item, "left", "0");
-                        Dom.setStyle(item, "top",  ((i*sz)+rsz) + "px");
-                    } else {
-                        Dom.setStyle(item, "left", ((i*sz)+rsz) + "px");
-                        Dom.setStyle(item, "top",  "0");
-                    }
-                }
-            }
-
             if (carousel._itemsTable.numItems < 1) {
                 return;
             }
+
+            sz  = getCarouselItemSize.call(carousel,
+                    isVertical ? "height" : "width");
             // This fixes the widget to auto-adjust height/width for absolute
             // positioned children.
             item = carousel._itemsTable.items[0].id;
@@ -3723,34 +3744,46 @@
          * @protected
          */
         _syncUiForItemAdd: function (obj) {
-            var carousel   = this,
+            var attr,
+                carousel   = this,
                 carouselEl = carousel._carouselEl,
                 el,
                 item,
                 itemsTable = carousel._itemsTable,
                 oel,
                 pos,
-                sibling;
+                sibling,
+                styles;
 
-            pos  = JS.isUndefined(obj.pos) ? obj.newPos || itemsTable.numItems - 1 : obj.pos;
+            pos  = JS.isUndefined(obj.pos) ?
+                   obj.newPos || itemsTable.numItems - 1 : obj.pos;
 
             if (!JS.isUndefined(itemsTable.items[pos])) {
                 item = itemsTable.items[pos];
+                styles = getCarouselItemPosition.call(carousel, pos);
+                item.styles = item.styles || {};
+                for (attr in styles) {
+                    if (styles.hasOwnProperty(attr)) {
+                        item.styles[attr] = styles[attr];
+                    }
+                }
                 if (item) {
-                    if(item.id) {
+                    if (item.id) {
                         oel  = Dom.get(item.id);
-                        if(item.styles) {
+                        if (item.styles) {
                             setStyles(oel, item.styles);
                         }
                     }
                 }
             }
+
             if (!oel) {
                 el = carousel._createCarouselItem({
                         className : item.className,
                         styles    : item.styles,
                         content   : item.item,
-                        id        : item.id
+                        id        : item.id,
+                        pos       : pos
                 });
                 if (JS.isUndefined(obj.pos)) {
                     if (!JS.isUndefined(itemsTable.loading[pos])) {
@@ -3817,7 +3850,8 @@
                 className : item.className,
                 styles    : item.styles,
                 content   : item.item,
-                id        : item.id
+                id        : item.id,
+                pos       : pos
             });
 
             if(el && oel) {
@@ -3892,7 +3926,8 @@
                     el = carousel._createCarouselItem({
                             className : carousel.CLASSES.ITEM_LOADING,
                             content   : carousel.STRINGS.ITEM_LOADING_CONTENT,
-                            id        : Dom.generateId()
+                            id        : Dom.generateId(),
+                            pos       : i
                     });
                     if (el) {
                         if (sibling) {
@@ -4281,5 +4316,6 @@
 ;;  indent-tabs-mode: nil **
 ;;  End: **
 */
+YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
