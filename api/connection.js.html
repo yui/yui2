@@ -1195,6 +1195,7 @@
 		    <span class="nx">io</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">frameId</span><span class="o">),</span>
 		    <span class="nx">oConn</span> <span class="o">=</span> <span class="k">this</span><span class="o">,</span>
 			<span class="nx">args</span> <span class="o">=</span> <span class="o">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">)?</span><span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">:</span><span class="kc">null</span><span class="o">,</span>
+			<span class="nx">ie8</span> <span class="o">=</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">documentMode</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">documentMode</span> <span class="o">===</span> <span class="m">8</span><span class="o">))?</span><span class="kc">true</span><span class="o">:</span><span class="kc">false</span><span class="o">,</span>
             <span class="nx">oElements</span><span class="o">,</span><span class="nx">i</span><span class="o">,</span><span class="nx">prop</span><span class="o">,</span><span class="nx">obj</span><span class="o">;</span>
 
 		<span class="c">// Track original HTML form attribute values.</span>
@@ -1211,7 +1212,7 @@
 		<span class="k">this</span><span class="o">.</span><span class="nx">_formNode</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;method&#39;</span><span class="o">,</span> <span class="s1">&#39;POST&#39;</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">_formNode</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;target&#39;</span><span class="o">,</span> <span class="nx">frameId</span><span class="o">);</span>
 
-		<span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">){</span>
+		<span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">ie8</span><span class="o">){</span>
 			<span class="c">// IE does not respect property enctype for HTML forms.</span>
 <span class="c"></span>			<span class="c">// Instead it uses the property - &quot;encoding&quot;.</span>
 <span class="c"></span>			<span class="k">this</span><span class="o">.</span><span class="nx">_formNode</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;encoding&#39;</span><span class="o">,</span> <span class="nx">uploadEncoding</span><span class="o">);</span>

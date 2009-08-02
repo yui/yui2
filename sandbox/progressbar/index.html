@@ -12,37 +12,49 @@
 <!-- js -->
 <script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="../../build/animation/animation-min.js"></script>
-<script type="text/javascript" src="../../build/element/element.js"></script>
+<script type="text/javascript" src="../../build/element/element-min.js"></script>
+
 
 <script type="text/javascript" src="../../build/progressbar/progressbar-debug.js"></script>
 
 <style type="text/css">
 
+/* This styles are to nullify the built in styles for the SAM skin */
+
+.yui-skin-sam .yui-pb  {
+	border-width:0;
+	background-color:transparent;
+	background-image:none;
+}
+.yui-skin-sam .yui-pb .yui-pb-bar {
+	background-color:transparent;
+	background-image:none;
+}
+.yui-skin-sam .yui-pb .yui-pb-mask {
+	border-width:0;
+	margin:0;
+}
 
 /* Here I am using the className of each bar to set the masks and/or bar images for each one separately */
 
 .plain.yui-pb {
 	height:25px;
 }
+
 .plain .yui-pb-mask div {
-	/* if you don't provide a mask, the bar will be a completely rectangular thing  with no borders */
 	background-image: url(mask.gif);
 }
 
-.plain .yui-pb-bar {
-	/* if you omit the image of the bar, it will be shown as a flat thing of the color given in attribute 'barColor' */
+.yui-skin-sam .plain .yui-pb-bar {
 	background-image:url(bar.gif);
 }
-.plain.yui-pb .yui-pb-anim {
-	/* if you omit the image of the bar, it will be shown as a flat thing of the color given in attribute 'barColor' */
-	background-image:url(animbar.gif);
-}
-
 
 .grid .yui-pb-mask div  {
 	background-image: url(grid.gif);
 }
-
+.yui-skin-sam .grid .yui-pb-bar {
+	background-color:blue;
+}
 /* Important:  there is no space in between .ruler and .yui-pb but there is one in all the other selectors */
 .ruler.yui-pb {
 	width:401px;
@@ -53,7 +65,7 @@
 	background-image: url(ruler.gif);
 }
 
-.ruler .yui-pb-bar {
+.yui-skin-sam .ruler .yui-pb-bar {
 	background-image: url(gradient.png);
 }
 
@@ -77,7 +89,7 @@
 	background-image: url(coppermaskV.gif);
 }
 
-.copper .yui-pb-bar {
+.yui-skin-sam .copper .yui-pb-bar {
 	background-image: url(copperbarV.gif);
 	margin: 32px 0;
 	height:34px;
@@ -85,7 +97,7 @@
 }
 
 #pbthin  {
-	padding:.5em;
+	padding:0.5em;
 	background-color: rgb(192,192,192);
 }
 
@@ -99,7 +111,7 @@
 	background-image: url(thinmask.gif);
 }
 
-.thin .yui-pb-bar {
+.yui-skin-sam .thin .yui-pb-bar {
 	background-image: url(thinbar.gif);
 	margin: 0 10px;
 }
@@ -109,7 +121,7 @@
 	height:20px;
 }
 
-.rankings .yui-pb-bar  {
+.yui-skin-sam .rankings .yui-pb-bar  {
 	background-image: url(star.png);
 }
 
@@ -164,12 +176,12 @@ pre, code {
 </style>
 </head>
 <body class="yui-skin-sam">
-	<div style="position:fixed;left:0;top:0;border:thin solid silver">
+	<div style="position:fixed;left:0;top:0;border:thin solid silver;">
 		You can use this box<br/>
 		to change the value<br/>
 		of the bar.<br/>
 		Range: 0 - 100<br/>
-		<input id="newValue" value="50" maxlength="3" size="3" /><button id="setValue">Set</button>
+		<input type="text" id="newValue" value="50" maxlength="3" size="3" /><button id="setValue">Set</button>
 	</div>
 
 	<div id="doc">
@@ -234,7 +246,7 @@ pre, code {
 			<table width="100%" class="rankings"><tr><th>Song</th><th>Artist</th><th>Ranking</th></tr>
 			<tr><td>Carolan's Frolic</td><td>Richard Searles</td><td id="song123"></td></tr>
 			<tr><td>Jeux d'enfants</td><td>Cirque Du Soleil</td><td id="song456"></td></tr>
-			<tr><td>Foliada dos Aires da Terra</td><td>Carlos Núñez</td><td id="song789"></td></tr>
+			<tr><td>Foliada dos Aires da Terra</td><td>Carlos N&uacute;&ntilde;ez</td><td id="song789"></td></tr>
 			</table>
 			<p>The code for the first cell is:</p>
 			<textarea name="code" class="JScript" cols="60" rows="1">

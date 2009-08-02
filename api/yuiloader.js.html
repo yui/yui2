@@ -252,6 +252,18 @@
             <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">]</span>
         <span class="o">},</span>
 
+        <span class="s1">&#39;event-delegate&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;event-delegate/event-delegate-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;event-mouseenter&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;event-mouseenter/event-mouseenter-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
         <span class="s1">&#39;fonts&#39;</span><span class="o">:</span> <span class="o">{</span>
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
             <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;fonts/fonts-min.css&#39;</span>
@@ -389,11 +401,36 @@
             <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
+        <span class="s1">&#39;storage&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;storage/storage-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;cookie&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;swfstore&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
          <span class="s1">&#39;stylesheet&#39;</span><span class="o">:</span> <span class="o">{</span>
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
             <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;stylesheet/stylesheet-min.js&#39;</span><span class="o">,</span>
             <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">]</span>
          <span class="o">},</span>
+
+        <span class="s1">&#39;swf&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;swf/swf-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;swfdetect&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;swfdetect/swfdetect-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;swfstore&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;swfstore/swfstore-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">,</span> <span class="s1">&#39;cookie&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
 
         <span class="s1">&#39;tabview&#39;</span><span class="o">:</span> <span class="o">{</span>
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>

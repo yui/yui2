@@ -75,6 +75,12 @@
                 key: "disabled",
                 value: false,
                 suppressEvent: true
+            },
+
+            "XY_OFFSET": {
+                key: "xyoffset",
+                value: [0, 25],
+                suppressEvent: true
             }
         },
 
@@ -371,6 +377,19 @@
             });
 
             /**
+            * Specifies the XY offset from the mouse position, where the tooltip should be displayed, specified
+            * as a 2 element array (e.g. [10, 20]); 
+            *
+            * @config xyoffset
+            * @type Array
+            * @default [0, 25]
+            */
+            this.cfg.addProperty(DEFAULT_CONFIG.XY_OFFSET.key, {
+                value: DEFAULT_CONFIG.XY_OFFSET.value.concat(),
+                supressEvent: DEFAULT_CONFIG.XY_OFFSET.suppressEvent 
+            });
+
+            /**
             * Specifies the element or elements that the Tooltip should be 
             * anchored to on mouseover.
             * @config context
@@ -389,7 +408,7 @@
             * before it is made visible.  The original value will be 
             * restored when the Tooltip is hidden. This ensures the Tooltip is 
             * rendered at a usable width.  For more information see 
-            * SourceForge bug #1685496 and SourceForge 
+            * YUILibrary bug #1685496 and YUILibrary 
             * bug #1735423.
             * @config width
             * @type String
@@ -618,7 +637,9 @@
         */
         doShow: function (e, context) {
 
-            var yOffset = 25,
+            var offset = this.cfg.getProperty("xyoffset"),
+                xOffset = offset[0],
+                yOffset = offset[1],
                 me = this;
 
             if (UA.opera && context.tagName && 
@@ -638,7 +659,7 @@
                 }
 
                 me.logger.log("Show tooltip", "time");
-                me.moveTo(me.pageX, me.pageY + yOffset);
+                me.moveTo(me.pageX + xOffset, me.pageY + yOffset);
 
                 if (me.cfg.getProperty("preventoverlap")) {
                     me.preventOverlap(me.pageX, me.pageY);
