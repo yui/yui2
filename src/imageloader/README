@@ -1,7 +1,10 @@
 ImageLoader - Release Notes
 
 Development Master
+
+2.8.0
    * @requires for module
+	 * No functional changes
 
 2.7.0
    * No Change
