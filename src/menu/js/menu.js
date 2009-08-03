@@ -32,7 +32,6 @@
 		_DYNAMIC = "dynamic",
 		_STATIC = "static",
 		_DYNAMIC_STATIC = _DYNAMIC + "," + _STATIC,
-		_WINDOWS = "windows",
 		_URL = "url",
 		_HASH = "#",
 		_TARGET = "target",
@@ -160,6 +159,10 @@ var Dom = YAHOO.util.Dom,
     UA = YAHOO.env.ua,
     
     m_oShadowTemplate,
+
+	bFocusListenerInitialized = false,
+
+	oFocusedElement,
 
 	EVENT_TYPES = [
     
@@ -301,6 +304,13 @@ var Dom = YAHOO.util.Dom,
 		value: false, 
 		validator: Lang.isBoolean
 	};
+
+
+function onDocFocus(event) {
+
+	oFocusedElement = Event.getTarget(event);
+
+}
 
 
 
@@ -734,15 +744,21 @@ init: function (p_oElement, p_oConfig) {
         this.beforeRenderEvent.subscribe(this._onBeforeRender);
         this.renderEvent.subscribe(this._onRender);
         this.beforeShowEvent.subscribe(this._onBeforeShow);
-        this.hideEvent.subscribe(this._onHide);
+		this.hideEvent.subscribe(this._onHide);
         this.showEvent.subscribe(this._onShow);
-        this.beforeHideEvent.subscribe(this._onBeforeHide);
+		this.beforeHideEvent.subscribe(this._onBeforeHide);
         this.mouseOverEvent.subscribe(this._onMouseOver);
         this.mouseOutEvent.subscribe(this._onMouseOut);
         this.clickEvent.subscribe(this._onClick);
         this.keyDownEvent.subscribe(this._onKeyDown);
         this.keyPressEvent.subscribe(this._onKeyPress);
         this.blurEvent.subscribe(this._onBlur);
+
+
+		if (!bFocusListenerInitialized) {
+			Event.onFocus(document, onDocFocus);
+			bFocusListenerInitialized = true;
+		}
 
 
 		//	Fixes an issue in Firefox 2 and Webkit where Dom's "getX" and "getY" 
@@ -765,7 +781,7 @@ init: function (p_oElement, p_oConfig) {
         // Register the Menu instance with the MenuManager
 
         MenuManager.addMenu(this);
-        
+
 
         this.initEvent.fire(Menu);
 
@@ -1991,42 +2007,20 @@ _onClick: function (p_sType, p_aArgs) {
 
 
 	var hide = function () {
-
-		/*
-			There is an inconsistency between Firefox for Mac OS X and Firefox Windows 
-			regarding the triggering of the display of the browser's context menu and the 
-			subsequent firing of the "click" event. In Firefox for Windows, when the user 
-			triggers the display of the browser's context menu the "click" event also fires 
-			for the document object, even though the "click" event did not fire for the 
-			element that was the original target of the "contextmenu" event. This is unique 
-			to Firefox on Windows. For all other A-Grade browsers, including Firefox for 
-			Mac OS X, the "click" event doesn't fire for the document object. 
-
-			This bug in Firefox for Windows affects Menu as Menu instances listen for 
-			events at the document level and have an internal "click" event handler they 
-			use to hide themselves when clicked. As a result, in Firefox for Windows a 
-			Menu will hide when the user right clicks on a MenuItem to raise the browser's 
-			default context menu, because its internal "click" event handler ends up 
-			getting called.  The following line fixes this bug.
-		*/
-
-		if (!((UA.gecko && this.platform == _WINDOWS) && oEvent.button > 0)) {
 		
-			oRoot = this.getRoot();
+		oRoot = this.getRoot();
 
-			if (oRoot instanceof YAHOO.widget.MenuBar || 
-				oRoot.cfg.getProperty(_POSITION) == _STATIC) {
+		if (oRoot instanceof YAHOO.widget.MenuBar || 
+			oRoot.cfg.getProperty(_POSITION) == _STATIC) {
 
-				oRoot.clearActiveItem();
+			oRoot.clearActiveItem();
 
-			}
-			else {
+		}
+		else {
 
-				oRoot.hide();
-			
-			}
+			oRoot.hide();
 		
-		}	
+		}
 	
 	};
 
@@ -2148,7 +2142,8 @@ _onKeyDown: function (p_sType, p_aArgs) {
         nItems,
         nNextItemOffsetTop,
         nScrollTarget,
-        oParentMenu;
+        oParentMenu,
+		oFocusedEl;
 
 
 	if (this._useHideDelay) {
@@ -2413,6 +2408,22 @@ _onKeyDown: function (p_sType, p_aArgs) {
                 this.parent.focus();
             
             }
+			else {
+				// Focus the element that previously had focus
+
+				oFocusedEl = this._focusedElement;
+
+				if (oFocusedEl && oFocusedEl.focus) {
+
+					try {
+						oFocusedEl.focus();
+					}
+					catch(ex) {
+					}
+
+				}
+				
+			}
 
         }
         else if (this.activeItem) {
@@ -3321,6 +3332,22 @@ _onShow: function (p_sType, p_aArgs) {
 
     }
 
+
+	/*
+		Dynamically positioned, root Menus focus themselves when visible, and 
+		will then, when hidden, restore focus to the UI control that had focus 
+		before the Menu was made visible.
+	*/ 
+
+	if (this === this.getRoot() && this.cfg.getProperty(_POSITION) === _DYNAMIC) {
+
+		this._focusedElement = oFocusedElement;
+		
+		this.focus();
+	
+	}
+
+
 },
 
 
@@ -3411,6 +3438,7 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         case _MONITOR_RESIZE:
         case _SHADOW:
         case _PREVENT_CONTEXT_OVERLAP:
+		case _KEEP_OPEN:
 
             p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                 
@@ -3477,7 +3505,9 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 
 			preventcontextoverlap: oParentCfg.getProperty(_PREVENT_CONTEXT_OVERLAP),
             
-            monitorresize: oParentCfg.getProperty(_MONITOR_RESIZE)
+            monitorresize: oParentCfg.getProperty(_MONITOR_RESIZE),
+
+			keepopen: oParentCfg.getProperty(_KEEP_OPEN)
 
         },
         
@@ -5001,6 +5031,29 @@ hasFocus: function () {
 },
 
 
+_doItemSubmenuSubscribe: function (p_sType, p_aArgs, p_oObject) {
+
+    var oItem = p_aArgs[0],
+        oSubmenu = oItem.cfg.getProperty(_SUBMENU);
+
+    if (oSubmenu) {
+        oSubmenu.subscribe.apply(oSubmenu, p_oObject);
+    }
+
+},
+
+
+_doSubmenuSubscribe: function (p_sType, p_aArgs, p_oObject) { 
+
+    var oSubmenu = this.cfg.getProperty(_SUBMENU);
+    
+    if (oSubmenu) {
+        oSubmenu.subscribe.apply(oSubmenu, p_oObject);
+    }
+
+},
+
+
 /**
 * Adds the specified CustomEvent subscriber to the menu and each of 
 * its submenus.
@@ -5014,35 +5067,12 @@ hasFocus: function () {
 */
 subscribe: function () {
 
-    function onItemAdded(p_sType, p_aArgs, p_oObject) {
-
-        var oItem = p_aArgs[0],
-            oSubmenu = oItem.cfg.getProperty(_SUBMENU);
-
-        if (oSubmenu) {
-
-            oSubmenu.subscribe.apply(oSubmenu, p_oObject);
-
-        }
-    
-    }
-
-
-    function onSubmenuAdded(p_sType, p_aArgs, p_oObject) { 
-    
-        var oSubmenu = this.cfg.getProperty(_SUBMENU);
-        
-        if (oSubmenu) {
-
-            oSubmenu.subscribe.apply(oSubmenu, p_oObject);
-        
-        }
-    
-    }
-
-
+	//	Subscribe to the event for this Menu instance
     Menu.superclass.subscribe.apply(this, arguments);
-    Menu.superclass.subscribe.call(this, _ITEM_ADDED, onItemAdded, arguments);
+
+	//	Subscribe to the "itemAdded" event so that all future submenus
+	//	also subscribe to this event
+    Menu.superclass.subscribe.call(this, _ITEM_ADDED, this._doItemSubmenuSubscribe, arguments);
 
 
     var aItems = this.getItems(),
@@ -5063,18 +5093,60 @@ subscribe: function () {
             do {
 
                 oItem = aItems[i];
-                
                 oSubmenu = oItem.cfg.getProperty(_SUBMENU);
                 
                 if (oSubmenu) {
-                
                     oSubmenu.subscribe.apply(oSubmenu, arguments);
-                
                 }
                 else {
+                    oItem.cfg.subscribeToConfigEvent(_SUBMENU, this._doSubmenuSubscribe, arguments);
+                }
+
+            }
+            while (i--);
+        
+        }
+
+    }
+
+},
+
+
+unsubscribe: function () {
+
+	//	Remove the event for this Menu instance
+    Menu.superclass.unsubscribe.apply(this, arguments);
+
+	//	Remove the "itemAdded" event so that all future submenus don't have 
+	//	the event handler
+    Menu.superclass.unsubscribe.call(this, _ITEM_ADDED, this._doItemSubmenuSubscribe, arguments);
+
+
+    var aItems = this.getItems(),
+        nItems,
+        oItem,
+        oSubmenu,
+        i;
+        
+
+    if (aItems) {
+
+        nItems = aItems.length;
+        
+        if (nItems > 0) {
+        
+            i = nItems - 1;
+            
+            do {
+
+                oItem = aItems[i];
+                oSubmenu = oItem.cfg.getProperty(_SUBMENU);
                 
-                    oItem.cfg.subscribeToConfigEvent(_SUBMENU, onSubmenuAdded, arguments);
-                
+                if (oSubmenu) {
+                    oSubmenu.unsubscribe.apply(oSubmenu, arguments);
+                }
+                else {
+                    oItem.cfg.unsubscribeFromConfigEvent(_SUBMENU, this._doSubmenuSubscribe, arguments);
                 }
 
             }

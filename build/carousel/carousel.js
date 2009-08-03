@@ -501,6 +501,47 @@
     }
 
     /**
+     * Return the size of a part of the item (reveal).
+     *
+     * @method getRevealSize
+     * @private
+     */
+    function getRevealSize() {
+        var carousel = this, isVertical, sz;
+
+        isVertical = carousel.get("isVertical");
+        sz  = getCarouselItemSize.call(carousel,
+                isVertical ? "height" : "width");
+        return (sz * carousel.get("revealAmount") / 100);
+    }
+
+    /**
+     * Compute and return the position of a Carousel item based on its
+     * position.
+     *
+     * @method getCarouselItemPosition
+     * @param position {Number} The position of the Carousel item.
+     * @private
+     */
+    function getCarouselItemPosition(pos) {
+        var carousel = this, isVertical, styles = {}, sz, rsz;
+
+        isVertical = carousel.get("isVertical");
+        sz  = getCarouselItemSize.call(carousel,
+                isVertical ? "height" : "width");
+        rsz = getRevealSize.call(carousel);
+        if (isVertical) {
+            styles.left = 0;
+            styles.top  = ((pos * sz) + rsz) + "px";
+        } else {
+            styles.top  = 0;
+            styles.left = ((pos * sz) + rsz) + "px";
+        }
+
+        return styles;
+    }
+
+    /**
      * Return the scrolling offset size given the number of elements to
      * scroll.
      *
@@ -1890,12 +1931,14 @@
             carousel.on(pageChangeEvent, syncPagerUi, carousel);
 
             carousel.on(renderEvent, function (ev) {
-                if(carousel.get("selectedItem") === null){
+                if (carousel.get("selectedItem") === null ||
+                    carousel.get("selectedItem") < 0) { // in either case
                     carousel.set("selectedItem", carousel.get("firstVisible"));
                 }
                 syncNavigation.call(carousel, ev);
                 syncPagerUi.call(carousel, ev);
                 carousel._setClipContainerSize();
+                carousel.show();
             });
 
             carousel.on("selectedItemChange", function (ev) {
@@ -2279,7 +2322,7 @@
                 carousel.appendChild(carousel._clipEl);
             }
 
-            if(rows) {
+            if (rows) {
                 Dom.addClass(carousel._clipEl, cssClass.MULTI_ROW);
             }
 
@@ -2295,7 +2338,7 @@
 
             carousel._refreshUi();
 
-            if(rows) {
+            if (rows) {
                 carousel._indexRows();
             }
 
@@ -2766,7 +2809,17 @@
          * @protected
          */
         _createCarouselItem: function (obj) {
-            return createElement(this.get("carouselItemEl"), {
+            var attr, carousel = this,
+                styles = getCarouselItemPosition.call(carousel, obj.pos);
+
+            obj.styles = obj.styles || {};
+            for (attr in styles) {
+                if (styles.hasOwnProperty(attr)) {
+                    obj.styles[attr] = styles[attr];
+                }
+            }
+
+            return createElement(carousel.get("carouselItemEl"), {
                     className : obj.className,
                     styles    : obj.styles,
                     content   : obj.content,
@@ -3230,25 +3283,14 @@
          * @protected
          */
         _refreshUi: function () {
-            var carousel = this, i, isVertical, item, n, sz;
+            var carousel = this, i, isVertical, item, n, rsz, sz;
 
-            isVertical = carousel.get("isVertical");
-            sz = getCarouselItemSize.call(carousel,
-                    isVertical ? "height" : "width");
-            for (i = 0, n = carousel._itemsTable.numItems; i < n; i++) {
-                if (JS.isUndefined(carousel._itemsTable.items[i].pos)) {
-                    item = carousel._itemsTable.items[i].id;
-                    carousel._itemsTable.items[i].pos = i * sz;
-                    if (isVertical) {
-                        Dom.setStyle(item, "left", "0");
-                        Dom.setStyle(item, "top",  (i*sz) + "px");
-                    } else {
-                        Dom.setStyle(item, "left", (i*sz) + "px");
-                        Dom.setStyle(item, "top",  "0");
-                    }
-                }
+            if (carousel._itemsTable.numItems < 1) {
+                return;
             }
 
+            sz  = getCarouselItemSize.call(carousel,
+                    isVertical ? "height" : "width");
             // This fixes the widget to auto-adjust height/width for absolute
             // positioned children.
             item = carousel._itemsTable.items[0].id;
@@ -3381,23 +3423,22 @@
                 rows       = carousel._rows,
                 cols       = carousel._cols,
                 reveal     = carousel.get("revealAmount"),
-                which      = isVertical ? "height" : "width",
-                attr       = isVertical ? "top" : "left",
-                clip       = clip || carousel._clipEl,
-                itemHeight      = getCarouselItemSize.call(carousel, "height"),
-                itemWidth       = getCarouselItemSize.call(carousel, "width"),
+                itemHeight = getCarouselItemSize.call(carousel, "height"),
+                itemWidth  = getCarouselItemSize.call(carousel, "width"),
                 containerHeight,
                 containerWidth;
 
-            if(rows) {
+            clip = clip || carousel._clipEl;
+
+            if (rows) {
                  containerHeight = itemHeight * rows;
-                 containerWidth  = itemWidth * cols;
+                 containerWidth  = itemWidth  * cols;
             } else {
                 num = num || carousel.get("numVisible");
-                if(isVertical) {
+                if (isVertical) {
                     containerHeight = itemHeight * num;
                 } else {
-                    containerWidth = itemWidth * num;
+                    containerWidth  = itemWidth  * num;
                 }
             }
 
@@ -3409,37 +3450,29 @@
                 return;             // no use going further, bail out!
             }
 
-            if (reveal > 0) {
-                if(isVertical) {
-                    reveal = itemHeight * (reveal / 100) * 2;
-                    containerHeight += reveal;
-                } else {
-                    reveal = itemWidth * (reveal / 100) * 2;
-                    containerWidth += reveal;
-                }
-
-                // TODO: set the Carousel's initial offset somwehere
-                currVal = parseFloat(Dom.getStyle(carousel._carouselEl, attr));
-                currVal = JS.isNumber(currVal) ? currVal : 0;
-                Dom.setStyle(carousel._carouselEl,
-                             attr, currVal + (reveal / 2) + "px");
+            reveal = getRevealSize.call(carousel);
+            if (isVertical) {
+                containerHeight += (reveal * 2);
+            } else {
+                containerWidth  += (reveal * 2);
             }
 
             if (isVertical) {
-                containerHeight += getDimensions(carousel._carouselEl, "height");
+                containerHeight += getDimensions(carousel._carouselEl,"height");
                 Dom.setStyle(clip, "height", containerHeight + "px");
                 // For multi-row Carousel
-                if(cols) {
-                    containerWidth += getDimensions(carousel._carouselEl, "width");
+                if (cols) {
+                    containerWidth += getDimensions(carousel._carouselEl,
+                            "width");
                     Dom.setStyle(clip, "width", containerWidth + (0) + "px");
                 }
-
             } else {
                 containerWidth += getDimensions(carousel._carouselEl, "width");
                 Dom.setStyle(clip, "width", containerWidth + "px");
                 // For multi-row Carousel
-                if(rows) {
-                    containerHeight += getDimensions(carousel._carouselEl, "height");
+                if (rows) {
+                    containerHeight += getDimensions(carousel._carouselEl,
+                            "height");
                     Dom.setStyle(clip, "height", containerHeight + "px");
                 }
             }
@@ -3711,34 +3744,46 @@
          * @protected
          */
         _syncUiForItemAdd: function (obj) {
-            var carousel   = this,
+            var attr,
+                carousel   = this,
                 carouselEl = carousel._carouselEl,
                 el,
                 item,
                 itemsTable = carousel._itemsTable,
                 oel,
                 pos,
-                sibling;
+                sibling,
+                styles;
 
-            pos  = JS.isUndefined(obj.pos) ? obj.newPos || itemsTable.numItems - 1 : obj.pos;
+            pos  = JS.isUndefined(obj.pos) ?
+                   obj.newPos || itemsTable.numItems - 1 : obj.pos;
 
             if (!JS.isUndefined(itemsTable.items[pos])) {
                 item = itemsTable.items[pos];
+                styles = getCarouselItemPosition.call(carousel, pos);
+                item.styles = item.styles || {};
+                for (attr in styles) {
+                    if (styles.hasOwnProperty(attr)) {
+                        item.styles[attr] = styles[attr];
+                    }
+                }
                 if (item) {
-                    if(item.id) {
+                    if (item.id) {
                         oel  = Dom.get(item.id);
-                        if(item.styles) {
+                        if (item.styles) {
                             setStyles(oel, item.styles);
                         }
                     }
                 }
             }
+
             if (!oel) {
                 el = carousel._createCarouselItem({
                         className : item.className,
                         styles    : item.styles,
                         content   : item.item,
-                        id        : item.id
+                        id        : item.id,
+                        pos       : pos
                 });
                 if (JS.isUndefined(obj.pos)) {
                     if (!JS.isUndefined(itemsTable.loading[pos])) {
@@ -3805,7 +3850,8 @@
                 className : item.className,
                 styles    : item.styles,
                 content   : item.item,
-                id        : item.id
+                id        : item.id,
+                pos       : pos
             });
 
             if(el && oel) {
@@ -3880,7 +3926,8 @@
                     el = carousel._createCarouselItem({
                             className : carousel.CLASSES.ITEM_LOADING,
                             content   : carousel.STRINGS.ITEM_LOADING_CONTENT,
-                            id        : Dom.generateId()
+                            id        : Dom.generateId(),
+                            pos       : i
                     });
                     if (el) {
                         if (sibling) {
@@ -4269,5 +4316,6 @@
 ;;  indent-tabs-mode: nil **
 ;;  End: **
 */
+YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});

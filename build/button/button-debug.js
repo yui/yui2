@@ -179,6 +179,7 @@
     function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
     
         var sSrcElementNodeName = p_oElement.nodeName.toUpperCase(),
+			sClass = (this.CLASS_NAME_PREFIX + this.CSS_CLASS_NAME),
             me = this,
             oAttribute,
             oRootNode,
@@ -282,13 +283,13 @@
 
             oRootNode = p_oElement.parentNode.parentNode;
 
-            if (Dom.hasClass(oRootNode, this.CSS_CLASS_NAME + "-checked")) {
+            if (Dom.hasClass(oRootNode, sClass + "-checked")) {
             
                 p_oAttributes.checked = true;
             
             }
 
-            if (Dom.hasClass(oRootNode, this.CSS_CLASS_NAME + "-disabled")) {
+            if (Dom.hasClass(oRootNode, sClass + "-disabled")) {
 
                 p_oAttributes.disabled = true;
             
@@ -634,6 +635,15 @@
 
 
         // Constants
+
+        /**
+        * @property CLASS_NAME_PREFIX
+        * @description Prefix used for all class names applied to a Button.
+        * @default "yui-"
+        * @final
+        * @type String
+        */
+        CLASS_NAME_PREFIX: "yui-",
         
         
         /**
@@ -684,115 +694,11 @@
         * @property CSS_CLASS_NAME
         * @description String representing the CSS class(es) to be applied to  
         * the button's root element.
-        * @default "yui-button"
+        * @default "button"
         * @final
         * @type String
         */
-        CSS_CLASS_NAME: "yui-button",
-        
-        
-        /**
-        * @property RADIO_DEFAULT_TITLE
-        * @description String representing the default title applied to buttons 
-        * of type "radio." 
-        * @default "Unchecked.  Click to check."
-        * @final
-        * @type String
-        */
-        RADIO_DEFAULT_TITLE: "Unchecked.  Click to check.",
-        
-        
-        /**
-        * @property RADIO_CHECKED_TITLE
-        * @description String representing the title applied to buttons of 
-        * type "radio" when checked.
-        * @default "Checked.  Click another button to uncheck"
-        * @final
-        * @type String
-        */
-        RADIO_CHECKED_TITLE: "Checked.  Click another button to uncheck",
-        
-        
-        /**
-        * @property CHECKBOX_DEFAULT_TITLE
-        * @description String representing the default title applied to 
-        * buttons of type "checkbox." 
-        * @default "Unchecked.  Click to check."
-        * @final
-        * @type String
-        */
-        CHECKBOX_DEFAULT_TITLE: "Unchecked.  Click to check.",
-        
-        
-        /**
-        * @property CHECKBOX_CHECKED_TITLE
-        * @description String representing the title applied to buttons of type 
-        * "checkbox" when checked.
-        * @default "Checked.  Click to uncheck."
-        * @final
-        * @type String
-        */
-        CHECKBOX_CHECKED_TITLE: "Checked.  Click to uncheck.",
-        
-        
-        /**
-        * @property MENUBUTTON_DEFAULT_TITLE
-        * @description String representing the default title applied to 
-        * buttons of type "menu." 
-        * @default "Menu collapsed.  Click to expand."
-        * @final
-        * @type String
-        */
-        MENUBUTTON_DEFAULT_TITLE: "Menu collapsed.  Click to expand.",
-        
-        
-        /**
-        * @property MENUBUTTON_MENU_VISIBLE_TITLE
-        * @description String representing the title applied to buttons of type 
-        * "menu" when the button's menu is visible. 
-        * @default "Menu expanded.  Click or press Esc to collapse."
-        * @final
-        * @type String
-        */
-        MENUBUTTON_MENU_VISIBLE_TITLE: 
-            "Menu expanded.  Click or press Esc to collapse.",
-        
-        
-        /**
-        * @property SPLITBUTTON_DEFAULT_TITLE
-        * @description  String representing the default title applied to 
-        * buttons of type "split." 
-        * @default "Menu collapsed.  Click inside option region or press 
-        * Ctrl + Shift + M to show the menu."
-        * @final
-        * @type String
-        */
-        SPLITBUTTON_DEFAULT_TITLE: ("Menu collapsed.  Click inside option " + 
-            "region or press down arrow key to show the menu."),
-        
-        
-        /**
-        * @property SPLITBUTTON_OPTION_VISIBLE_TITLE
-        * @description String representing the title applied to buttons of type 
-        * "split" when the button's menu is visible. 
-        * @default "Menu expanded.  Press Esc or Ctrl + Shift + M to hide 
-        * the menu."
-        * @final
-        * @type String
-        */
-        SPLITBUTTON_OPTION_VISIBLE_TITLE: 
-            "Menu expanded.  Press Esc to hide the menu.",
-        
-        
-        /**
-        * @property SUBMIT_TITLE
-        * @description String representing the title applied to buttons of 
-        * type "submit." 
-        * @default "Click to submit form."
-        * @final
-        * @type String
-        */
-        SUBMIT_TITLE: "Click to submit form.",
+        CSS_CLASS_NAME: "button",
         
         
         
@@ -845,7 +751,7 @@
             
             if (nGeckoVersion && nGeckoVersion < 1.9 && Dom.inDocument(this.get("element"))) {
             
-                sClass = this.CSS_CLASS_NAME;                
+                sClass = (this.CLASS_NAME_PREFIX + this.CSS_CLASS_NAME);
 
                 this.removeClass(sClass);
                 
@@ -879,49 +785,9 @@
         */
         _setTitle: function (p_sTitle) {
         
-            var sTitle = p_sTitle;
-        
             if (this.get("type") != "link") {
         
-                if (!sTitle) {
-        
-                    switch (this.get("type")) {
-        
-                    case "radio":
-    
-                        sTitle = this.RADIO_DEFAULT_TITLE;
-    
-                        break;
-    
-                    case "checkbox":
-    
-                        sTitle = this.CHECKBOX_DEFAULT_TITLE;
-    
-                        break;
-                    
-                    case "menu":
-    
-                        sTitle = this.MENUBUTTON_DEFAULT_TITLE;
-    
-                        break;
-    
-                    case "split":
-    
-                        sTitle = this.SPLITBUTTON_DEFAULT_TITLE;
-    
-                        break;
-    
-                    case "submit":
-    
-                        sTitle = this.SUBMIT_TITLE;
-    
-                        break;
-        
-                    }
-        
-                }
-        
-                this._button.title = sTitle;
+                this._button.title = p_sTitle;
         
             }
         
@@ -1020,35 +886,15 @@
         */
         _setChecked: function (p_bChecked) {
         
-            var sType = this.get("type"),
-                sTitle;
+            var sType = this.get("type");
         
             if (sType == "checkbox" || sType == "radio") {
         
                 if (p_bChecked) {
-        
                     this.addStateCSSClasses("checked");
-                    
-                    sTitle = (sType == "radio") ? 
-                                this.RADIO_CHECKED_TITLE : 
-                                this.CHECKBOX_CHECKED_TITLE;
-                
                 }
                 else {
-
                     this.removeStateCSSClasses("checked");
-        
-                    sTitle = (sType == "radio") ? 
-                                this.RADIO_DEFAULT_TITLE : 
-                                this.CHECKBOX_DEFAULT_TITLE;
-                
-                }
-
-
-        		if (!this._hasDefaultTitle) {
-        
-                	this.set("title", sTitle);
-                
                 }
         
             }
@@ -1105,7 +951,7 @@
 				if (oMenu) {
 
 					Dom.addClass(oMenu.element, this.get("menuclassname"));
-					Dom.addClass(oMenu.element, "yui-" + this.get("type") + "-button-menu");
+					Dom.addClass(oMenu.element, this.CLASS_NAME_PREFIX + this.get("type") + "-button-menu");
 
 					oMenu.showEvent.subscribe(this._onMenuShow, null, this);
 					oMenu.hideEvent.subscribe(this._onMenuHide, null, this);
@@ -2107,39 +1953,12 @@
         _onClick: function (p_oEvent) {
         
             var sType = this.get("type"),
-                sTitle,
                 oForm,
                 oSrcElement,
                 bReturnVal;
         
 
 			switch (sType) {
-
-			case "radio":
-			case "checkbox":
-
-				if (!this._hasDefaultTitle) {
-
-					if (this.get("checked")) {
-
-						sTitle = (sType == "radio") ? 
-									this.RADIO_CHECKED_TITLE : 
-									this.CHECKBOX_CHECKED_TITLE;
-
-					}
-					else {
-
-						sTitle = (sType == "radio") ? 
-									this.RADIO_DEFAULT_TITLE : 
-									this.CHECKBOX_DEFAULT_TITLE;
-
-					}
-
-					this.set("title", sTitle);
-
-				}
-
-				break;
 
 			case "submit":
 
@@ -2163,15 +1982,6 @@
 
 				break;
 
-			case "menu":
-
-				sTitle = this._menu.cfg.getProperty("visible") ? 
-								this.MENUBUTTON_MENU_VISIBLE_TITLE : 
-								this.MENUBUTTON_DEFAULT_TITLE;
-
-				this.set("title", sTitle);
-
-				break;
 
 			case "split":
 
@@ -2195,12 +2005,6 @@
 					}
 
 				}
-
-				sTitle = this._menu.cfg.getProperty("visible") ? 
-								this.SPLITBUTTON_OPTION_VISIBLE_TITLE : 
-								this.SPLITBUTTON_DEFAULT_TITLE;
-
-				this.set("title", sTitle);
 
 				break;
 
@@ -2316,6 +2120,22 @@
                 !Dom.isAncestor(oMenuElement, oTarget)) {
         
                 this._hideMenu();
+
+				//	In IE when the user mouses down on a focusable element
+				//	that element will be focused and become the "activeElement".
+				//	(http://msdn.microsoft.com/en-us/library/ms533065(VS.85).aspx)
+				//	However, there is a bug in IE where if there is a  
+				//	positioned element with a focused descendant that is 
+				//	hidden in response to the mousedown event, the target of 
+				//	the mousedown event will appear to have focus, but will 
+				//	not be set as the activeElement.  This will result 
+				//	in the element not firing key events, even though it
+				//	appears to have focus.	The following call to "setActive"
+				//	fixes this bug.
+
+				if (UA.ie && oTarget.focus) {
+					oTarget.setActive();
+				}
         
                 Event.removeListener(document, "mousedown", 
                     this._onDocumentMouseDown);    
@@ -2334,7 +2154,7 @@
         */
         _onOption: function (p_oEvent) {
         
-            if (this.hasClass("yui-split-button-activeoption")) {
+            if (this.hasClass(this.CLASS_NAME_PREFIX + "split-button-activeoption")) {
         
                 this._hideMenu();
         
@@ -2364,24 +2184,9 @@
             Event.on(document, "mousedown", this._onDocumentMouseDown, 
                 null, this);
         
-            var sTitle,
-                sState;
-            
-            if (this.get("type") == "split") {
-        
-                sTitle = this.SPLITBUTTON_OPTION_VISIBLE_TITLE;
-                sState = "activeoption";
-            
-            }
-            else {
-        
-                sTitle = this.MENUBUTTON_MENU_VISIBLE_TITLE;        
-                sState = "active";
-        
-            }
+            var sState = (this.get("type") == "split") ? "activeoption" : "active";
         
             this.addStateCSSClasses(sState);
-            this.set("title", sTitle);
         
         },
         
@@ -2395,26 +2200,9 @@
         */
         _onMenuHide: function (p_sType) {
             
-            var oMenu = this._menu,
-                sTitle,
-                sState;
-        
-            
-            if (this.get("type") == "split") {
-        
-                sTitle = this.SPLITBUTTON_DEFAULT_TITLE;
-                sState = "activeoption";
-        
-            }
-            else {
-        
-                sTitle = this.MENUBUTTON_DEFAULT_TITLE;        
-                sState = "active";
-            }
-        
+            var sState = (this.get("type") == "split") ? "activeoption" : "active";
         
             this.removeStateCSSClasses(sState);
-            this.set("title", sTitle);
         
         
             if (this.get("type") == "split") {
@@ -2467,7 +2255,8 @@
                 oButtonParent = oButtonElement.parentNode,
 				oMenu = this._menu,
                 oMenuElement = oMenu.element,
-				oSrcElement = oMenu.srcElement;
+				oSrcElement = oMenu.srcElement,
+				oItem;
         
         
             if (oButtonParent != oMenuElement.parentNode) {
@@ -2486,8 +2275,20 @@
 					oSrcElement.nodeName.toLowerCase() === "select" && 
 					oSrcElement.value) {
 				
-				this.set("selectedMenuItem", 
-							oMenu.getItem(oSrcElement.selectedIndex));
+				
+				oItem = oMenu.getItem(oSrcElement.selectedIndex);
+				
+				//	Set the value of the "selectedMenuItem" attribute
+				//	silently since this is the initial set--synchronizing 
+				//	the value of the source <SELECT> element in the DOM with 
+				//	its corresponding Menu instance.
+
+				this.set("selectedMenuItem", oItem, true);
+				
+				//	Call the "_onSelectedMenuItemChange" method since the 
+				//	attribute was set silently.
+
+				this._onSelectedMenuItemChange({ newValue: oItem });
 				
 			}
 
@@ -2538,18 +2339,39 @@
 		_onSelectedMenuItemChange: function (event) {
 		
 			var oSelected = event.prevValue,
-				oItem = event.newValue;
+				oItem = event.newValue,
+				sPrefix = this.CLASS_NAME_PREFIX;
 
 			if (oSelected) {
-				Dom.removeClass(oSelected.element, "yui-button-selectedmenuitem");
+				Dom.removeClass(oSelected.element, (sPrefix + "button-selectedmenuitem"));
 			}
 			
 			if (oItem) {
-				Dom.addClass(oItem.element, "yui-button-selectedmenuitem");
+				Dom.addClass(oItem.element, (sPrefix + "button-selectedmenuitem"));
 			}
 			
 		},        
         
+
+        /**
+        * @method _onLabelClick
+        * @description "click" event handler for the Button's
+		* <code>&#60;label&#62;</code> element.
+        * @param {Event} event Object representing the DOM event object  
+        * passed back by the event utility (YAHOO.util.Event).
+        */
+		_onLabelClick: function (event) {
+
+			this.focus();
+
+			var sType = this.get("type");
+
+			if (sType == "radio" || sType == "checkbox") {
+				this.set("checked", (!this.get("checked")));						
+			}
+			
+		},
+
         
         // Public methods
         
@@ -2583,17 +2405,18 @@
         */
         addStateCSSClasses: function (p_sState) {
         
-            var sType = this.get("type");
+            var sType = this.get("type"),
+				sPrefix = this.CLASS_NAME_PREFIX;
         
             if (Lang.isString(p_sState)) {
         
                 if (p_sState != "activeoption" && p_sState != "hoveroption") {
         
-                    this.addClass(this.CSS_CLASS_NAME + ("-" + p_sState));
+                    this.addClass(sPrefix + this.CSS_CLASS_NAME + ("-" + p_sState));
         
                 }
         
-                this.addClass("yui-" + sType + ("-button-" + p_sState));
+                this.addClass(sPrefix + sType + ("-button-" + p_sState));
             
             }
         
@@ -2607,12 +2430,13 @@
         */
         removeStateCSSClasses: function (p_sState) {
         
-            var sType = this.get("type");
+            var sType = this.get("type"),
+				sPrefix = this.CLASS_NAME_PREFIX;
         
             if (Lang.isString(p_sState)) {
         
-                this.removeClass(this.CSS_CLASS_NAME + ("-" + p_sState));
-                this.removeClass("yui-" + sType + ("-button-" + p_sState));
+                this.removeClass(sPrefix + this.CSS_CLASS_NAME + ("-" + p_sState));
+                this.removeClass(sPrefix + sType + ("-button-" + p_sState));
             
             }
         
@@ -2918,12 +2742,6 @@
 
             this._button = oButton;
 
-            /*
-				Capture if the button has a value for the title attribute.  If so, we won't 
-				override it for type of "checkbox" or "radio".
-            */
-            
-            this._hasDefaultTitle = (p_oAttributes.title && p_oAttributes.title.length > 0);
 
             YAHOO.widget.Button.superclass.init.call(this, p_oElement, p_oAttributes);
 
@@ -2967,10 +2785,11 @@
         
 
             m_oButtons[sId] = this;
-        
 
-            this.addClass(this.CSS_CLASS_NAME);
-            this.addClass("yui-" + this.get("type") + "-button");
+        	var sPrefix = this.CLASS_NAME_PREFIX;
+
+            this.addClass(sPrefix + this.CSS_CLASS_NAME);
+            this.addClass(sPrefix + this.get("type") + "-button");
         
             Event.on(this._button, "focus", this._onFocus, null, this);
             this.on("mouseover", this._onMouseOver);
@@ -2989,9 +2808,29 @@
 
             this.on("dblclick", this._onDblClick);
 
+
+			var oParentNode;
+
             if (oLabel) {
             
-				this.on("appendTo", setLabel);     
+				if (this.get("replaceLabel")) {
+
+					this.set("label", oLabel.innerHTML);
+					
+					oParentNode = oLabel.parentNode;
+					
+					oParentNode.removeChild(oLabel);
+					
+				}
+				else {
+
+					this.on("appendTo", setLabel); 
+
+					Event.on(oLabel, "click", this._onLabelClick, null, this);
+
+					this._label = oLabel;
+					
+				}
             
             }
             
@@ -3001,8 +2840,7 @@
 
             var oContainer = this.get("container"),
                 oElement = this.get("element"),
-                bElInDoc = Dom.inDocument(oElement),
-                oParentNode;
+                bElInDoc = Dom.inDocument(oElement);
 
 
             if (oContainer) {
@@ -3369,7 +3207,7 @@
             */
             this.setAttributeConfig("menuclassname", {
         
-                value: (oAttributes.menuclassname || "yui-button-menu"),
+                value: (oAttributes.menuclassname || (this.CLASS_NAME_PREFIX + "button-menu")),
                 validator: Lang.isString,
                 method: this._setMenuClassName,
                 writeOnce: true
@@ -3475,6 +3313,24 @@
         
             });
 
+
+            /**
+            * @attribute replaceLabel
+            * @description Boolean indicating whether or not the text of the 
+			* button's <code>&#60;label&#62;</code> element should be used as
+			* the source for the button's label configuration attribute and 
+			* removed from the DOM.
+            * @type Boolean
+            * @default false
+            */
+            this.setAttributeConfig("replaceLabel", {
+        
+                value: false,
+                validator: Lang.isBoolean,
+                writeOnce: true
+        
+            });
+
         },
         
         
@@ -3531,7 +3387,7 @@
         */
         isActive: function () {
         
-            return this.hasClass(this.CSS_CLASS_NAME + "-active");
+            return this.hasClass(this.CLASS_NAME_PREFIX + this.CSS_CLASS_NAME + "-active");
         
         },
         
@@ -3597,8 +3453,9 @@
             YAHOO.log("Destroying ...", "info", this.toString());
         
             var oElement = this.get("element"),
-                oParentNode = oElement.parentNode,
                 oMenu = this._menu,
+				oLabel = this._label,
+                oParentNode,
                 aButtons;
         
             if (oMenu) {
@@ -3622,6 +3479,16 @@
             Event.removeListener(document, "mouseup", this._onDocumentMouseUp);
             Event.removeListener(document, "keyup", this._onDocumentKeyUp);
             Event.removeListener(document, "mousedown", this._onDocumentMouseDown);
+
+
+			if (oLabel) {
+
+            	Event.removeListener(oLabel, "click", this._onLabelClick);
+				
+				oParentNode = oLabel.parentNode;
+				oParentNode.removeChild(oLabel);
+				
+			}
         
         
             var oForm = this.getForm();
@@ -3637,6 +3504,8 @@
 
             this.unsubscribeAll();
 
+			oParentNode = oElement.parentNode;
+
             if (oParentNode) {
 
                 oParentNode.removeChild(oElement);
@@ -3647,7 +3516,9 @@
         
             delete m_oButtons[this.get("id")];
 
-            aButtons = Dom.getElementsByClassName(this.CSS_CLASS_NAME, 
+			var sClass = (this.CLASS_NAME_PREFIX + this.CSS_CLASS_NAME);
+
+            aButtons = Dom.getElementsByClassName(sClass, 
                                 this.NODE_NAME, oForm); 
 
             if (Lang.isArray(aButtons) && aButtons.length === 0) {
@@ -3856,8 +3727,9 @@
     */
     YAHOO.widget.Button.addHiddenFieldsToForm = function (p_oForm) {
     
-        var aButtons = Dom.getElementsByClassName(
-                            YAHOO.widget.Button.prototype.CSS_CLASS_NAME, 
+        var proto = YAHOO.widget.Button.prototype,
+			aButtons = Dom.getElementsByClassName(
+							(proto.CLASS_NAME_PREFIX + proto.CSS_CLASS_NAME), 
                             "*", 
                             p_oForm),
     

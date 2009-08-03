@@ -307,6 +307,48 @@ _nTransactionId : 0,
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// DataSourceBase private static methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Get an XPath-specified value for a given field from an XML node or document.
+ *
+ * @method _getLocationValue
+ * @param field {String | Object} Field definition.
+ * @param context {Object} XML node or document to search within.
+ * @return {Object} Data value or null.
+ * @static
+ * @private
+ */
+_getLocationValue: function(field, context) {
+    var locator = field.locator || field.key || field,
+        xmldoc = context.ownerDocument || context,
+        result, res, value = null;
+
+    try {
+        // Standards mode
+        if(!lang.isUndefined(xmldoc.evaluate)) {
+            result = xmldoc.evaluate(locator, context, xmldoc.createNSResolver(!context.ownerDocument ? context.documentElement : context.ownerDocument.documentElement), 0, null);
+            while(res = result.iterateNext()) {
+                value = res.textContent;
+            }
+        }
+        // IE mode
+        else {
+            xmldoc.setProperty("SelectionLanguage", "XPath");
+            result = context.selectNodes(locator)[0];
+            value = result.value || result.text || null;
+        }
+        return value;
+
+    }
+    catch(e) {
+    }
+},
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // DataSourceBase public static methods
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -1301,7 +1343,6 @@ parseTextData : function(oRequest, oFullResponse) {
             
 },
 
-
 /**
  * Overridable method parses XML data for one result into an object literal.
  *
@@ -1319,32 +1360,40 @@ parseXMLResult : function(result) {
             var field = schema.fields[m];
             var key = (lang.isValue(field.key)) ? field.key : field;
             var data = null;
-            // Values may be held in an attribute...
-            var xmlAttr = result.attributes.getNamedItem(key);
-            if(xmlAttr) {
-                data = xmlAttr.value;
+
+            if(this.useXPath) {
+                data = YAHOO.util.DataSource._getLocationValue(field, result);
             }
-            // ...or in a node
             else {
-                var xmlNode = result.getElementsByTagName(key);
-                if(xmlNode && xmlNode.item(0)) {
-                    var item = xmlNode.item(0);
-                    // For IE, then DOM...
-                    data = (item) ? ((item.text) ? item.text : (item.textContent) ? item.textContent : null) : null;
-                    // ...then fallback, but check for multiple child nodes
-                    if(!data) {
-                        var datapieces = [];
-                        for(var j=0, len=item.childNodes.length; j<len; j++) {
-                            if(item.childNodes[j].nodeValue) {
-                                datapieces[datapieces.length] = item.childNodes[j].nodeValue;
+                // Values may be held in an attribute...
+                var xmlAttr = result.attributes.getNamedItem(key);
+                if(xmlAttr) {
+                    data = xmlAttr.value;
+                }
+                // ...or in a node
+                else {
+                    var xmlNode = result.getElementsByTagName(key);
+                    if(xmlNode && xmlNode.item(0)) {
+                        var item = xmlNode.item(0);
+                        // For IE, then DOM...
+                        data = (item) ? ((item.text) ? item.text : (item.textContent) ? item.textContent : null) : null;
+                        // ...then fallback, but check for multiple child nodes
+                        if(!data) {
+                            var datapieces = [];
+                            for(var j=0, len=item.childNodes.length; j<len; j++) {
+                                if(item.childNodes[j].nodeValue) {
+                                    datapieces[datapieces.length] = item.childNodes[j].nodeValue;
+                                }
                             }
-                        }
-                        if(datapieces.length > 0) {
-                            data = datapieces.join("");
+                            if(datapieces.length > 0) {
+                                data = datapieces.join("");
+                            }
                         }
                     }
                 }
             }
+            
+            
             // Safety net
             if(data === null) {
                    data = "";
@@ -1395,38 +1444,45 @@ parseXMLData : function(oRequest, oFullResponse) {
 
     // In case oFullResponse is something funky
     try {
+        // Pull any meta identified
+        if(this.useXPath) {
+            for (k in metaLocators) {
+                oParsedResponse.meta[k] = YAHOO.util.DataSource._getLocationValue(metaLocators[k], oFullResponse);
+            }
+        }
+        else {
+            metaNode = metaNode ? oFullResponse.getElementsByTagName(metaNode)[0] :
+                       oFullResponse;
+
+            if (metaNode) {
+                for (k in metaLocators) {
+                    if (lang.hasOwnProperty(metaLocators, k)) {
+                        loc = metaLocators[k];
+                        // Look for a node
+                        v = metaNode.getElementsByTagName(loc)[0];
+
+                        if (v) {
+                            v = v.firstChild.nodeValue;
+                        } else {
+                            // Look for an attribute
+                            v = metaNode.attributes.getNamedItem(loc);
+                            if (v) {
+                                v = v.value;
+                            }
+                        }
+
+                        if (lang.isValue(v)) {
+                            oParsedResponse.meta[k] = v;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // For result data
         xmlList = (schema.resultNode) ?
             oFullResponse.getElementsByTagName(schema.resultNode) :
             null;
-
-        // Pull any meta identified
-        metaNode = metaNode ? oFullResponse.getElementsByTagName(metaNode)[0] :
-                   oFullResponse;
-
-        if (metaNode) {
-            for (k in metaLocators) {
-                if (lang.hasOwnProperty(metaLocators, k)) {
-                    loc = metaLocators[k];
-                    // Look for a node
-                    v = metaNode.getElementsByTagName(loc)[0];
-
-                    if (v) {
-                        v = v.firstChild.nodeValue;
-                    } else {
-                        // Look for an attribute
-                        v = metaNode.attributes.getNamedItem(loc);
-                        if (v) {
-                            v = v.value;
-                        }
-                    }
-
-                    if (lang.isValue(v)) {
-                        oParsedResponse.meta[k] = v;
-                    }
-                }
-                
-            }
-        }
     }
     catch(e) {
     }

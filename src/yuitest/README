@@ -1,9 +1,8 @@
 YUI Library - YUITest - Release Notes
 
-Development Master
-
 2.8.0
 
+  * Fixed issues with ArrayAssert methods (trac #2528121)
   * UserAction moved into a new module: event-simulate
 
 2.7.0

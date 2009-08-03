@@ -8,6 +8,13 @@
  * @uses YAHOO.util.AttributeProvider
  */
 
+var Dom        = YAHOO.util.Dom,
+    lang       = YAHOO.lang,
+    isObject   = lang.isObject,
+    isFunction = lang.isFunction,
+    isArray    = lang.isArray,
+    isString   = lang.isString;
+
 /**
  * Instantiate a Paginator, passing a configuration object to the contructor.
  * The configuration object should contain the following properties:
@@ -25,10 +32,9 @@
  */
 function Paginator(config) {
     var UNLIMITED = Paginator.VALUE_UNLIMITED,
-        lang      = YAHOO.lang,
         attrib, initialPage, records, perPage, startIndex;
 
-    config = lang.isObject(config) ? config : {};
+    config = isObject(config) ? config : {};
 
     this.initConfig();
 
@@ -44,7 +50,7 @@ function Paginator(config) {
 
     // Update the other config values
     for (attrib in config) {
-        if (lang.hasOwnProperty(config,attrib)) {
+        if (config.hasOwnProperty(attrib)) {
             this.set(attrib,config[attrib],true);
         }
     }
@@ -63,7 +69,7 @@ function Paginator(config) {
 
 
 // Static members
-YAHOO.lang.augmentObject(Paginator, {
+lang.augmentObject(Paginator, {
     /**
      * Incrementing index used to give instances unique ids.
      * @static
@@ -197,8 +203,7 @@ Paginator.prototype = {
      */
     initConfig : function () {
 
-        var UNLIMITED = Paginator.VALUE_UNLIMITED,
-            l         = YAHOO.lang;
+        var UNLIMITED = Paginator.VALUE_UNLIMITED;
 
         /**
          * REQUIRED. Number of records constituting a &quot;page&quot;
@@ -220,12 +225,12 @@ Paginator.prototype = {
         this.setAttributeConfig('containers', {
             value     : null,
             validator : function (val) {
-                if (!l.isArray(val)) {
+                if (!isArray(val)) {
                     val = [val];
                 }
                 for (var i = 0, len = val.length; i < len; ++i) {
-                    if (l.isString(val[i]) || 
-                        (l.isObject(val[i]) && val[i].nodeType === 1)) {
+                    if (isString(val[i]) || 
+                        (isObject(val[i]) && val[i].nodeType === 1)) {
                         continue;
                     }
                     return false;
@@ -233,8 +238,8 @@ Paginator.prototype = {
                 return true;
             },
             method : function (val) {
-                val = YAHOO.util.Dom.get(val);
-                if (!l.isArray(val)) {
+                val = Dom.get(val);
+                if (!isArray(val)) {
                     val = [val];
                 }
                 this._containers = val;
@@ -300,7 +305,7 @@ Paginator.prototype = {
          */
         this.setAttributeConfig('template', {
             value : Paginator.TEMPLATE_DEFAULT,
-            validator : l.isString
+            validator : isString
         });
 
         /**
@@ -311,7 +316,7 @@ Paginator.prototype = {
          */
         this.setAttributeConfig('containerClass', {
             value : 'yui-pg-container',
-            validator : l.isString
+            validator : isString
         });
 
         /**
@@ -326,7 +331,7 @@ Paginator.prototype = {
          */
         this.setAttributeConfig('alwaysVisible', {
             value : true,
-            validator : l.isBoolean
+            validator : lang.isBoolean
         });
 
         /**
@@ -336,10 +341,11 @@ Paginator.prototype = {
          * @attribute updateOnChange
          * @type boolean
          * @default false
+         * @deprecated use changeRequest listener that calls setState
          */
         this.setAttributeConfig('updateOnChange', {
             value     : false,
-            validator : l.isBoolean
+            validator : lang.isBoolean
         });
 
 
@@ -379,10 +385,9 @@ Paginator.prototype = {
         var ui = Paginator.ui,
             name,UIComp;
         for (name in ui) {
-            if (YAHOO.lang.hasOwnProperty(ui,name)) {
+            if (ui.hasOwnProperty(name)) {
                 UIComp = ui[name];
-                if (YAHOO.lang.isObject(UIComp) &&
-                    YAHOO.lang.isFunction(UIComp.init)) {
+                if (isObject(UIComp) && isFunction(UIComp.init)) {
                     UIComp.init(this);
                 }
             }
@@ -528,7 +533,7 @@ Paginator.prototype = {
      * @protected
      */
     _firePageChange : function (state) {
-        if (YAHOO.lang.isObject(state)) {
+        if (isObject(state)) {
             var current = state.before;
             delete state.before;
             this.fireEvent('pageChange',{
@@ -548,70 +553,98 @@ Paginator.prototype = {
      */
     render : function () {
         if (this.get('rendered')) {
-            return;
+            return this;
         }
 
-        // Forgo rendering if only one page and alwaysVisible is off
         var totalRecords   = this.get('totalRecords'),
-            Dom            = YAHOO.util.Dom,
             template       = this.get('template'),
-            containerClass = this.get('containerClass'),
-            i,len,c,id_base,markers,j,jlen,m,mp,name,UIComp,comp;
-
-        if (totalRecords !== Paginator.VALUE_UNLIMITED &&
-            totalRecords < this.get('rowsPerPage') &&
-            !this.get('alwaysVisible')) {
-            return;
-        }
-
-        // add marker spans to the template html to indicate drop zones
-        // for ui components
-        template = template.replace(/\{([a-z0-9_ \-]+)\}/gi,
-            '<span class="yui-pg-ui $1"></span>');
-        for (i = 0, len = this._containers.length; i < len; ++i) {
-            c = this._containers[i];
+            state          = this.getState(),
             // ex. yui-pg0-1 (first paginator, second container)
-            id_base = Paginator.ID_BASE + this.get('id') + '-' + i;
+            id_base        = Paginator.ID_BASE + this.get('id') + '-',
+            i, len;
 
-            if (!c) {
-                continue;
-            }
-            // Hide the container while its contents are rendered
-            c.style.display = 'none';
-
-            Dom.addClass(c,containerClass);
-
-            // Place the template innerHTML
-            c.innerHTML = template;
-
-            // Replace each marker with the ui component's render() output
-            markers = Dom.getElementsByClassName('yui-pg-ui','span',c);
-
-            for (j = 0, jlen = markers.length; j < jlen; ++j) {
-                m      = markers[j];
-                mp     = m.parentNode;
-                name   = m.className.replace(/\s*yui-pg-ui\s+/g,'');
-                UIComp = Paginator.ui[name];
-
-                if (YAHOO.lang.isFunction(UIComp)) {
-                    comp = new UIComp(this);
-                    if (YAHOO.lang.isFunction(comp.render)) {
-                        mp.replaceChild(comp.render(id_base),m);
-                    }
-                }
-            }
-
-            // Show the container allowing page reflow
-            c.style.display = '';
+        // Assemble the containers, keeping them hidden
+        for (i = 0, len = this._containers.length; i < len; ++i) {
+            this._renderTemplate(this._containers[i],template,id_base+i,true);
         }
+
+        // Show the containers if appropriate
+        this.updateVisibility();
 
         // Set render attribute manually to support its readOnly contract
         if (this._containers.length) {
-            this.setAttributeConfig('rendered',{value:true});
+            this.setAttributeConfig('rendered', { value: true });
 
-            this.fireEvent('render',this.getState());
+            this.fireEvent('render', state);
             // For backward compatibility
-            this.fireEvent('rendered',this.getState());
+            this.fireEvent('rendered', state);
+        }
+
+        return this;
+    },
+
+    /**
+     * Creates the individual ui components and renders them into a container.
+     *
+     * @method _renderTemplate
+     * @param container {HTMLElement} where to add the ui components
+     * @param template {String} the template to use as a guide for rendering
+     * @param id_base {String} id base for the container's ui components
+     * @param hide {Boolean} leave the container hidden after assembly
+     * @protected
+     */
+    _renderTemplate : function (container, template, id_base, hide) {
+        var containerClass = this.get('containerClass'),
+            markers, i, len;
+
+        if (!container) {
+            return;
+        }
+
+        // Hide the container while its contents are rendered
+        Dom.setStyle(container,'display','none');
+
+        Dom.addClass(container, containerClass);
+
+        // Place the template innerHTML, adding marker spans to the template
+        // html to indicate drop zones for ui components
+        container.innerHTML = template.replace(/\{([a-z0-9_ \-]+)\}/gi,
+            '<span class="yui-pg-ui yui-pg-ui-$1"></span>');
+
+        // Replace each marker with the ui component's render() output
+        markers = Dom.getElementsByClassName('yui-pg-ui','span',container);
+
+        for (i = 0, len = markers.length; i < len; ++i) {
+            this._renderUIComponent(markers[i], id_base);
+        }
+
+        if (!hide) {
+            // Show the container allowing page reflow
+            Dom.setStyle(container,'display','');
+        }
+    },
+
+    /**
+     * Replaces a marker node with a rendered UI component, determined by the
+     * yui-pg-ui-(UI component class name) in the marker's className. e.g.
+     * yui-pg-ui-PageLinks => new YAHOO.widget.Paginator.ui.PageLinks(this)
+     *
+     * @method _renderUIComponent
+     * @param marker {HTMLElement} the marker node to replace
+     * @param id_base {String} string base the component's generated id
+     * @protected
+     */
+    _renderUIComponent : function (marker, id_base) {
+        var par    = marker.parentNode,
+            name   = /yui-pg-ui-(\w+)/.exec(marker.className),
+            UIComp = name && Paginator.ui[name[1]],
+            comp;
+
+        if (isFunction(UIComp)) {
+            comp = new UIComp(this);
+            if (isFunction(comp.render)) {
+                par.replaceChild(comp.render(id_base),marker);
+            }
         }
     },
 
@@ -636,13 +669,13 @@ Paginator.prototype = {
         var alwaysVisible = this.get('alwaysVisible'),
             totalRecords,visible,rpp,rppOptions,i,len;
 
-        if (e.type === 'alwaysVisibleChange' || !alwaysVisible) {
+        if (!e || e.type === 'alwaysVisibleChange' || !alwaysVisible) {
             totalRecords = this.get('totalRecords');
             visible      = true;
             rpp          = this.get('rowsPerPage');
             rppOptions   = this.get('rowsPerPageOptions');
 
-            if (YAHOO.lang.isArray(rppOptions)) {
+            if (isArray(rppOptions)) {
                 for (i = 0, len = rppOptions.length; i < len; ++i) {
                     rpp = Math.min(rpp,rppOptions[i]);
                 }
@@ -656,7 +689,7 @@ Paginator.prototype = {
             visible = visible || alwaysVisible;
 
             for (i = 0, len = this._containers.length; i < len; ++i) {
-                YAHOO.util.Dom.setStyle(this._containers[i],'display',
+                Dom.setStyle(this._containers[i],'display',
                     visible ? '' : 'none');
             }
         }
@@ -705,7 +738,7 @@ Paginator.prototype = {
      * @return {boolean}
      */
     hasPage : function (page) {
-        if (!YAHOO.lang.isNumber(page) || page < 1) {
+        if (!lang.isNumber(page) || page < 1) {
             return false;
         }
 
@@ -775,7 +808,7 @@ Paginator.prototype = {
      * @return {Array} [start_index, end_index]
      */
     getPageRecords : function (page) {
-        if (!YAHOO.lang.isNumber(page)) {
+        if (!lang.isNumber(page)) {
             page = this.getCurrentPage();
         }
 
@@ -1006,7 +1039,7 @@ Paginator.prototype = {
      * @param state {Object} Object literal of attribute:value pairs to set
      */
     setState : function (state) {
-        if (YAHOO.lang.isObject(state)) {
+        if (isObject(state)) {
             // get flux state based on current state with before state as well
             this._state = this.getState({});
 
@@ -1029,7 +1062,7 @@ Paginator.prototype = {
             this._pageChanged = false;
 
             for (var k in state) {
-                if (state.hasOwnProperty(k)) {
+                if (state.hasOwnProperty(k) && this._configs.hasOwnProperty(k)) {
                     this.set(k,state[k]);
                 }
             }
@@ -1045,7 +1078,7 @@ Paginator.prototype = {
     }
 };
 
-YAHOO.lang.augmentProto(Paginator, YAHOO.util.AttributeProvider);
+lang.augmentProto(Paginator, YAHOO.util.AttributeProvider);
 
 YAHOO.widget.Paginator = Paginator;
 })();

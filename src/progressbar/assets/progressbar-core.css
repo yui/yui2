@@ -75,3 +75,11 @@
 	z-index:3;
 	display:none;
 }
+
+.yui-pb-rtl .yui-pb-bar {
+	background-position:right;
+}
+
+.yui-pb-btt .yui-pb-bar {
+	background-position:left bottom;
+}

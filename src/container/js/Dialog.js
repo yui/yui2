@@ -1035,7 +1035,7 @@
         validate: function () {
             return true;
         },
-        
+
         /**
         * Executes a submit of the Dialog if validation 
         * is successful. By default the Dialog is hidden
@@ -1047,15 +1047,18 @@
         */
         submit: function () {
             if (this.validate()) {
-                this.beforeSubmitEvent.fire();
-                this.doSubmit();
-                this.submitEvent.fire();
-
-                if (this.cfg.getProperty("hideaftersubmit")) {
-                    this.hide();
+                if (this.beforeSubmitEvent.fire()) {
+                    this.doSubmit();
+                    this.submitEvent.fire();
+    
+                    if (this.cfg.getProperty("hideaftersubmit")) {
+                        this.hide();
+                    }
+    
+                    return true;
+                } else {
+                    return false;
                 }
-
-                return true;
             } else {
                 return false;
             }
