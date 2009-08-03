@@ -9,8 +9,16 @@
 	
 	<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
 	<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
+	<link type="text/css" rel="stylesheet" href="../../build/logger/assets/skins/sam/logger.css">
+	<link rel="stylesheet" type="text/css" href="../../build/yuitest/assets/skins/sam/yuitest.css" />
 	<style>
 		body{ text-align: left; }
+		.yui-log{
+			filter:alpha(opacity=50);
+			-moz-opacity:0.5;
+			-khtml-opacity: 0.5;
+			opacity: 0.5;
+		}
 		.yui-dt-expanded .yui-dt-expandablerow-trigger{
 			width:18px;
 			height:22px;
@@ -43,6 +51,8 @@
 <script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
 <script type="text/javascript" src="../../build/element/element.js"></script> 
+<script type="text/javascript" src="../../build/logger/logger-min.js"></script>
+<script type="text/javascript" src="../../build/yuitest/yuitest-min.js"></script>
 <script type="text/javascript" src="../../build/datasource/datasource.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable.js"></script>
 <script>
@@ -176,6 +186,7 @@ YAHOO.util.Event.addListener(window, "load", function() {
 });
 
 </script>
+<script type="text/javascript" src="test_expandablerows.js"></script>
 
 </body>
 </html>
