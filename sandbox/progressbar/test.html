@@ -64,10 +64,10 @@
 		var get = Dom.getElementsByClassName,
 			test = Dom.get('test');
 		return {
-			pb: get(PB.CLASS_PROGBAR,'div',test)[0],
-			m : get(PB.CLASS_MASK,'div',test)[0],
-			b : get(PB.CLASS_BAR,'div',test)[0],
-			c : get(PB.CLASS_CAPTION,'div',test)[0]
+			pb: get('yui-pb','div',test)[0],
+			m : get('yui-pb-mask','div',test)[0],
+			b : get('yui-pb-bar','div',test)[0],
+			c : get('yui-pb-caption','div',test)[0]
 		};
 	};
 	

@@ -509,6 +509,7 @@ if (!YAHOO.util.Event) {
          */
         var listeners = [];
 
+
         /**
          * User-defined unload function that will be fired before all events
          * are detached
@@ -567,6 +568,7 @@ if (!YAHOO.util.Event) {
         // String constants used by the addFocusListener and removeFocusListener methods
         var _FOCUS = YAHOO.env.ua.ie ? "focusin" : "focus";
         var _BLUR = YAHOO.env.ua.ie ? "focusout" : "blur";      
+
 
         return {
 
@@ -666,6 +668,9 @@ if (!YAHOO.util.Event) {
              * @final
              */
             OVERRIDE: 6,
+
+
+			CAPTURE: 7,
 
             /**
              * addListener/removeListener can throw errors in unexpected scenarios.
@@ -914,7 +919,7 @@ if (!YAHOO.util.Event) {
                     } else {
                         // defer adding the event until the element is available
                         this.onAvailable(el, function() {
-                           YAHOO.util.Event.on(el, sType, fn, obj, overrideContext);
+                           YAHOO.util.Event._addListener(el, sType, fn, obj, overrideContext, bCapture);
                         });
 
                         return true;
@@ -959,7 +964,7 @@ if (!YAHOO.util.Event) {
                                 obj);
                     };
 
-                var li = [el, sType, fn, wrappedFn, context, obj, overrideContext];
+                var li = [el, sType, fn, wrappedFn, context, obj, overrideContext, bCapture];
                 var index = listeners.length;
                 // cache the listener so we can try to automatically unload
                 listeners[index] = li;
@@ -1160,7 +1165,7 @@ if (!YAHOO.util.Event) {
                 var index = arguments[3];
   
                 if ("undefined" === typeof index) {
-                    index = this._getCacheIndex(el, sType, fn);
+                    index = this._getCacheIndex(listeners, el, sType, fn);
                 }
 
                 if (index >= 0) {
@@ -1174,8 +1179,10 @@ if (!YAHOO.util.Event) {
 
                 // this.logger.debug("Removing handler: " + el + ", " + sType);
 
+				var bCapture = cacheItem[this.CAPTURE] === true ? true : false;
+
                 try {
-                    this._simpleRemove(el, sType, cacheItem[this.WFN], false);
+                    this._simpleRemove(el, sType, cacheItem[this.WFN], bCapture);
                 } catch(ex) {
                     this.lastError = ex;
                     return false;
@@ -1414,9 +1421,9 @@ if (!YAHOO.util.Event) {
              * @static
              * @private
              */
-            _getCacheIndex: function(el, sType, fn) {
-                for (var i=0, l=listeners.length; i<l; i=i+1) {
-                    var li = listeners[i];
+            _getCacheIndex: function(a, el, sType, fn) {
+                for (var i=0, l=a.length; i<l; i=i+1) {
+                    var li = a[i];
                     if ( li                 && 
                          li[this.FN] == fn  && 
                          li[this.EL] == el  && 

@@ -259,7 +259,7 @@
                            <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
         
         <span class="c">//one may be longer than the other, so get the maximum length</span>
-<span class="c"></span>        <span class="k">var</span> <span class="nx">len</span> <span class="c">/*:int*/</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">expected</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">actual</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">len</span> <span class="c">/*:int*/</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">expected</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">actual</span><span class="o">.</span><span class="nx">length</span> <span class="o">||</span> <span class="m">0</span><span class="o">);</span>
         <span class="k">var</span> <span class="nx">Assert</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">;</span>
        
         <span class="c">//begin checking values</span>
@@ -292,7 +292,7 @@
         <span class="o">}</span>
         
         <span class="c">//one may be longer than the other, so get the maximum length</span>
-<span class="c"></span>        <span class="k">var</span> <span class="nx">len</span> <span class="c">/*:int*/</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">expected</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">actual</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">len</span> <span class="c">/*:int*/</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">expected</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">actual</span><span class="o">.</span><span class="nx">length</span> <span class="o">||</span> <span class="m">0</span><span class="o">);</span>
         
         <span class="c">//begin checking values</span>
 <span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
@@ -345,7 +345,7 @@
                           <span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
         
         <span class="c">//one may be longer than the other, so get the maximum length</span>
-<span class="c"></span>        <span class="k">var</span> <span class="nx">len</span> <span class="c">/*:int*/</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">expected</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">actual</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">len</span> <span class="c">/*:int*/</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">expected</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">actual</span><span class="o">.</span><span class="nx">length</span> <span class="o">||</span> <span class="m">0</span><span class="o">);</span>
         <span class="k">var</span> <span class="nx">Assert</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Assert</span><span class="o">;</span>
         
         <span class="c">//begin checking values</span>
