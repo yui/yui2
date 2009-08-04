@@ -92,7 +92,19 @@ var Dom = YAHOO.util.Dom,
         * @param {String} str The content of the Editor
         */
         _putUndo: function(str) {
-            this._undoCache.push(str);
+            if (this._undoLevel === this._undoCache.length) {
+                this._undoCache.push(str);
+                this._undoLevel = this._undoCache.length;
+            } else {
+                var str = this.getEditorHTML();
+                var last = this._undoCache[this._undoLevel];
+                if (last) {
+                    if (str !== last) {
+                        this._undoCache = [];
+                        this._undoLevel = 0;
+                    }
+                }
+            }
         },
         /**
         * @private
@@ -102,6 +114,7 @@ var Dom = YAHOO.util.Dom,
         * @return {String}
         */
         _getUndo: function(index) {
+            this._undoLevel = index;
             return this._undoCache[index];
         },
         /**
@@ -115,10 +128,12 @@ var Dom = YAHOO.util.Dom,
             }
             if (!this._undoCache) {
                 this._undoCache = [];
+                this._undoLevel = 0;
             }
             this._checkUndo();
             var str = this.getEditorHTML();
-            var last = this._undoCache[this._undoCache.length - 1];
+            //var last = this._undoCache[this._undoCache.length - 1];
+            var last = this._undoCache[this._undoLevel - 1];
             if (last) {
                 if (str !== last) {
                     //YAHOO.log('Storing Undo', 'info', 'SimpleEditor');
@@ -128,7 +143,6 @@ var Dom = YAHOO.util.Dom,
                 //YAHOO.log('Storing Undo', 'info', 'SimpleEditor');
                 this._putUndo(str);
             }
-            this._undoLevel = this._undoCache.length;
             this._undoNodeChange();
         },    
         /**
@@ -1603,15 +1617,24 @@ var Dom = YAHOO.util.Dom,
         */
         cmd_undo: function(value) {
             if (this._hasUndoLevel()) {
+                var c_html = this.getEditorHTML(), html;
                 if (!this._undoLevel) {
                     this._undoLevel = this._undoCache.length;
                 }
                 this._undoLevel = (this._undoLevel - 1);
                 if (this._undoCache[this._undoLevel]) {
-                    var html = this._getUndo(this._undoLevel);
-                    this.setEditorHTML(html);
+                    html = this._getUndo(this._undoLevel);
+                    if (html != c_html) {
+                        this.setEditorHTML(html);
+                    } else {
+                        this._undoLevel = (this._undoLevel - 1);
+                        html = this._getUndo(this._undoLevel);
+                        if (html != c_html) {
+                            this.setEditorHTML(html);
+                        }
+                    }
                 } else {
-                    this._undoLevel = null;
+                    this._undoLevel = 0;
                     this.toolbar.disableButton('undo');
                 }
             }
