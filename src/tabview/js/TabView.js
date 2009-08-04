@@ -124,13 +124,12 @@
 
         _initTabEvents: function(tab) {
             tab.addListener( tab.get('activationEvent'), tab._onActivate, this, tab);
-            
-            tab.addListener('activationEventChange', function(e) {
-                if (e.prevValue != e.newValue) {
-                    tab.removeListener(e.prevValue, tab._onActivate);
-                    tab.addListener(e.newValue, tab._onActivate, this, tab);
-                }
-            });
+            tab.addListener( tab.get('activationEventChange'), tab._onActivationEventChange, this, tab);
+        },
+
+        _removeTabEvents: function(tab) {
+            tab.removeListener(tab.get('activationEvent'), tab._onActivate, this, tab);
+            tab.removeListener('activationEventChange', tab._onActivationEventChange, this, tab);
         },
 
         /**
@@ -216,6 +215,7 @@
                 }
             }
             
+            this._removeTabEvents(tab);
             this._tabParent.removeChild( tab.get(ELEMENT) );
             this._contentParent.removeChild( tab.get(CONTENT_EL) );
             this._configs.tabs.value.splice(index, 1);
