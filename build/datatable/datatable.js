@@ -5124,6 +5124,16 @@ _initMsgTbodyEl : function(elTable) {
         var elMsgLiner = elMsgTd.appendChild(document.createElement("div"));
         elMsgLiner.className = DT.CLASS_LINER;
         this._elMsgTbody = elMsgTbody;
+
+        // Set up DOM events for TBODY
+        Ev.addListener(elMsgTbody, "focus", this._onTbodyFocus, this);
+        Ev.addListener(elMsgTbody, "mouseover", this._onTableMouseover, this);
+        Ev.addListener(elMsgTbody, "mouseout", this._onTableMouseout, this);
+        Ev.addListener(elMsgTbody, "mousedown", this._onTableMousedown, this);
+        Ev.addListener(elMsgTbody, "mouseup", this._onTableMouseup, this);
+        Ev.addListener(elMsgTbody, "keydown", this._onTbodyKeydown, this);
+        Ev.addListener(elMsgTbody, "keypress", this._onTableKeypress, this);
+        Ev.addListener(elMsgTbody, "click", this._onTbodyClick, this);
     }
 },
 
