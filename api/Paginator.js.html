@@ -605,11 +605,10 @@
             <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
         <span class="o">}</span>
 
-        <span class="k">var</span> <span class="nx">totalRecords</span>   <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">),</span>
-            <span class="nx">template</span>       <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;template&#39;</span><span class="o">),</span>
-            <span class="nx">state</span>          <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">(),</span>
+        <span class="k">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;template&#39;</span><span class="o">),</span>
+            <span class="nx">state</span>    <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">(),</span>
             <span class="c">// ex. yui-pg0-1 (first paginator, second container)</span>
-<span class="c"></span>            <span class="nx">id_base</span>        <span class="o">=</span> <span class="nx">Paginator</span><span class="o">.</span><span class="nx">ID_BASE</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span><span class="o">,</span>
+<span class="c"></span>            <span class="nx">id_base</span>  <span class="o">=</span> <span class="nx">Paginator</span><span class="o">.</span><span class="nx">ID_BASE</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span><span class="o">,</span>
             <span class="nx">i</span><span class="o">,</span> <span class="nx">len</span><span class="o">;</span>
 
         <span class="c">// Assemble the containers, keeping them hidden</span>
@@ -706,6 +705,7 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;destroy&#39;</span><span class="o">);</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;rendered&#39;</span><span class="o">,{</span><span class="nx">value</span><span class="o">:</span><span class="kc">false</span><span class="o">});</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
