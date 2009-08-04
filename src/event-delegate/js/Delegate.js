@@ -176,8 +176,14 @@
 			else {
 
 				if (type == FOCUS || type == BLUR) {
+
 					bUseCapture = true;
 					sType = (type == FOCUS) ? FOCUS_EVENT_NAME : BLUR_EVENT_NAME;
+
+					if (YAHOO.env.ua.opera) {
+						Event._captureHack(sType, container);
+					}
+
 				}
 
 				fnDelegate = Event._createDelegate(fn, filter, obj, overrideContext);

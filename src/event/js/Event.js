@@ -31,7 +31,7 @@ if (!YAHOO.util.Event) {
          * @static
          * @private
          */
-        var loadComplete =  false;
+        var loadComplete =  false,
 
         /**
          * Cache of wrapped listeners
@@ -40,7 +40,7 @@ if (!YAHOO.util.Event) {
          * @static
          * @private
          */
-        var listeners = [];
+        listeners = [],
 
 
         /**
@@ -51,7 +51,7 @@ if (!YAHOO.util.Event) {
          * @static
          * @private
          */
-        var unloadListeners = [];
+        unloadListeners = [],
 
         /**
          * The number of times to poll after window.onload.  This number is
@@ -61,7 +61,7 @@ if (!YAHOO.util.Event) {
          * @static
          * @private
          */
-        var retryCount = 0;
+        retryCount = 0,
 
         /**
          * onAvailable listeners
@@ -69,7 +69,7 @@ if (!YAHOO.util.Event) {
          * @static
          * @private
          */
-        var onAvailStack = [];
+        onAvailStack = [],
 
         /**
          * Counter for auto id generation
@@ -77,7 +77,7 @@ if (!YAHOO.util.Event) {
          * @static
          * @private
          */
-        var counter = 0;
+        counter = 0,
         
         /**
          * Normalized keycodes for webkit/safari
@@ -87,7 +87,7 @@ if (!YAHOO.util.Event) {
          * @static
          * @final
          */
-        var webkitKeymap = {
+         webkitKeymap = {
             63232: 38, // up
             63233: 40, // down
             63234: 37, // left
@@ -96,11 +96,17 @@ if (!YAHOO.util.Event) {
             63277: 34, // page down
             25: 9      // SHIFT-TAB (Safari provides a different key code in
                        // this case, even though the shiftKey modifier is set)
-        };
+        },
+
+		isIE = YAHOO.env.ua.ie,
+		isOpera = YAHOO.env.ua.opera,
         
         // String constants used by the addFocusListener and removeFocusListener methods
-        var _FOCUS = YAHOO.env.ua.ie ? "focusin" : "focus";
-        var _BLUR = YAHOO.env.ua.ie ? "focusout" : "blur";      
+       	_FOCUS = isIE ? "focusin" : "focus",
+       	_BLUR = isIE ? "focusout" : "blur",      
+
+
+	    NOOP  = function(){};
 
 
         return {
@@ -241,7 +247,7 @@ if (!YAHOO.util.Event) {
              * @static
              * @deprecated use YAHOO.env.ua.ie
              */
-            isIE: YAHOO.env.ua.ie,
+            isIE: isIE,
 
             /**
              * poll handle
@@ -543,6 +549,28 @@ if (!YAHOO.util.Event) {
                 return this._addListener(el, sType, fn, obj, overrideContext, false);
             },
 
+
+		    // Opera implents capture phase events per spec rather than
+		    // the more useful way it is implemented in other browsers:
+		    // The event doesn't fire on a target unless there is a
+		    // listener on an element in the target's ancestry.  If a
+		    // capture phase listener is added only to the element that 
+		    // will be the target of the event, the listener won't fire.  
+		    // To get around this, we register a NOOP listener on the
+		    // element's parent.
+
+		    _captureHack: function(type, o) {
+
+		        var el = YAHOO.util.Dom.get(o),
+		            p  = el && el.parentNode;
+
+		        if (p) {
+					this._simpleAdd(p, type, NOOP, true);
+		        }
+
+		    },
+
+
             /**
              * Appends a focus event handler.  (The focusin event is used for Internet Explorer, 
              * the focus, capture-event for Opera, WebKit.)
@@ -566,7 +594,13 @@ if (!YAHOO.util.Event) {
              * @static
              */
             addFocusListener: function (el, fn, obj, overrideContext) {
+				
+				if (isOpera) {
+					this._captureHack(el, _FOCUS);
+				}
+	
                 return this._addListener(el, _FOCUS, fn, obj, overrideContext, true);
+
             },          
 
 
@@ -612,6 +646,11 @@ if (!YAHOO.util.Event) {
              * @static
              */
             addBlurListener: function (el, fn, obj, overrideContext) {
+
+				if (isOpera) {
+					this._captureHack(el, _BLUR);
+				}
+
                 return this._addListener(el, _BLUR, fn, obj, overrideContext, true);
             },          
 
