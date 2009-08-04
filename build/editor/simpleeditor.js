@@ -3753,6 +3753,7 @@ var Dom = YAHOO.util.Dom,
             if (this._isNonEditable(ev)) {
                 return false;
             }
+            this._storeUndo();
             this._setCurrentEvent(ev);
             switch (ev.keyCode) {
                 case this._keyMap.SELECT_ALL.key:
@@ -3792,7 +3793,6 @@ var Dom = YAHOO.util.Dom,
                     break;
             }
             this.fireEvent('editorKeyUp', { type: 'editorKeyUp', target: this, ev: ev });
-            this._storeUndo();
         },
         /**
         * @private
@@ -3817,6 +3817,7 @@ var Dom = YAHOO.util.Dom,
                 return false;
             }
             this._setCurrentEvent(ev);
+            this._storeUndo();
             if (this.browser.opera) {
                 if (ev.keyCode === 13) {
                     var tar = this._getSelectedElement();
@@ -4074,6 +4075,7 @@ var Dom = YAHOO.util.Dom,
                 Event.stopEvent(ev);
                 this.nodeChange();
             }
+            this._storeUndo();
             this.fireEvent('editorKeyDown', { type: 'editorKeyDown', target: this, ev: ev });
         },
         /**
@@ -6144,15 +6146,15 @@ var Dom = YAHOO.util.Dom,
             * 2.6.0: Seems there are still some issues with List Creation and Safari 3, reverting to previously working Safari 2.x code
             */
             //if ((this.browser.webkit && !this._getDoc().queryCommandEnabled(action))) {
-            if (this.browser.webkit && !this.browser.webkit4) {
+            if ((this.browser.webkit && !this.browser.webkit4) || (this.browser.opera)) {
                 if (this._isElement(selEl, 'li') && this._isElement(selEl.parentNode, tag)) {
                     el = selEl.parentNode;
                     list = this._getDoc().createElement('span');
                     YAHOO.util.Dom.addClass(list, 'yui-non');
                     str = '';
-                    var lis = el.getElementsByTagName('li');
+                    var lis = el.getElementsByTagName('li'), p_tag = ((this.browser.opera && this.get('ptags')) ? 'p' : 'div');
                     for (li = 0; li < lis.length; li++) {
-                        str += '<div>' + lis[li].innerHTML + '</div>';
+                        str += '<' + p_tag + '>' + lis[li].innerHTML + '</' + p_tag + '>';
                     }
                     list.innerHTML = str;
                     this.currentElement[0] = el;
@@ -6168,12 +6170,12 @@ var Dom = YAHOO.util.Dom,
                             this.currentElement[li].parentNode.removeChild(this.currentElement[li]);
                         }
                     }
-                    
-                    var items = list.firstChild.innerHTML.split('<br>');
+                    var b_tag = ((this.browser.opera) ? '<BR>' : '<br>'),
+                    items = list.firstChild.innerHTML.split(b_tag), i, item;
                     if (items.length > 0) {
                         list.innerHTML = '';
-                        for (var i = 0; i < items.length; i++) {
-                            var item = this._getDoc().createElement('li');
+                        for (i = 0; i < items.length; i++) {
+                            item = this._getDoc().createElement('li');
                             item.innerHTML = items[i];
                             list.appendChild(item);
                         }
@@ -6183,7 +6185,9 @@ var Dom = YAHOO.util.Dom,
                     this.currentElement[0] = list;
                     var _h = this.currentElement[0].firstChild;
                     _h = Dom.getElementsByClassName('yui-non', 'span', _h)[0];
-                    this._getSelection().setBaseAndExtent(_h, 1, _h, _h.innerText.length);
+                    if (this.browser.webkit) {
+                        this._getSelection().setBaseAndExtent(_h, 1, _h, _h.innerText.length);
+                    }
                 }
                 exec = false;
             } else {

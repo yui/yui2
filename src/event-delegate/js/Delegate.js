@@ -36,6 +36,7 @@
 		 * @return {Function} Function that will call the event listener 
 		 * specified by the <code>YAHOO.util.Event.delegate</code> method.
          * @private
+         * @for Event
 		 * @static
 		 */
 		_createDelegate: function (fn, filter, obj, overrideContext) {
@@ -134,6 +135,7 @@
          *                        could not have the listener attached,
          *                        or if the operation throws an exception.
          * @static
+         * @for Event
          */
 		delegate: function (container, type, fn, filter, obj, overrideContext) {
 
@@ -155,7 +157,6 @@
 				sType = (type == MOUSEENTER) ? MOUSEOVER : MOUSEOUT;
 
 				if (!Event._createMouseDelegate) {
-					// TO DO: make sure the submodule event name is correct
 			        YAHOO.log("Delegating a " + type + " event requires the MouseEnter Event Submodule", "error", "Event");
 			        return false;				
 				}
@@ -176,8 +177,14 @@
 			else {
 
 				if (type == FOCUS || type == BLUR) {
+
 					bUseCapture = true;
 					sType = (type == FOCUS) ? FOCUS_EVENT_NAME : BLUR_EVENT_NAME;
+
+					if (YAHOO.env.ua.opera) {
+						Event._captureHack(sType, container);
+					}
+
 				}
 
 				fnDelegate = Event._createDelegate(fn, filter, obj, overrideContext);
@@ -212,6 +219,7 @@
          * @return {boolean} true if the unbind was successful, false 
          *  otherwise.
          * @static
+         * @for Event
          */
 		removeDelegate: function (container, type, fn) {
 

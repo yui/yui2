@@ -39,6 +39,9 @@
         Event       = YAHOO.util.Event,
         JS          = YAHOO.lang;
 
+    /* Cache the Carousel item attributes. */
+    var itemAttrCache = {};
+
     /**
      * The widget name.
      * @private
@@ -285,8 +288,12 @@
      * @private
      */
      function setStyles(el, styles) {
-         for (var which in styles) {
-             Dom.setStyle(el, which, styles[which]);
+         var which;
+
+         for (which in styles) {
+             if (styles.hasOwnProperty(which)) {
+                 Dom.setStyle(el, which, styles[which]);
+             }
          }
      }
 
@@ -455,13 +462,8 @@
             return 0;
         }
 
-        if (typeof which == "undefined") {
-            if (carousel._itemsTable.size > 0) {
-                return carousel._itemsTable.size;
-            }
-        }
-
-        item = carousel._itemsTable.items[first] || carousel._itemsTable.loading[first];
+        item = carousel._itemsTable.items[first] ||
+               carousel._itemsTable.loading[first];
 
         if (JS.isUndefined(item)) {
             return 0;
@@ -475,30 +477,19 @@
             vertical = which == "height";
         }
 
+        if (itemAttrCache[which]) {
+            return itemAttrCache[which];
+        }
+
         if (vertical) {
             size = getStyle(child, "height");
         } else {
             size = getStyle(child, "width");
         }
 
-        if (typeof which == "undefined") {
-            carousel._itemsTable.size = size; // save the size for later
-        }
+        itemAttrCache[which] = size;
 
         return size;
-    }
-
-    /**
-     * Return the index of the first item in the view port for displaying item
-     * in "pos".
-     *
-     * @method getFirstVisibleForPosition
-     * @param pos {Number} The position of the item to be displayed
-     * @private
-     */
-    function getFirstVisibleForPosition(pos) {
-        var num = this.get("numVisible");
-        return Math.floor(pos / num) * num;
     }
 
     /**
@@ -540,6 +531,19 @@
         }
 
         return styles;
+    }
+
+    /**
+     * Return the index of the first item in the view port for displaying item
+     * in "pos".
+     *
+     * @method getFirstVisibleForPosition
+     * @param pos {Number} The position of the item to be displayed
+     * @private
+     */
+    function getFirstVisibleForPosition(pos) {
+        var num = this.get("numVisible");
+        return Math.floor(pos / num) * num;
     }
 
     /**
@@ -772,27 +776,26 @@
      * @private
      */
     function getDimensions(el, which) {
-        switch(which) {
-            case 'height':
-
-                return  getStyle(el, "marginTop")        +
-                        getStyle(el, "marginBottom")     +
-                        getStyle(el, "paddingTop")       +
-                        getStyle(el, "paddingBottom")    +
-                        getStyle(el, "borderTopWidth")   +
-                        getStyle(el, "borderBottomWidth");
-
-                break;
-            case 'width':
-
-                return   getStyle(el, "marginLeft")      +
-                         getStyle(el, "marginRight")     +
-                         getStyle(el, "paddingLeft")     +
-                         getStyle(el, "paddingRight")    +
-                         getStyle(el, "borderLeftWidth") +
-                         getStyle(el, "borderRightWidth");
-                break;
+        switch (which) {
+        case 'height':
+            return  getStyle(el, "marginTop")        +
+                    getStyle(el, "marginBottom")     +
+                    getStyle(el, "paddingTop")       +
+                    getStyle(el, "paddingBottom")    +
+                    getStyle(el, "borderTopWidth")   +
+                    getStyle(el, "borderBottomWidth");
+        case 'width':
+            return   getStyle(el, "marginLeft")      +
+                     getStyle(el, "marginRight")     +
+                     getStyle(el, "paddingLeft")     +
+                     getStyle(el, "paddingRight")    +
+                     getStyle(el, "borderLeftWidth") +
+                     getStyle(el, "borderRightWidth");
+        default:
+            break;
         }
+
+        return getStyle(el, which);
     }
 
     /**
@@ -3709,7 +3712,9 @@
             } else {
                 carousel.replaceClass(cssClass.VERTICAL, cssClass.HORIZONTAL);
             }
-            carousel._itemsTable.size = 0; // force recalculation next time
+
+            itemAttrCache = {};            // force recomputed next time
+
             return val;
         },
 
