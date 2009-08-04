@@ -52,7 +52,7 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	this._swfEmbed = new YAHOO.widget.SWF(containerId, YAHOO.widget.Chart.SWFURL, attributes);
 	
 	this._swf = this._swfEmbed.swf;
-	this._swfEmbed.addListener("swfReady", this._eventHandler, null, this);
+	this._swfEmbed.subscribe("swfReady", this._eventHandler, this, true);
 	
 	this._type = type;
 	this._dataSource = dataSource;

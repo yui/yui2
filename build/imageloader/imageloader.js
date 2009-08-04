@@ -1,10 +1,10 @@
 /**
- * The image loader is a framework to dynamically load images
- * according to certain triggers, enabling faster load times
- * and a more responsive UI.
+ * The ImageLoader Utility is a framework to dynamically load images according to certain triggers,
+ * enabling faster load times and a more responsive UI.
  *
  * @module imageloader
  * @namespace YAHOO.util
+ * @requires yahoo, dom, event
  */
 
 if (typeof(YAHOO.util.ImageLoader) == 'undefined') {

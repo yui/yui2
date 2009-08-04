@@ -204,7 +204,7 @@ YAHOO.extend(YAHOO.widget.SWF, YAHOO.util.Element, {
 	{
 		if (event.type == "swfReady") {
 			this.createEvent("swfReady", {fireOnce:true});
-	     	this.fireEvent("swfReady");
+	     	this.fireEvent("swfReady", event);
         }
         else {
 	        this.fireEvent(event.type, event);
