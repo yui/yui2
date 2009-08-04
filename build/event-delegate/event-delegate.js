@@ -154,7 +154,6 @@
 				sType = (type == MOUSEENTER) ? MOUSEOVER : MOUSEOUT;
 
 				if (!Event._createMouseDelegate) {
-					// TO DO: make sure the submodule event name is correct
 			        return false;				
 				}
 
