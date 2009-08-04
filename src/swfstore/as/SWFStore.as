@@ -507,7 +507,7 @@ package
 			{
 				
 				evt = {type: "inadequateDimensions", message: "The current size of the SWF is too small to display " + 
-						"the settings panel. Please increase the available width and height to 138 x 215 or larger."};
+						"the settings panel. Please increase the available width and height to 215px x 138px or larger."};
 				yuibridge.sendEvent(evt);
 			}
 
