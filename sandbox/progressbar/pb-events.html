@@ -45,7 +45,8 @@ fieldset {
 }
 
 #pbContainer .yui-pb-bar {
-	background: transparent none;
+	background-color: rgb(127,127,127);
+	background-image: none;
 }
 
 #valueSet {
@@ -101,8 +102,8 @@ code {
 			<textarea name="code" class="JScript" cols="60" rows="1">
 				var pb = new YAHOO.widget.ProgressBar({
 					value:127,
-					anim:true,
 					maxValue:255,
+					anim:true,
 					captionEl:'captionContainer',
 					textTemplate:'We are at {value} in between {minValue} and {maxValue}'
 				}).render('pbContainer');
@@ -123,8 +124,10 @@ code {
 					Dom.setStyle('pbContainer','backgroundColor','white');
 				});
 			</textarea>
-			<p>We are instantiating the ProgressBar and configuring it so that the initial value is 127,
-			it will be animated, it will go up to 255 from the default minimum of 0, it will show its state 
+			<p>We are instantiating the ProgressBar and configuring it so that the initial value is 127 which is halfway
+			to the maximum we set of 255, starting from the default minimum of 0.
+			The range is set so that they translate directly into color values.
+			It will be animated, it will show its state 
 			using the text given in the template and it will do it right here: 
 			<span id="captionContainer"></span> (you will see it change while the bar moves).</p>
 			
@@ -141,16 +144,16 @@ code {
 			<code>complete</code> event we are setting the final color of the bar and setting the background to white once again.
 			The <code>value</code> argument provides the nominal value of the ProgresBar, not the size of the bar itself.
 			A value of 50 will always be halfway in a range o 0 to 100, whether the ProgressBar is 100 or 500 pixels wide.
-			We set the range of this bar in between 0 to 255 so that they translate directly into color values.</p>
+			</p>
 			
 			<p>We need to confirm the color value of the bar on completion of the animation.  The <code>progress</code> event
 			is unreliable, it is derived from the <code>onTween</code> event fired by the animation.  Animation will try
-			to complete the animation within the time limit given, on a busy machine it might be able to do less
-			steps than on a faster machine.  It will fire <code>onTween</code> for each step, but how many steps
+			to complete the animation within the time limit given doing it in as many steps as they fit on the alloted time.
+			On a busy machine it might be able to do less steps than on a faster machine.  
+			It will fire <code>onTween</code> for each step, but how many steps
 			it will be able to fit within the <code>duration</code> given cannot be predicted.  You cannot trust
 			that there will be a <code>progress</code> event close in time to the final point to leave things properly set
-			so we need to confirm the final state in the <code>complete</code> event.  Besides, at a later stage in the project, 
-			the animation might be dropped and there wouldn't be any more <code>progress</code> events.</p>
+			so we need to confirm the final state in the <code>complete</code> event.</p>
 			
 			<p>Just as we have the <code>barEl</code> configuration attribute, which we used here, we have attributes holding the references
 			to the main elements that make the ProgressBar.  They are all read-only except for <code>captionEl</code>
@@ -169,11 +172,11 @@ code {
 
 	YAHOO.util.Event.onDOMReady( function () {
 		var Dom = YAHOO.util.Dom;
-			
+		
 		var pb = new YAHOO.widget.ProgressBar({
 			value:127,
-			anim:true,
 			maxValue:255,
+			anim:true,
 			captionEl:'captionContainer',
 			textTemplate:'We are at {value} in between {minValue} and {maxValue}'
 		}).render('pbContainer');
@@ -197,7 +200,7 @@ code {
 		var valueSlider = YAHOO.widget.Slider.getHorizSlider('sliderValue',  
             'sliderValueThumb', 0, 200, 0
 		);
-		valueSlider.setValue(100);
+		valueSlider.setValue(100,true,true,true);
 		
 		valueSlider.subscribe("change", function(offsetFromStart) {
 			var value = Math.round(offsetFromStart  * 1.275);
