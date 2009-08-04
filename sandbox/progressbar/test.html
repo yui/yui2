@@ -20,7 +20,7 @@
 
 <style type="text/css">
 .yui-pb-caption {
-	display:block;
+	visibility:visible;
 }
 
 #plain.yui-pb {
@@ -115,7 +115,6 @@
 			A.areEqual('0px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('20px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('200px',getStyle(t.c,'width'),'caption width');
-			A.areEqual('20px',getStyle(t.c,'height'),'caption height');
         },
 
         testSetupByCode : function () {
@@ -137,7 +136,6 @@
 			A.areEqual('0px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('30px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('300px',getStyle(t.c,'width'),'caption width');
-			A.areEqual('30px',getStyle(t.c,'height'),'caption height');
         },
 		
 		testSetupByStyle: function () {
@@ -159,7 +157,6 @@
 			A.areEqual('0px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('25px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('250px',getStyle(t.c,'width'),'caption width');
-			A.areEqual('25px',getStyle(t.c,'height'),'caption height');
 		}
     }));
 
@@ -539,7 +536,6 @@
 			A.areEqual('90px',getStyle(t.b,'width'),'bar width after');
 			A.areEqual('20px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('300px',getStyle(t.c,'width'),'caption width');
-			A.areEqual('20px',getStyle(t.c,'height'),'caption height');
 		},
 		testHeightChangeLtr: function() {
             pb = new PB({value:30});
@@ -559,7 +555,6 @@
 			A.areEqual('60px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('50px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('200px',getStyle(t.c,'width'),'caption width');
-			A.areEqual('50px',getStyle(t.c,'height'),'caption height');
 		},
 		testWidthChangeTtb: function() {
             pb = new PB({value:30,direction:'ttb',height:100});
@@ -579,7 +574,6 @@
 			A.areEqual('300px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('30px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('300px',getStyle(t.c,'width'),'caption width');
-			A.areEqual('100px',getStyle(t.c,'height'),'caption height');
 		},
 		testHeightChangeTtb: function() {
             pb = new PB({value:30,direction:'ttb',height:100});
@@ -599,7 +593,6 @@
 			A.areEqual('200px',getStyle(t.b,'width'),'bar width');
 			A.areEqual('45px',getStyle(t.b,'height'),'bar height');
 			A.areEqual('200px',getStyle(t.c,'width'),'caption width');
-			A.areEqual('150px',getStyle(t.c,'height'),'caption height');
 		}
 	}));
 

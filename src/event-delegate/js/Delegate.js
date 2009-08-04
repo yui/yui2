@@ -36,6 +36,7 @@
 		 * @return {Function} Function that will call the event listener 
 		 * specified by the <code>YAHOO.util.Event.delegate</code> method.
          * @private
+         * @for Event
 		 * @static
 		 */
 		_createDelegate: function (fn, filter, obj, overrideContext) {
@@ -134,6 +135,7 @@
          *                        could not have the listener attached,
          *                        or if the operation throws an exception.
          * @static
+         * @for Event
          */
 		delegate: function (container, type, fn, filter, obj, overrideContext) {
 
@@ -217,6 +219,7 @@
          * @return {boolean} true if the unbind was successful, false 
          *  otherwise.
          * @static
+         * @for Event
          */
 		removeDelegate: function (container, type, fn) {
 
