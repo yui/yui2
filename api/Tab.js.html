@@ -499,13 +499,21 @@
         <span class="nx">_onActivate</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">tabview</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">tab</span> <span class="o">=</span> <span class="k">this</span><span class="o">,</span>
                 <span class="nx">silent</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-            
 
             <span class="nx">Y</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">tab</span> <span class="o">===</span> <span class="nx">tabview</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">ACTIVE_TAB</span><span class="o">))</span> <span class="o">{</span>
                 <span class="nx">silent</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span> <span class="c">// dont fire activeTabChange if already active</span>
 <span class="c"></span>            <span class="o">}</span>
             <span class="nx">tabview</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="nx">ACTIVE_TAB</span><span class="o">,</span> <span class="nx">tab</span><span class="o">,</span> <span class="nx">silent</span><span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="nx">_onActivationEventChange</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">tab</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">prevValue</span> <span class="o">!=</span> <span class="nx">e</span><span class="o">.</span><span class="nx">newValue</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">tab</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">prevValue</span><span class="o">,</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">_onActivate</span><span class="o">);</span>
+                <span class="nx">tab</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">newValue</span><span class="o">,</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">_onActivate</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">tab</span><span class="o">);</span>
+            <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">});</span>
     
