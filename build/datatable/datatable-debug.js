@@ -3109,7 +3109,7 @@ lang.augmentObject(DT, {
      * @private
      * @static     
      */
-    _bDynStylesFallback : (ua.ie && (ua.ie<7)) ? true : false,
+    _bDynStylesFallback : (ua.ie) ? true : false,
 
     /**
      * Object literal hash of Columns and their dynamically create style rules.
