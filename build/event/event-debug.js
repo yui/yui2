@@ -1028,7 +1028,7 @@ if (!YAHOO.util.Event) {
 
 		    _captureHack: function(type, o) {
 
-		        var el = YAHOO.util.Dom.get(o),
+		        var el = this.getEl(o),
 		            p  = el && el.parentNode;
 
 		        if (p) {
