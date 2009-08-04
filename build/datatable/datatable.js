@@ -7337,6 +7337,9 @@ destroy : function() {
         }
     }
 
+    // Destroy Paginator
+    this._destroyPaginator();
+
     // Unhook custom events
     this._oRecordSet.unsubscribeAll();
     this.unsubscribeAll();
@@ -9691,6 +9694,19 @@ _defaultPaginatorContainers : function (create) {
     }
 
     return [above,below];
+},
+
+/**
+ * Calls Paginator's destroy() method
+ *
+ * @method _destroyPaginator
+ * @private
+ */
+_destroyPaginator : function () {
+    var oldPag = this.get('paginator');
+    if (oldPag) {
+        oldPag.destroy();
+    }
 },
 
 /**
