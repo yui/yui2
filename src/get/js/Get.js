@@ -345,20 +345,33 @@ YAHOO.util.Get = function() {
      * @private
      */
     var _purge = function(tId) {
-        var q=queues[tId];
-        if (q) {
-            var n=q.nodes, l=n.length, d=q.win.document, 
-                h=d.getElementsByTagName("head")[0];
+        if (queues[tId]) {
+
+            var q     = queues[tId],
+                nodes = q.nodes, 
+                l     = nodes.length, 
+                d     = q.win.document, 
+                h     = d.getElementsByTagName("head")[0],
+                sib, i, node, attr;
 
             if (q.insertBefore) {
-                var s = _get(q.insertBefore, tId);
-                if (s) {
-                    h = s.parentNode;
+                sib = _get(q.insertBefore, tId);
+                if (sib) {
+                    h = sib.parentNode;
                 }
             }
 
-            for (var i=0; i<l; i=i+1) {
-                h.removeChild(n[i]);
+            for (i=0; i<l; i=i+1) {
+                node = nodes[i];
+                if (node.clearAttributes) {
+                    node.clearAttributes();
+                } else {
+                    for (attr in node) {
+                        delete node[attr];
+                    }
+                }
+
+                h.removeChild(node);
             }
 
             q.nodes = [];

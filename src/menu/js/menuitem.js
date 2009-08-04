@@ -1854,69 +1854,85 @@ MenuItem.prototype = {
 
 	},
 
+    /**
+    * @method getNextSibling
+    * @description Finds the menu item's next sibling.
+    * @return YAHOO.widget.MenuItem
+    */
+	getNextSibling: function () {
+	
+		var menuitemEl = this.element,
+			next = Dom.getNextSibling(menuitemEl),
+			parent,
+			sibling,
+			list;
+		
+		if (!next) {
+			
+			parent = menuitemEl.parentNode;
+			sibling = Dom.getNextSibling(parent);
+			
+			if (sibling && sibling.nodeName.toLowerCase() === "ul") {
+				list = sibling;
+			}
+			else {
+				list = Dom.getFirstChild(parent.parentNode);
+			}
+			
+			next = Dom.getFirstChild(list);
+			
+		}
+
+		return YAHOO.widget.MenuManager.getMenuItem(next.id);
+
+	},
 
     /**
     * @method getNextEnabledSibling
     * @description Finds the menu item's next enabled sibling.
     * @return YAHOO.widget.MenuItem
     */
-    getNextEnabledSibling: function () {
+	getNextEnabledSibling: function () {
+		
+		var next = this.getNextSibling();
+		
+        return (next.cfg.getProperty(_DISABLED) || next.element.style.display == _NONE) ? next.getNextEnabledSibling() : next;
+		
+	},
 
-        var nGroupIndex,
-            aItemGroups,
-            oNextItem,
-            nNextGroupIndex,
-            aNextGroup,
-            returnVal;
 
-        function getNextArrayItem(p_aArray, p_nStartIndex) {
+    /**
+    * @method getPreviousSibling
+    * @description Finds the menu item's previous sibling.
+    * @return {YAHOO.widget.MenuItem}
+    */	
+	getPreviousSibling: function () {
 
-            return p_aArray[p_nStartIndex] || getNextArrayItem(p_aArray, (p_nStartIndex+1));
+		var menuitemEl = this.element,
+			next = Dom.getPreviousSibling(menuitemEl),
+			parent,
+			sibling,
+			list;
+		
+		if (!next) {
+			
+			parent = menuitemEl.parentNode;
+			sibling = Dom.getPreviousSibling(parent);
+			
+			if (sibling && sibling.nodeName.toLowerCase() === "ul") {
+				list = sibling;
+			}
+			else {
+				list = Dom.getLastChild(parent.parentNode);
+			}
+			
+			next = Dom.getLastChild(list);
+			
+		}
 
-        }
-
-        if (this.parent instanceof Menu) {
-
-            nGroupIndex = this.groupIndex;
-    
-            aItemGroups = this.parent.getItemGroups();
-    
-            if (this.index < (aItemGroups[nGroupIndex].length - 1)) {
-    
-                oNextItem = getNextArrayItem(aItemGroups[nGroupIndex], 
-                        (this.index+1));
-    
-            }
-            else {
-    
-                if (nGroupIndex < (aItemGroups.length - 1)) {
-    
-                    nNextGroupIndex = nGroupIndex + 1;
-    
-                }
-                else {
-    
-                    nNextGroupIndex = 0;
-    
-                }
-    
-                aNextGroup = getNextArrayItem(aItemGroups, nNextGroupIndex);
-    
-                // Retrieve the first menu item in the next group
-    
-                oNextItem = getNextArrayItem(aNextGroup, 0);
-    
-            }
-    
-            returnVal = (oNextItem.cfg.getProperty(_DISABLED) || 
-                oNextItem.element.style.display == _NONE) ? 
-                oNextItem.getNextEnabledSibling() : oNextItem;
-
-        }
-        
-        return returnVal;
-
-    },
+		return YAHOO.widget.MenuManager.getMenuItem(next.id);
+		
+	},
 
 
     /**
@@ -1924,70 +1940,13 @@ MenuItem.prototype = {
     * @description Finds the menu item's previous enabled sibling.
     * @return {YAHOO.widget.MenuItem}
     */
-    getPreviousEnabledSibling: function () {
-
-        var nGroupIndex,
-            aItemGroups,
-            oPreviousItem,
-            nPreviousGroupIndex,
-            aPreviousGroup,
-            returnVal;
-
-        function getPreviousArrayItem(p_aArray, p_nStartIndex) {
-
-            return p_aArray[p_nStartIndex] || getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
-
-        }
-
-        function getFirstItemIndex(p_aArray, p_nStartIndex) {
-
-            return p_aArray[p_nStartIndex] ? p_nStartIndex : 
-                getFirstItemIndex(p_aArray, (p_nStartIndex+1));
-
-        }
-
-       if (this.parent instanceof Menu) {
-
-            nGroupIndex = this.groupIndex;
-            aItemGroups = this.parent.getItemGroups();
-
-    
-            if (this.index > getFirstItemIndex(aItemGroups[nGroupIndex], 0)) {
-    
-                oPreviousItem = getPreviousArrayItem(aItemGroups[nGroupIndex], 
-                        (this.index-1));
-    
-            }
-            else {
-    
-                if (nGroupIndex > getFirstItemIndex(aItemGroups, 0)) {
-    
-                    nPreviousGroupIndex = nGroupIndex - 1;
-    
-                }
-                else {
-    
-                    nPreviousGroupIndex = aItemGroups.length - 1;
-    
-                }
-    
-                aPreviousGroup = getPreviousArrayItem(aItemGroups, 
-                    nPreviousGroupIndex);
-    
-                oPreviousItem = getPreviousArrayItem(aPreviousGroup, 
-                        (aPreviousGroup.length - 1));
-    
-            }
-
-            returnVal = (oPreviousItem.cfg.getProperty(_DISABLED) || 
-                oPreviousItem.element.style.display == _NONE) ? 
-                oPreviousItem.getPreviousEnabledSibling() : oPreviousItem;
-
-        }
-        
-        return returnVal;
-
-    },
+	getPreviousEnabledSibling: function () {
+		
+		var next = this.getPreviousSibling();
+		
+        return (next.cfg.getProperty(_DISABLED) || next.element.style.display == _NONE) ? next.getPreviousEnabledSibling() : next;
+		
+	},
 
 
     /**

@@ -77,11 +77,14 @@ function checkDragDrop(callback, win) {
 
 function loadReset() {
     for (var i=0; i<50; i=i+1) {
-        // YAHOO.util.Get.css("../../build/reset/reset.js",
-        YAHOO.util.Get.css("../../build/reset/reset.css", {
-            autopurge: true
-        });
+        // YAHOO.util.Get.css("../../build/reset/reset.css", {
+        //     autopurge: true
+        // });
+
+        YAHOO.util.Get.script("../../build/cookie/cookie-min.js");
+
     }
+
 }
 
 YAHOO.util.Event.on("btnLoad", "click", loadReset);
