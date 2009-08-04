@@ -80,7 +80,7 @@
 <span class="c">         * @static</span>
 <span class="c">         * @private</span>
 <span class="c">         */</span>
-        <span class="k">var</span> <span class="nx">loadComplete</span> <span class="o">=</span>  <span class="kc">false</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">loadComplete</span> <span class="o">=</span>  <span class="kc">false</span><span class="o">,</span>
 
         <span class="c">/**</span>
 <span class="c">         * Cache of wrapped listeners</span>
@@ -89,7 +89,7 @@
 <span class="c">         * @static</span>
 <span class="c">         * @private</span>
 <span class="c">         */</span>
-        <span class="k">var</span> <span class="nx">listeners</span> <span class="o">=</span> <span class="o">[];</span>
+        <span class="nx">listeners</span> <span class="o">=</span> <span class="o">[],</span>
 
 
         <span class="c">/**</span>
@@ -100,7 +100,7 @@
 <span class="c">         * @static</span>
 <span class="c">         * @private</span>
 <span class="c">         */</span>
-        <span class="k">var</span> <span class="nx">unloadListeners</span> <span class="o">=</span> <span class="o">[];</span>
+        <span class="nx">unloadListeners</span> <span class="o">=</span> <span class="o">[],</span>
 
         <span class="c">/**</span>
 <span class="c">         * The number of times to poll after window.onload.  This number is</span>
@@ -110,7 +110,7 @@
 <span class="c">         * @static</span>
 <span class="c">         * @private</span>
 <span class="c">         */</span>
-        <span class="k">var</span> <span class="nx">retryCount</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+        <span class="nx">retryCount</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span>
 
         <span class="c">/**</span>
 <span class="c">         * onAvailable listeners</span>
@@ -118,7 +118,7 @@
 <span class="c">         * @static</span>
 <span class="c">         * @private</span>
 <span class="c">         */</span>
-        <span class="k">var</span> <span class="nx">onAvailStack</span> <span class="o">=</span> <span class="o">[];</span>
+        <span class="nx">onAvailStack</span> <span class="o">=</span> <span class="o">[],</span>
 
         <span class="c">/**</span>
 <span class="c">         * Counter for auto id generation</span>
@@ -126,7 +126,7 @@
 <span class="c">         * @static</span>
 <span class="c">         * @private</span>
 <span class="c">         */</span>
-        <span class="k">var</span> <span class="nx">counter</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+        <span class="nx">counter</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span>
         
         <span class="c">/**</span>
 <span class="c">         * Normalized keycodes for webkit/safari</span>
@@ -136,7 +136,7 @@
 <span class="c">         * @static</span>
 <span class="c">         * @final</span>
 <span class="c">         */</span>
-        <span class="k">var</span> <span class="nx">webkitKeymap</span> <span class="o">=</span> <span class="o">{</span>
+         <span class="nx">webkitKeymap</span> <span class="o">=</span> <span class="o">{</span>
             <span class="m">63232</span><span class="o">:</span> <span class="m">38</span><span class="o">,</span> <span class="c">// up</span>
 <span class="c"></span>            <span class="m">63233</span><span class="o">:</span> <span class="m">40</span><span class="o">,</span> <span class="c">// down</span>
 <span class="c"></span>            <span class="m">63234</span><span class="o">:</span> <span class="m">37</span><span class="o">,</span> <span class="c">// left</span>
@@ -145,11 +145,17 @@
 <span class="c"></span>            <span class="m">63277</span><span class="o">:</span> <span class="m">34</span><span class="o">,</span> <span class="c">// page down</span>
 <span class="c"></span>            <span class="m">25</span><span class="o">:</span> <span class="m">9</span>      <span class="c">// SHIFT-TAB (Safari provides a different key code in</span>
 <span class="c"></span>                       <span class="c">// this case, even though the shiftKey modifier is set)</span>
-<span class="c"></span>        <span class="o">};</span>
+<span class="c"></span>        <span class="o">},</span>
+
+		<span class="nx">isIE</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">,</span>
+		<span class="nx">isOpera</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">opera</span><span class="o">,</span>
         
         <span class="c">// String constants used by the addFocusListener and removeFocusListener methods</span>
-<span class="c"></span>        <span class="k">var</span> <span class="nx">_FOCUS</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">?</span> <span class="s2">&quot;focusin&quot;</span> <span class="o">:</span> <span class="s2">&quot;focus&quot;</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">_BLUR</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">?</span> <span class="s2">&quot;focusout&quot;</span> <span class="o">:</span> <span class="s2">&quot;blur&quot;</span><span class="o">;</span>      
+<span class="c"></span>       	<span class="nx">_FOCUS</span> <span class="o">=</span> <span class="nx">isIE</span> <span class="o">?</span> <span class="s2">&quot;focusin&quot;</span> <span class="o">:</span> <span class="s2">&quot;focus&quot;</span><span class="o">,</span>
+       	<span class="nx">_BLUR</span> <span class="o">=</span> <span class="nx">isIE</span> <span class="o">?</span> <span class="s2">&quot;focusout&quot;</span> <span class="o">:</span> <span class="s2">&quot;blur&quot;</span><span class="o">,</span>      
+
+
+	    <span class="nx">NOOP</span>  <span class="o">=</span> <span class="k">function</span><span class="o">(){};</span>
 
 
         <span class="k">return</span> <span class="o">{</span>
@@ -290,7 +296,7 @@
 <span class="c">             * @static</span>
 <span class="c">             * @deprecated use YAHOO.env.ua.ie</span>
 <span class="c">             */</span>
-            <span class="nx">isIE</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">,</span>
+            <span class="nx">isIE</span><span class="o">:</span> <span class="nx">isIE</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * poll handle</span>
@@ -592,6 +598,28 @@
                 <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_addListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
             <span class="o">},</span>
 
+
+		    <span class="c">// Opera implents capture phase events per spec rather than</span>
+<span class="c"></span>		    <span class="c">// the more useful way it is implemented in other browsers:</span>
+<span class="c"></span>		    <span class="c">// The event doesn&#39;t fire on a target unless there is a</span>
+<span class="c"></span>		    <span class="c">// listener on an element in the target&#39;s ancestry.  If a</span>
+<span class="c"></span>		    <span class="c">// capture phase listener is added only to the element that </span>
+<span class="c"></span>		    <span class="c">// will be the target of the event, the listener won&#39;t fire.  </span>
+<span class="c"></span>		    <span class="c">// To get around this, we register a NOOP listener on the</span>
+<span class="c"></span>		    <span class="c">// element&#39;s parent.</span>
+<span class="c"></span>
+		    <span class="nx">_captureHack</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
+
+		        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">o</span><span class="o">),</span>
+		            <span class="nx">p</span>  <span class="o">=</span> <span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+
+		        <span class="k">if</span> <span class="o">(</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">this</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nx">p</span><span class="o">,</span> <span class="nx">type</span><span class="o">,</span> <span class="nx">NOOP</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		        <span class="o">}</span>
+
+		    <span class="o">},</span>
+
+
             <span class="c">/**</span>
 <span class="c">             * Appends a focus event handler.  (The focusin event is used for Internet Explorer, </span>
 <span class="c">             * the focus, capture-event for Opera, WebKit.)</span>
@@ -615,7 +643,13 @@
 <span class="c">             * @static</span>
 <span class="c">             */</span>
             <span class="nx">addFocusListener</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
+				
+				<span class="k">if</span> <span class="o">(</span><span class="nx">isOpera</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">this</span><span class="o">.</span><span class="nx">_captureHack</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">_FOCUS</span><span class="o">);</span>
+				<span class="o">}</span>
+	
                 <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_addListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">_FOCUS</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
             <span class="o">},</span>          
 
 
@@ -661,6 +695,11 @@
 <span class="c">             * @static</span>
 <span class="c">             */</span>
             <span class="nx">addBlurListener</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
+
+				<span class="k">if</span> <span class="o">(</span><span class="nx">isOpera</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">this</span><span class="o">.</span><span class="nx">_captureHack</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">_BLUR</span><span class="o">);</span>
+				<span class="o">}</span>
+
                 <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_addListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">_BLUR</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
             <span class="o">},</span>          
 
