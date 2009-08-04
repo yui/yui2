@@ -64,6 +64,7 @@
 		 * and <code>YAHOO.util.Event.onMouseLeave</code> methods.
          * @private
 		 * @static
+         * @for Event
 		 */
 		_createMouseDelegate: function (fn, obj, overrideContext) {
  
@@ -133,6 +134,7 @@
 		 *                        could not have the listener attached,
 		 *                        or if the operation throws an exception.
 		 * @static
+         * @for Event
 		 */
 		onMouseEnter: function (el, fn, obj, overrideContext) {
 			return addListener.call(Event, el, MOUSEOVER, fn, obj, overrideContext);
@@ -162,6 +164,7 @@
 		 *                        could not have the listener attached,
 		 *                        or if the operation throws an exception.
 		 * @static
+         * @for Event
 		 */
 		onMouseLeave: function (el, fn, obj, overrideContext) {
 			return addListener.call(Event, el, MOUSEOUT, fn, obj, overrideContext);
@@ -182,6 +185,7 @@
          * @return {boolean} true if the unbind was successful, false 
          *  otherwise.
          * @static
+         * @for Event
          */
 		removeMouseEnterListener: function (el, fn) { 
 			return removeListener.call(Event, el, MOUSEOVER, fn);
@@ -202,6 +206,7 @@
          * @return {boolean} true if the unbind was successful, false 
          *  otherwise.
          * @static
+         * @for Event
          */
 		removeMouseLeaveListener: function (el, fn) { 
 			return removeListener.call(Event, el, MOUSEOUT, fn);

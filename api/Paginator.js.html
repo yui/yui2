@@ -605,11 +605,10 @@
             <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
         <span class="o">}</span>
 
-        <span class="k">var</span> <span class="nx">totalRecords</span>   <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">),</span>
-            <span class="nx">template</span>       <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;template&#39;</span><span class="o">),</span>
-            <span class="nx">state</span>          <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">(),</span>
+        <span class="k">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;template&#39;</span><span class="o">),</span>
+            <span class="nx">state</span>    <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">(),</span>
             <span class="c">// ex. yui-pg0-1 (first paginator, second container)</span>
-<span class="c"></span>            <span class="nx">id_base</span>        <span class="o">=</span> <span class="nx">Paginator</span><span class="o">.</span><span class="nx">ID_BASE</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span><span class="o">,</span>
+<span class="c"></span>            <span class="nx">id_base</span>  <span class="o">=</span> <span class="nx">Paginator</span><span class="o">.</span><span class="nx">ID_BASE</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span><span class="o">,</span>
             <span class="nx">i</span><span class="o">,</span> <span class="nx">len</span><span class="o">;</span>
 
         <span class="c">// Assemble the containers, keeping them hidden</span>
@@ -706,6 +705,7 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;destroy&#39;</span><span class="o">);</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;rendered&#39;</span><span class="o">,{</span><span class="nx">value</span><span class="o">:</span><span class="kc">false</span><span class="o">});</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -1159,6 +1159,7 @@
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
                                 <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
@@ -1170,10 +1171,13 @@
                                 <li class="selected"><a href="module_paginator.html" title="paginator">paginator</a></li>
                                 <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
                                 <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>

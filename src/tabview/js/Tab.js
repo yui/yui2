@@ -450,13 +450,21 @@
         _onActivate: function(e, tabview) {
             var tab = this,
                 silent = false;
-            
 
             Y.Event.preventDefault(e);
             if (tab === tabview.get(ACTIVE_TAB)) {
                 silent = true; // dont fire activeTabChange if already active
             }
             tabview.set(ACTIVE_TAB, tab, silent);
+        },
+
+        _onActivationEventChange: function(e) {
+            var tab = this;
+
+            if (e.prevValue != e.newValue) {
+                tab.removeListener(e.prevValue, tab._onActivate);
+                tab.addListener(e.newValue, tab._onActivate, this, tab);
+            }
         }
     });
     

@@ -121,6 +121,6 @@
 
 .yui-skin-sam .yui-carousel-item-loading {
     background: url(ajax-loader.gif) no-repeat 50% 50%;
-    position: relative;
+    position: absolute;
     text-indent: -150px;
 }
