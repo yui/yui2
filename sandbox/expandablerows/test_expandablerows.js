@@ -2,14 +2,14 @@
 
 	YAHOO.namespace("example.yuitest");
 
-	var	YTest					= YAHOO.example.yuitest,
-			Ytool					= YAHOO.tool,
-			Event					= YAHOO.util.Event,
-			Dom						=	YAHOO.util.Dom,
-			DT						= YAHOO.widget.DataTable,
-			Assert				= YAHOO.util.Assert,
-			ArrayAssert		= YAHOO.util.ArrayAssert,
-			ObjectAssert	= YAHOO.util.ObjectAssert;
+	var	YTest         = YAHOO.example.yuitest,
+			Ytool         = YAHOO.tool,
+			Event         = YAHOO.util.Event,
+			Dom           = YAHOO.util.Dom,
+			DT            = YAHOO.widget.DataTable,
+			Assert        = YAHOO.util.Assert,
+			ArrayAssert   = YAHOO.util.ArrayAssert,
+			ObjectAssert  = YAHOO.util.ObjectAssert;
 
 	YTest.RowExpansionCoreSuite = new Ytool.TestSuite("RowExpansion Core");
 

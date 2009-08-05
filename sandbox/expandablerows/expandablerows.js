@@ -7,14 +7,14 @@
 
 (function(){
 	
-	var	Dom 							= YAHOO.util.Dom
+	var	Dom               = YAHOO.util.Dom
 	
-			STRING_STATENAME	= 'yui_dt_state',
+			STRING_STATENAME  = 'yui_dt_state',
 
-			CLASS_EXPANDED		= 'yui-dt-expanded',
-			CLASS_COLLAPSED		= 'yui-dt-collapsed',
-			CLASS_EXPANSION		= 'yui-dt-expansion',
-			CLASS_LINER				= 'yui-dt-liner',
+			CLASS_EXPANDED    = 'yui-dt-expanded',
+			CLASS_COLLAPSED   = 'yui-dt-collapsed',
+			CLASS_EXPANSION   = 'yui-dt-expansion',
+			CLASS_LINER       = 'yui-dt-liner',
 
 			//From YUI 3
 			indexOf = function(a, val) {
@@ -37,31 +37,31 @@
 
 				YAHOO.widget.DataTable.superclass.initAttributes.call( this, oConfigs );
 
-			    /**
-			    * @attribute rowExpansionTemplate
-			    * @description Value for the rowExpansionTemplate attribute.
-			    * @type String or Function
-			    * @default ""
-			    */
+					/**
+					* @attribute rowExpansionTemplate
+					* @description Value for the rowExpansionTemplate attribute.
+					* @type String or Function
+					* @default ""
+					*/
 
-			    this.setAttributeConfig("rowExpansionTemplate", {
-			        value: "",
-			        validator: function( template ){
-								return (
-									YAHOO.lang.isString( template ) ||
-									YAHOO.lang.isFunction( template )
-								);
-							},
-			        method: this.initExpandableRows
-			    });
+					this.setAttributeConfig("rowExpansionTemplate", {
+					    value: "",
+					    validator: function( template ){
+						return (
+							YAHOO.lang.isString( template ) ||
+							YAHOO.lang.isFunction( template )
+						);
+					},
+					    method: this.initExpandableRows
+					});
 
 			},
 
 			_getRecordState : function( record_id, key ){
 
-				var	row_data		= this.getRecord( record_id ),
-						row_state		= row_data.getData( STRING_STATENAME ),
-						state_data	= ( row_state && key ) ? row_state[ key ] : row_state;
+				var	row_data    = this.getRecord( record_id ),
+						row_state   = row_data.getData( STRING_STATENAME ),
+						state_data  = ( row_state && key ) ? row_state[ key ] : row_state;
 				
 				return state_data || {};
 
@@ -69,8 +69,8 @@
 
 			_setRecordState : function( record_id, key, value ){
 
-				var	row_data			= this.getRecord( record_id ).getData(),
-						merged_data 	= row_data[ STRING_STATENAME ] || {};
+				var	row_data      = this.getRecord( record_id ).getData(),
+						merged_data   = row_data[ STRING_STATENAME ] || {};
 					
 				merged_data[ key ] = value;
 
@@ -115,14 +115,14 @@
 
 				if( !state.expanded || restore ){
 					
-					var	row_data					= this.getRecord( record_id ),
-							row 							= this.getRow( row_data ),
-							new_row 					= document.createElement('tr'),
-							column_length			= this.getFirstTrEl().childNodes.length,
-							expanded_data			= row_data.getData(),
-							expanded_content	= null,
-							template 					= this.rowExpansionTemplate,
-							next_sibling			= Dom.getNextSibling( row );
+					var	row_data          = this.getRecord( record_id ),
+							row               = this.getRow( row_data ),
+							new_row           = document.createElement('tr'),
+							column_length     = this.getFirstTrEl().childNodes.length,
+							expanded_data     = row_data.getData(),
+							expanded_content  = null,
+							template          = this.rowExpansionTemplate,
+							next_sibling      = Dom.getNextSibling( row );
 
 					//Construct expanded row body
 					new_row.className = CLASS_EXPANSION;
@@ -190,14 +190,14 @@
 
 			collapseRow : function( record_id ){
 				
-				var	row_data		= this.getRecord( record_id ),
-						row					= Dom.get( row_data.getId() ),
-						state				= row_data.getData( STRING_STATENAME );
+				var	row_data    = this.getRecord( record_id ),
+						row         = Dom.get( row_data.getId() ),
+						state       = row_data.getData( STRING_STATENAME );
 				
 				if( state && state.expanded ){
 
-					var	next_sibling		= Dom.getNextSibling( row ),
-							hash_index			= indexOf( this.a_rowExpansions, record_id );
+					var	next_sibling    = Dom.getNextSibling( row ),
+							hash_index      = indexOf( this.a_rowExpansions, record_id );
 						
 					if( Dom.hasClass( next_sibling, CLASS_EXPANSION ) ) {
 
