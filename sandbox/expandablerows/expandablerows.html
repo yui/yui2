@@ -88,9 +88,7 @@ YAHOO.util.Event.onDOMReady( function() {
 
 				var expansionFormatter = function(el, oRecord, oColumn, oData) {
 
-					var	cell_element = this.getTdEl(el),
-							state_object = oRecord.getData( STRING_STATENAME ),
-							this_static = YAHOO.widget.DataTable.formatExpandRowTrigger;
+					var	cell_element = this.getTdEl(el);
 
 					//Set trigger
 					if( oData ){ //Row is closed
@@ -106,6 +104,7 @@ YAHOO.util.Event.onDOMReady( function() {
 						{
 							key:"image_url",
 							label:"",
+							//Formatter function that creates a trigger in all rows with data.
 							formatter:expansionFormatter
 						},
 						{
@@ -140,21 +139,6 @@ YAHOO.util.Event.onDOMReady( function() {
 				myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
 				myDataSource.responseSchema = {
 					fields: ["id","date","quantity","amount","title","image_url"]
-				};
-
-				YAHOO.widget.DataTable.ExpansionFormatter = function(el, oRecord, oColumn, oData) {
-
-					var cell_element = this.getTdEl(el),
-						state_object = oRecord.getData( STRING_STATENAME ),
-						this_static = YAHOO.widget.DataTable.formatExpandRowTrigger;
-
-					//Set trigger
-					if( oData ){ //Row is closed
-
-						Dom.addClass( cell_element, "yui-dt-expandablerow-trigger" );
-
-					}
-
 				};
 
 				var myDataTable = new YAHOO.widget.DataTable(
