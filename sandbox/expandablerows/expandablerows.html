@@ -19,6 +19,7 @@
 			-khtml-opacity: 0.5;
 			opacity: 0.5;
 		}
+		#event_table{width:800px;}
 		.yui-dt-expanded .yui-dt-expandablerow-trigger{
 			width:18px;
 			height:22px;
@@ -44,7 +45,7 @@
 
 </div>
 
-<div id="basic"></div>
+<div id="event_table"></div>
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script> 
 <script type="text/javascript" src="data.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script> 
@@ -100,52 +101,30 @@ YAHOO.util.Event.onDOMReady( function() {
 				};
 
 				var myColumnDefs = [
-				
-						{
-							key:"image_url",
-							label:"",
-							//Formatter function that creates a trigger in all rows with data.
-							formatter:expansionFormatter
-						},
-						{
-							key:"date",
-							sortable:true, 
-							sortOptions:{
-								defaultDir:YAHOO.widget.DataTable.CLASS_DESC
-							},
-							resizeable:true
-						},
-						{
-							key:"quantity", 
-							formatter:YAHOO.widget.DataTable.formatNumber, 
-							sortable:true, 
-							resizeable:true
-						},
-						{
-							key:"amount", 
-							formatter:YAHOO.widget.DataTable.formatCurrency, 
-							sortable:true, 
-							resizeable:true
-						},
-						{
-							key:"title", 
-							sortable:true, 
-							resizeable:true
-						}
-						
+					{
+						key:"title",
+						label:"",
+						formatter:expansionFormatter
+					},
+					{
+						key:"title",
+						label:"Interesting Photo",
+						sortable:true,
+						resizeable:true
+					}
 				];
 
-				var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
+				var myDataSource = new YAHOO.util.DataSource(YAHOO.example.interestingness);
 						myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
 						myDataSource.responseSchema = {
-							fields: ["id","date","quantity","amount","title","image_url"]
+							fields: ["title","farm","server","id","secret","owner"]
 						};
 
 				var myDataTable = new YAHOO.widget.DataTable(
-						"basic",
+						"event_table",
 						myColumnDefs,
 						myDataSource,
-							{ rowExpansionTemplate : '<img src="{image_url}" />' }
+							{ rowExpansionTemplate : '<img src="http://farm{farm}.static.flickr.com/{server}/{id}_{secret}_m_d.jpg" />' }
 						);
 
 				//Subscribe to a click event to bind to
