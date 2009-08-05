@@ -7169,6 +7169,8 @@ render : function() {
 
     this._oChainRender.stop();
 
+    this.fireEvent("beforeRenderEvent");
+
     var i, j, k, len, allRecords;
 
     var oPaginator = this.get('paginator');
@@ -12997,6 +12999,12 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * Fired when the DataTable's rows are rendered from an initialized state.
      *
      * @event initEvent
+     */
+
+    /**
+     * Fired before the DataTable's DOM is rendered or modified.
+     *
+     * @event beforeRenderEvent
      */
 
     /**
