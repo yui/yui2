@@ -1,3 +1,13 @@
+/**
+ * Augments the Event Utility with support for the mouseenter and mouseleave 
+ * events
+ * 
+ * @module event-mouseenter
+ * @title Event Utility mouseenter and mouseout Module
+ * @namespace YAHOO.util
+ * @requires event
+ */
+
 (function () {
 
 	var Event = YAHOO.util.Event,
@@ -47,8 +57,8 @@
 
 		/**
 		 * Creates a delegate function used to call event listeners specified 
-		 * via the <code>YAHOO.util.Event.onMouseEnter</code> and 
-		 * <code>YAHOO.util.Event.onMouseLeave</code> methods.
+		 * via the <code>YAHOO.util.Event.addListener</code> 
+		 * or <code>YAHOO.util.Event.on</code> method.
 		 *
 		 * @method _createMouseDelegate
 		 *
@@ -60,8 +70,8 @@
 		 *                             object, this object becomes the execution
 		 *                             context. 
 		 * @return {Function} Function that will call the event listener 
-		 * specified by either the <code>YAHOO.util.Event.onMouseEnter</code> 
-		 * and <code>YAHOO.util.Event.onMouseLeave</code> methods.
+		 * specified by either the <code>YAHOO.util.Event.addListener</code> 
+		 * or <code>YAHOO.util.Event.on</code> method.
 	     * @private
 		 * @static
 	     * @for Event
