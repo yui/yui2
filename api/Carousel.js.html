@@ -2489,10 +2489,10 @@
 <span class="c">         * @param dontSelect Boolean True if select should be avoided</span>
 <span class="c">         */</span>
         <span class="nx">scrollTo</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">item</span><span class="o">,</span> <span class="nx">dontSelect</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">carousel</span>   <span class="o">=</span> <span class="k">this</span><span class="o">,</span>
-                <span class="nx">animate</span><span class="o">,</span> <span class="nx">animCfg</span><span class="o">,</span> <span class="nx">isCircular</span><span class="o">,</span> <span class="nx">isVertical</span><span class="o">,</span> <span class="nx">rows</span><span class="o">,</span> <span class="nx">delta</span><span class="o">,</span> <span class="nx">direction</span><span class="o">,</span> <span class="nx">firstItem</span><span class="o">,</span> <span class="nx">lastItem</span><span class="o">,</span> <span class="nx">itemsPerCol</span><span class="o">,</span>
-                <span class="nx">itemsPerRow</span><span class="o">,</span> <span class="nx">numItems</span><span class="o">,</span> <span class="nx">numPerPage</span><span class="o">,</span> <span class="nx">offset</span><span class="o">,</span> <span class="nx">page</span><span class="o">,</span> <span class="nx">rv</span><span class="o">,</span> <span class="nx">sentinel</span><span class="o">,</span> <span class="nx">index</span><span class="o">,</span>
-                <span class="nx">stopAutoScroll</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">carousel</span>   <span class="o">=</span> <span class="k">this</span><span class="o">,</span> <span class="nx">animate</span><span class="o">,</span> <span class="nx">animCfg</span><span class="o">,</span> <span class="nx">isCircular</span><span class="o">,</span> <span class="nx">isVertical</span><span class="o">,</span>
+                <span class="nx">rows</span><span class="o">,</span> <span class="nx">delta</span><span class="o">,</span> <span class="nx">direction</span><span class="o">,</span> <span class="nx">firstItem</span><span class="o">,</span> <span class="nx">lastItem</span><span class="o">,</span> <span class="nx">itemsPerCol</span><span class="o">,</span>
+                <span class="nx">itemsPerRow</span><span class="o">,</span> <span class="nx">numItems</span><span class="o">,</span> <span class="nx">numPerPage</span><span class="o">,</span> <span class="nx">offset</span><span class="o">,</span> <span class="nx">page</span><span class="o">,</span> <span class="nx">rv</span><span class="o">,</span> <span class="nx">sentinel</span><span class="o">,</span>
+                <span class="nx">index</span><span class="o">,</span> <span class="nx">stopAutoScroll</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">JS</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">item</span><span class="o">)</span> <span class="o">||</span> <span class="nx">item</span> <span class="o">==</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_firstItem</span> <span class="o">||</span>
                 <span class="nx">carousel</span><span class="o">.</span><span class="nx">isAnimating</span><span class="o">())</span> <span class="o">{</span>
@@ -2531,6 +2531,10 @@
                 <span class="o">}</span>
             <span class="o">}</span>
 
+            <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">item</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+
             <span class="nx">direction</span> <span class="o">=</span> <span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">_firstItem</span> <span class="o">&gt;</span> <span class="nx">item</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;backward&quot;</span> <span class="o">:</span> <span class="s2">&quot;forward&quot;</span><span class="o">;</span>
 
             <span class="nx">sentinel</span>  <span class="o">=</span> <span class="nx">firstItem</span> <span class="o">+</span> <span class="nx">numPerPage</span><span class="o">;</span>
@@ -2545,23 +2549,25 @@
 
             <span class="c">// call loaditems to check if we have all the items to display</span>
 <span class="c"></span>            <span class="nx">lastItem</span> <span class="o">=</span> <span class="nx">item</span> <span class="o">+</span> <span class="nx">numPerPage</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
-            <span class="nx">carousel</span><span class="o">.</span><span class="nx">_loadItems</span><span class="o">(</span><span class="nx">lastItem</span> <span class="o">&gt;</span> <span class="nx">numItems</span> <span class="o">-</span> <span class="m">1</span> <span class="o">?</span> <span class="nx">numItems</span> <span class="o">-</span> <span class="m">1</span> <span class="o">:</span> <span class="nx">lastItem</span><span class="o">);</span>
+            <span class="nx">carousel</span><span class="o">.</span><span class="nx">_loadItems</span><span class="o">(</span><span class="nx">lastItem</span> <span class="o">&gt;</span> <span class="nx">numItems</span><span class="o">-</span><span class="m">1</span> <span class="o">?</span> <span class="nx">numItems</span><span class="o">-</span><span class="m">1</span> <span class="o">:</span> <span class="nx">lastItem</span><span class="o">);</span>
 
-            <span class="c">// calculate the delta relative to the first item, the delta is always negative</span>
+            <span class="c">// Calculate the delta relative to the first item, the delta is</span>
+<span class="c"></span>            <span class="c">// always negative.</span>
 <span class="c"></span>            <span class="nx">delta</span> <span class="o">=</span> <span class="m">0</span> <span class="o">-</span> <span class="nx">item</span><span class="o">;</span>
-            <span class="k">if</span><span class="o">(</span><span class="nx">itemsPerRow</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">itemsPerRow</span><span class="o">)</span> <span class="o">{</span>
             	<span class="c">// offset calculations for multirow Carousel</span>
-<span class="c"></span>                <span class="k">if</span><span class="o">(</span><span class="nx">isVertical</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">delta</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">delta</span><span class="o">/</span><span class="nx">itemsPerCol</span><span class="o">,</span><span class="m">10</span><span class="o">);</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">isVertical</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">delta</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">delta</span> <span class="o">/</span> <span class="nx">itemsPerCol</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="nx">delta</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">delta</span><span class="o">/</span><span class="nx">itemsPerRow</span><span class="o">,</span><span class="m">10</span><span class="o">);</span>
+                    <span class="nx">delta</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">delta</span> <span class="o">/</span> <span class="nx">itemsPerRow</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>
 
             <span class="c">// adjust for items not yet loaded</span>
 <span class="c"></span>            <span class="nx">index</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
-            <span class="k">while</span><span class="o">(</span><span class="nx">delta</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="nx">item</span><span class="o">+</span><span class="nx">numPerPage</span><span class="o">-</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="nx">numItems</span><span class="o">){</span>
-                <span class="k">if</span><span class="o">(</span><span class="nx">JS</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">_itemsTable</span><span class="o">.</span><span class="nx">items</span><span class="o">[</span><span class="nx">index</span><span class="o">])</span> <span class="o">&amp;&amp;</span> <span class="nx">JS</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">_itemsTable</span><span class="o">.</span><span class="nx">loading</span><span class="o">[</span><span class="nx">index</span><span class="o">])){</span>
+            <span class="k">while</span> <span class="o">(</span><span class="nx">delta</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="nx">item</span><span class="o">+</span><span class="nx">numPerPage</span><span class="o">-</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="nx">numItems</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">JS</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">_itemsTable</span><span class="o">.</span><span class="nx">items</span><span class="o">[</span><span class="nx">index</span><span class="o">])</span> <span class="o">&amp;&amp;</span>
+                    <span class="nx">JS</span><span class="o">.</span><span class="nx">isUndefined</span><span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">_itemsTable</span><span class="o">.</span><span class="nx">loading</span><span class="o">[</span><span class="nx">index</span><span class="o">]))</span> <span class="o">{</span>
                     <span class="nx">delta</span><span class="o">++;</span>
                 <span class="o">}</span>
                 <span class="nx">index</span> <span class="o">+=</span> <span class="nx">itemsPerRow</span> <span class="o">?</span> <span class="nx">itemsPerRow</span> <span class="o">:</span> <span class="m">1</span><span class="o">;</span>
@@ -3398,7 +3404,7 @@
         <span class="nx">_setCarouselOffset</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">offset</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">carousel</span> <span class="o">=</span> <span class="k">this</span><span class="o">,</span> <span class="nx">which</span><span class="o">;</span>
 
-            <span class="nx">which</span>   <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;isVertical&quot;</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;top&quot;</span> <span class="o">:</span> <span class="s2">&quot;left&quot;</span><span class="o">;</span>
+            <span class="nx">which</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;isVertical&quot;</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;top&quot;</span> <span class="o">:</span> <span class="s2">&quot;left&quot;</span><span class="o">;</span>
             <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">_carouselEl</span><span class="o">,</span> <span class="nx">which</span><span class="o">,</span> <span class="nx">offset</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">);</span>
         <span class="o">},</span>
 
