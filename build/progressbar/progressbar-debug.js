@@ -9,7 +9,7 @@
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Lang = YAHOO.lang,
-		
+		// ClassNames
 		CLASS_PROGBAR = 'yui-pb',
 		CLASS_MASK = CLASS_PROGBAR + '-mask',
 		CLASS_BAR = CLASS_PROGBAR + '-bar',
@@ -21,6 +21,7 @@
 		CLASS_BL = CLASS_PROGBAR + '-bl',
 		CLASS_BR = CLASS_PROGBAR + '-br',
 		
+		// Configuration attributes
 		WIDTH = 'width',
 		HEIGHT = 'height',
 		MIN_VALUE = 'minValue',
@@ -32,8 +33,12 @@
 		DIRECTION_RTL = 'rtl',
 		DIRECTION_TTB = 'ttb',
 		DIRECTION_BTT = 'btt',
+		BAR_EL = 'barEl',
+		MASK_EL = 'maskEl',
+		CAPTION_EL = 'captionEl',
+		TEXT_TEMPLATE = 'textTemplate',
 		
-		
+		// Events
 		START = 'start',
 		PROGRESS = 'progress',
 		COMPLETE = 'complete';
@@ -157,7 +162,7 @@
 			 * @type HTMLElement (div)
 			 * @readonly
 			 */			
-		    this.setAttributeConfig('barEl', {
+		    this.setAttributeConfig(BAR_EL, {
 		        readOnly: true,
 		        value: this.getElementsByClassName(CLASS_BAR)[0]
 		    });
@@ -167,7 +172,7 @@
 			 * @type HTMLElement (table)
 			 * @readonly
 			 */			
-		    this.setAttributeConfig('maskEl', {
+		    this.setAttributeConfig(MASK_EL, {
 		        readOnly: true,
 		        value: this.getElementsByClassName(CLASS_MASK)[0]
 		    });
@@ -178,7 +183,7 @@
 			 * @type HTMLElement or String
 			 * @default a container placed centered over the progress bar.
 			 */			
-		    this.setAttributeConfig('captionEl', {
+		    this.setAttributeConfig(CAPTION_EL, {
 		        value: this.getElementsByClassName(CLASS_CAPTION)[0],
 				validator: function (value) {
 					return (Lang.isString(value) && Dom.get(value)) || (Lang.isObject(value) && value.ownerDocument == document);
@@ -293,7 +298,7 @@
 			 * @default ""
 			 * @type String
 			 */				
-			this.setAttributeConfig('textTemplate', {
+			this.setAttributeConfig(TEXT_TEMPLATE, {
 				value:'{value}'
 			});
 			
@@ -401,7 +406,7 @@
 			YAHOO.log('destroy','info','ProgressBar');
 			this.set(ANIM,false);
 			this.unsubscribeAll();
-			this.get('captionEl').innerHTML = '';
+			this.get(CAPTION_EL).innerHTML = '';
 			var el = this.get('element');
 			el.parentNode.removeChild(el);
 		},
@@ -492,7 +497,7 @@
 		 */
 		_fixEdges:function() {
 			if (!this._rendered || YAHOO.env.ua.ie || YAHOO.env.ua.gecko ) { return; }
-			var maskEl = this.get('maskEl'),
+			var maskEl = this.get(MASK_EL),
 				tlEl = Dom.getElementsByClassName(CLASS_TL,undefined,maskEl)[0],
 				trEl = Dom.getElementsByClassName(CLASS_TR,undefined,maskEl)[0],
 				blEl = Dom.getElementsByClassName(CLASS_BL,undefined,maskEl)[0],
@@ -518,7 +523,7 @@
 		 */		
 		_recalculateConstants: function() {
 			YAHOO.log('Recalculating auxiliary factors','info','ProgressBar');
-			var barEl = this.get('barEl');
+			var barEl = this.get(BAR_EL);
 
 			switch (this.get(DIRECTION)) {
 				case DIRECTION_LTR:
@@ -545,7 +550,7 @@
 		 * @private
 		 */		
 		_animSetter: function (value) {
-			var anim, barEl = this.get('barEl');
+			var anim, barEl = this.get(BAR_EL);
 			if (value) {
 				YAHOO.log('Turning animation on','info','ProgressBar');
 				if (value instanceof YAHOO.util.Anim) {
@@ -555,6 +560,28 @@
 				}
 				anim.onTween.subscribe(this._animOnTween,this,true);
 				anim.onComplete.subscribe(this._animComplete,this,true);
+				
+				// Temporary solution until http://yuilibrary.com/projects/yui2/ticket/2528222 gets solved:
+				var oldSetAttribute = anim.setAttribute,
+					pb = this;
+				switch(this.get(DIRECTION)) {
+					case DIRECTION_BTT:
+						anim.setAttribute = function(attr , val , unit) {
+							val = Math.round(val);
+							oldSetAttribute.call(this,attr,val,unit);
+							Dom.setStyle(barEl,'top',(pb._barSpace - val) + 'px');
+						};
+						break;
+					case DIRECTION_RTL:
+						anim.setAttribute = function(attr , val , unit) {
+							val = Math.round(val);
+							oldSetAttribute.call(this,attr,val,unit);
+							Dom.setStyle(barEl,'left',(pb._barSpace - val) + 'px');
+						};
+						break;
+				}
+				// up to here
+
 			} else {
 				YAHOO.log('Turning animation off','info','ProgressBar');
 				anim = this.get(ANIM);
@@ -573,7 +600,7 @@
 			var value = this.get(VALUE);
 			this._previousValue = value;
 			this.fireEvent(COMPLETE, value);
-			Dom.removeClass(this.get('barEl'),CLASS_ANIM);
+			Dom.removeClass(this.get(BAR_EL),CLASS_ANIM);
 			this._showTemplates(value,true);
 		},
 		_animOnTween:function () {
@@ -595,10 +622,15 @@
 			YAHOO.log('set value: ' + value,'info','ProgressBar');
 			var anim = this.get(ANIM),
 				pixelValue = Math.floor((value - this.get(MIN_VALUE)) * this._barFactor),
-				barEl = this.get('barEl');
+				barEl = this.get(BAR_EL);
 			
 			this._showTemplates(value,true);
 			if (this._rendered) {
+				if (anim) {
+					anim.stop();
+					if (anim.isAnimated()) { anim._onComplete.fire(); } // see: http://yuilibrary.com/projects/yui2/ticket/2528217
+				}
+				this.fireEvent(START,this._previousValue);
 				this._barSizeFunction(value, pixelValue, barEl, anim);
 			}
 		},
@@ -613,9 +645,9 @@
 			// When animated, this fills the logger window too fast
  			//YAHOO.log('Show template','info','ProgressBar');
 
-			var captionEl = this.get('captionEl'),
+			var captionEl = this.get(CAPTION_EL),
 				container = this.get('element'),
-				text = Lang.substitute(this.get('textTemplate'),{
+				text = Lang.substitute(this.get(TEXT_TEMPLATE),{
 					value:value,
 					minValue:this.get(MIN_VALUE),
 					maxValue:this.get(MAX_VALUE)
@@ -640,69 +672,41 @@
 	Prog.prototype._barSizeFunctions = b;
 	
 	b[0][DIRECTION_LTR] = function(value, pixelValue, barEl, anim) {
-		this.fireEvent(START,this._previousValue);
 		Dom.setStyle(barEl,WIDTH,  pixelValue + 'px');
 		this.fireEvent(PROGRESS,value);
 		this.fireEvent(COMPLETE,value);
 	};
 	b[0][DIRECTION_RTL] = function(value, pixelValue, barEl, anim) {
-		this.fireEvent(START,this._previousValue);
 		Dom.setStyle(barEl,WIDTH,  pixelValue + 'px');
 		Dom.setStyle(barEl,'left',(this._barSpace - pixelValue) + 'px');
 		this.fireEvent(PROGRESS,value);
 		this.fireEvent(COMPLETE,value);
 	};
 	b[0][DIRECTION_TTB] = function(value, pixelValue, barEl, anim) {
-		this.fireEvent(START,this._previousValue);
 		Dom.setStyle(barEl,HEIGHT,  pixelValue + 'px');
 		this.fireEvent(PROGRESS,value);
 		this.fireEvent(COMPLETE,value);
 	};
 	b[0][DIRECTION_BTT] = function(value, pixelValue, barEl, anim) {
-		this.fireEvent(START,this._previousValue);
 		Dom.setStyle(barEl,HEIGHT,  pixelValue + 'px');
 		Dom.setStyle(barEl,'top',  (this._barSpace - pixelValue) + 'px');
 		this.fireEvent(PROGRESS,value);
 		this.fireEvent(COMPLETE,value);
 	};
 	b[1][DIRECTION_LTR] = function(value, pixelValue, barEl, anim) {
-		if (anim.isAnimated()) { anim.stop(); }
-		this.fireEvent(START,this._previousValue);
 		Dom.addClass(barEl,CLASS_ANIM);
 		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 		anim.attributes = {width:{ to: pixelValue }}; 
 		anim.animate();
 	};
-	b[1][DIRECTION_RTL] =  function(value, pixelValue, barEl, anim) {
-		if (anim.isAnimated()) { anim.stop(); }
-		this.fireEvent(START,this._previousValue);
-		Dom.addClass(barEl,CLASS_ANIM);
-		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
-		anim.attributes = {
-			width:{ to: pixelValue },
-			left:{to: this._barSpace - pixelValue}
-		}; 
-		anim.animate();
-	};
+	b[1][DIRECTION_RTL] =  b[1][DIRECTION_LTR];
 	b[1][DIRECTION_TTB] =  function(value, pixelValue, barEl, anim) {
-		if (anim.isAnimated()) { anim.stop(); }
-		this.fireEvent(START,this._previousValue);
 		Dom.addClass(barEl,CLASS_ANIM);
 		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 		anim.attributes = {height:{to: pixelValue}};
 		anim.animate();
 	};
-	b[1][DIRECTION_BTT] =  function(value, pixelValue, barEl, anim) {
-		if (anim.isAnimated()) { anim.stop(); }
-		this.fireEvent(START,this._previousValue);
-		Dom.addClass(barEl,CLASS_ANIM);
-		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
-		anim.attributes = {
-			height:{to: pixelValue},
-			top:{to: this._barSpace - pixelValue}
-		};
-		anim.animate();
-	};
+	b[1][DIRECTION_BTT] =  b[1][DIRECTION_TTB];
 				
 })();
 

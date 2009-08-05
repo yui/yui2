@@ -569,11 +569,32 @@ if (!YAHOO.util.Event) {
 		isOpera = YAHOO.env.ua.opera,
         
         // String constants used by the addFocusListener and removeFocusListener methods
-       	_FOCUS = isIE ? "focusin" : "focus",
-       	_BLUR = isIE ? "focusout" : "blur",      
+		
+       	FOCUS = "focus",
+       	BLUR = "blur",
 
 
-	    NOOP  = function(){};
+	    NOOP  = function(){},
+
+	    // Opera implents capture phase events per spec rather than
+	    // the more useful way it is implemented in other browsers:
+	    // The event doesn't fire on a target unless there is a
+	    // listener on an element in the target's ancestry.  If a
+	    // capture phase listener is added only to the element that 
+	    // will be the target of the event, the listener won't fire.  
+	    // To get around this, we register a NOOP listener on the
+	    // element's parent.
+	
+		captureHack = function(type, o) {
+
+	        var el = this.getEl(o),
+	            p  = el && el.parentNode;
+
+	        if (p) {
+				this._simpleAdd(p, type, NOOP, true);
+	        }
+
+	    };
 
 
         return {
@@ -675,7 +696,13 @@ if (!YAHOO.util.Event) {
              */
             OVERRIDE: 6,
 
-
+            /**
+             * The original capture parameter passed into addListener
+             * @property CAPTURE
+             * @type int
+             * @static
+             * @final
+             */
 			CAPTURE: 7,
 
             /**
@@ -732,6 +759,19 @@ if (!YAHOO.util.Event) {
              */
              _dri: null,
 
+
+            /**
+             * Map of special event types
+             * @property _specialTypes
+             * @static
+             * @private
+             */
+			_specialTypes: {
+				focus: (isIE ? "focusin" : "focus"),
+				blur: (isIE ? "focusout" : "blur")
+			},
+
+
             /**
              * True when the document is initially usable
              * @property DOMReady
@@ -750,6 +790,7 @@ if (!YAHOO.util.Event) {
              * @default false
              */
             throwErrors: false,
+
 
             /**
              * @method startInterval
@@ -989,6 +1030,22 @@ if (!YAHOO.util.Event) {
                 
             },
 
+            /**
+             * Checks to see if the type requested is a special type 
+			 * (as defined by the _specialTypes hash), and (if so) returns 
+			 * the special type name.
+             *
+             * @method _getType
+             *
+             * @param {String}   sType     The type to look up
+             * @private
+             */
+			_getType: function (type) {
+			
+				return this._specialTypes[type] || type;
+				
+			},
+
 
             /**
              * Appends an event handler
@@ -1013,29 +1070,24 @@ if (!YAHOO.util.Event) {
              * @static
              */
             addListener: function (el, sType, fn, obj, overrideContext) {
-                return this._addListener(el, sType, fn, obj, overrideContext, false);
-            },
 
+				var capture = false;
 
-		    // Opera implents capture phase events per spec rather than
-		    // the more useful way it is implemented in other browsers:
-		    // The event doesn't fire on a target unless there is a
-		    // listener on an element in the target's ancestry.  If a
-		    // capture phase listener is added only to the element that 
-		    // will be the target of the event, the listener won't fire.  
-		    // To get around this, we register a NOOP listener on the
-		    // element's parent.
+				sType = this._getType(sType);
+				
+				if (sType == FOCUS || sType == BLUR) {
 
-		    _captureHack: function(type, o) {
+					capture = true;
+				
+					if (isOpera) {
+						captureHack.call(this, el, sType);
+					}
+					
+				}				
 
-		        var el = this.getEl(o),
-		            p  = el && el.parentNode;
+                return this._addListener(el, sType, fn, obj, overrideContext, capture);
 
-		        if (p) {
-					this._simpleAdd(p, type, NOOP, true);
-		        }
-
-		    },
+        	},
 
 
             /**
@@ -1059,14 +1111,11 @@ if (!YAHOO.util.Event) {
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
+         	 * @deprecated use YAHOO.util.Event.on("focus", ...)
              */
             addFocusListener: function (el, fn, obj, overrideContext) {
-				
-				if (isOpera) {
-					this._captureHack(el, _FOCUS);
-				}
-	
-                return this._addListener(el, _FOCUS, fn, obj, overrideContext, true);
+
+                return this.on(el, FOCUS, fn, obj, overrideContext);
 
             },          
 
@@ -1085,9 +1134,12 @@ if (!YAHOO.util.Event) {
              * @return {boolean} true if the unbind was successful, false 
              *  otherwise.
              * @static
+          	 * @deprecated use YAHOO.util.Event.removeListener("focus", ...)
              */
             removeFocusListener: function (el, fn) { 
-                return this.removeListener(el, _FOCUS, fn);
+
+                return this.removeListener(el, FOCUS, fn);
+
             },
 
             /**
@@ -1111,14 +1163,12 @@ if (!YAHOO.util.Event) {
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
+         	 * @deprecated use YAHOO.util.Event.on("blur", ...)
              */
             addBlurListener: function (el, fn, obj, overrideContext) {
 
-				if (isOpera) {
-					this._captureHack(el, _BLUR);
-				}
+                return this.on(el, BLUR, fn, obj, overrideContext);
 
-                return this._addListener(el, _BLUR, fn, obj, overrideContext, true);
             },          
 
             /**
@@ -1135,10 +1185,11 @@ if (!YAHOO.util.Event) {
              * @return {boolean} true if the unbind was successful, false 
              *  otherwise.
              * @static
+         	 * @deprecated use YAHOO.util.Event.removeListener("blur", ...)
              */
             removeBlurListener: function (el, fn) { 
             
-                return this.removeListener(el, _BLUR, fn);
+                return this.removeListener(el, BLUR, fn);
             
             },
 
@@ -1160,6 +1211,8 @@ if (!YAHOO.util.Event) {
              */
             removeListener: function(el, sType, fn) {
                 var i, len, li;
+
+				sType = this._getType(sType);
 
                 // The el argument can be a string
                 if (typeof el == "string") {
@@ -1967,6 +2020,7 @@ if (!YAHOO.util.Event) {
          * @method on
          * @see addFocusListener
          * @static
+         * @deprecated use YAHOO.util.Event.on("focus", ...)
          */
         EU.onFocus = EU.addFocusListener;
 
@@ -1975,6 +2029,7 @@ if (!YAHOO.util.Event) {
          * @method onBlur
          * @see addBlurListener
          * @static
+         * @deprecated use YAHOO.util.Event.on("blur", ...)
          */     
         EU.onBlur = EU.addBlurListener;
 
