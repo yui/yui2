@@ -541,6 +541,8 @@ Element.prototype = {
         if (el) {
             el[key] = value;
         }
+
+        return value;
     },
 
     DEFAULT_HTML_GETTER: function(key) {

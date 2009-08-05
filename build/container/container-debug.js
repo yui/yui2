@@ -758,7 +758,7 @@
             "CHANGE_BODY": "changeBody",
             "CHANGE_FOOTER": "changeFooter",
             "CHANGE_CONTENT": "changeContent",
-            "DESTORY": "destroy",
+            "DESTROY": "destroy",
             "BEFORE_SHOW": "beforeShow",
             "SHOW": "show",
             "BEFORE_HIDE": "beforeHide",
@@ -1078,7 +1078,7 @@
             * CustomEvent fired when the Module is destroyed
             * @event destroyEvent
             */
-            this.destroyEvent = this.createEvent(EVENT_TYPES.DESTORY);
+            this.destroyEvent = this.createEvent(EVENT_TYPES.DESTROY);
             this.destroyEvent.signature = SIGNATURE;
 
             /**
