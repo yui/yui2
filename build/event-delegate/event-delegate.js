@@ -1,18 +1,7 @@
 (function () {
 
 	var Event = YAHOO.util.Event,
-		UA = YAHOO.env.ua,
 		Lang = YAHOO.lang,
-		
-		FOCUS = "focus",
-		BLUR = "blur",
-		MOUSEENTER = "mouseenter",
-		MOUSELEAVE = "mouseleave",
-		MOUSEOVER = "mouseover",
-		MOUSEOUT = "mouseout",
-		FOCUS_EVENT_NAME = UA.ie ? "focusin" : FOCUS,
-	    BLUR_EVENT_NAME = UA.ie ? "focusout" : BLUR,
-
 		delegates = [];
 
 
@@ -36,11 +25,12 @@
 		 * @return {Function} Function that will call the event listener 
 		 * specified by the <code>YAHOO.util.Event.delegate</code> method.
          * @private
+         * @for Event
 		 * @static
 		 */
 		_createDelegate: function (fn, filter, obj, overrideContext) {
 
-			return function (event, args) {
+			return function (event) {
 
 				var container = this,
 					target = Event.getTarget(event),
@@ -134,14 +124,13 @@
          *                        could not have the listener attached,
          *                        or if the operation throws an exception.
          * @static
+         * @for Event
          */
 		delegate: function (container, type, fn, filter, obj, overrideContext) {
 
-			var bUseCapture = false,
-				sType = type,
+			var sType = Event._getType(type),
 				fnMouseDelegate,
-				fnDelegate,
-				returnVal = false;
+				fnDelegate;
 
 
 			if (Lang.isString(filter) && !YAHOO.util.Selector) {
@@ -149,9 +138,7 @@
 			}
 
 
-			if (type == MOUSEENTER || type == MOUSELEAVE) {
-
-				sType = (type == MOUSEENTER) ? MOUSEOVER : MOUSEOUT;
+			if (type == "mouseenter" || type == "mouseleave") {
 
 				if (!Event._createMouseDelegate) {
 			        return false;				
@@ -165,37 +152,16 @@
 
 				}, filter, obj, overrideContext);
 
-				delegates.push([container, sType, fn, fnDelegate]);			
-
-				returnVal = Event.on(container, sType, fnDelegate);
-
 			}
 			else {
 
-				if (type == FOCUS || type == BLUR) {
-
-					bUseCapture = true;
-					sType = (type == FOCUS) ? FOCUS_EVENT_NAME : BLUR_EVENT_NAME;
-
-					if (YAHOO.env.ua.opera) {
-						Event._captureHack(sType, container);
-					}
-
-				}
-
 				fnDelegate = Event._createDelegate(fn, filter, obj, overrideContext);
 
-				delegates.push([container, sType, fn, fnDelegate]);
-
-				//	Using "_addListener" here instead of "addListener/on"
-				//	in order to be able to specify the use of capture mode 
-				//	for the focus and blur events.
-
-				returnVal = Event._addListener(container, sType, fnDelegate, null, null, bUseCapture);
-
 			}
+
+			delegates.push([container, sType, fn, fnDelegate]);
 			
-			return returnVal;
+			return Event.on(container, sType, fnDelegate);
 
 		},
 
@@ -215,32 +181,16 @@
          * @return {boolean} true if the unbind was successful, false 
          *  otherwise.
          * @static
+         * @for Event
          */
 		removeDelegate: function (container, type, fn) {
 
-			var sType = type,
+			var sType = Event._getType(type),
 				returnVal = false,
 				index,
 				cacheItem;
 
-			switch (type) {
-				case MOUSEENTER:
-					sType = MOUSEOVER;
-					break;
-				case MOUSELEAVE:
-					sType = MOUSEOUT;
-					break;		
-				case FOCUS:
-					sType = FOCUS_EVENT_NAME;
-					break;
-				case BLUR:
-					sType = BLUR_EVENT_NAME;
-					break;
-			}
-
-
 			index = Event._getCacheIndex(delegates, container, sType, fn);
-
 
 		    if (index >= 0) {
 		        cacheItem = delegates[index];
