@@ -1,9 +1,4 @@
 /*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
- */
-
-/*
  * SWF limitation:
  * 	- only 100,000 bytes of data may be stored this way
  *  - data is publicly available on user machine
@@ -13,30 +8,41 @@
  *  - how can we not use cookies to handle session location
  */
 (function() {
-		// internal shorthand
-    var Y = YAHOO.util,
-		YL = YAHOO.lang,
+	// internal shorthand
+var Y = YAHOO.util,
+	YL = YAHOO.lang,
+	YD = Y.Dom,
+	
+	/*
+	 * The minimum width required to be able to display the settings panel within the SWF.
+	 */	
+	MINIMUM_WIDTH = 215,
 
-		// local variables
-		_engine = null;
+	/*
+	 * The minimum height required to be able to display the settings panel within the SWF.
+	 */	
+	MINIMUM_HEIGHT = 138,
 
-	var _getKey = function(that, key) {
-		return that._location + that.DELIMITER + key;
-	};
+	// local variables
+	_engine = null,
 
-	/**
-	 * Initializes the engine, if it isn't already initialized.
-	 * @method _initEngine
-	 * @param cfg {Object} Required. The configuration.
-	 * @private
+	/*
+	 * Creates a location bound key.
 	 */
-	var _initEngine = function(cfg) {
+	_getKey = function(that, key) {
+		return that._location + that.DELIMITER + key;
+	},
+
+	/*
+	 * Initializes the engine, if it isn't already initialized.
+	 */
+	_initEngine = function(cfg) {
 		if (! _engine) {
 			if (! YL.isString(cfg.swfURL)) {cfg.swfURL = Y.StorageEngineSWF.SWFURL;}
 			if (! cfg.containerID) {
 				var bd = document.getElementsByTagName('body')[0],
 					container = bd.appendChild(document.createElement('div'));
-				cfg.containerID = Y.Dom.generateId(container);
+				cfg.containerID = YD.generateId(container);
 			}
 
 			if (! cfg.attributes) {cfg.attributes  = {};}
@@ -99,7 +105,7 @@
 		 * The underlying SWF of the engine, exposed so developers can modify the adapter behavior.
 		 * @property _swf
 		 * @type {Object}
-		 * @public
+		 * @protected
 		 */
 		_swf: null,
 
@@ -149,13 +155,21 @@
 		 * @see YAHOO.util.Storage._setItem
 		 */
 		_setItem: function(key, data) {
-			var _key = _getKey(this, key);
+			var _key = _getKey(this, key), swfNode;
 
 			if (! _engine.callSWF("getValueOf", [_key])) {
 				this._addKey(_key);
 			}
-			
-			return _engine.callSWF("setItem", [data, _key]);
+
+			if (_engine.callSWF("setItem", [data, _key])) {
+				return true;
+			}
+			else {
+				swfNode = YD.get(_engine._id);
+				if (MINIMUM_WIDTH > YD.getStyle(swfNode, 'width').replace(/\D+/g, '')) {YD.setStyle(swfNode, 'width', MINIMUM_WIDTH + 'px')}
+				if (MINIMUM_HEIGHT > YD.getStyle(swfNode, 'height').replace(/\D+/g, '')) {YD.setStyle(swfNode, 'height', MINIMUM_HEIGHT + 'px')}
+				return _engine.callSWF("displaySettings", []);
+			}
 		}
 	});
 
