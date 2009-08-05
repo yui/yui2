@@ -2737,11 +2737,11 @@
 
             if (carousel.get("isVertical")) {
                 animObj = new YAHOO.util.Motion(carousel._carouselEl,
-                        { points: { to: [0, offset] } },
+                        { top: { to: offset } },
                         animCfg.speed, animCfg.effect);
             } else {
                 animObj = new YAHOO.util.Motion(carousel._carouselEl,
-                        { points: { to: [offset, 0] } },
+                        { left: { to: offset } },
                         animCfg.speed, animCfg.effect);
             }
 
