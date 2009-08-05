@@ -216,10 +216,12 @@ code {
 		valueSlider.subscribe("slideEnd", function() {
 			var value = valueSlider.getValue()  - 50;
 			pb.set('value',value);
+			console.log('value',value);
 			var actual = pb.get('value');
 			if (actual != value) {
 				Dom.get('actualValue').innerHTML = actual;
-				valueSlider.setValue(actual + 50);
+				valueSlider.setValue(actual + 50,true,true,true); // make sure it doesn't fire the event again.
+				console.log('back',actual);
 			}
 		});
 
