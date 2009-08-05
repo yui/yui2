@@ -275,7 +275,7 @@
 
 			}
 
-		}, true
+		}, true //This boolean is needed to override members of the original object
 	);
 
 })();
