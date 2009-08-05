@@ -4304,7 +4304,7 @@ _repaintOpera : (ua.opera) ?
     function() {
         if(ua.opera) {
             document.documentElement.className += " ";
-            document.documentElement.className.trim();
+            document.documentElement.className = YAHOO.lang.trim(document.documentElement.className);
         }
     } : function() {} ,
 
@@ -15127,7 +15127,7 @@ setColumnWidth : function(oColumn, nWidth) {
  * Scrolls to given row or cell
  *
  * @method scrollTo
- * @param to {YAHOO.widget.Record | } Scroll to item.
+ * @param to {YAHOO.widget.Record | HTMLElement } Itme to scroll to.
  */
 scrollTo : function(to) {
         var td = this.getTdEl(to);
