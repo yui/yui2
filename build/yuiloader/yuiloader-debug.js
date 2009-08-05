@@ -2024,13 +2024,14 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         'event-delegate': {
             'type': 'js',
             'path': 'event-delegate/event-delegate-min.js',
-            'requires': ['event']
+            'requires': ['dom', 'event'],
+            'optional': ['selector']
         },
 
         'event-mouseenter': {
             'type': 'js',
             'path': 'event-mouseenter/event-mouseenter-min.js',
-            'requires': ['event']
+            'requires': ['dom', 'event']
         },
 
         'fonts': {
