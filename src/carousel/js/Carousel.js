@@ -2482,6 +2482,10 @@
                 }
             }
 
+            if (isNaN(item)) {
+                return;
+            }
+
             direction = (carousel._firstItem > item) ? "backward" : "forward";
 
             sentinel  = firstItem + numPerPage;
