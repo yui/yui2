@@ -2006,7 +2006,14 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         'element': {
             'type': 'js',
             'path': 'element/element-min.js',
-            'requires': ['dom', 'event']
+            'requires': ['dom', 'event'],
+            'optional': ['event-mouseenter', 'event-delegate']
+        },
+
+        'element-delegate': {
+            'type': 'js',
+            'path': 'element-delegate/element-delegate-min.js',
+            'requires': ['element']
         },
 
         'event': {
