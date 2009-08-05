@@ -32,7 +32,7 @@
 			background:url(arrow_closed.png) 4px 4px no-repeat;
 		}
 	</style>
-	
+
 </head>
 
 <body class=" yui-skin-sam">
@@ -41,7 +41,7 @@
 
 <div class="exampleIntro">
 	<p>A demonstration of the DataTable's expandable row feature.</p>
-			
+
 </div>
 
 <div id="basic"></div>
@@ -56,7 +56,7 @@
 <script type="text/javascript" src="../../build/datasource/datasource.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable.js"></script>
 <script>
-	
+
 	YAHOO.widget.DataTable.prototype.getRecord = function(row) {
 		var oRecord = this._oRecordSet.getRecord(row);
 
@@ -77,7 +77,7 @@
 				 return null;
 		 }
 	};
-	
+
 </script>
 <script type="text/javascript" src="expandablerows.js"></script>
 
@@ -136,17 +136,17 @@ YAHOO.util.Event.onDOMReady( function() {
 				];
 
 				var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
-				myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-				myDataSource.responseSchema = {
-					fields: ["id","date","quantity","amount","title","image_url"]
-				};
+						myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+						myDataSource.responseSchema = {
+							fields: ["id","date","quantity","amount","title","image_url"]
+						};
 
 				var myDataTable = new YAHOO.widget.DataTable(
-					"basic",
-					myColumnDefs, 
-					myDataSource,
-					{ rowExpansionTemplate : '<img src="{image_url}" />' }
-				);
+						"basic",
+						myColumnDefs,
+						myDataSource,
+							{ rowExpansionTemplate : '<img src="{image_url}" />' }
+						);
 
 				//Subscribe to a click event to bind to
 				myDataTable.subscribe( 'cellClickEvent', myDataTable.onEventToggleRowExpansion );

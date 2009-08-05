@@ -143,7 +143,7 @@
 
 					} else if( YAHOO.lang.isFunction( template ) ) {
 
-						template( { 
+						template( {
 							row_element : new_row,
 							liner_element : liner_element,
 							data : row_data, 
