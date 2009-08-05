@@ -54,15 +54,19 @@
 		.outline,
 		.container ul li.outline {
 			border-color: #f00;
-		}		
+		}
+		
+		.container.focus {
+			background-color: blue;
+		}
 	
 	</style>
 
 	<script type="text/javascript" src="../../../build/yahoo/yahoo-min.js"></script>
 	<script type="text/javascript" src="../../../build/dom/dom-min.js"></script>
 	<script type="text/javascript" src="../../../build/event/event-min.js"></script>	
-	<script type="text/javascript" src="../../../build/event-mouseenter/event-mouseenter-debug.js"></script>
-	<script type="text/javascript" src="../../../build/event-delegate/event-delegate-debug.js"></script>	
+	<script type="text/javascript" src="../../../build/event-mouseenter/event-mouseenter-min.js"></script>
+	<script type="text/javascript" src="../../../build/event-delegate/event-delegate-min.js"></script>	
 	<script type="text/javascript" src="../../../build/selector/selector-min.js"></script>
 
 	<script type="text/javascript">
@@ -136,13 +140,28 @@
 				}				
 
 			};
+			
+			var onContainerFocus = function (event) {
+			
+				Dom.addClass(this, "focus");
+				
+			};
+			
+			var onContainerBlur = function (event) {
+			
+				Dom.removeClass(this, "focus");
+				
+			};			
+			
 
-			Event.onMouseEnter("container-1", onContainerMouseEnter);
-			Event.onMouseLeave("container-1", onContainerMouseLeave);
+			Event.on("container-1", "mouseenter", onContainerMouseEnter);
+			Event.on("container-1", "mouseleave", onContainerMouseLeave);
 
-			Event.onMouseEnter("container-1", addContainerOutline, "outline", true);
-			Event.onMouseLeave("container-1", removeContainerOutline, "outline", true);
+			Event.on("container-1", "mouseenter", addContainerOutline, "outline", true);
+			Event.on("container-1", "mouseleave", removeContainerOutline, "outline", true);
 
+			Event.on("container-1", "focus", onContainerFocus);
+			Event.on("container-1", "blur", onContainerBlur);
 
 			Event.delegate("container-1", "mouseenter", onLIMouseEnter, "li");
 			Event.delegate("container-1", "mouseleave", onLIMouseLeave, "li");
@@ -153,17 +172,20 @@
 
 			Event.on("remove-listeners", "click", function () {
 			
-				if (Event.removeMouseEnterListener("container-1", onContainerMouseEnter) && 
-					Event.removeMouseLeaveListener("container-1", onContainerMouseLeave) && 
+				if (Event.removeListener("container-1", "mouseenter", onContainerMouseEnter) && 
+					Event.removeListener("container-1", "mouseleave", onContainerMouseLeave) && 
 
-					Event.removeMouseEnterListener("container-1", addContainerOutline) && 
-					Event.removeMouseLeaveListener("container-1", removeContainerOutline) && 
+					Event.removeListener("container-1", "mouseenter", addContainerOutline) &&
+					Event.removeListener("container-1", "mouseleave", removeContainerOutline) && 
 
 					Event.removeDelegate("container-1", "mouseenter", onLIMouseEnter) &&
 					Event.removeDelegate("container-1", "mouseleave", onLIMouseLeave) && 
 
-					Event.removeDelegate("container-1", "mouseenter", addLIOutline) && 
-					Event.removeDelegate("container-1", "mouseleave", removeLIOutline)) {
+					Event.removeDelegate("container-1", "mouseenter", addLIOutline) &&
+					Event.removeDelegate("container-1", "mouseleave", removeLIOutline) && 
+
+					Event.removeListener("container-1", "focus", onContainerFocus) &&
+					Event.removeListener("container-1", "blur", onContainerBlur)) {
 
 					alert("Handlers successfully removed");
 						
@@ -195,9 +217,9 @@
 
 	<div id="container-1" class="container">
 		<ul id="ul-1">
-			<li><em>Item Type One</em></li>
-			<li><em>Item Type Two</em></li>
-			<li><em>Item Type Three</em></li>
+			<li tabindex="0"><em>Item Type One</em></li>
+			<li tabindex="0"><em>Item Type Two</em></li>
+			<li tabindex="0"><em>Item Type Three</em></li>
 		</ul>
 	</div>
 		
