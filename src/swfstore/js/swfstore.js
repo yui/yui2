@@ -1,4 +1,8 @@
-
+/**
+ * Provides a swf based storage implementation
+ *
+ * @module swfstore
+ */
 
 /**
  * Class for the YUI SWFStore util.
