@@ -1,9 +1,9 @@
 DataTable Release Notes
 
-**** version 2.7.0 ****
+**** version development master ****
 
 * DropdownCellEditor now supports multiple and size properties.
-
+* Calling DataTable's destroy() method now calls Paginator destroy(), when applicable.
 
 
 **** version 2.7.0 ***
