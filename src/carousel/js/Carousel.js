@@ -2440,10 +2440,10 @@
          * @param dontSelect Boolean True if select should be avoided
          */
         scrollTo: function (item, dontSelect) {
-            var carousel   = this,
-                animate, animCfg, isCircular, isVertical, rows, delta, direction, firstItem, lastItem, itemsPerCol,
-                itemsPerRow, numItems, numPerPage, offset, page, rv, sentinel, index,
-                stopAutoScroll;
+            var carousel   = this, animate, animCfg, isCircular, isVertical,
+                rows, delta, direction, firstItem, lastItem, itemsPerCol,
+                itemsPerRow, numItems, numPerPage, offset, page, rv, sentinel,
+                index, stopAutoScroll;
 
             if (JS.isUndefined(item) || item == carousel._firstItem ||
                 carousel.isAnimating()) {
@@ -2482,6 +2482,10 @@
                 }
             }
 
+            if (isNaN(item)) {
+                return;
+            }
+
             direction = (carousel._firstItem > item) ? "backward" : "forward";
 
             sentinel  = firstItem + numPerPage;
@@ -2496,23 +2500,25 @@
 
             // call loaditems to check if we have all the items to display
             lastItem = item + numPerPage - 1;
-            carousel._loadItems(lastItem > numItems - 1 ? numItems - 1 : lastItem);
+            carousel._loadItems(lastItem > numItems-1 ? numItems-1 : lastItem);
 
-            // calculate the delta relative to the first item, the delta is always negative
+            // Calculate the delta relative to the first item, the delta is
+            // always negative.
             delta = 0 - item;
-            if(itemsPerRow) {
+            if (itemsPerRow) {
             	// offset calculations for multirow Carousel
-                if(isVertical) {
-                    delta = parseInt(delta/itemsPerCol,10);
+                if (isVertical) {
+                    delta = parseInt(delta / itemsPerCol, 10);
                 } else {
-                    delta = parseInt(delta/itemsPerRow,10);
+                    delta = parseInt(delta / itemsPerRow, 10);
                 }
             }
 
             // adjust for items not yet loaded
             index = 0;
-            while(delta < 0 && index < item+numPerPage-1 && index < numItems){
-                if(JS.isUndefined(carousel._itemsTable.items[index]) && JS.isUndefined(carousel._itemsTable.loading[index])){
+            while (delta < 0 && index < item+numPerPage-1 && index < numItems) {
+                if (JS.isUndefined(carousel._itemsTable.items[index]) &&
+                    JS.isUndefined(carousel._itemsTable.loading[index])) {
                     delta++;
                 }
                 index += itemsPerRow ? itemsPerRow : 1;
@@ -3349,7 +3355,7 @@
         _setCarouselOffset: function (offset) {
             var carousel = this, which;
 
-            which   = carousel.get("isVertical") ? "top" : "left";
+            which = carousel.get("isVertical") ? "top" : "left";
             Dom.setStyle(carousel._carouselEl, which, offset + "px");
         },
 
