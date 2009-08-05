@@ -38,9 +38,6 @@
         Event       = YAHOO.util.Event,
         JS          = YAHOO.lang;
 
-    /* Cache the Carousel item attributes. */
-    var itemAttrCache = {};
-
     /**
      * The widget name.
      * @private
@@ -476,8 +473,8 @@
             vertical = which == "height";
         }
 
-        if (itemAttrCache[which]) {
-            return itemAttrCache[which];
+        if (this._itemAttrCache[which]) {
+            return this._itemAttrCache[which];
         }
 
         if (vertical) {
@@ -486,7 +483,7 @@
             size = getStyle(child, "width");
         }
 
-        itemAttrCache[which] = size;
+        this._itemAttrCache[which] = size;
 
         return size;
     }
@@ -1043,6 +1040,14 @@
          * @private
          */
         _recomputeSize: true,
+
+        /**
+         * Cache the Carousel item attributes.
+         *
+         * @property _itemAttrCache
+         * @private
+         */ 
+         _itemAttrCache: {},
 
         /*
          * CSS classes used by the Carousel component
@@ -1609,7 +1614,8 @@
             carousel._hasRendered = false;
             carousel._navBtns     = { prev: [], next: [] };
             carousel._pages       = { el: null, num: 0, cur: 0 };
-            carousel._pagination  = {  };
+            carousel._pagination  = {};
+            carousel._itemAttrCache = {}; 
             carousel._itemsTable  = { loading: {}, numItems: 0,
                                       items: [], size: 0 };
 
@@ -3018,7 +3024,7 @@
                 var itemEl = carousel.get("carouselItemEl"),
                     elNode = el.nodeName.toUpperCase();
 
-                if (elNode == itemEl.toUpperCase()) {
+                if (elNode !== itemEl.toUpperCase()) {
                     el = Dom.getChildrenBy(el, function (node) {
                         // either an anchor or select at least
                         return node.href || node.value;
@@ -3151,50 +3157,37 @@
                 itemHeight,
                 itemWidth;
 
-            if(rows && cols) {
-
+            if (rows && cols) {
                 row = 0;
                 col = 0;
                 itemHeight = getCarouselItemSize.call(carousel, "height");
                 itemWidth  = getCarouselItemSize.call(carousel, "width");
-
                 for (var i = 0; i < num; i++) {
                     item = items[i] ? Dom.get(items[i].id) : loading[i];
-
-                    if(item) {
-
-                        if(isVertical) {
-
-                            col++;// shifts item by one col.
-
+                    if (item) {
+                        if (isVertical) {
+                            col++;// shifts item by one col
                             if (i % cols === 0) {
-                                delta = Math.floor(i/numVisible);// find page item belongs on.
-                                //col = delta * cols;// shifts cols to appropriate page.
+                                delta = Math.floor(i/numVisible);// find page item is on
                                 // break row
                                 col = 0;
                                 if(i !== 0) {
                                     row++;
                                 }
                             }
-
                         } else {
-
                             col++;// shifts item by one col.
-
                             if (i % cols === 0) {
-                                delta = Math.floor(i/numVisible);// find page item belongs on.
-                                col = delta * cols;// shifts cols to appropriate page.
-                                row++;// breaks a row.
+                                delta = Math.floor(i/numVisible);// find page item belongs on
+                                col = delta * cols;// shifts cols to appropriate page
+                                row++;// breaks row
                             }
-
                             if (i % numVisible === 0) {
-                                row = 0;// shifts row back to top of page.
+                                row = 0;// shifts row back to top of page
                             }
-
                         }
-
                         items[i].styles = {
-                            /*position absolute applied via stylesheet */
+                            /* position absolute applied via stylesheet */
                             left     : (col * itemWidth) + "px",
                             top      : (row * itemHeight) + "px"
                         };
@@ -3686,7 +3679,7 @@
                 carousel.replaceClass(cssClass.VERTICAL, cssClass.HORIZONTAL);
             }
 
-            itemAttrCache = {};            // force recomputed next time
+            this._itemAttrCache = {};            // force recomputed next time
 
             return val;
         },
