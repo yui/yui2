@@ -1,3 +1,12 @@
+/**
+ * Augments the Event Utility with event delegation support.
+ *
+ * @module event-delegate
+ * @title Event Utility
+ * @namespace YAHOO.util
+ * @requires event
+ */
+
 (function () {
 
 	var Event = YAHOO.util.Event,
@@ -14,14 +23,14 @@
 		 * @method _createDelegate
 		 *
 		 * @param {Function} fn        The method (event listener) to call.
+		 * @param {Function|string} filter Function or CSS selector used to 
+		 * determine for what element(s) the event listener should be called.		
 		 * @param {Object}   obj	An arbitrary object that will be 
 		 *                             passed as a parameter to the listener.
 		 * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes
 		 *                             the execution context of the listener. If an
 		 *                             object, this object becomes the execution
 		 *                             context.
-		 * @param {HTMLElement}	The element that was specified as the 
-		 * delegation container. 
 		 * @return {Function} Function that will call the event listener 
 		 * specified by the <code>YAHOO.util.Event.delegate</code> method.
          * @private
@@ -108,7 +117,7 @@
          *  listener to.
          * @param {String}   type     The type of event listener to append
          * @param {Function} fn        The method the event invokes
-		 * @param spec {Function|string}  Function or CSS selector used to 
+		 * @param {Function|string} filter Function or CSS selector used to 
 		 * determine for what element(s) the event listener should be called. 
 		 * When a function is specified, the function should return an 
 		 * HTML element.  Using a CSS Selector requires the inclusion of the 
@@ -119,7 +128,7 @@
          *                             the execution context of the listener. If an
          *                             object, this object becomes the execution
          *                             context.
-         * @return {Boolean} True if the action was successful or defered,
+         * @return {Boolean} true Returns true if the action was successful or defered,
          *                        false if one or more of the elements 
          *                        could not have the listener attached,
          *                        or if the operation throws an exception.
@@ -142,7 +151,7 @@
 			if (type == "mouseenter" || type == "mouseleave") {
 
 				if (!Event._createMouseDelegate) {
-			        YAHOO.log("Delegating a " + type + " event requires the event-mouseleave submodule", "error", "Event");
+			        YAHOO.log("Delegating a " + type + " event requires the event-mouseleave module", "error", "Event");
 			        return false;				
 				}
 
@@ -176,11 +185,11 @@
          * @param {String|HTMLElement|Array|NodeList} container An id, an element 
          *  reference, or a collection of ids and/or elements to remove
          *  the listener from.
-         * @param {String} sType the type of event to remove.
-         * @param {Function} fn the method the event invokes.  If fn is
+         * @param {String} type The type of event to remove.
+         * @param {Function} fn The method the event invokes.  If fn is
          *  undefined, then all event listeners for the type of event are 
          *  removed.
-         * @return {boolean} true if the unbind was successful, false 
+         * @return {boolean} true Returns true if the unbind was successful, false 
          *  otherwise.
          * @static
          * @for Event
