@@ -6,9 +6,9 @@
 ***********/
 
 (function(){
-	
+
 	var	Dom               = YAHOO.util.Dom
-	
+
 			STRING_STATENAME  = 'yui_dt_state',
 
 			CLASS_EXPANDED    = 'yui-dt-expanded',
@@ -45,14 +45,14 @@
 					*/
 
 					this.setAttributeConfig("rowExpansionTemplate", {
-					    value: "",
-					    validator: function( template ){
+							value: "",
+							validator: function( template ){
 						return (
 							YAHOO.lang.isString( template ) ||
 							YAHOO.lang.isFunction( template )
 						);
 					},
-					    method: this.initExpandableRows
+					method: this.initExpandableRows
 					});
 
 			},
@@ -62,7 +62,7 @@
 				var	row_data    = this.getRecord( record_id ),
 						row_state   = row_data.getData( STRING_STATENAME ),
 						state_data  = ( row_state && key ) ? row_state[ key ] : row_state;
-				
+
 				return state_data || {};
 
 			},
@@ -71,7 +71,7 @@
 
 				var	row_data      = this.getRecord( record_id ).getData(),
 						merged_data   = row_data[ STRING_STATENAME ] || {};
-					
+
 				merged_data[ key ] = value;
 
 				this.getRecord( record_id ).setData( STRING_STATENAME, merged_data );
@@ -102,7 +102,7 @@
 					this.collapseRow( record_id );
 
 				} else {
-					
+
 					this.expandRow( record_id );
 
 				}
@@ -114,7 +114,7 @@
 				var state = this._getRecordState( record_id );
 
 				if( !state.expanded || restore ){
-					
+
 					var	row_data          = this.getRecord( record_id ),
 							row               = this.getRow( row_data ),
 							new_row           = document.createElement('tr'),
@@ -159,17 +159,17 @@
 
 					//Insert new row
 					newRow = Dom.insertAfter( new_row, row );
-					
+
 					if (newRow.innerHTML.length) {
-						
+
 						this._setRecordState( record_id, 'expanded', true );
-						
+
 						if( !restore ){
 
 							this.a_rowExpansions.push( this.getRecord( record_id ).getId() );
 
 						}
-						
+
 						Dom.removeClass( row, CLASS_COLLAPSED );
 						Dom.addClass( row, CLASS_EXPANDED );
 
@@ -189,22 +189,22 @@
 			},
 
 			collapseRow : function( record_id ){
-				
+
 				var	row_data    = this.getRecord( record_id ),
 						row         = Dom.get( row_data.getId() ),
 						state       = row_data.getData( STRING_STATENAME );
-				
+
 				if( state && state.expanded ){
 
 					var	next_sibling    = Dom.getNextSibling( row ),
 							hash_index      = indexOf( this.a_rowExpansions, record_id );
-						
+
 					if( Dom.hasClass( next_sibling, CLASS_EXPANSION ) ) {
 
 						next_sibling.parentNode.removeChild( next_sibling );
 						this.a_rowExpansions.splice( hash_index, 1 );
 						this._setRecordState( record_id, 'expanded', false );
-						
+
 						Dom.addClass( row, CLASS_COLLAPSED );
 						Dom.removeClass( row, CLASS_EXPANDED );
 
@@ -238,9 +238,9 @@
 			},
 
 			restoreExpandedRows : function(){
-				
+
 				var	expanded_rows = this.a_rowExpansions;
-				
+
 				if( !expanded_rows.length ){
 
 					return;
@@ -263,9 +263,19 @@
 
 				this.restoreExpandedRows();
 
+			},
+
+			onEventToggleRowExpansion : function( oArgs ){
+
+				if( YAHOO.util.Dom.hasClass( oArgs.target, 'yui-dt-expandablerow-trigger' ) ){
+
+					this.toggleRowExpansion( oArgs.target );
+
+				}
+
 			}
 
 		}, true
 	);
-	
+
 })();

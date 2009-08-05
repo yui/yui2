@@ -149,18 +149,7 @@ YAHOO.util.Event.onDOMReady( function() {
 				);
 
 				//Subscribe to a click event to bind to
-				myDataTable.subscribe( 'cellClickEvent', function( cell_click, args ){
-
-					if( YAHOO.util.Dom.hasClass( cell_click.target, 'yui-dt-expandablerow-trigger' ) ){
-						
-						//TODO: change this to just target after you normalize
-						var row_element = cell_click.target;
-
-						this.toggleRowExpansion( row_element );
-
-					}
-
-				} );
+				myDataTable.subscribe( 'cellClickEvent', myDataTable.onEventToggleRowExpansion );
 				
 				return {
 						oDS: myDataSource,
