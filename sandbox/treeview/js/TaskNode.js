@@ -238,7 +238,7 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
 
 
         sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
-        sb[sb.length] = '<tr>';
+        sb[sb.length] = '<tr class="ygtvrow">';
         
         for (var i=0;i<this.depth;++i) {
             //sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&#160;</td>';
