@@ -1,6 +1,6 @@
-/*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
+/**
+ * The Storage module manages client-side data storage.
+ * @module Storage
  */
 
 (function() {

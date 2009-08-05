@@ -394,20 +394,33 @@
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="k">var</span> <span class="nx">_purge</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">tId</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">q</span><span class="o">=</span><span class="nx">queues</span><span class="o">[</span><span class="nx">tId</span><span class="o">];</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">q</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">n</span><span class="o">=</span><span class="nx">q</span><span class="o">.</span><span class="nx">nodes</span><span class="o">,</span> <span class="nx">l</span><span class="o">=</span><span class="nx">n</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">d</span><span class="o">=</span><span class="nx">q</span><span class="o">.</span><span class="nx">win</span><span class="o">.</span><span class="nb">document</span><span class="o">,</span> 
-                <span class="nx">h</span><span class="o">=</span><span class="nx">d</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s2">&quot;head&quot;</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">queues</span><span class="o">[</span><span class="nx">tId</span><span class="o">])</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">q</span>     <span class="o">=</span> <span class="nx">queues</span><span class="o">[</span><span class="nx">tId</span><span class="o">],</span>
+                <span class="nx">nodes</span> <span class="o">=</span> <span class="nx">q</span><span class="o">.</span><span class="nx">nodes</span><span class="o">,</span> 
+                <span class="nx">l</span>     <span class="o">=</span> <span class="nx">nodes</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> 
+                <span class="nx">d</span>     <span class="o">=</span> <span class="nx">q</span><span class="o">.</span><span class="nx">win</span><span class="o">.</span><span class="nb">document</span><span class="o">,</span> 
+                <span class="nx">h</span>     <span class="o">=</span> <span class="nx">d</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s2">&quot;head&quot;</span><span class="o">)[</span><span class="m">0</span><span class="o">],</span>
+                <span class="nx">sib</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">node</span><span class="o">,</span> <span class="nx">attr</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">q</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">_get</span><span class="o">(</span><span class="nx">q</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">,</span> <span class="nx">tId</span><span class="o">);</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">s</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">h</span> <span class="o">=</span> <span class="nx">s</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+                <span class="nx">sib</span> <span class="o">=</span> <span class="nx">_get</span><span class="o">(</span><span class="nx">q</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">,</span> <span class="nx">tId</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">sib</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">h</span> <span class="o">=</span> <span class="nx">sib</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
                 <span class="o">}</span>
             <span class="o">}</span>
 
-            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">h</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">n</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">node</span> <span class="o">=</span> <span class="nx">nodes</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">node</span><span class="o">.</span><span class="nx">clearAttributes</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">node</span><span class="o">.</span><span class="nx">clearAttributes</span><span class="o">();</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="nx">attr</span> <span class="k">in</span> <span class="nx">node</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">delete</span> <span class="nx">node</span><span class="o">[</span><span class="nx">attr</span><span class="o">];</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="nx">h</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">node</span><span class="o">);</span>
             <span class="o">}</span>
 
             <span class="nx">q</span><span class="o">.</span><span class="nx">nodes</span> <span class="o">=</span> <span class="o">[];</span>
@@ -827,6 +840,7 @@
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class="selected"><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
                                 <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
@@ -838,10 +852,14 @@
                                 <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
                                 <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
                                 <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>

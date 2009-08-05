@@ -125,6 +125,7 @@ YAHOO.namespace("tool");
     };
 
 })();
+
 YAHOO.namespace("tool");
 
 
@@ -204,6 +205,7 @@ YAHOO.tool.TestSuite.prototype = {
     }
     
 };
+
 YAHOO.namespace("tool");
 
 /**
@@ -891,6 +893,7 @@ YAHOO.tool.TestRunner = (function(){
     return new TestRunner();
     
 })();
+
 YAHOO.namespace("util");
 
 //-----------------------------------------------------------------------------
@@ -1512,6 +1515,7 @@ YAHOO.util.UnexpectedError = function (cause /*:Object*/){
 
 //inherit methods
 YAHOO.lang.extend(YAHOO.util.UnexpectedError, YAHOO.util.AssertionError);
+
 //-----------------------------------------------------------------------------
 // ArrayAssert object
 //-----------------------------------------------------------------------------
@@ -1724,7 +1728,7 @@ YAHOO.util.ArrayAssert = {
                            message /*:String*/) /*:Void*/ {
         
         //one may be longer than the other, so get the maximum length
-        var len /*:int*/ = Math.max(expected.length, actual.length);
+        var len /*:int*/ = Math.max(expected.length, actual.length || 0);
         var Assert = YAHOO.util.Assert;
        
         //begin checking values
@@ -1757,7 +1761,7 @@ YAHOO.util.ArrayAssert = {
         }
         
         //one may be longer than the other, so get the maximum length
-        var len /*:int*/ = Math.max(expected.length, actual.length);
+        var len /*:int*/ = Math.max(expected.length, actual.length || 0);
         
         //begin checking values
         for (var i=0; i < len; i++){
@@ -1810,7 +1814,7 @@ YAHOO.util.ArrayAssert = {
                           message /*:String*/) /*:Void*/ {
         
         //one may be longer than the other, so get the maximum length
-        var len /*:int*/ = Math.max(expected.length, actual.length);
+        var len /*:int*/ = Math.max(expected.length, actual.length || 0);
         var Assert = YAHOO.util.Assert;
         
         //begin checking values
@@ -1848,6 +1852,7 @@ YAHOO.util.ArrayAssert = {
     }
     
 };
+
 YAHOO.namespace("util");
 
 
@@ -1922,6 +1927,7 @@ YAHOO.util.ObjectAssert = {
         }     
     }
 };
+
 //-----------------------------------------------------------------------------
 // DateAssert object
 //-----------------------------------------------------------------------------
@@ -1976,6 +1982,7 @@ YAHOO.util.DateAssert = {
     }
     
 };
+
 YAHOO.namespace("tool");
 
 //-----------------------------------------------------------------------------
@@ -2160,6 +2167,7 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
     }
     
 });
+
 YAHOO.namespace("tool.TestFormat");
 
 /**
@@ -2207,6 +2215,7 @@ YAHOO.tool.TestFormat.XML = function(results /*:Object*/) /*:String*/ {
     return xml;
 
 };
+
 YAHOO.namespace("tool");
 
 /**
@@ -2399,4 +2408,5 @@ YAHOO.tool.TestReporter.prototype = {
     }
 
 };
+
 YAHOO.register("yuitest", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});

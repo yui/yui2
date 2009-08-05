@@ -173,13 +173,12 @@
 
         <span class="nx">_initTabEvents</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">tab</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;activationEvent&#39;</span><span class="o">),</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">_onActivate</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">tab</span><span class="o">);</span>
-            
-            <span class="nx">tab</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="s1">&#39;activationEventChange&#39;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">prevValue</span> <span class="o">!=</span> <span class="nx">e</span><span class="o">.</span><span class="nx">newValue</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">tab</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">prevValue</span><span class="o">,</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">_onActivate</span><span class="o">);</span>
-                    <span class="nx">tab</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">newValue</span><span class="o">,</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">_onActivate</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">tab</span><span class="o">);</span>
-                <span class="o">}</span>
-            <span class="o">});</span>
+            <span class="nx">tab</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;activationEventChange&#39;</span><span class="o">),</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">_onActivationEventChange</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">tab</span><span class="o">);</span>
+        <span class="o">},</span>
+
+        <span class="nx">_removeTabEvents</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">tab</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">tab</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">tab</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;activationEvent&#39;</span><span class="o">),</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">_onActivate</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">tab</span><span class="o">);</span>
+            <span class="nx">tab</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="s1">&#39;activationEventChange&#39;</span><span class="o">,</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">_onActivationEventChange</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">tab</span><span class="o">);</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
@@ -265,6 +264,7 @@
                 <span class="o">}</span>
             <span class="o">}</span>
             
+            <span class="k">this</span><span class="o">.</span><span class="nx">_removeTabEvents</span><span class="o">(</span><span class="nx">tab</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_tabParent</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">ELEMENT</span><span class="o">)</span> <span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_contentParent</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span> <span class="nx">tab</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">CONTENT_EL</span><span class="o">)</span> <span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span><span class="o">.</span><span class="nx">tabs</span><span class="o">.</span><span class="nx">value</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">index</span><span class="o">,</span> <span class="m">1</span><span class="o">);</span>
@@ -580,6 +580,7 @@
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
                                 <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
@@ -591,10 +592,14 @@
                                 <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
                                 <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
                                 <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class="selected"><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>

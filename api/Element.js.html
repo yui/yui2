@@ -50,7 +50,11 @@
                         <div class="highlight" ><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 <span class="c">// internal shorthand</span>
 <span class="c"></span><span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
-    <span class="nx">AttributeProvider</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AttributeProvider</span><span class="o">;</span>
+    <span class="nx">AttributeProvider</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AttributeProvider</span><span class="o">,</span>
+	<span class="nx">specialTypes</span> <span class="o">=</span> <span class="o">{</span>
+		<span class="nx">mouseenter</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+		<span class="nx">mouseleave</span><span class="o">:</span> <span class="kc">true</span>
+	<span class="o">};</span>
 
 <span class="c">/**</span>
 <span class="c"> * Element provides an wrapper object to simplify adding</span>
@@ -85,6 +89,8 @@
     <span class="s1">&#39;mouseout&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
     <span class="s1">&#39;mouseover&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
     <span class="s1">&#39;mouseup&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+    <span class="s1">&#39;mouseenter&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
+    <span class="s1">&#39;mouseleave&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
     <span class="s1">&#39;focus&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
     <span class="s1">&#39;blur&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
     <span class="s1">&#39;submit&#39;</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
@@ -105,6 +111,9 @@
         <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">el</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
         <span class="o">}</span>
+
+		<span class="k">return</span> <span class="nx">value</span><span class="o">;</span>
+
     <span class="o">},</span>
 
     <span class="nx">DEFAULT_HTML_GETTER</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">)</span> <span class="o">{</span>
@@ -207,26 +216,51 @@
 <span class="c">     * @param {Object} scope The object to use for the scope of the handler </span>
 <span class="c">     */</span>
     <span class="nx">addListener</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">scope</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">)</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">);</span>
+
         <span class="nx">scope</span> <span class="o">=</span> <span class="nx">scope</span> <span class="o">||</span> <span class="k">this</span><span class="o">;</span>
-        
-        <span class="k">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span> 
+
+        <span class="k">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
+			<span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">)</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">),</span>
+        	<span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+
+
+		<span class="k">if</span> <span class="o">(</span><span class="nx">specialTypes</span><span class="o">[</span><span class="nx">type</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Event</span><span class="o">.</span><span class="nx">_createMouseDelegate</span><span class="o">)</span> <span class="o">{</span>
+	        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Using a &quot;</span> <span class="o">+</span> <span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot; event requires the event-mouseenter submodule&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;Event&quot;</span><span class="o">);</span>
+	        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>	
+		<span class="o">}</span>
+
+
         <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_events</span><span class="o">[</span><span class="nx">type</span><span class="o">])</span> <span class="o">{</span> <span class="c">// create on the fly</span>
-<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">DOM_EVENTS</span><span class="o">[</span><span class="nx">type</span><span class="o">])</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">type</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">srcElement</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">e</span><span class="o">.</span><span class="nx">target</span><span class="o">)</span> <span class="o">{</span> <span class="c">// supplement IE with target</span>
-<span class="c"></span>                        <span class="nx">e</span><span class="o">.</span><span class="nx">target</span> <span class="o">=</span> <span class="nx">e</span><span class="o">.</span><span class="nx">srcElement</span><span class="o">;</span>
-                    <span class="o">}</span>
-                    <span class="nx">self</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">e</span><span class="o">);</span>
-                <span class="o">},</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">scope</span><span class="o">);</span>
+<span class="c"></span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">DOM_EVENTS</span><span class="o">[</span><span class="nx">type</span><span class="o">])</span> <span class="o">{</span>
+				<span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">type</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">matchedEl</span><span class="o">)</span> <span class="o">{</span>
+
+					<span class="c">// Supplement IE with target, currentTarget relatedTarget</span>
+<span class="c"></span>
+	                <span class="k">if</span> <span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">srcElement</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">e</span><span class="o">.</span><span class="nx">target</span><span class="o">)</span> <span class="o">{</span> 
+	                    <span class="nx">e</span><span class="o">.</span><span class="nx">target</span> <span class="o">=</span> <span class="nx">e</span><span class="o">.</span><span class="nx">srcElement</span><span class="o">;</span>
+	                <span class="o">}</span>
+
+					<span class="k">if</span> <span class="o">((</span><span class="nx">e</span><span class="o">.</span><span class="nx">toElement</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">e</span><span class="o">.</span><span class="nx">relatedTarget</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">fromElement</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">e</span><span class="o">.</span><span class="nx">relatedTarget</span><span class="o">))</span> <span class="o">{</span>
+						<span class="nx">e</span><span class="o">.</span><span class="nx">relatedTarget</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getRelatedTarget</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+					<span class="o">}</span>
+					
+					<span class="k">if</span> <span class="o">(!</span><span class="nx">e</span><span class="o">.</span><span class="nx">currentTarget</span><span class="o">)</span> <span class="o">{</span>
+						<span class="nx">e</span><span class="o">.</span><span class="nx">currentTarget</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span>
+					<span class="o">}</span>
+
+					<span class="c">//	Note: matchedEl el is passed back for delegated listeners</span>
+<span class="c"></span>		            <span class="nx">self</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">e</span><span class="o">,</span> <span class="nx">matchedEl</span><span class="o">);</span>
+
+		        <span class="o">},</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">scope</span><span class="o">);</span>
             <span class="o">}</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="o">{</span><span class="nx">scope</span><span class="o">:</span> <span class="k">this</span><span class="o">});</span>
         <span class="o">}</span>
         
         <span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span> <span class="c">// notify via customEvent</span>
 <span class="c"></span>    <span class="o">},</span>
-    
-    
+
+
     <span class="c">/**</span>
 <span class="c">     * Alias for addListener</span>
 <span class="c">     * @method on</span>
@@ -644,6 +678,7 @@
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class="selected"><a href="module_element.html" title="element">element</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
                                 <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
@@ -655,10 +690,14 @@
                                 <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
                                 <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
                                 <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>
