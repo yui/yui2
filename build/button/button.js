@@ -3909,17 +3909,27 @@
         * @type String
         */
         NODE_NAME: "DIV",
+
+
+        /**
+        * @property CLASS_NAME_PREFIX
+        * @description Prefix used for all class names applied to a ButtonGroup.
+        * @default "yui-"
+        * @final
+        * @type String
+        */
+        CLASS_NAME_PREFIX: "yui-",
         
         
         /**
         * @property CSS_CLASS_NAME
         * @description String representing the CSS class(es) to be applied  
         * to the button group's element.
-        * @default "yui-buttongroup"
+        * @default "buttongroup"
         * @final
         * @type String
         */
-        CSS_CLASS_NAME: "yui-buttongroup",
+        CSS_CLASS_NAME: "buttongroup",
     
     
     
@@ -4099,10 +4109,12 @@
             YAHOO.widget.ButtonGroup.superclass.init.call(this, p_oElement, 
                     p_oAttributes);
         
-            this.addClass(this.CSS_CLASS_NAME);
+            this.addClass(this.CLASS_NAME_PREFIX + this.CSS_CLASS_NAME);
+
         
-        
-            var aButtons = this.getElementsByClassName("yui-radio-button");
+            var sClass = (YAHOO.widget.Button.prototype.CLASS_NAME_PREFIX + "radio-button"),
+				aButtons = this.getElementsByClassName(sClass);
+
         
         
             if (aButtons.length > 0) {
