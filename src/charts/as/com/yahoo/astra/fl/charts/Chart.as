@@ -21,6 +21,7 @@ package com.yahoo.astra.fl.charts
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.utils.getDefinitionByName;
+	import flash.events.ErrorEvent;
 		
 	//--------------------------------------
 	//  Styles
@@ -688,11 +689,27 @@ package com.yahoo.astra.fl.charts
 					itemData.label = itemData.label ? itemData.label : i.toString();
 					if(series.legendLabelFunction != null && series.legendLabelFunction is Function)
 					{
-						itemData.label = series.legendLabelFunction(itemData.label);
+						try
+						{
+							itemData.label = series.legendLabelFunction(itemData.label);
+						}
+						catch(e:Error)
+						{
+							var message:String = "There is an error in the series level legendLabelFunction.";
+							this.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, message));
+						}
 					}
 					else if(this.legendLabelFunction != null && this.legendLabelFunction is Function)
 					{
-						itemData.label = this.legendLabelFunction(itemData.label);
+						try
+						{
+							message = "There is an error in the legendLabelFunction.";
+							itemData.label = this.legendLabelFunction(itemData.label);
+						}
+						catch(e:Error)
+						{
+							this.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, message));
+						}
 					}
 					legendData.push(itemData);
 				}
@@ -756,11 +773,27 @@ package com.yahoo.astra.fl.charts
 			var dataTipText:String = "";
 			if(series.dataTipFunction != null)
 			{
-				dataTipText = series.dataTipFunction(item, index, series);
+				try
+				{
+					dataTipText = series.dataTipFunction(item, index, series);
+				}
+				catch(e:Error)
+				{
+					var message:String = "There is an error in your series level dataTipFunction";
+					this.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, message));
+				}
 			}
 			else if(this.dataTipFunction != null)
 			{
-				dataTipText = this.dataTipFunction(item, index, series);
+				try
+				{
+					dataTipText = this.dataTipFunction(item, index, series);
+				}
+				catch(e:Error)
+				{
+					message = "There is an error in your dataTipFunction";
+					this.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, message));
+				}
 			}
 			
 			var dataTipRenderer:IDataTipRenderer = this.dataTip as IDataTipRenderer;

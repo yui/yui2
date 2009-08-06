@@ -49,6 +49,12 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	{
 		this._attributes.version = 9.045;
 	}
+	
+	this._attributes.backgroundColor = attributes.backgroundColor || "#ffffff";
+	
+	this._swfURL = YAHOO.widget.Chart.SWFURL;
+	this._containerID = containerId;
+	
 	this._swfEmbed = new YAHOO.widget.SWF(containerId, YAHOO.widget.Chart.SWFURL, attributes);
 	
 	this._swf = this._swfEmbed.swf;
@@ -357,13 +363,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * @description The alternative text to provide for screen readers and other assistive technology.
 		 * @type String
 		 */
-		this.getAttributeConfig("altText",
-		{
-			method: this._getAltText
-		});
 		this.setAttributeConfig("altText",
 		{
-			method: this._setAltText
+			method: this._setAltText,
+			getter: this._getAltText
+			
 		});
 		
 		/**
@@ -372,9 +376,9 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 *		set after Flash Player has been embedded in the page.
 		 * @type String
 		 */
-		this.getAttributeConfig("swfURL",
+		this.setAttributeConfig("swfURL",
 		{
-			method: this._getSWFURL
+			getter: this._getSWFURL
 		});		
 
 		/**
@@ -382,14 +386,10 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * @description Request to be sent to the Chart's DataSource.
 		 * @type String
 		 */
-		this.getAttributeConfig("request",
-		{
-			method: this._getRequest
-		});
-		
 		this.setAttributeConfig("request",
 		{
-			method: this._setRequest
+			method: this._setRequest,
+			getter: this._getRequest
 		});
 		
 		/**
@@ -397,14 +397,10 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * @description The DataSource instance to display in the Chart.
 		 * @type DataSource
 		 */
-		this.getAttributeConfig("dataSource",
-		{
-			method: this._getDataSource
-		});
-		
 		this.setAttributeConfig("dataSource",
 		{
-			method: this._setDataSource
+			method: this._setDataSource,
+			getter: this._getDataSource
 		});
 		
 		/**
@@ -412,14 +408,10 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * @description Defines the series to be displayed by the Chart.
 		 * @type Array
 		 */
-		this.getAttributeConfig("series",
-		{
-			method: this._getSeriesDefs
-		});
-		
 		this.setAttributeConfig("series",
 		{
-			method: this._setSeriesDefs
+			method: this._setSeriesDefs,
+			getter: this._getSeriesDefs
 		});
 		
 		/**
@@ -427,15 +419,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * @description Defines the names of the categories to be displayed in the Chart..
 		 * @type Array
 		 */
-		this.getAttributeConfig("categoryNames",
-		{
-			method: this._getCategoryNames
-		});
-		
 		this.setAttributeConfig("categoryNames",
 		{
 			validator: YAHOO.lang.isArray,
-			method: this._setCategoryNames
+			method: this._setCategoryNames,
+			getter: this._getCategoryNames
 		});
 		
 		/**
@@ -444,14 +432,10 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * that may be called by the SWF to generate the datatip text for a Chart's item.
 		 * @type String
 		 */
-		this.getAttributeConfig("dataTipFunction",
-		{
-			method: this._getDataTipFunction
-		});
-		
 		this.setAttributeConfig("dataTipFunction",
 		{
-			method: this._setDataTipFunction
+			method: this._setDataTipFunction,
+			getter: this._getDataTipFunction
 		});
 		
 		/**
@@ -459,15 +443,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * @description The string representation of a globally-accessible function
 		 * that may be called by the SWF to format the labels of a Chart's legend.
 		 * @type String
-		 */
-		this.getAttributeConfig("legendLabelFunction",
-		{
-			method: this._legendLabelFunction
-		});
-		
+		 */	
 		this.setAttributeConfig("legendLabelFunction",
 		{
-			method: this._setLegendLabelFunction
+			method: this._setLegendLabelFunction,
+			getter: this._legendLabelFunction
 		});
 
 		/**
@@ -476,14 +456,10 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * polling requests to the DataSource.
 		 * @type Number
 		 */
-		this.getAttributeConfig("polling",
-		{
-			method: this._getPolling
-		});
-
 		this.setAttributeConfig("polling",
 		{
-			method: this._setPolling
+			method: this._setPolling,
+			getter: this._getPolling
 		});
 	},
 	
@@ -520,6 +496,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 	_loadHandler: function()
 	{
 		//the type is set separately because it must be first!
+		if(!this._swf || !this._swf.setType) return;
 		this._swf.setType(this._type);
 
 
@@ -783,7 +760,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 	 */
 	_getCategoryNames: function()
 	{
-		this._swf.getCategoryNames();
+		return this._swf.getCategoryNames();
 	},
 
 	/**
@@ -955,7 +932,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 	 */
 	_setAltText: function(value)
 	{
-		return this._swf.setAltText(value);
+	 	this._swf.setAltText(value);
 	}
 });
 
