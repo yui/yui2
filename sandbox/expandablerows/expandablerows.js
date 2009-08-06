@@ -1,8 +1,9 @@
 /**********
 *
 * Expandable Rows Plugin for the YUI DataTable
-* Author: gelinase@yahoo-inc.com / Eric Gelinas 
-*
+* Author: gelinase@yahoo-inc.com / Eric Gelinas
+* @submodule Row Expansion
+* @class YAHOO.widget.DataTable
 ***********/
 
 (function(){
@@ -27,10 +28,59 @@
 				return -1;
 			};
 
-	//Add prototype methods
 	YAHOO.lang.augmentObject( 
 		YAHOO.widget.DataTable.prototype , 
 		{
+
+			/////////////////////////////////////////////////////////////////////////////
+			//
+			// Private members
+			//
+			/////////////////////////////////////////////////////////////////////////////
+			/**
+				* Unique id assigned to instance "yui-ceditorN", useful prefix for generating unique
+				* DOM ID strings and log messages.
+				* @method _getRecordState
+				* @param {Mixed} record_id Record / Row / or Index id
+				* @param {String} key Key to return within the state object. Default is to return all as a map
+				* @return {Object} State data object
+				* @type mixed
+				* @private
+			*/
+			_getRecordState : function( record_id, key ){
+
+				var	row_data    = this.getRecord( record_id ),
+						row_state   = row_data.getData( STRING_STATENAME ),
+						state_data  = ( row_state && key ) ? row_state[ key ] : row_state;
+
+				return state_data || {};
+
+			},
+
+			/**
+				* Unique id assigned to instance "yui-ceditorN", useful prefix for generating unique
+				* DOM ID strings and log messages.
+				* @method _setRecordState
+				* @param {Mixed} record_id Record / Row / or Index id
+				* @param {String} key Key to use in map
+				* @param {Mixed} value Value to assign to the key
+				* @return {Object} State data object
+				* @type mixed
+				* @private
+			*/
+			_setRecordState : function( record_id, key, value ){
+
+				var	row_data      = this.getRecord( record_id ).getData(),
+						merged_data   = row_data[ STRING_STATENAME ] || {};
+
+				merged_data[ key ] = value;
+
+				this.getRecord( record_id ).setData( STRING_STATENAME, merged_data );
+
+				return merged_data;
+
+			},
+
 			initAttributes : function( oConfigs ) {
 
 				oConfigs = oConfigs || {};
@@ -54,29 +104,6 @@
 					},
 					method: this.initExpandableRows
 					});
-
-			},
-
-			_getRecordState : function( record_id, key ){
-
-				var	row_data    = this.getRecord( record_id ),
-						row_state   = row_data.getData( STRING_STATENAME ),
-						state_data  = ( row_state && key ) ? row_state[ key ] : row_state;
-
-				return state_data || {};
-
-			},
-
-			_setRecordState : function( record_id, key, value ){
-
-				var	row_data      = this.getRecord( record_id ).getData(),
-						merged_data   = row_data[ STRING_STATENAME ] || {};
-
-				merged_data[ key ] = value;
-
-				this.getRecord( record_id ).setData( STRING_STATENAME, merged_data );
-
-				return merged_data;
 
 			},
 
