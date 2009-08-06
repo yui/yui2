@@ -3048,7 +3048,7 @@
                 var itemEl = carousel.get("carouselItemEl"),
                     elNode = el.nodeName.toUpperCase();
 
-                if (elNode !== itemEl.toUpperCase()) {
+                if (elNode == itemEl.toUpperCase()) {
                     el = Dom.getChildrenBy(el, function (node) {
                         // either an anchor or select at least
                         return node.href || node.value;
