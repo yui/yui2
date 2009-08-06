@@ -1,9 +1,4 @@
 /*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
- */
-
-/*
  * HTML limitations:
  *  - 5MB in FF and Safari, 10MB in IE 8
  *  - only FF 3.5 recovers session storage after a browser crash
@@ -12,29 +7,23 @@
  *  - how can we not use cookies to handle session
  */
 (function() {
-		// internal shorthand
-    var Y = YAHOO.util,
-		YL = YAHOO.lang,
-		
-		/**
-		 * Required for IE 8 to make synchronous.
-		 * @method _beginTransaction
-		 * @param engine {Object} Required. The storage engine.
-		 * @private
-		 */
-		_beginTransaction = function(engine) {
-			if (engine.begin) {engine.begin();}
-		},
-		
-		/**
-		 * Required for IE 8 to make synchronous.
-		 * @method _commitTransaction
-		 * @param engine {Object} Required. The storage engine.
-		 * @private
-		 */
-		_commitTransaction = function(engine) {
-			if (engine.commit) {engine.commit();}
-		};
+	// internal shorthand
+var Y = YAHOO.util,
+	YL = YAHOO.lang,
+
+	/*
+	 * Required for IE 8 to make synchronous.
+	 */
+	_beginTransaction = function(engine) {
+		if (engine.begin) {engine.begin();}
+	},
+
+	/*
+	 * Required for IE 8 to make synchronous.
+	 */
+	_commitTransaction = function(engine) {
+		if (engine.commit) {engine.commit();}
+	};
 
 	/**
 	 * The StorageEngineHTML5 class implements the HTML5 storage engine.

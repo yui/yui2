@@ -7,6 +7,7 @@ package com.yahoo.astra.fl.charts.axes
 	import com.yahoo.astra.utils.TimeUnit;
 	import fl.core.UIComponent;
 	import flash.text.TextFormat;
+	import flash.events.ErrorEvent;
 
 	/**
 	 * An axis type representing a date and time range from minimum to maximum
@@ -419,7 +420,18 @@ package com.yahoo.astra.fl.charts.axes
 			if(this.labelFunction != null)
 			{
 				var numericValue:Number = this.valueToNumber(value);
-				text = this.labelFunction(new Date(numericValue), this.majorTimeUnit);
+				try
+				{
+					text = this.labelFunction(new Date(numericValue), this.majorTimeUnit);
+				}
+				catch(e:Error)
+				{
+					//dispatch error event from the chart
+					var message:String = "There is an error in your ";
+					message += (ICartesianAxisRenderer(this.renderer).orientation == AxisOrientation.VERTICAL)?"y":"x";
+					message += "-axis labelFunction.";
+					this.chart.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, message));
+				}
 			}			
 			if(text == null)
 			{

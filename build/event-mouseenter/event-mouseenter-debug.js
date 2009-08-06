@@ -1,23 +1,29 @@
+/**
+ * Augments the Event Utility with support for the mouseenter and mouseleave 
+ * events
+ * 
+ * @module event-mouseenter
+ * @title Event Utility mouseenter and mouseout Module
+ * @namespace YAHOO.util
+ * @requires event
+ */
+
 (function () {
 
 	var Event = YAHOO.util.Event,
+		Lang = YAHOO.lang,
+
+		addListener = Event.addListener,
+		removeListener = Event.removeListener,
 
 		delegates = [],
 		
-		MOUSEOVER = "mouseover",
-		MOUSEOUT = "mouseout",
+		specialTypes = {
+			mouseenter: "mouseover",
+			mouseleave: "mouseout"
+		}, 
 
-		addListener = function (el, type, fn, obj, overrideContext) {
-
-			var fnDelegate = Event._createMouseDelegate(fn, obj, overrideContext);
-
-			delegates.push([el, type, fn, fnDelegate]);
-
-			return Event.on(el, type, fnDelegate);
-
-		},
-
-		removeListener = function(el, type, fn) {
+		remove = function(el, type, fn) {
 
 			var index = Event._getCacheIndex(delegates, el, type, fn),
 				cacheItem,
@@ -28,7 +34,9 @@
 		    }
 
 		    if (el && cacheItem) {
-		        returnVal = Event.removeListener(cacheItem[0], type, cacheItem[3]);
+
+				//	removeListener will translate the value of type				
+		        returnVal = removeListener.call(Event, cacheItem[0], type, cacheItem[3]);
 		
 				if (returnVal) {
 	                delete delegates[index][2];
@@ -43,12 +51,14 @@
 		};		
 
 
-	YAHOO.lang.augmentObject(Event, {
+	Lang.augmentObject(Event._specialTypes, specialTypes); 
+
+	Lang.augmentObject(Event, {
 
 		/**
 		 * Creates a delegate function used to call event listeners specified 
-		 * via the <code>YAHOO.util.Event.onMouseEnter</code> and 
-		 * <code>YAHOO.util.Event.onMouseLeave</code> methods.
+		 * via the <code>YAHOO.util.Event.addListener</code> 
+		 * or <code>YAHOO.util.Event.on</code> method.
 		 *
 		 * @method _createMouseDelegate
 		 *
@@ -60,13 +70,14 @@
 		 *                             object, this object becomes the execution
 		 *                             context. 
 		 * @return {Function} Function that will call the event listener 
-		 * specified by either the <code>YAHOO.util.Event.onMouseEnter</code> 
-		 * and <code>YAHOO.util.Event.onMouseLeave</code> methods.
-         * @private
+		 * specified by either the <code>YAHOO.util.Event.addListener</code> 
+		 * or <code>YAHOO.util.Event.on</code> method.
+	     * @private
 		 * @static
+	     * @for Event
 		 */
 		_createMouseDelegate: function (fn, obj, overrideContext) {
- 
+
 			return function (event, container) {
 
 				var el = this,
@@ -107,107 +118,48 @@
 			};
 
 		},
-
-
-		/**
-		 * Appends a mouseenter event listener&#151;a listener that is 
-		 * called the first time the user's mouse enters the specified
-		 * element.  Event listeners receive two arguments by default:
-		 * the DOM event and the element to which the listener is bound.
-		 * 
-		 *
-		 * @method onMouseEnter
-		 *
-		 * @param {String|HTMLElement|Array|NodeList} el An id, an element 
-		 *  reference, or a collection of ids and/or elements to assign the 
-		 *  listener to.
-		 * @param {Function} fn        The method the event invokes
-		 * @param {Object}   obj    An arbitrary object that will be 
-		 *                             passed as a parameter to the listener
-		 * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes
-		 *                             the execution context of the listener. If an
-		 *                             object, this object becomes the execution
-		 *                             context.
-		 * @return {Boolean} True if the action was successful or defered,
-		 *                        false if one or more of the elements 
-		 *                        could not have the listener attached,
-		 *                        or if the operation throws an exception.
-		 * @static
-		 */
-		onMouseEnter: function (el, fn, obj, overrideContext) {
-			return addListener.call(Event, el, MOUSEOVER, fn, obj, overrideContext);
-		},
-
-
-		/**
-		 * Appends a mouseleave event listener&#151;a listener that is 
-		 * called the first time the user's mouse leaves the specified
-		 * element.  Event listeners receive two arguments by default:
-		 * the DOM event and the element to which the listener is bound.
-		 *
-		 * @method onMouseLeave
-		 *
-		 * @param {String|HTMLElement|Array|NodeList} el An id, an element 
-		 *  reference, or a collection of ids and/or elements to assign the 
-		 *  listener to.
-		 * @param {Function} fn        The method the event invokes
-		 * @param {Object}   obj    An arbitrary object that will be 
-		 *                             passed as a parameter to the listener
-		 * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes
-		 *                             the execution context of the listener. If an
-		 *                             object, this object becomes the execution
-		 *                             context.
-		 * @return {Boolean} True if the action was successful or defered,
-		 *                        false if one or more of the elements 
-		 *                        could not have the listener attached,
-		 *                        or if the operation throws an exception.
-		 * @static
-		 */
-		onMouseLeave: function (el, fn, obj, overrideContext) {
-			return addListener.call(Event, el, MOUSEOUT, fn, obj, overrideContext);
-		},
-
-
-        /**
-         * Removes a mouseenter event listener
-         *
-         * @method removeMouseEnterListener
-         *
-         * @param {String|HTMLElement|Array|NodeList} el An id, an element 
-         *  reference, or a collection of ids and/or elements to remove
-         *  the listener from.
-         * @param {Function} fn the method the event invokes.  If fn is
-         *  undefined, then all event listeners for the type of event are 
-         *  removed.
-         * @return {boolean} true if the unbind was successful, false 
-         *  otherwise.
-         * @static
-         */
-		removeMouseEnterListener: function (el, fn) { 
-			return removeListener.call(Event, el, MOUSEOVER, fn);
-		},
-
-
-        /**
-         * Removes a mouseleave event listener
-         *
-         * @method removeMouseLeaveListener
-         *
-         * @param {String|HTMLElement|Array|NodeList} el An id, an element 
-         *  reference, or a collection of ids and/or elements to remove
-         *  the listener from.
-         * @param {Function} fn the method the event invokes.  If fn is
-         *  undefined, then all event listeners for the type of event are 
-         *  removed.
-         * @return {boolean} true if the unbind was successful, false 
-         *  otherwise.
-         * @static
-         */
-		removeMouseLeaveListener: function (el, fn) { 
-			return removeListener.call(Event, el, MOUSEOUT, fn);
-		}
 		
-	});
+		addListener: function (el, type, fn, obj, overrideContext) {
+
+			var fnDelegate,
+				returnVal;
+
+			if (specialTypes[type]) {
+
+				fnDelegate = Event._createMouseDelegate(fn, obj, overrideContext);
+
+				delegates.push([el, type, fn, fnDelegate]);
+
+				//	addListener will translate the value of type
+				returnVal = addListener.call(Event, el, type, fnDelegate);
+
+			}
+			else {
+				returnVal = addListener.apply(Event, arguments);
+			}
+
+			return returnVal;
+
+		},
+		
+		removeListener: function (el, type, fn) {
+
+			var returnVal;
+
+			if (specialTypes[type]) {
+				returnVal = remove.apply(Event, arguments);
+			}
+			else {
+				returnVal = removeListener.apply(Event, arguments);
+			}
+
+			return returnVal;
+
+		}		
+		
+	}, true);
+	
+	Event.on = Event.addListener;
 
 }());
 YAHOO.register("event-mouseenter", YAHOO.util.Event, {version: "@VERSION@", build: "@BUILD@"});

@@ -86,7 +86,7 @@
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
-            var id, nodes, c, i, len;
+            var id, nodes, c, i, len, attr;
 
             if (el) {
                 if (el[NODE_TYPE] || el.item) { // Node, or NodeList
@@ -96,13 +96,14 @@
                 if (typeof el === 'string') { // id
                     id = el;
                     el = document.getElementById(el);
-                    if (el && el.getAttribute('id') === id) { // IE: avoid false match on "name" attribute
-                    return el;
+                    attr = (el) ? el.attributes : null;
+                    if (el && attr && attr.id && attr.id.value === id) { // IE: avoid false match on "name" attribute
+                        return el;
                     } else if (el && document.all) { // filter by name
                         el = null;
                         nodes = document.all[id];
                         for (i = 0, len = nodes.length; i < len; ++i) {
-                            if (nodes[i].getAttribute('id') === id) {
+                            if (nodes[i].id === id) {
                                 return nodes[i];
                             }
                         }
