@@ -1,3 +1,6 @@
+/**
+  * @for Connect
+  */
 (function(){
 	var YCM = YAHOO.util.Connect,
 		YE = YAHOO.util.Event;

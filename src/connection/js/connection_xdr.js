@@ -1,3 +1,6 @@
+/**
+  * @for Connect
+  */
 (function() {
 	var YCM = YAHOO.util.Connect,
 		_xdrReady = new YAHOO.util.CustomEvent('xdrReady'),
