@@ -703,7 +703,14 @@
 					<span class="k">var</span> <span class="nx">series</span> <span class="o">=</span> <span class="o">{</span><span class="nx">type</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_type</span><span class="o">,</span> <span class="nx">dataProvider</span><span class="o">:</span> <span class="nx">response</span><span class="o">.</span><span class="nx">results</span><span class="o">};</span>
 					<span class="nx">dataProvider</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">series</span><span class="o">);</span>
 				<span class="o">}</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setDataProvider</span><span class="o">(</span><span class="nx">dataProvider</span><span class="o">);</span>
+				<span class="k">try</span>
+				<span class="o">{</span>
+					<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setDataProvider</span><span class="o">)</span> <span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setDataProvider</span><span class="o">(</span><span class="nx">dataProvider</span><span class="o">);</span>
+				<span class="o">}</span>
+				<span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span>
+				<span class="o">{</span>
+					<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setDataProvider</span><span class="o">(</span><span class="nx">dataProvider</span><span class="o">);</span>
+				<span class="o">}</span>
 			<span class="o">}</span>
 		<span class="o">}</span>
 	<span class="o">},</span>

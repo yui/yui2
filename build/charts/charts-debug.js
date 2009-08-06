@@ -654,7 +654,14 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 					var series = {type: this._type, dataProvider: response.results};
 					dataProvider.push(series);
 				}
-				this._swf.setDataProvider(dataProvider);
+				try
+				{
+					if(this._swf.setDataProvider) this._swf.setDataProvider(dataProvider);
+				}
+				catch(e)
+				{
+					this._swf.setDataProvider(dataProvider);
+				}
 			}
 		}
 	},
