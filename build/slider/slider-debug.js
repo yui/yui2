@@ -565,7 +565,7 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
     thumbMouseUp: function() {
         this._mouseDown = false;
         this.logger.log("thumb mouseup");
-        if (!this.isLocked() && !this.moveComplete) {
+        if (!this.isLocked()) {
             this.endMove();
         }
 
@@ -574,7 +574,7 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
     onMouseUp: function() {
         this._mouseDown = false;
         this.logger.log("background mouseup");
-        if (this.backgroundEnabled && !this.isLocked() && !this.moveComplete) {
+        if (this.backgroundEnabled && !this.isLocked()) {
             this.endMove();
         }
     },
@@ -947,16 +947,17 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
                 this.fireEvent("slideStart");
             }
             this._sliding = true;
+            this.moveComplete = false; // for backward compatibility. Deprecated
         }
     },
 
     _slideEnd: function() {
-        if (this._sliding && this.moveComplete) {
+        if (this._sliding) {
             // Reset state before firing slideEnd
             var silent = this._silent;
             this._sliding = false;
+            this.moveComplete = true; // for backward compatibility. Deprecated
             this._silent = false;
-            this.moveComplete = false;
             if (!silent) {
                 this.onSlideEnd();
                 this.fireEvent("slideEnd");
@@ -1136,7 +1137,6 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
         this.logger.log("endMove");
         this.unlock();
         this.fireEvents();
-        this.moveComplete = true;
         this._slideEnd();
     },
 
@@ -1975,7 +1975,7 @@ DualSlider.prototype = {
      * @protected
      */
     _handleMouseDown: function(e) {
-        if (!e._handled) {
+        if (!e._handled && !this.minSlider._sliding && !this.maxSlider._sliding) {
             e._handled = true;
             this.selectActiveSlider(e);
             return YW.Slider.prototype.onMouseDown.call(this.activeSlider, e);
