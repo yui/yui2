@@ -1623,6 +1623,7 @@
             carousel._pages       = { el: null, num: 0, cur: 0 };
             carousel._pagination  = {};
             carousel._itemAttrCache = {}; 
+
             carousel._itemsTable  = { loading: {}, numItems: 0,
                                       items: [], size: 0 };
 
@@ -3198,7 +3199,7 @@
                                 delta = Math.floor(i/numVisible);// find page item is on
                                 // break row
                                 col = 0;
-                                if(i !== 0) {
+                                if (i !== 0) {
                                     row++;
                                 }
                             }
@@ -3711,7 +3712,6 @@
             } else {
                 carousel.replaceClass(cssClass.VERTICAL, cssClass.HORIZONTAL);
             }
-
             this._itemAttrCache = {};            // force recomputed next time
 
             return val;

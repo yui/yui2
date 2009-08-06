@@ -6894,7 +6894,8 @@ getTdEl : function(cell) {
         }
         
         // Make sure the TD is in this TBODY
-        if(elCell && (elCell.parentNode.parentNode == this._elTbody)) {
+        // Bug 2527707 and bug 2263558
+        if(elCell && ((elCell.parentNode.parentNode == this._elTbody) || (elCell.parentNode.parentNode === null))) {
             // Now we can return the TD element
             return elCell;
         }

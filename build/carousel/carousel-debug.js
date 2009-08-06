@@ -1047,7 +1047,11 @@
          *
          * @property _itemAttrCache
          * @private
+<<<<<<< HEAD:build/carousel/carousel-debug.js
          */ 
+=======
+         */
+>>>>>>> e269089842d7cab772377676a86bd83c61fd9d95:build/carousel/carousel-debug.js
          _itemAttrCache: {},
 
         /*
@@ -1622,7 +1626,11 @@
             carousel._navBtns     = { prev: [], next: [] };
             carousel._pages       = { el: null, num: 0, cur: 0 };
             carousel._pagination  = {};
+<<<<<<< HEAD:build/carousel/carousel-debug.js
             carousel._itemAttrCache = {}; 
+=======
+            carousel._itemAttrCache = {};
+>>>>>>> e269089842d7cab772377676a86bd83c61fd9d95:build/carousel/carousel-debug.js
             carousel._itemsTable  = { loading: {}, numItems: 0,
                                       items: [], size: 0 };
 
@@ -3193,16 +3201,24 @@
                     item = items[i] ? Dom.get(items[i].id) : loading[i];
                     if (item) {
                         if (isVertical) {
+<<<<<<< HEAD:build/carousel/carousel-debug.js
                             col++;// shifts item by one col
                             if (i % cols === 0) {
                                 delta = Math.floor(i/numVisible);// find page item is on
+=======
+                            col++; // shifts item by one col
+                            if (i % cols === 0) {
+                                // find page item is on
+                                delta = Math.floor(i / numVisible);
+>>>>>>> e269089842d7cab772377676a86bd83c61fd9d95:build/carousel/carousel-debug.js
                                 // break row
                                 col = 0;
-                                if(i !== 0) {
+                                if (i !== 0) {
                                     row++;
                                 }
                             }
                         } else {
+<<<<<<< HEAD:build/carousel/carousel-debug.js
                             col++;// shifts item by one col.
                             if (i % cols === 0) {
                                 delta = Math.floor(i/numVisible);// find page item belongs on
@@ -3211,12 +3227,29 @@
                             }
                             if (i % numVisible === 0) {
                                 row = 0;// shifts row back to top of page
+=======
+                            col++; // shifts item by one col.
+                            if (i % cols === 0) {
+                                // find page item belongs on
+                                delta = Math.floor(i / numVisible);
+                                // shifts cols to appropriate page
+                                col = delta * cols;
+                                row++; // breaks row
+                            }
+                            if (i % numVisible === 0) {
+                                row = 0; // shifts row back to top of page
+>>>>>>> e269089842d7cab772377676a86bd83c61fd9d95:build/carousel/carousel-debug.js
                             }
                         }
                         items[i].styles = {
                             /* position absolute applied via stylesheet */
+<<<<<<< HEAD:build/carousel/carousel-debug.js
                             left     : (col * itemWidth) + "px",
                             top      : (row * itemHeight) + "px"
+=======
+                            left : (col * itemWidth) + "px",
+                            top  : (row * itemHeight) + "px"
+>>>>>>> e269089842d7cab772377676a86bd83c61fd9d95:build/carousel/carousel-debug.js
                         };
                     }
                 }
@@ -3712,7 +3745,11 @@
                 carousel.replaceClass(cssClass.VERTICAL, cssClass.HORIZONTAL);
             }
 
+<<<<<<< HEAD:build/carousel/carousel-debug.js
             this._itemAttrCache = {};            // force recomputed next time
+=======
+            this._itemAttrCache = {}; // force recomputed next time
+>>>>>>> e269089842d7cab772377676a86bd83c61fd9d95:build/carousel/carousel-debug.js
 
             return val;
         },
