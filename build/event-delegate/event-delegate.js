@@ -2,7 +2,7 @@
  * Augments the Event Utility with event delegation support.
  *
  * @module event-delegate
- * @title Event Utility
+ * @title Event Utility Event Delegation Module
  * @namespace YAHOO.util
  * @requires event
  */
