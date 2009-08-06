@@ -1,17 +1,6 @@
 YAHOO.example.interestingness = [
     {
      "farm": "4",
-     "id": "3788433221",
-     "isfamily": "0",
-     "isfriend": "0",
-     "ispublic": "1",
-     "owner": "13883647@N05",
-     "secret": "f05928b149",
-     "server": "3438",
-     "title": "Summer Romance"
-    },
-    {
-     "farm": "4",
      "id": "3787520681",
      "isfamily": "0",
      "isfriend": "0",
@@ -67,17 +56,6 @@ YAHOO.example.interestingness = [
     },
     {
      "farm": "3",
-     "id": "3788620420",
-     "isfamily": "0",
-     "isfriend": "0",
-     "ispublic": "1",
-     "owner": "27244419@N00",
-     "secret": "1cf1602928",
-     "server": "2560",
-     "title": ""
-    },
-    {
-     "farm": "3",
      "id": "3788264713",
      "isfamily": "0",
      "isfriend": "0",
@@ -97,17 +75,6 @@ YAHOO.example.interestingness = [
      "secret": "3161283b24",
      "server": "2485",
      "title": "transportation - Egypt_8064 -acw"
-    },
-    {
-     "farm": "3",
-     "id": "3789776752",
-     "isfamily": "0",
-     "isfriend": "0",
-     "ispublic": "1",
-     "owner": "23174201@N06",
-     "secret": "ec8e4baa36",
-     "server": "2567",
-     "title": ""
     },
     {
      "farm": "4",

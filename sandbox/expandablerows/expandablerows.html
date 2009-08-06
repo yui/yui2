@@ -19,7 +19,6 @@
 			-khtml-opacity: 0.5;
 			opacity: 0.5;
 		}
-		#event_table{width:800px;}
 		.yui-dt-expanded .yui-dt-expandablerow-trigger{
 			width:18px;
 			height:22px;
@@ -38,16 +37,15 @@
 
 <body class=" yui-skin-sam">
 
-<h1>DataTable with Expandable Rows</h1>
+<h1>DataTable with Row Expansion</h1>
 
 <div class="exampleIntro">
-	<p>A demonstration of the DataTable's expandable row feature.</p>
+	<p>A demonstration of the DataTable's row expansion feature. This is a list of Interestingness from Flickr</p>
 
 </div>
 
 <div id="event_table"></div>
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script> 
-<script type="text/javascript" src="data.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script> 
 <script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
@@ -56,30 +54,7 @@
 <script type="text/javascript" src="../../build/yuitest/yuitest-min.js"></script>
 <script type="text/javascript" src="../../build/datasource/datasource.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable.js"></script>
-<script>
-
-	YAHOO.widget.DataTable.prototype.getRecord = function(row) {
-		var oRecord = this._oRecordSet.getRecord(row);
-
-		if(!oRecord) {
-			// Validate TR element
-			var elRow = this.getTrEl(row);
-				if(elRow) {
-					// This is the line that changed
-					oRecord = this._oRecordSet.getRecord(elRow.id);
-				 }
-		 }
-
-		 if(oRecord instanceof YAHOO.widget.Record) {
-				 return this._oRecordSet.getRecord(oRecord);
-		 }
-		 else {
-				 YAHOO.log("Could not get Record for row at " + row, "info", this.toString());
-				 return null;
-		 }
-	};
-
-</script>
+<script type="text/javascript" src="data.js"></script>
 <script type="text/javascript" src="expandablerows.js"></script>
 
 <script>
@@ -89,7 +64,7 @@ YAHOO.util.Event.onDOMReady( function() {
 
 				var expansionFormatter = function(el, oRecord, oColumn, oData) {
 
-					var	cell_element = this.getTdEl(el);
+					var	cell_element = el.parentNode;
 
 					//Set trigger
 					if( oData ){ //Row is closed
@@ -100,20 +75,6 @@ YAHOO.util.Event.onDOMReady( function() {
 
 				};
 
-				var myColumnDefs = [
-					{
-						key:"title",
-						label:"",
-						formatter:expansionFormatter
-					},
-					{
-						key:"title",
-						label:"Interesting Photo",
-						sortable:true,
-						resizeable:true
-					}
-				];
-
 				var myDataSource = new YAHOO.util.DataSource(YAHOO.example.interestingness);
 						myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
 						myDataSource.responseSchema = {
@@ -122,7 +83,20 @@ YAHOO.util.Event.onDOMReady( function() {
 
 				var myDataTable = new YAHOO.widget.DataTable(
 						"event_table",
-						myColumnDefs,
+						[
+							{
+								key:"farm",
+								label:"",
+								formatter:expansionFormatter
+							},
+							{
+								key:"title",
+								label:"Interestingness",
+								width : '200px',
+								resizeable:true,
+								sortable:true
+							}
+						],
 						myDataSource,
 							{ rowExpansionTemplate : '<img src="http://farm{farm}.static.flickr.com/{server}/{id}_{secret}_m_d.jpg" />' }
 						);
