@@ -75,10 +75,6 @@
 		'<div class="',
 		CLASS_BAR,
 		'"></div><div class="',
-		CLASS_CAPTION_CONTAINER,
-		'"><div class="',
-		CLASS_CAPTION,
-		'"></div></div><div class="',
 		CLASS_MASK,
 		'"><div class="',
 		CLASS_TL,
@@ -88,6 +84,10 @@
 		CLASS_BL,
 		'"></div><div class="',
 		CLASS_BR,
+		'"></div></div><div class="',
+		CLASS_CAPTION_CONTAINER,
+		'"><div class="',
+		CLASS_CAPTION,
 		'"></div></div>'
 	].join('');
 
@@ -643,7 +643,7 @@
 			}
 			if (aria) {
 				container.setAttribute('aria-valuenow',value);
-				container.setAttribute('aria-valuetext',captionEl.textContent || captionEl.innerText);
+				container.setAttribute('aria-valuetext',captionEl.innerText || captionEl.textContent);
 			}
 		}
 	});

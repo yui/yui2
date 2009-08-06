@@ -33,7 +33,11 @@ fieldset {
 	margin:1em;
 }
 
-#valueSet,#rangeSet,#sizeSet {
+p{
+	margin:0 1em;
+}
+
+#valueSet,#rangeSet,#sizeSet,#captionCheck {
 	float:left;
 	clear:left;
 	width:50%;
@@ -126,6 +130,7 @@ code {
 						<label> Height: <span id="height">20</span>px</label>
 					</p>
 				</fieldset>
+				<p id="captionCheck"><input type="checkbox" id="caption" /> Enable Caption</p>
 				<fieldset id="animationSet" class="disabled">
 					<legend>Animation</legend>
 					<p style="color:black;"><input type="checkbox" id="anim" /> Enable animation</p>
@@ -173,6 +178,8 @@ code {
 				pb.set('maxValue',rangeSlider.minValue);
 				pb.set('width',widthSlider.getValue());
 				pb.set('height',heightSlider.getValue());
+				YAHOO.util.Dom.setStyle(pb.get('captionEl'),'visibility',(checked?'visible':'hidden'));
+				
 				pb.set('anim',checkBoxEl.checked);
 				
 				var anim = pb.get('anim');
@@ -206,6 +213,7 @@ code {
 		var valueSlider = YAHOO.widget.Slider.getHorizSlider('sliderValue',  
             'sliderValueThumb', 0, 200, 0
 		);
+		valueSlider.animate = false;
 		valueSlider.setValue(100);
 		
 		valueSlider.subscribe("change", function(offsetFromStart) {
@@ -229,6 +237,7 @@ code {
             "sliderRangeMinThumb", "sliderRangeMaxThumb",
             200, 0, [50,150]
 		);
+		rangeSlider.animate = false;
 		rangeSlider.subscribe('change', function() {
 			var value = Math.round(this.minVal  - 50);
 			Dom.get('minValue').innerHTML = value;
@@ -245,6 +254,7 @@ code {
 		var widthSlider = YAHOO.widget.Slider.getHorizSlider('sliderWidth',  
             'sliderWidthThumb', 0, 200, 0
 		);
+		widthSlider.animate = false;
 		widthSlider.setValue(100);
 		widthSlider.subscribe("change", function(offsetFromStart) {
 			var value = offsetFromStart * 2;
@@ -259,6 +269,7 @@ code {
 		var heightSlider = YAHOO.widget.Slider.getHorizSlider('sliderHeight',  
             'sliderHeightThumb', 0, 200, 0
 		);
+		heightSlider.animate = false;
 		heightSlider.setValue(50);
 		heightSlider.subscribe("change", function(offsetFromStart) {
 			var value = Math.round(offsetFromStart / 2.5);
@@ -267,6 +278,11 @@ code {
 		heightSlider.subscribe("slideEnd", function() {
 			var value = Math.round(heightSlider.getValue() / 2.5);
 			pb.set('height',value);
+		});
+
+		Event.on('captionCheck','click',function(ev) {
+			var checked = Event.getTarget(ev).checked;
+			Dom.setStyle(pb.get('captionEl'),'visibility',(checked?'visible':'hidden'));
 		});
 		
 		Dom.get('anim').checked = false;
@@ -283,6 +299,7 @@ code {
 		var durationSlider = YAHOO.widget.Slider.getHorizSlider('sliderDuration',  
             'sliderDurationThumb', 0, 200, 0
 		);
+		durationSlider.animate = false;
 		durationSlider.setValue(20);
 		durationSlider.subscribe("change", function(offsetFromStart) {
 			var value = offsetFromStart / 20;
