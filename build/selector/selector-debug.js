@@ -395,26 +395,22 @@ Y.Selector = {
     },
 
     _getChildren: function() {
-        if (document.documentElement.children) { // document for capability test
+        if (document.documentElement.children && document.documentElement.children.tags) { // document for capability test
             return function(node, tag) {
                 return (tag) ? node.children.tags(tag) : node.children || [];
             };
         } else {
             return function(node, tag) {
-                if (node._children) {
-                    return node._children;
-                }
                 var children = [],
                     childNodes = node.childNodes;
 
                 for (var i = 0, len = childNodes.length; i < len; ++i) {
                     if (childNodes[i].tagName) {
                         if (!tag || childNodes[i].tagName === tag) {
-                            children[children.length] = childNodes[i];
+                            children.push(childNodes[i]);
                         }
                     }
                 }
-                node._children = children;
                 return children;
             };
         }

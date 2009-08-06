@@ -1,12 +1,4 @@
 /*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
- */
-
-// todo: what are the limitation of gears, is it per DB, per table, per user
-// todo: Abstract out SQL pieces so that an HTML5 SQL engine could use them (for Safari 3 and iPhone, specifically, which don't have local/sessionStorage)
-
-/*
  * Gears limitation:
  *  - SQLite limitations - http://www.sqlite.org/limits.html
  *  - DB Best Practices - http://code.google.com/apis/gears/gears_faq.html#bestPracticeDB
@@ -20,18 +12,18 @@
  *  - how can we not use cookies to handle session location
  */
 (function() {
-		// internal shorthand
-    var G = window.google,
-		Y = YAHOO.util,
-		YL = YAHOO.lang,
-		_SQL_STMT_LIMIT = 9948,
-		_TABLE_NAME = 'YUIStorageEngine',
+	// internal shorthand
+var G = window.google,
+	Y = YAHOO.util,
+	YL = YAHOO.lang,
+	_SQL_STMT_LIMIT = 9948,
+	_TABLE_NAME = 'YUIStorageEngine',
 
-		// local variables
-		_engine = null,
+	// local variables
+	_engine = null,
 
-		eURI = encodeURIComponent,
-		dURI = decodeURIComponent;
+	eURI = encodeURIComponent,
+	dURI = decodeURIComponent;
 
 	/**
 	 * The StorageEngineGears class implements the Google Gears storage engine.
