@@ -76,10 +76,38 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">dataSource</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">)</span>
 <span class="o">{</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">;</span>
+	
+	<span class="k">if</span><span class="o">(</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">&amp;&amp;</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">!=</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">!=</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span>
+	<span class="o">{</span> 
+		<span class="k">var</span> <span class="nx">version</span> <span class="o">=</span> <span class="o">(</span><span class="sr">/\w*.\w*/</span><span class="o">.</span><span class="nx">exec</span><span class="o">(((</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span><span class="o">).</span><span class="nx">toString</span><span class="o">()).</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/.0./g</span><span class="o">,</span> <span class="s2">&quot;.&quot;</span><span class="o">))).</span><span class="nx">toString</span><span class="o">();</span>
+		<span class="k">var</span> <span class="nx">verSplit</span> <span class="o">=</span> <span class="nx">version</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;.&quot;</span><span class="o">);</span>
+		<span class="nx">version</span> <span class="o">=</span> <span class="nx">verSplit</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="o">;</span>
+		<span class="nx">switch</span><span class="o">((</span><span class="nx">verSplit</span><span class="o">[</span><span class="m">1</span><span class="o">].</span><span class="nx">toString</span><span class="o">()).</span><span class="nx">length</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="nx">case</span> <span class="m">1</span><span class="o">:</span> 
+				<span class="nx">version</span> <span class="o">+=</span> <span class="s2">&quot;00&quot;</span><span class="o">;</span>
+			<span class="k">break</span><span class="o">;</span>
+			<span class="nx">case</span> <span class="m">2</span><span class="o">:</span>
+				<span class="nx">version</span> <span class="o">+=</span> <span class="s2">&quot;0&quot;</span><span class="o">;</span>
+			<span class="k">break</span><span class="o">;</span>	
+		<span class="o">}</span> 
+		<span class="nx">version</span> <span class="o">+=</span> <span class="nx">verSplit</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="o">(</span><span class="nx">version</span><span class="o">);</span> 
+	<span class="o">}</span>
+	<span class="k">else</span>
+	<span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="m">9</span><span class="o">.</span><span class="m">045</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">||</span> <span class="s2">&quot;#ffffff&quot;</span><span class="o">;</span>
+	
+	<span class="k">this</span><span class="o">.</span><span class="nx">_swfURL</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">SWFURL</span><span class="o">;</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">_containerID</span> <span class="o">=</span> <span class="nx">containerId</span><span class="o">;</span>
+	
 	<span class="k">this</span><span class="o">.</span><span class="nx">_swfEmbed</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SWF</span><span class="o">(</span><span class="nx">containerId</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">SWFURL</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">);</span>
 	
 	<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_swfEmbed</span><span class="o">.</span><span class="nx">swf</span><span class="o">;</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">_swfEmbed</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="s2">&quot;swfReady&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_eventHandler</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">_swfEmbed</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;swfReady&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_eventHandler</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 	
 	<span class="k">this</span><span class="o">.</span><span class="nx">_type</span> <span class="o">=</span> <span class="nx">type</span><span class="o">;</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span> <span class="o">=</span> <span class="nx">dataSource</span><span class="o">;</span>
@@ -384,13 +412,11 @@
 <span class="c">		 * @description The alternative text to provide for screen readers and other assistive technology.</span>
 <span class="c">		 * @type String</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;altText&quot;</span><span class="o">,</span>
-		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getAltText</span>
-		<span class="o">});</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;altText&quot;</span><span class="o">,</span>
 		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setAltText</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setAltText</span><span class="o">,</span>
+			<span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getAltText</span>
+			
 		<span class="o">});</span>
 		
 		<span class="c">/**</span>
@@ -399,9 +425,9 @@
 <span class="c">		 *		set after Flash Player has been embedded in the page.</span>
 <span class="c">		 * @type String</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;swfURL&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;swfURL&quot;</span><span class="o">,</span>
 		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getSWFURL</span>
+			<span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getSWFURL</span>
 		<span class="o">});</span>		
 
 		<span class="c">/**</span>
@@ -409,14 +435,10 @@
 <span class="c">		 * @description Request to be sent to the Chart&#39;s DataSource.</span>
 <span class="c">		 * @type String</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;request&quot;</span><span class="o">,</span>
-		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getRequest</span>
-		<span class="o">});</span>
-		
 		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;request&quot;</span><span class="o">,</span>
 		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setRequest</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setRequest</span><span class="o">,</span>
+			<span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getRequest</span>
 		<span class="o">});</span>
 		
 		<span class="c">/**</span>
@@ -424,14 +446,10 @@
 <span class="c">		 * @description The DataSource instance to display in the Chart.</span>
 <span class="c">		 * @type DataSource</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataSource&quot;</span><span class="o">,</span>
-		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDataSource</span>
-		<span class="o">});</span>
-		
 		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataSource&quot;</span><span class="o">,</span>
 		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setDataSource</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setDataSource</span><span class="o">,</span>
+			<span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDataSource</span>
 		<span class="o">});</span>
 		
 		<span class="c">/**</span>
@@ -439,14 +457,10 @@
 <span class="c">		 * @description Defines the series to be displayed by the Chart.</span>
 <span class="c">		 * @type Array</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;series&quot;</span><span class="o">,</span>
-		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getSeriesDefs</span>
-		<span class="o">});</span>
-		
 		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;series&quot;</span><span class="o">,</span>
 		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setSeriesDefs</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setSeriesDefs</span><span class="o">,</span>
+			<span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getSeriesDefs</span>
 		<span class="o">});</span>
 		
 		<span class="c">/**</span>
@@ -454,15 +468,11 @@
 <span class="c">		 * @description Defines the names of the categories to be displayed in the Chart..</span>
 <span class="c">		 * @type Array</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;categoryNames&quot;</span><span class="o">,</span>
-		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getCategoryNames</span>
-		<span class="o">});</span>
-		
 		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;categoryNames&quot;</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">,</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setCategoryNames</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setCategoryNames</span><span class="o">,</span>
+			<span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getCategoryNames</span>
 		<span class="o">});</span>
 		
 		<span class="c">/**</span>
@@ -471,14 +481,10 @@
 <span class="c">		 * that may be called by the SWF to generate the datatip text for a Chart&#39;s item.</span>
 <span class="c">		 * @type String</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataTipFunction&quot;</span><span class="o">,</span>
-		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDataTipFunction</span>
-		<span class="o">});</span>
-		
 		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataTipFunction&quot;</span><span class="o">,</span>
 		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setDataTipFunction</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setDataTipFunction</span><span class="o">,</span>
+			<span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDataTipFunction</span>
 		<span class="o">});</span>
 		
 		<span class="c">/**</span>
@@ -486,15 +492,11 @@
 <span class="c">		 * @description The string representation of a globally-accessible function</span>
 <span class="c">		 * that may be called by the SWF to format the labels of a Chart&#39;s legend.</span>
 <span class="c">		 * @type String</span>
-<span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;legendLabelFunction&quot;</span><span class="o">,</span>
-		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_legendLabelFunction</span>
-		<span class="o">});</span>
-		
+<span class="c">		 */</span>	
 		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;legendLabelFunction&quot;</span><span class="o">,</span>
 		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setLegendLabelFunction</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setLegendLabelFunction</span><span class="o">,</span>
+			<span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_legendLabelFunction</span>
 		<span class="o">});</span>
 
 		<span class="c">/**</span>
@@ -503,14 +505,10 @@
 <span class="c">		 * polling requests to the DataSource.</span>
 <span class="c">		 * @type Number</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;polling&quot;</span><span class="o">,</span>
-		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getPolling</span>
-		<span class="o">});</span>
-
 		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;polling&quot;</span><span class="o">,</span>
 		<span class="o">{</span>
-			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setPolling</span>
+			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setPolling</span><span class="o">,</span>
+			<span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getPolling</span>
 		<span class="o">});</span>
 	<span class="o">},</span>
 	
@@ -547,7 +545,8 @@
 	<span class="nx">_loadHandler</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
 	<span class="o">{</span>
 		<span class="c">//the type is set separately because it must be first!</span>
-<span class="c"></span>		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setType</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_type</span><span class="o">);</span>
+<span class="c"></span>		<span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_swf</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setType</span><span class="o">)</span> <span class="k">return</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setType</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_type</span><span class="o">);</span>
 
 
 		<span class="c">//set initial styles</span>
@@ -810,7 +809,7 @@
 <span class="c">	 */</span>
 	<span class="nx">_getCategoryNames</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
 	<span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">getCategoryNames</span><span class="o">();</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">getCategoryNames</span><span class="o">();</span>
 	<span class="o">},</span>
 
 	<span class="c">/**</span>
@@ -982,7 +981,7 @@
 <span class="c">	 */</span>
 	<span class="nx">_setAltText</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setAltText</span><span class="o">(</span><span class="nx">value</span><span class="o">);</span>
+	 	<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setAltText</span><span class="o">(</span><span class="nx">value</span><span class="o">);</span>
 	<span class="o">}</span>
 <span class="o">});</span>
 
@@ -1119,6 +1118,9 @@
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
                                 <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
@@ -1130,10 +1132,14 @@
                                 <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
                                 <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
                                 <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>

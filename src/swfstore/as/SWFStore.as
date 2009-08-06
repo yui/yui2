@@ -85,7 +85,7 @@ package
 				
 		/**
 		* @private
-		* Whitelist xml path 
+		* Whitelist xml path  
 		*/
 		private var _whitelistFileName:String = "storage-whitelist.xml";
 		
@@ -507,7 +507,7 @@ package
 			{
 				
 				evt = {type: "inadequateDimensions", message: "The current size of the SWF is too small to display " + 
-						"the settings panel. Please increase the available width and height to 138 x 215 or larger."};
+						"the settings panel. Please increase the available width and height to 215px x 138px or larger."};
 				yuibridge.sendEvent(evt);
 			}
 
@@ -590,7 +590,6 @@ package
 			{
 				yuibridge.sendEvent({type:"error", message:error.message});
 			}
-			var pageURL:String = ExternalInterface.call("function(){return window.location.href;}");
 			
 			var valid:Boolean;
 			
@@ -874,11 +873,9 @@ package
 			if(event.info.level =="error")
 			{           
 				//this is most likely the result of maxing out storage for the domain. There's no way to tell for certain
-				evt = {type: "quotaExceededError", message:"NetStatus Error: " + event.info.code +
-					"\nStorage capacity has been exceeded."};
-					
-				//evt.hasAdequateDimensions = hasAdequateDimensions;
-				
+				evt = {type: "quotaExceededError", info:"NetStatus Error: " + event.info.code,
+					message: "Storage capacity requested exceeds available amount."}; 
+					 
 				yuibridge.sendEvent(evt); 
 			}
 			else

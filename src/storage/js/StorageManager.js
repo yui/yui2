@@ -1,15 +1,3 @@
-/*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
- */
-
-// todo: move the session ID method to this
-
-/**
- * The Storage module manages client-side data storage.
- * @module Storage
- */
-
 /**
  * The StorageManager class is a singleton that registers DataStorage objects and returns instances of those objects.
  * @class StorageManager
@@ -56,11 +44,8 @@ var Y = YAHOO.util,
 			case Y.StorageManager.LOCATION_LOCAL:
 			case Y.StorageManager.LOCATION_SESSION:
 				return location;
-			break;
 
-			default:
-				return Y.StorageManager.LOCATION_SESSION;
-			break;
+			default: return Y.StorageManager.LOCATION_SESSION;
 		}
 	};
 

@@ -12,6 +12,8 @@ package
 	import com.yahoo.yui.LoggerCategory;
 	import com.yahoo.yui.YUIAdapter;
 	import com.yahoo.yui.charts.*;
+	import com.yahoo.util.ImageExport;
+	
 	
 	import fl.core.UIComponent;
 	
@@ -24,6 +26,8 @@ package
 	import flash.text.TextFormat;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
+	
+	import flash.system.Capabilities;
 
 	[SWF(backgroundColor=0xffffff)]
 	/**
@@ -52,6 +56,7 @@ package
 		public function Charts()
 		{
 			super();
+			this.setImageExport();
 		}
 		
 	//--------------------------------------
@@ -168,6 +173,7 @@ package
 		override protected function set component(value:DisplayObject):void
 		{
 			this.chart = Chart(value);
+			this.chart.addEventListener(ErrorEvent.ERROR, chartErrorHandler);
 			super.component = value;
 		}
 		
@@ -1018,7 +1024,7 @@ package
 			this.backgroundAndBorder = new BackgroundAndBorder();
 			this.backgroundAndBorder.width = this.stage.stageWidth;
 			this.backgroundAndBorder.height = this.stage.stageHeight;
-			this.backgroundAndBorder.addEventListener(ErrorEvent.ERROR, backgroundErrorHandler);
+			this.backgroundAndBorder.addEventListener(ErrorEvent.ERROR, chartErrorHandler);
 			this.addChild(this.backgroundAndBorder);
 			
 			this.legend = new Legend();
@@ -1105,9 +1111,9 @@ package
 		
 		/**
 		 * @private (protected)
-		 * Logs errors for the background image loading.
+		 * Logs errors.
 		 */
-		protected function backgroundErrorHandler(event:ErrorEvent):void
+		protected function chartErrorHandler(event:ErrorEvent):void
 		{
 			this.log(event.text, LoggerCategory.ERROR);
 		}
@@ -1532,5 +1538,27 @@ package
 			}
 			return uint(value);
 		}
+		
+		/**
+		 * @private
+		 */
+		private function setImageExport():void
+		{
+			try
+			{
+				var versionString:String = Capabilities.version;		
+				var version:Number = Number(/\w*.\w*/.exec((versionString.replace(/MAC|UNIX|PC|WIN\s/gi, "")).replace(/,0,/g, ".")));
+				if(version >= 10) 
+				{
+					var imageExport:ImageExport = new ImageExport(this);
+					imageExport.addImageType("jpg", "Chart");
+					imageExport.addImageType("png", "Chart");
+				}
+			}
+			catch(e:Error)
+			{
+				//just trapping potential error
+			}
+		}		
 	}
 }

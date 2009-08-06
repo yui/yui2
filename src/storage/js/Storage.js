@@ -1,6 +1,6 @@
-/*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
+/**
+ * The Storage module manages client-side data storage.
+ * @module Storage
  */
 
 (function() {
@@ -8,12 +8,12 @@
 	// internal shorthand
 var Y = YAHOO,
 	YU = Y.util,
-	YL = Y.lang;
+	YL = Y.lang,
+	_logOverwriteError;
 
 if (! YU.Storage) {
-
-	var _logOverwriteError = function(fxName) {
-		Y.log(_ERROR_OVERWRITTEN.replace('??', fxName).replace('??', this.getName ? this.getName() : 'Unknown'), 'error');
+	_logOverwriteError = function(fxName) {
+		Y.log('Exception in YAHOO.util.Storage.?? - must be extended by a storage engine'.replace('??', fxName).replace('??', this.getName ? this.getName() : 'Unknown'), 'error');
 	};
 
 	/**
@@ -304,6 +304,6 @@ if (! YU.Storage) {
 	};
 
 	YL.augmentProto(YU.Storage, YU.EventProvider);
-};
+}
 
 }());

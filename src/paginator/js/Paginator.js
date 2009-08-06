@@ -556,11 +556,10 @@ Paginator.prototype = {
             return this;
         }
 
-        var totalRecords   = this.get('totalRecords'),
-            template       = this.get('template'),
-            state          = this.getState(),
+        var template = this.get('template'),
+            state    = this.getState(),
             // ex. yui-pg0-1 (first paginator, second container)
-            id_base        = Paginator.ID_BASE + this.get('id') + '-',
+            id_base  = Paginator.ID_BASE + this.get('id') + '-',
             i, len;
 
         // Assemble the containers, keeping them hidden
@@ -657,6 +656,7 @@ Paginator.prototype = {
         this.fireEvent('destroy');
 
         this.setAttributeConfig('rendered',{value:false});
+        this.unsubscribeAll();
     },
 
     /**

@@ -12,12 +12,28 @@
 <!-- js -->
 <script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="../../build/animation/animation-min.js"></script>
-<script type="text/javascript" src="../../build/element/element.js"></script>
+<script type="text/javascript" src="../../build/element/element-min.js"></script>
+
 
 <script type="text/javascript" src="../../build/progressbar/progressbar-debug.js"></script>
 
 <style type="text/css">
 
+/* This styles are to nullify the built in styles for the SAM skin */
+
+.yui-skin-sam .yui-pb  {
+	border-width:0;
+	background-color:transparent;
+	background-image:none;
+}
+.yui-skin-sam .yui-pb .yui-pb-bar {
+	background-color:transparent;
+	background-image:none;
+}
+.yui-skin-sam .yui-pb .yui-pb-mask {
+	border-width:0;
+	margin:0;
+}
 
 /* Here I am using the className of each bar to set the masks and/or bar images for each one separately */
 
@@ -29,18 +45,16 @@
 	background-image: url(mask.gif);
 }
 
-.plain .yui-pb-bar {
+.yui-skin-sam .plain .yui-pb-bar {
 	background-image:url(bar.gif);
 }
-.plain.yui-pb .yui-pb-anim {
-	background-image:url(animbar.gif);
-}
-
 
 .grid .yui-pb-mask div  {
 	background-image: url(grid.gif);
 }
-
+.yui-skin-sam .grid .yui-pb-bar {
+	background-color:blue;
+}
 /* Important:  there is no space in between .ruler and .yui-pb but there is one in all the other selectors */
 .ruler.yui-pb {
 	width:401px;
@@ -51,7 +65,7 @@
 	background-image: url(ruler.gif);
 }
 
-.ruler .yui-pb-bar {
+.yui-skin-sam .ruler .yui-pb-bar {
 	background-image: url(gradient.png);
 }
 
@@ -75,7 +89,7 @@
 	background-image: url(coppermaskV.gif);
 }
 
-.copper .yui-pb-bar {
+.yui-skin-sam .copper .yui-pb-bar {
 	background-image: url(copperbarV.gif);
 	margin: 32px 0;
 	height:34px;
@@ -97,7 +111,7 @@
 	background-image: url(thinmask.gif);
 }
 
-.thin .yui-pb-bar {
+.yui-skin-sam .thin .yui-pb-bar {
 	background-image: url(thinbar.gif);
 	margin: 0 10px;
 }
@@ -107,7 +121,7 @@
 	height:20px;
 }
 
-.rankings .yui-pb-bar  {
+.yui-skin-sam .rankings .yui-pb-bar  {
 	background-image: url(star.png);
 }
 

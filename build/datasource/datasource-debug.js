@@ -310,6 +310,48 @@ _nTransactionId : 0,
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// DataSourceBase private static methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Get an XPath-specified value for a given field from an XML node or document.
+ *
+ * @method _getLocationValue
+ * @param field {String | Object} Field definition.
+ * @param context {Object} XML node or document to search within.
+ * @return {Object} Data value or null.
+ * @static
+ * @private
+ */
+_getLocationValue: function(field, context) {
+    var locator = field.locator || field.key || field,
+        xmldoc = context.ownerDocument || context,
+        result, res, value = null;
+
+    try {
+        // Standards mode
+        if(!lang.isUndefined(xmldoc.evaluate)) {
+            result = xmldoc.evaluate(locator, context, xmldoc.createNSResolver(!context.ownerDocument ? context.documentElement : context.ownerDocument.documentElement), 0, null);
+            while(res = result.iterateNext()) {
+                value = res.textContent;
+            }
+        }
+        // IE mode
+        else {
+            xmldoc.setProperty("SelectionLanguage", "XPath");
+            result = context.selectNodes(locator)[0];
+            value = result.value || result.text || null;
+        }
+        return value;
+
+    }
+    catch(e) {
+    }
+},
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // DataSourceBase public static methods
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -1339,7 +1381,6 @@ parseTextData : function(oRequest, oFullResponse) {
             
 },
 
-
 /**
  * Overridable method parses XML data for one result into an object literal.
  *
@@ -1357,32 +1398,40 @@ parseXMLResult : function(result) {
             var field = schema.fields[m];
             var key = (lang.isValue(field.key)) ? field.key : field;
             var data = null;
-            // Values may be held in an attribute...
-            var xmlAttr = result.attributes.getNamedItem(key);
-            if(xmlAttr) {
-                data = xmlAttr.value;
+
+            if(this.useXPath) {
+                data = YAHOO.util.DataSource._getLocationValue(field, result);
             }
-            // ...or in a node
             else {
-                var xmlNode = result.getElementsByTagName(key);
-                if(xmlNode && xmlNode.item(0)) {
-                    var item = xmlNode.item(0);
-                    // For IE, then DOM...
-                    data = (item) ? ((item.text) ? item.text : (item.textContent) ? item.textContent : null) : null;
-                    // ...then fallback, but check for multiple child nodes
-                    if(!data) {
-                        var datapieces = [];
-                        for(var j=0, len=item.childNodes.length; j<len; j++) {
-                            if(item.childNodes[j].nodeValue) {
-                                datapieces[datapieces.length] = item.childNodes[j].nodeValue;
+                // Values may be held in an attribute...
+                var xmlAttr = result.attributes.getNamedItem(key);
+                if(xmlAttr) {
+                    data = xmlAttr.value;
+                }
+                // ...or in a node
+                else {
+                    var xmlNode = result.getElementsByTagName(key);
+                    if(xmlNode && xmlNode.item(0)) {
+                        var item = xmlNode.item(0);
+                        // For IE, then DOM...
+                        data = (item) ? ((item.text) ? item.text : (item.textContent) ? item.textContent : null) : null;
+                        // ...then fallback, but check for multiple child nodes
+                        if(!data) {
+                            var datapieces = [];
+                            for(var j=0, len=item.childNodes.length; j<len; j++) {
+                                if(item.childNodes[j].nodeValue) {
+                                    datapieces[datapieces.length] = item.childNodes[j].nodeValue;
+                                }
                             }
-                        }
-                        if(datapieces.length > 0) {
-                            data = datapieces.join("");
+                            if(datapieces.length > 0) {
+                                data = datapieces.join("");
+                            }
                         }
                     }
                 }
             }
+            
+            
             // Safety net
             if(data === null) {
                    data = "";
@@ -1436,38 +1485,45 @@ parseXMLData : function(oRequest, oFullResponse) {
 
     // In case oFullResponse is something funky
     try {
+        // Pull any meta identified
+        if(this.useXPath) {
+            for (k in metaLocators) {
+                oParsedResponse.meta[k] = YAHOO.util.DataSource._getLocationValue(metaLocators[k], oFullResponse);
+            }
+        }
+        else {
+            metaNode = metaNode ? oFullResponse.getElementsByTagName(metaNode)[0] :
+                       oFullResponse;
+
+            if (metaNode) {
+                for (k in metaLocators) {
+                    if (lang.hasOwnProperty(metaLocators, k)) {
+                        loc = metaLocators[k];
+                        // Look for a node
+                        v = metaNode.getElementsByTagName(loc)[0];
+
+                        if (v) {
+                            v = v.firstChild.nodeValue;
+                        } else {
+                            // Look for an attribute
+                            v = metaNode.attributes.getNamedItem(loc);
+                            if (v) {
+                                v = v.value;
+                            }
+                        }
+
+                        if (lang.isValue(v)) {
+                            oParsedResponse.meta[k] = v;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // For result data
         xmlList = (schema.resultNode) ?
             oFullResponse.getElementsByTagName(schema.resultNode) :
             null;
-
-        // Pull any meta identified
-        metaNode = metaNode ? oFullResponse.getElementsByTagName(metaNode)[0] :
-                   oFullResponse;
-
-        if (metaNode) {
-            for (k in metaLocators) {
-                if (lang.hasOwnProperty(metaLocators, k)) {
-                    loc = metaLocators[k];
-                    // Look for a node
-                    v = metaNode.getElementsByTagName(loc)[0];
-
-                    if (v) {
-                        v = v.firstChild.nodeValue;
-                    } else {
-                        // Look for an attribute
-                        v = metaNode.attributes.getNamedItem(loc);
-                        if (v) {
-                            v = v.value;
-                        }
-                    }
-
-                    if (lang.isValue(v)) {
-                        oParsedResponse.meta[k] = v;
-                    }
-                }
-                
-            }
-        }
     }
     catch(e) {
         YAHOO.log("Error while parsing XML data: " + e.message);
@@ -2547,85 +2603,68 @@ lang.augmentObject(util.DataSource, DS);
      *   <dd>Thousands separator</dd>
      *   <dt>suffix {String}</dd>
      *   <dd>String appended after each number, like " items" (note the space)</dd>
+     *   <dt>negativeFormat</dt>
+     *   <dd>String used as a guide for how to indicate negative numbers.  The first '#' character in the string will be replaced by the number.  Default '-#'.</dd>
      *  </dl>
      * @return {String} Formatted number for display. Note, the following values
-     * return as "": null, undefined, NaN, "".     
+     * return as "": null, undefined, NaN, "".
      */
-    format : function(nData, oConfig) {
-        var lang = YAHOO.lang;
-        if(!lang.isValue(nData) || (nData === "")) {
-            return "";
+    format : function(n, cfg) {
+        if (!isFinite(+n)) {
+            return '';
         }
 
-        oConfig = oConfig || {};
-        
-        if(!lang.isNumber(nData)) {
-            nData *= 1;
-        }
+        n   = !isFinite(+n) ? 0 : +n;
+        cfg = YAHOO.lang.merge(YAHOO.util.Number.format.defaults, (cfg || {}));
 
-        if(lang.isNumber(nData)) {
-            var bNegative = (nData < 0);
-            var sOutput = nData + "";
-            var sDecimalSeparator = (oConfig.decimalSeparator) ? oConfig.decimalSeparator : ".";
-            var nDotIndex;
+        var neg    = n < 0,        absN   = Math.abs(n),
+            places = cfg.decimalPlaces,
+            sep    = cfg.thousandsSeparator,
+            s, bits, i;
 
-            // Manage decimals
-            if(lang.isNumber(oConfig.decimalPlaces)) {
-                // Round to the correct decimal place
-                var nDecimalPlaces = oConfig.decimalPlaces;
-                var nDecimal = Math.pow(10, nDecimalPlaces);
-                sOutput = Math.round(nData*nDecimal)/nDecimal + "";
-                nDotIndex = sOutput.lastIndexOf(".");
+        if (places < 0) {
+            // Get rid of the decimal info
+            s = absN - (absN % 1) + '';
+            i = s.length + places;
 
-                if(nDecimalPlaces > 0) {
-                    // Add the decimal separator
-                    if(nDotIndex < 0) {
-                        sOutput += sDecimalSeparator;
-                        nDotIndex = sOutput.length-1;
-                    }
-                    // Replace the "."
-                    else if(sDecimalSeparator !== "."){
-                        sOutput = sOutput.replace(".",sDecimalSeparator);
-                    }
-                    // Add missing zeros
-                    while((sOutput.length - 1 - nDotIndex) < nDecimalPlaces) {
-                        sOutput += "0";
-                    }
-                }
+            // avoid 123 vs decimalPlaces -4 (should return "0")
+            if (i > 0) {
+                    // leverage toFixed by making 123 => 0.123 for the rounding
+                    // operation, then add the appropriate number of zeros back on
+                s = Number('.' + s).toFixed(i).slice(2) +
+                    new Array(s.length - i + 1).join('0');
+            } else {
+                s = "0";
             }
-            
-            // Add the thousands separator
-            if(oConfig.thousandsSeparator) {
-                var sThousandsSeparator = oConfig.thousandsSeparator;
-                nDotIndex = sOutput.lastIndexOf(sDecimalSeparator);
-                nDotIndex = (nDotIndex > -1) ? nDotIndex : sOutput.length;
-                var sNewOutput = sOutput.substring(nDotIndex);
-                var nCount = -1;
-                for (var i=nDotIndex; i>0; i--) {
-                    nCount++;
-                    if ((nCount%3 === 0) && (i !== nDotIndex) && (!bNegative || (i > 1))) {
-                        sNewOutput = sThousandsSeparator + sNewOutput;
-                    }
-                    sNewOutput = sOutput.charAt(i-1) + sNewOutput;
-                }
-                sOutput = sNewOutput;
-            }
-
-            // Prepend prefix
-            sOutput = (oConfig.prefix) ? oConfig.prefix + sOutput : sOutput;
-
-            // Append suffix
-            sOutput = (oConfig.suffix) ? sOutput + oConfig.suffix : sOutput;
-
-            return sOutput;
+        } else {        // There is a bug in IE's toFixed implementation:
+            // for n in {(-0.94, -0.5], [0.5, 0.94)} n.toFixed() returns 0
+            // instead of -1 and 1. Manually handle that case.
+            s = absN < 1 && absN >= 0.5 && !places ? '1' : absN.toFixed(places);
         }
-        // Still not a Number, just return unaltered
-        else {
-            return nData;
+
+        if (absN > 1000) {
+            bits  = s.split(/\D/);
+            i  = bits[0].length % 3 || 3;
+
+            bits[0] = bits[0].slice(0,i) +
+                      bits[0].slice(i).replace(/(\d{3})/g, sep + '$1');
+
+            s = bits.join(cfg.decimalSeparator);
         }
+
+        s = cfg.prefix + s + cfg.suffix;
+
+        return neg ? cfg.negativeFormat.replace(/#/,s) : s;
     }
- };
-
+};
+YAHOO.util.Number.format.defaults = {
+    decimalSeparator : '.',
+    decimalPlaces    : null,
+    thousandsSeparator : '',
+    prefix : '',
+    suffix : '',
+    negativeFormat : '-#'
+};
 
 
 /****************************************************************************/

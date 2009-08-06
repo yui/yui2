@@ -188,7 +188,14 @@
         'element': {
             'type': 'js',
             'path': 'element/element-min.js',
-            'requires': ['dom', 'event']
+            'requires': ['dom', 'event'],
+            'optional': ['event-mouseenter', 'event-delegate']
+        },
+
+        'element-delegate': {
+            'type': 'js',
+            'path': 'element-delegate/element-delegate-min.js',
+            'requires': ['element']
         },
 
         'event': {
@@ -201,6 +208,19 @@
             'type': 'js',
             'path': 'event-simulate/event-simulate-min.js',
             'requires': ['event']
+        },
+
+        'event-delegate': {
+            'type': 'js',
+            'path': 'event-delegate/event-delegate-min.js',
+            'requires': ['dom', 'event'],
+            'optional': ['selector']
+        },
+
+        'event-mouseenter': {
+            'type': 'js',
+            'path': 'event-mouseenter/event-mouseenter-min.js',
+            'requires': ['dom', 'event']
         },
 
         'fonts': {

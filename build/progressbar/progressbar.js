@@ -9,12 +9,39 @@
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Lang = YAHOO.lang,
+		// ClassNames
+		CLASS_PROGBAR = 'yui-pb',
+		CLASS_MASK = CLASS_PROGBAR + '-mask',
+		CLASS_BAR = CLASS_PROGBAR + '-bar',
+		CLASS_CAPTION = CLASS_PROGBAR + '-caption',
+		CLASS_CAPTION_CONTAINER = CLASS_CAPTION + '-container',
+		CLASS_ANIM = CLASS_PROGBAR + '-anim',
+		CLASS_TL = CLASS_PROGBAR + '-tl',
+		CLASS_TR = CLASS_PROGBAR + '-tr',
+		CLASS_BL = CLASS_PROGBAR + '-bl',
+		CLASS_BR = CLASS_PROGBAR + '-br',
 		
+		// Configuration attributes
+		WIDTH = 'width',
+		HEIGHT = 'height',
+		MIN_VALUE = 'minValue',
+		MAX_VALUE = 'maxValue',
+		VALUE = 'value',
+		ANIM = 'anim',
+		DIRECTION = 'direction',
 		DIRECTION_LTR = 'ltr',
 		DIRECTION_RTL = 'rtl',
 		DIRECTION_TTB = 'ttb',
-		DIRECTION_BTT = 'btt';
+		DIRECTION_BTT = 'btt',
+		BAR_EL = 'barEl',
+		MASK_EL = 'maskEl',
+		CAPTION_EL = 'captionEl',
+		TEXT_TEMPLATE = 'textTemplate',
 		
+		// Events
+		START = 'start',
+		PROGRESS = 'progress',
+		COMPLETE = 'complete';
 	
 	/**
 	 * The ProgressBar widget provides an easy way to draw a bar depicting progress of an operation,
@@ -36,96 +63,6 @@
 	YAHOO.widget.ProgressBar = Prog;
 
     /**
-     * Class name assigned to ProgressBar container.
-     *
-     * @property ProgressBar.CLASS_PROGBAR
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb"
-     */
-	Prog.CLASS_PROGBAR = 'yui-pb';
-    /**
-     * Class name assigned to the mask element.
-     *
-     * @property ProgressBar.CLASS_MASK
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-mask"
-     */
-	Prog.CLASS_MASK = Prog.CLASS_PROGBAR + '-mask';
-    /**
-     * Class name assigned to the bar element.
-     *
-     * @property ProgressBar.CLASS_BAR
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-bar"
-     */
-	Prog.CLASS_BAR = Prog.CLASS_PROGBAR + '-bar';
-    /**
-     * Class name assigned to the element showing the current value.
-     *
-     * @property ProgressBar.CLASS_CAPTION
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-value"
-     */
-	Prog.CLASS_CAPTION = Prog.CLASS_PROGBAR + '-caption';
-    /**
-     * Class name assigned to the bar while animated.
-     *
-     * @property ProgressBar.CLASS_ANIM
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-anim"
-     */
-	Prog.CLASS_ANIM = Prog.CLASS_PROGBAR + '-anim';
-    /**
-     * Class name assigned to the top-left cuadrant of the mask.
-     *
-     * @property ProgressBar.CLASS_TL
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-tl"
-     */
-	Prog.CLASS_TL = Prog.CLASS_PROGBAR + '-tl';
-    /**
-     * Class name assigned to the top-right cuadrant of the mask.
-     *
-     * @property ProgressBar.CLASS_TR
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-tr"
-     */
-	Prog.CLASS_TR = Prog.CLASS_PROGBAR + '-tr';
-    /**
-     * Class name assigned to the bottom-left cuadrant of the mask.
-     *
-     * @property ProgressBar.CLASS_BL
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-bl"
-     */
-	Prog.CLASS_BL = Prog.CLASS_PROGBAR + '-bl';
-    /**
-     * Class name assigned to the bottom-right cuadrant of the mask.
-     *
-     * @property ProgressBar.CLASS_BR
-     * @type String
-     * @static
-     * @final
-     * @default "yui-pb-br"
-     */
-	Prog.CLASS_BR = Prog.CLASS_PROGBAR + '-br';
-    /**
      * String containing the HTML string which is the basis for the Progress Bar.
      *
      * @property ProgressBar.MARKUP
@@ -136,19 +73,21 @@
      */
 	Prog.MARKUP = [
 		'<div class="',
-		Prog.CLASS_BAR,
+		CLASS_BAR,
 		'"></div><div class="',
-		Prog.CLASS_CAPTION,
-		'"></div><div class="',
-		Prog.CLASS_MASK,
+		CLASS_CAPTION_CONTAINER,
 		'"><div class="',
-		Prog.CLASS_TL,
+		CLASS_CAPTION,
+		'"></div></div><div class="',
+		CLASS_MASK,
+		'"><div class="',
+		CLASS_TL,
 		'"></div><div class="',
-		Prog.CLASS_TR,
+		CLASS_TR,
 		'"></div><div class="',
-		Prog.CLASS_BL,
+		CLASS_BL,
 		'"></div><div class="',
-		Prog.CLASS_BR,
+		CLASS_BR,
 		'"></div></div>'
 	].join('');
 
@@ -170,7 +109,7 @@
 			 * @param value {Number} the current (initial) value
 			 */
 			// No actual creation required, event will be created when subscribed to
-			//this.createEvent('start');
+			//this.createEvent(START);
 			/**
 			 * If animation is loaded, it will trigger for each frame of the animation providing partial values
 			 * @event progress
@@ -178,7 +117,7 @@
 			 * @param  value{Number} the current (progress) value
 			 */
 			// No actual creation required, event will be created when subscribed to
-			//this.createEvent('progress');
+			//this.createEvent(PROGRESS);
 			/**
 			 * It will fire at the end of the animation or immediately upon progress values if animation is not loaded
 			 * @event complete
@@ -186,7 +125,7 @@
 			 * @param value {Number} the current (final)  value
 			 */
 			// No actual creation required, event will be created when listened to
-			//this.createEvent('complete');
+			//this.createEvent(COMPLETE);
 			
 
 		},
@@ -201,13 +140,13 @@
 
 		    Prog.superclass.initAttributes.call(this, oConfigs);
 			this.set('innerHTML',Prog.MARKUP);
-			this.addClass(Prog.CLASS_PROGBAR);
+			this.addClass(CLASS_PROGBAR);
 			
 			// I need to apply at least the following styles, if present in oConfigs, 
 			// to the ProgressBar so when it later reads the width and height, 
 			// they are already set to the correct values.
 			// id is important because it can be used as a CSS selector.
-			var key, presets = ['id','width','height','class','style'];
+			var key, presets = ['id',WIDTH,HEIGHT,'class','style'];
 			while((key = presets.pop())) {
 				if (key in oConfigs) {
 					this.set(key,oConfigs[key]);
@@ -215,17 +154,15 @@
 			}
 			
 
-			var barEl  = this.getElementsByClassName(Prog.CLASS_BAR)[0],
-				maskEl = this.getElementsByClassName(Prog.CLASS_MASK)[0];				
 			/**
 			 * @attribute barEl
 			 * @description Reference to the HTML object that makes the moving bar (read-only)
 			 * @type HTMLElement (div)
 			 * @readonly
 			 */			
-		    this.setAttributeConfig('barEl', {
+		    this.setAttributeConfig(BAR_EL, {
 		        readOnly: true,
-		        value: barEl
+		        value: this.getElementsByClassName(CLASS_BAR)[0]
 		    });
 			/**
 			 * @attribute maskEl
@@ -233,9 +170,9 @@
 			 * @type HTMLElement (table)
 			 * @readonly
 			 */			
-		    this.setAttributeConfig('maskEl', {
+		    this.setAttributeConfig(MASK_EL, {
 		        readOnly: true,
-		        value: maskEl
+		        value: this.getElementsByClassName(CLASS_MASK)[0]
 		    });
 			
 			/**
@@ -244,8 +181,8 @@
 			 * @type HTMLElement or String
 			 * @default a container placed centered over the progress bar.
 			 */			
-		    this.setAttributeConfig('captionEl', {
-		        value: this.getElementsByClassName(Prog.CLASS_CAPTION)[0],
+		    this.setAttributeConfig(CAPTION_EL, {
+		        value: this.getElementsByClassName(CLASS_CAPTION)[0],
 				validator: function (value) {
 					return (Lang.isString(value) && Dom.get(value)) || (Lang.isObject(value) && value.ownerDocument == document);
 				},
@@ -262,7 +199,7 @@
 			 * @default 'ltr'
 			 * @type String (any of "ltr", "rtl", "ttb" or "btt")
 			 */			
-			this.setAttributeConfig('direction', {
+			this.setAttributeConfig(DIRECTION, {
 				value:DIRECTION_LTR,
 				validator:function(value) {
 					if (this._rendered) { return false; }
@@ -277,7 +214,7 @@
 					}
 				},
 				method: function(value) {
-					this._barSizeFunction = this._barSizeFunctions[this.get('anim')?1:0][value];
+					this._barSizeFunction = this._barSizeFunctions[this.get(ANIM)?1:0][value];
 				}
 			});
 			
@@ -289,12 +226,12 @@
 			 * @default 100
 			 * @type Number
 			 */				    
-		    this.setAttributeConfig('maxValue', {
+		    this.setAttributeConfig(MAX_VALUE, {
 		        value: 100,
 				validator: Lang.isNumber,
 				method: function (value) {
 					this.get('element').setAttribute('aria-valuemax',value);
-					if (this.get('value') > value) { this.set('value',value); }
+					if (this.get(VALUE) > value) { this.set(VALUE,value); }
 				}
 		    });
 			
@@ -307,12 +244,12 @@
 			 * @type Number
 			 */				
 
-		    this.setAttributeConfig('minValue', {
+		    this.setAttributeConfig(MIN_VALUE, {
 		        value: 0,
 				validator: Lang.isNumber,
 				method: function (value) {
 					this.get('element').setAttribute('aria-valuemin',value);
-					if (this.get('value') < value) { this.set('value',value); }
+					if (this.get(VALUE) < value) { this.set(VALUE,value); }
 				}
 		    });
 			/**
@@ -325,9 +262,9 @@
 			 * @type Number or String
 			 */				
 
-		    this.setAttributeConfig('width', {
+		    this.setAttributeConfig(WIDTH, {
 				getter: function() {
-					return this.getStyle('width');
+					return this.getStyle(WIDTH);
 				},
 				method: this._widthChange
 		    });
@@ -342,9 +279,9 @@
 			 * @default "20px"
 			 * @type Number or String
 			 */				
-		    this.setAttributeConfig('height', {
+		    this.setAttributeConfig(HEIGHT, {
 				getter:function() {
-					return this.getStyle('height');
+					return this.getStyle(HEIGHT);
 				},
 				method: this._heightChange
 		    });
@@ -359,7 +296,7 @@
 			 * @default ""
 			 * @type String
 			 */				
-			this.setAttributeConfig('textTemplate', {
+			this.setAttributeConfig(TEXT_TEMPLATE, {
 				value:'{value}'
 			});
 			
@@ -370,10 +307,10 @@
 			 * @default 0
 			 * @type Number
 			 */			
-			this.setAttributeConfig('value', {
+			this.setAttributeConfig(VALUE, {
 				value: 0,
 				validator: function(value) {
-					return Lang.isNumber(value) && value >= this.get('minValue') && value <= this.get('maxValue');
+					return Lang.isNumber(value) && value >= this.get(MIN_VALUE) && value <= this.get(MAX_VALUE);
 				},
 				method: this._valueChange
 		    });
@@ -389,7 +326,7 @@
 			 * @default null
 			 * @type {boolean} or {instance of YAHOO.util.Anim}
 			 */						
-			this.setAttributeConfig('anim', {
+			this.setAttributeConfig(ANIM, {
 				validator: function(value) {
 					return !!YAHOO.util.Anim;
 				},
@@ -413,34 +350,32 @@
 
 			if (this._rendered) { return; }
 			this._rendered = true;
+			
+			var direction = this.get(DIRECTION);
 
 			// If the developer set a className attribute on initialization, 
-			// Element would have wiped out my own className
-			// So I need to insist on it.
-			this.addClass(Prog.CLASS_PROGBAR);
+			// Element would have wiped out my own classNames
+			// So I need to insist on them, plus add the one for direction.
+			this.addClass(CLASS_PROGBAR);
+			this.addClass(CLASS_PROGBAR + '-' + direction);
 
 			var container = this.get('element');
 			container.tabIndex = 0;
 			container.setAttribute('role','progressbar');
-			container.setAttribute('aria-valuemin',this.get('minValue'));
-			container.setAttribute('aria-valuemax',this.get('maxValue'));
+			container.setAttribute('aria-valuemin',this.get(MIN_VALUE));
+			container.setAttribute('aria-valuemax',this.get(MAX_VALUE));
 
 			this.appendTo(parent,before);
 			
-			switch(this.get('direction')) {
-				case DIRECTION_BTT:
-					Dom.setStyle(this.get('barEl'),'background-position','left bottom');
-					break;
-				case DIRECTION_RTL:
-					Dom.setStyle(this.get('barEl'),'background-position','right');
-					break;
-			}
 					
-			
-			this._barSizeFunction = this._barSizeFunctions[0][this.get('direction')];
+			// I need to use the non-animated bar resizing function for initial redraw
+			this._barSizeFunction = this._barSizeFunctions[0][direction];
 			this.redraw();
 			this._fixEdges();
-			this._barSizeFunction = this._barSizeFunctions[this.get('anim')?1:0][this.get('direction')];
+			// I can now set the correct bar resizer
+			if (this.get(ANIM)) {
+				this._barSizeFunction = this._barSizeFunctions[1][direction];
+			}
 
 			this.on('minValueChange',this.redraw);
 			this.on('maxValueChange',this.redraw);
@@ -455,7 +390,7 @@
 		 */
 		redraw: function () {
 			this._recalculateConstants();
-			this._valueChange(this.get('value'));
+			this._valueChange(this.get(VALUE));
 		},
 			
 		/** 
@@ -464,9 +399,9 @@
 		 * @return  void
 		 */
 		destroy: function() {
-			this.set('anim',false);
+			this.set(ANIM,false);
 			this.unsubscribeAll();
-			this.get('captionEl').innerHTML = '';
+			this.get(CAPTION_EL).innerHTML = '';
 			var el = this.get('element');
 			el.parentNode.removeChild(el);
 		},
@@ -505,76 +440,6 @@
 		_rendered:false,
 		
 		/**
-		 * Collection of functions used by to calculate the size of the bar.
-		 * One of this will be used depending on direction and whether animation is active.
-		 * @property _barSizeFunctions
-		 * @type {collection of functions}
-		 * @private
-		 */
-		_barSizeFunctions: [
-			{
-				ltr: function(value, pixelValue, barEl, anim) {
-					Dom.setStyle(barEl,'width',  pixelValue + 'px');
-					this.fireEvent('progress',value);
-					this.fireEvent('complete',value);
-				},
-				rtl: function(value, pixelValue, barEl, anim) {
-					Dom.setStyle(barEl,'width',  pixelValue + 'px');
-					Dom.setStyle(barEl,'left',(this._barSpace - pixelValue) + 'px');
-					this.fireEvent('progress',value);
-					this.fireEvent('complete',value);
-				},
-				ttb: function(value, pixelValue, barEl, anim) {
-					Dom.setStyle(barEl,'height',  pixelValue + 'px');
-					this.fireEvent('progress',value);
-					this.fireEvent('complete',value);
-				},
-				btt: function(value, pixelValue, barEl, anim) {
-					Dom.setStyle(barEl,'height',  pixelValue + 'px');
-					Dom.setStyle(barEl,'top',  (this._barSpace - pixelValue) + 'px');
-					this.fireEvent('progress',value);
-					this.fireEvent('complete',value);
-				}
-			},
-			{
-				ltr: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated()) { anim.stop(); }
-					Dom.addClass(barEl,Prog.CLASS_ANIM);
-					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
-					anim.attributes = {width:{ to: pixelValue }}; 
-					anim.animate();
-				},
-				rtl: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated()) { anim.stop(); }
-					Dom.addClass(barEl,Prog.CLASS_ANIM);
-					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
-					anim.attributes = {
-						width:{ to: pixelValue },
-						left:{to: this._barSpace - pixelValue}
-					}; 
-					anim.animate();
-				},
-				ttb: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated()) { anim.stop(); }
-					Dom.addClass(barEl,Prog.CLASS_ANIM);
-					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
-					anim.attributes = {height:{to: pixelValue}};
-					anim.animate();
-				},
-				btt: function(value, pixelValue, barEl, anim) {
-					if (anim.isAnimated()) { anim.stop(); }
-					Dom.addClass(barEl,Prog.CLASS_ANIM);
-					this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
-					anim.attributes = {
-						height:{to: pixelValue},
-						top:{to: this._barSpace - pixelValue}
-					};
-					anim.animate();
-				}
-			}
-		],
-		
-		/**
 		 * Function to be used to calculate bar size.  
 		 * It is picked from <a href="#property_barSizeFunctions">_barSizeFunctions</a>
 		 * depending on direction and whether animation is active.
@@ -596,8 +461,7 @@
 			if (Lang.isNumber(value)) {
 				value += 'px';
 			}
-			this.setStyle('height',value);
-			Dom.setStyle(this.get('maskEl'),'height', value);
+			this.setStyle(HEIGHT,value);
 			this._fixEdges();
 			this.redraw();
 		},
@@ -613,8 +477,7 @@
 			if (Lang.isNumber(value)) {
 				value += 'px';
 			}
-			this.setStyle('width',value);
-			Dom.setStyle(this.get('maskEl'),'width', value);
+			this.setStyle(WIDTH,value);
 			this._fixEdges();
 			this.redraw();
 		},
@@ -629,20 +492,20 @@
 		 */
 		_fixEdges:function() {
 			if (!this._rendered || YAHOO.env.ua.ie || YAHOO.env.ua.gecko ) { return; }
-			var maskEl = this.get('maskEl'),
-				tlEl = Dom.getElementsByClassName(Prog.CLASS_TL,undefined,maskEl)[0],
-				trEl = Dom.getElementsByClassName(Prog.CLASS_TR,undefined,maskEl)[0],
-				blEl = Dom.getElementsByClassName(Prog.CLASS_BL,undefined,maskEl)[0],
-				brEl = Dom.getElementsByClassName(Prog.CLASS_BR,undefined,maskEl)[0],
-				newSize = (parseInt(Dom.getStyle(maskEl,'height'),10) -
-				parseInt(Dom.getStyle(tlEl,'height'),10)) + 'px';
+			var maskEl = this.get(MASK_EL),
+				tlEl = Dom.getElementsByClassName(CLASS_TL,undefined,maskEl)[0],
+				trEl = Dom.getElementsByClassName(CLASS_TR,undefined,maskEl)[0],
+				blEl = Dom.getElementsByClassName(CLASS_BL,undefined,maskEl)[0],
+				brEl = Dom.getElementsByClassName(CLASS_BR,undefined,maskEl)[0],
+				newSize = (parseInt(Dom.getStyle(maskEl,HEIGHT),10) -
+				parseInt(Dom.getStyle(tlEl,HEIGHT),10)) + 'px';
 				
-			Dom.setStyle(blEl,'height',newSize);
-			Dom.setStyle(brEl,'height',newSize);
-			newSize = (parseInt(Dom.getStyle(maskEl,'width'),10) -
-				parseInt(Dom.getStyle(tlEl,'width'),10)) + 'px';
-			Dom.setStyle(trEl,'width',newSize);
-			Dom.setStyle(brEl,'width',newSize);
+			Dom.setStyle(blEl,HEIGHT,newSize);
+			Dom.setStyle(brEl,HEIGHT,newSize);
+			newSize = (parseInt(Dom.getStyle(maskEl,WIDTH),10) -
+				parseInt(Dom.getStyle(tlEl,WIDTH),10)) + 'px';
+			Dom.setStyle(trEl,WIDTH,newSize);
+			Dom.setStyle(brEl,WIDTH,newSize);
 		},
 					
 				
@@ -654,24 +517,23 @@
 		 * @private
 		 */		
 		_recalculateConstants: function() {
-			var barEl = this.get('barEl');
-			this._mn = this.get('minValue') || 0;
+			var barEl = this.get(BAR_EL);
 
-			switch (this.get('direction')) {
+			switch (this.get(DIRECTION)) {
 				case DIRECTION_LTR:
 				case DIRECTION_RTL:
-					this._barSpace = parseInt(this.get('width'),10) - 
+					this._barSpace = parseInt(this.get(WIDTH),10) - 
 						(parseInt(Dom.getStyle(barEl,'marginLeft'),10) || 0) -
 						(parseInt(Dom.getStyle(barEl,'marginRight'),10) || 0);
 					break;
 				case DIRECTION_TTB:
 				case DIRECTION_BTT:
-					this._barSpace = parseInt(this.get('height'),10) -
+					this._barSpace = parseInt(this.get(HEIGHT),10) -
 						(parseInt(Dom.getStyle(barEl,'marginTop'),10) || 0)-
 						(parseInt(Dom.getStyle(barEl,'marginBottom'),10) || 0); 
 					break;
 			}
-			this._barFactor = this._barSpace / (this.get('maxValue') - this._mn)  || 1;
+			this._barFactor = this._barSpace / (this.get(MAX_VALUE) - (this.get(MIN_VALUE) || 0))  || 1;
 		},
 		
 		/** 
@@ -682,7 +544,7 @@
 		 * @private
 		 */		
 		_animSetter: function (value) {
-			var anim, barEl = this.get('barEl');
+			var anim, barEl = this.get(BAR_EL);
 			if (value) {
 				if (value instanceof YAHOO.util.Anim) {
 					anim = value;
@@ -691,28 +553,50 @@
 				}
 				anim.onTween.subscribe(this._animOnTween,this,true);
 				anim.onComplete.subscribe(this._animComplete,this,true);
+				
+				// Temporary solution until http://yuilibrary.com/projects/yui2/ticket/2528222 gets solved:
+				var oldSetAttribute = anim.setAttribute,
+					pb = this;
+				switch(this.get(DIRECTION)) {
+					case DIRECTION_BTT:
+						anim.setAttribute = function(attr , val , unit) {
+							val = Math.round(val);
+							oldSetAttribute.call(this,attr,val,unit);
+							Dom.setStyle(barEl,'top',(pb._barSpace - val) + 'px');
+						};
+						break;
+					case DIRECTION_RTL:
+						anim.setAttribute = function(attr , val , unit) {
+							val = Math.round(val);
+							oldSetAttribute.call(this,attr,val,unit);
+							Dom.setStyle(barEl,'left',(pb._barSpace - val) + 'px');
+						};
+						break;
+				}
+				// up to here
+
 			} else {
-				anim = this.get('anim');
+				anim = this.get(ANIM);
 				if (anim) {
 					anim.onTween.unsubscribeAll();
 					anim.onComplete.unsubscribeAll();
 				}
 				anim = null;
 			}
-			this._barSizeFunction = this._barSizeFunctions[anim?1:0][this.get('direction')];
+			this._barSizeFunction = this._barSizeFunctions[anim?1:0][this.get(DIRECTION)];
 			return anim;
 		},
 		
-		_animComplete: function(ev) {
-			var value = this.get('value');
+		_animComplete: function() {
+			var value = this.get(VALUE);
 			this._previousValue = value;
-			this.fireEvent('complete', value);
-			Dom.removeClass(this.get('barEl'),Prog.CLASS_ANIM);
+			this.fireEvent(COMPLETE, value);
+			Dom.removeClass(this.get(BAR_EL),CLASS_ANIM);
 			this._showTemplates(value,true);
 		},
-		_animOnTween:function (ev) {
-			var value = Math.floor(this._tweenFactor * this.get('anim').currentFrame + this._previousValue);
-			this.fireEvent('progress',value);
+		_animOnTween:function () {
+			var value = Math.floor(this._tweenFactor * this.get(ANIM).currentFrame + this._previousValue);
+			this.fireEvent(PROGRESS,value);
 			this._showTemplates(value,false);
 		},
 		
@@ -724,13 +608,17 @@
 		 * @private
 		 */		
 		_valueChange: function (value) {
-			var anim = this.get('anim'),
-				pixelValue = Math.floor((value - this._mn) * this._barFactor),
-				barEl = this.get('barEl');
+			var anim = this.get(ANIM),
+				pixelValue = Math.floor((value - this.get(MIN_VALUE)) * this._barFactor),
+				barEl = this.get(BAR_EL);
 			
 			this._showTemplates(value,true);
 			if (this._rendered) {
-				this.fireEvent('start',this._previousValue);
+				if (anim) {
+					anim.stop();
+					if (anim.isAnimated()) { anim._onComplete.fire(); } // see: http://yuilibrary.com/projects/yui2/ticket/2528217
+				}
+				this.fireEvent(START,this._previousValue);
 				this._barSizeFunction(value, pixelValue, barEl, anim);
 			}
 		},
@@ -743,22 +631,69 @@
 		 */
 		 _showTemplates: function(value, aria) {
 
-			var captionEl = this.get('captionEl'),
+			var captionEl = this.get(CAPTION_EL),
 				container = this.get('element'),
-				text = Lang.substitute(this.get('textTemplate'),{
+				text = Lang.substitute(this.get(TEXT_TEMPLATE),{
 					value:value,
-					minValue:this.get('minValue'),
-					maxValue:this.get('maxValue')
+					minValue:this.get(MIN_VALUE),
+					maxValue:this.get(MAX_VALUE)
 				});
-			if (aria) {
-				container.setAttribute('aria-valuenow',value);
-				container.setAttribute('aria-valuetext',text);
-			}
 			if (captionEl) {
 				captionEl.innerHTML = text;
 			}
+			if (aria) {
+				container.setAttribute('aria-valuenow',value);
+				container.setAttribute('aria-valuetext',captionEl.textContent || captionEl.innerText);
+			}
 		}
 	});
+	/**
+	 * Collection of functions used by to calculate the size of the bar.
+	 * One of this will be used depending on direction and whether animation is active.
+	 * @property _barSizeFunctions
+	 * @type {collection of functions}
+	 * @private
+	 */
+	var b = [{},{}];
+	Prog.prototype._barSizeFunctions = b;
+	
+	b[0][DIRECTION_LTR] = function(value, pixelValue, barEl, anim) {
+		Dom.setStyle(barEl,WIDTH,  pixelValue + 'px');
+		this.fireEvent(PROGRESS,value);
+		this.fireEvent(COMPLETE,value);
+	};
+	b[0][DIRECTION_RTL] = function(value, pixelValue, barEl, anim) {
+		Dom.setStyle(barEl,WIDTH,  pixelValue + 'px');
+		Dom.setStyle(barEl,'left',(this._barSpace - pixelValue) + 'px');
+		this.fireEvent(PROGRESS,value);
+		this.fireEvent(COMPLETE,value);
+	};
+	b[0][DIRECTION_TTB] = function(value, pixelValue, barEl, anim) {
+		Dom.setStyle(barEl,HEIGHT,  pixelValue + 'px');
+		this.fireEvent(PROGRESS,value);
+		this.fireEvent(COMPLETE,value);
+	};
+	b[0][DIRECTION_BTT] = function(value, pixelValue, barEl, anim) {
+		Dom.setStyle(barEl,HEIGHT,  pixelValue + 'px');
+		Dom.setStyle(barEl,'top',  (this._barSpace - pixelValue) + 'px');
+		this.fireEvent(PROGRESS,value);
+		this.fireEvent(COMPLETE,value);
+	};
+	b[1][DIRECTION_LTR] = function(value, pixelValue, barEl, anim) {
+		Dom.addClass(barEl,CLASS_ANIM);
+		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
+		anim.attributes = {width:{ to: pixelValue }}; 
+		anim.animate();
+	};
+	b[1][DIRECTION_RTL] =  b[1][DIRECTION_LTR];
+	b[1][DIRECTION_TTB] =  function(value, pixelValue, barEl, anim) {
+		Dom.addClass(barEl,CLASS_ANIM);
+		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
+		anim.attributes = {height:{to: pixelValue}};
+		anim.animate();
+	};
+	b[1][DIRECTION_BTT] =  b[1][DIRECTION_TTB];
+				
 })();
 
 YAHOO.register("progressbar", YAHOO.widget.ProgressBar, {version: "@VERSION@", build: "@BUILD@"});

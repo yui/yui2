@@ -37,8 +37,6 @@
 		_MOUSEOUT = "mouseout",
 		_MOUSEDOWN = "mousedown",
 		_MOUSEUP = "mouseup",
-		
-		_FOCUS = UA.ie ? "focusin" : "focus",		
 		_CLICK = "click",
 		_KEYDOWN = "keydown",
 		_KEYUP = "keyup",
@@ -103,11 +101,6 @@
             "blur": "blurEvent",
             "focusout": "blurEvent"
         },
-
-
-    	// The element in the DOM that currently has focus
-    
-		m_oFocusedElement = null,
     
     
         m_oFocusedMenuItem = null;
@@ -310,8 +303,26 @@
                         if (oMenu.cfg.getProperty(_CLICK_TO_HIDE) && 
                             !(oMenu instanceof YAHOO.widget.MenuBar) && 
                             oMenu.cfg.getProperty(_POSITION) == _DYNAMIC) {
-        
+
                             oMenu.hide();
+
+							//	In IE when the user mouses down on a focusable 
+							//	element that element will be focused and become 
+							//	the "activeElement".
+							//	(http://msdn.microsoft.com/en-us/library/ms533065(VS.85).aspx)
+							//	However, there is a bug in IE where if there is 
+							//	a positioned element with a focused descendant 
+							//	that is hidden in response to the mousedown 
+							//	event, the target of the mousedown event will 
+							//	appear to have focus, but will not be set as 
+							//	the activeElement.  This will result in the 
+							//	element not firing key events, even though it
+							//	appears to have focus.  The following call to 
+							//	"setActive" fixes this bug.
+
+							if (UA.ie && oTarget.focus) {
+								oTarget.setActive();
+							}
         
                         }
                         else {
@@ -338,11 +349,6 @@
         
                 } 
     
-            }
-            else if (sEventType == _FOCUS) {
-            
-            	m_oFocusedElement = oTarget;
-            
             }
             
         }
@@ -405,68 +411,7 @@
             m_oFocusedMenuItem = null;
     
         }
-    
 
-        /**
-        * @method onMenuHide
-        * @description "hide" event handler for a Menu instance.
-        * @private
-        * @param {String} p_sType String representing the name of the event  
-        * that was fired.
-        * @param {Array} p_aArgs Array of arguments sent when the event 
-        * was fired.
-		* @param <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-		* level-one-html.html#ID-58190037">p_oFocusedElement</a> The HTML element that had focus
-		* prior to the Menu being made visible
-        */    
-    	function onMenuHide(p_sType, p_aArgs, p_oFocusedElement) {
-
-			/*
-				Restore focus to the element in the DOM that had focus prior to the Menu 
-				being made visible
-			*/
-
-			if (p_oFocusedElement && p_oFocusedElement.focus) {
-			
-				try {
-					p_oFocusedElement.focus();
-				}
-				catch(ex) {
-				}
-			
-			}
-			
-    		this.hideEvent.unsubscribe(onMenuHide, p_oFocusedElement);
-    	
-    	}
-    
-
-        /**
-        * @method onMenuShow
-        * @description "show" event handler for a MenuItem instance.
-        * @private
-        * @param {String} p_sType String representing the name of the event  
-        * that was fired.
-        * @param {Array} p_aArgs Array of arguments sent when the event 
-        * was fired.
-        */    	
-    	function onMenuShow(p_sType, p_aArgs) {
-
-			/*
-				Dynamically positioned, root Menus focus themselves when visible, and will then, 
-				when hidden, restore focus to the UI control that had focus before the Menu was 
-				made visible
-			*/ 
-
-			if (this === this.getRoot() && this.cfg.getProperty(_POSITION) === _DYNAMIC) {
-    	
-				this.hideEvent.subscribe(onMenuHide, m_oFocusedElement);
-				this.focus();
-			
-			}
-    	
-    	}    
-    
     
         /**
         * @method onMenuVisibleConfigChange
@@ -622,7 +567,6 @@
                     p_oMenu.itemAddedEvent.subscribe(onItemAdded);
                     p_oMenu.focusEvent.subscribe(onMenuFocus);
                     p_oMenu.blurEvent.subscribe(onMenuBlur);
-                    p_oMenu.showEvent.subscribe(onMenuShow);
         
         
                 }
@@ -1085,6 +1029,10 @@ var Dom = YAHOO.util.Dom,
     
     m_oShadowTemplate,
 
+	bFocusListenerInitialized = false,
+
+	oFocusedElement,
+
 	EVENT_TYPES = [
     
 		["mouseOverEvent", _MOUSEOVER],
@@ -1225,6 +1173,13 @@ var Dom = YAHOO.util.Dom,
 		value: false, 
 		validator: Lang.isBoolean
 	};
+
+
+function onDocFocus(event) {
+
+	oFocusedElement = Event.getTarget(event);
+
+}
 
 
 
@@ -1655,15 +1610,21 @@ init: function (p_oElement, p_oConfig) {
         this.beforeRenderEvent.subscribe(this._onBeforeRender);
         this.renderEvent.subscribe(this._onRender);
         this.beforeShowEvent.subscribe(this._onBeforeShow);
-        this.hideEvent.subscribe(this._onHide);
+		this.hideEvent.subscribe(this._onHide);
         this.showEvent.subscribe(this._onShow);
-        this.beforeHideEvent.subscribe(this._onBeforeHide);
+		this.beforeHideEvent.subscribe(this._onBeforeHide);
         this.mouseOverEvent.subscribe(this._onMouseOver);
         this.mouseOutEvent.subscribe(this._onMouseOut);
         this.clickEvent.subscribe(this._onClick);
         this.keyDownEvent.subscribe(this._onKeyDown);
         this.keyPressEvent.subscribe(this._onKeyPress);
         this.blurEvent.subscribe(this._onBlur);
+
+
+		if (!bFocusListenerInitialized) {
+			Event.onFocus(document, onDocFocus);
+			bFocusListenerInitialized = true;
+		}
 
 
 		//	Fixes an issue in Firefox 2 and Webkit where Dom's "getX" and "getY" 
@@ -1686,7 +1647,7 @@ init: function (p_oElement, p_oConfig) {
         // Register the Menu instance with the MenuManager
 
         MenuManager.addMenu(this);
-        
+
 
         this.initEvent.fire(Menu);
 
@@ -3026,7 +2987,8 @@ _onKeyDown: function (p_sType, p_aArgs) {
         nItems,
         nNextItemOffsetTop,
         nScrollTarget,
-        oParentMenu;
+        oParentMenu,
+		oFocusedEl;
 
 
 	if (this._useHideDelay) {
@@ -3291,6 +3253,22 @@ _onKeyDown: function (p_sType, p_aArgs) {
                 this.parent.focus();
             
             }
+			else {
+				// Focus the element that previously had focus
+
+				oFocusedEl = this._focusedElement;
+
+				if (oFocusedEl && oFocusedEl.focus) {
+
+					try {
+						oFocusedEl.focus();
+					}
+					catch(ex) {
+					}
+
+				}
+				
+			}
 
         }
         else if (this.activeItem) {
@@ -4198,6 +4176,22 @@ _onShow: function (p_sType, p_aArgs) {
 		}
 
     }
+
+
+	/*
+		Dynamically positioned, root Menus focus themselves when visible, and 
+		will then, when hidden, restore focus to the UI control that had focus 
+		before the Menu was made visible.
+	*/ 
+
+	if (this === this.getRoot() && this.cfg.getProperty(_POSITION) === _DYNAMIC) {
+
+		this._focusedElement = oFocusedElement;
+		
+		this.focus();
+	
+	}
+
 
 },
 
@@ -8317,69 +8311,85 @@ MenuItem.prototype = {
 
 	},
 
+    /**
+    * @method getNextSibling
+    * @description Finds the menu item's next sibling.
+    * @return YAHOO.widget.MenuItem
+    */
+	getNextSibling: function () {
+	
+		var menuitemEl = this.element,
+			next = Dom.getNextSibling(menuitemEl),
+			parent,
+			sibling,
+			list;
+		
+		if (!next) {
+			
+			parent = menuitemEl.parentNode;
+			sibling = Dom.getNextSibling(parent);
+			
+			if (sibling && sibling.nodeName.toLowerCase() === "ul") {
+				list = sibling;
+			}
+			else {
+				list = Dom.getFirstChild(parent.parentNode);
+			}
+			
+			next = Dom.getFirstChild(list);
+			
+		}
+
+		return YAHOO.widget.MenuManager.getMenuItem(next.id);
+
+	},
 
     /**
     * @method getNextEnabledSibling
     * @description Finds the menu item's next enabled sibling.
     * @return YAHOO.widget.MenuItem
     */
-    getNextEnabledSibling: function () {
+	getNextEnabledSibling: function () {
+		
+		var next = this.getNextSibling();
+		
+        return (next.cfg.getProperty(_DISABLED) || next.element.style.display == _NONE) ? next.getNextEnabledSibling() : next;
+		
+	},
 
-        var nGroupIndex,
-            aItemGroups,
-            oNextItem,
-            nNextGroupIndex,
-            aNextGroup,
-            returnVal;
 
-        function getNextArrayItem(p_aArray, p_nStartIndex) {
+    /**
+    * @method getPreviousSibling
+    * @description Finds the menu item's previous sibling.
+    * @return {YAHOO.widget.MenuItem}
+    */	
+	getPreviousSibling: function () {
 
-            return p_aArray[p_nStartIndex] || getNextArrayItem(p_aArray, (p_nStartIndex+1));
+		var menuitemEl = this.element,
+			next = Dom.getPreviousSibling(menuitemEl),
+			parent,
+			sibling,
+			list;
+		
+		if (!next) {
+			
+			parent = menuitemEl.parentNode;
+			sibling = Dom.getPreviousSibling(parent);
+			
+			if (sibling && sibling.nodeName.toLowerCase() === "ul") {
+				list = sibling;
+			}
+			else {
+				list = Dom.getLastChild(parent.parentNode);
+			}
+			
+			next = Dom.getLastChild(list);
+			
+		}
 
-        }
-
-        if (this.parent instanceof Menu) {
-
-            nGroupIndex = this.groupIndex;
-    
-            aItemGroups = this.parent.getItemGroups();
-    
-            if (this.index < (aItemGroups[nGroupIndex].length - 1)) {
-    
-                oNextItem = getNextArrayItem(aItemGroups[nGroupIndex], 
-                        (this.index+1));
-    
-            }
-            else {
-    
-                if (nGroupIndex < (aItemGroups.length - 1)) {
-    
-                    nNextGroupIndex = nGroupIndex + 1;
-    
-                }
-                else {
-    
-                    nNextGroupIndex = 0;
-    
-                }
-    
-                aNextGroup = getNextArrayItem(aItemGroups, nNextGroupIndex);
-    
-                // Retrieve the first menu item in the next group
-    
-                oNextItem = getNextArrayItem(aNextGroup, 0);
-    
-            }
-    
-            returnVal = (oNextItem.cfg.getProperty(_DISABLED) || 
-                oNextItem.element.style.display == _NONE) ? 
-                oNextItem.getNextEnabledSibling() : oNextItem;
-
-        }
-        
-        return returnVal;
-
-    },
+		return YAHOO.widget.MenuManager.getMenuItem(next.id);
+		
+	},
 
 
     /**
@@ -8387,70 +8397,13 @@ MenuItem.prototype = {
     * @description Finds the menu item's previous enabled sibling.
     * @return {YAHOO.widget.MenuItem}
     */
-    getPreviousEnabledSibling: function () {
-
-        var nGroupIndex,
-            aItemGroups,
-            oPreviousItem,
-            nPreviousGroupIndex,
-            aPreviousGroup,
-            returnVal;
-
-        function getPreviousArrayItem(p_aArray, p_nStartIndex) {
-
-            return p_aArray[p_nStartIndex] || getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
-
-        }
-
-        function getFirstItemIndex(p_aArray, p_nStartIndex) {
-
-            return p_aArray[p_nStartIndex] ? p_nStartIndex : 
-                getFirstItemIndex(p_aArray, (p_nStartIndex+1));
-
-        }
-
-       if (this.parent instanceof Menu) {
-
-            nGroupIndex = this.groupIndex;
-            aItemGroups = this.parent.getItemGroups();
-
-    
-            if (this.index > getFirstItemIndex(aItemGroups[nGroupIndex], 0)) {
-    
-                oPreviousItem = getPreviousArrayItem(aItemGroups[nGroupIndex], 
-                        (this.index-1));
-    
-            }
-            else {
-    
-                if (nGroupIndex > getFirstItemIndex(aItemGroups, 0)) {
-    
-                    nPreviousGroupIndex = nGroupIndex - 1;
-    
-                }
-                else {
-    
-                    nPreviousGroupIndex = aItemGroups.length - 1;
-    
-                }
-    
-                aPreviousGroup = getPreviousArrayItem(aItemGroups, 
-                    nPreviousGroupIndex);
-    
-                oPreviousItem = getPreviousArrayItem(aPreviousGroup, 
-                        (aPreviousGroup.length - 1));
-    
-            }
-
-            returnVal = (oPreviousItem.cfg.getProperty(_DISABLED) || 
-                oPreviousItem.element.style.display == _NONE) ? 
-                oPreviousItem.getPreviousEnabledSibling() : oPreviousItem;
-
-        }
-        
-        return returnVal;
-
-    },
+	getPreviousEnabledSibling: function () {
+		
+		var next = this.getPreviousSibling();
+		
+        return (next.cfg.getProperty(_DISABLED) || next.element.style.display == _NONE) ? next.getPreviousEnabledSibling() : next;
+		
+	},
 
 
     /**
