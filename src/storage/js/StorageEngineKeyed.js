@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
- */
 (function() {
 var Y = YAHOO.util,
 	YL = YAHOO.lang;
