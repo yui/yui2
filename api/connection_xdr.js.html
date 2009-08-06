@@ -2,7 +2,7 @@
 <html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: connection   (YUI Library)</title>
+	<title>API: connection   connection_xdr.js  (YUI Library)</title>
 
 	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
 	<link rel="stylesheet" type="text/css" href="assets/api.css" />
@@ -20,7 +20,7 @@
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_connection.html" title="connection">connection</a>
                 
-                
+                 &gt; connection_xdr.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
                 Search: <input autocomplete="off" id="searchinput" />
@@ -43,39 +43,142 @@
                 </fieldset>
             </form>
 
-                   
-                    <h3>Module: connection
-                    
+                    <div id="srcout">
+                        <style>
+                            #doc3 .classopts { display:none; }
+                        </style>
+                        <div class="highlight" ><pre><span class="c">/**</span>
+<span class="c"> * @for Connect</span>
+<span class="c"> */</span>
 
+<span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+	<span class="k">var</span> <span class="nx">YCM</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Connect</span><span class="o">,</span>
+		<span class="nx">_xdrReady</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s1">&#39;xdrReady&#39;</span><span class="o">),</span>
+		<span class="nx">_fn</span> <span class="o">=</span> <span class="o">{};</span>
 
-                    </h3>
-                    <div class="description summary">
-                        The Connection Manager provides a simplified interface to the XMLHttpRequest
-object.  It handles cross-browser instantiantion of XMLHttpRequest, negotiates the
-interactive states and server response, returning the results to a pre-defined
-callback you create.
+   <span class="c">/**</span>
+<span class="c">    * @description This method creates and instantiates the Flash transport.</span>
+<span class="c">    * @method _swf</span>
+<span class="c">    * @private</span>
+<span class="c">    * @static</span>
+<span class="c">    * @param {string} URI to connection.swf.</span>
+<span class="c">    * @return {void}</span>
+<span class="c">    */</span>
+	<span class="k">function</span> <span class="nx">_swf</span><span class="o">(</span><span class="nx">uri</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="s1">&#39;&lt;object id=&quot;YUIConnectionSwf&quot; type=&quot;application/x-shockwave-flash&quot; data=&quot;&#39;</span> <span class="o">+</span>
+		        <span class="nx">uri</span> <span class="o">+</span> <span class="s1">&#39;&quot; width=&quot;0&quot; height=&quot;0&quot;&gt;&#39;</span> <span class="o">+</span>
+		     	<span class="s1">&#39;&lt;param name=&quot;movie&quot; value=&quot;&#39;</span> <span class="o">+</span> <span class="nx">uri</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span>
+                <span class="s1">&#39;&lt;param name=&quot;allowScriptAccess&quot; value=&quot;always&quot;&gt;&#39;</span> <span class="o">+</span>
+		    	<span class="s1">&#39;&lt;/object&gt;&#39;</span><span class="o">,</span>
+		    <span class="nx">c</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">);</span>
+
+		<span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">c</span><span class="o">);</span>
+		<span class="nx">c</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">o</span><span class="o">;</span>
+	<span class="o">}</span>
+
+   <span class="c">/**</span>
+<span class="c">    * @description This method calls the public method on the</span>
+<span class="c">    * Flash transport to start the XDR transaction.  It is analogous</span>
+<span class="c">    * to Connection Manager&#39;s asyncRequest method.</span>
+<span class="c">    * @method xdr</span>
+<span class="c">    * @private</span>
+<span class="c">    * @static</span>
+<span class="c">    * @param {object} The transaction object.</span>
+<span class="c">    * @param {string} HTTP request method.</span>
+<span class="c">    * @param {string} URI for the transaction.</span>
+<span class="c">    * @param {object} The transaction&#39;s callback object.</span>
+<span class="c">    * @param {object} The JSON object used as HTTP POST data.</span>
+<span class="c">    * @return {void}</span>
+<span class="c">    */</span>
+	<span class="k">function</span> <span class="nx">_xdr</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">m</span><span class="o">,</span> <span class="nx">u</span><span class="o">,</span> <span class="nx">c</span><span class="o">,</span> <span class="nx">d</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">_fn</span><span class="o">[</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">tId</span><span class="o">)</span> <span class="o">?</span> <span class="nx">o</span><span class="o">.</span><span class="nx">tId</span> <span class="o">:</span> <span class="kc">null</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span> <span class="s1">&#39;o&#39;</span><span class="o">:</span><span class="nx">o</span><span class="o">,</span> <span class="s1">&#39;c&#39;</span><span class="o">:</span><span class="nx">c</span> <span class="o">};</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">d</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">c</span><span class="o">.</span><span class="nx">method</span> <span class="o">=</span> <span class="nx">m</span><span class="o">;</span>
+			<span class="nx">c</span><span class="o">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">d</span><span class="o">;</span>
+		<span class="o">}</span>
+
+		<span class="nx">o</span><span class="o">.</span><span class="nx">conn</span><span class="o">.</span><span class="nx">send</span><span class="o">(</span><span class="nx">u</span><span class="o">,</span> <span class="nx">c</span><span class="o">,</span> <span class="nx">o</span><span class="o">.</span><span class="nx">tId</span><span class="o">);</span>
+	<span class="o">}</span>
+
+   <span class="c">/**</span>
+<span class="c">    * @description This method instantiates the Flash transport and</span>
+<span class="c">    * establishes a static reference to it, used for all XDR requests.</span>
+<span class="c">    * @method transport</span>
+<span class="c">    * @public</span>
+<span class="c">    * @static</span>
+<span class="c">    * @param {string} URI to connection.swf.</span>
+<span class="c">    * @return {void}</span>
+<span class="c">    */</span>
+	<span class="k">function</span> <span class="nx">_init</span><span class="o">(</span><span class="nx">uri</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nx">_swf</span><span class="o">(</span><span class="nx">uri</span><span class="o">);</span>
+		<span class="nx">YCM</span><span class="o">.</span><span class="nx">_transport</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="s1">&#39;YUIConnectionSwf&#39;</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="k">function</span> <span class="nx">_xdrReady</span><span class="o">()</span> <span class="o">{</span>
+		<span class="nx">_xdrReady</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+	<span class="o">}</span>
+
+   <span class="c">/**</span>
+<span class="c">    * @description This method fires the global and transaction start</span>
+<span class="c">    * events.</span>
+<span class="c">    * @method _xdrStart</span>
+<span class="c">    * @private</span>
+<span class="c">    * @static</span>
+<span class="c">    * @param {object} The transaction object.</span>
+<span class="c">    * @param {string} The transaction&#39;s callback object.</span>
+<span class="c">    * @return {void}</span>
+<span class="c">    */</span>
+	<span class="k">function</span> <span class="nx">_xdrStart</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">cb</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span><span class="o">(</span><span class="nx">o</span><span class="o">){</span>
+			<span class="c">// Fire global custom event -- startEvent</span>
+<span class="c"></span>			<span class="k">this</span><span class="o">.</span><span class="nx">startEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">cb</span><span class="o">.</span><span class="nx">argument</span><span class="o">);</span>
+
+			<span class="k">if</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">startEvent</span><span class="o">){</span>
+				<span class="c">// Fire transaction custom event -- startEvent</span>
+<span class="c"></span>				<span class="nx">o</span><span class="o">.</span><span class="nx">startEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">cb</span><span class="o">.</span><span class="nx">argument</span><span class="o">);</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+   <span class="c">/**</span>
+<span class="c">    * @description This method is the initial response handler</span>
+<span class="c">    * for XDR transactions.  The Flash transport calls this</span>
+<span class="c">    * function and sends the response payload.</span>
+<span class="c">    * @method handleXdrResponse</span>
+<span class="c">    * @private</span>
+<span class="c">    * @static</span>
+<span class="c">    * @param {object} The response object sent from the Flash transport.</span>
+<span class="c">    * @return {void}</span>
+<span class="c">    */</span>
+	<span class="k">function</span> <span class="nx">_handleXdrResponse</span><span class="o">(</span><span class="nx">r</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">r</span><span class="o">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">&#39;xdr:start&#39;</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">_xdrStart</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">cb</span><span class="o">);</span>
+			<span class="k">return</span><span class="o">;</span>
+		<span class="o">}</span>
+
+		<span class="k">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="nx">_fn</span><span class="o">[</span><span class="nx">r</span><span class="o">.</span><span class="nx">tId</span><span class="o">].</span><span class="nx">o</span><span class="o">,</span>
+			<span class="nx">cb</span> <span class="o">=</span> <span class="nx">_fn</span><span class="o">[</span><span class="nx">r</span><span class="o">.</span><span class="nx">tId</span><span class="o">].</span><span class="nx">c</span><span class="o">,</span>
+			<span class="nx">isAbort</span> <span class="o">=</span> <span class="o">(</span><span class="nx">r</span><span class="o">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">&#39;xdr:abort&#39;</span><span class="o">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="o">;</span>
+
+		<span class="nx">o</span><span class="o">.</span><span class="nx">r</span> <span class="o">=</span> <span class="nx">r</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">cb</span><span class="o">.</span><span class="nx">argument</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nx">o</span><span class="o">.</span><span class="nx">response</span><span class="o">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="nx">cb</span><span class="o">.</span><span class="nx">argument</span><span class="o">;</span>
+		<span class="o">}</span>
+
+		<span class="k">this</span><span class="o">.</span><span class="nx">handleTransactionResponse</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">cb</span><span class="o">,</span> <span class="nx">isAbort</span><span class="o">);</span>
+		<span class="nx">delete</span> <span class="nx">_fn</span><span class="o">[</span><span class="nx">r</span><span class="o">.</span><span class="nx">tId</span><span class="o">];</span>
+	<span class="o">}</span>
+
+	<span class="c">// Bind the functions to Connection Manager as static fields.</span>
+<span class="c"></span>	<span class="nx">YCM</span><span class="o">.</span><span class="nx">xdr</span> <span class="o">=</span> <span class="nx">_xdr</span><span class="o">;</span>
+	<span class="nx">YCM</span><span class="o">.</span><span class="nx">swf</span> <span class="o">=</span> <span class="nx">_swf</span><span class="o">;</span>
+	<span class="nx">YCM</span><span class="o">.</span><span class="nx">transport</span> <span class="o">=</span> <span class="nx">_init</span><span class="o">;</span>
+	<span class="nx">YCM</span><span class="o">.</span><span class="nx">xdrReady</span> <span class="o">=</span> <span class="nx">_xdrReady</span><span class="o">;</span>
+	<span class="nx">YCM</span><span class="o">.</span><span class="nx">handleXdrResponse</span> <span class="o">=</span> <span class="nx">_handleXdrResponse</span><span class="o">;</span>
+<span class="o">})();</span>
+</pre></div>
+
                     </div>
-
-
-
-                <div class="yui-gc">
-                    <div class="yui-u first">
-
-                            <p>This module contains the following classes:</p>
-                            <script>
-                            //var YUI_CLASS_LIST = [{"extends": {"superclass": {}, "events": {}, "configs": {}, "properties": {}, "methods": {}}, "description": "The Connection Manager singleton provides methods for creating and managing\nasynchronous transactions.", "guessedname": "Connect", "name": "YAHOO.util.Connect"}];
-                            </script>
-                            <div id="splash_classList">
-                                <ul>
-                                    <li><a href="YAHOO.util.Connect.html" title="YAHOO.util.Connect" id="class_0">Connect</a></li>
-                                </ul>
-                            </div>
-                    </div>
-                    <div class="yui-u">
-
-                        </div>
-                </div>
-
 			</div>
 		</div>
 		<div class="yui-b">
@@ -143,7 +246,7 @@ callback you create.
                         <h4>Files</h4>
                         <ul class="content">        
                                 <li class=""><a href="connection_core.js.html" title="connection_core.js">connection_core.js</a></li>
-                                <li class=""><a href="connection_xdr.js.html" title="connection_xdr.js">connection_xdr.js</a></li>
+                                <li class="selected"><a href="connection_xdr.js.html" title="connection_xdr.js">connection_xdr.js</a></li>
                                 <li class=""><a href="connectionx.js.html" title="connectionx.js">connectionx.js</a></li>
                         </ul>
                     </div>
