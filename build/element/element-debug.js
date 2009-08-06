@@ -671,7 +671,7 @@ Element.prototype = {
 
 
 		if (specialTypes[type] && !Event._createMouseDelegate) {
-	        YAHOO.log("Using a " + type + " event requires the event-mouseenter submodule", "error", "Event");
+	        YAHOO.log("Using a " + type + " event requires the event-mouseenter module", "error", "Event");
 	        return false;	
 		}
 
