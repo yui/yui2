@@ -1196,6 +1196,14 @@
              */
             NAV_CONTAINER: "yui-carousel-buttons",
 
+             /**
+              * The class name for an item in the pager UL or dropdown menu.
+              *
+              * @property PAGER_ITEM
+              * @default "yui-pager-item"
+              */
+            PAGER_ITEM: "yui-pager-item",
+
             /**
              * The class name for the pagination container
              *
@@ -3037,54 +3045,58 @@
          * @param {Event} ev The event object
          * @protected
          */
-        _pagerClickHandler: function (ev) {
+         _pagerClickHandler: function (ev) {
             var carousel = this,
-                page,
-                pos,
-                target = Event.getTarget(ev),
-                val;
+                 css = carousel.CLASSES,
+                 val,
+                 stringIndex,
+                 page,
+                 target = Event.getTarget(ev),
+                 item;
 
-            function getPagerNode(el) {
+             function getPagerNode(el) {
+                 var itemEl = carousel.get("carouselItemEl"),
+                     elNode = el.nodeName.toUpperCase();
 
-                var itemEl = carousel.get("carouselItemEl"),
-                    elNode = el.nodeName.toUpperCase();
+                 if (Dom.hasClass(el, css.PAGER_ITEM) || Dom.hasClass(el.parentNode, css.PAGER_ITEM)) {
+                     if (elNode == itemEl.toUpperCase()) {
+                         el = Dom.getChildrenBy(el, function (node) {
+                             // either an anchor or select at least
+                             return node.href || node.value;
+                         });
+                         if (el && el[0]) {
+                             el = el[0];
+                         }
+                     } else if (elNode == "EM") {
+                         el = el.parentNode;// item is an em and not an anchor (when text is visible)
+                     }
+                     return el.href || el.value ? el : null;
+                 }
+             }
 
-                if (elNode == itemEl.toUpperCase()) {
-                    el = Dom.getChildrenBy(el, function (node) {
-                        // either an anchor or select at least
-                        return node.href || node.value;
-                    });
-                    if (el && el[0]) {
-                        el = el[0];
-                    }
-                } else if (elNode == "EM") {
-                    el = el.parentNode;// item is an em and not an anchor (when text is visible)
-                }
+             if (target) {
+                 target = getPagerNode(target);
 
-                return el.href || el.value ? el : null;
-            }
+                 if (!target) {
+                     return;
+                 }
+                 val = target.href || target.value;
 
-            if (target) {
-                target = getPagerNode(target);
-                if (!target) {
-                    return;
-                }
-                val = target.href || target.value;
-                if (JS.isString(val) && val) {
-                    pos = val.lastIndexOf("#");
-                    page =  parseInt(val.substring(pos+1), 10);
-                    if (page != -1) {
-                        val = (page - 1) * carousel.get("numVisible");
-                        carousel._selectedItem = val;
-                        carousel.scrollTo(val);
-                        if (!target.value) { // not a select element
-                            carousel.focus();
-                        }
-                        Event.preventDefault(ev);
-                    }
-                }
-            }
-        },
+                 if (JS.isString(val) && val) {
+                     stringIndex = val.lastIndexOf("#");
+                     page =  parseInt(val.substring(stringIndex+1), 10);
+                     if (page != -1) {
+                         item = (page - 1) * carousel.get("numVisible");
+                         carousel._selectedItem = item;
+                         carousel.scrollTo(item);
+                         if (!target.value) { // not a select element
+                             carousel.focus();
+                         }
+                         Event.preventDefault(ev);
+                     }
+                 }
+             }
+         },
 
         /**
          * Find the Carousel within a container. The Carousel is identified by
@@ -4054,21 +4066,7 @@
 
              for (i = 0; i < num; i++) {
 
-                /* ommitted or else pager buttons won't show all pages
-                if (JS.isUndefined(carousel._itemsTable.items[i * n])) {
-                     Dom.setStyle(pager, "visibility", "visible");
-                    break;
-                 }
-
-                 item = carousel._itemsTable.items[i * n].id;
-                 */
-
                  el   = document.createElement("LI");
-
-                 /*if (!el) {// redundant check
-                     Dom.setStyle(pager, "visibility", "visible");
-                     break;
-                 }*/
 
                  if (i === 0) {
                      Dom.addClass(el, css.FIRST_PAGE);
@@ -4077,10 +4075,9 @@
                      Dom.addClass(el, css.SELECTED_NAV);
                  }
 
-                 // TODO: use a template string for i18N compliance
-                 html = "<a href=\"#" + (i+1) + "\" tabindex=\"0\"><em>"   +
-                         carousel.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1) +
-                         "</em></a>";
+                 html = "<a class=" + css.PAGER_ITEM + " href=\"#" + (i+1) + "\" tabindex=\"0\"><em>"   +
+                          carousel.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1) +
+                          "</em></a>";
                  el.innerHTML = html;
 
                  pager.appendChild(el);
@@ -4101,6 +4098,7 @@
          */
         _updatePagerMenu: function () {
             var carousel = this,
+                css      = carousel.CLASSES,
                 cur      = carousel._pages.cur, // current page
                 el,
                 i,
@@ -4131,25 +4129,9 @@
 
             for (i = 0; i < num; i++) {
 
-                /* ommitted or else pager menu won't show all pages
-                if (JS.isUndefined(carousel._itemsTable.items[i * n])) {
-                    Dom.setStyle(pager, "visibility", "visible");
-                }
-                item = carousel._itemsTable.items[i * n].id;*/
-
-                el   = document.createElement("OPTION");
-
-                /*
-                if (!el) {// redundant check
-                    YAHOO.log("Unable to create an OPTION pager menu", "error",
-                              WidgetName);
-                    Dom.setStyle(pager, "visibility", "visible");
-                    break;
-                }
-                */
-
-                el.value     = "#" + i;
-                // TODO: use a template string for i18N compliance
+                el   = document.createElement("OPTION"); 
+                Dom.addClass(el, css.PAGER_ITEM);
+                el.value     = "#" + (i+1);
                 el.innerHTML = carousel.STRINGS.PAGER_PREFIX_TEXT+" "+(i+1);
 
                 if (i == cur) {
