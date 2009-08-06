@@ -703,7 +703,14 @@
 					<span class="k">var</span> <span class="nx">series</span> <span class="o">=</span> <span class="o">{</span><span class="nx">type</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_type</span><span class="o">,</span> <span class="nx">dataProvider</span><span class="o">:</span> <span class="nx">response</span><span class="o">.</span><span class="nx">results</span><span class="o">};</span>
 					<span class="nx">dataProvider</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">series</span><span class="o">);</span>
 				<span class="o">}</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setDataProvider</span><span class="o">(</span><span class="nx">dataProvider</span><span class="o">);</span>
+				<span class="k">try</span>
+				<span class="o">{</span>
+					<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setDataProvider</span><span class="o">)</span> <span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setDataProvider</span><span class="o">(</span><span class="nx">dataProvider</span><span class="o">);</span>
+				<span class="o">}</span>
+				<span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span>
+				<span class="o">{</span>
+					<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setDataProvider</span><span class="o">(</span><span class="nx">dataProvider</span><span class="o">);</span>
+				<span class="o">}</span>
 			<span class="o">}</span>
 		<span class="o">}</span>
 	<span class="o">},</span>
@@ -1119,6 +1126,7 @@
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
                                 <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
                                 <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
