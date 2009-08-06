@@ -1902,7 +1902,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
                     }
 
                     // The matching value, including backward compatibility for array format and safety net
-                    elListItem._sResultMatch = (YAHOO.lang.isString(oResult)) ? oResult : (YAHOO.lang.isArray(oResult)) ? oResult[0] : (oResult[sMatchKey] || "");
+                    elListItem._sResultMatch = this.resultMatch(oResult);
                     elListItem._oResultData = oResult; // Additional data
                     this._populateListItem(elListItem, oResult, sCurQuery);
                     elListItem.style.display = "";
@@ -1952,6 +1952,10 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
     }
         
 };
+
+YAHOO.widget.AutoComplete.prototype.resultMatch = function(oResult) {
+    return (YAHOO.lang.isString(oResult)) ? oResult : (YAHOO.lang.isArray(oResult)) ? oResult[0] : (oResult[sMatchKey] || "");
+}
 
 /**
  * Called before container expands, by default snaps container to the
