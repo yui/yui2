@@ -1,3 +1,12 @@
+/**
+ * Augments the Element Utility with event delegation support.
+ *
+ * @module element-delegate
+ * @title Element Event Delegation Module
+ * @namespace YAHOO.util
+ * @requires element
+ */
+
 (function () {
 
 	var Event = YAHOO.util.Event,
@@ -24,6 +33,7 @@
 	     * @param {Any} obj A variable to pass to the handler
 	     * @param {Object} scope The object to use for the scope of the handler 
          * @return {boolean} true if the delegate was added successfully
+         * @for Element
 	     */
 		delegate: function (type, fn, filter, obj, overrideContext) {
 
@@ -39,7 +49,7 @@
 				};
 
 			if (!Event._createDelegate) {
-		        YAHOO.log("Using delegate functionality requires the event-delegate submodule", "error", "Event");
+		        YAHOO.log("Using delegate functionality requires the event-delegate", "error", "Event");
 		        return false;
 			}
 
@@ -73,6 +83,7 @@
 	     * @param {Function} fn The function call when the event fires
          * @return {boolean} true if the unbind was successful, false 
          *  otherwise.
+         * @for Element
 	     */
 		removeDelegate: function (type, fn) {
 
