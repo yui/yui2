@@ -30,85 +30,68 @@
      *   <dd>Thousands separator</dd>
      *   <dt>suffix {String}</dd>
      *   <dd>String appended after each number, like " items" (note the space)</dd>
+     *   <dt>negativeFormat</dt>
+     *   <dd>String used as a guide for how to indicate negative numbers.  The first '#' character in the string will be replaced by the number.  Default '-#'.</dd>
      *  </dl>
      * @return {String} Formatted number for display. Note, the following values
-     * return as "": null, undefined, NaN, "".     
+     * return as "": null, undefined, NaN, "".
      */
-    format : function(nData, oConfig) {
-        var lang = YAHOO.lang;
-        if(!lang.isValue(nData) || (nData === "")) {
-            return "";
+    format : function(n, cfg) {
+        if (!isFinite(+n)) {
+            return '';
         }
 
-        oConfig = oConfig || {};
-        
-        if(!lang.isNumber(nData)) {
-            nData *= 1;
-        }
+        n   = !isFinite(+n) ? 0 : +n;
+        cfg = YAHOO.lang.merge(YAHOO.util.Number.format.defaults, (cfg || {}));
 
-        if(lang.isNumber(nData)) {
-            var bNegative = (nData < 0);
-            var sOutput = nData + "";
-            var sDecimalSeparator = (oConfig.decimalSeparator) ? oConfig.decimalSeparator : ".";
-            var nDotIndex;
+        var neg    = n < 0,        absN   = Math.abs(n),
+            places = cfg.decimalPlaces,
+            sep    = cfg.thousandsSeparator,
+            s, bits, i;
 
-            // Manage decimals
-            if(lang.isNumber(oConfig.decimalPlaces)) {
-                // Round to the correct decimal place
-                var nDecimalPlaces = oConfig.decimalPlaces;
-                var nDecimal = Math.pow(10, nDecimalPlaces);
-                sOutput = Math.round(nData*nDecimal)/nDecimal + "";
-                nDotIndex = sOutput.lastIndexOf(".");
+        if (places < 0) {
+            // Get rid of the decimal info
+            s = absN - (absN % 1) + '';
+            i = s.length + places;
 
-                if(nDecimalPlaces > 0) {
-                    // Add the decimal separator
-                    if(nDotIndex < 0) {
-                        sOutput += sDecimalSeparator;
-                        nDotIndex = sOutput.length-1;
-                    }
-                    // Replace the "."
-                    else if(sDecimalSeparator !== "."){
-                        sOutput = sOutput.replace(".",sDecimalSeparator);
-                    }
-                    // Add missing zeros
-                    while((sOutput.length - 1 - nDotIndex) < nDecimalPlaces) {
-                        sOutput += "0";
-                    }
-                }
+            // avoid 123 vs decimalPlaces -4 (should return "0")
+            if (i > 0) {
+                    // leverage toFixed by making 123 => 0.123 for the rounding
+                    // operation, then add the appropriate number of zeros back on
+                s = Number('.' + s).toFixed(i).slice(2) +
+                    new Array(s.length - i + 1).join('0');
+            } else {
+                s = "0";
             }
-            
-            // Add the thousands separator
-            if(oConfig.thousandsSeparator) {
-                var sThousandsSeparator = oConfig.thousandsSeparator;
-                nDotIndex = sOutput.lastIndexOf(sDecimalSeparator);
-                nDotIndex = (nDotIndex > -1) ? nDotIndex : sOutput.length;
-                var sNewOutput = sOutput.substring(nDotIndex);
-                var nCount = -1;
-                for (var i=nDotIndex; i>0; i--) {
-                    nCount++;
-                    if ((nCount%3 === 0) && (i !== nDotIndex) && (!bNegative || (i > 1))) {
-                        sNewOutput = sThousandsSeparator + sNewOutput;
-                    }
-                    sNewOutput = sOutput.charAt(i-1) + sNewOutput;
-                }
-                sOutput = sNewOutput;
-            }
-
-            // Prepend prefix
-            sOutput = (oConfig.prefix) ? oConfig.prefix + sOutput : sOutput;
-
-            // Append suffix
-            sOutput = (oConfig.suffix) ? sOutput + oConfig.suffix : sOutput;
-
-            return sOutput;
+        } else {        // There is a bug in IE's toFixed implementation:
+            // for n in {(-0.94, -0.5], [0.5, 0.94)} n.toFixed() returns 0
+            // instead of -1 and 1. Manually handle that case.
+            s = absN < 1 && absN >= 0.5 && !places ? '1' : absN.toFixed(places);
         }
-        // Still not a Number, just return unaltered
-        else {
-            return nData;
+
+        if (absN > 1000) {
+            bits  = s.split(/\D/);
+            i  = bits[0].length % 3 || 3;
+
+            bits[0] = bits[0].slice(0,i) +
+                      bits[0].slice(i).replace(/(\d{3})/g, sep + '$1');
+
+            s = bits.join(cfg.decimalSeparator);
         }
+
+        s = cfg.prefix + s + cfg.suffix;
+
+        return neg ? cfg.negativeFormat.replace(/#/,s) : s;
     }
- };
-
+};
+YAHOO.util.Number.format.defaults = {
+    decimalSeparator : '.',
+    decimalPlaces    : null,
+    thousandsSeparator : '',
+    prefix : '',
+    suffix : '',
+    negativeFormat : '-#'
+};
 
 
 /****************************************************************************/

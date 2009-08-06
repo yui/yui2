@@ -135,7 +135,7 @@
 <span class="c">         * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.</span>
 <span class="c">         */</span>
         <span class="nx">get</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">id</span><span class="o">,</span> <span class="nx">nodes</span><span class="o">,</span> <span class="nx">c</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">len</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">id</span><span class="o">,</span> <span class="nx">nodes</span><span class="o">,</span> <span class="nx">c</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">len</span><span class="o">,</span> <span class="nx">attr</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">[</span><span class="nx">NODE_TYPE</span><span class="o">]</span> <span class="o">||</span> <span class="nx">el</span><span class="o">.</span><span class="nx">item</span><span class="o">)</span> <span class="o">{</span> <span class="c">// Node, or NodeList</span>
@@ -145,13 +145,14 @@
                 <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">el</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="o">)</span> <span class="o">{</span> <span class="c">// id</span>
 <span class="c"></span>                    <span class="nx">id</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span>
                     <span class="nx">el</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">===</span> <span class="nx">id</span><span class="o">)</span> <span class="o">{</span> <span class="c">// IE: avoid false match on &quot;name&quot; attribute</span>
-<span class="c"></span>                    <span class="k">return</span> <span class="nx">el</span><span class="o">;</span>
+                    <span class="nx">attr</span> <span class="o">=</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">?</span> <span class="nx">el</span><span class="o">.</span><span class="nx">attributes</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">attr</span> <span class="o">&amp;&amp;</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">id</span> <span class="o">&amp;&amp;</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">id</span><span class="o">.</span><span class="nx">value</span> <span class="o">===</span> <span class="nx">id</span><span class="o">)</span> <span class="o">{</span> <span class="c">// IE: avoid false match on &quot;name&quot; attribute</span>
+<span class="c"></span>                        <span class="k">return</span> <span class="nx">el</span><span class="o">;</span>
                     <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="o">.</span><span class="nx">all</span><span class="o">)</span> <span class="o">{</span> <span class="c">// filter by name</span>
 <span class="c"></span>                        <span class="nx">el</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
                         <span class="nx">nodes</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">all</span><span class="o">[</span><span class="nx">id</span><span class="o">];</span>
                         <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">nodes</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                            <span class="k">if</span> <span class="o">(</span><span class="nx">nodes</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">===</span> <span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="nx">nodes</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span> <span class="o">===</span> <span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
                                 <span class="k">return</span> <span class="nx">nodes</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
                             <span class="o">}</span>
                         <span class="o">}</span>
@@ -1485,6 +1486,8 @@
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
                                 <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>

@@ -60,15 +60,11 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		 * @description The field in each item that corresponds to a value on the x axis.
 		 * @type String
 		 */
-		this.getAttributeConfig("xField",
-		{
-			method: this._getXField
-		});
-
 		this.setAttributeConfig("xField",
 		{
 			validator: YAHOO.lang.isString,
-			method: this._setXField
+			method: this._setXField,
+			getter: this._getXField
 		});
 
 		/**
@@ -76,15 +72,11 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		 * @description The field in each item that corresponds to a value on the x axis.
 		 * @type String
 		 */
-		this.getAttributeConfig("yField",
-		{
-			method: this._getYField
-		});
-
 		this.setAttributeConfig("yField",
 		{
 			validator: YAHOO.lang.isString,
-			method: this._setYField
+			method: this._setYField,
+			getter: this._getYField
 		});
 
 		/**

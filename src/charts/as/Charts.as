@@ -173,6 +173,7 @@ package
 		override protected function set component(value:DisplayObject):void
 		{
 			this.chart = Chart(value);
+			this.chart.addEventListener(ErrorEvent.ERROR, chartErrorHandler);
 			super.component = value;
 		}
 		
@@ -1023,7 +1024,7 @@ package
 			this.backgroundAndBorder = new BackgroundAndBorder();
 			this.backgroundAndBorder.width = this.stage.stageWidth;
 			this.backgroundAndBorder.height = this.stage.stageHeight;
-			this.backgroundAndBorder.addEventListener(ErrorEvent.ERROR, backgroundErrorHandler);
+			this.backgroundAndBorder.addEventListener(ErrorEvent.ERROR, chartErrorHandler);
 			this.addChild(this.backgroundAndBorder);
 			
 			this.legend = new Legend();
@@ -1110,9 +1111,9 @@ package
 		
 		/**
 		 * @private (protected)
-		 * Logs errors for the background image loading.
+		 * Logs errors.
 		 */
-		protected function backgroundErrorHandler(event:ErrorEvent):void
+		protected function chartErrorHandler(event:ErrorEvent):void
 		{
 			this.log(event.text, LoggerCategory.ERROR);
 		}
