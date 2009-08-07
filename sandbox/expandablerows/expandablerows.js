@@ -37,16 +37,17 @@
 			// Private members
 			//
 			/////////////////////////////////////////////////////////////////////////////
+
 			/**
-				* Unique id assigned to instance "yui-ceditorN", useful prefix for generating unique
-				* DOM ID strings and log messages.
+				* Gets state object for a specific record associated with the DataTable.
 				* @method _getRecordState
 				* @param {Mixed} record_id Record / Row / or Index id
-				* @param {String} key Key to return within the state object. Default is to return all as a map
+				* @param {String} key Key to return within the state object. Default is to
+				* return all as a map
 				* @return {Object} State data object
 				* @type mixed
 				* @private
-			*/
+			**/
 			_getRecordState : function( record_id, key ){
 
 				var	row_data    = this.getRecord( record_id ),
@@ -58,8 +59,8 @@
 			},
 
 			/**
-				* Unique id assigned to instance "yui-ceditorN", useful prefix for generating unique
-				* DOM ID strings and log messages.
+				* Sets a value to a state object with a unique id for a record which
+				* is associated with the DataTable
 				* @method _setRecordState
 				* @param {Mixed} record_id Record / Row / or Index id
 				* @param {String} key Key to use in map
@@ -67,7 +68,7 @@
 				* @return {Object} State data object
 				* @type mixed
 				* @private
-			*/
+			**/
 			_setRecordState : function( record_id, key, value ){
 
 				var	row_data      = this.getRecord( record_id ).getData(),
@@ -81,6 +82,21 @@
 
 			},
 
+			/////////////////////////////////////////////////////////////////////////////
+			//
+			// Public methods
+			//
+			/////////////////////////////////////////////////////////////////////////////
+
+			/**
+				* Over-ridden initAttributes method from DataTable
+				* @method initAttributes
+				* @param {Mixed} record_id Record / Row / or Index id
+				* @param {String} key Key to use in map
+				* @param {Mixed} value Value to assign to the key
+				* @return {Object} State data object
+				* @type mixed
+			**/
 			initAttributes : function( oConfigs ) {
 
 				oConfigs = oConfigs || {};
@@ -90,10 +106,9 @@
 					/**
 					* @attribute rowExpansionTemplate
 					* @description Value for the rowExpansionTemplate attribute.
-					* @type String or Function
+					* @type {Mixed}
 					* @default ""
-					*/
-
+					**/
 					this.setAttributeConfig("rowExpansionTemplate", {
 							value: "",
 							validator: function( template ){
@@ -107,6 +122,13 @@
 
 			},
 
+			/**
+				* Initializes row expansion on the DataTable instance
+				* @method initExpandableRows
+				* @param {Mixed} template a string template or function to be called when
+				* Row is expanded
+				* @type mixed
+			**/
 			initExpandableRows : function( template ){
 
 				//Set subscribe restore method
@@ -120,6 +142,12 @@
 
 			},
 
+			/**
+				* Toggles the expansion state of a row
+				* @method toggleRowExpansion
+				* @param {Mixed} record_id Record / Row / or Index id
+				* @type mixed
+			**/
 			toggleRowExpansion : function( record_id ){
 
 				var state = this._getRecordState( record_id );
@@ -136,6 +164,15 @@
 
 			},
 
+			/**
+				* Sets the expansion state of a row to expanded
+				* @method expandRow
+				* @param {Mixed} record_id Record / Row / or Index id
+				* @param {Boolean} restore will restore an exisiting state for a
+				* row that has been collapsed by a non user action
+				* @return {Boolean} successful
+				* @type mixed
+			**/
 			expandRow : function( record_id, restore ){
 
 				var state = this._getRecordState( record_id );
@@ -215,6 +252,13 @@
 
 			},
 
+			/**
+				* Sets the expansion state of a row to collapsed
+				* @method collapseRow
+				* @param {Mixed} record_id Record / Row / or Index id
+				* @return {Boolean} successful
+				* @type mixed
+			**/
 			collapseRow : function( record_id ){
 
 				var	row_data    = this.getRecord( record_id ),
@@ -250,6 +294,14 @@
 
 			},
 
+			/**
+				* Collapses all expanded rows. This should be called before any action where
+				* the row expansion markup would interfear with normal DataTable markup handling.
+				* This method does not remove exents attached during implementation. All event
+				* handlers should be removed separately.
+				* @method collapseAllRows
+				* @type mixed
+			**/
 			collapseAllRows : function(){
 
 				var rows = this.a_rowExpansions;
@@ -264,6 +316,13 @@
 
 			},
 
+			/**
+				* Restores rows which have an expanded state but no markup. This
+				* is to be called to restore row expansions after the DataTable
+				* renders or the collapseAllRows is called.
+				* @method collapseAllRows
+				* @type mixed
+			**/
 			restoreExpandedRows : function(){
 
 				var	expanded_rows = this.a_rowExpansions;
@@ -286,12 +345,26 @@
 
 			},
 
+			/**
+				* Abstract method which restores row expansion for subscribing to the
+				* DataTable postRenderEvent.
+				* @method onEventRestoreExpandableRows
+				* @param {Object} oArgs context of a subscribed event
+				* @type mixed
+			**/
 			onEventRestoreExpandableRows : function( oArgs ){
 
 				this.restoreExpandedRows();
 
 			},
 
+			/**
+				* Abstract method which toggles row expansion for subscribing to the
+				* DataTable postRenderEvent.
+				* @method onEventToggleRowExpansion
+				* @param {Object} oArgs context of a subscribed event
+				* @type mixed
+			**/
 			onEventToggleRowExpansion : function( oArgs ){
 
 				if( YAHOO.util.Dom.hasClass( oArgs.target, 'yui-dt-expandablerow-trigger' ) ){
