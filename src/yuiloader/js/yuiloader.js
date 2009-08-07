@@ -115,7 +115,15 @@
         'connection': {
             'type': 'js',
             'path': 'connection/connection-min.js',
-            'requires': ['event']
+            'requires': ['event'],
+            'supersedes': ['connectioncore'],
+        },
+
+        'connectioncore': {
+            'type': 'js',
+            'path': 'connection/connection_core-min.js',
+            'requires': ['event'],
+            'pkg': 'connection'
         },
 
         'container': {
