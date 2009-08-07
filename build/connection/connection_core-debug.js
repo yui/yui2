@@ -125,46 +125,6 @@ YAHOO.util.Connect =
     _default_headers:{},
 
  /**
-  * @description Property modified by setForm() to determine if the data
-  * should be submitted as an HTML form.
-  * @property _isFormSubmit
-  * @private
-  * @static
-  * @type boolean
-  */
-    _isFormSubmit:false,
-
- /**
-  * @description Property modified by setForm() to determine if a file(s)
-  * upload is expected.
-  * @property _isFileUpload
-  * @private
-  * @static
-  * @type boolean
-  */
-    _isFileUpload:false,
-
- /**
-  * @description Property modified by setForm() to set a reference to the HTML
-  * form node if the desired action is file upload.
-  * @property _formNode
-  * @private
-  * @static
-  * @type object
-  */
-    _formNode:null,
-
- /**
-  * @description Property modified by setForm() to set the HTML form data
-  * for each transaction.
-  * @property _sFormData
-  * @private
-  * @static
-  * @type string
-  */
-    _sFormData:null,
-
- /**
   * @description Collection of polling references to the polling mechanism in handleReadyState.
   * @property _poll
   * @private
@@ -203,43 +163,6 @@ YAHOO.util.Connect =
      _transaction_id:0,
 
   /**
-   * @description Tracks the name-value pair of the "clicked" submit button if multiple submit
-   * buttons are present in an HTML form; and, if YAHOO.util.Event is available.
-   * @property _submitElementValue
-   * @private
-   * @static
-   * @type string
-   */
-	 _submitElementValue:null,
-
-  /**
-   * @description Determines whether YAHOO.util.Event is available and returns true or false.
-   * If true, an event listener is bound at the document level to trap click events that
-   * resolve to a target type of "Submit".  This listener will enable setForm() to determine
-   * the clicked "Submit" value in a multi-Submit button, HTML form.
-   * @property _hasSubmitListener
-   * @private
-   * @static
-   */
-	 _hasSubmitListener:(function()
-	 {
-		if(YAHOO.util.Event){
-			YAHOO.util.Event.addListener(
-				document,
-				'click',
-				function(e){
-					var obj = YAHOO.util.Event.getTarget(e),
-						name = obj.nodeName.toLowerCase();
-					if((name === 'input' || name === 'button') && (obj.type && obj.type.toLowerCase() == 'submit')){
-						YAHOO.util.Connect._submitElementValue = encodeURIComponent(obj.name) + "=" + encodeURIComponent(obj.value);
-					}
-				});
-			return true;
-	    }
-	    return false;
-	 })(),
-
-  /**
    * @description Custom event that fires at the start of a transaction
    * @property startEvent
    * @private
@@ -276,16 +199,6 @@ YAHOO.util.Connect =
    * @type CustomEvent
    */
 	failureEvent: new YAHOO.util.CustomEvent('failure'),
-
-  /**
-   * @description Custom event that fires when handleTransactionResponse() determines a
-   * response in the HTTP 4xx/5xx range.
-   * @property failureEvent
-   * @private
-   * @static
-   * @type CustomEvent
-   */
-	uploadEvent: new YAHOO.util.CustomEvent('upload'),
 
   /**
    * @description Custom event that fires when a transaction is successfully aborted.
@@ -401,7 +314,7 @@ YAHOO.util.Connect =
 			// Instantiates XMLHttpRequest in non-IE browsers and assigns to http.
 			http = new XMLHttpRequest();
 			//  Object literal with http and tId properties
-			obj = { conn:http, tId:transactionId };
+			obj = { conn:http, tId:transactionId, xhr: true };
 			YAHOO.log('XHR object created for transaction ' + transactionId, 'info', 'Connection');
 		}
 		catch(e)
@@ -412,11 +325,11 @@ YAHOO.util.Connect =
 					// Instantiates XMLHttpRequest for IE and assign to http
 					http = new ActiveXObject(this._msxml_progid[i]);
 					//  Object literal with conn and tId properties
-					obj = { conn:http, tId:transactionId };
+					obj = { conn:http, tId:transactionId, xhr: true };
 					YAHOO.log('ActiveX XHR object created for transaction ' + transactionId, 'info', 'Connection');
 					break;
 				}
-				catch(e2){}
+				catch(e1){}
 			}
 		}
 		finally
@@ -434,20 +347,24 @@ YAHOO.util.Connect =
    * @static
    * @return {object}
    */
-	getConnectionObject:function(isFileUpload)
+	getConnectionObject:function(t)
 	{
-		var o;
-		var tId = this._transaction_id;
+		var o, tId = this._transaction_id;
 
 		try
 		{
-			if(!isFileUpload){
+			if(!t){
 				o = this.createXhrObject(tId);
 			}
 			else{
-				o = {};
-				o.tId = tId;
-				o.isUpload = true;
+				o = {tId:tId};
+				if(t==='xdr'){
+					o.conn = this._transport;
+					o.xdr = true;
+				}
+				else if(t==='upload'){
+					o.upload = true;
+				}
 			}
 
 			if(o){
@@ -455,10 +372,7 @@ YAHOO.util.Connect =
 			}
 		}
 		catch(e){}
-		finally
-		{
-			return o;
-		}
+		return o;
 	},
 
   /**
@@ -474,9 +388,16 @@ YAHOO.util.Connect =
    */
 	asyncRequest:function(method, uri, callback, postData)
 	{
-		var o = (this._isFileUpload)?this.getConnectionObject(true):this.getConnectionObject();
-		var args = (callback && callback.argument)?callback.argument:null;
+		var o, t, args = (callback && callback.argument)?callback.argument:null;
 
+		if(this._isFileUpload){
+			t = 'upload';
+		}
+		else if(callback.xdr){
+			t = 'xdr';
+		}
+
+		o = this.getConnectionObject(t);
 		if(!o){
 			YAHOO.log('Unable to create connection object.', 'error', 'Connection');
 			return null;
@@ -517,8 +438,6 @@ YAHOO.util.Connect =
 				uri += ((uri.indexOf('?') == -1)?'?':'&') + "rnd=" + new Date().valueOf().toString();
 			}
 
-			o.conn.open(method, uri, true);
-
 			// Each transaction will automatically include a custom header of
 			// "X-Requested-With: XMLHttpRequest" to identify the request as
 			// having originated from Connection Manager.
@@ -536,6 +455,12 @@ YAHOO.util.Connect =
 				YAHOO.log('Initialize header Content-Type to application/x-www-form-urlencoded; UTF-8 for POST transaction.', 'info', 'Connection');
 			}
 
+			if(o.xdr){
+				this.xdr(o, method, uri, callback, postData);
+				return o;
+			}
+
+			o.conn.open(method, uri, true);
 			//Initialize all default and custom HTTP headers,
 			if(this._has_default_headers || this._has_http_headers){
 				this.setHeader(o);
@@ -544,7 +469,6 @@ YAHOO.util.Connect =
 			this.handleReadyState(o, callback);
 			o.conn.send(postData || '');
 			YAHOO.log('Transaction ' + o.tId + ' sent.', 'info', 'Connection');
-
 
 			// Reset the HTML form data and state properties as
 			// soon as the data are submitted.
@@ -657,13 +581,24 @@ YAHOO.util.Connect =
    */
     handleTransactionResponse:function(o, callback, isAbort)
     {
-		var httpStatus, responseObject;
-		var args = (callback && callback.argument)?callback.argument:null;
+		var httpStatus, responseObject,
+			args = (callback && callback.argument)?callback.argument:null,
+			xdrS = (o.r && o.r.statusText === 'xdr:success')?true:false,
+			xdrF = (o.r && o.r.statusText === 'xdr:failure')?true:false,
+			xdrA = isAbort;
 
 		try
 		{
-			if(o.conn.status !== undefined && o.conn.status !== 0){
+			if((o.conn.status !== undefined && o.conn.status !== 0) || xdrS){
+				// XDR requests will not have HTTP status defined. The
+				// statusText property will define the response status
+				// set by the Flash transport.
 				httpStatus = o.conn.status;
+			}
+			else if(xdrF && !xdrA){
+				// Set XDR transaction failure to a status of 0, which
+				// resolves as an HTTP failure, instead of an exception.
+				httpStatus = 0;
 			}
 			else{
 				httpStatus = 13030;
@@ -677,8 +612,8 @@ YAHOO.util.Connect =
 			httpStatus = 13030;
 		}
 
-		if(httpStatus >= 200 && httpStatus < 300 || httpStatus === 1223){
-			responseObject = this.createResponseObject(o, args);
+		if((httpStatus >= 200 && httpStatus < 300) || httpStatus === 1223 || xdrS){
+			responseObject = (o.xdr) ? o.response : this.createResponseObject(o, args);
 			if(callback && callback.success){
 				if(!callback.scope){
 					callback.success(responseObject);
@@ -709,6 +644,8 @@ YAHOO.util.Connect =
 				case 12031:
 				case 12152: // Connection closed by server.
 				case 13030: // See above comments for variable status.
+					// XDR transactions will not resolve to this case, since the
+					// response object is already built in the xdr response.
 					responseObject = this.createExceptionObject(o.tId, args, (isAbort?isAbort:false));
 					if(callback && callback.failure){
 						if(!callback.scope){
@@ -723,7 +660,7 @@ YAHOO.util.Connect =
 
 					break;
 				default:
-					responseObject = this.createResponseObject(o, args);
+					responseObject = (o.xdr) ? o.response : this.createResponseObject(o, args);
 					if(callback && callback.failure){
 						if(!callback.scope){
 							callback.failure(responseObject);
@@ -773,7 +710,7 @@ YAHOO.util.Connect =
 			for(var i=0; i<header.length; i++){
 				var delimitPos = header[i].indexOf(':');
 				if(delimitPos != -1){
-					headerObj[header[i].substring(0,delimitPos)] = header[i].substring(delimitPos+2);
+					headerObj[header[i].substring(0,delimitPos)] = YAHOO.lang.trim(header[i].substring(delimitPos+2));
 				}
 			}
 		}
@@ -814,12 +751,11 @@ YAHOO.util.Connect =
    */
     createExceptionObject:function(tId, callbackArg, isAbort)
     {
-		var COMM_CODE = 0;
-		var COMM_ERROR = 'communication failure';
-		var ABORT_CODE = -1;
-		var ABORT_ERROR = 'transaction aborted';
-
-		var obj = {};
+		var COMM_CODE = 0,
+			COMM_ERROR = 'communication failure',
+			ABORT_CODE = -1,
+			ABORT_ERROR = 'transaction aborted',
+			obj = {};
 
 		obj.tId = tId;
 		if(isAbort){
@@ -890,7 +826,6 @@ YAHOO.util.Connect =
 					YAHOO.log('HTTP header ' + prop + ' set with value of ' + this._http_headers[prop], 'info', 'Connection');
 				}
 			}
-			delete this._http_headers;
 
 			this._http_headers = {};
 			this._has_http_headers = false;
@@ -905,380 +840,8 @@ YAHOO.util.Connect =
    * @return {void}
    */
 	resetDefaultHeaders:function(){
-		delete this._default_headers;
 		this._default_headers = {};
 		this._has_default_headers = false;
-	},
-
-  /**
-   * @description This method assembles the form label and value pairs and
-   * constructs an encoded string.
-   * asyncRequest() will automatically initialize the transaction with a
-   * a HTTP header Content-Type of application/x-www-form-urlencoded.
-   * @method setForm
-   * @public
-   * @static
-   * @param {string || object} form id or name attribute, or form object.
-   * @param {boolean} optional enable file upload.
-   * @param {boolean} optional enable file upload over SSL in IE only.
-   * @return {string} string of the HTML form field name and value pairs..
-   */
-	setForm:function(formId, isUpload, secureUri)
-	{
-        var oForm, oElement, oName, oValue, oDisabled,
-            hasSubmit = false,
-            data = [], item = 0,
-            i,len,j,jlen,opt;
-
-		this.resetFormState();
-
-		if(typeof formId == 'string'){
-			// Determine if the argument is a form id or a form name.
-			// Note form name usage is deprecated by supported
-			// here for legacy reasons.
-			oForm = (document.getElementById(formId) || document.forms[formId]);
-		}
-		else if(typeof formId == 'object'){
-			// Treat argument as an HTML form object.
-			oForm = formId;
-		}
-		else{
-			YAHOO.log('Unable to create form object ' + formId, 'warn', 'Connection');
-			return;
-		}
-
-		// If the isUpload argument is true, setForm will call createFrame to initialize
-		// an iframe as the form target.
-		//
-		// The argument secureURI is also required by IE in SSL environments
-		// where the secureURI string is a fully qualified HTTP path, used to set the source
-		// of the iframe, to a stub resource in the same domain.
-		if(isUpload){
-
-			// Create iframe in preparation for file upload.
-			this.createFrame(secureUri?secureUri:null);
-
-			// Set form reference and file upload properties to true.
-			this._isFormSubmit = true;
-			this._isFileUpload = true;
-			this._formNode = oForm;
-
-			return;
-
-		}
-
-		// Iterate over the form elements collection to construct the
-		// label-value pairs.
-		for (i=0,len=oForm.elements.length; i<len; ++i){
-			oElement  = oForm.elements[i];
-			oDisabled = oElement.disabled;
-            oName     = oElement.name;
-
-			// Do not submit fields that are disabled or
-			// do not have a name attribute value.
-			if(!oDisabled && oName)
-			{
-                oName  = encodeURIComponent(oName)+'=';
-                oValue = encodeURIComponent(oElement.value);
-
-				switch(oElement.type)
-				{
-                    // Safari, Opera, FF all default opt.value from .text if
-                    // value attribute not specified in markup
-					case 'select-one':
-                        if (oElement.selectedIndex > -1) {
-                            opt = oElement.options[oElement.selectedIndex];
-                            data[item++] = oName + encodeURIComponent(
-                                (opt.attributes.value && opt.attributes.value.specified) ? opt.value : opt.text);
-                        }
-                        break;
-					case 'select-multiple':
-                        if (oElement.selectedIndex > -1) {
-                            for(j=oElement.selectedIndex, jlen=oElement.options.length; j<jlen; ++j){
-                                opt = oElement.options[j];
-                                if (opt.selected) {
-                                    data[item++] = oName + encodeURIComponent(
-                                        (opt.attributes.value && opt.attributes.value.specified) ? opt.value : opt.text);
-                                }
-                            }
-                        }
-						break;
-					case 'radio':
-					case 'checkbox':
-						if(oElement.checked){
-                            data[item++] = oName + oValue;
-						}
-						break;
-					case 'file':
-						// stub case as XMLHttpRequest will only send the file path as a string.
-					case undefined:
-						// stub case for fieldset element which returns undefined.
-					case 'reset':
-						// stub case for input type reset button.
-					case 'button':
-						// stub case for input type button elements.
-						break;
-					case 'submit':
-						if(hasSubmit === false){
-							if(this._hasSubmitListener && this._submitElementValue){
-                                data[item++] = this._submitElementValue;
-							}
-							hasSubmit = true;
-						}
-						break;
-					default:
-                        data[item++] = oName + oValue;
-				}
-			}
-		}
-
-		this._isFormSubmit = true;
-		this._sFormData = data.join('&');
-
-		YAHOO.log('Form initialized for transaction. HTML form POST message is: ' + this._sFormData, 'info', 'Connection');
-
-		this.initHeader('Content-Type', this._default_form_header);
-		YAHOO.log('Initialize header Content-Type to application/x-www-form-urlencoded for setForm() transaction.', 'info', 'Connection');
-
-		return this._sFormData;
-	},
-
-  /**
-   * @description Resets HTML form properties when an HTML form or HTML form
-   * with file upload transaction is sent.
-   * @method resetFormState
-   * @private
-   * @static
-   * @return {void}
-   */
-	resetFormState:function(){
-		this._isFormSubmit = false;
-		this._isFileUpload = false;
-		this._formNode = null;
-		this._sFormData = "";
-	},
-
-  /**
-   * @description Creates an iframe to be used for form file uploads.  It is remove from the
-   * document upon completion of the upload transaction.
-   * @method createFrame
-   * @private
-   * @static
-   * @param {string} optional qualified path of iframe resource for SSL in IE.
-   * @return {void}
-   */
-	createFrame:function(secureUri){
-
-		// IE does not allow the setting of id and name attributes as object
-		// properties via createElement().  A different iframe creation
-		// pattern is required for IE.
-		var frameId = 'yuiIO' + this._transaction_id;
-		var io;
-		if(YAHOO.env.ua.ie){
-			io = document.createElement('<iframe id="' + frameId + '" name="' + frameId + '" />');
-
-			// IE will throw a security exception in an SSL environment if the
-			// iframe source is undefined.
-			if(typeof secureUri == 'boolean'){
-				io.src = 'javascript:false';
-			}
-		}
-		else{
-			io = document.createElement('iframe');
-			io.id = frameId;
-			io.name = frameId;
-		}
-
-		io.style.position = 'absolute';
-		io.style.top = '-1000px';
-		io.style.left = '-1000px';
-
-		document.body.appendChild(io);
-		YAHOO.log('File upload iframe created. Id is:' + frameId, 'info', 'Connection');
-	},
-
-  /**
-   * @description Parses the POST data and creates hidden form elements
-   * for each key-value, and appends them to the HTML form object.
-   * @method appendPostData
-   * @private
-   * @static
-   * @param {string} postData The HTTP POST data
-   * @return {array} formElements Collection of hidden fields.
-   */
-	appendPostData:function(postData)
-	{
-		var formElements = [],
-			postMessage = postData.split('&'),
-			i, delimitPos;
-		for(i=0; i < postMessage.length; i++){
-			delimitPos = postMessage[i].indexOf('=');
-			if(delimitPos != -1){
-				formElements[i] = document.createElement('input');
-				formElements[i].type = 'hidden';
-				formElements[i].name = decodeURIComponent(postMessage[i].substring(0,delimitPos));
-				formElements[i].value = decodeURIComponent(postMessage[i].substring(delimitPos+1));
-				this._formNode.appendChild(formElements[i]);
-			}
-		}
-
-		return formElements;
-	},
-
-  /**
-   * @description Uploads HTML form, inclusive of files/attachments, using the
-   * iframe created in createFrame to facilitate the transaction.
-   * @method uploadFile
-   * @private
-   * @static
-   * @param {int} id The transaction id.
-   * @param {object} callback User-defined callback object.
-   * @param {string} uri Fully qualified path of resource.
-   * @param {string} postData POST data to be submitted in addition to HTML form.
-   * @return {void}
-   */
-	uploadFile:function(o, callback, uri, postData){
-
-		// Each iframe has an id prefix of "yuiIO" followed
-		// by the unique transaction id.
-		var frameId = 'yuiIO' + o.tId,
-		    uploadEncoding = 'multipart/form-data',
-		    io = document.getElementById(frameId),
-		    oConn = this,
-			args = (callback && callback.argument)?callback.argument:null,
-			ie8 = (document.documentMode && (document.documentMode === 8))?true:false,
-            oElements,i,prop,obj;
-
-		// Track original HTML form attribute values.
-		var rawFormAttributes =
-		{
-			action:this._formNode.getAttribute('action'),
-			method:this._formNode.getAttribute('method'),
-			target:this._formNode.getAttribute('target')
-		};
-
-		// Initialize the HTML form properties in case they are
-		// not defined in the HTML form.
-		this._formNode.setAttribute('action', uri);
-		this._formNode.setAttribute('method', 'POST');
-		this._formNode.setAttribute('target', frameId);
-
-		if(YAHOO.env.ua.ie && !ie8){
-			// IE does not respect property enctype for HTML forms.
-			// Instead it uses the property - "encoding".
-			this._formNode.setAttribute('encoding', uploadEncoding);
-		}
-		else{
-			this._formNode.setAttribute('enctype', uploadEncoding);
-		}
-
-		if(postData){
-			oElements = this.appendPostData(postData);
-		}
-
-		// Start file upload.
-		this._formNode.submit();
-
-		// Fire global custom event -- startEvent
-		this.startEvent.fire(o, args);
-
-		if(o.startEvent){
-			// Fire transaction custom event -- startEvent
-			o.startEvent.fire(o, args);
-		}
-
-		// Start polling if a callback is present and the timeout
-		// property has been defined.
-		if(callback && callback.timeout){
-			this._timeOut[o.tId] = window.setTimeout(function(){ oConn.abort(o, callback, true); }, callback.timeout);
-		}
-
-		// Remove HTML elements created by appendPostData
-		if(oElements && oElements.length > 0){
-			for(i=0; i < oElements.length; i++){
-				this._formNode.removeChild(oElements[i]);
-			}
-		}
-
-		// Restore HTML form attributes to their original
-		// values prior to file upload.
-		for(prop in rawFormAttributes){
-			if(YAHOO.lang.hasOwnProperty(rawFormAttributes, prop)){
-				if(rawFormAttributes[prop]){
-					this._formNode.setAttribute(prop, rawFormAttributes[prop]);
-				}
-				else{
-					this._formNode.removeAttribute(prop);
-				}
-			}
-		}
-
-		// Reset HTML form state properties.
-		this.resetFormState();
-
-		// Create the upload callback handler that fires when the iframe
-		// receives the load event.  Subsequently, the event handler is detached
-		// and the iframe removed from the document.
-		var uploadCallback = function()
-		{
-			if(callback && callback.timeout){
-				window.clearTimeout(oConn._timeOut[o.tId]);
-				delete oConn._timeOut[o.tId];
-			}
-
-			// Fire global custom event -- completeEvent
-			oConn.completeEvent.fire(o, args);
-
-			if(o.completeEvent){
-				// Fire transaction custom event -- completeEvent
-				o.completeEvent.fire(o, args);
-			}
-
-			obj = {
-			    tId : o.tId,
-			    argument : callback.argument
-            };
-
-			try
-			{
-				// responseText and responseXML will be populated with the same data from the iframe.
-				// Since the HTTP headers cannot be read from the iframe
-				obj.responseText = io.contentWindow.document.body?io.contentWindow.document.body.innerHTML:io.contentWindow.document.documentElement.textContent;
-				obj.responseXML = io.contentWindow.document.XMLDocument?io.contentWindow.document.XMLDocument:io.contentWindow.document;
-			}
-			catch(e){}
-
-			if(callback && callback.upload){
-				if(!callback.scope){
-					callback.upload(obj);
-					YAHOO.log('Upload callback.', 'info', 'Connection');
-				}
-				else{
-					callback.upload.apply(callback.scope, [obj]);
-					YAHOO.log('Upload callback with scope.', 'info', 'Connection');
-				}
-			}
-
-			// Fire global custom event -- uploadEvent
-			oConn.uploadEvent.fire(obj);
-
-			if(o.uploadEvent){
-				// Fire transaction custom event -- uploadEvent
-				o.uploadEvent.fire(obj);
-			}
-
-			YAHOO.util.Event.removeListener(io, "load", uploadCallback);
-
-			setTimeout(
-				function(){
-					document.body.removeChild(io);
-					oConn.releaseObject(o);
-					YAHOO.log('File upload iframe destroyed. Id is:' + frameId, 'info', 'Connection');
-				}, 100);
-		};
-
-		// Bind the onload handler to the iframe to detect the file upload response.
-		YAHOO.util.Event.addListener(io, "load", uploadCallback);
 	},
 
   /**
@@ -1293,27 +856,35 @@ YAHOO.util.Connect =
    */
 	abort:function(o, callback, isTimeout)
 	{
-		var abortStatus;
-		var args = (callback && callback.argument)?callback.argument:null;
+		var abortStatus,
+			args = (callback && callback.argument)?callback.argument:null;
+			o = o || {};
 
+		if(o.conn){
+			if(o.xhr){
+				if(this.isCallInProgress(o)){
+					// Issue abort request
+					o.conn.abort();
 
-		if(o && o.conn){
-			if(this.isCallInProgress(o)){
-				// Issue abort request
-				o.conn.abort();
+					window.clearInterval(this._poll[o.tId]);
+					delete this._poll[o.tId];
 
-				window.clearInterval(this._poll[o.tId]);
-				delete this._poll[o.tId];
+					if(isTimeout){
+						window.clearTimeout(this._timeOut[o.tId]);
+						delete this._timeOut[o.tId];
+					}
 
-				if(isTimeout){
-					window.clearTimeout(this._timeOut[o.tId]);
-					delete this._timeOut[o.tId];
+					abortStatus = true;
 				}
-
-				abortStatus = true;
+			}
+			else if(o.xdr){
+				if(this.isCallInProgress(o)){
+					o.conn.abort(o.tId);
+					abortStatus = true;
+				}
 			}
 		}
-		else if(o && o.isUpload === true){
+		else if(o.upload){
 			var frameId = 'yuiIO' + o.tId;
 			var io = document.getElementById(frameId);
 
@@ -1363,14 +934,17 @@ YAHOO.util.Connect =
    */
 	isCallInProgress:function(o)
 	{
+		o = o || {};
 		// if the XHR object assigned to the transaction has not been dereferenced,
 		// then check its readyState status.  Otherwise, return false.
-		if(o && o.conn){
+		if(o.xhr){
 			return o.conn.readyState !== 4 && o.conn.readyState !== 0;
 		}
-		else if(o && o.isUpload === true){
-			var frameId = 'yuiIO' + o.tId;
-			return document.getElementById(frameId)?true:false;
+		else if(o.xdr){
+			return o.conn.isCallInProgress(o.tId);
+		}
+		else if(o.upload === true){
+			return document.getElementById('yuiIO' + o.tId)?true:false;
 		}
 		else{
 			return false;
@@ -1398,3 +972,5 @@ YAHOO.util.Connect =
 		}
 	}
 };
+
+YAHOO.register("connection_core", YAHOO.util.Connect, {version: "@VERSION@", build: "@BUILD@"});

@@ -38,9 +38,6 @@
         Event       = YAHOO.util.Event,
         JS          = YAHOO.lang;
 
-    /* Cache the Carousel item attributes. */
-    var itemAttrCache = {};
-
     /**
      * The widget name.
      * @private
@@ -476,8 +473,8 @@
             vertical = which == "height";
         }
 
-        if (itemAttrCache[which]) {
-            return itemAttrCache[which];
+        if (this._itemAttrCache[which]) {
+            return this._itemAttrCache[which];
         }
 
         if (vertical) {
@@ -486,7 +483,7 @@
             size = getStyle(child, "width");
         }
 
-        itemAttrCache[which] = size;
+        this._itemAttrCache[which] = size;
 
         return size;
     }
@@ -1043,6 +1040,14 @@
          * @private
          */
         _recomputeSize: true,
+
+        /**
+         * Cache the Carousel item attributes.
+         *
+         * @property _itemAttrCache
+         * @private
+         */
+         _itemAttrCache: {},
 
         /*
          * CSS classes used by the Carousel component
@@ -1609,7 +1614,8 @@
             carousel._hasRendered = false;
             carousel._navBtns     = { prev: [], next: [] };
             carousel._pages       = { el: null, num: 0, cur: 0 };
-            carousel._pagination  = {  };
+            carousel._pagination  = {};
+            carousel._itemAttrCache = {};
             carousel._itemsTable  = { loading: {}, numItems: 0,
                                       items: [], size: 0 };
 
@@ -2419,10 +2425,10 @@
          * @param dontSelect Boolean True if select should be avoided
          */
         scrollTo: function (item, dontSelect) {
-            var carousel   = this,
-                animate, animCfg, isCircular, isVertical, rows, delta, direction, firstItem, lastItem, itemsPerCol,
-                itemsPerRow, numItems, numPerPage, offset, page, rv, sentinel, index,
-                stopAutoScroll;
+            var carousel   = this, animate, animCfg, isCircular, isVertical,
+                rows, delta, direction, firstItem, lastItem, itemsPerCol,
+                itemsPerRow, numItems, numPerPage, offset, page, rv, sentinel,
+                index, stopAutoScroll;
 
             if (JS.isUndefined(item) || item == carousel._firstItem ||
                 carousel.isAnimating()) {
@@ -2461,6 +2467,10 @@
                 }
             }
 
+            if (isNaN(item)) {
+                return;
+            }
+
             direction = (carousel._firstItem > item) ? "backward" : "forward";
 
             sentinel  = firstItem + numPerPage;
@@ -2475,23 +2485,25 @@
 
             // call loaditems to check if we have all the items to display
             lastItem = item + numPerPage - 1;
-            carousel._loadItems(lastItem > numItems - 1 ? numItems - 1 : lastItem);
+            carousel._loadItems(lastItem > numItems-1 ? numItems-1 : lastItem);
 
-            // calculate the delta relative to the first item, the delta is always negative
+            // Calculate the delta relative to the first item, the delta is
+            // always negative.
             delta = 0 - item;
-            if(itemsPerRow) {
+            if (itemsPerRow) {
             	// offset calculations for multirow Carousel
-                if(isVertical) {
-                    delta = parseInt(delta/itemsPerCol,10);
+                if (isVertical) {
+                    delta = parseInt(delta / itemsPerCol, 10);
                 } else {
-                    delta = parseInt(delta/itemsPerRow,10);
+                    delta = parseInt(delta / itemsPerRow, 10);
                 }
             }
 
             // adjust for items not yet loaded
             index = 0;
-            while(delta < 0 && index < item+numPerPage-1 && index < numItems){
-                if(JS.isUndefined(carousel._itemsTable.items[index]) && JS.isUndefined(carousel._itemsTable.loading[index])){
+            while (delta < 0 && index < item+numPerPage-1 && index < numItems) {
+                if (JS.isUndefined(carousel._itemsTable.items[index]) &&
+                    JS.isUndefined(carousel._itemsTable.loading[index])) {
                     delta++;
                 }
                 index += itemsPerRow ? itemsPerRow : 1;
@@ -2714,11 +2726,11 @@
 
             if (carousel.get("isVertical")) {
                 animObj = new YAHOO.util.Motion(carousel._carouselEl,
-                        { points: { to: [0, offset] } },
+                        { top: { to: offset } },
                         animCfg.speed, animCfg.effect);
             } else {
                 animObj = new YAHOO.util.Motion(carousel._carouselEl,
-                        { points: { to: [offset, 0] } },
+                        { left: { to: offset } },
                         animCfg.speed, animCfg.effect);
             }
 
@@ -3145,52 +3157,42 @@
                 itemHeight,
                 itemWidth;
 
-            if(rows && cols) {
-
+            if (rows && cols) {
                 row = 0;
                 col = 0;
                 itemHeight = getCarouselItemSize.call(carousel, "height");
                 itemWidth  = getCarouselItemSize.call(carousel, "width");
-
                 for (var i = 0; i < num; i++) {
                     item = items[i] ? Dom.get(items[i].id) : loading[i];
-
-                    if(item) {
-
-                        if(isVertical) {
-
-                            col++;// shifts item by one col.
-
+                    if (item) {
+                        if (isVertical) {
+                            col++; // shifts item by one col
                             if (i % cols === 0) {
-                                delta = Math.floor(i/numVisible);// find page item belongs on.
-                                //col = delta * cols;// shifts cols to appropriate page.
+                                // find page item is on
+                                delta = Math.floor(i / numVisible);
                                 // break row
                                 col = 0;
-                                if(i !== 0) {
+                                if (i !== 0) {
                                     row++;
                                 }
                             }
-
                         } else {
-
-                            col++;// shifts item by one col.
-
+                            col++; // shifts item by one col.
                             if (i % cols === 0) {
-                                delta = Math.floor(i/numVisible);// find page item belongs on.
-                                col = delta * cols;// shifts cols to appropriate page.
-                                row++;// breaks a row.
+                                // find page item belongs on
+                                delta = Math.floor(i / numVisible);
+                                // shifts cols to appropriate page
+                                col = delta * cols;
+                                row++; // breaks row
                             }
-
                             if (i % numVisible === 0) {
-                                row = 0;// shifts row back to top of page.
+                                row = 0; // shifts row back to top of page
                             }
-
                         }
-
                         items[i].styles = {
-                            /*position absolute applied via stylesheet */
-                            left     : (col * itemWidth) + "px",
-                            top      : (row * itemHeight) + "px"
+                            /* position absolute applied via stylesheet */
+                            left : (col * itemWidth) + "px",
+                            top  : (row * itemHeight) + "px"
                         };
                     }
                 }
@@ -3316,7 +3318,7 @@
         _setCarouselOffset: function (offset) {
             var carousel = this, which;
 
-            which   = carousel.get("isVertical") ? "top" : "left";
+            which = carousel.get("isVertical") ? "top" : "left";
             Dom.setStyle(carousel._carouselEl, which, offset + "px");
         },
 
@@ -3680,7 +3682,7 @@
                 carousel.replaceClass(cssClass.VERTICAL, cssClass.HORIZONTAL);
             }
 
-            itemAttrCache = {};            // force recomputed next time
+            this._itemAttrCache = {}; // force recomputed next time
 
             return val;
         },

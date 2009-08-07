@@ -115,7 +115,15 @@
         'connection': {
             'type': 'js',
             'path': 'connection/connection-min.js',
-            'requires': ['event']
+            'requires': ['event'],
+            'supersedes': ['connectioncore'],
+        },
+
+        'connectioncore': {
+            'type': 'js',
+            'path': 'connection/connection_core-min.js',
+            'requires': ['event'],
+            'pkg': 'connection'
         },
 
         'container': {
@@ -188,7 +196,14 @@
         'element': {
             'type': 'js',
             'path': 'element/element-min.js',
-            'requires': ['dom', 'event']
+            'requires': ['dom', 'event'],
+            'optional': ['event-mouseenter', 'event-delegate']
+        },
+
+        'element-delegate': {
+            'type': 'js',
+            'path': 'element-delegate/element-delegate-min.js',
+            'requires': ['element']
         },
 
         'event': {
@@ -206,13 +221,14 @@
         'event-delegate': {
             'type': 'js',
             'path': 'event-delegate/event-delegate-min.js',
-            'requires': ['event']
+            'requires': ['dom', 'event'],
+            'optional': ['selector']
         },
 
         'event-mouseenter': {
             'type': 'js',
             'path': 'event-mouseenter/event-mouseenter-min.js',
-            'requires': ['event']
+            'requires': ['dom', 'event']
         },
 
         'fonts': {

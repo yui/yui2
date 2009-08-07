@@ -76,10 +76,6 @@
 		'<div class="',
 		CLASS_BAR,
 		'"></div><div class="',
-		CLASS_CAPTION_CONTAINER,
-		'"><div class="',
-		CLASS_CAPTION,
-		'"></div></div><div class="',
 		CLASS_MASK,
 		'"><div class="',
 		CLASS_TL,
@@ -89,6 +85,10 @@
 		CLASS_BL,
 		'"></div><div class="',
 		CLASS_BR,
+		'"></div></div><div class="',
+		CLASS_CAPTION_CONTAINER,
+		'"><div class="',
+		CLASS_CAPTION,
 		'"></div></div>'
 	].join('');
 
@@ -560,6 +560,28 @@
 				}
 				anim.onTween.subscribe(this._animOnTween,this,true);
 				anim.onComplete.subscribe(this._animComplete,this,true);
+				
+				// Temporary solution until http://yuilibrary.com/projects/yui2/ticket/2528222 gets solved:
+				var oldSetAttribute = anim.setAttribute,
+					pb = this;
+				switch(this.get(DIRECTION)) {
+					case DIRECTION_BTT:
+						anim.setAttribute = function(attr , val , unit) {
+							val = Math.round(val);
+							oldSetAttribute.call(this,attr,val,unit);
+							Dom.setStyle(barEl,'top',(pb._barSpace - val) + 'px');
+						};
+						break;
+					case DIRECTION_RTL:
+						anim.setAttribute = function(attr , val , unit) {
+							val = Math.round(val);
+							oldSetAttribute.call(this,attr,val,unit);
+							Dom.setStyle(barEl,'left',(pb._barSpace - val) + 'px');
+						};
+						break;
+				}
+				// up to here
+
 			} else {
 				YAHOO.log('Turning animation off','info','ProgressBar');
 				anim = this.get(ANIM);
@@ -604,6 +626,11 @@
 			
 			this._showTemplates(value,true);
 			if (this._rendered) {
+				if (anim) {
+					anim.stop();
+					if (anim.isAnimated()) { anim._onComplete.fire(); } // see: http://yuilibrary.com/projects/yui2/ticket/2528217
+				}
+				this.fireEvent(START,this._previousValue);
 				this._barSizeFunction(value, pixelValue, barEl, anim);
 			}
 		},
@@ -630,7 +657,7 @@
 			}
 			if (aria) {
 				container.setAttribute('aria-valuenow',value);
-				container.setAttribute('aria-valuetext',captionEl.textContent || captionEl.innerText);
+				container.setAttribute('aria-valuetext',captionEl.innerText || captionEl.textContent);
 			}
 		}
 	});
@@ -645,68 +672,40 @@
 	Prog.prototype._barSizeFunctions = b;
 	
 	b[0][DIRECTION_LTR] = function(value, pixelValue, barEl, anim) {
-		this.fireEvent(START,this._previousValue);
 		Dom.setStyle(barEl,WIDTH,  pixelValue + 'px');
 		this.fireEvent(PROGRESS,value);
 		this.fireEvent(COMPLETE,value);
 	};
 	b[0][DIRECTION_RTL] = function(value, pixelValue, barEl, anim) {
-		this.fireEvent(START,this._previousValue);
 		Dom.setStyle(barEl,WIDTH,  pixelValue + 'px');
 		Dom.setStyle(barEl,'left',(this._barSpace - pixelValue) + 'px');
 		this.fireEvent(PROGRESS,value);
 		this.fireEvent(COMPLETE,value);
 	};
 	b[0][DIRECTION_TTB] = function(value, pixelValue, barEl, anim) {
-		this.fireEvent(START,this._previousValue);
 		Dom.setStyle(barEl,HEIGHT,  pixelValue + 'px');
 		this.fireEvent(PROGRESS,value);
 		this.fireEvent(COMPLETE,value);
 	};
 	b[0][DIRECTION_BTT] = function(value, pixelValue, barEl, anim) {
-		this.fireEvent(START,this._previousValue);
 		Dom.setStyle(barEl,HEIGHT,  pixelValue + 'px');
 		Dom.setStyle(barEl,'top',  (this._barSpace - pixelValue) + 'px');
 		this.fireEvent(PROGRESS,value);
 		this.fireEvent(COMPLETE,value);
 	};
 	b[1][DIRECTION_LTR] = function(value, pixelValue, barEl, anim) {
-		if (anim.isAnimated()) { anim.stop(); }
-		this.fireEvent(START,this._previousValue);
 		Dom.addClass(barEl,CLASS_ANIM);
 		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 		anim.attributes = {width:{ to: pixelValue }}; 
 		anim.animate();
 	};
-	b[1][DIRECTION_RTL] =  function(value, pixelValue, barEl, anim) {
-		if (anim.isAnimated()) { anim.stop(); }
-		this.fireEvent(START,this._previousValue);
-		Dom.addClass(barEl,CLASS_ANIM);
-		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
-		anim.attributes = {
-			width:{ to: pixelValue },
-			left:{to: this._barSpace - pixelValue}
-		}; 
-		anim.animate();
-	};
+	b[1][DIRECTION_RTL] =  b[1][DIRECTION_LTR];
 	b[1][DIRECTION_TTB] =  function(value, pixelValue, barEl, anim) {
-		if (anim.isAnimated()) { anim.stop(); }
-		this.fireEvent(START,this._previousValue);
 		Dom.addClass(barEl,CLASS_ANIM);
 		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
 		anim.attributes = {height:{to: pixelValue}};
 		anim.animate();
 	};
-	b[1][DIRECTION_BTT] =  function(value, pixelValue, barEl, anim) {
-		if (anim.isAnimated()) { anim.stop(); }
-		this.fireEvent(START,this._previousValue);
-		Dom.addClass(barEl,CLASS_ANIM);
-		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
-		anim.attributes = {
-			height:{to: pixelValue},
-			top:{to: this._barSpace - pixelValue}
-		};
-		anim.animate();
-	};
+	b[1][DIRECTION_BTT] =  b[1][DIRECTION_TTB];
 				
 })();

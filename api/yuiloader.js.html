@@ -164,7 +164,15 @@
         <span class="s1">&#39;connection&#39;</span><span class="o">:</span> <span class="o">{</span>
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
             <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;connection/connection-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">]</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;supersedes&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;connectioncore&#39;</span><span class="o">],</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;connectioncore&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;connection/connection_core-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;pkg&#39;</span><span class="o">:</span> <span class="s1">&#39;connection&#39;</span>
         <span class="o">},</span>
 
         <span class="s1">&#39;container&#39;</span><span class="o">:</span> <span class="o">{</span>
@@ -237,7 +245,14 @@
         <span class="s1">&#39;element&#39;</span><span class="o">:</span> <span class="o">{</span>
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
             <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;element/element-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">]</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event-mouseenter&#39;</span><span class="o">,</span> <span class="s1">&#39;event-delegate&#39;</span><span class="o">]</span>
+        <span class="o">},</span>
+
+        <span class="s1">&#39;element-delegate&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;element-delegate/element-delegate-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;element&#39;</span><span class="o">]</span>
         <span class="o">},</span>
 
         <span class="s1">&#39;event&#39;</span><span class="o">:</span> <span class="o">{</span>
@@ -255,13 +270,14 @@
         <span class="s1">&#39;event-delegate&#39;</span><span class="o">:</span> <span class="o">{</span>
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
             <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;event-delegate/event-delegate-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">]</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;selector&#39;</span><span class="o">]</span>
         <span class="o">},</span>
 
         <span class="s1">&#39;event-mouseenter&#39;</span><span class="o">:</span> <span class="o">{</span>
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
             <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;event-mouseenter/event-mouseenter-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">]</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">]</span>
         <span class="o">},</span>
 
         <span class="s1">&#39;fonts&#39;</span><span class="o">:</span> <span class="o">{</span>
@@ -2103,6 +2119,8 @@
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
                                 <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
@@ -2122,6 +2140,7 @@
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
                                 <li class=""><a href="module_swf.html" title="swf">swf</a></li>
                                 <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>

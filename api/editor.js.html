@@ -141,7 +141,19 @@
 <span class="c">        * @param {String} str The content of the Editor</span>
 <span class="c">        */</span>
         <span class="nx">_putUndo</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">str</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">str</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">===</span> <span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">str</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEditorHTML</span><span class="o">();</span>
+                <span class="k">var</span> <span class="nx">last</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">last</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">str</span> <span class="o">!==</span> <span class="nx">last</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span> <span class="o">=</span> <span class="o">[];</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
         <span class="o">},</span>
         <span class="c">/**</span>
 <span class="c">        * @private</span>
@@ -151,6 +163,7 @@
 <span class="c">        * @return {String}</span>
 <span class="c">        */</span>
         <span class="nx">_getUndo</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">=</span> <span class="nx">index</span><span class="o">;</span>
             <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">[</span><span class="nx">index</span><span class="o">];</span>
         <span class="o">},</span>
         <span class="c">/**</span>
@@ -164,10 +177,12 @@
             <span class="o">}</span>
             <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span> <span class="o">=</span> <span class="o">[];</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
             <span class="o">}</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_checkUndo</span><span class="o">();</span>
             <span class="k">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEditorHTML</span><span class="o">();</span>
-            <span class="k">var</span> <span class="nx">last</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">.</span><span class="nx">length</span> <span class="o">-</span> <span class="m">1</span><span class="o">];</span>
+            <span class="c">//var last = this._undoCache[this._undoCache.length - 1];</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">last</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">-</span> <span class="m">1</span><span class="o">];</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">last</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">str</span> <span class="o">!==</span> <span class="nx">last</span><span class="o">)</span> <span class="o">{</span>
                     <span class="c">//YAHOO.log(&#39;Storing Undo&#39;, &#39;info&#39;, &#39;SimpleEditor&#39;);</span>
@@ -177,7 +192,6 @@
                 <span class="c">//YAHOO.log(&#39;Storing Undo&#39;, &#39;info&#39;, &#39;SimpleEditor&#39;);</span>
 <span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">_putUndo</span><span class="o">(</span><span class="nx">str</span><span class="o">);</span>
             <span class="o">}</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_undoNodeChange</span><span class="o">();</span>
         <span class="o">},</span>    
         <span class="c">/**</span>
@@ -1652,15 +1666,24 @@
 <span class="c">        */</span>
         <span class="nx">cmd_undo</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_hasUndoLevel</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">var</span> <span class="nx">c_html</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEditorHTML</span><span class="o">(),</span> <span class="nx">html</span><span class="o">;</span>
                 <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
                 <span class="o">}</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">-</span> <span class="m">1</span><span class="o">);</span>
                 <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoCache</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span><span class="o">])</span> <span class="o">{</span>
-                    <span class="k">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getUndo</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span><span class="o">);</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">setEditorHTML</span><span class="o">(</span><span class="nx">html</span><span class="o">);</span>
+                    <span class="nx">html</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getUndo</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">html</span> <span class="o">!=</span> <span class="nx">c_html</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">setEditorHTML</span><span class="o">(</span><span class="nx">html</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">-</span> <span class="m">1</span><span class="o">);</span>
+                        <span class="nx">html</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getUndo</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span><span class="o">);</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">html</span> <span class="o">!=</span> <span class="nx">c_html</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">this</span><span class="o">.</span><span class="nx">setEditorHTML</span><span class="o">(</span><span class="nx">html</span><span class="o">);</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_undoLevel</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">toolbar</span><span class="o">.</span><span class="nx">disableButton</span><span class="o">(</span><span class="s1">&#39;undo&#39;</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>
@@ -2116,6 +2139,8 @@
                                 <li class="selected"><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
                                 <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
@@ -2135,6 +2160,7 @@
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
                                 <li class=""><a href="module_swf.html" title="swf">swf</a></li>
                                 <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>

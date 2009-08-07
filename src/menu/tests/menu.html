@@ -1384,6 +1384,10 @@
                         oMenu.getItem(0).blur();
 
 
+                        // Test the "getPreviousSibling" and "getNextSibling"
+  
+                        Assert.areEqual(oMenu.getItem(0), oMenu.getItem(1).getPreviousSibling(), "The \"getPreviousSibling\" method should return a reference to the first item in the menu.");
+                        Assert.areEqual(oMenu.getItem(1), oMenu.getItem(0).getNextSibling(), "The \"getNextSibling\" method should return a reference to the second item in the menu.");
 
 
                         // Test the "getPreviousEnabledSibling" and "getNextEnabledSibling"
@@ -1391,8 +1395,8 @@
                         oMenu.getItem(1).cfg.setProperty("disabled", true);
                         oMenu.getItem(3).cfg.setProperty("disabled", true);
   
-                        Assert.areEqual(oMenu.getItem(2), oMenu.getItem(0).getPreviousEnabledSibling(), "The \"getPreviousEnabledSibling\" method should retun a reference to the third item in the menu.");
-                        Assert.areEqual(oMenu.getItem(2), oMenu.getItem(0).getNextEnabledSibling(), "The \"getNextEnabledSibling\" method should retun a reference to the third item in the menu.");
+                        Assert.areEqual(oMenu.getItem(2), oMenu.getItem(0).getPreviousEnabledSibling(), "The \"getPreviousEnabledSibling\" method should return a reference to the third item in the menu.");
+                        Assert.areEqual(oMenu.getItem(2), oMenu.getItem(0).getNextEnabledSibling(), "The \"getNextEnabledSibling\" method should return a reference to the third item in the menu.");
 
 
                         // Test the "destroy" method

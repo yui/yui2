@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>untitled</title>
+	<title>Button Label Replace Test</title>
 
 	<link rel="stylesheet" type="text/css" href="../../../build/fonts/fonts-min.css">
 	<link rel="stylesheet" type="text/css" href="../../../build/button/assets/skins/sam/button.css">
@@ -12,23 +12,19 @@
 
 	<script type="text/javascript" src="../../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
 	<script type="text/javascript" src="../../../build/element/element-min.js"></script>
-	<!-- <script type="text/javascript" src="../../../build/button/button-min.js"></script> -->
-
-	<script type="text/javascript" src="../js/button.js"></script>
-	<script type="text/javascript" src="../js/buttongroup.js"></script>
-
+	<script type="text/javascript" src="../../../build/button/button-min.js"></script>
 
 	<script type="text/javascript">
 	
 		YAHOO.util.Event.onDOMReady(function () {
 		
-			var oButton1 = new YAHOO.widget.Button("checkbox-1");
-			var oButton2 = new YAHOO.widget.Button("checkbox-2");
-			var oButton3 = new YAHOO.widget.Button("checkbox-3");
+			var oButton1 = new YAHOO.widget.Button("checkbox-1", { replaceLabel: true });
+			var oButton2 = new YAHOO.widget.Button("checkbox-2", { replaceLabel: true });
+			var oButton3 = new YAHOO.widget.Button("checkbox-3", { replaceLabel: true });
 			
-			var oButton4 = new YAHOO.widget.Button("radio-1");
-			var oButton5 = new YAHOO.widget.Button("radio-2");
-			var oButton6 = new YAHOO.widget.Button("radio-3");			
+			var oButton4 = new YAHOO.widget.Button("radio-1", { replaceLabel: true });
+			var oButton5 = new YAHOO.widget.Button("radio-2", { replaceLabel: true });
+			var oButton6 = new YAHOO.widget.Button("radio-3", { replaceLabel: true });			
 		
 			YAHOO.util.Event.on("destroy-1", "click", function (event) {
 
@@ -43,36 +39,14 @@
 			
 		});
 	
-		YAHOO.util.Event.on("form-1", "submit", function (event) {
-		
-			var bSubmit = 
-					window.confirm("Are you sure you want to submit the form?");
-
-			if(!bSubmit) {
-				YAHOO.util.Event.preventDefault(event);
-			}			
-			
-		});
-
 	</script>
 
 </head>
 <body class="yui-skin-sam">
 
-	<?php
-
-		if (isset($_POST) && count($_POST) > 1) {
-	?>
-		<h1>Post Data</h1>
-		<pre>
-	<?php
-	print_r($_POST);
-	?>
-		</pre>			
-	<?
-		}
-
-	?>	
+	<h1>Button Label Replace Test</h1>
+	<p>Test case for <a href="http://yuilibrary.com/projects/yui2/ticket/1897085">bug 1897085</a>.</p>
+	<p>The text label for each Button should be the text of its corresponding <code>&#60;label&#60;</code>.</p>
 
 	<form id="form-1" method="post">
 
@@ -100,7 +74,6 @@
 			<input type="radio" name="radio-field" id="radio-3" value="3">				
 		</fieldset>
 				
-		<input type="submit" name="submit-1" id="submit-1" value="Submit Form">
 		<input type="button" name="destroy-1" id="destroy-1" value="Destroy All">
 	
 	</form>
