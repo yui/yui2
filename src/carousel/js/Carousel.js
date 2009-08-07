@@ -4346,4 +4346,3 @@
 ;;  End: **
 */
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
-YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
