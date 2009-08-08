@@ -308,7 +308,8 @@
 
 				for( var i = 0, l = rows.length; l > i; i++ ){
 
-					this.collapseRow( rows[ i ] );
+					//Always pass 0 since collapseRow removes item from the a_rowExpansions array
+					this.collapseRow( rows[ 0 ] );
 
 				}
 
