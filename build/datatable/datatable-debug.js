@@ -2191,7 +2191,7 @@ RS.prototype = {
      * @param fnSort {Function} Reference to a sort function.
      * @param desc {Boolean} True if sort direction is descending, false if sort
      * direction is ascending.
-     * @parm field {String} The field to sort by, from sortOptions.field
+     * @param field {String} The field to sort by, from sortOptions.field
      * @return {YAHOO.widget.Record[]} Sorted array of Records.
      */
     sortRecords : function(fnSort, desc, field) {
@@ -6894,7 +6894,8 @@ getTdEl : function(cell) {
         }
         
         // Make sure the TD is in this TBODY
-        if(elCell && (elCell.parentNode.parentNode == this._elTbody)) {
+        // Bug 2527707 and bug 2263558
+        if(elCell && ((elCell.parentNode.parentNode == this._elTbody) || (elCell.parentNode.parentNode === null))) {
             // Now we can return the TD element
             return elCell;
         }

@@ -161,7 +161,7 @@ var Y = YAHOO.util,
 				this._addKey(_key);
 			}
 
-			if (_engine.callSWF("setItem", [data, _key])) {
+			if (_engine.callSWF("setItem", [_key, data])) {
 				return true;
 			}
 			else {

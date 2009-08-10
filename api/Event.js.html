@@ -175,6 +175,11 @@
 	        <span class="k">if</span> <span class="o">(</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
 				<span class="k">this</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nx">p</span><span class="o">,</span> <span class="nx">type</span><span class="o">,</span> <span class="nx">NOOP</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 	        <span class="o">}</span>
+			<span class="k">else</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">onAvailable</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+					<span class="nx">captureHack</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">type</span><span class="o">,</span> <span class="nx">o</span><span class="o">);</span>
+				<span class="o">},</span> <span class="kc">null</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+			<span class="o">}</span>
 
 	    <span class="o">};</span>
 
@@ -662,7 +667,7 @@
 					<span class="nx">capture</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 				
 					<span class="k">if</span> <span class="o">(</span><span class="nx">isOpera</span><span class="o">)</span> <span class="o">{</span>
-						<span class="nx">captureHack</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">);</span>
+						<span class="nx">captureHack</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">el</span><span class="o">);</span>
 					<span class="o">}</span>
 					
 				<span class="o">}</span>				
@@ -693,7 +698,7 @@
 <span class="c">             *                        could not have the listener attached,</span>
 <span class="c">             *                        or if the operation throws an exception.</span>
 <span class="c">             * @static</span>
-<span class="c">         	 * @deprecated use YAHOO.util.Event.on(&quot;focus&quot;, ...)</span>
+<span class="c">         	 * @deprecated use YAHOO.util.Event.on</span>
 <span class="c">             */</span>
             <span class="nx">addFocusListener</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
 
@@ -745,7 +750,7 @@
 <span class="c">             *                        could not have the listener attached,</span>
 <span class="c">             *                        or if the operation throws an exception.</span>
 <span class="c">             * @static</span>
-<span class="c">         	 * @deprecated use YAHOO.util.Event.on(&quot;blur&quot;, ...)</span>
+<span class="c">         	 * @deprecated use YAHOO.util.Event.on</span>
 <span class="c">             */</span>
             <span class="nx">addBlurListener</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
 
@@ -1602,7 +1607,7 @@
 <span class="c">         * @method on</span>
 <span class="c">         * @see addFocusListener</span>
 <span class="c">         * @static</span>
-<span class="c">         * @deprecated use YAHOO.util.Event.on(&quot;focus&quot;, ...)</span>
+<span class="c">         * @deprecated use YAHOO.util.Event.on</span>
 <span class="c">         */</span>
         <span class="nx">EU</span><span class="o">.</span><span class="nx">onFocus</span> <span class="o">=</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">addFocusListener</span><span class="o">;</span>
 
@@ -1611,7 +1616,7 @@
 <span class="c">         * @method onBlur</span>
 <span class="c">         * @see addBlurListener</span>
 <span class="c">         * @static</span>
-<span class="c">         * @deprecated use YAHOO.util.Event.on(&quot;blur&quot;, ...)</span>
+<span class="c">         * @deprecated use YAHOO.util.Event.on</span>
 <span class="c">         */</span>     
         <span class="nx">EU</span><span class="o">.</span><span class="nx">onBlur</span> <span class="o">=</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">addBlurListener</span><span class="o">;</span>
 
@@ -1708,6 +1713,7 @@
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_element-delegate.html" title="element-delegate">element-delegate</a></li>
                                 <li class="selected"><a href="module_event.html" title="event">event</a></li>
                                 <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
                                 <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
@@ -1727,6 +1733,7 @@
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_storage.html" title="Storage">Storage</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
                                 <li class=""><a href="module_swf.html" title="swf">swf</a></li>
                                 <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>

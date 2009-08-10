@@ -582,6 +582,11 @@ if (!YAHOO.util.Event) {
 	        if (p) {
 				this._simpleAdd(p, type, NOOP, true);
 	        }
+			else {
+				this.onAvailable(o, function () {
+					captureHack.call(this, type, o);
+				}, null, this);
+			}
 
 	    };
 
@@ -1066,7 +1071,7 @@ if (!YAHOO.util.Event) {
 					capture = true;
 				
 					if (isOpera) {
-						captureHack.call(this, el, sType);
+						captureHack.call(this, sType, el);
 					}
 					
 				}				
@@ -1097,7 +1102,7 @@ if (!YAHOO.util.Event) {
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
-         	 * @deprecated use YAHOO.util.Event.on("focus", ...)
+         	 * @deprecated use YAHOO.util.Event.on
              */
             addFocusListener: function (el, fn, obj, overrideContext) {
 
@@ -1149,7 +1154,7 @@ if (!YAHOO.util.Event) {
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
-         	 * @deprecated use YAHOO.util.Event.on("blur", ...)
+         	 * @deprecated use YAHOO.util.Event.on
              */
             addBlurListener: function (el, fn, obj, overrideContext) {
 
@@ -2001,7 +2006,7 @@ if (!YAHOO.util.Event) {
          * @method on
          * @see addFocusListener
          * @static
-         * @deprecated use YAHOO.util.Event.on("focus", ...)
+         * @deprecated use YAHOO.util.Event.on
          */
         EU.onFocus = EU.addFocusListener;
 
@@ -2010,7 +2015,7 @@ if (!YAHOO.util.Event) {
          * @method onBlur
          * @see addBlurListener
          * @static
-         * @deprecated use YAHOO.util.Event.on("blur", ...)
+         * @deprecated use YAHOO.util.Event.on
          */     
         EU.onBlur = EU.addBlurListener;
 

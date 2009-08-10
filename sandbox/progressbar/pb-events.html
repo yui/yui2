@@ -201,6 +201,7 @@ code {
             'sliderValueThumb', 0, 200, 0
 		);
 		valueSlider.setValue(100,true,true,true);
+		valueSlider.animate = false;
 		
 		valueSlider.subscribe("change", function(offsetFromStart) {
 			var value = Math.round(offsetFromStart  * 1.275);
