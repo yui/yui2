@@ -134,9 +134,9 @@ hr {
 				</td></tr>
 				<tr><td>
 					<table id="rangeTable">
-						<tr><td></td><td>0</td><td></td><td align="right">100</td><td></td></tr>
-						<tr><td>0</td><td  align="center" colspan="3" id="pbrange"></td><td align="right">100</td></tr>
-						<tr><td></td><td>0</td><td></td><td align="right">100</td><td></td></tr>
+						<tr><td></td><td class="yui-pb-range">0</td><td></td><td align="right" class="yui-pb-range">100</td><td></td></tr>
+						<tr><td class="yui-pb-range">0</td><td  align="center" colspan="3" id="pbrange"></td><td align="right" class="yui-pb-range">100</td></tr>
+						<tr><td></td><td class="yui-pb-range">0</td><td></td><td align="right" class="yui-pb-range">100</td><td></td></tr>
 					</table>
 				</td></tr>
 			</table>
@@ -269,15 +269,18 @@ hr {
 			<textarea name="code" class="JScript" cols="60" rows="1">
 				var pbrange = new YAHOO.widget.ProgressBar({
 					value:50,
-					textTemplate:'<span style="float:left">{minValue}</span> {value} ' +
-						'<span style="float:right">{maxValue}</span>' 
+					textTemplate:'<span style="float:left" class="yui-pb-range">{minValue}</span>' +
+						'{value} <span style="float:right" class="yui-pb-range">{maxValue}</span>' 
 				}).render('pbrange');
 			</textarea>
 			<p>There is nothing preventing the <code>textTemplate</code> from containing HTML markup.  We have used it to place
 			the two end values at the edges of the bar.  In contrast to the values placed outside, which are hard-coded into the
 			HTML, these would be updated automatically as the template uses the <code>{minValue}</code> and <code>{maxValue}</code>
 			placeholders.  Since this same template is used to produce the value for the <code>aria-valuetext</code> 
-			attribute to be used by screen readers any markup contained in the template is deleted when copied into <code>aria-valuetext</code>.</p>
+			attribute to be used by screen readers any markup contained in the template is deleted when copied into <code>aria-valuetext</code>.
+			The template includes the className <code>yui-pb-range</code> to be used for both end values.  
+			The style for this class, a light gray color, is defined for the SAM skin and available to the implementer,
+			though not used by the bar itself.</p>
 			
 			<p>Should the value of any attribute be presented to the user elsewhere, we can use the events fired by the
 			YUI Element utility from which the ProgressBar inherits from:</p>
@@ -305,7 +308,7 @@ hr {
 
 		var pbrange = new YAHOO.widget.ProgressBar({
 			value:50,
-			textTemplate:'<span style="float:left">{minValue}</span> {value} <span style="float:right">{maxValue}</span>' 
+			textTemplate:'<span style="float:left" class="yui-pb-range">{minValue}</span> {value} <span style="float:right" class="yui-pb-range">{maxValue}</span>' 
 		}).render('pbrange');
 		
 		YAHOO.util.Event.on('go','click',function(ev) {

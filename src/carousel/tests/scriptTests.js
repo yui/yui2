@@ -190,21 +190,21 @@
             },
 
             testScrollPageForward: function () {
-                Dom.setStyle(carouselEl, "left", "");
+                carousel.set("firstVisible", 0);
                 carousel.scrollPageForward();
                 Assert.areEqual("-300px", carouselEl.style.left);
             },
 
             testScrollBackward: function () {
-                Dom.setStyle(carouselEl, "left", "-200px");
+                carousel.set("firstVisible", 3);
                 carousel.scrollBackward();
-                Assert.areEqual("-100px", carouselEl.style.left);
+                Assert.areEqual("-200px", carouselEl.style.left);
             },
 
             testScrollPageBackward: function () {
-                Dom.setStyle(carouselEl, "left", "");
+                carousel.set("firstVisible", 3);
                 carousel.scrollPageBackward();
-                Assert.areEqual("300px", carouselEl.style.left);
+                Assert.areEqual("0px", carouselEl.style.left);
             },
 
             testScrollTo: function () {
