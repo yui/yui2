@@ -512,18 +512,64 @@
      * @private
      */
     function getCarouselItemPosition(pos) {
-        var carousel = this, isVertical, styles = {}, sz, rsz;
+        var carousel    = this, 
+            itemsPerCol = carousel._cols,
+            itemsPerRow = carousel._rows,
+            page,
+            sz,
+            isVertical,
+            itemsCol,
+            itemsRow,
+            sentinel,
+            delta,
+            top,
+            left, 
+            rsz,
+            styles = {};
 
         isVertical = carousel.get("isVertical");
         sz  = getCarouselItemSize.call(carousel,
                 isVertical ? "height" : "width");
         rsz = getRevealSize.call(carousel);
-        if (isVertical) {
-            styles.left = 0;
-            styles.top  = ((pos * sz) + rsz) + "px";
+
+        if (itemsPerRow && itemsPerCol) {
+            page = this.getPageForItem(pos); 
+            if (isVertical) {
+                itemsCol = pos % itemsPerCol,
+                delta = itemsCol,
+                left = delta * sz;
+                styles.left = left + "px";
+
+                sz  = getCarouselItemSize.call(carousel, "width");
+
+                itemsRow = Math.floor(pos/itemsPerCol),
+                delta = itemsRow
+                top = delta * sz;
+                styles.top  = (top + rsz) + "px";
+            } else {
+                itemsCol = pos % itemsPerCol,
+                sentinel = (page - 1) * itemsPerCol,
+                delta = itemsCol + sentinel,
+                left = delta * sz;
+                styles.left = (left + rsz) + "px";
+
+                sz  = getCarouselItemSize.call(carousel, "height");
+
+                itemsRow = Math.floor(pos/itemsPerCol),
+                sentinel = (page - 1) * itemsPerRow,
+                delta = itemsRow - sentinel,
+                top = delta * sz;
+
+                styles.top  = top + "px";
+            }
         } else {
-            styles.top  = 0;
-            styles.left = ((pos * sz) + rsz) + "px";
+            if (isVertical) {
+                styles.left = 0;
+                styles.top  = ((pos * sz) + rsz) + "px";
+            } else {
+                styles.top  = 0;
+                styles.left = ((pos * sz) + rsz) + "px";
+            }
         }
 
         return styles;
@@ -809,10 +855,6 @@
 
         if (!JS.isObject(o)) {
             return;
-        }
-
-        if(rows) {//Re-index rows if multirows is enabled.
-            carousel._indexRows();
         }
 
         switch (o.ev) {
@@ -2356,10 +2398,6 @@
 
             carousel._refreshUi();
 
-            if (rows) {
-                carousel._indexRows();
-            }
-
             return true;
         },
 
@@ -2507,7 +2545,7 @@
                     delta = parseInt(delta / itemsPerRow, 10);
                 }
             }
-
+            
             // adjust for items not yet loaded
             index = 0;
             while (delta < 0 && index < item+numPerPage-1 && index < numItems) {
@@ -3145,70 +3183,7 @@
                 }
             }
         },
-
-        /**
-         * Position items for multirow Carousel.
-         *
-         * @method indexRows
-         * @protected
-         */
-        _indexRows: function () {
-            var carousel    = this,
-                isVertical  = carousel.get("isVertical"),
-                numVisible  = carousel.get("numVisible"),
-                table       = carousel._itemsTable,
-                loading     = table.loading,
-                items       = table.items,
-                num         = items.length,
-                rows        = carousel._rows,
-                cols        = carousel._cols,
-                item,
-                delta,
-                id,
-                row,
-                col,
-                itemHeight,
-                itemWidth;
-
-            if (rows && cols) {
-                row = 0;
-                col = 0;
-                itemHeight = getCarouselItemSize.call(carousel, "height");
-                itemWidth  = getCarouselItemSize.call(carousel, "width");
-                for (var i = 0; i < num; i++) {
-                    item = items[i] ? Dom.get(items[i].id) : loading[i];
-                    if (item) {
-                        if (isVertical) {
-                            col++;// shifts item by one col
-                            if (i % cols === 0) {
-                                delta = Math.floor(i/numVisible);// find page item is on
-                                // break row
-                                col = 0;
-                                if (i !== 0) {
-                                    row++;
-                                }
-                            }
-                        } else {
-                            col++;// shifts item by one col.
-                            if (i % cols === 0) {
-                                delta = Math.floor(i/numVisible);// find page item belongs on
-                                col = delta * cols;// shifts cols to appropriate page
-                                row++;// breaks row
-                            }
-                            if (i % numVisible === 0) {
-                                row = 0;// shifts row back to top of page
-                            }
-                        }
-                        items[i].styles = {
-                            /* position absolute applied via stylesheet */
-                            left     : (col * itemWidth) + "px",
-                            top      : (row * itemHeight) + "px"
-                        };
-                    }
-                }
-            }
-        },
-
+        
         /**
          * Find the Carousel navigation within a container. The navigation
          * elements need to match the carousel navigation class names.
