@@ -121,7 +121,8 @@ var l = YAHOO.lang,
         '[object Number]'  : NUMBER,
         'boolean'          : BOOLEAN,
         '[object Boolean]' : BOOLEAN,
-        '[object Date]'    : DATE
+        '[object Date]'    : DATE,
+        '[object RegExp]'  : OBJECT
     },
     EMPTY     = '',
     OPEN_O    = '{',
