@@ -60,7 +60,7 @@ var G = window.google,
 		try {
 			// iterate on the rows and map the keys
 			while (rs.isValidRow()) {
-				var fld = rs.field(0);
+				var fld = dURI(rs.field(0));
 
 				if (! keyMap[fld]) {
 					keyMap[fld] = true;
