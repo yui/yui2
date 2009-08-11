@@ -116,7 +116,7 @@
             'type': 'js',
             'path': 'connection/connection-min.js',
             'requires': ['event'],
-            'supersedes': ['connectioncore'],
+            'supersedes': ['connectioncore']
         },
 
         'connectioncore': {
@@ -258,7 +258,7 @@
          'imagecropper': {
              'type': 'js',
              'path': 'imagecropper/imagecropper-min.js',
-             'requires': ['dom', 'event', 'dragdrop', 'element', 'resize'],
+             'requires': ['dragdrop', 'element', 'resize'],
              'skinnable': true
          },
 
@@ -277,7 +277,7 @@
          'layout': {
              'type': 'js',
              'path': 'layout/layout-min.js',
-             'requires': ['dom', 'event', 'element'],
+             'requires': ['element'],
              'optional': ['animation', 'dragdrop', 'resize', 'selector'],
              'skinnable': true
          }, 
@@ -318,6 +318,13 @@
             'skinnable': true
         },
 
+        'progressbar': {
+            'type': 'js',
+            'path': 'progressbar/progressbar-min.js',
+            'requires': ['element'],
+            'optional': ['animation']
+        },
+
         'reset': {
             'type': 'css',
             'path': 'reset/reset-min.css'
@@ -340,7 +347,7 @@
          'resize': {
              'type': 'js',
              'path': 'resize/resize-min.js',
-             'requires': ['dom', 'event', 'dragdrop', 'element'],
+             'requires': ['dragdrop', 'element'],
              'optional': ['animation'],
              'skinnable': true
          },
@@ -384,7 +391,7 @@
         'swf': {
             'type': 'js',
             'path': 'swf/swf-min.js',
-            'requires': ['yahoo', 'dom', 'event', 'element']
+            'requires': ['element']
         },
 
         'swfdetect': {
@@ -396,7 +403,7 @@
         'swfstore': {
             'type': 'js',
             'path': 'swfstore/swfstore-min.js',
-            'requires': ['yahoo', 'dom', 'event', 'element', 'cookie']
+            'requires': ['element', 'cookie']
         },
 
         'tabview': {
