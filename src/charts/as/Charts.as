@@ -904,8 +904,7 @@ package
 							case "visibility":
 								if(!(series is PieSeries))
 								{
-									UIComponent(series).setStyle("visibility", style.visibility);   									
-									UIComponent(series).visible = style.visibility == "visible";
+									UIComponent(series).setStyle("visibility", style.visibility);
 								}
 								break;
 							case "skin":
@@ -1009,6 +1008,7 @@ package
 				ExternalInterface.addCallback("setHorizontalAxis", setHorizontalAxis);
 				ExternalInterface.addCallback("setVerticalAxis", setVerticalAxis);
 				ExternalInterface.addCallback("setConstrainViewport", setConstrainViewport);
+				ExternalInterface.addCallback("setSeriesStylesByIndex", setSeriesStylesByIndex);
 				
 				//PieChart
 				ExternalInterface.addCallback("getDataField", getDataField);
@@ -1473,6 +1473,20 @@ package
 			}
 			
 			this.legend.setStyle("contentPadding", contentPadding);
+		}
+		
+		public function setSeriesStylesByIndex(index:int, style:Object):void
+		{
+			var series:ISeries = this.chart.indexToSeries(index) as ISeries;
+			if(style)
+			{
+				style = JSON.decode(style as String);
+			}
+			
+			for(var i:String in style)
+			{
+				(series as UIComponent).setStyle(i, style[i]);
+			}					
 		}
 		
 	//--------------------------------------
