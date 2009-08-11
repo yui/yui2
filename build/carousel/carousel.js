@@ -2589,6 +2589,18 @@
                 (item+1) / parseInt(this.get("numVisible"),10)
             );
         },
+        
+        /**
+         * Get the first visible item's index on any given page.
+         *
+         * @method getFirstVisibleOnpage
+         * @public
+         * @param page {Number} Page
+         * @return {Number} First item's index
+         */
+        getFirstVisibleOnPage : function(page) {
+            return (page - 1) * this.get("numVisible");
+        },
 
         /**
          * Select the previous item in the Carousel.
@@ -3051,64 +3063,58 @@
             }
 
         },
-
+        
         /**
-         * The "click" handler for the pager navigation.
+         * The "onchange" handler for select box pagination.
+         *
+         * @method _pagerChangeHandler
+         * @param {Event} ev The event object
+         * @protected
+         */
+         _pagerChangeHandler: function (ev) {
+             var carousel = this,
+                 target = Event.getTarget(ev),
+                 page = target.value,
+                 item; 
+
+             if (page) {
+                 item = carousel.getFirstVisibleOnPage(page);
+                 carousel._selectedItem = item;
+                 carousel.scrollTo(item);
+                 carousel.focus();
+             }
+          },
+        /**
+         * The "click" handler for anchor pagination.
          *
          * @method _pagerClickHandler
          * @param {Event} ev The event object
          * @protected
          */
          _pagerClickHandler: function (ev) {
-            var carousel = this,
+             var carousel = this,
                  css = carousel.CLASSES,
+                 target = Event.getTarget(ev),
+                 elNode = target.nodeName.toUpperCase(),
                  val,
                  stringIndex,
                  page,
-                 target = Event.getTarget(ev),
                  item;
 
-             function getPagerNode(el) {
-                 var itemEl = carousel.get("carouselItemEl"),
-                     elNode = el.nodeName.toUpperCase();
-
-                 if (Dom.hasClass(el, css.PAGER_ITEM) || Dom.hasClass(el.parentNode, css.PAGER_ITEM)) {
-                     if (elNode == itemEl.toUpperCase()) {
-                         el = Dom.getChildrenBy(el, function (node) {
-                             // either an anchor or select at least
-                             return node.href || node.value;
-                         });
-                         if (el && el[0]) {
-                             el = el[0];
-                         }
-                     } else if (elNode == "EM") {
-                         el = el.parentNode;// item is an em and not an anchor (when text is visible)
-                     }
-                     return el.href || el.value ? el : null;
+             if (Dom.hasClass(target, css.PAGER_ITEM) || Dom.hasClass(target.parentNode, css.PAGER_ITEM))  {            
+                 if (elNode == "EM") {
+                     target = target.parentNode;// item is an em and not an anchor (when text is visible)
                  }
-             }
-
-             if (target) {
-                 target = getPagerNode(target);
-
-                 if (!target) {
-                     return;
-                 }
-                 val = target.href || target.value;
-
-                 if (JS.isString(val) && val) {
-                     stringIndex = val.lastIndexOf("#");
-                     page =  parseInt(val.substring(stringIndex+1), 10);
-                     if (page != -1) {
-                         item = (page - 1) * carousel.get("numVisible");
-                         carousel._selectedItem = item;
-                         carousel.scrollTo(item);
-                         if (!target.value) { // not a select element
-                             carousel.focus();
-                         }
-                         Event.preventDefault(ev);
-                     }
-                 }
+                 val = target.href;
+                 stringIndex = val.lastIndexOf("#");
+                 page =  parseInt(val.substring(stringIndex+1), 10);
+                 if (page != -1) {
+                     item = carousel.getFirstVisibleOnPage(page);
+                     carousel._selectedItem = item;
+                     carousel.scrollTo(item);
+                     carousel.focus();
+                }
+                Event.preventDefault(ev);
              }
          },
 
@@ -4047,10 +4053,12 @@
                 sel;
 
             if (num === 0) {
-                return;         // don't do anything if number of pages is 0
+                return;// don't do anything if number of pages is 0
             }
 
             sel = document.createElement("SELECT");
+            
+            
             if (!sel) {
                 return;
             }
@@ -4066,8 +4074,7 @@
             for (i = 0; i < num; i++) {
 
                 el   = document.createElement("OPTION"); 
-                Dom.addClass(el, css.PAGER_ITEM);
-                el.value     = "#" + (i+1);
+                el.value     = i+1;
                 el.innerHTML = carousel.STRINGS.PAGER_PREFIX_TEXT+" "+(i+1);
 
                 if (i == cur) {
@@ -4085,6 +4092,7 @@
             }
 
             // Show the pager now
+            Event.addListener(sel, "change", carousel._pagerChangeHandler, this, true);
             Dom.setStyle(pager, "visibility", "visible");
         },
 
