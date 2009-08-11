@@ -316,15 +316,7 @@ order: {Array} an array of storage engine names; the desired order to try engine
                                            (
                                                 
                                                         
-                                                         engineType
-                                                    
-                                                
-                                                        , 
-                                                         validationFx
-                                                    
-                                                
-                                                        , 
-                                                         klass
+                                                         engineConstructor
                                                     
                                                 
                                             )
@@ -339,22 +331,10 @@ order: {Array} an array of storage engine names; the desired order to try engine
                                                 <dl rel="yui:parameters">
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">engineType</span>
-                                                        &lt;<span property="yui:type">String</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  Required. The engine type, see engines.</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">validationFx</span>
+                                                        <code><span property="yui:name">engineConstructor</span>
                                                         &lt;<span property="yui:type">Function</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  Required. The evaluation function to test if engineType is available.</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">klass</span>
-                                                        &lt;<span property="yui:type">Function</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  Required. A pointer to the engineType Class.</span>
+                                                        <span property="yui:description">  Required. The engine constructor function, see engines.</span>
                                                         </dd>
                                                 </dl>
 
