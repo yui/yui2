@@ -175,7 +175,8 @@ var Y = YAHOO.util,
 
 	Y.StorageEngineSWF.SWFURL = "swfstore.swf";
 	Y.StorageEngineSWF.ENGINE_NAME = 'swf';
-    Y.StorageManager.register(Y.StorageEngineSWF.ENGINE_NAME, function() {
+	Y.StorageEngineSWF.isAvailable = function() {
 		return (6 <= YAHOO.env.ua.flash && YAHOO.widget.SWF);
-	}, Y.StorageEngineSWF);
+	};
+    Y.StorageManager.register(Y.StorageEngineSWF);
 }());
