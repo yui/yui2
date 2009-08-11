@@ -1,6 +1,6 @@
-/*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
+/**
+ * The Storage module manages client-side data storage.
+ * @module Storage
  */
 
 (function() {
@@ -26,16 +26,22 @@ if (! YU.Storage) {
 	 * @param conf {Object} Required. A configuration object.
 	 */
 	YU.Storage = function(location, name, conf) {
+		var that = this;
 		Y.env._id_counter += 1;
 
 		// protected variables
-		this._cfg = YL.isObject(conf) ? conf : {};
-		this._location = location;
-		this._name = name;
+		that._cfg = YL.isObject(conf) ? conf : {};
+		that._location = location;
+		that._name = name;
+		that.isReady = false;
 
 		// public variables
-		this.createEvent(this.CE_READY, {scope: this});
-		this.createEvent(this.CE_CHANGE, {scope: this});
+		that.createEvent(that.CE_READY, {scope: that});
+		that.createEvent(that.CE_CHANGE, {scope: that});
+		
+		that.subscribe(that.CE_READY, function() {
+			that.isReady = true;
+		});
 	};
 
 	YU.Storage.prototype = {
@@ -95,6 +101,14 @@ if (! YU.Storage) {
 		 * @public
 		 */
 		length: 0,
+
+		/**
+		 * This engine singleton has been initialized already.
+		 * @property isReady
+		 * @type {String}
+		 * @protected
+		 */
+		isReady: false,
 
 		/**
 		 * Clears any existing key/value pairs.
@@ -307,18 +321,6 @@ if (! YU.Storage) {
 }
 
 }());
-/*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
- */
-
-// todo: move the session ID method to this
-
-/**
- * The Storage module manages client-side data storage.
- * @module Storage
- */
-
 /**
  * The StorageManager class is a singleton that registers DataStorage objects and returns instances of those objects.
  * @class StorageManager
@@ -446,16 +448,14 @@ var Y = YAHOO.util,
 		/**
 		 * Registers a engineType Class with the StorageManager singleton; first in is the first out.
 		 * @method register
-		 * @param engineType {String} Required. The engine type, see engines.
-		 * @param validationFx {Function} Required. The evaluation function to test if engineType is available.
-		 * @param klass {Function} Required. A pointer to the engineType Class.
+		 * @param engineConstructor {Function} Required. The engine constructor function, see engines.
 		 * @return {Boolean} When successfully registered.
 		 * @static
 		 */
-		register: function(engineType, validationFx, klass) {
-			if (YL.isString(engineType) && YL.isFunction(validationFx) && YL.isFunction(klass) && validationFx()) {
-				_registeredEngineMap[engineType] = klass;
-				_registeredEngineSet.push(klass);
+		register: function(engineConstructor) {
+			if (YL.isFunction(engineConstructor) && YL.isFunction(engineConstructor.isAvailable) && YL.isString(engineConstructor.ENGINE_NAME) && engineConstructor.isAvailable()) {
+				_registeredEngineMap[engineConstructor.ENGINE_NAME] = engineConstructor;
+				_registeredEngineSet.push(engineConstructor);
 				return true;
 			}
 
@@ -465,11 +465,6 @@ var Y = YAHOO.util,
 
 	YAHOO.register("StorageManager", Y.SWFStore, {version: "@VERSION@", build: "@BUILD@"});
 }());
-/*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
- */
-
 (function() {
 
 /**
@@ -566,10 +561,6 @@ YAHOO.util.StorageEvent.prototype = {
 };
 	
 }());
-/*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
- */
 (function() {
 var Y = YAHOO.util,
 	YL = YAHOO.lang;
@@ -653,11 +644,6 @@ var Y = YAHOO.util,
 	});
 }());
 /*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
- */
-
-/*
  * HTML limitations:
  *  - 5MB in FF and Safari, 10MB in IE 8
  *  - only FF 3.5 recovers session storage after a browser crash
@@ -666,29 +652,23 @@ var Y = YAHOO.util,
  *  - how can we not use cookies to handle session
  */
 (function() {
-		// internal shorthand
-    var Y = YAHOO.util,
-		YL = YAHOO.lang,
-		
-		/**
-		 * Required for IE 8 to make synchronous.
-		 * @method _beginTransaction
-		 * @param engine {Object} Required. The storage engine.
-		 * @private
-		 */
-		_beginTransaction = function(engine) {
-			if (engine.begin) {engine.begin();}
-		},
-		
-		/**
-		 * Required for IE 8 to make synchronous.
-		 * @method _commitTransaction
-		 * @param engine {Object} Required. The storage engine.
-		 * @private
-		 */
-		_commitTransaction = function(engine) {
-			if (engine.commit) {engine.commit();}
-		};
+	// internal shorthand
+var Y = YAHOO.util,
+	YL = YAHOO.lang,
+
+	/*
+	 * Required for IE 8 to make synchronous.
+	 */
+	_beginTransaction = function(engine) {
+		if (engine.begin) {engine.begin();}
+	},
+
+	/*
+	 * Required for IE 8 to make synchronous.
+	 */
+	_commitTransaction = function(engine) {
+		if (engine.commit) {engine.commit();}
+	};
 
 	/**
 	 * The StorageEngineHTML5 class implements the HTML5 storage engine.
@@ -779,16 +759,11 @@ var Y = YAHOO.util,
 	}, true);
 
 	Y.StorageEngineHTML5.ENGINE_NAME = 'html5';
-    Y.StorageManager.register(Y.StorageEngineHTML5.ENGINE_NAME, function() {return window.localStorage;}, Y.StorageEngineHTML5);
+	Y.StorageEngineHTML5.isAvailable = function() {
+		return window.localStorage;
+	};
+    Y.StorageManager.register(Y.StorageEngineHTML5);
 }());
-/*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
- */
-
-// todo: what are the limitation of gears, is it per DB, per table, per user
-// todo: Abstract out SQL pieces so that an HTML5 SQL engine could use them (for Safari 3 and iPhone, specifically, which don't have local/sessionStorage)
-
 /*
  * Gears limitation:
  *  - SQLite limitations - http://www.sqlite.org/limits.html
@@ -803,18 +778,18 @@ var Y = YAHOO.util,
  *  - how can we not use cookies to handle session location
  */
 (function() {
-		// internal shorthand
-    var G = window.google,
-		Y = YAHOO.util,
-		YL = YAHOO.lang,
-		_SQL_STMT_LIMIT = 9948,
-		_TABLE_NAME = 'YUIStorageEngine',
+	// internal shorthand
+var G = window.google,
+	Y = YAHOO.util,
+	YL = YAHOO.lang,
+	_SQL_STMT_LIMIT = 9948,
+	_TABLE_NAME = 'YUIStorageEngine',
 
-		// local variables
-		_engine = null,
+	// local variables
+	_engine = null,
 
-		eURI = encodeURIComponent,
-		dURI = decodeURIComponent;
+	eURI = encodeURIComponent,
+	dURI = decodeURIComponent;
 
 	/**
 	 * The StorageEngineGears class implements the Google Gears storage engine.
@@ -851,11 +826,11 @@ var Y = YAHOO.util,
 		try {
 			// iterate on the rows and map the keys
 			while (rs.isValidRow()) {
-				var fld = rs.field(0);
+				var fld = dURI(rs.field(0));
 
 				if (! keyMap[fld]) {
 					keyMap[fld] = true;
-					_this._keys.push(fld);
+					_this._addKey(fld);
 				}
 
 				rs.next();
@@ -976,26 +951,22 @@ var Y = YAHOO.util,
 	Y.StorageEngineGears.ENGINE_NAME = 'gears';
 	Y.StorageEngineGears.GEARS = 'beta.database';
 	Y.StorageEngineGears.DATABASE = 'yui.database';
-    Y.StorageManager.register(Y.StorageEngineGears.ENGINE_NAME, function() {
+	Y.StorageEngineGears.isAvailable = function() {
 		if (G && G.gears) {
 			try {
 				// this will throw an exception if the user denies gears
 				G.gears.factory.create(Y.StorageEngineGears.GEARS);
-				return true; 
+				return true;
 			}
 			catch (e) {
-				// no need to do anything 
+				// no need to do anything
 			}
 		}
 
 		return false;
-	}, Y.StorageEngineGears);
+	};
+    Y.StorageManager.register(Y.StorageEngineGears);
 }());
-/*
- * Copyright (c) 2009, Matt Snider, LLC. All rights reserved.
- * Version: 0.2.00
- */
-
 /*
  * SWF limitation:
  * 	- only 100,000 bytes of data may be stored this way
@@ -1006,30 +977,41 @@ var Y = YAHOO.util,
  *  - how can we not use cookies to handle session location
  */
 (function() {
-		// internal shorthand
-    var Y = YAHOO.util,
-		YL = YAHOO.lang,
+	// internal shorthand
+var Y = YAHOO.util,
+	YL = YAHOO.lang,
+	YD = Y.Dom,
+	
+	/*
+	 * The minimum width required to be able to display the settings panel within the SWF.
+	 */	
+	MINIMUM_WIDTH = 215,
 
-		// local variables
-		_engine = null;
+	/*
+	 * The minimum height required to be able to display the settings panel within the SWF.
+	 */	
+	MINIMUM_HEIGHT = 138,
 
-	var _getKey = function(that, key) {
-		return that._location + that.DELIMITER + key;
-	};
+	// local variables
+	_engine = null,
 
-	/**
-	 * Initializes the engine, if it isn't already initialized.
-	 * @method _initEngine
-	 * @param cfg {Object} Required. The configuration.
-	 * @private
+	/*
+	 * Creates a location bound key.
 	 */
-	var _initEngine = function(cfg) {
+	_getKey = function(that, key) {
+		return that._location + that.DELIMITER + key;
+	},
+
+	/*
+	 * Initializes the engine, if it isn't already initialized.
+	 */
+	_initEngine = function(cfg) {
 		if (! _engine) {
 			if (! YL.isString(cfg.swfURL)) {cfg.swfURL = Y.StorageEngineSWF.SWFURL;}
 			if (! cfg.containerID) {
 				var bd = document.getElementsByTagName('body')[0],
 					container = bd.appendChild(document.createElement('div'));
-				cfg.containerID = Y.Dom.generateId(container);
+				cfg.containerID = YD.generateId(container);
 			}
 
 			if (! cfg.attributes) {cfg.attributes  = {};}
@@ -1060,6 +1042,7 @@ var Y = YAHOO.util,
 		// evaluates when the SWF is loaded
 		_engine.addListener("contentReady", function() {
 			_this._swf = _engine._swf;
+			_engine.initialized = true;
 
 			var sessionKey = Y.Cookie.get('sessionKey' + Y.StorageEngineSWF.ENGINE_NAME);
 
@@ -1073,7 +1056,7 @@ var Y = YAHOO.util,
 				}
 				// the key matches the storage type, add to key collection
 				else if (isSessionStorage === isKeySessionStorage) {
-					_this._keys.push(key);
+					_this._addKey(key);
 				}
 			}
 
@@ -1085,6 +1068,9 @@ var Y = YAHOO.util,
 			_this.length = _this._keys.length;
 			_this.fireEvent(_this.CE_READY);
 		});
+		
+		// required for pages with both a session and local storage
+		if (_engine.initialized) {_engine.fireEvent('contentReady');}
 	};
 
 	YL.extend(Y.StorageEngineSWF, Y.StorageEngineKeyed, {
@@ -1092,7 +1078,7 @@ var Y = YAHOO.util,
 		 * The underlying SWF of the engine, exposed so developers can modify the adapter behavior.
 		 * @property _swf
 		 * @type {Object}
-		 * @public
+		 * @protected
 		 */
 		_swf: null,
 
@@ -1142,20 +1128,29 @@ var Y = YAHOO.util,
 		 * @see YAHOO.util.Storage._setItem
 		 */
 		_setItem: function(key, data) {
-			var _key = _getKey(this, key);
+			var _key = _getKey(this, key), swfNode;
 
 			if (! _engine.callSWF("getValueOf", [_key])) {
 				this._addKey(_key);
 			}
-			
-			return _engine.callSWF("setItem", [data, _key]);
+
+			if (_engine.callSWF("setItem", [_key, data])) {
+				return true;
+			}
+			else {
+				swfNode = YD.get(_engine._id);
+				if (MINIMUM_WIDTH > YD.getStyle(swfNode, 'width').replace(/\D+/g, '')) {YD.setStyle(swfNode, 'width', MINIMUM_WIDTH + 'px')}
+				if (MINIMUM_HEIGHT > YD.getStyle(swfNode, 'height').replace(/\D+/g, '')) {YD.setStyle(swfNode, 'height', MINIMUM_HEIGHT + 'px')}
+				return _engine.callSWF("displaySettings", []);
+			}
 		}
 	});
 
 	Y.StorageEngineSWF.SWFURL = "swfstore.swf";
 	Y.StorageEngineSWF.ENGINE_NAME = 'swf';
-    Y.StorageManager.register(Y.StorageEngineSWF.ENGINE_NAME, function() {
+	Y.StorageEngineSWF.isAvailable = function() {
 		return (6 <= YAHOO.env.ua.flash && YAHOO.widget.SWF);
-	}, Y.StorageEngineSWF);
+	};
+    Y.StorageManager.register(Y.StorageEngineSWF);
 }());
 YAHOO.register("storage", YAHOO.util.Storage, {version: "@VERSION@", build: "@BUILD@"});
