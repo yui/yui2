@@ -567,6 +567,9 @@ can be listened for.  All handlers receive an event object.
                                             Appends a delegated event listener.  Delegated event listeners 
 receive two arguments by default: the DOM event and the element  
 specified by the filtering function or CSS selector.
+(Note: Using the delegate method requires the element-delegate 
+module.  Using CSS selectors as the filtering criteria for delegated 
+event listeners requires inclusion of the Selector Utility.)
                                         </div>
 
                                         <div class="description">
@@ -593,7 +596,7 @@ specified by the filtering function or CSS selector.
 determine for what element(s) the event listener should be called. 
 When a function is specified, the function should return an 
 HTML element.  Using a CSS Selector requires the inclusion of the 
-CSS Selector utility (YAHOO.util.Selector).</span>
+CSS Selector Utility.</span>
                                                         </dd>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">obj</span>
@@ -614,7 +617,8 @@ CSS Selector utility (YAHOO.util.Selector).</span>
                                                     <code property="yui:return">
                                                         boolean
                                                     </code></dt>
-                                                    <dd property="yui:returnInfo">true if the delegate was added successfully</dd>
+                                                    <dd property="yui:returnInfo">Returns true if the delegated event listener 
+was added successfully</dd>
                                                 </dl>
 
 
@@ -1234,7 +1238,7 @@ the element before.</span>
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Remove an event listener
+                                            Remove a delegated event listener
                                         </div>
 
                                         <div class="description">
