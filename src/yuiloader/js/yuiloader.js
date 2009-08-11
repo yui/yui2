@@ -322,7 +322,8 @@
             'type': 'js',
             'path': 'progressbar/progressbar-min.js',
             'requires': ['element'],
-            'optional': ['animation']
+            'optional': ['animation'],
+            'skinnable': true
         },
 
         'reset': {

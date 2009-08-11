@@ -2140,7 +2140,8 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'type': 'js',
             'path': 'progressbar/progressbar-min.js',
             'requires': ['element'],
-            'optional': ['animation']
+            'optional': ['animation'],
+            'skinnable': true
         },
 
         'reset': {
