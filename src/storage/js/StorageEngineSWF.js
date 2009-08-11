@@ -73,6 +73,7 @@ var Y = YAHOO.util,
 		// evaluates when the SWF is loaded
 		_engine.addListener("contentReady", function() {
 			_this._swf = _engine._swf;
+			_engine.initialized = true;
 
 			var sessionKey = Y.Cookie.get('sessionKey' + Y.StorageEngineSWF.ENGINE_NAME);
 
@@ -86,7 +87,7 @@ var Y = YAHOO.util,
 				}
 				// the key matches the storage type, add to key collection
 				else if (isSessionStorage === isKeySessionStorage) {
-					_this._keys.push(key);
+					_this._addKey(key);
 				}
 			}
 
@@ -98,6 +99,9 @@ var Y = YAHOO.util,
 			_this.length = _this._keys.length;
 			_this.fireEvent(_this.CE_READY);
 		});
+		
+		// required for pages with both a session and local storage
+		if (_engine.initialized) {_engine.fireEvent('contentReady');}
 	};
 
 	YL.extend(Y.StorageEngineSWF, Y.StorageEngineKeyed, {

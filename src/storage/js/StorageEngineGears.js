@@ -64,7 +64,7 @@ var G = window.google,
 
 				if (! keyMap[fld]) {
 					keyMap[fld] = true;
-					_this._keys.push(fld);
+					_this._addKey(fld);
 				}
 
 				rs.next();
