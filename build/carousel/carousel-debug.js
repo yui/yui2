@@ -514,8 +514,8 @@
      */
     function getCarouselItemPosition(pos) {
         var carousel    = this, 
-            itemsPerCol = carousel._cols,
-            itemsPerRow = carousel._rows,
+            itemsPerRow = carousel._cols,
+            itemsPerCol = carousel._rows,
             page,
             sz,
             isVertical,
@@ -533,31 +533,31 @@
                 isVertical ? "height" : "width");
         rsz = getRevealSize.call(carousel);
 
-        if (itemsPerRow && itemsPerCol) {
+        if (itemsPerCol) {
             page = this.getPageForItem(pos); 
             if (isVertical) {
-                itemsCol = pos % itemsPerCol,
-                delta = itemsCol,
-                left = delta * sz;
-                styles.left = left + "px";
+                itemsRow = Math.floor(pos/itemsPerRow),
+                delta = itemsRow;
+                top = delta * sz;
+                styles.top  = (top + rsz) + "px";
 
                 sz  = getCarouselItemSize.call(carousel, "width");
 
-                itemsRow = Math.floor(pos/itemsPerCol),
-                delta = itemsRow
-                top = delta * sz;
-                styles.top  = (top + rsz) + "px";
+                itemsCol = pos % itemsPerRow,
+                delta = itemsCol,
+                left = delta * sz;
+                styles.left = left + "px";
             } else {
-                itemsCol = pos % itemsPerCol,
-                sentinel = (page - 1) * itemsPerCol,
+                itemsCol = pos % itemsPerRow,
+                sentinel = (page - 1) * itemsPerRow,
                 delta = itemsCol + sentinel,
                 left = delta * sz;
                 styles.left = (left + rsz) + "px";
 
                 sz  = getCarouselItemSize.call(carousel, "height");
 
-                itemsRow = Math.floor(pos/itemsPerCol),
-                sentinel = (page - 1) * itemsPerRow,
+                itemsRow = Math.floor(pos/itemsPerRow),
+                sentinel = (page - 1) * itemsPerCol,
                 delta = itemsRow - sentinel,
                 top = delta * sz;
 
@@ -851,8 +851,7 @@
      * @private
      */
     function syncUi(o) {
-        var carousel = this,
-            rows = carousel._rows;
+        var carousel = this;
 
         if (!JS.isObject(o)) {
             return;
@@ -1444,7 +1443,6 @@
          */
         addItem: function (item, index) {
             var carousel = this,
-                rows = carousel._rows,
                 className,
                 content,
                 elId,
@@ -2252,7 +2250,6 @@
          */
         removeItem: function (index) {
             var carousel = this,
-                rows = carousel._rows,
                 item,
                 num      = carousel.get("numItems");
 
@@ -2290,7 +2287,6 @@
          */
         replaceItem: function (item, index) {
             var carousel = this,
-                rows = carousel._rows,
                 className,
                 content,
                 elId,
@@ -2494,8 +2490,8 @@
          */
         scrollTo: function (item, dontSelect) {
             var carousel   = this, animate, animCfg, isCircular, isVertical,
-                rows, delta, direction, firstItem, lastItem, itemsPerCol,
-                itemsPerRow, numItems, numPerPage, offset, page, rv, sentinel,
+                rows, delta, direction, firstItem, lastItem, itemsPerRow,
+                itemsPerCol, numItems, numPerPage, offset, page, rv, sentinel,
                 index, stopAutoScroll;
 
             if (JS.isUndefined(item) || item == carousel._firstItem ||
@@ -2506,8 +2502,8 @@
             animCfg        = carousel.get("animation");
             isCircular     = carousel.get("isCircular");
             isVertical     = carousel.get("isVertical");
-            itemsPerCol    = carousel._cols;
-            itemsPerRow    = carousel._rows;
+            itemsPerRow    = carousel._cols;
+            itemsPerCol    = carousel._rows;
             firstItem      = carousel._firstItem;
             numItems       = carousel.get("numItems");
             numPerPage     = carousel.get("numVisible");
@@ -2521,7 +2517,10 @@
 
             if (item < 0) {
                 if (isCircular) {
+                    console.log('isCircular');
+                    console.log('numItems:', numItems, 'item:', item);
                     item = numItems + item;
+                    console.log('after calc:', item);
                 } else {
                     stopAutoScroll.call(carousel);
                     return;
@@ -2558,12 +2557,12 @@
             // Calculate the delta relative to the first item, the delta is
             // always negative.
             delta = 0 - item;
-            if (itemsPerRow) {
-            	// offset calculations for multirow Carousel
+            if (itemsPerCol) {
+                // offset calculations for multirow Carousel
                 if (isVertical) {
-                    delta = parseInt(delta / itemsPerCol, 10);
-                } else {
                     delta = parseInt(delta / itemsPerRow, 10);
+                } else {
+                    delta = parseInt(delta / itemsPerCol, 10);
                 }
             }
             
@@ -2574,7 +2573,7 @@
                     JS.isUndefined(carousel._itemsTable.loading[index])) {
                     delta++;
                 }
-                index += itemsPerRow ? itemsPerRow : 1;
+                index += itemsPerCol ? itemsPerCol : 1;
             }
 
             carousel._firstItem = item;
