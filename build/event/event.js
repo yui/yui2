@@ -1102,7 +1102,7 @@ if (!YAHOO.util.Event) {
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
-         	 * @deprecated use YAHOO.util.Event.on
+         	 * @deprecated use YAHOO.util.Event.on and specify "focus" as the event type.
              */
             addFocusListener: function (el, fn, obj, overrideContext) {
 
@@ -1125,7 +1125,7 @@ if (!YAHOO.util.Event) {
              * @return {boolean} true if the unbind was successful, false 
              *  otherwise.
              * @static
-          	 * @deprecated use YAHOO.util.Event.removeListener("focus", ...)
+          	 * @deprecated use YAHOO.util.Event.removeListener and specify "focus" as the event type.
              */
             removeFocusListener: function (el, fn) { 
 
@@ -1154,7 +1154,7 @@ if (!YAHOO.util.Event) {
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
-         	 * @deprecated use YAHOO.util.Event.on
+         	 * @deprecated use YAHOO.util.Event.on and specify "blur" as the event type.
              */
             addBlurListener: function (el, fn, obj, overrideContext) {
 
@@ -1176,7 +1176,7 @@ if (!YAHOO.util.Event) {
              * @return {boolean} true if the unbind was successful, false 
              *  otherwise.
              * @static
-         	 * @deprecated use YAHOO.util.Event.removeListener("blur", ...)
+         	 * @deprecated use YAHOO.util.Event.removeListener and specify "blur" as the event type.
              */
             removeBlurListener: function (el, fn) { 
             
@@ -2003,10 +2003,10 @@ if (!YAHOO.util.Event) {
 
         /**
          * YAHOO.util.Event.onFocus is an alias for addFocusListener
-         * @method on
+         * @method onFocus
          * @see addFocusListener
          * @static
-         * @deprecated use YAHOO.util.Event.on
+      	 * @deprecated use YAHOO.util.Event.on and specify "focus" as the event type.
          */
         EU.onFocus = EU.addFocusListener;
 
@@ -2015,7 +2015,7 @@ if (!YAHOO.util.Event) {
          * @method onBlur
          * @see addBlurListener
          * @static
-         * @deprecated use YAHOO.util.Event.on
+      	 * @deprecated use YAHOO.util.Event.on and specify "blur" as the event type.
          */     
         EU.onBlur = EU.addBlurListener;
 

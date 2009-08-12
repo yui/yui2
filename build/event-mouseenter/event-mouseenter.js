@@ -1,6 +1,8 @@
 /**
  * Augments the Event Utility with support for the mouseenter and mouseleave 
- * events
+ * events:  A mouseenter event fires the first time the mouse enters an 
+ * element; a mouseleave event first the first time the mouse leaves an 
+ * element.
  * 
  * @module event-mouseenter
  * @title Event Utility mouseenter and mouseout Module
@@ -56,8 +58,9 @@
 	Lang.augmentObject(Event, {
 
 		/**
-		 * Creates a delegate function used to call event listeners specified 
-		 * via the <code>YAHOO.util.Event.addListener</code> 
+		 * Creates a delegate function used to call mouseover and mouseleave 
+		 * event listeners specified via the 
+		 * <code>YAHOO.util.Event.addListener</code> 
 		 * or <code>YAHOO.util.Event.on</code> method.
 		 *
 		 * @method _createMouseDelegate
@@ -65,10 +68,10 @@
 		 * @param {Function} fn        The method (event listener) to call
 		 * @param {Object}   obj    An arbitrary object that will be 
 		 *                             passed as a parameter to the listener
-		 * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes
-		 *                             the execution context of the listener. If an
-		 *                             object, this object becomes the execution
-		 *                             context. 
+		 * @param {Boolean|object}  overrideContext  If true, the value of the 
+		 * 							obj parameter becomes the execution context
+		 *                          of the listener. If an object, this object
+		 *                          becomes the execution context. 
 		 * @return {Function} Function that will call the event listener 
 		 * specified by either the <code>YAHOO.util.Event.addListener</code> 
 		 * or <code>YAHOO.util.Event.on</code> method.
