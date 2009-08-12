@@ -536,29 +536,29 @@
         if (itemsPerCol) {
             page = this.getPageForItem(pos); 
             if (isVertical) {
-                itemsRow = Math.floor(pos/itemsPerRow),
+                itemsRow = Math.floor(pos/itemsPerRow); 
                 delta = itemsRow;
                 top = delta * sz;
                 styles.top  = (top + rsz) + "px";
 
                 sz  = getCarouselItemSize.call(carousel, "width");
 
-                itemsCol = pos % itemsPerRow,
-                delta = itemsCol,
+                itemsCol = pos % itemsPerRow;
+                delta = itemsCol;
                 left = delta * sz;
                 styles.left = left + "px";
             } else {
-                itemsCol = pos % itemsPerRow,
-                sentinel = (page - 1) * itemsPerRow,
-                delta = itemsCol + sentinel,
+                itemsCol = pos % itemsPerRow;
+                sentinel = (page - 1) * itemsPerRow;
+                delta = itemsCol + sentinel;
                 left = delta * sz;
                 styles.left = (left + rsz) + "px";
 
                 sz  = getCarouselItemSize.call(carousel, "height");
 
-                itemsRow = Math.floor(pos/itemsPerRow),
-                sentinel = (page - 1) * itemsPerCol,
-                delta = itemsRow - sentinel,
+                itemsRow = Math.floor(pos/itemsPerRow);
+                sentinel = (page - 1) * itemsPerCol;
+                delta = itemsRow - sentinel;
                 top = delta * sz;
 
                 styles.top  = top + "px";
