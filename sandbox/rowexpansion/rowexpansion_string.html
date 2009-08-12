@@ -5,7 +5,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>String Template Based Row Expansion</title>
+	<title>DataTable with Expandable Rows</title>
 	
 	<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
 	<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
@@ -31,20 +31,16 @@
 			cursor:pointer;
 			background:url(arrow_closed.png) 4px 4px no-repeat;
 		}
-		.yui-dt-expansion .yui-dt-liner{
-			background-color:#333;
-			padding:1px;
-		}
 	</style>
 
 </head>
 
 <body class=" yui-skin-sam">
 
-<h1>String Template Based Row Expansion</h1>
+<h1>DataTable with Row Expansion</h1>
 
 <div class="exampleIntro">
-	<p>A demonstration of the DataTable's row expansion feature, using a string based template. This is a list of popular items bookmarked on Delicious</p>
+	<p>A demonstration of the DataTable's row expansion feature. This is a list of Interestingness from Flickr</p>
 
 </div>
 
@@ -56,10 +52,9 @@
 <script type="text/javascript" src="../../build/element/element.js"></script> 
 <script type="text/javascript" src="../../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../../build/yuitest/yuitest-min.js"></script>
-<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
-<script type="text/javascript" src="../../build/json/json-min.js"></script>
 <script type="text/javascript" src="../../build/datasource/datasource.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable.js"></script>
+<script type="text/javascript" src="data.js"></script>
 <script type="text/javascript" src="rowexpansion.js"></script>
 
 <script>
@@ -71,40 +66,40 @@ YAHOO.util.Event.onDOMReady( function() {
 
 					var	cell_element = el.parentNode;
 
-					YAHOO.util.Dom.addClass( cell_element, "yui-dt-expandablerow-trigger" );
+					//Set trigger
+					if( oData ){ //Row is closed
+
+						YAHOO.util.Dom.addClass( cell_element, "yui-dt-expandablerow-trigger" );
+
+					}
 
 				};
 
-				var myDataSource = new YAHOO.util.DataSource("/data/flickr_proxy.php?q=select%20*%20from%20delicious.feeds.popular&format=json&env=http%3A%2F%2Fdatatables.org%2Falltables.env");
-				myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-				myDataSource.connXhrMode = "queueRequests";
-				myDataSource.responseSchema = {
-				    resultsList: "query.results.item"
-				};
-				
+				var myDataSource = new YAHOO.util.DataSource(YAHOO.example.interestingness);
+						myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+						myDataSource.responseSchema = {
+							fields: ["title","farm","server","id","secret","owner"]
+						};
 
 				var myDataTable = new YAHOO.widget.DataTable(
 						"event_table",
 						[
 							{
+								key:"farm",
 								label:"",
 								formatter:expansionFormatter
 							},
 							{
 								key:"title",
-								label:"Popular Bookmark",
-								resizeable:true,
-								sortable:true
-							},
-							{
-								key:"creator",
-								label:"First Bookmarked By",
+								label:"Interestingness",
+								width : '200px',
 								resizeable:true,
 								sortable:true
 							}
 						],
 						myDataSource,
-						{ rowExpansionTemplate : '<iframe src="{link}" width="100%" height="300px"></iframe>'});
+							{ rowExpansionTemplate : '<img src="http://farm{farm}.static.flickr.com/{server}/{id}_{secret}_m_d.jpg" />' }
+						);
 
 				//Subscribe to a click event to bind to
 				myDataTable.subscribe( 'cellClickEvent', myDataTable.onEventToggleRowExpansion );
