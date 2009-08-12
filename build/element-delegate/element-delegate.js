@@ -91,7 +91,7 @@
 	     * @method removeDelegate
 	     * @param {String} type The name of the event to listen for
 	     * @param {Function} fn The function call when the event fires
-         * @return {boolean} true if the unbind was successful, false 
+         * @return {boolean} Returns true if the unbind was successful, false 
          *  otherwise.
          * @for Element
 	     */
