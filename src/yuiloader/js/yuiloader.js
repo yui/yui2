@@ -101,7 +101,7 @@
         'charts': {
             'type': 'js',
             'path': 'charts/charts-min.js',
-            'requires': ['element', 'json', 'datasource']
+            'requires': ['element', 'json', 'datasource', 'swf']
         },
 
         'colorpicker': {
@@ -392,7 +392,8 @@
         'swf': {
             'type': 'js',
             'path': 'swf/swf-min.js',
-            'requires': ['element']
+            'requires': ['element'],
+            'supersedes': ['swfdetect']
         },
 
         'swfdetect': {
@@ -404,7 +405,7 @@
         'swfstore': {
             'type': 'js',
             'path': 'swfstore/swfstore-min.js',
-            'requires': ['element', 'cookie']
+            'requires': ['element', 'cookie', 'swf']
         },
 
         'tabview': {
