@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>Function Template Based Row Expansion</title>
+	
+	<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+	<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
+	<link type="text/css" rel="stylesheet" href="../../build/logger/assets/skins/sam/logger.css">
+	<link rel="stylesheet" type="text/css" href="../../build/yuitest/assets/skins/sam/yuitest.css" />
+	<style>
+		body{ text-align: left; }
+		UL{ padding:0;margin:0; }
+		.yui-log{
+			filter:alpha(opacity=50);
+			-moz-opacity:0.5;
+			-khtml-opacity: 0.5;
+			opacity: 0.5;
+		}
+		.yui-dt-expanded .yui-dt-expandablerow-trigger{
+			width:18px;
+			height:22px;
+			cursor:pointer;
+			background:url(arrow_open.png) 4px 4px no-repeat;
+		}
+		.yui-dt-expandablerow-trigger, .yui-dt-collapsed .yui-dt-expandablerow-trigger{
+			width:18px;
+			height:22px;
+			cursor:pointer;
+			background:url(arrow_closed.png) 4px 4px no-repeat;
+		}
+		.yui-dt-expansion .yui-dt-liner{
+			padding:0;
+			background-color:#fff;
+			border:solid 0 #333;
+			border-width: 0 0 1px 0;
+		}
+		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table{
+			border:none;
+		}
+		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td{
+			border:solid 0 #bbb;
+			border-width:1px 0;
+			padding:3px;
+			width:100%;
+		}
+		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td div{
+			overflow:hidden;
+			width:100px;
+		}
+		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td.big{
+			padding:3px;
+			width:300px;
+		}
+		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td.big div{
+			overflow:hidden;
+			width:300px;
+		}
+		#expandable_table{
+			width:500px;
+			table-layout: fixed;
+		}
+	</style>
+
+</head>
+
+<body class=" yui-skin-sam">
+
+<h1>Function Template Based Row Expansion</h1>
+
+<div class="exampleIntro">
+	<p>A demonstration of the DataTable's row expansion feature, using a function based template. This is a list of popular items bookmarked on Delicious</p>
+</div>
+
+<div id="expandable_table"></div>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script> 
+<script type="text/javascript" src="../../build/dom/dom.js"></script> 
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
+<script type="text/javascript" src="../../build/element/element.js"></script> 
+<script type="text/javascript" src="../../build/logger/logger-min.js"></script>
+<script type="text/javascript" src="../../build/yuitest/yuitest-min.js"></script>
+<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
+<script type="text/javascript" src="../../build/json/json-min.js"></script>
+<script type="text/javascript" src="../../build/datasource/datasource.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable.js"></script>
+<script type="text/javascript" src="rowexpansion.js"></script>
+
+<script>
+
+YAHOO.util.Event.onDOMReady( function() {
+
+	YAHOO.example.rowExpansionFunction = function() {
+
+		var expansionFormatter = function(el, oRecord, oColumn, oData) {
+
+			YAHOO.util.Dom.addClass( el.parentNode, "yui-dt-expandablerow-trigger" );
+		
+		};
+		
+		var getExtendedData = function( url, success ){
+			
+			YAHOO.util.Connect.asyncRequest(
+				'GET',
+				url,
+				{
+					success : success,
+					failure : function( o ){
+						
+						YAHOO.log('Failed to get data','error','RowExpansionExample');
+						
+					}
+				}
+			); 
+			
+		};
+		
+		var getYQLUrl = function( query ){
+			
+			return '/data/yql.php?format=json&q=' + encodeURIComponent( query );
+			
+		};
+		
+		var expansionTemplate = function( oArgs ){
+
+			var rss_feed            = oArgs.data.getData().commentRss,
+					table_markup_top    = '<table width=500> \
+																		<tr> \
+																			<th class="big">Comment</th> \
+																			<th>User</th> \
+																			<th>tags</th> \
+																		</tr> \
+																',
+					table_markup_bottom = '</table>',
+					row_template        = '<tr> \
+																	<td class="big"><div>{description}</div></td> \
+																	<td><div><a href="http://delicious.com/{creator}">{creator}</a></div></td> \
+																	<td><div><ul>{yuidt_category_markup}</ul></div></td> \
+																</tr> \
+															';
+
+			getExtendedData( 
+				getYQLUrl('select * from rss where url="' + rss_feed + '?count=100"'),
+				
+				function( o ){ //Pass a function to be called on success
+					
+					var response_object = YAHOO.lang.JSON.parse( o.responseText ),
+							data_array      = response_object.query.results.item,
+							element         = oArgs.liner_element,
+							markup          = table_markup_top;
+					
+					for( var i=0, l=data_array.length; l > i; i++ ){
+						
+						var item = data_array[ i ],
+								catagory_markup = '';
+						
+						if( item.category ){
+							
+							for( var ii=0, ll=item.category.length; ll > ii; ii++ ){
+
+								catagory_markup += YAHOO.lang.substitute( 
+									'<li><a href="{domain}{content}">{content}</a></li>',
+									item.category[ii]
+								);
+
+							}
+							
+						}
+						
+						item.yuidt_category_markup = catagory_markup;
+						
+						if( item.description ){
+							
+							markup += YAHOO.lang.substitute( row_template, item );
+							
+						}
+
+					}
+					
+					markup += table_markup_bottom;
+					
+					element.innerHTML = markup;
+					
+				}
+				
+			);
+
+		};
+
+		var myDataSource = new YAHOO.util.DataSource( getYQLUrl( 'select * from delicious.feeds.popular' ) );
+		myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+		myDataSource.connXhrMode = "queueRequests";
+		myDataSource.responseSchema = {
+		    resultsList: "query.results.item"
+		};
+
+		var myDataTable = new YAHOO.widget.DataTable(
+			"expandable_table",
+			[
+				{
+					label:"",
+					formatter:expansionFormatter
+				},
+				{
+					key:"title",
+					label:"Popular Bookmark",
+					resizeable:true,
+					sortable:true,
+					formatter:function( el, oRecord, oColumn, oData ){
+						
+						el.innerHTML = '<a href="' + oRecord.getData().link + '">' + oData + '</a>';
+						
+					}
+				}
+			],
+			myDataSource,
+			{ rowExpansionTemplate : expansionTemplate }
+		);
+
+		//Subscribe to a click event to bind to
+		myDataTable.subscribe( 'cellClickEvent', myDataTable.onEventToggleRowExpansion );
+				
+		return {
+			
+			oDS: myDataSource,
+			oDT: myDataTable
+		
+		};
+		
+	}();
+});
+
+</script>
+<!--script type="text/javascript" src="test_rowexpansion.js"></script-->
+
+</body>
+</html>
