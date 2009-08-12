@@ -26,16 +26,22 @@ if (! YU.Storage) {
 	 * @param conf {Object} Required. A configuration object.
 	 */
 	YU.Storage = function(location, name, conf) {
+		var that = this;
 		Y.env._id_counter += 1;
 
 		// protected variables
-		this._cfg = YL.isObject(conf) ? conf : {};
-		this._location = location;
-		this._name = name;
+		that._cfg = YL.isObject(conf) ? conf : {};
+		that._location = location;
+		that._name = name;
+		that.isReady = false;
 
 		// public variables
-		this.createEvent(this.CE_READY, {scope: this});
-		this.createEvent(this.CE_CHANGE, {scope: this});
+		that.createEvent(that.CE_READY, {scope: that});
+		that.createEvent(that.CE_CHANGE, {scope: that});
+		
+		that.subscribe(that.CE_READY, function() {
+			that.isReady = true;
+		});
 	};
 
 	YU.Storage.prototype = {
@@ -95,6 +101,14 @@ if (! YU.Storage) {
 		 * @public
 		 */
 		length: 0,
+
+		/**
+		 * This engine singleton has been initialized already.
+		 * @property isReady
+		 * @type {String}
+		 * @protected
+		 */
+		isReady: false,
 
 		/**
 		 * Clears any existing key/value pairs.

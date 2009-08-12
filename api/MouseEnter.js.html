@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Event Utility mouseenter and mouseout Module&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>Event Utility mouseenter and mouseout Module&nbsp; <span class="subtitle">2.8.0</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a>
                 
@@ -49,7 +49,9 @@
                         </style>
                         <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * Augments the Event Utility with support for the mouseenter and mouseleave </span>
-<span class="c"> * events</span>
+<span class="c"> * events:  A mouseenter event fires the first time the mouse enters an </span>
+<span class="c"> * element; a mouseleave event first the first time the mouse leaves an </span>
+<span class="c"> * element.</span>
 <span class="c"> * </span>
 <span class="c"> * @module event-mouseenter</span>
 <span class="c"> * @title Event Utility mouseenter and mouseout Module</span>
@@ -105,8 +107,9 @@
 	<span class="nx">Lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">Event</span><span class="o">,</span> <span class="o">{</span>
 
 		<span class="c">/**</span>
-<span class="c">		 * Creates a delegate function used to call event listeners specified </span>
-<span class="c">		 * via the &lt;code&gt;YAHOO.util.Event.addListener&lt;/code&gt; </span>
+<span class="c">		 * Creates a delegate function used to call mouseover and mouseleave </span>
+<span class="c">		 * event listeners specified via the </span>
+<span class="c">		 * &lt;code&gt;YAHOO.util.Event.addListener&lt;/code&gt; </span>
 <span class="c">		 * or &lt;code&gt;YAHOO.util.Event.on&lt;/code&gt; method.</span>
 <span class="c">		 *</span>
 <span class="c">		 * @method _createMouseDelegate</span>
@@ -114,10 +117,10 @@
 <span class="c">		 * @param {Function} fn        The method (event listener) to call</span>
 <span class="c">		 * @param {Object}   obj    An arbitrary object that will be </span>
 <span class="c">		 *                             passed as a parameter to the listener</span>
-<span class="c">		 * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes</span>
-<span class="c">		 *                             the execution context of the listener. If an</span>
-<span class="c">		 *                             object, this object becomes the execution</span>
-<span class="c">		 *                             context. </span>
+<span class="c">		 * @param {Boolean|object}  overrideContext  If true, the value of the </span>
+<span class="c">		 * 							obj parameter becomes the execution context</span>
+<span class="c">		 *                          of the listener. If an object, this object</span>
+<span class="c">		 *                          becomes the execution context. </span>
 <span class="c">		 * @return {Function} Function that will call the event listener </span>
 <span class="c">		 * specified by either the &lt;code&gt;YAHOO.util.Event.addListener&lt;/code&gt; </span>
 <span class="c">		 * or &lt;code&gt;YAHOO.util.Event.on&lt;/code&gt; method.</span>
@@ -238,6 +241,7 @@
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_element-delegate.html" title="element-delegate">element-delegate</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
                                 <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
                                 <li class="selected"><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
@@ -257,6 +261,7 @@
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_storage.html" title="Storage">Storage</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
                                 <li class=""><a href="module_swf.html" title="swf">swf</a></li>
                                 <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
