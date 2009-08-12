@@ -15,15 +15,7 @@
     position: relative;
     text-align:center;
 }
- 
-.yui-carousel-horizontal .yui-carousel-element {
-    overflow: hidden;
-    padding: 0;
-    position: relative;
-    width: 320000px;
-    z-index: 1;
-}
- 
+
 .yui-carousel-element li {
     border: 1px solid #ccc;
     list-style: none;
@@ -62,11 +54,17 @@
 }
 
 .yui-carousel-element   {
+    overflow: hidden;
+    position:relative;
     margin: 0 auto;
+    padding:0;
     text-align:left;
+}
+
+.yui-carousel-horizontal .yui-carousel-element {
+    width: 320000px;
 }
 
 .yui-carousel-vertical .yui-carousel-element {
     height:320000px;
-    padding:0;
 }

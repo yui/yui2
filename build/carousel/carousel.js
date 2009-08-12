@@ -603,12 +603,6 @@
         itemSize = getCarouselItemSize.call(this);
         size = itemSize * delta;
 
-        // XXX: really, when the orientation is vertical, the scrolling
-        // is not exactly the number of elements into element size. However, it is when multirows is enabled.
-        if (this.get("isVertical") && !this._rows) {
-            size -= delta;
-        }
-
         return size;
     }
 
@@ -2405,7 +2399,6 @@
          */
         scrollBackward: function () {
             var carousel = this;
-
             carousel.scrollTo(carousel._firstItem -
                               carousel.get("scrollIncrement"));
         },
@@ -2418,7 +2411,6 @@
          */
         scrollForward: function () {
             var carousel = this;
-
             carousel.scrollTo(carousel._firstItem +
                               carousel.get("scrollIncrement"));
         },
@@ -2430,14 +2422,21 @@
          * @public
          */
         scrollPageBackward: function () {
-            var carousel = this,
-                item     = carousel._firstItem - carousel.get("numVisible");
+            var carousel   = this,
+                isVertical = carousel.get("isVertical"),
+                cols       = carousel._cols,
+                item       = carousel._firstItem - carousel.get("numVisible");
+
+            if (item < 0) { // only account for multi-row when scrolling backwards from item 0
+                if (cols) {
+                    item = carousel._firstItem - cols;
+                } 
+            }
 
             if (carousel.get("selectOnScroll")) {
                 carousel._selectedItem = carousel._getSelectedItem(item);
-            } else {
-                item = carousel._getValidIndex(item);
             }
+
             carousel.scrollTo(item);
         },
 
@@ -2450,12 +2449,15 @@
         scrollPageForward: function () {
             var carousel = this,
                 item     = carousel._firstItem + carousel.get("numVisible");
+            
+            if (item > carousel.get("numItems")) {
+                item = 0;
+            }
 
             if (carousel.get("selectOnScroll")) {
                 carousel._selectedItem = carousel._getSelectedItem(item);
-            } else {
-                item = carousel._getValidIndex(item);
             }
+
             carousel.scrollTo(item);
         },
 
@@ -2496,15 +2498,13 @@
 
             if (item < 0) {
                 if (isCircular) {
-                    console.log('isCircular');
-                    console.log('numItems:', numItems, 'item:', item);
                     item = numItems + item;
-                    console.log('after calc:', item);
                 } else {
                     stopAutoScroll.call(carousel);
                     return;
                 }
             } else if (numItems > 0 && item > numItems - 1) {
+                
                 if (carousel.get("isCircular")) {
                     item = numItems - item;
                 } else {
@@ -2535,7 +2535,12 @@
 
             // Calculate the delta relative to the first item, the delta is
             // always negative.
-            delta = 0 - item;
+            /*if (isVertical) {
+                delta = -1 - item;
+            } else {*/
+                delta = 0 - item;
+            //}
+            
             if (itemsPerCol) {
                 // offset calculations for multirow Carousel
                 if (isVertical) {
@@ -2953,7 +2958,6 @@
                     val = carousel.get("selectedItem");
                 }
             }
-
             return val;
         },
 
@@ -3278,7 +3282,7 @@
          * @protected
          */
         _refreshUi: function () {
-            var carousel = this, i, isVertical, item, n, rsz, sz;
+            var carousel = this, i, isVertical = carousel.get("isVertical"), item, n, rsz, sz;
 
             if (carousel._itemsTable.numItems < 1) {
                 return;
@@ -3289,8 +3293,10 @@
             // This fixes the widget to auto-adjust height/width for absolute
             // positioned children.
             item = carousel._itemsTable.items[0].id;
+            
             sz   = isVertical ? getStyle(item, "width") :
                     getStyle(item, "height");
+
             Dom.setStyle(carousel._carouselEl,
                          isVertical ? "width" : "height", sz + "px");
 
