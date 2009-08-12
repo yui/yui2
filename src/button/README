@@ -1,3 +1,58 @@
+*** Version 2.8.0 ***
+
+Fixed the following bugs:
+-------------------------
+
++ For Buttons of type "checkbox" and "radio": clicking on a Button's 
+  corresponding <label> element will focus and check or uncheck the Button.
+
++ For YAHOO.widget.Button and YAHOO.widget.ButtonGroup: Moved the "yui-" prefix 
+  used for all class names into a new prototype constant named "CLASS_NAME_PREFIX"
+
++ Buttons with menus created from existing markup will no longer create two 
+  hidden fields for their menu when its parent form is submitted.
+
++ For IE: Mousing down on a focusable element (such as a 
+  form field) when a Button's Menu is visible will now result in the Button
+  blurring properly, and the focusable element gaining focus, becoming the 
+  activeElement and firing key-related events.
+
++ The "selectedMenuItemChange" attribute no longer fires when a Button's Menu 
+  is initially made visible.
+
+Added the following features:
+-----------------------------
+
++ Added a new "replaceLabel" attribute to YAHOO.widget.Button.  When set to 
+  "true" the text of the Button's <label> element is used as the source for the 
+  Button's label configuration attribute and removed from the DOM.
+
+Changes:
+--------
+
++ Removed the following prototype properties used to set the value of a 
+  Button's title attribute:
+
+  - RADIO_DEFAULT_TITLE
+  - RADIO_CHECKED_TITLE
+  - CHECKBOX_DEFAULT_TITLE
+  - CHECKBOX_CHECKED_TITLE
+  - MENUBUTTON_DEFAULT_TITLE
+  - MENUBUTTON_MENU_VISIBLE_TITLE
+  - SPLITBUTTON_DEFAULT_TITLE
+  - SPLITBUTTON_OPTION_VISIBLE_TITLE
+  - SUBMIT_TITLE
+
+  These default title were known to cause problems with screen readers in that 
+  the value of the title attribute would be read instead of the Button's 
+  text label.  This affected the following browser + screen reader combinations:
+
+  - VoiceOver + Safari 
+  - JAWS + Firefox
+  - JAWS + IE
+  - Window-Eyes + IE
+
+
 *** Version 2.7.0 ***
 
 Fixed the following bugs:
