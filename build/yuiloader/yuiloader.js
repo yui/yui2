@@ -1919,7 +1919,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         'charts': {
             'type': 'js',
             'path': 'charts/charts-min.js',
-            'requires': ['element', 'json', 'datasource']
+            'requires': ['element', 'json', 'datasource', 'swf']
         },
 
         'colorpicker': {
@@ -2210,7 +2210,8 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         'swf': {
             'type': 'js',
             'path': 'swf/swf-min.js',
-            'requires': ['element']
+            'requires': ['element'],
+            'supersedes': ['swfdetect']
         },
 
         'swfdetect': {
@@ -2222,7 +2223,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         'swfstore': {
             'type': 'js',
             'path': 'swfstore/swfstore-min.js',
-            'requires': ['element', 'cookie']
+            'requires': ['element', 'cookie', 'swf']
         },
 
         'tabview': {
