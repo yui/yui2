@@ -1,6 +1,6 @@
 AutoComplete Release Notes
 
-*** version 2.NEXT ***
+*** version 2.8.0 ***
 
 * Refactored the "isFocused" model to more simply and accurately describe if
 the widget instance is active or inactive.

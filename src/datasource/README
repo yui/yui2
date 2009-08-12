@@ -1,5 +1,13 @@
 DataSource Release Notes
 
+**** version 2.8.0 ****
+
+* Negative formatting support in YAHOO.util.Number.format().
+* Added useXPath property for XPath support when parsing XML data.
+
+
+
+
 **** version 2.7.0 ****
 
 * The parseNumber() method will now return null for the following values:

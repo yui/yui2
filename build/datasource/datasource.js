@@ -621,6 +621,16 @@ responseSchema : null,
  */
 // property intentionally undefined
  
+/**
+ * When working with XML data, setting this property to true enables support for
+ * XPath-syntaxed locators in schema definitions.
+ *
+ * @property useXPath
+ * @type Boolean
+ * @default false
+ */
+useXPath : false,
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // DataSourceBase public methods
