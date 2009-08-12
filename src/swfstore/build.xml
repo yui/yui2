@@ -17,7 +17,7 @@
 		<exec executable="${flexbin}/mxmlc" failonerror="true">
 
 			<!-- Flash Platform -->
-            <arg line="-source-path+='../charts/as'"/>
+            <arg line="-source-path+='../swfstore/as'"/>
                         
             <!-- Output SWF -->
             <arg line="-output './build_tmp/assets/swfstore.swf'"/>
