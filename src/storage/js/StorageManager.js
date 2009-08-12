@@ -125,16 +125,14 @@ var Y = YAHOO.util,
 		/**
 		 * Registers a engineType Class with the StorageManager singleton; first in is the first out.
 		 * @method register
-		 * @param engineType {String} Required. The engine type, see engines.
-		 * @param validationFx {Function} Required. The evaluation function to test if engineType is available.
-		 * @param klass {Function} Required. A pointer to the engineType Class.
+		 * @param engineConstructor {Function} Required. The engine constructor function, see engines.
 		 * @return {Boolean} When successfully registered.
 		 * @static
 		 */
-		register: function(engineType, validationFx, klass) {
-			if (YL.isString(engineType) && YL.isFunction(validationFx) && YL.isFunction(klass) && validationFx()) {
-				_registeredEngineMap[engineType] = klass;
-				_registeredEngineSet.push(klass);
+		register: function(engineConstructor) {
+			if (YL.isFunction(engineConstructor) && YL.isFunction(engineConstructor.isAvailable) && YL.isString(engineConstructor.ENGINE_NAME) && engineConstructor.isAvailable()) {
+				_registeredEngineMap[engineConstructor.ENGINE_NAME] = engineConstructor;
+				_registeredEngineSet.push(engineConstructor);
 				return true;
 			}
 

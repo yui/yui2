@@ -484,7 +484,7 @@ DualSlider.prototype = {
      * @protected
      */
     _handleMouseDown: function(e) {
-        if (!e._handled) {
+        if (!e._handled && !this.minSlider._sliding && !this.maxSlider._sliding) {
             e._handled = true;
             this.selectActiveSlider(e);
             return YW.Slider.prototype.onMouseDown.call(this.activeSlider, e);

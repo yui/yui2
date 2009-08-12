@@ -2774,7 +2774,7 @@ YAHOO.widget.Node.prototype = {
         if (this.enableHighlight) {
             if (this.tree.singleNodeHighlight) {
                 if (this.tree._currentlyHighlighted) {
-                    this.tree._currentlyHighlighted.unhighlight();
+                    this.tree._currentlyHighlighted.unhighlight(_silent);
                 }
                 this.tree._currentlyHighlighted = this;
             }

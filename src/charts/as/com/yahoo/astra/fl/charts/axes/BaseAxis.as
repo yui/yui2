@@ -5,6 +5,7 @@ package com.yahoo.astra.fl.charts.axes
 	import fl.core.UIComponent;
 	import flash.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
+	import flash.events.ErrorEvent;
 	import com.yahoo.astra.fl.charts.CartesianChart;
 	import com.yahoo.astra.utils.AxisLabelUtil;
 	
@@ -345,7 +346,18 @@ package com.yahoo.astra.fl.charts.axes
 			var text:String = value.toString();
 			if(this._labelFunction != null)
 			{
-				text = this._labelFunction(value);
+				try
+				{
+					text = this._labelFunction(value);
+				}
+				catch(e:Error)
+				{
+					//dispatch error event from the chart
+					var message:String = "There is an error in your ";
+					message += (ICartesianAxisRenderer(this.renderer).orientation == AxisOrientation.VERTICAL)?"y":"x";
+					message += "-axis labelFunction.";
+					this.chart.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, message));
+				}
 			}
 			
 			if(text == null)

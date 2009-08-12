@@ -1,9 +1,14 @@
 DataTable Release Notes
 
-**** version development master ****
+**** 2.8.0 ****
 
 * DropdownCellEditor now supports multiple and size properties.
 * Calling DataTable's destroy() method now calls Paginator destroy(), when applicable.
+* Added beforeRenderEvent.
+* Added clearScrollPositions() and scrollTo() to ScrollingDataTable.
+* Performance improvements for ScrollingDataTable in IE.
+* Support for multiple and size properties in DropdownCellEditor.
+* Bug fixes for DataTables rendered within table markup.
 
 
 **** version 2.7.0 ***
