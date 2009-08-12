@@ -101,9 +101,11 @@
 }
 
 .yui-skin-sam .yui-carousel-nav ul:after {
-    clear: both;
-    content: "";
+    content: ".";
     display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
 }
 
 .yui-skin-sam .yui-carousel-nav ul li a {

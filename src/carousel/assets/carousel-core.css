@@ -5,11 +5,11 @@
     text-align: left;
     zoom: 1;
 }
- 
+
 .yui-carousel.yui-carousel-visible {
     visibility: visible;
 }
- 
+
 .yui-carousel-content {
     overflow: hidden;
     position: relative;
@@ -30,21 +30,23 @@
     display: block;
     float: none;
 }
- 
+
 .yui-log .carousel {
     background: #f2e886;
 }
- 
+
 .yui-carousel-nav {
     zoom: 1;
 }
- 
+
 .yui-carousel-nav:after {
-    clear: both;
-    content: "";
+    content: ".";
     display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;    
 }
- 
+
 .yui-carousel-button-focus {
     outline: 1px dotted #000;
 }
