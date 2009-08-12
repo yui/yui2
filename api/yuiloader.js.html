@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>yuiloader&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>yuiloader&nbsp; <span class="subtitle">2.8.0</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_yuiloader.html" title="yuiloader">yuiloader</a>
                 
@@ -165,7 +165,7 @@
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
             <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;connection/connection-min.js&#39;</span><span class="o">,</span>
             <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;event&#39;</span><span class="o">],</span>
-            <span class="s1">&#39;supersedes&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;connectioncore&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;supersedes&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;connectioncore&#39;</span><span class="o">]</span>
         <span class="o">},</span>
 
         <span class="s1">&#39;connectioncore&#39;</span><span class="o">:</span> <span class="o">{</span>
@@ -307,7 +307,7 @@
          <span class="s1">&#39;imagecropper&#39;</span><span class="o">:</span> <span class="o">{</span>
              <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
              <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;imagecropper/imagecropper-min.js&#39;</span><span class="o">,</span>
-             <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;dragdrop&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">,</span> <span class="s1">&#39;resize&#39;</span><span class="o">],</span>
+             <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dragdrop&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">,</span> <span class="s1">&#39;resize&#39;</span><span class="o">],</span>
              <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
          <span class="o">},</span>
 
@@ -326,7 +326,7 @@
          <span class="s1">&#39;layout&#39;</span><span class="o">:</span> <span class="o">{</span>
              <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
              <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;layout/layout-min.js&#39;</span><span class="o">,</span>
-             <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">],</span>
+             <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;element&#39;</span><span class="o">],</span>
              <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;animation&#39;</span><span class="o">,</span> <span class="s1">&#39;dragdrop&#39;</span><span class="o">,</span> <span class="s1">&#39;resize&#39;</span><span class="o">,</span> <span class="s1">&#39;selector&#39;</span><span class="o">],</span>
              <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
          <span class="o">},</span> 
@@ -367,6 +367,14 @@
             <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
         <span class="o">},</span>
 
+        <span class="s1">&#39;progressbar&#39;</span><span class="o">:</span> <span class="o">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;progressbar/progressbar-min.js&#39;</span><span class="o">,</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;element&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;animation&#39;</span><span class="o">],</span>
+            <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">},</span>
+
         <span class="s1">&#39;reset&#39;</span><span class="o">:</span> <span class="o">{</span>
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="o">,</span>
             <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;reset/reset-min.css&#39;</span>
@@ -389,7 +397,7 @@
          <span class="s1">&#39;resize&#39;</span><span class="o">:</span> <span class="o">{</span>
              <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
              <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;resize/resize-min.js&#39;</span><span class="o">,</span>
-             <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;dragdrop&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">],</span>
+             <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;dragdrop&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">],</span>
              <span class="s1">&#39;optional&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;animation&#39;</span><span class="o">],</span>
              <span class="s1">&#39;skinnable&#39;</span><span class="o">:</span> <span class="kc">true</span>
          <span class="o">},</span>
@@ -433,7 +441,7 @@
         <span class="s1">&#39;swf&#39;</span><span class="o">:</span> <span class="o">{</span>
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
             <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;swf/swf-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">]</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;element&#39;</span><span class="o">]</span>
         <span class="o">},</span>
 
         <span class="s1">&#39;swfdetect&#39;</span><span class="o">:</span> <span class="o">{</span>
@@ -445,7 +453,7 @@
         <span class="s1">&#39;swfstore&#39;</span><span class="o">:</span> <span class="o">{</span>
             <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;js&#39;</span><span class="o">,</span>
             <span class="s1">&#39;path&#39;</span><span class="o">:</span> <span class="s1">&#39;swfstore/swfstore-min.js&#39;</span><span class="o">,</span>
-            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;yahoo&#39;</span><span class="o">,</span> <span class="s1">&#39;dom&#39;</span><span class="o">,</span> <span class="s1">&#39;event&#39;</span><span class="o">,</span> <span class="s1">&#39;element&#39;</span><span class="o">,</span> <span class="s1">&#39;cookie&#39;</span><span class="o">]</span>
+            <span class="s1">&#39;requires&#39;</span><span class="o">:</span> <span class="o">[</span><span class="s1">&#39;element&#39;</span><span class="o">,</span> <span class="s1">&#39;cookie&#39;</span><span class="o">]</span>
         <span class="o">},</span>
 
         <span class="s1">&#39;tabview&#39;</span><span class="o">:</span> <span class="o">{</span>

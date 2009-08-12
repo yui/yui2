@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Element Event Delegation Module&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>Element Event Delegation Module&nbsp; <span class="subtitle">2.8.0</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_element-delegate.html" title="element-delegate">element-delegate</a>
                 
@@ -48,12 +48,15 @@
                             #doc3 .classopts { display:none; }
                         </style>
                         <div class="highlight" ><pre><span class="c">/**</span>
-<span class="c"> * Augments the Element Utility with event delegation support.</span>
+<span class="c"> * Augments the Element Utility with a &lt;code&gt;delegate&lt;/code&gt; method that </span>
+<span class="c"> * facilitates easy creation of delegated event listeners.  (Note: Using CSS </span>
+<span class="c"> * selectors as the filtering criteria for delegated event listeners requires </span>
+<span class="c"> * inclusion of the Selector Utility.)</span>
 <span class="c"> *</span>
 <span class="c"> * @module element-delegate</span>
 <span class="c"> * @title Element Event Delegation Module</span>
 <span class="c"> * @namespace YAHOO.util</span>
-<span class="c"> * @requires element</span>
+<span class="c"> * @requires element, event-delegate</span>
 <span class="c"> */</span>
 
 <span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
@@ -70,7 +73,10 @@
 	    <span class="c">/**</span>
 <span class="c">         * Appends a delegated event listener.  Delegated event listeners </span>
 <span class="c">		 * receive two arguments by default: the DOM event and the element  </span>
-<span class="c">		 * specified by the filtering function or CSS selector. </span>
+<span class="c">		 * specified by the filtering function or CSS selector.</span>
+<span class="c">		 * (Note: Using the delegate method requires the element-delegate </span>
+<span class="c">		 * module.  Using CSS selectors as the filtering criteria for delegated </span>
+<span class="c">		 * event listeners requires inclusion of the Selector Utility.)</span>
 <span class="c">	     * @method delegate</span>
 <span class="c">	     * @param {String} type The name of the event to listen for</span>
 <span class="c">	     * @param {Function} fn The handler to call when the event fires</span>
@@ -78,10 +84,11 @@
 <span class="c">		 * determine for what element(s) the event listener should be called. </span>
 <span class="c">		 * When a function is specified, the function should return an </span>
 <span class="c">		 * HTML element.  Using a CSS Selector requires the inclusion of the </span>
-<span class="c">		 * CSS Selector utility (YAHOO.util.Selector).</span>
+<span class="c">		 * CSS Selector Utility.</span>
 <span class="c">	     * @param {Any} obj A variable to pass to the handler</span>
 <span class="c">	     * @param {Object} scope The object to use for the scope of the handler </span>
-<span class="c">         * @return {boolean} true if the delegate was added successfully</span>
+<span class="c">         * @return {boolean} Returns true if the delegated event listener </span>
+<span class="c">		 * was added successfully</span>
 <span class="c">         * @for Element</span>
 <span class="c">	     */</span>
 		<span class="nx">delegate</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">filter</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
@@ -98,11 +105,16 @@
 				<span class="o">};</span>
 
 			<span class="k">if</span> <span class="o">(!</span><span class="nx">Event</span><span class="o">.</span><span class="nx">_createDelegate</span><span class="o">)</span> <span class="o">{</span>
-		        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Using delegate functionality requires the event-delegate&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;Event&quot;</span><span class="o">);</span>
+		        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Using delegate functionality requires the event-delegate&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;Element&quot;</span><span class="o">);</span>
 		        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
 			<span class="o">}</span>
 
 			<span class="k">if</span> <span class="o">(</span><span class="nx">specialTypes</span><span class="o">[</span><span class="nx">type</span><span class="o">])</span> <span class="o">{</span>
+
+				<span class="k">if</span> <span class="o">(!</span><span class="nx">Event</span><span class="o">.</span><span class="nx">_createMouseDelegate</span><span class="o">)</span> <span class="o">{</span>
+			        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Delegating a &quot;</span> <span class="o">+</span> <span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot; event requires the event-mouseleave module&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;Element&quot;</span><span class="o">);</span>
+			        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>				
+				<span class="o">}</span>
 
 				<span class="nx">fnMouseDelegate</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">_createMouseDelegate</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">);</span>
 
@@ -126,7 +138,7 @@
 
 
 	    <span class="c">/**</span>
-<span class="c">	     * Remove an event listener</span>
+<span class="c">	     * Remove a delegated event listener</span>
 <span class="c">	     * @method removeDelegate</span>
 <span class="c">	     * @param {String} type The name of the event to listen for</span>
 <span class="c">	     * @param {Function} fn The function call when the event fires</span>

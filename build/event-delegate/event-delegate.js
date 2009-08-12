@@ -1,5 +1,8 @@
 /**
- * Augments the Event Utility with event delegation support.
+ * Augments the Event Utility with a <code>delegate</code> method that 
+ * facilitates easy creation of delegated event listeners.  (Note: Using CSS 
+ * selectors as the filtering criteria for delegated event listeners requires 
+ * inclusion of the Selector Utility.)
  *
  * @module event-delegate
  * @title Event Utility Event Delegation Module
@@ -27,10 +30,10 @@
 		 * determine for what element(s) the event listener should be called.		
 		 * @param {Object}   obj	An arbitrary object that will be 
 		 *                             passed as a parameter to the listener.
-		 * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes
-		 *                             the execution context of the listener. If an
-		 *                             object, this object becomes the execution
-		 *                             context.
+		 * @param {Boolean|object}  overrideContext  If true, the value of the 
+		 * 							obj parameter becomes the execution context
+		 *                          of the listener. If an object, this object
+		 *                          becomes the execution context.
 		 * @return {Function} Function that will call the event listener 
 		 * specified by the <code>YAHOO.util.Event.delegate</code> method.
          * @private
@@ -108,7 +111,9 @@
 		 * receive three arguments by default: the DOM event, the element  
 		 * specified by the filtering function or CSS selector, and the 
 		 * container element (the element to which the event listener is 
-		 * bound).
+		 * bound).  (Note: Using the delegate method requires the event-delegate 
+		 * module.  Using CSS selectors as the filtering criteria for delegated 
+		 * event listeners requires inclusion of the Selector Utility.)
          *
          * @method delegate
          *
@@ -121,17 +126,17 @@
 		 * determine for what element(s) the event listener should be called. 
 		 * When a function is specified, the function should return an 
 		 * HTML element.  Using a CSS Selector requires the inclusion of the 
-		 * CSS Selector utility (YAHOO.util.Selector).
+		 * CSS Selector Utility.
          * @param {Object}   obj    An arbitrary object that will be 
          *                             passed as a parameter to the listener
-         * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes
+         * @param {Boolean|object}  overrideContext  If true, the value of the obj parameter becomes
          *                             the execution context of the listener. If an
          *                             object, this object becomes the execution
          *                             context.
-         * @return {Boolean} true Returns true if the action was successful or defered,
-         *                        false if one or more of the elements 
-         *                        could not have the listener attached,
-         *                        or if the operation throws an exception.
+         * @return {Boolean} Returns true if the action was successful or defered,
+         *                   false if one or more of the elements 
+         *                   could not have the listener attached,
+         *                   or if the operation throws an exception.
          * @static
          * @for Event
          */
@@ -187,7 +192,7 @@
          * @param {Function} fn The method the event invokes.  If fn is
          *  undefined, then all event listeners for the type of event are 
          *  removed.
-         * @return {boolean} true Returns true if the unbind was successful, false 
+         * @return {boolean} Returns true if the unbind was successful, false 
          *  otherwise.
          * @static
          * @for Event
