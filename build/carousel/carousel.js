@@ -1994,7 +1994,6 @@
             carousel.on(pageChangeEvent, syncPagerUi, carousel);
 
             carousel.on(renderEvent, function (ev) {
-                carousel.on(renderEvent, function (ev) {
                 if (carousel.get("selectedItem") === null ||
                     carousel.get("selectedItem") < 0) { // in either case
                     carousel.set("selectedItem", carousel.get("firstVisible"));
