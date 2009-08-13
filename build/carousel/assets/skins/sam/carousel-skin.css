@@ -81,6 +81,10 @@
     top: 4px;
 }
 
+.yui-skin-sam .yui-carousel-vertical .yui-carousel-nav select {
+    position: static;
+}
+
 .yui-skin-sam .yui-carousel-vertical .yui-carousel-nav ul,
 .yui-skin-sam .yui-carousel-vertical .yui-carousel-nav select {
     float: none;
