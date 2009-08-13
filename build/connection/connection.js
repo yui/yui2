@@ -915,10 +915,10 @@ YAHOO.util.Connect =
 		o = o || {};
 		// if the XHR object assigned to the transaction has not been dereferenced,
 		// then check its readyState status.  Otherwise, return false.
-		if(o.xhr){
+		if(o.xhr && o.conn){
 			return o.conn.readyState !== 4 && o.conn.readyState !== 0;
 		}
-		else if(o.xdr){
+		else if(o.xdr && o.conn){
 			return o.conn.isCallInProgress(o.tId);
 		}
 		else if(o.upload === true){
@@ -950,6 +950,9 @@ YAHOO.util.Connect =
 	}
 };
 
+/**
+  * @for Connect
+  */
 (function() {
 	var YCM = YAHOO.util.Connect,
 		_xdrReady = new YAHOO.util.CustomEvent('xdrReady'),
@@ -1076,6 +1079,9 @@ YAHOO.util.Connect =
 	YCM.handleXdrResponse = _handleXdrResponse;
 })();
 
+/**
+  * @for Connect
+  */
 (function(){
 	var YCM = YAHOO.util.Connect,
 		YE = YAHOO.util.Event;
