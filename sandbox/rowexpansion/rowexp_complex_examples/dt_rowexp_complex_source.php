@@ -12,10 +12,16 @@
 <script type="text/javascript" src="../../j/yui2/build/json/json-min.js"></script>
 <script type="text/javascript" src="../../j/yui2/build/datasource/datasource.js"></script>
 <script type="text/javascript" src="../../j/yui2/build/datatable/datatable.js"></script>
-<script type="text/javascript" src="../../j/yui2/sandbox/rowexpansion/rowexpansion.js"></script>
+<!--script type="text/javascript" src="../../j/yui2/sandbox/rowexpansion/rowexpansion.js"></script-->
 
 <script>
 
+/* This code should not be modified */
+<?php
+require "./includes/" . $id_map[ $doc_id ][ 'path' ] . "/rowexpansion.js";
+?>
+
+/* Modify as needed */
 YAHOO.util.Event.onDOMReady( function() {
 
 	YAHOO.example.rowExpansionFunction = function() {
