@@ -13,8 +13,25 @@
 (function () {
 
 	var Event = YAHOO.util.Event,
+		Selector = YAHOO.util.Selector,
 		Lang = YAHOO.lang,
-		delegates = [];
+		delegates = [],
+
+
+		getMatch = function(el, selector, container) {
+		
+			var returnVal;
+		
+			if (el === container) {
+				returnVal = false;
+			}
+			else {
+				returnVal = Selector.test(el, selector) ? el: getMatch(el.parentNode, selector);
+			}
+		
+			return returnVal;
+		
+		};
 
 
 	Lang.augmentObject(Event, {
@@ -48,10 +65,7 @@
 					target = Event.getTarget(event),
 					matchedEl,
 					context,
-					elements,
-					element,
-					nElements,
-					i;
+					selector;
 
 
 				if (Lang.isFunction(filter)) {
@@ -59,20 +73,23 @@
 				}
 				else if (Lang.isString(filter)) {
 
-					elements = YAHOO.util.Selector.query(filter, container);
-					nElements = elements.length;
+					if (!container.id) {
+						YAHOO.util.Dom.generateId(container);
+					}
 
-					if (nElements > 0) {
+					selector = ("#" + container.id + " " + filter);
 
-						i = elements.length - 1;
+					if (Selector.test(target, selector)) {
+						matchedEl = target;
+					}
+					else if (Selector.test(target, (selector + " *"))) {
 
-						do {
-							element = elements[i];
-		                    if (element === target || YAHOO.util.Dom.isAncestor(element, target)) {
-								matchedEl = element;
-							}
-						}
-						while (i--);
+						//	The target is a descendant of an element matching 
+						//	the selector, so crawl up to find the ancestor that 
+						//	matches the selector
+
+						matchedEl = getMatch(target.parentNode, selector, container);
+
 					}
 
 				}
