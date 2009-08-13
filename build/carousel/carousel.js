@@ -1994,10 +1994,7 @@
             carousel.on(pageChangeEvent, syncPagerUi, carousel);
 
             carousel.on(renderEvent, function (ev) {
-                if (carousel.get("selectedItem") === null ||
-                    carousel.get("selectedItem") < 0) { // in either case
-                    carousel.set("selectedItem", carousel.get("firstVisible"));
-                }
+                carousel.set("selectedItem", carousel.get("firstVisible"));
                 syncNavigation.call(carousel, ev);
                 syncPagerUi.call(carousel, ev);
                 carousel._setClipContainerSize();
