@@ -904,8 +904,7 @@ package
 							case "visibility":
 								if(!(series is PieSeries))
 								{
-									UIComponent(series).setStyle("visibility", style.visibility);   									
-									UIComponent(series).visible = style.visibility == "visible";
+									UIComponent(series).setStyle("visibility", style.visibility);
 								}
 								break;
 							case "skin":
@@ -1009,6 +1008,7 @@ package
 				ExternalInterface.addCallback("setHorizontalAxis", setHorizontalAxis);
 				ExternalInterface.addCallback("setVerticalAxis", setVerticalAxis);
 				ExternalInterface.addCallback("setConstrainViewport", setConstrainViewport);
+				ExternalInterface.addCallback("setSeriesStylesByIndex", setSeriesStylesByIndex);
 				
 				//PieChart
 				ExternalInterface.addCallback("getDataField", getDataField);
@@ -1473,6 +1473,103 @@ package
 			}
 			
 			this.legend.setStyle("contentPadding", contentPadding);
+		}
+		
+		public function setSeriesStylesByIndex(index:int, style:Object):void
+		{
+			var series:ISeries = this.chart.indexToSeries(index) as ISeries;
+			var seriesComponent:UIComponent = UIComponent(series);
+			if(style)
+			{
+				style = JSON.decode(style as String);
+			}
+
+			//parse color styles
+			if(style.borderColor) seriesComponent.setStyle("borderColor", this.parseColor(style.borderColor));
+			if(style.fillColor) seriesComponent.setStyle("fillColor", this.parseColor(style.fillColor));
+			if(series is LineSeries && style.lineColor) seriesComponent.setStyle("lineColor", this.parseColor(style.lineColor));
+
+			//cascade color styles by setting the color style to more specific styles when the specific styles are not present
+			if(style.color)
+			{
+				style.color = this.parseColor(style.color);
+				seriesComponent.setStyle("color", style.color);
+				if(!style.borderColor) seriesComponent.setStyle("borderColor", style.color);
+				if(!style.fillColor) seriesComponent.setStyle("fillColor", style.color);
+				if(series is LineSeries && !style.lineColor) seriesComponent.setStyle("lineColor", style.color);
+			}
+			
+			//parse external image skin
+			if(style.image)
+			{
+				var skin:Object = this.createMarkerSkin(style.image, series);
+				if(!(series is LineSeries))
+				{
+					skin.properties.fillColor = style.color ? style.color : UIComponentUtil.getStyleValue(seriesComponent, "color");
+					skin.properties.fillAlpha = 1;
+				}	
+				if(style.mode) skin.properties.imageMode = style.mode; 
+				seriesComponent.setStyle("markerSkin", skin);			
+			}
+			else if(style.mode)
+			{
+				var oldSkin:Object = UIComponentUtil.getStyleValue(seriesComponent, "markerSkin");
+				if(oldSkin is InstanceFactory)
+				{
+					skin = this.createMarkerSkin(oldSkin.properties.image, series);
+					if(!(series is LineSeries))
+					{
+						skin.properties.fillColor = style.color ? style.color : UIComponentUtil.getStyleValue(seriesComponent, "color");
+						skin.properties.fillAlpha = 1;
+					}					
+					skin.properties.imageMode = style.mode;
+					seriesComponent.setStyle("markerSkin", skin);
+				}
+			}
+			
+			//map external styles to the series equivalent
+			var availableStyles:Object =
+			{
+				alpha:"markerAlpha",
+				size:"markerSize",
+				borderAlpha:"borderAlpha",
+				fillAlpha:"fillAlpha",
+				visibility:"visibility"
+			}
+			
+			if(series is LineSeries)
+			{
+				//add line only style mappings
+				availableStyles.lineAlpha = "lineAlpha";
+				availableStyles.connectPoints = "connectPoints";
+				availableStyles.connectDiscontinuousPoints = "connectDiscontinuousPoints";
+				availableStyles.discontinuousDashLength = "discontinuousDashLength";
+				availableStyles.showAreaFill = "showAreaFill";
+				availableStyles.areaFillAlpha = "areaFillAlpha";
+				availableStyles.lineSize = "lineWeight";
+				
+				//handle specified marker class
+				if(style.skin)
+				{
+					try
+					{
+						skin = getDefinitionByName(SKIN_NAMESPACE + style.skin) as Class;
+						seriesComponent.setStyle("markerSkin", skin);	
+					}
+					catch(e:Error)
+					{
+						this.log(style.skin + " is not a valid skin class", LoggerCategory.WARN);
+					}					
+				}
+			}	
+			
+			var len:int = availableStyles.length;
+			//set mapped styles
+			for(var i:String in availableStyles)
+			{
+				if(style[i] != null) seriesComponent.setStyle(availableStyles[i], style[i]);
+			}
+			seriesComponent.drawNow();
 		}
 		
 	//--------------------------------------
