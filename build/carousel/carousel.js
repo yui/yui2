@@ -521,16 +521,27 @@
             itemsCol,
             itemsRow,
             sentinel,
-            delta,
+            delta = 0,
             top,
             left, 
             rsz,
-            styles = {};
+            styles = {},
+            index = 0;
 
         isVertical = carousel.get("isVertical");
         sz  = getCarouselItemSize.call(carousel,
                 isVertical ? "height" : "width");
         rsz = getRevealSize.call(carousel);
+
+        // adjust for items not yet loaded
+        while (index < pos) {
+            if (JS.isUndefined(carousel._itemsTable.items[index]) &&
+                JS.isUndefined(carousel._itemsTable.loading[index])) {
+                delta++;
+            }
+            index++;
+        }
+        pos -= delta;
 
         if (itemsPerCol) {
             page = this.getPageForItem(pos); 
@@ -2149,8 +2160,19 @@
          * @return {Array} Return all items in the Carousel
          * @public
          */
-        getItems: function (index) {
+        getItems: function () {
             return this._itemsTable.items;
+        },
+
+        /**
+         * Return all loading items as an array.
+         *
+         * @method getLoadingItems
+         * @return {Array} Return all items that are loading in the Carousel.
+         * @public
+         */
+        getLoadingItems: function () {
+            return this._itemsTable.loading;
         },
 
         /**
@@ -2535,11 +2557,7 @@
 
             // Calculate the delta relative to the first item, the delta is
             // always negative.
-            /*if (isVertical) {
-                delta = -1 - item;
-            } else {*/
-                delta = 0 - item;
-            //}
+            delta = 0 - item;
             
             if (itemsPerCol) {
                 // offset calculations for multirow Carousel
@@ -2890,13 +2908,6 @@
             var attr, carousel = this,
                 styles = getCarouselItemPosition.call(carousel, obj.pos);
 
-            obj.styles = obj.styles || {};
-            for (attr in styles) {
-                if (styles.hasOwnProperty(attr)) {
-                    obj.styles[attr] = styles[attr];
-                }
-            }
-
             return createElement(carousel.get("carouselItemEl"), {
                     className : obj.className,
                     styles    : obj.styles,
@@ -2974,7 +2985,14 @@
                 container    = carousel.get("element"),
                 el,
                 item,
-                target       = Event.getTarget(ev);
+                target       = Event.getTarget(ev),
+                tag          = target.tagName.toUpperCase();
+
+            if(tag === "INPUT" ||
+               tag === "SELECT" ||
+               tag === "TEXTAREA") {
+                return;
+            }
 
             while (target && target != container &&
                    target.id != carousel._carouselEl) {
@@ -3001,10 +3019,12 @@
         _keyboardEventHandler: function (ev) {
             var carousel = this,
                 key      = Event.getCharCode(ev),
+                target   = Event.getTarget(ev),
                 prevent  = false;
 
-            if (carousel.isAnimating()) {
-                return;         // do not mess while animation is in progress
+            // do not mess while animation is in progress or naving via select
+            if (carousel.isAnimating() || target.tagName.toUpperCase() === "SELECT") {
+                return;
             }
 
             switch (key) {
@@ -3282,7 +3302,7 @@
          * @protected
          */
         _refreshUi: function () {
-            var carousel = this, i, isVertical = carousel.get("isVertical"), item, n, rsz, sz;
+            var carousel = this, i, isVertical = carousel.get("isVertical"), firstVisible = carousel.get("firstVisible"), item, n, rsz, sz;
 
             if (carousel._itemsTable.numItems < 1) {
                 return;
@@ -3292,7 +3312,7 @@
                     isVertical ? "height" : "width");
             // This fixes the widget to auto-adjust height/width for absolute
             // positioned children.
-            item = carousel._itemsTable.items[0].id;
+            item = carousel._itemsTable.items[firstVisible].id;
             
             sz   = isVertical ? getStyle(item, "width") :
                     getStyle(item, "height");
@@ -3760,26 +3780,8 @@
             pos  = JS.isUndefined(obj.pos) ?
                    obj.newPos || itemsTable.numItems - 1 : obj.pos;
 
-            if (!JS.isUndefined(itemsTable.items[pos])) {
-                item = itemsTable.items[pos];
-                styles = getCarouselItemPosition.call(carousel, pos);
-                item.styles = item.styles || {};
-                for (attr in styles) {
-                    if (styles.hasOwnProperty(attr)) {
-                        item.styles[attr] = styles[attr];
-                    }
-                }
-                if (item) {
-                    if (item.id) {
-                        oel  = Dom.get(item.id);
-                        if (item.styles) {
-                            setStyles(oel, item.styles);
-                        }
-                    }
-                }
-            }
-
             if (!oel) {
+                item = itemsTable.items[pos] || {};
                 el = carousel._createCarouselItem({
                         className : item.className,
                         styles    : item.styles,
@@ -3831,6 +3833,8 @@
             if (carousel.get("selectedItem") < 0) {
                 carousel.set("selectedItem", carousel.get("firstVisible"));
             }
+
+            carousel._syncUiItems();
         },
 
         /**
@@ -3858,7 +3862,7 @@
 
             if(el && oel) {
                 Event.purgeElement(oel, true);
-                carouselEl.replaceChild(el, oel);
+                carouselEl.replaceChild(el, Dom.get(oel.id));
                 if (!JS.isUndefined(itemsTable.loading[pos])) {
                     itemsTable.numItems++;
                     delete itemsTable.loading[pos];
@@ -3869,6 +3873,8 @@
             if (!carousel._hasRendered) {
                 carousel._refreshUi();
             }
+
+            carousel._syncUiItems();
         },
 
         /**
@@ -3897,6 +3903,8 @@
                 }
             } else {
             }
+
+            carousel._syncUiItems();
         },
 
         /**
@@ -3943,6 +3951,33 @@
                         }
                     }
                     itemsTable.loading[i] = el;
+                }
+            }
+            
+            carousel._syncUiItems();
+        },
+
+        /**
+         * Redraw the UI for item positioning.
+         *
+         * @method _syncUiItems
+         * @protected
+         */
+        _syncUiItems: function () {
+            var carousel = this,
+                numItems = carousel.get("numItems"),
+                itemsTable = carousel._itemsTable,
+                item,
+                styles;
+            for (var i = 0; i<numItems; i++) {
+                styles = getCarouselItemPosition.call(carousel, i);
+                item = itemsTable.items[i] || itemsTable.loading[i];
+                if (item && item.id) {
+                    item.styles = item.styles || {};
+                    for (var attr in styles) {
+                        item.styles[attr] = styles[attr];
+                    }
+                    setStyles(Dom.get(item.id), styles);
                 }
             }
         },
