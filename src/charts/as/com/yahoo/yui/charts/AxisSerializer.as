@@ -107,6 +107,8 @@ package com.yahoo.yui.charts
 				numericAxis.scale = input.scale;
 				numericAxis.stackingEnabled = input.stackingEnabled;
 				numericAxis.calculateByLabelSize = input.calculateByLabelSize;
+				numericAxis.adjustMaximumByMajorUnit = input.adjustMaximumByMajorUnit;
+				numericAxis.adjustMinimumByMajorUnit = input.adjustMinimumByMajorUnit;
 			}
 			else if(axis is TimeAxis)
 			{

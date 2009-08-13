@@ -106,5 +106,23 @@ YAHOO.lang.extend(YAHOO.widget.NumericAxis, YAHOO.widget.Axis,
 	 * @property position
 	 * @type String
 	 */
-	position:"left"
+	position:"left",
+	
+	/**
+	 * Indicates whether to extend maximum beyond data's maximum to the nearest 
+	 * majorUnit.
+	 *
+	 * @property adjustMaximumByMajorUnit
+	 * @type Boolean
+	 */
+	adjustMaximumByMajorUnit:true,
+	
+	/**
+	 * Indicates whether to extend the minimum beyond data's minimum to the nearest
+	 * majorUnit.
+	 *
+	 * @property adjustMinimumByMajorUnit
+	 * @type Boolean
+	 */
+	adjustMinimumByMajorUnit:true
 });

@@ -170,6 +170,8 @@
 <span class="c">     */</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s2">&quot;yuiswf&quot;</span><span class="o">);</span>
 	
+	<span class="k">if</span><span class="o">(</span><span class="nx">p_oAttributes</span><span class="o">.</span><span class="nx">host</span><span class="o">)</span> <span class="k">this</span><span class="o">.</span><span class="nx">_host</span> <span class="o">=</span> <span class="nx">p_oAttributes</span><span class="o">.</span><span class="nx">host</span><span class="o">;</span>
+	
 	<span class="k">var</span> <span class="nx">_id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
     <span class="k">var</span> <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">);</span>
 	<span class="k">var</span> <span class="nx">flashVersion</span> <span class="o">=</span> <span class="o">(</span><span class="nx">p_oAttributes</span><span class="o">[</span><span class="s2">&quot;version&quot;</span><span class="o">]</span> <span class="o">||</span> <span class="nx">FLASH_VER</span><span class="o">);</span>
@@ -251,14 +253,28 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SWF</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Element</span><span class="o">,</span> <span class="o">{</span>
 	<span class="nx">_eventHandler</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">event</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="k">if</span> <span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;swfReady&quot;</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;swfReady&quot;</span><span class="o">)</span> 
+		<span class="o">{</span>
 			<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;swfReady&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">fireOnce</span><span class="o">:</span><span class="kc">true</span><span class="o">});</span>
 	     	<span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;swfReady&quot;</span><span class="o">,</span> <span class="nx">event</span><span class="o">);</span>
         <span class="o">}</span>
-        <span class="k">else</span> <span class="o">{</span>
-	        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">type</span><span class="o">,</span> <span class="nx">event</span><span class="o">);</span>
+		<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;log&quot;</span><span class="o">)</span>
+		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">message</span><span class="o">,</span> <span class="nx">event</span><span class="o">.</span><span class="nx">category</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_host</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">_host</span><span class="o">.</span><span class="nx">toString</span><span class="o">()</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+		<span class="o">}</span>
+        <span class="k">else</span> 
+		<span class="o">{</span>
+	    	<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_host</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_host</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">)</span> 
+			<span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">_host</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">type</span><span class="o">,</span> <span class="nx">event</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="k">else</span>
+			<span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">type</span><span class="o">,</span> <span class="nx">event</span><span class="o">);</span>
+			<span class="o">}</span>
         <span class="o">}</span> 
-	<span class="o">},</span>	
+	<span class="o">},</span>
+		
 	<span class="c">/**</span>
 <span class="c">	 * Calls a specific function exposed by the SWF&#39;s</span>
 <span class="c">	 * ExternalInterface.</span>
@@ -273,6 +289,17 @@
 	    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
 		<span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
 	    <span class="o">}</span>
+	<span class="o">},</span>
+	
+	<span class="c">/**</span>
+<span class="c">	 * Public accessor to the unique name of the SWF instance.</span>
+<span class="c">	 *</span>
+<span class="c">	 * @method toString</span>
+<span class="c">	 * @return {String} Unique name of the SWF instance.</span>
+<span class="c">	 */</span>
+	<span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="k">return</span> <span class="s2">&quot;SWF &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
 	<span class="o">}</span>
 <span class="o">});</span>
 
@@ -366,7 +393,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.SWF", "name": "callSWF", "url": "YAHOO.widget.SWF.html#method_callSWF", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SWF", "name": "eventHandler", "url": "YAHOO.widget.SWF.html#method_eventHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.SWF", "name": "_id", "url": "YAHOO.widget.SWF.html#property__id", "type": "property"}, {"access": "private", "host": "YAHOO.widget.SWF", "name": "_instances", "url": "YAHOO.widget.SWF.html#property__instances", "type": "property"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.SWF", "name": "callSWF", "url": "YAHOO.widget.SWF.html#method_callSWF", "type": "method"}, {"access": "private", "host": "YAHOO.widget.SWF", "name": "eventHandler", "url": "YAHOO.widget.SWF.html#method_eventHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.SWF", "name": "_id", "url": "YAHOO.widget.SWF.html#property__id", "type": "property"}, {"access": "private", "host": "YAHOO.widget.SWF", "name": "_instances", "url": "YAHOO.widget.SWF.html#property__instances", "type": "property"}, {"access": "", "host": "YAHOO.widget.SWF", "name": "toString", "url": "YAHOO.widget.SWF.html#method_toString", "type": "method"}];
 </script>
 </body>
 </html>
