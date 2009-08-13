@@ -653,12 +653,6 @@
         <span class="nx">itemSize</span> <span class="o">=</span> <span class="nx">getCarouselItemSize</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
         <span class="nx">size</span> <span class="o">=</span> <span class="nx">itemSize</span> <span class="o">*</span> <span class="nx">delta</span><span class="o">;</span>
 
-        <span class="c">// XXX: really, when the orientation is vertical, the scrolling</span>
-<span class="c"></span>        <span class="c">// is not exactly the number of elements into element size. However, it is when multirows is enabled.</span>
-<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;isVertical&quot;</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">_rows</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">size</span> <span class="o">-=</span> <span class="nx">delta</span><span class="o">;</span>
-        <span class="o">}</span>
-
         <span class="k">return</span> <span class="nx">size</span><span class="o">;</span>
     <span class="o">}</span>
 
@@ -2475,7 +2469,6 @@
 <span class="c">         */</span>
         <span class="nx">scrollBackward</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">carousel</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
-
             <span class="nx">carousel</span><span class="o">.</span><span class="nx">scrollTo</span><span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">_firstItem</span> <span class="o">-</span>
                               <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;scrollIncrement&quot;</span><span class="o">));</span>
         <span class="o">},</span>
@@ -2488,7 +2481,6 @@
 <span class="c">         */</span>
         <span class="nx">scrollForward</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">carousel</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
-
             <span class="nx">carousel</span><span class="o">.</span><span class="nx">scrollTo</span><span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">_firstItem</span> <span class="o">+</span>
                               <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;scrollIncrement&quot;</span><span class="o">));</span>
         <span class="o">},</span>
@@ -2501,13 +2493,20 @@
 <span class="c">         */</span>
         <span class="nx">scrollPageBackward</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">carousel</span> <span class="o">=</span> <span class="k">this</span><span class="o">,</span>
+                <span class="nx">isVertical</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;isVertical&quot;</span><span class="o">),</span>
+                <span class="nx">cols</span>       <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_cols</span><span class="o">,</span>
                 <span class="nx">item</span>     <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_firstItem</span> <span class="o">-</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;numVisible&quot;</span><span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">item</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span> <span class="c">// only account for multi-row when scrolling backwards from item 0</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">cols</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">item</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_firstItem</span> <span class="o">-</span> <span class="nx">cols</span><span class="o">;</span>
+                <span class="o">}</span> 
+            <span class="o">}</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;selectOnScroll&quot;</span><span class="o">))</span> <span class="o">{</span>
                 <span class="nx">carousel</span><span class="o">.</span><span class="nx">_selectedItem</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getSelectedItem</span><span class="o">(</span><span class="nx">item</span><span class="o">);</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="nx">item</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getValidIndex</span><span class="o">(</span><span class="nx">item</span><span class="o">);</span>
             <span class="o">}</span>
+
             <span class="nx">carousel</span><span class="o">.</span><span class="nx">scrollTo</span><span class="o">(</span><span class="nx">item</span><span class="o">);</span>
         <span class="o">},</span>
 
@@ -2521,11 +2520,14 @@
             <span class="k">var</span> <span class="nx">carousel</span> <span class="o">=</span> <span class="k">this</span><span class="o">,</span>
                 <span class="nx">item</span>     <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_firstItem</span> <span class="o">+</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;numVisible&quot;</span><span class="o">);</span>
 
+            <span class="k">if</span> <span class="o">(</span><span class="nx">item</span> <span class="o">&gt;</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;numItems&quot;</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nx">item</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
+            <span class="o">}</span>
+
             <span class="k">if</span> <span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;selectOnScroll&quot;</span><span class="o">))</span> <span class="o">{</span>
                 <span class="nx">carousel</span><span class="o">.</span><span class="nx">_selectedItem</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getSelectedItem</span><span class="o">(</span><span class="nx">item</span><span class="o">);</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="nx">item</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_getValidIndex</span><span class="o">(</span><span class="nx">item</span><span class="o">);</span>
             <span class="o">}</span>
+
             <span class="nx">carousel</span><span class="o">.</span><span class="nx">scrollTo</span><span class="o">(</span><span class="nx">item</span><span class="o">);</span>
         <span class="o">},</span>
 
@@ -2572,6 +2574,7 @@
                     <span class="k">return</span><span class="o">;</span>
                 <span class="o">}</span>
             <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">numItems</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nx">item</span> <span class="o">&gt;</span> <span class="nx">numItems</span> <span class="o">-</span> <span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                
                 <span class="k">if</span> <span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;isCircular&quot;</span><span class="o">))</span> <span class="o">{</span>
                     <span class="nx">item</span> <span class="o">=</span> <span class="nx">numItems</span> <span class="o">-</span> <span class="nx">item</span><span class="o">;</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
@@ -2602,7 +2605,12 @@
 
             <span class="c">// Calculate the delta relative to the first item, the delta is</span>
 <span class="c"></span>            <span class="c">// always negative.</span>
-<span class="c"></span>            <span class="nx">delta</span> <span class="o">=</span> <span class="m">0</span> <span class="o">-</span> <span class="nx">item</span><span class="o">;</span>
+<span class="c"></span>            <span class="c">/*if (isVertical) {</span>
+<span class="c">                delta = -1 - item;</span>
+<span class="c">            } else {*/</span>
+            <span class="nx">delta</span> <span class="o">=</span> <span class="m">0</span> <span class="o">-</span> <span class="nx">item</span><span class="o">;</span>
+            <span class="c">//}</span>
+<span class="c"></span>            
             <span class="k">if</span> <span class="o">(</span><span class="nx">itemsPerCol</span><span class="o">)</span> <span class="o">{</span>
             	<span class="c">// offset calculations for multirow Carousel</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">isVertical</span><span class="o">)</span> <span class="o">{</span>
@@ -3022,7 +3030,6 @@
                     <span class="nx">val</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;selectedItem&quot;</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>
-
             <span class="k">return</span> <span class="nx">val</span><span class="o">;</span>
         <span class="o">},</span>
 
@@ -3357,7 +3364,7 @@
 <span class="c">         * @protected</span>
 <span class="c">         */</span>
         <span class="nx">_refreshUi</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">carousel</span> <span class="o">=</span> <span class="k">this</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">isVertical</span><span class="o">,</span> <span class="nx">item</span><span class="o">,</span> <span class="nx">n</span><span class="o">,</span> <span class="nx">rsz</span><span class="o">,</span> <span class="nx">sz</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">carousel</span> <span class="o">=</span> <span class="k">this</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">isVertical</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;isVertical&quot;</span><span class="o">),</span> <span class="nx">item</span><span class="o">,</span> <span class="nx">n</span><span class="o">,</span> <span class="nx">rsz</span><span class="o">,</span> <span class="nx">sz</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">_itemsTable</span><span class="o">.</span><span class="nx">numItems</span> <span class="o">&lt;</span> <span class="m">1</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">return</span><span class="o">;</span>
@@ -3368,8 +3375,10 @@
             <span class="c">// This fixes the widget to auto-adjust height/width for absolute</span>
 <span class="c"></span>            <span class="c">// positioned children.</span>
 <span class="c"></span>            <span class="nx">item</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">_itemsTable</span><span class="o">.</span><span class="nx">items</span><span class="o">[</span><span class="m">0</span><span class="o">].</span><span class="nx">id</span><span class="o">;</span>
+            
             <span class="nx">sz</span>   <span class="o">=</span> <span class="nx">isVertical</span> <span class="o">?</span> <span class="nx">getStyle</span><span class="o">(</span><span class="nx">item</span><span class="o">,</span> <span class="s2">&quot;width&quot;</span><span class="o">)</span> <span class="o">:</span>
                     <span class="nx">getStyle</span><span class="o">(</span><span class="nx">item</span><span class="o">,</span> <span class="s2">&quot;height&quot;</span><span class="o">);</span>
+
             <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">_carouselEl</span><span class="o">,</span>
                          <span class="nx">isVertical</span> <span class="o">?</span> <span class="s2">&quot;width&quot;</span> <span class="o">:</span> <span class="s2">&quot;height&quot;</span><span class="o">,</span> <span class="nx">sz</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">);</span>
 

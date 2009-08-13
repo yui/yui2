@@ -3,6 +3,16 @@ Logger Release Notes
 
 Development master
 
+*** version 2.8.0 ***
+
+* Added destroy method.
+* Moved initialization code from the constructor to _init.
+* Moved UI construction to new render method (Still renders automatically
+  unless configured with autoRender = false).
+* General clean up and code reduction.
+* Fixed yui-log-container class not being applied when constructed with a
+  render target.
+
 *** version 2.7.0 ***
 
 * No changes.
