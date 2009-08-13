@@ -28,6 +28,8 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 {
 	this._attributes = attributes;
 	
+	this._id = attributes.id || YAHOO.util.Dom.generateId(null, "yuigen");
+	
 	if(attributes.version && attributes.version != null && attributes.version != undefined && attributes.version != "undefined")
 	{ 
 		var version = (/\w*.\w*/.exec(((attributes.version).toString()).replace(/.0./g, "."))).toString();
@@ -55,6 +57,7 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	this._swfURL = YAHOO.widget.Chart.SWFURL;
 	this._containerID = containerId;
 	
+	attributes.host = this;
 	this._swfEmbed = new YAHOO.widget.SWF(containerId, YAHOO.widget.Chart.SWFURL, attributes);
 	
 	this._swf = this._swfEmbed.swf;
@@ -62,8 +65,7 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	
 	this._type = type;
 	this._dataSource = dataSource;
-	
-	
+		
 	/**
 	 * Fires when the SWF is initialized and communication is possible.
 	 * @event contentReady
@@ -464,25 +466,18 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 	},
 	
 	/**
-	 * Handles or re-dispatches events received from the SWF.
+	 * Handles swfReady event from SWF.
 	 *
 	 * @method _eventHandler
 	 * @private
 	 */
 	_eventHandler: function(event)
-	{
-		var type = event.type; 
-		switch(type)
+	{ 
+		if(event.type == "swfReady")
 		{
-			case "swfReady":
-   				this._swf = this._swfEmbed._swf;
-				this._loadHandler();
-   				this.fireEvent("contentReady");
-				return;
-			case "log":
-				YAHOO.log(event.message, event.category, this.toString());
-				this.fireEvent(type, event);
-				return;
+   			this._swf = this._swfEmbed._swf;
+			this._loadHandler();
+   			this.fireEvent("contentReady");
 		}
 	},	
 	
@@ -942,28 +937,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 	 	this._swf.setAltText(value);
 	}
 });
-
-/**
- * Receives event messages from SWF and passes them to the correct instance
- * of Chart.
- *
- * @method YAHOO.widget.Chart.eventHandler
- * @static
- * @private
- */
-YAHOO.widget.Chart.eventHandler = function(elementID, event)
-{
-	var loadedSWF = YAHOO.util.Dom.get(elementID);
-	if(!loadedSWF.owner)
-	{
-		//fix for ie: if owner doesn't exist yet, try again in a moment
-		setTimeout(function() { YAHOO.widget.Chart.eventHandler( elementID, event ); }, 0);
-	}
-	else
-	{
-		loadedSWF.owner._eventHandler(event);
-	}
-};
 
 /**
  * The number of proxy functions that have been created.
