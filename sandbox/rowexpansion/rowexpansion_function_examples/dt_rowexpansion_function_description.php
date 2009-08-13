@@ -1,110 +1,81 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
+<!-- Example text. Note that code excerpts are housed in special
+textarea's that are used to do syntax highlighting -->
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<h2 class="first">Sample Code for this Example</h2>
 
-	<title>Function Template Based Row Expansion</title>
-	
-	<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
-	<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
-	<link type="text/css" rel="stylesheet" href="../../build/logger/assets/skins/sam/logger.css">
-	<link rel="stylesheet" type="text/css" href="../../build/yuitest/assets/skins/sam/yuitest.css" />
-	<style>#expandable_table{width:500px;}</style>
-	<style>
-		
-		/** 
-		*
-		* Style the yui-dt-expandablerow-trigger column 
-		*
-		**/
-		.yui-dt-expandablerow-trigger{
-			width:18px;
-			height:22px;
-			cursor:pointer;
-		}
-		.yui-dt-expanded .yui-dt-expandablerow-trigger{
-			background:url(arrow_open.png) 4px 4px no-repeat;
-		}
-		.yui-dt-expandablerow-trigger, .yui-dt-collapsed .yui-dt-expandablerow-trigger{
-			background:url(arrow_closed.png) 4px 4px no-repeat;
-		}
-		.yui-dt-expanded .yui-dt-expandablerow-trigger.spinner{
-			background:url(spinner.gif) 1px 4px no-repeat;
-		}
-		
-		/** 
-		*
-		* Style the expansion row
-		*
-		**/
-		.yui-dt-expansion .yui-dt-liner{
-			padding:0;
-			border:solid 0 #bbb;
-			border-width: 0 0 2px 0;
-		}
-		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table{
-			border:none;
-			background-color:#fff;
-		}
-		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table th{
-			background-image:none;
-			background-color:#eee;
-		}
-		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td{
-			border:solid 0 #eee;
-			border-width: 0 0 1px 1px;
-		}
-		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td div{
-			padding:3px;
-			overflow:hidden;
-			width:100px;
-		}
-		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td.big div{
-			width:300px;
-		}
-		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td ul{ padding:0;margin:0; }
-	</style>
-
-</head>
-
-<body class=" yui-skin-sam">
-
-<h1>Function Template Based Row Expansion</h1>
-
-<div class="exampleIntro">
-	<p>A demonstration of the DataTable's row expansion feature, using a function based template. This is a list of popular items bookmarked on Delicious</p>
-</div>
-
+<p>Markup:</p>
+<textarea name="code" class="HTML" cols="60" rows="1">
 <div id="expandable_table"></div>
+</textarea>
 
-<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script> 
-<script type="text/javascript" src="../../build/dom/dom.js"></script> 
-<script type="text/javascript" src="../../build/event/event.js"></script>
-<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
-<script type="text/javascript" src="../../build/element/element.js"></script> 
-<script type="text/javascript" src="../../build/logger/logger-min.js"></script>
-<script type="text/javascript" src="../../build/yuitest/yuitest-min.js"></script>
-<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
-<script type="text/javascript" src="../../build/json/json-min.js"></script>
-<script type="text/javascript" src="../../build/datasource/datasource.js"></script>
-<script type="text/javascript" src="../../build/datatable/datatable.js"></script>
-<script type="text/javascript" src="rowexpansion.js"></script>
+<p>CSS:</p>
+<textarea name="code" class="HTML" cols="60" rows="1">		
+/** 
+*
+* Style the yui-dt-expandablerow-trigger column 
+*
+**/
+.yui-dt-expandablerow-trigger{
+	width:18px;
+	height:22px;
+	cursor:pointer;
+}
+.yui-dt-expanded .yui-dt-expandablerow-trigger{
+	background:url(arrow_open.png) 4px 4px no-repeat;
+}
+.yui-dt-expandablerow-trigger, .yui-dt-collapsed .yui-dt-expandablerow-trigger{
+	background:url(arrow_closed.png) 4px 4px no-repeat;
+}
+.yui-dt-expanded .yui-dt-expandablerow-trigger.spinner{
+	background:url(spinner.gif) 1px 4px no-repeat;
+}
 
-<script>
+/** 
+*
+* Style the expansion row
+*
+**/
+.yui-dt-expansion .yui-dt-liner{
+	padding:0;
+	border:solid 0 #bbb;
+	border-width: 0 0 2px 0;
+}
+.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table{
+	border:none;
+	background-color:#fff;
+}
+.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table th{
+	background-image:none;
+	background-color:#eee;
+}
+.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td{
+	border:solid 0 #eee;
+	border-width: 0 0 1px 1px;
+}
+.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td div{
+	padding:3px;
+	overflow:hidden;
+	width:100px;
+}
+.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td.big div{
+	width:300px;
+}
+.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td ul{ padding:0;margin:0; }
+</textarea>
 
+<p>Java Script:</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
 YAHOO.util.Event.onDOMReady( function() {
 
 	YAHOO.example.rowExpansionFunction = function() {
-		
-		
+
+
 		/**
 		* This "getExtendedData" function be called to make an XHR call to return data to
 		* be dispayed in the row expansion.
 		**/
 		var getExtendedData = function( url, success ){
-			
+
 			/**
 			* This async request is passed a local proxy url with arguments serialized for YQL, 
 			* including the YQL query. We also pass a function to be called on success.
@@ -115,13 +86,13 @@ YAHOO.util.Event.onDOMReady( function() {
 				{
 					success : success,
 					failure : function( o ){
-						
+
 						YAHOO.log('Failed to get data','error','RowExpansionExample');
-						
+
 					}
 				}
 			); 
-			
+
 		};
 
 		/**
@@ -129,12 +100,12 @@ YAHOO.util.Event.onDOMReady( function() {
 		* to the "getExtendedData" method
 		**/
 		var getYQLUrl = function( query ){
-			
+
 			/**
 			* Concatinate the proxy url with the query passed as an argument.
 			**/
 			return '/data/yql.php?format=json&q=' + encodeURIComponent( query );
-			
+
 		};
 
 		/**
@@ -151,7 +122,7 @@ YAHOO.util.Event.onDOMReady( function() {
 			* The RSS feed url from the original call to the delicious api is extracted
 			**/
 			var rss_feed            = oArgs.data.getData().commentRss,
-			
+
 					/**
 					* Markup for the table that will be rendered is assembled. Since YAHOO.lang.substitute is
 					* used for templating, brackets "{}" are put around tokens taht will match properties 
@@ -177,24 +148,24 @@ YAHOO.util.Event.onDOMReady( function() {
 			**/
 			getExtendedData( 
 				getYQLUrl('select * from rss where url="' + rss_feed + '?count=100"'),
-				
+
 				function( o ){ //This is the callback function that will be called if the Async is successful
-					
+
 					var response_object = YAHOO.lang.JSON.parse( o.responseText ),
 							data_array      = response_object.query.results.item,
 							element         = oArgs.liner_element,
 							markup          = table_markup_top;
-					
+
 					/**
 					* Builds rows from returned comments
 					**/
 					for( var i=0, l=data_array.length, w=0; l > i; i++ ){
-						
+
 						var item = data_array[ i ],
 								catagory_markup = '';
-						
+
 						if( item.category ){
-							
+
 							/**
 							* Builds an unordered list of tags returnd as part of the comment item
 							**/
@@ -206,46 +177,46 @@ YAHOO.util.Event.onDOMReady( function() {
 								);
 
 							}
-							
+
 						}
-						
+
 						item.yuidt_category_markup = catagory_markup;
-						
+
 						var closeTable = function(){
-							
+
 							markup += table_markup_bottom;
 
 							element.innerHTML = markup;
-							
+
 							YAHOO.util.Dom.removeClass( 
 								YAHOO.util.Dom.getPreviousSibling( oArgs.row_element ).childNodes[ 0 ], 
 								'spinner'
 							);
-							
+
 							return true;
-							
+
 						}
-						
+
 						/**
 						* Writes only the items that contain text in the description property. This implementation
 						* displays a hard coded maximum of 5 comments. This is not a neccisary limitation.
 						**/
 						if( item.description ){
-							
+
 							if( w > 4 ){ return closeTable(); }
-							
+
 							markup += YAHOO.lang.substitute( row_template, item );
-							
+
 							w++;
-							
+
 						}
 
 					}
-					
+
 					return closeTable();
-					
+
 				}
-				
+
 			);
 
 		};
@@ -292,9 +263,9 @@ YAHOO.util.Event.onDOMReady( function() {
 					* user can click to expand a row.
 					**/
 					formatter:function( el, oRecord, oColumn, oData ){ //formats a link
-						
+
 						el.innerHTML = '<a href="' + oRecord.getData().link + '">' + oData + '</a>';
-						
+
 					}
 				}
 			],
@@ -309,24 +280,19 @@ YAHOO.util.Event.onDOMReady( function() {
 		*
 		**/
 		myDataTable.subscribe( 'cellClickEvent', function( o ){
-		
+
 			myDataTable.onEventToggleRowExpansion( o );
 			YAHOO.util.Dom.addClass( o.target, 'spinner' );
-		
+
 		} );
-				
+
 		return {
-			
+
 			oDS: myDataSource,
 			oDT: myDataTable
-		
+
 		};
-		
+
 	}();
 });
-
-</script>
-<!--script type="text/javascript" src="test_rowexpansion.js"></script-->
-
-</body>
-</html>
+</textarea>

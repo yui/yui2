@@ -1,96 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-	<title>Function Template Based Row Expansion</title>
-	
-	<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
-	<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
-	<link type="text/css" rel="stylesheet" href="../../build/logger/assets/skins/sam/logger.css">
-	<link rel="stylesheet" type="text/css" href="../../build/yuitest/assets/skins/sam/yuitest.css" />
-	<style>#expandable_table{width:500px;}</style>
-	<style>
-		
-		/** 
-		*
-		* Style the yui-dt-expandablerow-trigger column 
-		*
-		**/
-		.yui-dt-expandablerow-trigger{
-			width:18px;
-			height:22px;
-			cursor:pointer;
-		}
-		.yui-dt-expanded .yui-dt-expandablerow-trigger{
-			background:url(arrow_open.png) 4px 4px no-repeat;
-		}
-		.yui-dt-expandablerow-trigger, .yui-dt-collapsed .yui-dt-expandablerow-trigger{
-			background:url(arrow_closed.png) 4px 4px no-repeat;
-		}
-		.yui-dt-expanded .yui-dt-expandablerow-trigger.spinner{
-			background:url(spinner.gif) 1px 4px no-repeat;
-		}
-		
-		/** 
-		*
-		* Style the expansion row
-		*
-		**/
-		.yui-dt-expansion .yui-dt-liner{
-			padding:0;
-			border:solid 0 #bbb;
-			border-width: 0 0 2px 0;
-		}
-		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table{
-			border:none;
-			background-color:#fff;
-		}
-		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table th{
-			background-image:none;
-			background-color:#eee;
-		}
-		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td{
-			border:solid 0 #eee;
-			border-width: 0 0 1px 1px;
-		}
-		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td div{
-			padding:3px;
-			overflow:hidden;
-			width:100px;
-		}
-		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td.big div{
-			width:300px;
-		}
-		.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td ul{ padding:0;margin:0; }
-	</style>
-
-</head>
-
-<body class=" yui-skin-sam">
-
-<h1>Function Template Based Row Expansion</h1>
-
-<div class="exampleIntro">
-	<p>A demonstration of the DataTable's row expansion feature, using a function based template. This is a list of popular items bookmarked on Delicious</p>
-</div>
 
 <div id="expandable_table"></div>
 
-<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script> 
-<script type="text/javascript" src="../../build/dom/dom.js"></script> 
-<script type="text/javascript" src="../../build/event/event.js"></script>
-<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
-<script type="text/javascript" src="../../build/element/element.js"></script> 
-<script type="text/javascript" src="../../build/logger/logger-min.js"></script>
-<script type="text/javascript" src="../../build/yuitest/yuitest-min.js"></script>
-<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
-<script type="text/javascript" src="../../build/json/json-min.js"></script>
-<script type="text/javascript" src="../../build/datasource/datasource.js"></script>
-<script type="text/javascript" src="../../build/datatable/datatable.js"></script>
-<script type="text/javascript" src="rowexpansion.js"></script>
+<script type="text/javascript" src="../../j/yui2/build/yahoo/yahoo.js"></script> 
+<script type="text/javascript" src="../../j/yui2/build/dom/dom.js"></script> 
+<script type="text/javascript" src="../../j/yui2/build/event/event.js"></script>
+<script type="text/javascript" src="../../j/yui2/build/dragdrop/dragdrop.js"></script>
+<script type="text/javascript" src="../../j/yui2/build/element/element.js"></script> 
+<script type="text/javascript" src="../../j/yui2/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="../../j/yui2/build/yuitest/yuitest-min.js"></script>
+<script type="text/javascript" src="../../j/yui2/build/connection/connection-min.js"></script>
+<script type="text/javascript" src="../../j/yui2/build/json/json-min.js"></script>
+<script type="text/javascript" src="../../j/yui2/build/datasource/datasource.js"></script>
+<script type="text/javascript" src="../../j/yui2/build/datatable/datatable.js"></script>
+<script type="text/javascript" src="../../j/yui2/sandbox/rowexpansion/rowexpansion.js"></script>
 
 <script>
 
@@ -326,7 +248,3 @@ YAHOO.util.Event.onDOMReady( function() {
 });
 
 </script>
-<!--script type="text/javascript" src="test_rowexpansion.js"></script-->
-
-</body>
-</html>
