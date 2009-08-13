@@ -60,11 +60,11 @@ var G = window.google,
 		try {
 			// iterate on the rows and map the keys
 			while (rs.isValidRow()) {
-				var fld = rs.field(0);
+				var fld = dURI(rs.field(0));
 
 				if (! keyMap[fld]) {
 					keyMap[fld] = true;
-					_this._keys.push(fld);
+					_this._addKey(fld);
 				}
 
 				rs.next();
@@ -185,18 +185,19 @@ var G = window.google,
 	Y.StorageEngineGears.ENGINE_NAME = 'gears';
 	Y.StorageEngineGears.GEARS = 'beta.database';
 	Y.StorageEngineGears.DATABASE = 'yui.database';
-    Y.StorageManager.register(Y.StorageEngineGears.ENGINE_NAME, function() {
+	Y.StorageEngineGears.isAvailable = function() {
 		if (G && G.gears) {
 			try {
 				// this will throw an exception if the user denies gears
 				G.gears.factory.create(Y.StorageEngineGears.GEARS);
-				return true; 
+				return true;
 			}
 			catch (e) {
-				// no need to do anything 
+				// no need to do anything
 			}
 		}
 
 		return false;
-	}, Y.StorageEngineGears);
+	};
+    Y.StorageManager.register(Y.StorageEngineGears);
 }());

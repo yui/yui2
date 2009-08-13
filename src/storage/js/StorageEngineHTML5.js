@@ -114,5 +114,8 @@ var Y = YAHOO.util,
 	}, true);
 
 	Y.StorageEngineHTML5.ENGINE_NAME = 'html5';
-    Y.StorageManager.register(Y.StorageEngineHTML5.ENGINE_NAME, function() {return window.localStorage;}, Y.StorageEngineHTML5);
+	Y.StorageEngineHTML5.isAvailable = function() {
+		return window.localStorage;
+	};
+    Y.StorageManager.register(Y.StorageEngineHTML5);
 }());

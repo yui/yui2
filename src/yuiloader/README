@@ -5,6 +5,7 @@ yuiloader - Release Notes
  * added datemath module, updated calendar metadata accordingly.
  * added event-simulate module, which was extracted from yuitest.
  * connection split into connectioncore and connection rollup.
+ * progressbar, swf, swfdetect, swfstore metadata.
 
 2.7.0
  * Combo filtering fixed.

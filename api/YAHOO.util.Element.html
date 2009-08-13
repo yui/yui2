@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>element&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>element&nbsp; <span class="subtitle">2.8.0</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_element.html" title="element">element</a>
                  &gt; YAHOO.util.Element 
@@ -567,6 +567,9 @@ can be listened for.  All handlers receive an event object.
                                             Appends a delegated event listener.  Delegated event listeners 
 receive two arguments by default: the DOM event and the element  
 specified by the filtering function or CSS selector.
+(Note: Using the delegate method requires the element-delegate 
+module.  Using CSS selectors as the filtering criteria for delegated 
+event listeners requires inclusion of the Selector Utility.)
                                         </div>
 
                                         <div class="description">
@@ -593,7 +596,7 @@ specified by the filtering function or CSS selector.
 determine for what element(s) the event listener should be called. 
 When a function is specified, the function should return an 
 HTML element.  Using a CSS Selector requires the inclusion of the 
-CSS Selector utility (YAHOO.util.Selector).</span>
+CSS Selector Utility.</span>
                                                         </dd>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">obj</span>
@@ -614,7 +617,8 @@ CSS Selector utility (YAHOO.util.Selector).</span>
                                                     <code property="yui:return">
                                                         boolean
                                                     </code></dt>
-                                                    <dd property="yui:returnInfo">true if the delegate was added successfully</dd>
+                                                    <dd property="yui:returnInfo">Returns true if the delegated event listener 
+was added successfully</dd>
                                                 </dl>
 
 
@@ -1234,7 +1238,7 @@ the element before.</span>
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Remove an event listener
+                                            Remove a delegated event listener
                                         </div>
 
                                         <div class="description">
@@ -1260,7 +1264,7 @@ the element before.</span>
                                                     <code property="yui:return">
                                                         boolean
                                                     </code></dt>
-                                                    <dd property="yui:returnInfo">true if the unbind was successful, false 
+                                                    <dd property="yui:returnInfo">Returns true if the unbind was successful, false 
 otherwise.</dd>
                                                 </dl>
 
