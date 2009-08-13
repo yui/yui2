@@ -986,10 +986,10 @@
 		<span class="nx">o</span> <span class="o">=</span> <span class="nx">o</span> <span class="o">||</span> <span class="o">{};</span>
 		<span class="c">// if the XHR object assigned to the transaction has not been dereferenced,</span>
 <span class="c"></span>		<span class="c">// then check its readyState status.  Otherwise, return false.</span>
-<span class="c"></span>		<span class="k">if</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">xhr</span><span class="o">){</span>
+<span class="c"></span>		<span class="k">if</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">xhr</span> <span class="o">&amp;&amp;</span> <span class="nx">o</span><span class="o">.</span><span class="nx">conn</span><span class="o">){</span>
 			<span class="k">return</span> <span class="nx">o</span><span class="o">.</span><span class="nx">conn</span><span class="o">.</span><span class="nx">readyState</span> <span class="o">!==</span> <span class="m">4</span> <span class="o">&amp;&amp;</span> <span class="nx">o</span><span class="o">.</span><span class="nx">conn</span><span class="o">.</span><span class="nx">readyState</span> <span class="o">!==</span> <span class="m">0</span><span class="o">;</span>
 		<span class="o">}</span>
-		<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">xdr</span><span class="o">){</span>
+		<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">xdr</span> <span class="o">&amp;&amp;</span> <span class="nx">o</span><span class="o">.</span><span class="nx">conn</span><span class="o">){</span>
 			<span class="k">return</span> <span class="nx">o</span><span class="o">.</span><span class="nx">conn</span><span class="o">.</span><span class="nx">isCallInProgress</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">tId</span><span class="o">);</span>
 		<span class="o">}</span>
 		<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">upload</span> <span class="o">===</span> <span class="kc">true</span><span class="o">){</span>
