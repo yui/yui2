@@ -512,7 +512,7 @@
      * @private
      */
     function getCarouselItemPosition(pos) {
-        var carousel    = this, 
+        var carousel    = this,
             itemsPerRow = carousel._cols,
             itemsPerCol = carousel._rows,
             page,
@@ -523,7 +523,7 @@
             sentinel,
             delta = 0,
             top,
-            left, 
+            left,
             rsz,
             styles = {},
             index = 0;
@@ -544,9 +544,9 @@
         pos -= delta;
 
         if (itemsPerCol) {
-            page = this.getPageForItem(pos); 
+            page = this.getPageForItem(pos);
             if (isVertical) {
-                itemsRow = Math.floor(pos/itemsPerRow); 
+                itemsRow = Math.floor(pos/itemsPerRow);
                 delta = itemsRow;
                 top = delta * sz;
                 styles.top  = (top + rsz) + "px";
@@ -574,13 +574,13 @@
                 styles.top  = top + "px";
             }
         } else {
-            if (isVertical) {
-                styles.left = 0;
-                styles.top  = ((pos * sz) + rsz) + "px";
-            } else {
-                styles.top  = 0;
-                styles.left = ((pos * sz) + rsz) + "px";
-            }
+        if (isVertical) {
+            styles.left = 0;
+            styles.top  = ((pos * sz) + rsz) + "px";
+        } else {
+            styles.top  = 0;
+            styles.left = ((pos * sz) + rsz) + "px";
+        }
         }
 
         return styles;
@@ -1092,7 +1092,7 @@
          *
          * @property _itemAttrCache
          * @private
-         */ 
+         */
          _itemAttrCache: {},
 
         /*
@@ -1241,7 +1241,7 @@
              */
             NAV_CONTAINER: "yui-carousel-buttons",
 
-             /**
+            /**
               * The class name for an item in the pager UL or dropdown menu.
               *
               * @property PAGER_ITEM
@@ -1668,7 +1668,7 @@
             carousel._navBtns     = { prev: [], next: [] };
             carousel._pages       = { el: null, num: 0, cur: 0 };
             carousel._pagination  = {};
-            carousel._itemAttrCache = {}; 
+            carousel._itemAttrCache = {};
 
             carousel._itemsTable  = { loading: {}, numItems: 0,
                                       items: [], size: 0 };
@@ -1994,6 +1994,7 @@
             carousel.on(pageChangeEvent, syncPagerUi, carousel);
 
             carousel.on(renderEvent, function (ev) {
+                carousel.on(renderEvent, function (ev) {
                 if (carousel.get("selectedItem") === null ||
                     carousel.get("selectedItem") < 0) { // in either case
                     carousel.set("selectedItem", carousel.get("firstVisible"));
@@ -2444,15 +2445,15 @@
          * @public
          */
         scrollPageBackward: function () {
-            var carousel   = this,
+            var carousel = this,
                 isVertical = carousel.get("isVertical"),
                 cols       = carousel._cols,
-                item       = carousel._firstItem - carousel.get("numVisible");
+                item     = carousel._firstItem - carousel.get("numVisible");
 
             if (item < 0) { // only account for multi-row when scrolling backwards from item 0
                 if (cols) {
                     item = carousel._firstItem - cols;
-                } 
+                }
             }
 
             if (carousel.get("selectOnScroll")) {
@@ -2471,7 +2472,7 @@
         scrollPageForward: function () {
             var carousel = this,
                 item     = carousel._firstItem + carousel.get("numVisible");
-            
+
             if (item > carousel.get("numItems")) {
                 item = 0;
             }
@@ -2526,7 +2527,7 @@
                     return;
                 }
             } else if (numItems > 0 && item > numItems - 1) {
-                
+
                 if (carousel.get("isCircular")) {
                     item = numItems - item;
                 } else {
@@ -2558,16 +2559,16 @@
             // Calculate the delta relative to the first item, the delta is
             // always negative.
             delta = 0 - item;
-            
+
             if (itemsPerCol) {
-                // offset calculations for multirow Carousel
+            	// offset calculations for multirow Carousel
                 if (isVertical) {
                     delta = parseInt(delta / itemsPerRow, 10);
                 } else {
                     delta = parseInt(delta / itemsPerCol, 10);
                 }
             }
-            
+
             // adjust for items not yet loaded
             index = 0;
             while (delta < 0 && index < item+numPerPage-1 && index < numItems) {
@@ -2611,7 +2612,7 @@
                 (item+1) / parseInt(this.get("numVisible"),10)
             );
         },
-        
+
         /**
          * Get the first visible item's index on any given page.
          *
@@ -3086,7 +3087,7 @@
             }
 
         },
-        
+
         /**
          * The "onchange" handler for select box pagination.
          *
@@ -3095,17 +3096,17 @@
          * @protected
          */
          _pagerChangeHandler: function (ev) {
-             var carousel = this,
-                 target = Event.getTarget(ev),
+            var carousel = this,
+                target = Event.getTarget(ev),
                  page = target.value,
-                 item; 
+                 item;
 
              if (page) {
                  item = carousel.getFirstVisibleOnPage(page);
                  carousel._selectedItem = item;
                  carousel.scrollTo(item);
                  carousel.focus();
-             }
+            }
           },
         /**
          * The "click" handler for anchor pagination.
@@ -3124,22 +3125,22 @@
                  page,
                  item;
 
-             if (Dom.hasClass(target, css.PAGER_ITEM) || Dom.hasClass(target.parentNode, css.PAGER_ITEM))  {            
+             if (Dom.hasClass(target, css.PAGER_ITEM) || Dom.hasClass(target.parentNode, css.PAGER_ITEM))  {
                  if (elNode == "EM") {
                      target = target.parentNode;// item is an em and not an anchor (when text is visible)
                  }
                  val = target.href;
                  stringIndex = val.lastIndexOf("#");
                  page =  parseInt(val.substring(stringIndex+1), 10);
-                 if (page != -1) {
+                    if (page != -1) {
                      item = carousel.getFirstVisibleOnPage(page);
                      carousel._selectedItem = item;
                      carousel.scrollTo(item);
-                     carousel.focus();
-                }
-                Event.preventDefault(ev);
-             }
-         },
+                            carousel.focus();
+                        }
+                        Event.preventDefault(ev);
+                    }
+        },
 
         /**
          * Find the Carousel within a container. The Carousel is identified by
@@ -3212,7 +3213,7 @@
                 }
             }
         },
-        
+
         /**
          * Find the Carousel navigation within a container. The navigation
          * elements need to match the carousel navigation class names.
@@ -3313,7 +3314,7 @@
             // This fixes the widget to auto-adjust height/width for absolute
             // positioned children.
             item = carousel._itemsTable.items[firstVisible].id;
-            
+
             sz   = isVertical ? getStyle(item, "width") :
                     getStyle(item, "height");
 
@@ -3697,7 +3698,7 @@
             } else {
                 carousel.replaceClass(cssClass.VERTICAL, cssClass.HORIZONTAL);
             }
-            this._itemAttrCache = {};            // force recomputed next time
+            this._itemAttrCache = {}; // force recomputed next time
 
             return val;
         },
@@ -3953,7 +3954,7 @@
                     itemsTable.loading[i] = el;
                 }
             }
-            
+
             carousel._syncUiItems();
         },
 
@@ -3964,18 +3965,23 @@
          * @protected
          */
         _syncUiItems: function () {
-            var carousel = this,
+            var attr,
+                carousel = this,
                 numItems = carousel.get("numItems"),
+                i,
                 itemsTable = carousel._itemsTable,
                 item,
                 styles;
-            for (var i = 0; i<numItems; i++) {
+
+            for (i = 0; i < numItems; i++) {
                 styles = getCarouselItemPosition.call(carousel, i);
                 item = itemsTable.items[i] || itemsTable.loading[i];
                 if (item && item.id) {
                     item.styles = item.styles || {};
-                    for (var attr in styles) {
-                        item.styles[attr] = styles[attr];
+                    for (attr in styles) {
+                        if (styles.hasOwnProperty(attr)) {
+                            item.styles[attr] = styles[attr];
+                        }
                     }
                     setStyles(Dom.get(item.id), styles);
                 }
@@ -4060,8 +4066,8 @@
                  }
 
                  html = "<a class=" + css.PAGER_ITEM + " href=\"#" + (i+1) + "\" tabindex=\"0\"><em>"   +
-                          carousel.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1) +
-                          "</em></a>";
+                         carousel.STRINGS.PAGER_PREFIX_TEXT + " " + (i+1) +
+                         "</em></a>";
                  el.innerHTML = html;
 
                  pager.appendChild(el);
@@ -4097,8 +4103,8 @@
             }
 
             sel = document.createElement("SELECT");
-            
-            
+
+
             if (!sel) {
                 return;
             }
@@ -4113,7 +4119,7 @@
 
             for (i = 0; i < num; i++) {
 
-                el   = document.createElement("OPTION"); 
+                el   = document.createElement("OPTION");
                 el.value     = i+1;
                 el.innerHTML = carousel.STRINGS.PAGER_PREFIX_TEXT+" "+(i+1);
 
