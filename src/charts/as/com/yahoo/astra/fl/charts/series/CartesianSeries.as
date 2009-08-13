@@ -142,7 +142,23 @@ package com.yahoo.astra.fl.charts.series
 		public function set showInLegend(value:Boolean):void
 		{
 			this._showInLegend = value;
-		}		
+		}	
+		
+		/**
+		 * @inheritDoc
+		 */	
+		override public function set visible(value:Boolean):void
+		{
+			super.visible = value;
+			if(this.getStyleValue("visibility") as String == "hidden")
+			{
+				if(this.visible) super.setStyle("visibility", "visible");
+			}
+			else
+			{
+				if(!this.visible) super.setStyle("visibility", "hidden");
+			}
+		}
 		
 		
 	//--------------------------------------
@@ -163,5 +179,16 @@ package com.yahoo.astra.fl.charts.series
 										this.getStyleValue("borderAlpha") as Number);
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
+		override public function setStyle(style:String, value:Object):void
+		{
+			super.setStyle(style, value);
+			if(style == "visibility")
+			{
+				this.visible = value != "hidden";
+			}
+		}		
 	}
 }

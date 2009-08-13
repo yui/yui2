@@ -297,6 +297,19 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	 */
 	_setConstrainViewport: function(value)
 	{
-			this._swf.setConstrainViewport(value);
+		this._swf.setConstrainViewport(value);
+	},
+	
+	/**
+	 * Sets the style object for a single series based on its index
+	 * 
+	 * @method setSeriesStylesByIndex
+	 * @param index {Number} The position within the series definition to apply the style
+	 * @param style {object} Style object to be applied to the selected series
+	 */
+	setSeriesStylesByIndex:function(index, style)
+	{
+		style = YAHOO.lang.JSON.stringify(style);
+		if(this._swf && this._swf.setSeriesStylesByIndex) this._swf.setSeriesStylesByIndex(index, style);
 	}
 });

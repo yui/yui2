@@ -61,6 +61,7 @@
 	margin: 0 auto;
     padding:0;
     text-align:left;
+    *margin:0;
 }
 
 .yui-carousel-horizontal .yui-carousel-element {
@@ -69,4 +70,8 @@
 
 .yui-carousel-vertical .yui-carousel-element {
     height:320000px;
+}
+
+.yui-skin-sam .yui-carousel-nav select {
+    position:static;
 }
