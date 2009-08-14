@@ -13,8 +13,6 @@
 		CLASS_PROGBAR = 'yui-pb',
 		CLASS_MASK = CLASS_PROGBAR + '-mask',
 		CLASS_BAR = CLASS_PROGBAR + '-bar',
-		CLASS_CAPTION = CLASS_PROGBAR + '-caption',
-		CLASS_CAPTION_CONTAINER = CLASS_CAPTION + '-container',
 		CLASS_ANIM = CLASS_PROGBAR + '-anim',
 		CLASS_TL = CLASS_PROGBAR + '-tl',
 		CLASS_TR = CLASS_PROGBAR + '-tr',
@@ -35,8 +33,7 @@
 		DIRECTION_BTT = 'btt',
 		BAR_EL = 'barEl',
 		MASK_EL = 'maskEl',
-		CAPTION_EL = 'captionEl',
-		TEXT_TEMPLATE = 'textTemplate',
+		ARIA_TEXT_TEMPLATE = 'ariaTextTemplate',
 		
 		// Events
 		START = 'start',
@@ -84,10 +81,6 @@
 		CLASS_BL,
 		'"></div><div class="',
 		CLASS_BR,
-		'"></div></div><div class="',
-		CLASS_CAPTION_CONTAINER,
-		'"><div class="',
-		CLASS_CAPTION,
 		'"></div></div>'
 	].join('');
 
@@ -175,21 +168,6 @@
 		        value: this.getElementsByClassName(CLASS_MASK)[0]
 		    });
 			
-			/**
-			 * @attribute captionEl
-			 * @description Reference to the HTML object that contains the caption.
-			 * @type HTMLElement or String
-			 * @default a container placed centered over the progress bar.
-			 */			
-		    this.setAttributeConfig(CAPTION_EL, {
-		        value: this.getElementsByClassName(CLASS_CAPTION)[0],
-				validator: function (value) {
-					return (Lang.isString(value) && Dom.get(value)) || (Lang.isObject(value) && value.ownerDocument == document);
-				},
-				setter: function (value) {
-					return Dom.get(value);
-				}
-		    });
 			
 			/**
 			 * @attribute direction
@@ -289,14 +267,14 @@
 			
 	
 			/**
-			 * @attribute textTemplate
-			 * @description Text to be shown usually overlapping the bar and to be voiced by screen readers.
+			 * @attribute ariaTextTemplate 
+			 * @description Text to be voiced by screen readers.
 			 *     The text is processed by <a href="YAHOO.lang.html#method_substitute">YAHOO.lang.substitute</a>.  
 			 *     It can use the placeholders {value}, {minValue} and {maxValue}
-			 * @default ""
+			 * @default "{value}"
 			 * @type String
 			 */				
-			this.setAttributeConfig(TEXT_TEMPLATE, {
+			this.setAttributeConfig(ARIA_TEXT_TEMPLATE, {
 				value:'{value}'
 			});
 			
@@ -371,6 +349,7 @@
 			// I need to use the non-animated bar resizing function for initial redraw
 			this._barSizeFunction = this._barSizeFunctions[0][direction];
 			this.redraw();
+			this._previousValue = this.get(VALUE);
 			this._fixEdges();
 			// I can now set the correct bar resizer
 			if (this.get(ANIM)) {
@@ -401,7 +380,6 @@
 		destroy: function() {
 			this.set(ANIM,false);
 			this.unsubscribeAll();
-			this.get(CAPTION_EL).innerHTML = '';
 			var el = this.get('element');
 			el.parentNode.removeChild(el);
 		},
@@ -590,14 +568,13 @@
 		_animComplete: function() {
 			var value = this.get(VALUE);
 			this._previousValue = value;
+			this.fireEvent(PROGRESS,value);
 			this.fireEvent(COMPLETE, value);
 			Dom.removeClass(this.get(BAR_EL),CLASS_ANIM);
-			this._showTemplates(value,true);
 		},
-		_animOnTween:function () {
-			var value = Math.floor(this._tweenFactor * this.get(ANIM).currentFrame + this._previousValue);
+		_animOnTween:function (name,oArgs) {
+			var value = Math.floor(this._tweenFactor * oArgs[0].currentFrame + this._previousValue);
 			this.fireEvent(PROGRESS,value);
-			this._showTemplates(value,false);
 		},
 		
 		/** 
@@ -612,7 +589,7 @@
 				pixelValue = Math.floor((value - this.get(MIN_VALUE)) * this._barFactor),
 				barEl = this.get(BAR_EL);
 			
-			this._showTemplates(value,true);
+			this._setAriaText(value);
 			if (this._rendered) {
 				if (anim) {
 					anim.stop();
@@ -625,26 +602,20 @@
 
 		/** 
 		 * Utility method to set the ARIA value attributes
-		 * @method _showTemplates
+		 * @method _setAriaText
 		 * @return  void
 		 * @private
 		 */
-		 _showTemplates: function(value, aria) {
+		 _setAriaText: function(value) {
 
-			var captionEl = this.get(CAPTION_EL),
-				container = this.get('element'),
-				text = Lang.substitute(this.get(TEXT_TEMPLATE),{
+			var container = this.get('element'),
+				text = Lang.substitute(this.get(ARIA_TEXT_TEMPLATE),{
 					value:value,
 					minValue:this.get(MIN_VALUE),
 					maxValue:this.get(MAX_VALUE)
 				});
-			if (captionEl) {
-				captionEl.innerHTML = text;
-			}
-			if (aria) {
-				container.setAttribute('aria-valuenow',value);
-				container.setAttribute('aria-valuetext',captionEl.innerText || captionEl.textContent);
-			}
+			container.setAttribute('aria-valuenow',value);
+			container.setAttribute('aria-valuetext',text);
 		}
 	});
 	/**
@@ -681,14 +652,14 @@
 	};
 	b[1][DIRECTION_LTR] = function(value, pixelValue, barEl, anim) {
 		Dom.addClass(barEl,CLASS_ANIM);
-		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
+		this._tweenFactor = (value - this._previousValue) / anim.totalFrames  / anim.duration;
 		anim.attributes = {width:{ to: pixelValue }}; 
 		anim.animate();
 	};
 	b[1][DIRECTION_RTL] =  b[1][DIRECTION_LTR];
 	b[1][DIRECTION_TTB] =  function(value, pixelValue, barEl, anim) {
 		Dom.addClass(barEl,CLASS_ANIM);
-		this._tweenFactor = (value - this._previousValue) / anim.totalFrames;
+		this._tweenFactor = (value - this._previousValue) / anim.totalFrames  / anim.duration;
 		anim.attributes = {height:{to: pixelValue}};
 		anim.animate();
 	};
