@@ -52,7 +52,7 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 	
 	
 	
-	embeddedSWF = new YAHOO.widget.SWF(containerID, YAHOO.util.SWFStore.SWFURL, params); 
+	this.embeddedSWF = new YAHOO.widget.SWF(containerID, YAHOO.util.SWFStore.SWFURL, params); 
 	
 	
 	/**
@@ -89,7 +89,7 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 	/**
 	 * Fires when a store is saved successfully
 	 *
-	 * @event success
+	 * @event save
 	 * @param event.type {String} The event type
 	 * 
 	 */
@@ -140,10 +140,7 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 {
 
-	/**
-	 * Pointer to the embedded SWF instance
-	 */
-	embeddedSWF: {},
+
 	
 	/**
 	 * Method to attach listeners to events
@@ -152,7 +149,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	on: function(type, listener)
 	{
-		embeddedSWF.addListener(type, listener); 
+		this.embeddedSWF.addListener(type, listener); 
 	},
 
 	/**
@@ -162,7 +159,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	addListener: function(type, listener)
 	{
-		embeddedSWF.addListener(type, listener); 
+		this.embeddedSWF.addListener(type, listener); 
 	},
 
 	/**
@@ -184,7 +181,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	getShareData: function()
 	{
-		return embeddedSWF.callSWF("getShareData");
+		return this.embeddedSWF.callSWF("getShareData");
 	},
 	/**
 	 * Public accessor to the unique name of the SWFStore instance.
@@ -194,7 +191,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	setShareData: function(value)
 	{
-		embeddedSWF.callSWF("setShareData", [value]);
+		this.embeddedSWF.callSWF("setShareData", [value]);
 	},
 
 	/**
@@ -205,7 +202,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	hasAdequateDimensions: function()
 	{
-		return embeddedSWF.callSWF("hasAdequateDimensions");
+		return this.embeddedSWF.callSWF("hasAdequateDimensions");
 	},
 
 	/**
@@ -216,7 +213,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	getUseCompression: function()
 	{
-		return embeddedSWF.callSWF("getUseCompression");
+		return this.embeddedSWF.callSWF("getUseCompression");
 	},
 
 	/**
@@ -227,7 +224,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	setUseCompression: function(value)
 	{
-		embeddedSWF.callSWF("setUseCompression", [value]);
+		this.embeddedSWF.callSWF("setUseCompression", [value]);
 	},	
 
 	   /**
@@ -244,7 +241,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		setItem: function(location,data) 
 		{	
-			return embeddedSWF.callSWF("setItem", [location, data]);
+			return this.embeddedSWF.callSWF("setItem", [location, data]);
 		} ,
 	    	
 	   /**
@@ -256,7 +253,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */	    
 		getValueAt: function(index) 
 		{
-			return embeddedSWF.callSWF("getValueAt", [index]);
+			return this.embeddedSWF.callSWF("getValueAt", [index]);
 		},
 
 	   /**
@@ -269,7 +266,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */	    
 		getNameAt: function(index) 
 		{
-			return embeddedSWF.callSWF("getNameAt", [index]);
+			return this.embeddedSWF.callSWF("getNameAt", [index]);
 		},
 		
 		
@@ -282,7 +279,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		getValueOf: function(location) 
 		{
-			return embeddedSWF.callSWF("getValueOf", [location]);
+			return this.embeddedSWF.callSWF("getValueOf", [location]);
 		} ,
 
 	    /**
@@ -305,7 +302,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		getTypeOf: function(location) 
 		{
-			return embeddedSWF.callSWF("getTypeOf", [location]);
+			return this.embeddedSWF.callSWF("getTypeOf", [location]);
 		} ,
 
 	    /**
@@ -328,7 +325,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		getTypeAt: function(index) 
 		{
-			return embeddedSWF.callSWF("getTypeAt", [index]);
+			return this.embeddedSWF.callSWF("getTypeAt", [index]);
 		} ,
 
 		/**
@@ -340,7 +337,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 		 */
 		getValueAt: function(index) 
 		{
-			return embeddedSWF.callSWF("getValueAt", [index]);
+			return this.embeddedSWF.callSWF("getValueAt", [index]);
 		},
 		 
 		/**
@@ -351,7 +348,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 		 */
 		getItems: function() 
 		{
-			return embeddedSWF.callSWF("getItems", []);
+			return this.embeddedSWF.callSWF("getItems", []);
 		},
 
 	    /**
@@ -362,7 +359,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		removeItem: function(location) 
 		{
-			return embeddedSWF.callSWF("removeItem", [location]);
+			return this.embeddedSWF.callSWF("removeItem", [location]);
 		} ,
 
 	    /**
@@ -373,7 +370,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		removeItemAt: function(index) 
 		{
-			return embeddedSWF.callSWF("removeItemAt", [index]);
+			return this.embeddedSWF.callSWF("removeItemAt", [index]);
 		} ,
 		
 	    /**
@@ -384,7 +381,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		getLength: function() 
 		{
-			return embeddedSWF.callSWF("getLength", []);
+			return this.embeddedSWF.callSWF("getLength", []);
 		} ,
 		
 	   /**
@@ -396,7 +393,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */		
 		clear: function() 
 		{
-			return embeddedSWF.callSWF("clear", []);
+			return this.embeddedSWF.callSWF("clear", []);
 		} ,
 		
 	    /**
@@ -407,7 +404,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	     */		
 		calculateCurrentSize: function() 
 		{
-			return embeddedSWF.callSWF("calculateCurrentSize", []);
+			return this.embeddedSWF.callSWF("calculateCurrentSize", []);
 		} ,
 		
 	    /**
@@ -418,7 +415,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	     */
 		getModificationDate: function() 
 		{
-			return embeddedSWF.callSWF("getModificationDate", []);
+			return this.embeddedSWF.callSWF("getModificationDate", []);
 		} ,
 		
 		/**
@@ -432,7 +429,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 		*/		
 		setSize: function(value) 
 		{
-			return embeddedSWF.callSWF("setSize", [value]);
+			return this.embeddedSWF.callSWF("setSize", [value]);
 		} ,
 		
 		/**
@@ -444,7 +441,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 		 */		
 		displaySettings: function() 
 		{
-			return embeddedSWF.callSWF("displaySettings", []);
+			return this.embeddedSWF.callSWF("displaySettings", []);
 		} 
 
 });

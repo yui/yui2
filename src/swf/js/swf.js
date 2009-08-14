@@ -121,6 +121,8 @@ YAHOO.widget.SWF = function (p_oElement /*:String*/, swfURL /*:String*/, p_oAttr
      */
 	this._id = Dom.generateId(null, "yuiswf");
 	
+	if(p_oAttributes.host) this._host = p_oAttributes.host;
+	
 	var _id = this._id;
     var oElement = Dom.get(p_oElement);
 	var flashVersion = (p_oAttributes["version"] || FLASH_VER);
@@ -202,14 +204,28 @@ YAHOO.widget.SWF.eventHandler = function (swfid, event) {
 YAHOO.extend(YAHOO.widget.SWF, YAHOO.util.Element, {
 	_eventHandler: function(event)
 	{
-		if (event.type == "swfReady") {
+		if (event.type == "swfReady") 
+		{
 			this.createEvent("swfReady", {fireOnce:true});
 	     	this.fireEvent("swfReady", event);
         }
-        else {
-	        this.fireEvent(event.type, event);
+		else if(event.type == "log")
+		{
+			YAHOO.log(event.message, event.category, this._host ? this._host.toString() : this.toString());
+		}
+        else 
+		{
+	    	if(this._host && this._host.fireEvent) 
+			{
+				this._host.fireEvent(event.type, event);
+			}
+			else
+			{
+				this.fireEvent(event.type, event);
+			}
         } 
-	},	
+	},
+		
 	/**
 	 * Calls a specific function exposed by the SWF's
 	 * ExternalInterface.
@@ -224,6 +240,17 @@ YAHOO.extend(YAHOO.widget.SWF, YAHOO.util.Element, {
 	    } else {
 		return null;
 	    }
+	},
+	
+	/**
+	 * Public accessor to the unique name of the SWF instance.
+	 *
+	 * @method toString
+	 * @return {String} Unique name of the SWF instance.
+	 */
+	toString: function()
+	{
+		return "SWF " + this._id;
 	}
 });
 

@@ -393,6 +393,51 @@ package com.yahoo.astra.fl.charts.axes
 			_calculateByLabelSize = value;
 		}
 		
+		/**
+		 * @private
+		 * Storage for adjustMaximumByMajorUnit
+		 */
+		private var _adjustMaximumByMajorUnit:Boolean = true;
+		
+		/**
+	 	 * Indicates whether to extend maximum beyond data's maximum to the 
+	 	 * nearest majorUnit.
+		 */
+		public function get adjustMaximumByMajorUnit():Boolean
+		{
+			return _adjustMaximumByMajorUnit;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set adjustMaximumByMajorUnit(value:Boolean):void
+		{
+			_adjustMaximumByMajorUnit = value;
+		}
+		
+		/**
+		 * @private
+		 * Storage for adjustMinimumByMajorUnit
+		 */
+		private var _adjustMinimumByMajorUnit:Boolean = true;
+		
+		/**
+	 	 * Indicates whether to extend minimum beyond data's minimum to the 
+	 	 * nearest majorUnit.
+		 */
+		public function get adjustMinimumByMajorUnit():Boolean
+		{
+			return _adjustMinimumByMajorUnit;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set adjustMinimumByMajorUnit(value:Boolean):void
+		{
+			_adjustMinimumByMajorUnit = value;
+		}		
 		
 	//--------------------------------------
 	//  Public Methods
@@ -739,7 +784,7 @@ package com.yahoo.astra.fl.charts.axes
 		{
 			//adjust the maximum so that it appears on a major unit
 			//but don't change the maximum if the user set it or it is pinned to zero
-			if(!this._maximumSetByUser && !(this.alwaysShowZero && this._maximum == 0))
+			if(!this._maximumSetByUser && !(this.alwaysShowZero && this._maximum == 0) && this.adjustMaximumByMajorUnit)
 			{
 				var oldMaximum:Number = this._maximum;
 				if(this._minimumSetByUser)
@@ -763,7 +808,7 @@ package com.yahoo.astra.fl.charts.axes
 			
 			//adjust the minimum so that it appears on a major unit
 			//but don't change the minimum if the user set it or it is pinned to zero
-			if(!this._minimumSetByUser && !(this.alwaysShowZero && this._minimum == 0))
+			if(!this._minimumSetByUser && !(this.alwaysShowZero && this._minimum == 0) && this.adjustMinimumByMajorUnit)
 			{
 				var oldMinimum:Number = this._minimum;
 				this._minimum = NumberUtil.roundDownToNearest(this._minimum, this._majorUnit);

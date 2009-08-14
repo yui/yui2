@@ -1,3 +1,30 @@
+**** version 2.8.0 ***
+
+    * 2527611 - Original size in insert image window not working as expected
+	* 2527612 - Image size resets
+	* 2527737 - _getDoc in simpleeditor could be simpler
+	* 2527738 - Cleanup cmd_insertimage in simpleeditor
+	* 2527795 - RTE and Safari 4 Beta Defect
+	* 2527837 - Editor Window Footer open class
+	* 2527861 - Editor menu collapse doesnt change image
+	* 2527882 - allowDesignMode option for Editor
+	* 2527888 - FFox and Chrome replicate IDs when editing <li> items
+	* 2527893 - CSS typo in editor-core.css
+	* 2527934 - Editor can't be extended to have a custom toolbar in init function
+	* 2527951 - Ampersands are not always escaped properly in the RichTextEditor (RTE)
+	* 2527952 - Controlling the saveHTML process for multiple instances of HTML Editor without a real reference to t...
+	* 2527977 - RTE: The cleanHTML method removes <span> tags at beginning and end of HTML when it shouldn't
+	* 2527988 - [bz 2741524] multiple images inserted
+	* 2528024 - Editor mangles and incorrectly removes <div> tags in WebKit
+	* 2528086 - [bz 2763863] editor not working in ie8
+	* 2528103 - data with large images / large quantity of images not editable
+	* 2528106 - Disabling RTE doesn't work properly in IE6
+	* 2528193 - [bz 2790831] undo functionality broken
+	* 2528194 - Custom Image Browser Example has old code
+	* 2528195 - Toggling Editor "disabled" attribute causes extra line breaks to be inserted
+
+
+
 **** version 2.7.0 ***
     * 1946017 - Unable to delete text when editor opens (Firefox)
     * 2527610 - Insert image deletes image in FF3
