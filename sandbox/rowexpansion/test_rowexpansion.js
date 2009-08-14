@@ -73,7 +73,7 @@
 				( Dom.get( 'testTable' ) || makeDiv() ),
 				myColumnDefs,
 				myDataSource,
-					{ rowExpansionTemplate : '<img src="{image_url}" />' }
+					{ rowExpansionTemplate : '{image_url}' }
 				),
 
 				records = myDataTable.getRecordSet().getRecords(),
@@ -263,6 +263,48 @@
 				'An extra row with "yui-dt-expanded" class applied. Restore failure.'
 			);
 
+		},
+
+		tearDown : function () {
+
+			YTest.RowExpansionCoreSuite.tableDestroyer( this.table );
+
+		}
+
+	}) );
+
+	YTest.RowExpansionCoreSuite.add( new Ytool.TestCase({
+
+		name : "collapseAllRows Method",
+
+		setUp : function () {
+
+			this.table = YTest.RowExpansionCoreSuite.tableMaker();
+
+			this.data_table = this.table.oDT;
+
+			//Expand the first and third records
+			this.data_table.expandRow( this.table.aIds[ 0 ].getId() );
+			this.data_table.expandRow( this.table.aIds[ 1 ].getId() );
+			
+			/*
+			* After calling the collapseAllRows method, there should be no row
+			* expansions in the table but the state objects should remain with an 
+			* expanded state
+			*/
+			
+			this.data_table.collapseAllRows();
+
+		},
+
+		testRegularExpansion : function () {
+			/*
+			console.log(this.data_table.getBodyTableEl())
+			Assert.isFalse(
+				Dom.hasClass( this.data_table.getRow( this.table.aIds[ 0 ] ), 'yui-dt-expanded' ),
+				'The first record does not have the "yui-dt-expanded" class applied'
+			);
+			*/
 		},
 
 		tearDown : function () {
