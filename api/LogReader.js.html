@@ -111,7 +111,7 @@
 <span class="c">     * @property ENTRY_TEMPLATE</span>
 <span class="c">     * @static</span>
 <span class="c">     * @type {HTMLElement}</span>
-<span class="c">     * @default PRE.yui-log-entry element</span>
+<span class="c">     * @default &lt;code&gt;pre&lt;/code&gt; element with class yui-log-entry</span>
 <span class="c">     */</span>
     <span class="nx">ENTRY_TEMPLATE</span> <span class="o">:</span> <span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="nx">make</span><span class="o">(</span><span class="s1">&#39;pre&#39;</span><span class="o">,{</span> <span class="nx">className</span><span class="o">:</span> <span class="s1">&#39;yui-log-entry&#39;</span> <span class="o">});</span>
@@ -121,7 +121,7 @@
 <span class="c">     * Template used for innerHTML of verbose entry output.</span>
 <span class="c">     * @property VERBOSE_TEMPLATE</span>
 <span class="c">     * @static</span>
-<span class="c">     * @default &quot;&lt;span class=&#39;{category}&#39;&gt;{label}&lt;/span&gt;{totalTime}ms (+{elapsedTime}) {localTime}:&lt;/p&gt;&lt;p&gt;{sourceAndDetail}&lt;/p&gt;&lt;p&gt;{message}&lt;/p&gt;&quot;</span>
+<span class="c">     * @default &quot;&amp;lt;p&gt;&amp;lt;span class=&#39;{category}&#39;&gt;{label}&amp;lt;/span&gt;{totalTime}ms (+{elapsedTime}) {localTime}:&amp;lt;/p&gt;&amp;lt;p&gt;{sourceAndDetail}&amp;lt;/p&gt;&amp;lt;p&gt;{message}&amp;lt;/p&gt;&quot;</span>
 <span class="c">     */</span>
     <span class="nx">VERBOSE_TEMPLATE</span> <span class="o">:</span> <span class="s2">&quot;&lt;p&gt;&lt;span class=&#39;{category}&#39;&gt;{label}&lt;/span&gt; {totalTime}ms (+{elapsedTime}) {localTime}:&lt;/p&gt;&lt;p&gt;{sourceAndDetail}&lt;/p&gt;&lt;p&gt;{message}&lt;/p&gt;&quot;</span><span class="o">,</span>
 
@@ -129,7 +129,7 @@
 <span class="c">     * Template used for innerHTML of compact entry output.</span>
 <span class="c">     * @property BASIC_TEMPLATE</span>
 <span class="c">     * @static</span>
-<span class="c">     * @default &quot;&lt;p&gt;&lt;span class=&#39;{category}&#39;&gt;{label}&lt;/span&gt;{totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}&lt;/p&gt;&quot;</span>
+<span class="c">     * @default &quot;&amp;lt;p&gt;&amp;lt;span class=&#39;{category}&#39;&gt;{label}&amp;lt;/span&gt;{totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}&amp;lt;/p&gt;&quot;</span>
 <span class="c">     */</span>
     <span class="nx">BASIC_TEMPLATE</span> <span class="o">:</span> <span class="s2">&quot;&lt;p&gt;&lt;span class=&#39;{category}&#39;&gt;{label}&lt;/span&gt; {totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}&lt;/p&gt;&quot;</span>
 <span class="o">});</span>

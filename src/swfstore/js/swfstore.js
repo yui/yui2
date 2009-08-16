@@ -89,7 +89,7 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 	/**
 	 * Fires when a store is saved successfully
 	 *
-	 * @event success
+	 * @event save
 	 * @param event.type {String} The event type
 	 * 
 	 */

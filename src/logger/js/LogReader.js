@@ -62,7 +62,7 @@ YAHOO.lang.augmentObject(LogReader, {
      * @property ENTRY_TEMPLATE
      * @static
      * @type {HTMLElement}
-     * @default PRE.yui-log-entry element
+     * @default <code>pre</code> element with class yui-log-entry
      */
     ENTRY_TEMPLATE : (function () {
         return make('pre',{ className: 'yui-log-entry' });
@@ -72,7 +72,7 @@ YAHOO.lang.augmentObject(LogReader, {
      * Template used for innerHTML of verbose entry output.
      * @property VERBOSE_TEMPLATE
      * @static
-     * @default "<span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}:</p><p>{sourceAndDetail}</p><p>{message}</p>"
+     * @default "&lt;p>&lt;span class='{category}'>{label}&lt;/span>{totalTime}ms (+{elapsedTime}) {localTime}:&lt;/p>&lt;p>{sourceAndDetail}&lt;/p>&lt;p>{message}&lt;/p>"
      */
     VERBOSE_TEMPLATE : "<p><span class='{category}'>{label}</span> {totalTime}ms (+{elapsedTime}) {localTime}:</p><p>{sourceAndDetail}</p><p>{message}</p>",
 
@@ -80,7 +80,7 @@ YAHOO.lang.augmentObject(LogReader, {
      * Template used for innerHTML of compact entry output.
      * @property BASIC_TEMPLATE
      * @static
-     * @default "<p><span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}</p>"
+     * @default "&lt;p>&lt;span class='{category}'>{label}&lt;/span>{totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}&lt;/p>"
      */
     BASIC_TEMPLATE : "<p><span class='{category}'>{label}</span> {totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}</p>"
 });
