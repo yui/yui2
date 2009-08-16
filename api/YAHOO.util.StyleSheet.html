@@ -392,10 +392,14 @@ cssText will be returned.
 If the selector includes commas, it will be split into individual
 selectors and applied accordingly.  If the selector string does not
 have a corresponding rule in the sheet, it will be added.</p>
-<p>The object properties in the second parameter must be the JavaScript
-names of style properties.  E.g. fontSize rather than font-size.</p>
+<p>The second parameter can be either a string of CSS text,
+formatted as CSS ("font-size: 10px;"), or an object collection of
+properties and their new values.  Object properties must be in
+JavaScript format ({ fontSize: "10px" }).</p>
 <p>The float style property will be set by any of &quot;float&quot;,
-&quot;styleFloat&quot;, or &quot;cssFloat&quot;.</p>
+&quot;styleFloat&quot;, or &quot;cssFloat&quot; if passed in the
+object map.  Use "float: left;" format when passing a CSS text
+string.</p>
                                         </div>
 
                                         <div class="description">
@@ -410,9 +414,10 @@ names of style properties.  E.g. fontSize rather than font-size.</p>
                                                         </dd>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">css</span>
-                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        &lt;<span property="yui:type">Object|String</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  Object literal of style properties and new values</span>
+                                                        <span property="yui:description">  Object literal of style properties and
+new values, or a string of cssText</span>
                                                         </dd>
                                                 </dl>
 
