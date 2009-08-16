@@ -1052,6 +1052,20 @@ package com.yahoo.astra.fl.charts
 		}
 		
 		/**
+		 * @private (protected)
+		 * Storage for the axisLayer property.
+		 */
+		protected var _axisLayer:Sprite = new Sprite();		
+		
+		/**
+		 * Container for all axis elements of the chart.
+		 */
+		public function get axisLayer():Sprite
+		{
+			return this._axisLayer;
+		}
+		
+		/**
 		 * @private
 		 */
 		protected var horizontalGridLines:IGridLinesRenderer;
@@ -1449,8 +1463,8 @@ package com.yahoo.astra.fl.charts
 		{
 			this._constrainViewport = value;
 		}
-		
-		
+
+
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
@@ -1681,6 +1695,7 @@ package com.yahoo.astra.fl.charts
 		override protected function configUI():void
 		{
 			super.configUI();
+			this.addChildAt(this.axisLayer, this.getChildIndex(this.content));
 			
 			//by default, the x axis is for categories. other types of charts will need
 			//to override this if they need a numeric or other type of axis
@@ -1695,7 +1710,7 @@ package com.yahoo.astra.fl.charts
 				var RendererClass:Class = this.getStyleValue("horizontalAxisRenderer") as Class;
 				this.horizontalAxisRenderer = new RendererClass();
 				this.horizontalAxisRenderer.position = "bottom";
-				this.addChild(DisplayObject(this.horizontalAxisRenderer));
+				this.axisLayer.addChild(DisplayObject(this.horizontalAxisRenderer));
 				this.horizontalAxis.renderer = this.horizontalAxisRenderer;
 			}
 			
@@ -1711,7 +1726,7 @@ package com.yahoo.astra.fl.charts
 				RendererClass = this.getStyleValue("verticalAxisRenderer") as Class;
 				this.verticalAxisRenderer = new RendererClass();
 				this.verticalAxisRenderer.position = "left";
-				this.addChild(DisplayObject(this.verticalAxisRenderer));
+				this.axisLayer.addChild(DisplayObject(this.verticalAxisRenderer));
 				this.verticalAxis.renderer = this.verticalAxisRenderer;
 			}
 			
@@ -1806,14 +1821,14 @@ package com.yahoo.astra.fl.charts
 			//create axis renderers
 			if(this.horizontalAxisRenderer)
 			{
-				this.removeChild(DisplayObject(this.horizontalAxisRenderer));
+				this.axisLayer.removeChild(DisplayObject(this.horizontalAxisRenderer));
 				this.horizontalAxisRenderer = null;
 			}
 			
 			var RendererClass:Class = this.getStyleValue("horizontalAxisRenderer") as Class;
 			this.horizontalAxisRenderer = new RendererClass();
 			this.horizontalAxisRenderer.position = this.horizontalAxis.position;
-			this.addChild(DisplayObject(this.horizontalAxisRenderer));
+			this.axisLayer.addChild(DisplayObject(this.horizontalAxisRenderer));
 			this.copyStylesToChild(UIComponent(this.horizontalAxisRenderer), CartesianChart.HORIZONTAL_AXIS_STYLES);
 			this.copyStyleObjectToChild(UIComponent(this.horizontalAxisRenderer), this.getStyleValue("horizontalAxisStyles"));
 			var horizontalAxisTextFormat:TextFormat = this.getAxisStyle("horizontal", "textFormat") as TextFormat;
@@ -1828,14 +1843,14 @@ package com.yahoo.astra.fl.charts
 		
 			if(this.verticalAxisRenderer)
 			{
-				this.removeChild(DisplayObject(this.verticalAxisRenderer));
+				this.axisLayer.removeChild(DisplayObject(this.verticalAxisRenderer));
 				this.verticalAxisRenderer = null;
 			}
 			
 			RendererClass = this.getStyleValue("verticalAxisRenderer") as Class;
 			this.verticalAxisRenderer = new RendererClass();
 			this.verticalAxisRenderer.position = this.verticalAxis.position;
-			this.addChild(DisplayObject(this.verticalAxisRenderer));
+			this.axisLayer.addChild(DisplayObject(this.verticalAxisRenderer));
 			this.copyStylesToChild(UIComponent(verticalAxisRenderer), CartesianChart.VERTICAL_AXIS_STYLES);
 			this.copyStyleObjectToChild(UIComponent(this.verticalAxisRenderer), this.getStyleValue("verticalAxisStyles"));
 			var verticalAxisTextFormat:TextFormat = this.getAxisStyle("vertical", "textFormat") as TextFormat;
@@ -1849,7 +1864,7 @@ package com.yahoo.astra.fl.charts
 			
 			if(this.secondaryHorizontalAxisRenderer)
 			{
-				this.removeChild(DisplayObject(this.secondaryHorizontalAxisRenderer));
+				this.axisLayer.removeChild(DisplayObject(this.secondaryHorizontalAxisRenderer));
 				this.secondaryHorizontalAxisRenderer = null;
 			}
 			
@@ -1859,7 +1874,7 @@ package com.yahoo.astra.fl.charts
 				this.secondaryHorizontalAxisRenderer = new RendererClass();
 	
 				this.secondaryHorizontalAxisRenderer.position = this.secondaryHorizontalAxis.position;
-				this.addChild(DisplayObject(this.secondaryHorizontalAxisRenderer));
+				this.axisLayer.addChild(DisplayObject(this.secondaryHorizontalAxisRenderer));
 				this.copyStylesToChild(UIComponent(this.secondaryHorizontalAxisRenderer), CartesianChart.HORIZONTAL_AXIS_STYLES);
 				this.copyStyleObjectToChild(UIComponent(this.secondaryHorizontalAxisRenderer), this.getStyleValue("horizontalAxisStyles"));
 				this.copyStyleObjectToChild(UIComponent(this.secondaryHorizontalAxisRenderer), this.getStyleValue("secondaryHorizontalAxisStyles"));
@@ -1874,7 +1889,7 @@ package com.yahoo.astra.fl.charts
 			}			
 			if(this.secondaryVerticalAxisRenderer)
 			{
-				this.removeChild(DisplayObject(this.secondaryVerticalAxisRenderer));
+				this.axisLayer.removeChild(DisplayObject(this.secondaryVerticalAxisRenderer));
 				this.secondaryVerticalAxisRenderer = null;
 			}
 			
@@ -1883,7 +1898,7 @@ package com.yahoo.astra.fl.charts
 				RendererClass = this.getStyleValue("secondaryVerticalAxisRenderer") as Class;			
 				this.secondaryVerticalAxisRenderer = new RendererClass();
 				this.secondaryVerticalAxisRenderer.position = this.secondaryVerticalAxis.position;
-				this.addChild(DisplayObject(this.secondaryVerticalAxisRenderer));
+				this.axisLayer.addChild(DisplayObject(this.secondaryVerticalAxisRenderer));
 				this.copyStylesToChild(UIComponent(this.secondaryVerticalAxisRenderer), CartesianChart.VERTICAL_AXIS_STYLES);
 				this.copyStyleObjectToChild(UIComponent(this.secondaryVerticalAxisRenderer), this.getStyleValue("verticalAxisStyles"));
 				this.copyStyleObjectToChild(UIComponent(this.secondaryVerticalAxisRenderer), this.getStyleValue("secondaryVerticalAxisStyles"));
@@ -1900,23 +1915,23 @@ package com.yahoo.astra.fl.charts
 			
 			if(this.horizontalGridLines)
 			{
-				this.removeChild(DisplayObject(this.horizontalGridLines));
+				this.axisLayer.removeChild(DisplayObject(this.horizontalGridLines));
 			}
 			RendererClass = this.getStyleValue("horizontalAxisGridLinesRenderer") as Class;
 			this.horizontalGridLines = new RendererClass();
 			this.horizontalGridLines.axisRenderer = this.horizontalAxisRenderer;
-			this.addChild(DisplayObject(this.horizontalGridLines));
+			this.axisLayer.addChild(DisplayObject(this.horizontalGridLines));
 			this.copyStylesToChild(UIComponent(this.horizontalGridLines), CartesianChart.HORIZONTAL_GRID_LINES_STYLES);
 			this.copyStyleObjectToChild(UIComponent(this.horizontalGridLines), this.getStyleValue("horizontalAxisGridLinesStyles")); 
 			
 			if(this.verticalGridLines)
 			{
-				this.removeChild(DisplayObject(this.verticalGridLines));
+				this.axisLayer.removeChild(DisplayObject(this.verticalGridLines));
 			}
 			RendererClass = this.getStyleValue("verticalAxisGridLinesRenderer") as Class;
 			this.verticalGridLines = new RendererClass();
 			this.verticalGridLines.axisRenderer = this.verticalAxisRenderer;
-			this.addChild(DisplayObject(this.verticalGridLines));
+			this.axisLayer.addChild(DisplayObject(this.verticalGridLines));
 			this.copyStylesToChild(UIComponent(this.verticalGridLines), CartesianChart.VERTICAL_GRID_LINES_STYLES);
 			this.copyStyleObjectToChild(UIComponent(this.verticalGridLines), this.getStyleValue("verticalAxisGridLinesStyles")); 
 			
@@ -1954,7 +1969,7 @@ package com.yahoo.astra.fl.charts
 				var cartesianAxisRenderer:ICartesianAxisRenderer = axis.renderer as ICartesianAxisRenderer;
 				axisRenderer.setSize(axisWidth, axisHeight);
 				cartesianAxisRenderer.title = axis.title;
-				this.setChildIndex(axisRenderer, this.numChildren - 1);			
+				this.axisLayer.setChildIndex(axisRenderer, this.numChildren - 1);			
 				cartesianAxisRenderer.ticks = [];
 				cartesianAxisRenderer.minorTicks = [];
 			
@@ -2064,7 +2079,7 @@ package com.yahoo.astra.fl.charts
 			if(this.horizontalGridLines)
 			{
 				var horizontalGridLines:UIComponent = this.horizontalGridLines as UIComponent;
-				this.setChildIndex(horizontalGridLines, index++);
+				this.axisLayer.setChildIndex(horizontalGridLines, index++);
 				horizontalGridLines.x = contentPadding + this.contentBounds.x;
 				horizontalGridLines.y = contentPadding + this.contentBounds.y;
 				horizontalGridLines.drawNow();
@@ -2073,7 +2088,7 @@ package com.yahoo.astra.fl.charts
 			if(this.verticalGridLines)
 			{
 				var verticalGridLines:UIComponent = this.verticalGridLines as UIComponent;
-				this.setChildIndex(verticalGridLines, index++);
+				this.axisLayer.setChildIndex(verticalGridLines, index++);
 				verticalGridLines.x = contentPadding + this.contentBounds.x;
 				verticalGridLines.y = contentPadding + this.contentBounds.y;
 				verticalGridLines.drawNow();
