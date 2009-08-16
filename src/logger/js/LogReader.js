@@ -35,6 +35,14 @@ function LogReader(elContainer, oConfigs) {
     
     this._init.apply(this,arguments);
 
+    /**
+     * Render the LogReader immediately upon instantiation.  If set to false,
+     * you must call myLogReader.render() to generate the UI.
+     * 
+     * @property autoRender
+     * @type {Boolean}
+     * @default true
+     */
     if (this.autoRender !== false) {
         this.render();
     }
