@@ -1997,6 +1997,8 @@
                 if (carousel.get("selectedItem") === null ||
                     carousel.get("selectedItem") < 0) { // in either case
                     carousel.set("selectedItem", carousel.get("firstVisible"));
+                } else {
+                    carousel.set("selectedItem", carousel.get("selectedItem"));
                 }
                 syncNavigation.call(carousel, ev);
                 syncPagerUi.call(carousel, ev);
