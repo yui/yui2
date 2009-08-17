@@ -8,6 +8,7 @@ package com.yahoo.astra.fl.charts.axes
 	import flash.events.ErrorEvent;
 	import com.yahoo.astra.fl.charts.CartesianChart;
 	import com.yahoo.astra.utils.AxisLabelUtil;
+	import flash.events.EventDispatcher;
 	
 	/**
 	 * Implements some of the most common axis functionality
@@ -17,7 +18,7 @@ package com.yahoo.astra.fl.charts.axes
 	 * 
 	 * @author Josh Tynjala
 	 */
-	public class BaseAxis
+	public class BaseAxis extends EventDispatcher
 	{
 		
 	//--------------------------------------
@@ -327,6 +328,50 @@ package com.yahoo.astra.fl.charts.axes
 		public function set position(value:String):void
 		{
 			this._position = value;
+		}
+		
+		/**
+		 * @private
+		 * Storage for maxLabel property.
+		 */
+		private var _maxLabel:String = "";
+		
+		/**
+		 * @copy as.com.yahoo.astra.fl.charts.IAxis#maxLabel
+		 */
+		public function get maxLabel():String
+		{
+			return _maxLabel;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set maxLabel(value:String):void
+		{
+			_maxLabel = value;
+		}
+		
+		/**
+		 * @private
+		 * Storage for recalculations
+		 */
+		protected var _recalculations:int = 0;
+		
+		/**
+		 * @copy com.yahoo.astra.fl.charts.axes.IAxis#recalculations
+		 */
+		public function get recalculations():int
+		{
+			return this._recalculations;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set recalculations(value:int):void
+		{
+			this._recalculations = value;
 		}
 				
 	//--------------------------------------

@@ -1,5 +1,6 @@
 package com.yahoo.astra.fl.charts.axes
 {
+	import com.yahoo.astra.fl.charts.events.*;
 	import com.yahoo.astra.fl.charts.series.ISeries;
 	import com.yahoo.astra.fl.charts.series.CartesianSeries;
 	import com.yahoo.astra.fl.utils.UIComponentUtil;
@@ -28,6 +29,8 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		public function NumericAxis()
 		{
+			super();
+			this.addEventListener(AxisEvent.AXIS_READY, axisReadyHandler);
 		}
 
 	//--------------------------------------
@@ -437,7 +440,20 @@ package com.yahoo.astra.fl.charts.axes
 		public function set adjustMinimumByMajorUnit(value:Boolean):void
 		{
 			_adjustMinimumByMajorUnit = value;
-		}		
+		}
+
+		/**
+		 * @private
+		 * Contains minor unit data to be passed to the renderer.
+		 */
+		private var _minorTicks:Array;
+		
+		/**
+		 * @private
+		 * Contains major unit data to be passed to the renderer.
+		 */
+		private var _majorTicks:Array;	
+					
 		
 	//--------------------------------------
 	//  Public Methods
@@ -508,7 +524,7 @@ package com.yahoo.astra.fl.charts.axes
 			}
 			return numericValue;
 		}
-			
+
 		/**
 		 * @inheritDoc
 		 */
@@ -518,8 +534,8 @@ package com.yahoo.astra.fl.charts.axes
 			this.calculatePositionMultiplier();
 			
 			(this.renderer as ICartesianAxisRenderer).majorUnitSetByUser = this._majorUnitSetByUser;
-			this.renderer.ticks = this.createAxisData(this.majorUnit);
-			this.renderer.minorTicks = this.createAxisData(this.minorUnit);
+			this.createAxisData(this.minorUnit, false);
+			this.createAxisData(this.majorUnit);
 		}
 
 		/**
@@ -533,7 +549,8 @@ package com.yahoo.astra.fl.charts.axes
 			var halfString:String = this.valueToLabel(Math.round(difference/2));
 			if(maxString.length < minString.length) maxString = minString;
 			if(halfString.length > maxString.length) maxString = halfString;
-
+			this.maxLabel = maxString = maxString.length > this.maxLabel.length ? maxString : this.maxLabel;
+			
 			return maxString as String;	
 		}
 		
@@ -708,23 +725,38 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private
 		 * Creates the AxisData objects for the axis renderer.
 		 */
-		protected function createAxisData(unit:Number):Array
+		protected function createAxisData(unit:Number, isMajorUnit:Boolean = true):void
 		{
 			if(unit <= 0)
 			{
-				return [];
+				if(isMajorUnit)
+				{
+					_majorTicks = [];
+				}
+				else
+				{
+					_minorTicks = [];
+				}
+				return;
 			}
 			
 			var data:Array = [];
 			var displayedMaximum:Boolean = false;
 			var value:Number = this.minimum;
+			var maxLabel:String = "";
 			while(value < this.maximum || NumberUtil.fuzzyEquals(value, this.maximum))
 			{
 				if(value % 1 != 0) value = NumberUtil.roundToPrecision(value, 10);
 				
 				//because Flash UIComponents round the position to the nearest pixel, we need to do the same.
 				var position:Number = Math.round(this.valueToLocal(value));
-				var label:String = this.valueToLabel(value);
+				var label:String = "";
+				if(isMajorUnit)
+				{
+					label = this.valueToLabel(value);
+					if(label.length > maxLabel.length) maxLabel = label;
+				}
+				
 				var axisData:AxisData = new AxisData(position, value, label);
 				data.push(axisData);
 				
@@ -748,7 +780,24 @@ package com.yahoo.astra.fl.charts.axes
 				displayedMaximum = NumberUtil.fuzzyEquals(value, this.maximum);
 			}
 			if(this.reverse) data = data.reverse();
-			return data;
+			if(isMajorUnit)
+			{
+				_majorTicks = data;
+				this.recalculations++;
+				if(maxLabel.length > this.maxLabel.length && this.recalculations < 5)
+				{
+					this.maxLabel = maxLabel;
+					this.dispatchEvent(new AxisEvent(AxisEvent.AXIS_FAILED));
+				}
+				else
+				{
+					this.dispatchEvent(new AxisEvent(AxisEvent.AXIS_READY));
+				}
+			}
+			else
+			{
+				_minorTicks = data;
+			}
 		}
 		
 	//--------------------------------------
@@ -969,6 +1018,16 @@ package com.yahoo.astra.fl.charts.axes
 				unit = roundedMajorUnit;
 			}			
 			return unit;
+		}
+		
+		/**
+		 * @private
+		 * Listener for axisReady event. Sets the ticks and minorTicks for the renderer.
+		 */
+		private function axisReadyHandler(event:AxisEvent):void
+		{
+			this.renderer.ticks = _majorTicks;
+			this.renderer.minorTicks = _minorTicks;
 		}
 		
 	}

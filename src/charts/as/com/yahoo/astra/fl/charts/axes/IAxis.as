@@ -1,13 +1,14 @@
 package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.IChart;
+	import flash.events.IEventDispatcher;
 	
 	/**
 	 * Data-only representation of a chart's axis.
 	 * 
 	 * @author Josh Tynjala
 	 */
-	public interface IAxis
+	public interface IAxis extends IEventDispatcher
 	{	
 		/**
 		 * Total width of axis
@@ -153,6 +154,26 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private (setter)
 		 */
 		function set position(value:String):void;
+		
+		/**
+		 * Largest label value to appear on the axis.
+		 */
+		function get maxLabel():String;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set maxLabel(value:String):void;
+		
+		/**
+		 * Counter for the number of recalculations of the max label
+		 */
+		function get recalculations():int;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set recalculations(value:int):void;
 		
 		/**
 		 * Determines the axis scale based on the input data set.
