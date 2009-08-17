@@ -63,12 +63,18 @@
 
 				var container = this,
 					target = Event.getTarget(event),
+					selector = filter,
+
+					//	The user might have specified the document object 
+					//	as the delegation container, in which case it is not 
+					//	nessary to scope the provided CSS selector(s) to the 
+					//	delegation container
+					bDocument = (container.nodeType === 9),
+
 					matchedEl,
 					context,
-					selector,
 					sID,
-					sIDSelector,
-					node;
+					sIDSelector;
 
 
 				if (Lang.isFunction(filter)) {
@@ -76,21 +82,20 @@
 				}
 				else if (Lang.isString(filter)) {
 
-					//	The user might have specified the document element
-					//	as the delegation container, in which case it is 
-					//	nessary to crawl up to the documentElement (<HTML />)
+					if (!bDocument) {
 
-					node = container.nodeType === 9 ? container.documentElement : container;
-					sID = node.id;
+						sID = container.id;
 
-					if (!sID) {
-						sID = Event.generateId(node);
+						if (!sID) {
+							sID = Event.generateId(container);
+						}						
+
+						//	Scope all selectors to the container
+						sIDSelector = ("#" + sID + " ");
+						selector = (sIDSelector + filter).replace(/,/gi, ("," + sIDSelector));
+
 					}
 
-					//	Scope all selectors to the container
-
-					sIDSelector = ("#" + sID + " ");
-					selector = (sIDSelector + filter).replace(/,/gi, ("," + sIDSelector));
 
 					if (Selector.test(target, selector)) {
 						matchedEl = target;
@@ -101,7 +106,7 @@
 						//	the selector, so crawl up to find the ancestor that 
 						//	matches the selector
 
-						matchedEl = getMatch(target, selector, node);
+						matchedEl = getMatch(target, selector, container);
 
 					}
 
