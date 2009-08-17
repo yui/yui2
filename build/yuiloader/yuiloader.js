@@ -2039,7 +2039,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         'event-delegate': {
             'type': 'js',
             'path': 'event-delegate/event-delegate-min.js',
-            'requires': ['dom', 'event'],
+            'requires': ['event'],
             'optional': ['selector']
         },
 
