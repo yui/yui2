@@ -1,3 +1,10 @@
+**** version 2.8.0 ****
+    * 2528175 - Resize event of a layout is fired twice when using the resize handles
+	* 2527868 - top panel's header always displayed in a layout in IE7
+	* 2527803 - Example: Simple Application broken on IE7
+	* 2527706 - Can't set maxHeight/maxWidth after creation
+
+
 **** version 2.7.0 ****
 
     * 1940339 - Add resizing class to center unit whilst resizing

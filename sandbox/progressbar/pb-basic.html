@@ -26,18 +26,7 @@
 
 <style type="text/css">
 
-fieldset {
-	border: thin solid silver;
-	background-color:#F0F0F0;
-	padding:1em;
-	margin:1em;
-}
-
-p{
-	margin:0 1em;
-}
-
-#valueSet,#rangeSet,#sizeSet,#captionCheck {
+#valueSet,#rangeSet,#sizeSet {
 	float:left;
 	clear:left;
 	width:50%;
@@ -52,10 +41,29 @@ p{
 	margin:0 auto;
 }
 
+fieldset {
+	border: thin solid silver;
+	background-color:#F0F0F0;
+	padding:1em;
+	margin:1em;
+
+	*position: relative;
+	*margin: 0 0 1em 0;
+    *padding-top:.75em;
+}
+
+fieldset p {
+	margin:0 1em;
+}
+
 legend {
 	font-weight:bold;
 	margin:0 0.5em;
 	padding:0 0.2em;
+
+	*position:absolute;
+    *top: -.5em;
+    *left: .5em;
 }
 
 .disabled {
@@ -130,7 +138,6 @@ code {
 						<label> Height: <span id="height">20</span>px</label>
 					</p>
 				</fieldset>
-				<p id="captionCheck"><input type="checkbox" id="caption" /> Enable Caption</p>
 				<fieldset id="animationSet" class="disabled">
 					<legend>Animation</legend>
 					<p style="color:black;"><input type="checkbox" id="anim" /> Enable animation</p>
@@ -142,6 +149,7 @@ code {
 					</p>
 					<fieldset id="easing">
 						<legend>Easing</legend>
+						<input type="radio" name="easing" value="easeNone" id="easeNone"/> easeNone<br/>
 						<input type="radio" name="easing" value="backBoth" /> backBoth<br/>
 						<input type="radio" name="easing" value="backIn" /> backIn<br/>
 						<input type="radio" name="easing" value="backOut" /> backOut<br/>
@@ -152,7 +160,6 @@ code {
 						<input type="radio" name="easing" value="easeBothStrong" /> easeBothStrong<br/>
 						<input type="radio" name="easing" value="easeIn" /> easeIn<br/>
 						<input type="radio" name="easing" value="easeInStrong" /> easeInStrong<br/>
-						<input type="radio" name="easing" value="easeNone" id="easeNone"/> easeNone<br/>
 						<input type="radio" name="easing" value="easeOut" /> easeOut<br/>
 						<input type="radio" name="easing" value="easeOutStrong" /> easeOutStrong<br/>
 						<input type="radio" name="easing" value="elasticBoth" /> elasticBoth<br/>
@@ -168,8 +175,9 @@ code {
 			<textarea name="code" class="JScript" cols="60" rows="1">
 				var pb = new YAHOO.widget.ProgressBar({value:50}).render('basic');
 			</textarea>
+			
 			<p>Most of the code in this example deals with handling the interface, the sliders and other input controls.
-			When a value is changed, it is simply applied to the corresponding property if the ProgressBar. 
+			When a value is changed, it is simply applied to the corresponding property of the ProgressBar. 
 			The ProgressBar responds when the slider is released, not while it is moving.
 			Leaving aside all the interface details, these are the statements that deal with those settings:</p>
 			<textarea name="code" class="JScript" cols="60" rows="1">
@@ -178,7 +186,6 @@ code {
 				pb.set('maxValue',rangeSlider.minValue);
 				pb.set('width',widthSlider.getValue());
 				pb.set('height',heightSlider.getValue());
-				YAHOO.util.Dom.setStyle(pb.get('captionEl'),'visibility',(checked?'visible':'hidden'));
 				
 				pb.set('anim',checkBoxEl.checked);
 				
@@ -209,7 +216,7 @@ code {
 			Event = YAHOO.util.Event;
 			
 		var pb = new YAHOO.widget.ProgressBar({value:50}).render('basic');
-		
+
 		var valueSlider = YAHOO.widget.Slider.getHorizSlider('sliderValue',  
             'sliderValueThumb', 0, 200, 0
 		);
@@ -224,12 +231,12 @@ code {
 		valueSlider.subscribe("slideEnd", function() {
 			var value = valueSlider.getValue()  - 50;
 			pb.set('value',value);
-			console.log('value',value);
 			var actual = pb.get('value');
+			Dom.get('actualValue').innerHTML = actual;
 			if (actual != value) {
-				Dom.get('actualValue').innerHTML = actual;
-				valueSlider.setValue(actual + 50,true,true,true); // make sure it doesn't fire the event again.
-				console.log('back',actual);
+				window.setTimeout(function() {
+					valueSlider.setValue(actual + 50,true,true,true); // make sure it doesn't fire the event again.
+				},1);
 			}
 		});
 
@@ -280,11 +287,6 @@ code {
 			pb.set('height',value);
 		});
 
-		Event.on('captionCheck','click',function(ev) {
-			var checked = Event.getTarget(ev).checked;
-			Dom.setStyle(pb.get('captionEl'),'visibility',(checked?'visible':'hidden'));
-		});
-		
 		Dom.get('anim').checked = false;
 		Event.on('anim','click',function(ev) {
 			var checked = Event.getTarget(ev).checked;

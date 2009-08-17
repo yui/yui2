@@ -35,7 +35,7 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 			{
 
 				newValue = Math.round(Math.random() * Math.PI * 100000); 
-				var cook = YAHOO.util.Cookie.set("swfstore", newValue);
+				YAHOO.util.Cookie.set("swfstore", newValue);
 
 			}
 

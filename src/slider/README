@@ -2,6 +2,12 @@ Slider - Release Notes
 
 Development master
 
+2.8.0
+    * baselinePos is reset on each mousedown to avoid a horrible positioning
+      bug in IE that sends the thumb off screen
+    * More work to get slideEnd event firing correctly and consistently.  This
+      time removed deprecated moveComplete from state change conditionals
+     
 2.7.0
     * Sliders with ticks no longer require YAHOO.util.Anim to be animated.
       Still need to set slider.animated = true, however.
