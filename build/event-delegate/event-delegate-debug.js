@@ -22,11 +22,11 @@
 		
 			var returnVal;
 		
-			if (el === container) {
+			if (!el || el === container) {
 				returnVal = false;
 			}
 			else {
-				returnVal = Selector.test(el, selector) ? el: getMatch(el.parentNode, selector);
+				returnVal = Selector.test(el, selector) ? el: getMatch(el.parentNode, selector, container);
 			}
 		
 			return returnVal;
@@ -65,7 +65,10 @@
 					target = Event.getTarget(event),
 					matchedEl,
 					context,
-					selector;
+					selector,
+					sID,
+					sIDSelector,
+					node;
 
 
 				if (Lang.isFunction(filter)) {
@@ -73,22 +76,32 @@
 				}
 				else if (Lang.isString(filter)) {
 
-					if (!container.id) {
-						YAHOO.util.Dom.generateId(container);
+					//	The user might have specified the document element
+					//	as the delegation container, in which case it is 
+					//	nessary to crawl up to the documentElement (<HTML />)
+
+					node = container.nodeType === 9 ? container.documentElement : container;
+					sID = node.id;
+
+					if (!sID) {
+						sID = Event.generateId(node);
 					}
 
-					selector = ("#" + container.id + " " + filter);
+					//	Scope all selectors to the container
+
+					sIDSelector = ("#" + sID + " ");
+					selector = (sIDSelector + filter).replace(/,/gi, ("," + sIDSelector));
 
 					if (Selector.test(target, selector)) {
 						matchedEl = target;
 					}
-					else if (Selector.test(target, (selector + " *"))) {
+					else if (Selector.test(target, ((selector.replace(/,/gi, " *,")) + " *"))) {
 
 						//	The target is a descendant of an element matching 
 						//	the selector, so crawl up to find the ancestor that 
 						//	matches the selector
 
-						matchedEl = getMatch(target.parentNode, selector, container);
+						matchedEl = getMatch(target, selector, node);
 
 					}
 
@@ -165,7 +178,6 @@
 
 
 			if (Lang.isString(filter) && !YAHOO.util.Selector) {
-		        YAHOO.log("Using delegate functionality with a CSS selector requires the Selector Utility", "error", "Event");
 		        return false;
 			}
 
@@ -173,7 +185,6 @@
 			if (type == "mouseenter" || type == "mouseleave") {
 
 				if (!Event._createMouseDelegate) {
-			        YAHOO.log("Delegating a " + type + " event requires the event-mouseleave module", "error", "Event");
 			        return false;				
 				}
 
