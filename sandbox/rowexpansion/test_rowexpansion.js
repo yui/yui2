@@ -13,7 +13,11 @@
 
 	YTest.RowExpansionCoreSuite = new Ytool.TestSuite("RowExpansion Core");
 
-	YTest.RowExpansionCoreSuite.tableMaker = function(){
+	YTest.RowExpansionCoreSuite.tableMaker = function( oArgs ){
+		
+		var args     = oArgs || {},
+				template = args.rowExpansionTemplate || '{image_url}',
+				id       = args.id || 'testTable';
 
 		var myData = [
 			{id:"po-0167", date:new Date(1980, 2, 24), quantity:1, amount:4, title:"A Book About Nothing",
@@ -64,16 +68,16 @@
 		var makeDiv = function(){
 
 			var new_div = document.createElement( 'div' );
-			new_div.id = 'testTable';
+			new_div.id = id;
 			return document.getElementsByTagName( 'body' )[ 0 ].appendChild( new_div );
 
 		};
 
 		var myDataTable = new YAHOO.widget.DataTable(
-				( Dom.get( 'testTable' ) || makeDiv() ),
+				( Dom.get( id ) || makeDiv() ),
 				myColumnDefs,
 				myDataSource,
-					{ rowExpansionTemplate : '{image_url}' }
+					{ rowExpansionTemplate : template }
 				),
 
 				records = myDataTable.getRecordSet().getRecords(),
@@ -92,7 +96,11 @@
 	YTest.RowExpansionCoreSuite.tableDestroyer = function( oTable ){
 
 		oTable.oDT.destroy();
-		oTable.eContainer.parentNode.removeChild( oTable.eContainer );
+		if( oTable.eContainer ){
+			
+			oTable.eContainer.parentNode.removeChild( oTable.eContainer );
+			
+		}
 
 	};
 
@@ -140,6 +148,77 @@
 
 	YTest.RowExpansionCoreSuite.add( new Ytool.TestCase({
 
+		name : "Pass bad templates to the table",
+
+		setUp : function () {
+
+			this.table_number = YTest.RowExpansionCoreSuite.tableMaker( { id : 'yuitest_table_number', rowExpansionTemplate : 123 } );
+			
+			this.table_empty = YTest.RowExpansionCoreSuite.tableMaker( { id : 'yuitest_table_nothing', rowExpansionTemplate : '' } );
+			
+			this.table_object = YTest.RowExpansionCoreSuite.tableMaker( { id : 'yuitest_table_object', rowExpansionTemplate : {} } );
+
+		},
+
+		testTableWithNumberPassedAsTemplate : function () {
+
+			Assert.isObject(
+				this.table_number.oDT,
+				'Number DataTable does not appear to be instantiated'
+			);
+			
+			Assert.areSame(
+				'TBODY',
+				this.table_number.oDT.getBody().nodeName,
+				'No TBODY element found'
+			);
+
+		},
+
+		testTableWithNothingPassedAsTemplate : function () {
+
+			Assert.isObject(
+				this.table_empty.oDT,
+				'DataTable does not appear to be instantiated'
+			);
+			
+			Assert.areSame(
+				'TBODY',
+				this.table_empty.oDT.getBody().nodeName,
+				'No TBODY element found'
+			);
+
+		},
+		
+		testTableWithObjectPassedAsTemplate : function () {
+
+			Assert.isObject(
+				this.table_object.oDT,
+				'DataTable does not appear to be instantiated'
+			);
+			
+			Assert.areSame(
+				'TBODY',
+				this.table_object.oDT.getBody().nodeName,
+				'No TBODY element found'
+			);
+
+		},
+
+		tearDown : function () {
+
+			YTest.RowExpansionCoreSuite.tableDestroyer( this.table_number );
+			
+			YTest.RowExpansionCoreSuite.tableDestroyer( this.table_empty );
+			
+			YTest.RowExpansionCoreSuite.tableDestroyer( this.table_object );
+
+		}
+
+	}) );
+
+	YTest.RowExpansionCoreSuite.add( new Ytool.TestCase({
+
 		name : "toggleRowExpansion (Open) Method",
 
 		setUp : function () {
@@ -162,6 +241,11 @@
 			Assert.isTrue(
 				Dom.hasClass( Dom.getNextSibling( this.data_table.getRow(0) ), 'yui-dt-expansion' ),
 				'The first row does not have the "yui-dt-expanded" class applied'
+			);
+
+			ArrayAssert.isNotEmpty(
+				this.data_table.a_rowExpansions,
+				'The "a_rowExpansions" array is empty'
 			);
 
 		},
@@ -199,6 +283,11 @@
 			Assert.isFalse(
 				Dom.hasClass( Dom.getNextSibling( this.data_table.getRow( 0 ) ), 'yui-dt-expansion' ),
 				'The first row should not have the "yui-dt-expanded" class applied'
+			);
+			
+			ArrayAssert.isEmpty(
+				this.data_table.a_rowExpansions,
+				'The "a_rowExpansions" array is not empty'
 			);
 
 		},
@@ -297,14 +386,98 @@
 
 		},
 
-		testRegularExpansion : function () {
-			/*
-			console.log(this.data_table.getBodyTableEl())
-			Assert.isFalse(
-				Dom.hasClass( this.data_table.getRow( this.table.aIds[ 0 ] ), 'yui-dt-expanded' ),
-				'The first record does not have the "yui-dt-expanded" class applied'
+		testIsNotExpanded : function () {
+
+			ArrayAssert.doesNotContain(
+				true,
+				Dom.hasClass( this.data_table.getBody().getElementsByTagName( 'tr' ), 'yui-dt-expansion' ),
+				'There are rows with "yui-dt-expansion" in the DataTable instance'
 			);
+			
+			ArrayAssert.doesNotContain(
+				true,
+				Dom.hasClass( this.data_table.getBody().getElementsByTagName( 'tr' ), 'yui-dt-expanded' ),
+				'There are rows with class "yui-dt-expanded" in this DataTable instance'
+			);
+
+			ArrayAssert.isEmpty(
+				this.data_table.a_rowExpansions,
+				'The "a_rowExpansions" array is not empty'
+			);
+
+		},
+
+		tearDown : function () {
+
+			YTest.RowExpansionCoreSuite.tableDestroyer( this.table );
+
+		}
+
+	}) );
+
+	YTest.RowExpansionCoreSuite.add( new Ytool.TestCase({
+
+		name : "restoreExpandedRows Method",
+
+		setUp : function () {
+
+			this.table = YTest.RowExpansionCoreSuite.tableMaker();
+
+			this.data_table = this.table.oDT;
+
+			//Expand the first and third records
+			this.data_table.expandRow( this.table.aIds[ 0 ].getId() );
+			this.data_table.expandRow( this.table.aIds[ 1 ].getId() );
+			
+			/*
+			* After calling the collapseAllRows method, there should be no row
+			* expansions in the table but the state objects should remain with an 
+			* expanded state
 			*/
+			
+			var expansion_rows = Dom.getElementsByClassName( 
+				'yui-dt-expansion',
+				'tr',
+				this.data_table.getBody()
+			);
+			
+			for( var i=0,l=expansion_rows.length;l > i; i++ ){
+
+				var expansion_row = expansion_rows[ i ];
+
+				Dom.replaceClass(
+					Dom.getPreviousSibling( expansion_row ),
+					'yui-dt-expanded',
+					'yui-dt-collapsed'
+				);
+
+				expansion_row.parentNode.removeChild( expansion_row );
+
+			}
+			
+			this.data_table.restoreExpandedRows();
+
+		},
+
+		testIsReExpanded : function () {
+
+			ArrayAssert.contains(
+				true,
+				Dom.hasClass( this.data_table.getBody().getElementsByTagName( 'tr' ), 'yui-dt-expansion' ),
+				'There are not rows with "yui-dt-expansion" in the DataTable instance'
+			);
+			
+			ArrayAssert.contains(
+				true,
+				Dom.hasClass( this.data_table.getBody().getElementsByTagName( 'tr' ), 'yui-dt-expanded' ),
+				'There are not rows with class "yui-dt-expanded" in this DataTable instance'
+			);
+
+			ArrayAssert.isNotEmpty(
+				this.data_table.a_rowExpansions,
+				'The "a_rowExpansions" array is empty'
+			);
+
 		},
 
 		tearDown : function () {

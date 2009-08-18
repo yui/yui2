@@ -12,7 +12,6 @@
 <script type="text/javascript" src="../../j/yui2/build/json/json-min.js"></script>
 <script type="text/javascript" src="../../j/yui2/build/datasource/datasource.js"></script>
 <script type="text/javascript" src="../../j/yui2/build/datatable/datatable.js"></script>
-<!--script type="text/javascript" src="../../j/yui2/sandbox/rowexpansion/rowexpansion.js"></script-->
 
 <script>
 
