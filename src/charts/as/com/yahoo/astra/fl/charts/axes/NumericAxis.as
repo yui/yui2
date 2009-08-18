@@ -3,6 +3,7 @@ package com.yahoo.astra.fl.charts.axes
 	import com.yahoo.astra.fl.charts.events.*;
 	import com.yahoo.astra.fl.charts.series.ISeries;
 	import com.yahoo.astra.fl.charts.series.CartesianSeries;
+	import com.yahoo.astra.fl.charts.IChart;
 	import com.yahoo.astra.fl.utils.UIComponentUtil;
 	import com.yahoo.astra.utils.NumberUtil;
 	import com.yahoo.astra.fl.charts.CartesianChart;	
@@ -452,8 +453,16 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private
 		 * Contains major unit data to be passed to the renderer.
 		 */
-		private var _majorTicks:Array;	
-					
+		private var _majorTicks:Array;
+
+		/**
+		 * @inheritDoc
+		 */
+		override public function set chart(value:IChart):void
+		{
+			super.chart = value;
+			(this.chart as UIComponent).addEventListener(AxisEvent.AXIS_READY, axisReadyHandler);
+		}						
 		
 	//--------------------------------------
 	//  Public Methods
@@ -529,10 +538,9 @@ package com.yahoo.astra.fl.charts.axes
 		 * @inheritDoc
 		 */
 		public function updateScale():void
-		{			
+		{
 			this.resetScale();
-			this.calculatePositionMultiplier();
-			
+			this.calculatePositionMultiplier();	
 			(this.renderer as ICartesianAxisRenderer).majorUnitSetByUser = this._majorUnitSetByUser;
 			this.createAxisData(this.minorUnit, false);
 			this.createAxisData(this.majorUnit);
@@ -720,7 +728,7 @@ package com.yahoo.astra.fl.charts.axes
 				this._minorUnit = this._majorUnit / 2;
 			}
 		}
-		
+
 		/**
 		 * @private
 		 * Creates the AxisData objects for the axis renderer.
@@ -739,7 +747,6 @@ package com.yahoo.astra.fl.charts.axes
 				}
 				return;
 			}
-			
 			var data:Array = [];
 			var displayedMaximum:Boolean = false;
 			var value:Number = this.minimum;
@@ -783,8 +790,7 @@ package com.yahoo.astra.fl.charts.axes
 			if(isMajorUnit)
 			{
 				_majorTicks = data;
-				this.recalculations++;
-				if(maxLabel.length > this.maxLabel.length && this.recalculations < 5)
+				if(maxLabel.length > this.maxLabel.length)
 				{
 					this.maxLabel = maxLabel;
 					this.dispatchEvent(new AxisEvent(AxisEvent.AXIS_FAILED));

@@ -166,16 +166,6 @@ package com.yahoo.astra.fl.charts.axes
 		function set maxLabel(value:String):void;
 		
 		/**
-		 * Counter for the number of recalculations of the max label
-		 */
-		function get recalculations():int;
-		
-		/**
-		 * @private (setter)
-		 */
-		function set recalculations(value:int):void;
-		
-		/**
 		 * Determines the axis scale based on the input data set.
 		 * Seperating this function from the draw method optimizes processing time,
 		 * and it allows the chart to synchronize its axes.

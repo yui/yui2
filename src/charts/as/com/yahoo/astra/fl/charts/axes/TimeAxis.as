@@ -4,6 +4,7 @@ package com.yahoo.astra.fl.charts.axes
 	import com.yahoo.astra.fl.charts.series.CartesianSeries;
 	import com.yahoo.astra.fl.charts.CartesianChart;
 	import com.yahoo.astra.fl.charts.events.AxisEvent;
+	import com.yahoo.astra.fl.charts.IChart;
 	import com.yahoo.astra.utils.DateUtil;
 	import com.yahoo.astra.utils.TimeUnit;
 	import fl.core.UIComponent;
@@ -370,7 +371,16 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private
 		 * Contains major unit data to be passed to the renderer.
 		 */
-		private var _majorTicks:Array;		
+		private var _majorTicks:Array;
+		
+		/**
+		 * @inheritDoc
+		 */
+		override public function set chart(value:IChart):void
+		{
+			super.chart = value;
+			(this.chart as UIComponent).addEventListener(AxisEvent.AXIS_READY, axisReadyHandler);
+		}		
 				
 	//--------------------------------------
 	//  Public Methods
@@ -388,17 +398,18 @@ package com.yahoo.astra.fl.charts.axes
 				value += this.valueToNumber(rest[i]);
 			}
 			return value;
-		}
-	
+		}		
+
 		/**
 		 * @inheritDoc
 		 */
 		public function updateScale():void
-		{			
+		{						
 			this.resetScale();
 			this.calculatePositionMultiplier();
 			
 			(this.renderer as ICartesianAxisRenderer).majorUnitSetByUser = this._majorUnitSetByUser;
+
 			this.createAxisData(this.minorUnit, this.minorTimeUnit, false);
 			this.createAxisData(this.majorUnit, this.majorTimeUnit);
 		}
@@ -501,7 +512,7 @@ package com.yahoo.astra.fl.charts.axes
 			this.calculateMajorUnit();
 			this.calculateMinorUnit();
 		}
-		
+
 		/**
 		 * @private
 		 * Generates AxisData objects for use by the axis renderer.
@@ -563,8 +574,7 @@ package com.yahoo.astra.fl.charts.axes
 			if(isMajorUnit)
 			{
 				_majorTicks = data;
-				this.recalculations++;
-				if(maxLabel.length > this.maxLabel.length && this.recalculations < 5)
+				if(maxLabel.length > this.maxLabel.length)
 				{
 					this.maxLabel = maxLabel;
 					this.dispatchEvent(new AxisEvent(AxisEvent.AXIS_FAILED));

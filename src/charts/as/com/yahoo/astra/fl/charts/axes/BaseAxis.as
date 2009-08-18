@@ -352,28 +352,6 @@ package com.yahoo.astra.fl.charts.axes
 			_maxLabel = value;
 		}
 		
-		/**
-		 * @private
-		 * Storage for recalculations
-		 */
-		protected var _recalculations:int = 0;
-		
-		/**
-		 * @copy com.yahoo.astra.fl.charts.axes.IAxis#recalculations
-		 */
-		public function get recalculations():int
-		{
-			return this._recalculations;
-		}
-		
-		/**
-		 * @private (setter)
-		 */
-		public function set recalculations(value:int):void
-		{
-			this._recalculations = value;
-		}
-				
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------

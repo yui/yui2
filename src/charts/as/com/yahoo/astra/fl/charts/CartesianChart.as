@@ -1468,7 +1468,28 @@ package com.yahoo.astra.fl.charts
 		{
 			this._constrainViewport = value;
 		}
-
+		
+		/**
+		 * @private
+		 * Storage for recalculations
+		 */
+		private var _recalculations:int = 0;
+		
+		/**
+		 * Number of times label width is recalculated for all axes
+		 */
+		public function get recalculations():int
+		{
+			return _recalculations;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set recalculations(value:int):void
+		{
+			_recalculations = value;
+		}
 
 	//--------------------------------------
 	//  Public Methods
@@ -1563,17 +1584,25 @@ package com.yahoo.astra.fl.charts
 	//--------------------------------------
 	//  Protected Methods
 	//--------------------------------------
-		 
-		
+
 		/**
 		 * @private
 		 * Redraws chart after an axis label overflows
 		 */		
 		private function recalculateChart(event:AxisEvent):void
 		{
-			this.drawAxes();
-			this.drawSeries();
-			this.updateLegend();
+			this.recalculations++;
+			if(this.recalculations < 8)
+			{
+				this.drawAxes();
+				this.drawSeries();
+				this.updateLegend();
+			}
+			else
+			{
+				this.dispatchEvent(new AxisEvent(AxisEvent.AXIS_READY));
+			}
+			
 		}
 		
 		/**
@@ -1595,13 +1624,13 @@ package com.yahoo.astra.fl.charts
 
 			if((sizeInvalid || dataInvalid || stylesInvalid || axesInvalid) && this.width > 0 && this.height > 0)
 			{
+				this.recalculations = 0;
 				var allAxes:Array = this._horizontalAxes.concat(this._verticalAxes);
 				var len:int = allAxes.length;
 				var i:int;
 				for(i = 0; i < len; i++)
 				{
 					(allAxes[i] as IAxis).maxLabel = "";
-					(allAxes[i] as IAxis).recalculations = 0;
 				}
 								
 				this.drawAxes();
