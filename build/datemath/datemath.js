@@ -1,4 +1,11 @@
 /**
+* The datemath module provides utility methods for basic JavaScript Date object manipulation and 
+* comparison. 
+* 
+* @module datemath
+*/
+
+/**
 * YAHOO.widget.DateMath is used for simple date manipulation. The class is a static utility
 * used for adding, subtracting, and comparing dates.
 * @namespace YAHOO.widget

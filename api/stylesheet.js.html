@@ -309,15 +309,20 @@
 <span class="c">         * selectors and applied accordingly.  If the selector string does not</span>
 <span class="c">         * have a corresponding rule in the sheet, it will be added.&lt;/p&gt;</span>
 <span class="c">         *</span>
-<span class="c">         * &lt;p&gt;The object properties in the second parameter must be the JavaScript</span>
-<span class="c">         * names of style properties.  E.g. fontSize rather than font-size.&lt;/p&gt;</span>
+<span class="c">         * &lt;p&gt;The second parameter can be either a string of CSS text,</span>
+<span class="c">         * formatted as CSS (&quot;font-size: 10px;&quot;), or an object collection of</span>
+<span class="c">         * properties and their new values.  Object properties must be in</span>
+<span class="c">         * JavaScript format ({ fontSize: &quot;10px&quot; }).&lt;/p&gt;</span>
 <span class="c">         *</span>
 <span class="c">         * &lt;p&gt;The float style property will be set by any of &amp;quot;float&amp;quot;,</span>
-<span class="c">         * &amp;quot;styleFloat&amp;quot;, or &amp;quot;cssFloat&amp;quot;.&lt;/p&gt;</span>
+<span class="c">         * &amp;quot;styleFloat&amp;quot;, or &amp;quot;cssFloat&amp;quot; if passed in the</span>
+<span class="c">         * object map.  Use &quot;float: left;&quot; format when passing a CSS text</span>
+<span class="c">         * string.&lt;/p&gt;</span>
 <span class="c">         *</span>
 <span class="c">         * @method set</span>
 <span class="c">         * @param sel {String} the selector string to apply the changes to</span>
-<span class="c">         * @param css {Object} Object literal of style properties and new values</span>
+<span class="c">         * @param css {Object|String} Object literal of style properties and</span>
+<span class="c">         *                      new values, or a string of cssText</span>
 <span class="c">         * @return {StyleSheet} the StyleSheet instance</span>
 <span class="c">         * @chainable</span>
 <span class="c">         */</span>
@@ -705,6 +710,7 @@
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>

@@ -791,7 +791,7 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">valueChangeSource</span> <span class="o">=</span> <span class="nx">source</span> <span class="o">||</span> <span class="nx">Slider</span><span class="o">.</span><span class="nx">SOURCE_SET_VALUE</span><span class="o">;</span>
 
         <span class="nx">t</span><span class="o">.</span><span class="nx">lastOffset</span> <span class="o">=</span> <span class="o">[</span><span class="nx">newOffset</span><span class="o">,</span> <span class="nx">newOffset</span><span class="o">];</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">verifyOffset</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">verifyOffset</span><span class="o">();</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">_slideStart</span><span class="o">();</span>
 
@@ -871,7 +871,7 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">valueChangeSource</span> <span class="o">=</span> <span class="nx">source</span> <span class="o">||</span> <span class="nx">Slider</span><span class="o">.</span><span class="nx">SOURCE_SET_VALUE</span><span class="o">;</span>
 
         <span class="nx">t</span><span class="o">.</span><span class="nx">lastOffset</span> <span class="o">=</span> <span class="o">[</span><span class="nx">newOffset</span><span class="o">,</span> <span class="nx">newOffset2</span><span class="o">];</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">verifyOffset</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">verifyOffset</span><span class="o">();</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">_slideStart</span><span class="o">();</span>
 
@@ -885,11 +885,10 @@
     <span class="c">/**</span>
 <span class="c">     * Checks the background position element position.  If it has moved from the</span>
 <span class="c">     * baseline position, the constraints for the thumb are reset</span>
-<span class="c">     * @param checkPos {boolean} check the position instead of using cached value</span>
 <span class="c">     * @method verifyOffset</span>
 <span class="c">     * @return {boolean} True if the offset is the same as the baseline.</span>
 <span class="c">     */</span>
-    <span class="nx">verifyOffset</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">checkPos</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nx">verifyOffset</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 
         <span class="k">var</span> <span class="nx">xy</span> <span class="o">=</span> <span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">()),</span>
             <span class="nx">t</span>  <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">thumb</span><span class="o">;</span>
@@ -1291,6 +1290,7 @@
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>

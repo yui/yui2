@@ -17,6 +17,7 @@
 
 		addListener = Event.addListener,
 		removeListener = Event.removeListener,
+		getListeners = Event.getListeners,
 
 		delegates = [],
 		
@@ -130,6 +131,8 @@
 			if (specialTypes[type]) {
 
 				fnDelegate = Event._createMouseDelegate(fn, obj, overrideContext);
+				
+				fnDelegate.mouseDelegate = true;
 
 				delegates.push([el, type, fn, fnDelegate]);
 
@@ -158,7 +161,49 @@
 
 			return returnVal;
 
-		}		
+		},
+		
+		getListeners: function (el, type) {
+
+			//	If the user specified the type as mouseover or mouseout, 
+			//	need to filter out those used by mouseenter and mouseleave.
+			//	If the user specified the type as mouseenter or mouseleave, 
+			//	need to filter out the true mouseover and mouseout listeners.
+
+			var listeners = [],
+				elListeners,
+				bMouseOverOrOut = (type === "mouseover" || type === "mouseout"),
+				bMouseDelegate,
+				i,
+				l;
+			
+			if (type && (bMouseOverOrOut || specialTypes[type])) {
+				
+				elListeners = getListeners.call(Event, el, this._getType(type));
+
+	            if (elListeners) {
+
+	                for (i=elListeners.length-1; i>-1; i--) {
+
+	                    l = elListeners[i];
+						bMouseDelegate = l.fn.mouseDelegate;
+
+						if ((specialTypes[type] && bMouseDelegate) || (bMouseOverOrOut && !bMouseDelegate)) {
+							listeners.push(l);
+						}
+
+	                }
+
+	            }
+				
+			}
+			else {
+				listeners = getListeners.apply(Event, arguments);
+			}
+
+			return listeners.length ? listeners : null;
+			
+		}
 		
 	}, true);
 	
