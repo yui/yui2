@@ -73,7 +73,7 @@ lang.augmentObject(Paginator, {
     /**
      * Incrementing index used to give instances unique ids.
      * @static
-     * @property id
+     * @property Paginator.id
      * @type number
      * @private
      */
@@ -82,7 +82,7 @@ lang.augmentObject(Paginator, {
     /**
      * Base of id strings used for ui components.
      * @static
-     * @property ID_BASE
+     * @property Paginator.ID_BASE
      * @type string
      * @private
      */
@@ -92,7 +92,7 @@ lang.augmentObject(Paginator, {
      * Used to identify unset, optional configurations, or used explicitly in
      * the case of totalRecords to indicate unlimited pagination.
      * @static
-     * @property VALUE_UNLIMITED
+     * @property Paginator.VALUE_UNLIMITED
      * @type number
      * @final
      */
@@ -102,7 +102,7 @@ lang.augmentObject(Paginator, {
      * Default template used by Paginator instances.  Update this if you want
      * all new Paginators to use a different default template.
      * @static
-     * @property TEMPLATE_DEFAULT
+     * @property Paginator.TEMPLATE_DEFAULT
      * @type string
      */
     TEMPLATE_DEFAULT : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}",
@@ -112,7 +112,7 @@ lang.augmentObject(Paginator, {
      * previous, next, first and last pages as well as a rows-per-page
      * dropdown.  Offered as a convenience.
      * @static
-     * @property TEMPLATE_ROWS_PER_PAGE
+     * @property Paginator.TEMPLATE_ROWS_PER_PAGE
      * @type string
      */
     TEMPLATE_ROWS_PER_PAGE : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}",
@@ -120,7 +120,7 @@ lang.augmentObject(Paginator, {
     /**
      * Storage object for UI Components
      * @static
-     * @property ui
+     * @property Paginator.ui
      */
     ui : {},
 
@@ -129,7 +129,7 @@ lang.augmentObject(Paginator, {
      * is used for attribute validation in conjunction with getters that return
      * numbers.
      *
-     * @method isNumeric
+     * @method Paginator.isNumeric
      * @param v {Number|String} value to be checked for number or numeric string
      * @returns {Boolean} true if the input is coercable into a finite number
      * @static
@@ -141,7 +141,7 @@ lang.augmentObject(Paginator, {
     /**
      * Return a number or null from input
      *
-     * @method toNumber
+     * @method Paginator.toNumber
      * @param n {Number|String} a number or numeric string
      * @return Number
      * @static
@@ -550,6 +550,8 @@ Paginator.prototype = {
      * Render the pagination controls per the format attribute into the
      * specified container nodes.
      * @method render
+     * @return the Paginator instance
+     * @chainable
      */
     render : function () {
         if (this.get('rendered')) {
@@ -614,7 +616,7 @@ Paginator.prototype = {
         markers = Dom.getElementsByClassName('yui-pg-ui','span',container);
 
         for (i = 0, len = markers.length; i < len; ++i) {
-            this._renderUIComponent(markers[i], id_base);
+            this.renderUIComponent(markers[i], id_base);
         }
 
         if (!hide) {
@@ -628,12 +630,11 @@ Paginator.prototype = {
      * yui-pg-ui-(UI component class name) in the marker's className. e.g.
      * yui-pg-ui-PageLinks => new YAHOO.widget.Paginator.ui.PageLinks(this)
      *
-     * @method _renderUIComponent
+     * @method renderUIComponent
      * @param marker {HTMLElement} the marker node to replace
      * @param id_base {String} string base the component's generated id
-     * @protected
      */
-    _renderUIComponent : function (marker, id_base) {
+    renderUIComponent : function (marker, id_base) {
         var par    = marker.parentNode,
             name   = /yui-pg-ui-(\w+)/.exec(marker.className),
             UIComp = name && Paginator.ui[name[1]],

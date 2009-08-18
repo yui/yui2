@@ -13,8 +13,25 @@
 (function () {
 
 	var Event = YAHOO.util.Event,
+		Selector = YAHOO.util.Selector,
 		Lang = YAHOO.lang,
-		delegates = [];
+		delegates = [],
+
+
+		getMatch = function(el, selector, container) {
+		
+			var returnVal;
+		
+			if (!el || el === container) {
+				returnVal = false;
+			}
+			else {
+				returnVal = Selector.test(el, selector) ? el: getMatch(el.parentNode, selector, container);
+			}
+		
+			return returnVal;
+		
+		};
 
 
 	Lang.augmentObject(Event, {
@@ -46,12 +63,18 @@
 
 				var container = this,
 					target = Event.getTarget(event),
+					selector = filter,
+
+					//	The user might have specified the document object 
+					//	as the delegation container, in which case it is not 
+					//	nessary to scope the provided CSS selector(s) to the 
+					//	delegation container
+					bDocument = (container.nodeType === 9),
+
 					matchedEl,
 					context,
-					elements,
-					element,
-					nElements,
-					i;
+					sID,
+					sIDSelector;
 
 
 				if (Lang.isFunction(filter)) {
@@ -59,20 +82,32 @@
 				}
 				else if (Lang.isString(filter)) {
 
-					elements = YAHOO.util.Selector.query(filter, container);
-					nElements = elements.length;
+					if (!bDocument) {
 
-					if (nElements > 0) {
+						sID = container.id;
 
-						i = elements.length - 1;
+						if (!sID) {
+							sID = Event.generateId(container);
+						}						
 
-						do {
-							element = elements[i];
-		                    if (element === target || YAHOO.util.Dom.isAncestor(element, target)) {
-								matchedEl = element;
-							}
-						}
-						while (i--);
+						//	Scope all selectors to the container
+						sIDSelector = ("#" + sID + " ");
+						selector = (sIDSelector + filter).replace(/,/gi, ("," + sIDSelector));
+
+					}
+
+
+					if (Selector.test(target, selector)) {
+						matchedEl = target;
+					}
+					else if (Selector.test(target, ((selector.replace(/,/gi, " *,")) + " *"))) {
+
+						//	The target is a descendant of an element matching 
+						//	the selector, so crawl up to find the ancestor that 
+						//	matches the selector
+
+						matchedEl = getMatch(target, selector, container);
+
 					}
 
 				}

@@ -63,7 +63,7 @@
     <span class="nx">_toStr</span>     <span class="o">=</span> <span class="nb">Object</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">toString</span><span class="o">,</span>
     <span class="nx">Native</span>     <span class="o">=</span> <span class="nx">_toStr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">JSON</span><span class="o">)</span> <span class="o">===</span> <span class="s1">&#39;[object JSON]&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">JSON</span><span class="o">,</span>
 
-<span class="c">/*** Variables used by parse ***/</span>
+<span class="c">/* Variables used by parse */</span>
 
     <span class="c">/**</span>
 <span class="c">     * Replace certain Unicode characters that JavaScript may handle incorrectly</span>
@@ -124,7 +124,7 @@
     <span class="nx">_UNSAFE</span>  <span class="o">=</span> <span class="sr">/^[\],:{}\s]*$/</span><span class="o">,</span>
 
 
-<span class="c">/*** Variables used by stringify ***/</span>
+<span class="c">/* Variables used by stringify */</span>
 
     <span class="c">/**</span>
 <span class="c">     * Regex used to replace special characters in strings for JSON</span>
@@ -194,7 +194,7 @@
 <span class="o">}</span>
 
 
-<span class="c">/*** functions used by parse ***/</span>
+<span class="c">/* functions used by parse */</span>
 
 <span class="c">/**</span>
 <span class="c"> * Traverses nested objects, applying a filter or reviver function to</span>
@@ -266,7 +266,7 @@
 
 
 
-<span class="c">/*** functions used by stringify ***/</span>
+<span class="c">/* functions used by stringify */</span>
 
 <span class="c">// Utility function used to determine how to serialize a variable.</span>
 <span class="c"></span><span class="k">function</span> <span class="nx">_type</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
@@ -406,7 +406,7 @@
 <span class="o">}</span>
 
 
-<span class="c">/*** Public API ***/</span>
+<span class="c">/* Public API */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">JSON</span> <span class="o">=</span> <span class="o">{</span>
     <span class="c">/**</span>
 <span class="c">     * Leverage native JSON parse if the browser has a native implementation.</span>
@@ -510,8 +510,11 @@
 
     <span class="c">/**</span>
 <span class="c">     * Serializes a Date instance as a UTC date string.  Used internally by</span>
-<span class="c">     * stringify.  Override this method if you need Dates serialized in a</span>
-<span class="c">     * different format.</span>
+<span class="c">     * the JavaScript implementation of stringify.  If you need a different</span>
+<span class="c">     * Date serialization format, override this method.  If you change this,</span>
+<span class="c">     * you should also set useNativeStringify to false, since native JSON</span>
+<span class="c">     * implementations serialize Dates per the ECMAScript 5 spec.  You&#39;ve been</span>
+<span class="c">     * warned.</span>
 <span class="c">     *</span>
 <span class="c">     * @method JSON.dateToString</span>
 <span class="c">     * @param d {Date} The Date to serialize</span>
@@ -560,7 +563,7 @@
 <span class="c"> *</span>
 <span class="c"> * &lt;p&gt;This is an alias for isSafe.&lt;/p&gt;</span>
 <span class="c"> *</span>
-<span class="c"> * @method isValid</span>
+<span class="c"> * @method JSON.isValid</span>
 <span class="c"> * @param str {String} JSON string to be tested</span>
 <span class="c"> * @return {boolean} is the string safe for eval?</span>
 <span class="c"> * @static</span>
@@ -657,7 +660,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "private", "host": "JSON", "name": "_BRACKETS", "url": "JSON.html#property__BRACKETS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_CHARS", "url": "JSON.html#property__CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_ESCAPES", "url": "JSON.html#property__ESCAPES", "type": "property"}, {"access": "", "host": "JSON", "name": "isValid", "url": "JSON.html#method_isValid", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.dateToString", "url": "JSON.html#method_JSON.dateToString", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.isSafe", "url": "JSON.html#method_JSON.isSafe", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.parse", "url": "JSON.html#method_JSON.parse", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.stringify", "url": "JSON.html#method_JSON.stringify", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.stringToDate", "url": "JSON.html#method_JSON.stringToDate", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.useNativeParse", "url": "JSON.html#property_JSON.useNativeParse", "type": "property"}, {"access": "", "host": "JSON", "name": "JSON.useNativeStringify", "url": "JSON.html#property_JSON.useNativeStringify", "type": "property"}, {"access": "private", "host": "JSON", "name": "_prepare", "url": "JSON.html#method__prepare", "type": "method"}, {"access": "private", "host": "JSON", "name": "_revive", "url": "JSON.html#method__revive", "type": "method"}, {"access": "private", "host": "JSON", "name": "_SPECIAL_CHARS", "url": "JSON.html#property__SPECIAL_CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_UNICODE_EXCEPTIONS", "url": "JSON.html#property__UNICODE_EXCEPTIONS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_UNSAFE", "url": "JSON.html#property__UNSAFE", "type": "property"}, {"access": "private", "host": "JSON", "name": "_VALUES", "url": "JSON.html#property__VALUES", "type": "property"}];
+    ALL_YUI_PROPS = [{"access": "private", "host": "JSON", "name": "_BRACKETS", "url": "JSON.html#property__BRACKETS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_CHARS", "url": "JSON.html#property__CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_ESCAPES", "url": "JSON.html#property__ESCAPES", "type": "property"}, {"access": "", "host": "JSON", "name": "JSON.dateToString", "url": "JSON.html#method_JSON.dateToString", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.isSafe", "url": "JSON.html#method_JSON.isSafe", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.isValid", "url": "JSON.html#method_JSON.isValid", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.parse", "url": "JSON.html#method_JSON.parse", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.stringify", "url": "JSON.html#method_JSON.stringify", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.stringToDate", "url": "JSON.html#method_JSON.stringToDate", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.useNativeParse", "url": "JSON.html#property_JSON.useNativeParse", "type": "property"}, {"access": "", "host": "JSON", "name": "JSON.useNativeStringify", "url": "JSON.html#property_JSON.useNativeStringify", "type": "property"}, {"access": "private", "host": "JSON", "name": "_prepare", "url": "JSON.html#method__prepare", "type": "method"}, {"access": "private", "host": "JSON", "name": "_revive", "url": "JSON.html#method__revive", "type": "method"}, {"access": "private", "host": "JSON", "name": "_SPECIAL_CHARS", "url": "JSON.html#property__SPECIAL_CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_UNICODE_EXCEPTIONS", "url": "JSON.html#property__UNICODE_EXCEPTIONS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_UNSAFE", "url": "JSON.html#property__UNSAFE", "type": "property"}, {"access": "private", "host": "JSON", "name": "_VALUES", "url": "JSON.html#property__VALUES", "type": "property"}];
 </script>
 </body>
 </html>

@@ -66,6 +66,10 @@
 	z-index:1;
 }
 
+.yui-pb-ltr .yui-pb-bar {
+	_position:static
+}
+
 .yui-pb-rtl .yui-pb-bar {
 	background-position:right;
 }
