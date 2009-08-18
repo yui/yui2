@@ -435,7 +435,7 @@
 			<span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="nx">ANIM</span><span class="o">,</span><span class="kc">false</span><span class="o">);</span>
 			<span class="k">this</span><span class="o">.</span><span class="nx">unsubscribeAll</span><span class="o">();</span>
 			<span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
-			<span class="nx">el</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">)</span> <span class="o">{</span> <span class="nx">el</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span> <span class="o">}</span>
 		<span class="o">},</span>
 		<span class="c">/**</span>
 <span class="c">		 * The previous value setting for the bar.  Used mostly as information to event listeners</span>
