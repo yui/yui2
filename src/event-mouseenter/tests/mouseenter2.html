@@ -23,8 +23,8 @@
 
 			    onSuccess: function() {
 
-					if (YAHOO.util.Event.onMouseEnter) {
-						alert("Loading of the delegate submodule was successful");
+					if (YAHOO.util.Event._createMouseDelegate) {
+						alert("Loading of the event-mouseenter submodule was successful");
 					}
 
 			    },

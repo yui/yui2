@@ -64,6 +64,68 @@
 						Assert.isTrue(bRemoved, "Removal of delegated click event failed");
 
 			        },
+
+					test_multiple_selectors: function () {
+
+						var foo = false, 
+							target, 
+							match, 
+							boundEl,
+							bRemoved,
+
+							onClick = function(e, matchedEl, container) {
+
+								foo = true;
+								target = Event.getTarget(e);
+								match = matchedEl;
+								boundEl = container;
+
+							};
+						
+						Event.delegate('mod1', 'click', onClick, '.hd,.bd');
+
+						UserAction.click(Dom.get('mod-header'));
+
+						Assert.areEqual(match, Dom.get('mod-header'), "event delegate works but the matched element is an incorrect node, should be the matching node");
+						
+						UserAction.click(Dom.get('mod-body'));		
+
+						Assert.areEqual(match, Dom.get('mod-body'), "event delegate works but the matched element is an incorrect node, should be the matching node");
+						
+					},
+
+					test_document_as_container: function () {
+
+						var foo = false, 
+							target, 
+							match, 
+							boundEl,
+							bRemoved,
+
+							onClick = function(e, matchedEl, container) {
+
+								foo = true;
+								target = Event.getTarget(e);
+								match = matchedEl;
+								boundEl = container;
+
+							};
+						
+						Event.delegate(document, 'click', onClick, 'a');
+
+						UserAction.click(Dom.get('firstlink'));
+
+						Assert.isTrue(foo, "simple delegation fails, document should pickup the event and test target [firstlink]");
+
+						Assert.areEqual(match, Dom.get('firstlink'), "event delegate works but the matched element is an incorrect node, should be the matching node");
+						Assert.areEqual(target, Dom.get('firstlink'), "event delegate works but the target is an incorrect node, should be the actual click target");
+						Assert.areEqual(boundEl, document, "event delegate works but the container property should be the bound element");
+
+						bRemoved = Event.removeDelegate(document, 'click', onClick);
+
+						Assert.isTrue(bRemoved, "Removal of delegated click event failed");
+						
+					},
 			
 					test_checking_delegation_target: function(){
 
@@ -244,7 +306,6 @@
 						Assert.isTrue(bRemoved, "Removal of delegated focus event handler failed");
 						
 					}
-
 			    });
 
 
@@ -267,8 +328,8 @@
     <div id="doc">
 
 		<div id="mod1">
-			<div class="hd"><h3 class="title">H3 - Title</h3></div>
-			<div class="bd">
+			<div id="mod-header" class="hd"><h3 class="title">H3 - Title</h3></div>
+			<div id="mod-body" class="bd">
 				<p>simple paragraph with a link <a href="#" id="firstlink">simple link</a></p>
 				<p>another paragraph with a complex link <a href="#" id="secondlink"><strong>strong within link</strong><img alt="fake image" id="fakeimage" /> - complex <span id="spanwithinlink">link</span></a></p>
 			</div>

@@ -115,5 +115,14 @@ package com.yahoo.astra.fl.charts
 				this.copyStylesToSeries(currentSeries, LINE_SERIES_STYLES);
 			}
 		}
+		
+		/**
+		 * @private
+		 */
+		override protected function configUI():void
+		{
+			super.configUI();
+			this.setChildIndex(this.axisLayer, this.getChildIndex(this.content))
+		}
 	}
 }

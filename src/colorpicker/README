@@ -2,6 +2,9 @@ ColorPicker - Release Notes
 
 Development master
 
+2.8.0
+    * No change
+
 2.7.0
     * Moved private functions to protected prototype methods
     * Now allows paste into RGB, HSV, Hex input fields (YUILibrary bug 1907525)

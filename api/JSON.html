@@ -349,64 +349,6 @@ undefined, the key will be omitted from the returned object.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class=" deprecated" rel="yui:method" resource="#method_isValid">
-                                    <h4>
-                                        <a name="method_isValid">isValid</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                        
-                                         static 
-                                        
-                                        boolean
-                                            <strong property="yui:name">isValid</strong>
-                                           (
-                                                
-                                                        
-                                                         str
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            <p>Four step determination whether a string is safe to eval. In three steps,
-escape sequences, safe values, and properly placed open square brackets
-are replaced with placeholders or removed.  Then in the final step, the
-result of all these replacements is checked for invalid characters.</p>
-<p>This is an alias for isSafe.</p>
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">str</span>
-                                                        &lt;<span property="yui:type">String</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  JSON string to be tested</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        boolean
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">is the string safe for eval?</dd>
-                                                </dl>
-
-
-             
-                                            <div class="deprecated">
-                                                <strong>Deprecated</strong> use isSafe
-                                            </div>        
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:method" resource="#method_JSON.dateToString">
                                     <h4>
                                         <a name="method_JSON.dateToString">JSON.dateToString</a></h4>
@@ -428,8 +370,11 @@ result of all these replacements is checked for invalid characters.</p>
                                         
                                         <div class="description" property="yui:description">
                                             Serializes a Date instance as a UTC date string.  Used internally by
-stringify.  Override this method if you need Dates serialized in a
-different format.
+the JavaScript implementation of stringify.  If you need a different
+Date serialization format, override this method.  If you change this,
+you should also set useNativeStringify to false, since native JSON
+implementations serialize Dates per the ECMAScript 5 spec.  You've been
+warned.
                                         </div>
 
                                         <div class="description">
@@ -508,6 +453,64 @@ result of all these replacements is checked for invalid characters.
 
 
              
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class=" deprecated" rel="yui:method" resource="#method_JSON.isValid">
+                                    <h4>
+                                        <a name="method_JSON.isValid">JSON.isValid</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        boolean
+                                            <strong property="yui:name">JSON.isValid</strong>
+                                           (
+                                                
+                                                        
+                                                         str
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            <p>Four step determination whether a string is safe to eval. In three steps,
+escape sequences, safe values, and properly placed open square brackets
+are replaced with placeholders or removed.  Then in the final step, the
+result of all these replacements is checked for invalid characters.</p>
+<p>This is an alias for isSafe.</p>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">str</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  JSON string to be tested</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">is the string safe for eval?</dd>
+                                                </dl>
+
+
+             
+                                            <div class="deprecated">
+                                                <strong>Deprecated</strong> use isSafe
+                                            </div>        
 
                                         </div>
 
@@ -756,6 +759,7 @@ parse operation.
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
@@ -828,9 +832,9 @@ parse operation.
                         <ul class="content">        
                                 <li class="private"><a href="#method__prepare" title="_prepare">_prepare</a></li>
                                 <li class="private"><a href="#method__revive" title="_revive">_revive</a></li>
-                                <li class=" deprecated"><a href="#method_isValid" title="isValid">isValid</a></li>
                                 <li class=""><a href="#method_JSON.dateToString" title="JSON.dateToString">JSON.dateToString</a></li>
                                 <li class=""><a href="#method_JSON.isSafe" title="JSON.isSafe">JSON.isSafe</a></li>
+                                <li class=" deprecated"><a href="#method_JSON.isValid" title="JSON.isValid">JSON.isValid</a></li>
                                 <li class=""><a href="#method_JSON.parse" title="JSON.parse">JSON.parse</a></li>
                                 <li class=""><a href="#method_JSON.stringify" title="JSON.stringify">JSON.stringify</a></li>
                                 <li class=""><a href="#method_JSON.stringToDate" title="JSON.stringToDate">JSON.stringToDate</a></li>
@@ -848,7 +852,7 @@ parse operation.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "private", "host": "JSON", "name": "_BRACKETS", "url": "JSON.html#property__BRACKETS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_CHARS", "url": "JSON.html#property__CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_ESCAPES", "url": "JSON.html#property__ESCAPES", "type": "property"}, {"access": "", "host": "JSON", "name": "isValid", "url": "JSON.html#method_isValid", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.dateToString", "url": "JSON.html#method_JSON.dateToString", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.isSafe", "url": "JSON.html#method_JSON.isSafe", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.parse", "url": "JSON.html#method_JSON.parse", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.stringify", "url": "JSON.html#method_JSON.stringify", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.stringToDate", "url": "JSON.html#method_JSON.stringToDate", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.useNativeParse", "url": "JSON.html#property_JSON.useNativeParse", "type": "property"}, {"access": "", "host": "JSON", "name": "JSON.useNativeStringify", "url": "JSON.html#property_JSON.useNativeStringify", "type": "property"}, {"access": "private", "host": "JSON", "name": "_prepare", "url": "JSON.html#method__prepare", "type": "method"}, {"access": "private", "host": "JSON", "name": "_revive", "url": "JSON.html#method__revive", "type": "method"}, {"access": "private", "host": "JSON", "name": "_SPECIAL_CHARS", "url": "JSON.html#property__SPECIAL_CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_UNICODE_EXCEPTIONS", "url": "JSON.html#property__UNICODE_EXCEPTIONS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_UNSAFE", "url": "JSON.html#property__UNSAFE", "type": "property"}, {"access": "private", "host": "JSON", "name": "_VALUES", "url": "JSON.html#property__VALUES", "type": "property"}];
+    ALL_YUI_PROPS = [{"access": "private", "host": "JSON", "name": "_BRACKETS", "url": "JSON.html#property__BRACKETS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_CHARS", "url": "JSON.html#property__CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_ESCAPES", "url": "JSON.html#property__ESCAPES", "type": "property"}, {"access": "", "host": "JSON", "name": "JSON.dateToString", "url": "JSON.html#method_JSON.dateToString", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.isSafe", "url": "JSON.html#method_JSON.isSafe", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.isValid", "url": "JSON.html#method_JSON.isValid", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.parse", "url": "JSON.html#method_JSON.parse", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.stringify", "url": "JSON.html#method_JSON.stringify", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.stringToDate", "url": "JSON.html#method_JSON.stringToDate", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.useNativeParse", "url": "JSON.html#property_JSON.useNativeParse", "type": "property"}, {"access": "", "host": "JSON", "name": "JSON.useNativeStringify", "url": "JSON.html#property_JSON.useNativeStringify", "type": "property"}, {"access": "private", "host": "JSON", "name": "_prepare", "url": "JSON.html#method__prepare", "type": "method"}, {"access": "private", "host": "JSON", "name": "_revive", "url": "JSON.html#method__revive", "type": "method"}, {"access": "private", "host": "JSON", "name": "_SPECIAL_CHARS", "url": "JSON.html#property__SPECIAL_CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_UNICODE_EXCEPTIONS", "url": "JSON.html#property__UNICODE_EXCEPTIONS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_UNSAFE", "url": "JSON.html#property__UNSAFE", "type": "property"}, {"access": "private", "host": "JSON", "name": "_VALUES", "url": "JSON.html#property__VALUES", "type": "property"}];
 </script>
 </body>
 </html>
