@@ -14,7 +14,7 @@ var l = YAHOO.lang,
     _toStr     = Object.prototype.toString,
     Native     = _toStr.call(this.JSON) === '[object JSON]' && this.JSON,
 
-/*** Variables used by parse ***/
+/* Variables used by parse */
 
     /**
      * Replace certain Unicode characters that JavaScript may handle incorrectly
@@ -75,7 +75,7 @@ var l = YAHOO.lang,
     _UNSAFE  = /^[\],:{}\s]*$/,
 
 
-/*** Variables used by stringify ***/
+/* Variables used by stringify */
 
     /**
      * Regex used to replace special characters in strings for JSON
@@ -145,7 +145,7 @@ function _char(c) {
 }
 
 
-/*** functions used by parse ***/
+/* functions used by parse */
 
 /**
  * Traverses nested objects, applying a filter or reviver function to
@@ -217,7 +217,7 @@ function _parse(s,reviver) {
 
 
 
-/*** functions used by stringify ***/
+/* functions used by stringify */
 
 // Utility function used to determine how to serialize a variable.
 function _type(o) {
@@ -357,7 +357,7 @@ function _stringify(o,w,space) {
 }
 
 
-/*** Public API ***/
+/* Public API */
 YAHOO.lang.JSON = {
     /**
      * Leverage native JSON parse if the browser has a native implementation.
@@ -461,8 +461,11 @@ YAHOO.lang.JSON = {
 
     /**
      * Serializes a Date instance as a UTC date string.  Used internally by
-     * stringify.  Override this method if you need Dates serialized in a
-     * different format.
+     * the JavaScript implementation of stringify.  If you need a different
+     * Date serialization format, override this method.  If you change this,
+     * you should also set useNativeStringify to false, since native JSON
+     * implementations serialize Dates per the ECMAScript 5 spec.  You've been
+     * warned.
      *
      * @method JSON.dateToString
      * @param d {Date} The Date to serialize
@@ -511,7 +514,7 @@ YAHOO.lang.JSON = {
  *
  * <p>This is an alias for isSafe.</p>
  *
- * @method isValid
+ * @method JSON.isValid
  * @param str {String} JSON string to be tested
  * @return {boolean} is the string safe for eval?
  * @static
