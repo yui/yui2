@@ -108,34 +108,38 @@ code {
 
 			<p>The <code>ratingFormatter</code> is the one that will draw the ProgressBars:<p>
 			<textarea name="code" class="JScript" cols="60" rows="1">
+				var pbs = [];
 				var ratingFormatter = function (elLiner, oRecord, oColumn, oData) {
-					var pb = oRecord.getData('pb');
-					if (pb) {
-						pb.destroy();
-					}
-					oRecord.setData('pb',new YAHOO.widget.ProgressBar({
+					var pb = new YAHOO.widget.ProgressBar({
 						width:'100px', 
 						height:'20px', 
 						maxValue:5, 
 						className:'ratings',
 						value:YAHOO.util.DataSource.parseNumber(oData)
-					}).render(elLiner));
+					}).render(elLiner);
+					pbs.push(pb);
 				};
 			</textarea>
-			<p>Everytime the DataTable is sorted or redrawn for any reason, such as call to the <code>render</code> method or paging, 
-			the formatters will be called again.  As with any widget, the ProgressBar might take resources that might not be
-			automatically cleared by the garbage collector.  It is vital to call method <code>destroy</code> to make sure all such
-			resources are cleared.  The formatter provides us with the <code>oRecord</code> object where all the data from the
-			remote source is stored.  There is nothing to prevent us from storing some extra information there, such as the 
-			ProgressBar instance we have created in the previous pass through the formatter. We read from <code>oRecord</code> 
-			the value of field <code>"pb"</code> where we stored the previous instance of the widget.  
-			If there was any stored, we make sure to destroy it.</p>
-			<p>We then store into the <code>"pb"</code> field of <code>oRecord</code> the new ProgressBar instance.
-			We make it 100px wide and 20px hight because our star is in a square 20pixels on each side so that
+			<p>The core of it is the creation of the ProgressBar 100px wide and 20px hight because our star is in a square 20pixels on each side so that
 			up to five stars will fit horizontally.  Five is, indeed, the <code>maxValue</code> that the rating 
 			might reach.  We add a className <code>"rating"</code> to the widget, which will help us with some formatting details
 			and, finally, we set the current value for the progressBar to the new value for the cell, after converting it to a number.
 			Unfortunately, YQL returns everything as strings.</p>
+			
+			<p>Everytime the DataTable is sorted or redrawn for any reason, such as call to the <code>render</code> method or paging, 
+			the formatters will be called again.  As with any widget, the ProgressBar might take resources that might not be
+			automatically cleared by the garbage collector.  It is vital to call method <code>destroy</code> to make sure all such
+			resources are cleared.  We push the ProgressBar instances created into the array <code>pbs</code>.  To destroy
+			those instances, we do:</p>
+			<textarea name="code" class="JScript" cols="60" rows="1">
+				dt.on('beforeRenderEvent',function() {
+					for (var i = 0;i<pbs.length;i++) {
+						pbs[i].destroy();
+					}
+				});
+			</textarea>
+			<p>Before any render, we make sure we destroy every instance we might have stored in the <code>pbs</code> array, 
+			if any.</p>
 			
 			<p>The stars come from this single star <img src="star.png" /> which the ProgressBar tiles until it fills the allotted space.
 			The style settings for this example is:</p>
@@ -154,28 +158,22 @@ code {
 			In the second definition, we set the background image for the bar itself to the star icon.  
 			We leave the borders that the SAM skin provides.</p>
 			
-			<p>There is a catch with the way we are doing the cleanup.  The ProgressBar we are clearing might not be the one in the cell
-			we are drawing the new one into. When we sort, the records will show in different rows.  In the end, we will destroy 
-			as many used ProgressBars as we create and things remain even.  For the purpose of this example, though,
-			it should suffice.</p>
 		</div>
 	</div>
 	
 <script  type="text/javascript">
 
 	YAHOO.util.Event.onDOMReady(function () {
+		var pbs = [];
 		var ratingFormatter = function (elLiner, oRecord, oColumn, oData) {
-			var pb = oRecord.getData('pb');
-			if (pb) {
-				pb.destroy();
-			}
-			oRecord.setData('pb',new YAHOO.widget.ProgressBar({
+			var pb = new YAHOO.widget.ProgressBar({
 				width:'100px', 
 				height:'20px', 
 				maxValue:5, 
 				className:'ratings',
 				value:YAHOO.util.DataSource.parseNumber(oData)
-			}).render(elLiner));
+			}).render(elLiner);
+			pbs.push(pb);
 		};
 
 		var dt = new YAHOO.widget.DataTable(
@@ -191,6 +189,11 @@ code {
 				initialRequest:'select Title,Address,Phone, Rating.AverageRating from local.search where query="sushi" and location="san francisco, ca"'
 			}
 		);
+		dt.on('beforeRenderEvent',function() {
+			for (var i = 0;i<pbs.length;i++) {
+				pbs[i].destroy();
+			}
+		});
 	});
 </script>
 <script type="text/javascript" src="http://developer.yahoo.com/yui/assets/dpSyntaxHighlighter.js"></script>
