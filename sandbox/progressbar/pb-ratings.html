@@ -136,6 +136,7 @@ code {
 					for (var i = 0;i<pbs.length;i++) {
 						pbs[i].destroy();
 					}
+					pbs = [];
 				});
 			</textarea>
 			<p>Before any render, we make sure we destroy every instance we might have stored in the <code>pbs</code> array, 
@@ -193,6 +194,7 @@ code {
 			for (var i = 0;i<pbs.length;i++) {
 				pbs[i].destroy();
 			}
+			pbs = [];
 		});
 	});
 </script>
