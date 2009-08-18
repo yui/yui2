@@ -386,7 +386,7 @@
 			this.set(ANIM,false);
 			this.unsubscribeAll();
 			var el = this.get('element');
-			el.parentNode.removeChild(el);
+			if (el.parentNode) { el.parentNode.removeChild(el); }
 		},
 		/**
 		 * The previous value setting for the bar.  Used mostly as information to event listeners
