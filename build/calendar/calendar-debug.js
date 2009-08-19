@@ -1258,19 +1258,24 @@ Calendar.ONE_CHAR = "1char";
 
 /**
 * The set of default Config property keys and values for the Calendar.
-* 
+*
 * <p>
 * NOTE: This property is made public in order to allow users to change 
 * the default values of configuration properties. Users should not 
 * modify the key string, unless they are overriding the Calendar implementation
 * </p>
+*
+* <p>
+* The property is an object with key/value pairs, the key being the 
+* uppercase configuration property name and the value being an object 
+* literal with a key string property, and a value property, specifying the 
+* default value of the property. To override a default value, you can set
+* the value property, for example, <code>YAHOO.widget.Calendar.DEFAULT_CONFIG.MULTI_SELECT.value = true;</code>
+* <code>
 * 
 * @property YAHOO.widget.Calendar.DEFAULT_CONFIG
 * @static
-* @type Object An object with key/value pairs, the key being the 
-* uppercase configuration property name and the value being an objec 
-* literal with a key string property, and a value property, specifying the 
-* default value of the property 
+* @type Object
 */
 
 Calendar.DEFAULT_CONFIG = {
@@ -2306,7 +2311,7 @@ Calendar.prototype = {
         * be used when displaying and parsing dates. NOTE: All JS Date objects returned by methods, or expected as input by
         * methods will always represent the Gregorian year, in order to maintain date/month/week values. 
         *
-        * @config year_offset
+        * @config YEAR_OFFSET
         * @type Number
         * @default 0
         */
