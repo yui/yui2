@@ -65,7 +65,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianSeries, YAHOO.widget.Series,
 	/**
 	 * Indicates which axis the series will bind to
 	 *
-	 * @property
+	 * @property axis
 	 * @type String
 	 */
 	axis: "primary",
@@ -73,7 +73,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianSeries, YAHOO.widget.Series,
 	/**
 	 * When a Legend is present, indicates whether the series will show in the legend.
 	 * 
-	 * @property
+	 * @property showInLegend
 	 * @type Boolean
 	 */
 	showInLegend: true

@@ -95,13 +95,28 @@ should be used.
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <div class="" rel="yui:property" resource="#property_">
-                                    <h4><a name="property_" property="yui:name"></a>
+                                    <div class="" rel="yui:property" resource="#property_axis">
+                                    <h4><a name="property_axis" property="yui:name">axis</a>
                                         - <code><span property="yui:type">String</span></code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
                                             Indicates which axis the series will bind to
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_showInLegend">
+                                    <h4><a name="property_showInLegend" property="yui:name">showInLegend</a>
+                                        - <code><span property="yui:type">Boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            When a Legend is present, indicates whether the series will show in the legend.
                                         </div>
                                     </div>
      
@@ -196,6 +211,7 @@ should be used.
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
@@ -278,7 +294,8 @@ should be used.
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li class=""><a href="#property_" title=""></a></li>
+                                <li class=""><a href="#property_axis" title="axis">axis</a></li>
+                                <li class=""><a href="#property_showInLegend" title="showInLegend">showInLegend</a></li>
                                 <li class=""><a href="#property_xField" title="xField">xField</a></li>
                                 <li class=""><a href="#property_yField" title="yField">yField</a></li>
                         </ul>
@@ -296,7 +313,7 @@ should be used.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "", "url": "YAHOO.widget.CartesianSeries.html#property_", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "beforeCategoryFieldChange", "url": "YAHOO.widget.PieChart.html#event_beforeCategoryFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "beforeDataFieldChange", "url": "YAHOO.widget.PieChart.html#event_beforeDataFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "categoryField", "url": "YAHOO.widget.PieChart.html#config_categoryField", "type": "config"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "categoryFieldChange", "url": "YAHOO.widget.PieChart.html#event_categoryFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "dataField", "url": "YAHOO.widget.PieChart.html#config_dataField", "type": "config"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "dataFieldChange", "url": "YAHOO.widget.PieChart.html#event_dataFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Series", "name": "displayName", "url": "YAHOO.widget.Series.html#property_displayName", "type": "property"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_getCategoryField", "url": "YAHOO.widget.PieChart.html#method__getCategoryField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_getDataField", "url": "YAHOO.widget.PieChart.html#method__getDataField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_initAttributes", "url": "YAHOO.widget.PieChart.html#method__initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_setCategoryField", "url": "YAHOO.widget.PieChart.html#method__setCategoryField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_setDataField", "url": "YAHOO.widget.PieChart.html#method__setDataField", "type": "method"}, {"access": "", "host": "YAHOO.widget.Series", "name": "type", "url": "YAHOO.widget.Series.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "xField", "url": "YAHOO.widget.CartesianSeries.html#property_xField", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "yField", "url": "YAHOO.widget.CartesianSeries.html#property_yField", "type": "property"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "axis", "url": "YAHOO.widget.CartesianSeries.html#property_axis", "type": "property"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "beforeCategoryFieldChange", "url": "YAHOO.widget.PieChart.html#event_beforeCategoryFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "beforeDataFieldChange", "url": "YAHOO.widget.PieChart.html#event_beforeDataFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "categoryField", "url": "YAHOO.widget.PieChart.html#config_categoryField", "type": "config"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "categoryFieldChange", "url": "YAHOO.widget.PieChart.html#event_categoryFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "dataField", "url": "YAHOO.widget.PieChart.html#config_dataField", "type": "config"}, {"access": "", "host": "YAHOO.widget.PieChart", "name": "dataFieldChange", "url": "YAHOO.widget.PieChart.html#event_dataFieldChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Series", "name": "displayName", "url": "YAHOO.widget.Series.html#property_displayName", "type": "property"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_getCategoryField", "url": "YAHOO.widget.PieChart.html#method__getCategoryField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_getDataField", "url": "YAHOO.widget.PieChart.html#method__getDataField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_initAttributes", "url": "YAHOO.widget.PieChart.html#method__initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_setCategoryField", "url": "YAHOO.widget.PieChart.html#method__setCategoryField", "type": "method"}, {"access": "private", "host": "YAHOO.widget.PieChart", "name": "_setDataField", "url": "YAHOO.widget.PieChart.html#method__setDataField", "type": "method"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "showInLegend", "url": "YAHOO.widget.CartesianSeries.html#property_showInLegend", "type": "property"}, {"access": "", "host": "YAHOO.widget.Series", "name": "type", "url": "YAHOO.widget.Series.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "xField", "url": "YAHOO.widget.CartesianSeries.html#property_xField", "type": "property"}, {"access": "", "host": "YAHOO.widget.CartesianSeries", "name": "yField", "url": "YAHOO.widget.CartesianSeries.html#property_yField", "type": "property"}];
 </script>
 </body>
 </html>

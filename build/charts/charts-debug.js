@@ -1825,7 +1825,7 @@ YAHOO.lang.extend(YAHOO.widget.CategoryAxis, YAHOO.widget.Axis,
 	 * when there is not enough room to display all labels on the axis. If set to true, the axis 
 	 * will determine the number of categories to plot. If not, all categories will be plotted.
 	 *
-	 * @property calcualateCategoryCount
+	 * @property calculateCategoryCount
 	 * @type Boolean
 	 */
 	calculateCategoryCount: false 
@@ -1897,7 +1897,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianSeries, YAHOO.widget.Series,
 	/**
 	 * Indicates which axis the series will bind to
 	 *
-	 * @property
+	 * @property axis
 	 * @type String
 	 */
 	axis: "primary",
@@ -1905,7 +1905,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianSeries, YAHOO.widget.Series,
 	/**
 	 * When a Legend is present, indicates whether the series will show in the legend.
 	 * 
-	 * @property
+	 * @property showInLegend
 	 * @type Boolean
 	 */
 	showInLegend: true
