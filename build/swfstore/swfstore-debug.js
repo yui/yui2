@@ -45,12 +45,14 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 			}
 
 			
-			var params = { version: 9.115,
-		          useExpressInstall: false,
-		          fixedAttributes:
-				  {allowScriptAccess:"always", allowNetworking:"all"},
-				  flashVars:
-				  {shareData: shareData, browser: newValue, useCompression: useCompression}
+			var params = 
+				{ 
+					version: 9.115,
+					useExpressInstall: false,
+					fixedAttributes:
+						{allowScriptAccess:"always", allowNetworking:"all", scale:"noScale"},
+						flashVars:
+							{shareData: shareData, browser: newValue, useCompression: useCompression}
 				 };
 	
 	
@@ -195,6 +197,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	setShareData: function(value)
 	{
+		YAHOO.log("Setting share data to " + value);
 		this.embeddedSWF.callSWF("setShareData", [value]);
 	},
 
@@ -229,6 +232,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	setUseCompression: function(value)
 	{
+		YAHOO.log("Setting compression to " + value);
 		this.embeddedSWF.callSWF("setUseCompression", [value]);
 	},	
 
@@ -433,7 +437,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 		*/		
 		setSize: function(value) 
 		{
-			YAHOO.log("attempting to set size to " + value*1024);
+			YAHOO.log("attempting to set size to " + value*1024) + "bytes";
 			return this.embeddedSWF.callSWF("setSize", [value]);
 		} ,
 		

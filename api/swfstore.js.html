@@ -94,12 +94,14 @@
 			<span class="o">}</span>
 
 			
-			<span class="k">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="o">{</span> <span class="nx">version</span><span class="o">:</span> <span class="m">9</span><span class="o">.</span><span class="m">115</span><span class="o">,</span>
-		          <span class="nx">useExpressInstall</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
-		          <span class="nx">fixedAttributes</span><span class="o">:</span>
-				  <span class="o">{</span><span class="nx">allowScriptAccess</span><span class="o">:</span><span class="s2">&quot;always&quot;</span><span class="o">,</span> <span class="nx">allowNetworking</span><span class="o">:</span><span class="s2">&quot;all&quot;</span><span class="o">},</span>
-				  <span class="nx">flashVars</span><span class="o">:</span>
-				  <span class="o">{</span><span class="nx">shareData</span><span class="o">:</span> <span class="nx">shareData</span><span class="o">,</span> <span class="nx">browser</span><span class="o">:</span> <span class="nx">newValue</span><span class="o">,</span> <span class="nx">useCompression</span><span class="o">:</span> <span class="nx">useCompression</span><span class="o">}</span>
+			<span class="k">var</span> <span class="nx">params</span> <span class="o">=</span> 
+				<span class="o">{</span> 
+					<span class="nx">version</span><span class="o">:</span> <span class="m">9</span><span class="o">.</span><span class="m">115</span><span class="o">,</span>
+					<span class="nx">useExpressInstall</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+					<span class="nx">fixedAttributes</span><span class="o">:</span>
+						<span class="o">{</span><span class="nx">allowScriptAccess</span><span class="o">:</span><span class="s2">&quot;always&quot;</span><span class="o">,</span> <span class="nx">allowNetworking</span><span class="o">:</span><span class="s2">&quot;all&quot;</span><span class="o">,</span> <span class="nx">scale</span><span class="o">:</span><span class="s2">&quot;noScale&quot;</span><span class="o">},</span>
+						<span class="nx">flashVars</span><span class="o">:</span>
+							<span class="o">{</span><span class="nx">shareData</span><span class="o">:</span> <span class="nx">shareData</span><span class="o">,</span> <span class="nx">browser</span><span class="o">:</span> <span class="nx">newValue</span><span class="o">,</span> <span class="nx">useCompression</span><span class="o">:</span> <span class="nx">useCompression</span><span class="o">}</span>
 				 <span class="o">};</span>
 	
 	
@@ -244,6 +246,7 @@
 <span class="c">	 */</span>
 	<span class="nx">setShareData</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span>
 	<span class="o">{</span>
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Setting share data to &quot;</span> <span class="o">+</span> <span class="nx">value</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;setShareData&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">value</span><span class="o">]);</span>
 	<span class="o">},</span>
 
@@ -278,6 +281,7 @@
 <span class="c">	 */</span>
 	<span class="nx">setUseCompression</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span>
 	<span class="o">{</span>
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Setting compression to &quot;</span> <span class="o">+</span> <span class="nx">value</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;setUseCompression&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">value</span><span class="o">]);</span>
 	<span class="o">},</span>	
 
@@ -482,7 +486,7 @@
 <span class="c">		*/</span>		
 		<span class="nx">setSize</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> 
 		<span class="o">{</span>
-			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;attempting to set size to &quot;</span> <span class="o">+</span> <span class="nx">value</span><span class="o">*</span><span class="m">1024</span><span class="o">);</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;attempting to set size to &quot;</span> <span class="o">+</span> <span class="nx">value</span><span class="o">*</span><span class="m">1024</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;bytes&quot;</span><span class="o">;</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;setSize&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">value</span><span class="o">]);</span>
 		<span class="o">}</span> <span class="o">,</span>
 		
