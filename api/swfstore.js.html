@@ -84,11 +84,14 @@
 			<span class="o">{</span>
 
 				<span class="nx">newValue</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="nb">Math</span><span class="o">.</span><span class="nx">random</span><span class="o">()</span> <span class="o">*</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">PI</span> <span class="o">*</span> <span class="m">100000</span><span class="o">);</span> 
-				<span class="k">var</span> <span class="nx">cook</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Cookie</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;swfstore&quot;</span><span class="o">,</span> <span class="nx">newValue</span><span class="o">);</span>
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Cookie</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;swfstore&quot;</span><span class="o">,</span> <span class="nx">newValue</span><span class="o">);</span>
 
 			<span class="o">}</span>
 
-			<span class="k">else</span> <span class="o">{</span><span class="nx">newValue</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Cookie</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;swfstore&quot;</span><span class="o">)}</span>
+			<span class="k">else</span> 
+			<span class="o">{</span>
+				<span class="nx">newValue</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Cookie</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;swfstore&quot;</span><span class="o">);</span>
+			<span class="o">}</span>
 
 			
 			<span class="k">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="o">{</span> <span class="nx">version</span><span class="o">:</span> <span class="m">9</span><span class="o">.</span><span class="m">115</span><span class="o">,</span>
@@ -208,6 +211,7 @@
 <span class="c">	 */</span>
 	<span class="nx">addListener</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">listener</span><span class="o">)</span>
 	<span class="o">{</span>
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;adding &#39;&quot;</span> <span class="o">+</span> <span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot;&#39; listener&quot;</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">listener</span><span class="o">);</span> 
 	<span class="o">},</span>
 
@@ -251,6 +255,7 @@
 <span class="c">	 */</span>
 	<span class="nx">hasAdequateDimensions</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
 	<span class="o">{</span>
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;dimensions adequate? &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;hasAdequateDimensions&quot;</span><span class="o">));</span>
 		<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;hasAdequateDimensions&quot;</span><span class="o">);</span>
 	<span class="o">},</span>
 
@@ -290,6 +295,7 @@
 <span class="c">	    */</span>
 		<span class="nx">setItem</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">location</span><span class="o">,</span><span class="nx">data</span><span class="o">)</span> 
 		<span class="o">{</span>	
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;setting &quot;</span> <span class="o">+</span> <span class="nx">location</span> <span class="o">+</span> <span class="s2">&quot; to &quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="o">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;setItem&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">location</span><span class="o">,</span> <span class="nx">data</span><span class="o">]);</span>
 		<span class="o">}</span> <span class="o">,</span>
 	    	
@@ -302,6 +308,7 @@
 <span class="c">	    */</span>	    
 		<span class="nx">getValueAt</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">index</span><span class="o">)</span> 
 		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;value at &quot;</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot; is &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getValueAt&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">index</span><span class="o">])</span> <span class="o">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getValueAt&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">index</span><span class="o">]);</span>
 		<span class="o">},</span>
 
@@ -315,6 +322,7 @@
 <span class="c">	    */</span>	    
 		<span class="nx">getNameAt</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">index</span><span class="o">)</span> 
 		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;name at &quot;</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot; is &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getNameAt&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">index</span><span class="o">])</span> <span class="o">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getNameAt&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">index</span><span class="o">]);</span>
 		<span class="o">},</span>
 		
@@ -328,6 +336,7 @@
 <span class="c">	    */</span>
 		<span class="nx">getValueOf</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">location</span><span class="o">)</span> 
 		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;value of &quot;</span> <span class="o">+</span> <span class="nx">location</span> <span class="o">+</span> <span class="s2">&quot; is &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getValueOf&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">location</span><span class="o">])</span> <span class="o">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getValueOf&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">location</span><span class="o">]);</span>
 		<span class="o">}</span> <span class="o">,</span>
 
@@ -351,6 +360,7 @@
 <span class="c">	    */</span>
 		<span class="nx">getTypeOf</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">location</span><span class="o">)</span> 
 		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;type of &quot;</span> <span class="o">+</span> <span class="nx">location</span> <span class="o">+</span> <span class="s2">&quot; is &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getTypeOf&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">location</span><span class="o">])</span> <span class="o">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getTypeOf&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">location</span><span class="o">]);</span>
 		<span class="o">}</span> <span class="o">,</span>
 
@@ -374,20 +384,9 @@
 <span class="c">	    */</span>
 		<span class="nx">getTypeAt</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">index</span><span class="o">)</span> 
 		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;type at &quot;</span> <span class="o">+</span> <span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot; is &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getTypeAt&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">index</span><span class="o">])</span> <span class="o">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getTypeAt&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">index</span><span class="o">]);</span>
 		<span class="o">}</span> <span class="o">,</span>
-
-		<span class="c">/**</span>
-<span class="c">		 * Returns the item in storage at a particular index, if any.</span>
-<span class="c">		 * @method getValueAt</span>
-<span class="c">		 * @param index {Number} Required. The index where data is stored.</span>
-<span class="c">		 * @return {Object} The data.</span>
-<span class="c">		 * @public</span>
-<span class="c">		 */</span>
-		<span class="nx">getValueAt</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">index</span><span class="o">)</span> 
-		<span class="o">{</span>
-			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getValueAt&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">index</span><span class="o">]);</span>
-		<span class="o">},</span>
 		 
 		<span class="c">/**</span>
 <span class="c">		 * Returns the items in storage as an array.</span>
@@ -408,6 +407,7 @@
 <span class="c">	    */</span>
 		<span class="nx">removeItem</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">location</span><span class="o">)</span> 
 		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;removing &quot;</span> <span class="o">+</span> <span class="nx">location</span><span class="o">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;removeItem&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">location</span><span class="o">]);</span>
 		<span class="o">}</span> <span class="o">,</span>
 
@@ -419,6 +419,7 @@
 <span class="c">	    */</span>
 		<span class="nx">removeItemAt</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">index</span><span class="o">)</span> 
 		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;removing item at &quot;</span> <span class="o">+</span> <span class="nx">index</span><span class="o">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;removeItemAt&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">index</span><span class="o">]);</span>
 		<span class="o">}</span> <span class="o">,</span>
 		
@@ -442,6 +443,7 @@
 <span class="c">	    */</span>		
 		<span class="nx">clear</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> 
 		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;clearing all items&quot;</span><span class="o">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;clear&quot;</span><span class="o">,</span> <span class="o">[]);</span>
 		<span class="o">}</span> <span class="o">,</span>
 		
@@ -453,6 +455,7 @@
 <span class="c">	     */</span>		
 		<span class="nx">calculateCurrentSize</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> 
 		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;calculating size&quot;</span><span class="o">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;calculateCurrentSize&quot;</span><span class="o">,</span> <span class="o">[]);</span>
 		<span class="o">}</span> <span class="o">,</span>
 		
@@ -464,6 +467,7 @@
 <span class="c">	     */</span>
 		<span class="nx">getModificationDate</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> 
 		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;getting date&quot;</span><span class="o">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getModificationDate&quot;</span><span class="o">,</span> <span class="o">[]);</span>
 		<span class="o">}</span> <span class="o">,</span>
 		
@@ -478,6 +482,7 @@
 <span class="c">		*/</span>		
 		<span class="nx">setSize</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> 
 		<span class="o">{</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;attempting to set size to &quot;</span> <span class="o">+</span> <span class="nx">value</span><span class="o">*</span><span class="m">1024</span><span class="o">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;setSize&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">value</span><span class="o">]);</span>
 		<span class="o">}</span> <span class="o">,</span>
 		
@@ -490,7 +495,8 @@
 <span class="c">		 */</span>		
 		<span class="nx">displaySettings</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> 
 		<span class="o">{</span>
-			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;displaySettings&quot;</span><span class="o">,</span> <span class="o">[]);</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;attempting to show settings. are dimensions adequate? &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;hasAdequateDimensions&quot;</span><span class="o">));</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;displaySettings&quot;</span><span class="o">,</span> <span class="o">[]);</span>
 		<span class="o">}</span> 
 
 <span class="o">});</span>
