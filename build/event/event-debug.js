@@ -2045,7 +2045,7 @@ if (!YAHOO.util.Event) {
         // the DOM prior to when the document's readyState suggests
         // it is safe to do so.
         if (EU.isIE) {
-            if (window !== window.top) {
+            if (self !== self.top) {
                 document.onreadystatechange = function() {
                     if (document.readyState == 'complete') {
                         document.onreadystatechange = null;

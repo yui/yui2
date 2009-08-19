@@ -42,7 +42,7 @@
 	
 	/**
 	 * The ProgressBar widget provides an easy way to draw a bar depicting progress of an operation,
-	 * a level meter, ranking or any such simple linear measure.
+	 * a level meter, rating or any such simple linear measure.
 	 * It allows for highly customized styles including animation, vertical or horizontal and forward or reverse.
 	 * @namespace YAHOO.widget
 	 * @class ProgressBar
@@ -104,15 +104,16 @@
 			// No actual creation required, event will be created when subscribed to
 			//this.createEvent(START);
 			/**
-			 * If animation is loaded, it will trigger for each frame of the animation providing partial values
+			 * If animation is active, it will trigger several times during the animation providing intermediate values
+			 * If animation is not active, it will fire only once providing the end value
 			 * @event progress
 			 * @type CustomEvent
-			 * @param  value{Number} the current (progress) value
+			 * @param  value{Number} the current, changing value
 			 */
 			// No actual creation required, event will be created when subscribed to
 			//this.createEvent(PROGRESS);
 			/**
-			 * It will fire at the end of the animation or immediately upon progress values if animation is not loaded
+			 * Fires at the end of the animation or immediately upon changing values if animation is not loaded
 			 * @event complete
 			 * @type CustomEvent
 			 * @param value {Number} the current (final)  value
@@ -363,7 +364,7 @@
 		},
 
 		/** 
-		 * Recalculate the bar size and position and redraws it
+		 * Recalculates the bar size and position and redraws it
 		 * @method redraw
 		 * @return  void
 		 */
@@ -381,7 +382,7 @@
 			this.set(ANIM,false);
 			this.unsubscribeAll();
 			var el = this.get('element');
-			el.parentNode.removeChild(el);
+			if (el.parentNode) { el.parentNode.removeChild(el); }
 		},
 		/**
 		 * The previous value setting for the bar.  Used mostly as information to event listeners

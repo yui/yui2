@@ -35,19 +35,24 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 			{
 
 				newValue = Math.round(Math.random() * Math.PI * 100000); 
-				var cook = YAHOO.util.Cookie.set("swfstore", newValue);
+				YAHOO.util.Cookie.set("swfstore", newValue);
 
 			}
 
-			else {newValue = YAHOO.util.Cookie.get("swfstore")}
+			else 
+			{
+				newValue = YAHOO.util.Cookie.get("swfstore");
+			}
 
 			
-			var params = { version: 9.115,
-		          useExpressInstall: false,
-		          fixedAttributes:
-				  {allowScriptAccess:"always", allowNetworking:"all"},
-				  flashVars:
-				  {shareData: shareData, browser: newValue, useCompression: useCompression}
+			var params = 
+				{ 
+					version: 9.115,
+					useExpressInstall: false,
+					fixedAttributes:
+						{allowScriptAccess:"always", allowNetworking:"all", scale:"noScale"},
+						flashVars:
+							{shareData: shareData, browser: newValue, useCompression: useCompression}
 				 };
 	
 	
@@ -159,6 +164,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	addListener: function(type, listener)
 	{
+		YAHOO.log("adding '" + type + "' listener");
 		this.embeddedSWF.addListener(type, listener); 
 	},
 
@@ -202,6 +208,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	hasAdequateDimensions: function()
 	{
+		YAHOO.log("dimensions adequate? " + this.embeddedSWF.callSWF("hasAdequateDimensions"));
 		return this.embeddedSWF.callSWF("hasAdequateDimensions");
 	},
 
@@ -241,6 +248,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		setItem: function(location,data) 
 		{	
+			YAHOO.log("setting " + location + " to " + data);
 			return this.embeddedSWF.callSWF("setItem", [location, data]);
 		} ,
 	    	
@@ -253,6 +261,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */	    
 		getValueAt: function(index) 
 		{
+			YAHOO.log("value at " + index + " is " + this.embeddedSWF.callSWF("getValueAt", [index]) );
 			return this.embeddedSWF.callSWF("getValueAt", [index]);
 		},
 
@@ -266,6 +275,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */	    
 		getNameAt: function(index) 
 		{
+			YAHOO.log("name at " + index + " is " + this.embeddedSWF.callSWF("getNameAt", [index]) );
 			return this.embeddedSWF.callSWF("getNameAt", [index]);
 		},
 		
@@ -279,6 +289,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		getValueOf: function(location) 
 		{
+			YAHOO.log("value of " + location + " is " + this.embeddedSWF.callSWF("getValueOf", [location]) );
 			return this.embeddedSWF.callSWF("getValueOf", [location]);
 		} ,
 
@@ -302,6 +313,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		getTypeOf: function(location) 
 		{
+			YAHOO.log("type of " + location + " is " + this.embeddedSWF.callSWF("getTypeOf", [location]) );
 			return this.embeddedSWF.callSWF("getTypeOf", [location]);
 		} ,
 
@@ -325,20 +337,9 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		getTypeAt: function(index) 
 		{
+			YAHOO.log("type at " + index + " is " + this.embeddedSWF.callSWF("getTypeAt", [index]) );
 			return this.embeddedSWF.callSWF("getTypeAt", [index]);
 		} ,
-
-		/**
-		 * Returns the item in storage at a particular index, if any.
-		 * @method getValueAt
-		 * @param index {Number} Required. The index where data is stored.
-		 * @return {Object} The data.
-		 * @public
-		 */
-		getValueAt: function(index) 
-		{
-			return this.embeddedSWF.callSWF("getValueAt", [index]);
-		},
 		 
 		/**
 		 * Returns the items in storage as an array.
@@ -359,6 +360,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		removeItem: function(location) 
 		{
+			YAHOO.log("removing " + location);
 			return this.embeddedSWF.callSWF("removeItem", [location]);
 		} ,
 
@@ -370,6 +372,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		removeItemAt: function(index) 
 		{
+			YAHOO.log("removing item at " + index);
 			return this.embeddedSWF.callSWF("removeItemAt", [index]);
 		} ,
 		
@@ -393,6 +396,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */		
 		clear: function() 
 		{
+			YAHOO.log("clearing all items");
 			return this.embeddedSWF.callSWF("clear", []);
 		} ,
 		
@@ -404,6 +408,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	     */		
 		calculateCurrentSize: function() 
 		{
+			YAHOO.log("calculating size");
 			return this.embeddedSWF.callSWF("calculateCurrentSize", []);
 		} ,
 		
@@ -415,6 +420,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	     */
 		getModificationDate: function() 
 		{
+			YAHOO.log("getting date");
 			return this.embeddedSWF.callSWF("getModificationDate", []);
 		} ,
 		
@@ -429,6 +435,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 		*/		
 		setSize: function(value) 
 		{
+			YAHOO.log("attempting to set size to " + value*1024);
 			return this.embeddedSWF.callSWF("setSize", [value]);
 		} ,
 		
@@ -441,7 +448,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 		 */		
 		displaySettings: function() 
 		{
-			return this.embeddedSWF.callSWF("displaySettings", []);
+			YAHOO.log("attempting to show settings. are dimensions adequate? " + this.embeddedSWF.callSWF("hasAdequateDimensions"));
+			this.embeddedSWF.callSWF("displaySettings", []);
 		} 
 
 });

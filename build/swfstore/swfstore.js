@@ -39,15 +39,20 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 
 			}
 
-			else {newValue = YAHOO.util.Cookie.get("swfstore")}
+			else 
+			{
+				newValue = YAHOO.util.Cookie.get("swfstore");
+			}
 
 			
-			var params = { version: 9.115,
-		          useExpressInstall: false,
-		          fixedAttributes:
-				  {allowScriptAccess:"always", allowNetworking:"all"},
-				  flashVars:
-				  {shareData: shareData, browser: newValue, useCompression: useCompression}
+			var params = 
+				{ 
+					version: 9.115,
+					useExpressInstall: false,
+					fixedAttributes:
+						{allowScriptAccess:"always", allowNetworking:"all", scale:"noScale"},
+						flashVars:
+							{shareData: shareData, browser: newValue, useCompression: useCompression}
 				 };
 	
 	
@@ -327,18 +332,6 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 		{
 			return this.embeddedSWF.callSWF("getTypeAt", [index]);
 		} ,
-
-		/**
-		 * Returns the item in storage at a particular index, if any.
-		 * @method getValueAt
-		 * @param index {Number} Required. The index where data is stored.
-		 * @return {Object} The data.
-		 * @public
-		 */
-		getValueAt: function(index) 
-		{
-			return this.embeddedSWF.callSWF("getValueAt", [index]);
-		},
 		 
 		/**
 		 * Returns the items in storage as an array.
@@ -441,7 +434,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 		 */		
 		displaySettings: function() 
 		{
-			return this.embeddedSWF.callSWF("displaySettings", []);
+			this.embeddedSWF.callSWF("displaySettings", []);
 		} 
 
 });
