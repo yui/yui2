@@ -837,6 +837,7 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		private function adjustMinAndMaxFromMajorUnit():void
 		{
+			if(isNaN(this._majorUnit)) return;
 			//adjust the maximum so that it appears on a major unit
 			//but don't change the maximum if the user set it or it is pinned to zero
 			if(!this._maximumSetByUser && !(this.alwaysShowZero && this._maximum == 0) && this.adjustMaximumByMajorUnit)
