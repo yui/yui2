@@ -61,7 +61,7 @@
 
                     <div class="summary description" property="yui:description">
                         The ProgressBar widget provides an easy way to draw a bar depicting progress of an operation,
-a level meter, ranking or any such simple linear measure.
+a level meter, rating or any such simple linear measure.
 It allows for highly customized styles including animation, vertical or horizontal and forward or reverse.
                     </div>
 
@@ -632,7 +632,7 @@ Moves the bar to reflect the new value
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Recalculate the bar size and position and redraws it
+                                            Recalculates the bar size and position and redraws it
                                         </div>
 
                                         <div class="description">
@@ -1440,7 +1440,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            It will fire at the end of the animation or immediately upon progress values if animation is not loaded
+                                            Fires at the end of the animation or immediately upon changing values if animation is not loaded
                                         </div>
 
                                         <div class="description">
@@ -1704,7 +1704,8 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            If animation is loaded, it will trigger for each frame of the animation providing partial values
+                                            If animation is active, it will trigger several times during the animation providing intermediate values
+If animation is not active, it will fire only once providing the end value
                                         </div>
 
                                         <div class="description">
@@ -1716,7 +1717,7 @@ The method is chainable since it returns a reference to this instance.
                                                             <code><span property="yui:name">value</span>
                                                                 &lt;<span property="yui:type">Number</span>&gt;
                                                             </code>
-                                                            <span property="yui:description"> the current (progress) value</span>
+                                                            <span property="yui:description"> the current, changing value</span>
                                                         </dd>
                                                         
                                                 </dl>
