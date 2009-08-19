@@ -799,7 +799,7 @@
         numVisible = carousel.get("numVisible");
 
         if (!JS.isNumber(page)) {
-            page = Math.ceil(carousel.get("selectedItem") / numVisible);
+            page = Math.floor(carousel.get("selectedItem") / numVisible);
         }
 
         numPages = Math.ceil(carousel.get("numItems") / numVisible);
@@ -1995,10 +1995,8 @@
 
             carousel.on(renderEvent, function (ev) {
                 if (carousel.get("selectedItem") === null ||
-                    carousel.get("selectedItem") < 0) { // in either case
+                    carousel.get("selectedItem") <= 0) { // in either case
                     carousel.set("selectedItem", carousel.get("firstVisible"));
-                } else {
-                    carousel.set("selectedItem", carousel.get("selectedItem"));
                 }
                 syncNavigation.call(carousel, ev);
                 syncPagerUi.call(carousel, ev);
