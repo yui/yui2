@@ -45,12 +45,14 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 			}
 
 			
-			var params = { version: 9.115,
-		          useExpressInstall: false,
-		          fixedAttributes:
-				  {allowScriptAccess:"always", allowNetworking:"all"},
-				  flashVars:
-				  {shareData: shareData, browser: newValue, useCompression: useCompression}
+			var params = 
+				{ 
+					version: 9.115,
+					useExpressInstall: false,
+					fixedAttributes:
+						{allowScriptAccess:"always", allowNetworking:"all", scale:"noScale"},
+						flashVars:
+							{shareData: shareData, browser: newValue, useCompression: useCompression}
 				 };
 	
 	
