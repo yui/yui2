@@ -1,5 +1,19 @@
 TreeView - Release Notes
 
+2.8.0
+  * No new features were added
+  * Fixed #2527720: TextNode with href didn't navigate to location
+  * Fixed #2527920: When moving with right arrow to a dynamic
+    node not already loaded, focus would pass to immediate
+	sibling instead of first child of loaded children
+  * Fixed #2455223: Opacity of nodes was not always restored once 
+    faded out
+  * Fixed #2528017: On nodes loaded dynamically, highlight didn't
+    propagate down.
+  * Icon pre-loading function was dropped
+  * Fixed #2528296: method highlight didn't pass on the _silent flag
+    when calling unhighlight, making it fire events.
+
 2.7.0
   * Added node highlighting/selection with single and multi-node 
     selection and propagation up and down
