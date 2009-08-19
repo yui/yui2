@@ -537,18 +537,19 @@
         * the property's event
         * @param {Object} obj The Object to use for scoping the event handler 
         * (see CustomEvent documentation)
-        * @param {Boolean} override Optional. If true, will override "this"  
-        * within the handler to map to the scope Object passed into the method.
+        * @param {Boolean} overrideContext Optional. If true, will override
+        * "this" within the handler to map to the scope Object passed into the
+        * method.
         * @return {Boolean} True, if the subscription was successful, 
         * otherwise false.
         */ 
-        subscribeToConfigEvent: function (key, handler, obj, override) {
+        subscribeToConfigEvent: function (key, handler, obj, overrideContext) {
     
             var property = this.config[key.toLowerCase()];
     
             if (property && property.event) {
                 if (!Config.alreadySubscribed(property.event, handler, obj)) {
-                    property.event.subscribe(handler, obj, override);
+                    property.event.subscribe(handler, obj, overrideContext);
                 }
                 return true;
             } else {
