@@ -304,7 +304,7 @@ YAHOO.util.Connect =
    */
 	createXhrObject:function(transactionId)
 	{
-		var obj,http;
+		var obj,http,i;
 		try
 		{
 			// Instantiates XMLHttpRequest in non-IE browsers and assigns to http.
@@ -314,7 +314,7 @@ YAHOO.util.Connect =
 		}
 		catch(e)
 		{
-			for(var i=0; i<this._msxml_progid.length; ++i){
+			for(i=0; i<this._msxml_progid.length; ++i){
 				try
 				{
 					// Instantiates XMLHttpRequest for IE and assign to http
@@ -382,7 +382,7 @@ YAHOO.util.Connect =
    */
 	asyncRequest:function(method, uri, callback, postData)
 	{
-		var o, t, args = (callback && callback.argument)?callback.argument:null;
+		var o,t,args = (callback && callback.argument)?callback.argument:null;
 
 		if(this._isFileUpload){
 			t = 'upload';
@@ -520,8 +520,8 @@ YAHOO.util.Connect =
     handleReadyState:function(o, callback)
 
     {
-		var oConn = this;
-		var args = (callback && callback.argument)?callback.argument:null;
+		var oConn = this,
+			args = (callback && callback.argument)?callback.argument:null;
 
 		if(callback && callback.timeout){
 			this._timeOut[o.tId] = window.setTimeout(function(){ oConn.abort(o, callback, true); }, callback.timeout);
@@ -601,7 +601,7 @@ YAHOO.util.Connect =
 		}
 
 		if((httpStatus >= 200 && httpStatus < 300) || httpStatus === 1223 || xdrS){
-			responseObject = (o.xdr) ? o.response : this.createResponseObject(o, args);
+			responseObject = o.xdr ? o.r : this.createResponseObject(o, args);
 			if(callback && callback.success){
 				if(!callback.scope){
 					callback.success(responseObject);
@@ -682,15 +682,15 @@ YAHOO.util.Connect =
    */
     createResponseObject:function(o, callbackArg)
     {
-		var obj = {};
-		var headerObj = {};
+		var obj = {}, headerObj = {},
+			i, headerStr, header, delimitPos;
 
 		try
 		{
-			var headerStr = o.conn.getAllResponseHeaders();
-			var header = headerStr.split('\n');
-			for(var i=0; i<header.length; i++){
-				var delimitPos = header[i].indexOf(':');
+			headerStr = o.conn.getAllResponseHeaders();
+			header = headerStr.split('\n');
+			for(i=0; i<header.length; i++){
+				delimitPos = header[i].indexOf(':');
 				if(delimitPos != -1){
 					headerObj[header[i].substring(0,delimitPos)] = YAHOO.lang.trim(header[i].substring(delimitPos+2));
 				}
@@ -770,8 +770,8 @@ YAHOO.util.Connect =
 	initHeader:function(label, value, isDefault)
 	{
 		var headerObj = (isDefault)?this._default_headers:this._http_headers;
-		headerObj[label] = value;
 
+		headerObj[label] = value;
 		if(isDefault){
 			this._has_default_headers = true;
 		}
@@ -858,10 +858,8 @@ YAHOO.util.Connect =
 				}
 			}
 			else if(o.xdr){
-				if(this.isCallInProgress(o)){
-					o.conn.abort(o.tId);
-					abortStatus = true;
-				}
+				o.conn.abort(o.tId);
+				abortStatus = true;
 			}
 		}
 		else if(o.upload){
@@ -954,9 +952,7 @@ YAHOO.util.Connect =
   * @for Connect
   */
 (function() {
-	var YCM = YAHOO.util.Connect,
-		_xdrReady = new YAHOO.util.CustomEvent('xdrReady'),
-		_fn = {};
+	var YCM = YAHOO.util.Connect, _fn = {};
 
    /**
     * @description This method creates and instantiates the Flash transport.
@@ -993,7 +989,7 @@ YAHOO.util.Connect =
     * @return {void}
     */
 	function _xdr(o, m, u, c, d) {
-		_fn[YAHOO.lang.isNumber(o.tId) ? o.tId : null] = { 'o':o, 'c':c };
+		_fn[parseInt(o.tId)] = { 'o':o, 'c':c };
 		if (d) {
 			c.method = m;
 			c.data = d;
@@ -1017,7 +1013,7 @@ YAHOO.util.Connect =
 	}
 
 	function _xdrReady() {
-		_xdrReady.fire();
+		YCM.xdrReadyEvent.fire();
 	}
 
    /**
@@ -1031,9 +1027,9 @@ YAHOO.util.Connect =
     * @return {void}
     */
 	function _xdrStart(o, cb) {
-		if(o){
+		if (o) {
 			// Fire global custom event -- startEvent
-			this.startEvent.fire(o, cb.argument);
+			YCM.startEvent.fire(o, cb.argument);
 
 			if(o.startEvent){
 				// Fire transaction custom event -- startEvent
@@ -1053,21 +1049,20 @@ YAHOO.util.Connect =
     * @return {void}
     */
 	function _handleXdrResponse(r) {
+		var o = _fn[r.tId].o,
+			cb = _fn[r.tId].c;
+
 		if (r.statusText === 'xdr:start') {
 			_xdrStart(o, cb);
 			return;
 		}
 
-		var o = _fn[r.tId].o,
-			cb = _fn[r.tId].c,
-			isAbort = (r.statusText === 'xdr:abort') ? true : false;
-
 		o.r = r;
 		if (cb.argument) {
-			o.response.argument = cb.argument;
+			o.r.argument = cb.argument;
 		}
 
-		this.handleTransactionResponse(o, cb, isAbort);
+		this.handleTransactionResponse(o, cb, r.statusText === 'xdr:abort' ? true : false);
 		delete _fn[r.tId];
 	}
 
@@ -1075,6 +1070,7 @@ YAHOO.util.Connect =
 	YCM.xdr = _xdr;
 	YCM.swf = _swf;
 	YCM.transport = _init;
+	YCM.xdrReadyEvent = new YAHOO.util.CustomEvent('xdrReady');
 	YCM.xdrReady = _xdrReady;
 	YCM.handleXdrResponse = _handleXdrResponse;
 })();

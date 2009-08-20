@@ -1521,10 +1521,11 @@ LogReader.prototype = {
         // Default the container if unset or not a div
         if(!this._elContainer || !/div$/i.test(this._elContainer.tagName)) {
             this._elContainer = d.body.insertBefore(make("div"),d.body.firstChild);
+            // Only position absolutely if an in-DOM element is not supplied
+            Dom.addClass(this._elContainer,"yui-log-container");
         }
 
         Dom.addClass(this._elContainer,"yui-log");
-        Dom.addClass(this._elContainer,"yui-log-container");
 
         // If implementer has provided container values, trust and set those
         var style = this._elContainer.style,

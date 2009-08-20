@@ -43,7 +43,7 @@ package com.yui.util
 						}
 						break;
 					case "data":
-						serializeData(request, cb.data);
+						request.data = cb.data;
 						break;
 					case "timeout":
 						timer = new Timer(cb.timeout, 1);
@@ -146,15 +146,11 @@ package com.yui.util
 		}
 
 		public function isCallInProgress(id:uint):Boolean {
-			return loaderMap[id].readyState !== 4;
-		}
-
-		private function serializeData(request:URLRequest, d:Object):void {
-			var prop:String;
-			request.data = new URLVariables();
-
-			for (prop in d) {
-				request.data[prop] = d[prop];
+			if (loaderMap[id]) {
+				return loaderMap[id].readyState !== 4;
+			}
+			else {
+				return false;
 			}
 		}
 

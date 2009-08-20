@@ -336,6 +336,17 @@ var Y = YAHOO.util,
 	_locationEngineMap = {}, // cached engines
 	_registeredEngineSet = [], // set of available engines
 	_registeredEngineMap = {}, // map of available engines
+	
+	/**
+	 * Fetches a storage constructor if it is available, otherwise returns NULL.
+	 * @method _getClass
+	 * @param klass {Function} Required. The storage constructor to test.
+	 * @return {Function} An available storage constructor or NULL.
+	 * @private
+	 */
+	_getClass = function(klass) {
+		return (klass && klass.isAvailable()) ? klass : null;
+	},
 
 	/**
 	 * Fetches the storage engine from the cache, or creates and caches it.
@@ -405,7 +416,7 @@ var Y = YAHOO.util,
 		 */
 		get: function(engineType, location, conf) {
 			var _cfg = YL.isObject(conf) ? conf : {},
-				klass = _registeredEngineMap[engineType];
+				klass = _getClass(_registeredEngineMap[engineType]);
 
 			if (! klass && ! _cfg.force) {
 				var i, j;
@@ -414,7 +425,7 @@ var Y = YAHOO.util,
 					j = _cfg.order.length;
 
 					for (i = 0; i < j && ! klass; i += 1) {
-						klass = _registeredEngineMap[_cfg.order[i]];
+						klass = _getClass(_registeredEngineMap[_cfg.order[i]]);
 					}
 				}
 
@@ -422,7 +433,7 @@ var Y = YAHOO.util,
 					j = _registeredEngineSet.length;
 
 					for (i = 0; i < j && ! klass; i += 1) {
-						klass = _registeredEngineSet[i];
+						klass = _getClass(_registeredEngineSet[i]);
 					}
 				}
 			}
@@ -453,7 +464,7 @@ var Y = YAHOO.util,
 		 * @static
 		 */
 		register: function(engineConstructor) {
-			if (YL.isFunction(engineConstructor) && YL.isFunction(engineConstructor.isAvailable) && YL.isString(engineConstructor.ENGINE_NAME) && engineConstructor.isAvailable()) {
+			if (YL.isFunction(engineConstructor) && YL.isFunction(engineConstructor.isAvailable) && YL.isString(engineConstructor.ENGINE_NAME)) {
 				_registeredEngineMap[engineConstructor.ENGINE_NAME] = engineConstructor;
 				_registeredEngineSet.push(engineConstructor);
 				return true;
@@ -1015,6 +1026,7 @@ var Y = YAHOO.util,
 			if (! cfg.attributes) {cfg.attributes  = {};}
 			if (! cfg.attributes.flashVars) {cfg.attributes.flashVars = {};}
 			cfg.attributes.flashVars.useCompression = 'true';
+			cfg.attributes.version = 9.115;
 			_engine = new YAHOO.widget.SWF(cfg.containerID, cfg.swfURL, cfg.attributes);
 		}
 	};

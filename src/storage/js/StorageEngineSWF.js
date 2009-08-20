@@ -48,6 +48,7 @@ var Y = YAHOO.util,
 			if (! cfg.attributes) {cfg.attributes  = {};}
 			if (! cfg.attributes.flashVars) {cfg.attributes.flashVars = {};}
 			cfg.attributes.flashVars.useCompression = 'true';
+			cfg.attributes.version = 9.115;
 			_engine = new YAHOO.widget.SWF(cfg.containerID, cfg.swfURL, cfg.attributes);
 		}
 	};

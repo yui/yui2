@@ -1005,7 +1005,7 @@ but the storage space allotted is not sufficient.
                                         
                                         
                                         
-                                        void
+                                        String
                                             <strong property="yui:name">setSize</strong>
                                            (
                                                 
@@ -1017,10 +1017,9 @@ but the storage space allotted is not sufficient.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            This method requests more storage if the amount is above 100KB. (e.g.,
-if the <code>store()</code> method returns "pending".
+                                            This method requests more storage (if the amount is above 100KB or the current setting).
 The request dialog has to be displayed within the Flash player itself
-so the SWF it is called from must be visible and at least 215px x 138px in size.
+so the SWF it is called from must be visible and at least 215px x 138px (w x h) in size.
                                         </div>
 
                                         <div class="description">
@@ -1038,7 +1037,7 @@ so the SWF it is called from must be visible and at least 215px x 138px in size.
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        void
+                                                        String
                                                     </code></dt>
                                                     <dd property="yui:returnInfo"></dd>
                                                 </dl>
@@ -1571,6 +1570,7 @@ If no whitelist is used, fires when page's url does not match the embedded swf's
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
