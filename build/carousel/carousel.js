@@ -1245,9 +1245,9 @@
               * The class name for an item in the pager UL or dropdown menu.
               *
               * @property PAGER_ITEM
-              * @default "yui-pager-item"
+              * @default "yui-carousel-pager-item"
               */
-            PAGER_ITEM: "yui-pager-item",
+            PAGER_ITEM: "yui-carousel-pager-item",
 
             /**
              * The class name for the pagination container
@@ -1995,7 +1995,7 @@
 
             carousel.on(renderEvent, function (ev) {
                 if (carousel.get("selectedItem") === null ||
-                    carousel.get("selectedItem") <= 0) { // in either case
+                    carousel.get("selectedItem") <= 0) {// in either case
                     carousel.set("selectedItem", carousel.get("firstVisible"));
                 }
                 syncNavigation.call(carousel, ev);
