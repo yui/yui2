@@ -62,8 +62,7 @@
 <span class="c"> */</span>
 <span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 	<span class="c">// internal shorthand</span>
-<span class="c"></span><span class="k">var</span> <span class="nx">G</span> <span class="o">=</span> <span class="nb">window</span><span class="o">.</span><span class="nx">google</span><span class="o">,</span>
-	<span class="nx">Y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">,</span>
+<span class="c"></span><span class="k">var</span> <span class="nx">Y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">,</span>
 	<span class="nx">YL</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
 	<span class="nx">_SQL_STMT_LIMIT</span> <span class="o">=</span> <span class="m">9948</span><span class="o">,</span>
 	<span class="nx">_TABLE_NAME</span> <span class="o">=</span> <span class="s1">&#39;YUIStorageEngine&#39;</span><span class="o">,</span>
@@ -89,7 +88,7 @@
 
 		<span class="k">if</span> <span class="o">(!</span> <span class="nx">_engine</span><span class="o">)</span> <span class="o">{</span>
 			<span class="c">// create the database</span>
-<span class="c"></span>			<span class="nx">_engine</span> <span class="o">=</span> <span class="nx">G</span><span class="o">.</span><span class="nx">gears</span><span class="o">.</span><span class="nx">factory</span><span class="o">.</span><span class="nx">create</span><span class="o">(</span><span class="nx">Y</span><span class="o">.</span><span class="nx">StorageEngineGears</span><span class="o">.</span><span class="nx">GEARS</span><span class="o">);</span>
+<span class="c"></span>			<span class="nx">_engine</span> <span class="o">=</span> <span class="nx">google</span><span class="o">.</span><span class="nx">gears</span><span class="o">.</span><span class="nx">factory</span><span class="o">.</span><span class="nx">create</span><span class="o">(</span><span class="nx">Y</span><span class="o">.</span><span class="nx">StorageEngineGears</span><span class="o">.</span><span class="nx">GEARS</span><span class="o">);</span>
 			<span class="nx">_engine</span><span class="o">.</span><span class="nx">open</span><span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">host</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">StorageEngineGears</span><span class="o">.</span><span class="nx">DATABASE</span><span class="o">);</span>
 			<span class="nx">_engine</span><span class="o">.</span><span class="nx">execute</span><span class="o">(</span><span class="s1">&#39;CREATE TABLE IF NOT EXISTS &#39;</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">&#39; (key TEXT, location TEXT, value TEXT)&#39;</span><span class="o">);</span>
 		<span class="o">}</span>
@@ -235,10 +234,10 @@
 	<span class="nx">Y</span><span class="o">.</span><span class="nx">StorageEngineGears</span><span class="o">.</span><span class="nx">GEARS</span> <span class="o">=</span> <span class="s1">&#39;beta.database&#39;</span><span class="o">;</span>
 	<span class="nx">Y</span><span class="o">.</span><span class="nx">StorageEngineGears</span><span class="o">.</span><span class="nx">DATABASE</span> <span class="o">=</span> <span class="s1">&#39;yui.database&#39;</span><span class="o">;</span>
 	<span class="nx">Y</span><span class="o">.</span><span class="nx">StorageEngineGears</span><span class="o">.</span><span class="nx">isAvailable</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">if</span> <span class="o">(</span><span class="nx">G</span> <span class="o">&amp;&amp;</span> <span class="nx">G</span><span class="o">.</span><span class="nx">gears</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">google</span> <span class="o">&amp;&amp;</span> <span class="nb">window</span><span class="o">.</span><span class="nx">google</span><span class="o">.</span><span class="nx">gears</span><span class="o">)</span> <span class="o">{</span>
 			<span class="k">try</span> <span class="o">{</span>
 				<span class="c">// this will throw an exception if the user denies gears</span>
-<span class="c"></span>				<span class="nx">G</span><span class="o">.</span><span class="nx">gears</span><span class="o">.</span><span class="nx">factory</span><span class="o">.</span><span class="nx">create</span><span class="o">(</span><span class="nx">Y</span><span class="o">.</span><span class="nx">StorageEngineGears</span><span class="o">.</span><span class="nx">GEARS</span><span class="o">);</span>
+<span class="c"></span>				<span class="nx">google</span><span class="o">.</span><span class="nx">gears</span><span class="o">.</span><span class="nx">factory</span><span class="o">.</span><span class="nx">create</span><span class="o">(</span><span class="nx">Y</span><span class="o">.</span><span class="nx">StorageEngineGears</span><span class="o">.</span><span class="nx">GEARS</span><span class="o">);</span>
 				<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
 			<span class="o">}</span>
 			<span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>

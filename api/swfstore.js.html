@@ -246,6 +246,7 @@
 <span class="c">	 */</span>
 	<span class="nx">setShareData</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span>
 	<span class="o">{</span>
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Setting share data to &quot;</span> <span class="o">+</span> <span class="nx">value</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;setShareData&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">value</span><span class="o">]);</span>
 	<span class="o">},</span>
 
@@ -280,6 +281,7 @@
 <span class="c">	 */</span>
 	<span class="nx">setUseCompression</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span>
 	<span class="o">{</span>
+		<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Setting compression to &quot;</span> <span class="o">+</span> <span class="nx">value</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;setUseCompression&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">value</span><span class="o">]);</span>
 	<span class="o">},</span>	
 
@@ -474,18 +476,20 @@
 		<span class="o">}</span> <span class="o">,</span>
 		
 		<span class="c">/**</span>
-<span class="c">		* This method requests more storage if the amount is above 100KB. (e.g.,</span>
-<span class="c">		* if the &lt;code&gt;store()&lt;/code&gt; method returns &quot;pending&quot;.</span>
+<span class="c">		* This method requests more storage (if the amount is above 100KB or the current setting).</span>
+<span class="c">		* </span>
 <span class="c">		* The request dialog has to be displayed within the Flash player itself</span>
-<span class="c">		* so the SWF it is called from must be visible and at least 215px x 138px in size.</span>
+<span class="c">		* so the SWF it is called from must be visible and at least 215px x 138px (w x h) in size.</span>
 <span class="c">		* </span>
 <span class="c">		* @method setSize</span>
 <span class="c">		* @param value {Number} The size, in KB</span>
+<span class="c">		* @return {String} </span>
 <span class="c">		*/</span>		
 		<span class="nx">setSize</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">value</span><span class="o">)</span> 
 		<span class="o">{</span>
-			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;attempting to set size to &quot;</span> <span class="o">+</span> <span class="nx">value</span><span class="o">*</span><span class="m">1024</span><span class="o">);</span>
-			<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;setSize&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">value</span><span class="o">]);</span>
+			<span class="k">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">embeddedSWF</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;setSize&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">value</span><span class="o">]);</span>
+			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;attempt to set size to &quot;</span> <span class="o">+</span> <span class="nx">value</span><span class="o">*</span><span class="m">1024</span> <span class="o">+</span> <span class="s2">&quot; bytes resulted in &quot;</span> <span class="o">+</span> <span class="nx">result</span><span class="o">);</span>
+			<span class="k">return</span> <span class="nx">result</span><span class="o">;</span>
 		<span class="o">}</span> <span class="o">,</span>
 		
 		<span class="c">/**</span>

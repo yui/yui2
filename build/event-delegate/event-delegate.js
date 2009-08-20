@@ -190,7 +190,7 @@
 			if (type == "mouseenter" || type == "mouseleave") {
 
 				if (!Event._createMouseDelegate) {
-			        return false;				
+			        return false;
 				}
 
 				fnMouseDelegate = Event._createMouseDelegate(fn, obj, overrideContext);

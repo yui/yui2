@@ -880,8 +880,8 @@ package
 			}
 			else
 			{
-				//flush() is called again and resolved successfully
-				evt = {type: "save"};
+				//this is normally executed when additional storage is requested and allowed by the user
+				evt = {type: "success"};
 				yuibridge.sendEvent(evt);
 			}
 			

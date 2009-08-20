@@ -44,6 +44,14 @@
 	     */
 		delegate: function (type, fn, filter, obj, overrideContext) {
 
+			if (YAHOO.lang.isString(filter) && !YAHOO.util.Selector) {
+		        return false;
+			}
+			
+			if (!Event._createDelegate) {
+		        return false;
+			}			
+
 			var sType = Event._getType(type),
 				el = this.get("element"),
 				fnDelegate,
@@ -54,10 +62,6 @@
 					return fnDelegate.call(el, e);
 
 				};
-
-			if (!Event._createDelegate) {
-		        return false;
-			}
 
 			if (specialTypes[type]) {
 
