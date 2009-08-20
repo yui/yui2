@@ -790,8 +790,7 @@ var Y = YAHOO.util,
  */
 (function() {
 	// internal shorthand
-var G = window.google,
-	Y = YAHOO.util,
+var Y = YAHOO.util,
 	YL = YAHOO.lang,
 	_SQL_STMT_LIMIT = 9948,
 	_TABLE_NAME = 'YUIStorageEngine',
@@ -817,7 +816,7 @@ var G = window.google,
 
 		if (! _engine) {
 			// create the database
-			_engine = G.gears.factory.create(Y.StorageEngineGears.GEARS);
+			_engine = google.gears.factory.create(Y.StorageEngineGears.GEARS);
 			_engine.open(window.location.host + '-' + Y.StorageEngineGears.DATABASE);
 			_engine.execute('CREATE TABLE IF NOT EXISTS ' + _TABLE_NAME + ' (key TEXT, location TEXT, value TEXT)');
 		}
@@ -961,10 +960,10 @@ var G = window.google,
 	Y.StorageEngineGears.GEARS = 'beta.database';
 	Y.StorageEngineGears.DATABASE = 'yui.database';
 	Y.StorageEngineGears.isAvailable = function() {
-		if (G && G.gears) {
+		if (window.google && window.google.gears) {
 			try {
 				// this will throw an exception if the user denies gears
-				G.gears.factory.create(Y.StorageEngineGears.GEARS);
+				google.gears.factory.create(Y.StorageEngineGears.GEARS);
 				return true;
 			}
 			catch (e) {
