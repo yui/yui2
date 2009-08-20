@@ -45,12 +45,14 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 			}
 
 			
-			var params = { version: 9.115,
-		          useExpressInstall: false,
-		          fixedAttributes:
-				  {allowScriptAccess:"always", allowNetworking:"all"},
-				  flashVars:
-				  {shareData: shareData, browser: newValue, useCompression: useCompression}
+			var params = 
+				{ 
+					version: 9.115,
+					useExpressInstall: false,
+					fixedAttributes:
+						{allowScriptAccess:"always", allowNetworking:"all", scale:"noScale"},
+						flashVars:
+							{shareData: shareData, browser: newValue, useCompression: useCompression}
 				 };
 	
 	
@@ -410,17 +412,19 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 		} ,
 		
 		/**
-		* This method requests more storage if the amount is above 100KB. (e.g.,
-		* if the <code>store()</code> method returns "pending".
+		* This method requests more storage (if the amount is above 100KB or the current setting).
+		* 
 		* The request dialog has to be displayed within the Flash player itself
-		* so the SWF it is called from must be visible and at least 215px x 138px in size.
+		* so the SWF it is called from must be visible and at least 215px x 138px (w x h) in size.
 		* 
 		* @method setSize
 		* @param value {Number} The size, in KB
+		* @return {String} 
 		*/		
 		setSize: function(value) 
 		{
-			return this.embeddedSWF.callSWF("setSize", [value]);
+			var result = this.embeddedSWF.callSWF("setSize", [value]);
+			return result;
 		} ,
 		
 		/**

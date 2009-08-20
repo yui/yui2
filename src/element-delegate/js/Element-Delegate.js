@@ -44,6 +44,16 @@
 	     */
 		delegate: function (type, fn, filter, obj, overrideContext) {
 
+			if (YAHOO.lang.isString(filter) && !YAHOO.util.Selector) {
+				YAHOO.log("Using a CSS selector to define the filtering criteria for a delegated listener requires the Selector Utility.", "error", "Element");
+		        return false;
+			}
+			
+			if (!Event._createDelegate) {
+		        YAHOO.log("Using delegate functionality requires the event-delegate module.", "error", "Element");
+		        return false;
+			}			
+
 			var sType = Event._getType(type),
 				el = this.get("element"),
 				fnDelegate,
@@ -55,15 +65,10 @@
 
 				};
 
-			if (!Event._createDelegate) {
-		        YAHOO.log("Using delegate functionality requires the event-delegate", "error", "Element");
-		        return false;
-			}
-
 			if (specialTypes[type]) {
 
 				if (!Event._createMouseDelegate) {
-			        YAHOO.log("Delegating a " + type + " event requires the event-mouseleave module", "error", "Element");
+			        YAHOO.log("Delegating a " + type + " event requires the event-mouseleave module.", "error", "Element");
 			        return false;				
 				}
 
