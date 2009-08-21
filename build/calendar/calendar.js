@@ -1920,7 +1920,7 @@ Calendar.prototype = {
             if (navs && navs[0]) {
                 try {
                     navs[0].focus();
-                } catch (e) {
+                } catch (ex) {
                     // ignore
                 }
             }
@@ -1942,7 +1942,7 @@ Calendar.prototype = {
             if (navs && navs[0]) {
                 try {
                     navs[0].focus();
-                } catch (e) {
+                } catch (ex) {
                     // ignore
                 }
             }
