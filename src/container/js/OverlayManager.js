@@ -282,8 +282,7 @@
         /**
         * @method _onOverlayFocusHandler
         *
-        * focusEvent Handler, used to delegate to _manageFocus with the 
-        * correct arguments.
+        * @description focusEvent Handler, used to delegate to _manageFocus with the correct arguments.
         *
         * @private
         * @param {String} p_sType String representing the name of the event  
@@ -299,9 +298,7 @@
 
         /**
         * @method _onOverlayBlurHandler
-        *
-        * blurEvent Handler, used to delegate to _manageBlur with the 
-        * correct arguments.
+        * @description blurEvent Handler, used to delegate to _manageBlur with the correct arguments.
         *
         * @private
         * @param {String} p_sType String representing the name of the event  
