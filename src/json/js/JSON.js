@@ -3,6 +3,7 @@
  *
  * @module json
  * @class JSON
+ * @namespace YAHOO.lang
  * @static
  */
 (function () {
@@ -365,7 +366,7 @@ YAHOO.lang.JSON = {
      * JSON user guide for caveats.  The default value is true for browsers with
      * native JSON support.
      *
-     * @property JSON.useNativeParse
+     * @property useNativeParse
      * @type Boolean
      * @default true
      * @static
@@ -378,7 +379,7 @@ YAHOO.lang.JSON = {
      * section in the JSON user guide for caveats.  The default value is true
      * for browsers with native JSON support.
      *
-     * @property JSON.useNativeStringify
+     * @property useNativeStringify
      * @type Boolean
      * @default true
      * @static
@@ -391,7 +392,7 @@ YAHOO.lang.JSON = {
      * are replaced with placeholders or removed.  Then in the final step, the
      * result of all these replacements is checked for invalid characters.
      *
-     * @method JSON.isSafe
+     * @method isSafe
      * @param str {String} JSON string to be tested
      * @return {boolean} is the string safe for eval?
      * @static
@@ -409,7 +410,7 @@ YAHOO.lang.JSON = {
      * JavaScript implementation based on http://www.json.org/json2.js
      * is used.</p>
      *
-     * @method JSON.parse
+     * @method parse
      * @param s {string} JSON string data
      * @param reviver {function} (optional) function(k,v) passed each key:value
      *          pair of object literals, allowing pruning or altering values
@@ -443,7 +444,7 @@ YAHOO.lang.JSON = {
      * native JSON.stringify if the browser has a native implementation.
      * Otherwise, a JavaScript implementation is used.</p>
      *
-     * @method JSON.stringify
+     * @method stringify
      * @param o {MIXED} any arbitrary object to convert to JSON string
      * @param w {Array|Function} (optional) whitelist of acceptable object keys
      *                  to include OR a function(value,key) to alter values
@@ -467,7 +468,7 @@ YAHOO.lang.JSON = {
      * implementations serialize Dates per the ECMAScript 5 spec.  You've been
      * warned.
      *
-     * @method JSON.dateToString
+     * @method dateToString
      * @param d {Date} The Date to serialize
      * @return {String} stringified Date in UTC format YYYY-MM-DDTHH:mm:SSZ
      * @static
@@ -490,7 +491,7 @@ YAHOO.lang.JSON = {
      * Reference this from a reviver function to rebuild Dates during the
      * parse operation.
      *
-     * @method JSON.stringToDate
+     * @method stringToDate
      * @param str {String} String serialization of a Date
      * @return {Date}
      */
@@ -514,7 +515,7 @@ YAHOO.lang.JSON = {
  *
  * <p>This is an alias for isSafe.</p>
  *
- * @method JSON.isValid
+ * @method isValid
  * @param str {String} JSON string to be tested
  * @return {boolean} is the string safe for eval?
  * @static

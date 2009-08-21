@@ -427,20 +427,20 @@ YAHOO.util.History = (function () {
          * @method onReady
          * @param {function} fn what to execute when the Browser History Manager is ready.
          * @param {object} obj an optional object to be passed back as a parameter to fn.
-         * @param {boolean|object} override If true, the obj passed in becomes fn's execution scope.
+         * @param {boolean|object} overrideContext If true, the obj passed in becomes fn's execution scope.
          * @see onLoadEvent
          */
-        onReady: function (fn, obj, override) {
+        onReady: function (fn, obj, overrideContext) {
 
             if (_initialized) {
 
                 setTimeout(function () {
                     var ctx = window;
-                    if (override) {
-                        if (override === true) {
+                    if (overrideContext) {
+                        if (overrideContext === true) {
                             ctx = obj;
                         } else {
-                            ctx = override;
+                            ctx = overrideContext;
                         }
                     }
                     fn.call(ctx, "onLoad", [], obj);
@@ -448,7 +448,7 @@ YAHOO.util.History = (function () {
 
             } else {
 
-                YAHOO.util.History.onLoadEvent.subscribe(fn, obj, override);
+                YAHOO.util.History.onLoadEvent.subscribe(fn, obj, overrideContext);
 
             }
         },
@@ -465,10 +465,10 @@ YAHOO.util.History = (function () {
          *     state of the specified module has changed.
          * @param {object} obj An arbitrary object that will be passed as a
          *     parameter to the handler.
-         * @param {boolean} override If true, the obj passed in becomes the
+         * @param {boolean} overrideContext If true, the obj passed in becomes the
          *     execution scope of the listener.
          */
-        register: function (module, initialState, onStateChange, obj, override) {
+        register: function (module, initialState, onStateChange, obj, overrideContext) {
 
             var scope, wrappedFn;
 
@@ -502,10 +502,10 @@ YAHOO.util.History = (function () {
             // If the user chooses to override the scope, we use the
             // custom object passed in as the execution scope.
             scope = null;
-            if (override === true) {
+            if (overrideContext === true) {
                 scope = obj;
             } else {
-                scope = override;
+                scope = overrideContext;
             }
 
             wrappedFn = function (state) {
