@@ -968,7 +968,7 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
                 this.responseType = DS.TYPE_JSARRAY;
             }
              // xml
-            else if(oRawResponse && oRawResponse.nodeType && oRawResponse.nodeType == 9) {
+            else if(oRawResponse && oRawResponse.nodeType && (oRawResponse.nodeType === 9 || oRawResponse.nodeType === 1 || oRawResponse.nodeType === 11)) {
                 this.responseType = DS.TYPE_XML;
             }
             else if(oRawResponse && oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
