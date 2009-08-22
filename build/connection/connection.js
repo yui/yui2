@@ -1057,6 +1057,7 @@ YAHOO.util.Connect =
 			return;
 		}
 
+		r.responseText = decodeURI(r.responseText);
 		o.r = r;
 		if (cb.argument) {
 			o.r.argument = cb.argument;
