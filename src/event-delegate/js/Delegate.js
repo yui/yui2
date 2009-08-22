@@ -183,6 +183,7 @@
 
 
 			if (Lang.isString(filter) && !YAHOO.util.Selector) {
+				YAHOO.log("Using a CSS selector to define the filtering criteria for a delegated listener requires the Selector Utility.", "error", "Event");
 		        return false;
 			}
 
@@ -190,7 +191,8 @@
 			if (type == "mouseenter" || type == "mouseleave") {
 
 				if (!Event._createMouseDelegate) {
-			        return false;				
+					YAHOO.log("Delegating a " + type + " event requires the event-mouseenter module.", "error", "Event");
+			        return false;
 				}
 
 				fnMouseDelegate = Event._createMouseDelegate(fn, obj, overrideContext);

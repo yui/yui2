@@ -1,90 +1,3 @@
-// Copyright 2007, Google Inc.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
-//
-//  1. Redistributions of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//  2. Redistributions in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//  3. Neither the name of Google Inc. nor the names of its contributors may be
-//     used to endorse or promote products derived from this software without
-//     specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
-// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
-// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
-// OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
-// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-// ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// Sets up google.gears.*, which is *the only* supported way to access Gears.
-//
-// Circumvent this file at your own risk!
-//
-// In the future, Gears may automatically define google.gears.* without this
-// file. Gears may use these objects to transparently fix bugs and compatibility
-// issues. Applications that use the code below will continue to work seamlessly
-// when that happens.
-
-(function() {
-  // We are already defined. Hooray!
-  if (window.google && google.gears) {
-    return;
-  }
-
-  var factory = null;
-
-  // Firefox
-  if (typeof GearsFactory != 'undefined') {
-    factory = new GearsFactory();
-  } else {
-    // IE
-    try {
-      factory = new ActiveXObject('Gears.Factory');
-      // privateSetGlobalObject is only required and supported on IE Mobile on
-      // WinCE.
-      if (factory.getBuildInfo().indexOf('ie_mobile') != -1) {
-        factory.privateSetGlobalObject(this);
-      }
-    } catch (e) {
-      // Safari
-      if ((typeof navigator.mimeTypes != 'undefined')
-           && navigator.mimeTypes["application/x-googlegears"]) {
-        factory = document.createElement("object");
-        factory.style.display = "none";
-        factory.width = 0;
-        factory.height = 0;
-        factory.type = "application/x-googlegears";
-        document.documentElement.appendChild(factory);
-      }
-    }
-  }
-
-  // *Do not* define any objects if Gears is not installed. This mimics the
-  // behavior of Gears defining the objects in the future.
-  if (!factory) {
-    return;
-  }
-
-  // Now set up the objects, being careful not to overwrite anything.
-  //
-  // Note: In Internet Explorer for Windows Mobile, you can't add properties to
-  // the window object. However, global objects are automatically added as
-  // properties of the window object in all browsers.
-  if (!window.google) {
-    google = {};
-  }
-
-  if (!google.gears) {
-    google.gears = {factory: factory};
-  }
-})();
 /**
  * The Storage module manages client-side data storage.
  * @module Storage
@@ -423,6 +336,17 @@ var Y = YAHOO.util,
 	_locationEngineMap = {}, // cached engines
 	_registeredEngineSet = [], // set of available engines
 	_registeredEngineMap = {}, // map of available engines
+	
+	/**
+	 * Fetches a storage constructor if it is available, otherwise returns NULL.
+	 * @method _getClass
+	 * @param klass {Function} Required. The storage constructor to test.
+	 * @return {Function} An available storage constructor or NULL.
+	 * @private
+	 */
+	_getClass = function(klass) {
+		return (klass && klass.isAvailable()) ? klass : null;
+	},
 
 	/**
 	 * Fetches the storage engine from the cache, or creates and caches it.
@@ -492,7 +416,7 @@ var Y = YAHOO.util,
 		 */
 		get: function(engineType, location, conf) {
 			var _cfg = YL.isObject(conf) ? conf : {},
-				klass = _registeredEngineMap[engineType];
+				klass = _getClass(_registeredEngineMap[engineType]);
 
 			if (! klass && ! _cfg.force) {
 				var i, j;
@@ -501,7 +425,7 @@ var Y = YAHOO.util,
 					j = _cfg.order.length;
 
 					for (i = 0; i < j && ! klass; i += 1) {
-						klass = _registeredEngineMap[_cfg.order[i]];
+						klass = _getClass(_cfg.order[i]);
 					}
 				}
 
@@ -509,7 +433,7 @@ var Y = YAHOO.util,
 					j = _registeredEngineSet.length;
 
 					for (i = 0; i < j && ! klass; i += 1) {
-						klass = _registeredEngineSet[i];
+						klass = _getClass(_registeredEngineSet[i]);
 					}
 				}
 			}
@@ -540,7 +464,7 @@ var Y = YAHOO.util,
 		 * @static
 		 */
 		register: function(engineConstructor) {
-			if (YL.isFunction(engineConstructor) && YL.isFunction(engineConstructor.isAvailable) && YL.isString(engineConstructor.ENGINE_NAME) && engineConstructor.isAvailable()) {
+			if (YL.isFunction(engineConstructor) && YL.isFunction(engineConstructor.isAvailable) && YL.isString(engineConstructor.ENGINE_NAME)) {
 				_registeredEngineMap[engineConstructor.ENGINE_NAME] = engineConstructor;
 				_registeredEngineSet.push(engineConstructor);
 				return true;
@@ -866,8 +790,7 @@ var Y = YAHOO.util,
  */
 (function() {
 	// internal shorthand
-var G = window.google,
-	Y = YAHOO.util,
+var Y = YAHOO.util,
 	YL = YAHOO.lang,
 	_SQL_STMT_LIMIT = 9948,
 	_TABLE_NAME = 'YUIStorageEngine',
@@ -893,7 +816,7 @@ var G = window.google,
 
 		if (! _engine) {
 			// create the database
-			_engine = G.gears.factory.create(Y.StorageEngineGears.GEARS);
+			_engine = google.gears.factory.create(Y.StorageEngineGears.GEARS);
 			_engine.open(window.location.host + '-' + Y.StorageEngineGears.DATABASE);
 			_engine.execute('CREATE TABLE IF NOT EXISTS ' + _TABLE_NAME + ' (key TEXT, location TEXT, value TEXT)');
 		}
@@ -1039,10 +962,10 @@ var G = window.google,
 	Y.StorageEngineGears.GEARS = 'beta.database';
 	Y.StorageEngineGears.DATABASE = 'yui.database';
 	Y.StorageEngineGears.isAvailable = function() {
-		if (G && G.gears) {
+		if (window.google && window.google.gears) {
 			try {
 				// this will throw an exception if the user denies gears
-				G.gears.factory.create(Y.StorageEngineGears.GEARS);
+				google.gears.factory.create(Y.StorageEngineGears.GEARS);
 				return true;
 			}
 			catch (e) {
@@ -1104,6 +1027,7 @@ var Y = YAHOO.util,
 			if (! cfg.attributes) {cfg.attributes  = {};}
 			if (! cfg.attributes.flashVars) {cfg.attributes.flashVars = {};}
 			cfg.attributes.flashVars.useCompression = 'true';
+			cfg.attributes.version = 9.115;
 			_engine = new YAHOO.widget.SWF(cfg.containerID, cfg.swfURL, cfg.attributes);
 		}
 	};

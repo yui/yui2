@@ -476,20 +476,20 @@
 <span class="c">         * @method onReady</span>
 <span class="c">         * @param {function} fn what to execute when the Browser History Manager is ready.</span>
 <span class="c">         * @param {object} obj an optional object to be passed back as a parameter to fn.</span>
-<span class="c">         * @param {boolean|object} override If true, the obj passed in becomes fn&#39;s execution scope.</span>
+<span class="c">         * @param {boolean|object} overrideContext If true, the obj passed in becomes fn&#39;s execution scope.</span>
 <span class="c">         * @see onLoadEvent</span>
 <span class="c">         */</span>
-        <span class="nx">onReady</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">onReady</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">_initialized</span><span class="o">)</span> <span class="o">{</span>
 
                 <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
                     <span class="k">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nb">window</span><span class="o">;</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">if</span> <span class="o">(</span><span class="nx">override</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">overrideContext</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
                             <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">obj</span><span class="o">;</span>
                         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                            <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">override</span><span class="o">;</span>
+                            <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">overrideContext</span><span class="o">;</span>
                         <span class="o">}</span>
                     <span class="o">}</span>
                     <span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">ctx</span><span class="o">,</span> <span class="s2">&quot;onLoad&quot;</span><span class="o">,</span> <span class="o">[],</span> <span class="nx">obj</span><span class="o">);</span>
@@ -497,7 +497,7 @@
 
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
 
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">History</span><span class="o">.</span><span class="nx">onLoadEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">History</span><span class="o">.</span><span class="nx">onLoadEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">);</span>
 
             <span class="o">}</span>
         <span class="o">},</span>
@@ -514,10 +514,10 @@
 <span class="c">         *     state of the specified module has changed.</span>
 <span class="c">         * @param {object} obj An arbitrary object that will be passed as a</span>
 <span class="c">         *     parameter to the handler.</span>
-<span class="c">         * @param {boolean} override If true, the obj passed in becomes the</span>
+<span class="c">         * @param {boolean} overrideContext If true, the obj passed in becomes the</span>
 <span class="c">         *     execution scope of the listener.</span>
 <span class="c">         */</span>
-        <span class="nx">register</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">module</span><span class="o">,</span> <span class="nx">initialState</span><span class="o">,</span> <span class="nx">onStateChange</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">register</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">module</span><span class="o">,</span> <span class="nx">initialState</span><span class="o">,</span> <span class="nx">onStateChange</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
 
             <span class="k">var</span> <span class="nx">scope</span><span class="o">,</span> <span class="nx">wrappedFn</span><span class="o">;</span>
 
@@ -551,10 +551,10 @@
             <span class="c">// If the user chooses to override the scope, we use the</span>
 <span class="c"></span>            <span class="c">// custom object passed in as the execution scope.</span>
 <span class="c"></span>            <span class="nx">scope</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="nx">override</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">overrideContext</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">scope</span> <span class="o">=</span> <span class="nx">obj</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="nx">scope</span> <span class="o">=</span> <span class="nx">override</span><span class="o">;</span>
+                <span class="nx">scope</span> <span class="o">=</span> <span class="nx">overrideContext</span><span class="o">;</span>
             <span class="o">}</span>
 
             <span class="nx">wrappedFn</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">state</span><span class="o">)</span> <span class="o">{</span>

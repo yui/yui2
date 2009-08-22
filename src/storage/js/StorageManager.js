@@ -102,7 +102,7 @@ var Y = YAHOO.util,
 					j = _cfg.order.length;
 
 					for (i = 0; i < j && ! klass; i += 1) {
-						klass = _getClass(_registeredEngineMap[_cfg.order[i]]);
+						klass = _getClass(_cfg.order[i]);
 					}
 				}
 

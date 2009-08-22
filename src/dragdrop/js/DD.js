@@ -3,6 +3,7 @@
  * mouse cursor during a drag.
  * @class DD
  * @extends YAHOO.util.DragDrop
+ * @namespace YAHOO.util
  * @constructor
  * @param {String} id the id of the linked element 
  * @param {String} sGroup the group of related DragDrop items

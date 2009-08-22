@@ -1551,7 +1551,7 @@
          * Clears the items from Carousel.
          *
          * @method clearItems
-         * public
+         * @public
          */
         clearItems: function () {
             var carousel = this, n = carousel.get("numItems");
