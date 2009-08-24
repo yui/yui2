@@ -1048,7 +1048,7 @@
 <span class="c">        *</span>
 <span class="c">        * @config today</span>
 <span class="c">        * @type Date</span>
-<span class="c">        * @default Today&#39;s date</span>
+<span class="c">        * @default The client side date (new Date()) when the Calendar is instantiated.</span>
 <span class="c">        */</span>
         <span class="nx">cfg</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span><span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">TODAY</span><span class="o">.</span><span class="nx">key</span><span class="o">,</span> <span class="o">{</span> <span class="nx">value</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">(</span><span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">TODAY</span><span class="o">.</span><span class="nx">value</span><span class="o">.</span><span class="nx">getTime</span><span class="o">()),</span> <span class="nx">supercedes</span><span class="o">:</span><span class="nx">DEF_CFG</span><span class="o">.</span><span class="nx">TODAY</span><span class="o">.</span><span class="nx">supercedes</span><span class="o">,</span> <span class="nx">handler</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">configToday</span><span class="o">,</span> <span class="nx">suppressEvent</span><span class="o">:</span><span class="kc">true</span> <span class="o">}</span> <span class="o">);</span>
 
