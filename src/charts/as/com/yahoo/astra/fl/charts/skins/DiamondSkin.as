@@ -3,7 +3,7 @@
 	import fl.core.UIComponent;
 
 	/**
-	 * A skin shaped like a diamond with a single color.
+	 * A skin shaped like a diamond with customizable color and alpha properties for its fill and border.
 	 * 
 	 * @author Josh Tynjala
 	 */

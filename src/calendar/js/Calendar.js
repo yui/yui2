@@ -836,7 +836,7 @@ Calendar.prototype = {
             if (navs && navs[0]) {
                 try {
                     navs[0].focus();
-                } catch (e) {
+                } catch (ex) {
                     // ignore
                 }
             }
@@ -858,7 +858,7 @@ Calendar.prototype = {
             if (navs && navs[0]) {
                 try {
                     navs[0].focus();
-                } catch (e) {
+                } catch (ex) {
                     // ignore
                 }
             }
@@ -999,7 +999,7 @@ Calendar.prototype = {
         *
         * @config today
         * @type Date
-        * @default Today's date
+        * @default The client side date (new Date()) when the Calendar is instantiated.
         */
         cfg.addProperty(DEF_CFG.TODAY.key, { value: new Date(DEF_CFG.TODAY.value.getTime()), supercedes:DEF_CFG.TODAY.supercedes, handler:this.configToday, suppressEvent:true } );
 

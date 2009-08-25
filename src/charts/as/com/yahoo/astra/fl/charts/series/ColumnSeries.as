@@ -41,6 +41,7 @@ package com.yahoo.astra.fl.charts.series
 	//--------------------------------------
 			
 		/**
+		 * @private
 		 * @copy fl.core.UIComponent#getStyleDefinition()
 		 */
 		public static function getStyleDefinition():Object
