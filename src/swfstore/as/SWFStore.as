@@ -5,6 +5,7 @@ package
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.events.NetStatusEvent;
 	import flash.external.ExternalInterface;
 	import flash.net.SharedObject;
@@ -554,6 +555,7 @@ package
 			var whitelistLoader:URLLoader = new URLLoader();
 			whitelistLoader.addEventListener(Event.COMPLETE, onComplete);
 			whitelistLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+			whitelistLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 		
 			//don't use a relative path, use the swf's loaded path
 			//to prevent crossdomain or base param workarounds
@@ -640,7 +642,7 @@ package
 		}
 		/**
 		 * @private
-		 * Parses the config xml data and populates path array
+		 * Dispatches an IOErrorEvent
 		 * 
 		 */
 		private function onError(event:IOErrorEvent) : void 
@@ -652,6 +654,17 @@ package
 			performURLMatch();
 		}
 		
+		/**
+		 * @private
+		 * Dispatches a SecurityErrorEvent
+		 * 
+		 */
+		private function onSecurityError(event:SecurityErrorEvent) : void 
+		{
+			var evt:Object = {type: "securityError", message: event.text };
+					
+				yuibridge.sendEvent(evt);
+		}
 		
 		/**
 		 * Expands a path with shorthands to url
