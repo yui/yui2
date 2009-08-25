@@ -235,6 +235,10 @@ YAHOO.extend(YAHOO.widget.SWF, YAHOO.util.Element, {
 	 */
 	callSWF: function (func, args)
 	{
+		if (!args) { 
+			  args= []; 
+		};
+		
 		if (this._swf[func]) {
 		return(this._swf[func].apply(this._swf, args));
 	    } else {
