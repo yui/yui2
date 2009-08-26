@@ -24,11 +24,24 @@
  * @param dataSource {YAHOO.util.DataSource} DataSource instance.
  * @param attributes {object} (optional) Object literal of configuration values.
  */
-YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
+YAHOO.widget.Chart = function(type, containerId, dataSource, configurationAttributes)
 {
-	this._attributes = attributes;
+	var possibleParams = {align:"", allowNetworking:"", allowScriptAccess:"", base:"", bgcolor:"", menu:"", name:"", quality:"", salign:"", scale:"", tabindex:"", wmode:""};
+	var attributes = {fixedAttributes:{allowScriptAccess:"always"}, flashVars:{allowedDomain : document.location.hostname}, backgroundColor:"#ffffff", host:this, version:9.045};
 	
-	this._id = attributes.id || YAHOO.util.Dom.generateId(null, "yuigen");
+	for(var i in configurationAttributes)
+	{
+		if(possibleParams.hasOwnProperty(i))
+		{
+			attributes.fixedAttributes[i] = configurationAttributes[i];
+		}
+		else
+		{
+			attributes[i] = configurationAttributes[i];
+		}
+	}
+	
+	this._id = attributes.id = attributes.id || YAHOO.util.Dom.generateId(null, "yuigen");
 	
 	if(attributes.version && attributes.version != null && attributes.version != undefined && attributes.version != "undefined")
 	{ 
@@ -45,19 +58,13 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 			break;	
 		} 
 		version += verSplit[1];
-		this._attributes.version = parseFloat(version); 
+		attributes.version = parseFloat(version); 
 	}
-	else
-	{
-		this._attributes.version = 9.045;
-	}
-	
-	this._attributes.backgroundColor = attributes.backgroundColor || "#ffffff";
 	
 	this._swfURL = YAHOO.widget.Chart.SWFURL;
 	this._containerID = containerId;
 	
-	attributes.host = this;
+	this._attributes = attributes
 	this._swfEmbed = new YAHOO.widget.SWF(containerId, YAHOO.widget.Chart.SWFURL, attributes);
 	
 	this._swf = this._swfEmbed.swf;

@@ -125,7 +125,6 @@ YAHOO.namespace("tool");
     };
 
 })();
-
 YAHOO.namespace("tool");
 
 
@@ -205,7 +204,6 @@ YAHOO.tool.TestSuite.prototype = {
     }
     
 };
-
 YAHOO.namespace("tool");
 
 /**
@@ -880,7 +878,7 @@ YAHOO.tool.TestRunner = (function(){
             runner._buildTestTree();
             
             //set when the test started
-            runner._root.results.duration = (new Date()).valueOf();
+            runner._root.results.duration = (new Date()).getTime();
             
             //fire the begin event
             runner.fireEvent(runner.BEGIN_EVENT);
@@ -893,7 +891,6 @@ YAHOO.tool.TestRunner = (function(){
     return new TestRunner();
     
 })();
-
 YAHOO.namespace("util");
 
 //-----------------------------------------------------------------------------
@@ -1238,8 +1235,8 @@ YAHOO.util.Assert = {
      * @method isTypeOf
      * @static
      */
-    isTypeOf : function (expectedType /*:String*/, actualValue /*:Object*/, message /*:String*/) /*:Void*/{
-        if (typeof actualValue != expectedType){
+    isTypeOf : function (expected /*:String*/, actual /*:Object*/, message /*:String*/) /*:Void*/{
+        if (typeof actual != expected){
             throw new YAHOO.util.ComparisonFailure(this._formatMessage(message, "Value should be of type " + expected + "."), expected, typeof actual);
         }
     }
@@ -1281,7 +1278,7 @@ YAHOO.util.AssertionError = function (message /*:String*/){
 };
 
 //inherit methods
-YAHOO.lang.extend(YAHOO.util.AssertionError, Error, {
+YAHOO.lang.extend(YAHOO.util.AssertionError, Object, {
 
     /**
      * Returns a fully formatted error for an assertion failure. This should
@@ -1300,17 +1297,8 @@ YAHOO.lang.extend(YAHOO.util.AssertionError, Error, {
      */
     toString : function () /*:String*/ {
         return this.name + ": " + this.getMessage();
-    },
-    
-    /**
-     * Returns a primitive value version of the error. Same as toString().
-     * @method valueOf
-     * @return {String} A primitive value version of the error.
-     */
-    valueOf : function () /*:String*/ {
-        return this.toString();
     }
-
+    
 });
 
 /**
@@ -1515,7 +1503,6 @@ YAHOO.util.UnexpectedError = function (cause /*:Object*/){
 
 //inherit methods
 YAHOO.lang.extend(YAHOO.util.UnexpectedError, YAHOO.util.AssertionError);
-
 //-----------------------------------------------------------------------------
 // ArrayAssert object
 //-----------------------------------------------------------------------------
@@ -1852,7 +1839,6 @@ YAHOO.util.ArrayAssert = {
     }
     
 };
-
 YAHOO.namespace("util");
 
 
@@ -1927,7 +1913,6 @@ YAHOO.util.ObjectAssert = {
         }     
     }
 };
-
 //-----------------------------------------------------------------------------
 // DateAssert object
 //-----------------------------------------------------------------------------
@@ -1982,5 +1967,4 @@ YAHOO.util.DateAssert = {
     }
     
 };
-
 YAHOO.register("yuitest_core", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});

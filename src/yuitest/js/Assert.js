@@ -342,8 +342,8 @@ YAHOO.util.Assert = {
      * @method isTypeOf
      * @static
      */
-    isTypeOf : function (expectedType /*:String*/, actualValue /*:Object*/, message /*:String*/) /*:Void*/{
-        if (typeof actualValue != expectedType){
+    isTypeOf : function (expected /*:String*/, actual /*:Object*/, message /*:String*/) /*:Void*/{
+        if (typeof actual != expected){
             throw new YAHOO.util.ComparisonFailure(this._formatMessage(message, "Value should be of type " + expected + "."), expected, typeof actual);
         }
     }
@@ -385,7 +385,7 @@ YAHOO.util.AssertionError = function (message /*:String*/){
 };
 
 //inherit methods
-YAHOO.lang.extend(YAHOO.util.AssertionError, Error, {
+YAHOO.lang.extend(YAHOO.util.AssertionError, Object, {
 
     /**
      * Returns a fully formatted error for an assertion failure. This should
@@ -404,17 +404,8 @@ YAHOO.lang.extend(YAHOO.util.AssertionError, Error, {
      */
     toString : function () /*:String*/ {
         return this.name + ": " + this.getMessage();
-    },
-    
-    /**
-     * Returns a primitive value version of the error. Same as toString().
-     * @method valueOf
-     * @return {String} A primitive value version of the error.
-     */
-    valueOf : function () /*:String*/ {
-        return this.toString();
     }
-
+    
 });
 
 /**
