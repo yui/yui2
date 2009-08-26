@@ -22,7 +22,11 @@
             <!-- Output SWF -->
             <arg line="-output './build_tmp/assets/swfstore.swf'"/>
             
-            <!-- Document Class -->
+			<!-- Make optimize release build -->
+            <arg line="-optimize='true'"/>
+			<arg line="-debug='false'"/>
+            
+			<!-- Document Class -->
             <arg line="'./as/SWFStore.as'"/>
 		</exec>	
     </target>
