@@ -1,5 +1,27 @@
 Connection Manager Release Notes
 
+*** version 2.8.0 ***
+
+* Connection Manager can now perform basic cross-domain transactions using a lightweight Flash transport.  Transactions using this transport will provide a subset of the response data compared to a standard transaction when using XMLHttpRequest as the transport.
+	- XML response data are not supported.
+	- Transactions will resolve to success or failure.  There is no "complete" event -- global or transaction -- when using the XDR transport.
+	- HTTP status is not available.
+	- Custom HTTP headers cannot be sent with the request.
+	- HTTP headers are not available in the response.
+
+* Connection Manager is now comprised of two modules:
+	- connection_core.js: Basic transaction support, using the XMLHttpRequest transport.
+	- connection.js: Contains all auxiliary functionality including:
+		- serializing HTML form data for POST transactions.
+		- file upload transactions.
+		- cross-domain transactions using the Flash transport -- connection.swf.
+
+The new core file provides basic HTTP transaction support, without the additional features, for a more streamlined file.  The full file connection.js will continue to provide all Connection Manager functionality.
+
+* [FIXED] 2527878 HTTP response headers are trimmed.
+
+* [FIXED] 2527983 IE8 file upload's iframe tranport now sets the "enctype" instead of "encoding" attribute.
+
 *** version 2.7.0 ***
 
 * [FIXED] SF2141044.  Button elements of type "submit" are now handled in the
