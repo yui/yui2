@@ -1,5 +1,9 @@
 Element Release Notes
 
+*** version 2.8.0 ***
+* Returning value from DEFAULT_SETTER
+* Added support for mouseenter/mouseleave events
+
 *** version 2.7.0 ***
 * Taken out of BETA
 * Added setter/getter fields to Attribute
