@@ -46,8 +46,8 @@ New Features:
 Changes:
 --------
 
-+ Overlay (and the iframe shim if enabled), now have a CSS class applied to them
-  which is removed just before the overlay (and iframe shim) is moved using using
++ Overlays (and the iframe shim if enabled), now have a CSS class applied to them
+  which is removed just before the overlay (and iframe shim) is moved using
   YAHOO.util.Dom.setX or setY methods.
 
   These classes can be used to apply margins, padding or borders to the Overlay 

@@ -4,7 +4,7 @@
 	import flash.display.Sprite;
 
 	/**
-	 * A skin shaped like a circle with a single color.
+	 * A skin shaped like a circle with customizable color and alpha properties for its fill and border.
 	 * 
 	 * @author Josh Tynjala
 	 */

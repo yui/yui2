@@ -126,6 +126,11 @@ if (!YAHOO.util.Event) {
 	        if (p) {
 				this._simpleAdd(p, type, NOOP, true);
 	        }
+			else {
+				this.onAvailable(o, function () {
+					captureHack.call(this, type, o);
+				}, null, this);
+			}
 
 	    };
 
@@ -335,7 +340,7 @@ if (!YAHOO.util.Event) {
                     // var self = this;
                     // var callback = function() { self._tryPreloadAttach(); };
                     // this._interval = setInterval(callback, this.POLL_INTERVAL);
-                    this._interval = YAHOO.lang.later(this.POLL_INTERVAL, this, this._tryPreloadAttach, true);
+                    this._interval = YAHOO.lang.later(this.POLL_INTERVAL, this, this._tryPreloadAttach, null, true);
                 }
             },
 
@@ -613,7 +618,7 @@ if (!YAHOO.util.Event) {
 					capture = true;
 				
 					if (isOpera) {
-						captureHack.call(this, el, sType);
+						captureHack.call(this, sType, el);
 					}
 					
 				}				
@@ -644,7 +649,7 @@ if (!YAHOO.util.Event) {
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
-         	 * @deprecated use YAHOO.util.Event.on("focus", ...)
+         	 * @deprecated use YAHOO.util.Event.on and specify "focus" as the event type.
              */
             addFocusListener: function (el, fn, obj, overrideContext) {
 
@@ -667,7 +672,7 @@ if (!YAHOO.util.Event) {
              * @return {boolean} true if the unbind was successful, false 
              *  otherwise.
              * @static
-          	 * @deprecated use YAHOO.util.Event.removeListener("focus", ...)
+          	 * @deprecated use YAHOO.util.Event.removeListener and specify "focus" as the event type.
              */
             removeFocusListener: function (el, fn) { 
 
@@ -696,7 +701,7 @@ if (!YAHOO.util.Event) {
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
-         	 * @deprecated use YAHOO.util.Event.on("blur", ...)
+         	 * @deprecated use YAHOO.util.Event.on and specify "blur" as the event type.
              */
             addBlurListener: function (el, fn, obj, overrideContext) {
 
@@ -718,7 +723,7 @@ if (!YAHOO.util.Event) {
              * @return {boolean} true if the unbind was successful, false 
              *  otherwise.
              * @static
-         	 * @deprecated use YAHOO.util.Event.removeListener("blur", ...)
+         	 * @deprecated use YAHOO.util.Event.removeListener and specify "blur" as the event type.
              */
             removeBlurListener: function (el, fn) { 
             
@@ -1550,10 +1555,10 @@ if (!YAHOO.util.Event) {
 
         /**
          * YAHOO.util.Event.onFocus is an alias for addFocusListener
-         * @method on
+         * @method onFocus
          * @see addFocusListener
          * @static
-         * @deprecated use YAHOO.util.Event.on("focus", ...)
+      	 * @deprecated use YAHOO.util.Event.on and specify "focus" as the event type.
          */
         EU.onFocus = EU.addFocusListener;
 
@@ -1562,7 +1567,7 @@ if (!YAHOO.util.Event) {
          * @method onBlur
          * @see addBlurListener
          * @static
-         * @deprecated use YAHOO.util.Event.on("blur", ...)
+      	 * @deprecated use YAHOO.util.Event.on and specify "blur" as the event type.
          */     
         EU.onBlur = EU.addBlurListener;
 
@@ -1573,7 +1578,7 @@ if (!YAHOO.util.Event) {
         // the DOM prior to when the document's readyState suggests
         // it is safe to do so.
         if (EU.isIE) {
-            if (window !== window.top) {
+            if (self !== self.top) {
                 document.onreadystatechange = function() {
                     if (document.readyState == 'complete') {
                         document.onreadystatechange = null;

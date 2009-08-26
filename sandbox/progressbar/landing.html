@@ -54,7 +54,7 @@ To use the ProgressBar control include the following source files in your web pa
 <script src="http://yui.yahooapis.com/<?php echo($yuiCurrentVersion);?>/build/animation/animation-min.js" type="text/javascript"></script>
 
 <!-- ProgressBar source file --> 
-<script src = "http://yui.yahooapis.com/<?php echo($yuiCurrentVersion);?>/build/treeview/treeviewed-min.js" ></script>
+<script src = "http://yui.yahooapis.com/<?php echo($yuiCurrentVersion);?>/build/progressbar/progressbar-min.js" ></script>
   </textarea></pre>
   <?php
 include "../inc/include-notice.inc";
@@ -138,7 +138,7 @@ alert(progressBar.get('value'));  // should show 70
 <h3>Animating the Bar<a name="animation"></a></h3>
 <p>If the Animation utility is loaded, the ProgressBar can use it to move the bar.  
 To enable it the <code>anim</code> configuration attribute has to be set to true.
-This attributes accepts either a boolean to enable/disable animation or an instance of
+This attribute accepts either a boolean to enable/disable animation or an instance of
 <code>YAHOO.util.Anim</code>.   When read, <code>anim</code> will return the instance
 of the Animation object created or <code>null</code> if there is none.  
 The properties of the Animation object can then be changed to set the behavior of the bar,
@@ -169,18 +169,20 @@ The ProgressBar component makes use of several CSS classes to style the bar.  Yo
 <tr><td style="white-space:nowrap;">.yui-pb-bar</td><td>margin</td><td>offset from the edge of the ProgressBar to where the transparency of the mask starts.</td></tr>
 <tr><td style="white-space:nowrap;">.yui-pb .yui-pb-anim</td><td>background-image<br/>background-color</td><td>Image or color to use for the bar while it is moving.</td></tr>
 <tr><td style="white-space:nowrap;">.yui-pb-mask div</td><td>background-image</td><td>mask with transparencies to allow the bar to show through</td></tr>
-<tr><td style="white-space:nowrap;">.yui-pb-caption</td><td>visibility</td><td>the caption is normally hidden, it needs to be shown by setting <code>visibility:visible</code></td></tr>
-<tr><td style="white-space:nowrap;">.yui-pb-caption</td><td>font and others</td><td>the caption is normally shown in the normal font, which is unlikely to be satisfying</td></tr>
+<tr><td style="white-space:nowrap;">.yui-pb-caption</td><td>font and others</td><td>this style is not actually used by the ProgressBar, 
+		but is is defined in the SAM skin to be used to display the value of the bar</td></tr>
+<tr><td style="white-space:nowrap;">.yui-pb-range</td><td>font and others</td><td>this style is not actually used by the ProgressBar, 
+		but is is defined in the SAM skin to be used to display the end values of the bar</td></tr>
 </table>
 <p>The elements that constitute the ProgressBar are stacked one on top of the other. 
 They are accesible through configuration attributes which allows further styling, possibly dynamic.
-The following table enumerates the four layers, their classNames and attribute names:</p>
+The attributes allowing access to the DOM elements are read-only.
+The following table enumerates the three layers, their classNames and attribute names:</p>
 <table>
 <tr><th>className</th><th>Attribute Name</th><th>Description</th><th>z-index</th></tr>
 <tr><td>yui-pb</td><td>element</td><td>the container of the ProgressBar itself</td><td>0 (bottom)</td></tr>
 <tr><td>yui-pb-bar</td><td>barEl</td><td>the moveable bar</td><td>1</td></tr>
 <tr><td>yui-pb-mask</td><td>maskEl</td><td>the mask that may partially cover the bar</td><td>2</td></tr>
-<tr><td>yui-pb-caption</td><td>captionEl</td><td>the placeholder for the caption text</td><td>3 (top)</td></tr>
 </table>
 
 <p>To let the bar be seen through the mask that covers it, the mask has to have transparencies, a PNG or GIF file with transparency works. 
@@ -201,10 +203,6 @@ YAHOO.util.Dom.setStyle(progressBar.get('element'),'backgroundColor','green');
 // bar, not an Element, regular methods have to be used
 YAHOO.util.Dom.setStyle(progressBar.get('barEl'),'backgroundColor','yellow');
 </textarea></pre>
-
-<p>The attributes allowing access to the DOM elements are read-only, except <code>captionEl</code> which can also be set 
-to a reference to any HTML element or to the id of an element.  
-The ProgressBar will then show the caption text in this element instead of its own caption container.</p>
 
 <p>The ProgressBar has a predefined style for the SAM skin (<code>yui-skin-sam</code>).  Since this style is often set
 at the document body, if you want to customize a particular ProgressBar while retaining the skin for other elements in the page,
@@ -233,48 +231,54 @@ of the ProgressBar that is to be styled differently.</p>
 <h3>Responding to Events <a name="events"></a> </h3>
 <p>
 The ProgressBar inherits from the Element utility the before and after change events for any of its 
-configuration attributes, thus, there is a <code>beforeMinValueChange</code> and a <code>minValueChange</code>.
+configuration attributes thus, there is, for example, a <code>beforeMinValueChange</code> and a <code>minValueChange</code>.
 The before event listeners can return false to reject the change.  They both receive the old and new values 
 for the corresponding attribute.</p>
 <p>The ProgressBar adds three events that signal the movement of the bar.  The <code>start</code> event
 will be fired right before the bar is about to move.  The <code>progress</code> event fires at least
 once in between.  If animation is enabled, it will fire as many times as the Animation
 fires its own <code>onTween</code> event but it will scale the pixel value of the bar to a value 
-in whichever units the implementer has set.  If the easing method makes the bar overshoot its range,
-this event will report values reflecting that.   Finally, the <code>complete</code> event
+in whichever units the implementer has set.  Finally, the <code>complete</code> event
 fires when the bar reaches its set value.  All three receive as its single argument the actual
 value that the bar represents at the instant they fire. For consistency, the <code>progress</code> event
 will fire only once when animation is not enabled.</p>
+
 <h3>Captioning<a name="caption"></a></h3>
-<p>If the container for the caption is made visible or the <code>captionEl</code> configuration attribute is set to point to a separate container, 
-the ProgressBar will show a text assembled via YAHOO.lang.substitute from the template in the <code>textTemplate</code> configuration attribute.
-The ProgressBar makes the values of the <code>value</code>, <code>minValue</code> and <code>maxValue</code> available for <code>substitute</code>
-to use in the placeholders in the template.</p>
+<p>The ProgressBar does not directly handle captioning, however using the motion or attribute change events,
+any of its settings can be shown in any container.  For a consistent look when using the SAM skin,
+the classNames <code>yui-pb-caption</code> and <code>yui-pb-range</code> have been defined to be used
+in the containers for the current value and the end values respectively. The following code shows
+how the current, possibly changing <code>value</code> and the <code>minValue</code> can be shown in their respective containers:</p>
+
 <pre><textarea name="code" class="JScript" cols="60" rows="1">
-var progressBar = new YAHOO.widget.ProgressBar({
-	captionEl:'captionContainer',
-	textTemplate:'We are at {value} in between {minValue} and {maxValue}'
-}).render('progressBarContainer');
-</textarea></pre>
-<p>The identifiers enclosed in curly braces in the template will be replaced by the actual values of those attributes.  
-The caption will be shown in the DOM element with an id of <code>captionContainer</code> anywhere in the page.
-The visibility setting of <code>.yui-pb-caption</code> is then irrelevant.</p>
+progressBar.on('progress',function (value) {
+	YAHOO.util.Dom.get('valueContainer').innerHTML = value;
+});
+
+progressBar.on('minValueChange',function(oArgs)  {
+	YAHOO.util.Dom.get('minValueContainer').innerHTML = oArgs.newValue;
+});</textarea></pre>
+
 
 <h3>WAI-ARIA support<a name="aria"></a></h3>
 <p>The ProgressBar supports WAI-ARIA as specified for the "progressbar" role, see: <a href="http://www.w3.org/TR/wai-aria/#progressbar">W3C spec</a>.
 The ProgressBar container has <code>tabIndex="0"</code> and has <code>role</code> and role-specific settings as described in the document.</p>
 <p>Since the ProgressBar cannot know what concept the value corresponds to, it cannot, on its own, provide a meaningful <code>aria-valuetext</code>
-text.  The <code>textTemplate</code> configuration attribute allows the implementer to set the template to be used for that attribute, 
-which is the same one used for the caption. Unlike the caption, which changes while the bar is animated, the <code>aria-valuetext</code>
-is only changed upon completion of the change, otherwise, the continuous changes might overwhelm the screen reader. 
-Also, while HTML markup may be used for <code>textTemplate</code> and it will be visible in the caption, all HTML markup will
-be stripped for the <code>aria-valuetext</code> HTML attribute.</p>
+text.  The <code>ariaTextTemplate</code> configuration attribute allows the implementer to set the template to be used for that attribute.</p>
+<pre><textarea name="code" class="JScript" cols="60" rows="1">
+var progressBar = new YAHOO.widget.ProgressBar({
+	ariaTextTemplate:'We are at {value} in between {minValue} and {maxValue}'
+}).render('progressBarContainer');
+</textarea></pre>
+<p>The ProgressBar will produce a text assembled via YAHOO.lang.substitute from the template in the <code>ariaTextTemplate</code> configuration attribute.
+The ProgressBar makes the values of the <code>value</code>, <code>minValue</code> and <code>maxValue</code> available for <code>substitute</code>
+to use in the placeholders in the template.</p>
 
 <h3>Scaling of the mask<a name="mask"></a></h3>
 
 <p>The normal mechanism for scaling images in a browser is not acceptable for scaling the mask.
-Masks are usually thin frames around the bar, usually with small single pixel-wide features.
-With normal scaling, these features might be lost. Instead, the ProgressBar cut the mask into 
+Masks are usually thin frames around the bar, often with small single pixel-wide features.
+With normal scaling, these features might be lost. Instead, the ProgressBar cuts the mask into 
 four quadrants.</p>
 
 <div style="clear:both;float:left;margin:1em;"><img src="maskdiag.png" /></div>
@@ -285,7 +289,7 @@ which is shown below.</p>
 The container holds four quadrants of 50% width and height, marked by the yellow lines.</p>
 
 <p>The same mask image is set as the background for each of the four individual quadrants but instead of letting it tile normally, 
-we use the background-position CSS attribute so each is aligned to its own external corner.  The blue area shows the corner section of the mask image that 
+we use the <code>background-position</code> CSS attribute so each is aligned to its own external corner.  The blue area shows the corner section of the mask image that 
 is visible in each quadrant, enclosed in between the ProgressBar edge in red and the edges of the quadrants in yellow, 
 the light blue areas are the parts of the same image that fall outside of the quadrants and are invisible.</p>
 <p>If the top ProgressBar were to be stretched a little more, the now invisible edges opposite each visible corner would start to show.  
@@ -330,14 +334,14 @@ on Safari 4 and other recent WebKit derivatives.</p>
 				<h3>More Reading about the YUI ProgressBar Control:</h3>
 				
 				<ul>
-				  <li><a href="http://yuiblog.com/blog/2006/08/02/dynamic_loading/">Dynamic Loading and Rendering with YUI's Menu and ProgressBar Controls</a>, by Eric Miraglia</li>
+				  <li><a href="http://yuiblog.com/blog/2006/08/02/dynamic_loading/">Basic Features</a>, by Eric Miraglia</li>
 				  <li><a href="http://yuiblog.com/sandbox/yui/v0113/examples/treeview/dyn_ld.php">ProgressBar Example: Dynamic Load, Using <code>node.onLabelClick</code> and <code>node.data</code></a>, by the YUI Team</li>
 				  <li><a href="http://yuiblog.com/sandbox/yui/v0121/examples/treeview/scrolling.php">ProgressBar Example: ProgressBar and Horizontal Scrolling</a>, by the YUI Team</li>
 			   </ul>
 		   </div>
 		   
 <?php 
-$thisURI="http://developer.yahoo.com/yui/treeview/";
+$thisURI="http://developer.yahoo.com/yui/progressbar/";
 require_once('../inc/badge.inc');
 ?>
 <h3 id="delicious">YUI ProgressBar on del.icio.us:</h3>

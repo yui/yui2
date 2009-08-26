@@ -1239,7 +1239,6 @@ YAHOO.widget.Node.prototype = {
                         aEl.focus();
                         self._focusedItem = aEl;
                         Event.on(aEl,'blur',function () {
-                            //console.log('f1');
                             self.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
                             self.tree.currentFocus = null;
                             self._removeFocus();
@@ -1251,11 +1250,9 @@ YAHOO.widget.Node.prototype = {
             }
         );
         if (focused) { 
-                            //console.log('f2');
             this.tree.fireEvent('focusChanged',{oldNode:this.tree.currentFocus,newNode:this});
             this.tree.currentFocus = this;
         } else {
-                            //console.log('f3');
             this.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
             this.tree.currentFocus = null;
             this._removeFocus(); 
@@ -1370,7 +1367,7 @@ YAHOO.widget.Node.prototype = {
         if (this.enableHighlight) {
             if (this.tree.singleNodeHighlight) {
                 if (this.tree._currentlyHighlighted) {
-                    this.tree._currentlyHighlighted.unhighlight();
+                    this.tree._currentlyHighlighted.unhighlight(_silent);
                 }
                 this.tree._currentlyHighlighted = this;
             }

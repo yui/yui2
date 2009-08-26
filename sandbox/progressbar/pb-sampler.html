@@ -80,19 +80,20 @@
 	font-size: large;
 	font-weight:bold;
 	visibility:visible;
+	vertical-align:top;
 }
 
-#rangeTable {
-	margin:auto;
+#pbr {
+	position:relative;
 }
 
-#rangeTable td {
-	border:none;
-	padding:0 0.3em;
-}
-
-.yui-skin-sam #pbrange .yui-pb-caption {
-	visibility:visible;
+#caption {
+	position:absolute;
+	width:100%;
+	z-index:3;
+	text-align:center;
+	font-size:large;
+	font-weight:bold;
 }
 
 code {
@@ -122,29 +123,26 @@ hr {
 	<div id="doc">
 		<div id="hd">
 			<h1>Progress Bar examples - Design Samples</h1>
-			<p>An assortment of ProgressBars.</p>
+			<p>A sample of ProgressBars.</p>
 		</div>
 		<div id="bd">
-			<table><tr>
-				<td rowspan="2" id="pbcopper"></td>
-				<td id="pbr"></td>
-				<td rowspan="2">
-					Value:<br/>
-					<input id="value" value="50" /> <button id="go">Set</button>
-				</td></tr>
-				<tr><td>
-					<table id="rangeTable">
-						<tr><td></td><td>0</td><td></td><td align="right">100</td><td></td></tr>
-						<tr><td>0</td><td  align="center" colspan="3" id="pbrange"></td><td align="right">100</td></tr>
-						<tr><td></td><td>0</td><td></td><td align="right">100</td><td></td></tr>
-					</table>
-				</td></tr>
+			<table>
+				<tr>
+					<td rowspan="2" id="pbcopper"></td>
+					<td><div id="pbr"><div id="caption">50%</div></div></td>
+				</tr><tr>
+					<td>
+						Value:<br/>
+						<input id="value" value="50" /> <button id="go">Set</button>
+					</td>
+				</tr>
 			</table>
 		</div>
 		<div id="ft">
-			<p>The input element to the right lets you change the values of both bars at once. 
-			Two of these ProgressBars have something in common, they don't use the standard SAM skin that comes
-			with the YUI library so the first thing is to cancel out those:</p> 
+			<p>The input element lets you change the values of both bars at once. 
+			None of these ProgressBars use the standard SAM skin that comes
+			with the YUI library.  Since the rest of the page does use that skin, 
+			the first thing is to cancel out those:</p> 
 			<textarea name="code" class="CSS" cols="60" rows="1">
 				.yui-skin-sam #pbr .yui-pb, 
 				.yui-skin-sam #pbcopper .yui-pb  {
@@ -164,8 +162,8 @@ hr {
 					margin:0;
 				}
 			</textarea>
-			<p>The containers for the two ProgressBars that we want to customize have ids <code>pbcopper</code> and <code>pbr</code> so we use them to 
-			specifically cancel the built-in styles for those two containers.  Of course if the page had not used the <code>yui-skin-sam</code>
+			<p>The containers for the two ProgressBars have ids <code>pbcopper</code> and <code>pbr</code> so we use them to 
+			specifically cancel the built-in styles for them.  Of course if the page had not used the <code>yui-skin-sam</code>
 			className, this would not have been needed at all, but then other YUI controls would have been deprived of their skinning. </p>
 			<hr/>
 			<p>The bar on the left, with a certain Victorian-era look, was created with this code:</p>
@@ -201,7 +199,7 @@ hr {
 					margin: 32px 0;
 				}
 			</textarea>
-			<p>We are using three images to style this ProgressBar, the top one provides the silvery concave background 
+			<p>We are using three images to style this ProgressBar, the image in the first declaration provides the silvery concave background 
 			of the bar, the second the copper faceplate, which includes a transparent window to let the bar show through 
 			and the last one, the brown bar.  The three images are here:
 
@@ -210,13 +208,13 @@ hr {
 
 			None of the images are the size of the ProgressBar as shown, the ProgressBar either crops or tiles them as needed
 			to cover the given area of 200x25px.  We have to provide a margin for the bar.  The bar will be covered by the opaque
-			areas of the mask, in fact, the bar stretches under the sides of the copper faceplate, but we can't let it go
+			areas of the mask, in fact, the bar stretches under the sides of the copper faceplate, which is not an issue, but we can't let it go
 			behind the top and bottom of the faceplate, otherwise, the bar would not show up when it is within 16 units of the end values for the range,
 			it would be running behind the faceplate.  Thus, we set <code>margin: 32px 0</code> to 
 			prevent the bar to go under.</p>
 			
 			<hr/>
-			<p>This ProgressBar at the center top uses a mask that is not symmetrical in any way.  It cannot be stretched or cropped.  
+			<p>This ProgressBar at the  top uses a mask that is not symmetrical in any way.  It cannot be stretched or cropped.  
 			The bar, which looks like a wedge, is actually rectangular as it always is.  
 			The mask has a wedge-shaped transparent area in the bottom-right corner, with an opaque area in the top-left of the same color as the page background.
 			It also has the tick marks which reach into the transparent area.
@@ -243,50 +241,22 @@ hr {
 				.yui-skin-sam #pbr .yui-pb-bar {
 					background-image: url(gradient.png);
 				}
-
-				.yui-skin-sam #pbr .yui-pb-caption {
-					font-size: large;
-					font-weight:bold;
-					visibility:visible;
-				}
 			</textarea>
-			<p>The ProgressBar has been further suplemented with the current value.  The ProgressBar 
-			always generates the caption, but the container assigned to hold it is normally hidden.  
-			To make it show, it just needs to be made visible and possibly assign a suitable font,
-			as we did in the bottom declaration above. The percent sign has been produced by asigning
-			a suitable template for the caption in the <code>textTemplate</code> configuration attribute.</p>
 			<p>The bar itself was created with the following code:</p>
 			<textarea name="code" class="JScript" cols="60" rows="1">
-				var pbr = new YAHOO.widget.ProgressBar({textTemplate:'{value}%',value:50});
+				var pbr = new YAHOO.widget.ProgressBar({ariaTextTemplate:'{value}%',anim:true,value:50});
+				pbr.get('anim').duration = 2;
 				pbr.render('pbr');
 			</textarea>
-			<hr/>
-			<p>The bottom-center ProgressBar uses the standard skin.  However, it has been supplemented with the
-			end values of the range in several positions around it.  It is easy to place them anywhere around the 
-			ProgressBar itself by providing suitable containers.  The end values rarely change so they can often be
-			set permanently.  The end values placed within the bar itself are set via the <code>textTemplate</code>
-			configuration attribute, as shown in the following code:</p>
+			<p>The ProgressBar has been assigned a template to be voiced by WAI-ARIA readers and has animation enabled.
+			It has been further suplemented with the current value.  We have used 
+			CSS positioning to get the caption overlaid on the area not occupied by the wedge.
+			To keep it updated, we use the following code:</p>
 			<textarea name="code" class="JScript" cols="60" rows="1">
-				var pbrange = new YAHOO.widget.ProgressBar({
-					value:50,
-					textTemplate:'<span style="float:left">{minValue}</span> {value} ' +
-						'<span style="float:right">{maxValue}</span>' 
-				}).render('pbrange');
-			</textarea>
-			<p>There is nothing preventing the <code>textTemplate</code> from containing HTML markup.  We have used it to place
-			the two end values at the edges of the bar.  In contrast to the values placed outside, which are hard-coded into the
-			HTML, these would be updated automatically as the template uses the <code>{minValue}</code> and <code>{maxValue}</code>
-			placeholders.  Since this same template is used to produce the value for the <code>aria-valuetext</code> 
-			attribute to be used by screen readers any markup contained in the template is deleted when copied into <code>aria-valuetext</code>.</p>
-			
-			<p>Should the value of any attribute be presented to the user elsewhere, we can use the events fired by the
-			YUI Element utility from which the ProgressBar inherits from:</p>
-			<textarea name="code" class="JScript" cols="60" rows="1">
-				pb.on('minValueChange',function(oArgs) {
-					YAHOO.util.Dom.get('minValueContainer').innerHTML = oArgs.newValue;
+				pbr.on('progress',function (value) {
+					YAHOO.util.Dom.get('caption').innerHTML = value + '%';
 				});
 			</textarea>
-			
 		</div>
 	</div>
 	
@@ -300,19 +270,18 @@ hr {
 		pbcopper.get('anim').method = YAHOO.util.Easing.bounceBoth;
 		pbcopper.render('pbcopper');
 		
-		var pbr = new YAHOO.widget.ProgressBar({textTemplate:'{value}%',value:50});
+		var pbr = new YAHOO.widget.ProgressBar({ariaTextTemplate:'{value}%',anim:true,value:50});
+		pbr.get('anim').duration = 2;
 		pbr.render('pbr');
-
-		var pbrange = new YAHOO.widget.ProgressBar({
-			value:50,
-			textTemplate:'<span style="float:left">{minValue}</span> {value} <span style="float:right">{maxValue}</span>' 
-		}).render('pbrange');
+		
+		pbr.on('progress',function (value) {
+			YAHOO.util.Dom.get('caption').innerHTML = value + '%';
+		});
 		
 		YAHOO.util.Event.on('go','click',function(ev) {
 			var value = parseInt(YAHOO.util.Dom.get('value').value,10);
 			pbcopper.set('value',value);
 			pbr.set('value',value);
-			pbrange.set('value',value);
 		});
 			
 	});

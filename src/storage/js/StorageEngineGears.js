@@ -13,8 +13,7 @@
  */
 (function() {
 	// internal shorthand
-var G = window.google,
-	Y = YAHOO.util,
+var Y = YAHOO.util,
 	YL = YAHOO.lang,
 	_SQL_STMT_LIMIT = 9948,
 	_TABLE_NAME = 'YUIStorageEngine',
@@ -40,7 +39,7 @@ var G = window.google,
 
 		if (! _engine) {
 			// create the database
-			_engine = G.gears.factory.create(Y.StorageEngineGears.GEARS);
+			_engine = google.gears.factory.create(Y.StorageEngineGears.GEARS);
 			_engine.open(window.location.host + '-' + Y.StorageEngineGears.DATABASE);
 			_engine.execute('CREATE TABLE IF NOT EXISTS ' + _TABLE_NAME + ' (key TEXT, location TEXT, value TEXT)');
 		}
@@ -60,11 +59,11 @@ var G = window.google,
 		try {
 			// iterate on the rows and map the keys
 			while (rs.isValidRow()) {
-				var fld = rs.field(0);
+				var fld = dURI(rs.field(0));
 
 				if (! keyMap[fld]) {
 					keyMap[fld] = true;
-					_this._keys.push(fld);
+					_this._addKey(fld);
 				}
 
 				rs.next();
@@ -185,18 +184,19 @@ var G = window.google,
 	Y.StorageEngineGears.ENGINE_NAME = 'gears';
 	Y.StorageEngineGears.GEARS = 'beta.database';
 	Y.StorageEngineGears.DATABASE = 'yui.database';
-    Y.StorageManager.register(Y.StorageEngineGears.ENGINE_NAME, function() {
-		if (G && G.gears) {
+	Y.StorageEngineGears.isAvailable = function() {
+		if (window.google && window.google.gears) {
 			try {
 				// this will throw an exception if the user denies gears
-				G.gears.factory.create(Y.StorageEngineGears.GEARS);
-				return true; 
+				google.gears.factory.create(Y.StorageEngineGears.GEARS);
+				return true;
 			}
 			catch (e) {
-				// no need to do anything 
+				// no need to do anything
 			}
 		}
 
 		return false;
-	}, Y.StorageEngineGears);
+	};
+    Y.StorageManager.register(Y.StorageEngineGears);
 }());

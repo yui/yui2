@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>ProgressBar Widget&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>ProgressBar Widget&nbsp; <span class="subtitle">2.8.0_test1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_progressbar.html" title="progressbar">progressbar</a>
                  &gt; YAHOO.widget.ProgressBar 
@@ -61,7 +61,7 @@
 
                     <div class="summary description" property="yui:description">
                         The ProgressBar widget provides an easy way to draw a bar depicting progress of an operation,
-a level meter, ranking or any such simple linear measure.
+a level meter, rating or any such simple linear measure.
 It allows for highly customized styles including animation, vertical or horizontal and forward or reverse.
                     </div>
 
@@ -431,16 +431,16 @@ It is called after <a href="#method_initAttributes">initAttributes</a>
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="private" rel="yui:method" resource="#method__showTemplates">
+                                    <div class="private" rel="yui:method" resource="#method__setAriaText">
                                     <h4>
-                                        <a name="method__showTemplates">_showTemplates</a></h4>
+                                        <a name="method__setAriaText">_setAriaText</a></h4>
                                     <div class="detail" >
                                         <code>
                                          private 
                                         
                                         
                                         
-                                            <strong property="yui:name">_showTemplates</strong>
+                                            <strong property="yui:name">_setAriaText</strong>
                                            (
                                             )
                                         </code>
@@ -632,7 +632,7 @@ Moves the bar to reflect the new value
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Recalculate the bar size and position and redraws it
+                                            Recalculates the bar size and position and redraws it
                                         </div>
 
                                         <div class="description">
@@ -737,6 +737,9 @@ The method is chainable since it returns a reference to this instance.
                                             <span rel="yui:method" resource="YAHOO.util.Element.html#method_appendTo">                                        
                                             <a class="" href="YAHOO.util.Element.html#method_appendTo" property="yui:name" title="appendTo">appendTo</a><span class="">,</span>
                                             </span>
+                                            <span rel="yui:method" resource="YAHOO.util.Element.html#method_delegate">                                        
+                                            <a class="" href="YAHOO.util.Element.html#method_delegate" property="yui:name" title="delegate">delegate</a><span class="">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.Element.html#method_fireQueue">                                        
                                             <a class="" href="YAHOO.util.Element.html#method_fireQueue" property="yui:name" title="fireQueue">fireQueue</a><span class="">,</span>
                                             </span>
@@ -769,6 +772,9 @@ The method is chainable since it returns a reference to this instance.
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.Element.html#method_removeClass">                                        
                                             <a class="" href="YAHOO.util.Element.html#method_removeClass" property="yui:name" title="removeClass">removeClass</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.Element.html#method_removeDelegate">                                        
+                                            <a class="" href="YAHOO.util.Element.html#method_removeDelegate" property="yui:name" title="removeDelegate">removeDelegate</a><span class="">,</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.Element.html#method_removeListener">                                        
                                             <a class="" href="YAHOO.util.Element.html#method_removeListener" property="yui:name" title="removeListener">removeListener</a><span class="">,</span>
@@ -885,6 +891,50 @@ The method is chainable since it returns a reference to this instance.
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:event" resource="#event_ariaTextTemplateChange">
+                                    <h4>
+                                        <a name="event_ariaTextTemplateChange">ariaTextTemplateChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">ariaTextTemplateChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         event
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fires when the value for the configuration attribute 'ariaTextTemplate' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                            <code><span property="yui:name">event</span>
+                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                            </code>
+                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                        </dd>
+                                                        
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:event" resource="#event_barElChange">
                                     <h4>
                                         <a name="event_barElChange">barElChange</a></h4>
@@ -973,15 +1023,15 @@ The method is chainable since it returns a reference to this instance.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeBarElChange">
+                                    <div class="" rel="yui:event" resource="#event_beforeAriaTextTemplateChange">
                                     <h4>
-                                        <a name="event_beforeBarElChange">beforeBarElChange</a></h4>
+                                        <a name="event_beforeAriaTextTemplateChange">beforeAriaTextTemplateChange</a></h4>
                                     <div class="detail">
                                         <code>
                                         
                                         
                                         
-                                            <strong property="yui:name">beforeBarElChange</strong>
+                                            <strong property="yui:name">beforeAriaTextTemplateChange</strong>
 
                                             (
                                                 
@@ -994,7 +1044,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'barEl' changes. Return false to cancel the attribute change.
+                                            Fires before the value for the configuration attribute 'ariaTextTemplate' changes. Return false to cancel the attribute change.
                                         </div>
 
                                         <div class="description">
@@ -1017,15 +1067,15 @@ The method is chainable since it returns a reference to this instance.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeCaptionElChange">
+                                    <div class="" rel="yui:event" resource="#event_beforeBarElChange">
                                     <h4>
-                                        <a name="event_beforeCaptionElChange">beforeCaptionElChange</a></h4>
+                                        <a name="event_beforeBarElChange">beforeBarElChange</a></h4>
                                     <div class="detail">
                                         <code>
                                         
                                         
                                         
-                                            <strong property="yui:name">beforeCaptionElChange</strong>
+                                            <strong property="yui:name">beforeBarElChange</strong>
 
                                             (
                                                 
@@ -1038,7 +1088,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'captionEl' changes. Return false to cancel the attribute change.
+                                            Fires before the value for the configuration attribute 'barEl' changes. Return false to cancel the attribute change.
                                         </div>
 
                                         <div class="description">
@@ -1281,50 +1331,6 @@ The method is chainable since it returns a reference to this instance.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeTextTemplateChange">
-                                    <h4>
-                                        <a name="event_beforeTextTemplateChange">beforeTextTemplateChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">beforeTextTemplateChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'textTemplate' changes. Return false to cancel the attribute change.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:event" resource="#event_beforeValueChange">
                                     <h4>
                                         <a name="event_beforeValueChange">beforeValueChange</a></h4>
@@ -1413,50 +1419,6 @@ The method is chainable since it returns a reference to this instance.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:event" resource="#event_captionElChange">
-                                    <h4>
-                                        <a name="event_captionElChange">captionElChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">captionElChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'captionEl' changes.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:event" resource="#event_complete">
                                     <h4>
                                         <a name="event_complete">complete</a></h4>
@@ -1478,7 +1440,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            It will fire at the end of the animation or immediately upon progress values if animation is not loaded
+                                            Fires at the end of the animation or immediately upon changing values if animation is not loaded
                                         </div>
 
                                         <div class="description">
@@ -1742,7 +1704,8 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            If animation is loaded, it will trigger for each frame of the animation providing partial values
+                                            If animation is active, it will trigger several times during the animation providing intermediate values
+If animation is not active, it will fire only once providing the end value
                                         </div>
 
                                         <div class="description">
@@ -1754,7 +1717,7 @@ The method is chainable since it returns a reference to this instance.
                                                             <code><span property="yui:name">value</span>
                                                                 &lt;<span property="yui:type">Number</span>&gt;
                                                             </code>
-                                                            <span property="yui:description"> the current (progress) value</span>
+                                                            <span property="yui:description"> the current, changing value</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1799,50 +1762,6 @@ The method is chainable since it returns a reference to this instance.
                                                                 &lt;<span property="yui:type">Number</span>&gt;
                                                             </code>
                                                             <span property="yui:description">  the current (initial) value</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:event" resource="#event_textTemplateChange">
-                                    <h4>
-                                        <a name="event_textTemplateChange">textTemplateChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">textTemplateChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'textTemplate' changes.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2001,6 +1920,25 @@ It can be used to set the animation parameters such as easing methods or duratio
 
                                     <hr />
                                     </div>        
+                                    <div class="" rel="yui:attribute" resource="#config_ariaTextTemplate">
+                                    <h4><a name="config_ariaTextTemplate">ariaTextTemplate</a>
+                                        <code>- <span property="yui:type">String</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Text to be voiced by screen readers.
+The text is processed by <a href="YAHOO.lang.html#method_substitute">YAHOO.lang.substitute</a>.  
+It can use the placeholders {value}, {minValue} and {maxValue}
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: "{value}"
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
                                     <div class="" rel="yui:attribute" resource="#config_barEl">
                                     <h4><a name="config_barEl">barEl</a>
                                         <code>- <span property="yui:type">HTMLElement (div)</span></code>
@@ -2012,23 +1950,6 @@ It can be used to set the animation parameters such as easing methods or duratio
                                     </div>
  
      
-
-                                    <hr />
-                                    </div>        
-                                    <div class="" rel="yui:attribute" resource="#config_captionEl">
-                                    <h4><a name="config_captionEl">captionEl</a>
-                                        <code>- <span property="yui:type">HTMLElement or String</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Reference to the HTML object that contains the caption.
-                                        </div>
-                                    </div>
- 
-     
-                                    <div class="default">
-                                        Default Value: a container placed centered over the progress bar.
-                                    </div>        
 
                                     <hr />
                                     </div>        
@@ -2123,25 +2044,6 @@ Values lower than this will be ignored.
 
                                     <hr />
                                     </div>        
-                                    <div class="" rel="yui:attribute" resource="#config_textTemplate">
-                                    <h4><a name="config_textTemplate">textTemplate</a>
-                                        <code>- <span property="yui:type">String</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Text to be shown usually overlapping the bar and to be voiced by screen readers.
-The text is processed by <a href="YAHOO.lang.html#method_substitute">YAHOO.lang.substitute</a>.  
-It can use the placeholders {value}, {minValue} and {maxValue}
-                                        </div>
-                                    </div>
- 
-     
-                                    <div class="default">
-                                        Default Value: ""
-                                    </div>        
-
-                                    <hr />
-                                    </div>        
                                     <div class="" rel="yui:attribute" resource="#config_value">
                                     <h4><a name="config_value">value</a>
                                         <code>- <span property="yui:type">Number</span></code>
@@ -2219,11 +2121,15 @@ It will always be returned as a string including units.
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_element-delegate.html" title="element-delegate">element-delegate</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
                                 <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
@@ -2240,6 +2146,7 @@ It will always be returned as a string including units.
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_storage.html" title="Storage">Storage</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
                                 <li class=""><a href="module_swf.html" title="swf">swf</a></li>
                                 <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
@@ -2287,7 +2194,7 @@ It will always be returned as a string including units.
                                 <li class="private"><a href="#method__heightChange" title="_heightChange">_heightChange</a></li>
                                 <li class="protected"><a href="#method__init" title="_init">_init</a></li>
                                 <li class="private"><a href="#method__recalculateConstants" title="_recalculateConstants">_recalculateConstants</a></li>
-                                <li class="private"><a href="#method__showTemplates" title="_showTemplates">_showTemplates</a></li>
+                                <li class="private"><a href="#method__setAriaText" title="_setAriaText">_setAriaText</a></li>
                                 <li class="private"><a href="#method__valueChange" title="_valueChange">_valueChange</a></li>
                                 <li class="private"><a href="#method__widthChange" title="_widthChange">_widthChange</a></li>
                                 <li class=""><a href="#method_destroy" title="destroy">destroy</a></li>
@@ -2301,19 +2208,18 @@ It will always be returned as a string including units.
                         <h4>Events</h4>
                         <ul class="content">        
                                 <li class=""><a href="#event_animChange" title="animChange">animChange</a></li>
+                                <li class=""><a href="#event_ariaTextTemplateChange" title="ariaTextTemplateChange">ariaTextTemplateChange</a></li>
                                 <li class=""><a href="#event_barElChange" title="barElChange">barElChange</a></li>
                                 <li class=""><a href="#event_beforeAnimChange" title="beforeAnimChange">beforeAnimChange</a></li>
+                                <li class=""><a href="#event_beforeAriaTextTemplateChange" title="beforeAriaTextTemplateChange">beforeAriaTextTemplateChange</a></li>
                                 <li class=""><a href="#event_beforeBarElChange" title="beforeBarElChange">beforeBarElChange</a></li>
-                                <li class=""><a href="#event_beforeCaptionElChange" title="beforeCaptionElChange">beforeCaptionElChange</a></li>
                                 <li class=""><a href="#event_beforeDirectionChange" title="beforeDirectionChange">beforeDirectionChange</a></li>
                                 <li class=""><a href="#event_beforeHeightChange" title="beforeHeightChange">beforeHeightChange</a></li>
                                 <li class=""><a href="#event_beforeMaskElChange" title="beforeMaskElChange">beforeMaskElChange</a></li>
                                 <li class=""><a href="#event_beforeMaxValueChange" title="beforeMaxValueChange">beforeMaxValueChange</a></li>
                                 <li class=""><a href="#event_beforeMinValueChange" title="beforeMinValueChange">beforeMinValueChange</a></li>
-                                <li class=""><a href="#event_beforeTextTemplateChange" title="beforeTextTemplateChange">beforeTextTemplateChange</a></li>
                                 <li class=""><a href="#event_beforeValueChange" title="beforeValueChange">beforeValueChange</a></li>
                                 <li class=""><a href="#event_beforeWidthChange" title="beforeWidthChange">beforeWidthChange</a></li>
-                                <li class=""><a href="#event_captionElChange" title="captionElChange">captionElChange</a></li>
                                 <li class=""><a href="#event_complete" title="complete">complete</a></li>
                                 <li class=""><a href="#event_directionChange" title="directionChange">directionChange</a></li>
                                 <li class=""><a href="#event_heightChange" title="heightChange">heightChange</a></li>
@@ -2322,7 +2228,6 @@ It will always be returned as a string including units.
                                 <li class=""><a href="#event_minValueChange" title="minValueChange">minValueChange</a></li>
                                 <li class=""><a href="#event_progress" title="progress">progress</a></li>
                                 <li class=""><a href="#event_start" title="start">start</a></li>
-                                <li class=""><a href="#event_textTemplateChange" title="textTemplateChange">textTemplateChange</a></li>
                                 <li class=""><a href="#event_valueChange" title="valueChange">valueChange</a></li>
                                 <li class=""><a href="#event_widthChange" title="widthChange">widthChange</a></li>
                         </ul>
@@ -2332,14 +2237,13 @@ It will always be returned as a string including units.
                         <h4>Configuration Attributes</h4>
                         <ul class="content">        
                                 <li class=""><a href="#config_anim" title="anim">anim</a></li>
+                                <li class=""><a href="#config_ariaTextTemplate" title="ariaTextTemplate">ariaTextTemplate</a></li>
                                 <li class=""><a href="#config_barEl" title="barEl">barEl</a></li>
-                                <li class=""><a href="#config_captionEl" title="captionEl">captionEl</a></li>
                                 <li class=""><a href="#config_direction" title="direction">direction</a></li>
                                 <li class=""><a href="#config_height" title="height">height</a></li>
                                 <li class=""><a href="#config_maskEl" title="maskEl">maskEl</a></li>
                                 <li class=""><a href="#config_maxValue" title="maxValue">maxValue</a></li>
                                 <li class=""><a href="#config_minValue" title="minValue">minValue</a></li>
-                                <li class=""><a href="#config_textTemplate" title="textTemplate">textTemplate</a></li>
                                 <li class=""><a href="#config_value" title="value">value</a></li>
                                 <li class=""><a href="#config_width" title="width">width</a></li>
                         </ul>
@@ -2354,7 +2258,7 @@ It will always be returned as a string including units.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.ProgressBar", "name": "anim", "url": "YAHOO.widget.ProgressBar.html#config_anim", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "animChange", "url": "YAHOO.widget.ProgressBar.html#event_animChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_animSetter", "url": "YAHOO.widget.ProgressBar.html#method__animSetter", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barEl", "url": "YAHOO.widget.ProgressBar.html#config_barEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barElChange", "url": "YAHOO.widget.ProgressBar.html#event_barElChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSizeFunction", "url": "YAHOO.widget.ProgressBar.html#property__barSizeFunction", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSizeFunctions", "url": "YAHOO.widget.ProgressBar.html#property__barSizeFunctions", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSpace", "url": "YAHOO.widget.ProgressBar.html#property__barSpace", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAnimChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAnimChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeBarElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeBarElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeCaptionElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeCaptionElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeDirectionChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeDirectionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeHeightChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeHeightChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaskElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMinValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMinValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeWidthChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeWidthChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "captionEl", "url": "YAHOO.widget.ProgressBar.html#config_captionEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "captionElChange", "url": "YAHOO.widget.ProgressBar.html#event_captionElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "complete", "url": "YAHOO.widget.ProgressBar.html#event_complete", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "destroy", "url": "YAHOO.widget.ProgressBar.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "direction", "url": "YAHOO.widget.ProgressBar.html#config_direction", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "directionChange", "url": "YAHOO.widget.ProgressBar.html#event_directionChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_fixEdges", "url": "YAHOO.widget.ProgressBar.html#method__fixEdges", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "height", "url": "YAHOO.widget.ProgressBar.html#config_height", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_heightChange", "url": "YAHOO.widget.ProgressBar.html#method__heightChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "heightChange", "url": "YAHOO.widget.ProgressBar.html#event_heightChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ProgressBar", "name": "_init", "url": "YAHOO.widget.ProgressBar.html#method__init", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "initAttributes", "url": "YAHOO.widget.ProgressBar.html#method_initAttributes", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskEl", "url": "YAHOO.widget.ProgressBar.html#config_maskEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskElChange", "url": "YAHOO.widget.ProgressBar.html#event_maskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValue", "url": "YAHOO.widget.ProgressBar.html#config_maxValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_maxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValue", "url": "YAHOO.widget.ProgressBar.html#config_minValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValueChange", "url": "YAHOO.widget.ProgressBar.html#event_minValueChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_previousValue", "url": "YAHOO.widget.ProgressBar.html#property__previousValue", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "progress", "url": "YAHOO.widget.ProgressBar.html#event_progress", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ProgressBar.MARKUP", "url": "YAHOO.widget.ProgressBar.html#property_ProgressBar.MARKUP", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_recalculateConstants", "url": "YAHOO.widget.ProgressBar.html#method__recalculateConstants", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "redraw", "url": "YAHOO.widget.ProgressBar.html#method_redraw", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "render", "url": "YAHOO.widget.ProgressBar.html#method_render", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_rendered", "url": "YAHOO.widget.ProgressBar.html#property__rendered", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_showTemplates", "url": "YAHOO.widget.ProgressBar.html#method__showTemplates", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "start", "url": "YAHOO.widget.ProgressBar.html#event_start", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "textTemplate", "url": "YAHOO.widget.ProgressBar.html#config_textTemplate", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "textTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_textTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "value", "url": "YAHOO.widget.ProgressBar.html#config_value", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_valueChange", "url": "YAHOO.widget.ProgressBar.html#method__valueChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "valueChange", "url": "YAHOO.widget.ProgressBar.html#event_valueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "width", "url": "YAHOO.widget.ProgressBar.html#config_width", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_widthChange", "url": "YAHOO.widget.ProgressBar.html#method__widthChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "widthChange", "url": "YAHOO.widget.ProgressBar.html#event_widthChange", "type": "event"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.ProgressBar", "name": "anim", "url": "YAHOO.widget.ProgressBar.html#config_anim", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "animChange", "url": "YAHOO.widget.ProgressBar.html#event_animChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_animSetter", "url": "YAHOO.widget.ProgressBar.html#method__animSetter", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplate", "url": "YAHOO.widget.ProgressBar.html#config_ariaTextTemplate", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_ariaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barEl", "url": "YAHOO.widget.ProgressBar.html#config_barEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barElChange", "url": "YAHOO.widget.ProgressBar.html#event_barElChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSizeFunction", "url": "YAHOO.widget.ProgressBar.html#property__barSizeFunction", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSizeFunctions", "url": "YAHOO.widget.ProgressBar.html#property__barSizeFunctions", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSpace", "url": "YAHOO.widget.ProgressBar.html#property__barSpace", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAnimChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAnimChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAriaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAriaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeBarElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeBarElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeDirectionChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeDirectionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeHeightChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeHeightChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaskElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMinValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMinValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeWidthChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeWidthChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "complete", "url": "YAHOO.widget.ProgressBar.html#event_complete", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "destroy", "url": "YAHOO.widget.ProgressBar.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "direction", "url": "YAHOO.widget.ProgressBar.html#config_direction", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "directionChange", "url": "YAHOO.widget.ProgressBar.html#event_directionChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_fixEdges", "url": "YAHOO.widget.ProgressBar.html#method__fixEdges", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "height", "url": "YAHOO.widget.ProgressBar.html#config_height", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_heightChange", "url": "YAHOO.widget.ProgressBar.html#method__heightChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "heightChange", "url": "YAHOO.widget.ProgressBar.html#event_heightChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ProgressBar", "name": "_init", "url": "YAHOO.widget.ProgressBar.html#method__init", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "initAttributes", "url": "YAHOO.widget.ProgressBar.html#method_initAttributes", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskEl", "url": "YAHOO.widget.ProgressBar.html#config_maskEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskElChange", "url": "YAHOO.widget.ProgressBar.html#event_maskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValue", "url": "YAHOO.widget.ProgressBar.html#config_maxValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_maxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValue", "url": "YAHOO.widget.ProgressBar.html#config_minValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValueChange", "url": "YAHOO.widget.ProgressBar.html#event_minValueChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_previousValue", "url": "YAHOO.widget.ProgressBar.html#property__previousValue", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "progress", "url": "YAHOO.widget.ProgressBar.html#event_progress", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ProgressBar.MARKUP", "url": "YAHOO.widget.ProgressBar.html#property_ProgressBar.MARKUP", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_recalculateConstants", "url": "YAHOO.widget.ProgressBar.html#method__recalculateConstants", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "redraw", "url": "YAHOO.widget.ProgressBar.html#method_redraw", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "render", "url": "YAHOO.widget.ProgressBar.html#method_render", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_rendered", "url": "YAHOO.widget.ProgressBar.html#property__rendered", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_setAriaText", "url": "YAHOO.widget.ProgressBar.html#method__setAriaText", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "start", "url": "YAHOO.widget.ProgressBar.html#event_start", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "value", "url": "YAHOO.widget.ProgressBar.html#config_value", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_valueChange", "url": "YAHOO.widget.ProgressBar.html#method__valueChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "valueChange", "url": "YAHOO.widget.ProgressBar.html#event_valueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "width", "url": "YAHOO.widget.ProgressBar.html#config_width", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_widthChange", "url": "YAHOO.widget.ProgressBar.html#method__widthChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "widthChange", "url": "YAHOO.widget.ProgressBar.html#event_widthChange", "type": "event"}];
 </script>
 </body>
 </html>

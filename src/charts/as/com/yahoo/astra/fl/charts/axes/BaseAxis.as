@@ -5,8 +5,10 @@ package com.yahoo.astra.fl.charts.axes
 	import fl.core.UIComponent;
 	import flash.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
+	import flash.events.ErrorEvent;
 	import com.yahoo.astra.fl.charts.CartesianChart;
 	import com.yahoo.astra.utils.AxisLabelUtil;
+	import flash.events.EventDispatcher;
 	
 	/**
 	 * Implements some of the most common axis functionality
@@ -16,7 +18,7 @@ package com.yahoo.astra.fl.charts.axes
 	 * 
 	 * @author Josh Tynjala
 	 */
-	public class BaseAxis
+	public class BaseAxis extends EventDispatcher
 	{
 		
 	//--------------------------------------
@@ -138,7 +140,7 @@ package com.yahoo.astra.fl.charts.axes
 		private var _labelFunction:Function;
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.axes.labelFunction
+		 * @copy com.yahoo.astra.fl.charts.axes.IAxis#labelFunction
 		 */
 		public function get labelFunction():Function
 		{
@@ -313,7 +315,7 @@ package com.yahoo.astra.fl.charts.axes
 		private var _position:String = "left";
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.IAxis#position
+		 * @copy com.yahoo.astra.fl.charts.axes.IAxis#position
 		 */
 		public function get position():String
 		{
@@ -327,7 +329,29 @@ package com.yahoo.astra.fl.charts.axes
 		{
 			this._position = value;
 		}
-				
+		
+		/**
+		 * @private
+		 * Storage for maxLabel property.
+		 */
+		private var _maxLabel:String = "";
+		
+		/**
+		 * Gets or sets the largest possible label.
+		 */
+		public function get maxLabel():String
+		{
+			return _maxLabel;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set maxLabel(value:String):void
+		{
+			_maxLabel = value;
+		}
+		
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
@@ -345,7 +369,18 @@ package com.yahoo.astra.fl.charts.axes
 			var text:String = value.toString();
 			if(this._labelFunction != null)
 			{
-				text = this._labelFunction(value);
+				try
+				{
+					text = this._labelFunction(value);
+				}
+				catch(e:Error)
+				{
+					//dispatch error event from the chart
+					var message:String = "There is an error in your ";
+					message += (ICartesianAxisRenderer(this.renderer).orientation == AxisOrientation.VERTICAL)?"y":"x";
+					message += "-axis labelFunction.";
+					this.chart.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, message));
+				}
 			}
 			
 			if(text == null)

@@ -27,7 +27,7 @@ YAHOO.lang.extend(YAHOO.widget.CategoryAxis, YAHOO.widget.Axis,
 	 * when there is not enough room to display all labels on the axis. If set to true, the axis 
 	 * will determine the number of categories to plot. If not, all categories will be plotted.
 	 *
-	 * @property calcualateCategoryCount
+	 * @property calculateCategoryCount
 	 * @type Boolean
 	 */
 	calculateCategoryCount: false 

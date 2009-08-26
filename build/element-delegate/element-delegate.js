@@ -1,3 +1,15 @@
+/**
+ * Augments the Element Utility with a <code>delegate</code> method that 
+ * facilitates easy creation of delegated event listeners.  (Note: Using CSS 
+ * selectors as the filtering criteria for delegated event listeners requires 
+ * inclusion of the Selector Utility.)
+ *
+ * @module element-delegate
+ * @title Element Event Delegation Module
+ * @namespace YAHOO.util
+ * @requires element, event-delegate
+ */
+
 (function () {
 
 	var Event = YAHOO.util.Event,
@@ -12,7 +24,10 @@
 	    /**
          * Appends a delegated event listener.  Delegated event listeners 
 		 * receive two arguments by default: the DOM event and the element  
-		 * specified by the filtering function or CSS selector. 
+		 * specified by the filtering function or CSS selector.
+		 * (Note: Using the delegate method requires the element-delegate 
+		 * module.  Using CSS selectors as the filtering criteria for delegated 
+		 * event listeners requires inclusion of the Selector Utility.)
 	     * @method delegate
 	     * @param {String} type The name of the event to listen for
 	     * @param {Function} fn The handler to call when the event fires
@@ -20,12 +35,22 @@
 		 * determine for what element(s) the event listener should be called. 
 		 * When a function is specified, the function should return an 
 		 * HTML element.  Using a CSS Selector requires the inclusion of the 
-		 * CSS Selector utility (YAHOO.util.Selector).
+		 * CSS Selector Utility.
 	     * @param {Any} obj A variable to pass to the handler
 	     * @param {Object} scope The object to use for the scope of the handler 
-         * @return {boolean} true if the delegate was added successfully
+         * @return {boolean} Returns true if the delegated event listener 
+		 * was added successfully
+         * @for Element
 	     */
 		delegate: function (type, fn, filter, obj, overrideContext) {
+
+			if (YAHOO.lang.isString(filter) && !YAHOO.util.Selector) {
+		        return false;
+			}
+			
+			if (!Event._createDelegate) {
+		        return false;
+			}			
 
 			var sType = Event._getType(type),
 				el = this.get("element"),
@@ -38,11 +63,11 @@
 
 				};
 
-			if (!Event._createDelegate) {
-		        return false;
-			}
-
 			if (specialTypes[type]) {
+
+				if (!Event._createMouseDelegate) {
+			        return false;				
+				}
 
 				fnMouseDelegate = Event._createMouseDelegate(fn, obj, overrideContext);
 
@@ -66,12 +91,13 @@
 
 
 	    /**
-	     * Remove an event listener
+	     * Remove a delegated event listener
 	     * @method removeDelegate
 	     * @param {String} type The name of the event to listen for
 	     * @param {Function} fn The function call when the event fires
-         * @return {boolean} true if the unbind was successful, false 
+         * @return {boolean} Returns true if the unbind was successful, false 
          *  otherwise.
+         * @for Element
 	     */
 		removeDelegate: function (type, fn) {
 

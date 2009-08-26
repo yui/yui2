@@ -10,7 +10,8 @@ package com.yahoo.astra.fl.charts.series
 	//--------------------------------------
 	
 	/**
-	 * Indicates the value of the visible property
+	 * Indicates the value of the visible property. A value of <code>visible</code> indicates <code>true</code>.
+	 * A value of <code>hidden</code> indicates <code>false</code>.
 	 */
 	[Style(name="visibility", type="String")]
 
@@ -39,6 +40,7 @@ package com.yahoo.astra.fl.charts.series
 	//  Class Methods
 	//--------------------------------------		
 		/**
+		 * @private
 		 * @copy fl.core.UIComponent#getStyleDefinition()
 		 */
 		public static function getStyleDefinition():Object
@@ -70,7 +72,7 @@ package com.yahoo.astra.fl.charts.series
 		private var _horizontalField:String;
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.ISeries#horizontalField
+		 * Defines the property to access when determining the x value.
 		 */
 		public function get horizontalField():String
 		{
@@ -97,7 +99,7 @@ package com.yahoo.astra.fl.charts.series
 		private var _verticalField:String;
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.ISeries#verticalField
+		 * Defines the property to access when determining the y value.
 		 */
 		public function get verticalField():String
 		{
@@ -142,7 +144,23 @@ package com.yahoo.astra.fl.charts.series
 		public function set showInLegend(value:Boolean):void
 		{
 			this._showInLegend = value;
-		}		
+		}	
+		
+		/**
+		 * @private (setter)
+		 */	
+		override public function set visible(value:Boolean):void
+		{
+			super.visible = value;
+			if(this.getStyleValue("visibility") as String == "hidden")
+			{
+				if(this.visible) super.setStyle("visibility", "visible");
+			}
+			else
+			{
+				if(!this.visible) super.setStyle("visibility", "hidden");
+			}
+		}
 		
 		
 	//--------------------------------------
@@ -163,5 +181,17 @@ package com.yahoo.astra.fl.charts.series
 										this.getStyleValue("borderAlpha") as Number);
 		}
 		
+		/**
+		 * @private
+		 * @copy fl.core.UIComponent#setStyle()
+		 */
+		override public function setStyle(style:String, value:Object):void
+		{
+			super.setStyle(style, value);
+			if(style == "visibility")
+			{
+				this.visible = value != "hidden";
+			}
+		}		
 	}
 }

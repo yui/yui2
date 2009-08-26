@@ -531,18 +531,19 @@
         * the property's event
         * @param {Object} obj The Object to use for scoping the event handler 
         * (see CustomEvent documentation)
-        * @param {Boolean} override Optional. If true, will override "this"  
-        * within the handler to map to the scope Object passed into the method.
+        * @param {Boolean} overrideContext Optional. If true, will override
+        * "this" within the handler to map to the scope Object passed into the
+        * method.
         * @return {Boolean} True, if the subscription was successful, 
         * otherwise false.
         */ 
-        subscribeToConfigEvent: function (key, handler, obj, override) {
+        subscribeToConfigEvent: function (key, handler, obj, overrideContext) {
     
             var property = this.config[key.toLowerCase()];
     
             if (property && property.event) {
                 if (!Config.alreadySubscribed(property.event, handler, obj)) {
-                    property.event.subscribe(handler, obj, override);
+                    property.event.subscribe(handler, obj, overrideContext);
                 }
                 return true;
             } else {
@@ -683,6 +684,13 @@
     YAHOO.lang.augmentProto(Config, YAHOO.util.EventProvider);
 
 }());
+/**
+* The datemath module provides utility methods for basic JavaScript Date object manipulation and 
+* comparison. 
+* 
+* @module datemath
+*/
+
 /**
 * YAHOO.widget.DateMath is used for simple date manipulation. The class is a static utility
 * used for adding, subtracting, and comparing dates.
@@ -1245,19 +1253,24 @@ Calendar.ONE_CHAR = "1char";
 
 /**
 * The set of default Config property keys and values for the Calendar.
-* 
+*
 * <p>
 * NOTE: This property is made public in order to allow users to change 
 * the default values of configuration properties. Users should not 
 * modify the key string, unless they are overriding the Calendar implementation
 * </p>
+*
+* <p>
+* The property is an object with key/value pairs, the key being the 
+* uppercase configuration property name and the value being an object 
+* literal with a key string property, and a value property, specifying the 
+* default value of the property. To override a default value, you can set
+* the value property, for example, <code>YAHOO.widget.Calendar.DEFAULT_CONFIG.MULTI_SELECT.value = true;</code>
+* <code>
 * 
 * @property YAHOO.widget.Calendar.DEFAULT_CONFIG
 * @static
-* @type Object An object with key/value pairs, the key being the 
-* uppercase configuration property name and the value being an objec 
-* literal with a key string property, and a value property, specifying the 
-* default value of the property 
+* @type Object
 */
 
 Calendar.DEFAULT_CONFIG = {
@@ -1907,7 +1920,7 @@ Calendar.prototype = {
             if (navs && navs[0]) {
                 try {
                     navs[0].focus();
-                } catch (e) {
+                } catch (ex) {
                     // ignore
                 }
             }
@@ -1929,7 +1942,7 @@ Calendar.prototype = {
             if (navs && navs[0]) {
                 try {
                     navs[0].focus();
-                } catch (e) {
+                } catch (ex) {
                     // ignore
                 }
             }
@@ -2069,7 +2082,7 @@ Calendar.prototype = {
         *
         * @config today
         * @type Date
-        * @default Today's date
+        * @default The client side date (new Date()) when the Calendar is instantiated.
         */
         cfg.addProperty(DEF_CFG.TODAY.key, { value: new Date(DEF_CFG.TODAY.value.getTime()), supercedes:DEF_CFG.TODAY.supercedes, handler:this.configToday, suppressEvent:true } );
 
@@ -2289,7 +2302,7 @@ Calendar.prototype = {
         * be used when displaying and parsing dates. NOTE: All JS Date objects returned by methods, or expected as input by
         * methods will always represent the Gregorian year, in order to maintain date/month/week values. 
         *
-        * @config year_offset
+        * @config YEAR_OFFSET
         * @type Number
         * @default 0
         */

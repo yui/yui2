@@ -39,3 +39,12 @@
 	border-width:0 1px;
 	margin: 0 -1px;
 }
+
+.yui-skin-sam .yui-pb-caption {
+	color:#000;
+	text-align:center;
+	margin:0 auto;
+}
+.yui-skin-sam .yui-pb-range {
+	color:#a6a6a6;
+}

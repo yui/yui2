@@ -35,24 +35,29 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 			{
 
 				newValue = Math.round(Math.random() * Math.PI * 100000); 
-				var cook = YAHOO.util.Cookie.set("swfstore", newValue);
+				YAHOO.util.Cookie.set("swfstore", newValue);
 
 			}
 
-			else {newValue = YAHOO.util.Cookie.get("swfstore")}
+			else 
+			{
+				newValue = YAHOO.util.Cookie.get("swfstore");
+			}
 
 			
-			var params = { version: 9.115,
-		          useExpressInstall: false,
-		          fixedAttributes:
-				  {allowScriptAccess:"always", allowNetworking:"all"},
-				  flashVars:
-				  {shareData: shareData, browser: newValue, useCompression: useCompression}
+			var params = 
+				{ 
+					version: 9.115,
+					useExpressInstall: false,
+					fixedAttributes:
+						{allowScriptAccess:"always", allowNetworking:"all", scale:"noScale"},
+						flashVars:
+							{shareData: shareData, browser: newValue, useCompression: useCompression}
 				 };
 	
 	
 	
-	embeddedSWF = new YAHOO.widget.SWF(containerID, YAHOO.util.SWFStore.SWFURL, params); 
+	this.embeddedSWF = new YAHOO.widget.SWF(containerID, YAHOO.util.SWFStore.SWFURL, params); 
 	
 	
 	/**
@@ -89,7 +94,7 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 	/**
 	 * Fires when a store is saved successfully
 	 *
-	 * @event success
+	 * @event save
 	 * @param event.type {String} The event type
 	 * 
 	 */
@@ -140,10 +145,7 @@ YAHOO.util.SWFStore = function(containerID, shareData, useCompression)
 YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 {
 
-	/**
-	 * Pointer to the embedded SWF instance
-	 */
-	embeddedSWF: {},
+
 	
 	/**
 	 * Method to attach listeners to events
@@ -152,7 +154,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	on: function(type, listener)
 	{
-		embeddedSWF.addListener(type, listener); 
+		this.embeddedSWF.addListener(type, listener); 
 	},
 
 	/**
@@ -162,7 +164,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	addListener: function(type, listener)
 	{
-		embeddedSWF.addListener(type, listener); 
+		YAHOO.log("adding '" + type + "' listener");
+		this.embeddedSWF.addListener(type, listener); 
 	},
 
 	/**
@@ -184,7 +187,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	getShareData: function()
 	{
-		return embeddedSWF.callSWF("getShareData");
+		return this.embeddedSWF.callSWF("getShareData");
 	},
 	/**
 	 * Public accessor to the unique name of the SWFStore instance.
@@ -194,7 +197,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	setShareData: function(value)
 	{
-		embeddedSWF.callSWF("setShareData", [value]);
+		YAHOO.log("Setting share data to " + value);
+		this.embeddedSWF.callSWF("setShareData", [value]);
 	},
 
 	/**
@@ -205,7 +209,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	hasAdequateDimensions: function()
 	{
-		return embeddedSWF.callSWF("hasAdequateDimensions");
+		YAHOO.log("dimensions adequate? " + this.embeddedSWF.callSWF("hasAdequateDimensions"));
+		return this.embeddedSWF.callSWF("hasAdequateDimensions");
 	},
 
 	/**
@@ -216,7 +221,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	getUseCompression: function()
 	{
-		return embeddedSWF.callSWF("getUseCompression");
+		return this.embeddedSWF.callSWF("getUseCompression");
 	},
 
 	/**
@@ -227,7 +232,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	 */
 	setUseCompression: function(value)
 	{
-		embeddedSWF.callSWF("setUseCompression", [value]);
+		YAHOO.log("Setting compression to " + value);
+		this.embeddedSWF.callSWF("setUseCompression", [value]);
 	},	
 
 	   /**
@@ -244,7 +250,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		setItem: function(location,data) 
 		{	
-			return embeddedSWF.callSWF("setItem", [location, data]);
+			YAHOO.log("setting " + location + " to " + data);
+			return this.embeddedSWF.callSWF("setItem", [location, data]);
 		} ,
 	    	
 	   /**
@@ -256,7 +263,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */	    
 		getValueAt: function(index) 
 		{
-			return embeddedSWF.callSWF("getValueAt", [index]);
+			YAHOO.log("value at " + index + " is " + this.embeddedSWF.callSWF("getValueAt", [index]) );
+			return this.embeddedSWF.callSWF("getValueAt", [index]);
 		},
 
 	   /**
@@ -269,7 +277,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */	    
 		getNameAt: function(index) 
 		{
-			return embeddedSWF.callSWF("getNameAt", [index]);
+			YAHOO.log("name at " + index + " is " + this.embeddedSWF.callSWF("getNameAt", [index]) );
+			return this.embeddedSWF.callSWF("getNameAt", [index]);
 		},
 		
 		
@@ -282,7 +291,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		getValueOf: function(location) 
 		{
-			return embeddedSWF.callSWF("getValueOf", [location]);
+			YAHOO.log("value of " + location + " is " + this.embeddedSWF.callSWF("getValueOf", [location]) );
+			return this.embeddedSWF.callSWF("getValueOf", [location]);
 		} ,
 
 	    /**
@@ -305,7 +315,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		getTypeOf: function(location) 
 		{
-			return embeddedSWF.callSWF("getTypeOf", [location]);
+			YAHOO.log("type of " + location + " is " + this.embeddedSWF.callSWF("getTypeOf", [location]) );
+			return this.embeddedSWF.callSWF("getTypeOf", [location]);
 		} ,
 
 	    /**
@@ -328,20 +339,9 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		getTypeAt: function(index) 
 		{
-			return embeddedSWF.callSWF("getTypeAt", [index]);
+			YAHOO.log("type at " + index + " is " + this.embeddedSWF.callSWF("getTypeAt", [index]) );
+			return this.embeddedSWF.callSWF("getTypeAt", [index]);
 		} ,
-
-		/**
-		 * Returns the item in storage at a particular index, if any.
-		 * @method getValueAt
-		 * @param index {Number} Required. The index where data is stored.
-		 * @return {Object} The data.
-		 * @public
-		 */
-		getValueAt: function(index) 
-		{
-			return embeddedSWF.callSWF("getValueAt", [index]);
-		},
 		 
 		/**
 		 * Returns the items in storage as an array.
@@ -351,7 +351,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 		 */
 		getItems: function() 
 		{
-			return embeddedSWF.callSWF("getItems", []);
+			return this.embeddedSWF.callSWF("getItems", []);
 		},
 
 	    /**
@@ -362,7 +362,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		removeItem: function(location) 
 		{
-			return embeddedSWF.callSWF("removeItem", [location]);
+			YAHOO.log("removing " + location);
+			return this.embeddedSWF.callSWF("removeItem", [location]);
 		} ,
 
 	    /**
@@ -373,7 +374,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		removeItemAt: function(index) 
 		{
-			return embeddedSWF.callSWF("removeItemAt", [index]);
+			YAHOO.log("removing item at " + index);
+			return this.embeddedSWF.callSWF("removeItemAt", [index]);
 		} ,
 		
 	    /**
@@ -384,7 +386,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */
 		getLength: function() 
 		{
-			return embeddedSWF.callSWF("getLength", []);
+			return this.embeddedSWF.callSWF("getLength", []);
 		} ,
 		
 	   /**
@@ -396,7 +398,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	    */		
 		clear: function() 
 		{
-			return embeddedSWF.callSWF("clear", []);
+			YAHOO.log("clearing all items");
+			return this.embeddedSWF.callSWF("clear", []);
 		} ,
 		
 	    /**
@@ -407,7 +410,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	     */		
 		calculateCurrentSize: function() 
 		{
-			return embeddedSWF.callSWF("calculateCurrentSize", []);
+			YAHOO.log("calculating size");
+			return this.embeddedSWF.callSWF("calculateCurrentSize", []);
 		} ,
 		
 	    /**
@@ -418,21 +422,25 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	     */
 		getModificationDate: function() 
 		{
-			return embeddedSWF.callSWF("getModificationDate", []);
+			YAHOO.log("getting date");
+			return this.embeddedSWF.callSWF("getModificationDate", []);
 		} ,
 		
 		/**
-		* This method requests more storage if the amount is above 100KB. (e.g.,
-		* if the <code>store()</code> method returns "pending".
+		* This method requests more storage (if the amount is above 100KB or the current setting).
+		* 
 		* The request dialog has to be displayed within the Flash player itself
-		* so the SWF it is called from must be visible and at least 215px x 138px in size.
+		* so the SWF it is called from must be visible and at least 215px x 138px (w x h) in size.
 		* 
 		* @method setSize
 		* @param value {Number} The size, in KB
+		* @return {String} 
 		*/		
 		setSize: function(value) 
 		{
-			return embeddedSWF.callSWF("setSize", [value]);
+			var result = this.embeddedSWF.callSWF("setSize", [value]);
+			YAHOO.log("attempt to set size to " + value*1024 + " bytes resulted in " + result);
+			return result;
 		} ,
 		
 		/**
@@ -444,7 +452,8 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 		 */		
 		displaySettings: function() 
 		{
-			return embeddedSWF.callSWF("displaySettings", []);
+			YAHOO.log("attempting to show settings. are dimensions adequate? " + this.embeddedSWF.callSWF("hasAdequateDimensions"));
+			this.embeddedSWF.callSWF("displaySettings", []);
 		} 
 
 });

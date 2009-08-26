@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Browser History Manager&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>Browser History Manager&nbsp; <span class="subtitle">2.8.0_test1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_history.html" title="history">history</a>
                 
@@ -476,20 +476,20 @@
 <span class="c">         * @method onReady</span>
 <span class="c">         * @param {function} fn what to execute when the Browser History Manager is ready.</span>
 <span class="c">         * @param {object} obj an optional object to be passed back as a parameter to fn.</span>
-<span class="c">         * @param {boolean|object} override If true, the obj passed in becomes fn&#39;s execution scope.</span>
+<span class="c">         * @param {boolean|object} overrideContext If true, the obj passed in becomes fn&#39;s execution scope.</span>
 <span class="c">         * @see onLoadEvent</span>
 <span class="c">         */</span>
-        <span class="nx">onReady</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">onReady</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">_initialized</span><span class="o">)</span> <span class="o">{</span>
 
                 <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
                     <span class="k">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nb">window</span><span class="o">;</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">if</span> <span class="o">(</span><span class="nx">override</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">overrideContext</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
                             <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">obj</span><span class="o">;</span>
                         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                            <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">override</span><span class="o">;</span>
+                            <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">overrideContext</span><span class="o">;</span>
                         <span class="o">}</span>
                     <span class="o">}</span>
                     <span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">ctx</span><span class="o">,</span> <span class="s2">&quot;onLoad&quot;</span><span class="o">,</span> <span class="o">[],</span> <span class="nx">obj</span><span class="o">);</span>
@@ -497,7 +497,7 @@
 
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
 
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">History</span><span class="o">.</span><span class="nx">onLoadEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">History</span><span class="o">.</span><span class="nx">onLoadEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">);</span>
 
             <span class="o">}</span>
         <span class="o">},</span>
@@ -514,10 +514,10 @@
 <span class="c">         *     state of the specified module has changed.</span>
 <span class="c">         * @param {object} obj An arbitrary object that will be passed as a</span>
 <span class="c">         *     parameter to the handler.</span>
-<span class="c">         * @param {boolean} override If true, the obj passed in becomes the</span>
+<span class="c">         * @param {boolean} overrideContext If true, the obj passed in becomes the</span>
 <span class="c">         *     execution scope of the listener.</span>
 <span class="c">         */</span>
-        <span class="nx">register</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">module</span><span class="o">,</span> <span class="nx">initialState</span><span class="o">,</span> <span class="nx">onStateChange</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">register</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">module</span><span class="o">,</span> <span class="nx">initialState</span><span class="o">,</span> <span class="nx">onStateChange</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
 
             <span class="k">var</span> <span class="nx">scope</span><span class="o">,</span> <span class="nx">wrappedFn</span><span class="o">;</span>
 
@@ -551,10 +551,10 @@
             <span class="c">// If the user chooses to override the scope, we use the</span>
 <span class="c"></span>            <span class="c">// custom object passed in as the execution scope.</span>
 <span class="c"></span>            <span class="nx">scope</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="nx">override</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">overrideContext</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">scope</span> <span class="o">=</span> <span class="nx">obj</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="nx">scope</span> <span class="o">=</span> <span class="nx">override</span><span class="o">;</span>
+                <span class="nx">scope</span> <span class="o">=</span> <span class="nx">overrideContext</span><span class="o">;</span>
             <span class="o">}</span>
 
             <span class="nx">wrappedFn</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">state</span><span class="o">)</span> <span class="o">{</span>
@@ -866,11 +866,15 @@
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_element-delegate.html" title="element-delegate">element-delegate</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
                                 <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class="selected"><a href="module_history.html" title="history">history</a></li>
@@ -887,6 +891,7 @@
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_storage.html" title="Storage">Storage</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
                                 <li class=""><a href="module_swf.html" title="swf">swf</a></li>
                                 <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>

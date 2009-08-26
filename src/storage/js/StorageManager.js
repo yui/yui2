@@ -13,6 +13,17 @@ var Y = YAHOO.util,
 	_locationEngineMap = {}, // cached engines
 	_registeredEngineSet = [], // set of available engines
 	_registeredEngineMap = {}, // map of available engines
+	
+	/**
+	 * Fetches a storage constructor if it is available, otherwise returns NULL.
+	 * @method _getClass
+	 * @param klass {Function} Required. The storage constructor to test.
+	 * @return {Function} An available storage constructor or NULL.
+	 * @private
+	 */
+	_getClass = function(klass) {
+		return (klass && klass.isAvailable()) ? klass : null;
+	},
 
 	/**
 	 * Fetches the storage engine from the cache, or creates and caches it.
@@ -82,7 +93,7 @@ var Y = YAHOO.util,
 		 */
 		get: function(engineType, location, conf) {
 			var _cfg = YL.isObject(conf) ? conf : {},
-				klass = _registeredEngineMap[engineType];
+				klass = _getClass(_registeredEngineMap[engineType]);
 
 			if (! klass && ! _cfg.force) {
 				var i, j;
@@ -91,7 +102,7 @@ var Y = YAHOO.util,
 					j = _cfg.order.length;
 
 					for (i = 0; i < j && ! klass; i += 1) {
-						klass = _registeredEngineMap[_cfg.order[i]];
+						klass = _getClass(_cfg.order[i]);
 					}
 				}
 
@@ -99,7 +110,7 @@ var Y = YAHOO.util,
 					j = _registeredEngineSet.length;
 
 					for (i = 0; i < j && ! klass; i += 1) {
-						klass = _registeredEngineSet[i];
+						klass = _getClass(_registeredEngineSet[i]);
 					}
 				}
 			}
@@ -125,16 +136,14 @@ var Y = YAHOO.util,
 		/**
 		 * Registers a engineType Class with the StorageManager singleton; first in is the first out.
 		 * @method register
-		 * @param engineType {String} Required. The engine type, see engines.
-		 * @param validationFx {Function} Required. The evaluation function to test if engineType is available.
-		 * @param klass {Function} Required. A pointer to the engineType Class.
+		 * @param engineConstructor {Function} Required. The engine constructor function, see engines.
 		 * @return {Boolean} When successfully registered.
 		 * @static
 		 */
-		register: function(engineType, validationFx, klass) {
-			if (YL.isString(engineType) && YL.isFunction(validationFx) && YL.isFunction(klass) && validationFx()) {
-				_registeredEngineMap[engineType] = klass;
-				_registeredEngineSet.push(klass);
+		register: function(engineConstructor) {
+			if (YL.isFunction(engineConstructor) && YL.isFunction(engineConstructor.isAvailable) && YL.isString(engineConstructor.ENGINE_NAME)) {
+				_registeredEngineMap[engineConstructor.ENGINE_NAME] = engineConstructor;
+				_registeredEngineSet.push(engineConstructor);
 				return true;
 			}
 

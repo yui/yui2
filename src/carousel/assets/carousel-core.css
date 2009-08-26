@@ -1,4 +1,3 @@
-
 .yui-carousel {
     visibility: hidden;
     overflow: hidden;
@@ -14,16 +13,7 @@
 .yui-carousel-content {
     overflow: hidden;
     position: relative;
-    text-align:center;/*(1) for centering of .yui-carousel-element in IEs*/
-}
- 
-.yui-carousel-horizontal .yui-carousel-element {
-    /*margin: 5px 0;*/ 
-    overflow: hidden;
-    padding: 0;
-    position: relative;
-    width: 320000px;
-    z-index: 1;
+    text-align:center;
 }
  
 .yui-carousel-element li {
@@ -34,12 +24,6 @@
     padding: 0;
     position: absolute;
     text-align: center;
-
-    /* IE 6 & 7 fix - prevent DOM scroll for focussed elements. */
-   *float: none;
-   *display: inline-block;
-   *zoom: 1;
-   *display: inline;
 }
 
 .yui-carousel-vertical .yui-carousel-element li {
@@ -56,29 +40,43 @@
 }
  
 .yui-carousel-nav:after {
-    clear: both;
-    content: "";
+    content: ".";
     display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;    
 }
  
 .yui-carousel-button-focus {
     outline: 1px dotted #000;
 }
 
-.yui-carousel-min-width /* .yui-carousel-element don't need this because min-width should actually be applied to the container to avoid cutting off drop down nav. */ {
-    min-width: 115px;/* had margin: 0 auto on the *carousel container*, don't see the reason for this (see below). */
+.yui-carousel-min-width {
+    min-width: 115px;
 }
 
-.yui-carousel-element	{/* previously had 5px 0, I'm guessing it was to center, so changing to below... but we still need a width on the OL*/ 
+.yui-carousel-element   {
+    overflow: hidden;
+    position:relative;
 	margin: 0 auto;
-	text-align:left; /* overrided centering of text hack for IEs above. See (1) above. */ 
+    padding:0;
+    text-align:left;
+    *margin:0;
+}
+
+.yui-carousel-horizontal .yui-carousel-element {
+    width: 320000px;
 }
 
 .yui-carousel-vertical .yui-carousel-element {
     height:320000px;
-    padding:0;
 }
 
-.yui-carousel-multi-row .yui-carousel-element li {
-    position:absolute; /* allows for horiz and vertical scrolling multi row */ 
+.yui-skin-sam .yui-carousel-nav select {
+    position:static;
+}
+
+.yui-carousel .yui-carousel-item-selected {
+    border: 1px dashed #000;
+    margin: 1px;
 }

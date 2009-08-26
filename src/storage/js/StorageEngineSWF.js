@@ -48,6 +48,7 @@ var Y = YAHOO.util,
 			if (! cfg.attributes) {cfg.attributes  = {};}
 			if (! cfg.attributes.flashVars) {cfg.attributes.flashVars = {};}
 			cfg.attributes.flashVars.useCompression = 'true';
+			cfg.attributes.version = 9.115;
 			_engine = new YAHOO.widget.SWF(cfg.containerID, cfg.swfURL, cfg.attributes);
 		}
 	};
@@ -73,6 +74,7 @@ var Y = YAHOO.util,
 		// evaluates when the SWF is loaded
 		_engine.addListener("contentReady", function() {
 			_this._swf = _engine._swf;
+			_engine.initialized = true;
 
 			var sessionKey = Y.Cookie.get('sessionKey' + Y.StorageEngineSWF.ENGINE_NAME);
 
@@ -86,7 +88,7 @@ var Y = YAHOO.util,
 				}
 				// the key matches the storage type, add to key collection
 				else if (isSessionStorage === isKeySessionStorage) {
-					_this._keys.push(key);
+					_this._addKey(key);
 				}
 			}
 
@@ -98,6 +100,9 @@ var Y = YAHOO.util,
 			_this.length = _this._keys.length;
 			_this.fireEvent(_this.CE_READY);
 		});
+		
+		// required for pages with both a session and local storage
+		if (_engine.initialized) {_engine.fireEvent('contentReady');}
 	};
 
 	YL.extend(Y.StorageEngineSWF, Y.StorageEngineKeyed, {
@@ -161,7 +166,7 @@ var Y = YAHOO.util,
 				this._addKey(_key);
 			}
 
-			if (_engine.callSWF("setItem", [data, _key])) {
+			if (_engine.callSWF("setItem", [_key, data])) {
 				return true;
 			}
 			else {
@@ -175,7 +180,8 @@ var Y = YAHOO.util,
 
 	Y.StorageEngineSWF.SWFURL = "swfstore.swf";
 	Y.StorageEngineSWF.ENGINE_NAME = 'swf';
-    Y.StorageManager.register(Y.StorageEngineSWF.ENGINE_NAME, function() {
+	Y.StorageEngineSWF.isAvailable = function() {
 		return (6 <= YAHOO.env.ua.flash && YAHOO.widget.SWF);
-	}, Y.StorageEngineSWF);
+	};
+    Y.StorageManager.register(Y.StorageEngineSWF);
 }());

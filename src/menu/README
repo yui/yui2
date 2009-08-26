@@ -1,3 +1,29 @@
+*** version 2.8.0 ***
+
+Fixed the following bugs:
+-------------------------
+
++ For IE: Mousing down on a focusable element (such as a form field) when a 
+  Menu is visible will now result in the focusable element gaining focus, 
+  becoming the activeElement and firing key-related events.
+
++ The keepopen configuration property now correctly cascades to all of a 
+  Menu's submenus
+
++ Unsubscribing from an Event listener will now correctly unsubscribe  
+  listeners from all submenus.
+
++ Right clicking on a Menu in Firefox will no longer result in the firing of 
+  the Menu's click event.
+
+Added the following features:
+-----------------------------
++ added to new methods to YAHOO.widget.MenuItem:
+
+  - getNextSibling
+  - getPreviousSibling
+
+
 *** version 2.7.0 ***
 
 Fixed the following bugs:

@@ -31,6 +31,7 @@ package com.yahoo.astra.fl.charts.series
 	//--------------------------------------
 		
 		/**
+		 * @private
 		 * @inheritDoc
 		 */
 		override protected function calculateYOffset(valueAxis:IOriginAxis, otherAxis:IAxis, markerSizes:Array, totalMarkerSize:Number, allSeriesOfType:Array):Number
@@ -45,6 +46,7 @@ package com.yahoo.astra.fl.charts.series
 		}
 		
 		/**
+		 * @private
 		 * @inheritDoc
 		 */
 		override protected function calculateTotalMarkerSize(axis:IAxis, sizes:Array):Number
@@ -68,6 +70,7 @@ package com.yahoo.astra.fl.charts.series
 		}
 		
 		/**
+		 * @private
 		 * @inheritDoc
 		 */
 		override protected function calculateMaximumAllowedMarkerSize(axis:IAxis):Number
