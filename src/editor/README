@@ -12,14 +12,16 @@
 	* 2527893 - CSS typo in editor-core.css
 	* 2527934 - Editor can't be extended to have a custom toolbar in init function
 	* 2527951 - Ampersands are not always escaped properly in the RichTextEditor (RTE)
-	* 2527952 - Controlling the saveHTML process for multiple instances of HTML Editor without a real reference to t...
+	* 2527952 - Controlling the saveHTML process for multiple instances of HTML Editor 
+                    without a real reference to the editor, to ensure the process of collecting data
+                    from a form before tunneling the request thru YUI Connection Manager.
 	* 2527977 - RTE: The cleanHTML method removes <span> tags at beginning and end of HTML when it shouldn't
-	* 2527988 - [bz 2741524] multiple images inserted
+	* 2527988 - multiple images inserted
 	* 2528024 - Editor mangles and incorrectly removes <div> tags in WebKit
-	* 2528086 - [bz 2763863] editor not working in ie8
+	* 2528086 - editor not working in ie8
 	* 2528103 - data with large images / large quantity of images not editable
 	* 2528106 - Disabling RTE doesn't work properly in IE6
-	* 2528193 - [bz 2790831] undo functionality broken
+	* 2528193 - undo functionality broken
 	* 2528194 - Custom Image Browser Example has old code
 	* 2528195 - Toggling Editor "disabled" attribute causes extra line breaks to be inserted
 

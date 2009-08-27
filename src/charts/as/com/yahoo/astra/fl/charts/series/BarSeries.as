@@ -40,6 +40,7 @@
 	//--------------------------------------
 			
 		/**
+		 * @private
 		 * @copy fl.core.UIComponent#getStyleDefinition()
 		 */
 		public static function getStyleDefinition():Object

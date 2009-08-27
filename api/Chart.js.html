@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Charts Widget&nbsp; <span class="subtitle">2.8.0</span></h3>
+        <h3>Charts Widget&nbsp; <span class="subtitle">2.8.0_test1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_charts.html" title="charts">charts</a>
                 
@@ -73,11 +73,24 @@
 <span class="c"> * @param dataSource {YAHOO.util.DataSource} DataSource instance.</span>
 <span class="c"> * @param attributes {object} (optional) Object literal of configuration values.</span>
 <span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">dataSource</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">)</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">dataSource</span><span class="o">,</span> <span class="nx">configurationAttributes</span><span class="o">)</span>
 <span class="o">{</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">;</span>
+	<span class="k">var</span> <span class="nx">possibleParams</span> <span class="o">=</span> <span class="o">{</span><span class="nx">align</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">allowNetworking</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">allowScriptAccess</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">base</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">bgcolor</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">menu</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">quality</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">salign</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">scale</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">tabindex</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">wmode</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">};</span>
+	<span class="k">var</span> <span class="nx">attributes</span> <span class="o">=</span> <span class="o">{</span><span class="nx">fixedAttributes</span><span class="o">:{</span><span class="nx">allowScriptAccess</span><span class="o">:</span><span class="s2">&quot;always&quot;</span><span class="o">},</span> <span class="nx">flashVars</span><span class="o">:{</span><span class="nx">allowedDomain</span> <span class="o">:</span> <span class="nb">document</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">hostname</span><span class="o">},</span> <span class="nx">backgroundColor</span><span class="o">:</span><span class="s2">&quot;#ffffff&quot;</span><span class="o">,</span> <span class="nx">host</span><span class="o">:</span><span class="k">this</span><span class="o">,</span> <span class="nx">version</span><span class="o">:</span><span class="m">9</span><span class="o">.</span><span class="m">045</span><span class="o">};</span>
 	
-	<span class="k">this</span><span class="o">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s2">&quot;yuigen&quot;</span><span class="o">);</span>
+	<span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">configurationAttributes</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="k">if</span><span class="o">(</span><span class="nx">possibleParams</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">i</span><span class="o">))</span>
+		<span class="o">{</span>
+			<span class="nx">attributes</span><span class="o">.</span><span class="nx">fixedAttributes</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">configurationAttributes</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+		<span class="o">}</span>
+		<span class="k">else</span>
+		<span class="o">{</span>
+			<span class="nx">attributes</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">configurationAttributes</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	
+	<span class="k">this</span><span class="o">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s2">&quot;yuigen&quot;</span><span class="o">);</span>
 	
 	<span class="k">if</span><span class="o">(</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">&amp;&amp;</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">!=</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">!=</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span>
 	<span class="o">{</span> 
@@ -94,19 +107,13 @@
 			<span class="k">break</span><span class="o">;</span>	
 		<span class="o">}</span> 
 		<span class="nx">version</span> <span class="o">+=</span> <span class="nx">verSplit</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="o">(</span><span class="nx">version</span><span class="o">);</span> 
+		<span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="o">(</span><span class="nx">version</span><span class="o">);</span> 
 	<span class="o">}</span>
-	<span class="k">else</span>
-	<span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="m">9</span><span class="o">.</span><span class="m">045</span><span class="o">;</span>
-	<span class="o">}</span>
-	
-	<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">||</span> <span class="s2">&quot;#ffffff&quot;</span><span class="o">;</span>
 	
 	<span class="k">this</span><span class="o">.</span><span class="nx">_swfURL</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">SWFURL</span><span class="o">;</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">_containerID</span> <span class="o">=</span> <span class="nx">containerId</span><span class="o">;</span>
 	
-	<span class="nx">attributes</span><span class="o">.</span><span class="nx">host</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span> <span class="o">=</span> <span class="nx">attributes</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">_swfEmbed</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SWF</span><span class="o">(</span><span class="nx">containerId</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">SWFURL</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">);</span>
 	
 	<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_swfEmbed</span><span class="o">.</span><span class="nx">swf</span><span class="o">;</span>

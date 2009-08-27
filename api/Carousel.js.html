@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Carousel Widget&nbsp; <span class="subtitle">2.8.0</span></h3>
+        <h3>Carousel Widget&nbsp; <span class="subtitle">2.8.0_test1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_carousel.html" title="carousel">carousel</a>
                 
@@ -849,7 +849,7 @@
         <span class="nx">numVisible</span> <span class="o">=</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;numVisible&quot;</span><span class="o">);</span>
 
         <span class="k">if</span> <span class="o">(!</span><span class="nx">JS</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">page</span><span class="o">))</span> <span class="o">{</span>
-            <span class="nx">page</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">ceil</span><span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;selectedItem&quot;</span><span class="o">)</span> <span class="o">/</span> <span class="nx">numVisible</span><span class="o">);</span>
+            <span class="nx">page</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;selectedItem&quot;</span><span class="o">)</span> <span class="o">/</span> <span class="nx">numVisible</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="nx">numPages</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">ceil</span><span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;numItems&quot;</span><span class="o">)</span> <span class="o">/</span> <span class="nx">numVisible</span><span class="o">);</span>
@@ -1295,9 +1295,9 @@
 <span class="c">              * The class name for an item in the pager UL or dropdown menu.</span>
 <span class="c">              *</span>
 <span class="c">              * @property PAGER_ITEM</span>
-<span class="c">              * @default &quot;yui-pager-item&quot;</span>
+<span class="c">              * @default &quot;yui-carousel-pager-item&quot;</span>
 <span class="c">              */</span>
-            <span class="nx">PAGER_ITEM</span><span class="o">:</span> <span class="s2">&quot;yui-pager-item&quot;</span><span class="o">,</span>
+            <span class="nx">PAGER_ITEM</span><span class="o">:</span> <span class="s2">&quot;yui-carousel-pager-item&quot;</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The class name for the pagination container</span>
@@ -2054,10 +2054,8 @@
 
             <span class="nx">carousel</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">renderEvent</span><span class="o">,</span> <span class="k">function</span> <span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;selectedItem&quot;</span><span class="o">)</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">||</span>
-                    <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;selectedItem&quot;</span><span class="o">)</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span> <span class="c">// in either case</span>
+                    <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;selectedItem&quot;</span><span class="o">)</span> <span class="o">&lt;=</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span><span class="c">// in either case</span>
 <span class="c"></span>                <span class="nx">carousel</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;selectedItem&quot;</span><span class="o">,</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;firstVisible&quot;</span><span class="o">));</span>
-                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="nx">carousel</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;selectedItem&quot;</span><span class="o">,</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;selectedItem&quot;</span><span class="o">));</span>
                 <span class="o">}</span>
                 <span class="nx">syncNavigation</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">carousel</span><span class="o">,</span> <span class="nx">ev</span><span class="o">);</span>
                 <span class="nx">syncPagerUi</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">carousel</span><span class="o">,</span> <span class="nx">ev</span><span class="o">);</span>

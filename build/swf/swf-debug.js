@@ -132,7 +132,7 @@ YAHOO.widget.SWF = function (p_oElement /*:String*/, swfURL /*:String*/, p_oAttr
 	var flashURL = (shouldExpressInstall)?EXPRESS_INSTALL_URL:swfURL;
 	var objstring = '<object ';
 	var w, h;
-	var flashvarstring = "YUISwfId=" + _id + "&YUIBridgeCallback=" + EVENT_HANDLER + "&";
+	var flashvarstring = "YUISwfId=" + _id + "&YUIBridgeCallback=" + EVENT_HANDLER;
 	
 	YAHOO.widget.SWF._instances[_id] = this;
 
@@ -235,6 +235,10 @@ YAHOO.extend(YAHOO.widget.SWF, YAHOO.util.Element, {
 	 */
 	callSWF: function (func, args)
 	{
+		if (!args) { 
+			  args= []; 
+		};
+		
 		if (this._swf[func]) {
 		return(this._swf[func].apply(this._swf, args));
 	    } else {

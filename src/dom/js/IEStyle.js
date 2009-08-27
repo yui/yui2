@@ -37,7 +37,7 @@ var Y = YAHOO.util,
         * @description Method used by DOM to get style information for IE
         * @param {HTMLElement} el The element to check
         * @param {String} property The property to check
-        * @returns {String} - The computed style
+        * @returns {String} The computed style
         */
         get: function(el, property) {
             var value = '',
@@ -60,8 +60,8 @@ var Y = YAHOO.util,
         /**
         * @method getOffset
         * @description Determine the offset of an element
-        * @param {HTMLElement} - el The element to check
-        * @param {String} - prop The property to check.
+        * @param {HTMLElement} el The element to check
+        * @param {String} prop The property to check.
         * @return {String} The offset
         */
         getOffset: function(el, prop) {
