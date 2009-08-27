@@ -307,7 +307,7 @@ Y.Selector = {
         if (groups.length > 1) {
             var found;
             for (var i = 0, len = groups.length; i < len; ++i) {
-                found = arguments.callee(groups[i], root, firstOnly, true);
+                found = Y.Selector._query(groups[i], root, firstOnly, true);
                 result = firstOnly ? found : result.concat(found); 
             }
             Y.Selector._clearFoundCache();
