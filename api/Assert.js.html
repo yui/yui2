@@ -416,8 +416,8 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">){</span>
 
     <span class="c">//call superclass</span>
-<span class="c"></span>    <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span><span class="o">);</span>
-    
+<span class="c"></span>    <span class="c">//arguments.callee.superclass.constructor.call(this, message);</span>
+<span class="c"></span>    
     <span class="c">/*</span>
 <span class="c">     * Error message. Must be duplicated to ensure browser receives it.</span>
 <span class="c">     * @type String</span>
@@ -473,7 +473,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ComparisonFailure</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">,</span> <span class="nx">expected</span> <span class="c">/*:Object*/</span><span class="o">,</span> <span class="nx">actual</span> <span class="c">/*:Object*/</span><span class="o">){</span>
 
     <span class="c">//call superclass</span>
-<span class="c"></span>    <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span><span class="o">);</span>
+<span class="c"></span>    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span><span class="o">);</span>
     
     <span class="c">/**</span>
 <span class="c">     * The expected value.</span>
@@ -530,7 +530,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedValue</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">,</span> <span class="nx">unexpected</span> <span class="c">/*:Object*/</span><span class="o">){</span>
 
     <span class="c">//call superclass</span>
-<span class="c"></span>    <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span><span class="o">);</span>
+<span class="c"></span>    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span><span class="o">);</span>
     
     <span class="c">/**</span>
 <span class="c">     * The unexpected value.</span>
@@ -576,7 +576,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ShouldFail</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">){</span>
 
     <span class="c">//call superclass</span>
-<span class="c"></span>    <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;This test should fail but didn&#39;t.&quot;</span><span class="o">);</span>
+<span class="c"></span>    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;This test should fail but didn&#39;t.&quot;</span><span class="o">);</span>
     
     <span class="c">/**</span>
 <span class="c">     * The name of the error that occurred.</span>
@@ -603,7 +603,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ShouldError</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">message</span> <span class="c">/*:String*/</span><span class="o">){</span>
 
     <span class="c">//call superclass</span>
-<span class="c"></span>    <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;This test should have thrown an error but didn&#39;t.&quot;</span><span class="o">);</span>
+<span class="c"></span>    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;This test should have thrown an error but didn&#39;t.&quot;</span><span class="o">);</span>
     
     <span class="c">/**</span>
 <span class="c">     * The name of the error that occurred.</span>
@@ -632,7 +632,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">UnexpectedError</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">cause</span> <span class="c">/*:Object*/</span><span class="o">){</span>
 
     <span class="c">//call superclass</span>
-<span class="c"></span>    <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s2">&quot;Unexpected error: &quot;</span> <span class="o">+</span> <span class="nx">cause</span><span class="o">.</span><span class="nx">message</span><span class="o">);</span>
+<span class="c"></span>    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AssertionError</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s2">&quot;Unexpected error: &quot;</span> <span class="o">+</span> <span class="nx">cause</span><span class="o">.</span><span class="nx">message</span><span class="o">);</span>
     
     <span class="c">/**</span>
 <span class="c">     * The unexpected error that occurred.</span>
