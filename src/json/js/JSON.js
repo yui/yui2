@@ -13,7 +13,9 @@ var l = YAHOO.lang,
     isObject   = l.isObject,
     isArray    = l.isArray,
     _toStr     = Object.prototype.toString,
-    Native     = _toStr.call(this.JSON) === '[object JSON]' && this.JSON,
+                 // 'this' is the global object.  window in browser env.  Keep
+                 // the code env agnostic.  Caja requies window, unfortunately.
+    Native     = (YAHOO.env.ua.caja ? window : this).JSON,
 
 /* Variables used by parse */
 
@@ -136,6 +138,9 @@ var l = YAHOO.lang,
     COLON     = ':',
     COLON_SP  = ': ',
     QUOTE     = '"';
+
+// Only accept JSON objects that report a [[Class]] of JSON
+Native = _toStr.call(Native) === '[object JSON]' && Native;
 
 // Escapes a special character to a safe Unicode representation
 function _char(c) {
@@ -496,11 +501,11 @@ YAHOO.lang.JSON = {
      * @return {Date}
      */
     stringToDate : function (str) {
-        var m = str.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/);
+        var m = str.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{3}))?Z$/);
         if (m) {
             var d = new Date();
             d.setUTCFullYear(m[1], m[2]-1, m[3]);
-            d.setUTCHours(m[4], m[5], m[6]);
+            d.setUTCHours(m[4], m[5], m[6], (m[7] || 0));
             return d;
         }
         return str;

@@ -62,7 +62,9 @@
     <span class="nx">isObject</span>   <span class="o">=</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isObject</span><span class="o">,</span>
     <span class="nx">isArray</span>    <span class="o">=</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isArray</span><span class="o">,</span>
     <span class="nx">_toStr</span>     <span class="o">=</span> <span class="nb">Object</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">toString</span><span class="o">,</span>
-    <span class="nx">Native</span>     <span class="o">=</span> <span class="nx">_toStr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">JSON</span><span class="o">)</span> <span class="o">===</span> <span class="s1">&#39;[object JSON]&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">JSON</span><span class="o">,</span>
+                 <span class="c">// &#39;this&#39; is the global object.  window in browser env.  Keep</span>
+<span class="c"></span>                 <span class="c">// the code env agnostic.  Caja requies window, unfortunately.</span>
+<span class="c"></span>    <span class="nx">Native</span>     <span class="o">=</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">caja</span> <span class="o">?</span> <span class="nb">window</span> <span class="o">:</span> <span class="k">this</span><span class="o">).</span><span class="nx">JSON</span><span class="o">,</span>
 
 <span class="c">/* Variables used by parse */</span>
 
@@ -185,6 +187,9 @@
     <span class="nx">COLON</span>     <span class="o">=</span> <span class="s1">&#39;:&#39;</span><span class="o">,</span>
     <span class="nx">COLON_SP</span>  <span class="o">=</span> <span class="s1">&#39;: &#39;</span><span class="o">,</span>
     <span class="nx">QUOTE</span>     <span class="o">=</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+
+<span class="c">// Only accept JSON objects that report a [[Class]] of JSON</span>
+<span class="c"></span><span class="nx">Native</span> <span class="o">=</span> <span class="nx">_toStr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">Native</span><span class="o">)</span> <span class="o">===</span> <span class="s1">&#39;[object JSON]&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">Native</span><span class="o">;</span>
 
 <span class="c">// Escapes a special character to a safe Unicode representation</span>
 <span class="c"></span><span class="k">function</span> <span class="nx">_char</span><span class="o">(</span><span class="nx">c</span><span class="o">)</span> <span class="o">{</span>
@@ -545,11 +550,11 @@
 <span class="c">     * @return {Date}</span>
 <span class="c">     */</span>
     <span class="nx">stringToDate</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">str</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">str</span><span class="o">.</span><span class="nx">match</span><span class="o">(</span><span class="sr">/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">str</span><span class="o">.</span><span class="nx">match</span><span class="o">(</span><span class="sr">/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{3}))?Z$/</span><span class="o">);</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">m</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">();</span>
             <span class="nx">d</span><span class="o">.</span><span class="nx">setUTCFullYear</span><span class="o">(</span><span class="nx">m</span><span class="o">[</span><span class="m">1</span><span class="o">],</span> <span class="nx">m</span><span class="o">[</span><span class="m">2</span><span class="o">]-</span><span class="m">1</span><span class="o">,</span> <span class="nx">m</span><span class="o">[</span><span class="m">3</span><span class="o">]);</span>
-            <span class="nx">d</span><span class="o">.</span><span class="nx">setUTCHours</span><span class="o">(</span><span class="nx">m</span><span class="o">[</span><span class="m">4</span><span class="o">],</span> <span class="nx">m</span><span class="o">[</span><span class="m">5</span><span class="o">],</span> <span class="nx">m</span><span class="o">[</span><span class="m">6</span><span class="o">]);</span>
+            <span class="nx">d</span><span class="o">.</span><span class="nx">setUTCHours</span><span class="o">(</span><span class="nx">m</span><span class="o">[</span><span class="m">4</span><span class="o">],</span> <span class="nx">m</span><span class="o">[</span><span class="m">5</span><span class="o">],</span> <span class="nx">m</span><span class="o">[</span><span class="m">6</span><span class="o">],</span> <span class="o">(</span><span class="nx">m</span><span class="o">[</span><span class="m">7</span><span class="o">]</span> <span class="o">||</span> <span class="m">0</span><span class="o">));</span>
             <span class="k">return</span> <span class="nx">d</span><span class="o">;</span>
         <span class="o">}</span>
         <span class="k">return</span> <span class="nx">str</span><span class="o">;</span>
