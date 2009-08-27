@@ -75,6 +75,9 @@
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="nx">dataSource</span><span class="o">,</span> <span class="nx">configurationAttributes</span><span class="o">)</span>
 <span class="o">{</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">_type</span> <span class="o">=</span> <span class="nx">type</span><span class="o">;</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span> <span class="o">=</span> <span class="nx">dataSource</span><span class="o">;</span>
+		
 	<span class="k">var</span> <span class="nx">possibleParams</span> <span class="o">=</span> <span class="o">{</span><span class="nx">align</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">allowNetworking</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">allowScriptAccess</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">base</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">bgcolor</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">menu</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">quality</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">salign</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">scale</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">tabindex</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">,</span> <span class="nx">wmode</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">};</span>
 	<span class="k">var</span> <span class="nx">attributes</span> <span class="o">=</span> <span class="o">{</span><span class="nx">fixedAttributes</span><span class="o">:{</span><span class="nx">allowScriptAccess</span><span class="o">:</span><span class="s2">&quot;always&quot;</span><span class="o">},</span> <span class="nx">flashVars</span><span class="o">:{</span><span class="nx">allowedDomain</span> <span class="o">:</span> <span class="nb">document</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">hostname</span><span class="o">},</span> <span class="nx">backgroundColor</span><span class="o">:</span><span class="s2">&quot;#ffffff&quot;</span><span class="o">,</span> <span class="nx">host</span><span class="o">:</span><span class="k">this</span><span class="o">,</span> <span class="nx">version</span><span class="o">:</span><span class="m">9</span><span class="o">.</span><span class="m">045</span><span class="o">};</span>
 	
@@ -118,10 +121,7 @@
 	
 	<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_swfEmbed</span><span class="o">.</span><span class="nx">swf</span><span class="o">;</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">_swfEmbed</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;swfReady&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_eventHandler</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-	
-	<span class="k">this</span><span class="o">.</span><span class="nx">_type</span> <span class="o">=</span> <span class="nx">type</span><span class="o">;</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span> <span class="o">=</span> <span class="nx">dataSource</span><span class="o">;</span>
-		
+			
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the SWF is initialized and communication is possible.</span>
 <span class="c">	 * @event contentReady</span>
@@ -131,7 +131,7 @@
 	<span class="o">{</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;contentReady&quot;</span><span class="o">);</span>
 	<span class="o">}</span>
-	<span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">){}</span>	
+	<span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">){}</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user moves the mouse over the bounds of an item renderer in the chart.</span>
