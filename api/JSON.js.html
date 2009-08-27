@@ -189,7 +189,7 @@
     <span class="nx">QUOTE</span>     <span class="o">=</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
 
 <span class="c">// Only accept JSON objects that report a [[Class]] of JSON</span>
-<span class="c"></span><span class="nx">Native</span> <span class="o">=</span> <span class="nx">_toStr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">JSON</span><span class="o">)</span> <span class="o">===</span> <span class="s1">&#39;[object JSON]&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">Native</span><span class="o">;</span>
+<span class="c"></span><span class="nx">Native</span> <span class="o">=</span> <span class="nx">_toStr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">Native</span><span class="o">)</span> <span class="o">===</span> <span class="s1">&#39;[object JSON]&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">Native</span><span class="o">;</span>
 
 <span class="c">// Escapes a special character to a safe Unicode representation</span>
 <span class="c"></span><span class="k">function</span> <span class="nx">_char</span><span class="o">(</span><span class="nx">c</span><span class="o">)</span> <span class="o">{</span>
