@@ -26,6 +26,9 @@
  */
 YAHOO.widget.Chart = function(type, containerId, dataSource, configurationAttributes)
 {
+	this._type = type;
+	this._dataSource = dataSource;
+		
 	var possibleParams = {align:"", allowNetworking:"", allowScriptAccess:"", base:"", bgcolor:"", menu:"", name:"", quality:"", salign:"", scale:"", tabindex:"", wmode:""};
 	var attributes = {fixedAttributes:{allowScriptAccess:"always"}, flashVars:{allowedDomain : document.location.hostname}, backgroundColor:"#ffffff", host:this, version:9.045};
 	
@@ -69,10 +72,7 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, configurationAttrib
 	
 	this._swf = this._swfEmbed.swf;
 	this._swfEmbed.subscribe("swfReady", this._eventHandler, this, true);
-	
-	this._type = type;
-	this._dataSource = dataSource;
-		
+			
 	/**
 	 * Fires when the SWF is initialized and communication is possible.
 	 * @event contentReady
@@ -82,7 +82,7 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, configurationAttrib
 	{
 		this.createEvent("contentReady");
 	}
-	catch(e){}	
+	catch(e){}
 	
 	/**
 	 * Fires when the user moves the mouse over the bounds of an item renderer in the chart.
