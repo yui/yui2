@@ -1260,7 +1260,7 @@ YAHOO.util.Assert = {
 YAHOO.util.AssertionError = function (message /*:String*/){
 
     //call superclass
-    arguments.callee.superclass.constructor.call(this, message);
+    //arguments.callee.superclass.constructor.call(this, message);
     
     /*
      * Error message. Must be duplicated to ensure browser receives it.
@@ -1317,7 +1317,7 @@ YAHOO.lang.extend(YAHOO.util.AssertionError, Object, {
 YAHOO.util.ComparisonFailure = function (message /*:String*/, expected /*:Object*/, actual /*:Object*/){
 
     //call superclass
-    arguments.callee.superclass.constructor.call(this, message);
+    YAHOO.util.AssertionError.call(this, message);
     
     /**
      * The expected value.
@@ -1374,7 +1374,7 @@ YAHOO.lang.extend(YAHOO.util.ComparisonFailure, YAHOO.util.AssertionError, {
 YAHOO.util.UnexpectedValue = function (message /*:String*/, unexpected /*:Object*/){
 
     //call superclass
-    arguments.callee.superclass.constructor.call(this, message);
+    YAHOO.util.AssertionError.call(this, message);
     
     /**
      * The unexpected value.
@@ -1420,7 +1420,7 @@ YAHOO.lang.extend(YAHOO.util.UnexpectedValue, YAHOO.util.AssertionError, {
 YAHOO.util.ShouldFail = function (message /*:String*/){
 
     //call superclass
-    arguments.callee.superclass.constructor.call(this, message || "This test should fail but didn't.");
+    YAHOO.util.AssertionError.call(this, message || "This test should fail but didn't.");
     
     /**
      * The name of the error that occurred.
@@ -1447,7 +1447,7 @@ YAHOO.lang.extend(YAHOO.util.ShouldFail, YAHOO.util.AssertionError);
 YAHOO.util.ShouldError = function (message /*:String*/){
 
     //call superclass
-    arguments.callee.superclass.constructor.call(this, message || "This test should have thrown an error but didn't.");
+    YAHOO.util.AssertionError.call(this, message || "This test should have thrown an error but didn't.");
     
     /**
      * The name of the error that occurred.
@@ -1476,7 +1476,7 @@ YAHOO.lang.extend(YAHOO.util.ShouldError, YAHOO.util.AssertionError);
 YAHOO.util.UnexpectedError = function (cause /*:Object*/){
 
     //call superclass
-    arguments.callee.superclass.constructor.call(this, "Unexpected error: " + cause.message);
+    YAHOO.util.AssertionError.call(this, "Unexpected error: " + cause.message);
     
     /**
      * The unexpected error that occurred.

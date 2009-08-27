@@ -140,7 +140,7 @@ var l = YAHOO.lang,
     QUOTE     = '"';
 
 // Only accept JSON objects that report a [[Class]] of JSON
-Native = _toStr.call(JSON) === '[object JSON]' && Native;
+Native = _toStr.call(Native) === '[object JSON]' && Native;
 
 // Escapes a special character to a safe Unicode representation
 function _char(c) {
