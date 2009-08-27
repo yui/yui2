@@ -101,7 +101,7 @@
         'charts': {
             'type': 'js',
             'path': 'charts/charts-min.js',
-            'requires': ['element', 'json', 'datasource']
+            'requires': ['element', 'json', 'datasource', 'swf']
         },
 
         'colorpicker': {
@@ -115,7 +115,15 @@
         'connection': {
             'type': 'js',
             'path': 'connection/connection-min.js',
-            'requires': ['event']
+            'requires': ['event'],
+            'supersedes': ['connectioncore']
+        },
+
+        'connectioncore': {
+            'type': 'js',
+            'path': 'connection/connection_core-min.js',
+            'requires': ['event'],
+            'pkg': 'connection'
         },
 
         'container': {
@@ -188,7 +196,14 @@
         'element': {
             'type': 'js',
             'path': 'element/element-min.js',
-            'requires': ['dom', 'event']
+            'requires': ['dom', 'event'],
+            'optional': ['event-mouseenter', 'event-delegate']
+        },
+
+        'element-delegate': {
+            'type': 'js',
+            'path': 'element-delegate/element-delegate-min.js',
+            'requires': ['element']
         },
 
         'event': {
@@ -201,6 +216,19 @@
             'type': 'js',
             'path': 'event-simulate/event-simulate-min.js',
             'requires': ['event']
+        },
+
+        'event-delegate': {
+            'type': 'js',
+            'path': 'event-delegate/event-delegate-min.js',
+            'requires': ['event'],
+            'optional': ['selector']
+        },
+
+        'event-mouseenter': {
+            'type': 'js',
+            'path': 'event-mouseenter/event-mouseenter-min.js',
+            'requires': ['dom', 'event']
         },
 
         'fonts': {
@@ -230,7 +258,7 @@
          'imagecropper': {
              'type': 'js',
              'path': 'imagecropper/imagecropper-min.js',
-             'requires': ['dom', 'event', 'dragdrop', 'element', 'resize'],
+             'requires': ['dragdrop', 'element', 'resize'],
              'skinnable': true
          },
 
@@ -249,7 +277,7 @@
          'layout': {
              'type': 'js',
              'path': 'layout/layout-min.js',
-             'requires': ['dom', 'event', 'element'],
+             'requires': ['element'],
              'optional': ['animation', 'dragdrop', 'resize', 'selector'],
              'skinnable': true
          }, 
@@ -290,6 +318,14 @@
             'skinnable': true
         },
 
+        'progressbar': {
+            'type': 'js',
+            'path': 'progressbar/progressbar-min.js',
+            'requires': ['element'],
+            'optional': ['animation'],
+            'skinnable': true
+        },
+
         'reset': {
             'type': 'css',
             'path': 'reset/reset-min.css'
@@ -312,7 +348,7 @@
          'resize': {
              'type': 'js',
              'path': 'resize/resize-min.js',
-             'requires': ['dom', 'event', 'dragdrop', 'element'],
+             'requires': ['dragdrop', 'element'],
              'optional': ['animation'],
              'skinnable': true
          },
@@ -356,7 +392,8 @@
         'swf': {
             'type': 'js',
             'path': 'swf/swf-min.js',
-            'requires': ['yahoo', 'dom', 'event', 'element']
+            'requires': ['element'],
+            'supersedes': ['swfdetect']
         },
 
         'swfdetect': {
@@ -368,7 +405,7 @@
         'swfstore': {
             'type': 'js',
             'path': 'swfstore/swfstore-min.js',
-            'requires': ['yahoo', 'dom', 'event', 'element', 'cookie']
+            'requires': ['element', 'cookie', 'swf']
         },
 
         'tabview': {
@@ -964,21 +1001,6 @@
                 d.push(r[i]);
                 m = info[r[i]];
                 YUI.ArrayUtil.appendArray(d, this.getRequires(m));
-
-                // add existing skins for skinnable modules as well.  The only
-                // way to do this is go through the list of required items (this
-                // assumes that _skin is called before getRequires is called on
-                // the module.
-                // if (m.skinnable) {
-                //     var req=this.required, l=req.length;
-                //     for (var j=0; j<l; j=j+1) {
-                //         // YAHOO.log('checking ' + r[j]);
-                //         if (req[j].indexOf(r[j]) > -1) {
-                //             // YAHOO.log('adding ' + r[j]);
-                //             d.push(req[j]);
-                //         }
-                //     }
-                // }
             }
 
             if (o && this.loadOptional) {
@@ -1062,7 +1084,6 @@
                 this._config(o);
                 this._setup();
                 this._explode();
-                // this._skin(); // deprecated
                 if (this.allowRollup) {
                     this._rollup();
                 }
@@ -1171,17 +1192,12 @@
             }
         },
 
-        /**
-         * Sets up the requirements for the skin assets if any of the
-         * requested modules are skinnable
+        /*
          * @method _skin
          * @private
-         * @deprecated skin modules are generated for all skinnable
-         *             components during _setup(), and the components
-         *             are configured to require the skin.
+         * @deprecated
          */
-        _skin: function() {
-
+        _skin: function() { 
         },
 
         /**

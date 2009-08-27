@@ -3,10 +3,13 @@ package com.yahoo.astra.fl.charts.axes
 	import com.yahoo.astra.fl.charts.series.ISeries;
 	import com.yahoo.astra.fl.charts.series.CartesianSeries;
 	import com.yahoo.astra.fl.charts.CartesianChart;
+	import com.yahoo.astra.fl.charts.events.AxisEvent;
+	import com.yahoo.astra.fl.charts.IChart;
 	import com.yahoo.astra.utils.DateUtil;
 	import com.yahoo.astra.utils.TimeUnit;
 	import fl.core.UIComponent;
 	import flash.text.TextFormat;
+	import flash.events.ErrorEvent;
 
 	/**
 	 * An axis type representing a date and time range from minimum to maximum
@@ -37,6 +40,7 @@ package com.yahoo.astra.fl.charts.axes
 		public function TimeAxis()
 		{
 			super();
+			this.addEventListener(AxisEvent.AXIS_READY, axisReadyHandler);
 		}
 		
 	//--------------------------------------
@@ -292,7 +296,7 @@ package com.yahoo.astra.fl.charts.axes
 		private var _numLabelsSetByUser:Boolean = false;
 
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
 		public function get numLabels():Number
 		{
@@ -356,6 +360,27 @@ package com.yahoo.astra.fl.charts.axes
 		{
 			_calculateByLabelSize = value;
 		}
+		
+		/**
+		 * @private
+		 * Contains minor unit data to be passed to the renderer.
+		 */
+		private var _minorTicks:Array;
+		
+		/**
+		 * @private
+		 * Contains major unit data to be passed to the renderer.
+		 */
+		private var _majorTicks:Array;
+		
+		/**
+		 * @private (setter)
+		 */
+		override public function set chart(value:IChart):void
+		{
+			super.chart = value;
+			(this.chart as UIComponent).addEventListener(AxisEvent.AXIS_READY, axisReadyHandler);
+		}		
 				
 	//--------------------------------------
 	//  Public Methods
@@ -373,19 +398,20 @@ package com.yahoo.astra.fl.charts.axes
 				value += this.valueToNumber(rest[i]);
 			}
 			return value;
-		}
-	
+		}		
+
 		/**
 		 * @inheritDoc
 		 */
 		public function updateScale():void
-		{			
+		{						
 			this.resetScale();
 			this.calculatePositionMultiplier();
 			
 			(this.renderer as ICartesianAxisRenderer).majorUnitSetByUser = this._majorUnitSetByUser;
-			this.renderer.ticks = this.createAxisData(this.majorUnit, this.majorTimeUnit);
-			this.renderer.minorTicks = this.createAxisData(this.minorUnit, this.minorTimeUnit, false);
+
+			this.createAxisData(this.minorUnit, this.minorTimeUnit, false);
+			this.createAxisData(this.majorUnit, this.majorTimeUnit);
 		}
 		
 		/**
@@ -419,7 +445,18 @@ package com.yahoo.astra.fl.charts.axes
 			if(this.labelFunction != null)
 			{
 				var numericValue:Number = this.valueToNumber(value);
-				text = this.labelFunction(new Date(numericValue), this.majorTimeUnit);
+				try
+				{
+					text = this.labelFunction(new Date(numericValue), this.majorTimeUnit);
+				}
+				catch(e:Error)
+				{
+					//dispatch error event from the chart
+					var message:String = "There is an error in your ";
+					message += (ICartesianAxisRenderer(this.renderer).orientation == AxisOrientation.VERTICAL)?"y":"x";
+					message += "-axis labelFunction.";
+					this.chart.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, message));
+				}
 			}			
 			if(text == null)
 			{
@@ -475,16 +512,24 @@ package com.yahoo.astra.fl.charts.axes
 			this.calculateMajorUnit();
 			this.calculateMinorUnit();
 		}
-		
+
 		/**
 		 * @private
 		 * Generates AxisData objects for use by the axis renderer.
 		 */
-		protected function createAxisData(unit:Number, timeUnit:String, isMajorUnit:Boolean = true):Array
+		protected function createAxisData(unit:Number, timeUnit:String, isMajorUnit:Boolean = true):void
 		{
 			if(unit <= 0)
 			{
-				return [];
+				if(isMajorUnit)
+				{
+					_majorTicks = [];
+				}
+				else
+				{
+					_minorTicks = [];
+				}
+				return;
 			}
 			
 			var data:Array = [];
@@ -492,6 +537,7 @@ package com.yahoo.astra.fl.charts.axes
 			var displayedMinimum:Boolean = false;
 			var date:Date = new Date(this.minimum.valueOf());
 			var itemCount:int = 0;
+			var maxLabel:String = "";
 			while(date.valueOf() <= this.maximum.valueOf())
 			{
 				date = new Date(this.minimum.valueOf());
@@ -509,7 +555,12 @@ package com.yahoo.astra.fl.charts.axes
 				}
 				//because Flash UIComponents round the position to the nearest pixel, we need to do the same.
 				var position:Number = Math.round(this.valueToLocal(date));
-				var label:String = this.valueToLabel(date);
+				var label:String = "";
+				if(isMajorUnit) 
+				{
+					label = this.valueToLabel(date);
+					if(label.length > maxLabel.length) maxLabel = label;
+				}
 				var axisData:AxisData = new AxisData(position, date, label);
 				data.push(axisData);
 				itemCount++;
@@ -520,7 +571,23 @@ package com.yahoo.astra.fl.charts.axes
 				}
 			}
 			if(this.reverse) data = data.reverse();
-			return data;
+			if(isMajorUnit)
+			{
+				_majorTicks = data;
+				if(maxLabel.length > this.maxLabel.length)
+				{
+					this.maxLabel = maxLabel;
+					this.dispatchEvent(new AxisEvent(AxisEvent.AXIS_FAILED));
+				}
+				else
+				{
+					this.dispatchEvent(new AxisEvent(AxisEvent.AXIS_READY));
+				}
+			}
+			else
+			{
+				_minorTicks = data;
+			}
 		}
 
 		/**
@@ -531,7 +598,8 @@ package com.yahoo.astra.fl.charts.axes
 			var maxAbbrevDate:String = this.valueToLabel(new Date(2008, 4, 30)) as String;
 			var maxFullDate:String = this.valueToLabel(new Date(2009, 8, 30)) as String;
 			var maxDate:String = maxAbbrevDate.length > maxFullDate.length ? maxAbbrevDate : maxFullDate; 
-			return maxDate;	
+			this.maxLabel = maxDate.length > this.maxLabel.length ? maxDate : this.maxLabel;
+			return this.maxLabel;	
 		}			
 
 	//--------------------------------------
@@ -1018,6 +1086,16 @@ package com.yahoo.astra.fl.charts.axes
 			this._dataMaximum = new Date(max);
 			
 			super.parseDataProvider();
-		}		
+		}
+
+		/**
+		 * @private
+		 * Listener for axisReady event. Sets the ticks and minorTicks for the renderer.
+		 */
+		private function axisReadyHandler(event:AxisEvent):void
+		{
+			this.renderer.ticks = _majorTicks;
+			this.renderer.minorTicks = _minorTicks;
+		}				
 	}
 }

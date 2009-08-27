@@ -668,6 +668,14 @@ function LogReader(elContainer, oConfigs) {
     
     this._init.apply(this,arguments);
 
+    /**
+     * Render the LogReader immediately upon instantiation.  If set to false,
+     * you must call myLogReader.render() to generate the UI.
+     * 
+     * @property autoRender
+     * @type {Boolean}
+     * @default true
+     */
     if (this.autoRender !== false) {
         this.render();
     }
@@ -695,7 +703,7 @@ YAHOO.lang.augmentObject(LogReader, {
      * @property ENTRY_TEMPLATE
      * @static
      * @type {HTMLElement}
-     * @default PRE.yui-log-entry element
+     * @default <code>pre</code> element with class yui-log-entry
      */
     ENTRY_TEMPLATE : (function () {
         return make('pre',{ className: 'yui-log-entry' });
@@ -705,7 +713,7 @@ YAHOO.lang.augmentObject(LogReader, {
      * Template used for innerHTML of verbose entry output.
      * @property VERBOSE_TEMPLATE
      * @static
-     * @default "<span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}:</p><p>{sourceAndDetail}</p><p>{message}</p>"
+     * @default "&lt;p>&lt;span class='{category}'>{label}&lt;/span>{totalTime}ms (+{elapsedTime}) {localTime}:&lt;/p>&lt;p>{sourceAndDetail}&lt;/p>&lt;p>{message}&lt;/p>"
      */
     VERBOSE_TEMPLATE : "<p><span class='{category}'>{label}</span> {totalTime}ms (+{elapsedTime}) {localTime}:</p><p>{sourceAndDetail}</p><p>{message}</p>",
 
@@ -713,7 +721,7 @@ YAHOO.lang.augmentObject(LogReader, {
      * Template used for innerHTML of compact entry output.
      * @property BASIC_TEMPLATE
      * @static
-     * @default "<p><span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}</p>"
+     * @default "&lt;p>&lt;span class='{category}'>{label}&lt;/span>{totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}&lt;/p>"
      */
     BASIC_TEMPLATE : "<p><span class='{category}'>{label}</span> {totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}</p>"
 });
@@ -1513,10 +1521,11 @@ LogReader.prototype = {
         // Default the container if unset or not a div
         if(!this._elContainer || !/div$/i.test(this._elContainer.tagName)) {
             this._elContainer = d.body.insertBefore(make("div"),d.body.firstChild);
+            // Only position absolutely if an in-DOM element is not supplied
+            Dom.addClass(this._elContainer,"yui-log-container");
         }
 
         Dom.addClass(this._elContainer,"yui-log");
-        Dom.addClass(this._elContainer,"yui-log-container");
 
         // If implementer has provided container values, trust and set those
         var style = this._elContainer.style,

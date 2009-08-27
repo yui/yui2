@@ -3,6 +3,7 @@
  *
  * @module json
  * @class JSON
+ * @namespace YAHOO.lang
  * @static
  */
 (function () {
@@ -14,7 +15,7 @@ var l = YAHOO.lang,
     _toStr     = Object.prototype.toString,
     Native     = _toStr.call(this.JSON) === '[object JSON]' && this.JSON,
 
-/*** Variables used by parse ***/
+/* Variables used by parse */
 
     /**
      * Replace certain Unicode characters that JavaScript may handle incorrectly
@@ -75,7 +76,7 @@ var l = YAHOO.lang,
     _UNSAFE  = /^[\],:{}\s]*$/,
 
 
-/*** Variables used by stringify ***/
+/* Variables used by stringify */
 
     /**
      * Regex used to replace special characters in strings for JSON
@@ -121,7 +122,8 @@ var l = YAHOO.lang,
         '[object Number]'  : NUMBER,
         'boolean'          : BOOLEAN,
         '[object Boolean]' : BOOLEAN,
-        '[object Date]'    : DATE
+        '[object Date]'    : DATE,
+        '[object RegExp]'  : OBJECT
     },
     EMPTY     = '',
     OPEN_O    = '{',
@@ -144,7 +146,7 @@ function _char(c) {
 }
 
 
-/*** functions used by parse ***/
+/* functions used by parse */
 
 /**
  * Traverses nested objects, applying a filter or reviver function to
@@ -216,7 +218,7 @@ function _parse(s,reviver) {
 
 
 
-/*** functions used by stringify ***/
+/* functions used by stringify */
 
 // Utility function used to determine how to serialize a variable.
 function _type(o) {
@@ -247,10 +249,20 @@ function _stringify(o,w,space) {
     var replacer = isFunction(w) ? w : null,
         format   = _toStr.call(space).match(/String|Number/) || [],
         _date    = YAHOO.lang.JSON.dateToString,
-        stack    = [];
+        stack    = [],
+        tmp,i,len;
 
-    if (replacer) {
+    if (replacer || !isArray(w)) {
         w = undefined;
+    }
+
+    // Ensure whitelist keys are unique (bug 2110391)
+    if (w) {
+        tmp = {};
+        for (i = 0, len = w.length; i < len; ++i) {
+            tmp[w[i]] = true;
+        }
+        w = tmp;
     }
 
     // Per the spec, strings are truncated to 10 characters and numbers
@@ -259,57 +271,67 @@ function _stringify(o,w,space) {
                 new Array(Math.min(Math.max(0,space),10)+1).join(" ") :
                 (space || EMPTY).slice(0,10);
 
-    // Ensure whitelist keys are unique (bug 2110391)
-    if (l.isArray(w)) {
-        w = (function (a) {
-            var uniq = {},i,len;
-            for (i = 0, len = a.length; i < len; ++i) {
-                uniq[a[i]] = true;
-            }
-            return uniq;
-        })(w);
-    }
-
     function _serialize(h,key) {
-        var o = isFunction(replacer) ? replacer.call(h,key,h[key]) : h[key],
-            a = [],
+        var value = h[key],
+            t     = _type(value),
+            a     = [],
             colon = space ? COLON_SP : COLON,
             arr, i, keys, k, v;
 
-        switch (_type(o)) {
+        // Per the ECMA 5 spec, toJSON is applied before the replacer is
+        // called.  Also per the spec, Date.prototype.toJSON has been added, so
+        // Date instances should be serialized prior to exposure to the
+        // replacer.  I disagree with this decision, but the spec is the spec.
+        if (isObject(value) && isFunction(value.toJSON)) {
+            value = value.toJSON(key);
+        } else if (t === DATE) {
+            value = _date(value);
+        }
+
+        if (isFunction(replacer)) {
+            value = replacer.call(h,key,value);
+        }
+
+        if (value !== h[key]) {
+            t = _type(value);
+        }
+
+        switch (t) {
+            case DATE    : // intentional fallthrough.  Pre-replacer Dates are
+                           // serialized in the toJSON stage.  Dates here would
+                           // have been produced by the replacer.
             case OBJECT  : break;
-            case STRING  : return _string(o);
-            case NUMBER  : return isFinite(o) ? o+EMPTY : NULL;
-            case BOOLEAN : return o+EMPTY;
-            case DATE    : return _date(o);
+            case STRING  : return _string(value);
+            case NUMBER  : return isFinite(value) ? value+EMPTY : NULL;
+            case BOOLEAN : return value+EMPTY;
             case NULL    : return NULL;
             default      : return undefined;
         }
 
         // Check for cyclical references in nested objects
         for (i = stack.length - 1; i >= 0; --i) {
-            if (stack[i] === o) {
+            if (stack[i] === value) {
                 throw new Error("JSON.stringify. Cyclical reference");
             }
         }
 
-        arr = isArray(o);
+        arr = isArray(value);
 
         // Add the object to the processing stack
-        stack.push(o);
+        stack.push(value);
 
         if (arr) { // Array
-            for (i = o.length - 1; i >= 0; --i) {
-                a[i] = _serialize(o, i) || NULL;
+            for (i = value.length - 1; i >= 0; --i) {
+                a[i] = _serialize(value, i) || NULL;
             }
         } else {   // Object
             // If whitelist provided, take only those keys
-            keys = isObject(w) ? w : o;
+            keys = w || value;
             i = 0;
 
             for (k in keys) {
                 if (keys.hasOwnProperty(k)) {
-                    v = _serialize(o, k);
+                    v = _serialize(value, k);
                     if (v) {
                         a[i++] = _string(k) + colon + v;
                     }
@@ -336,7 +358,7 @@ function _stringify(o,w,space) {
 }
 
 
-/*** Public API ***/
+/* Public API */
 YAHOO.lang.JSON = {
     /**
      * Leverage native JSON parse if the browser has a native implementation.
@@ -344,7 +366,7 @@ YAHOO.lang.JSON = {
      * JSON user guide for caveats.  The default value is true for browsers with
      * native JSON support.
      *
-     * @property JSON.useNativeParse
+     * @property useNativeParse
      * @type Boolean
      * @default true
      * @static
@@ -357,7 +379,7 @@ YAHOO.lang.JSON = {
      * section in the JSON user guide for caveats.  The default value is true
      * for browsers with native JSON support.
      *
-     * @property JSON.useNativeStringify
+     * @property useNativeStringify
      * @type Boolean
      * @default true
      * @static
@@ -370,7 +392,7 @@ YAHOO.lang.JSON = {
      * are replaced with placeholders or removed.  Then in the final step, the
      * result of all these replacements is checked for invalid characters.
      *
-     * @method JSON.isSafe
+     * @method isSafe
      * @param str {String} JSON string to be tested
      * @return {boolean} is the string safe for eval?
      * @static
@@ -388,7 +410,7 @@ YAHOO.lang.JSON = {
      * JavaScript implementation based on http://www.json.org/json2.js
      * is used.</p>
      *
-     * @method JSON.parse
+     * @method parse
      * @param s {string} JSON string data
      * @param reviver {function} (optional) function(k,v) passed each key:value
      *          pair of object literals, allowing pruning or altering values
@@ -422,7 +444,7 @@ YAHOO.lang.JSON = {
      * native JSON.stringify if the browser has a native implementation.
      * Otherwise, a JavaScript implementation is used.</p>
      *
-     * @method JSON.stringify
+     * @method stringify
      * @param o {MIXED} any arbitrary object to convert to JSON string
      * @param w {Array|Function} (optional) whitelist of acceptable object keys
      *                  to include OR a function(value,key) to alter values
@@ -440,10 +462,13 @@ YAHOO.lang.JSON = {
 
     /**
      * Serializes a Date instance as a UTC date string.  Used internally by
-     * stringify.  Override this method if you need Dates serialized in a
-     * different format.
+     * the JavaScript implementation of stringify.  If you need a different
+     * Date serialization format, override this method.  If you change this,
+     * you should also set useNativeStringify to false, since native JSON
+     * implementations serialize Dates per the ECMAScript 5 spec.  You've been
+     * warned.
      *
-     * @method JSON.dateToString
+     * @method dateToString
      * @param d {Date} The Date to serialize
      * @return {String} stringified Date in UTC format YYYY-MM-DDTHH:mm:SSZ
      * @static
@@ -453,12 +478,12 @@ YAHOO.lang.JSON = {
             return v < 10 ? '0' + v : v;
         }
 
-        return QUOTE + d.getUTCFullYear() + '-' +
+        return d.getUTCFullYear()         + '-' +
             _zeroPad(d.getUTCMonth() + 1) + '-' +
             _zeroPad(d.getUTCDate())      + 'T' +
             _zeroPad(d.getUTCHours())     + COLON +
             _zeroPad(d.getUTCMinutes())   + COLON +
-            _zeroPad(d.getUTCSeconds())   + 'Z' + QUOTE;
+            _zeroPad(d.getUTCSeconds())   + 'Z';
     },
 
     /**
@@ -466,7 +491,7 @@ YAHOO.lang.JSON = {
      * Reference this from a reviver function to rebuild Dates during the
      * parse operation.
      *
-     * @method JSON.stringToDate
+     * @method stringToDate
      * @param str {String} String serialization of a Date
      * @return {Date}
      */

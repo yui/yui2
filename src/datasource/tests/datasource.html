@@ -598,13 +598,20 @@ var XMLDocument = function(rootTagName, namespaceURL) {
         output = YAHOO.util.Number.format("123123123", {thousandsSeparator:","});
         Assert.areSame("123,123,123", output, "Incorrect thousands separation");
 
-        output = YAHOO.util.Number.format("123123123.176",{
+        output = YAHOO.util.Number.format(-123123123);
+        Assert.areSame("-123123123", output, "Incorrect default negative format");
+
+        output = YAHOO.util.Number.format(-123123123, {negativeFormat:"--#"});
+        Assert.areSame("--123123123", output, "Incorrect negative format indicator");
+
+        output = YAHOO.util.Number.format("-123123123.176",{
                 prefix: "&#165;",
                 decimalPlaces:2,
                 thousandsSeparator:".",
-                decimalSeparator:","
+                decimalSeparator:",",
+                negativeFormat:"# (neg)"
             });
-        Assert.areSame("&#165;123.123.123,18", output, "Incorrect Yen formatting");
+        Assert.areSame("&#165;123.123.123,18 (neg)", output, "Incorrect Yen formatting");
     }
 });
 

@@ -60,15 +60,11 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		 * @description The field in each item that corresponds to a value on the x axis.
 		 * @type String
 		 */
-		this.getAttributeConfig("xField",
-		{
-			method: this._getXField
-		});
-
 		this.setAttributeConfig("xField",
 		{
 			validator: YAHOO.lang.isString,
-			method: this._setXField
+			method: this._setXField,
+			getter: this._getXField
 		});
 
 		/**
@@ -76,15 +72,11 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		 * @description The field in each item that corresponds to a value on the x axis.
 		 * @type String
 		 */
-		this.getAttributeConfig("yField",
-		{
-			method: this._getYField
-		});
-
 		this.setAttributeConfig("yField",
 		{
 			validator: YAHOO.lang.isString,
-			method: this._setYField
+			method: this._setYField,
+			getter: this._getYField
 		});
 
 		/**
@@ -305,6 +297,19 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	 */
 	_setConstrainViewport: function(value)
 	{
-			this._swf.setConstrainViewport(value);
+		this._swf.setConstrainViewport(value);
+	},
+	
+	/**
+	 * Sets the style object for a single series based on its index
+	 * 
+	 * @method setSeriesStylesByIndex
+	 * @param index {Number} The position within the series definition to apply the style
+	 * @param style {object} Style object to be applied to the selected series
+	 */
+	setSeriesStylesByIndex:function(index, style)
+	{
+		style = YAHOO.lang.JSON.stringify(style);
+		if(this._swf && this._swf.setSeriesStylesByIndex) this._swf.setSeriesStylesByIndex(index, style);
 	}
 });

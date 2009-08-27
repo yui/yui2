@@ -633,6 +633,16 @@ responseSchema : null,
  */
 // property intentionally undefined
  
+/**
+ * When working with XML data, setting this property to true enables support for
+ * XPath-syntaxed locators in schema definitions.
+ *
+ * @property useXPath
+ * @type Boolean
+ * @default false
+ */
+useXPath : false,
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // DataSourceBase public methods
@@ -958,7 +968,7 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
                 this.responseType = DS.TYPE_JSARRAY;
             }
              // xml
-            else if(oRawResponse && oRawResponse.nodeType && oRawResponse.nodeType == 9) {
+            else if(oRawResponse && oRawResponse.nodeType && (oRawResponse.nodeType === 9 || oRawResponse.nodeType === 1 || oRawResponse.nodeType === 11)) {
                 this.responseType = DS.TYPE_XML;
             }
             else if(oRawResponse && oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table

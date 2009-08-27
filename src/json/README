@@ -1,6 +1,22 @@
 JSON Utility - Release Notes
 
 Development master
+2.8.0
+    * Refactored to be ECMA 5 spec compliant.  This resulted in the following:
+        * Leverages browser native JSON parse and stringify if present
+        * Added JSON.useNativeParse and JSON.useNativeStringify boolean configs to
+          allow implementers to force the use of the JavaScript implementation.
+          These are defaulted to true when the current browser supports native
+          JSON.  It is currently recommended to set useNativeStringify to false if
+          you need to use a replacer function.
+        * Removed object key sorting (per spec)
+        * Stringifying cyclical objects will now throw an error (per spec)
+        * Removed support for depth control (per spec)
+    * Tightened up JSON.stringToDate
+    * Renamed final regex _INVALID => _UNSAFE because the destructive regex
+      process is to detect unsafe input.  It does not validate against JSON
+      syntax.
+    * Refactored stringify to match the implementation in YUI 3.
 
 2.7.0
     * No changes

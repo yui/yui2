@@ -31,15 +31,11 @@ YAHOO.lang.extend(YAHOO.widget.PieChart, YAHOO.widget.Chart,
 		 * @description The field in each item that corresponds to the data value.
 		 * @type String
 		 */
-		this.getAttributeConfig("dataField",
-		{
-			method: this._getDataField
-		});
-   
 		this.setAttributeConfig("dataField",
 		{
 			validator: YAHOO.lang.isString,
-			method: this._setDataField
+			method: this._setDataField,
+			getter: this._getDataField
 		});
    
 		/**
@@ -47,15 +43,11 @@ YAHOO.lang.extend(YAHOO.widget.PieChart, YAHOO.widget.Chart,
 		 * @description The field in each item that corresponds to the category value.
 		 * @type String
 		 */
-		this.getAttributeConfig("categoryField",
-		{
-			method: this._getCategoryField
-		});
-   
 		this.setAttributeConfig("categoryField",
 		{
 			validator: YAHOO.lang.isString,
-			method: this._setCategoryField
+			method: this._setCategoryField,
+			getter: this._getCategoryField
 		});
 	},
 

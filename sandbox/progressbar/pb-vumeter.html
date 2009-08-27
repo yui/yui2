@@ -13,7 +13,7 @@
 
 <!-- js -->
 <script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/animation/animation-debug.js"></script>
+<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
 <script type="text/javascript" src="../../build/element/element-min.js"></script>
 
 <script type="text/javascript" src="../../build/progressbar/progressbar-debug.js"></script>
@@ -27,12 +27,13 @@
 	padding:3px;
 	margin:10px;
 	border: medium ridge silver;
+	overflow:hidden;
 }
 
 
 #vumeter .yui-pb {
 	margin:3px;
-	display:inline-block;
+	float:left;
 }
 
 #vumeter .yui-pb-bar  {
@@ -141,7 +142,13 @@ code {
 		
 		var pbvu = [],i,NUM_BARS= 8, hold = false;
 		for (i = 0; i < NUM_BARS;i++) {
-			pbvu[i] = new YAHOO.widget.ProgressBar({direction:'btt',width:20,height:80,anim:true,duration:0.3,id:'a' + i}).render('vumeter');
+			pbvu[i] = new YAHOO.widget.ProgressBar({
+				direction:'btt',
+				width:20,
+				height:80,
+				anim:true
+			}).render('vumeter');
+			pbvu[i].get('anim').duration = 0.3;
 		}
 		var redrawVUs = function() {
 			var points = [],i;
@@ -153,7 +160,6 @@ code {
 				pbvu[i].set('value',newValue);
 			}
 		};
-		//window.setInterval(redrawVUs,350);	
 		pbvu[NUM_BARS -1].on('complete',redrawVUs);
 		redrawVUs();
 	});

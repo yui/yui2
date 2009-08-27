@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>DataTable Widget&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>DataTable Widget&nbsp; <span class="subtitle">2.8.0_test1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_datatable.html" title="datatable">datatable</a>
                  &gt; YAHOO.widget.ScrollingDataTable 
@@ -1569,6 +1569,45 @@ and container width and height.
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="private" rel="yui:method" resource="#method_clearScrollPositions">
+                                    <h4>
+                                        <a name="method_clearScrollPositions">clearScrollPositions</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">clearScrollPositions</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Clears stored scroll positions to interrupt the automatic restore mechanism.
+Useful for setting scroll positions programmatically rather than as part of
+the post-render cleanup process.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_disable">
                                     <h4>
                                         <a name="method_disable">disable</a></h4>
@@ -2036,6 +2075,57 @@ reorder a nested Column to an existing parent.
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:method" resource="#method_scrollTo">
+                                    <h4>
+                                        <a name="method_scrollTo">scrollTo</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">scrollTo</strong>
+                                           (
+                                                
+                                                        
+                                                         to
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Scrolls to given row or cell
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">to</span>
+                                                        &lt;<span property="yui:type">YAHOO.widget.Record | HTMLElement </span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  Itme to scroll to.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_setColumnWidth">
                                     <h4>
                                         <a name="method_setColumnWidth">setColumnWidth</a></h4>
@@ -2249,6 +2339,9 @@ validates that width against minWidth and/or maxAutoWidth as necessary.
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.widget.DataTable.html#method__destroyMsgTbodyEl">                                        
                                             <a class="private" href="YAHOO.widget.DataTable.html#method__destroyMsgTbodyEl" property="yui:name" title="_destroyMsgTbodyEl">_destroyMsgTbodyEl</a><span class="private">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.widget.DataTable.html#method__destroyPaginator">                                        
+                                            <a class="private" href="YAHOO.widget.DataTable.html#method__destroyPaginator" property="yui:name" title="_destroyPaginator">_destroyPaginator</a><span class="private">,</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.widget.DataTable.html#method__destroyResizeableColumns">                                        
                                             <a class="private" href="YAHOO.widget.DataTable.html#method__destroyResizeableColumns" property="yui:name" title="_destroyResizeableColumns">_destroyResizeableColumns</a><span class="private">,</span>
@@ -2984,6 +3077,9 @@ validates that width against minWidth and/or maxAutoWidth as necessary.
                                             <span rel="yui:method" resource="YAHOO.util.Element.html#method_appendTo">                                        
                                             <a class="" href="YAHOO.util.Element.html#method_appendTo" property="yui:name" title="appendTo">appendTo</a><span class="">,</span>
                                             </span>
+                                            <span rel="yui:method" resource="YAHOO.util.Element.html#method_delegate">                                        
+                                            <a class="" href="YAHOO.util.Element.html#method_delegate" property="yui:name" title="delegate">delegate</a><span class="">,</span>
+                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.Element.html#method_fireQueue">                                        
                                             <a class="" href="YAHOO.util.Element.html#method_fireQueue" property="yui:name" title="fireQueue">fireQueue</a><span class="">,</span>
                                             </span>
@@ -3016,6 +3112,9 @@ validates that width against minWidth and/or maxAutoWidth as necessary.
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.Element.html#method_removeClass">                                        
                                             <a class="" href="YAHOO.util.Element.html#method_removeClass" property="yui:name" title="removeClass">removeClass</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.Element.html#method_removeDelegate">                                        
+                                            <a class="" href="YAHOO.util.Element.html#method_removeDelegate" property="yui:name" title="removeDelegate">removeDelegate</a><span class="">,</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.Element.html#method_removeListener">                                        
                                             <a class="" href="YAHOO.util.Element.html#method_removeListener" property="yui:name" title="removeListener">removeListener</a><span class="">,</span>
@@ -3421,6 +3520,9 @@ or the DataTable's TBODY element (everyone else).</span>
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.widget.DataTable.html#event_beforePaginatorChange">
                                         <a class="" href="YAHOO.widget.DataTable.html#event_beforePaginatorChange" property="yui:name" title="beforePaginatorChange">beforePaginatorChange</a><span class="">,</span>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.widget.DataTable.html#event_beforeRenderEvent">
+                                        <a class="" href="YAHOO.widget.DataTable.html#event_beforeRenderEvent" property="yui:name" title="beforeRenderEvent">beforeRenderEvent</a><span class="">,</span>
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.widget.DataTable.html#event_beforeRenderLoopSizeChange">
                                         <a class="" href="YAHOO.widget.DataTable.html#event_beforeRenderLoopSizeChange" property="yui:name" title="beforeRenderLoopSizeChange">beforeRenderLoopSizeChange</a><span class="">,</span>
@@ -4019,11 +4121,16 @@ or the DataTable's TBODY element (everyone else).</span>
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class="selected"><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_element-delegate.html" title="element-delegate">element-delegate</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
                                 <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
@@ -4035,10 +4142,15 @@ or the DataTable's TBODY element (everyone else).</span>
                                 <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
                                 <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
                                 <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_storage.html" title="Storage">Storage</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>
@@ -4078,10 +4190,7 @@ or the DataTable's TBODY element (everyone else).</span>
                                 <li class=""><a href="CellEditor.js.html" title="CellEditor.js">CellEditor.js</a></li>
                                 <li class=""><a href="Chain.js.html" title="Chain.js">Chain.js</a></li>
                                 <li class=""><a href="ColumnSet.js.html" title="ColumnSet.js">ColumnSet.js</a></li>
-                                <li class=""><a href="ColumnSet.js.html" title="ColumnSet.js">ColumnSet.js</a></li>
                                 <li class=""><a href="DataTable.js.html" title="DataTable.js">DataTable.js</a></li>
-                                <li class=""><a href="DataTable.js.html" title="DataTable.js">DataTable.js</a></li>
-                                <li class=""><a href="RecordSet.js.html" title="RecordSet.js">RecordSet.js</a></li>
                                 <li class=""><a href="RecordSet.js.html" title="RecordSet.js">RecordSet.js</a></li>
                                 <li class=""><a href="ScrollingDataTable.js.html" title="ScrollingDataTable.js">ScrollingDataTable.js</a></li>
                         </ul>
@@ -4129,6 +4238,7 @@ or the DataTable's TBODY element (everyone else).</span>
                                 <li class="private"><a href="#method__syncScrollX" title="_syncScrollX">_syncScrollX</a></li>
                                 <li class="private"><a href="#method__syncScrollY" title="_syncScrollY">_syncScrollY</a></li>
                                 <li class="private"><a href="#method__validateColumnWidth" title="_validateColumnWidth">_validateColumnWidth</a></li>
+                                <li class="private"><a href="#method_clearScrollPositions" title="clearScrollPositions">clearScrollPositions</a></li>
                                 <li class=""><a href="#method_disable" title="disable">disable</a></li>
                                 <li class=""><a href="#method_getBdContainerEl" title="getBdContainerEl">getBdContainerEl</a></li>
                                 <li class=""><a href="#method_getBdTableEl" title="getBdTableEl">getBdTableEl</a></li>
@@ -4139,6 +4249,7 @@ or the DataTable's TBODY element (everyone else).</span>
                                 <li class=""><a href="#method_onColumnChange" title="onColumnChange">onColumnChange</a></li>
                                 <li class=""><a href="#method_removeColumn" title="removeColumn">removeColumn</a></li>
                                 <li class=""><a href="#method_reorderColumn" title="reorderColumn">reorderColumn</a></li>
+                                <li class=""><a href="#method_scrollTo" title="scrollTo">scrollTo</a></li>
                                 <li class=""><a href="#method_setColumnWidth" title="setColumnWidth">setColumnWidth</a></li>
                                 <li class=""><a href="#method_showTableMessage" title="showTableMessage">showTableMessage</a></li>
                                 <li class=""><a href="#method_validateColumnWidths" title="validateColumnWidths">validateColumnWidths</a></li>
@@ -4176,7 +4287,7 @@ or the DataTable's TBODY element (everyone else).</span>
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "beforeCOLOR_COLUMNFILLERChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_beforeCOLOR_COLUMNFILLERChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "beforeHeightChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_beforeHeightChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "beforeWidthChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_beforeWidthChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_bScrollbarX", "url": "YAHOO.widget.ScrollingDataTable.html#property__bScrollbarX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "COLOR_COLUMNFILLER", "url": "YAHOO.widget.ScrollingDataTable.html#config_COLOR_COLUMNFILLER", "type": "config"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "COLOR_COLUMNFILLERChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_COLOR_COLUMNFILLERChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "DataTable.CLASS_BODY", "url": "YAHOO.widget.ScrollingDataTable.html#property_DataTable.CLASS_BODY", "type": "property"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "DataTable.CLASS_HEADER", "url": "YAHOO.widget.ScrollingDataTable.html#property_DataTable.CLASS_HEADER", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_destroyBdTheadEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__destroyBdTheadEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_destroyContainerEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__destroyContainerEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_destroyHdTableEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__destroyHdTableEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "disable", "url": "YAHOO.widget.ScrollingDataTable.html#method_disable", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elBdContainer", "url": "YAHOO.widget.ScrollingDataTable.html#property__elBdContainer", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elBdThead", "url": "YAHOO.widget.ScrollingDataTable.html#property__elBdThead", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elHdContainer", "url": "YAHOO.widget.ScrollingDataTable.html#property__elHdContainer", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elHdTable", "url": "YAHOO.widget.ScrollingDataTable.html#property__elHdTable", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elTmpContainer", "url": "YAHOO.widget.ScrollingDataTable.html#property__elTmpContainer", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elTmpTable", "url": "YAHOO.widget.ScrollingDataTable.html#property__elTmpTable", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_focusEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__focusEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "getBdContainerEl", "url": "YAHOO.widget.ScrollingDataTable.html#method_getBdContainerEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "getBdTableEl", "url": "YAHOO.widget.ScrollingDataTable.html#method_getBdTableEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "getHdContainerEl", "url": "YAHOO.widget.ScrollingDataTable.html#method_getHdContainerEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "getHdTableEl", "url": "YAHOO.widget.ScrollingDataTable.html#method_getHdTableEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "height", "url": "YAHOO.widget.ScrollingDataTable.html#config_height", "type": "config"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "heightChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_heightChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "initAttributes", "url": "YAHOO.widget.ScrollingDataTable.html#method_initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initBdTheadEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initBdTheadEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initBdThEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initBdThEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initCaptionEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initCaptionEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initContainerEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initContainerEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initDomElements", "url": "YAHOO.widget.ScrollingDataTable.html#method__initDomElements", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initTableEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initTableEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initTbodyEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initTbodyEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initTheadEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initTheadEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initThEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initThEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "insertColumn", "url": "YAHOO.widget.ScrollingDataTable.html#method_insertColumn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "onColumnChange", "url": "YAHOO.widget.ScrollingDataTable.html#method_onColumnChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_onScroll", "url": "YAHOO.widget.ScrollingDataTable.html#method__onScroll", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_onTheadKeydown", "url": "YAHOO.widget.ScrollingDataTable.html#method__onTheadKeydown", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "removeColumn", "url": "YAHOO.widget.ScrollingDataTable.html#method_removeColumn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "reorderColumn", "url": "YAHOO.widget.ScrollingDataTable.html#method_reorderColumn", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_retoreScrollPositions", "url": "YAHOO.widget.ScrollingDataTable.html#method__retoreScrollPositions", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_runRenderChain", "url": "YAHOO.widget.ScrollingDataTable.html#method__runRenderChain", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "setColumnWidth", "url": "YAHOO.widget.ScrollingDataTable.html#method_setColumnWidth", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_setOverhangValue", "url": "YAHOO.widget.ScrollingDataTable.html#method__setOverhangValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "showTableMessage", "url": "YAHOO.widget.ScrollingDataTable.html#method_showTableMessage", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_storeScrollPositions", "url": "YAHOO.widget.ScrollingDataTable.html#method__storeScrollPositions", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_syncScroll", "url": "YAHOO.widget.ScrollingDataTable.html#method__syncScroll", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_syncScrollOverhang", "url": "YAHOO.widget.ScrollingDataTable.html#method__syncScrollOverhang", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_syncScrollX", "url": "YAHOO.widget.ScrollingDataTable.html#method__syncScrollX", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_syncScrollY", "url": "YAHOO.widget.ScrollingDataTable.html#method__syncScrollY", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "tableScrollEvent", "url": "YAHOO.widget.ScrollingDataTable.html#event_tableScrollEvent", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_validateColumnWidth", "url": "YAHOO.widget.ScrollingDataTable.html#method__validateColumnWidth", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "validateColumnWidths", "url": "YAHOO.widget.ScrollingDataTable.html#method_validateColumnWidths", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "width", "url": "YAHOO.widget.ScrollingDataTable.html#config_width", "type": "config"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "widthChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_widthChange", "type": "event"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "beforeCOLOR_COLUMNFILLERChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_beforeCOLOR_COLUMNFILLERChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "beforeHeightChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_beforeHeightChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "beforeWidthChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_beforeWidthChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_bScrollbarX", "url": "YAHOO.widget.ScrollingDataTable.html#property__bScrollbarX", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "clearScrollPositions", "url": "YAHOO.widget.ScrollingDataTable.html#method_clearScrollPositions", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "COLOR_COLUMNFILLER", "url": "YAHOO.widget.ScrollingDataTable.html#config_COLOR_COLUMNFILLER", "type": "config"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "COLOR_COLUMNFILLERChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_COLOR_COLUMNFILLERChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "DataTable.CLASS_BODY", "url": "YAHOO.widget.ScrollingDataTable.html#property_DataTable.CLASS_BODY", "type": "property"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "DataTable.CLASS_HEADER", "url": "YAHOO.widget.ScrollingDataTable.html#property_DataTable.CLASS_HEADER", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_destroyBdTheadEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__destroyBdTheadEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_destroyContainerEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__destroyContainerEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_destroyHdTableEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__destroyHdTableEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "disable", "url": "YAHOO.widget.ScrollingDataTable.html#method_disable", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elBdContainer", "url": "YAHOO.widget.ScrollingDataTable.html#property__elBdContainer", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elBdThead", "url": "YAHOO.widget.ScrollingDataTable.html#property__elBdThead", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elHdContainer", "url": "YAHOO.widget.ScrollingDataTable.html#property__elHdContainer", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elHdTable", "url": "YAHOO.widget.ScrollingDataTable.html#property__elHdTable", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elTmpContainer", "url": "YAHOO.widget.ScrollingDataTable.html#property__elTmpContainer", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_elTmpTable", "url": "YAHOO.widget.ScrollingDataTable.html#property__elTmpTable", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_focusEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__focusEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "getBdContainerEl", "url": "YAHOO.widget.ScrollingDataTable.html#method_getBdContainerEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "getBdTableEl", "url": "YAHOO.widget.ScrollingDataTable.html#method_getBdTableEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "getHdContainerEl", "url": "YAHOO.widget.ScrollingDataTable.html#method_getHdContainerEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "getHdTableEl", "url": "YAHOO.widget.ScrollingDataTable.html#method_getHdTableEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "height", "url": "YAHOO.widget.ScrollingDataTable.html#config_height", "type": "config"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "heightChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_heightChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "initAttributes", "url": "YAHOO.widget.ScrollingDataTable.html#method_initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initBdTheadEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initBdTheadEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initBdThEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initBdThEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initCaptionEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initCaptionEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initContainerEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initContainerEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initDomElements", "url": "YAHOO.widget.ScrollingDataTable.html#method__initDomElements", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initTableEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initTableEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initTbodyEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initTbodyEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initTheadEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initTheadEl", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_initThEl", "url": "YAHOO.widget.ScrollingDataTable.html#method__initThEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "insertColumn", "url": "YAHOO.widget.ScrollingDataTable.html#method_insertColumn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "onColumnChange", "url": "YAHOO.widget.ScrollingDataTable.html#method_onColumnChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_onScroll", "url": "YAHOO.widget.ScrollingDataTable.html#method__onScroll", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_onTheadKeydown", "url": "YAHOO.widget.ScrollingDataTable.html#method__onTheadKeydown", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "removeColumn", "url": "YAHOO.widget.ScrollingDataTable.html#method_removeColumn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "reorderColumn", "url": "YAHOO.widget.ScrollingDataTable.html#method_reorderColumn", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_retoreScrollPositions", "url": "YAHOO.widget.ScrollingDataTable.html#method__retoreScrollPositions", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_runRenderChain", "url": "YAHOO.widget.ScrollingDataTable.html#method__runRenderChain", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "scrollTo", "url": "YAHOO.widget.ScrollingDataTable.html#method_scrollTo", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "setColumnWidth", "url": "YAHOO.widget.ScrollingDataTable.html#method_setColumnWidth", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_setOverhangValue", "url": "YAHOO.widget.ScrollingDataTable.html#method__setOverhangValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "showTableMessage", "url": "YAHOO.widget.ScrollingDataTable.html#method_showTableMessage", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_storeScrollPositions", "url": "YAHOO.widget.ScrollingDataTable.html#method__storeScrollPositions", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_syncScroll", "url": "YAHOO.widget.ScrollingDataTable.html#method__syncScroll", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_syncScrollOverhang", "url": "YAHOO.widget.ScrollingDataTable.html#method__syncScrollOverhang", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_syncScrollX", "url": "YAHOO.widget.ScrollingDataTable.html#method__syncScrollX", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_syncScrollY", "url": "YAHOO.widget.ScrollingDataTable.html#method__syncScrollY", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "tableScrollEvent", "url": "YAHOO.widget.ScrollingDataTable.html#event_tableScrollEvent", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ScrollingDataTable", "name": "_validateColumnWidth", "url": "YAHOO.widget.ScrollingDataTable.html#method__validateColumnWidth", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "validateColumnWidths", "url": "YAHOO.widget.ScrollingDataTable.html#method_validateColumnWidths", "type": "method"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "width", "url": "YAHOO.widget.ScrollingDataTable.html#config_width", "type": "config"}, {"access": "", "host": "YAHOO.widget.ScrollingDataTable", "name": "widthChange", "url": "YAHOO.widget.ScrollingDataTable.html#event_widthChange", "type": "event"}];
 </script>
 </body>
 </html>

@@ -1,31 +1,34 @@
+/* several */
+
+.yui-pb-bar,
+.yui-pb-mask {
+	width:100%;
+	height:100%;
+}	
+
+/* contentBox */
 .yui-pb {
-	text-align:left;
-	vertical-align:top;
+	position:relative;
+	top:0;
+	left:0;
+
+	width:200px;
+	height:20px;
 
 	padding:0;
 	border:none;
 	margin:0;
 
-	width:200px;
-	height:20px;
-
-	background-attachment:scroll;
-	background-position:left top;
-
-	position:relative;
-	top:0;
-	left:0;
+	text-align:left;
 }
+
+/* mask */
 
 .yui-pb-mask {
 	position:absolute;
 	top:0;
 	left:0;
 
-	width:100%;
-	height:100%;
-
-	background-attachment:scroll;
 	z-index:2;
 }
 
@@ -33,7 +36,6 @@
 	width:50%;
 	height:50%;
 	background-repeat:no-repeat;
-	border:0;
 	padding:0;
 	position: absolute;
 }
@@ -55,23 +57,23 @@
 	top:50%;
 }
 
+/* bar */
 .yui-pb-bar {
-	width:100%;
-	height:100%;
 	margin:0;
-
 	position:absolute;
 	left:0;
 	top:0;
 	z-index:1;
 }
 
-.yui-pb-caption {
-	height:100%;
-	position:absolute;
-	text-align:center;
-	vertical-align:middle;
-	width:100%;
-	z-index:3;
-	display:none;
+.yui-pb-ltr .yui-pb-bar {
+	_position:static
+}
+
+.yui-pb-rtl .yui-pb-bar {
+	background-position:right;
+}
+
+.yui-pb-btt .yui-pb-bar {
+	background-position:left bottom;
 }

@@ -1,8 +1,9 @@
 (function() {
 /**
- * Add style management functionality to DOM.
+ * Internal methods used to add style management functionality to DOM.
  * @module dom
- * @for Dom
+ * @class IEStyle
+ * @namespace YAHOO.util.Dom
  */
 
 var Y = YAHOO.util, 
@@ -31,6 +32,13 @@ var Y = YAHOO.util,
     re_unit = /^(\d[.\d]*)+(em|ex|px|gd|rem|vw|vh|vm|ch|mm|cm|in|pt|pc|deg|rad|ms|s|hz|khz|%){1}?/i,
 
     ComputedStyle = {
+        /**
+        * @method get
+        * @description Method used by DOM to get style information for IE
+        * @param {HTMLElement} el The element to check
+        * @param {String} property The property to check
+        * @returns {String} The computed style
+        */
         get: function(el, property) {
             var value = '',
                 current = el[CURRENT_STYLE][property];
@@ -49,7 +57,13 @@ var Y = YAHOO.util,
 
             return value;
         },
-
+        /**
+        * @method getOffset
+        * @description Determine the offset of an element
+        * @param {HTMLElement} el The element to check
+        * @param {String} prop The property to check.
+        * @return {String} The offset
+        */
         getOffset: function(el, prop) {
             var current = el[CURRENT_STYLE][prop],                        // value of "width", "top", etc.
                 capped = prop.charAt(0).toUpperCase() + prop.substr(1), // "Width", "Top", etc.
@@ -81,7 +95,13 @@ var Y = YAHOO.util,
             }
             return value + PX;
         },
-
+        /**
+        * @method getBorderWidth
+        * @description Try to determine the width of an elements border
+        * @param {HTMLElement} el The element to check
+        * @param {String} property The property to check
+        * @return {String} The elements border width
+        */
         getBorderWidth: function(el, property) {
             // clientHeight/Width = paddingBox (e.g. offsetWidth - borderWidth)
             // clientTop/Left = borderWidth
@@ -106,7 +126,13 @@ var Y = YAHOO.util,
             }
             return value + PX;
         },
-
+        /**
+        * @method getPixel
+        * @description Get the pixel value from a style property
+        * @param {HTMLElement} node The element to check
+        * @param {String} att The attribute to check
+        * @return {String} The pixel value
+        */
         getPixel: function(node, att) {
             // use pixelRight to convert to px
             var val = null,
@@ -120,6 +146,13 @@ var Y = YAHOO.util,
             return val + PX;
         },
 
+        /**
+        * @method getMargin
+        * @description Get the margin value from a style property
+        * @param {HTMLElement} node The element to check
+        * @param {String} att The attribute to check
+        * @return {String} The margin value
+        */
         getMargin: function(node, att) {
             var val;
             if (node[CURRENT_STYLE][att] == AUTO) {
@@ -130,6 +163,13 @@ var Y = YAHOO.util,
             return val;
         },
 
+        /**
+        * @method getVisibility
+        * @description Get the visibility of an element
+        * @param {HTMLElement} node The element to check
+        * @param {String} att The attribute to check
+        * @return {String} The value
+        */
         getVisibility: function(node, att) {
             var current;
             while ( (current = node[CURRENT_STYLE]) && current[att] == 'inherit') { // NOTE: assignment in test
@@ -138,10 +178,24 @@ var Y = YAHOO.util,
             return (current) ? current[att] : VISIBLE;
         },
 
+        /**
+        * @method getColor
+        * @description Get the color of an element
+        * @param {HTMLElement} node The element to check
+        * @param {String} att The attribute to check
+        * @return {String} The value
+        */
         getColor: function(node, att) {
             return Y.Dom.Color.toRGB(node[CURRENT_STYLE][att]) || TRANSPARENT;
         },
 
+        /**
+        * @method getBorderColor
+        * @description Get the bordercolor of an element
+        * @param {HTMLElement} node The element to check
+        * @param {String} att The attribute to check
+        * @return {String} The value
+        */
         getBorderColor: function(node, att) {
             var current = node[CURRENT_STYLE],
                 val = current[att] || current.color;

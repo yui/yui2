@@ -1,5 +1,11 @@
 Element Release Notes
 
+*** version 2.8.0 ***
+* Returning value from DEFAULT_SETTER
+* Added support for mouseenter and mouseleave events (requires the event-mouseenter module)
+* Added a "delegate" method that facilitates easy creation of delegated event listeners. 
+  (requires the element-delegate module)
+
 *** version 2.7.0 ***
 * Taken out of BETA
 * Added setter/getter fields to Attribute

@@ -1,9 +1,12 @@
 package com.yahoo.astra.fl.charts.axes
 {	
+	/**
+	 * Dimension data shared by axes of the same type
+	 */
 	public class AxisLabelData
 	{	
 		/**
-		 * Dimension data shared by axes of the same type
+		 * Constructor
 		 */
 		public function AxisLabelData()
 		{

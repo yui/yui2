@@ -2191,7 +2191,7 @@ RS.prototype = {
      * @param fnSort {Function} Reference to a sort function.
      * @param desc {Boolean} True if sort direction is descending, false if sort
      * direction is ascending.
-     * @parm field {String} The field to sort by, from sortOptions.field
+     * @param field {String} The field to sort by, from sortOptions.field
      * @return {YAHOO.widget.Record[]} Sorted array of Records.
      */
     sortRecords : function(fnSort, desc, field) {
@@ -3109,7 +3109,7 @@ lang.augmentObject(DT, {
      * @private
      * @static     
      */
-    _bDynStylesFallback : (ua.ie && (ua.ie<7)) ? true : false,
+    _bDynStylesFallback : (ua.ie) ? true : false,
 
     /**
      * Object literal hash of Columns and their dynamically create style rules.
@@ -4387,7 +4387,7 @@ _repaintOpera : (ua.opera) ?
     function() {
         if(ua.opera) {
             document.documentElement.className += " ";
-            document.documentElement.className.trim();
+            document.documentElement.className = YAHOO.lang.trim(document.documentElement.className);
         }
     } : function() {} ,
 
@@ -5215,6 +5215,16 @@ _initMsgTbodyEl : function(elTable) {
         var elMsgLiner = elMsgTd.appendChild(document.createElement("div"));
         elMsgLiner.className = DT.CLASS_LINER;
         this._elMsgTbody = elMsgTbody;
+
+        // Set up DOM events for TBODY
+        Ev.addListener(elMsgTbody, "focus", this._onTbodyFocus, this);
+        Ev.addListener(elMsgTbody, "mouseover", this._onTableMouseover, this);
+        Ev.addListener(elMsgTbody, "mouseout", this._onTableMouseout, this);
+        Ev.addListener(elMsgTbody, "mousedown", this._onTableMousedown, this);
+        Ev.addListener(elMsgTbody, "mouseup", this._onTableMouseup, this);
+        Ev.addListener(elMsgTbody, "keydown", this._onTbodyKeydown, this);
+        Ev.addListener(elMsgTbody, "keypress", this._onTableKeypress, this);
+        Ev.addListener(elMsgTbody, "click", this._onTbodyClick, this);
     }
 },
 
@@ -6884,7 +6894,8 @@ getTdEl : function(cell) {
         }
         
         // Make sure the TD is in this TBODY
-        if(elCell && (elCell.parentNode.parentNode == this._elTbody)) {
+        // Bug 2527707 and bug 2263558
+        if(elCell && ((elCell.parentNode.parentNode == this._elTbody) || (elCell.parentNode.parentNode === null))) {
             // Now we can return the TD element
             return elCell;
         }
@@ -7261,6 +7272,8 @@ render : function() {
 //YAHOO.example.Performance.trialStart = new Date();
 
     this._oChainRender.stop();
+
+    this.fireEvent("beforeRenderEvent");
     YAHOO.log("DataTable rendering...", "info", this.toString());
 
     var i, j, k, len, allRecords;
@@ -7430,6 +7443,9 @@ destroy : function() {
             this._oColumnSet.flat[i].editor = null;
         }
     }
+
+    // Destroy Paginator
+    this._destroyPaginator();
 
     // Unhook custom events
     this._oRecordSet.unsubscribeAll();
@@ -9853,6 +9869,19 @@ _defaultPaginatorContainers : function (create) {
     }
 
     return [above,below];
+},
+
+/**
+ * Calls Paginator's destroy() method
+ *
+ * @method _destroyPaginator
+ * @private
+ */
+_destroyPaginator : function () {
+    var oldPag = this.get('paginator');
+    if (oldPag) {
+        oldPag.destroy();
+    }
 },
 
 /**
@@ -13174,6 +13203,12 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      */
 
     /**
+     * Fired before the DataTable's DOM is rendered or modified.
+     *
+     * @event beforeRenderEvent
+     */
+
+    /**
      * Fired when the DataTable's DOM is rendered or modified.
      *
      * @event renderEvent
@@ -14808,14 +14843,27 @@ _runRenderChain : function() {
 },
 
 /**
- * Stores scroll positions so they can be restored after a render. 
+ * Stores scroll positions so they can be restored after a render.
  *
  * @method _storeScrollPositions
- * @private 
+ * @private
  */
  _storeScrollPositions : function() {
     this._nScrollTop = this._elBdContainer.scrollTop;
     this._nScrollLeft = this._elBdContainer.scrollLeft;
+},
+
+/**
+ * Clears stored scroll positions to interrupt the automatic restore mechanism.
+ * Useful for setting scroll positions programmatically rather than as part of
+ * the post-render cleanup process.
+ *
+ * @method clearScrollPositions
+ * @private
+ */
+ clearScrollPositions : function() {
+    this._nScrollTop = 0;
+    this._nScrollLeft = 0;
 },
 
 /**
@@ -15305,6 +15353,28 @@ setColumnWidth : function(oColumn, nWidth) {
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
     }
+},
+
+/**
+ * Scrolls to given row or cell
+ *
+ * @method scrollTo
+ * @param to {YAHOO.widget.Record | HTMLElement } Itme to scroll to.
+ */
+scrollTo : function(to) {
+        var td = this.getTdEl(to);
+        if(td) {
+            this.clearScrollPositions();
+            this.getBdContainerEl().scrollLeft = td.offsetLeft;
+            this.getBdContainerEl().scrollTop = td.parentNode.offsetTop;
+        }
+        else {
+            var tr = this.getTrEl(to);
+            if(tr) {
+                this.clearScrollPositions();
+                this.getBdContainerEl().scrollTop = tr.offsetTop;
+            }
+        }
 },
 
 /**

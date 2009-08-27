@@ -24,9 +24,24 @@
  * @param dataSource {YAHOO.util.DataSource} DataSource instance.
  * @param attributes {object} (optional) Object literal of configuration values.
  */
-YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
+YAHOO.widget.Chart = function(type, containerId, dataSource, configurationAttributes)
 {
-	this._attributes = attributes;
+	var possibleParams = {align:"", allowNetworking:"", allowScriptAccess:"", base:"", bgcolor:"", menu:"", name:"", quality:"", salign:"", scale:"", tabindex:"", wmode:""};
+	var attributes = {fixedAttributes:{allowScriptAccess:"always"}, flashVars:{allowedDomain : document.location.hostname}, backgroundColor:"#ffffff", host:this, version:9.045};
+	
+	for(var i in configurationAttributes)
+	{
+		if(possibleParams.hasOwnProperty(i))
+		{
+			attributes.fixedAttributes[i] = configurationAttributes[i];
+		}
+		else
+		{
+			attributes[i] = configurationAttributes[i];
+		}
+	}
+	
+	this._id = attributes.id = attributes.id || YAHOO.util.Dom.generateId(null, "yuigen");
 	
 	if(attributes.version && attributes.version != null && attributes.version != undefined && attributes.version != "undefined")
 	{ 
@@ -43,21 +58,21 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 			break;	
 		} 
 		version += verSplit[1];
-		this._attributes.version = parseFloat(version); 
+		attributes.version = parseFloat(version); 
 	}
-	else
-	{
-		this._attributes.version = 9.045;
-	}
+	
+	this._swfURL = YAHOO.widget.Chart.SWFURL;
+	this._containerID = containerId;
+	
+	this._attributes = attributes
 	this._swfEmbed = new YAHOO.widget.SWF(containerId, YAHOO.widget.Chart.SWFURL, attributes);
 	
 	this._swf = this._swfEmbed.swf;
-	this._swfEmbed.addListener("swfReady", this._eventHandler, null, this);
+	this._swfEmbed.subscribe("swfReady", this._eventHandler, this, true);
 	
 	this._type = type;
 	this._dataSource = dataSource;
-	
-	
+		
 	/**
 	 * Fires when the SWF is initialized and communication is possible.
 	 * @event contentReady
@@ -357,13 +372,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * @description The alternative text to provide for screen readers and other assistive technology.
 		 * @type String
 		 */
-		this.getAttributeConfig("altText",
-		{
-			method: this._getAltText
-		});
 		this.setAttributeConfig("altText",
 		{
-			method: this._setAltText
+			method: this._setAltText,
+			getter: this._getAltText
+			
 		});
 		
 		/**
@@ -372,9 +385,9 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 *		set after Flash Player has been embedded in the page.
 		 * @type String
 		 */
-		this.getAttributeConfig("swfURL",
+		this.setAttributeConfig("swfURL",
 		{
-			method: this._getSWFURL
+			getter: this._getSWFURL
 		});		
 
 		/**
@@ -382,14 +395,10 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * @description Request to be sent to the Chart's DataSource.
 		 * @type String
 		 */
-		this.getAttributeConfig("request",
-		{
-			method: this._getRequest
-		});
-		
 		this.setAttributeConfig("request",
 		{
-			method: this._setRequest
+			method: this._setRequest,
+			getter: this._getRequest
 		});
 		
 		/**
@@ -397,14 +406,10 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * @description The DataSource instance to display in the Chart.
 		 * @type DataSource
 		 */
-		this.getAttributeConfig("dataSource",
-		{
-			method: this._getDataSource
-		});
-		
 		this.setAttributeConfig("dataSource",
 		{
-			method: this._setDataSource
+			method: this._setDataSource,
+			getter: this._getDataSource
 		});
 		
 		/**
@@ -412,14 +417,10 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * @description Defines the series to be displayed by the Chart.
 		 * @type Array
 		 */
-		this.getAttributeConfig("series",
-		{
-			method: this._getSeriesDefs
-		});
-		
 		this.setAttributeConfig("series",
 		{
-			method: this._setSeriesDefs
+			method: this._setSeriesDefs,
+			getter: this._getSeriesDefs
 		});
 		
 		/**
@@ -427,15 +428,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * @description Defines the names of the categories to be displayed in the Chart..
 		 * @type Array
 		 */
-		this.getAttributeConfig("categoryNames",
-		{
-			method: this._getCategoryNames
-		});
-		
 		this.setAttributeConfig("categoryNames",
 		{
 			validator: YAHOO.lang.isArray,
-			method: this._setCategoryNames
+			method: this._setCategoryNames,
+			getter: this._getCategoryNames
 		});
 		
 		/**
@@ -444,14 +441,10 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * that may be called by the SWF to generate the datatip text for a Chart's item.
 		 * @type String
 		 */
-		this.getAttributeConfig("dataTipFunction",
-		{
-			method: this._getDataTipFunction
-		});
-		
 		this.setAttributeConfig("dataTipFunction",
 		{
-			method: this._setDataTipFunction
+			method: this._setDataTipFunction,
+			getter: this._getDataTipFunction
 		});
 		
 		/**
@@ -459,15 +452,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * @description The string representation of a globally-accessible function
 		 * that may be called by the SWF to format the labels of a Chart's legend.
 		 * @type String
-		 */
-		this.getAttributeConfig("legendLabelFunction",
-		{
-			method: this._legendLabelFunction
-		});
-		
+		 */	
 		this.setAttributeConfig("legendLabelFunction",
 		{
-			method: this._setLegendLabelFunction
+			method: this._setLegendLabelFunction,
+			getter: this._legendLabelFunction
 		});
 
 		/**
@@ -476,36 +465,26 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 		 * polling requests to the DataSource.
 		 * @type Number
 		 */
-		this.getAttributeConfig("polling",
-		{
-			method: this._getPolling
-		});
-
 		this.setAttributeConfig("polling",
 		{
-			method: this._setPolling
+			method: this._setPolling,
+			getter: this._getPolling
 		});
 	},
 	
 	/**
-	 * Handles or re-dispatches events received from the SWF.
+	 * Handles swfReady event from SWF.
 	 *
 	 * @method _eventHandler
 	 * @private
 	 */
 	_eventHandler: function(event)
-	{
-		var type = event.type; 
-		switch(type)
+	{ 
+		if(event.type == "swfReady")
 		{
-			case "swfReady":
-   				this._swf = this._swfEmbed._swf;
-				this._loadHandler();
-   				this.fireEvent("contentReady");
-				return;
-			case "log":
-				this.fireEvent(type, event);
-				return;
+   			this._swf = this._swfEmbed._swf;
+			this._loadHandler();
+   			this.fireEvent("contentReady");
 		}
 	},	
 	
@@ -519,6 +498,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 	_loadHandler: function()
 	{
 		//the type is set separately because it must be first!
+		if(!this._swf || !this._swf.setType) return;
 		this._swf.setType(this._type);
 
 
@@ -675,7 +655,14 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 					var series = {type: this._type, dataProvider: response.results};
 					dataProvider.push(series);
 				}
-				this._swf.setDataProvider(dataProvider);
+				try
+				{
+					if(this._swf.setDataProvider) this._swf.setDataProvider(dataProvider);
+				}
+				catch(e)
+				{
+					this._swf.setDataProvider(dataProvider);
+				}
 			}
 		}
 	},
@@ -781,7 +768,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 	 */
 	_getCategoryNames: function()
 	{
-		this._swf.getCategoryNames();
+		return this._swf.getCategoryNames();
 	},
 
 	/**
@@ -953,31 +940,9 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.util.AttributeProvider,
 	 */
 	_setAltText: function(value)
 	{
-		return this._swf.setAltText(value);
+	 	this._swf.setAltText(value);
 	}
 });
-
-/**
- * Receives event messages from SWF and passes them to the correct instance
- * of Chart.
- *
- * @method YAHOO.widget.Chart.eventHandler
- * @static
- * @private
- */
-YAHOO.widget.Chart.eventHandler = function(elementID, event)
-{
-	var loadedSWF = YAHOO.util.Dom.get(elementID);
-	if(!loadedSWF.owner)
-	{
-		//fix for ie: if owner doesn't exist yet, try again in a moment
-		setTimeout(function() { YAHOO.widget.Chart.eventHandler( elementID, event ); }, 0);
-	}
-	else
-	{
-		loadedSWF.owner._eventHandler(event);
-	}
-};
 
 /**
  * The number of proxy functions that have been created.
@@ -1095,15 +1060,11 @@ YAHOO.lang.extend(YAHOO.widget.PieChart, YAHOO.widget.Chart,
 		 * @description The field in each item that corresponds to the data value.
 		 * @type String
 		 */
-		this.getAttributeConfig("dataField",
-		{
-			method: this._getDataField
-		});
-   
 		this.setAttributeConfig("dataField",
 		{
 			validator: YAHOO.lang.isString,
-			method: this._setDataField
+			method: this._setDataField,
+			getter: this._getDataField
 		});
    
 		/**
@@ -1111,15 +1072,11 @@ YAHOO.lang.extend(YAHOO.widget.PieChart, YAHOO.widget.Chart,
 		 * @description The field in each item that corresponds to the category value.
 		 * @type String
 		 */
-		this.getAttributeConfig("categoryField",
-		{
-			method: this._getCategoryField
-		});
-   
 		this.setAttributeConfig("categoryField",
 		{
 			validator: YAHOO.lang.isString,
-			method: this._setCategoryField
+			method: this._setCategoryField,
+			getter: this._getCategoryField
 		});
 	},
 
@@ -1229,15 +1186,11 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		 * @description The field in each item that corresponds to a value on the x axis.
 		 * @type String
 		 */
-		this.getAttributeConfig("xField",
-		{
-			method: this._getXField
-		});
-
 		this.setAttributeConfig("xField",
 		{
 			validator: YAHOO.lang.isString,
-			method: this._setXField
+			method: this._setXField,
+			getter: this._getXField
 		});
 
 		/**
@@ -1245,15 +1198,11 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		 * @description The field in each item that corresponds to a value on the x axis.
 		 * @type String
 		 */
-		this.getAttributeConfig("yField",
-		{
-			method: this._getYField
-		});
-
 		this.setAttributeConfig("yField",
 		{
 			validator: YAHOO.lang.isString,
-			method: this._setYField
+			method: this._setYField,
+			getter: this._getYField
 		});
 
 		/**
@@ -1474,7 +1423,20 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	 */
 	_setConstrainViewport: function(value)
 	{
-			this._swf.setConstrainViewport(value);
+		this._swf.setConstrainViewport(value);
+	},
+	
+	/**
+	 * Sets the style object for a single series based on its index
+	 * 
+	 * @method setSeriesStylesByIndex
+	 * @param index {Number} The position within the series definition to apply the style
+	 * @param style {object} Style object to be applied to the selected series
+	 */
+	setSeriesStylesByIndex:function(index, style)
+	{
+		style = YAHOO.lang.JSON.stringify(style);
+		if(this._swf && this._swf.setSeriesStylesByIndex) this._swf.setSeriesStylesByIndex(index, style);
 	}
 });
 /**
@@ -1728,7 +1690,25 @@ YAHOO.lang.extend(YAHOO.widget.NumericAxis, YAHOO.widget.Axis,
 	 * @property position
 	 * @type String
 	 */
-	position:"left"
+	position:"left",
+	
+	/**
+	 * Indicates whether to extend maximum beyond data's maximum to the nearest 
+	 * majorUnit.
+	 *
+	 * @property adjustMaximumByMajorUnit
+	 * @type Boolean
+	 */
+	adjustMaximumByMajorUnit:true,
+	
+	/**
+	 * Indicates whether to extend the minimum beyond data's minimum to the nearest
+	 * majorUnit.
+	 *
+	 * @property adjustMinimumByMajorUnit
+	 * @type Boolean
+	 */
+	adjustMinimumByMajorUnit:true
 });
 /**
  * A type of axis whose units are measured in time-based values.
@@ -1851,7 +1831,7 @@ YAHOO.lang.extend(YAHOO.widget.CategoryAxis, YAHOO.widget.Axis,
 	 * when there is not enough room to display all labels on the axis. If set to true, the axis 
 	 * will determine the number of categories to plot. If not, all categories will be plotted.
 	 *
-	 * @property calcualateCategoryCount
+	 * @property calculateCategoryCount
 	 * @type Boolean
 	 */
 	calculateCategoryCount: false 
@@ -1923,7 +1903,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianSeries, YAHOO.widget.Series,
 	/**
 	 * Indicates which axis the series will bind to
 	 *
-	 * @property
+	 * @property axis
 	 * @type String
 	 */
 	axis: "primary",
@@ -1931,7 +1911,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianSeries, YAHOO.widget.Series,
 	/**
 	 * When a Legend is present, indicates whether the series will show in the legend.
 	 * 
-	 * @property
+	 * @property showInLegend
 	 * @type Boolean
 	 */
 	showInLegend: true

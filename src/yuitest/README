@@ -1,10 +1,10 @@
 YUI Library - YUITest - Release Notes
 
-Development Master
-
 2.8.0
 
-  * UserAction moved into a new module: event-simulate
+  * Fixed issues with ArrayAssert methods (trac #2528121)
+  * UserAction moved into a new module: event-simulate.
+  * Custom Error objects inherit from Object instead of Error.
 
 2.7.0
 
