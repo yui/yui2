@@ -810,6 +810,98 @@ The minimum value is 1, and maximum value is 5. The default value is 2.
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:method" resource="#method_uploadThese">
+                                    <h4>
+                                        <a name="method_uploadThese">uploadThese</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">uploadThese</strong>
+                                           (
+                                                
+                                                        
+                                                         fileIDs
+                                                    
+                                                
+                                                        , 
+                                                         uploadScriptPath
+                                                    
+                                                
+                                                        , 
+                                                         method
+                                                    
+                                                
+                                                        , 
+                                                         vars
+                                                    
+                                                
+                                                        , 
+                                                         fieldName
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Starts the upload of the files specified by fileIDs, or adds them to a currently running queue. The upload queue is automatically managed.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">fileIDs</span>
+                                                        &lt;<span property="yui:type">Array</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  The ids of the files to start uploading.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">uploadScriptPath</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  The URL of the upload location.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">method</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  Either "GET" or "POST", specifying how the variables accompanying the file upload POST request should be submitted. "GET" by default.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">vars</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  The object containing variables to be sent in the same request as the file upload.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">fieldName</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  The name of the variable in the POST request containing the file data. "Filedata" by default.
+</code></span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -1793,6 +1885,7 @@ the render type is 'transparent'.
                                 <li class=""><a href="#method_setSimUploadLimit" title="setSimUploadLimit">setSimUploadLimit</a></li>
                                 <li class=""><a href="#method_upload" title="upload">upload</a></li>
                                 <li class=""><a href="#method_uploadAll" title="uploadAll">uploadAll</a></li>
+                                <li class=""><a href="#method_uploadThese" title="uploadThese">uploadThese</a></li>
                         </ul>
                     </div>
 
@@ -1824,7 +1917,7 @@ the render type is 'transparent'.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Uploader", "name": "cancel", "url": "YAHOO.widget.Uploader.html#method_cancel", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Uploader", "name": "Chart.SWFURL", "url": "YAHOO.widget.Uploader.html#property_Chart.SWFURL", "type": "property"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "clearFileList", "url": "YAHOO.widget.Uploader.html#method_clearFileList", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "click", "url": "YAHOO.widget.Uploader.html#event_click", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "disable", "url": "YAHOO.widget.Uploader.html#method_disable", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "enable", "url": "YAHOO.widget.Uploader.html#method_enable", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "fileSelect", "url": "YAHOO.widget.Uploader.html#event_fileSelect", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "mouseDown", "url": "YAHOO.widget.Uploader.html#event_mouseDown", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "mouseUp", "url": "YAHOO.widget.Uploader.html#event_mouseUp", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "removeFile", "url": "YAHOO.widget.Uploader.html#method_removeFile", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "rollOut", "url": "YAHOO.widget.Uploader.html#event_rollOut", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "rollOver", "url": "YAHOO.widget.Uploader.html#event_rollOver", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "setAllowLogging", "url": "YAHOO.widget.Uploader.html#method_setAllowLogging", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "setAllowMultipleFiles", "url": "YAHOO.widget.Uploader.html#method_setAllowMultipleFiles", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "setFileFilters", "url": "YAHOO.widget.Uploader.html#method_setFileFilters", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "setSimUploadLimit", "url": "YAHOO.widget.Uploader.html#method_setSimUploadLimit", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "upload", "url": "YAHOO.widget.Uploader.html#method_upload", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadAll", "url": "YAHOO.widget.Uploader.html#method_uploadAll", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadCancel", "url": "YAHOO.widget.Uploader.html#event_uploadCancel", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadComplete", "url": "YAHOO.widget.Uploader.html#event_uploadComplete", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadCompleteData", "url": "YAHOO.widget.Uploader.html#event_uploadCompleteData", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadError", "url": "YAHOO.widget.Uploader.html#event_uploadError", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadProgress", "url": "YAHOO.widget.Uploader.html#event_uploadProgress", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadStart", "url": "YAHOO.widget.Uploader.html#event_uploadStart", "type": "event"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Uploader", "name": "cancel", "url": "YAHOO.widget.Uploader.html#method_cancel", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Uploader", "name": "Chart.SWFURL", "url": "YAHOO.widget.Uploader.html#property_Chart.SWFURL", "type": "property"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "clearFileList", "url": "YAHOO.widget.Uploader.html#method_clearFileList", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "click", "url": "YAHOO.widget.Uploader.html#event_click", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "disable", "url": "YAHOO.widget.Uploader.html#method_disable", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "enable", "url": "YAHOO.widget.Uploader.html#method_enable", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "fileSelect", "url": "YAHOO.widget.Uploader.html#event_fileSelect", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "mouseDown", "url": "YAHOO.widget.Uploader.html#event_mouseDown", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "mouseUp", "url": "YAHOO.widget.Uploader.html#event_mouseUp", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "removeFile", "url": "YAHOO.widget.Uploader.html#method_removeFile", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "rollOut", "url": "YAHOO.widget.Uploader.html#event_rollOut", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "rollOver", "url": "YAHOO.widget.Uploader.html#event_rollOver", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "setAllowLogging", "url": "YAHOO.widget.Uploader.html#method_setAllowLogging", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "setAllowMultipleFiles", "url": "YAHOO.widget.Uploader.html#method_setAllowMultipleFiles", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "setFileFilters", "url": "YAHOO.widget.Uploader.html#method_setFileFilters", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "setSimUploadLimit", "url": "YAHOO.widget.Uploader.html#method_setSimUploadLimit", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "upload", "url": "YAHOO.widget.Uploader.html#method_upload", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadAll", "url": "YAHOO.widget.Uploader.html#method_uploadAll", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadCancel", "url": "YAHOO.widget.Uploader.html#event_uploadCancel", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadComplete", "url": "YAHOO.widget.Uploader.html#event_uploadComplete", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadCompleteData", "url": "YAHOO.widget.Uploader.html#event_uploadCompleteData", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadError", "url": "YAHOO.widget.Uploader.html#event_uploadError", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadProgress", "url": "YAHOO.widget.Uploader.html#event_uploadProgress", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadStart", "url": "YAHOO.widget.Uploader.html#event_uploadStart", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadThese", "url": "YAHOO.widget.Uploader.html#method_uploadThese", "type": "method"}];
 </script>
 </body>
 </html>

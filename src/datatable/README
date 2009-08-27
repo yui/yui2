@@ -7,7 +7,6 @@ DataTable Release Notes
 * Added beforeRenderEvent.
 * Added clearScrollPositions() and scrollTo() to ScrollingDataTable.
 * Performance improvements for ScrollingDataTable in IE.
-* Support for multiple and size properties in DropdownCellEditor.
 * Bug fixes for DataTables rendered within table markup.
 
 
