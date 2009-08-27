@@ -2044,7 +2044,7 @@ asyncMode : "allowAll",
 /**
  * Callback string parameter name sent to the remote script. By default,
  * requests are sent to
- * &#60;URI&#62;?&#60;scriptCallbackParam&#62;=callbackFunction
+ * &#60;URI&#62;?&#60;scriptCallbackParam&#62;=callback
  *
  * @property scriptCallbackParam
  * @type String
