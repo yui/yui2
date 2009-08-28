@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>dom&nbsp; <span class="subtitle">2.8.0</span></h3>
+        <h3>dom&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_dom.html" title="dom">dom</a>
                 
@@ -108,8 +108,8 @@
     <span class="c">/**</span>
 <span class="c">    * @method toRGB</span>
 <span class="c">    * @description Converts a hex or color string to an rgb string: rgb(0,0,0)</span>
-<span class="c">    * @param {String} val - The string to convert to RGB notation.</span>
-<span class="c">    * @returns {String} - The converted string</span>
+<span class="c">    * @param {String} val The string to convert to RGB notation.</span>
+<span class="c">    * @returns {String} The converted string</span>
 <span class="c">    */</span>
     <span class="nx">toRGB</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">val</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(!</span><span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">Color</span><span class="o">.</span><span class="nx">re_RGB</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">val</span><span class="o">))</span> <span class="o">{</span>
@@ -128,8 +128,8 @@
     <span class="c">/**</span>
 <span class="c">    * @method toHex</span>
 <span class="c">    * @description Converts an rgb or color string to a hex string: #123456</span>
-<span class="c">    * @param {String} val - The string to convert to hex notation.</span>
-<span class="c">    * @returns {String} - The converted string</span>
+<span class="c">    * @param {String} val The string to convert to hex notation.</span>
+<span class="c">    * @returns {String} The converted string</span>
 <span class="c">    */</span>
     <span class="nx">toHex</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">val</span><span class="o">)</span> <span class="o">{</span>
         <span class="nx">val</span> <span class="o">=</span> <span class="nx">Y</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">Color</span><span class="o">.</span><span class="nx">KEYWORDS</span><span class="o">[</span><span class="nx">val</span><span class="o">]</span> <span class="o">||</span> <span class="nx">val</span><span class="o">;</span>

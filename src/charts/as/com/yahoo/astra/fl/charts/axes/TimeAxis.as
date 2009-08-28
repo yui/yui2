@@ -296,7 +296,7 @@ package com.yahoo.astra.fl.charts.axes
 		private var _numLabelsSetByUser:Boolean = false;
 
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
 		public function get numLabels():Number
 		{
@@ -374,7 +374,7 @@ package com.yahoo.astra.fl.charts.axes
 		private var _majorTicks:Array;
 		
 		/**
-		 * @inheritDoc
+		 * @private (setter)
 		 */
 		override public function set chart(value:IChart):void
 		{

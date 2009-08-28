@@ -807,7 +807,7 @@ if (!YAHOO.util.Event) {
                     // var self = this;
                     // var callback = function() { self._tryPreloadAttach(); };
                     // this._interval = setInterval(callback, this.POLL_INTERVAL);
-                    this._interval = YAHOO.lang.later(this.POLL_INTERVAL, this, this._tryPreloadAttach, true);
+                    this._interval = YAHOO.lang.later(this.POLL_INTERVAL, this, this._tryPreloadAttach, null, true);
                 }
             },
 

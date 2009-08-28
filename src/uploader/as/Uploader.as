@@ -327,6 +327,34 @@
 			fr.upload(request,fieldName);
 		}
 
+		/**
+		 *  Uploads the specified files to a specified path where a script handles writing to the server.
+		 *  
+		 *  @param fileIDs The IDs of the files to be uploaded
+		 *  @param url The path to the serverside script
+		 *  @param method The HTTP submission method. Possible values are "GET" and "POST"
+		 *  @param vars An object containing data to be sent along with the request
+		 *  @param fieldName The field name that precedes the file data in the upload POST operation. The uploadDataFieldName value must be non-null and a non-empty String.
+		 */
+
+		public function uploadThese(fileIDs:Array, url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata"):void {
+			if(isEmptyString(method)) {
+				method = "GET";
+			}
+
+			if(isEmptyString(fieldName)) {
+				fieldName = "Filedata";
+			}
+
+			var request:URLRequest = formURLRequest(url, method, vars);
+
+			for each(var fileID:String in fileIDs) {
+				queueForUpload(fileRefList[fileID], request, fieldName);
+			}
+
+			processQueue();
+		}
+
 	    /**
 	     *  Uploads all files to a specified path where a script handles writing to the server.
 		 *  
@@ -347,7 +375,6 @@
 	     */
 
 		public function uploadAll(url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata", headers:Object = null):void {
-
 			if(isEmptyString(method)) {
 				method = "GET";
 			}
@@ -360,8 +387,14 @@
 			
 			filesToUpload = [];
 
-			for each(var fr:FileReference in fileRefList) {
-				queueForUpload(fr, request, fieldName);
+			// sort files in the order that they were given to us
+			var fileIds:Array = [];
+			for (var fileId:String in fileRefList) {
+			  fileIds.push(parseInt(fileId.substr(4)));
+			}
+			fileIds.sort(Array.NUMERIC);
+			for each(var fileId2:int in fileIds) {
+			  queueForUpload(fileRefList["file"+fileId2], request, fieldName);
 			}
 			
 			processQueue();
@@ -471,7 +504,6 @@
 
 
 		private function uploadComplete (event:Event) : void {
-
 			logMessage("Upload complete for " + fileIDList[event.target]);
 			var newEvent:Object = new Object();
 			newEvent.id = fileIDList[event.target];
@@ -480,9 +512,7 @@
 
 			this.currentUploadThreads--;
 			// get next off of queue:
-			if(filesToUpload.length > 0) {
-				processQueue();
-			}
+			processQueue();
 		}
 
 
@@ -508,7 +538,6 @@
 
 
 		private function uploadError (event:Event) : void {
-
 	        var newEvent:Object = {};
 
 			if (event is HTTPStatusEvent) {
@@ -532,14 +561,8 @@
 
 			super.dispatchEventToJavaScript(newEvent);
 
-
-
 			// get next off of queue:
-
-			if(filesToUpload.length > 0) {
-				processQueue();
-			}
-
+			processQueue();
 		}
 
 
@@ -748,6 +771,8 @@
 			// Uploads the specified file in a specified POST variable, attaching other variables using the specified method
 			ExternalInterface.addCallback("upload", upload);
 			
+			ExternalInterface.addCallback("uploadThese", uploadThese);
+			
 			// uploadAll(url:String, method:String = "GET", vars:Object = null, fieldName:String = "Filedata")
 			// Uploads all files in the queue, using simultaneousUploads.
 			ExternalInterface.addCallback("uploadAll", uploadAll);
@@ -883,16 +908,15 @@
 		 */	
 
 		private function processQueue():void {
+			while (this.currentUploadThreads < this.simultaneousUploadLimit && filesToUpload.length > 0) {
+				var objToUpload:Object = filesToUpload.shift();
+				var fr:FileReference = objToUpload.fr;
+				var request:URLRequest = objToUpload.request;
+				var fieldName:String = objToUpload.fieldName;
 
-		while (this.currentUploadThreads < this.simultaneousUploadLimit) {
-			var objToUpload:Object = filesToUpload.pop();
-			var fr:FileReference = objToUpload.fr;
-			var request:URLRequest = objToUpload.request;
-			var fieldName:String = objToUpload.fieldName;
-
-			fr.upload(request,fieldName);
-			this.currentUploadThreads++;
-		}
+				fr.upload(request,fieldName);
+				this.currentUploadThreads++;
+			}
 		}
 
 		/**
