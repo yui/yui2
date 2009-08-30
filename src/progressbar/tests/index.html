@@ -3,20 +3,20 @@
 <head>
 <title>Progress Bar Tests</title>
 <!-- css -->
-<link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css">
-<link rel="stylesheet" type="text/css" href="../../build/base/base.css">
-<link rel="stylesheet" type="text/css" href="../../build/logger/assets/logger.css">
-<link rel="stylesheet" type="text/css" href="../../build/yuitest/assets/testlogger.css">
-<link rel="stylesheet" type="text/css" href="../../build/progressbar/assets/progressbar-core.css">
-<link rel="stylesheet" type="text/css" href="../../build/progressbar/assets/skins/sam/progressbar.css">
+<link rel="stylesheet" type="text/css" href="../../../build/reset-fonts-grids/reset-fonts-grids.css">
+<link rel="stylesheet" type="text/css" href="../../../build/base/base.css">
+<link rel="stylesheet" type="text/css" href="../../../build/logger/assets/logger.css">
+<link rel="stylesheet" type="text/css" href="../../../build/yuitest/assets/testlogger.css">
+<link rel="stylesheet" type="text/css" href="../../../build/progressbar/assets/progressbar-core.css">
+<link rel="stylesheet" type="text/css" href="../../../build/progressbar/assets/skins/sam/progressbar.css">
 <!-- js -->
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../build/logger/logger-min.js"></script>
+<script type="text/javascript" src="../../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="../../../build/animation/animation-min.js"></script>
+<script type="text/javascript" src="../../../build/element/element-min.js"></script>
+<script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
 
-<script type="text/javascript" src="../../build/yuitest/yuitest-min.js"></script>
-<script type="text/javascript" src="../../build/progressbar/progressbar-debug.js"></script>
+<script type="text/javascript" src="../../../build/yuitest/yuitest-min.js"></script>
+<script type="text/javascript" src="../../../build/progressbar/progressbar-debug.js"></script>
 
 <style type="text/css">
 
@@ -818,6 +818,23 @@
 				
 				},2100);
 			},1000);
+		},
+		testOnOff: function () {
+			pb = new PB();
+			pb.render('test');
+			pb.set('value',30);
+			t = getEls();
+			A.areEqual(30,pb.get('value'),'reported value');
+			A.areEqual('60px',getStyle(t.b,'width'),'bar width');
+			pb.set('anim',true);
+			pb.set('value',60);
+			this.wait(function() {
+				A.isTrue(parseInt(getStyle(t.b,'width'),10) < 120,'bar still going');
+				A.isTrue(parseInt(getStyle(t.b,'width'),10) > 0,'bar not departed');
+				this.wait(function () {
+					A.areEqual('120px',getStyle(t.b,'width'),'bar reached end');
+				},700);
+			},500);
 		}
 
 
