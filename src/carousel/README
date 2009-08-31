@@ -3,7 +3,8 @@ Carousel Release Notes
 *** version 2.8.0 ***
 
 * Changed the implementation to use absolute positioning instead of float for
-  the Carousel list items.
+  the Carousel list items.  This change makes the component set raw styles to
+  the Carousel items instead of just settings the styles through CSS only.
 * Added multi-row support.
 * Added pagination template support.
 * Added support for reverse lazy loading of items.
