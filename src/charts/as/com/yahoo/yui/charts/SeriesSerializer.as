@@ -34,16 +34,34 @@ package com.yahoo.yui.charts
 	//  Static Methods
 	//--------------------------------------
 		
+		/**
+		 * Returns a series class based on a string reference.
+		 * 
+		 * @param name Reference from which to derive a class.
+		 * @return Series Class
+		 */
 		public static function shortNameToSeriesType(name:String):Class
 		{
 			return shortNameToSeriesTypeHash[name];
 		}
 		
+		/**
+		 * Returns a series string reference based on a class.
+		 *
+		 * @param type Series class from which to derive a string reference.
+		 * @return Reference to the series.
+		 */
 		public static function seriesTypeToShortName(type:Class):String
 		{
 			return seriesTypeToShortNameHash[type];
 		}
 		
+		/**
+		 * Returns the properties of a series.
+		 *
+		 * @param input Series from which to retrieve the properties.
+		 * @return Properties of the Series.
+		 */
 		public static function writeSeries(input:ISeries):Object
 		{
 			if(!input)
@@ -68,6 +86,13 @@ package com.yahoo.yui.charts
 			return series;
 		}
 		
+		/**
+		 * Creates or updates a series based on an object of series properties.
+		 *
+		 * @param input Properties to be applied to the series.
+		 * @param series Series to be updated
+		 * @return New or updated series.
+		 */
 		public static function readSeries(input:Object, series:ISeries = null):ISeries
 		{
 			if(!input || !input.type)
@@ -117,6 +142,9 @@ package com.yahoo.yui.charts
 			return series;
 		}
 		
+		/**
+		 * @private
+		 */
 		private static function getDataTipFunction(value:String):Function
 		{
 			var delegate:Object = {dataTipFunction: JavaScriptUtil.createCallbackFunction(value).callback};

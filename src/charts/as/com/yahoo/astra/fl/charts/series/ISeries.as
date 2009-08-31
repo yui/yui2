@@ -96,8 +96,20 @@ package com.yahoo.astra.fl.charts.series
 		 */
 		function clone():ISeries;
 		
+		/**
+		 * Returns the index of an item renderer.
+		 * 
+		 * @param renderer The renderer whose index is to be returned.
+		 * @return The index of the renderer.
+		 */
 		function itemRendererToIndex(renderer:ISeriesItemRenderer):int;
 		
+		/**
+		 * Converts an item to its corresponding item renderer.
+		 * 
+		 * @param item The item from the dataProvider to be converted to a renderer.
+		 * @return The renderer that corresponds to the item.
+		 */
 		function itemToItemRenderer(item:Object):ISeriesItemRenderer;
 	}
 }

@@ -456,7 +456,7 @@ package com.yahoo.astra.fl.charts.axes
 		private var _majorTicks:Array;
 
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
 		override public function set chart(value:IChart):void
 		{

@@ -1,5 +1,8 @@
 Animation Release Notes
 
+*** version 2.8.0 ***
+* Re-enabled multiple animations (when starting from the same value)
+
 *** version 2.7.0 ***
 * Updated set/getAttribute to fall back to element.attribute
 

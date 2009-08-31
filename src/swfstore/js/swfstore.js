@@ -239,8 +239,7 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 	   /**
 	    * Saves data to local storage. It returns a String that can
 		* be one of three values: "true" if the storage succeeded; "false" if the user
-		* has denied storage on their machine, and "pending" if storage is permitted,
-		* but the storage space allotted is not sufficient.
+		* has denied storage on their machine or storage space allotted is not sufficient.
 		* <p>The size limit for the passed parameters is ~40Kb.</p>
 		* @method setItem
 	    * @param data {Object} The data to store

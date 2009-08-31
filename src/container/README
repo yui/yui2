@@ -46,17 +46,6 @@ New Features:
 Changes:
 --------
 
-+ Overlays (and the iframe shim if enabled), now have a CSS class applied to them
-  which is removed just before the overlay (and iframe shim) is moved using using
-  YAHOO.util.Dom.setX or setY methods.
-
-  These classes can be used to apply margins, padding or borders to the Overlay 
-  element (and iframe shim), without having Dom.setXY positioning compensate for
-  them when positioning the Overlay.
-
-  The default class names are "yui-overlay-positioned" and 
-  "yui-overlay-iframe-positioned" respectively.
-
 + Users can now prevent Dialog form submission by returning false from a beforeSubmit 
   event subscriber  
 

@@ -140,7 +140,7 @@ package com.yahoo.astra.fl.charts.axes
 		private var _labelFunction:Function;
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.axes.labelFunction
+		 * @copy com.yahoo.astra.fl.charts.axes.IAxis#labelFunction
 		 */
 		public function get labelFunction():Function
 		{
@@ -315,7 +315,7 @@ package com.yahoo.astra.fl.charts.axes
 		private var _position:String = "left";
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.IAxis#position
+		 * @copy com.yahoo.astra.fl.charts.axes.IAxis#position
 		 */
 		public function get position():String
 		{
@@ -337,7 +337,7 @@ package com.yahoo.astra.fl.charts.axes
 		private var _maxLabel:String = "";
 		
 		/**
-		 * @copy as.com.yahoo.astra.fl.charts.IAxis#maxLabel
+		 * Gets or sets the largest possible label.
 		 */
 		public function get maxLabel():String
 		{

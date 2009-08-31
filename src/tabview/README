@@ -1,5 +1,9 @@
 TabView Release Notes
 
+*** version 2.8.0 ***
+* Removing event listeners when a Tab is removed
+* Fixed CSS overflow issue
+
 *** version 2.7.0 ***
 * null "activeTab" when all tabs are removed
 * allow cancelling of tab change from "beforeActiveTabChange"

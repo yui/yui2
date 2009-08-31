@@ -117,8 +117,8 @@ function StyleSheet(seed, name) {
         i,r,sel;
 
     // Factory or constructor
-    if (!(this instanceof arguments.callee)) {
-        return new arguments.callee(seed,name);
+    if (!(this instanceof StyleSheet)) {
+        return new StyleSheet(seed,name);
     }
 
     // capture the DOM node if the string is an id

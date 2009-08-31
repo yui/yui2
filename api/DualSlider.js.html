@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Slider Widget&nbsp; <span class="subtitle">2.8.0</span></h3>
+        <h3>Slider Widget&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_slider.html" title="slider">slider</a>
                 
@@ -564,12 +564,13 @@
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="nx">_oneTimeCallback</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">o</span><span class="o">,</span><span class="nx">evt</span><span class="o">,</span><span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">o</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">evt</span><span class="o">,</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">sub</span> <span class="o">=</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
             <span class="c">// Unsubscribe myself</span>
-<span class="c"></span>            <span class="nx">o</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">evt</span><span class="o">,</span><span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">);</span>
+<span class="c"></span>            <span class="nx">o</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">evt</span><span class="o">,</span> <span class="nx">sub</span><span class="o">);</span>
             <span class="c">// Pass the event handler arguments to the one time callback</span>
-<span class="c"></span>            <span class="nx">fn</span><span class="o">.</span><span class="nx">apply</span><span class="o">({},[].</span><span class="nx">slice</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">arguments</span><span class="o">));</span>
-        <span class="o">});</span>
+<span class="c"></span>            <span class="nx">fn</span><span class="o">.</span><span class="nx">apply</span><span class="o">({},</span><span class="nx">arguments</span><span class="o">);</span>
+        <span class="o">};</span>
+        <span class="nx">o</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">evt</span><span class="o">,</span><span class="nx">sub</span><span class="o">);</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>

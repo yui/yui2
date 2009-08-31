@@ -59,8 +59,8 @@ Y.Dom.Color = {
     /**
     * @method toRGB
     * @description Converts a hex or color string to an rgb string: rgb(0,0,0)
-    * @param {String} val - The string to convert to RGB notation.
-    * @returns {String} - The converted string
+    * @param {String} val The string to convert to RGB notation.
+    * @returns {String} The converted string
     */
     toRGB: function(val) {
         if (!Y.Dom.Color.re_RGB.test(val)) {
@@ -79,8 +79,8 @@ Y.Dom.Color = {
     /**
     * @method toHex
     * @description Converts an rgb or color string to a hex string: #123456
-    * @param {String} val - The string to convert to hex notation.
-    * @returns {String} - The converted string
+    * @param {String} val The string to convert to hex notation.
+    * @returns {String} The converted string
     */
     toHex: function(val) {
         val = Y.Dom.Color.KEYWORDS[val] || val;

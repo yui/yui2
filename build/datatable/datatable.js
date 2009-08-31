@@ -2417,7 +2417,7 @@ YAHOO.widget.Record.prototype = {
     },
 
     /**
-     * Sets given data at the given key. Use the RecordSet method setValue to trigger
+     * Sets given data at the given key. Use the RecordSet method updateRecordValue to trigger
      * events. 
      *
      * @method setData

@@ -1,5 +1,9 @@
 YUI Library - Base - Release Notes
 
+Version 2.8.0
+
+  * No changes.
+
 Version 2.7.0
 
   * Fixed bug 2366702 by removing the rule that set an arbitrary width for form
