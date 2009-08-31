@@ -1548,7 +1548,7 @@
          * Clears the items from Carousel.
          *
          * @method clearItems
-         * public
+         * @public
          */
         clearItems: function () {
             var carousel = this, n = carousel.get("numItems");
@@ -1996,11 +1996,7 @@
             carousel.on(renderEvent, function (ev) {
                 if (carousel.get("selectedItem") === null ||
                     carousel.get("selectedItem") <= 0) {// in either case
-<<<<<<< HEAD:build/carousel/carousel.js
-                    carousel.set("selectedItem", carousel.get("firstVisible"));
-=======
                 carousel.set("selectedItem", carousel.get("firstVisible"));
->>>>>>> 2ef8e71c1809332d6db7cdde99bf5e14173e005a:build/carousel/carousel.js
                 }
                 syncNavigation.call(carousel, ev);
                 syncPagerUi.call(carousel, ev);
