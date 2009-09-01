@@ -2211,10 +2211,11 @@
             var carousel = this,
                 n = carousel.get("numItems"),
                 i = 0,
+                items = carousel._itemsTable.items,
                 item;
 
             while (i < n) {
-                item = carousel._itemsTable.items[i] || {};
+                item = items[i] || {};
                 if(item.id == id) {
                     return i;
                 }
@@ -3973,13 +3974,16 @@
                 numItems = carousel.get("numItems"),
                 i,
                 itemsTable = carousel._itemsTable,
+                items = itemsTable.items,
+                loading = itemsTable.loading,
                 item,
                 styles;
 
             for (i = 0; i < numItems; i++) {
-                styles = getCarouselItemPosition.call(carousel, i);
-                item = itemsTable.items[i] || itemsTable.loading[i];
+                item = items[i] || loading[i];
+                
                 if (item && item.id) {
+                    styles = getCarouselItemPosition.call(carousel, i);
                     item.styles = item.styles || {};
                     for (attr in styles) {
                         if (styles.hasOwnProperty(attr)) {
