@@ -527,7 +527,10 @@
             left,
             rsz,
             styles = {},
-            index = 0;
+            index = 0,
+            itemsTable = carousel._itemsTable,
+            items = itemsTable.items,
+            loading = itemsTable.loading;
 
         isVertical = carousel.get("isVertical");
         sz  = getCarouselItemSize.call(carousel,
@@ -536,8 +539,7 @@
 
         // adjust for items not yet loaded
         while (index < pos) {
-            if (JS.isUndefined(carousel._itemsTable.items[index]) &&
-                JS.isUndefined(carousel._itemsTable.loading[index])) {
+            if (!items[index] && !loading[index]) {
                 delta++;
             }
             index++;
@@ -2005,8 +2007,8 @@
 
             carousel.on(renderEvent, function (ev) {
                 if (carousel.get("selectedItem") === null ||
-                    carousel.get("selectedItem") <= 0) {// in either case
-                carousel.set("selectedItem", carousel.get("firstVisible"));
+                    carousel.get("selectedItem") <= 0) { //in either case
+                    carousel.set("selectedItem", carousel.get("firstVisible"));
                 }
                 syncNavigation.call(carousel, ev);
                 syncPagerUi.call(carousel, ev);
@@ -2516,7 +2518,10 @@
             var carousel   = this, animate, animCfg, isCircular, isVertical,
                 rows, delta, direction, firstItem, lastItem, itemsPerRow,
                 itemsPerCol, numItems, numPerPage, offset, page, rv, sentinel,
-                index, stopAutoScroll;
+                index, stopAutoScroll,
+                itemsTable = carousel._itemsTable,
+                items = itemsTable.items,
+                loading = itemsTable.loading;
 
             if (JS.isUndefined(item) || item == carousel._firstItem ||
                 carousel.isAnimating()) {
@@ -2592,8 +2597,7 @@
             // adjust for items not yet loaded
             index = 0;
             while (delta < 0 && index < item+numPerPage-1 && index < numItems) {
-                if (JS.isUndefined(carousel._itemsTable.items[index]) &&
-                    JS.isUndefined(carousel._itemsTable.loading[index])) {
+                if (!items[index] && !loading[index]) {
                     delta++;
                 }
                 index += itemsPerCol ? itemsPerCol : 1;
