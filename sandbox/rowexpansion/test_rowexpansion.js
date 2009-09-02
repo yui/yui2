@@ -157,6 +157,14 @@
 			this.table_empty = YTest.RowExpansionCoreSuite.tableMaker( { id : 'yuitest_table_nothing', rowExpansionTemplate : '' } );
 			
 			this.table_object = YTest.RowExpansionCoreSuite.tableMaker( { id : 'yuitest_table_object', rowExpansionTemplate : {} } );
+			
+			this.table_null = YTest.RowExpansionCoreSuite.tableMaker( { id : 'yuitest_table_null', rowExpansionTemplate : null } );
+			
+			this.table_undefined = YTest.RowExpansionCoreSuite.tableMaker( { id : 'yuitest_table_undefined', rowExpansionTemplate : undefined } );
+			
+			this.table_function_true = YTest.RowExpansionCoreSuite.tableMaker( { id : 'yuitest_table_function_true', rowExpansionTemplate : function(){return true} } );
+			
+			this.table_function_false = YTest.RowExpansionCoreSuite.tableMaker( { id : 'yuitest_table_function_false', rowExpansionTemplate : function(){return false} } );
 
 		},
 
@@ -200,6 +208,66 @@
 			Assert.areSame(
 				'TBODY',
 				this.table_object.oDT.getBody().nodeName,
+				'No TBODY element found'
+			);
+
+		},
+		
+		testTableWithNullPassedAsTemplate : function () {
+
+			Assert.isObject(
+				this.table_null.oDT,
+				'DataTable does not appear to be instantiated'
+			);
+			
+			Assert.areSame(
+				'TBODY',
+				this.table_null.oDT.getBody().nodeName,
+				'No TBODY element found'
+			);
+
+		}	,
+
+		testTableWithUndefinedPassedAsTemplate : function () {
+
+			Assert.isObject(
+				this.table_undefined.oDT,
+				'DataTable does not appear to be instantiated'
+			);
+
+			Assert.areSame(
+				'TBODY',
+				this.table_undefined.oDT.getBody().nodeName,
+				'No TBODY element found'
+			);
+
+		},
+
+		testTableWithFunctionTruePassedAsTemplate : function () {
+
+			Assert.isObject(
+				this.table_function_true.oDT,
+				'DataTable does not appear to be instantiated'
+			);
+
+			Assert.areSame(
+				'TBODY',
+				this.table_function_true.oDT.getBody().nodeName,
+				'No TBODY element found'
+			);
+
+		},
+
+		testTableWithFunctionFalsePassedAsTemplate : function () {
+
+			Assert.isObject(
+				this.table_function_false.oDT,
+				'DataTable does not appear to be instantiated'
+			);
+
+			Assert.areSame(
+				'TBODY',
+				this.table_function_false.oDT.getBody().nodeName,
 				'No TBODY element found'
 			);
 
