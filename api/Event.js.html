@@ -189,15 +189,15 @@
             <span class="c">/**</span>
 <span class="c">             * The number of times we should look for elements that are not</span>
 <span class="c">             * in the DOM at the time the event is requested after the document</span>
-<span class="c">             * has been loaded.  The default is 2000@amp;20 ms, so it will poll</span>
-<span class="c">             * for 40 seconds or until all outstanding handlers are bound</span>
+<span class="c">             * has been loaded.  The default is 500@amp;40 ms, so it will poll</span>
+<span class="c">             * for 20 seconds or until all outstanding handlers are bound</span>
 <span class="c">             * (whichever comes first).</span>
 <span class="c">             * @property POLL_RETRYS</span>
 <span class="c">             * @type int</span>
 <span class="c">             * @static</span>
 <span class="c">             * @final</span>
 <span class="c">             */</span>
-            <span class="nx">POLL_RETRYS</span><span class="o">:</span> <span class="m">2000</span><span class="o">,</span>
+            <span class="nx">POLL_RETRYS</span><span class="o">:</span> <span class="m">500</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The poll interval in milliseconds</span>
@@ -206,7 +206,7 @@
 <span class="c">             * @static</span>
 <span class="c">             * @final</span>
 <span class="c">             */</span>
-            <span class="nx">POLL_INTERVAL</span><span class="o">:</span> <span class="m">20</span><span class="o">,</span>
+            <span class="nx">POLL_INTERVAL</span><span class="o">:</span> <span class="m">40</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * Element to bind, int constant</span>
@@ -353,11 +353,11 @@
 <span class="c">             * @static</span>
 <span class="c">             * @private</span>
 <span class="c">             */</span>
-			<span class="nx">_specialTypes</span><span class="o">:</span> <span class="o">{</span>
-				<span class="nx">focus</span><span class="o">:</span> <span class="o">(</span><span class="nx">isIE</span> <span class="o">?</span> <span class="s2">&quot;focusin&quot;</span> <span class="o">:</span> <span class="s2">&quot;focus&quot;</span><span class="o">),</span>
-				<span class="nx">blur</span><span class="o">:</span> <span class="o">(</span><span class="nx">isIE</span> <span class="o">?</span> <span class="s2">&quot;focusout&quot;</span> <span class="o">:</span> <span class="s2">&quot;blur&quot;</span><span class="o">)</span>
-			<span class="o">},</span>
-
+			<span class="c">// _specialTypes: {</span>
+<span class="c"></span>			<span class="c">// 	focus: (isIE ? &quot;focusin&quot; : &quot;focus&quot;),</span>
+<span class="c"></span>			<span class="c">// 	blur: (isIE ? &quot;focusout&quot; : &quot;blur&quot;)</span>
+<span class="c"></span>			<span class="c">// },</span>
+<span class="c"></span>
 
             <span class="c">/**</span>
 <span class="c">             * True when the document is initially usable</span>
@@ -627,12 +627,12 @@
 <span class="c">             * @param {String}   sType     The type to look up</span>
 <span class="c">             * @private</span>
 <span class="c">             */</span>
-			<span class="nx">_getType</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-			
-				<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_specialTypes</span><span class="o">[</span><span class="nx">type</span><span class="o">]</span> <span class="o">||</span> <span class="nx">type</span><span class="o">;</span>
-				
-			<span class="o">},</span>
-
+			<span class="c">// _getType: function (type) {</span>
+<span class="c"></span>			<span class="c">// </span>
+<span class="c"></span>			<span class="c">// 	return this._specialTypes[type] || type;</span>
+<span class="c"></span>			<span class="c">// 	</span>
+<span class="c"></span>			<span class="c">// },</span>
+<span class="c"></span>
 
             <span class="c">/**</span>
 <span class="c">             * Appends an event handler</span>
@@ -660,18 +660,17 @@
 
 				<span class="k">var</span> <span class="nx">capture</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
 
-				<span class="nx">sType</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getType</span><span class="o">(</span><span class="nx">sType</span><span class="o">);</span>
-				
-				<span class="k">if</span> <span class="o">(</span><span class="nx">sType</span> <span class="o">==</span> <span class="nx">FOCUS</span> <span class="o">||</span> <span class="nx">sType</span> <span class="o">==</span> <span class="nx">BLUR</span><span class="o">)</span> <span class="o">{</span>
-
-					<span class="nx">capture</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-				
-					<span class="k">if</span> <span class="o">(</span><span class="nx">isOpera</span><span class="o">)</span> <span class="o">{</span>
-						<span class="nx">captureHack</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">el</span><span class="o">);</span>
-					<span class="o">}</span>
-					
-				<span class="o">}</span>				
-
+				<span class="c">// sType = this._getType(sType);</span>
+<span class="c"></span>				
+				<span class="c">// if (sType == FOCUS || sType == BLUR) {</span>
+<span class="c"></span>				<span class="c">// 	capture = true;</span>
+<span class="c"></span>				<span class="c">// </span>
+<span class="c"></span>				<span class="c">// 	if (isOpera) {</span>
+<span class="c"></span>				<span class="c">// 		captureHack.call(this, sType, el);</span>
+<span class="c"></span>				<span class="c">// 	}</span>
+<span class="c"></span>				<span class="c">// 	</span>
+<span class="c"></span>				<span class="c">// }				</span>
+<span class="c"></span>
                 <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_addListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">,</span> <span class="nx">capture</span><span class="o">);</span>
 
         	<span class="o">},</span>
@@ -799,8 +798,8 @@
             <span class="nx">removeListener</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">len</span><span class="o">,</span> <span class="nx">li</span><span class="o">;</span>
 
-				<span class="nx">sType</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getType</span><span class="o">(</span><span class="nx">sType</span><span class="o">);</span>
-
+				<span class="c">// sType = this._getType(sType);</span>
+<span class="c"></span>
                 <span class="c">// The el argument can be a string</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">el</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
