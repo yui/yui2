@@ -2,7 +2,7 @@
 <html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: dragdrop  DD   (YUI Library)</title>
+	<title>API: dragdrop  YAHOO.util.DDProxy   (YUI Library)</title>
 
 	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
 	<link rel="stylesheet" type="text/css" href="assets/api.css" />
@@ -16,10 +16,10 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Drag and Drop&nbsp; <span class="subtitle">2.8.0</span></h3>
+        <h3>Drag and Drop&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_dragdrop.html" title="dragdrop">dragdrop</a>
-                 &gt; DD 
+                 &gt; YAHOO.util.DDProxy 
                 
         <form onsubmit="return false">
             <div id="propertysearch">
@@ -48,27 +48,43 @@
 
                         
                         
-                            Class <b property="yui:name">DD</b>
+                            Class <b property="yui:name">YAHOO.util.DDProxy</b>
                         <span class="extends">
-                           - extends <a href="YAHOO.util.DragDrop.html" title="YAHOO.util.DragDrop">YAHOO.util.DragDrop</a>
+                           - extends <a href="YAHOO.util.DD.html" title="YAHOO.util.DD">YAHOO.util.DD</a>
                         </span>
 
                     </h2>
                     <!-- class tree goes here -->
                     
+                        <dl class="subclasses" rel="yui:subclasses">
+                            <dt>Known Subclasses:</dt>
+                            <dd>
+                                    <span rel="yui:subclass" resource="YAHOO.util.ColumnResizer.html">
+                                    <a href="YAHOO.util.ColumnResizer.html" property="yui:name" title="YAHOO.util.ColumnResizer">YAHOO.util.ColumnResizer</a>
+                                    </span>
+                                    <span rel="yui:subclass" resource="YAHOO.util.ColumnDD.html">
+                                    <a href="YAHOO.util.ColumnDD.html" property="yui:name" title="YAHOO.util.ColumnDD">YAHOO.util.ColumnDD</a>
+                                    </span>
+                            </dd>
+                       </dl>
                 
   
 
                     <div class="summary description" property="yui:description">
-                        A DragDrop implementation where the linked element follows the 
-mouse cursor during a drag.
+                        A DragDrop implementation that inserts an empty, bordered div into
+the document that follows the cursor during drag operations.  At the time of
+the click, the frame div is resized to the dimensions of the linked html
+element, and moved to the exact location of the linked element.
+References to the "frame" element refer to the single proxy element that
+was created to be dragged in place of all DDProxy elements on the
+page.
                     </div>
 
                         <div class="section constructor details" rel="yui:constructor" resource="#constructor">
                         <h3 id="constructor">Constructor</h3>
                         <div class="content">
                             <div class="detail">
-                                <strong property="yui:name">DD</strong>
+                                <strong property="yui:name">YAHOO.util.DDProxy</strong>
                                 <code>
                                     (
   
@@ -90,21 +106,21 @@ mouse cursor during a drag.
                                                     <code><span property="yui:name">id</span>
                                                     &lt;<span property="yui:type">String</span>&gt;
                                                     </code>
-                                                    <span property="yui:description"> the id of the linked element</span>
+                                                    <span property="yui:description"> the id of the linked html element</span>
                                                 </dd>
                                                 <dd rel="yui:parameter">
                                                     <code><span property="yui:name">sGroup</span>
                                                     &lt;<span property="yui:type">String</span>&gt;
                                                     </code>
-                                                    <span property="yui:description"> the group of related DragDrop items</span>
+                                                    <span property="yui:description"> the group of related DragDrop objects</span>
                                                 </dd>
                                                 <dd rel="yui:parameter">
                                                     <code><span property="yui:name">config</span>
                                                     &lt;<span property="yui:type">object</span>&gt;
                                                     </code>
                                                     <span property="yui:description"> an object containing configurable attributes
-Valid properties for DD: 
-scroll</span>
+Valid properties for DDProxy in addition to those in DragDrop: 
+resizeFrame, centerFrame, dragElId</span>
                                                 </dd>
                                         </dl>
                                     
@@ -118,15 +134,48 @@ scroll</span>
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <div class="" rel="yui:property" resource="#property_scroll">
-                                    <h4><a name="property_scroll" property="yui:name">scroll</a>
+                                    <div class="" rel="yui:property" resource="#property_centerFrame">
+                                    <h4><a name="property_centerFrame" property="yui:name">centerFrame</a>
                                         - <code><span property="yui:type">boolean</span></code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description" property="yui:description">
-                                            When set to true, the utility automatically tries to scroll the browser
-window when a drag and drop element is dragged near the viewport boundary.
-Defaults to true.
+                                            By default the frame is positioned exactly where the drag element is, so
+we use the cursor offset provided by YAHOO.util.DD.  Another option that works only if
+you do not have constraints on the obj is to have the drag frame centered
+around the cursor.  Set centerFrame to true for this effect.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_resizeFrame">
+                                    <h4><a name="property_resizeFrame" property="yui:name">resizeFrame</a>
+                                        - <code><span property="yui:type">boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            By default we resize the drag frame to be the same size as the element
+we want to drag (this is to get the frame effect).  We can turn it off
+if we want a different behavior.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_YAHOO.util.DDProxy.dragElId">
+                                    <h4><a name="property_YAHOO.util.DDProxy.dragElId" property="yui:name">YAHOO.util.DDProxy.dragElId</a>
+                                        - <code>static <span property="yui:type">String</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The default drag frame div id
                                         </div>
                                     </div>
      
@@ -139,6 +188,18 @@ Defaults to true.
                         </div>
 
                         <div rel="yui:inheritance">
+                        <div class="section field inheritance" rel="yui:superclass"  resource="YAHOO.util.DD.html">
+                            <h4>Properties inherited from <a href="YAHOO.util.DD.html" property="yui:name" title="YAHOO.util.DD">YAHOO.util.DD</a>:</h4>
+                            <div class="content" rel="yui:properties">
+                                <code>
+                                    
+                                        <span rel="yui:property" resource="YAHOO.util.DD.html#property_scroll">
+                                        <a class="" href="YAHOO.util.DD.html#property_scroll" property="yui:name" title="scroll">scroll</a>
+                                        </span>
+                                    
+                                </code>
+                            </div>
+                        </div>
                         <div class="section field inheritance" rel="yui:superclass"  resource="YAHOO.util.DragDrop.html">
                             <h4>Properties inherited from <a href="YAHOO.util.DragDrop.html" property="yui:name" title="YAHOO.util.DragDrop">YAHOO.util.DragDrop</a>:</h4>
                             <div class="content" rel="yui:properties">
@@ -290,207 +351,27 @@ Defaults to true.
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
-                                    <div class="" rel="yui:method" resource="#method_alignElWithMouse">
+                                    <div class="private" rel="yui:method" resource="#method__resizeProxy">
                                     <h4>
-                                        <a name="method_alignElWithMouse">alignElWithMouse</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                        
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">alignElWithMouse</strong>
-                                           (
-                                                
-                                                        
-                                                         el
-                                                    
-                                                
-                                                        , 
-                                                         iPageX
-                                                    
-                                                
-                                                        , 
-                                                         iPageY
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Sets the element to the location of the mousedown or click event, 
-maintaining the cursor location relative to the location on the element 
-that was clicked.  Override this if you want to place the element in a 
-location other than where the cursor is.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">el</span>
-                                                        &lt;<span property="yui:type">HTMLElement</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the element to move</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">iPageX</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the X coordinate of the mousedown or drag event</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">iPageY</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the Y coordinate of the mousedown or drag event</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:method" resource="#method_autoOffset">
-                                    <h4>
-                                        <a name="method_autoOffset">autoOffset</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                        
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">autoOffset</strong>
-                                           (
-                                                
-                                                        
-                                                         iPageX
-                                                    
-                                                
-                                                        , 
-                                                         iPageY
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Sets the pointer offset to the distance between the linked element's top 
-left corner and the location the element was clicked
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">iPageX</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the X coordinate of the click</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">iPageY</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the Y coordinate of the click</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_autoScroll">
-                                    <h4>
-                                        <a name="method_autoScroll">autoScroll</a></h4>
+                                        <a name="method__resizeProxy">_resizeProxy</a></h4>
                                     <div class="detail" >
                                         <code>
                                          private 
                                         
                                         
                                         void
-                                            <strong property="yui:name">autoScroll</strong>
+                                            <strong property="yui:name">_resizeProxy</strong>
                                            (
-                                                
-                                                        
-                                                         x
-                                                    
-                                                
-                                                        , 
-                                                         y
-                                                    
-                                                
-                                                        , 
-                                                         h
-                                                    
-                                                
-                                                        , 
-                                                         w
-                                                    
-                                                
                                             )
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Auto-scroll the window if the dragged object has been moved beyond the 
-visible window boundary.
+                                            The proxy is automatically resized to the dimensions of the linked
+element when a drag is initiated, unless resizeFrame is set to false
                                         </div>
 
                                         <div class="description">
 
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">x</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the drag element's x position</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">y</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the drag element's y position</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">h</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the height of the drag element</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">w</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the width of the drag element</span>
-                                                        </dd>
-                                                </dl>
 
                                                 <dl>
                                                     <dt>Returns:
@@ -508,16 +389,91 @@ visible window boundary.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:method" resource="#method_cachePosition">
+                                    <div class="" rel="yui:method" resource="#method_createFrame">
                                     <h4>
-                                        <a name="method_cachePosition">cachePosition</a></h4>
+                                        <a name="method_createFrame">createFrame</a></h4>
                                     <div class="detail" >
                                         <code>
                                         
                                         
                                         
                                         void
-                                            <strong property="yui:name">cachePosition</strong>
+                                            <strong property="yui:name">createFrame</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Creates the proxy element if it does not yet exist
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_initFrame">
+                                    <h4>
+                                        <a name="method_initFrame">initFrame</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">initFrame</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Initialization for the drag frame element.  Must be called in the
+constructor of all subclasses
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private" rel="yui:method" resource="#method_showFrame">
+                                    <h4>
+                                        <a name="method_showFrame">showFrame</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">showFrame</strong>
                                            (
                                                 
                                                         
@@ -532,138 +488,8 @@ visible window boundary.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Saves the most recent position so that we can reset the constraints and
-tick marks on-demand.  We need to know this so that we can calculate the
-number of pixels the element is offset from its original position.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">iPageX</span>
-                                                        &lt;<span property="yui:type">object</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the current x position (optional, this just makes it so we
-don't have to look it up again)</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">iPageY</span>
-                                                        &lt;<span property="yui:type">object</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the current y position (optional, this just makes it so we
-don't have to look it up again)</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:method" resource="#method_setDelta">
-                                    <h4>
-                                        <a name="method_setDelta">setDelta</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                        
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">setDelta</strong>
-                                           (
-                                                
-                                                        
-                                                         iDeltaX
-                                                    
-                                                
-                                                        , 
-                                                         iDeltaY
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Sets the pointer offset.  You can call this directly to force the 
-offset to be in a particular location (e.g., pass in 0,0 to set it 
-to the center of the object, as done in YAHOO.widget.Slider)
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">iDeltaX</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the distance from the left</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">iDeltaY</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the distance from the top</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:method" resource="#method_setDragElPos">
-                                    <h4>
-                                        <a name="method_setDragElPos">setDragElPos</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                        
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">setDragElPos</strong>
-                                           (
-                                                
-                                                        
-                                                         iPageX
-                                                    
-                                                
-                                                        , 
-                                                         iPageY
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Sets the drag element to the location of the mousedown or click event, 
-maintaining the cursor location relative to the location on the element 
-that was clicked.  Override this if you want to place the element in a 
-location other than where the cursor is.
+                                            Resizes the drag frame to the dimensions of the clicked object, positions 
+it over the object, and finally displays it
                                         </div>
 
                                         <div class="description">
@@ -674,13 +500,13 @@ location other than where the cursor is.
                                                         <code><span property="yui:name">iPageX</span>
                                                         &lt;<span property="yui:type">int</span>&gt;
                                                         </code>
-                                                        <span property="yui:description"> the X coordinate of the mousedown or drag event</span>
+                                                        <span property="yui:description"> X click position</span>
                                                         </dd>
                                                         <dd rel="yui:parameter">
                                                         <code><span property="yui:name">iPageY</span>
                                                         &lt;<span property="yui:type">int</span>&gt;
                                                         </code>
-                                                        <span property="yui:description"> the Y coordinate of the mousedown or drag event</span>
+                                                        <span property="yui:description"> Y click position</span>
                                                         </dd>
                                                 </dl>
 
@@ -704,6 +530,31 @@ location other than where the cursor is.
                         </div>
 
                         <div rel="yui:inheritance">                    
+                            <div class="section field inheritance" rel="yui:superclass"  resource="YAHOO.util.DD.html">
+                                <h4>Methods inherited from <a href="YAHOO.util.DD.html" property="yui:name" title="YAHOO.util.DD">YAHOO.util.DD</a>:</h4>
+                                <div class="content" rel="yui:methods">
+                                    <code>
+                                            <span rel="yui:method" resource="YAHOO.util.DD.html#method_alignElWithMouse">                                        
+                                            <a class="" href="YAHOO.util.DD.html#method_alignElWithMouse" property="yui:name" title="alignElWithMouse">alignElWithMouse</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DD.html#method_autoOffset">                                        
+                                            <a class="" href="YAHOO.util.DD.html#method_autoOffset" property="yui:name" title="autoOffset">autoOffset</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DD.html#method_autoScroll">                                        
+                                            <a class="private" href="YAHOO.util.DD.html#method_autoScroll" property="yui:name" title="autoScroll">autoScroll</a><span class="private">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DD.html#method_cachePosition">                                        
+                                            <a class="" href="YAHOO.util.DD.html#method_cachePosition" property="yui:name" title="cachePosition">cachePosition</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DD.html#method_setDelta">                                        
+                                            <a class="" href="YAHOO.util.DD.html#method_setDelta" property="yui:name" title="setDelta">setDelta</a><span class="">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.util.DD.html#method_setDragElPos">                                        
+                                            <a class="" href="YAHOO.util.DD.html#method_setDragElPos" property="yui:name" title="setDragElPos">setDragElPos</a>
+                                            </span>
+                                    </code>
+                                </div>
+                            </div>
                             <div class="section field inheritance" rel="yui:superclass"  resource="YAHOO.util.DragDrop.html">
                                 <h4>Methods inherited from <a href="YAHOO.util.DragDrop.html" property="yui:name" title="YAHOO.util.DragDrop">YAHOO.util.DragDrop</a>:</h4>
                                 <div class="content" rel="yui:methods">
@@ -1384,6 +1235,65 @@ location other than where the cursor is.
 
 
                         <div rel="yui:inheritance">                    
+                        <div class="section field inheritance" rel="yui:superclass"  resource="YAHOO.util.DD.html">
+                            <h4>Events inherited from <a href="YAHOO.util.DD.html" property="yui:name" title="YAHOO.util.DD">YAHOO.util.DD</a>:</h4>
+                            <div class="content" rel="yui:events">
+                                <code>
+                                        <span rel="yui:event" resource="YAHOO.util.DD.html#event_b4DragDropEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_b4DragDropEvent" property="yui:name" title="b4DragDropEvent">b4DragDropEvent</a><span class="">,</span>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_b4DragEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_b4DragEvent" property="yui:name" title="b4DragEvent">b4DragEvent</a><span class="">,</span>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_b4DragOutEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_b4DragOutEvent" property="yui:name" title="b4DragOutEvent">b4DragOutEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_b4DragOverEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_b4DragOverEvent" property="yui:name" title="b4DragOverEvent">b4DragOverEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_b4EndDragEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_b4EndDragEvent" property="yui:name" title="b4EndDragEvent">b4EndDragEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_b4MouseDownEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_b4MouseDownEvent" property="yui:name" title="b4MouseDownEvent">b4MouseDownEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_b4StartDragEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_b4StartDragEvent" property="yui:name" title="b4StartDragEvent">b4StartDragEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_dragDropEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_dragDropEvent" property="yui:name" title="dragDropEvent">dragDropEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_dragEnterEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_dragEnterEvent" property="yui:name" title="dragEnterEvent">dragEnterEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_dragEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_dragEvent" property="yui:name" title="dragEvent">dragEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_dragOutEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_dragOutEvent" property="yui:name" title="dragOutEvent">dragOutEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_dragOverEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_dragOverEvent" property="yui:name" title="dragOverEvent">dragOverEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_endDragEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_endDragEvent" property="yui:name" title="endDragEvent">endDragEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_invalidDropEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_invalidDropEvent" property="yui:name" title="invalidDropEvent">invalidDropEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_mouseDownEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_mouseDownEvent" property="yui:name" title="mouseDownEvent">mouseDownEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_mouseUpEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_mouseUpEvent" property="yui:name" title="mouseUpEvent">mouseUpEvent</a>
+                                        </span>
+                                                                            <span rel="yui:event" resource="YAHOO.util.DD.html#event_startDragEvent">
+                                        <a class="" href="YAHOO.util.DD.html#event_startDragEvent" property="yui:name" title="startDragEvent">startDragEvent</a>
+                                        </span>
+                                    
+                                </code>
+                            </div>
+                        </div>
                         <div class="section field inheritance" rel="yui:superclass"  resource="YAHOO.util.DragDrop.html">
                             <h4>Events inherited from <a href="YAHOO.util.DragDrop.html" property="yui:name" title="YAHOO.util.DragDrop">YAHOO.util.DragDrop</a>:</h4>
                             <div class="content" rel="yui:events">
@@ -1512,9 +1422,9 @@ location other than where the cursor is.
                     <div id="classList" class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li class="selected"><a href="DD.html" title="DD">DD</a></li>
-                                <li class=""><a href="DDProxy.html" title="DDProxy">DDProxy</a></li>
-                                <li class=""><a href="DDTarget.html" title="DDTarget">DDTarget</a></li>
+                                <li class=""><a href="YAHOO.util.DD.html" title="YAHOO.util.DD">YAHOO.util.DD</a></li>
+                                <li class="selected"><a href="YAHOO.util.DDProxy.html" title="YAHOO.util.DDProxy">YAHOO.util.DDProxy</a></li>
+                                <li class=""><a href="YAHOO.util.DDTarget.html" title="YAHOO.util.DDTarget">YAHOO.util.DDTarget</a></li>
                                 <li class=""><a href="YAHOO.util.DragDrop.html" title="YAHOO.util.DragDrop">YAHOO.util.DragDrop</a></li>
                                 <li class=""><a href="YAHOO.util.DragDropMgr.html" title="YAHOO.util.DragDropMgr">YAHOO.util.DragDropMgr</a></li>
                                 <li class=""><a href="YAHOO.util.DragDropMgr.ElementWrapper.html" title="YAHOO.util.DragDropMgr.ElementWrapper">YAHOO.util.DragDropMgr.ElementWrapper</a></li>
@@ -1535,19 +1445,19 @@ location other than where the cursor is.
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li class=""><a href="#property_scroll" title="scroll">scroll</a></li>
+                                <li class=""><a href="#property_centerFrame" title="centerFrame">centerFrame</a></li>
+                                <li class=""><a href="#property_resizeFrame" title="resizeFrame">resizeFrame</a></li>
+                                <li class=""><a href="#property_YAHOO.util.DDProxy.dragElId" title="YAHOO.util.DDProxy.dragElId">YAHOO.util.DDProxy.dragElId</a></li>
                         </ul>
                     </div>
 
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li class=""><a href="#method_alignElWithMouse" title="alignElWithMouse">alignElWithMouse</a></li>
-                                <li class=""><a href="#method_autoOffset" title="autoOffset">autoOffset</a></li>
-                                <li class="private"><a href="#method_autoScroll" title="autoScroll">autoScroll</a></li>
-                                <li class=""><a href="#method_cachePosition" title="cachePosition">cachePosition</a></li>
-                                <li class=""><a href="#method_setDelta" title="setDelta">setDelta</a></li>
-                                <li class=""><a href="#method_setDragElPos" title="setDragElPos">setDragElPos</a></li>
+                                <li class="private"><a href="#method__resizeProxy" title="_resizeProxy">_resizeProxy</a></li>
+                                <li class=""><a href="#method_createFrame" title="createFrame">createFrame</a></li>
+                                <li class=""><a href="#method_initFrame" title="initFrame">initFrame</a></li>
+                                <li class="private"><a href="#method_showFrame" title="showFrame">showFrame</a></li>
                         </ul>
                     </div>
 
@@ -1584,7 +1494,7 @@ location other than where the cursor is.
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "DD", "name": "alignElWithMouse", "url": "DD.html#method_alignElWithMouse", "type": "method"}, {"access": "", "host": "DD", "name": "autoOffset", "url": "DD.html#method_autoOffset", "type": "method"}, {"access": "private", "host": "DD", "name": "autoScroll", "url": "DD.html#method_autoScroll", "type": "method"}, {"access": "", "host": "DD", "name": "b4DragDropEvent", "url": "DD.html#event_b4DragDropEvent", "type": "event"}, {"access": "", "host": "DD", "name": "b4DragEvent", "url": "DD.html#event_b4DragEvent", "type": "event"}, {"access": "", "host": "DD", "name": "b4DragOutEvent", "url": "DD.html#event_b4DragOutEvent", "type": "event"}, {"access": "", "host": "DD", "name": "b4DragOverEvent", "url": "DD.html#event_b4DragOverEvent", "type": "event"}, {"access": "", "host": "DD", "name": "b4EndDragEvent", "url": "DD.html#event_b4EndDragEvent", "type": "event"}, {"access": "", "host": "DD", "name": "b4MouseDownEvent", "url": "DD.html#event_b4MouseDownEvent", "type": "event"}, {"access": "", "host": "DD", "name": "b4StartDragEvent", "url": "DD.html#event_b4StartDragEvent", "type": "event"}, {"access": "", "host": "DD", "name": "cachePosition", "url": "DD.html#method_cachePosition", "type": "method"}, {"access": "", "host": "DD", "name": "dragDropEvent", "url": "DD.html#event_dragDropEvent", "type": "event"}, {"access": "", "host": "DD", "name": "dragEnterEvent", "url": "DD.html#event_dragEnterEvent", "type": "event"}, {"access": "", "host": "DD", "name": "dragEvent", "url": "DD.html#event_dragEvent", "type": "event"}, {"access": "", "host": "DD", "name": "dragOutEvent", "url": "DD.html#event_dragOutEvent", "type": "event"}, {"access": "", "host": "DD", "name": "dragOverEvent", "url": "DD.html#event_dragOverEvent", "type": "event"}, {"access": "", "host": "DD", "name": "endDragEvent", "url": "DD.html#event_endDragEvent", "type": "event"}, {"access": "", "host": "DD", "name": "invalidDropEvent", "url": "DD.html#event_invalidDropEvent", "type": "event"}, {"access": "", "host": "DD", "name": "mouseDownEvent", "url": "DD.html#event_mouseDownEvent", "type": "event"}, {"access": "", "host": "DD", "name": "mouseUpEvent", "url": "DD.html#event_mouseUpEvent", "type": "event"}, {"access": "", "host": "DD", "name": "scroll", "url": "DD.html#property_scroll", "type": "property"}, {"access": "", "host": "DD", "name": "setDelta", "url": "DD.html#method_setDelta", "type": "method"}, {"access": "", "host": "DD", "name": "setDragElPos", "url": "DD.html#method_setDragElPos", "type": "method"}, {"access": "", "host": "DD", "name": "startDragEvent", "url": "DD.html#event_startDragEvent", "type": "event"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.DD", "name": "alignElWithMouse", "url": "YAHOO.util.DD.html#method_alignElWithMouse", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "autoOffset", "url": "YAHOO.util.DD.html#method_autoOffset", "type": "method"}, {"access": "private", "host": "YAHOO.util.DD", "name": "autoScroll", "url": "YAHOO.util.DD.html#method_autoScroll", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4DragDropEvent", "url": "YAHOO.util.DD.html#event_b4DragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4DragDropEvent", "url": "YAHOO.util.DDProxy.html#event_b4DragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4DragEvent", "url": "YAHOO.util.DD.html#event_b4DragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4DragEvent", "url": "YAHOO.util.DDProxy.html#event_b4DragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4DragOutEvent", "url": "YAHOO.util.DD.html#event_b4DragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4DragOutEvent", "url": "YAHOO.util.DDProxy.html#event_b4DragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4DragOverEvent", "url": "YAHOO.util.DD.html#event_b4DragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4DragOverEvent", "url": "YAHOO.util.DDProxy.html#event_b4DragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4EndDragEvent", "url": "YAHOO.util.DD.html#event_b4EndDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4EndDragEvent", "url": "YAHOO.util.DDProxy.html#event_b4EndDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4MouseDownEvent", "url": "YAHOO.util.DD.html#event_b4MouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4MouseDownEvent", "url": "YAHOO.util.DDProxy.html#event_b4MouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4StartDragEvent", "url": "YAHOO.util.DD.html#event_b4StartDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4StartDragEvent", "url": "YAHOO.util.DDProxy.html#event_b4StartDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "cachePosition", "url": "YAHOO.util.DD.html#method_cachePosition", "type": "method"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "centerFrame", "url": "YAHOO.util.DDProxy.html#property_centerFrame", "type": "property"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "createFrame", "url": "YAHOO.util.DDProxy.html#method_createFrame", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragDropEvent", "url": "YAHOO.util.DD.html#event_dragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragDropEvent", "url": "YAHOO.util.DDProxy.html#event_dragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragEnterEvent", "url": "YAHOO.util.DD.html#event_dragEnterEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragEnterEvent", "url": "YAHOO.util.DDProxy.html#event_dragEnterEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragEvent", "url": "YAHOO.util.DD.html#event_dragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragEvent", "url": "YAHOO.util.DDProxy.html#event_dragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragOutEvent", "url": "YAHOO.util.DD.html#event_dragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragOutEvent", "url": "YAHOO.util.DDProxy.html#event_dragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragOverEvent", "url": "YAHOO.util.DD.html#event_dragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragOverEvent", "url": "YAHOO.util.DDProxy.html#event_dragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "endDragEvent", "url": "YAHOO.util.DD.html#event_endDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "endDragEvent", "url": "YAHOO.util.DDProxy.html#event_endDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "initFrame", "url": "YAHOO.util.DDProxy.html#method_initFrame", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "invalidDropEvent", "url": "YAHOO.util.DD.html#event_invalidDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "invalidDropEvent", "url": "YAHOO.util.DDProxy.html#event_invalidDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "mouseDownEvent", "url": "YAHOO.util.DD.html#event_mouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "mouseDownEvent", "url": "YAHOO.util.DDProxy.html#event_mouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "mouseUpEvent", "url": "YAHOO.util.DD.html#event_mouseUpEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "mouseUpEvent", "url": "YAHOO.util.DDProxy.html#event_mouseUpEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "resizeFrame", "url": "YAHOO.util.DDProxy.html#property_resizeFrame", "type": "property"}, {"access": "private", "host": "YAHOO.util.DDProxy", "name": "_resizeProxy", "url": "YAHOO.util.DDProxy.html#method__resizeProxy", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "scroll", "url": "YAHOO.util.DD.html#property_scroll", "type": "property"}, {"access": "", "host": "YAHOO.util.DD", "name": "setDelta", "url": "YAHOO.util.DD.html#method_setDelta", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "setDragElPos", "url": "YAHOO.util.DD.html#method_setDragElPos", "type": "method"}, {"access": "private", "host": "YAHOO.util.DDProxy", "name": "showFrame", "url": "YAHOO.util.DDProxy.html#method_showFrame", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "startDragEvent", "url": "YAHOO.util.DD.html#event_startDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "startDragEvent", "url": "YAHOO.util.DDProxy.html#event_startDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "YAHOO.util.DDProxy.dragElId", "url": "YAHOO.util.DDProxy.html#property_YAHOO.util.DDProxy.dragElId", "type": "property"}];
 </script>
 </body>
 </html>

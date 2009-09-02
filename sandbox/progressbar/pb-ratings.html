@@ -27,8 +27,6 @@
 <style type="text/css">
 
 .yui-skin-sam .ratings {
-	width:100px;
-	height:20px;
 	background:white none repeat 0 0;
 }
 .yui-skin-sam .ratings .yui-pb-bar  {
@@ -89,15 +87,14 @@ code {
 				var dt = new YAHOO.widget.DataTable(
 					'Container',
 					[
-						{key:"Title",sortable:true},
-						{key:"Address",sortable:true},
-						{key:"Phone",sortable:true},
-						{key:"Rating.AverageRating",label:"Rating",	sortable:true}
+						{key:"Title", sortable:true},
+						{key:"Address", sortable:true},
+						{key:"Phone", sortable:true},
+						{key:"Rating.AverageRating", label:"Rating", formatter:ratingFormatter,	sortable:true}
 					],
 					new YAHOO.util.YQLDataSource(),
 					{
-						initialRequest:'select Title,Address,Phone, Rating.AverageRating from local.search ' +
-							'where query="sushi" and location="san francisco, ca"'
+						initialRequest:'select Title, Address, Phone, Rating.AverageRating from local.search where query="sushi" and location="san francisco, ca"'
 					}
 				);
 			</textarea>
@@ -106,41 +103,49 @@ code {
 			The query returns that field nested within the structure of each record.  The property <code>Rating</code> is actually 
 			an object which contains several other properties and from those we choose <code>AverageRating</code>, thus, we
 			use the composite field name <code>Rating.AverageRating</code> both in the query and in the <code>key</code> for the
-			column definitions.  Since that is not an acceptable label for the column header, we have to provide one. 
-			Initially, this will also be drawn as a simple text field. All columns are sortable, even the Ratings column.</p>
+			column definitions.  Since that is not an acceptable label for the column header, we have to provide one and 
+			assign it a custom formatter. All columns are sortable, even the Ratings column.</p>
 
-			<p>We will listen to DataTable's <code>renderEvent</code> to know when the table has been drawn.  
-			At that point, we will search for the cells containing the rating and replace it with the ProgressBar:<p>
+			<p>The <code>ratingFormatter</code> is the one that will draw the ProgressBars:<p>
 			<textarea name="code" class="JScript" cols="60" rows="1">
-				dt.on('renderEvent',function() {
-					YAHOO.util.Dom.getElementsByClassName(
-						'yui-dt-col-' + this.getColumn("Rating.AverageRating").getSanitizedKey(),
-						'td', 
-						this.getTbodyEl(),
-						function (tdEl) {
-							var elLiner = this.getTdLinerEl(tdEl), 
-								val = parseFloat(elLiner.innerHTML);
-							elLiner.innerHTML = '';
-							// Here we draw the progerssBar:
-							(new YAHOO.widget.ProgressBar({value:val,maxValue:5, className:'ratings'})).render(elLiner);
-						},
-						this,
-						true
-					);
+				var pbs = [];
+				var ratingFormatter = function (elLiner, oRecord, oColumn, oData) {
+					var pb = new YAHOO.widget.ProgressBar({
+						width:'100px', 
+						height:'20px', 
+						maxValue:5, 
+						className:'ratings',
+						value:YAHOO.util.DataSource.parseNumber(oData)
+					}).render(elLiner);
+					pbs.push(pb);
+				};
+			</textarea>
+			<p>The core of it is the creation of the ProgressBar 100px wide and 20px hight because our star is in a square 20pixels on each side so that
+			up to five stars will fit horizontally.  Five is, indeed, the <code>maxValue</code> that the rating 
+			might reach.  We add a className <code>"rating"</code> to the widget, which will help us with some formatting details
+			and, finally, we set the current value for the progressBar to the new value for the cell, after converting it to a number.
+			Unfortunately, YQL returns everything as strings.</p>
+			
+			<p>Everytime the DataTable is sorted or redrawn for any reason, such as call to the <code>render</code> method or paging, 
+			the formatters will be called again.  As with any widget, the ProgressBar might take resources that might not be
+			automatically cleared by the garbage collector.  It is vital to call method <code>destroy</code> to make sure all such
+			resources are cleared.  We push the ProgressBar instances created into the array <code>pbs</code>.  To destroy
+			those instances, we do:</p>
+			<textarea name="code" class="JScript" cols="60" rows="1">
+				dt.on('beforeRenderEvent',function() {
+					for (var i = 0; i < pbs.length; i++) {
+						pbs[i].destroy();
+					}
+					pbs = [];
 				});
 			</textarea>
-			<p>The DataTable marks each cell with a className with a prefix of <code>'yui-dt-col-'</code> followed by its sanitized column key value, 
-			to ensure it is a valid className.  We use Dom's <code>getElementsByClassName</code> to locate each &lt;td&gt; element of that className
-			and execute a function that locates the liner element, which is the one that actually contains the value displayed.
-			We read the value into variable <code>val</code>, empty the cell and finally draw the ProgressBar.  
-			This is done in the single line that takes the value just read and renders it in the same liner element.</p>
+			<p>Before any render, we make sure we destroy every instance we might have stored in the <code>pbs</code> array, 
+			if any.</p>
 			
 			<p>The stars come from this single star <img src="star.png" /> which the ProgressBar tiles until it fills the allotted space.
 			The style settings for this example is:</p>
 			<textarea name="code" class="JScript" cols="60" rows="1">
 				.yui-skin-sam .ratings {
-					width:100px;
-					height:20px;
 					background:white none repeat 0 0; 
 				}
 				.yui-skin-sam .ratings .yui-pb-bar  {
@@ -150,56 +155,46 @@ code {
 			<p>We are using <code>.yui-skin-sam .ratings</code> as a selector in all the styles.  
 			We use the <code>yui-skin-sam</code> for basic skinning in all the page, including the DataTable, so we need to
 			override some of its settings.  We gave the <code>ratings</code> className to all the ProgressBars
-			as one of the arguments in their instantiation.  Since the star is in a square 20px on a side and ratings go up to 5,
-			we draw the bars of 100px * 20px and, since the icon fades to white, we set the background to white as well.
+			as one of the arguments in their instantiation.  Since the star icon fades to white, we set the background to white.
 			In the second definition, we set the background image for the bar itself to the star icon.  
 			We leave the borders that the SAM skin provides.</p>
 			
-			<p>A simpler way might have been to use the formatter function on the columns definition of the DataTable to draw
-			the ProgressBar for each cell when building the table.  Unfortunately, the formatter is called while the DataTable row
-			has not been added to the DOM document yet.  At that point, the CSS styles above wouldn't work because the <code>yui-skin-sam</code>
-			is in the document body so the width and height wouldn't be set and all the rest of the elements would be resized incorrectly.</p>
-			
-			<p>We are being a little careless about the ProgressBar instances we are leaving behind.  Just as with most YUI components
-			the ProgressBar has a <code>destroy</code> method which makes certain nothing is left behind taking up memory.  
-			In some operations like sorting, the DataTable draws each cell anew, ignoring its previous contents.  Though this
-			takes care of the HTML markup produced, it does not frees the memory taken by the ProgressBar object instances themselves.
-			In this example we are keeping no reference to the ProgressBars created nor to any of the other components, for that matter.
-			We should keep this references and make sure to run through them calling the <code>destroy</code> method when the DataTable
-			is about to destroy them.</p>
 		</div>
 	</div>
 	
 <script  type="text/javascript">
 
 	YAHOO.util.Event.onDOMReady(function () {
+		var pbs = [];
+		var ratingFormatter = function (elLiner, oRecord, oColumn, oData) {
+			var pb = new YAHOO.widget.ProgressBar({
+				width:'100px', 
+				height:'20px', 
+				maxValue:5, 
+				className:'ratings',
+				value:YAHOO.util.DataSource.parseNumber(oData)
+			}).render(elLiner);
+			pbs.push(pb);
+		};
+
 		var dt = new YAHOO.widget.DataTable(
 			'Container',
 			[
 				{key:"Title",sortable:true},
 				{key:"Address",sortable:true},
 				{key:"Phone",sortable:true},
-				{key:"Rating.AverageRating",label:"Rating",	sortable:true}
+				{key:"Rating.AverageRating",label:"Rating",	sortable:true, formatter:ratingFormatter}
 			],
 			new YAHOO.util.YQLDataSource(),
 			{
 				initialRequest:'select Title,Address,Phone, Rating.AverageRating from local.search where query="sushi" and location="san francisco, ca"'
 			}
 		);
-
-		dt.on('renderEvent',function() {
-			YAHOO.util.Dom.getElementsByClassName(
-				'yui-dt-col-' + this.getColumn("Rating.AverageRating").getSanitizedKey(),
-				'td', 
-				this.getTbodyEl(),
-				function (tdEl) {
-					var elLiner = this.getTdLinerEl(tdEl), val = parseFloat(elLiner.innerHTML);
-					elLiner.innerHTML = '';
-					(new YAHOO.widget.ProgressBar({value:val,maxValue:5, className:'ratings'})).render(elLiner);
-				},
-				this,
-				true
-			);
+		dt.on('beforeRenderEvent',function() {
+			for (var i = 0; i < pbs.length; i++) {
+				pbs[i].destroy();
+			}
+			pbs = [];
 		});
 	});
 </script>

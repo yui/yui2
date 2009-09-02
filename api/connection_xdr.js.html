@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>connection&nbsp; <span class="subtitle">2.8.0</span></h3>
+        <h3>connection&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_connection.html" title="connection">connection</a>
                 
@@ -51,9 +51,7 @@
 <span class="c">  * @for Connect</span>
 <span class="c">  */</span>
 <span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-	<span class="k">var</span> <span class="nx">YCM</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Connect</span><span class="o">,</span>
-		<span class="nx">_xdrReady</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s1">&#39;xdrReady&#39;</span><span class="o">),</span>
-		<span class="nx">_fn</span> <span class="o">=</span> <span class="o">{};</span>
+	<span class="k">var</span> <span class="nx">YCM</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Connect</span><span class="o">,</span> <span class="nx">_fn</span> <span class="o">=</span> <span class="o">{};</span>
 
    <span class="c">/**</span>
 <span class="c">    * @description This method creates and instantiates the Flash transport.</span>
@@ -90,7 +88,7 @@
 <span class="c">    * @return {void}</span>
 <span class="c">    */</span>
 	<span class="k">function</span> <span class="nx">_xdr</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">m</span><span class="o">,</span> <span class="nx">u</span><span class="o">,</span> <span class="nx">c</span><span class="o">,</span> <span class="nx">d</span><span class="o">)</span> <span class="o">{</span>
-		<span class="nx">_fn</span><span class="o">[</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">tId</span><span class="o">)</span> <span class="o">?</span> <span class="nx">o</span><span class="o">.</span><span class="nx">tId</span> <span class="o">:</span> <span class="kc">null</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span> <span class="s1">&#39;o&#39;</span><span class="o">:</span><span class="nx">o</span><span class="o">,</span> <span class="s1">&#39;c&#39;</span><span class="o">:</span><span class="nx">c</span> <span class="o">};</span>
+		<span class="nx">_fn</span><span class="o">[</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">tId</span><span class="o">)]</span> <span class="o">=</span> <span class="o">{</span> <span class="s1">&#39;o&#39;</span><span class="o">:</span><span class="nx">o</span><span class="o">,</span> <span class="s1">&#39;c&#39;</span><span class="o">:</span><span class="nx">c</span> <span class="o">};</span>
 		<span class="k">if</span> <span class="o">(</span><span class="nx">d</span><span class="o">)</span> <span class="o">{</span>
 			<span class="nx">c</span><span class="o">.</span><span class="nx">method</span> <span class="o">=</span> <span class="nx">m</span><span class="o">;</span>
 			<span class="nx">c</span><span class="o">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">d</span><span class="o">;</span>
@@ -114,7 +112,7 @@
 	<span class="o">}</span>
 
 	<span class="k">function</span> <span class="nx">_xdrReady</span><span class="o">()</span> <span class="o">{</span>
-		<span class="nx">_xdrReady</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
+		<span class="nx">YCM</span><span class="o">.</span><span class="nx">xdrReadyEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
 	<span class="o">}</span>
 
    <span class="c">/**</span>
@@ -128,9 +126,9 @@
 <span class="c">    * @return {void}</span>
 <span class="c">    */</span>
 	<span class="k">function</span> <span class="nx">_xdrStart</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">cb</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">if</span><span class="o">(</span><span class="nx">o</span><span class="o">){</span>
+		<span class="k">if</span> <span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
 			<span class="c">// Fire global custom event -- startEvent</span>
-<span class="c"></span>			<span class="k">this</span><span class="o">.</span><span class="nx">startEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">cb</span><span class="o">.</span><span class="nx">argument</span><span class="o">);</span>
+<span class="c"></span>			<span class="nx">YCM</span><span class="o">.</span><span class="nx">startEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">cb</span><span class="o">.</span><span class="nx">argument</span><span class="o">);</span>
 
 			<span class="k">if</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">startEvent</span><span class="o">){</span>
 				<span class="c">// Fire transaction custom event -- startEvent</span>
@@ -150,21 +148,21 @@
 <span class="c">    * @return {void}</span>
 <span class="c">    */</span>
 	<span class="k">function</span> <span class="nx">_handleXdrResponse</span><span class="o">(</span><span class="nx">r</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="nx">_fn</span><span class="o">[</span><span class="nx">r</span><span class="o">.</span><span class="nx">tId</span><span class="o">].</span><span class="nx">o</span><span class="o">,</span>
+			<span class="nx">cb</span> <span class="o">=</span> <span class="nx">_fn</span><span class="o">[</span><span class="nx">r</span><span class="o">.</span><span class="nx">tId</span><span class="o">].</span><span class="nx">c</span><span class="o">;</span>
+
 		<span class="k">if</span> <span class="o">(</span><span class="nx">r</span><span class="o">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">&#39;xdr:start&#39;</span><span class="o">)</span> <span class="o">{</span>
 			<span class="nx">_xdrStart</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">cb</span><span class="o">);</span>
 			<span class="k">return</span><span class="o">;</span>
 		<span class="o">}</span>
 
-		<span class="k">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="nx">_fn</span><span class="o">[</span><span class="nx">r</span><span class="o">.</span><span class="nx">tId</span><span class="o">].</span><span class="nx">o</span><span class="o">,</span>
-			<span class="nx">cb</span> <span class="o">=</span> <span class="nx">_fn</span><span class="o">[</span><span class="nx">r</span><span class="o">.</span><span class="nx">tId</span><span class="o">].</span><span class="nx">c</span><span class="o">,</span>
-			<span class="nx">isAbort</span> <span class="o">=</span> <span class="o">(</span><span class="nx">r</span><span class="o">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">&#39;xdr:abort&#39;</span><span class="o">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="o">;</span>
-
+		<span class="nx">r</span><span class="o">.</span><span class="nx">responseText</span> <span class="o">=</span> <span class="nb">decodeURI</span><span class="o">(</span><span class="nx">r</span><span class="o">.</span><span class="nx">responseText</span><span class="o">);</span>
 		<span class="nx">o</span><span class="o">.</span><span class="nx">r</span> <span class="o">=</span> <span class="nx">r</span><span class="o">;</span>
 		<span class="k">if</span> <span class="o">(</span><span class="nx">cb</span><span class="o">.</span><span class="nx">argument</span><span class="o">)</span> <span class="o">{</span>
-			<span class="nx">o</span><span class="o">.</span><span class="nx">response</span><span class="o">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="nx">cb</span><span class="o">.</span><span class="nx">argument</span><span class="o">;</span>
+			<span class="nx">o</span><span class="o">.</span><span class="nx">r</span><span class="o">.</span><span class="nx">argument</span> <span class="o">=</span> <span class="nx">cb</span><span class="o">.</span><span class="nx">argument</span><span class="o">;</span>
 		<span class="o">}</span>
 
-		<span class="k">this</span><span class="o">.</span><span class="nx">handleTransactionResponse</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">cb</span><span class="o">,</span> <span class="nx">isAbort</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">handleTransactionResponse</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">cb</span><span class="o">,</span> <span class="nx">r</span><span class="o">.</span><span class="nx">statusText</span> <span class="o">===</span> <span class="s1">&#39;xdr:abort&#39;</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="o">);</span>
 		<span class="nx">delete</span> <span class="nx">_fn</span><span class="o">[</span><span class="nx">r</span><span class="o">.</span><span class="nx">tId</span><span class="o">];</span>
 	<span class="o">}</span>
 
@@ -172,6 +170,7 @@
 <span class="c"></span>	<span class="nx">YCM</span><span class="o">.</span><span class="nx">xdr</span> <span class="o">=</span> <span class="nx">_xdr</span><span class="o">;</span>
 	<span class="nx">YCM</span><span class="o">.</span><span class="nx">swf</span> <span class="o">=</span> <span class="nx">_swf</span><span class="o">;</span>
 	<span class="nx">YCM</span><span class="o">.</span><span class="nx">transport</span> <span class="o">=</span> <span class="nx">_init</span><span class="o">;</span>
+	<span class="nx">YCM</span><span class="o">.</span><span class="nx">xdrReadyEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s1">&#39;xdrReady&#39;</span><span class="o">);</span>
 	<span class="nx">YCM</span><span class="o">.</span><span class="nx">xdrReady</span> <span class="o">=</span> <span class="nx">_xdrReady</span><span class="o">;</span>
 	<span class="nx">YCM</span><span class="o">.</span><span class="nx">handleXdrResponse</span> <span class="o">=</span> <span class="nx">_handleXdrResponse</span><span class="o">;</span>
 <span class="o">})();</span>

@@ -86,6 +86,7 @@ package com.yahoo.astra.fl.charts.series
 	//--------------------------------------
 	
 		/**
+		 * @private
 		 * @copy fl.core.UIComponent#getStyleDefinition()
 		 */
 		public static function getStyleDefinition():Object
@@ -280,6 +281,7 @@ package com.yahoo.astra.fl.charts.series
 				{
 					marker.x = xPosition - marker.width / 2;
 					marker.y = yPosition - marker.height / 2;
+					marker.visible = yPosition <= seriesBounds.height + seriesBounds.y && yPosition >= seriesBounds.y;
 					
 					if(lastValidPosition && !lastMarkerValid && connectDiscontinuousPoints)
 					{
@@ -342,7 +344,6 @@ package com.yahoo.astra.fl.charts.series
 							var y2:Number = yPosition;
 							if(yPosition > bottom)
 							{	
-								marker.visible = false;
 								if(lastValidPosition.y == yPosition)
 								{
 									this.graphics.lineTo(xPosition, bottom);
@@ -362,7 +363,6 @@ package com.yahoo.astra.fl.charts.series
 							}
 							else if(yPosition < seriesBounds.y)
 							{
-								marker.visible = false;
 								if(lastValidPosition.y == yPosition)
 								{
 									this.graphics.lineTo(xPosition, seriesBounds.y);
@@ -384,7 +384,6 @@ package com.yahoo.astra.fl.charts.series
 							}
 							else
 							{	
-								marker.visible = true;
 								if(lastValidPosition.y > bottom) 
 								{
 									newX = x2 - ((y2 - bottom)*(x2-x1)/(y2-y1));	

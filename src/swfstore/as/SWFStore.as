@@ -5,6 +5,7 @@ package
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.events.NetStatusEvent;
 	import flash.external.ExternalInterface;
 	import flash.net.SharedObject;
@@ -229,7 +230,7 @@ package
 	    */   
 	    public function setItem(location:String, item:* ):Boolean
 	    {        
-	    	var oldValue:Object;
+	    	var oldValue:Object = null;
 	    	var info:String;
 	    	
  			//check to see if this has already been added
@@ -248,7 +249,6 @@ package
 			 
 			else //doesn't exist, create and index it
 			{ 
-				oldValue = null;
 				info = "add";
 				  
 				_archive.storage[location] = item;
@@ -258,7 +258,22 @@ package
 			   
 			//write it immediately
 	    	var result:Boolean = save(location, info, oldValue, item);
-			  
+			if(!result) 
+			{
+				//return archive to its original state, as this did not propagate to the SharedObject
+				switch(info)
+				{
+					case "update":
+					_archive.storage[location] = oldValue;
+					break;
+					
+					case "add":
+					delete _archive.storage[location];
+					_archive.hash.pop();
+					break;
+					
+				}
+			} 
 	    	return result;
 	    }
    
@@ -447,7 +462,7 @@ package
 	    public function clear():Boolean
 	    {
 	    	_sharedObject.clear();
-	    	
+	    	_archive = {storage:{}, hash:[]};
 	    	var evt:Object = {type: "save"};           
 	    	
 			yuibridge.sendEvent(evt);
@@ -554,6 +569,7 @@ package
 			var whitelistLoader:URLLoader = new URLLoader();
 			whitelistLoader.addEventListener(Event.COMPLETE, onComplete);
 			whitelistLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+			whitelistLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 		
 			//don't use a relative path, use the swf's loaded path
 			//to prevent crossdomain or base param workarounds
@@ -640,7 +656,7 @@ package
 		}
 		/**
 		 * @private
-		 * Parses the config xml data and populates path array
+		 * Dispatches an IOErrorEvent
 		 * 
 		 */
 		private function onError(event:IOErrorEvent) : void 
@@ -652,6 +668,17 @@ package
 			performURLMatch();
 		}
 		
+		/**
+		 * @private
+		 * Dispatches a SecurityErrorEvent
+		 * 
+		 */
+		private function onSecurityError(event:SecurityErrorEvent) : void 
+		{
+			var evt:Object = {type: "securityError", message: event.text };
+					
+				yuibridge.sendEvent(evt);
+		}
 		
 		/**
 		 * Expands a path with shorthands to url
@@ -815,8 +842,16 @@ package
 	        }
 	        else _sharedObject.data.archive = _archive;
 	         
-	    	var result:String = _sharedObject.flush();
-	    	 
+	    	var result:String;
+	 		
+			try
+			{
+				result = _sharedObject.flush();
+	    	}
+			catch(e:Error)
+			{
+				//event will be throw further down
+			}
 	    	//return status
 	    	if(result == SharedObjectFlushStatus.FLUSHED)
 	    	{
@@ -841,7 +876,7 @@ package
 	    	 
 	    	else
 	    	{
-	    		evt = {type: "error"};
+	    		evt = {type: "error", message:"Unable to save. Client-side storage has been disabled for this domain. To enable, display the Flash settings panel and set a storage amount."};
 				yuibridge.sendEvent(evt);
 	    		return false;
 	    		
@@ -880,8 +915,8 @@ package
 			}
 			else
 			{
-				//flush() is called again and resolved successfully
-				evt = {type: "save"};
+				//this is normally executed when additional storage is requested and allowed by the user
+				evt = {type: "success"};
 				yuibridge.sendEvent(evt);
 			}
 			

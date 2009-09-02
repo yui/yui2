@@ -456,7 +456,7 @@ package com.yahoo.astra.fl.charts.axes
 		private var _majorTicks:Array;
 
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
 		override public function set chart(value:IChart):void
 		{
@@ -837,6 +837,7 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		private function adjustMinAndMaxFromMajorUnit():void
 		{
+			if(isNaN(this._majorUnit)) return;
 			//adjust the maximum so that it appears on a major unit
 			//but don't change the maximum if the user set it or it is pinned to zero
 			if(!this._maximumSetByUser && !(this.alwaysShowZero && this._maximum == 0) && this.adjustMaximumByMajorUnit)
@@ -1006,6 +1007,7 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		private function roundUnit(unit:Number):Number
 		{
+			if(unit == 0) return 0;
 			if(unit < 0)
 			{
 				return this.roundUnit(Math.abs(unit)) * -1;
@@ -1013,10 +1015,10 @@ package com.yahoo.astra.fl.charts.axes
 			
 			var order:Number = Math.ceil(Math.log(unit) * Math.LOG10E);
 			var roundedMajorUnit:Number = Math.pow(10, order);
-			
+	
 			if (roundedMajorUnit / 2 >= unit) 
 			{
-				var roundedDiff:Number = Math.floor((roundedMajorUnit / 2 - unit)/(Math.pow(10,order-1)/2));
+				var roundedDiff:Number = Math.floor((roundedMajorUnit / 2 - unit)/(Math.pow(10,order-(unit<1?-1:1))/2));
 			 	unit = roundedMajorUnit/2 - roundedDiff * Math.pow(10, order - 1)/2;
 			}
 			else 

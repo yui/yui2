@@ -672,7 +672,7 @@ YAHOO.tool.TestRunner = (function(){
             runner._buildTestTree();
             
             //set when the test started
-            runner._root.results.duration = (new Date()).valueOf();
+            runner._root.results.duration = (new Date()).getTime();
             
             //fire the begin event
             runner.fireEvent(runner.BEGIN_EVENT);

@@ -3099,9 +3099,9 @@
             * @description Object specifying the menu for the button.  
             * The value can be one of the following:
             * <ul>
-            * <li>Object specifying a <a href="YAHOO.widget.Menu.html">
+            * <li>Object specifying a rendered <a href="YAHOO.widget.Menu.html">
             * YAHOO.widget.Menu</a> instance.</li>
-            * <li>Object specifying a <a href="YAHOO.widget.Overlay.html">
+            * <li>Object specifying a rendered <a href="YAHOO.widget.Overlay.html">
             * YAHOO.widget.Overlay</a> instance.</li>
             * <li>String specifying the id attribute of the <code>&#60;div&#62;
             * </code> element used to create the menu.  By default the menu 

@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>swfstore&nbsp; <span class="subtitle">2.8.0</span></h3>
+        <h3>swfstore&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_swfstore.html" title="swfstore">swfstore</a>
                  &gt; YAHOO.util.SWFStore 
@@ -907,8 +907,7 @@ data is stored.
                                         <div class="description" property="yui:description">
                                             Saves data to local storage. It returns a String that can
 be one of three values: "true" if the storage succeeded; "false" if the user
-has denied storage on their machine, and "pending" if storage is permitted,
-but the storage space allotted is not sufficient.
+has denied storage on their machine or storage space allotted is not sufficient.
 <p>The size limit for the passed parameters is ~40Kb.</p>
                                         </div>
 
@@ -1005,7 +1004,7 @@ but the storage space allotted is not sufficient.
                                         
                                         
                                         
-                                        void
+                                        String
                                             <strong property="yui:name">setSize</strong>
                                            (
                                                 
@@ -1017,10 +1016,9 @@ but the storage space allotted is not sufficient.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            This method requests more storage if the amount is above 100KB. (e.g.,
-if the <code>store()</code> method returns "pending".
+                                            This method requests more storage (if the amount is above 100KB or the current setting).
 The request dialog has to be displayed within the Flash player itself
-so the SWF it is called from must be visible and at least 215px x 138px in size.
+so the SWF it is called from must be visible and at least 215px x 138px (w x h) in size.
                                         </div>
 
                                         <div class="description">
@@ -1038,7 +1036,7 @@ so the SWF it is called from must be visible and at least 215px x 138px in size.
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        void
+                                                        String
                                                     </code></dt>
                                                     <dd property="yui:returnInfo"></dd>
                                                 </dl>

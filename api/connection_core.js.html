@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>connection&nbsp; <span class="subtitle">2.8.0</span></h3>
+        <h3>connection&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_connection.html" title="connection">connection</a>
                 
@@ -357,7 +357,7 @@
 <span class="c">   */</span>
 	<span class="nx">createXhrObject</span><span class="o">:</span><span class="k">function</span><span class="o">(</span><span class="nx">transactionId</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="k">var</span> <span class="nx">obj</span><span class="o">,</span><span class="nx">http</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">obj</span><span class="o">,</span><span class="nx">http</span><span class="o">,</span><span class="nx">i</span><span class="o">;</span>
 		<span class="k">try</span>
 		<span class="o">{</span>
 			<span class="c">// Instantiates XMLHttpRequest in non-IE browsers and assigns to http.</span>
@@ -368,7 +368,7 @@
 		<span class="o">}</span>
 		<span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span>
 		<span class="o">{</span>
-			<span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">_msxml_progid</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">){</span>
+			<span class="k">for</span><span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="k">this</span><span class="o">.</span><span class="nx">_msxml_progid</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">){</span>
 				<span class="k">try</span>
 				<span class="o">{</span>
 					<span class="c">// Instantiates XMLHttpRequest for IE and assign to http</span>
@@ -437,7 +437,7 @@
 <span class="c">   */</span>
 	<span class="nx">asyncRequest</span><span class="o">:</span><span class="k">function</span><span class="o">(</span><span class="nx">method</span><span class="o">,</span> <span class="nx">uri</span><span class="o">,</span> <span class="nx">callback</span><span class="o">,</span> <span class="nx">postData</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="k">var</span> <span class="nx">o</span><span class="o">,</span> <span class="nx">t</span><span class="o">,</span> <span class="nx">args</span> <span class="o">=</span> <span class="o">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">)?</span><span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">:</span><span class="kc">null</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">o</span><span class="o">,</span><span class="nx">t</span><span class="o">,</span><span class="nx">args</span> <span class="o">=</span> <span class="o">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">)?</span><span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">:</span><span class="kc">null</span><span class="o">;</span>
 
 		<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_isFileUpload</span><span class="o">){</span>
 			<span class="nx">t</span> <span class="o">=</span> <span class="s1">&#39;upload&#39;</span><span class="o">;</span>
@@ -581,8 +581,8 @@
     <span class="nx">handleReadyState</span><span class="o">:</span><span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">callback</span><span class="o">)</span>
 
     <span class="o">{</span>
-		<span class="k">var</span> <span class="nx">oConn</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
-		<span class="k">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="o">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">)?</span><span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">:</span><span class="kc">null</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">oConn</span> <span class="o">=</span> <span class="k">this</span><span class="o">,</span>
+			<span class="nx">args</span> <span class="o">=</span> <span class="o">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">)?</span><span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">:</span><span class="kc">null</span><span class="o">;</span>
 
 		<span class="k">if</span><span class="o">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="o">.</span><span class="nx">timeout</span><span class="o">){</span>
 			<span class="k">this</span><span class="o">.</span><span class="nx">_timeOut</span><span class="o">[</span><span class="nx">o</span><span class="o">.</span><span class="nx">tId</span><span class="o">]</span> <span class="o">=</span> <span class="nb">window</span><span class="o">.</span><span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">(){</span> <span class="nx">oConn</span><span class="o">.</span><span class="nx">abort</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">callback</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span> <span class="o">},</span> <span class="nx">callback</span><span class="o">.</span><span class="nx">timeout</span><span class="o">);</span>
@@ -662,7 +662,7 @@
 		<span class="o">}</span>
 
 		<span class="k">if</span><span class="o">((</span><span class="nx">httpStatus</span> <span class="o">&gt;=</span> <span class="m">200</span> <span class="o">&amp;&amp;</span> <span class="nx">httpStatus</span> <span class="o">&lt;</span> <span class="m">300</span><span class="o">)</span> <span class="o">||</span> <span class="nx">httpStatus</span> <span class="o">===</span> <span class="m">1223</span> <span class="o">||</span> <span class="nx">xdrS</span><span class="o">){</span>
-			<span class="nx">responseObject</span> <span class="o">=</span> <span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">xdr</span><span class="o">)</span> <span class="o">?</span> <span class="nx">o</span><span class="o">.</span><span class="nx">response</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">createResponseObject</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">args</span><span class="o">);</span>
+			<span class="nx">responseObject</span> <span class="o">=</span> <span class="nx">o</span><span class="o">.</span><span class="nx">xdr</span> <span class="o">?</span> <span class="nx">o</span><span class="o">.</span><span class="nx">r</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">createResponseObject</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">args</span><span class="o">);</span>
 			<span class="k">if</span><span class="o">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="o">.</span><span class="nx">success</span><span class="o">){</span>
 				<span class="k">if</span><span class="o">(!</span><span class="nx">callback</span><span class="o">.</span><span class="nx">scope</span><span class="o">){</span>
 					<span class="nx">callback</span><span class="o">.</span><span class="nx">success</span><span class="o">(</span><span class="nx">responseObject</span><span class="o">);</span>
@@ -749,15 +749,15 @@
 <span class="c">   */</span>
     <span class="nx">createResponseObject</span><span class="o">:</span><span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">callbackArg</span><span class="o">)</span>
     <span class="o">{</span>
-		<span class="k">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="o">{};</span>
-		<span class="k">var</span> <span class="nx">headerObj</span> <span class="o">=</span> <span class="o">{};</span>
+		<span class="k">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="o">{},</span> <span class="nx">headerObj</span> <span class="o">=</span> <span class="o">{},</span>
+			<span class="nx">i</span><span class="o">,</span> <span class="nx">headerStr</span><span class="o">,</span> <span class="nx">header</span><span class="o">,</span> <span class="nx">delimitPos</span><span class="o">;</span>
 
 		<span class="k">try</span>
 		<span class="o">{</span>
-			<span class="k">var</span> <span class="nx">headerStr</span> <span class="o">=</span> <span class="nx">o</span><span class="o">.</span><span class="nx">conn</span><span class="o">.</span><span class="nx">getAllResponseHeaders</span><span class="o">();</span>
-			<span class="k">var</span> <span class="nx">header</span> <span class="o">=</span> <span class="nx">headerStr</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s1">&#39;\n&#39;</span><span class="o">);</span>
-			<span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">header</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
-				<span class="k">var</span> <span class="nx">delimitPos</span> <span class="o">=</span> <span class="nx">header</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;:&#39;</span><span class="o">);</span>
+			<span class="nx">headerStr</span> <span class="o">=</span> <span class="nx">o</span><span class="o">.</span><span class="nx">conn</span><span class="o">.</span><span class="nx">getAllResponseHeaders</span><span class="o">();</span>
+			<span class="nx">header</span> <span class="o">=</span> <span class="nx">headerStr</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s1">&#39;\n&#39;</span><span class="o">);</span>
+			<span class="k">for</span><span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">header</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++){</span>
+				<span class="nx">delimitPos</span> <span class="o">=</span> <span class="nx">header</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;:&#39;</span><span class="o">);</span>
 				<span class="k">if</span><span class="o">(</span><span class="nx">delimitPos</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">){</span>
 					<span class="nx">headerObj</span><span class="o">[</span><span class="nx">header</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="nx">delimitPos</span><span class="o">)]</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">trim</span><span class="o">(</span><span class="nx">header</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">substring</span><span class="o">(</span><span class="nx">delimitPos</span><span class="o">+</span><span class="m">2</span><span class="o">));</span>
 				<span class="o">}</span>
@@ -837,8 +837,8 @@
 	<span class="nx">initHeader</span><span class="o">:</span><span class="k">function</span><span class="o">(</span><span class="k">label</span><span class="o">,</span> <span class="nx">value</span><span class="o">,</span> <span class="nx">isDefault</span><span class="o">)</span>
 	<span class="o">{</span>
 		<span class="k">var</span> <span class="nx">headerObj</span> <span class="o">=</span> <span class="o">(</span><span class="nx">isDefault</span><span class="o">)?</span><span class="k">this</span><span class="o">.</span><span class="nx">_default_headers</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">_http_headers</span><span class="o">;</span>
-		<span class="nx">headerObj</span><span class="o">[</span><span class="k">label</span><span class="o">]</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
 
+		<span class="nx">headerObj</span><span class="o">[</span><span class="k">label</span><span class="o">]</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
 		<span class="k">if</span><span class="o">(</span><span class="nx">isDefault</span><span class="o">){</span>
 			<span class="k">this</span><span class="o">.</span><span class="nx">_has_default_headers</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 		<span class="o">}</span>
@@ -927,10 +927,8 @@
 				<span class="o">}</span>
 			<span class="o">}</span>
 			<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">xdr</span><span class="o">){</span>
-				<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isCallInProgress</span><span class="o">(</span><span class="nx">o</span><span class="o">)){</span>
-					<span class="nx">o</span><span class="o">.</span><span class="nx">conn</span><span class="o">.</span><span class="nx">abort</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">tId</span><span class="o">);</span>
-					<span class="nx">abortStatus</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-				<span class="o">}</span>
+				<span class="nx">o</span><span class="o">.</span><span class="nx">conn</span><span class="o">.</span><span class="nx">abort</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">tId</span><span class="o">);</span>
+				<span class="nx">abortStatus</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 			<span class="o">}</span>
 		<span class="o">}</span>
 		<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">upload</span><span class="o">){</span>

@@ -125,7 +125,6 @@ YAHOO.namespace("tool");
     };
 
 })();
-
 YAHOO.namespace("tool");
 
 
@@ -205,7 +204,6 @@ YAHOO.tool.TestSuite.prototype = {
     }
     
 };
-
 YAHOO.namespace("tool");
 
 /**
@@ -880,7 +878,7 @@ YAHOO.tool.TestRunner = (function(){
             runner._buildTestTree();
             
             //set when the test started
-            runner._root.results.duration = (new Date()).valueOf();
+            runner._root.results.duration = (new Date()).getTime();
             
             //fire the begin event
             runner.fireEvent(runner.BEGIN_EVENT);
@@ -893,7 +891,6 @@ YAHOO.tool.TestRunner = (function(){
     return new TestRunner();
     
 })();
-
 YAHOO.namespace("util");
 
 //-----------------------------------------------------------------------------
@@ -1238,8 +1235,8 @@ YAHOO.util.Assert = {
      * @method isTypeOf
      * @static
      */
-    isTypeOf : function (expectedType /*:String*/, actualValue /*:Object*/, message /*:String*/) /*:Void*/{
-        if (typeof actualValue != expectedType){
+    isTypeOf : function (expected /*:String*/, actual /*:Object*/, message /*:String*/) /*:Void*/{
+        if (typeof actual != expected){
             throw new YAHOO.util.ComparisonFailure(this._formatMessage(message, "Value should be of type " + expected + "."), expected, typeof actual);
         }
     }
@@ -1263,7 +1260,7 @@ YAHOO.util.Assert = {
 YAHOO.util.AssertionError = function (message /*:String*/){
 
     //call superclass
-    arguments.callee.superclass.constructor.call(this, message);
+    //arguments.callee.superclass.constructor.call(this, message);
     
     /*
      * Error message. Must be duplicated to ensure browser receives it.
@@ -1281,7 +1278,7 @@ YAHOO.util.AssertionError = function (message /*:String*/){
 };
 
 //inherit methods
-YAHOO.lang.extend(YAHOO.util.AssertionError, Error, {
+YAHOO.lang.extend(YAHOO.util.AssertionError, Object, {
 
     /**
      * Returns a fully formatted error for an assertion failure. This should
@@ -1300,17 +1297,8 @@ YAHOO.lang.extend(YAHOO.util.AssertionError, Error, {
      */
     toString : function () /*:String*/ {
         return this.name + ": " + this.getMessage();
-    },
-    
-    /**
-     * Returns a primitive value version of the error. Same as toString().
-     * @method valueOf
-     * @return {String} A primitive value version of the error.
-     */
-    valueOf : function () /*:String*/ {
-        return this.toString();
     }
-
+    
 });
 
 /**
@@ -1329,7 +1317,7 @@ YAHOO.lang.extend(YAHOO.util.AssertionError, Error, {
 YAHOO.util.ComparisonFailure = function (message /*:String*/, expected /*:Object*/, actual /*:Object*/){
 
     //call superclass
-    arguments.callee.superclass.constructor.call(this, message);
+    YAHOO.util.AssertionError.call(this, message);
     
     /**
      * The expected value.
@@ -1386,7 +1374,7 @@ YAHOO.lang.extend(YAHOO.util.ComparisonFailure, YAHOO.util.AssertionError, {
 YAHOO.util.UnexpectedValue = function (message /*:String*/, unexpected /*:Object*/){
 
     //call superclass
-    arguments.callee.superclass.constructor.call(this, message);
+    YAHOO.util.AssertionError.call(this, message);
     
     /**
      * The unexpected value.
@@ -1432,7 +1420,7 @@ YAHOO.lang.extend(YAHOO.util.UnexpectedValue, YAHOO.util.AssertionError, {
 YAHOO.util.ShouldFail = function (message /*:String*/){
 
     //call superclass
-    arguments.callee.superclass.constructor.call(this, message || "This test should fail but didn't.");
+    YAHOO.util.AssertionError.call(this, message || "This test should fail but didn't.");
     
     /**
      * The name of the error that occurred.
@@ -1459,7 +1447,7 @@ YAHOO.lang.extend(YAHOO.util.ShouldFail, YAHOO.util.AssertionError);
 YAHOO.util.ShouldError = function (message /*:String*/){
 
     //call superclass
-    arguments.callee.superclass.constructor.call(this, message || "This test should have thrown an error but didn't.");
+    YAHOO.util.AssertionError.call(this, message || "This test should have thrown an error but didn't.");
     
     /**
      * The name of the error that occurred.
@@ -1488,7 +1476,7 @@ YAHOO.lang.extend(YAHOO.util.ShouldError, YAHOO.util.AssertionError);
 YAHOO.util.UnexpectedError = function (cause /*:Object*/){
 
     //call superclass
-    arguments.callee.superclass.constructor.call(this, "Unexpected error: " + cause.message);
+    YAHOO.util.AssertionError.call(this, "Unexpected error: " + cause.message);
     
     /**
      * The unexpected error that occurred.
@@ -1515,7 +1503,6 @@ YAHOO.util.UnexpectedError = function (cause /*:Object*/){
 
 //inherit methods
 YAHOO.lang.extend(YAHOO.util.UnexpectedError, YAHOO.util.AssertionError);
-
 //-----------------------------------------------------------------------------
 // ArrayAssert object
 //-----------------------------------------------------------------------------
@@ -1852,7 +1839,6 @@ YAHOO.util.ArrayAssert = {
     }
     
 };
-
 YAHOO.namespace("util");
 
 
@@ -1927,7 +1913,6 @@ YAHOO.util.ObjectAssert = {
         }     
     }
 };
-
 //-----------------------------------------------------------------------------
 // DateAssert object
 //-----------------------------------------------------------------------------
@@ -1982,7 +1967,6 @@ YAHOO.util.DateAssert = {
     }
     
 };
-
 YAHOO.namespace("tool");
 
 //-----------------------------------------------------------------------------
@@ -2167,7 +2151,6 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
     }
     
 });
-
 YAHOO.namespace("tool.TestFormat");
 
 /**
@@ -2215,7 +2198,6 @@ YAHOO.tool.TestFormat.XML = function(results /*:Object*/) /*:String*/ {
     return xml;
 
 };
-
 YAHOO.namespace("tool");
 
 /**
@@ -2408,5 +2390,4 @@ YAHOO.tool.TestReporter.prototype = {
     }
 
 };
-
 YAHOO.register("yuitest", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});

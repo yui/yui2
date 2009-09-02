@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>DataSource Utility&nbsp; <span class="subtitle">2.8.0</span></h3>
+        <h3>DataSource Utility&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_datasource.html" title="datasource">datasource</a>
                 
@@ -1017,7 +1017,7 @@
 <span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_JSARRAY</span><span class="o">;</span>
             <span class="o">}</span>
              <span class="c">// xml</span>
-<span class="c"></span>            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">==</span> <span class="m">9</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">===</span> <span class="m">9</span> <span class="o">||</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">===</span> <span class="m">1</span> <span class="o">||</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">===</span> <span class="m">11</span><span class="o">))</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_XML</span><span class="o">;</span>
             <span class="o">}</span>
             <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">&quot;table&quot;</span><span class="o">))</span> <span class="o">{</span> <span class="c">// table</span>
@@ -2093,7 +2093,7 @@
 <span class="c">/**</span>
 <span class="c"> * Callback string parameter name sent to the remote script. By default,</span>
 <span class="c"> * requests are sent to</span>
-<span class="c"> * &amp;#60;URI&amp;#62;?&amp;#60;scriptCallbackParam&amp;#62;=callbackFunction</span>
+<span class="c"> * &amp;#60;URI&amp;#62;?&amp;#60;scriptCallbackParam&amp;#62;=callback</span>
 <span class="c"> *</span>
 <span class="c"> * @property scriptCallbackParam</span>
 <span class="c"> * @type String</span>

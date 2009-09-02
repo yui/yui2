@@ -3,6 +3,7 @@
  *
  * @module json
  * @class JSON
+ * @namespace YAHOO.lang
  * @static
  */
 (function () {
@@ -12,7 +13,9 @@ var l = YAHOO.lang,
     isObject   = l.isObject,
     isArray    = l.isArray,
     _toStr     = Object.prototype.toString,
-    Native     = _toStr.call(this.JSON) === '[object JSON]' && this.JSON,
+                 // 'this' is the global object.  window in browser env.  Keep
+                 // the code env agnostic.  Caja requies window, unfortunately.
+    Native     = (YAHOO.env.ua.caja ? window : this).JSON,
 
 /* Variables used by parse */
 
@@ -135,6 +138,9 @@ var l = YAHOO.lang,
     COLON     = ':',
     COLON_SP  = ': ',
     QUOTE     = '"';
+
+// Only accept JSON objects that report a [[Class]] of JSON
+Native = _toStr.call(Native) === '[object JSON]' && Native;
 
 // Escapes a special character to a safe Unicode representation
 function _char(c) {
@@ -365,7 +371,7 @@ YAHOO.lang.JSON = {
      * JSON user guide for caveats.  The default value is true for browsers with
      * native JSON support.
      *
-     * @property JSON.useNativeParse
+     * @property useNativeParse
      * @type Boolean
      * @default true
      * @static
@@ -378,7 +384,7 @@ YAHOO.lang.JSON = {
      * section in the JSON user guide for caveats.  The default value is true
      * for browsers with native JSON support.
      *
-     * @property JSON.useNativeStringify
+     * @property useNativeStringify
      * @type Boolean
      * @default true
      * @static
@@ -391,7 +397,7 @@ YAHOO.lang.JSON = {
      * are replaced with placeholders or removed.  Then in the final step, the
      * result of all these replacements is checked for invalid characters.
      *
-     * @method JSON.isSafe
+     * @method isSafe
      * @param str {String} JSON string to be tested
      * @return {boolean} is the string safe for eval?
      * @static
@@ -409,7 +415,7 @@ YAHOO.lang.JSON = {
      * JavaScript implementation based on http://www.json.org/json2.js
      * is used.</p>
      *
-     * @method JSON.parse
+     * @method parse
      * @param s {string} JSON string data
      * @param reviver {function} (optional) function(k,v) passed each key:value
      *          pair of object literals, allowing pruning or altering values
@@ -443,7 +449,7 @@ YAHOO.lang.JSON = {
      * native JSON.stringify if the browser has a native implementation.
      * Otherwise, a JavaScript implementation is used.</p>
      *
-     * @method JSON.stringify
+     * @method stringify
      * @param o {MIXED} any arbitrary object to convert to JSON string
      * @param w {Array|Function} (optional) whitelist of acceptable object keys
      *                  to include OR a function(value,key) to alter values
@@ -467,7 +473,7 @@ YAHOO.lang.JSON = {
      * implementations serialize Dates per the ECMAScript 5 spec.  You've been
      * warned.
      *
-     * @method JSON.dateToString
+     * @method dateToString
      * @param d {Date} The Date to serialize
      * @return {String} stringified Date in UTC format YYYY-MM-DDTHH:mm:SSZ
      * @static
@@ -490,16 +496,16 @@ YAHOO.lang.JSON = {
      * Reference this from a reviver function to rebuild Dates during the
      * parse operation.
      *
-     * @method JSON.stringToDate
+     * @method stringToDate
      * @param str {String} String serialization of a Date
      * @return {Date}
      */
     stringToDate : function (str) {
-        var m = str.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/);
+        var m = str.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{3}))?Z$/);
         if (m) {
             var d = new Date();
             d.setUTCFullYear(m[1], m[2]-1, m[3]);
-            d.setUTCHours(m[4], m[5], m[6]);
+            d.setUTCHours(m[4], m[5], m[6], (m[7] || 0));
             return d;
         }
         return str;
@@ -514,7 +520,7 @@ YAHOO.lang.JSON = {
  *
  * <p>This is an alias for isSafe.</p>
  *
- * @method JSON.isValid
+ * @method isValid
  * @param str {String} JSON string to be tested
  * @return {boolean} is the string safe for eval?
  * @static

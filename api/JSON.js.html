@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>json&nbsp; <span class="subtitle">2.8.0</span></h3>
+        <h3>json&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_json.html" title="json">json</a>
                 
@@ -52,6 +52,7 @@
 <span class="c"> *</span>
 <span class="c"> * @module json</span>
 <span class="c"> * @class JSON</span>
+<span class="c"> * @namespace YAHOO.lang</span>
 <span class="c"> * @static</span>
 <span class="c"> */</span>
 <span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
@@ -61,7 +62,9 @@
     <span class="nx">isObject</span>   <span class="o">=</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isObject</span><span class="o">,</span>
     <span class="nx">isArray</span>    <span class="o">=</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isArray</span><span class="o">,</span>
     <span class="nx">_toStr</span>     <span class="o">=</span> <span class="nb">Object</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">toString</span><span class="o">,</span>
-    <span class="nx">Native</span>     <span class="o">=</span> <span class="nx">_toStr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">JSON</span><span class="o">)</span> <span class="o">===</span> <span class="s1">&#39;[object JSON]&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">JSON</span><span class="o">,</span>
+                 <span class="c">// &#39;this&#39; is the global object.  window in browser env.  Keep</span>
+<span class="c"></span>                 <span class="c">// the code env agnostic.  Caja requies window, unfortunately.</span>
+<span class="c"></span>    <span class="nx">Native</span>     <span class="o">=</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">caja</span> <span class="o">?</span> <span class="nb">window</span> <span class="o">:</span> <span class="k">this</span><span class="o">).</span><span class="nx">JSON</span><span class="o">,</span>
 
 <span class="c">/* Variables used by parse */</span>
 
@@ -184,6 +187,9 @@
     <span class="nx">COLON</span>     <span class="o">=</span> <span class="s1">&#39;:&#39;</span><span class="o">,</span>
     <span class="nx">COLON_SP</span>  <span class="o">=</span> <span class="s1">&#39;: &#39;</span><span class="o">,</span>
     <span class="nx">QUOTE</span>     <span class="o">=</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+
+<span class="c">// Only accept JSON objects that report a [[Class]] of JSON</span>
+<span class="c"></span><span class="nx">Native</span> <span class="o">=</span> <span class="nx">_toStr</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">Native</span><span class="o">)</span> <span class="o">===</span> <span class="s1">&#39;[object JSON]&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">Native</span><span class="o">;</span>
 
 <span class="c">// Escapes a special character to a safe Unicode representation</span>
 <span class="c"></span><span class="k">function</span> <span class="nx">_char</span><span class="o">(</span><span class="nx">c</span><span class="o">)</span> <span class="o">{</span>
@@ -414,7 +420,7 @@
 <span class="c">     * JSON user guide for caveats.  The default value is true for browsers with</span>
 <span class="c">     * native JSON support.</span>
 <span class="c">     *</span>
-<span class="c">     * @property JSON.useNativeParse</span>
+<span class="c">     * @property useNativeParse</span>
 <span class="c">     * @type Boolean</span>
 <span class="c">     * @default true</span>
 <span class="c">     * @static</span>
@@ -427,7 +433,7 @@
 <span class="c">     * section in the JSON user guide for caveats.  The default value is true</span>
 <span class="c">     * for browsers with native JSON support.</span>
 <span class="c">     *</span>
-<span class="c">     * @property JSON.useNativeStringify</span>
+<span class="c">     * @property useNativeStringify</span>
 <span class="c">     * @type Boolean</span>
 <span class="c">     * @default true</span>
 <span class="c">     * @static</span>
@@ -440,7 +446,7 @@
 <span class="c">     * are replaced with placeholders or removed.  Then in the final step, the</span>
 <span class="c">     * result of all these replacements is checked for invalid characters.</span>
 <span class="c">     *</span>
-<span class="c">     * @method JSON.isSafe</span>
+<span class="c">     * @method isSafe</span>
 <span class="c">     * @param str {String} JSON string to be tested</span>
 <span class="c">     * @return {boolean} is the string safe for eval?</span>
 <span class="c">     * @static</span>
@@ -458,7 +464,7 @@
 <span class="c">     * JavaScript implementation based on http://www.json.org/json2.js</span>
 <span class="c">     * is used.&lt;/p&gt;</span>
 <span class="c">     *</span>
-<span class="c">     * @method JSON.parse</span>
+<span class="c">     * @method parse</span>
 <span class="c">     * @param s {string} JSON string data</span>
 <span class="c">     * @param reviver {function} (optional) function(k,v) passed each key:value</span>
 <span class="c">     *          pair of object literals, allowing pruning or altering values</span>
@@ -492,7 +498,7 @@
 <span class="c">     * native JSON.stringify if the browser has a native implementation.</span>
 <span class="c">     * Otherwise, a JavaScript implementation is used.&lt;/p&gt;</span>
 <span class="c">     *</span>
-<span class="c">     * @method JSON.stringify</span>
+<span class="c">     * @method stringify</span>
 <span class="c">     * @param o {MIXED} any arbitrary object to convert to JSON string</span>
 <span class="c">     * @param w {Array|Function} (optional) whitelist of acceptable object keys</span>
 <span class="c">     *                  to include OR a function(value,key) to alter values</span>
@@ -516,7 +522,7 @@
 <span class="c">     * implementations serialize Dates per the ECMAScript 5 spec.  You&#39;ve been</span>
 <span class="c">     * warned.</span>
 <span class="c">     *</span>
-<span class="c">     * @method JSON.dateToString</span>
+<span class="c">     * @method dateToString</span>
 <span class="c">     * @param d {Date} The Date to serialize</span>
 <span class="c">     * @return {String} stringified Date in UTC format YYYY-MM-DDTHH:mm:SSZ</span>
 <span class="c">     * @static</span>
@@ -539,16 +545,16 @@
 <span class="c">     * Reference this from a reviver function to rebuild Dates during the</span>
 <span class="c">     * parse operation.</span>
 <span class="c">     *</span>
-<span class="c">     * @method JSON.stringToDate</span>
+<span class="c">     * @method stringToDate</span>
 <span class="c">     * @param str {String} String serialization of a Date</span>
 <span class="c">     * @return {Date}</span>
 <span class="c">     */</span>
     <span class="nx">stringToDate</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">str</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">str</span><span class="o">.</span><span class="nx">match</span><span class="o">(</span><span class="sr">/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">str</span><span class="o">.</span><span class="nx">match</span><span class="o">(</span><span class="sr">/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{3}))?Z$/</span><span class="o">);</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">m</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">();</span>
             <span class="nx">d</span><span class="o">.</span><span class="nx">setUTCFullYear</span><span class="o">(</span><span class="nx">m</span><span class="o">[</span><span class="m">1</span><span class="o">],</span> <span class="nx">m</span><span class="o">[</span><span class="m">2</span><span class="o">]-</span><span class="m">1</span><span class="o">,</span> <span class="nx">m</span><span class="o">[</span><span class="m">3</span><span class="o">]);</span>
-            <span class="nx">d</span><span class="o">.</span><span class="nx">setUTCHours</span><span class="o">(</span><span class="nx">m</span><span class="o">[</span><span class="m">4</span><span class="o">],</span> <span class="nx">m</span><span class="o">[</span><span class="m">5</span><span class="o">],</span> <span class="nx">m</span><span class="o">[</span><span class="m">6</span><span class="o">]);</span>
+            <span class="nx">d</span><span class="o">.</span><span class="nx">setUTCHours</span><span class="o">(</span><span class="nx">m</span><span class="o">[</span><span class="m">4</span><span class="o">],</span> <span class="nx">m</span><span class="o">[</span><span class="m">5</span><span class="o">],</span> <span class="nx">m</span><span class="o">[</span><span class="m">6</span><span class="o">],</span> <span class="o">(</span><span class="nx">m</span><span class="o">[</span><span class="m">7</span><span class="o">]</span> <span class="o">||</span> <span class="m">0</span><span class="o">));</span>
             <span class="k">return</span> <span class="nx">d</span><span class="o">;</span>
         <span class="o">}</span>
         <span class="k">return</span> <span class="nx">str</span><span class="o">;</span>
@@ -563,7 +569,7 @@
 <span class="c"> *</span>
 <span class="c"> * &lt;p&gt;This is an alias for isSafe.&lt;/p&gt;</span>
 <span class="c"> *</span>
-<span class="c"> * @method JSON.isValid</span>
+<span class="c"> * @method isValid</span>
 <span class="c"> * @param str {String} JSON string to be tested</span>
 <span class="c"> * @return {boolean} is the string safe for eval?</span>
 <span class="c"> * @static</span>
@@ -637,7 +643,7 @@
                     <div id="classList" class="module">
                         <h4>Classes</h4>
                         <ul class="content">
-                                <li class=""><a href="JSON.html" title="JSON">JSON</a></li>
+                                <li class=""><a href="YAHOO.lang.JSON.html" title="YAHOO.lang.JSON">YAHOO.lang.JSON</a></li>
                         </ul>
                     </div>
 
@@ -661,7 +667,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "private", "host": "JSON", "name": "_BRACKETS", "url": "JSON.html#property__BRACKETS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_CHARS", "url": "JSON.html#property__CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_ESCAPES", "url": "JSON.html#property__ESCAPES", "type": "property"}, {"access": "", "host": "JSON", "name": "JSON.dateToString", "url": "JSON.html#method_JSON.dateToString", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.isSafe", "url": "JSON.html#method_JSON.isSafe", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.isValid", "url": "JSON.html#method_JSON.isValid", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.parse", "url": "JSON.html#method_JSON.parse", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.stringify", "url": "JSON.html#method_JSON.stringify", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.stringToDate", "url": "JSON.html#method_JSON.stringToDate", "type": "method"}, {"access": "", "host": "JSON", "name": "JSON.useNativeParse", "url": "JSON.html#property_JSON.useNativeParse", "type": "property"}, {"access": "", "host": "JSON", "name": "JSON.useNativeStringify", "url": "JSON.html#property_JSON.useNativeStringify", "type": "property"}, {"access": "private", "host": "JSON", "name": "_prepare", "url": "JSON.html#method__prepare", "type": "method"}, {"access": "private", "host": "JSON", "name": "_revive", "url": "JSON.html#method__revive", "type": "method"}, {"access": "private", "host": "JSON", "name": "_SPECIAL_CHARS", "url": "JSON.html#property__SPECIAL_CHARS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_UNICODE_EXCEPTIONS", "url": "JSON.html#property__UNICODE_EXCEPTIONS", "type": "property"}, {"access": "private", "host": "JSON", "name": "_UNSAFE", "url": "JSON.html#property__UNSAFE", "type": "property"}, {"access": "private", "host": "JSON", "name": "_VALUES", "url": "JSON.html#property__VALUES", "type": "property"}];
+    ALL_YUI_PROPS = [{"access": "private", "host": "YAHOO.lang.JSON", "name": "_BRACKETS", "url": "YAHOO.lang.JSON.html#property__BRACKETS", "type": "property"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_CHARS", "url": "YAHOO.lang.JSON.html#property__CHARS", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "dateToString", "url": "YAHOO.lang.JSON.html#method_dateToString", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_ESCAPES", "url": "YAHOO.lang.JSON.html#property__ESCAPES", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "isSafe", "url": "YAHOO.lang.JSON.html#method_isSafe", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "isValid", "url": "YAHOO.lang.JSON.html#method_isValid", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "parse", "url": "YAHOO.lang.JSON.html#method_parse", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_prepare", "url": "YAHOO.lang.JSON.html#method__prepare", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_revive", "url": "YAHOO.lang.JSON.html#method__revive", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_SPECIAL_CHARS", "url": "YAHOO.lang.JSON.html#property__SPECIAL_CHARS", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "stringify", "url": "YAHOO.lang.JSON.html#method_stringify", "type": "method"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "stringToDate", "url": "YAHOO.lang.JSON.html#method_stringToDate", "type": "method"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_UNICODE_EXCEPTIONS", "url": "YAHOO.lang.JSON.html#property__UNICODE_EXCEPTIONS", "type": "property"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_UNSAFE", "url": "YAHOO.lang.JSON.html#property__UNSAFE", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "useNativeParse", "url": "YAHOO.lang.JSON.html#property_useNativeParse", "type": "property"}, {"access": "", "host": "YAHOO.lang.JSON", "name": "useNativeStringify", "url": "YAHOO.lang.JSON.html#property_useNativeStringify", "type": "property"}, {"access": "private", "host": "YAHOO.lang.JSON", "name": "_VALUES", "url": "YAHOO.lang.JSON.html#property__VALUES", "type": "property"}];
 </script>
 </body>
 </html>

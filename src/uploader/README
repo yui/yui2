@@ -1,5 +1,10 @@
 YUI Library - Uploader - Release Notes
 
+2.8.0
+  * Bug fixes
+     * The queue for uploadAll() has been reimplemented (contribution by Jordan Brough) to work as a proper queue.
+  * Added uploadThese() method (contribution by Jordan Brough) to upload a specific subset of selected files.
+
 2.7.0
   * Bug fixes
      * All global variables were converted to member variables of YAHOO

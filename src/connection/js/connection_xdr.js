@@ -2,9 +2,7 @@
   * @for Connect
   */
 (function() {
-	var YCM = YAHOO.util.Connect,
-		_xdrReady = new YAHOO.util.CustomEvent('xdrReady'),
-		_fn = {};
+	var YCM = YAHOO.util.Connect, _fn = {};
 
    /**
     * @description This method creates and instantiates the Flash transport.
@@ -41,7 +39,7 @@
     * @return {void}
     */
 	function _xdr(o, m, u, c, d) {
-		_fn[YAHOO.lang.isNumber(o.tId) ? o.tId : null] = { 'o':o, 'c':c };
+		_fn[parseInt(o.tId)] = { 'o':o, 'c':c };
 		if (d) {
 			c.method = m;
 			c.data = d;
@@ -65,7 +63,7 @@
 	}
 
 	function _xdrReady() {
-		_xdrReady.fire();
+		YCM.xdrReadyEvent.fire();
 	}
 
    /**
@@ -79,9 +77,9 @@
     * @return {void}
     */
 	function _xdrStart(o, cb) {
-		if(o){
+		if (o) {
 			// Fire global custom event -- startEvent
-			this.startEvent.fire(o, cb.argument);
+			YCM.startEvent.fire(o, cb.argument);
 
 			if(o.startEvent){
 				// Fire transaction custom event -- startEvent
@@ -101,21 +99,21 @@
     * @return {void}
     */
 	function _handleXdrResponse(r) {
+		var o = _fn[r.tId].o,
+			cb = _fn[r.tId].c;
+
 		if (r.statusText === 'xdr:start') {
 			_xdrStart(o, cb);
 			return;
 		}
 
-		var o = _fn[r.tId].o,
-			cb = _fn[r.tId].c,
-			isAbort = (r.statusText === 'xdr:abort') ? true : false;
-
+		r.responseText = decodeURI(r.responseText);
 		o.r = r;
 		if (cb.argument) {
-			o.response.argument = cb.argument;
+			o.r.argument = cb.argument;
 		}
 
-		this.handleTransactionResponse(o, cb, isAbort);
+		this.handleTransactionResponse(o, cb, r.statusText === 'xdr:abort' ? true : false);
 		delete _fn[r.tId];
 	}
 
@@ -123,6 +121,7 @@
 	YCM.xdr = _xdr;
 	YCM.swf = _swf;
 	YCM.transport = _init;
+	YCM.xdrReadyEvent = new YAHOO.util.CustomEvent('xdrReady');
 	YCM.xdrReady = _xdrReady;
 	YCM.handleXdrResponse = _handleXdrResponse;
 })();

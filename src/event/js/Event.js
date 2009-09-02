@@ -340,7 +340,7 @@ if (!YAHOO.util.Event) {
                     // var self = this;
                     // var callback = function() { self._tryPreloadAttach(); };
                     // this._interval = setInterval(callback, this.POLL_INTERVAL);
-                    this._interval = YAHOO.lang.later(this.POLL_INTERVAL, this, this._tryPreloadAttach, true);
+                    this._interval = YAHOO.lang.later(this.POLL_INTERVAL, this, this._tryPreloadAttach, null, true);
                 }
             },
 
@@ -1578,7 +1578,7 @@ if (!YAHOO.util.Event) {
         // the DOM prior to when the document's readyState suggests
         // it is safe to do so.
         if (EU.isIE) {
-            if (window !== window.top) {
+            if (self !== self.top) {
                 document.onreadystatechange = function() {
                     if (document.readyState == 'complete') {
                         document.onreadystatechange = null;

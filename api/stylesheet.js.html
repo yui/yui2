@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>stylesheet&nbsp; <span class="subtitle">2.8.0</span></h3>
+        <h3>stylesheet&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_stylesheet.html" title="stylesheet">stylesheet</a>
                 
@@ -166,8 +166,8 @@
         <span class="nx">i</span><span class="o">,</span><span class="nx">r</span><span class="o">,</span><span class="nx">sel</span><span class="o">;</span>
 
     <span class="c">// Factory or constructor</span>
-<span class="c"></span>    <span class="k">if</span> <span class="o">(!(</span><span class="k">this</span> <span class="k">instanceof</span> <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">))</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">(</span><span class="nx">seed</span><span class="o">,</span><span class="nx">name</span><span class="o">);</span>
+<span class="c"></span>    <span class="k">if</span> <span class="o">(!(</span><span class="k">this</span> <span class="k">instanceof</span> <span class="nx">StyleSheet</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nx">StyleSheet</span><span class="o">(</span><span class="nx">seed</span><span class="o">,</span><span class="nx">name</span><span class="o">);</span>
     <span class="o">}</span>
 
     <span class="c">// capture the DOM node if the string is an id</span>

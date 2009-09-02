@@ -3,7 +3,7 @@
  * enabling faster load times and a more responsive UI.
  *
  * @module imageloader
- * @namespace YAHOO.util
+ * @namespace YAHOO.util.ImageLoader
  * @requires yahoo, dom, event
  */
 

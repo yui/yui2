@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Logger Widget&nbsp; <span class="subtitle">2.8.0</span></h3>
+        <h3>Logger Widget&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_logger.html" title="logger">logger</a>
                 
@@ -937,10 +937,11 @@
         <span class="c">// Default the container if unset or not a div</span>
 <span class="c"></span>        <span class="k">if</span><span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span> <span class="o">||</span> <span class="o">!</span><span class="sr">/div$/i</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span><span class="o">.</span><span class="nx">tagName</span><span class="o">))</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span> <span class="o">=</span> <span class="nx">d</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="nx">make</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">),</span><span class="nx">d</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">);</span>
+            <span class="c">// Only position absolutely if an in-DOM element is not supplied</span>
+<span class="c"></span>            <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span><span class="o">,</span><span class="s2">&quot;yui-log-container&quot;</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span><span class="o">,</span><span class="s2">&quot;yui-log&quot;</span><span class="o">);</span>
-        <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span><span class="o">,</span><span class="s2">&quot;yui-log-container&quot;</span><span class="o">);</span>
 
         <span class="c">// If implementer has provided container values, trust and set those</span>
 <span class="c"></span>        <span class="k">var</span> <span class="nx">style</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_elContainer</span><span class="o">.</span><span class="nx">style</span><span class="o">,</span>
