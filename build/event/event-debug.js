@@ -607,15 +607,15 @@ if (!YAHOO.util.Event) {
             /**
              * The number of times we should look for elements that are not
              * in the DOM at the time the event is requested after the document
-             * has been loaded.  The default is 2000@amp;20 ms, so it will poll
-             * for 40 seconds or until all outstanding handlers are bound
+             * has been loaded.  The default is 500@amp;40 ms, so it will poll
+             * for 20 seconds or until all outstanding handlers are bound
              * (whichever comes first).
              * @property POLL_RETRYS
              * @type int
              * @static
              * @final
              */
-            POLL_RETRYS: 2000,
+            POLL_RETRYS: 500,
 
             /**
              * The poll interval in milliseconds
@@ -624,7 +624,7 @@ if (!YAHOO.util.Event) {
              * @static
              * @final
              */
-            POLL_INTERVAL: 20,
+            POLL_INTERVAL: 40,
 
             /**
              * Element to bind, int constant
@@ -771,10 +771,10 @@ if (!YAHOO.util.Event) {
              * @static
              * @private
              */
-			_specialTypes: {
-				focus: (isIE ? "focusin" : "focus"),
-				blur: (isIE ? "focusout" : "blur")
-			},
+			// _specialTypes: {
+			// 	focus: (isIE ? "focusin" : "focus"),
+			// 	blur: (isIE ? "focusout" : "blur")
+			// },
 
 
             /**
@@ -1045,11 +1045,11 @@ if (!YAHOO.util.Event) {
              * @param {String}   sType     The type to look up
              * @private
              */
-			_getType: function (type) {
-			
-				return this._specialTypes[type] || type;
-				
-			},
+			// _getType: function (type) {
+			// 
+			// 	return this._specialTypes[type] || type;
+			// 	
+			// },
 
 
             /**
@@ -1078,17 +1078,16 @@ if (!YAHOO.util.Event) {
 
 				var capture = false;
 
-				sType = this._getType(sType);
+				// sType = this._getType(sType);
 				
-				if (sType == FOCUS || sType == BLUR) {
-
-					capture = true;
-				
-					if (isOpera) {
-						captureHack.call(this, sType, el);
-					}
-					
-				}				
+				// if (sType == FOCUS || sType == BLUR) {
+				// 	capture = true;
+				// 
+				// 	if (isOpera) {
+				// 		captureHack.call(this, sType, el);
+				// 	}
+				// 	
+				// }				
 
                 return this._addListener(el, sType, fn, obj, overrideContext, capture);
 
@@ -1217,7 +1216,7 @@ if (!YAHOO.util.Event) {
             removeListener: function(el, sType, fn) {
                 var i, len, li;
 
-				sType = this._getType(sType);
+				// sType = this._getType(sType);
 
                 // The el argument can be a string
                 if (typeof el == "string") {
