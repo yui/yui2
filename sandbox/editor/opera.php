@@ -38,7 +38,7 @@ var d = document.createElement('div');
 d.innerHTML = '<a href="http://foo-bar.com">Foo Three!!</a>';
 log('4: ' + YAHOO.lang.isString(d.firstChild));
 
-YAHOO.util.Event.on([d, d.firstChild], 'click', log);
+YAHOO.util.Event.on([d, d.firstChild], 'focus', log);
 
 </script>
 </body>
