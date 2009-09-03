@@ -638,9 +638,9 @@
 
 
             <span class="c">/**</span>
-<span class="c">             * Appends a focus event handler.  (The focusin event is used for Internet Explorer, </span>
-<span class="c">             * the focus, capture-event for Opera, WebKit.)</span>
-<span class="c">             *</span>
+<span class="c">             * Attaches a focusin event listener to the specified element for </span>
+<span class="c"> 			 * the purpose of listening for the focus event on the element&#39;s </span>
+<span class="c">             * descendants.</span>
 <span class="c">             * @method addFocusListener</span>
 <span class="c">             *</span>
 <span class="c">             * @param {String|HTMLElement|Array|NodeList} el An id, an element </span>
@@ -666,7 +666,9 @@
 
 
             <span class="c">/**</span>
-<span class="c">             * Removes a focus event listener</span>
+<span class="c">             * Removes a focusin event listener to the specified element for </span>
+<span class="c">			 * the purpose of listening for the focus event on the element&#39;s </span>
+<span class="c">             * descendants.</span>
 <span class="c">             *</span>
 <span class="c">             * @method removeFocusListener</span>
 <span class="c">             *</span>
@@ -686,8 +688,9 @@
             <span class="o">},</span>
 
             <span class="c">/**</span>
-<span class="c">             * Appends a blur event handler.  (The focusout event is used for Internet Explorer, </span>
-<span class="c">             * the focusout, capture-event for Opera, WebKit.)</span>
+<span class="c">             * Attaches a focusout event listener to the specified element for </span>
+<span class="c">			 * the purpose of listening for the blur event on the element&#39;s </span>
+<span class="c">			 * descendants.</span>
 <span class="c">             *</span>
 <span class="c">             * @method addBlurListener</span>
 <span class="c">             *</span>
@@ -713,7 +716,9 @@
             <span class="o">},</span>          
 
             <span class="c">/**</span>
-<span class="c">             * Removes a blur event listener</span>
+<span class="c">             * Removes a focusout event listener to the specified element for </span>
+<span class="c">			 * the purpose of listening for the blur event on the element&#39;s </span>
+<span class="c">			 * descendants.</span>
 <span class="c">             *</span>
 <span class="c">             * @method removeBlurListener</span>
 <span class="c">             *</span>
