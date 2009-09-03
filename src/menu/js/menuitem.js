@@ -1861,7 +1861,11 @@ MenuItem.prototype = {
     */
 	getNextSibling: function () {
 	
-		var menuitemEl = this.element,
+		var isUL = function (el) {
+				return (el.nodeName.toLowerCase() === "ul");
+			},
+	
+			menuitemEl = this.element,
 			next = Dom.getNextSibling(menuitemEl),
 			parent,
 			sibling,
@@ -1870,13 +1874,13 @@ MenuItem.prototype = {
 		if (!next) {
 			
 			parent = menuitemEl.parentNode;
-			sibling = Dom.getNextSibling(parent);
+			sibling = Dom.getNextSiblingBy(parent, isUL);
 			
-			if (sibling && sibling.nodeName.toLowerCase() === "ul") {
+			if (sibling) {
 				list = sibling;
 			}
 			else {
-				list = Dom.getFirstChild(parent.parentNode);
+				list = Dom.getFirstChildBy(parent.parentNode, isUL);
 			}
 			
 			next = Dom.getFirstChild(list);
@@ -1908,7 +1912,11 @@ MenuItem.prototype = {
     */	
 	getPreviousSibling: function () {
 
-		var menuitemEl = this.element,
+		var isUL = function (el) {
+				return (el.nodeName.toLowerCase() === "ul");
+			},
+
+			menuitemEl = this.element,
 			next = Dom.getPreviousSibling(menuitemEl),
 			parent,
 			sibling,
@@ -1917,13 +1925,13 @@ MenuItem.prototype = {
 		if (!next) {
 			
 			parent = menuitemEl.parentNode;
-			sibling = Dom.getPreviousSibling(parent);
+			sibling = Dom.getPreviousSiblingBy(parent, isUL);
 			
-			if (sibling && sibling.nodeName.toLowerCase() === "ul") {
+			if (sibling) {
 				list = sibling;
 			}
 			else {
-				list = Dom.getLastChild(parent.parentNode);
+				list = Dom.getLastChildBy(parent.parentNode, isUL);
 			}
 			
 			next = Dom.getLastChild(list);

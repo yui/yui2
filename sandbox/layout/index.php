@@ -91,7 +91,7 @@ if (!$_GET['non']) {
             minWidth: 500,
             units: [
                 { position: 'top', height: 50, resize: false, header: 'Top', body: 'top1', gutter: '5px', collapse: true, resize: true, scroll: null },
-                { position: 'right', header: 'Right Side Header with extra long long long long title', width: 300, gutter: '15px', footer: 'Footer', collapse: true, scroll: true, body: 'right1', animate: false, useShim: true, resize: true },
+                { position: 'right', header: 'Right Side Header with extra long long long long title', width: 300, gutter: '15px', footer: 'Footer', collapse: true, scroll: true, body: 'right1', animate: true, useShim: true, resize: true },
                 { position: 'bottom', header: 'Bottom', height: 100, resize: true, body: 'bottom1', gutter: '5px', collapse: true },
                 { position: 'left', width: 200, body: 'left1', gutter: '15px', collapse: true, close: true, collapseSize: 50, scroll: true, animate: false, resize: true },
                 //{ position: 'left', width: 200, body: 'left1', gutter: '15px', collapse: false, close: false, collapseSize: 50, scroll: true, animate: false, resize: true },

@@ -1,5 +1,34 @@
 YUI Library Release Notes
 
+*** version 2.8.0 ***
+
+The 2.8.0 release of YUI contains:
+
+New components:
+  - Storage
+  - SWFStore 
+  _ SWF
+  - ProgressBar
+
+Significant additions. To the following components:
+  - Calendar
+    - Year offset support
+  - Carousel
+    - Gallery
+  - Charts
+    - Support for multiple Y axes
+    - Visibility control for individual series
+    - Custom event marker 
+  - Connection
+    - Cross-domain support
+  - Event
+    - Event Delegation
+
+
+There have been bug fixes and feature enhancements to many components.  Refer to the README files for full 
+details of the specific changes made to each component. 
+
+
 *** version 2.7.0 ***
 
 The 2.7.0 release of YUI contains:
