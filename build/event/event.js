@@ -1761,6 +1761,7 @@ if (!YAHOO.util.Event) {
                 } else if (sType === "unload") {
                     searchLists = [unloadListeners];
                 } else {
+					sType = this._getType(sType);
                     searchLists = [listeners];
                 }
 
