@@ -1362,6 +1362,7 @@
                 <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">sType</span> <span class="o">===</span> <span class="s2">&quot;unload&quot;</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">searchLists</span> <span class="o">=</span> <span class="o">[</span><span class="nx">unloadListeners</span><span class="o">];</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+					<span class="nx">sType</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getType</span><span class="o">(</span><span class="nx">sType</span><span class="o">);</span>
                     <span class="nx">searchLists</span> <span class="o">=</span> <span class="o">[</span><span class="nx">listeners</span><span class="o">];</span>
                 <span class="o">}</span>
 
