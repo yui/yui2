@@ -148,41 +148,11 @@
 <span class="c"></span>        <span class="o">},</span>
 
 		<span class="nx">isIE</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">,</span>
-		<span class="nx">isOpera</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">opera</span><span class="o">,</span>
-        
+
         <span class="c">// String constants used by the addFocusListener and removeFocusListener methods</span>
 <span class="c"></span>		
-       	<span class="nx">FOCUS</span> <span class="o">=</span> <span class="s2">&quot;focus&quot;</span><span class="o">,</span>
-       	<span class="nx">BLUR</span> <span class="o">=</span> <span class="s2">&quot;blur&quot;</span><span class="o">,</span>
-
-
-	    <span class="nx">NOOP</span>  <span class="o">=</span> <span class="k">function</span><span class="o">(){},</span>
-
-	    <span class="c">// Opera implents capture phase events per spec rather than</span>
-<span class="c"></span>	    <span class="c">// the more useful way it is implemented in other browsers:</span>
-<span class="c"></span>	    <span class="c">// The event doesn&#39;t fire on a target unless there is a</span>
-<span class="c"></span>	    <span class="c">// listener on an element in the target&#39;s ancestry.  If a</span>
-<span class="c"></span>	    <span class="c">// capture phase listener is added only to the element that </span>
-<span class="c"></span>	    <span class="c">// will be the target of the event, the listener won&#39;t fire.  </span>
-<span class="c"></span>	    <span class="c">// To get around this, we register a NOOP listener on the</span>
-<span class="c"></span>	    <span class="c">// element&#39;s parent.</span>
-<span class="c"></span>	
-		<span class="nx">captureHack</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
-
-	        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">(</span><span class="nx">o</span><span class="o">),</span>
-	            <span class="nx">p</span>  <span class="o">=</span> <span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
-
-	        <span class="k">if</span> <span class="o">(</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nx">p</span><span class="o">,</span> <span class="nx">type</span><span class="o">,</span> <span class="nx">NOOP</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-	        <span class="o">}</span>
-			<span class="k">else</span> <span class="o">{</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">onAvailable</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-					<span class="nx">captureHack</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">type</span><span class="o">,</span> <span class="nx">o</span><span class="o">);</span>
-				<span class="o">},</span> <span class="kc">null</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
-			<span class="o">}</span>
-
-	    <span class="o">};</span>
-
+       	<span class="nx">FOCUSIN</span> <span class="o">=</span> <span class="s2">&quot;focusin&quot;</span><span class="o">,</span>
+       	<span class="nx">FOCUSOUT</span> <span class="o">=</span> <span class="s2">&quot;focusout&quot;</span><span class="o">;</span>
 
         <span class="k">return</span> <span class="o">{</span>
 
@@ -353,11 +323,11 @@
 <span class="c">             * @static</span>
 <span class="c">             * @private</span>
 <span class="c">             */</span>
-			<span class="c">// _specialTypes: {</span>
-<span class="c"></span>			<span class="c">// 	focus: (isIE ? &quot;focusin&quot; : &quot;focus&quot;),</span>
-<span class="c"></span>			<span class="c">// 	blur: (isIE ? &quot;focusout&quot; : &quot;blur&quot;)</span>
-<span class="c"></span>			<span class="c">// },</span>
-<span class="c"></span>
+			<span class="nx">_specialTypes</span><span class="o">:</span> <span class="o">{</span>
+				<span class="nx">focusin</span><span class="o">:</span> <span class="o">(</span><span class="nx">isIE</span> <span class="o">?</span> <span class="s2">&quot;focusin&quot;</span> <span class="o">:</span> <span class="o">((</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">opera</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;DOMFocusIn&quot;</span> <span class="o">:</span> <span class="s2">&quot;focus&quot;</span><span class="o">)),</span>
+				<span class="nx">focusout</span><span class="o">:</span> <span class="o">(</span><span class="nx">isIE</span> <span class="o">?</span> <span class="s2">&quot;focusout&quot;</span> <span class="o">:</span> <span class="o">((</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">opera</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;DOMFocusOut&quot;</span> <span class="o">:</span> <span class="s2">&quot;blur&quot;</span><span class="o">))</span>
+			<span class="o">},</span>
+
 
             <span class="c">/**</span>
 <span class="c">             * True when the document is initially usable</span>
@@ -627,12 +597,12 @@
 <span class="c">             * @param {String}   sType     The type to look up</span>
 <span class="c">             * @private</span>
 <span class="c">             */</span>
-			<span class="c">// _getType: function (type) {</span>
-<span class="c"></span>			<span class="c">// </span>
-<span class="c"></span>			<span class="c">// 	return this._specialTypes[type] || type;</span>
-<span class="c"></span>			<span class="c">// 	</span>
-<span class="c"></span>			<span class="c">// },</span>
-<span class="c"></span>
+			<span class="nx">_getType</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
+			
+				<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_specialTypes</span><span class="o">[</span><span class="nx">type</span><span class="o">]</span> <span class="o">||</span> <span class="nx">type</span><span class="o">;</span>
+				
+			<span class="o">},</span>
+
 
             <span class="c">/**</span>
 <span class="c">             * Appends an event handler</span>
@@ -658,20 +628,11 @@
 <span class="c">             */</span>
             <span class="nx">addListener</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
 
-				<span class="k">var</span> <span class="nx">capture</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+				<span class="c">//	Gecko is the only browser that doesn&#39;t support focusin </span>
+<span class="c"></span>				<span class="c">//	and focusout, so need to use capture-based focus and blur</span>
+<span class="c"></span>				<span class="k">var</span> <span class="nx">capture</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_specialTypes</span><span class="o">[</span><span class="nx">sType</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">gecko</span><span class="o">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="o">;</span>
 
-				<span class="c">// sType = this._getType(sType);</span>
-<span class="c"></span>				
-				<span class="c">// if (sType == FOCUS || sType == BLUR) {</span>
-<span class="c"></span>				<span class="c">// 	capture = true;</span>
-<span class="c"></span>				<span class="c">// </span>
-<span class="c"></span>				<span class="c">// 	if (isOpera) {</span>
-<span class="c"></span>				<span class="c">// 		captureHack.call(this, sType, el);</span>
-<span class="c"></span>				<span class="c">// 	}</span>
-<span class="c"></span>				<span class="c">// 	</span>
-<span class="c"></span>				<span class="c">// }				</span>
-<span class="c"></span>
-                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_addListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">,</span> <span class="nx">capture</span><span class="o">);</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_addListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getType</span><span class="o">(</span><span class="nx">sType</span><span class="o">),</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">,</span> <span class="nx">capture</span><span class="o">);</span>
 
         	<span class="o">},</span>
 
@@ -697,12 +658,10 @@
 <span class="c">             *                        could not have the listener attached,</span>
 <span class="c">             *                        or if the operation throws an exception.</span>
 <span class="c">             * @static</span>
-<span class="c">         	 * @deprecated use YAHOO.util.Event.on and specify &quot;focus&quot; as the event type.</span>
+<span class="c">			* @deprecated use YAHOO.util.Event.on and specify &quot;focusin&quot; as the event type.</span>
 <span class="c">             */</span>
             <span class="nx">addFocusListener</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
-
-                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">FOCUS</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">);</span>
-
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">FOCUSIN</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">);</span>
             <span class="o">},</span>          
 
 
@@ -720,12 +679,10 @@
 <span class="c">             * @return {boolean} true if the unbind was successful, false </span>
 <span class="c">             *  otherwise.</span>
 <span class="c">             * @static</span>
-<span class="c">          	 * @deprecated use YAHOO.util.Event.removeListener and specify &quot;focus&quot; as the event type.</span>
+<span class="c">         	 * @deprecated use YAHOO.util.Event.removeListener and specify &quot;focusin&quot; as the event type.</span>
 <span class="c">             */</span>
             <span class="nx">removeFocusListener</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span> 
-
-                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">FOCUS</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
-
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">FOCUSIN</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
             <span class="o">},</span>
 
             <span class="c">/**</span>
@@ -749,12 +706,10 @@
 <span class="c">             *                        could not have the listener attached,</span>
 <span class="c">             *                        or if the operation throws an exception.</span>
 <span class="c">             * @static</span>
-<span class="c">         	 * @deprecated use YAHOO.util.Event.on and specify &quot;blur&quot; as the event type.</span>
+<span class="c">         	 * @deprecated use YAHOO.util.Event.on and specify &quot;focusout&quot; as the event type.</span>
 <span class="c">             */</span>
             <span class="nx">addBlurListener</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
-
-                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">BLUR</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">);</span>
-
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">FOCUSOUT</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">);</span>
             <span class="o">},</span>          
 
             <span class="c">/**</span>
@@ -771,12 +726,10 @@
 <span class="c">             * @return {boolean} true if the unbind was successful, false </span>
 <span class="c">             *  otherwise.</span>
 <span class="c">             * @static</span>
-<span class="c">         	 * @deprecated use YAHOO.util.Event.removeListener and specify &quot;blur&quot; as the event type.</span>
+<span class="c">         	 * @deprecated use YAHOO.util.Event.removeListener and specify &quot;focusout&quot; as the event type.</span>
 <span class="c">             */</span>
             <span class="nx">removeBlurListener</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span> 
-            
-                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">BLUR</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
-            
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">FOCUSOUT</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
             <span class="o">},</span>
 
             <span class="c">/**</span>
@@ -798,8 +751,8 @@
             <span class="nx">removeListener</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">len</span><span class="o">,</span> <span class="nx">li</span><span class="o">;</span>
 
-				<span class="c">// sType = this._getType(sType);</span>
-<span class="c"></span>
+				<span class="nx">sType</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getType</span><span class="o">(</span><span class="nx">sType</span><span class="o">);</span>
+
                 <span class="c">// The el argument can be a string</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">el</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
@@ -1606,7 +1559,7 @@
 <span class="c">         * @method onFocus</span>
 <span class="c">         * @see addFocusListener</span>
 <span class="c">         * @static</span>
-<span class="c">      	 * @deprecated use YAHOO.util.Event.on and specify &quot;focus&quot; as the event type.</span>
+<span class="c">		 * @deprecated use YAHOO.util.Event.on and specify &quot;focusin&quot; as the event type.</span>
 <span class="c">         */</span>
         <span class="nx">EU</span><span class="o">.</span><span class="nx">onFocus</span> <span class="o">=</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">addFocusListener</span><span class="o">;</span>
 
@@ -1615,7 +1568,7 @@
 <span class="c">         * @method onBlur</span>
 <span class="c">         * @see addBlurListener</span>
 <span class="c">         * @static</span>
-<span class="c">      	 * @deprecated use YAHOO.util.Event.on and specify &quot;blur&quot; as the event type.</span>
+<span class="c">		 * @deprecated use YAHOO.util.Event.on and specify &quot;focusout&quot; as the event type.</span>
 <span class="c">         */</span>     
         <span class="nx">EU</span><span class="o">.</span><span class="nx">onBlur</span> <span class="o">=</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">addBlurListener</span><span class="o">;</span>
 
