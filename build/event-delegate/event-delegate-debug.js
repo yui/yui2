@@ -13,7 +13,6 @@
 (function () {
 
 	var Event = YAHOO.util.Event,
-		Selector = YAHOO.util.Selector,
 		Lang = YAHOO.lang,
 		delegates = [],
 
@@ -26,7 +25,7 @@
 				returnVal = false;
 			}
 			else {
-				returnVal = Selector.test(el, selector) ? el: getMatch(el.parentNode, selector, container);
+				returnVal = YAHOO.util.Selector.test(el, selector) ? el: getMatch(el.parentNode, selector, container);
 			}
 		
 			return returnVal;
@@ -97,10 +96,10 @@
 					}
 
 
-					if (Selector.test(target, selector)) {
+					if (YAHOO.util.Selector.test(target, selector)) {
 						matchedEl = target;
 					}
-					else if (Selector.test(target, ((selector.replace(/,/gi, " *,")) + " *"))) {
+					else if (YAHOO.util.Selector.test(target, ((selector.replace(/,/gi, " *,")) + " *"))) {
 
 						//	The target is a descendant of an element matching 
 						//	the selector, so crawl up to find the ancestor that 
