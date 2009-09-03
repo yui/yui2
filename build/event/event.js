@@ -1042,9 +1042,9 @@ if (!YAHOO.util.Event) {
 
 
             /**
-             * Appends a focus event handler.  (The focusin event is used for Internet Explorer, 
-             * the focus, capture-event for Opera, WebKit.)
-             *
+             * Attaches a focusin event listener to the specified element for 
+ 			 * the purpose of listening for the focus event on the element's 
+             * descendants.
              * @method addFocusListener
              *
              * @param {String|HTMLElement|Array|NodeList} el An id, an element 
@@ -1070,7 +1070,9 @@ if (!YAHOO.util.Event) {
 
 
             /**
-             * Removes a focus event listener
+             * Removes a focusin event listener to the specified element for 
+			 * the purpose of listening for the focus event on the element's 
+             * descendants.
              *
              * @method removeFocusListener
              *
@@ -1090,8 +1092,9 @@ if (!YAHOO.util.Event) {
             },
 
             /**
-             * Appends a blur event handler.  (The focusout event is used for Internet Explorer, 
-             * the focusout, capture-event for Opera, WebKit.)
+             * Attaches a focusout event listener to the specified element for 
+			 * the purpose of listening for the blur event on the element's 
+			 * descendants.
              *
              * @method addBlurListener
              *
@@ -1117,7 +1120,9 @@ if (!YAHOO.util.Event) {
             },          
 
             /**
-             * Removes a blur event listener
+             * Removes a focusout event listener to the specified element for 
+			 * the purpose of listening for the blur event on the element's 
+			 * descendants.
              *
              * @method removeBlurListener
              *

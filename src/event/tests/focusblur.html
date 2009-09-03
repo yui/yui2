@@ -28,8 +28,8 @@
 			YAHOO.log("blur");
 		};
 
-		Event.on("button-1", "focus", onButtonFocus);
-		Event.on("button-1", "blur", onButtonBlur);
+		Event.onFocus("button-1", onButtonFocus);
+		Event.onBlur("button-1", onButtonBlur);
 
 		Event.onDOMReady(function () {
 
