@@ -566,41 +566,11 @@ if (!YAHOO.util.Event) {
         },
 
 		isIE = YAHOO.env.ua.ie,
-		isOpera = YAHOO.env.ua.opera,
-        
+
         // String constants used by the addFocusListener and removeFocusListener methods
 		
-       	FOCUS = "focus",
-       	BLUR = "blur",
-
-
-	    NOOP  = function(){},
-
-	    // Opera implents capture phase events per spec rather than
-	    // the more useful way it is implemented in other browsers:
-	    // The event doesn't fire on a target unless there is a
-	    // listener on an element in the target's ancestry.  If a
-	    // capture phase listener is added only to the element that 
-	    // will be the target of the event, the listener won't fire.  
-	    // To get around this, we register a NOOP listener on the
-	    // element's parent.
-	
-		captureHack = function(type, o) {
-
-	        var el = this.getEl(o),
-	            p  = el && el.parentNode;
-
-	        if (p) {
-				this._simpleAdd(p, type, NOOP, true);
-	        }
-			else {
-				this.onAvailable(o, function () {
-					captureHack.call(this, type, o);
-				}, null, this);
-			}
-
-	    };
-
+       	FOCUSIN = "focusin",
+       	FOCUSOUT = "focusout";
 
         return {
 
@@ -771,10 +741,10 @@ if (!YAHOO.util.Event) {
              * @static
              * @private
              */
-			// _specialTypes: {
-			// 	focus: (isIE ? "focusin" : "focus"),
-			// 	blur: (isIE ? "focusout" : "blur")
-			// },
+			_specialTypes: {
+				focusin: (isIE ? "focusin" : ((YAHOO.env.ua.webkit || YAHOO.env.ua.opera) ? "DOMFocusIn" : "focus")),
+				focusout: (isIE ? "focusout" : ((YAHOO.env.ua.webkit || YAHOO.env.ua.opera) ? "DOMFocusOut" : "blur"))
+			},
 
 
             /**
@@ -1045,11 +1015,11 @@ if (!YAHOO.util.Event) {
              * @param {String}   sType     The type to look up
              * @private
              */
-			// _getType: function (type) {
-			// 
-			// 	return this._specialTypes[type] || type;
-			// 	
-			// },
+			_getType: function (type) {
+			
+				return this._specialTypes[type] || type;
+				
+			},
 
 
             /**
@@ -1076,20 +1046,11 @@ if (!YAHOO.util.Event) {
              */
             addListener: function (el, sType, fn, obj, overrideContext) {
 
-				var capture = false;
+				//	Gecko is the only browser that doesn't support focusin 
+				//	and focusout, so need to use capture-based focus and blur
+				var capture = (this._specialTypes[sType] && YAHOO.env.ua.gecko) ? true : false;
 
-				// sType = this._getType(sType);
-				
-				// if (sType == FOCUS || sType == BLUR) {
-				// 	capture = true;
-				// 
-				// 	if (isOpera) {
-				// 		captureHack.call(this, sType, el);
-				// 	}
-				// 	
-				// }				
-
-                return this._addListener(el, sType, fn, obj, overrideContext, capture);
+                return this._addListener(el, this._getType(sType), fn, obj, overrideContext, capture);
 
         	},
 
@@ -1115,12 +1076,10 @@ if (!YAHOO.util.Event) {
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
-         	 * @deprecated use YAHOO.util.Event.on and specify "focus" as the event type.
+			* @deprecated use YAHOO.util.Event.on and specify "focusin" as the event type.
              */
             addFocusListener: function (el, fn, obj, overrideContext) {
-
-                return this.on(el, FOCUS, fn, obj, overrideContext);
-
+                return this.on(el, FOCUSIN, fn, obj, overrideContext);
             },          
 
 
@@ -1138,12 +1097,10 @@ if (!YAHOO.util.Event) {
              * @return {boolean} true if the unbind was successful, false 
              *  otherwise.
              * @static
-          	 * @deprecated use YAHOO.util.Event.removeListener and specify "focus" as the event type.
+         	 * @deprecated use YAHOO.util.Event.removeListener and specify "focusin" as the event type.
              */
             removeFocusListener: function (el, fn) { 
-
-                return this.removeListener(el, FOCUS, fn);
-
+                return this.removeListener(el, FOCUSIN, fn);
             },
 
             /**
@@ -1167,12 +1124,10 @@ if (!YAHOO.util.Event) {
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
-         	 * @deprecated use YAHOO.util.Event.on and specify "blur" as the event type.
+         	 * @deprecated use YAHOO.util.Event.on and specify "focusout" as the event type.
              */
             addBlurListener: function (el, fn, obj, overrideContext) {
-
-                return this.on(el, BLUR, fn, obj, overrideContext);
-
+                return this.on(el, FOCUSOUT, fn, obj, overrideContext);
             },          
 
             /**
@@ -1189,12 +1144,10 @@ if (!YAHOO.util.Event) {
              * @return {boolean} true if the unbind was successful, false 
              *  otherwise.
              * @static
-         	 * @deprecated use YAHOO.util.Event.removeListener and specify "blur" as the event type.
+         	 * @deprecated use YAHOO.util.Event.removeListener and specify "focusout" as the event type.
              */
             removeBlurListener: function (el, fn) { 
-            
-                return this.removeListener(el, BLUR, fn);
-            
+                return this.removeListener(el, FOCUSOUT, fn);
             },
 
             /**
@@ -1216,7 +1169,7 @@ if (!YAHOO.util.Event) {
             removeListener: function(el, sType, fn) {
                 var i, len, li;
 
-				// sType = this._getType(sType);
+				sType = this._getType(sType);
 
                 // The el argument can be a string
                 if (typeof el == "string") {
@@ -2024,7 +1977,7 @@ if (!YAHOO.util.Event) {
          * @method onFocus
          * @see addFocusListener
          * @static
-      	 * @deprecated use YAHOO.util.Event.on and specify "focus" as the event type.
+		 * @deprecated use YAHOO.util.Event.on and specify "focusin" as the event type.
          */
         EU.onFocus = EU.addFocusListener;
 
@@ -2033,7 +1986,7 @@ if (!YAHOO.util.Event) {
          * @method onBlur
          * @see addBlurListener
          * @static
-      	 * @deprecated use YAHOO.util.Event.on and specify "blur" as the event type.
+		 * @deprecated use YAHOO.util.Event.on and specify "focusout" as the event type.
          */     
         EU.onBlur = EU.addBlurListener;
 
