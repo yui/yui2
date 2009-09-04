@@ -176,7 +176,7 @@
          */
 		delegate: function (container, type, fn, filter, obj, overrideContext) {
 
-			var sType = Event._getType(type),
+			var sType = type,
 				fnMouseDelegate,
 				fnDelegate;
 
@@ -191,6 +191,9 @@
 				if (!Event._createMouseDelegate) {
 			        return false;
 				}
+
+				//	Look up the real event--either mouseover or mouseout
+				sType = Event._getType(type);
 
 				fnMouseDelegate = Event._createMouseDelegate(fn, obj, overrideContext);
 
@@ -233,10 +236,15 @@
          */
 		removeDelegate: function (container, type, fn) {
 
-			var sType = Event._getType(type),
+			var sType = type,
 				returnVal = false,
 				index,
 				cacheItem;
+
+			//	Look up the real event--either mouseover or mouseout
+			if (type == "mouseenter" || type == "mouseleave") {
+				sType = Event._getType(type);
+			}
 
 			index = Event._getCacheIndex(delegates, container, sType, fn);
 

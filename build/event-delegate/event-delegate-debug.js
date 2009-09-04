@@ -176,7 +176,7 @@
          */
 		delegate: function (container, type, fn, filter, obj, overrideContext) {
 
-			var sType = Event._getType(type),
+			var sType = type,
 				fnMouseDelegate,
 				fnDelegate;
 
@@ -193,6 +193,9 @@
 					YAHOO.log("Delegating a " + type + " event requires the event-mouseenter module.", "error", "Event");
 			        return false;
 				}
+
+				//	Look up the real event--either mouseover or mouseout
+				sType = Event._getType(type);
 
 				fnMouseDelegate = Event._createMouseDelegate(fn, obj, overrideContext);
 
@@ -235,10 +238,15 @@
          */
 		removeDelegate: function (container, type, fn) {
 
-			var sType = Event._getType(type),
+			var sType = type,
 				returnVal = false,
 				index,
 				cacheItem;
+
+			//	Look up the real event--either mouseover or mouseout
+			if (type == "mouseenter" || type == "mouseleave") {
+				sType = Event._getType(type);
+			}
 
 			index = Event._getCacheIndex(delegates, container, sType, fn);
 
