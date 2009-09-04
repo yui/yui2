@@ -291,7 +291,7 @@
 
 							};
 						
-						Event.delegate('mod1', 'focus', onFocus, 'a');
+						Event.delegate('mod1', 'focusin', onFocus, 'a');
 
 						Dom.get('firstlink').focus();
 
@@ -301,7 +301,7 @@
 						Assert.areEqual(target, Dom.get('firstlink'), "event delegate works but the target is an incorrect node, should be the actual click target");
 						Assert.areEqual(boundEl, Dom.get('mod1'), "event delegate works but the container property should be the bound element");						
 						
-						bRemoved = Event.removeDelegate('mod1', 'focus', onFocus);
+						bRemoved = Event.removeDelegate('mod1', 'focusin', onFocus);
 						
 						Assert.isTrue(bRemoved, "Removal of delegated focus event handler failed");
 						
