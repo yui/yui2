@@ -2008,7 +2008,11 @@
             carousel.on(renderEvent, function (ev) {
                 if (carousel.get("selectedItem") === null ||
                     carousel.get("selectedItem") <= 0) { //in either case
+<<<<<<< HEAD:src/carousel/js/Carousel.js
                     carousel.set("selectedItem", carousel.get("firstVisible"));
+=======
+                carousel.set("selectedItem", carousel.get("firstVisible"));
+>>>>>>> af0939f3470238689934b336ceb0f7158b1c9461:src/carousel/js/Carousel.js
                 }
                 syncNavigation.call(carousel, ev);
                 syncPagerUi.call(carousel, ev);
@@ -4018,7 +4022,11 @@
 
             for (i = 0; i < numItems; i++) {
                 item = items[i] || loading[i];
+<<<<<<< HEAD:src/carousel/js/Carousel.js
                 
+=======
+
+>>>>>>> af0939f3470238689934b336ceb0f7158b1c9461:src/carousel/js/Carousel.js
                 if (item && item.id) {
                     styles = getCarouselItemPosition.call(carousel, i);
                     item.styles = item.styles || {};
@@ -4381,5 +4389,8 @@
 ;;  indent-tabs-mode: nil **
 ;;  End: **
 */
+<<<<<<< HEAD:src/carousel/js/Carousel.js
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});
+=======
+>>>>>>> af0939f3470238689934b336ceb0f7158b1c9461:src/carousel/js/Carousel.js
 YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});

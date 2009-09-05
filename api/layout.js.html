@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>layout&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
+        <h3>layout&nbsp; <span class="subtitle">2.8.0_test3</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_layout.html" title="layout">layout</a>
                 
@@ -397,9 +397,9 @@
 
             <span class="k">var</span> <span class="nx">unit</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LayoutUnit</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">unitConfig</span><span class="o">);</span>
 
-            <span class="nx">unit</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;heightChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="nx">unit</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;widthChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="nx">unit</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;gutterChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">unit</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;heightChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">,</span> <span class="o">{</span> <span class="nx">unit</span><span class="o">:</span> <span class="nx">unit</span> <span class="o">},</span> <span class="k">this</span><span class="o">);</span>
+            <span class="nx">unit</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;widthChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">,</span> <span class="o">{</span> <span class="nx">unit</span><span class="o">:</span> <span class="nx">unit</span> <span class="o">},</span> <span class="k">this</span><span class="o">);</span>
+            <span class="nx">unit</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;gutterChange&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">resize</span><span class="o">,</span> <span class="o">{</span> <span class="nx">unit</span><span class="o">:</span> <span class="nx">unit</span> <span class="o">},</span> <span class="k">this</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_units</span><span class="o">[</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">position</span><span class="o">]</span> <span class="o">=</span> <span class="nx">unit</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_rendered</span><span class="o">)</span> <span class="o">{</span>
@@ -427,7 +427,7 @@
 <span class="c">        * @description Starts the chain of resize routines that will resize all the units.</span>
 <span class="c">        * @return {&lt;a href=&quot;YAHOO.widget.Layout.html&quot;&gt;YAHOO.widget.Layout&lt;/a&gt;} The Layout instance</span>
 <span class="c">        */</span>
-        <span class="nx">resize</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">set</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nx">resize</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">set</span><span class="o">,</span> <span class="nx">info</span><span class="o">)</span> <span class="o">{</span>
             <span class="c">/*</span>
 <span class="c">            * Fixes bug #2528175</span>
 <span class="c">            * If the event comes from an attribute and the value hasn&#39;t changed, don&#39;t process it.</span>
@@ -435,7 +435,13 @@
             <span class="k">var</span> <span class="nx">ev</span> <span class="o">=</span> <span class="nx">set</span><span class="o">;</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span> <span class="o">&amp;&amp;</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">prevValue</span> <span class="o">&amp;&amp;</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">newValue</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span><span class="o">.</span><span class="nx">prevValue</span> <span class="o">==</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">newValue</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">set</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">info</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">info</span><span class="o">.</span><span class="nx">unit</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">(!</span><span class="nx">info</span><span class="o">.</span><span class="nx">unit</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;animate&#39;</span><span class="o">))</span> <span class="o">{</span>
+                                <span class="nx">set</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                            <span class="o">}</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
                 <span class="o">}</span>
             <span class="o">}</span>
             <span class="nx">set</span> <span class="o">=</span> <span class="o">((</span><span class="nx">set</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span><span class="o">);</span>

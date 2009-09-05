@@ -13,7 +13,6 @@
 (function () {
 
 	var Event = YAHOO.util.Event,
-		Selector = YAHOO.util.Selector,
 		Lang = YAHOO.lang,
 		delegates = [],
 
@@ -26,7 +25,7 @@
 				returnVal = false;
 			}
 			else {
-				returnVal = Selector.test(el, selector) ? el: getMatch(el.parentNode, selector, container);
+				returnVal = YAHOO.util.Selector.test(el, selector) ? el: getMatch(el.parentNode, selector, container);
 			}
 		
 			return returnVal;
@@ -97,10 +96,10 @@
 					}
 
 
-					if (Selector.test(target, selector)) {
+					if (YAHOO.util.Selector.test(target, selector)) {
 						matchedEl = target;
 					}
-					else if (Selector.test(target, ((selector.replace(/,/gi, " *,")) + " *"))) {
+					else if (YAHOO.util.Selector.test(target, ((selector.replace(/,/gi, " *,")) + " *"))) {
 
 						//	The target is a descendant of an element matching 
 						//	the selector, so crawl up to find the ancestor that 
@@ -177,7 +176,7 @@
          */
 		delegate: function (container, type, fn, filter, obj, overrideContext) {
 
-			var sType = Event._getType(type),
+			var sType = type,
 				fnMouseDelegate,
 				fnDelegate;
 
@@ -194,6 +193,9 @@
 					YAHOO.log("Delegating a " + type + " event requires the event-mouseenter module.", "error", "Event");
 			        return false;
 				}
+
+				//	Look up the real event--either mouseover or mouseout
+				sType = Event._getType(type);
 
 				fnMouseDelegate = Event._createMouseDelegate(fn, obj, overrideContext);
 
@@ -236,10 +238,15 @@
          */
 		removeDelegate: function (container, type, fn) {
 
-			var sType = Event._getType(type),
+			var sType = type,
 				returnVal = false,
 				index,
 				cacheItem;
+
+			//	Look up the real event--either mouseover or mouseout
+			if (type == "mouseenter" || type == "mouseleave") {
+				sType = Event._getType(type);
+			}
 
 			index = Event._getCacheIndex(delegates, container, sType, fn);
 
