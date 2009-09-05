@@ -2815,7 +2815,7 @@
                     <span class="s1">&#39;selectedItem&#39;</span> <span class="o">:</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;selectedItem&#39;</span><span class="o">)+</span><span class="m">1</span><span class="o">,</span>
                     <span class="s1">&#39;currentPage&#39;</span> <span class="o">:</span> <span class="nx">currentPage</span><span class="o">,</span>
                     <span class="s1">&#39;firstVisible&#39;</span> <span class="o">:</span> <span class="nx">firstVisible</span><span class="o">,</span>
-                    <span class="s1">&#39;lastVisible&#39;</span> <span class="o">:</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;lastVisible&quot;</span><span class="o">)</span>
+                    <span class="s1">&#39;lastVisible&#39;</span> <span class="o">:</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;lastVisible&quot;</span><span class="o">)+</span><span class="m">1</span>
                 <span class="o">},</span>
                 <span class="nx">cb</span> <span class="o">=</span> <span class="nx">pagination</span><span class="o">.</span><span class="nx">callback</span> <span class="o">||</span> <span class="o">{},</span>
                 <span class="nx">scope</span> <span class="o">=</span> <span class="nx">cb</span><span class="o">.</span><span class="nx">scope</span> <span class="o">&amp;&amp;</span> <span class="nx">cb</span><span class="o">.</span><span class="nx">obj</span> <span class="o">?</span> <span class="nx">cb</span><span class="o">.</span><span class="nx">obj</span> <span class="o">:</span> <span class="nx">carousel</span><span class="o">;</span>
@@ -3834,7 +3834,7 @@
         <span class="o">},</span>
 
         <span class="c">/**</span>
-<span class="c">         * Get the last visible item.</span>
+<span class="c">         * Get the index of the last visible item</span>
 <span class="c">         *</span>
 <span class="c">         * @method _getLastVisible</span>
 <span class="c">         * @protected</span>
@@ -3843,7 +3843,7 @@
             <span class="k">var</span> <span class="nx">carousel</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
             <span class="k">return</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;currentPage&quot;</span><span class="o">)</span> <span class="o">+</span> <span class="m">1</span> <span class="o">==</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;numPages&quot;</span><span class="o">)</span> <span class="o">?</span>
                    <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;numItems&quot;</span><span class="o">)</span> <span class="o">-</span> <span class="m">1</span><span class="o">:</span>
-                   <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;firstVisible&quot;</span><span class="o">)</span> <span class="o">+</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;numVisible&quot;</span><span class="o">);</span>
+                   <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;firstVisible&quot;</span><span class="o">)</span> <span class="o">+</span> <span class="nx">carousel</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;numVisible&quot;</span><span class="o">)</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
