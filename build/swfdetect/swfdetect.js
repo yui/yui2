@@ -84,6 +84,4 @@ YAHOO.util.SWFDetect = {
 		}	
 	};
 })();
-
-YAHOO.register("swfdetect", YAHOO.util.SWFDetect, {version: "2.7.0", build: "1796"});
-YAHOO.register("swfdetect", YAHOO.widget.SWFDetect, {version: "@VERSION@", build: "@BUILD@"});
+YAHOO.register("swfdetect", YAHOO.util.SWFDetect, {version: "@VERSION@", build: "@BUILD@"});

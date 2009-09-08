@@ -2154,22 +2154,6 @@
     Overlay.CSS_HIDDEN = "yui-overlay-hidden";
 
     /**
-    * Constant representing the default positioned CSS class used for an Overlay. This class is
-    * applied to the overlay's outer DIV whenever it's positioned at a specific XY co-ordinate.
-    * <p>
-    * The class is automatically removed just before the overlay is moved, and re-applied after 
-    * the overlay is repositioned, and can be used to apply margins to overlay (applying margins to the overlay
-    * using the yui-overlay class, will not have any effect, since YAHOO.util.Dom.setXY and getXY 
-    * attempts to account for margins when positioning the overlay at a specific XY co-ordinate).   
-    * </p>
-    * @property YAHOO.widget.Overlay.CSS_POSITIONED
-    * @static
-    * @final
-    * @type String
-    */
-    Overlay.CSS_POSITIONED = "yui-overlay-positioned";
-
-    /**
     * Constant representing the default CSS class used for an Overlay iframe shim.
     * 
     * @property YAHOO.widget.Overlay.CSS_IFRAME
@@ -2178,21 +2162,6 @@
     * @type String
     */
     Overlay.CSS_IFRAME = "yui-overlay-iframe";
-
-    /**
-    * Constant representing the default positioned CSS class used for an Overlay iframe shim. This class is
-    * applied to the overlay's iframe shime whenever it's positioned at a specific XY co-ordinate.
-    * <p>
-    * The class is automatically removed just before the iframe position is sync'd with the overlay 
-    * and re-applied after the sync is complete. It can be used when using the CSS_POSITIONED
-    * class for the Overlay div, to apply similar margins to the iframe shim.   
-    * </p>
-    * @property YAHOO.widget.Overlay.CSS_IFRAME_POSITIONED
-    * @static
-    * @final
-    * @type String
-    */
-    Overlay.CSS_IFRAME_POSITIONED = "yui-overlay-iframe-positioned";
 
     /**
      * Constant representing the names of the standard module elements
@@ -3102,8 +3071,7 @@
         configX: function (type, args, obj) {
 
             var x = args[0],
-                y = this.cfg.getProperty("y"),
-                positionedClass = Overlay.CSS_POSITIONED;
+                y = this.cfg.getProperty("y");
 
             this.cfg.setProperty("x", x, true);
             this.cfg.setProperty("y", y, true);
@@ -3113,9 +3081,7 @@
             x = this.cfg.getProperty("x");
             y = this.cfg.getProperty("y");
 
-            Dom.removeClass(this.element, positionedClass);
             Dom.setX(this.element, x, true);
-            Dom.addClass(this.element, positionedClass);
 
             this.cfg.setProperty("xy", [x, y], true);
 
@@ -3135,8 +3101,7 @@
         configY: function (type, args, obj) {
 
             var x = this.cfg.getProperty("x"),
-                y = args[0],
-                positionedClass = Overlay.CSS_POSITIONED;
+                y = args[0];
 
             this.cfg.setProperty("x", x, true);
             this.cfg.setProperty("y", y, true);
@@ -3146,9 +3111,7 @@
             x = this.cfg.getProperty("x");
             y = this.cfg.getProperty("y");
 
-            Dom.removeClass(this.element, positionedClass);
             Dom.setY(this.element, y, true);
-            Dom.addClass(this.element, positionedClass);
 
             this.cfg.setProperty("xy", [x, y], true);
 
@@ -3210,9 +3173,7 @@
                     this.syncPosition();
                     aXY = this.cfg.getProperty("xy");
                 }
-                Dom.removeClass(oIFrame, Overlay.CSS_IFRAME_POSITIONED);
                 Dom.setXY(oIFrame, [(aXY[0] - nOffset), (aXY[1] - nOffset)]);
-                Dom.addClass(oIFrame, Overlay.CSS_IFRAME_POSITIONED);
             }
         },
 
@@ -4450,8 +4411,7 @@
         /**
         * @method _onOverlayFocusHandler
         *
-        * focusEvent Handler, used to delegate to _manageFocus with the 
-        * correct arguments.
+        * @description focusEvent Handler, used to delegate to _manageFocus with the correct arguments.
         *
         * @private
         * @param {String} p_sType String representing the name of the event  
@@ -4467,9 +4427,7 @@
 
         /**
         * @method _onOverlayBlurHandler
-        *
-        * blurEvent Handler, used to delegate to _manageBlur with the 
-        * correct arguments.
+        * @description blurEvent Handler, used to delegate to _manageBlur with the correct arguments.
         *
         * @private
         * @param {String} p_sType String representing the name of the event  

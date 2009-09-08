@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Menu&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
+        <h3>Menu&nbsp; <span class="subtitle">2.8.0_test3</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_menu.html" title="menu">menu</a>
                 
@@ -1907,7 +1907,11 @@
 <span class="c">    */</span>
 	<span class="nx">getNextSibling</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 	
-		<span class="k">var</span> <span class="nx">menuitemEl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span>
+		<span class="k">var</span> <span class="nx">isUL</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">return</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">===</span> <span class="s2">&quot;ul&quot;</span><span class="o">);</span>
+			<span class="o">},</span>
+	
+			<span class="nx">menuitemEl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span>
 			<span class="nx">next</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getNextSibling</span><span class="o">(</span><span class="nx">menuitemEl</span><span class="o">),</span>
 			<span class="nx">parent</span><span class="o">,</span>
 			<span class="nx">sibling</span><span class="o">,</span>
@@ -1916,13 +1920,13 @@
 		<span class="k">if</span> <span class="o">(!</span><span class="nx">next</span><span class="o">)</span> <span class="o">{</span>
 			
 			<span class="nx">parent</span> <span class="o">=</span> <span class="nx">menuitemEl</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
-			<span class="nx">sibling</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getNextSibling</span><span class="o">(</span><span class="nx">parent</span><span class="o">);</span>
+			<span class="nx">sibling</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getNextSiblingBy</span><span class="o">(</span><span class="nx">parent</span><span class="o">,</span> <span class="nx">isUL</span><span class="o">);</span>
 			
-			<span class="k">if</span> <span class="o">(</span><span class="nx">sibling</span> <span class="o">&amp;&amp;</span> <span class="nx">sibling</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">===</span> <span class="s2">&quot;ul&quot;</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">sibling</span><span class="o">)</span> <span class="o">{</span>
 				<span class="nx">list</span> <span class="o">=</span> <span class="nx">sibling</span><span class="o">;</span>
 			<span class="o">}</span>
 			<span class="k">else</span> <span class="o">{</span>
-				<span class="nx">list</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getFirstChild</span><span class="o">(</span><span class="nx">parent</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">);</span>
+				<span class="nx">list</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getFirstChildBy</span><span class="o">(</span><span class="nx">parent</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">,</span> <span class="nx">isUL</span><span class="o">);</span>
 			<span class="o">}</span>
 			
 			<span class="nx">next</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getFirstChild</span><span class="o">(</span><span class="nx">list</span><span class="o">);</span>
@@ -1954,7 +1958,11 @@
 <span class="c">    */</span>	
 	<span class="nx">getPreviousSibling</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
-		<span class="k">var</span> <span class="nx">menuitemEl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span>
+		<span class="k">var</span> <span class="nx">isUL</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">return</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">===</span> <span class="s2">&quot;ul&quot;</span><span class="o">);</span>
+			<span class="o">},</span>
+
+			<span class="nx">menuitemEl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span>
 			<span class="nx">next</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getPreviousSibling</span><span class="o">(</span><span class="nx">menuitemEl</span><span class="o">),</span>
 			<span class="nx">parent</span><span class="o">,</span>
 			<span class="nx">sibling</span><span class="o">,</span>
@@ -1963,13 +1971,13 @@
 		<span class="k">if</span> <span class="o">(!</span><span class="nx">next</span><span class="o">)</span> <span class="o">{</span>
 			
 			<span class="nx">parent</span> <span class="o">=</span> <span class="nx">menuitemEl</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
-			<span class="nx">sibling</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getPreviousSibling</span><span class="o">(</span><span class="nx">parent</span><span class="o">);</span>
+			<span class="nx">sibling</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getPreviousSiblingBy</span><span class="o">(</span><span class="nx">parent</span><span class="o">,</span> <span class="nx">isUL</span><span class="o">);</span>
 			
-			<span class="k">if</span> <span class="o">(</span><span class="nx">sibling</span> <span class="o">&amp;&amp;</span> <span class="nx">sibling</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">===</span> <span class="s2">&quot;ul&quot;</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="nx">sibling</span><span class="o">)</span> <span class="o">{</span>
 				<span class="nx">list</span> <span class="o">=</span> <span class="nx">sibling</span><span class="o">;</span>
 			<span class="o">}</span>
 			<span class="k">else</span> <span class="o">{</span>
-				<span class="nx">list</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getLastChild</span><span class="o">(</span><span class="nx">parent</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">);</span>
+				<span class="nx">list</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getLastChildBy</span><span class="o">(</span><span class="nx">parent</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">,</span> <span class="nx">isUL</span><span class="o">);</span>
 			<span class="o">}</span>
 			
 			<span class="nx">next</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getLastChild</span><span class="o">(</span><span class="nx">list</span><span class="o">);</span>
