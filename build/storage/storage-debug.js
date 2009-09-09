@@ -1141,6 +1141,9 @@ var Y = YAHOO.util,
         _setItem: function(key, data) {
             var _key = _getKey(this, key), swfNode;
 
+            // setting the value returns false if the value didn't change,
+            // so I changed this to clear the key if it exists so that the
+            // fork below works.
             if (_engine.callSWF("getValueOf", [_key])) {
                 this._removeItem(key);
             }
@@ -1150,6 +1153,10 @@ var Y = YAHOO.util,
             if (_engine.callSWF("setItem", [_key, data])) {
                 return true;
             } else {
+
+                // @TODO we should not assume that a false return means that
+                // the quota has been exceeded.  this dialog should only be
+                // displayed if the quotaExceededError event fired.
                 swfNode = YD.get(_engine._id);
                 if (MINIMUM_WIDTH > YD.getStyle(swfNode, 'width').replace(/\D+/g, '')) {
                     YD.setStyle(swfNode, 'width', MINIMUM_WIDTH + 'px');
