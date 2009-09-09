@@ -211,7 +211,10 @@
         <span class="nx">_setItem</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">key</span><span class="o">,</span> <span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">_key</span> <span class="o">=</span> <span class="nx">_getKey</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">key</span><span class="o">),</span> <span class="nx">swfNode</span><span class="o">;</span>
 
-            <span class="k">if</span> <span class="o">(</span><span class="nx">_engine</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getValueOf&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">_key</span><span class="o">]))</span> <span class="o">{</span>
+            <span class="c">// setting the value returns false if the value didn&#39;t change,</span>
+<span class="c"></span>            <span class="c">// so I changed this to clear the key if it exists so that the</span>
+<span class="c"></span>            <span class="c">// fork below works.</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">_engine</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;getValueOf&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">_key</span><span class="o">]))</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_removeItem</span><span class="o">(</span><span class="nx">key</span><span class="o">);</span>
             <span class="o">}</span>
 
@@ -220,7 +223,11 @@
             <span class="k">if</span> <span class="o">(</span><span class="nx">_engine</span><span class="o">.</span><span class="nx">callSWF</span><span class="o">(</span><span class="s2">&quot;setItem&quot;</span><span class="o">,</span> <span class="o">[</span><span class="nx">_key</span><span class="o">,</span> <span class="nx">data</span><span class="o">]))</span> <span class="o">{</span>
                 <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="nx">swfNode</span> <span class="o">=</span> <span class="nx">YD</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">_engine</span><span class="o">.</span><span class="nx">_id</span><span class="o">);</span>
+
+                <span class="c">// @TODO we should not assume that a false return means that</span>
+<span class="c"></span>                <span class="c">// the quota has been exceeded.  this dialog should only be</span>
+<span class="c"></span>                <span class="c">// displayed if the quotaExceededError event fired.</span>
+<span class="c"></span>                <span class="nx">swfNode</span> <span class="o">=</span> <span class="nx">YD</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">_engine</span><span class="o">.</span><span class="nx">_id</span><span class="o">);</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">MINIMUM_WIDTH</span> <span class="o">&gt;</span> <span class="nx">YD</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">swfNode</span><span class="o">,</span> <span class="s1">&#39;width&#39;</span><span class="o">).</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/\D+/g</span><span class="o">,</span> <span class="s1">&#39;&#39;</span><span class="o">))</span> <span class="o">{</span>
                     <span class="nx">YD</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">swfNode</span><span class="o">,</span> <span class="s1">&#39;width&#39;</span><span class="o">,</span> <span class="nx">MINIMUM_WIDTH</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">);</span>
                 <span class="o">}</span>
