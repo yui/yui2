@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Event Utility Event Delegation Module&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
+        <h3>Event Utility Event Delegation Module&nbsp; <span class="subtitle">2.8.0</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_event-delegate.html" title="event-delegate">event-delegate</a>
                 
@@ -225,7 +225,7 @@
 <span class="c">         */</span>
 		<span class="nx">delegate</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">container</span><span class="o">,</span> <span class="nx">type</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">filter</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">)</span> <span class="o">{</span>
 
-			<span class="k">var</span> <span class="nx">sType</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">_getType</span><span class="o">(</span><span class="nx">type</span><span class="o">),</span>
+			<span class="k">var</span> <span class="nx">sType</span> <span class="o">=</span> <span class="nx">type</span><span class="o">,</span>
 				<span class="nx">fnMouseDelegate</span><span class="o">,</span>
 				<span class="nx">fnDelegate</span><span class="o">;</span>
 
@@ -242,6 +242,9 @@
 					<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Delegating a &quot;</span> <span class="o">+</span> <span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot; event requires the event-mouseenter module.&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;Event&quot;</span><span class="o">);</span>
 			        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
 				<span class="o">}</span>
+
+				<span class="c">//	Look up the real event--either mouseover or mouseout</span>
+<span class="c"></span>				<span class="nx">sType</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">_getType</span><span class="o">(</span><span class="nx">type</span><span class="o">);</span>
 
 				<span class="nx">fnMouseDelegate</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">_createMouseDelegate</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">overrideContext</span><span class="o">);</span>
 
@@ -284,10 +287,15 @@
 <span class="c">         */</span>
 		<span class="nx">removeDelegate</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">container</span><span class="o">,</span> <span class="nx">type</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
 
-			<span class="k">var</span> <span class="nx">sType</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">_getType</span><span class="o">(</span><span class="nx">type</span><span class="o">),</span>
+			<span class="k">var</span> <span class="nx">sType</span> <span class="o">=</span> <span class="nx">type</span><span class="o">,</span>
 				<span class="nx">returnVal</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span>
 				<span class="nx">index</span><span class="o">,</span>
 				<span class="nx">cacheItem</span><span class="o">;</span>
+
+			<span class="c">//	Look up the real event--either mouseover or mouseout</span>
+<span class="c"></span>			<span class="k">if</span> <span class="o">(</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;mouseenter&quot;</span> <span class="o">||</span> <span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;mouseleave&quot;</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nx">sType</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">_getType</span><span class="o">(</span><span class="nx">type</span><span class="o">);</span>
+			<span class="o">}</span>
 
 			<span class="nx">index</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">_getCacheIndex</span><span class="o">(</span><span class="nx">delegates</span><span class="o">,</span> <span class="nx">container</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
 

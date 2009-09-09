@@ -160,8 +160,8 @@
 			Event.on("container-1", "mouseenter", addContainerOutline, "outline", true);
 			Event.on("container-1", "mouseleave", removeContainerOutline, "outline", true);
 
-			Event.on("container-1", "focus", onContainerFocus);
-			Event.on("container-1", "blur", onContainerBlur);
+			Event.on("container-1", "focusin", onContainerFocus);
+			Event.on("container-1", "focusout", onContainerBlur);
 
 			Event.delegate("container-1", "mouseenter", onLIMouseEnter, "li");
 			Event.delegate("container-1", "mouseleave", onLIMouseLeave, "li");
@@ -184,8 +184,8 @@
 					Event.removeDelegate("container-1", "mouseenter", addLIOutline) &&
 					Event.removeDelegate("container-1", "mouseleave", removeLIOutline) && 
 
-					Event.removeListener("container-1", "focus", onContainerFocus) &&
-					Event.removeListener("container-1", "blur", onContainerBlur)) {
+					Event.removeListener("container-1", "focusin", onContainerFocus) &&
+					Event.removeListener("container-1", "focusout", onContainerBlur)) {
 
 					alert("Handlers successfully removed");
 						

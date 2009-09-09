@@ -275,8 +275,8 @@ if (!YAHOO.util.Event) {
              * @private
              */
 			_specialTypes: {
-				focusin: (isIE ? "focusin" : ((YAHOO.env.ua.webkit || YAHOO.env.ua.opera) ? "DOMFocusIn" : "focus")),
-				focusout: (isIE ? "focusout" : ((YAHOO.env.ua.webkit || YAHOO.env.ua.opera) ? "DOMFocusOut" : "blur"))
+				focusin: (isIE ? "focusin" : "focus"),
+				focusout: (isIE ? "focusout" : "blur")
 			},
 
 
@@ -579,9 +579,7 @@ if (!YAHOO.util.Event) {
              */
             addListener: function (el, sType, fn, obj, overrideContext) {
 
-				//	Gecko is the only browser that doesn't support focusin 
-				//	and focusout, so need to use capture-based focus and blur
-				var capture = (this._specialTypes[sType] && YAHOO.env.ua.gecko) ? true : false;
+				var capture = ((sType == FOCUSIN || sType == FOCUSOUT) && !YAHOO.env.ua.ie) ? true : false;
 
                 return this._addListener(el, this._getType(sType), fn, obj, overrideContext, capture);
 
