@@ -1048,14 +1048,14 @@ var Y = YAHOO.util,
         
         _initEngine(_this._cfg);
 
-        var isSessionStorage = Y.StorageManager.LOCATION_SESSION === _this._location;
-
         // evaluates when the SWF is loaded
+		_engine.unsubscribe('contentReady'); // prevents local and session content ready callbacks from firing, when switching between context
         _engine.addListener("contentReady", function() {
             _this._swf = _engine._swf;
             _engine.initialized = true;
-
-            var sessionKey = Y.Cookie.get('sessionKey' + Y.StorageEngineSWF.ENGINE_NAME);
+			
+			var isSessionStorage = Y.StorageManager.LOCATION_SESSION === _this._location,
+				sessionKey = Y.Cookie.get('sessionKey' + Y.StorageEngineSWF.ENGINE_NAME);
 
             for (var i = _engine.callSWF("getLength", []) - 1; 0 <= i; i -= 1) {
                 var key = _engine.callSWF("getNameAt", [i]),
