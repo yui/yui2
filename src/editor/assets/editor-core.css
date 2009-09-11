@@ -11,6 +11,26 @@
 .yui-toolbar-container legend {
     display: none;
 }
+.yui-skin-sam .yui-toolbar-container .yui-button button,
+.yui-skin-sam .yui-toolbar-container .yui-button a,
+.yui-skin-sam .yui-toolbar-container .yui-button a:visited {
+    font-size: 0px;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-select button,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-select a,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-select a:visited,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton button,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton a,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton a:visited {
+    font-size: 12px;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton a.up,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton a.down {
+    font-size: 0;
+    line-height: 0;
+    padding: 0;
+}
+
 /* Setup the container with some padding and zoom it for IE's hasLayout */
 .yui-toolbar-container .yui-toolbar-subcont {
     padding: .25em 0;
