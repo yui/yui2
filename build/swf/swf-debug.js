@@ -174,10 +174,9 @@ YAHOO.widget.SWF = function (p_oElement /*:String*/, swfURL /*:String*/, p_oAttr
 				objstring += "</object>"; 
 
 				oElement.innerHTML = objstring;
-			}
-			
-			YAHOO.widget.SWF.superclass.constructor.call(this, Dom.get(_id));
-			this._swf = Dom.get(_id);	
+				YAHOO.widget.SWF.superclass.constructor.call(this, Dom.get(_id));
+				this._swf = Dom.get(_id);
+			}				
 };
 
 /**
