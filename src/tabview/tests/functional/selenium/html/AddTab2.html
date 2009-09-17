@@ -1,0 +1,31 @@
+package com.example.tests;
+
+import com.thoughtworks.selenium.*;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
+import java.util.regex.Pattern;
+
+public class AddTab2 extends SeleneseTestNgHelper {
+	@Test public void testAddTab2() throws Exception {
+		selenium.click("//div[@id='demo']/ul/li[2]/a/em");
+		selenium.click("//div[@id='demo']/ul/li[4]/a/em");
+		selenium.click("link=TabViewExternalSourc..>");
+		selenium.waitForPageToLoad("30000");
+		selenium.click("//div[@id='container']/div/ul/li[2]/a/em");
+		selenium.click("//div[@id='container']/div/ul/li[2]/a/em");
+		selenium.click("//div[@id='container']/div/ul/li[2]/a/em");
+		selenium.click("//div[@id='container']/div/ul/li[2]/a/em");
+		selenium.click("//div[@id='container']/div/ul/li[3]/a/em");
+		selenium.click("//div[@id='container']/div/ul/li[4]/a/em");
+		selenium.open("/dev/gitroot/yui2/src/tabview/tests/functional/html/TabViewAddTabs.html");
+		selenium.click("//div[@id='demo']/ul/li[1]/a/em");
+		selenium.answerOnNextPrompt("Tab 4");
+		selenium.click("//div[@id='demo']/button");
+		assertEquals(selenium.getPrompt(), "Enter the new tab name");
+		selenium.answerOnNextPrompt("Tab 5");
+		selenium.click("//div[@id='demo']/button");
+		assertEquals(selenium.getPrompt(), "Enter the new tab name");
+		selenium.click("//div[@id='demo']/ul/li[4]/a/em");
+		selenium.click("//div[@id='demo']/ul/li[5]/a/em");
+	}
+}
