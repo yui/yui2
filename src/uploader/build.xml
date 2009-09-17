@@ -22,7 +22,7 @@
 	
             <!-- Flash Platform -->
             <arg line="-source-path+='../charts/as'"/>
-                        
+
             <!-- Output SWF -->
             <arg line="-output './build_tmp/assets/uploader.swf'"/>
             
