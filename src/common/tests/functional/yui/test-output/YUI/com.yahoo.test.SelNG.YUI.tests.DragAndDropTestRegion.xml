@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion" failures="0" tests="1" time="0.054" errors="0">
+  <properties/>
+  <testcase name="@BeforeTest initFramework" time="0.0" classname="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion">
+    <failure type="org.testng.TestNGException" message="
+Parameter &apos;config-file&apos; is required by @Configuration on method initFramework
+but has not been marked @Optional or defined in /Users/theman/Documents/code/yui/temp-testng-customsuite.xml">
+      <![CDATA[org.testng.TestNGException: 
+Parameter 'config-file' is required by @Configuration on method initFramework
+but has not been marked @Optional or defined in /Users/theman/Documents/code/yui/temp-testng-customsuite.xml
+... Removed 16 stack frames]]>
+    </failure>
+  </testcase>
+  <testcase name="@BeforeTest initTests" time="0.0" classname="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion">
+    <skipped/>
+  </testcase>
+  <testcase name="@BeforeTest initTestInGrid" time="0.0" classname="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion">
+    <skipped/>
+  </testcase>
+  <testcase name="@BeforeMethod setupTestGrid" time="0.0" classname="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion">
+    <skipped/>
+  </testcase>
+  <testcase name="@BeforeMethod setUpTests" time="0.0" classname="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion">
+    <skipped/>
+  </testcase>
+  <testcase name="@AfterMethod tearDownTests" time="0.0" classname="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion">
+    <skipped/>
+  </testcase>
+  <testcase name="@AfterMethod tearDownTestGrid" time="0.0" classname="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion">
+    <skipped/>
+  </testcase>
+  <testcase name="@AfterTest cleanUp" time="0.0" classname="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion">
+    <skipped/>
+  </testcase>
+  <testcase name="DragAndDropRegion" time="0.0030" classname="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion">
+    <skipped/>
+  </testcase>
+</testsuite>

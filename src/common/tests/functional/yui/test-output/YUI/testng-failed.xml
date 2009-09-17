@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="5" skipfailedinvocationCounts="false" verbose="1" name="Failed suite [YUI]" junit="false" parallel="false" annotations="JDK">
+  <test name="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion(failed)" junit="false" parallel="false" annotations="JDK">
+    <classes>
+      <class name="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion">
+        <methods>
+          <include name="DragAndDropRegion"/>
+        </methods>
+      </class>
+    </classes>
+  </test>
+</suite>

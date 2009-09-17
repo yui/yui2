@@ -1,0 +1,34 @@
+<testng-results>
+  <reporter-output>
+  </reporter-output>
+  <suite name="SelNG Test">
+    <groups>
+      <group name="demo">
+        <method signature="com.yahoo.test.SelNG.YUI.tests.TabViewTestExternalSource.TabViewExternalSource()" name="TabViewExternalSource" class="com.yahoo.test.SelNG.YUI.tests.TabViewTestExternalSource"/>
+      </group>
+    </groups>
+    <test name="YUI">
+      <class name="com.yahoo.test.SelNG.YUI.tests.TabViewTestExternalSource">
+        <test-method status="PASS" signature="setUpTests()" name="setUpTests" is-config="true" duration-ms="6822" started-at="2009-08-05T16:42:55Z" finished-at="2009-08-05T16:43:02Z">
+        </test-method>
+        <test-method status="PASS" signature="initTests()" name="initTests" is-config="true" duration-ms="149" started-at="2009-08-05T16:42:55Z" depends-on-methods="com.yahoo.test.SelNG.YUI.tests.CommonTest.initFramework" finished-at="2009-08-05T16:42:55Z">
+        </test-method>
+        <test-method status="PASS" signature="initFramework(java.lang.String)" name="initFramework" is-config="true" duration-ms="59" started-at="2009-08-05T16:42:55Z" finished-at="2009-08-05T16:42:55Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[src/test/resources/config.properties]]>
+              </value>
+            </param>
+          </params>
+        </test-method>
+        <test-method status="PASS" signature="cleanUp()" name="cleanUp" is-config="true" duration-ms="434" started-at="2009-08-05T16:44:19Z" finished-at="2009-08-05T16:44:19Z">
+        </test-method>
+        <test-method status="PASS" signature="TabViewExternalSource()" name="TabViewExternalSource" duration-ms="73293" started-at="2009-08-05T16:43:02Z" finished-at="2009-08-05T16:44:15Z">
+        </test-method>
+        <test-method status="PASS" signature="tearDownTests()" name="tearDownTests" is-config="true" duration-ms="3842" started-at="2009-08-05T16:44:15Z" finished-at="2009-08-05T16:44:19Z">
+        </test-method>
+      </class>
+    </test>
+  </suite>
+</testng-results>

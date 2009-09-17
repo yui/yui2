@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.yahoo.test.SelNG.YUI.tests.TabViewTestBuildFromMarkup"
+           tests="1"
+           failures="1"
+           errors="0"
+           skipped="0"
+           time="11.621">
+  <properties />
+      <testcase name="TabViewBuildFromMarkup" time="11.621">
+            <failure type="java.lang.AssertionError" 
+                  message="null"
+              >
+<![CDATA[java.lang.AssertionError: null
+  org.testng.Assert.fail(Assert.java:84)
+  org.testng.Assert.fail(Assert.java:91)
+  com.yahoo.test.SelNG.YUI.tests.TabViewTestBuildFromMarkup.TabViewBuildFromMarkup(TabViewTestBuildFromMarkup.java:23)
+  sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+  sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+  sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+  java.lang.reflect.Method.invoke(Method.java:597)
+  org.testng.internal.MethodHelper.invokeMethod(MethodHelper.java:580)
+  org.testng.internal.Invoker.invokeMethod(Invoker.java:478)
+  org.testng.internal.Invoker.invokeTestMethod(Invoker.java:617)
+  org.testng.internal.Invoker.invokeTestMethods(Invoker.java:885)
+  org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:126)
+  org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:110)
+  org.testng.TestRunner.runWorkers(TestRunner.java:712)
+  org.testng.TestRunner.privateRun(TestRunner.java:582)
+  org.testng.TestRunner.run(TestRunner.java:477)
+  org.testng.SuiteRunner.runTest(SuiteRunner.java:324)
+  org.testng.SuiteRunner.runSequentially(SuiteRunner.java:319)
+  org.testng.SuiteRunner.privateRun(SuiteRunner.java:292)
+  org.testng.SuiteRunner.run(SuiteRunner.java:198)
+  org.testng.TestNG.createAndRunSuiteRunners(TestNG.java:821)
+  org.testng.TestNG.runSuitesLocally(TestNG.java:788)
+  org.testng.TestNG.run(TestNG.java:708)
+  org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:74)
+  org.apache.maven.surefire.testng.TestNGXmlTestSuite.execute(TestNGXmlTestSuite.java:92)
+  org.apache.maven.surefire.Surefire.run(Surefire.java:177)
+  sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+  sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+  sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+  java.lang.reflect.Method.invoke(Method.java:597)
+  org.apache.maven.surefire.booter.SurefireBooter.runSuitesInProcess(SurefireBooter.java:338)
+  org.apache.maven.surefire.booter.SurefireBooter.main(SurefireBooter.java:997)
+]]>
+      </failure>
+          </testcase>
+      </testsuite>

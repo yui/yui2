@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.yahoo.test.SelNG.YUI.tests.ContainerTestTooltip"
+           tests="1"
+           failures="0"
+           errors="0"
+           skipped="0"
+           time="21.545">
+  <properties />
+          <testcase name="TabView" time="21.545" />
+  </testsuite>

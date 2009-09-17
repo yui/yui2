@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="YUI" failures="1" tests="1" time="17.039" errors="0">
+  <properties/>
+  <testcase name="TabView" time="1.688" classname="com.yahoo.test.SelNG.YUI.tests.ContainerTestOverlay">
+    <failure type="java.lang.AssertionError" message="null">
+      <![CDATA[java.lang.AssertionError: null
+	at com.yahoo.test.SelNG.YUI.tests.ContainerTestOverlay.TabView(ContainerTestOverlay.java:23)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+	at java.lang.Thread.run(Thread.java:637)
+... Removed 13 stack frames]]>
+    </failure>
+  </testcase>
+</testsuite>

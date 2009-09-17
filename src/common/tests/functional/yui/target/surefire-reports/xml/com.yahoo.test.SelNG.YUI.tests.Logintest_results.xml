@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.yahoo.test.SelNG.YUI.tests.Logintest"
+           tests="1"
+           failures="0"
+           errors="0"
+           skipped="0"
+           time="10.471">
+  <properties />
+          <testcase name="Verifylogin" time="10.471" />
+  </testsuite>

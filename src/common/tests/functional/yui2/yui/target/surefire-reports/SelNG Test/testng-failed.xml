@@ -1,0 +1,28 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="5" skipfailedinvocationCounts="false" verbose="0" name="Failed suite [SelNG Test]" junit="false" parallel="false" annotations="JDK">
+  <parameter name="config-file" value="src/test/resources/config.properties"/>
+  <parameter name="config-file_YUI" value="src/test/resources/config.properties"/>
+  <test name="YUI(failed)" junit="false" parallel="false" annotations="JDK">
+    <parameter name="config-file" value="src/test/resources/config.properties"/>
+    <parameter name="config-file_YUI" value="src/test/resources/config.properties"/>
+    <groups>
+      <run>
+        <include name="abstract"/>
+        <include name="demo"/>
+        <exclude name="grid"/>
+      </run>
+    </groups>
+    <classes>
+      <class name="com.yahoo.test.SelNG.YUI.tests.TabViewTestBuildFromMarkup">
+        <methods>
+          <include name="tearDownTests"/>
+          <include name="setUpTests"/>
+          <include name="initFramework"/>
+          <include name="TabViewBuildFromMarkup"/>
+          <include name="cleanUp"/>
+          <include name="initTests"/>
+        </methods>
+      </class>
+    </classes>
+  </test>
+</suite>

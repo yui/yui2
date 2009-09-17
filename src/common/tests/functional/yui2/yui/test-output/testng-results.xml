@@ -1,0 +1,56 @@
+<testng-results>
+  <reporter-output>
+  </reporter-output>
+  <suite name="SelNG Test">
+    <groups>
+      <group name="demo">
+        <method signature="com.yahoo.test.SelNG.YUI.tests.ContainerTestOverlay.TabView()" name="TabView" class="com.yahoo.test.SelNG.YUI.tests.ContainerTestOverlay"/>
+      </group>
+    </groups>
+    <test name="YUI">
+      <class name="com.yahoo.test.SelNG.YUI.tests.ContainerTestOverlay">
+        <test-method status="PASS" signature="setupTestGrid()" name="setupTestGrid" is-config="true" duration-ms="5069" started-at="2009-09-15T14:40:50Z" finished-at="2009-09-15T14:40:55Z">
+        </test-method>
+        <test-method status="FAIL" signature="TabView()" name="TabView" duration-ms="1688" started-at="2009-09-15T14:40:55Z" finished-at="2009-09-15T14:40:57Z">
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[null]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: null
+	at org.testng.Assert.fail(Assert.java:86)
+	at org.testng.Assert.fail(Assert.java:93)
+	at com.yahoo.test.SelNG.YUI.tests.ContainerTestOverlay.TabView(ContainerTestOverlay.java:23)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.testng.internal.MethodHelper.invokeMethod(MethodHelper.java:607)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:517)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:669)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:956)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:126)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:110)
+	at org.testng.internal.thread.ThreadUtil$CountDownLatchedRunnable.run(ThreadUtil.java:132)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+	at java.lang.Thread.run(Thread.java:637)
+]]>
+            </full-stacktrace>
+          </exception>
+        </test-method>
+        <test-method status="PASS" signature="initTestInGrid(java.lang.String)" name="initTestInGrid" is-config="true" duration-ms="7560" started-at="2009-09-15T14:40:42Z" finished-at="2009-09-15T14:40:50Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[src/test/resources/config_grid.properties]]>
+              </value>
+            </param>
+          </params>
+        </test-method>
+        <test-method status="PASS" signature="tearDownTestGrid()" name="tearDownTestGrid" is-config="true" duration-ms="2561" started-at="2009-09-15T14:40:57Z" finished-at="2009-09-15T14:40:59Z">
+        </test-method>
+      </class>
+    </test>
+  </suite>
+</testng-results>
