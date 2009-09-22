@@ -853,7 +853,16 @@
             <span class="c">/**</span>
 <span class="c">             * In some cases, some browsers will return a text node inside</span>
 <span class="c">             * the actual element that was targeted.  This normalizes the</span>
-<span class="c">             * return value for getTarget and getRelatedTarget.</span>
+<span class="c">             * return value for getTarget and getRelatedTarget.  </span>
+<span class="c">             *</span>
+<span class="c">             * If accessing a property of the node throws an error, this is</span>
+<span class="c">             * probably the anonymous div wrapper Gecko adds inside text</span>
+<span class="c">             * nodes.  This likely will only occur when attempting to access</span>
+<span class="c">             * the relatedTarget.  In this case, we now return null because</span>
+<span class="c">             * the anonymous div is completely useless and we do not know</span>
+<span class="c">             * what the related target was because we can&#39;t even get to</span>
+<span class="c">             * the element&#39;s parent node.</span>
+<span class="c">             *</span>
 <span class="c">             * @method resolveTextNode</span>
 <span class="c">             * @param {HTMLElement} node node to resolve</span>
 <span class="c">             * @return {HTMLElement} the normized node</span>
@@ -864,7 +873,9 @@
                     <span class="k">if</span> <span class="o">(</span><span class="nx">n</span> <span class="o">&amp;&amp;</span> <span class="m">3</span> <span class="o">==</span> <span class="nx">n</span><span class="o">.</span><span class="nx">nodeType</span><span class="o">)</span> <span class="o">{</span>
                         <span class="k">return</span> <span class="nx">n</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
                     <span class="o">}</span>
-                <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
+                <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span> 
+                    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+                <span class="o">}</span>
 
                 <span class="k">return</span> <span class="nx">n</span><span class="o">;</span>
             <span class="o">},</span>
