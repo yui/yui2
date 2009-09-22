@@ -120,6 +120,25 @@
 
 			<span class="nx">isFlashVersionAtLeast</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">ver</span><span class="o">)</span> <span class="o">{</span>
 				<span class="k">return</span> <span class="nx">version</span> <span class="o">&gt;=</span> <span class="nx">ver</span><span class="o">;</span>
+			<span class="o">},</span>
+			
+			<span class="nx">parseFlashVersion</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">ver</span><span class="o">)</span>
+			<span class="o">{</span>
+				<span class="k">var</span> <span class="nx">flashVersion</span> <span class="o">=</span> <span class="nx">ver</span><span class="o">;</span>
+				<span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">ver</span><span class="o">))</span>
+				<span class="o">{</span>
+					<span class="k">var</span> <span class="nx">verSplit</span> <span class="o">=</span> <span class="nx">ver</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;.&quot;</span><span class="o">);</span>
+					<span class="k">if</span><span class="o">(</span><span class="nx">verSplit</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">2</span><span class="o">)</span>
+					<span class="o">{</span>
+						<span class="nx">flashVersion</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">verSplit</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
+						<span class="nx">flashVersion</span> <span class="o">+=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">verSplit</span><span class="o">[</span><span class="m">2</span><span class="o">])</span> <span class="o">*</span> <span class="o">.</span><span class="m">001</span><span class="o">;</span>
+					<span class="o">}</span>
+					<span class="k">else</span>
+					<span class="o">{</span>
+						<span class="nx">flashVersion</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="o">(</span><span class="nx">ver</span><span class="o">);</span>
+					<span class="o">}</span>					
+				<span class="o">}</span>
+				<span class="k">return</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">flashVersion</span><span class="o">)</span> <span class="o">?</span> <span class="nx">flashVersion</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
 			<span class="o">}</span>	
 		<span class="o">};</span>	
 	
@@ -174,7 +193,7 @@
 	
 	<span class="k">var</span> <span class="nx">_id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
     <span class="k">var</span> <span class="nx">oElement</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">);</span>
-	<span class="k">var</span> <span class="nx">flashVersion</span> <span class="o">=</span> <span class="o">(</span><span class="nx">p_oAttributes</span><span class="o">[</span><span class="s2">&quot;version&quot;</span><span class="o">]</span> <span class="o">||</span> <span class="nx">FLASH_VER</span><span class="o">);</span>
+	<span class="k">var</span> <span class="nx">flashVersion</span> <span class="o">=</span> <span class="nx">SWFDetect</span><span class="o">.</span><span class="nx">parseFlashVersion</span><span class="o">(</span><span class="nx">p_oAttributes</span><span class="o">[</span><span class="s2">&quot;version&quot;</span><span class="o">])</span> <span class="o">||</span> <span class="nx">FLASH_VER</span><span class="o">;</span>
 	<span class="k">var</span> <span class="nx">isFlashVersionRight</span> <span class="o">=</span> <span class="nx">SWFDetect</span><span class="o">.</span><span class="nx">isFlashVersionAtLeast</span><span class="o">(</span><span class="nx">flashVersion</span><span class="o">);</span>
 	<span class="k">var</span> <span class="nx">canExpressInstall</span> <span class="o">=</span> <span class="o">(</span><span class="nx">UA</span><span class="o">.</span><span class="nx">flash</span> <span class="o">&gt;=</span> <span class="m">8</span><span class="o">.</span><span class="m">0</span><span class="o">);</span>
 	<span class="k">var</span> <span class="nx">shouldExpressInstall</span> <span class="o">=</span> <span class="nx">canExpressInstall</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">isFlashVersionRight</span> <span class="o">&amp;&amp;</span> <span class="nx">p_oAttributes</span><span class="o">[</span><span class="s2">&quot;useExpressInstall&quot;</span><span class="o">];</span>
