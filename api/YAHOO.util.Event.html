@@ -3296,7 +3296,14 @@ otherwise.</dd>
                                         <div class="description" property="yui:description">
                                             In some cases, some browsers will return a text node inside
 the actual element that was targeted.  This normalizes the
-return value for getTarget and getRelatedTarget.
+return value for getTarget and getRelatedTarget.  
+If accessing a property of the node throws an error, this is
+probably the anonymous div wrapper Gecko adds inside text
+nodes.  This likely will only occur when attempting to access
+the relatedTarget.  In this case, we now return null because
+the anonymous div is completely useless and we do not know
+what the related target was because we can't even get to
+the element's parent node.
                                         </div>
 
                                         <div class="description">

@@ -147,6 +147,14 @@
 
         ////////////////////////////////////////////////////////////////////////////////
 
+        var template = 'My {prefix} name is {name}. {signature}';
+        var obj = {
+            prefix:'last', 
+            name: 'Zappa', 
+            signature: '{I am a replacement string }{}'
+        };
+        log(l.substitute(template, obj));
+
     });
             
 })();
