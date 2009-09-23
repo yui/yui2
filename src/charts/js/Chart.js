@@ -46,28 +46,10 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, configurationAttrib
 	
 	this._id = attributes.id = attributes.id || YAHOO.util.Dom.generateId(null, "yuigen");
 	
-	if(attributes.version && attributes.version != null && attributes.version != undefined && attributes.version != "undefined")
-	{ 
-		var version = (/\w*.\w*/.exec(((attributes.version).toString()).replace(/.0./g, "."))).toString();
-		var verSplit = version.split(".");
-		version = verSplit[0] + ".";
-		switch((verSplit[1].toString()).length)
-		{
-			case 1: 
-				version += "00";
-			break;
-			case 2:
-				version += "0";
-			break;	
-		} 
-		version += verSplit[1];
-		attributes.version = parseFloat(version); 
-	}
-	
 	this._swfURL = YAHOO.widget.Chart.SWFURL;
 	this._containerID = containerId;
 	
-	this._attributes = attributes
+	this._attributes = attributes;
 	this._swfEmbed = new YAHOO.widget.SWF(containerId, YAHOO.widget.Chart.SWFURL, attributes);
 	
 	this._swf = this._swfEmbed.swf;

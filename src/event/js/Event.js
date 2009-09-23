@@ -804,7 +804,16 @@ if (!YAHOO.util.Event) {
             /**
              * In some cases, some browsers will return a text node inside
              * the actual element that was targeted.  This normalizes the
-             * return value for getTarget and getRelatedTarget.
+             * return value for getTarget and getRelatedTarget.  
+             *
+             * If accessing a property of the node throws an error, this is
+             * probably the anonymous div wrapper Gecko adds inside text
+             * nodes.  This likely will only occur when attempting to access
+             * the relatedTarget.  In this case, we now return null because
+             * the anonymous div is completely useless and we do not know
+             * what the related target was because we can't even get to
+             * the element's parent node.
+             *
              * @method resolveTextNode
              * @param {HTMLElement} node node to resolve
              * @return {HTMLElement} the normized node
@@ -815,7 +824,9 @@ if (!YAHOO.util.Event) {
                     if (n && 3 == n.nodeType) {
                         return n.parentNode;
                     }
-                } catch(e) { }
+                } catch(e) { 
+                    return null;
+                }
 
                 return n;
             },

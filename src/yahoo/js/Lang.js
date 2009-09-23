@@ -325,6 +325,12 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * value is an object, it uses the Object's toString() if this has
      * been overridden, otherwise it does a shallow dump of the key/value
      * pairs.
+     * 
+     * By specifying the recurse option, the string is rescanned after
+     * every replacement, allowing for nested template substitutions.
+     * The side effect of this option is that curly braces in the
+     * replacement content must be encoded.
+     *
      * @method substitute
      * @since 2.3.0
      * @param s {String} The string that will be modified.
@@ -333,16 +339,17 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      *                     process each match.  It receives the key,
      *                     value, and any extra metadata included with
      *                     the key inside of the braces.
+     * @param recurse {boolean} default false, if true, the replaced
+     * string will be rescanned so that nested substitutions are possible.
      * @return {String} the substituted string
      */
-    substitute: function (s, o, f) {
-        var i, j, k, key, v, meta, saved=[], token, 
+    substitute: function (s, o, f, recurse) {
+        var i, j, k, key, v, meta, saved=[], token, lidx=s.length,
             DUMP='dump', SPACE=' ', LBRACE='{', RBRACE='}',
             dump, objstr;
 
-
         for (;;) {
-            i = s.lastIndexOf(LBRACE);
+            i = s.lastIndexOf(LBRACE, lidx);
             if (i < 0) {
                 break;
             }
@@ -401,6 +408,9 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
 
             s = s.substring(0, i) + v + s.substring(j + 1);
 
+            if (!recurse) {
+                lidx = i-1;
+            }
 
         }
 

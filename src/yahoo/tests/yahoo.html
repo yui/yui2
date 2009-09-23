@@ -228,7 +228,7 @@ are output in the logger to the right. <br />View the source to see how it's don
             var url, l=YAHOO.lang;
 
             // standard replace, nested
-            url = l.substitute("{media}logo.gif", param);
+            url = l.substitute("{media}logo.gif", param, null, true);
             Assert.areEqual(url, "http://media.valvion.com/logo.gif");
 
             
@@ -240,7 +240,7 @@ are output in the logger to the right. <br />View the source to see how it's don
 
             // "random data" is not used since the value for the contextmedia key is a string.  
             // contextdomain uses "context1" as a key to expand the string correctly
-            url = l.substitute("{contextmedia random data}logo.gif", param, multipleChoice);
+            url = l.substitute("{contextmedia random data}logo.gif", param, multipleChoice, true);
             Assert.areEqual(url, "http://contextmedia.contextvalvion.com/logo.gif");
 
             ////////////////////////////////////////////////////////////////////////////////
@@ -300,7 +300,7 @@ are output in the logger to the right. <br />View the source to see how it's don
             ];
 
             Assert.areEqual(
-                l.substitute("{testarr 1}", { testarr: arr }), 
+                l.substitute("{testarr 1}", { testarr: arr }, null, true), 
                 "[1.1, 1.2, [2.1, 2.2, {...}, 2.4], 1.4]",
                 "failed two level array dump"
             );
@@ -323,7 +323,7 @@ are output in the logger to the right. <br />View the source to see how it's don
                 function(){}
             ];
 
-            var result = l.substitute("{testmix 1}", { testmix: mix });
+            var result = l.substitute("{testmix 1}", { testmix: mix }, null, true);
 
             Assert.isTrue(
                 (result.indexOf("GMT" > -1)) ? true : false,
@@ -354,18 +354,29 @@ are output in the logger to the right. <br />View the source to see how it's don
             };
 
             Assert.areEqual(
-                l.substitute("{customtostr 1}", { customtostr:  tostr }), 
+                l.substitute("{customtostr 1}", { customtostr:  tostr }, null, true), 
                 "custom toString executed",
                 "failed: custom toString should have been used"
             );
 
             Assert.areEqual(
-                l.substitute("{customtostr dump 1}", { customtostr:  tostr }), 
+                l.substitute("{customtostr dump 1}", { customtostr:  tostr }, null, true), 
                 "{custom1_1 => 1.1, custom1_2 => 1.2, custom1_3 => {custom2_1 => 2.1, custom2_2 => 2.2, custom2_3 => {...}, custom2_4 => 2.4}, custom1_4 => 1.4, toString => f(){...}}",
                 "failed: custom toString should NOT have been used because the dump keyword should override it"
             );
 
             ////////////////////////////////////////////////////////////////////////////////
+
+
+            var template = 'My {prefix} name is {name}. {signature}';
+            var obj = {
+                prefix:'last', 
+                name: 'Zappa', 
+                signature: '{I am a replacement string }{}'
+            };
+
+            // testing {} in the replacement text
+            Assert.areEqual("My last name is Zappa. {I am a replacement string }{}", l.substitute(template, obj));
 
         },
 

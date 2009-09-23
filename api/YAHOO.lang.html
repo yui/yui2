@@ -1177,6 +1177,10 @@ will overwrite those in earlier objects.
                                                          f
                                                     
                                                 
+                                                        , 
+                                                         recurse
+                                                    
+                                                
                                             )
                                         </code>
                                         
@@ -1193,6 +1197,10 @@ substituted for the bracket expression and it repeats.  If this
 value is an object, it uses the Object's toString() if this has
 been overridden, otherwise it does a shallow dump of the key/value
 pairs.
+By specifying the recurse option, the string is rescanned after
+every replacement, allowing for nested template substitutions.
+The side effect of this option is that curly braces in the
+replacement content must be encoded.
                                         </div>
 
                                         <div class="description">
@@ -1219,6 +1227,13 @@ pairs.
 process each match.  It receives the key,
 value, and any extra metadata included with
 the key inside of the braces.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">recurse</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  default false, if true, the replaced
+string will be rescanned so that nested substitutions are possible.</span>
                                                         </dd>
                                                 </dl>
 
