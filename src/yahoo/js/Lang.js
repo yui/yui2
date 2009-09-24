@@ -446,7 +446,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @method merge
      * @since 2.3.0
      * @param arguments {Object*} the objects to merge
-     * @return the new merged object
+     * @return {object} the new merged object
      */
     merge: function() {
         var o={}, a=arguments, l=a.length, i;
@@ -467,14 +467,14 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @param o the context object
      * @param fn {Function|String} the function to execute or the name of 
      * the method in the 'o' object to execute
-     * @param data [Array] data that is provided to the function.  This accepts
+     * @param data {Array} data that is provided to the function.  This accepts
      * either a single item or an array.  If an array is provided, the
      * function is executed with one parameter for each array item.  If
      * you need to pass a single array parameter, it needs to be wrapped in
      * an array [myarray]
      * @param periodic {boolean} if true, executes continuously at supplied 
      * interval until canceled
-     * @return a timer object. Call the cancel() method on this object to 
+     * @return {object} a timer object. Call the cancel() method on this object to 
      * stop the timer.
      */
     later: function(when, o, fn, data, periodic) {
