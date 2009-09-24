@@ -374,6 +374,12 @@
 <span class="c">     * value is an object, it uses the Object&#39;s toString() if this has</span>
 <span class="c">     * been overridden, otherwise it does a shallow dump of the key/value</span>
 <span class="c">     * pairs.</span>
+<span class="c">     * </span>
+<span class="c">     * By specifying the recurse option, the string is rescanned after</span>
+<span class="c">     * every replacement, allowing for nested template substitutions.</span>
+<span class="c">     * The side effect of this option is that curly braces in the</span>
+<span class="c">     * replacement content must be encoded.</span>
+<span class="c">     *</span>
 <span class="c">     * @method substitute</span>
 <span class="c">     * @since 2.3.0</span>
 <span class="c">     * @param s {String} The string that will be modified.</span>
@@ -382,16 +388,17 @@
 <span class="c">     *                     process each match.  It receives the key,</span>
 <span class="c">     *                     value, and any extra metadata included with</span>
 <span class="c">     *                     the key inside of the braces.</span>
+<span class="c">     * @param recurse {boolean} default false, if true, the replaced</span>
+<span class="c">     * string will be rescanned so that nested substitutions are possible.</span>
 <span class="c">     * @return {String} the substituted string</span>
 <span class="c">     */</span>
-    <span class="nx">substitute</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">s</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="nx">f</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">j</span><span class="o">,</span> <span class="nx">k</span><span class="o">,</span> <span class="nx">key</span><span class="o">,</span> <span class="nx">v</span><span class="o">,</span> <span class="nx">meta</span><span class="o">,</span> <span class="nx">saved</span><span class="o">=[],</span> <span class="nx">token</span><span class="o">,</span> 
+    <span class="nx">substitute</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">s</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="nx">f</span><span class="o">,</span> <span class="nx">recurse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">j</span><span class="o">,</span> <span class="nx">k</span><span class="o">,</span> <span class="nx">key</span><span class="o">,</span> <span class="nx">v</span><span class="o">,</span> <span class="nx">meta</span><span class="o">,</span> <span class="nx">saved</span><span class="o">=[],</span> <span class="nx">token</span><span class="o">,</span> <span class="nx">lidx</span><span class="o">=</span><span class="nx">s</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span>
             <span class="nx">DUMP</span><span class="o">=</span><span class="s1">&#39;dump&#39;</span><span class="o">,</span> <span class="nx">SPACE</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="o">,</span> <span class="nx">LBRACE</span><span class="o">=</span><span class="s1">&#39;{&#39;</span><span class="o">,</span> <span class="nx">RBRACE</span><span class="o">=</span><span class="s1">&#39;}&#39;</span><span class="o">,</span>
             <span class="nx">dump</span><span class="o">,</span> <span class="nx">objstr</span><span class="o">;</span>
 
-
         <span class="k">for</span> <span class="o">(;;)</span> <span class="o">{</span>
-            <span class="nx">i</span> <span class="o">=</span> <span class="nx">s</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="nx">LBRACE</span><span class="o">);</span>
+            <span class="nx">i</span> <span class="o">=</span> <span class="nx">s</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="nx">LBRACE</span><span class="o">,</span> <span class="nx">lidx</span><span class="o">);</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">break</span><span class="o">;</span>
             <span class="o">}</span>
@@ -450,6 +457,9 @@
 
             <span class="nx">s</span> <span class="o">=</span> <span class="nx">s</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">i</span><span class="o">)</span> <span class="o">+</span> <span class="nx">v</span> <span class="o">+</span> <span class="nx">s</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="nx">j</span> <span class="o">+</span> <span class="m">1</span><span class="o">);</span>
 
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">recurse</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">lidx</span> <span class="o">=</span> <span class="nx">i</span><span class="o">-</span><span class="m">1</span><span class="o">;</span>
+            <span class="o">}</span>
 
         <span class="o">}</span>
 

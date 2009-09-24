@@ -599,7 +599,7 @@ YAHOO.test.YUITest_test = (function(){
         name: "Test Results Formatting Tests",
         
         setUp : function(){
-            this.report = {
+            this.simpleReport = {
                 passed: 2,
                 failed: 2,
                 ignored: 1,
@@ -663,7 +663,7 @@ YAHOO.test.YUITest_test = (function(){
         },
         
         tearDown : function(){
-            delete this.report;
+            delete this.simpleReport;
         },
         
         
@@ -685,8 +685,9 @@ YAHOO.test.YUITest_test = (function(){
         },*/
         
         testXmlFormat : function(){
-            var xml = YAHOO.tool.TestFormat.XML(this.report);
+            var xml = YAHOO.tool.TestFormat.XML(this.simpleReport);
             var expectedXml = 
+                "<?xml version=\"1.0\" charset=\"UTF-8\"?>" +
                 "<report name=\"YUI Test Results\" passed=\"2\" failed=\"2\" ignored=\"1\" total=\"5\">" +
                     "<testsuite name=\"Some Suite\" passed=\"2\" failed=\"2\" ignored=\"1\" total=\"5\">" +
                         "<testcase name=\"Some Tests\" passed=\"2\" failed=\"2\" ignored=\"1\" total=\"5\">" +
@@ -701,7 +702,28 @@ YAHOO.test.YUITest_test = (function(){
             
             Assert.areEqual(expectedXml, xml, "XML formatting is incorrect.");
         
-        }
+        },
+        
+        testJUnitXmlFormat : function(){
+            var xml = YAHOO.tool.TestFormat.JUnitXML(this.simpleReport);
+            var expectedXml = 
+                "<?xml version=\"1.0\" charset=\"UTF-8\"?>" +
+                "<testsuites>" +
+                    "<testsuite name=\"Some Tests\" tests=\"5\" failures=\"2\">" + 
+                        "<testcase name=\"test1\"></testcase>" +
+                        "<testcase name=\"test2\"></testcase>" + 
+                        "<testcase name=\"test4\">" + 
+                            "<failure message=\"Test failed.\"><![CDATA[Test failed.]]></failure>" + 
+                        "</testcase>" + 
+                        "<testcase name=\"test5\">" + 
+                            "<failure message=\"Test failed.\"><![CDATA[Test failed.]]></failure>" + 
+                        "</testcase>" + 
+                    "</testsuite>" +
+                "</testsuites>";
+            
+            Assert.areEqual(expectedXml, xml, "JUnit XML formatting is incorrect.");
+        
+        }        
     }));
     
     reportSuite.add(new YAHOO.tool.TestCase({
