@@ -495,7 +495,7 @@
 <span class="c">     * @method merge</span>
 <span class="c">     * @since 2.3.0</span>
 <span class="c">     * @param arguments {Object*} the objects to merge</span>
-<span class="c">     * @return the new merged object</span>
+<span class="c">     * @return {object} the new merged object</span>
 <span class="c">     */</span>
     <span class="nx">merge</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">o</span><span class="o">={},</span> <span class="nx">a</span><span class="o">=</span><span class="nx">arguments</span><span class="o">,</span> <span class="nx">l</span><span class="o">=</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">i</span><span class="o">;</span>
@@ -516,14 +516,14 @@
 <span class="c">     * @param o the context object</span>
 <span class="c">     * @param fn {Function|String} the function to execute or the name of </span>
 <span class="c">     * the method in the &#39;o&#39; object to execute</span>
-<span class="c">     * @param data [Array] data that is provided to the function.  This accepts</span>
+<span class="c">     * @param data {Array} data that is provided to the function.  This accepts</span>
 <span class="c">     * either a single item or an array.  If an array is provided, the</span>
 <span class="c">     * function is executed with one parameter for each array item.  If</span>
 <span class="c">     * you need to pass a single array parameter, it needs to be wrapped in</span>
 <span class="c">     * an array [myarray]</span>
 <span class="c">     * @param periodic {boolean} if true, executes continuously at supplied </span>
 <span class="c">     * interval until canceled</span>
-<span class="c">     * @return a timer object. Call the cancel() method on this object to </span>
+<span class="c">     * @return {object} a timer object. Call the cancel() method on this object to </span>
 <span class="c">     * stop the timer.</span>
 <span class="c">     */</span>
     <span class="nx">later</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">when</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">data</span><span class="o">,</span> <span class="nx">periodic</span><span class="o">)</span> <span class="o">{</span>
