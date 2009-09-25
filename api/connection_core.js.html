@@ -437,12 +437,12 @@
 <span class="c">   */</span>
 	<span class="nx">asyncRequest</span><span class="o">:</span><span class="k">function</span><span class="o">(</span><span class="nx">method</span><span class="o">,</span> <span class="nx">uri</span><span class="o">,</span> <span class="nx">callback</span><span class="o">,</span> <span class="nx">postData</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="k">var</span> <span class="nx">o</span><span class="o">,</span><span class="nx">t</span><span class="o">,</span><span class="nx">args</span> <span class="o">=</span> <span class="o">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">)?</span><span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">:</span><span class="kc">null</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">o</span><span class="o">,</span> <span class="nx">t</span><span class="o">,</span> <span class="nx">args</span> <span class="o">=</span> <span class="o">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">)?</span><span class="nx">callback</span><span class="o">.</span><span class="nx">argument</span><span class="o">:</span><span class="kc">null</span><span class="o">;</span>
 
 		<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_isFileUpload</span><span class="o">){</span>
 			<span class="nx">t</span> <span class="o">=</span> <span class="s1">&#39;upload&#39;</span><span class="o">;</span>
 		<span class="o">}</span>
-		<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">callback</span><span class="o">.</span><span class="nx">xdr</span><span class="o">){</span>
+		<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">callback</span> <span class="o">&amp;&amp;</span> <span class="nx">callback</span><span class="o">.</span><span class="nx">xdr</span><span class="o">){</span>
 			<span class="nx">t</span> <span class="o">=</span> <span class="s1">&#39;xdr&#39;</span><span class="o">;</span>
 		<span class="o">}</span>
 
