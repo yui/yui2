@@ -148,6 +148,7 @@ YAHOO.util.Event.onAvailable('editorFocus', function() {
 
 YAHOO.util.Event.onAvailable('editorInput', function() {
     YAHOO.util.Event.addListener('editorInput', 'click', function(ev) {
+        YAHOO.util.Event.stopEvent(ev);
         delete myEditor.invalidHTML.input;
         if (myEditor._hasSelection()) {
             var text = '';
@@ -164,6 +165,13 @@ YAHOO.util.Event.onAvailable('editorInput', function() {
             
         } else {
             alert('Select Something First..');
+        }
+    });
+    myEditor.on('beforeEditorKeyDown', function(e) {
+        var tar = YAHOO.util.Event.getTarget(e.ev);
+        if (tar.tagName && tar.tagName.toLowerCase() == 'input') {
+            YAHOO.util.Event.stopEvent(e.ev);
+            return false;
         }
     });
 });
