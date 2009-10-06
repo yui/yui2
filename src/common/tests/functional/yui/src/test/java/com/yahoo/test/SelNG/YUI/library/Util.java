@@ -16,6 +16,13 @@ public class Util {
 		return ((attribute != null) && (attribute.contains(attributeValue.toLowerCase())));
 		
 	}
+	
+	public static boolean hasClass(String elXpath, String className) {
+		
+		String classAttribute = session().getAttribute(elXpath + "@class");
+		return ((classAttribute != null) && (classAttribute.contains(className)));
+	}
+
 
 	/**
 	 * The raw Java parseInt() will not handle a leading plus sign.

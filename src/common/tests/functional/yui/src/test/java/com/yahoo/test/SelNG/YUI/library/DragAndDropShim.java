@@ -19,11 +19,11 @@ public class DragAndDropShim extends SelNGBase {
 		session().click("shim");
 		int elWidth = getElementWidth("demo");
 		//int elHeight = getElementHeight("demo");
-		int innerWidth =  getViewportWidth();
+//		int innerWidth =  getViewportWidth();
 		//int innerHeight = getViewportHeight();
-		int deltaX = -(innerWidth - elWidth - 170);
+//		int deltaX = -(innerWidth - elWidth - 170);
 		int deltaY = 100;
-		moveElement("demo", deltaX, deltaY);
+//		moveElement("demo", deltaX, deltaY);
 	}
 
 	private static void moveElement(String el, int deltaX, int deltaY) {
