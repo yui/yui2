@@ -1065,6 +1065,24 @@ YAHOO.test.YUITest_test = (function(){
     }));
     
     //-------------------------------------------------------------------------
+    // TestRunner Tests
+    //-------------------------------------------------------------------------
+
+    reportSuite.add(new YAHOO.tool.TestCase({
+ 
+        name: "TestRunner Tests",  
+
+        
+        testRunnerIsRunning: function(){
+            var url = "http://www.yahoo.com/";
+            this.reporter = new YAHOO.tool.TestReporter(url);
+            
+            Assert.isTrue(YAHOO.tool.TestRunner.isRunning(), "TestRunner should be running.");
+            Assert.isNull(YAHOO.tool.TestRunner.getResults(), "Results should be null while TestRuner is running.");        
+        }
+    }));
+    
+    //-------------------------------------------------------------------------
     // Assert Tests
     //-------------------------------------------------------------------------
 
@@ -1514,6 +1532,10 @@ YAHOO.test.YUITest_test = (function(){
     
     //add the tests
     YAHOO.tool.TestRunner.add(YAHOO.test.YUITest_test);
+    
+    YAHOO.tool.TestRunner.subscribe("complete", function(){
+        alert("Done!");
+    });
     
     //add event handler
     YAHOO.util.Event.addListener("btnRun", "click", YAHOO.tool.TestRunner.run);
