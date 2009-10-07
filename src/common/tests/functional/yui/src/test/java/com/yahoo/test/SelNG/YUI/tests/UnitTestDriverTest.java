@@ -29,7 +29,8 @@ public class UnitTestDriverTest extends CommonTest{
     public String[][] YUIUnitTest() { 
     return new String[][] {
     		{ "animation" },
-    		{ "autocomplete" },
+    		{ "autocomplete" }
+/*******
     		{ "base" },
     		// { "button" },
     		{ "calendar" },
@@ -81,7 +82,8 @@ public class UnitTestDriverTest extends CommonTest{
     		{ "yuiloader" },
     		{ "yuiloader-config" },
     		{ "yuiloader-rollup" },
-    		{ "yuitest" } 
+    		{ "yuitest" }
+    		**/ 
     };
     }
     
