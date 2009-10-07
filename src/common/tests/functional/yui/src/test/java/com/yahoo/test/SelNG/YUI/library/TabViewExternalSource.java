@@ -15,7 +15,6 @@ public class TabViewExternalSource extends SelNGBase {
 		session().open("http://10.72.112.142/dev/gitroot/yui2/src/tabview/tests/functional/html/TabViewExternalSource.html");
 		//assertEquals(session().getTitle(), "Getting Content from an External Source");
 		
-		// TODO: deal with XHR the right way for all of the initial tab clicks
 		// wait 5 seconds for the XHR to complete
 		for (int second = 0;; second++) {
 			if (second >= 5) fail("XHR timeout");
