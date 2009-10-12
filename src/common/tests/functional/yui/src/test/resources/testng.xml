@@ -20,15 +20,15 @@
     <parameter name="tab-xml-file" value="src/test/java/com/yahoo/test/SelNG/YUI/library/TabViewData.xml"/>	
 -->
 
-
+<!--
 	<parameter name="uri" value="http://tv.yahoo.com"/>
     <parameter name="tab-xml-file" value="src/test/java/com/yahoo/test/SelNG/YUI/library/TabViewDataTv.xml"/>		
+-->
 
 
-<!--
 	<parameter name="uri" value="http://10.72.112.142/dev/gitroot/yui2/src/tabview/tests/functional/html/VerticalTabs.html"/>
     <parameter name="tab-xml-file" value="src/test/java/com/yahoo/test/SelNG/YUI/library/TabViewDataOrientations.xml"/>		
--->
+
 
     <groups>
       <run>
@@ -39,9 +39,10 @@
     </groups>
 	
     <classes>
-      <!--
+      
 
-        <class name="com.yahoo.test.SelNG.YUI.tests.TabViewTest"/>   
+        <class name="com.yahoo.test.SelNG.YUI.tests.TabViewTest"/>
+
 
         <class name="com.yahoo.test.SelNG.YUI.tests.TabViewTestBuildFromMarkup"/>
         <class name="com.yahoo.test.SelNG.YUI.tests.TabViewTestBuildFromScript"/>
@@ -53,20 +54,11 @@
         <class name="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestHandles"/>
 		<class name="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestBasic"/>
         <class name="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestRegion"/>
-        <class name="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestReorder"/>
-        <class name="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestOnTop"/>
-        <class name="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestGroups"/>
-        <class name="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestCircle"/>
-        <class name="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestShim"/>
-        <class name="com.yahoo.test.SelNG.YUI.tests.DragAndDropTestDdRows"/>
-
    
         <class name="com.yahoo.test.SelNG.YUI.tests.ContainerTestDialogQuickstart"/>                
         <class name="com.yahoo.test.SelNG.YUI.tests.ContainerTestDialogQuickstartForm"/>
-        <class name="com.yahoo.test.SelNG.YUI.tests.ContainerTestKeyListener"/> 
         <class name="com.yahoo.test.SelNG.YUI.tests.ContainerTestModule"/>
         <class name="com.yahoo.test.SelNG.YUI.tests.ContainerTestOverlay"/>
-     
         <class name="com.yahoo.test.SelNG.YUI.tests.ContainerTestOverlayManager"/>
         <class name="com.yahoo.test.SelNG.YUI.tests.ContainerTestPanel"/>        
         <class name="com.yahoo.test.SelNG.YUI.tests.ContainerTestPanelResize"/>
@@ -77,14 +69,8 @@
 
         <class name="com.yahoo.test.SelNG.YUI.tests.AutoCompleteTestBasicLocal"/>
         
-        <class name="com.yahoo.test.SelNG.YUI.tests.ButtonTestPushButton"/>
-        <class name="com.yahoo.test.SelNG.YUI.tests.ButtonTestCheckboxButton"/>        
-
-
-
-      -->
-
         <class name="com.yahoo.test.SelNG.YUI.tests.UnitTestDriverTest"/>
+
           
     </classes>
 
