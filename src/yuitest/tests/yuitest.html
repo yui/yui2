@@ -723,7 +723,24 @@ YAHOO.test.YUITest_test = (function(){
             
             Assert.areEqual(expectedXml, xml, "JUnit XML formatting is incorrect.");
         
-        }        
+        },
+
+        testTAPFormat : function(){
+            var text = YAHOO.tool.TestFormat.TAP(this.simpleReport);
+            var expectedText = 
+                "1..5\n" + 
+                "#Begin testsuite Some Suite(2 failed of 5)\n" +
+                "#Begin testcase Some Tests(2 failed of 5)\n" + 
+                "ok 1 - test1\n" +
+                "ok 2 - test2\n" + 
+                "#Ignored test test3\n" + 
+                "not ok 3 - test4 - Test failed.\n" + 
+                "not ok 4 - test5 - Test failed.\n" +
+                "#End testcase Some Tests\n" + 
+                "#End testsuite Some Suite\n";  
+            
+            Assert.areEqual(expectedText, text, "TAP formatting is incorrect.");
+        }
     }));
     
     reportSuite.add(new YAHOO.tool.TestCase({
@@ -1045,6 +1062,24 @@ YAHOO.test.YUITest_test = (function(){
             YAHOO.util.Assert.fail("This test should not be run.");
         }
         
+    }));
+    
+    //-------------------------------------------------------------------------
+    // TestRunner Tests
+    //-------------------------------------------------------------------------
+
+    reportSuite.add(new YAHOO.tool.TestCase({
+ 
+        name: "TestRunner Tests",  
+
+        
+        testRunnerIsRunning: function(){
+            var url = "http://www.yahoo.com/";
+            this.reporter = new YAHOO.tool.TestReporter(url);
+            
+            Assert.isTrue(YAHOO.tool.TestRunner.isRunning(), "TestRunner should be running.");
+            Assert.isNull(YAHOO.tool.TestRunner.getResults(), "Results should be null while TestRuner is running.");        
+        }
     }));
     
     //-------------------------------------------------------------------------
@@ -1497,6 +1532,10 @@ YAHOO.test.YUITest_test = (function(){
     
     //add the tests
     YAHOO.tool.TestRunner.add(YAHOO.test.YUITest_test);
+    
+    YAHOO.tool.TestRunner.subscribe("complete", function(){
+        alert("Done!");
+    });
     
     //add event handler
     YAHOO.util.Event.addListener("btnRun", "click", YAHOO.tool.TestRunner.run);
