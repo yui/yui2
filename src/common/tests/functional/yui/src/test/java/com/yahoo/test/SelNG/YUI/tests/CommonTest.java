@@ -46,7 +46,7 @@ public class CommonTest extends SelNGBase {
 	public void setUpTests() {
 		try {
 			super.openBrowser();
-			session().setSpeed("1000");
+			session().setSpeed("500");
 			SelNGBase.screenshotfilename="";
 		} catch (Exception e) {
 			logger.info(e.getMessage());
