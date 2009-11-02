@@ -637,6 +637,7 @@
 	 * @property _barSizeFunctions
 	 * @type {collection of functions}
 	 * @private
+	 * @static
 	 */
 	var b = [{},{}];
 	Prog._barSizeFunctions = b;
