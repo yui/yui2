@@ -1,8 +1,22 @@
 
 YUI Library - Event - Release Notes
 
+2.8.0
+  * Added fireOnce support for custom events.
+  * Added onreadystatechange fork for IE onDOMReady when YUI is running in an iframe.
+  * Removed DOM0 fallback that was there to support preventDefault in browsers that
+    are not supported and nearly extinct.
+  * Added support for mouseenter and mouseleave events (requires the inclusion 
+	of the event-mouseenter module)
+  * Added support for event delegation via the "delegate" and "removeDelegate"
+    methods (requires inclusion of the event-delegate module)
+  * Deprecated onFocus, onBlur, addFocusListener, addBlurListener, 
+    removeFocusListener, and removeBlurListener.  Going forward listen for the 
+    focusin and focusout events when listening for focus and blur on an element's
+    descendants
+
 2.7.0
-  * unsubscribeAll return value fixed
+  * unsubscribeAll return value fixed.
 
 2.6.0
   * Legacy event check for Webkit increased to capture Safari 2.0.3.

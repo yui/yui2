@@ -4,6 +4,8 @@ package com.yahoo.astra.fl.charts.axes
 	import com.yahoo.astra.utils.NumberUtil;
 	import com.yahoo.astra.display.BitmapText;
 	
+	import com.yahoo.astra.utils.DynamicRegistration;
+	
 	import fl.core.InvalidationType;
 	import fl.core.UIComponent;
 	
@@ -183,8 +185,10 @@ package com.yahoo.astra.fl.charts.axes
 	[Style(name="titleTextFormat", type="TextFormat")]
 
 	/**
-	 * The default axis renderer for a cartesian chart.
+	 * The base axis renderer for a cartesian chart.
 	 * 
+     * <p>This class is not meant to be instantiated directly! It is an abstract base class.</p>
+     *
 	 * @see com.yahoo.astra.fl.charts.CartesianChart
 	 * @author Josh Tynjala
 	 */
@@ -238,6 +242,7 @@ package com.yahoo.astra.fl.charts.axes
 	//--------------------------------------
 	
 		/**
+		 * @private
 		 * @copy fl.core.UIComponent#getStyleDefinition()
 		 */
 		public static function getStyleDefinition():Object
@@ -252,16 +257,36 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * Constructor.
 		 */
-		public function DefaultAxisRenderer(orientation:String)
+		public function DefaultAxisRenderer()
 		{
 			super();
-			this.orientation = orientation;
 		}
 		
 	//--------------------------------------
 	//  Properties
 	//--------------------------------------
+
+		/**
+		 * @private
+		 * Placeholder for position
+		 */
+		private var _position:String = "bottom";
 		
+		/**
+		 * @copy com.yahoo.astra.fl.charts.axes.ICartesianAxisRenderer#position
+		 */
+		public function get position():String
+		{
+			return _position;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set position(value:String):void
+		{
+			_position = value;
+		}		
 		/**
 		 * @private
 		 * Storage for the TextFields used for labels on this axis.
@@ -550,9 +575,6 @@ package com.yahoo.astra.fl.charts.axes
 				this.titleTextField.defaultTextFormat = textFormat;
 				this.titleTextField.embedFonts = embedFonts;
 				this.titleTextField.text = this.title;
-
-				var titleRotation:Number = this.getStyleValue("titleRotation") as Number;
-				this.titleTextField.rotation = Math.max(-90, Math.min(titleRotation, 90));;
 			}
 		}
 		
@@ -562,49 +584,6 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		protected function positionTitle():void
 		{
-			var showTitle:Boolean = this.getStyleValue("showTitle") as Boolean;
-			this.titleTextField.visible = showTitle;
-			if(showTitle)
-			{
-				var titleRotation:Number = this.titleTextField.rotation; 
-				if(this.orientation == AxisOrientation.VERTICAL)
-				{
-					this.titleTextField.y = this.contentBounds.y + (this.contentBounds.height) / 2;
-					this.titleTextField.x = 0;
-					if(titleRotation > 0)
-					{						
-						this.titleTextField.x += this.titleTextField.textField.height * (titleRotation/90);
-						this.titleTextField.y -= this.titleTextField.height/2;
-					}
-					else if(titleRotation < 0)
-					{	
-						this.titleTextField.y += this.titleTextField.height/2;
-					}
-					else
-					{
-						this.titleTextField.y -= this.titleTextField.height /2;
-					}
-				}
-				else //horizontal
-				{					
-					this.titleTextField.x = this.contentBounds.x + (this.contentBounds.width/2);
-					this.titleTextField.y = this.y + this.height - this.titleTextField.height;
-					if(titleRotation > 0)
-					{
-						this.titleTextField.x += (-.5 + titleRotation/90) * this.titleTextField.width;
-													
-					}
-					else if(titleRotation < 0)
-					{
-						this.titleTextField.x -= (this.titleTextField.width * (1 - Math.abs(titleRotation/180)))/2;
-						this.titleTextField.y += this.titleTextField.height - (Math.sin((90 - titleRotation) * Math.PI/180) * this.titleTextField.textField.height);						
-					}
-					else
-					{
-						this.titleTextField.x -= this.titleTextField.width/2;					
-					}
-				}	
-			}
 		}
 	
 		/**
@@ -622,24 +601,6 @@ package com.yahoo.astra.fl.charts.axes
 			var axisWeight:int = this.getStyleValue("axisWeight") as int;
 			var axisColor:uint = this.getStyleValue("axisColor") as uint;
 			this.graphics.lineStyle(axisWeight, axisColor);
-			if(this.orientation == AxisOrientation.VERTICAL)
-			{
-				//we round these values because that's what the Flash CS3 components do
-				//with positions
-				var verticalX:Number = this.contentBounds.x;
-				var verticalStart:Number = this.contentBounds.y;
-				var verticalEnd:Number = this.contentBounds.y + this.contentBounds.height;
-				this.graphics.moveTo(verticalX, verticalStart);
-				this.graphics.lineTo(verticalX, verticalEnd);
-			}
-			else //horizontal
-			{
-				var horizontalY:Number = this.contentBounds.y + this.contentBounds.height;
-				var horizontalStart:Number = this.contentBounds.x;
-				var horizontalEnd:Number = this.contentBounds.x + this.contentBounds.width;
-				this.graphics.moveTo(horizontalStart, horizontalY);
-				this.graphics.lineTo(horizontalEnd, horizontalY);
-			}
 		}
 		
 		/**
@@ -649,79 +610,6 @@ package com.yahoo.astra.fl.charts.axes
 		protected function drawTicks(data:Array, showTicks:Boolean, tickPosition:String,
 			tickLength:Number, tickWeight:Number, tickColor:uint):void
 		{
-			if(!showTicks)
-			{
-				return;
-			}
-			
-			this.graphics.lineStyle(tickWeight, tickColor);
-			
-			var dataCount:int = data.length;
-			for(var i:int = 0; i < dataCount; i++)
-			{
-				var axisData:AxisData = AxisData(data[i]);
-				if(isNaN(axisData.position))
-				{
-					//skip bad positions
-					continue;
-				}
-				
-				var position:Number = axisData.position;
-				if(this.orientation == AxisOrientation.VERTICAL)
-				{
-					position += this.contentBounds.y;
-				}
-				else
-				{
-					position += this.contentBounds.x;
-				}
-				position = position;
-				switch(tickPosition)
-				{
-					case TickPosition.OUTSIDE:
-					{
-						if(this.orientation == AxisOrientation.VERTICAL)
-						{
-							this.graphics.moveTo(this.contentBounds.x - tickLength, position);
-							this.graphics.lineTo(this.contentBounds.x, position);
-						}
-						else
-						{
-							this.graphics.moveTo(position, this.contentBounds.y + this.contentBounds.height);
-							this.graphics.lineTo(position, this.contentBounds.y + this.contentBounds.height + tickLength);
-						}
-						break;
-					}
-					case TickPosition.INSIDE:
-					{
-						if(this.orientation == AxisOrientation.VERTICAL)
-						{
-							this.graphics.moveTo(this.contentBounds.x, position);
-							this.graphics.lineTo(this.contentBounds.x + tickLength, position);
-						}
-						else
-						{
-							this.graphics.moveTo(position, this.contentBounds.y + this.contentBounds.height - tickLength);
-							this.graphics.lineTo(position, this.contentBounds.y + this.contentBounds.height);
-						}
-						break;
-					}
-					default: //CROSS
-					{
-						if(this.orientation == AxisOrientation.VERTICAL)
-						{
-							this.graphics.moveTo(this.contentBounds.x - tickLength / 2, position);
-							this.graphics.lineTo(this.contentBounds.x + tickLength / 2, position);
-						}
-						else
-						{
-							this.graphics.moveTo(position, this.contentBounds.y + this.contentBounds.height - tickLength / 2);
-							this.graphics.lineTo(position, this.contentBounds.y + this.contentBounds.height + tickLength / 2);
-						}
-						break;
-					}
-				}
-			}
 		}
 		
 		/**
@@ -793,73 +681,72 @@ package com.yahoo.astra.fl.charts.axes
 				label.rotation = 0;
 				var axisData:AxisData = AxisData(this.ticks[i]);
 				var position:Number = axisData.position;
+			
 				if(this.orientation == AxisOrientation.VERTICAL)
 				{
 					position += this.contentBounds.y;
-					
 					if(showLabels)
 					{
-						label.x = this.contentBounds.x - labelDistance - this.outerTickOffset;
-						label.y = position;
+						label.x = this.contentBounds.x - labelDistance - this.outerTickOffset - label.width;
+						label.y = position - label.height/2;
 					}
 					
-					label.rotation = labelRotation;
-					
-					if(labelRotation == 90)
+					if(labelRotation == 0)
 					{
-						label.y -= label.height/2;
+						//do nothing. already ideally positioned
 					}
-					else if (labelRotation == -90)
+					else if(labelRotation < 90 && labelRotation > 0)
 					{
-						label.x -= label.width;
-						label.y += label.height/2;						
+						label.x -= (label.height * labelRotation / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
 					}
-					else if (labelRotation >= 0 && labelRotation != 90)
+					else if(labelRotation > -90 && labelRotation < 0)
 					{
-						label.y -= label.height - 0.5 * Math.abs(label.textField.height*Math.cos(labelRotation*Math.PI/180));
-						label.x -= label.width - Math.abs(Math.sin(labelRotation*Math.PI/180)*label.textField.height);
-					}					
-					else if (labelRotation < 0 && labelRotation != -90)
-					{	
-						label.y += label.height - 1.5 * Math.abs(label.textField.height*Math.cos(labelRotation*Math.PI/180));
-						label.x -= label.width;
+						label.x -= (label.height * Math.abs(labelRotation) / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
 					}
-									
-					label.x = Math.round(label.x);
-					label.y = Math.round(label.y);
+					else if(labelRotation == -90)
+					{
+						label.y -= label.width / 2;
+						label.x -= (label.height * Math.abs(labelRotation) / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
+					}
+					else //90
+					{
+						label.y += label.width / 2;
+						label.x -= (label.height * Math.abs(labelRotation) / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
+					}
+
 				}
-				
 				else //horizontal
 				{
 					position += this.contentBounds.x;
-					
 					if(showLabels)
 					{
-						label.y = this.contentBounds.height + this.contentBounds.y + labelDistance + this.outerTickOffset;
+						label.y = this.contentBounds.y + this.contentBounds.height + labelDistance + this.outerTickOffset;
 					}
 					
 					if(labelRotation > 0)
 					{
 						label.x = position;
-						label.rotation = labelRotation;
-						label.x += label.textField.height * Math.sin(labelRotation * Math.PI/180)/2; 
+						label.y -= (label.height * labelRotation / 180);
+						DynamicRegistration.rotate(label, new Point(0, label.height / 2), labelRotation);
 					}
 					else if(labelRotation < 0)
-					{						
-						label.x = position;
-						label.rotation = labelRotation;
-						label.x -= label.width - Math.abs((label.textField.height * Math.sin(labelRotation*Math.PI/180)))/2; 
-						label.y += label.height - Math.abs((Math.cos(labelRotation*Math.PI/180) * label.textField.height));	
+					{
+						label.x = position - label.width;
+						label.y -= (label.height * Math.abs(labelRotation) / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
 					}
 					else //labelRotation == 0
 					{
 						label.x = position - label.width / 2;
 					}
-					label.x = Math.round(label.x);
-					label.y = Math.ceil(label.y);					
 				}
-
-				if(this.majorUnitSetByUser) this.handleOverlappingLabels();
+				label.x = Math.round(label.x);
+				label.y = Math.round(label.y);
+				this.handleOverlappingLabels();
 			}
 		}
 		
@@ -876,7 +763,7 @@ package com.yahoo.astra.fl.charts.axes
 			var labelRotation:Number = this.getStyleValue("labelRotation") as Number;
 			var label:BitmapText = new BitmapText();
 			label.selectable = false;
-			label.autoSize = labelRotation < 0 ? TextFieldAutoSize.RIGHT : TextFieldAutoSize.LEFT;
+			label.autoSize = TextFieldAutoSize.LEFT;
 			this.addChild(label);
 			return label;
 		}
@@ -887,95 +774,6 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		protected function handleOverlappingLabels():void
 		{
-			var showLabels:Boolean = this.getStyleValue("showLabels");
-			var hideOverlappingLabels:Boolean = this.getStyleValue("hideOverlappingLabels");
-			if(!showLabels || !hideOverlappingLabels)
-			{
-				return;
-			}
-			
-			var labelRotation:Number = this.getStyleValue("labelRotation") as Number;
-			var lastVisibleLabel:BitmapText;
-			var labelCount:int = this.labelTextFields.length;
-			for(var i:int = 0; i < labelCount; i++)
-			{
-				var index:int = labelRotation >= 0 ? i : (labelCount - i - 1);
-				var label:BitmapText = BitmapText(this.labelTextFields[index]);
-				label.visible = true;
-				if(lastVisibleLabel)
-				{
-					if(this.orientation == AxisOrientation.HORIZONTAL)
-					{
-						if(labelRotation >= 0)
-						{
-							var xDifference:Number = label.x - lastVisibleLabel.x;
-						}
-						else
-						{
-							xDifference = (lastVisibleLabel.x + lastVisibleLabel.textField.textWidth) - (label.x + label.textField.textWidth);
-						}
-						var textWidth:Number;
-
-						if(labelRotation == 0)
-						{
-							textWidth = lastVisibleLabel.textField.textWidth;
-						}
-						else if(Math.abs(labelRotation) == 90)
-						{
-							textWidth = lastVisibleLabel.textField.textHeight;
-						}
-						else
-						{
-							textWidth = label.width;
-						}
-						if(textWidth > xDifference)
-						{
-							var offset:Point = Point.polar(xDifference, GeomUtil.degreesToRadians(labelRotation));
-							if(Math.abs(offset.y) <= label.height)
-							{
-								label.visible = false;
-							}
-						}
-					}
-					else //vertical
-					{
-						if(labelRotation >= 0)
-						{
-							var yDifference:Number = Math.abs(lastVisibleLabel.y - label.y);
-						}
-						else
-						{
-							yDifference = Math.abs((lastVisibleLabel.y + lastVisibleLabel.height) - (label.y + label.height));
-						}
-						var textHeight:Number;
-						
-						if(labelRotation == 0)
-						{
-							textHeight = lastVisibleLabel.textField.textHeight;
-						}
-						else if(Math.abs(labelRotation) == 90)
-						{
-							textHeight = lastVisibleLabel.textField.textWidth;
-						}
-						else
-						{
-							textHeight = lastVisibleLabel.height;
-						}
-						if(textHeight > yDifference)
-						{
-							offset = Point.polar(yDifference, GeomUtil.degreesToRadians(labelRotation));
-							if(offset.x <= label.width)
-							{
-								label.visible = false;
-							}
-						}
-					}
-				}
-				if(label.visible)
-				{
-					lastVisibleLabel = label;
-				}
-			}
 		}		
 	}
 }

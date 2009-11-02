@@ -25,5 +25,25 @@ package com.yahoo.astra.fl.charts.legend
 		 * @private
 		 */
 		function set dataProvider(value:Array):void;
+
+		/**
+		 * The maximum available width for the legend.
+		 */		
+		function get maxWidth():Number;
+		
+		/** 
+		 * @private (setter)
+		 */		
+		function set maxWidth(value:Number):void;
+
+		/** 
+		 * The maximum available height for the legend.
+		 */		
+		function get maxHeight():Number;
+		
+		/** 
+		 * @private (setter)
+		 */		
+		function set maxHeight(value:Number):void;		
 	}
 }

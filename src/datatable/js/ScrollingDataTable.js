@@ -572,14 +572,27 @@ _runRenderChain : function() {
 },
 
 /**
- * Stores scroll positions so they can be restored after a render. 
+ * Stores scroll positions so they can be restored after a render.
  *
  * @method _storeScrollPositions
- * @private 
+ * @private
  */
  _storeScrollPositions : function() {
     this._nScrollTop = this._elBdContainer.scrollTop;
     this._nScrollLeft = this._elBdContainer.scrollLeft;
+},
+
+/**
+ * Clears stored scroll positions to interrupt the automatic restore mechanism.
+ * Useful for setting scroll positions programmatically rather than as part of
+ * the post-render cleanup process.
+ *
+ * @method clearScrollPositions
+ * @private
+ */
+ clearScrollPositions : function() {
+    this._nScrollTop = 0;
+    this._nScrollLeft = 0;
 },
 
 /**
@@ -1035,6 +1048,8 @@ reorderColumn : function(oColumn, index) {
 setColumnWidth : function(oColumn, nWidth) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
+        this._storeScrollPositions();
+
         // Validate new width against minWidth
         if(lang.isNumber(nWidth)) {
             nWidth = (nWidth > oColumn.minWidth) ? nWidth : oColumn.minWidth;
@@ -1067,6 +1082,28 @@ setColumnWidth : function(oColumn, nWidth) {
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
     }
+},
+
+/**
+ * Scrolls to given row or cell
+ *
+ * @method scrollTo
+ * @param to {YAHOO.widget.Record | HTMLElement } Itme to scroll to.
+ */
+scrollTo : function(to) {
+        var td = this.getTdEl(to);
+        if(td) {
+            this.clearScrollPositions();
+            this.getBdContainerEl().scrollLeft = td.offsetLeft;
+            this.getBdContainerEl().scrollTop = td.parentNode.offsetTop;
+        }
+        else {
+            var tr = this.getTrEl(to);
+            if(tr) {
+                this.clearScrollPositions();
+                this.getBdContainerEl().scrollTop = tr.offsetTop;
+            }
+        }
 },
 
 /**

@@ -4,7 +4,7 @@
 	import flash.display.Sprite;
 
 	/**
-	 * A skin shaped like a circle with a single color.
+	 * A skin shaped like a circle with customizable color and alpha properties for its fill and border.
 	 * 
 	 * @author Josh Tynjala
 	 */
@@ -130,25 +130,7 @@
 				this.invalidate();
 			}
 		}
-		
-		/**
-		 * @private 
-		 * Sprite used to render the border.
-		 */
-		private var _border:Sprite;
-		
-		/**
-		 * @private
-		 * Sprite used to render the fill.
-		 */
-		private var _fill:Sprite;
-		
-		/**
-		 * @private
-		 * Sprite used to mask the border when applicable.
-		 */
-		private var _mask:Sprite; 
-		
+
 	//--------------------------------------
 	//  Protected Methods
 	//--------------------------------------
@@ -166,57 +148,18 @@
 				return;
 			}
 			
-			if(_border == null)
-			{
-				_border = new Sprite();
-				this.addChild(_border);
-			}
-			_border.graphics.clear();
-			_border.graphics.lineStyle(0, 0, 0);
-			_border.graphics.beginFill(this.borderColor, this.borderAlpha);
-			_border.graphics.drawCircle(this.width / 2, this.height / 2, Math.min(this.width, this.height) / 2);
-			_border.graphics.endFill();
-			_border.cacheAsBitmap = true;			
-
-			if(_mask == null)
-			{
-				_mask = new Sprite();
-				this.addChild(_mask);
-				_mask.cacheAsBitmap = true;
-				_border.mask = _mask;
-			}
 			
-			var maskAlpha:Number;
-			var maskLineStyle:Number;
-			var maskBuffer:Number;
-			if(this.fillAlpha < 1)
+			if(this.fillColor == this.borderColor)
 			{
-				maskAlpha = 0;
-				maskLineStyle = 2;
-				maskBuffer = 0;
+				this.graphics.lineStyle(0, 0, 0);
 			}
 			else
 			{
-				maskAlpha = 1;
-				maskLineStyle = 0;
-				maskBuffer = 1;				
+				this.graphics.lineStyle(1, this.borderColor, this.borderAlpha);
 			}
-			_mask.graphics.clear();
-			_mask.graphics.lineStyle(maskLineStyle, 0x000000, maskLineStyle);
-			_mask.graphics.beginFill(0x000000, maskAlpha);
-			_mask.graphics.drawCircle((this.width / 2), (this.height / 2), Math.min(this.width + maskBuffer, this.height + maskBuffer) / 2);			
-			_mask.graphics.endFill();				
-
-			if(_fill == null)
-			{
-				_fill = new Sprite();
-				this.addChild(_fill);
-			}
-			_fill.graphics.clear();
-			_fill.graphics.lineStyle(0, 0 , 0);
-			_fill.graphics.beginFill(this.fillColor, this.fillAlpha);
-			_fill.graphics.drawCircle((this.width / 2), (this.height / 2), Math.min(this.width-2, this.height-2) / 2);
-			_fill.graphics.endFill();	
+			this.graphics.beginFill(this.fillColor, this.fillAlpha);
+			this.graphics.drawCircle((this.width / 2), (this.height / 2), Math.min(this.width, this.height) / 2);
+			this.graphics.endFill();	
 		}
 		
 	}

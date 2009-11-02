@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>YAHOO Global&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>YAHOO Global&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_yahoo.html" title="yahoo">yahoo</a>
                 
@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * Provides the language utilites and extensions used by the library</span>
 <span class="c"> * @class YAHOO.lang</span>
 <span class="c"> */</span>
@@ -58,9 +58,11 @@
 
 <span class="k">var</span> <span class="nx">L</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
 
+    <span class="nx">OP</span> <span class="o">=</span> <span class="nb">Object</span><span class="o">.</span><span class="nx">prototype</span><span class="o">,</span>
     <span class="nx">ARRAY_TOSTRING</span> <span class="o">=</span> <span class="s1">&#39;[object Array]&#39;</span><span class="o">,</span>
     <span class="nx">FUNCTION_TOSTRING</span> <span class="o">=</span> <span class="s1">&#39;[object Function]&#39;</span><span class="o">,</span>
-    <span class="nx">OP</span> <span class="o">=</span> <span class="nb">Object</span><span class="o">.</span><span class="nx">prototype</span><span class="o">,</span>
+    <span class="nx">OBJECT_TOSTRING</span> <span class="o">=</span> <span class="s1">&#39;[object Object]&#39;</span><span class="o">,</span>
+    <span class="nx">NOTHING</span> <span class="o">=</span> <span class="o">[],</span>
 
     <span class="c">// ADD = [&quot;toString&quot;, &quot;valueOf&quot;, &quot;hasOwnProperty&quot;],</span>
 <span class="c"></span>    <span class="nx">ADD</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;toString&quot;</span><span class="o">,</span> <span class="s2">&quot;valueOf&quot;</span><span class="o">],</span>
@@ -105,7 +107,7 @@
 <span class="c">     * @return {boolean} the result</span>
 <span class="c">     */</span>
     <span class="nx">isFunction</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nx">OP</span><span class="o">.</span><span class="nx">toString</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">===</span> <span class="nx">FUNCTION_TOSTRING</span><span class="o">;</span>
+        <span class="k">return</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">o</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="o">)</span> <span class="o">||</span> <span class="nx">OP</span><span class="o">.</span><span class="nx">toString</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">===</span> <span class="nx">FUNCTION_TOSTRING</span><span class="o">;</span>
     <span class="o">},</span>
         
     <span class="c">/**</span>
@@ -372,6 +374,12 @@
 <span class="c">     * value is an object, it uses the Object&#39;s toString() if this has</span>
 <span class="c">     * been overridden, otherwise it does a shallow dump of the key/value</span>
 <span class="c">     * pairs.</span>
+<span class="c">     * </span>
+<span class="c">     * By specifying the recurse option, the string is rescanned after</span>
+<span class="c">     * every replacement, allowing for nested template substitutions.</span>
+<span class="c">     * The side effect of this option is that curly braces in the</span>
+<span class="c">     * replacement content must be encoded.</span>
+<span class="c">     *</span>
 <span class="c">     * @method substitute</span>
 <span class="c">     * @since 2.3.0</span>
 <span class="c">     * @param s {String} The string that will be modified.</span>
@@ -380,16 +388,17 @@
 <span class="c">     *                     process each match.  It receives the key,</span>
 <span class="c">     *                     value, and any extra metadata included with</span>
 <span class="c">     *                     the key inside of the braces.</span>
+<span class="c">     * @param recurse {boolean} default false, if true, the replaced</span>
+<span class="c">     * string will be rescanned so that nested substitutions are possible.</span>
 <span class="c">     * @return {String} the substituted string</span>
 <span class="c">     */</span>
-    <span class="nx">substitute</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">s</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="nx">f</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">j</span><span class="o">,</span> <span class="nx">k</span><span class="o">,</span> <span class="nx">key</span><span class="o">,</span> <span class="nx">v</span><span class="o">,</span> <span class="nx">meta</span><span class="o">,</span> <span class="nx">saved</span><span class="o">=[],</span> <span class="nx">token</span><span class="o">,</span> 
+    <span class="nx">substitute</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">s</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="nx">f</span><span class="o">,</span> <span class="nx">recurse</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">j</span><span class="o">,</span> <span class="nx">k</span><span class="o">,</span> <span class="nx">key</span><span class="o">,</span> <span class="nx">v</span><span class="o">,</span> <span class="nx">meta</span><span class="o">,</span> <span class="nx">saved</span><span class="o">=[],</span> <span class="nx">token</span><span class="o">,</span> <span class="nx">lidx</span><span class="o">=</span><span class="nx">s</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span>
             <span class="nx">DUMP</span><span class="o">=</span><span class="s1">&#39;dump&#39;</span><span class="o">,</span> <span class="nx">SPACE</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="o">,</span> <span class="nx">LBRACE</span><span class="o">=</span><span class="s1">&#39;{&#39;</span><span class="o">,</span> <span class="nx">RBRACE</span><span class="o">=</span><span class="s1">&#39;}&#39;</span><span class="o">,</span>
-            <span class="nx">dump</span><span class="o">;</span>
-
+            <span class="nx">dump</span><span class="o">,</span> <span class="nx">objstr</span><span class="o">;</span>
 
         <span class="k">for</span> <span class="o">(;;)</span> <span class="o">{</span>
-            <span class="nx">i</span> <span class="o">=</span> <span class="nx">s</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="nx">LBRACE</span><span class="o">);</span>
+            <span class="nx">i</span> <span class="o">=</span> <span class="nx">s</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="nx">LBRACE</span><span class="o">,</span> <span class="nx">lidx</span><span class="o">);</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">break</span><span class="o">;</span>
             <span class="o">}</span>
@@ -428,12 +437,14 @@
                         <span class="nx">meta</span> <span class="o">=</span> <span class="nx">meta</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">4</span><span class="o">);</span>
                     <span class="o">}</span>
 
+                    <span class="nx">objstr</span> <span class="o">=</span> <span class="nx">v</span><span class="o">.</span><span class="nx">toString</span><span class="o">();</span>
+
                     <span class="c">// use the toString if it is not the Object toString </span>
 <span class="c"></span>                    <span class="c">// and the &#39;dump&#39; meta info was not found</span>
-<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">v</span><span class="o">.</span><span class="nx">toString</span><span class="o">===</span><span class="nx">OP</span><span class="o">.</span><span class="nx">toString</span> <span class="o">||</span> <span class="nx">dump</span><span class="o">&gt;-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">objstr</span> <span class="o">===</span> <span class="nx">OBJECT_TOSTRING</span> <span class="o">||</span> <span class="nx">dump</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">v</span> <span class="o">=</span> <span class="nx">L</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">v</span><span class="o">,</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">meta</span><span class="o">,</span> <span class="m">10</span><span class="o">));</span>
                     <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                        <span class="nx">v</span> <span class="o">=</span> <span class="nx">v</span><span class="o">.</span><span class="nx">toString</span><span class="o">();</span>
+                        <span class="nx">v</span> <span class="o">=</span> <span class="nx">objstr</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
             <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(!</span><span class="nx">L</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">v</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">L</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">v</span><span class="o">))</span> <span class="o">{</span>
@@ -446,6 +457,9 @@
 
             <span class="nx">s</span> <span class="o">=</span> <span class="nx">s</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">i</span><span class="o">)</span> <span class="o">+</span> <span class="nx">v</span> <span class="o">+</span> <span class="nx">s</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="nx">j</span> <span class="o">+</span> <span class="m">1</span><span class="o">);</span>
 
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">recurse</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">lidx</span> <span class="o">=</span> <span class="nx">i</span><span class="o">-</span><span class="m">1</span><span class="o">;</span>
+            <span class="o">}</span>
 
         <span class="o">}</span>
 
@@ -481,7 +495,7 @@
 <span class="c">     * @method merge</span>
 <span class="c">     * @since 2.3.0</span>
 <span class="c">     * @param arguments {Object*} the objects to merge</span>
-<span class="c">     * @return the new merged object</span>
+<span class="c">     * @return {object} the new merged object</span>
 <span class="c">     */</span>
     <span class="nx">merge</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">o</span><span class="o">={},</span> <span class="nx">a</span><span class="o">=</span><span class="nx">arguments</span><span class="o">,</span> <span class="nx">l</span><span class="o">=</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">i</span><span class="o">;</span>
@@ -502,14 +516,14 @@
 <span class="c">     * @param o the context object</span>
 <span class="c">     * @param fn {Function|String} the function to execute or the name of </span>
 <span class="c">     * the method in the &#39;o&#39; object to execute</span>
-<span class="c">     * @param data [Array] data that is provided to the function.  This accepts</span>
+<span class="c">     * @param data {Array} data that is provided to the function.  This accepts</span>
 <span class="c">     * either a single item or an array.  If an array is provided, the</span>
 <span class="c">     * function is executed with one parameter for each array item.  If</span>
 <span class="c">     * you need to pass a single array parameter, it needs to be wrapped in</span>
 <span class="c">     * an array [myarray]</span>
 <span class="c">     * @param periodic {boolean} if true, executes continuously at supplied </span>
 <span class="c">     * interval until canceled</span>
-<span class="c">     * @return a timer object. Call the cancel() method on this object to </span>
+<span class="c">     * @return {object} a timer object. Call the cancel() method on this object to </span>
 <span class="c">     * stop the timer.</span>
 <span class="c">     */</span>
     <span class="nx">later</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">when</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">data</span><span class="o">,</span> <span class="nx">periodic</span><span class="o">)</span> <span class="o">{</span>
@@ -525,12 +539,12 @@
             <span class="k">throw</span> <span class="k">new</span> <span class="nx">TypeError</span><span class="o">(</span><span class="s2">&quot;method undefined&quot;</span><span class="o">);</span>
         <span class="o">}</span>
 
-        <span class="k">if</span> <span class="o">(!</span><span class="nx">L</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">d</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">d</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">L</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">d</span><span class="o">))</span> <span class="o">{</span>
             <span class="nx">d</span> <span class="o">=</span> <span class="o">[</span><span class="nx">data</span><span class="o">];</span>
         <span class="o">}</span>
 
         <span class="nx">f</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="nx">m</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">d</span><span class="o">);</span>
+            <span class="nx">m</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">d</span> <span class="o">||</span> <span class="nx">NOTHING</span><span class="o">);</span>
         <span class="o">};</span>
 
         <span class="nx">r</span> <span class="o">=</span> <span class="o">(</span><span class="nx">periodic</span><span class="o">)</span> <span class="o">?</span> <span class="nx">setInterval</span><span class="o">(</span><span class="nx">f</span><span class="o">,</span> <span class="nx">when</span><span class="o">)</span> <span class="o">:</span> <span class="nx">setTimeout</span><span class="o">(</span><span class="nx">f</span><span class="o">,</span> <span class="nx">when</span><span class="o">);</span>
@@ -647,6 +661,7 @@
 
 <span class="o">})();</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>
@@ -668,11 +683,16 @@
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_element-delegate.html" title="element-delegate">element-delegate</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
                                 <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
@@ -684,10 +704,15 @@
                                 <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
                                 <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
                                 <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_storage.html" title="Storage">Storage</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>
@@ -730,7 +755,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.env.ua", "name": "air", "url": "YAHOO.env.ua.html#property_air", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "augment", "url": "YAHOO.lang.html#method_augment", "type": "method"}, {"access": "", "host": "YAHOO", "name": "augment", "url": "YAHOO.html#method_augment", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "augmentObject", "url": "YAHOO.lang.html#method_augmentObject", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "augmentProto", "url": "YAHOO.lang.html#method_augmentProto", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "caja", "url": "YAHOO.env.ua.html#property_caja", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "dump", "url": "YAHOO.lang.html#method_dump", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "extend", "url": "YAHOO.lang.html#method_extend", "type": "method"}, {"access": "", "host": "YAHOO", "name": "extend", "url": "YAHOO.html#method_extend", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "gecko", "url": "YAHOO.env.ua.html#property_gecko", "type": "property"}, {"access": "", "host": "YAHOO.env", "name": "getVersion", "url": "YAHOO.env.html#method_getVersion", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "hasOwnProperty", "url": "YAHOO.lang.html#method_hasOwnProperty", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "ie", "url": "YAHOO.env.ua.html#property_ie", "type": "property"}, {"access": "private", "host": "YAHOO.lang", "name": "_IEEnumFix", "url": "YAHOO.lang.html#property__IEEnumFix", "type": "property"}, {"access": "", "host": "YAHOO_config", "name": "injecting", "url": "YAHOO_config.html#property_injecting", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "isArray", "url": "YAHOO.lang.html#method_isArray", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isBoolean", "url": "YAHOO.lang.html#method_isBoolean", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isFunction", "url": "YAHOO.lang.html#method_isFunction", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isNull", "url": "YAHOO.lang.html#method_isNull", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isNumber", "url": "YAHOO.lang.html#method_isNumber", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isObject", "url": "YAHOO.lang.html#method_isObject", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isString", "url": "YAHOO.lang.html#method_isString", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isUndefined", "url": "YAHOO.lang.html#method_isUndefined", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isValue", "url": "YAHOO.lang.html#method_isValue", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "later", "url": "YAHOO.lang.html#method_later", "type": "method"}, {"access": "", "host": "YAHOO_config", "name": "listener", "url": "YAHOO_config.html#property_listener", "type": "property"}, {"access": "", "host": "YAHOO.env", "name": "listeners", "url": "YAHOO.env.html#property_listeners", "type": "property"}, {"access": "", "host": "YAHOO_config", "name": "load", "url": "YAHOO_config.html#property_load", "type": "property"}, {"access": "", "host": "YAHOO_config", "name": "locale", "url": "YAHOO_config.html#property_locale", "type": "property"}, {"access": "", "host": "YAHOO", "name": "log", "url": "YAHOO.html#method_log", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "merge", "url": "YAHOO.lang.html#method_merge", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "mobile", "url": "YAHOO.env.ua.html#property_mobile", "type": "property"}, {"access": "", "host": "YAHOO.env", "name": "modules", "url": "YAHOO.env.html#property_modules", "type": "property"}, {"access": "", "host": "YAHOO", "name": "namespace", "url": "YAHOO.html#method_namespace", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "opera", "url": "YAHOO.env.ua.html#property_opera", "type": "property"}, {"access": "", "host": "YAHOO", "name": "register", "url": "YAHOO.html#method_register", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "substitute", "url": "YAHOO.lang.html#method_substitute", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "trim", "url": "YAHOO.lang.html#method_trim", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "webkit", "url": "YAHOO.env.ua.html#property_webkit", "type": "property"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.env.ua", "name": "air", "url": "YAHOO.env.ua.html#property_air", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "augment", "url": "YAHOO.lang.html#method_augment", "type": "method"}, {"access": "", "host": "YAHOO", "name": "augment", "url": "YAHOO.html#method_augment", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "augmentObject", "url": "YAHOO.lang.html#method_augmentObject", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "augmentProto", "url": "YAHOO.lang.html#method_augmentProto", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "caja", "url": "YAHOO.env.ua.html#property_caja", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "dump", "url": "YAHOO.lang.html#method_dump", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "extend", "url": "YAHOO.lang.html#method_extend", "type": "method"}, {"access": "", "host": "YAHOO", "name": "extend", "url": "YAHOO.html#method_extend", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "gecko", "url": "YAHOO.env.ua.html#property_gecko", "type": "property"}, {"access": "", "host": "YAHOO.env", "name": "getVersion", "url": "YAHOO.env.html#method_getVersion", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "hasOwnProperty", "url": "YAHOO.lang.html#method_hasOwnProperty", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "ie", "url": "YAHOO.env.ua.html#property_ie", "type": "property"}, {"access": "private", "host": "YAHOO.lang", "name": "_IEEnumFix", "url": "YAHOO.lang.html#property__IEEnumFix", "type": "property"}, {"access": "", "host": "YAHOO_config", "name": "injecting", "url": "YAHOO_config.html#property_injecting", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "isArray", "url": "YAHOO.lang.html#method_isArray", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isBoolean", "url": "YAHOO.lang.html#method_isBoolean", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isFunction", "url": "YAHOO.lang.html#method_isFunction", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isNull", "url": "YAHOO.lang.html#method_isNull", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isNumber", "url": "YAHOO.lang.html#method_isNumber", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isObject", "url": "YAHOO.lang.html#method_isObject", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isString", "url": "YAHOO.lang.html#method_isString", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isUndefined", "url": "YAHOO.lang.html#method_isUndefined", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isValue", "url": "YAHOO.lang.html#method_isValue", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "later", "url": "YAHOO.lang.html#method_later", "type": "method"}, {"access": "", "host": "YAHOO_config", "name": "listener", "url": "YAHOO_config.html#property_listener", "type": "property"}, {"access": "", "host": "YAHOO.env", "name": "listeners", "url": "YAHOO.env.html#property_listeners", "type": "property"}, {"access": "", "host": "YAHOO_config", "name": "load", "url": "YAHOO_config.html#property_load", "type": "property"}, {"access": "", "host": "YAHOO_config", "name": "locale", "url": "YAHOO_config.html#property_locale", "type": "property"}, {"access": "", "host": "YAHOO", "name": "log", "url": "YAHOO.html#method_log", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "merge", "url": "YAHOO.lang.html#method_merge", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "mobile", "url": "YAHOO.env.ua.html#property_mobile", "type": "property"}, {"access": "", "host": "YAHOO.env", "name": "modules", "url": "YAHOO.env.html#property_modules", "type": "property"}, {"access": "", "host": "YAHOO", "name": "namespace", "url": "YAHOO.html#method_namespace", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "opera", "url": "YAHOO.env.ua.html#property_opera", "type": "property"}, {"access": "", "host": "YAHOO.env.ua", "name": "os", "url": "YAHOO.env.ua.html#property_os", "type": "property"}, {"access": "", "host": "YAHOO", "name": "register", "url": "YAHOO.html#method_register", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "secure", "url": "YAHOO.env.ua.html#property_secure", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "substitute", "url": "YAHOO.lang.html#method_substitute", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "trim", "url": "YAHOO.lang.html#method_trim", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "webkit", "url": "YAHOO.env.ua.html#property_webkit", "type": "property"}];
 </script>
 </body>
 </html>

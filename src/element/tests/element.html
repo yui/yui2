@@ -8,6 +8,7 @@
 
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../../build/event/event.js"></script>
+<script type="text/javascript" src="../../../build/event-simulate/event-simulate-min.js"></script>	
 <script type="text/javascript" src="../../../build/dom/dom.js"></script> 
 <script type="text/javascript" src="../../../build/element/element.js"></script> 
 <script type="text/javascript" src="../../../build/logger/logger-min.js"></script>
@@ -55,9 +56,12 @@
                     return 'from setter';
                 },
 
-                getter: function(name) {
+                getter: function(name, val) {
+                    Assert.areEqual(val, this._configs[name].value, "getter: function(name, val)");
                     return 'from getter';
-                }
+                },
+
+                value: 'default'
             });
         };
 
@@ -173,6 +177,10 @@
             test_method: function() {
                 Assert.isFalse(foo.hasClass('test-method'), 'call method only on valid set');
                 Assert.isTrue(bar.hasClass('test-method'), 'call method on init valid value');
+            },
+
+            test_getter: function() {
+                Assert.areEqual(foo.get('custom'), 'from getter', 'getter failed to use return');
             },
 
             test_setter: function() {

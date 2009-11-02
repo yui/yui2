@@ -484,7 +484,7 @@ DualSlider.prototype = {
      * @protected
      */
     _handleMouseDown: function(e) {
-        if (!e._handled) {
+        if (!e._handled && !this.minSlider._sliding && !this.maxSlider._sliding) {
             e._handled = true;
             this.selectActiveSlider(e);
             return YW.Slider.prototype.onMouseDown.call(this.activeSlider, e);
@@ -515,12 +515,13 @@ DualSlider.prototype = {
      * @private
      */
     _oneTimeCallback : function (o,evt,fn) {
-        o.subscribe(evt,function () {
+        var sub = function () {
             // Unsubscribe myself
-            o.unsubscribe(evt,arguments.callee);
+            o.unsubscribe(evt, sub);
             // Pass the event handler arguments to the one time callback
-            fn.apply({},[].slice.apply(arguments));
-        });
+            fn.apply({},arguments);
+        };
+        o.subscribe(evt,sub);
     },
 
     /**

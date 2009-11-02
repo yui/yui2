@@ -142,7 +142,10 @@ YAHOO.util.Chain.prototype = {
      * @return {Chain} the Chain instance
      */
     pause: function () {
-        clearTimeout(this.id);
+        // Conditional added for Caja compatibility
+        if (this.id > 0) {
+            clearTimeout(this.id);
+        }
         this.id = 0;
         return this;
     },
@@ -1026,6 +1029,17 @@ YAHOO.widget.Column.prototype = {
     dateOptions : null,
 
     /**
+     * Array of dropdown values for formatter:"dropdown" cases. Can either be a simple array (e.g.,
+     * ["Alabama","Alaska","Arizona","Arkansas"]) or a an array of objects (e.g.,
+     * [{label:"Alabama", value:"AL"}, {label:"Alaska", value:"AK"},
+     * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]).
+     *
+     * @property dropdownOptions
+     * @type String[] | Object[]
+     */
+    dropdownOptions : null,
+     
+    /**
      * A CellEditor instance, otherwise Column is not editable.     
      *
      * @property editor
@@ -1072,7 +1086,7 @@ YAHOO.widget.Column.prototype = {
      * @default null
      */
     /**
-     * Custom sort handler.
+     * Custom sort handler. Signature: sortFunction(a, b, desc, field) where field is the sortOptions.field value
      *
      * @property sortOptions.sortFunction
      * @type Function
@@ -1416,7 +1430,7 @@ if(YAHOO.util.DDProxy) {
             this.setYConstraint(10, 10);            
         },
         _resizeProxy: function() {
-            this.constructor.superclass._resizeProxy.apply(this, arguments);
+            YAHOO.widget.ColumnDD.superclass._resizeProxy.apply(this, arguments);
             var dragEl = this.getDragEl(),
                 el = this.getEl();
 
@@ -2177,10 +2191,11 @@ RS.prototype = {
      * @param fnSort {Function} Reference to a sort function.
      * @param desc {Boolean} True if sort direction is descending, false if sort
      * direction is ascending.
+     * @param field {String} The field to sort by, from sortOptions.field
      * @return {YAHOO.widget.Record[]} Sorted array of Records.
      */
-    sortRecords : function(fnSort, desc) {
-        return this._records.sort(function(a, b) {return fnSort(a, b, desc);});
+    sortRecords : function(fnSort, desc, field) {
+        return this._records.sort(function(a, b) {return fnSort(a, b, desc, field);});
     },
 
     /**
@@ -2481,7 +2496,7 @@ YAHOO.widget.Record.prototype = {
     },
 
     /**
-     * Sets given data at the given key. Use the RecordSet method setValue to trigger
+     * Sets given data at the given key. Use the RecordSet method updateRecordValue to trigger
      * events. 
      *
      * @method setData
@@ -2579,7 +2594,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Initialize DOM elements
     var okDom = this._initDomElements(elContainer);
     if(!okDom) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
+        YAHOO.log("Could not instantiate DataTable due to an invalid DOM element", "error", this.toString());
         return;
     }
             
@@ -3094,7 +3109,7 @@ lang.augmentObject(DT, {
      * @private
      * @static     
      */
-    _bDynStylesFallback : (ua.ie && (ua.ie<7)) ? true : false,
+    _bDynStylesFallback : (ua.ie) ? true : false,
 
     /**
      * Object literal hash of Columns and their dynamically create style rules.
@@ -3848,7 +3863,7 @@ initAttributes : function(oConfigs) {
         value: function(oState, oSelf) {
             // Set defaults
             oState = oState || {pagination:null, sortedBy:null};
-            var sort = (oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey();
+            var sort = encodeURIComponent((oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey());
             var dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc";
             var startIndex = (oState.pagination) ? oState.pagination.recordOffset : 0;
             var results = (oState.pagination) ? oState.pagination.rowsPerPage : null;
@@ -4372,7 +4387,7 @@ _repaintOpera : (ua.opera) ?
     function() {
         if(ua.opera) {
             document.documentElement.className += " ";
-            document.documentElement.className.trim();
+            document.documentElement.className = YAHOO.lang.trim(document.documentElement.className);
         }
     } : function() {} ,
 
@@ -4490,7 +4505,7 @@ _initColumnSet : function(aColumnDefs) {
  */
 _initDataSource : function(oDataSource) {
     this._oDataSource = null;
-    if(oDataSource && (oDataSource instanceof DS)) {
+    if(oDataSource && (lang.isFunction(oDataSource.sendRequest))) {
         this._oDataSource = oDataSource;
     }
     // Backward compatibility
@@ -4564,7 +4579,6 @@ _initDomElements : function(elContainer) {
     this._initTbodyEl(this._elTable);
 
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
         return false;
     }
     else {
@@ -5201,6 +5215,16 @@ _initMsgTbodyEl : function(elTable) {
         var elMsgLiner = elMsgTd.appendChild(document.createElement("div"));
         elMsgLiner.className = DT.CLASS_LINER;
         this._elMsgTbody = elMsgTbody;
+
+        // Set up DOM events for TBODY
+        Ev.addListener(elMsgTbody, "focus", this._onTbodyFocus, this);
+        Ev.addListener(elMsgTbody, "mouseover", this._onTableMouseover, this);
+        Ev.addListener(elMsgTbody, "mouseout", this._onTableMouseout, this);
+        Ev.addListener(elMsgTbody, "mousedown", this._onTableMousedown, this);
+        Ev.addListener(elMsgTbody, "mouseup", this._onTableMouseup, this);
+        Ev.addListener(elMsgTbody, "keydown", this._onTbodyKeydown, this);
+        Ev.addListener(elMsgTbody, "keypress", this._onTableKeypress, this);
+        Ev.addListener(elMsgTbody, "click", this._onTbodyClick, this);
     }
 },
 
@@ -6868,8 +6892,13 @@ getTdEl : function(cell) {
         else {
             elCell = el;
         }
-
-        return elCell;
+        
+        // Make sure the TD is in this TBODY
+        // Bug 2527707 and bug 2263558
+        if(elCell && ((elCell.parentNode.parentNode == this._elTbody) || (elCell.parentNode.parentNode === null))) {
+            // Now we can return the TD element
+            return elCell;
+        }
     }
     else if(cell) {
         var oRecord, nColKeyIndex;
@@ -7243,6 +7272,8 @@ render : function() {
 //YAHOO.example.Performance.trialStart = new Date();
 
     this._oChainRender.stop();
+
+    this.fireEvent("beforeRenderEvent");
     YAHOO.log("DataTable rendering...", "info", this.toString());
 
     var i, j, k, len, allRecords;
@@ -7412,6 +7443,9 @@ destroy : function() {
             this._oColumnSet.flat[i].editor = null;
         }
     }
+
+    // Destroy Paginator
+    this._destroyPaginator();
 
     // Unhook custom events
     this._oRecordSet.unsubscribeAll();
@@ -7651,7 +7685,7 @@ getRecord : function(row) {
         // Validate TR element
         var elRow = this.getTrEl(row);
         if(elRow) {
-            oRecord = this._oRecordSet.getRecord(this.getRecordIndex(elRow.sectionRowIndex));
+            oRecord = this._oRecordSet.getRecord(elRow.id);
         }
     }
 
@@ -7884,22 +7918,26 @@ sortColumn : function(oColumn, sDir) {
                    
                 // Sort the Records
                 if(!bSorted || sDir || sortFnc) {
-                    // Get the field to sort
-                    var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
+                    // Shortcut for the frequently-used compare method
+                    var compare = YAHOO.util.Sort.compare;
 
                     // Default sort function if necessary
                     sortFnc = sortFnc || 
-                        function(a, b, desc) {
-                            var sorted = YAHOO.util.Sort.compare(a.getData(sField),b.getData(sField), desc);
+                        function(a, b, desc, field) {
+                            var sorted = compare(a.getData(field),b.getData(field), desc);
                             if(sorted === 0) {
-                                return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
+                                return compare(a.getCount(),b.getCount(), desc); // Bug 1932978
                             }
                             else {
                                 return sorted;
                             }
                         };
+
+                    // Get the field to sort
+                    var sField = (oColumn.sortOptions && oColumn.sortOptions.field) ? oColumn.sortOptions.field : oColumn.field;
+
                     // Sort the Records        
-                    this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false));
+                    this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false), sField);
                 }
                 // Just reverse the Records
                 else {
@@ -9376,7 +9414,7 @@ deleteRow : function(row) {
                         this._oChainRender.add({
                             method: function() {
                                 if((this instanceof DT) && this._sId) {
-                                    var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex);
+                                    var isLast = (nRecordIndex === this._oRecordSet.getLength());//(nTrIndex == this.getLastTrEl().sectionRowIndex);
                                     this._deleteTrEl(nTrIndex);
                     
                                     // Post-delete tasks
@@ -9592,16 +9630,16 @@ deleteRows : function(row, count) {
  * Outputs markup into the given TD based on given Record.
  *
  * @method formatCell
- * @param elCell {HTMLElement} The liner DIV element within the TD.
+ * @param elLiner {HTMLElement} The liner DIV element within the TD.
  * @param oRecord {YAHOO.widget.Record} (Optional) Record instance.
  * @param oColumn {YAHOO.widget.Column} (Optional) Column instance.
  */
-formatCell : function(elCell, oRecord, oColumn) {
+formatCell : function(elLiner, oRecord, oColumn) {
     if(!oRecord) {
-        oRecord = this.getRecord(elCell);
+        oRecord = this.getRecord(elLiner);
     }
     if(!oColumn) {
-        oColumn = this.getColumn(elCell.parentNode.cellIndex);
+        oColumn = this.getColumn(elLiner.parentNode.cellIndex);
     }
 
     if(oRecord && oColumn) {
@@ -9615,16 +9653,16 @@ formatCell : function(elCell, oRecord, oColumn) {
 
         // Apply special formatter
         if(fnFormatter) {
-            fnFormatter.call(this, elCell, oRecord, oColumn, oData);
+            fnFormatter.call(this, elLiner, oRecord, oColumn, oData);
         }
         else {
-            elCell.innerHTML = oData;
+            elLiner.innerHTML = oData;
         }
 
-        this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:oColumn.key, el:elCell});
+        this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:oColumn.key, el:elLiner});
     }
     else {
-        YAHOO.log("Could not format cell " + elCell, "error", this.toString());
+        YAHOO.log("Could not format cell " + elLiner, "error", this.toString());
     }
 },
 
@@ -9640,8 +9678,8 @@ formatCell : function(elCell, oRecord, oColumn) {
 updateCell : function(oRecord, oColumn, oData) {    
     // Validate Column and Record
     oColumn = (oColumn instanceof YAHOO.widget.Column) ? oColumn : this.getColumn(oColumn);
-    if(oColumn && oColumn.getKey() && (oRecord instanceof YAHOO.widget.Record)) {
-        var sKey = oColumn.getKey(),
+    if(oColumn && oColumn.getField() && (oRecord instanceof YAHOO.widget.Record)) {
+        var sKey = oColumn.getField(),
         
         // Copy data from the Record for the event that gets fired later
         //var oldData = YAHOO.widget.DataTable._cloneObject(oRecord.getData());
@@ -9831,6 +9869,19 @@ _defaultPaginatorContainers : function (create) {
     }
 
     return [above,below];
+},
+
+/**
+ * Calls Paginator's destroy() method
+ *
+ * @method _destroyPaginator
+ * @private
+ */
+_destroyPaginator : function () {
+    var oldPag = this.get('paginator');
+    if (oldPag) {
+        oldPag.destroy();
+    }
 },
 
 /**
@@ -13152,6 +13203,12 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      */
 
     /**
+     * Fired before the DataTable's DOM is rendered or modified.
+     *
+     * @event beforeRenderEvent
+     */
+
+    /**
      * Fired when the DataTable's DOM is rendered or modified.
      *
      * @event renderEvent
@@ -14786,14 +14843,27 @@ _runRenderChain : function() {
 },
 
 /**
- * Stores scroll positions so they can be restored after a render. 
+ * Stores scroll positions so they can be restored after a render.
  *
  * @method _storeScrollPositions
- * @private 
+ * @private
  */
  _storeScrollPositions : function() {
     this._nScrollTop = this._elBdContainer.scrollTop;
     this._nScrollLeft = this._elBdContainer.scrollLeft;
+},
+
+/**
+ * Clears stored scroll positions to interrupt the automatic restore mechanism.
+ * Useful for setting scroll positions programmatically rather than as part of
+ * the post-render cleanup process.
+ *
+ * @method clearScrollPositions
+ * @private
+ */
+ clearScrollPositions : function() {
+    this._nScrollTop = 0;
+    this._nScrollLeft = 0;
 },
 
 /**
@@ -15249,6 +15319,8 @@ reorderColumn : function(oColumn, index) {
 setColumnWidth : function(oColumn, nWidth) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
+        this._storeScrollPositions();
+
         // Validate new width against minWidth
         if(lang.isNumber(nWidth)) {
             nWidth = (nWidth > oColumn.minWidth) ? nWidth : oColumn.minWidth;
@@ -15281,6 +15353,28 @@ setColumnWidth : function(oColumn, nWidth) {
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
     }
+},
+
+/**
+ * Scrolls to given row or cell
+ *
+ * @method scrollTo
+ * @param to {YAHOO.widget.Record | HTMLElement } Itme to scroll to.
+ */
+scrollTo : function(to) {
+        var td = this.getTdEl(to);
+        if(td) {
+            this.clearScrollPositions();
+            this.getBdContainerEl().scrollLeft = td.offsetLeft;
+            this.getBdContainerEl().scrollTop = td.parentNode.offsetTop;
+        }
+        else {
+            var tr = this.getTrEl(to);
+            if(tr) {
+                this.clearScrollPositions();
+                this.getBdContainerEl().scrollTop = tr.offsetTop;
+            }
+        }
 },
 
 /**
@@ -15565,6 +15659,7 @@ _oDataTable : null,
  * @property _oColumn
  * @type YAHOO.widget.Column
  * @default null
+ * @private 
  */
 _oColumn : null,
 
@@ -15978,7 +16073,7 @@ attach : function(oDataTable, elCell) {
                 var oRecord = oDataTable.getRecord(elCell);
                 if(oRecord) {
                     this._oRecord = oRecord;
-                    var value = oRecord.getData(this.getColumn().getKey());
+                    var value = oRecord.getData(this.getColumn().getField());
                     this.value = (value !== undefined) ? value : this.defaultValue;
                     return true;
                 }
@@ -16605,7 +16700,7 @@ lang.augmentObject(widget.DateCellEditor, BCE);
  */
 widget.DropdownCellEditor = function(oConfigs) {
     this._sId = "yui-dropdownceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    widget.DropdownCellEditor.superclass.constructor.call(this, "dropdown", oConfigs); 
+    widget.DropdownCellEditor.superclass.constructor.call(this, "dropdown", oConfigs);
 };
 
 // DropdownCellEditor extends BaseCellEditor
@@ -16617,7 +16712,7 @@ lang.extend(widget.DropdownCellEditor, BCE, {
 //
 /////////////////////////////////////////////////////////////////////////////
 /**
- * Array of dropdown values. Can either be a simple array (e.g., 
+ * Array of dropdown values. Can either be a simple array (e.g.,
  * ["Alabama","Alaska","Arizona","Arkansas"]) or a an array of objects (e.g., 
  * [{label:"Alabama", value:"AL"}, {label:"Alaska", value:"AK"},
  * {label:"Arizona", value:"AZ"}, {label:"Arkansas", value:"AR"}]). 
@@ -16635,6 +16730,21 @@ dropdownOptions : null,
  */
 dropdown : null,
 
+/**
+ * Enables multi-select.
+ *
+ * @property multiple
+ * @type Boolean
+ */
+multiple : false,
+
+/**
+ * Specifies number of visible options.
+ *
+ * @property size
+ * @type Number
+ */
+size : null,
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -16650,6 +16760,12 @@ dropdown : null,
 renderForm : function() {
     var elDropdown = this.getContainerEl().appendChild(document.createElement("select"));
     elDropdown.style.zoom = 1;
+    if(this.multiple) {
+        elDropdown.multiple = "multiple";
+    }
+    if(lang.isNumber(this.size)) {
+        elDropdown.size = this.size;
+    }
     this.dropdown = elDropdown;
     
     if(lang.isArray(this.dropdownOptions)) {
@@ -16677,10 +16793,20 @@ renderForm : function() {
  * @method handleDisabledBtns
  */
 handleDisabledBtns : function() {
-    Ev.addListener(this.dropdown, "change", function(v){
-        // Save on change
-        this.save();
-    }, this, true);        
+    // Save on blur for multi-select
+    if(this.multiple) {
+        Ev.addListener(this.dropdown, "blur", function(v){
+            // Save on change
+            this.save();
+        }, this, true);
+    }
+    // Save on change for single-select
+    else {
+        Ev.addListener(this.dropdown, "change", function(v){
+            // Save on change
+            this.save();
+        }, this, true);
+    }
 },
 
 /**
@@ -16689,11 +16815,33 @@ handleDisabledBtns : function() {
  * @method resetForm
  */
 resetForm : function() {
-    for(var i=0, j=this.dropdown.options.length; i<j; i++) {
-        if(this.value === this.dropdown.options[i].value) {
-            this.dropdown.options[i].selected = true;
+    var allOptions = this.dropdown.options,
+        i=0, j=allOptions.length;
+
+    // Look for multi-select selections
+    if(lang.isArray(this.value)) {
+        var allValues = this.value,
+            m=0, n=allValues.length,
+            hash = {};
+        // Reset all selections and stash options in a value hash
+        for(; i<j; i++) {
+            allOptions[i].selected = false;
+            hash[allOptions[i].value] = allOptions[i];
         }
-    }    
+        for(; m<n; m++) {
+            if(hash[allValues[m]]) {
+                hash[allValues[m]].selected = true;
+            }
+        }
+    }
+    // Only need to look for a single selection
+    else {
+        for(; i<j; i++) {
+            if(this.value === allOptions[i].value) {
+                allOptions[i].selected = true;
+            }
+        }
+    }
 },
 
 /**
@@ -16711,7 +16859,23 @@ focus : function() {
  * @method getInputValue
  */
 getInputValue : function() {
-    return this.dropdown.options[this.dropdown.options.selectedIndex].value;
+    var allOptions = this.dropdown.options;
+    
+    // Look for multiple selections
+    if(this.multiple) {
+        var values = [],
+            i=0, j=allOptions.length;
+        for(; i<j; i++) {
+            if(allOptions[i].selected) {
+                values.push(allOptions[i].value);
+            }
+        }
+        return values;
+    }
+    // Only need to look for single selection
+    else {
+        return allOptions[allOptions.selectedIndex].value;
+    }
 }
 
 });

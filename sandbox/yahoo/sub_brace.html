@@ -3,9 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
     <title>Plain Text Switcher</title>
-    <script type="text/javascript" src="../src/js/YAHOO.js"></script>
-    <script type="text/javascript" src="../src/js/Env.js"></script>
-    <script type="text/javascript" src="../src/js/Lang.js"></script>
+    <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
     <script type="text/javascript" src="../../build/dom/dom.js"></script>
     <script type="text/javascript" src="../../build/event/event.js"></script>
     <style>
@@ -41,7 +39,7 @@ var title = 'Rich Text Editor';
     YAHOO.util.Event.on(window, 'load', function() {
         YAHOO.util.Dom.get('before').value = html;
         YAHOO.util.Dom.get('after').value = YAHOO.lang.substitute(html, { CONTENT: content, TITLE: title, CSS: css, HIDDEN_CSS: hidden_css });
-        //YAHOO.util.Dom.get('after2').value = YAHOO.lang.substitute(html, { CONTENT: content, TITLE: title, CSS: css2, HIDDEN_CSS: hidden_css2 });
+        YAHOO.util.Dom.get('after2').value = YAHOO.lang.substitute(html, { CONTENT: content, TITLE: title, CSS: css2, HIDDEN_CSS: hidden_css2 });
     });
 })();
 </script>

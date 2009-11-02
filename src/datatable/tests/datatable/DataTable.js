@@ -1192,6 +1192,21 @@
             DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Bottom desc: Row mismatch");
         },
 
+        testSortCustomPassesField: function() {
+          var dt = this.createInstance(); 
+          var oColumn = dt.getColumn(1);
+          oColumn.sortOptions = { 
+            field: "ahasuerus",
+            sortFunction: function(a, b, desc, field) {
+              Assert.areSame("ahasuerus", field, "field is supposed to be passed to a custom sort routine!");
+              return 0;
+            }
+          }
+          dt.sortColumn(oColumn);
+
+
+        },
+
         testInsertThenSort: function() {
             var dt = this.createInstance();
             dt.addRow({a:4,b:"four"}, 0)

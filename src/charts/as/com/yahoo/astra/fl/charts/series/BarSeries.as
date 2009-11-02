@@ -40,11 +40,12 @@
 	//--------------------------------------
 			
 		/**
+		 * @private
 		 * @copy fl.core.UIComponent#getStyleDefinition()
 		 */
 		public static function getStyleDefinition():Object
 		{
-			return mergeStyles(defaultStyles, Series.getStyleDefinition());
+			return mergeStyles(defaultStyles, CartesianSeries.getStyleDefinition());
 		}
 		
 		
@@ -119,7 +120,8 @@
 			
 			//grab the axes
 			var cartesianChart:CartesianChart = this.chart as CartesianChart;
-			var valueAxis:IOriginAxis = cartesianChart.horizontalAxis as IOriginAxis;
+			var xAxis:String = this.axis == "primary" ? "horizontalAxis" : "secondaryHorizontalAxis";
+			var valueAxis:IOriginAxis = cartesianChart[xAxis] as IOriginAxis;			
 			var otherAxis:IAxis = cartesianChart.verticalAxis;
 			if(!valueAxis)
 			{
@@ -133,6 +135,7 @@
 			var seriesIndex:int = allSeriesOfType.indexOf(this);
 			var markerSize:Number = markerSizes[seriesIndex] as Number;
 			var yOffset:Number = this.calculateYOffset(valueAxis, otherAxis, markerSizes, totalMarkerSize, allSeriesOfType);
+			var seriesItemSpacing:Number = UIComponentUtil.getStyleValue(UIComponent(this.chart), "seriesItemSpacing") as Number;
 			
 			var startValues:Array = [];
 			var endValues:Array = [];
@@ -144,6 +147,7 @@
 				
 				var position:Point = IChart(this.chart).itemToPosition(this, i);
 				var marker:DisplayObject = this.markers[i] as DisplayObject;
+				position.y += (allSeriesOfType.length - 1) * seriesItemSpacing;
 				
 				marker.y = position.y + yOffset;
 				marker.height = markerSize;
@@ -214,10 +218,12 @@
 		 */
 		protected function calculateMaximumAllowedMarkerSize(axis:IAxis):Number
 		{
+			var seriesItemSpacing:Number = UIComponentUtil.getStyleValue(UIComponent(this.chart), "seriesItemSpacing") as Number;
 			if(axis is IClusteringAxis)
 			{
 				var allSeriesOfType:Array = ChartUtil.findSeriesOfType(this, this.chart as IChart);
-				return (this.height / IClusteringAxis(axis).clusterCount) / allSeriesOfType.length;
+				var availableHeight:Number = this.height - (IClusteringAxis(axis).clusterCount * seriesItemSpacing *(allSeriesOfType.length - 1));
+				return (availableHeight / IClusteringAxis(axis).clusterCount) / allSeriesOfType.length;
 			}
 			return Number.POSITIVE_INFINITY;
 		}
@@ -246,6 +252,7 @@
 			var totalMarkerSize:Number = 0;
 			var allSeriesOfType:Array = ChartUtil.findSeriesOfType(this, this.chart as IChart);
 			var seriesCount:int = allSeriesOfType.length;
+			var seriesItemSpacing:Number = UIComponentUtil.getStyleValue(UIComponent(this.chart), "seriesItemSpacing") as Number;
 			for(var i:int = 0; i < seriesCount; i++)
 			{
 				var series:BarSeries = BarSeries(allSeriesOfType[i]);
@@ -260,6 +267,7 @@
 					totalMarkerSize = Math.max(totalMarkerSize, markerSize);
 				}
 			}
+			totalMarkerSize += seriesItemSpacing * (seriesCount-1);
 			return totalMarkerSize;
 		}
 		
@@ -270,7 +278,8 @@
 		protected function calculateYOffset(valueAxis:IOriginAxis, otherAxis:IAxis, markerSizes:Array, totalMarkerSize:Number, allSeriesOfType:Array):Number
 		{
 			var seriesIndex:int = allSeriesOfType.indexOf(this);
-			
+			var seriesItemSpacing:Number = UIComponentUtil.getStyleValue(UIComponent(this.chart), "seriesItemSpacing") as Number;
+			var seriesCount:int = allSeriesOfType.length;
 			//special case for axes that allow clustering
 			if(otherAxis is IClusteringAxis)
 			{
@@ -279,10 +288,10 @@
 				{
 					yOffset += markerSizes[i] as Number;
 				}
+				yOffset -= (markerSizes.length - (i+1)) * seriesItemSpacing;
 				//center based on the sum of all marker sizes
 				return -(totalMarkerSize / 2) + yOffset;
 			}
-			
 			//center based on the marker size of this series
 			return -(markerSizes[seriesIndex] as Number) / 2;
 		}

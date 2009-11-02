@@ -38,10 +38,10 @@ Paginator.ui.LastPageLink.init = function (p) {
     /**
      * Used as innerHTML for the last page link/span.
      * @attribute lastPageLinkLabel
-     * @default 'last&nbsp;&gt;&gt;'
+     * @default 'last &gt;&gt;'
      */
     p.setAttributeConfig('lastPageLinkLabel', {
-        value : 'last&nbsp;&gt;&gt;',
+        value : 'last &gt;&gt;',
         validator : l.isString
     });
 

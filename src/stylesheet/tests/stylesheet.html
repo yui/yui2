@@ -81,6 +81,10 @@ StyleAssert.normalizeColor = function (c) {
 StyleAssert.areEqual = function (a,b,msg) {
     var aa = StyleAssert.normalizeColor(a),
         bb = StyleAssert.normalizeColor(b);
+
+    if ((+aa === 700 && bb === 'bold') || (+bb === 700 && aa === 'bold')) {
+        aa = bb;
+    }
     if (aa !== bb) {
         throw new u.ComparisonFailure(
             Assert._formatMessage(msg, "Values should be equal."), a, b);
@@ -285,6 +289,16 @@ suite.add(new TestCase({
                         Dom.getStyle(
                             testbed.getElementsByTagName('pre')[0],'paddingLeft'),
                         "#target pre");
+    },
+
+    test_setWithCSSTextString : function () {
+        this.stylesheet.set('#target p', 'font-weight: bold; color: #00f').
+                        set('#target pre', 'text-transform: uppercase');
+
+        StyleAssert.areEqual('bold', Dom.getStyle(
+            this.testNode.getElementsByTagName('p')[0],'fontWeight'));
+        StyleAssert.areEqual('uppercase', Dom.getStyle(
+            this.testNode.getElementsByTagName('pre')[0],'textTransform'));
     }
 }));
 

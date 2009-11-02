@@ -26,7 +26,7 @@
      * @extends YAHOO.util.Element
      * @constructor
      * @param element {HTMLElement | String} (optional) The html element that 
-     * represents the TabView. An element will be created if none provided.
+     * represents the Tab. An element will be created if none provided.
      * @param {Object} properties A key map of initial properties
      */
     Tab = function(el, attr) {
@@ -72,7 +72,7 @@
         
         /**
          * The class name applied to active tabs.
-         * @property ACTIVE_CLASSNAME
+         * @property HIDDEN_CLASSNAME
          * @type String
          * @default "yui-hidden"
          */
@@ -131,7 +131,7 @@
         },
         
         /**
-         * setAttributeConfigs TabView specific properties.
+         * setAttributeConfigs Tab specific properties.
          * @method initAttributes
          * @param {Object} attr Hash of initial attributes
          */
@@ -450,13 +450,21 @@
         _onActivate: function(e, tabview) {
             var tab = this,
                 silent = false;
-            
 
             Y.Event.preventDefault(e);
             if (tab === tabview.get(ACTIVE_TAB)) {
                 silent = true; // dont fire activeTabChange if already active
             }
             tabview.set(ACTIVE_TAB, tab, silent);
+        },
+
+        _onActivationEventChange: function(e) {
+            var tab = this;
+
+            if (e.prevValue != e.newValue) {
+                tab.removeListener(e.prevValue, tab._onActivate);
+                tab.addListener(e.newValue, tab._onActivate, this, tab);
+            }
         }
     });
     

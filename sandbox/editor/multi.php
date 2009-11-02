@@ -60,20 +60,87 @@ var myConfig = {
     width: '785px',
     animate: true,
     dompath: true,
-    handleSubmit: true,
-    ptags: true,
-    drag: true,
-    resize: true,
-    //extracss: 'body { font-size: 11px; }',
-    //autoHeight: true,
-    focusAtStart: true//,
-    //extracss: 'body { background-color: blue; }'
+    toolbar: {
+        titlebar: 'My Editor',
+        buttons: [
+            { group: 'textstyle', label: 'Font Style',
+                buttons: [
+                    { type: 'push', label: 'Bold', value: 'bold' },
+                    { type: 'push', label: 'Italic', value: 'italic' },
+                    { type: 'push', label: 'Underline', value: 'underline' },
+                    { type: 'separator' },
+                    { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+                        menu: [
+                            { text: 'Arial', checked: true },
+                            { text: 'Arial Black' },
+                            { text: 'Comic Sans MS' },
+                            { text: 'Courier New' },
+                            { text: 'Lucida Console' },
+                            { text: 'Tahoma' },
+                            { text: 'Times New Roman' },
+                            { text: 'Trebuchet MS' },
+                            { text: 'Verdana' }
+                        ]
+                    },
+                    { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true },
+                    { type: 'separator' },
+                    { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
+                    { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true },
+                    { type: 'separator' },
+                    { type: 'push', label: 'Insert Image', value: 'insertimage' }
+                ]
+            }
+        ]
+    }
+    
 };
+
+var myConfig2 = {
+    height: '300px',
+    width: '785px',
+    animate: true,
+    dompath: true,
+    toolbar: {
+        titlebar: 'My Other Editor',
+        buttons: [
+            { group: 'textstyle', label: 'Font Style',
+                buttons: [
+                    { type: 'push', label: 'Bold', value: 'bold' },
+                    { type: 'push', label: 'Italic', value: 'italic' },
+                    { type: 'push', label: 'Underline', value: 'underline' },
+                    { type: 'separator' },
+                    { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+                        menu: [
+                            { text: 'Arial', checked: true },
+                            { text: 'Arial Black' },
+                            { text: 'Comic Sans MS' },
+                            { text: 'Courier New' },
+                            { text: 'Lucida Console' },
+                            { text: 'Tahoma' },
+                            { text: 'Times New Roman' },
+                            { text: 'Trebuchet MS' },
+                            { text: 'Verdana' }
+                        ]
+                    },
+                    { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true },
+                    { type: 'separator' },
+                    { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
+                    { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true },
+                    { type: 'separator' },
+                    { type: 'push', label: 'Insert Image', value: 'insertimage' }
+                ]
+            }
+        ]
+    }
+    
+};
+
+
 
 myEditor = new YAHOO.widget.Editor('editor', myConfig);
 myEditor.render();
 
-myEditor2 = new YAHOO.widget.Editor('editor2', myConfig);
+myEditor2 = new YAHOO.widget.Editor('editor2', myConfig2);
 myEditor2.render();
 
 

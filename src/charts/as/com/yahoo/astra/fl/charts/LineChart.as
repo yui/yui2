@@ -26,7 +26,22 @@ package com.yahoo.astra.fl.charts
      * @default null
      */
     [Style(name="seriesLineWeights", type="Array")]
+
+	/**
+	 * The color of the line drawn between points in each series. When not specified,
+	 * the line color is determined by the color style.
+	 * 
+	 * @default []
+	 */
+	[Style(name="seriesLineColors", type="Array")]
 	
+	/**
+	 * The alpha of the line drawn between points in each series. 
+	 *
+	 * @default [1]
+	 */
+	[Style(name="seriesLineAlphas", type="Array")]
+
 	/**
 	 * A chart that displays its data points with connected line segments.
 	 * 
@@ -62,6 +77,7 @@ package com.yahoo.astra.fl.charts
 	//--------------------------------------
 	
 		/**
+		 * @private
 		 * @copy fl.core.UIComponent#getStyleDefinition()
 		 */
 		public static function getStyleDefinition():Object
@@ -99,6 +115,15 @@ package com.yahoo.astra.fl.charts
 				var currentSeries:ISeries = this.series[i] as ISeries;
 				this.copyStylesToSeries(currentSeries, LINE_SERIES_STYLES);
 			}
+		}
+		
+		/**
+		 * @private
+		 */
+		override protected function configUI():void
+		{
+			super.configUI();
+			this.setChildIndex(this.axisLayer, this.getChildIndex(this.content))
 		}
 	}
 }

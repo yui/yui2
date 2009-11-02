@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Event Utility&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>Event Utility&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_event.html" title="event">event</a>
                  &gt; EventProvider 
@@ -164,6 +164,13 @@ silent: if true, the custom event will not generate log messages.
 This is false by default.
 </li>
 <li>
+fireOnce: if true, the custom event will only notify subscribers
+once regardless of the number of times the event is fired.  In
+addition, new subscribers will be executed immediately if the
+event has already fired.
+This is false by default.
+</li>
+<li>
 onSubscribeCallback: specifies a callback to execute when the
 event has a new subscriber.  This will fire immediately for
 each queued subscriber if any exist prior to the creation of
@@ -176,7 +183,7 @@ the event.
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        CustomEvent
+                                                            CustomEvent
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">the custom event</dd>
                                                 </dl>
@@ -245,7 +252,7 @@ the handler.</span>
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        boolean
+                                                            boolean
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">the return value from CustomEvent.fire</dd>
                                                 </dl>
@@ -294,13 +301,6 @@ with createEvent.
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -377,13 +377,6 @@ execution scope of the listener</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -458,7 +451,7 @@ that lives on the prototype)</span>
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        boolean
+                                                            boolean
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">true if the subscriber was found and detached.</dd>
                                                 </dl>
@@ -508,13 +501,6 @@ be removed.
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -558,11 +544,16 @@ be removed.
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_element-delegate.html" title="element-delegate">element-delegate</a></li>
                                 <li class="selected"><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
                                 <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
@@ -574,10 +565,15 @@ be removed.
                                 <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
                                 <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
                                 <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_storage.html" title="Storage">Storage</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>

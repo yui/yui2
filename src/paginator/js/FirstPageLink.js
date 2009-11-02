@@ -38,10 +38,10 @@ Paginator.ui.FirstPageLink.init = function (p) {
     /**
      * Used as innerHTML for the first page link/span.
      * @attribute firstPageLinkLabel
-     * @default '&lt;&lt;&nbsp;first'
+     * @default '&lt;&lt; first'
      */
     p.setAttributeConfig('firstPageLinkLabel', {
-        value : '&lt;&lt;&nbsp;first',
+        value : '&lt;&lt; first',
         validator : l.isString
     });
 

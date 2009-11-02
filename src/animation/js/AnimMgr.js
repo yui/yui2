@@ -69,7 +69,7 @@ YAHOO.util.AnimMgr = new function() {
      */
     this.unRegister = function(tween, index) {
         index = index || getIndex(tween);
-        if (!tween.isAnimated() || index == -1) {
+        if (!tween.isAnimated() || index === -1) {
             return false;
         }
         
@@ -142,7 +142,7 @@ YAHOO.util.AnimMgr = new function() {
     
     var getIndex = function(anim) {
         for (var i = 0, len = queue.length; i < len; ++i) {
-            if (queue[i] == anim) {
+            if (queue[i] === anim) {
                 return i; // note return;
             }
         }
@@ -175,4 +175,6 @@ YAHOO.util.AnimMgr = new function() {
             tween.currentFrame += tweak;      
         }
     };
+    this._queue = queue;
+    this._getIndex = getIndex;
 };

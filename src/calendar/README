@@ -1,5 +1,65 @@
 Calendar Release Notes
 
+*** version 2.8.0 ***
+
++ DateMath extracted to standalone module. However, it continues to
+  be included in the calendar module, so no change is required to
+  existing pages which use calendar.
+
++ Made default configuration property values (DEFAULT_CONFIG) public.
+
++ Made default class names (STYLES) used for CSS classes, public.
+
++ Changed the few remaining hardcoded CSS class names to use default
+  STYLES configuration.
+
++ The cells property is now populated by searching for tds by class 
+  name ("calcell") under the calendar's table element, as opposed to 
+  blindly picking up all td elements under the div container.
+
+  This fixes incorrect selection state related bugs in custom calendars,
+  where the customization introduces additional tables to the default 
+  calendar markup.
+
++ Added prevDate and newDate arguments to the changePage event. These
+  are accessible through the arguments array (as with all custom events
+  created using the default LIST signature):
+
+  e.g:
+
+  changePageEvent.subscribe(function(type, args) {
+
+    var prevDate = args[0];
+    var newDate = args[1];
+
+    if (YAHOO.widget.DateMath.before(newDate, prevDate) {
+       // Moving back in time 
+    } else {
+       // Moving forward in time
+    }
+
+  });
+
++ Added "year_offset" configuration property.
+
+  This can be used for locales which follow the Gregorian calendar, 
+  but have the year offset by a fixed amount. For example the Thai 
+  (th_TH) calendar, for which the year is a positive 543 year offset 
+  from the Gregorian calendar. 
+  
+  The offset is applied to any output year strings, such as the year 
+  label, or the year CSS marker class and to any input strings, such as
+  date selection strings or the pageDate value string.  
+
+  NOTE: Any JavaScript Date objects which Calendar accepts as input, 
+  should reflect the Gregorian calendar state (that is, the year should be 
+  set to the Gregorian year), in order to maintain consistent state for other 
+  fields such as weekday, month and date. Similarly, any JavaScript Date 
+  objects returned by the Calendar, will be set to the Gregorian year.
+  
++ Added "today" configuration property, allowing the user to configure the 
+  date which represents "today" in the Calendar.
+
 *** version 2.7.0 ***
 
 + Fixed CalendarGroup page construction, so that the intial pagedate for 

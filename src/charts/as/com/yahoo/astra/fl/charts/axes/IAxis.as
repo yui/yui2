@@ -1,14 +1,35 @@
 package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.IChart;
+	import flash.events.IEventDispatcher;
 	
 	/**
 	 * Data-only representation of a chart's axis.
 	 * 
 	 * @author Josh Tynjala
 	 */
-	public interface IAxis
-	{
+	public interface IAxis extends IEventDispatcher
+	{	
+		/**
+		 * Total width of axis
+		 */
+		function get width():Number;
+		
+		/*
+		 * @private (setter)
+		 */
+		function set width(value:Number):void;
+		
+		/** 
+		 * Total height of axis
+		 */
+		function get height():Number;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set height(value:Number):void;
+		
 		/**
 		 * The chart in which this axis appears.
 		 */
@@ -73,6 +94,7 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private (setter)
 		 */
 		function set maxLabelWidth(value:Number):void;
+		
 		/**
 		 * Gets or sets the maximum width of a label
 		 */
@@ -112,6 +134,36 @@ package com.yahoo.astra.fl.charts.axes
 		 * @private (setter)
 		 */
 		function set labelSpacing(value:Number):void; 
+		
+		/**
+		 * Maximum dimensions of axis labels
+		 */
+		function get labelData():AxisLabelData;
+		
+		/** 
+		 * @private (setter)
+		 */
+		function set labelData(value:AxisLabelData):void; 
+		
+		/**
+		 * Position of axis in relation to the chart
+		 */
+		function get position():String;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set position(value:String):void;
+		
+		/**
+		 * Largest label value to appear on the axis.
+		 */
+		function get maxLabel():String;
+		
+		/**
+		 * @private (setter)
+		 */
+		function set maxLabel(value:String):void;
 		
 		/**
 		 * Determines the axis scale based on the input data set.

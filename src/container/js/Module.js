@@ -67,7 +67,7 @@
             "CHANGE_BODY": "changeBody",
             "CHANGE_FOOTER": "changeFooter",
             "CHANGE_CONTENT": "changeContent",
-            "DESTORY": "destroy",
+            "DESTROY": "destroy",
             "BEFORE_SHOW": "beforeShow",
             "SHOW": "show",
             "BEFORE_HIDE": "beforeHide",
@@ -387,7 +387,7 @@
             * CustomEvent fired when the Module is destroyed
             * @event destroyEvent
             */
-            this.destroyEvent = this.createEvent(EVENT_TYPES.DESTORY);
+            this.destroyEvent = this.createEvent(EVENT_TYPES.DESTROY);
             this.destroyEvent.signature = SIGNATURE;
 
             /**
@@ -703,7 +703,7 @@
                         Need to set "position" property before inserting the 
                         iframe into the document or Safari's status bar will 
                         forever indicate the iframe is loading 
-                        (See SourceForge bug #1723064)
+                        (See YUILibrary bug #1723064)
                     */
                     oIFrame.style.position = "absolute";
                     oIFrame.style.visibility = "hidden";
@@ -716,16 +716,23 @@
                         db.appendChild(oIFrame);
                     }
 
+                    // Setting the background color fixes an issue with IE6/IE7, where
+                    // elements in the DOM, with -ve margin-top which positioned them 
+                    // offscreen (so they would be overlapped by the iframe and its -ve top
+                    // setting), would have their -ve margin-top ignored, when the iframe 
+                    // was added.
+                    oIFrame.style.backgroundColor = "transparent";
+
+                    oIFrame.style.borderWidth = "0";
                     oIFrame.style.width = "2em";
                     oIFrame.style.height = "2em";
-                    oIFrame.style.top = (-1 * (oIFrame.offsetHeight + Module.RESIZE_MONITOR_BUFFER)) + "px";
                     oIFrame.style.left = "0";
-                    oIFrame.style.borderWidth = "0";
+                    oIFrame.style.top = (-1 * (oIFrame.offsetHeight + Module.RESIZE_MONITOR_BUFFER)) + "px";
                     oIFrame.style.visibility = "visible";
 
                     /*
                        Don't open/close the document for Gecko like we used to, since it
-                       leads to duplicate cookies. (See SourceForge bug #1721755)
+                       leads to duplicate cookies. (See YUILibrary bug #1721755)
                     */
                     if (UA.webkit) {
                         oDoc = oIFrame.contentWindow.document;
@@ -818,6 +825,10 @@
                 oHeader.innerHTML = headerContent;
             }
 
+            if (this._rendered) {
+                this._renderHeader();
+            }
+
             this.changeHeaderEvent.fire(headerContent);
             this.changeContentEvent.fire();
 
@@ -869,6 +880,10 @@
                 oBody.innerHTML = bodyContent;
             }
 
+            if (this._rendered) {
+                this._renderBody();
+            }
+
             this.changeBodyEvent.fire(bodyContent);
             this.changeContentEvent.fire();
         },
@@ -918,6 +933,10 @@
                 oFooter.appendChild(footerContent);
             } else {
                 oFooter.innerHTML = footerContent;
+            }
+
+            if (this._rendered) {
+                this._renderFooter();
             }
 
             this.changeFooterEvent.fire(footerContent);
@@ -972,8 +991,7 @@
         */
         render: function (appendToNode, moduleElement) {
 
-            var me = this,
-                firstChild;
+            var me = this;
 
             function appendTo(parentNode) {
                 if (typeof parentNode == "string") {
@@ -1002,33 +1020,78 @@
                 }
             }
 
+            this._renderHeader(moduleElement);
+            this._renderBody(moduleElement);
+            this._renderFooter(moduleElement);
+
+            this._rendered = true;
+
+            this.renderEvent.fire();
+            return true;
+        },
+
+        /**
+         * Renders the currently set header into it's proper position under the 
+         * module element. If the module element is not provided, "this.element" 
+         * is used.
+         * 
+         * @method _renderHeader
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element
+         */
+        _renderHeader: function(moduleElement){
+            moduleElement = moduleElement || this.element;
+
             // Need to get everything into the DOM if it isn't already
-            if (this.header && ! Dom.inDocument(this.header)) {
+            if (this.header && !Dom.inDocument(this.header)) {
                 // There is a header, but it's not in the DOM yet. Need to add it.
-                firstChild = moduleElement.firstChild;
+                var firstChild = moduleElement.firstChild;
                 if (firstChild) {
                     moduleElement.insertBefore(this.header, firstChild);
                 } else {
                     moduleElement.appendChild(this.header);
                 }
             }
+        },
 
-            if (this.body && ! Dom.inDocument(this.body)) {
-                // There is a body, but it's not in the DOM yet. Need to add it.		
-                if (this.footer && Dom.isAncestor(this.moduleElement, this.footer)) {
+        /**
+         * Renders the currently set body into it's proper position under the 
+         * module element. If the module element is not provided, "this.element" 
+         * is used.
+         * 
+         * @method _renderBody
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element.
+         */
+        _renderBody: function(moduleElement){
+            moduleElement = moduleElement || this.element;
+
+            if (this.body && !Dom.inDocument(this.body)) {
+                // There is a body, but it's not in the DOM yet. Need to add it.
+                if (this.footer && Dom.isAncestor(moduleElement, this.footer)) {
                     moduleElement.insertBefore(this.body, this.footer);
                 } else {
                     moduleElement.appendChild(this.body);
                 }
             }
+        },
 
-            if (this.footer && ! Dom.inDocument(this.footer)) {
+        /**
+         * Renders the currently set footer into it's proper position under the 
+         * module element. If the module element is not provided, "this.element" 
+         * is used.
+         * 
+         * @method _renderFooter
+         * @protected
+         * @param {HTMLElement} moduleElement Optional. A reference to the module element
+         */
+        _renderFooter: function(moduleElement){
+            moduleElement = moduleElement || this.element;
+
+            if (this.footer && !Dom.inDocument(this.footer)) {
                 // There is a footer, but it's not in the DOM yet. Need to add it.
                 moduleElement.appendChild(this.footer);
             }
-
-            this.renderEvent.fire();
-            return true;
         },
 
         /**

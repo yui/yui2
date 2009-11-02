@@ -1,8 +1,17 @@
 YUI Library - YUITest - Release Notes
 
-Development Master
+2.NEXT
 
-  * No changes
+  * Added JUnit XML test format.
+  * Added TAP test format.
+  * Added getResults() method on YAHOO.tool.TestRunner.
+  * Added isRunning() method on YAHOO.tool.TestRunner.
+
+2.8.0
+
+  * Fixed issues with ArrayAssert methods (trac #2528121)
+  * UserAction moved into a new module: event-simulate.
+  * Custom Error objects inherit from Object instead of Error.
 
 2.7.0
 

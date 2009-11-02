@@ -38,10 +38,10 @@ Paginator.ui.NextPageLink.init = function (p) {
     /**
      * Used as innerHTML for the next page link/span.
      * @attribute nextPageLinkLabel
-     * @default 'next&nbsp;&gt;'
+     * @default 'next &gt;'
      */
     p.setAttributeConfig('nextPageLinkLabel', {
-        value : 'next&nbsp;&gt;',
+        value : 'next &gt;',
         validator : l.isString
     });
 

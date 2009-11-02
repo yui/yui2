@@ -21,6 +21,7 @@ package com.yahoo.astra.fl.charts
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.utils.getDefinitionByName;
+	import flash.events.ErrorEvent;
 		
 	//--------------------------------------
 	//  Styles
@@ -289,7 +290,7 @@ package com.yahoo.astra.fl.charts
 		
 		[Inspectable(type=Array)]
 		/**
-		 * @inheritDoc
+		 * @copy com.yahoo.astra.fl.charts.IChart#dataProvider
 		 */
 		public function get dataProvider():Object
 		{
@@ -411,6 +412,29 @@ package com.yahoo.astra.fl.charts
 		{
 			this._legend = value;
 			this.invalidate();
+		}
+		
+		/**
+		 * @private 
+		 * Storage for legendLabelFunction
+		 */
+		private var _legendLabelFunction:Function;
+		
+		/**
+		 * If defined, the chart will call the input function to determine the text displayed in 
+		 * in the chart's legend.
+		 */
+		public function get legendLabelFunction():Function
+		{
+			return this._legendLabelFunction;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set legendLabelFunction(value:Function):void
+		{
+			this._legendLabelFunction = value;
 		}
 	
 	//--------------------------------------
@@ -660,8 +684,33 @@ package com.yahoo.astra.fl.charts
 				var series:ISeries = ISeries(this.series[i]);
 				if(series is ILegendItemSeries)
 				{
+					if(!(series as ILegendItemSeries).showInLegend) continue;
 					var itemData:LegendItemData = ILegendItemSeries(series).createLegendItemData();
 					itemData.label = itemData.label ? itemData.label : i.toString();
+					if(series.legendLabelFunction != null && series.legendLabelFunction is Function)
+					{
+						try
+						{
+							itemData.label = series.legendLabelFunction(itemData.label);
+						}
+						catch(e:Error)
+						{
+							var message:String = "There is an error in the series level legendLabelFunction.";
+							this.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, message));
+						}
+					}
+					else if(this.legendLabelFunction != null && this.legendLabelFunction is Function)
+					{
+						try
+						{
+							message = "There is an error in the legendLabelFunction.";
+							itemData.label = this.legendLabelFunction(itemData.label);
+						}
+						catch(e:Error)
+						{
+							this.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, message));
+						}
+					}
 					legendData.push(itemData);
 				}
 				else if(series is ICategorySeries)
@@ -722,9 +771,29 @@ package com.yahoo.astra.fl.charts
 			var index:int = series.itemRendererToIndex(this._lastDataTipRenderer);
 			
 			var dataTipText:String = "";
-			if(this.dataTipFunction != null)
+			if(series.dataTipFunction != null)
 			{
-				dataTipText = this.dataTipFunction(item, index, series);
+				try
+				{
+					dataTipText = series.dataTipFunction(item, index, series);
+				}
+				catch(e:Error)
+				{
+					var message:String = "There is an error in your series level dataTipFunction";
+					this.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, message));
+				}
+			}
+			else if(this.dataTipFunction != null)
+			{
+				try
+				{
+					dataTipText = this.dataTipFunction(item, index, series);
+				}
+				catch(e:Error)
+				{
+					message = "There is an error in your dataTipFunction";
+					this.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, message));
+				}
 			}
 			
 			var dataTipRenderer:IDataTipRenderer = this.dataTip as IDataTipRenderer;

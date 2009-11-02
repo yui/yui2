@@ -36,13 +36,18 @@ package com.yahoo.astra.fl.charts.series
 	/**
 	 * The base color used by objects displayed in this series.
 	 */
-    [Style(name="fillColor", type="uint")]
+    [Style(name="color", type="uint")]
     
     /** 
      * The border color used by programatic skins in this series.
      */
     [Style(name="borderColor", type="uint")]
     
+	/**
+	 * The fill color used by programatic skins in this series.
+	 */
+	[Style(name="fillColor", type="uint")]
+	
 	/**
 	 * The Class used to instantiate each marker's skin.
 	 */
@@ -118,6 +123,7 @@ package com.yahoo.astra.fl.charts.series
 	//--------------------------------------
 	
 		/**
+		 * @private
 		 * @copy fl.core.UIComponent#getStyleDefinition()
 		 */
 		public static function getStyleDefinition():Object
@@ -160,7 +166,7 @@ package com.yahoo.astra.fl.charts.series
 		private var _chart:Object;
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.ISeries#chart
+		 * @copy com.yahoo.astra.fl.charts.series.ISeries#chart
 		 */
 		public function get chart():Object
 		{
@@ -226,7 +232,7 @@ package com.yahoo.astra.fl.charts.series
 		private var _dataProvider:Object;
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.ISeries#data
+		 * @copy com.yahoo.astra.fl.charts.series.ISeries#dataProvider
 		 */
 		public function get dataProvider():Object
 		{
@@ -269,7 +275,7 @@ package com.yahoo.astra.fl.charts.series
 		private var _displayName:String;
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.ISeries#data
+		 * @copy com.yahoo.astra.fl.charts.series.ISeries#displayName
 		 */
 		public function get displayName():String
 		{
@@ -285,7 +291,7 @@ package com.yahoo.astra.fl.charts.series
 		}
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.ISeries#length
+		 * @copy com.yahoo.astra.fl.charts.series.ISeries#length
 		 */
 		public function get length():int
 		{
@@ -301,12 +307,57 @@ package com.yahoo.astra.fl.charts.series
 			return 0;
 		}
 		
+		/**
+		 * @private
+		 * Storage for dataTipFunction
+		 */
+		private var _dataTipFunction:Function;
+		
+		/**
+		 * @copy com.yahoo.astra.fl.charts.series.ISeries#dataTipFunction
+		 */
+		public function get dataTipFunction():Function
+		{
+			return this._dataTipFunction;
+		}
+		
+		/**
+		 * @private (setter)
+		 */
+		public function set dataTipFunction(value:Function):void
+		{
+			this._dataTipFunction = value;
+		}
+		
+		/**
+		 * @private 
+		 * Storage for legendLabelFunction
+		 */
+		private var _legendLabelFunction:Function = null;
+		
+		/** 
+		 * @copy com.yahoo.astra.fl.charts.series.ISeries#legendLabelFunction
+		 */
+		public function get legendLabelFunction():Function
+		{
+			return this._legendLabelFunction;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set legendLabelFunction(value:Function):void
+		{
+			this._legendLabelFunction = value;
+		}	
+		
+		
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.ISeries#clone()
+		 * @copy com.yahoo.astra.fl.charts.series.ISeries#clone()
 		 */
 		public function clone():ISeries
 		{
@@ -317,13 +368,16 @@ package com.yahoo.astra.fl.charts.series
 		}
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.ISeries#itemRendererToIndex()
+		 * @copy com.yahoo.astra.fl.charts.series.ISeries#itemRendererToIndex()
 		 */
 		public function itemRendererToIndex(renderer:ISeriesItemRenderer):int
 		{
 			return this.markers.indexOf(renderer);
 		}
 		
+		/**
+		 * @copy com.yahoo.astra.fl.charts.series.ISeries#itemToItemRenderer()
+		 */		
 		public function itemToItemRenderer(item:Object):ISeriesItemRenderer
 		{
 			return this._itemToItemRendererHash[item] as ISeriesItemRenderer;

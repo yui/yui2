@@ -517,10 +517,11 @@ RS.prototype = {
      * @param fnSort {Function} Reference to a sort function.
      * @param desc {Boolean} True if sort direction is descending, false if sort
      * direction is ascending.
+     * @param field {String} The field to sort by, from sortOptions.field
      * @return {YAHOO.widget.Record[]} Sorted array of Records.
      */
-    sortRecords : function(fnSort, desc) {
-        return this._records.sort(function(a, b) {return fnSort(a, b, desc);});
+    sortRecords : function(fnSort, desc, field) {
+        return this._records.sort(function(a, b) {return fnSort(a, b, desc, field);});
     },
 
     /**
@@ -821,7 +822,7 @@ YAHOO.widget.Record.prototype = {
     },
 
     /**
-     * Sets given data at the given key. Use the RecordSet method setValue to trigger
+     * Sets given data at the given key. Use the RecordSet method updateRecordValue to trigger
      * events. 
      *
      * @method setData

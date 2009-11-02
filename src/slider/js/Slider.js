@@ -565,7 +565,7 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
     thumbMouseUp: function() {
         this._mouseDown = false;
         this.logger.log("thumb mouseup");
-        if (!this.isLocked() && !this.moveComplete) {
+        if (!this.isLocked()) {
             this.endMove();
         }
 
@@ -574,7 +574,7 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
     onMouseUp: function() {
         this._mouseDown = false;
         this.logger.log("background mouseup");
-        if (this.backgroundEnabled && !this.isLocked() && !this.moveComplete) {
+        if (this.backgroundEnabled && !this.isLocked()) {
             this.endMove();
         }
     },
@@ -742,7 +742,7 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
         this.valueChangeSource = source || Slider.SOURCE_SET_VALUE;
 
         t.lastOffset = [newOffset, newOffset];
-        this.verifyOffset(true);
+        this.verifyOffset();
 
         this._slideStart();
 
@@ -822,7 +822,7 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
         this.valueChangeSource = source || Slider.SOURCE_SET_VALUE;
 
         t.lastOffset = [newOffset, newOffset2];
-        this.verifyOffset(true);
+        this.verifyOffset();
 
         this._slideStart();
 
@@ -836,11 +836,10 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
     /**
      * Checks the background position element position.  If it has moved from the
      * baseline position, the constraints for the thumb are reset
-     * @param checkPos {boolean} check the position instead of using cached value
      * @method verifyOffset
      * @return {boolean} True if the offset is the same as the baseline.
      */
-    verifyOffset: function(checkPos) {
+    verifyOffset: function() {
 
         var xy = getXY(this.getEl()),
             t  = this.thumb;
@@ -947,16 +946,17 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
                 this.fireEvent("slideStart");
             }
             this._sliding = true;
+            this.moveComplete = false; // for backward compatibility. Deprecated
         }
     },
 
     _slideEnd: function() {
-        if (this._sliding && this.moveComplete) {
+        if (this._sliding) {
             // Reset state before firing slideEnd
             var silent = this._silent;
             this._sliding = false;
+            this.moveComplete = true; // for backward compatibility. Deprecated
             this._silent = false;
-            this.moveComplete = false;
             if (!silent) {
                 this.onSlideEnd();
                 this.fireEvent("slideEnd");
@@ -1087,7 +1087,7 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
         }
 
         this.thumb.autoOffset();
-        this.resetThumbConstraints();
+        this.baselinePos = [];
     },
 
     /**
@@ -1136,7 +1136,6 @@ YAHOO.extend(Slider, YAHOO.util.DragDrop, {
         this.logger.log("endMove");
         this.unlock();
         this.fireEvents();
-        this.moveComplete = true;
         this._slideEnd();
     },
 

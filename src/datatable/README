@@ -1,6 +1,16 @@
 DataTable Release Notes
 
-*** version 2.7.0 ***
+**** 2.8.0 ****
+
+* DropdownCellEditor now supports multiple and size properties.
+* Calling DataTable's destroy() method now calls Paginator destroy(), when applicable.
+* Added beforeRenderEvent.
+* Added clearScrollPositions() and scrollTo() to ScrollingDataTable.
+* Performance improvements for ScrollingDataTable in IE.
+* Bug fixes for DataTables rendered within table markup.
+
+
+**** version 2.7.0 ***
 
 * The custom function defined by the formatRow Attribute is now called within
 the scope of the DataTable instance.
@@ -12,6 +22,8 @@ modifications to a subset of rows.
 * The method getSanitizedKey() now also strips "." and ":" chars from Column keys.
 * Better validation of out-of-range index in the methods addRow(), addRows(),
 updateRow() and updateRows().
+
+
 
 *** version 2.6.0 ***
 

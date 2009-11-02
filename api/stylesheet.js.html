@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>stylesheet&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>stylesheet&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_stylesheet.html" title="stylesheet">stylesheet</a>
                 
@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * The StyleSheet component is a utility for managing css rules at the</span>
 <span class="c"> * stylesheet level</span>
 <span class="c"> *</span>
@@ -166,8 +166,8 @@
         <span class="nx">i</span><span class="o">,</span><span class="nx">r</span><span class="o">,</span><span class="nx">sel</span><span class="o">;</span>
 
     <span class="c">// Factory or constructor</span>
-<span class="c"></span>    <span class="k">if</span> <span class="o">(!(</span><span class="k">this</span> <span class="k">instanceof</span> <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">))</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nx">arguments</span><span class="o">.</span><span class="nx">callee</span><span class="o">(</span><span class="nx">seed</span><span class="o">,</span><span class="nx">name</span><span class="o">);</span>
+<span class="c"></span>    <span class="k">if</span> <span class="o">(!(</span><span class="k">this</span> <span class="k">instanceof</span> <span class="nx">StyleSheet</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nx">StyleSheet</span><span class="o">(</span><span class="nx">seed</span><span class="o">,</span><span class="nx">name</span><span class="o">);</span>
     <span class="o">}</span>
 
     <span class="c">// capture the DOM node if the string is an id</span>
@@ -309,15 +309,20 @@
 <span class="c">         * selectors and applied accordingly.  If the selector string does not</span>
 <span class="c">         * have a corresponding rule in the sheet, it will be added.&lt;/p&gt;</span>
 <span class="c">         *</span>
-<span class="c">         * &lt;p&gt;The object properties in the second parameter must be the JavaScript</span>
-<span class="c">         * names of style properties.  E.g. fontSize rather than font-size.&lt;/p&gt;</span>
+<span class="c">         * &lt;p&gt;The second parameter can be either a string of CSS text,</span>
+<span class="c">         * formatted as CSS (&quot;font-size: 10px;&quot;), or an object collection of</span>
+<span class="c">         * properties and their new values.  Object properties must be in</span>
+<span class="c">         * JavaScript format ({ fontSize: &quot;10px&quot; }).&lt;/p&gt;</span>
 <span class="c">         *</span>
 <span class="c">         * &lt;p&gt;The float style property will be set by any of &amp;quot;float&amp;quot;,</span>
-<span class="c">         * &amp;quot;styleFloat&amp;quot;, or &amp;quot;cssFloat&amp;quot;.&lt;/p&gt;</span>
+<span class="c">         * &amp;quot;styleFloat&amp;quot;, or &amp;quot;cssFloat&amp;quot; if passed in the</span>
+<span class="c">         * object map.  Use &quot;float: left;&quot; format when passing a CSS text</span>
+<span class="c">         * string.&lt;/p&gt;</span>
 <span class="c">         *</span>
 <span class="c">         * @method set</span>
 <span class="c">         * @param sel {String} the selector string to apply the changes to</span>
-<span class="c">         * @param css {Object} Object literal of style properties and new values</span>
+<span class="c">         * @param css {Object|String} Object literal of style properties and</span>
+<span class="c">         *                      new values, or a string of cssText</span>
 <span class="c">         * @return {StyleSheet} the StyleSheet instance</span>
 <span class="c">         * @chainable</span>
 <span class="c">         */</span>
@@ -472,25 +477,31 @@
 
     <span class="nx">workerStyle</span><span class="o">.</span><span class="nx">cssText</span> <span class="o">=</span> <span class="nx">base</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="o">;</span>
 
-    <span class="k">if</span> <span class="o">(</span><span class="nx">f</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">css</span><span class="o">[</span><span class="nx">floatAttr</span><span class="o">])</span> <span class="o">{</span>
-        <span class="nx">css</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">merge</span><span class="o">(</span><span class="nx">css</span><span class="o">);</span>
-        <span class="nx">delete</span> <span class="nx">css</span><span class="o">.</span><span class="nx">styleFloat</span><span class="o">;</span> <span class="nx">delete</span> <span class="nx">css</span><span class="o">.</span><span class="nx">cssFloat</span><span class="o">;</span> <span class="nx">delete</span> <span class="nx">css</span><span class="o">[</span><span class="s1">&#39;float&#39;</span><span class="o">];</span>
-        <span class="nx">css</span><span class="o">[</span><span class="nx">floatAttr</span><span class="o">]</span> <span class="o">=</span> <span class="nx">f</span><span class="o">;</span>
-    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">css</span><span class="o">))</span> <span class="o">{</span>
+        <span class="c">// There is a danger here of incremental memory consumption in Opera</span>
+<span class="c"></span>        <span class="nx">workerStyle</span><span class="o">.</span><span class="nx">cssText</span> <span class="o">+=</span> <span class="s1">&#39;;&#39;</span> <span class="o">+</span> <span class="nx">css</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">f</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">css</span><span class="o">[</span><span class="nx">floatAttr</span><span class="o">])</span> <span class="o">{</span>
+            <span class="nx">css</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">merge</span><span class="o">(</span><span class="nx">css</span><span class="o">);</span>
+            <span class="nx">delete</span> <span class="nx">css</span><span class="o">.</span><span class="nx">styleFloat</span><span class="o">;</span> <span class="nx">delete</span> <span class="nx">css</span><span class="o">.</span><span class="nx">cssFloat</span><span class="o">;</span> <span class="nx">delete</span> <span class="nx">css</span><span class="o">[</span><span class="s1">&#39;float&#39;</span><span class="o">];</span>
+            <span class="nx">css</span><span class="o">[</span><span class="nx">floatAttr</span><span class="o">]</span> <span class="o">=</span> <span class="nx">f</span><span class="o">;</span>
+        <span class="o">}</span>
 
-    <span class="k">for</span> <span class="o">(</span><span class="nx">prop</span> <span class="k">in</span> <span class="nx">css</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">css</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">prop</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="c">// IE throws Invalid Value errors and doesn&#39;t like whitespace</span>
-<span class="c"></span>                <span class="c">// in values ala &#39; red&#39; or &#39;red &#39;</span>
-<span class="c"></span>                <span class="nx">workerStyle</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">trim</span><span class="o">(</span><span class="nx">css</span><span class="o">[</span><span class="nx">prop</span><span class="o">]);</span>
-            <span class="o">}</span>
-            <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Error assigning property &quot;&#39;</span><span class="o">+</span><span class="nx">prop</span><span class="o">+</span><span class="s1">&#39;&quot; to &quot;&#39;</span><span class="o">+</span><span class="nx">css</span><span class="o">[</span><span class="nx">prop</span><span class="o">]+</span>
-                          <span class="s2">&quot;\&quot; (ignored):\n&quot;</span><span class="o">+</span><span class="nx">e</span><span class="o">.</span><span class="nx">message</span><span class="o">,</span><span class="s1">&#39;warn&#39;</span><span class="o">,</span><span class="s1">&#39;StyleSheet&#39;</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nx">prop</span> <span class="k">in</span> <span class="nx">css</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">css</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">prop</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="c">// IE throws Invalid Value errors and doesn&#39;t like whitespace</span>
+<span class="c"></span>                    <span class="c">// in values ala &#39; red&#39; or &#39;red &#39;</span>
+<span class="c"></span>                    <span class="nx">workerStyle</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">trim</span><span class="o">(</span><span class="nx">css</span><span class="o">[</span><span class="nx">prop</span><span class="o">]);</span>
+                <span class="o">}</span>
+                <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Error assigning property &quot;&#39;</span><span class="o">+</span><span class="nx">prop</span><span class="o">+</span><span class="s1">&#39;&quot; to &quot;&#39;</span><span class="o">+</span><span class="nx">css</span><span class="o">[</span><span class="nx">prop</span><span class="o">]+</span>
+                              <span class="s2">&quot;\&quot; (ignored):\n&quot;</span><span class="o">+</span><span class="nx">e</span><span class="o">.</span><span class="nx">message</span><span class="o">,</span><span class="s1">&#39;warn&#39;</span><span class="o">,</span><span class="s1">&#39;StyleSheet&#39;</span><span class="o">);</span>
+                <span class="o">}</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">}</span>
+
     <span class="k">return</span> <span class="nx">workerStyle</span><span class="o">.</span><span class="nx">cssText</span><span class="o">;</span>
 <span class="o">};</span>
 
@@ -515,7 +526,7 @@
 <span class="c"></span>        <span class="c">// input will be copied twice in IE.  Is there a way to avoid this</span>
 <span class="c"></span>        <span class="c">// without increasing the byte count?</span>
 <span class="c"></span>        <span class="k">function</span> <span class="o">(</span><span class="nx">css</span><span class="o">,</span> <span class="nx">cssText</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="s1">&#39;opacity&#39;</span> <span class="k">in</span> <span class="nx">css</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">css</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;opacity&#39;</span> <span class="k">in</span> <span class="nx">css</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">css</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">merge</span><span class="o">(</span><span class="nx">css</span><span class="o">,{</span>
                         <span class="nx">filter</span><span class="o">:</span> <span class="s1">&#39;alpha(opacity=&#39;</span><span class="o">+(</span><span class="nx">css</span><span class="o">.</span><span class="nx">opacity</span><span class="o">*</span><span class="m">100</span><span class="o">)+</span><span class="s1">&#39;)&#39;</span>
                       <span class="o">});</span>
@@ -677,6 +688,7 @@
 <span class="c"> * IE6-8 addRule(&#39;.foo&#39;,&#39;&#39;,n) throws an error.  Must supply *some* cssText</span>
 <span class="c">*/</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>
@@ -698,11 +710,16 @@
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_element-delegate.html" title="element-delegate">element-delegate</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
                                 <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
@@ -714,10 +731,15 @@
                                 <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
                                 <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
                                 <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_storage.html" title="Storage">Storage</a></li>
                                 <li class="selected"><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>

@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>element&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>element&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_element.html" title="element">element</a>
                  &gt; YAHOO.util.Element 
@@ -84,6 +84,12 @@
                                     </span>
                                     <span rel="yui:subclass" resource="YAHOO.widget.SimpleEditor.html">
                                     <a href="YAHOO.widget.SimpleEditor.html" property="yui:name" title="YAHOO.widget.SimpleEditor">YAHOO.widget.SimpleEditor</a>
+                                    </span>
+                                    <span rel="yui:subclass" resource="YAHOO.widget.ProgressBar.html">
+                                    <a href="YAHOO.widget.ProgressBar.html" property="yui:name" title="YAHOO.widget.ProgressBar">YAHOO.widget.ProgressBar</a>
+                                    </span>
+                                    <span rel="yui:subclass" resource="YAHOO.widget.SWF.html">
+                                    <a href="YAHOO.widget.SWF.html" property="yui:name" title="YAHOO.widget.SWF">YAHOO.widget.SWF</a>
                                     </span>
                                     <span rel="yui:subclass" resource="YAHOO.widget.Carousel.html">
                                     <a href="YAHOO.widget.Carousel.html" property="yui:name" title="YAHOO.widget.Carousel">YAHOO.widget.Carousel</a>
@@ -260,13 +266,6 @@ register the config to.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -311,13 +310,6 @@ register the config to.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -394,13 +386,6 @@ can be listened for.  All handlers receive an event object.
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -448,7 +433,7 @@ can be listened for.  All handlers receive an event object.
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        HTMLElement
+                                                            HTMLElement
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The appended DOM element.</dd>
                                                 </dl>
@@ -509,9 +494,110 @@ can be listened for.  All handlers receive an event object.
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        HTMLElement
+                                                            HTMLElement
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The appended DOM element.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_delegate">
+                                    <h4>
+                                        <a name="method_delegate">delegate</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong property="yui:name">delegate</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         filter
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                        , 
+                                                         scope
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Appends a delegated event listener.  Delegated event listeners 
+receive two arguments by default: the DOM event and the element  
+specified by the filtering function or CSS selector.
+(Note: Using the delegate method requires the element-delegate 
+module.  Using CSS selectors as the filtering criteria for delegated 
+event listeners requires inclusion of the Selector Utility.)
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">type</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the event to listen for</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">fn</span>
+                                                        &lt;<span property="yui:type">Function</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The handler to call when the event fires</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">filter</span>
+                                                        &lt;<span property="yui:type">Function|string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> Function or CSS selector used to 
+determine for what element(s) the event listener should be called. 
+When a function is specified, the function should return an 
+HTML element.  Using a CSS Selector requires the inclusion of the 
+CSS Selector Utility.</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">obj</span>
+                                                        &lt;<span property="yui:type">Any</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> A variable to pass to the handler</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">scope</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The object to use for the scope of the handler</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            boolean
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">Returns true if the delegated event listener 
+was added successfully</dd>
                                                 </dl>
 
 
@@ -543,13 +629,6 @@ can be listened for.  All handlers receive an event object.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -608,7 +687,7 @@ conjunction with class name</span>
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        Array
+                                                            Array
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">Array of HTMLElements</dd>
                                                 </dl>
@@ -659,7 +738,7 @@ conjunction with class name</span>
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        HTMLCollection
+                                                            HTMLCollection
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">A collection of DOM elements.</dd>
                                                 </dl>
@@ -710,7 +789,7 @@ conjunction with class name</span>
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        String
+                                                            String
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The current value of the property</dd>
                                                 </dl>
@@ -747,7 +826,7 @@ conjunction with class name</span>
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        Boolean
+                                                            Boolean
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">Whether or not the element has childNodes</dd>
                                                 </dl>
@@ -798,7 +877,7 @@ conjunction with class name</span>
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        Boolean
+                                                            Boolean
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">Whether or not the element has the class name</dd>
                                                 </dl>
@@ -846,13 +925,6 @@ conjunction with class name</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -911,7 +983,7 @@ the element before.</span>
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        HTMLElement
+                                                            HTMLElement
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The inserted DOM element.</dd>
                                                 </dl>
@@ -989,13 +1061,6 @@ the element before.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1043,7 +1108,7 @@ the element before.</span>
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        HTMLElement
+                                                            HTMLElement
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The removed DOM element.</dd>
                                                 </dl>
@@ -1091,12 +1156,67 @@ the element before.</span>
                                                         </dd>
                                                 </dl>
 
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_removeDelegate">
+                                    <h4>
+                                        <a name="method_removeDelegate">removeDelegate</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong property="yui:name">removeDelegate</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         fn
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Remove a delegated event listener
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">type</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the event to listen for</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">fn</span>
+                                                        &lt;<span property="yui:type">Function</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The function call when the event fires</span>
+                                                        </dd>
+                                                </dl>
+
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        void
+                                                            boolean
                                                     </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
+                                                    <dd property="yui:returnInfo">Returns true if the unbind was successful, false 
+otherwise.</dd>
                                                 </dl>
 
 
@@ -1152,13 +1272,6 @@ the element before.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1216,7 +1329,7 @@ the element before.</span>
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        HTMLElement
+                                                            HTMLElement
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The replaced DOM element.</dd>
                                                 </dl>
@@ -1274,13 +1387,6 @@ the element before.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1335,13 +1441,6 @@ the element before.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1416,13 +1515,6 @@ the element before.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1775,11 +1867,16 @@ myTabs.addListener('contentReady', handler);</code></p>
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class="selected"><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_element-delegate.html" title="element-delegate">element-delegate</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
                                 <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
@@ -1791,10 +1888,15 @@ myTabs.addListener('contentReady', handler);</code></p>
                                 <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
                                 <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
                                 <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_storage.html" title="Storage">Storage</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>
@@ -1837,6 +1939,7 @@ myTabs.addListener('contentReady', handler);</code></p>
                                 <li class=""><a href="#method_addListener" title="addListener">addListener</a></li>
                                 <li class=""><a href="#method_appendChild" title="appendChild">appendChild</a></li>
                                 <li class=""><a href="#method_appendTo" title="appendTo">appendTo</a></li>
+                                <li class=""><a href="#method_delegate" title="delegate">delegate</a></li>
                                 <li class=""><a href="#method_fireQueue" title="fireQueue">fireQueue</a></li>
                                 <li class=""><a href="#method_getElementsByClassName" title="getElementsByClassName">getElementsByClassName</a></li>
                                 <li class=""><a href="#method_getElementsByTagName" title="getElementsByTagName">getElementsByTagName</a></li>
@@ -1848,6 +1951,7 @@ myTabs.addListener('contentReady', handler);</code></p>
                                 <li class=""><a href="#method_on" title="on">on</a></li>
                                 <li class=""><a href="#method_removeChild" title="removeChild">removeChild</a></li>
                                 <li class=""><a href="#method_removeClass" title="removeClass">removeClass</a></li>
+                                <li class=""><a href="#method_removeDelegate" title="removeDelegate">removeDelegate</a></li>
                                 <li class=""><a href="#method_removeListener" title="removeListener">removeListener</a></li>
                                 <li class=""><a href="#method_replaceChild" title="replaceChild">replaceChild</a></li>
                                 <li class=""><a href="#method_replaceClass" title="replaceClass">replaceClass</a></li>
@@ -1884,7 +1988,7 @@ myTabs.addListener('contentReady', handler);</code></p>
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Element", "name": "addClass", "url": "YAHOO.util.Element.html#method_addClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "addListener", "url": "YAHOO.util.Element.html#method_addListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendChild", "url": "YAHOO.util.Element.html#method_appendChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendTo", "url": "YAHOO.util.Element.html#method_appendTo", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendTo", "url": "YAHOO.util.Element.html#event_appendTo", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "available", "url": "YAHOO.util.Element.html#event_available", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "beforeAppendTo", "url": "YAHOO.util.Element.html#event_beforeAppendTo", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "beforeElementChange", "url": "YAHOO.util.Element.html#event_beforeElementChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "contentReady", "url": "YAHOO.util.Element.html#event_contentReady", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "DOM_EVENTS", "url": "YAHOO.util.Element.html#property_DOM_EVENTS", "type": "property"}, {"access": "", "host": "YAHOO.util.Element", "name": "element", "url": "YAHOO.util.Element.html#config_element", "type": "config"}, {"access": "", "host": "YAHOO.util.Element", "name": "elementChange", "url": "YAHOO.util.Element.html#event_elementChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "fireQueue", "url": "YAHOO.util.Element.html#method_fireQueue", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getElementsByClassName", "url": "YAHOO.util.Element.html#method_getElementsByClassName", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getElementsByTagName", "url": "YAHOO.util.Element.html#method_getElementsByTagName", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getStyle", "url": "YAHOO.util.Element.html#method_getStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "hasChildNodes", "url": "YAHOO.util.Element.html#method_hasChildNodes", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "hasClass", "url": "YAHOO.util.Element.html#method_hasClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "initAttributes", "url": "YAHOO.util.Element.html#method_initAttributes", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "insertBefore", "url": "YAHOO.util.Element.html#method_insertBefore", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "on", "url": "YAHOO.util.Element.html#method_on", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeChild", "url": "YAHOO.util.Element.html#method_removeChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeClass", "url": "YAHOO.util.Element.html#method_removeClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeListener", "url": "YAHOO.util.Element.html#method_removeListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "replaceChild", "url": "YAHOO.util.Element.html#method_replaceChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "replaceClass", "url": "YAHOO.util.Element.html#method_replaceClass", "type": "method"}, {"access": "private", "host": "YAHOO.util.Element", "name": "_setHTMLAttrConfig", "url": "YAHOO.util.Element.html#method__setHTMLAttrConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "setStyle", "url": "YAHOO.util.Element.html#method_setStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "subscribe", "url": "YAHOO.util.Element.html#method_subscribe", "type": "method"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Element", "name": "addClass", "url": "YAHOO.util.Element.html#method_addClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "addListener", "url": "YAHOO.util.Element.html#method_addListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendChild", "url": "YAHOO.util.Element.html#method_appendChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendTo", "url": "YAHOO.util.Element.html#method_appendTo", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendTo", "url": "YAHOO.util.Element.html#event_appendTo", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "available", "url": "YAHOO.util.Element.html#event_available", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "beforeAppendTo", "url": "YAHOO.util.Element.html#event_beforeAppendTo", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "beforeElementChange", "url": "YAHOO.util.Element.html#event_beforeElementChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "contentReady", "url": "YAHOO.util.Element.html#event_contentReady", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "delegate", "url": "YAHOO.util.Element.html#method_delegate", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "DOM_EVENTS", "url": "YAHOO.util.Element.html#property_DOM_EVENTS", "type": "property"}, {"access": "", "host": "YAHOO.util.Element", "name": "element", "url": "YAHOO.util.Element.html#config_element", "type": "config"}, {"access": "", "host": "YAHOO.util.Element", "name": "elementChange", "url": "YAHOO.util.Element.html#event_elementChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "fireQueue", "url": "YAHOO.util.Element.html#method_fireQueue", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getElementsByClassName", "url": "YAHOO.util.Element.html#method_getElementsByClassName", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getElementsByTagName", "url": "YAHOO.util.Element.html#method_getElementsByTagName", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getStyle", "url": "YAHOO.util.Element.html#method_getStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "hasChildNodes", "url": "YAHOO.util.Element.html#method_hasChildNodes", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "hasClass", "url": "YAHOO.util.Element.html#method_hasClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "initAttributes", "url": "YAHOO.util.Element.html#method_initAttributes", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "insertBefore", "url": "YAHOO.util.Element.html#method_insertBefore", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "on", "url": "YAHOO.util.Element.html#method_on", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeChild", "url": "YAHOO.util.Element.html#method_removeChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeClass", "url": "YAHOO.util.Element.html#method_removeClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeDelegate", "url": "YAHOO.util.Element.html#method_removeDelegate", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeListener", "url": "YAHOO.util.Element.html#method_removeListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "replaceChild", "url": "YAHOO.util.Element.html#method_replaceChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "replaceClass", "url": "YAHOO.util.Element.html#method_replaceClass", "type": "method"}, {"access": "private", "host": "YAHOO.util.Element", "name": "_setHTMLAttrConfig", "url": "YAHOO.util.Element.html#method__setHTMLAttrConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "setStyle", "url": "YAHOO.util.Element.html#method_setStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "subscribe", "url": "YAHOO.util.Element.html#method_subscribe", "type": "method"}];
 </script>
 </body>
 </html>

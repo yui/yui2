@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>get&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>get&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_get.html" title="get">get</a>
                 
@@ -47,7 +47,7 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * Provides a mechanism to fetch remote resources and</span>
 <span class="c"> * insert them into a document</span>
 <span class="c"> * @module get</span>
@@ -130,15 +130,20 @@
 <span class="c">     * @return {HTMLElement} the generated node</span>
 <span class="c">     * @private</span>
 <span class="c">     */</span>
-    <span class="k">var</span> <span class="nx">_linkNode</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">url</span><span class="o">,</span> <span class="nx">win</span><span class="o">,</span> <span class="nx">charset</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">charset</span> <span class="o">||</span> <span class="s2">&quot;utf-8&quot;</span><span class="o">;</span>
-        <span class="k">return</span> <span class="nx">_node</span><span class="o">(</span><span class="s2">&quot;link&quot;</span><span class="o">,</span> <span class="o">{</span>
-                <span class="s2">&quot;id&quot;</span><span class="o">:</span>      <span class="s2">&quot;yui__dyn_&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="nx">nidx</span><span class="o">++),</span>
-                <span class="s2">&quot;type&quot;</span><span class="o">:</span>    <span class="s2">&quot;text/css&quot;</span><span class="o">,</span>
-                <span class="s2">&quot;charset&quot;</span><span class="o">:</span> <span class="nx">c</span><span class="o">,</span>
-                <span class="s2">&quot;rel&quot;</span><span class="o">:</span>     <span class="s2">&quot;stylesheet&quot;</span><span class="o">,</span>
-                <span class="s2">&quot;href&quot;</span><span class="o">:</span>    <span class="nx">url</span>
-            <span class="o">},</span> <span class="nx">win</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">_linkNode</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">url</span><span class="o">,</span> <span class="nx">win</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="o">{</span>
+            <span class="nx">id</span><span class="o">:</span>   <span class="s2">&quot;yui__dyn_&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="nx">nidx</span><span class="o">++),</span>
+            <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;text/css&quot;</span><span class="o">,</span>
+            <span class="nx">rel</span><span class="o">:</span>  <span class="s2">&quot;stylesheet&quot;</span><span class="o">,</span>
+            <span class="nx">href</span><span class="o">:</span> <span class="nx">url</span>
+        <span class="o">};</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="nx">attributes</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="nx">_node</span><span class="o">(</span><span class="s2">&quot;link&quot;</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="nx">win</span><span class="o">);</span>
     <span class="o">};</span>
 
     <span class="c">/**</span>
@@ -149,14 +154,18 @@
 <span class="c">     * @return {HTMLElement} the generated node</span>
 <span class="c">     * @private</span>
 <span class="c">     */</span>
-    <span class="k">var</span> <span class="nx">_scriptNode</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">url</span><span class="o">,</span> <span class="nx">win</span><span class="o">,</span> <span class="nx">charset</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">charset</span> <span class="o">||</span> <span class="s2">&quot;utf-8&quot;</span><span class="o">;</span>
-        <span class="k">return</span> <span class="nx">_node</span><span class="o">(</span><span class="s2">&quot;script&quot;</span><span class="o">,</span> <span class="o">{</span>
-                <span class="s2">&quot;id&quot;</span><span class="o">:</span>      <span class="s2">&quot;yui__dyn_&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="nx">nidx</span><span class="o">++),</span>
-                <span class="s2">&quot;type&quot;</span><span class="o">:</span>    <span class="s2">&quot;text/javascript&quot;</span><span class="o">,</span>
-                <span class="s2">&quot;charset&quot;</span><span class="o">:</span> <span class="nx">c</span><span class="o">,</span>
-                <span class="s2">&quot;src&quot;</span><span class="o">:</span>     <span class="nx">url</span>
-            <span class="o">},</span> <span class="nx">win</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">_scriptNode</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">url</span><span class="o">,</span> <span class="nx">win</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="o">{</span>
+            <span class="nx">id</span><span class="o">:</span>   <span class="s2">&quot;yui__dyn_&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="nx">nidx</span><span class="o">++),</span>
+            <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;text/javascript&quot;</span><span class="o">,</span>
+            <span class="nx">src</span><span class="o">:</span>  <span class="nx">url</span>
+        <span class="o">};</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="nx">attributes</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span> <span class="nx">attributes</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="nx">_node</span><span class="o">(</span><span class="s2">&quot;script&quot;</span><span class="o">,</span> <span class="nx">o</span><span class="o">,</span> <span class="nx">win</span><span class="o">);</span>
     <span class="o">};</span>
 
     <span class="c">/**</span>
@@ -295,7 +304,7 @@
 <span class="c"></span>                <span class="c">// arbitrary timeout.  It is possible that the browser does</span>
 <span class="c"></span>                <span class="c">// block subsequent script execution in this case for a limited</span>
 <span class="c"></span>                <span class="c">// time.</span>
-<span class="c"></span>                <span class="k">var</span> <span class="nx">extra</span> <span class="o">=</span> <span class="nx">_scriptNode</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="nx">q</span><span class="o">.</span><span class="nx">win</span><span class="o">,</span> <span class="nx">q</span><span class="o">.</span><span class="nx">charset</span><span class="o">);</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">extra</span> <span class="o">=</span> <span class="nx">_scriptNode</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="nx">q</span><span class="o">.</span><span class="nx">win</span><span class="o">,</span> <span class="nx">q</span><span class="o">.</span><span class="nx">attributes</span><span class="o">);</span>
                 <span class="nx">extra</span><span class="o">.</span><span class="nx">innerHTML</span><span class="o">=</span><span class="s1">&#39;YAHOO.util.Get._finalize(&quot;&#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;&quot;);&#39;</span><span class="o">;</span>
                 <span class="nx">q</span><span class="o">.</span><span class="nx">nodes</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">extra</span><span class="o">);</span> <span class="nx">h</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">extra</span><span class="o">);</span>
 
@@ -324,9 +333,9 @@
         <span class="o">}</span>
 
         <span class="k">if</span> <span class="o">(</span><span class="nx">q</span><span class="o">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">&quot;script&quot;</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">n</span> <span class="o">=</span> <span class="nx">_scriptNode</span><span class="o">(</span><span class="nx">url</span><span class="o">,</span> <span class="nx">w</span><span class="o">,</span> <span class="nx">q</span><span class="o">.</span><span class="nx">charset</span><span class="o">);</span>
+            <span class="nx">n</span> <span class="o">=</span> <span class="nx">_scriptNode</span><span class="o">(</span><span class="nx">url</span><span class="o">,</span> <span class="nx">w</span><span class="o">,</span> <span class="nx">q</span><span class="o">.</span><span class="nx">attributes</span><span class="o">);</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="nx">n</span> <span class="o">=</span> <span class="nx">_linkNode</span><span class="o">(</span><span class="nx">url</span><span class="o">,</span> <span class="nx">w</span><span class="o">,</span> <span class="nx">q</span><span class="o">.</span><span class="nx">charset</span><span class="o">);</span>
+            <span class="nx">n</span> <span class="o">=</span> <span class="nx">_linkNode</span><span class="o">(</span><span class="nx">url</span><span class="o">,</span> <span class="nx">w</span><span class="o">,</span> <span class="nx">q</span><span class="o">.</span><span class="nx">attributes</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="c">// track this node&#39;s load progress</span>
@@ -385,20 +394,33 @@
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="k">var</span> <span class="nx">_purge</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">tId</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">q</span><span class="o">=</span><span class="nx">queues</span><span class="o">[</span><span class="nx">tId</span><span class="o">];</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">q</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">n</span><span class="o">=</span><span class="nx">q</span><span class="o">.</span><span class="nx">nodes</span><span class="o">,</span> <span class="nx">l</span><span class="o">=</span><span class="nx">n</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> <span class="nx">d</span><span class="o">=</span><span class="nx">q</span><span class="o">.</span><span class="nx">win</span><span class="o">.</span><span class="nb">document</span><span class="o">,</span> 
-                <span class="nx">h</span><span class="o">=</span><span class="nx">d</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s2">&quot;head&quot;</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">queues</span><span class="o">[</span><span class="nx">tId</span><span class="o">])</span> <span class="o">{</span>
+
+            <span class="k">var</span> <span class="nx">q</span>     <span class="o">=</span> <span class="nx">queues</span><span class="o">[</span><span class="nx">tId</span><span class="o">],</span>
+                <span class="nx">nodes</span> <span class="o">=</span> <span class="nx">q</span><span class="o">.</span><span class="nx">nodes</span><span class="o">,</span> 
+                <span class="nx">l</span>     <span class="o">=</span> <span class="nx">nodes</span><span class="o">.</span><span class="nx">length</span><span class="o">,</span> 
+                <span class="nx">d</span>     <span class="o">=</span> <span class="nx">q</span><span class="o">.</span><span class="nx">win</span><span class="o">.</span><span class="nb">document</span><span class="o">,</span> 
+                <span class="nx">h</span>     <span class="o">=</span> <span class="nx">d</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s2">&quot;head&quot;</span><span class="o">)[</span><span class="m">0</span><span class="o">],</span>
+                <span class="nx">sib</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">node</span><span class="o">,</span> <span class="nx">attr</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">q</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">_get</span><span class="o">(</span><span class="nx">q</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">,</span> <span class="nx">tId</span><span class="o">);</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">s</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">h</span> <span class="o">=</span> <span class="nx">s</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+                <span class="nx">sib</span> <span class="o">=</span> <span class="nx">_get</span><span class="o">(</span><span class="nx">q</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">,</span> <span class="nx">tId</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">sib</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">h</span> <span class="o">=</span> <span class="nx">sib</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
                 <span class="o">}</span>
             <span class="o">}</span>
 
-            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">h</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">n</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">node</span> <span class="o">=</span> <span class="nx">nodes</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">node</span><span class="o">.</span><span class="nx">clearAttributes</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nx">node</span><span class="o">.</span><span class="nx">clearAttributes</span><span class="o">();</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="k">for</span> <span class="o">(</span><span class="nx">attr</span> <span class="k">in</span> <span class="nx">node</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nx">delete</span> <span class="nx">node</span><span class="o">[</span><span class="nx">attr</span><span class="o">];</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="nx">h</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">node</span><span class="o">);</span>
             <span class="o">}</span>
 
             <span class="nx">q</span><span class="o">.</span><span class="nx">nodes</span> <span class="o">=</span> <span class="o">[];</span>
@@ -437,6 +459,11 @@
         <span class="nx">q</span><span class="o">.</span><span class="nx">scope</span> <span class="o">=</span> <span class="nx">q</span><span class="o">.</span><span class="nx">scope</span> <span class="o">||</span> <span class="nx">q</span><span class="o">.</span><span class="nx">win</span><span class="o">;</span>
         <span class="nx">q</span><span class="o">.</span><span class="nx">autopurge</span> <span class="o">=</span> <span class="o">(</span><span class="s2">&quot;autopurge&quot;</span> <span class="k">in</span> <span class="nx">q</span><span class="o">)</span> <span class="o">?</span> <span class="nx">q</span><span class="o">.</span><span class="nx">autopurge</span> <span class="o">:</span> 
                       <span class="o">(</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">&quot;script&quot;</span><span class="o">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="nx">opts</span><span class="o">.</span><span class="nx">charset</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">q</span><span class="o">.</span><span class="nx">attributes</span> <span class="o">=</span> <span class="nx">q</span><span class="o">.</span><span class="nx">attributes</span> <span class="o">||</span> <span class="o">{};</span>
+            <span class="nx">q</span><span class="o">.</span><span class="nx">attributes</span><span class="o">.</span><span class="nx">charset</span> <span class="o">=</span> <span class="nx">opts</span><span class="o">.</span><span class="nx">charset</span><span class="o">;</span>
+        <span class="o">}</span>
 
         <span class="nx">lang</span><span class="o">.</span><span class="nx">later</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">q</span><span class="o">,</span> <span class="nx">_next</span><span class="o">,</span> <span class="nx">id</span><span class="o">);</span>
 
@@ -697,14 +724,16 @@
 <span class="c">         * &lt;dd&gt;node or node id that will become the new node&#39;s nextSibling&lt;/dd&gt;</span>
 <span class="c">         * &lt;/dl&gt;</span>
 <span class="c">         * &lt;dt&gt;charset&lt;/dt&gt;</span>
-<span class="c">         * &lt;dd&gt;Node charset, default utf-8&lt;/dd&gt;</span>
+<span class="c">         * &lt;dd&gt;Node charset, deprecated, use &#39;attributes&#39;&lt;/dd&gt;</span>
+<span class="c">         * &lt;dt&gt;attributes&lt;/dt&gt;</span>
+<span class="c">         * &lt;dd&gt;A hash of attributes to apply to dynamic nodes.&lt;/dd&gt;</span>
 <span class="c">         * &lt;dt&gt;timeout&lt;/dt&gt;</span>
 <span class="c">         * &lt;dd&gt;Number of milliseconds to wait before aborting and firing the timeout event&lt;/dd&gt;</span>
 <span class="c">         * &lt;pre&gt;</span>
 <span class="c">         * // assumes yahoo, dom, and event are already on the page</span>
 <span class="c">         * &amp;nbsp;&amp;nbsp;YAHOO.util.Get.script(</span>
-<span class="c">         * &amp;nbsp;&amp;nbsp;[&quot;http://yui.yahooapis.com/2.3.1/build/dragdrop/dragdrop-min.js&quot;,</span>
-<span class="c">         * &amp;nbsp;&amp;nbsp;&amp;nbsp;&quot;http://yui.yahooapis.com/2.3.1/build/animation/animation-min.js&quot;], &amp;#123;</span>
+<span class="c">         * &amp;nbsp;&amp;nbsp;[&quot;http://yui.yahooapis.com/2.7.0/build/dragdrop/dragdrop-min.js&quot;,</span>
+<span class="c">         * &amp;nbsp;&amp;nbsp;&amp;nbsp;&quot;http://yui.yahooapis.com/2.7.0/build/animation/animation-min.js&quot;], &amp;#123;</span>
 <span class="c">         * &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;onSuccess: function(o) &amp;#123;</span>
 <span class="c">         * &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;YAHOO.log(o.data); // foo</span>
 <span class="c">         * &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;new YAHOO.util.DDProxy(&quot;dd1&quot;); // also new o.reference(&quot;dd1&quot;); would work</span>
@@ -765,14 +794,16 @@
 <span class="c">         * &lt;dt&gt;insertBefore&lt;/dt&gt;</span>
 <span class="c">         * &lt;dd&gt;node or node id that will become the new node&#39;s nextSibling&lt;/dd&gt;</span>
 <span class="c">         * &lt;dt&gt;charset&lt;/dt&gt;</span>
-<span class="c">         * &lt;dd&gt;Node charset, default utf-8&lt;/dd&gt;</span>
+<span class="c">         * &lt;dd&gt;Node charset, deprecated, use &#39;attributes&#39;&lt;/dd&gt;</span>
+<span class="c">         * &lt;dt&gt;attributes&lt;/dt&gt;</span>
+<span class="c">         * &lt;dd&gt;A hash of attributes to apply to dynamic nodes.&lt;/dd&gt;</span>
 <span class="c">         * &lt;/dl&gt;</span>
 <span class="c">         * &lt;pre&gt;</span>
-<span class="c">         *      YAHOO.util.Get.css(&quot;http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css&quot;);</span>
+<span class="c">         *      YAHOO.util.Get.css(&quot;http://yui.yahooapis.com/2.7.0/build/menu/assets/skins/sam/menu.css&quot;);</span>
 <span class="c">         * &lt;/pre&gt;</span>
 <span class="c">         * &lt;pre&gt;</span>
-<span class="c">         *      YAHOO.util.Get.css([&quot;http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css&quot;,</span>
-<span class="c">         *                          &quot;http://yui.yahooapis.com/2.3.1/build/logger/assets/skins/sam/logger.css&quot;]);</span>
+<span class="c">         *      YAHOO.util.Get.css([&quot;http://yui.yahooapis.com/2.7.0/build/menu/assets/skins/sam/menu.css&quot;,</span>
+<span class="c">         *                          &quot;http://yui.yahooapis.com/2.7.0/build/logger/assets/skins/sam/logger.css&quot;]);</span>
 <span class="c">         * &lt;/pre&gt;</span>
 <span class="c">         * @return {tId: string} an object containing info about the transaction</span>
 <span class="c">         */</span>
@@ -782,6 +813,7 @@
     <span class="o">};</span>
 <span class="o">}();</span>
 </pre></div>
+
                     </div>
 			</div>
 		</div>
@@ -803,11 +835,16 @@
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_element-delegate.html" title="element-delegate">element-delegate</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class="selected"><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
                                 <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
@@ -819,10 +856,15 @@
                                 <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
                                 <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
                                 <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_storage.html" title="Storage">Storage</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>

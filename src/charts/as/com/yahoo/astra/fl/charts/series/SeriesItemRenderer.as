@@ -1,6 +1,6 @@
 package com.yahoo.astra.fl.charts.series
 {
-	import com.yahoo.astra.fl.charts.skins.IProgrammaticSkin;
+	import com.yahoo.astra.fl.charts.skins.*;
 	import com.yahoo.astra.fl.utils.UIComponentUtil;
 	
 	import fl.core.InvalidationType;

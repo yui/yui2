@@ -32,6 +32,7 @@
 <h1>Paginator Tests</h1>
 <input type="button" id="go" value="recordOffset -= 3">
 <input type="button" id="del" value="totalRecords -= 3">
+<input type="button" id="add" value="totalRecords += 3">
 <div id="log"></div>
 <div id="ex"></div>
 <div id="testbed"></div>
@@ -152,13 +153,16 @@ YAHOO.util.Event.onDOMReady(function () {
     logger.hideCategory('info');
 
     var p = new YAHOO.widget.Paginator({
-        rowsPerPage   :10,
-        totalRecords  :93,
+        rowsPerPage   :17,
+        totalRecords  :10,
         containers    :'ex',
         template      : YAHOO.widget.Paginator.TEMPLATE_ROWS_PER_PAGE,
         pageLinks     : 5,
-        rowsPerPageOptions : [3,10,17],
-        updateOnChange:true
+        rowsPerPageOptions : [10,17,33],
+        alwaysVisible : false
+    });
+    p.subscribe('changeRequest', function (state) {
+        this.setState(state);
     });
     p.subscribe('totalRecordsChange',function (e) {
         if (window.console) {
@@ -182,6 +186,11 @@ YAHOO.util.Event.onDOMReady(function () {
         YAHOO.util.Event.preventDefault(e);
 
         p.set('totalRecords',Math.max(0,p.get('totalRecords') - 3));
+    });
+    YAHOO.util.Event.on('add','click',function (e) {
+        YAHOO.util.Event.preventDefault(e);
+
+        p.set('totalRecords',p.get('totalRecords') + 3);
     });
 
     TestRunner.add(suite);

@@ -77,6 +77,8 @@
             'className': _CLASS
         },
 
+        DOT_ATTRIBUTES: {},
+
         /**
          * Returns an HTMLElement reference.
          * @method get
@@ -84,7 +86,7 @@
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
-            var id, nodes, c, i, len;
+            var id, nodes, c, i, len, attr;
 
             if (el) {
                 if (el[NODE_TYPE] || el.item) { // Node, or NodeList
@@ -94,8 +96,9 @@
                 if (typeof el === 'string') { // id
                     id = el;
                     el = document.getElementById(el);
-                    if (el && el.id === id) { // IE: avoid false match on "name" attribute
-                    return el;
+                    attr = (el) ? el.attributes : null;
+                    if (el && attr && attr.id && attr.id.value === id) { // IE: avoid false match on "name" attribute
+                        return el;
                     } else if (el && document.all) { // filter by name
                         el = null;
                         nodes = document.all[id];
@@ -558,14 +561,14 @@
          * @method getElementsByClassName
          * @param {String} className The class name to match against
          * @param {String} tag (optional) The tag name of the elements being collected
-         * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
+         * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point.
+         * This element is not included in the className scan.
          * @param {Function} apply (optional) A function to apply to each element when found 
          * @param {Any} o (optional) An optional arg that is passed to the supplied method
          * @param {Boolean} overrides (optional) Whether or not to override the scope of "method" with "o"
          * @return {Array} An array of elements that have the given class name
          */
         getElementsByClassName: function(className, tag, root, apply, o, overrides) {
-            className = lang.trim(className);
             tag = tag || '*';
             root = (root) ? Y.Dom.get(root) : null || document; 
             if (!root) {
@@ -1284,8 +1287,12 @@
                 val = args.val;
 
             if (el && el.setAttribute) {
-                attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
-                el.setAttribute(attr, val);
+                if (Y.Dom.DOT_ATTRIBUTES[attr]) {
+                    el[attr] = val;
+                } else {
+                    attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
+                    el.setAttribute(attr, val);
+                }
             } else {
                 YAHOO.log('setAttribute method not available for ' + el, 'error', 'Dom');
             }
@@ -1308,7 +1315,7 @@
             attr = Y.Dom.CUSTOM_ATTRIBUTES[attr] || attr;
 
             if (el && el.getAttribute) {
-                val = el.getAttribute(attr);
+                val = el.getAttribute(attr, 2);
             } else {
                 YAHOO.log('getAttribute method not available for ' + el, 'error', 'Dom');
             }
@@ -1347,7 +1354,7 @@
 
         _patterns: {
             ROOT_TAG: /^body|html$/i, // body for quirks mode, html for standards,
-            CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}])/g
+            CLASS_RE_TOKENS: /([\.\(\)\^\$\*\+\?\|\[\]\{\}\\])/g
         },
 
 
@@ -1396,5 +1403,9 @@
             return val;
         };
 
+    }
+
+    if (UA.ie && UA.ie >= 8 && document.documentElement.hasAttribute) { // IE 8 standards
+        Y.Dom.DOT_ATTRIBUTES.type = true; // IE 8 errors on input.setAttribute('type')
     }
 })();

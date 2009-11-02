@@ -117,8 +117,8 @@ function StyleSheet(seed, name) {
         i,r,sel;
 
     // Factory or constructor
-    if (!(this instanceof arguments.callee)) {
-        return new arguments.callee(seed,name);
+    if (!(this instanceof StyleSheet)) {
+        return new StyleSheet(seed,name);
     }
 
     // capture the DOM node if the string is an id
@@ -260,15 +260,20 @@ function StyleSheet(seed, name) {
          * selectors and applied accordingly.  If the selector string does not
          * have a corresponding rule in the sheet, it will be added.</p>
          *
-         * <p>The object properties in the second parameter must be the JavaScript
-         * names of style properties.  E.g. fontSize rather than font-size.</p>
+         * <p>The second parameter can be either a string of CSS text,
+         * formatted as CSS ("font-size: 10px;"), or an object collection of
+         * properties and their new values.  Object properties must be in
+         * JavaScript format ({ fontSize: "10px" }).</p>
          *
          * <p>The float style property will be set by any of &quot;float&quot;,
-         * &quot;styleFloat&quot;, or &quot;cssFloat&quot;.</p>
+         * &quot;styleFloat&quot;, or &quot;cssFloat&quot; if passed in the
+         * object map.  Use "float: left;" format when passing a CSS text
+         * string.</p>
          *
          * @method set
          * @param sel {String} the selector string to apply the changes to
-         * @param css {Object} Object literal of style properties and new values
+         * @param css {Object|String} Object literal of style properties and
+         *                      new values, or a string of cssText
          * @return {StyleSheet} the StyleSheet instance
          * @chainable
          */
@@ -423,25 +428,31 @@ _toCssText = function (css,base) {
 
     workerStyle.cssText = base || '';
 
-    if (f && !css[floatAttr]) {
-        css = lang.merge(css);
-        delete css.styleFloat; delete css.cssFloat; delete css['float'];
-        css[floatAttr] = f;
-    }
+    if (lang.isString(css)) {
+        // There is a danger here of incremental memory consumption in Opera
+        workerStyle.cssText += ';' + css;
+    } else {
+        if (f && !css[floatAttr]) {
+            css = lang.merge(css);
+            delete css.styleFloat; delete css.cssFloat; delete css['float'];
+            css[floatAttr] = f;
+        }
 
-    for (prop in css) {
-        if (css.hasOwnProperty(prop)) {
-            try {
-                // IE throws Invalid Value errors and doesn't like whitespace
-                // in values ala ' red' or 'red '
-                workerStyle[prop] = lang.trim(css[prop]);
-            }
-            catch (e) {
-                YAHOO.log('Error assigning property "'+prop+'" to "'+css[prop]+
-                          "\" (ignored):\n"+e.message,'warn','StyleSheet');
+        for (prop in css) {
+            if (css.hasOwnProperty(prop)) {
+                try {
+                    // IE throws Invalid Value errors and doesn't like whitespace
+                    // in values ala ' red' or 'red '
+                    workerStyle[prop] = lang.trim(css[prop]);
+                }
+                catch (e) {
+                    YAHOO.log('Error assigning property "'+prop+'" to "'+css[prop]+
+                              "\" (ignored):\n"+e.message,'warn','StyleSheet');
+                }
             }
         }
     }
+
     return workerStyle.cssText;
 };
 
@@ -466,7 +477,7 @@ lang.augmentObject(StyleSheet, {
         // input will be copied twice in IE.  Is there a way to avoid this
         // without increasing the byte count?
         function (css, cssText) {
-            if ('opacity' in css) {
+            if (lang.isObject(css) && 'opacity' in css) {
                 css = lang.merge(css,{
                         filter: 'alpha(opacity='+(css.opacity*100)+')'
                       });

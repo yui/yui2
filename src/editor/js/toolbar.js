@@ -96,11 +96,19 @@ var Dom = YAHOO.util.Dom,
         oConfig.attributes.element = oConfig.element;
         oConfig.attributes.id = oConfig.element.id;
 
+        this._configuredButtons = [];
+
         YAHOO.widget.Toolbar.superclass.constructor.call(this, oConfig.element, oConfig.attributes);
          
     };
 
     YAHOO.extend(YAHOO.widget.Toolbar, YAHOO.util.Element, {
+        /**
+        * @protected
+        * @property _configuredButtons
+        * @type Array
+        */
+        _configuredButtons: null,
         /**
         * @method _addMenuClasses
         * @private
@@ -298,6 +306,12 @@ var Dom = YAHOO.util.Dom,
         */
         STR_COLLAPSE: 'Collapse Toolbar',
         /** 
+        * @property STR_EXPAND
+        * @description String for Toolbar Collapse Button - Expand
+        * @type String
+        */
+        STR_EXPAND: 'Expand Toolbar',
+        /** 
         * @property STR_SPIN_LABEL
         * @description String for spinbutton dynamic label. Note the {VALUE} will be replaced with YAHOO.lang.substitute
         * @type String
@@ -410,7 +424,6 @@ var Dom = YAHOO.util.Dom,
         */
         init: function(p_oElement, p_oAttributes) {
             YAHOO.widget.Toolbar.superclass.init.call(this, p_oElement, p_oAttributes);
-
         },
         /**
         * @method initAttributes
@@ -478,14 +491,27 @@ var Dom = YAHOO.util.Dom,
                 value: [],
                 writeOnce: true,
                 method: function(data) {
-                    for (var i in data) {
+                    var i, button, buttons, len, b;
+                    for (i in data) {
                         if (Lang.hasOwnProperty(data, i)) {
                             if (data[i].type == 'separator') {
                                 this.addSeparator();
                             } else if (data[i].group !== undefined) {
-                                this.addButtonGroup(data[i]);
+                                buttons = this.addButtonGroup(data[i]);
+                                if (buttons) {
+                                    len = buttons.length;
+                                    for(b = 0; b < len; b++) {
+                                        if (buttons[b]) {
+                                            this._configuredButtons[this._configuredButtons.length] = buttons[b].id;
+                                        }
+                                    }
+                                }
+                                
                             } else {
-                                this.addButton(data[i]);
+                                button = this.addButton(data[i]);
+                                if (button) {
+                                    this._configuredButtons[this._configuredButtons.length] = button.id;
+                                }
                             }
                         }
                     }
@@ -737,6 +763,12 @@ var Dom = YAHOO.util.Dom,
             
             this._buttonGroupList[oGroup.group] = ul;
 
+            //An array of the button ids added to this group
+            //This is used for destruction later...
+            var addedButtons = [],
+                button;
+            
+
             for (var i = 0; i < oGroup.buttons.length; i++) {
                 var li = document.createElement('li');
                 li.className = this.CLASS_PREFIX + '-groupitem';
@@ -745,9 +777,13 @@ var Dom = YAHOO.util.Dom,
                     this.addSeparator(li);
                 } else {
                     oGroup.buttons[i].container = li;
-                    this.addButton(oGroup.buttons[i]);
+                    button = this.addButton(oGroup.buttons[i]);
+                    if (button) {
+                        addedButtons[addedButtons.length]  = button.id;
+                    }
                 }
             }
+            return addedButtons;
         },
         /**
         * @method addButtonToGroup
@@ -758,8 +794,9 @@ var Dom = YAHOO.util.Dom,
         * @param {HTMLElement} after Optional HTML element to insert this button after in the DOM.
         */
         addButtonToGroup: function(oButton, group, after) {
-            var groupCont = this._buttonGroupList[group];
-            var li = document.createElement('li');
+            var groupCont = this._buttonGroupList[group],
+                li = document.createElement('li');
+
             li.className = this.CLASS_PREFIX + '-groupitem';
             oButton.container = li;
             this.addButton(oButton, after);
@@ -894,9 +931,13 @@ var Dom = YAHOO.util.Dom,
                 if (oButton.type == 'select') {
                     if (tmp._button.tagName.toLowerCase() == 'select') {
                         icon.parentNode.removeChild(icon);
-                        var iel = tmp._button;
-                        var parEl = tmp.get('element');
+                        var iel = tmp._button,
+                            parEl = tmp.get('element');
                         parEl.parentNode.replaceChild(iel, parEl);
+                        //The 'element' value is currently the orphaned element
+                        //In order for "destroy" to execute we need to get('element') to reference the correct node.
+                        //I'm not sure if there is a direct approach to setting this value.
+                        tmp._configs.element.value = iel;
                     } else {
                         //Don't put a class on it if it's a real select element
                         tmp.addClass(this.CLASS_PREFIX + '-select');
@@ -950,11 +991,13 @@ var Dom = YAHOO.util.Dom,
                             YAHOO.util.Event.stopEvent(ev);
                         });
                         tmp.on('change', function(ev) {
-                            if (!oButton.menucmd) {
-                                oButton.menucmd = oButton.value;
+                            if (!ev.target) {
+                                if (!oButton.menucmd) {
+                                    oButton.menucmd = oButton.value;
+                                }
+                                oButton.value = ev.value;
+                                this._buttonClick(ev, oButton);
                             }
-                            oButton.value = ev.value;
-                            this._buttonClick(ev, oButton);
                         }, this, true);
 
                         var self = this;
@@ -1462,6 +1505,9 @@ var Dom = YAHOO.util.Dom,
         */
         getButtonByValue: function(value) {
             var _buttons = this.get('buttons');
+            if (!_buttons) {
+                return false;
+            }
             var len = _buttons.length;
             for (var i = 0; i < len; i++) {
                 if (_buttons[i].group !== undefined) {
@@ -1655,7 +1701,7 @@ var Dom = YAHOO.util.Dom,
             if (!Lang.isObject(_ex)) {
                 _ex = {};
             }
-            if (this.get('disabled')) {
+            if (this.get('disabled') || !this._buttonList) {
                 return false;
             }
             var len = this._buttonList.length;
@@ -1686,15 +1732,19 @@ var Dom = YAHOO.util.Dom,
         destroyButton: function(id) {
             var button = getButton.call(this, id);
             if (button) {
-                var thisID = button.get('id');
-                button.destroy();
+                var thisID = button.get('id'),
+                    new_list = [], i = 0,
+                    len = this._buttonList.length;
 
-                var len = this._buttonList.length;
-                for (var i = 0; i < len; i++) {
-                    if (this._buttonList[i] && this._buttonList[i].get('id') == thisID) {
-                        this._buttonList[i] = null;
+                button.destroy();
+                
+                for (i = 0; i < len; i++) {
+                    if (this._buttonList[i].get('id') != thisID) {
+                        new_list[new_list.length]= this._buttonList[i];
                     }
                 }
+
+                this._buttonList = new_list;
             } else {
                 return false;
             }
@@ -1705,10 +1755,17 @@ var Dom = YAHOO.util.Dom,
         * @return {Boolean}
         */
         destroy: function() {
+            var len = this._configuredButtons.length, j, i;
+            for(b = 0; b < len; b++) {
+                this.destroyButton(this._configuredButtons[b]);
+            }
+
+            this._configuredButtons = null;
+        
             this.get('element').innerHTML = '';
             this.get('element').className = '';
             //Brutal Object Destroy
-            for (var i in this) {
+            for (i in this) {
                 if (Lang.hasOwnProperty(this, i)) {
                     this[i] = null;
                 }
@@ -1726,11 +1783,13 @@ var Dom = YAHOO.util.Dom,
                 Dom.removeClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed');
                 if (el[0]) {
                     Dom.removeClass(el[0], 'collapsed');
+                    el[0].title = this.STR_COLLAPSE;
                 }
                 this.fireEvent('toolbarExpanded', { type: 'toolbarExpanded', target: this });
             } else {
                 if (el[0]) {
                     Dom.addClass(el[0], 'collapsed');
+                    el[0].title = this.STR_EXPAND;
                 }
                 Dom.addClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed');
                 this.fireEvent('toolbarCollapsed', { type: 'toolbarCollapsed', target: this });

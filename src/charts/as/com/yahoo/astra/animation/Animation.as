@@ -59,59 +59,62 @@ package com.yahoo.astra.animation
 	 * @example The following code will draw a circle and use an Animation instance
 	 * 	to change its alpha property from 0.0 to 1.0 over a period of 1.5 seconds.
 	 * 	It will set the easingFunction property to <code>Back.easeOut</code>, which
-	 * 	is an easing function included with Flash CS3.
+	 *	is an easing function included with Flash CS3. In order to implement this 
+	 *	example, you will need to save this code as a class file and set it as the   
+	 *	Document Class of your flash application.
 	 * 
 	 * <listing version="3.0">
-	 * package
-	 * {
-	 * 	import fl.motion.easing.Back;
-	 * 	import flash.display.Shape;
-	 * 	import com.yahoo.astra.animation.Animation;
-	 * 	import com.yahoo.astra.animation.AnimationEvent;
-	 * 
-	 * 	public class AnimationExample extends Sprite
+	 * 	package
 	 * 	{
-	 * 		public function AnimationExample
+	 * 		import fl.motion.easing.Back;
+	 * 		import flash.display.Shape; 
+	 * 		import flash.display.Sprite;
+	 * 		import com.yahoo.astra.animation.Animation;
+	 * 		import com.yahoo.astra.animation.AnimationEvent;
+	 * 	
+	 * 		public class AnimationExample extends Sprite
 	 * 		{
-	 * 			// Create a simple circular display object
-	 * 			this.circle = new Shape();
-	 * 			this.circle.graphics.beginFill(0xcccccc);
-	 * 			this.circle.graphics.drawEllipse(0, 0, 50, 50);
-	 * 			this.circle.graphics.endFill();
-	 * 			this.addChild(circle);
-	 * 
-	 * 			// Create the instance animating over 1500ms from 0 to 1
-	 * 			this.animation = new Animation( 1500, { alpha: 0.0 }, { alpha: 1.0 } );
-	 * 
-	 * 			// Use an easing equation
-	 * 			this.animation.easingFunction = Back.easeOut;
-	 * 
-	 * 			// Listen for events to update our circle's values
-	 * 			this.animation.addEventListener( AnimationEvent.UPDATE, animationUpdateHandler );
-	 * 			this.animation.addEventListener( AnimationEvent.COMPLETE, animationCompleteHandler );
-	 * 		}
-	 * 
-	 * 		// Should be a member variable so that the garbage collector doesn't
-	 * 		// remove the instance from memory before it finishes
-	 * 		private var animation:Animation;
-	 * 
-	 * 		// The display object whose properties we will animate
-	 * 		private var circle:Shape;
-	 * 
-	 * 		private function animationUpdateHandler(event:AnimationEvent):void
-	 * 		{
-	 * 			this.circle.alpha = event.parameters.alpha;
-	 * 		}
-	 * 
-	 * 		private function animationCompleteHandler(event:AnimationEvent):void
-	 * 		{
-	 * 			this.animationUpdateHandler(event);
-	 * 
-	 * 			// Set the animation instance to null to ensure garbage collection
-	 * 			this.animation = null;
+	 * 			public function AnimationExample()
+	 * 			{
+	 * 				// Create a simple circular display object
+	 * 				this.circle = new Shape();
+	 * 				this.circle.graphics.beginFill(0xcccccc);
+	 * 				this.circle.graphics.drawEllipse(0, 0, 50, 50);
+	 * 				this.circle.graphics.endFill();
+	 * 				this.addChild(circle);
+	 * 	
+	 * 				// Create the instance animating over 1500ms from 0 to 1
+	 * 				this.animation = new Animation( 1500, { alpha: 0.0 }, { alpha: 1.0 } );
+	 * 	
+	 * 				// Use an easing equation
+	 * 				this.animation.easingFunction = Back.easeOut;
+	 * 	
+	 * 				// Listen for events to update our circle's values
+	 * 				this.animation.addEventListener( AnimationEvent.UPDATE, animationUpdateHandler );
+	 * 				this.animation.addEventListener( AnimationEvent.COMPLETE, animationCompleteHandler );
+	 * 			}
+	 * 	
+	 * 			// Should be a member variable so that the garbage collector doesn't
+	 * 			// remove the instance from memory before it finishes
+	 * 			private var animation:Animation;
+	 * 	
+	 * 			// The display object whose properties we will animate
+	 * 			private var circle:Shape;
+	 * 	
+	 * 			private function animationUpdateHandler(event:AnimationEvent):void
+	 * 			{
+	 * 				this.circle.alpha = event.parameters.alpha;
+	 * 			}
+	 * 	
+	 * 			private function animationCompleteHandler(event:AnimationEvent):void
+	 * 			{
+	 * 				this.animationUpdateHandler(event);
+	 * 	
+	 * 				// Set the animation instance to null to ensure garbage collection
+	 * 				this.animation = null;
+	 * 			}
 	 * 		}
 	 * 	}
-	 * }
 	 * </listing>
 	 * @author Josh Tynjala
 	 */
@@ -481,7 +484,7 @@ package com.yahoo.astra.animation
 		}
 		
 		/**
-		 * Swaps the start and end paramters and restarts the animation.
+		 * Swaps the start and end parameters and restarts the animation.
 		 */
 		public function yoyo():void
 		{

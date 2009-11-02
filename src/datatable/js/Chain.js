@@ -142,7 +142,10 @@ YAHOO.util.Chain.prototype = {
      * @return {Chain} the Chain instance
      */
     pause: function () {
-        clearTimeout(this.id);
+        // Conditional added for Caja compatibility
+        if (this.id > 0) {
+            clearTimeout(this.id);
+        }
         this.id = 0;
         return this;
     },

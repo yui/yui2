@@ -92,7 +92,19 @@ var Dom = YAHOO.util.Dom,
         * @param {String} str The content of the Editor
         */
         _putUndo: function(str) {
-            this._undoCache.push(str);
+            if (this._undoLevel === this._undoCache.length) {
+                this._undoCache.push(str);
+                this._undoLevel = this._undoCache.length;
+            } else {
+                var str = this.getEditorHTML();
+                var last = this._undoCache[this._undoLevel];
+                if (last) {
+                    if (str !== last) {
+                        this._undoCache = [];
+                        this._undoLevel = 0;
+                    }
+                }
+            }
         },
         /**
         * @private
@@ -102,6 +114,7 @@ var Dom = YAHOO.util.Dom,
         * @return {String}
         */
         _getUndo: function(index) {
+            this._undoLevel = index;
             return this._undoCache[index];
         },
         /**
@@ -115,10 +128,12 @@ var Dom = YAHOO.util.Dom,
             }
             if (!this._undoCache) {
                 this._undoCache = [];
+                this._undoLevel = 0;
             }
             this._checkUndo();
             var str = this.getEditorHTML();
-            var last = this._undoCache[this._undoCache.length - 1];
+            //var last = this._undoCache[this._undoCache.length - 1];
+            var last = this._undoCache[this._undoLevel - 1];
             if (last) {
                 if (str !== last) {
                     //YAHOO.log('Storing Undo', 'info', 'SimpleEditor');
@@ -128,7 +143,6 @@ var Dom = YAHOO.util.Dom,
                 //YAHOO.log('Storing Undo', 'info', 'SimpleEditor');
                 this._putUndo(str);
             }
-            this._undoLevel = this._undoCache.length;
             this._undoNodeChange();
         },    
         /**
@@ -267,146 +281,150 @@ var Dom = YAHOO.util.Dom,
             YAHOO.log('init', 'info', 'Editor');
             
             this._windows = {};
-            this._defaultToolbar = {
-                collapse: true,
-                titlebar: 'Text Editing Tools',
-                draggable: false,
-                buttonType: 'advanced',
-                buttons: [
-                    { group: 'fontstyle', label: 'Font Name and Size',
-                        buttons: [
-                            { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+            if (!this._defaultToolbar) {            
+                this._defaultToolbar = {
+                    collapse: true,
+                    titlebar: 'Text Editing Tools',
+                    draggable: false,
+                    buttonType: 'advanced',
+                    buttons: [
+                        { group: 'fontstyle', label: 'Font Name and Size',
+                            buttons: [
+                                { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+                                    menu: [
+                                        { text: 'Arial', checked: true },
+                                        { text: 'Arial Black' },
+                                        { text: 'Comic Sans MS' },
+                                        { text: 'Courier New' },
+                                        { text: 'Lucida Console' },
+                                        { text: 'Tahoma' },
+                                        { text: 'Times New Roman' },
+                                        { text: 'Trebuchet MS' },
+                                        { text: 'Verdana' }
+                                    ]
+                                },
+                                { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'textstyle', label: 'Font Style',
+                            buttons: [
+                                { type: 'push', label: 'Bold CTRL + SHIFT + B', value: 'bold' },
+                                { type: 'push', label: 'Italic CTRL + SHIFT + I', value: 'italic' },
+                                { type: 'push', label: 'Underline CTRL + SHIFT + U', value: 'underline' },
+                                { type: 'separator' },
+                                { type: 'push', label: 'Subscript', value: 'subscript', disabled: true },
+                                { type: 'push', label: 'Superscript', value: 'superscript', disabled: true }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'textstyle2', label: '&nbsp;',
+                            buttons: [
+                                { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
+                                { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true },
+                                { type: 'separator' },
+                                { type: 'push', label: 'Remove Formatting', value: 'removeformat', disabled: true },
+                                { type: 'push', label: 'Show/Hide Hidden Elements', value: 'hiddenelements' }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'undoredo', label: 'Undo/Redo',
+                            buttons: [
+                                { type: 'push', label: 'Undo', value: 'undo', disabled: true },
+                                { type: 'push', label: 'Redo', value: 'redo', disabled: true }
+                                
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'alignment', label: 'Alignment',
+                            buttons: [
+                                { type: 'push', label: 'Align Left CTRL + SHIFT + [', value: 'justifyleft' },
+                                { type: 'push', label: 'Align Center CTRL + SHIFT + |', value: 'justifycenter' },
+                                { type: 'push', label: 'Align Right CTRL + SHIFT + ]', value: 'justifyright' },
+                                { type: 'push', label: 'Justify', value: 'justifyfull' }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'parastyle', label: 'Paragraph Style',
+                            buttons: [
+                            { type: 'select', label: 'Normal', value: 'heading', disabled: true,
                                 menu: [
-                                    { text: 'Arial', checked: true },
-                                    { text: 'Arial Black' },
-                                    { text: 'Comic Sans MS' },
-                                    { text: 'Courier New' },
-                                    { text: 'Lucida Console' },
-                                    { text: 'Tahoma' },
-                                    { text: 'Times New Roman' },
-                                    { text: 'Trebuchet MS' },
-                                    { text: 'Verdana' }
+                                    { text: 'Normal', value: 'none', checked: true },
+                                    { text: 'Header 1', value: 'h1' },
+                                    { text: 'Header 2', value: 'h2' },
+                                    { text: 'Header 3', value: 'h3' },
+                                    { text: 'Header 4', value: 'h4' },
+                                    { text: 'Header 5', value: 'h5' },
+                                    { text: 'Header 6', value: 'h6' }
                                 ]
-                            },
-                            { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'textstyle', label: 'Font Style',
-                        buttons: [
-                            { type: 'push', label: 'Bold CTRL + SHIFT + B', value: 'bold' },
-                            { type: 'push', label: 'Italic CTRL + SHIFT + I', value: 'italic' },
-                            { type: 'push', label: 'Underline CTRL + SHIFT + U', value: 'underline' },
-                            { type: 'separator' },
-                            { type: 'push', label: 'Subscript', value: 'subscript', disabled: true },
-                            { type: 'push', label: 'Superscript', value: 'superscript', disabled: true }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'textstyle2', label: '&nbsp;',
-                        buttons: [
-                            { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
-                            { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true },
-                            { type: 'separator' },
-                            { type: 'push', label: 'Remove Formatting', value: 'removeformat', disabled: true },
-                            { type: 'push', label: 'Show/Hide Hidden Elements', value: 'hiddenelements' }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'undoredo', label: 'Undo/Redo',
-                        buttons: [
-                            { type: 'push', label: 'Undo', value: 'undo', disabled: true },
-                            { type: 'push', label: 'Redo', value: 'redo', disabled: true }
-                            
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'alignment', label: 'Alignment',
-                        buttons: [
-                            { type: 'push', label: 'Align Left CTRL + SHIFT + [', value: 'justifyleft' },
-                            { type: 'push', label: 'Align Center CTRL + SHIFT + |', value: 'justifycenter' },
-                            { type: 'push', label: 'Align Right CTRL + SHIFT + ]', value: 'justifyright' },
-                            { type: 'push', label: 'Justify', value: 'justifyfull' }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'parastyle', label: 'Paragraph Style',
-                        buttons: [
-                        { type: 'select', label: 'Normal', value: 'heading', disabled: true,
-                            menu: [
-                                { text: 'Normal', value: 'none', checked: true },
-                                { text: 'Header 1', value: 'h1' },
-                                { text: 'Header 2', value: 'h2' },
-                                { text: 'Header 3', value: 'h3' },
-                                { text: 'Header 4', value: 'h4' },
-                                { text: 'Header 5', value: 'h5' },
-                                { text: 'Header 6', value: 'h6' }
+                            }
+                            ]
+                        },
+                        { type: 'separator' },
+                        
+                        { group: 'indentlist2', label: 'Indenting and Lists',
+                            buttons: [
+                                { type: 'push', label: 'Indent', value: 'indent', disabled: true },
+                                { type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
+                                { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
+                                { type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist' }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'insertitem', label: 'Insert Item',
+                            buttons: [
+                                { type: 'push', label: 'HTML Link CTRL + SHIFT + L', value: 'createlink', disabled: true },
+                                { type: 'push', label: 'Insert Image', value: 'insertimage' }
                             ]
                         }
-                        ]
-                    },
-                    { type: 'separator' },
-                    
-                    { group: 'indentlist2', label: 'Indenting and Lists',
-                        buttons: [
-                            { type: 'push', label: 'Indent', value: 'indent', disabled: true },
-                            { type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
-                            { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
-                            { type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist' }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'insertitem', label: 'Insert Item',
-                        buttons: [
-                            { type: 'push', label: 'HTML Link CTRL + SHIFT + L', value: 'createlink', disabled: true },
-                            { type: 'push', label: 'Insert Image', value: 'insertimage' }
-                        ]
-                    }
-                ]
-            };
+                    ]
+                };
+            }
 
-            this._defaultImageToolbarConfig = {
-                buttonType: this._defaultToolbar.buttonType,
-                buttons: [
-                    { group: 'textflow', label: this.STR_IMAGE_TEXTFLOW + ':',
-                        buttons: [
-                            { type: 'push', label: 'Left', value: 'left' },
-                            { type: 'push', label: 'Inline', value: 'inline' },
-                            { type: 'push', label: 'Block', value: 'block' },
-                            { type: 'push', label: 'Right', value: 'right' }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'padding', label: this.STR_IMAGE_PADDING + ':',
-                        buttons: [
-                            { type: 'spin', label: '0', value: 'padding', range: [0, 50] }
-                        ]
-                    },
-                    { type: 'separator' },
-                    { group: 'border', label: this.STR_IMAGE_BORDER + ':',
-                        buttons: [
-                            { type: 'select', label: this.STR_IMAGE_BORDER_SIZE, value: 'bordersize',
-                                menu: [
-                                    { text: 'none', value: '0', checked: true },
-                                    { text: '1px', value: '1' },
-                                    { text: '2px', value: '2' },
-                                    { text: '3px', value: '3' },
-                                    { text: '4px', value: '4' },
-                                    { text: '5px', value: '5' }
-                                ]
-                            },
-                            { type: 'select', label: this.STR_IMAGE_BORDER_TYPE, value: 'bordertype', disabled: true,
-                                menu: [
-                                    { text: 'Solid', value: 'solid', checked: true },
-                                    { text: 'Dashed', value: 'dashed' },
-                                    { text: 'Dotted', value: 'dotted' }
-                                ]
-                            },
-                            { type: 'color', label: 'Border Color', value: 'bordercolor', disabled: true }
-                        ]
-                    }
-                ]
-            };
+            if (!this._defaultImageToolbarConfig) {
+                this._defaultImageToolbarConfig = {
+                    buttonType: this._defaultToolbar.buttonType,
+                    buttons: [
+                        { group: 'textflow', label: this.STR_IMAGE_TEXTFLOW + ':',
+                            buttons: [
+                                { type: 'push', label: 'Left', value: 'left' },
+                                { type: 'push', label: 'Inline', value: 'inline' },
+                                { type: 'push', label: 'Block', value: 'block' },
+                                { type: 'push', label: 'Right', value: 'right' }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'padding', label: this.STR_IMAGE_PADDING + ':',
+                            buttons: [
+                                { type: 'spin', label: '0', value: 'padding', range: [0, 50] }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'border', label: this.STR_IMAGE_BORDER + ':',
+                            buttons: [
+                                { type: 'select', label: this.STR_IMAGE_BORDER_SIZE, value: 'bordersize',
+                                    menu: [
+                                        { text: 'none', value: '0', checked: true },
+                                        { text: '1px', value: '1' },
+                                        { text: '2px', value: '2' },
+                                        { text: '3px', value: '3' },
+                                        { text: '4px', value: '4' },
+                                        { text: '5px', value: '5' }
+                                    ]
+                                },
+                                { type: 'select', label: this.STR_IMAGE_BORDER_TYPE, value: 'bordertype', disabled: true,
+                                    menu: [
+                                        { text: 'Solid', value: 'solid', checked: true },
+                                        { text: 'Dashed', value: 'dashed' },
+                                        { text: 'Dotted', value: 'dotted' }
+                                    ]
+                                },
+                                { type: 'color', label: 'Border Color', value: 'bordercolor', disabled: true }
+                            ]
+                        }
+                    ]
+                };
+            }
 
             YAHOO.widget.Editor.superclass.init.call(this, p_oElement, p_oAttributes);
         },
@@ -486,30 +504,32 @@ var Dom = YAHOO.util.Dom,
         */
         _fixNodes: function() {
             YAHOO.widget.Editor.superclass._fixNodes.call(this);
-            var url = '';
+            try {
+                var url = '';
 
-            var imgs = this._getDoc().getElementsByTagName('img');
-            for (var im = 0; im < imgs.length; im++) {
-                if (imgs[im].getAttribute('href', 2)) {
-                    url = imgs[im].getAttribute('src', 2);
-                    if (this._isLocalFile(url)) {
-                        Dom.addClass(imgs[im], this.CLASS_LOCAL_FILE);
-                    } else {
-                        Dom.removeClass(imgs[im], this.CLASS_LOCAL_FILE);
+                var imgs = this._getDoc().getElementsByTagName('img');
+                for (var im = 0; im < imgs.length; im++) {
+                    if (imgs[im].getAttribute('href', 2)) {
+                        url = imgs[im].getAttribute('src', 2);
+                        if (this._isLocalFile(url)) {
+                            Dom.addClass(imgs[im], this.CLASS_LOCAL_FILE);
+                        } else {
+                            Dom.removeClass(imgs[im], this.CLASS_LOCAL_FILE);
+                        }
                     }
                 }
-            }
-            var fakeAs = this._getDoc().body.getElementsByTagName('a');
-            for (var a = 0; a < fakeAs.length; a++) {
-                if (fakeAs[a].getAttribute('href', 2)) {
-                    url = fakeAs[a].getAttribute('href', 2);
-                    if (this._isLocalFile(url)) {
-                        Dom.addClass(fakeAs[a], this.CLASS_LOCAL_FILE);
-                    } else {
-                        Dom.removeClass(fakeAs[a], this.CLASS_LOCAL_FILE);
+                var fakeAs = this._getDoc().body.getElementsByTagName('a');
+                for (var a = 0; a < fakeAs.length; a++) {
+                    if (fakeAs[a].getAttribute('href', 2)) {
+                        url = fakeAs[a].getAttribute('href', 2);
+                        if (this._isLocalFile(url)) {
+                            Dom.addClass(fakeAs[a], this.CLASS_LOCAL_FILE);
+                        } else {
+                            Dom.removeClass(fakeAs[a], this.CLASS_LOCAL_FILE);
+                        }
                     }
                 }
-            }
+            } catch(e) {}
         },
         /**
         * @private
@@ -791,12 +811,6 @@ var Dom = YAHOO.util.Dom,
                 var hw = document.createElement('div');
                 hw.className = 'yui-toolbar-group yui-toolbar-group-height-width height-width';
                 hw.innerHTML = '<h3>' + this.STR_IMAGE_SIZE + ':</h3>';
-                /*
-                var orgSize = '';
-                if ((height != oheight) || (width != owidth)) {
-                    orgSize = '<span class="info">' + this.STR_IMAGE_ORIG_SIZE + '<br>'+ owidth +' x ' + oheight + '</span>';
-                }
-                */
                 hw.innerHTML += '<span tabIndex="-1"><input type="text" size="3" value="" id="' + this.get('id') + '_insertimage_width"> x <input type="text" size="3" value="" id="' + this.get('id') + '_insertimage_height"></span>';
                 cont.insertBefore(hw, cont.firstChild);
 
@@ -933,7 +947,9 @@ var Dom = YAHOO.util.Dom,
                 }
 
                 Event.on(this.get('id') + '_insertimage_url', 'blur', function() {
-                    var url = Dom.get(this.get('id') + '_insertimage_url');
+                    var url = Dom.get(this.get('id') + '_insertimage_url'),
+                        el = this.currentElement[0];
+
                     if (url.value && el) {
                         if (url.value == el.getAttribute('src', 2)) {
                             YAHOO.log('Images are the same, bail on blur handler', 'info', 'Editor');
@@ -1066,14 +1082,16 @@ var Dom = YAHOO.util.Dom,
                     if (el.style.margin) {
                         padding = parseInt(el.style.margin, 10);
                     }
-                    if (!el._height) {
-                        el._height = height;
+                    if (!blankimage) {
+                        if (!el._height) {
+                            el._height = height;
+                        }
+                        if (!el._width) {
+                            el._width = width;
+                        }
+                        oheight = el._height;
+                        owidth = el._width;
                     }
-                    if (!el._width) {
-                        el._width = width;
-                    }
-                    oheight = el._height;
-                    owidth = el._width;
                 }
                 if (this._windows.insertimage && this._windows.insertimage.body) {
                     body = this._windows.insertimage.body;
@@ -1142,8 +1160,7 @@ var Dom = YAHOO.util.Dom,
                 Dom.get(this.get('id') + '_insertimage_height').value = height;
 
 
-                var orgSize = '';
-                if ((height != oheight) || (width != owidth)) {
+                if (((height != oheight) || (width != owidth)) && (!blankimage)) {
                     var s = document.createElement('span');
                     s.className = 'info';
                     s.innerHTML = this.STR_IMAGE_ORIG_SIZE + ': ('+ owidth +' x ' + oheight + ')';
@@ -1416,9 +1433,6 @@ var Dom = YAHOO.util.Dom,
             panel.editor_header.firstChild.innerHTML = win.header;
             if (win.footer !== null) {
                 panel.setFooter(win.footer);
-                Dom.addClass(panel.footer, 'open');
-            } else {
-                Dom.removeClass(panel.footer, 'open');
             }
             panel.cfg.setProperty('width', win.attrs.width);
 
@@ -1603,15 +1617,24 @@ var Dom = YAHOO.util.Dom,
         */
         cmd_undo: function(value) {
             if (this._hasUndoLevel()) {
+                var c_html = this.getEditorHTML(), html;
                 if (!this._undoLevel) {
                     this._undoLevel = this._undoCache.length;
                 }
                 this._undoLevel = (this._undoLevel - 1);
                 if (this._undoCache[this._undoLevel]) {
-                    var html = this._getUndo(this._undoLevel);
-                    this.setEditorHTML(html);
+                    html = this._getUndo(this._undoLevel);
+                    if (html != c_html) {
+                        this.setEditorHTML(html);
+                    } else {
+                        this._undoLevel = (this._undoLevel - 1);
+                        html = this._getUndo(this._undoLevel);
+                        if (html != c_html) {
+                            this.setEditorHTML(html);
+                        }
+                    }
                 } else {
-                    this._undoLevel = null;
+                    this._undoLevel = 0;
                     this.toolbar.disableButton('undo');
                 }
             }

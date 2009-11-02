@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Container&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>Container&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_container.html" title="container">container</a>
                  &gt; YAHOO.widget.Overlay 
@@ -258,6 +258,37 @@ configuring the context element alignment
 
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:property" resource="#property_YAHOO.widget.Overlay.CSS_HIDDEN">
+                                    <h4><a name="property_YAHOO.widget.Overlay.CSS_HIDDEN" property="yui:name">YAHOO.widget.Overlay.CSS_HIDDEN</a>
+                                        - <code>static final <span property="yui:type">String</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Constant representing the default hidden CSS class used for an Overlay. This class is 
+applied to the overlay's outer DIV whenever it's hidden.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_YAHOO.widget.Overlay.CSS_IFRAME">
+                                    <h4><a name="property_YAHOO.widget.Overlay.CSS_IFRAME" property="yui:name">YAHOO.widget.Overlay.CSS_IFRAME</a>
+                                        - <code>static final <span property="yui:type">String</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Constant representing the default CSS class used for an Overlay iframe shim.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:property" resource="#property_YAHOO.widget.Overlay.CSS_OVERLAY">
                                     <h4><a name="property_YAHOO.widget.Overlay.CSS_OVERLAY" property="yui:name">YAHOO.widget.Overlay.CSS_OVERLAY</a>
                                         - <code>static final <span property="yui:type">String</span></code>
@@ -474,13 +505,6 @@ positioned relative to the boundaries of the browser's viewport, in pixels.
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -547,13 +571,6 @@ out the containers height</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -600,13 +617,6 @@ custom event instance needs to be looked up from the Overlay._TRIGGER_MAP.</span
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -654,9 +664,76 @@ custom event instance needs to be looked up from the Overlay._TRIGGER_MAP.</span
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        Number
+                                                            Number
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The content box height of the given element, or null if it could not be determined.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected" rel="yui:method" resource="#method__getConstrainedPos">
+                                    <h4>
+                                        <a name="method__getConstrainedPos">_getConstrainedPos</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        Number
+                                            <strong property="yui:name">_getConstrainedPos</strong>
+                                           (
+                                                
+                                                        
+                                                         pos
+                                                    
+                                                
+                                                        , 
+                                                         The
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Shared implementation method for getConstrainedX and getConstrainedY.
+<p>
+Given a coordinate value, returns the calculated coordinate required to 
+position the Overlay if it is to be constrained to the viewport, based on the 
+current element size, viewport dimensions, scroll values and preventoverlap 
+settings
+</p>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">pos</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The coordinate which needs to be constrained, either "x" or "y"</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">The</span>
+                                                        &lt;<span property="yui:type">Number</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> coordinate value which needs to be constrained</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            Number
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The constrained coordinate value</dd>
                                                 </dl>
 
 
@@ -706,9 +783,101 @@ otherwise returns the offsetHeight
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        Float
+                                                            Float
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The sub-pixel height if supported by the browser, else the rounded height.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected" rel="yui:method" resource="#method__preventOverlap">
+                                    <h4>
+                                        <a name="method__preventOverlap">_preventOverlap</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        Number
+                                            <strong property="yui:name">_preventOverlap</strong>
+                                           (
+                                                
+                                                        
+                                                         pos
+                                                    
+                                                
+                                                        , 
+                                                         contextEl
+                                                    
+                                                
+                                                        , 
+                                                         overlaySize
+                                                    
+                                                
+                                                        , 
+                                                         viewportSize
+                                                    
+                                                
+                                                        , 
+                                                         docScroll
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Helper method, used to position the Overlap to prevent overlap with the 
+context element (used when preventcontextoverlap is enabled)
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">pos</span>
+                                                        &lt;<span property="yui:type">String</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The coordinate to prevent overlap for, either "x" or "y".</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">contextEl</span>
+                                                        &lt;<span property="yui:type">HTMLElement</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The context element</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">overlaySize</span>
+                                                        &lt;<span property="yui:type">Number</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The related overlay dimension value (for "x", the width, for "y", the height)</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">viewportSize</span>
+                                                        &lt;<span property="yui:type">Number</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The related viewport dimension value (for "x", the width, for "y", the height)</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">docScroll</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  The related document scroll value (for "x", the scrollLeft, for "y", the scrollTop)</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                            Number
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The new coordinate value which was set to prevent overlap</dd>
                                                 </dl>
 
 
@@ -743,13 +912,6 @@ beforeMove, Move event listeners are invoked.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -820,13 +982,6 @@ get passed to the subscribed function.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -871,13 +1026,6 @@ get passed to the subscribed function.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -923,6 +1071,12 @@ or one of the strings : "body", "header" or "footer".
                                                         </dd>
                                                 </dl>
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">true, if valid, false otherwise</dd>
+                                                </dl>
 
 
              
@@ -952,6 +1106,10 @@ or one of the strings : "body", "header" or "footer".
                                                          contextAlign
                                                     
                                                 
+                                                        , 
+                                                         xyOffset
+                                                    
+                                                
                                             )
                                         </code>
                                         
@@ -979,15 +1137,16 @@ the Overlay that should be aligned to the context element</span>
                                                         <span property="yui:description">  The corner of the context element 
 that the elementAlign corner should stick to.</span>
                                                         </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">xyOffset</span>
+                                                        &lt;<span property="yui:type">Number[]</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> Optional. A 2 element array specifying the x and y pixel offsets which should be applied
+after aligning the element and context corners. For example, passing in [5, -10] for this value, would offset the 
+Overlay by 5 pixels along the X axis (horizontally) and -10 pixels along the Y axis (vertically) after aligning the specified corners.</span>
+                                                        </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1019,13 +1178,6 @@ YAHOO.widget.Overlay.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1056,13 +1208,6 @@ YAHOO.widget.Overlay.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1129,13 +1274,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1204,13 +1342,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1278,13 +1409,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1352,13 +1476,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1425,13 +1542,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1498,13 +1608,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1573,13 +1676,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1646,13 +1742,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1719,13 +1808,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1792,13 +1874,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1865,13 +1940,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1938,13 +2006,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -1976,13 +2037,6 @@ elements to null.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2015,13 +2069,6 @@ the overlay fits within the viewport.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2089,13 +2136,6 @@ this will usually equal the owner.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2151,13 +2191,6 @@ of the container element.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2189,6 +2222,12 @@ will fit entirely inside the viewport, in both dimensions - width and height.
                                         <div class="description">
 
 
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">boolean true if the Overlay will fit, false if not</dd>
+                                                </dl>
 
 
              
@@ -2227,13 +2266,6 @@ browsers, when centering.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2283,7 +2315,7 @@ current element size, viewport dimensions and scroll values.
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        Number
+                                                            Number
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The constrained x coordinate</dd>
                                                 </dl>
@@ -2346,7 +2378,7 @@ current element size, viewport dimensions and scroll values.
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        Array
+                                                            Array
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The constrained x and y coordinates at index 0 and 1 respectively;</dd>
                                                 </dl>
@@ -2399,7 +2431,7 @@ current element size, viewport dimensions and scroll values.
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        Number
+                                                            Number
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The constrained y coordinate</dd>
                                                 </dl>
@@ -2433,13 +2465,6 @@ current element size, viewport dimensions and scroll values.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2472,13 +2497,6 @@ current element size, viewport dimensions and scroll values.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2546,13 +2564,6 @@ See configuration documentation for more details.</span>
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2584,13 +2595,6 @@ using the Overlay's Config object (cfg).
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2622,13 +2626,6 @@ automatically at appropriate times by the Overlay class.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2684,13 +2681,6 @@ identical to calling this.cfg.setProperty("xy", [x,y]);
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2745,13 +2735,6 @@ identical to calling this.cfg.setProperty("xy", [x,y]);
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2782,13 +2765,6 @@ identical to calling this.cfg.setProperty("xy", [x,y]);
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2821,13 +2797,6 @@ identical to calling this.cfg.setProperty("xy", [x,y]);
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2866,13 +2835,6 @@ this method is called.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2904,13 +2866,6 @@ corresponding Overlay instance.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2943,13 +2898,6 @@ position information during drag & drop.
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -2983,7 +2931,7 @@ position information during drag & drop.
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        String
+                                                            String
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The string representation of the Overlay.</dd>
                                                 </dl>
@@ -3031,13 +2979,6 @@ position information during drag & drop.
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -3082,13 +3023,6 @@ position information during drag & drop.
                                                         </dd>
                                                 </dl>
 
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                        void
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo"></dd>
-                                                </dl>
 
 
              
@@ -3111,6 +3045,15 @@ position information during drag & drop.
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.widget.Module.html#method__initResizeMonitor">                                        
                                             <a class="protected" href="YAHOO.widget.Module.html#method__initResizeMonitor" property="yui:name" title="_initResizeMonitor">_initResizeMonitor</a><span class="protected">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.widget.Module.html#method__renderBody">                                        
+                                            <a class="protected" href="YAHOO.widget.Module.html#method__renderBody" property="yui:name" title="_renderBody">_renderBody</a><span class="protected">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.widget.Module.html#method__renderFooter">                                        
+                                            <a class="protected" href="YAHOO.widget.Module.html#method__renderFooter" property="yui:name" title="_renderFooter">_renderFooter</a><span class="protected">,</span>
+                                            </span>
+                                            <span rel="yui:method" resource="YAHOO.widget.Module.html#method__renderHeader">                                        
+                                            <a class="protected" href="YAHOO.widget.Module.html#method__renderHeader" property="yui:name" title="_renderHeader">_renderHeader</a><span class="protected">,</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.widget.Module.html#method__supportsCWResize">                                        
                                             <a class="private" href="YAHOO.widget.Module.html#method__supportsCWResize" property="yui:name" title="_supportsCWResize">_supportsCWResize</a><span class="private">,</span>
@@ -3389,7 +3332,7 @@ window scroll
                                         <a class="" href="YAHOO.widget.Module.html#event_destroyEvent" property="yui:name" title="destroyEvent">destroyEvent</a><span class="">,</span>
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.widget.Module.html#event_hideEvent">
-                                        <a class="" href="YAHOO.widget.Module.html#event_hideEvent" property="yui:name" title="hideEvent">hideEvent</a>
+                                        <a class="" href="YAHOO.widget.Module.html#event_hideEvent" property="yui:name" title="hideEvent">hideEvent</a><span class="">,</span>
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.widget.Module.html#event_initEvent">
                                         <a class="" href="YAHOO.widget.Module.html#event_initEvent" property="yui:name" title="initEvent">initEvent</a>
@@ -3460,8 +3403,8 @@ out of the viewport.
 The array of context arguments for context-sensitive positioning. 
 </p>
 <p>
-The format of the array is: <code>[contextElementOrId, overlayCorner, contextCorner, arrayOfTriggerEvents (optional)]</code>, the
-the 4 array elements described in detail below:
+The format of the array is: <code>[contextElementOrId, overlayCorner, contextCorner, arrayOfTriggerEvents (optional), xyOffset (optional)]</code>, the
+the 5 array elements described in detail below:
 </p>
 <dl>
 <dt>contextElementOrId &#60;String|HTMLElement&#62;</dt>
@@ -3484,6 +3427,11 @@ The array can contain either event type strings for events the instance publishe
 3 static container event types are also currently supported : <code>"windowResize", "windowScroll", "textResize"</code> (defined in <a href="#property__TRIGGER_MAP">_TRIGGER_MAP</a> private property).
 </p>
 </dd>
+<dt>xyOffset &#60;Number[]&#62;</dt>
+<dd>
+A 2 element Array specifying the X and Y pixel amounts by which the Overlay should be offset from the aligned corner. e.g. [5,0] offsets the Overlay 5 pixels to the left, <em>after</em> aligning the given context corners.
+NOTE: If using this property and no triggers need to be defined, the arrayOfTriggerEvents property should be set to null to maintain correct array positions for the arguments. 
+</dd>
 </dl>
 <p>
 For example, setting this property to <code>["img1", "tl", "bl"]</code> will 
@@ -3491,7 +3439,12 @@ align the Overlay's top left corner to the bottom left corner of the
 context element with id "img1".
 </p>
 <p>
-Adding the optional trigger values: <code>["img1", "tl", "bl", ["beforeShow", "windowResize"]]</code>,
+Setting this property to <code>["img1", "tl", "bl", null, [0,5]</code> will 
+align the Overlay's top left corner to the bottom left corner of the
+context element with id "img1", and then offset it by 5 pixels on the Y axis (providing a 5 pixel gap between the bottom of the context element and top of the overlay).
+</p>
+<p>
+Adding the optional trigger values: <code>["img1", "tl", "bl", ["beforeShow", "windowResize"], [0,5]]</code>,
 will re-align the overlay position, whenever the "beforeShow" or "windowResize" events are fired.
 </p>
                                         </div>
@@ -3746,11 +3699,16 @@ context element (defined using the "context" configuration property) when the
                                 <li class=""><a href="module_cookie.html" title="cookie">cookie</a></li>
                                 <li class=""><a href="module_datasource.html" title="datasource">datasource</a></li>
                                 <li class=""><a href="module_datatable.html" title="datatable">datatable</a></li>
+                                <li class=""><a href="module_datemath.html" title="datemath">datemath</a></li>
                                 <li class=""><a href="module_dom.html" title="dom">dom</a></li>
                                 <li class=""><a href="module_dragdrop.html" title="dragdrop">dragdrop</a></li>
                                 <li class=""><a href="module_editor.html" title="editor">editor</a></li>
                                 <li class=""><a href="module_element.html" title="element">element</a></li>
+                                <li class=""><a href="module_element-delegate.html" title="element-delegate">element-delegate</a></li>
                                 <li class=""><a href="module_event.html" title="event">event</a></li>
+                                <li class=""><a href="module_event-delegate.html" title="event-delegate">event-delegate</a></li>
+                                <li class=""><a href="module_event-mouseenter.html" title="event-mouseenter">event-mouseenter</a></li>
+                                <li class=""><a href="module_event-simulate.html" title="event-simulate">event-simulate</a></li>
                                 <li class=""><a href="module_get.html" title="get">get</a></li>
                                 <li class=""><a href="module_history.html" title="history">history</a></li>
                                 <li class=""><a href="module_imagecropper.html" title="imagecropper">imagecropper</a></li>
@@ -3762,10 +3720,15 @@ context element (defined using the "context" configuration property) when the
                                 <li class=""><a href="module_paginator.html" title="paginator">paginator</a></li>
                                 <li class=""><a href="module_profiler.html" title="profiler">profiler</a></li>
                                 <li class=""><a href="module_profilerviewer.html" title="profilerviewer">profilerviewer</a></li>
+                                <li class=""><a href="module_progressbar.html" title="progressbar">progressbar</a></li>
                                 <li class=""><a href="module_resize.html" title="resize">resize</a></li>
                                 <li class=""><a href="module_selector.html" title="selector">selector</a></li>
                                 <li class=""><a href="module_slider.html" title="slider">slider</a></li>
+                                <li class=""><a href="module_storage.html" title="Storage">Storage</a></li>
                                 <li class=""><a href="module_stylesheet.html" title="stylesheet">stylesheet</a></li>
+                                <li class=""><a href="module_swf.html" title="swf">swf</a></li>
+                                <li class=""><a href="module_swfdetect.html" title="swfdetect">swfdetect</a></li>
+                                <li class=""><a href="module_swfstore.html" title="swfstore">swfstore</a></li>
                                 <li class=""><a href="module_tabview.html" title="tabview">tabview</a></li>
                                 <li class=""><a href="module_treeview.html" title="treeview">treeview</a></li>
                                 <li class=""><a href="module_uploader.html" title="uploader">uploader</a></li>
@@ -3815,6 +3778,8 @@ context element (defined using the "context" configuration property) when the
                                 <li class="private"><a href="#property_YAHOO.widget.Overlay._TRIGGER_MAP" title="YAHOO.widget.Overlay._TRIGGER_MAP">YAHOO.widget.Overlay._TRIGGER_MAP</a></li>
                                 <li class=""><a href="#property_YAHOO.widget.Overlay.BOTTOM_LEFT" title="YAHOO.widget.Overlay.BOTTOM_LEFT">YAHOO.widget.Overlay.BOTTOM_LEFT</a></li>
                                 <li class=""><a href="#property_YAHOO.widget.Overlay.BOTTOM_RIGHT" title="YAHOO.widget.Overlay.BOTTOM_RIGHT">YAHOO.widget.Overlay.BOTTOM_RIGHT</a></li>
+                                <li class=""><a href="#property_YAHOO.widget.Overlay.CSS_HIDDEN" title="YAHOO.widget.Overlay.CSS_HIDDEN">YAHOO.widget.Overlay.CSS_HIDDEN</a></li>
+                                <li class=""><a href="#property_YAHOO.widget.Overlay.CSS_IFRAME" title="YAHOO.widget.Overlay.CSS_IFRAME">YAHOO.widget.Overlay.CSS_IFRAME</a></li>
                                 <li class=""><a href="#property_YAHOO.widget.Overlay.CSS_OVERLAY" title="YAHOO.widget.Overlay.CSS_OVERLAY">YAHOO.widget.Overlay.CSS_OVERLAY</a></li>
                                 <li class=""><a href="#property_YAHOO.widget.Overlay.IFRAME_SRC" title="YAHOO.widget.Overlay.IFRAME_SRC">YAHOO.widget.Overlay.IFRAME_SRC</a></li>
                                 <li class=""><a href="#property_YAHOO.widget.Overlay.STD_MOD_RE" title="YAHOO.widget.Overlay.STD_MOD_RE">YAHOO.widget.Overlay.STD_MOD_RE</a></li>
@@ -3831,7 +3796,9 @@ context element (defined using the "context" configuration property) when the
                                 <li class="protected"><a href="#method__autoFillOnHeightChange" title="_autoFillOnHeightChange">_autoFillOnHeightChange</a></li>
                                 <li class="private"><a href="#method__findTriggerCE" title="_findTriggerCE">_findTriggerCE</a></li>
                                 <li class="private"><a href="#method__getComputedHeight" title="_getComputedHeight">_getComputedHeight</a></li>
+                                <li class="protected"><a href="#method__getConstrainedPos" title="_getConstrainedPos">_getConstrainedPos</a></li>
                                 <li class="private"><a href="#method__getPreciseHeight" title="_getPreciseHeight">_getPreciseHeight</a></li>
+                                <li class="protected"><a href="#method__preventOverlap" title="_preventOverlap">_preventOverlap</a></li>
                                 <li class="protected"><a href="#method__primeXYFromDOM" title="_primeXYFromDOM">_primeXYFromDOM</a></li>
                                 <li class="protected"><a href="#method__processTriggers" title="_processTriggers">_processTriggers</a></li>
                                 <li class="protected"><a href="#method__setDomVisibility" title="_setDomVisibility">_setDomVisibility</a></li>
@@ -3915,7 +3882,7 @@ context element (defined using the "context" configuration property) when the
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Overlay", "name": "align", "url": "YAHOO.widget.Overlay.html#method_align", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_alignOnTrigger", "url": "YAHOO.widget.Overlay.html#method__alignOnTrigger", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "animateIn", "url": "YAHOO.widget.ContainerEffect.html#method_animateIn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "animateOut", "url": "YAHOO.widget.ContainerEffect.html#method_animateOut", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "animClass", "url": "YAHOO.widget.ContainerEffect.html#property_animClass", "type": "property"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "attrIn", "url": "YAHOO.widget.ContainerEffect.html#property_attrIn", "type": "property"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "attrOut", "url": "YAHOO.widget.ContainerEffect.html#property_attrOut", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "autofillheight", "url": "YAHOO.widget.Overlay.html#config_autofillheight", "type": "config"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_autoFillOnHeightChange", "url": "YAHOO.widget.Overlay.html#method__autoFillOnHeightChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "beforeMoveEvent", "url": "YAHOO.widget.Overlay.html#event_beforeMoveEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "bringToTop", "url": "YAHOO.widget.Overlay.html#method_bringToTop", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "center", "url": "YAHOO.widget.Overlay.html#method_center", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configAutoFillHeight", "url": "YAHOO.widget.Overlay.html#method_configAutoFillHeight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configConstrainToViewport", "url": "YAHOO.widget.Overlay.html#method_configConstrainToViewport", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configContext", "url": "YAHOO.widget.Overlay.html#method_configContext", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configFixedCenter", "url": "YAHOO.widget.Overlay.html#method_configFixedCenter", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configHeight", "url": "YAHOO.widget.Overlay.html#method_configHeight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configIframe", "url": "YAHOO.widget.Overlay.html#method_configIframe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configVisible", "url": "YAHOO.widget.Overlay.html#method_configVisible", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configWidth", "url": "YAHOO.widget.Overlay.html#method_configWidth", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configX", "url": "YAHOO.widget.Overlay.html#method_configX", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configXY", "url": "YAHOO.widget.Overlay.html#method_configXY", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configY", "url": "YAHOO.widget.Overlay.html#method_configY", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configzIndex", "url": "YAHOO.widget.Overlay.html#method_configzIndex", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "constraintoviewport", "url": "YAHOO.widget.Overlay.html#config_constraintoviewport", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "context", "url": "YAHOO.widget.Overlay.html#config_context", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "CONTEXT_TRIGGERS", "url": "YAHOO.widget.Overlay.html#property_CONTEXT_TRIGGERS", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "DEFAULT_CONFIG", "url": "YAHOO.widget.Overlay.html#property_DEFAULT_CONFIG", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "destroy", "url": "YAHOO.widget.Overlay.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "doCenterOnDOMEvent", "url": "YAHOO.widget.Overlay.html#method_doCenterOnDOMEvent", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "enforceConstraints", "url": "YAHOO.widget.Overlay.html#method_enforceConstraints", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "EVENT_TYPES", "url": "YAHOO.widget.Overlay.html#property_EVENT_TYPES", "type": "property"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "FADE", "url": "YAHOO.widget.ContainerEffect.html#method_FADE", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "fillHeight", "url": "YAHOO.widget.Overlay.html#method_fillHeight", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "_findTriggerCE", "url": "YAHOO.widget.Overlay.html#method__findTriggerCE", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "fitsInViewport", "url": "YAHOO.widget.Overlay.html#method_fitsInViewport", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "fixedcenter", "url": "YAHOO.widget.Overlay.html#config_fixedcenter", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "forceContainerRedraw", "url": "YAHOO.widget.Overlay.html#method_forceContainerRedraw", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "_getComputedHeight", "url": "YAHOO.widget.Overlay.html#method__getComputedHeight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "getConstrainedX", "url": "YAHOO.widget.Overlay.html#method_getConstrainedX", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "getConstrainedXY", "url": "YAHOO.widget.Overlay.html#method_getConstrainedXY", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "getConstrainedY", "url": "YAHOO.widget.Overlay.html#method_getConstrainedY", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "_getPreciseHeight", "url": "YAHOO.widget.Overlay.html#method__getPreciseHeight", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "handleCompleteAnimateIn", "url": "YAHOO.widget.ContainerEffect.html#method_handleCompleteAnimateIn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "handleCompleteAnimateOut", "url": "YAHOO.widget.ContainerEffect.html#method_handleCompleteAnimateOut", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "handleStartAnimateIn", "url": "YAHOO.widget.ContainerEffect.html#method_handleStartAnimateIn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "handleStartAnimateOut", "url": "YAHOO.widget.ContainerEffect.html#method_handleStartAnimateOut", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "handleTweenAnimateIn", "url": "YAHOO.widget.ContainerEffect.html#method_handleTweenAnimateIn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "handleTweenAnimateOut", "url": "YAHOO.widget.ContainerEffect.html#method_handleTweenAnimateOut", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "height", "url": "YAHOO.widget.Overlay.html#config_height", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "hideIframe", "url": "YAHOO.widget.Overlay.html#method_hideIframe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "hideMacGeckoScrollbars", "url": "YAHOO.widget.Overlay.html#method_hideMacGeckoScrollbars", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "iframe", "url": "YAHOO.widget.Overlay.html#config_iframe", "type": "config"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "init", "url": "YAHOO.widget.ContainerEffect.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "init", "url": "YAHOO.widget.Overlay.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "initDefaultConfig", "url": "YAHOO.widget.Overlay.html#method_initDefaultConfig", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "initEvents", "url": "YAHOO.widget.Overlay.html#method_initEvents", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "moveEvent", "url": "YAHOO.widget.Overlay.html#event_moveEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "moveTo", "url": "YAHOO.widget.Overlay.html#method_moveTo", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "onDomResize", "url": "YAHOO.widget.Overlay.html#method_onDomResize", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "overlay", "url": "YAHOO.widget.ContainerEffect.html#property_overlay", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "preventcontextoverlap", "url": "YAHOO.widget.Overlay.html#config_preventcontextoverlap", "type": "config"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_primeXYFromDOM", "url": "YAHOO.widget.Overlay.html#method__primeXYFromDOM", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_processTriggers", "url": "YAHOO.widget.Overlay.html#method__processTriggers", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_setDomVisibility", "url": "YAHOO.widget.Overlay.html#method__setDomVisibility", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "showIframe", "url": "YAHOO.widget.Overlay.html#method_showIframe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "showMacGeckoScrollbars", "url": "YAHOO.widget.Overlay.html#method_showMacGeckoScrollbars", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "SLIDE", "url": "YAHOO.widget.ContainerEffect.html#method_SLIDE", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "stackIframe", "url": "YAHOO.widget.Overlay.html#method_stackIframe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "syncIframe", "url": "YAHOO.widget.Overlay.html#method_syncIframe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "syncPosition", "url": "YAHOO.widget.Overlay.html#method_syncPosition", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "targetElement", "url": "YAHOO.widget.ContainerEffect.html#property_targetElement", "type": "property"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "toString", "url": "YAHOO.widget.ContainerEffect.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "toString", "url": "YAHOO.widget.Overlay.html#method_toString", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_validateAutoFillHeight", "url": "YAHOO.widget.Overlay.html#method__validateAutoFillHeight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "width", "url": "YAHOO.widget.Overlay.html#config_width", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "x", "url": "YAHOO.widget.Overlay.html#config_x", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "xy", "url": "YAHOO.widget.Overlay.html#config_xy", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "y", "url": "YAHOO.widget.Overlay.html#config_y", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.BOTTOM_LEFT", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.BOTTOM_LEFT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.BOTTOM_RIGHT", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.BOTTOM_RIGHT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.CSS_OVERLAY", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.CSS_OVERLAY", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.IFRAME_SRC", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.IFRAME_SRC", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay._initialized", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay._initialized", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.STD_MOD_RE", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.STD_MOD_RE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.TOP_LEFT", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.TOP_LEFT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.TOP_RIGHT", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.TOP_RIGHT", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay._TRIGGER_MAP", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay._TRIGGER_MAP", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.VIEWPORT_OFFSET", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.VIEWPORT_OFFSET", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.windowResizeEvent", "url": "YAHOO.widget.Overlay.html#event_YAHOO.widget.Overlay.windowResizeEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.windowResizeHandler", "url": "YAHOO.widget.Overlay.html#method_YAHOO.widget.Overlay.windowResizeHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.windowScrollEvent", "url": "YAHOO.widget.Overlay.html#event_YAHOO.widget.Overlay.windowScrollEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.windowScrollHandler", "url": "YAHOO.widget.Overlay.html#method_YAHOO.widget.Overlay.windowScrollHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "zIndex", "url": "YAHOO.widget.Overlay.html#config_zIndex", "type": "config"}];
+    ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Overlay", "name": "align", "url": "YAHOO.widget.Overlay.html#method_align", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_alignOnTrigger", "url": "YAHOO.widget.Overlay.html#method__alignOnTrigger", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "animateIn", "url": "YAHOO.widget.ContainerEffect.html#method_animateIn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "animateOut", "url": "YAHOO.widget.ContainerEffect.html#method_animateOut", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "animClass", "url": "YAHOO.widget.ContainerEffect.html#property_animClass", "type": "property"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "attrIn", "url": "YAHOO.widget.ContainerEffect.html#property_attrIn", "type": "property"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "attrOut", "url": "YAHOO.widget.ContainerEffect.html#property_attrOut", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "autofillheight", "url": "YAHOO.widget.Overlay.html#config_autofillheight", "type": "config"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_autoFillOnHeightChange", "url": "YAHOO.widget.Overlay.html#method__autoFillOnHeightChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "beforeMoveEvent", "url": "YAHOO.widget.Overlay.html#event_beforeMoveEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "bringToTop", "url": "YAHOO.widget.Overlay.html#method_bringToTop", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "center", "url": "YAHOO.widget.Overlay.html#method_center", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configAutoFillHeight", "url": "YAHOO.widget.Overlay.html#method_configAutoFillHeight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configConstrainToViewport", "url": "YAHOO.widget.Overlay.html#method_configConstrainToViewport", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configContext", "url": "YAHOO.widget.Overlay.html#method_configContext", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configFixedCenter", "url": "YAHOO.widget.Overlay.html#method_configFixedCenter", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configHeight", "url": "YAHOO.widget.Overlay.html#method_configHeight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configIframe", "url": "YAHOO.widget.Overlay.html#method_configIframe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configVisible", "url": "YAHOO.widget.Overlay.html#method_configVisible", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configWidth", "url": "YAHOO.widget.Overlay.html#method_configWidth", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configX", "url": "YAHOO.widget.Overlay.html#method_configX", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configXY", "url": "YAHOO.widget.Overlay.html#method_configXY", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configY", "url": "YAHOO.widget.Overlay.html#method_configY", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "configzIndex", "url": "YAHOO.widget.Overlay.html#method_configzIndex", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "constraintoviewport", "url": "YAHOO.widget.Overlay.html#config_constraintoviewport", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "context", "url": "YAHOO.widget.Overlay.html#config_context", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "CONTEXT_TRIGGERS", "url": "YAHOO.widget.Overlay.html#property_CONTEXT_TRIGGERS", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "DEFAULT_CONFIG", "url": "YAHOO.widget.Overlay.html#property_DEFAULT_CONFIG", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "destroy", "url": "YAHOO.widget.Overlay.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "doCenterOnDOMEvent", "url": "YAHOO.widget.Overlay.html#method_doCenterOnDOMEvent", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "enforceConstraints", "url": "YAHOO.widget.Overlay.html#method_enforceConstraints", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "EVENT_TYPES", "url": "YAHOO.widget.Overlay.html#property_EVENT_TYPES", "type": "property"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "FADE", "url": "YAHOO.widget.ContainerEffect.html#method_FADE", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "fillHeight", "url": "YAHOO.widget.Overlay.html#method_fillHeight", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "_findTriggerCE", "url": "YAHOO.widget.Overlay.html#method__findTriggerCE", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "fitsInViewport", "url": "YAHOO.widget.Overlay.html#method_fitsInViewport", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "fixedcenter", "url": "YAHOO.widget.Overlay.html#config_fixedcenter", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "forceContainerRedraw", "url": "YAHOO.widget.Overlay.html#method_forceContainerRedraw", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "_getComputedHeight", "url": "YAHOO.widget.Overlay.html#method__getComputedHeight", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_getConstrainedPos", "url": "YAHOO.widget.Overlay.html#method__getConstrainedPos", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "getConstrainedX", "url": "YAHOO.widget.Overlay.html#method_getConstrainedX", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "getConstrainedXY", "url": "YAHOO.widget.Overlay.html#method_getConstrainedXY", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "getConstrainedY", "url": "YAHOO.widget.Overlay.html#method_getConstrainedY", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "_getPreciseHeight", "url": "YAHOO.widget.Overlay.html#method__getPreciseHeight", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "handleCompleteAnimateIn", "url": "YAHOO.widget.ContainerEffect.html#method_handleCompleteAnimateIn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "handleCompleteAnimateOut", "url": "YAHOO.widget.ContainerEffect.html#method_handleCompleteAnimateOut", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "handleStartAnimateIn", "url": "YAHOO.widget.ContainerEffect.html#method_handleStartAnimateIn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "handleStartAnimateOut", "url": "YAHOO.widget.ContainerEffect.html#method_handleStartAnimateOut", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "handleTweenAnimateIn", "url": "YAHOO.widget.ContainerEffect.html#method_handleTweenAnimateIn", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "handleTweenAnimateOut", "url": "YAHOO.widget.ContainerEffect.html#method_handleTweenAnimateOut", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "height", "url": "YAHOO.widget.Overlay.html#config_height", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "hideIframe", "url": "YAHOO.widget.Overlay.html#method_hideIframe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "hideMacGeckoScrollbars", "url": "YAHOO.widget.Overlay.html#method_hideMacGeckoScrollbars", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "iframe", "url": "YAHOO.widget.Overlay.html#config_iframe", "type": "config"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "init", "url": "YAHOO.widget.ContainerEffect.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "init", "url": "YAHOO.widget.Overlay.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "initDefaultConfig", "url": "YAHOO.widget.Overlay.html#method_initDefaultConfig", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "initEvents", "url": "YAHOO.widget.Overlay.html#method_initEvents", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "moveEvent", "url": "YAHOO.widget.Overlay.html#event_moveEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "moveTo", "url": "YAHOO.widget.Overlay.html#method_moveTo", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "onDomResize", "url": "YAHOO.widget.Overlay.html#method_onDomResize", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "overlay", "url": "YAHOO.widget.ContainerEffect.html#property_overlay", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "preventcontextoverlap", "url": "YAHOO.widget.Overlay.html#config_preventcontextoverlap", "type": "config"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_preventOverlap", "url": "YAHOO.widget.Overlay.html#method__preventOverlap", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_primeXYFromDOM", "url": "YAHOO.widget.Overlay.html#method__primeXYFromDOM", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_processTriggers", "url": "YAHOO.widget.Overlay.html#method__processTriggers", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_setDomVisibility", "url": "YAHOO.widget.Overlay.html#method__setDomVisibility", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "showIframe", "url": "YAHOO.widget.Overlay.html#method_showIframe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "showMacGeckoScrollbars", "url": "YAHOO.widget.Overlay.html#method_showMacGeckoScrollbars", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "SLIDE", "url": "YAHOO.widget.ContainerEffect.html#method_SLIDE", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "stackIframe", "url": "YAHOO.widget.Overlay.html#method_stackIframe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "syncIframe", "url": "YAHOO.widget.Overlay.html#method_syncIframe", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "syncPosition", "url": "YAHOO.widget.Overlay.html#method_syncPosition", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "targetElement", "url": "YAHOO.widget.ContainerEffect.html#property_targetElement", "type": "property"}, {"access": "", "host": "YAHOO.widget.ContainerEffect", "name": "toString", "url": "YAHOO.widget.ContainerEffect.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "toString", "url": "YAHOO.widget.Overlay.html#method_toString", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Overlay", "name": "_validateAutoFillHeight", "url": "YAHOO.widget.Overlay.html#method__validateAutoFillHeight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "width", "url": "YAHOO.widget.Overlay.html#config_width", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "x", "url": "YAHOO.widget.Overlay.html#config_x", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "xy", "url": "YAHOO.widget.Overlay.html#config_xy", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "y", "url": "YAHOO.widget.Overlay.html#config_y", "type": "config"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.BOTTOM_LEFT", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.BOTTOM_LEFT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.BOTTOM_RIGHT", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.BOTTOM_RIGHT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.CSS_HIDDEN", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.CSS_HIDDEN", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.CSS_IFRAME", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.CSS_IFRAME", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.CSS_OVERLAY", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.CSS_OVERLAY", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.IFRAME_SRC", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.IFRAME_SRC", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay._initialized", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay._initialized", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.STD_MOD_RE", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.STD_MOD_RE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.TOP_LEFT", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.TOP_LEFT", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.TOP_RIGHT", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.TOP_RIGHT", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay._TRIGGER_MAP", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay._TRIGGER_MAP", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.VIEWPORT_OFFSET", "url": "YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay.VIEWPORT_OFFSET", "type": "property"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.windowResizeEvent", "url": "YAHOO.widget.Overlay.html#event_YAHOO.widget.Overlay.windowResizeEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.windowResizeHandler", "url": "YAHOO.widget.Overlay.html#method_YAHOO.widget.Overlay.windowResizeHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.windowScrollEvent", "url": "YAHOO.widget.Overlay.html#event_YAHOO.widget.Overlay.windowScrollEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "YAHOO.widget.Overlay.windowScrollHandler", "url": "YAHOO.widget.Overlay.html#method_YAHOO.widget.Overlay.windowScrollHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.Overlay", "name": "zIndex", "url": "YAHOO.widget.Overlay.html#config_zIndex", "type": "config"}];
 </script>
 </body>
 </html>

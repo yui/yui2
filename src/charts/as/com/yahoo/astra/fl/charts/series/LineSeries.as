@@ -86,11 +86,12 @@ package com.yahoo.astra.fl.charts.series
 	//--------------------------------------
 	
 		/**
+		 * @private
 		 * @copy fl.core.UIComponent#getStyleDefinition()
 		 */
 		public static function getStyleDefinition():Object
 		{
-			return mergeStyles(defaultStyles, Series.getStyleDefinition());
+			return mergeStyles(defaultStyles, CartesianSeries.getStyleDefinition());
 		}
 		
 	//--------------------------------------
@@ -239,16 +240,17 @@ package com.yahoo.astra.fl.charts.series
 		private function drawMarkers(data:Array):void
 		{
 			var primaryIsVertical:Boolean = true;
-			var primaryAxis:NumericAxis = CartesianChart(this.chart).verticalAxis as NumericAxis;
+			var yAxis:String = this.axis == "primary" ? "verticalAxis" : "secondaryVerticalAxis";
+			var primaryAxis:NumericAxis = CartesianChart(this.chart)[yAxis] as NumericAxis;
+
 			if(!primaryAxis)
 			{
+				var xAxis:String = this.axis == "primary" ? "horizontalAxis" : "secondaryHorizontalAxis";
 				primaryIsVertical = false;
-				primaryAxis = CartesianChart(this.chart).horizontalAxis as NumericAxis;
+				primaryAxis = CartesianChart(this.chart)[xAxis] as NumericAxis;
 			}
 			
 			var originPosition:Number = primaryAxis.valueToLocal(primaryAxis.origin);
-			
-			
 			
 			var lineColor:uint = this.getStyleValue("lineColor") != null ? this.getStyleValue("lineColor") as uint : this.getStyleValue("color") as uint;
 			var connectDiscontinuousPoints:Boolean = this.getStyleValue("connectDiscontinuousPoints") as Boolean;
@@ -271,6 +273,7 @@ package com.yahoo.astra.fl.charts.series
 				var marker:DisplayObject = DisplayObject(this.markers[i]);
 				var xPosition:Number = data[i * 2] as Number;
 				var yPosition:Number = data[i * 2 + 1] as Number;
+
 				var markerValid:Boolean = !this.isMarkerInvalid(ISeriesItemRenderer(marker));
 				
 				//if the position is valid, move or draw as needed
@@ -278,6 +281,7 @@ package com.yahoo.astra.fl.charts.series
 				{
 					marker.x = xPosition - marker.width / 2;
 					marker.y = yPosition - marker.height / 2;
+					marker.visible = yPosition <= seriesBounds.height + seriesBounds.y && yPosition >= seriesBounds.y;
 					
 					if(lastValidPosition && !lastMarkerValid && connectDiscontinuousPoints)
 					{
@@ -291,7 +295,17 @@ package com.yahoo.astra.fl.charts.series
 					else if(!lastValidPosition || (!lastMarkerValid && !connectDiscontinuousPoints))
 					{
 						//if the last position is not valid, simply move to the new position
-						this.graphics.moveTo(xPosition, yPosition);
+						var newY:Number = yPosition;
+						if(yPosition < seriesBounds.y) 
+						{
+							newY = seriesBounds.y;
+						}
+						if(yPosition > seriesBounds.y + seriesBounds.height) 
+						{
+							newY = seriesBounds.y + seriesBounds.height;
+						}
+
+						this.graphics.moveTo(xPosition, newY);
 					}
 					else //current and last position are both valid
 					{
@@ -313,15 +327,79 @@ package com.yahoo.astra.fl.charts.series
 							lineBounds.height = 1;
 						}
 						
+						var bottom:Number = seriesBounds.y + seriesBounds.height;
+
 						//if line between the last point and this point is within
 						//the series bounds, draw it, otherwise, only move to the new point.
 						if(lineBounds.intersects(seriesBounds) ||
 							yPosition == seriesBounds.y ||
 							yPosition == seriesBounds.y + seriesBounds.height ||
 							xPosition == seriesBounds.x ||
-							xPosition == seriesBounds.x + seriesBounds.width)
+							xPosition == seriesBounds.x + seriesBounds.width ||
+							showAreaFill)
 						{
-							this.graphics.lineTo(xPosition, yPosition);
+							var x1:Number = lastValidPosition.x;
+							var x2:Number = xPosition;
+							var y1:Number = lastValidPosition.y;
+							var y2:Number = yPosition;
+							if(yPosition > bottom)
+							{	
+								if(lastValidPosition.y == yPosition)
+								{
+									this.graphics.lineTo(xPosition, bottom);
+								}
+								else
+								{
+									if(lastValidPosition.y < seriesBounds.y) 
+									{
+										newX = x2 - ((y2 - seriesBounds.y)*(x2-x1)/(y2-y1));
+										this.graphics.lineTo(newX, seriesBounds.y);
+										this.setPrimaryLineStyle();
+									}
+									var newX:Number = x2 - ((y2 - bottom)*(x2-x1)/(y2-y1));
+									this.graphics.lineTo(newX, bottom);
+								}
+								this.graphics.lineStyle(0, 0, 0);
+							}
+							else if(yPosition < seriesBounds.y)
+							{
+								if(lastValidPosition.y == yPosition)
+								{
+									this.graphics.lineTo(xPosition, seriesBounds.y);
+								}
+								else
+								{										
+									if(lastValidPosition.y > bottom) 
+									{
+										newX = x2 - ((y2 - bottom)*(x2-x1)/(y2-y1));	
+										this.graphics.lineTo(newX, bottom);
+										this.setPrimaryLineStyle();
+									}
+													
+									newX = x2 - ((y2 - seriesBounds.y)*(x2-x1)/(y2-y1));
+									if(lastValidPosition.y < seriesBounds.y) this.graphics.lineStyle(0, 0, 0);
+									this.graphics.lineTo(newX, seriesBounds.y);
+								}
+								this.graphics.lineStyle(0, 0, 0);
+							}
+							else
+							{	
+								if(lastValidPosition.y > bottom) 
+								{
+									newX = x2 - ((y2 - bottom)*(x2-x1)/(y2-y1));	
+									this.graphics.lineTo(newX, bottom);
+									this.setPrimaryLineStyle();
+								}
+						
+								if(lastValidPosition.y < seriesBounds.y)
+								{
+									newX = x2 - ((y2 - seriesBounds.y)*(x2-x1)/(y2-y1));							
+									this.graphics.lineTo(newX, seriesBounds.y);
+									this.setPrimaryLineStyle();									
+								}
+
+								this.graphics.lineTo(xPosition, yPosition);
+							}	
 						}
 						else
 						{
@@ -343,6 +421,7 @@ package com.yahoo.astra.fl.charts.series
 					lastMarkerValid = false;
 					firstValidPosition = null;
 				}
+				
 			}
 			
 			if(showAreaFill)
@@ -385,7 +464,7 @@ package com.yahoo.astra.fl.charts.series
 			var lineWeight:int = this.getStyleValue("lineWeight") as int;
 			var lineColor:uint = this.getStyleValue("lineColor") != null ? this.getStyleValue("lineColor") as uint : this.getStyleValue("color") as uint;
 			var lineAlpha:Number = this.getStyleValue("lineAlpha") as Number;
-			this.graphics.lineStyle(lineWeight, lineColor, lineAlpha);
+			this.graphics.lineStyle(lineWeight, lineColor, lineAlpha, false, "normal", "none");
 		}
 		
 		/**
