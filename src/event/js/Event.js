@@ -1513,9 +1513,25 @@ if (!YAHOO.util.Event) {
         var EU = YAHOO.util.Event;
 
         /**
-         * YAHOO.util.Event.on is an alias for addListener
+         * Appends an event handler.  This is an alias for <code>addListener</code>
+         *
          * @method on
-         * @see addListener
+         *
+         * @param {String|HTMLElement|Array|NodeList} el An id, an element 
+         *  reference, or a collection of ids and/or elements to assign the 
+         *  listener to.
+         * @param {String}   sType     The type of event to append
+         * @param {Function} fn        The method the event invokes
+         * @param {Object}   obj    An arbitrary object that will be 
+         *                             passed as a parameter to the handler
+         * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes
+         *                             the execution context of the listener. If an
+         *                             object, this object becomes the execution
+         *                             context.
+         * @return {Boolean} True if the action was successful or defered,
+         *                        false if one or more of the elements 
+         *                        could not have the listener attached,
+         *                        or if the operation throws an exception.
          * @static
          */
         EU.on = EU.addListener;
