@@ -2097,6 +2097,14 @@ YAHOO.widget.Node.prototype = {
                 el.className = el.className.replace(/\bygtv(([tl][pmn]h?)|(loading))\b/gi,this.getStyle());
             }
         }
+		el = Dom.get('ygtvtableel' + this.index);
+        if (el) {
+			if (this.expanded) {
+				Dom.replaceClass(el,'ygtv-collapsed','ygtv-expanded');
+			} else {
+				Dom.replaceClass(el,'ygtv-expanded','ygtv-collapsed');
+			}
+        }
     },
 
     /**
@@ -2439,6 +2447,7 @@ YAHOO.widget.Node.prototype = {
         var sb = [];
 
         sb[sb.length] = '<table id="ygtvtableel' + this.index + '" border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
+		sb[sb.length] = ' ygtv-' + (this.expanded?'expanded':'collapsed');
         if (this.enableHighlight) {
             sb[sb.length] = ' ygtv-highlight' + this.highlightState;
         }
@@ -2583,7 +2592,6 @@ YAHOO.widget.Node.prototype = {
                         aEl.focus();
                         self._focusedItem = aEl;
                         Event.on(aEl,'blur',function () {
-                            //console.log('f1');
                             self.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
                             self.tree.currentFocus = null;
                             self._removeFocus();
@@ -2595,11 +2603,9 @@ YAHOO.widget.Node.prototype = {
             }
         );
         if (focused) { 
-                            //console.log('f2');
             this.tree.fireEvent('focusChanged',{oldNode:this.tree.currentFocus,newNode:this});
             this.tree.currentFocus = this;
         } else {
-                            //console.log('f3');
             this.tree.fireEvent('focusChanged',{oldNode:self.tree.currentFocus,newNode:null});
             this.tree.currentFocus = null;
             this._removeFocus(); 

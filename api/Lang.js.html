@@ -495,7 +495,7 @@
 <span class="cm">     * @method merge</span>
 <span class="cm">     * @since 2.3.0</span>
 <span class="cm">     * @param arguments {Object*} the objects to merge</span>
-<span class="cm">     * @return {object} the new merged object</span>
+<span class="cm">     * @return the new merged object</span>
 <span class="cm">     */</span>
     <span class="nx">merge</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">o</span><span class="o">=</span><span class="p">{},</span> <span class="nx">a</span><span class="o">=</span><span class="nx">arguments</span><span class="p">,</span> <span class="nx">l</span><span class="o">=</span><span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
@@ -516,14 +516,14 @@
 <span class="cm">     * @param o the context object</span>
 <span class="cm">     * @param fn {Function|String} the function to execute or the name of </span>
 <span class="cm">     * the method in the &#39;o&#39; object to execute</span>
-<span class="cm">     * @param data {Array} data that is provided to the function.  This accepts</span>
+<span class="cm">     * @param data [Array] data that is provided to the function.  This accepts</span>
 <span class="cm">     * either a single item or an array.  If an array is provided, the</span>
 <span class="cm">     * function is executed with one parameter for each array item.  If</span>
 <span class="cm">     * you need to pass a single array parameter, it needs to be wrapped in</span>
 <span class="cm">     * an array [myarray]</span>
 <span class="cm">     * @param periodic {boolean} if true, executes continuously at supplied </span>
 <span class="cm">     * interval until canceled</span>
-<span class="cm">     * @return {object} a timer object. Call the cancel() method on this object to </span>
+<span class="cm">     * @return a timer object. Call the cancel() method on this object to </span>
 <span class="cm">     * stop the timer.</span>
 <span class="cm">     */</span>
     <span class="nx">later</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">when</span><span class="p">,</span> <span class="nx">o</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">periodic</span><span class="p">)</span> <span class="p">{</span>
