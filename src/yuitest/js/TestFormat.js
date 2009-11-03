@@ -68,7 +68,7 @@ YAHOO.namespace("tool.TestFormat");
             return xml;    
         }
 
-        return "<?xml version=\"1.0\" charset=\"UTF-8\"?>" + serializeToXML(results);
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serializeToXML(results);
 
     };
 
@@ -144,7 +144,7 @@ YAHOO.namespace("tool.TestFormat");
      
         }
 
-        return "<?xml version=\"1.0\" charset=\"UTF-8\"?>" + serializeToJUnitXML(results);
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serializeToJUnitXML(results);
     };
     
     /**
