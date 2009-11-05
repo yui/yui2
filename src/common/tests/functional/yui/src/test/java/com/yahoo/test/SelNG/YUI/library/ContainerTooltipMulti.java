@@ -19,15 +19,15 @@ public class ContainerTooltipMulti extends SelNGBase {
 		//Thread.sleep(3000);
 
 		// When the page is first loaded, the tt element has no value for visibility rather than "visibility: hidden;"
-		assertFalse(hasAttribute("ttA", "style", "visibility: visible;"));
+		assertFalse(Util.hasAttribute("ttA", "style", "visibility: visible;"));
 		session().mouseOver("A1");
-		assertTrue(hasAttribute("ttA", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("ttA", "style", "visibility: visible;"));
 		String ttText = session().getText("ttA");
 		assertEquals(ttText, "Tooltip for link A1, set through title");
 
 		// Check for auto dismiss default timeout of 5 seconds
 		Thread.sleep(5500);
-		assertFalse(hasAttribute("ttA", "style", "visibility: visible;"));
+		assertFalse(Util.hasAttribute("ttA", "style", "visibility: visible;"));
 		session().mouseOut("A1");
 		
 		// Now that the tt element has a value for visibility, we can check for it
@@ -39,9 +39,9 @@ public class ContainerTooltipMulti extends SelNGBase {
 		checkTT("ttB", "B2", "Tooltip for B2, set using contextTriggerEvent");
 		
 		// anchor B3 has no tt
-		assertFalse(hasAttribute("ttA", "style", "visibility: visible;"));
+		assertFalse(Util.hasAttribute("ttA", "style", "visibility: visible;"));
 		session().mouseOver("B3");
-		assertFalse(hasAttribute("ttA", "style", "visibility: visible;"));
+		assertFalse(Util.hasAttribute("ttA", "style", "visibility: visible;"));
 		session().mouseOut("B3");
 		
 		checkTT("ttB", "B4", "Tooltip for B4, set using contextTriggerEvent");
@@ -51,23 +51,18 @@ public class ContainerTooltipMulti extends SelNGBase {
 	
 	public static void checkTT(String elTT, String elA, String expectedTTtext) throws Exception {
 
-		assertTrue(hasAttribute(elTT, "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute(elTT, "style", "visibility: hidden;"));
 		session().mouseOver(elA);
 		//Number X = session().getElementPositionLeft(elTT);
 		//Number Y = session().getElementPositionTop(elTT);
-		assertTrue(hasAttribute(elTT, "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute(elTT, "style", "visibility: visible;"));
 		String ttText = session().getText(elTT);
 		assertEquals(ttText, expectedTTtext);
 		Thread.sleep(5500);
-		assertTrue(hasAttribute(elTT, "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute(elTT, "style", "visibility: hidden;"));
 		session().mouseOut(elA);
 
 	}
 	
-	public static boolean hasAttribute(String elXpath, String attributeName, String attributeValue) {
-		
-		String attribute = session().getAttribute(elXpath + "@" + attributeName);
-		return ((attribute != null) && (attribute.contains(attributeValue)));
-	}
 
 }

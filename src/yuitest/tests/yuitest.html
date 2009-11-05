@@ -687,7 +687,7 @@ YAHOO.test.YUITest_test = (function(){
         testXmlFormat : function(){
             var xml = YAHOO.tool.TestFormat.XML(this.simpleReport);
             var expectedXml = 
-                "<?xml version=\"1.0\" charset=\"UTF-8\"?>" +
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<report name=\"YUI Test Results\" passed=\"2\" failed=\"2\" ignored=\"1\" total=\"5\">" +
                     "<testsuite name=\"Some Suite\" passed=\"2\" failed=\"2\" ignored=\"1\" total=\"5\">" +
                         "<testcase name=\"Some Tests\" passed=\"2\" failed=\"2\" ignored=\"1\" total=\"5\">" +
@@ -707,7 +707,7 @@ YAHOO.test.YUITest_test = (function(){
         testJUnitXmlFormat : function(){
             var xml = YAHOO.tool.TestFormat.JUnitXML(this.simpleReport);
             var expectedXml = 
-                "<?xml version=\"1.0\" charset=\"UTF-8\"?>" +
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<testsuites>" +
                     "<testsuite name=\"Some Tests\" tests=\"5\" failures=\"2\">" + 
                         "<testcase name=\"test1\"></testcase>" +
@@ -1532,10 +1532,6 @@ YAHOO.test.YUITest_test = (function(){
     
     //add the tests
     YAHOO.tool.TestRunner.add(YAHOO.test.YUITest_test);
-    
-    YAHOO.tool.TestRunner.subscribe("complete", function(){
-        alert("Done!");
-    });
     
     //add event handler
     YAHOO.util.Event.addListener("btnRun", "click", YAHOO.tool.TestRunner.run);
