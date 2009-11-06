@@ -5,7 +5,7 @@ YAHOO.namespace("tool");
  * @module yuitest
  * @namespace YAHOO.tool
  * @requires yahoo,dom,event,logger
- * @optional event-simulte
+ * @optional event-simulate
  */
 
 
@@ -124,7 +124,7 @@ YAHOO.tool.TestRunner = (function(){
          * @private
          * @static
          */
-        this.masterSuite = new YAHOO.tool.TestSuite("YUI Test Results");        
+        this.masterSuite = new YAHOO.tool.TestSuite("yuitests" + (new Date()).getTime());        
 
         /**
          * Pointer to the current node in the test tree.
@@ -304,6 +304,15 @@ YAHOO.tool.TestRunner = (function(){
         //-------------------------------------------------------------------------
         // Misc Methods
         //-------------------------------------------------------------------------
+
+        /**
+         * Retrieves the name of the current result set.
+         * @return {String} The name of the result set.
+         * @method getName
+         */
+        getName: function(){
+            return this.masterSuite.name;
+        },         
 
         /**
          * The name assigned to the master suite of the TestRunner. This is the name
@@ -744,6 +753,7 @@ YAHOO.tool.TestRunner = (function(){
          */
         clear : function () /*:Void*/ {
             this.masterSuite.items = [];
+            this.masterSuite.name = "yuitests" + (new Date()).getTime();
         },
         
         /**
