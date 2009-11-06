@@ -255,6 +255,17 @@ lang.augmentObject(DT, {
     CLASS_EDITOR : "yui-dt-editor",
 
     /**
+     * Class name assigned to CellEditor container shim.
+     *
+     * @property DataTable.CLASS_EDITOR_SHIM
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt-editor-shim"
+     */
+    CLASS_EDITOR_SHIM : "yui-dt-editor-shim",
+
+    /**
      * Class name assigned to paginator container elements.
      *
      * @property DataTable.CLASS_PAGINATOR
