@@ -2047,6 +2047,8 @@ YAHOO.widget.AutoComplete.prototype._typeAhead = function(elListItem, sQuery) {
                 var nEnd = elTextbox.value.length;
                 oSelf._selectText(elTextbox,nStart,nEnd);
                 var sPrefill = elTextbox.value.substr(nStart,nEnd);
+                // Bug 2528552: Store as a selection
+                oSelf._sCurQuery = elListItem._sResultMatch;
                 oSelf.typeAheadEvent.fire(oSelf,sQuery,sPrefill);
                 YAHOO.log("Typeahead occured with prefill string \"" + sPrefill + "\"", "info", oSelf.toString());
             },(this.typeAheadDelay*1000));            
@@ -2518,6 +2520,8 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
         YAHOO.log("Item arrowed to " + elNewListItem._nItemIndex, "info", this.toString());
         if(this.typeAhead) {
             this._updateValue(elNewListItem);
+            // Bug 2528552: Store as a selection
+            this._sCurQuery = elNewListItem._sResultMatch;
         }
     }
 };
