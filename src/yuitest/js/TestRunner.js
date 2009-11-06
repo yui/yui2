@@ -133,7 +133,7 @@ YAHOO.tool.TestRunner = (function(){
          * @property _cur
          * @static
          */
-        this._cur = null;
+        this._cur = null;                
         
         /**
          * Pointer to the root node in the test tree.
@@ -301,6 +301,21 @@ YAHOO.tool.TestRunner = (function(){
             }            
         },
         
+        //-------------------------------------------------------------------------
+        // Misc Methods
+        //-------------------------------------------------------------------------
+
+        /**
+         * The name assigned to the master suite of the TestRunner. This is the name
+         * that is output as the root's name when results are retrieved.
+         * @param {String} name The name of the result set.
+         * @return {Void}
+         * @method setName
+         */
+        setName: function(name){
+            this.masterSuite.name = name;
+        },
+
         //-------------------------------------------------------------------------
         // Test Tree-Related Methods
         //-------------------------------------------------------------------------
