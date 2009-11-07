@@ -227,7 +227,11 @@ _initContainerEl : function() {
     elContainer.id = this.getId() + "-container"; // Needed for tracking blur event
     elContainer.style.display = "none";
     elContainer.tabIndex = 0;
-    elContainer.className = DT.CLASS_EDITOR;
+    
+    this.className = lang.isArray(this.className) ? this.className : this.className ? [this.className] : [];
+    this.className[this.className.length] = DT.CLASS_EDITOR;
+    elContainer.className = this.className.join(" ");
+    
     document.body.insertBefore(elContainer, document.body.firstChild);
     this._elContainer = elContainer;
 },
@@ -380,6 +384,13 @@ disableBtns : false,
  */
 useIFrame : false,
 
+/**
+ * Custom CSS class or array of classes applied to the container element.
+ *
+ * @property className
+ * @type String || String[]
+ */
+className : null,
 
 
 
