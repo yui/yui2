@@ -7,6 +7,8 @@ YUI Library - YUITest - Release Notes
   * Added getResults() method on YAHOO.tool.TestRunner.
   * Added isRunning() method on YAHOO.tool.TestRunner.
   * Added coverage support, including getCoverage() on YAHOO.tool.TestRunner and YAHOO.tool.CoverageFormat.
+  * Added getName()/setName() method to allow setting overall results name.
+  * Changed master suite default name to be "yuitests" plus a timestampl
 
 2.8.0
 
