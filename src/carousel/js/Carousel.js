@@ -52,6 +52,7 @@
      * @static
      */
     var instances = {},
+        syncUiOnItemInsert = true,
 
     /*
      * Custom events of the Carousel component
@@ -352,7 +353,7 @@
         if (!el) {
             return 0;
         }
-
+        
         function getStyleIntVal(el, style) {
             var val;
 
@@ -466,8 +467,6 @@
             return 0;
         }
 
-        child = Dom.get(item.id);
-
         if (typeof which == "undefined") {
             vertical = carousel.get("isVertical");
         } else {
@@ -478,6 +477,7 @@
             return this._itemAttrCache[which];
         }
 
+        child = Dom.get(item.id);
         if (vertical) {
             size = getStyle(child, "height");
         } else {
@@ -996,7 +996,7 @@
          * @private
          */
         _hasFocus: false,
-
+        
         /**
          * Is the Carousel rendered already?
          *
@@ -1529,11 +1529,15 @@
                 return false;
             }
 
+            syncUiOnItemInsert = false;
             for (i = 0, n = items.length; i < n; i++) {
                 if (this.addItem(items[i][0], items[i][1]) === false) {
                     rv = false;
                 }
             }
+            syncUiOnItemInsert = true;
+            
+            this._syncUiItems();
 
             return rv;
         },
@@ -2158,7 +2162,7 @@
                 return null;
             }
 
-            if (carousel._itemsTable.numItems > index) {
+            if (carousel._itemsTable.items.length > index) {
                 if (!JS.isUndefined(carousel._itemsTable.items[index])) {
                     return carousel._itemsTable.items[index];
                 }
@@ -2373,11 +2377,15 @@
                  return false;
              }
 
+             syncUiOnItemInsert = false;
              for (i = 0, n = items.length; i < n; i++) {
                  if (this.replaceItem(items[i][0], items[i][1]) === false) {
                      rv = false;
                  }
              }
+             syncUiOnItemInsert = true;
+
+             this._syncUiItems();
 
              return rv;
          },
@@ -2933,12 +2941,12 @@
          * @protected
          */
         _createCarouselItem: function (obj) {
-            var attr, carousel = this,
-                styles = getCarouselItemPosition.call(carousel, obj.pos);
+            var attr, carousel = this;
+                //styles = getCarouselItemPosition.call(carousel, obj.pos);
 
             return createElement(carousel.get("carouselItemEl"), {
                     className : obj.className,
-                    styles    : obj.styles,
+                    styles    : {},
                     content   : obj.content,
                     id        : obj.id
             });
@@ -3785,7 +3793,7 @@
         },
 
         /**
-         * Get the index of the last visible item
+         * Get the last visible item.
          *
          * @method _getLastVisible
          * @protected
@@ -4006,6 +4014,11 @@
          * @protected
          */
         _syncUiItems: function () {
+
+            if(!syncUiOnItemInsert) {
+                return;
+            }
+
             var attr,
                 carousel = this,
                 numItems = carousel.get("numItems"),
@@ -4014,7 +4027,8 @@
                 items = itemsTable.items,
                 loading = itemsTable.loading,
                 item,
-                styles;
+                styles,
+                updateStyles = false;
 
             for (i = 0; i < numItems; i++) {
                 item = items[i] || loading[i];
@@ -4022,12 +4036,19 @@
                 if (item && item.id) {
                     styles = getCarouselItemPosition.call(carousel, i);
                     item.styles = item.styles || {};
+                    
                     for (attr in styles) {
-                        if (styles.hasOwnProperty(attr)) {
-                            item.styles[attr] = styles[attr];
+                        if(item.styles[attr] !== styles[attr])
+                        {
+                            updateStyles = true;
+                            item.styles[attr] = styles[attr];                            
                         }
                     }
-                    setStyles(Dom.get(item.id), styles);
+                    if(updateStyles)
+                    {
+                        setStyles(Dom.get(item.id), styles);
+                    }
+                    updateStyles = false;
                 }
             }
         },
@@ -4075,6 +4096,11 @@
          * @protected
          */
          _updatePagerButtons: function () {
+
+             if(!syncUiOnItemInsert) {
+                return;
+             }
+
              var carousel = this,
                  css      = carousel.CLASSES,
                  cur      = carousel._pages.cur, // current page
