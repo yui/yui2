@@ -790,6 +790,12 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * value is an object, it uses the Object's toString() if this has
      * been overridden, otherwise it does a shallow dump of the key/value
      * pairs.
+     * 
+     * By specifying the recurse option, the string is rescanned after
+     * every replacement, allowing for nested template substitutions.
+     * The side effect of this option is that curly braces in the
+     * replacement content must be encoded.
+     *
      * @method substitute
      * @since 2.3.0
      * @param s {String} The string that will be modified.
@@ -798,16 +804,17 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      *                     process each match.  It receives the key,
      *                     value, and any extra metadata included with
      *                     the key inside of the braces.
+     * @param recurse {boolean} default false, if true, the replaced
+     * string will be rescanned so that nested substitutions are possible.
      * @return {String} the substituted string
      */
-    substitute: function (s, o, f) {
-        var i, j, k, key, v, meta, saved=[], token, 
+    substitute: function (s, o, f, recurse) {
+        var i, j, k, key, v, meta, saved=[], token, lidx=s.length,
             DUMP='dump', SPACE=' ', LBRACE='{', RBRACE='}',
             dump, objstr;
 
-
         for (;;) {
-            i = s.lastIndexOf(LBRACE);
+            i = s.lastIndexOf(LBRACE, lidx);
             if (i < 0) {
                 break;
             }
@@ -866,6 +873,9 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
 
             s = s.substring(0, i) + v + s.substring(j + 1);
 
+            if (!recurse) {
+                lidx = i-1;
+            }
 
         }
 
@@ -901,7 +911,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @method merge
      * @since 2.3.0
      * @param arguments {Object*} the objects to merge
-     * @return the new merged object
+     * @return {object} the new merged object
      */
     merge: function() {
         var o={}, a=arguments, l=a.length, i;
@@ -922,14 +932,14 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @param o the context object
      * @param fn {Function|String} the function to execute or the name of 
      * the method in the 'o' object to execute
-     * @param data [Array] data that is provided to the function.  This accepts
+     * @param data {Array} data that is provided to the function.  This accepts
      * either a single item or an array.  If an array is provided, the
      * function is executed with one parameter for each array item.  If
      * you need to pass a single array parameter, it needs to be wrapped in
      * an array [myarray]
      * @param periodic {boolean} if true, executes continuously at supplied 
      * interval until canceled
-     * @return a timer object. Call the cancel() method on this object to 
+     * @return {object} a timer object. Call the cancel() method on this object to 
      * stop the timer.
      */
     later: function(when, o, fn, data, periodic) {

@@ -86,7 +86,7 @@
             'type': 'js',
             'path': 'calendar/calendar-min.js',
             'requires': ['event', 'dom'],
-            supersedes: ['datemeth'],
+            supersedes: ['datemath'],
             'skinnable': true
         },
 

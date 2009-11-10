@@ -442,6 +442,4 @@ YAHOO.extend(YAHOO.util.SWFStore, YAHOO.util.AttributeProvider,
 
 
 YAHOO.util.SWFStore.SWFURL = "swfstore.swf";
-
-YAHOO.register("swfstore", YAHOO.util.SWFStore, {version: "@VERSION@", build: "@BUILD@"});
 YAHOO.register("swfstore", YAHOO.util.SWFStore, {version: "@VERSION@", build: "@BUILD@"});

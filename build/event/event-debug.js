@@ -1271,7 +1271,16 @@ if (!YAHOO.util.Event) {
             /**
              * In some cases, some browsers will return a text node inside
              * the actual element that was targeted.  This normalizes the
-             * return value for getTarget and getRelatedTarget.
+             * return value for getTarget and getRelatedTarget.  
+             *
+             * If accessing a property of the node throws an error, this is
+             * probably the anonymous div wrapper Gecko adds inside text
+             * nodes.  This likely will only occur when attempting to access
+             * the relatedTarget.  In this case, we now return null because
+             * the anonymous div is completely useless and we do not know
+             * what the related target was because we can't even get to
+             * the element's parent node.
+             *
              * @method resolveTextNode
              * @param {HTMLElement} node node to resolve
              * @return {HTMLElement} the normized node
@@ -1282,7 +1291,9 @@ if (!YAHOO.util.Event) {
                     if (n && 3 == n.nodeType) {
                         return n.parentNode;
                     }
-                } catch(e) { }
+                } catch(e) { 
+                    return null;
+                }
 
                 return n;
             },
@@ -1969,9 +1980,25 @@ if (!YAHOO.util.Event) {
         var EU = YAHOO.util.Event;
 
         /**
-         * YAHOO.util.Event.on is an alias for addListener
+         * Appends an event handler.  This is an alias for <code>addListener</code>
+         *
          * @method on
-         * @see addListener
+         *
+         * @param {String|HTMLElement|Array|NodeList} el An id, an element 
+         *  reference, or a collection of ids and/or elements to assign the 
+         *  listener to.
+         * @param {String}   sType     The type of event to append
+         * @param {Function} fn        The method the event invokes
+         * @param {Object}   obj    An arbitrary object that will be 
+         *                             passed as a parameter to the handler
+         * @param {Boolean|object}  overrideContext  If true, the obj passed in becomes
+         *                             the execution context of the listener. If an
+         *                             object, this object becomes the execution
+         *                             context.
+         * @return {Boolean} True if the action was successful or defered,
+         *                        false if one or more of the elements 
+         *                        could not have the listener attached,
+         *                        or if the operation throws an exception.
          * @static
          */
         EU.on = EU.addListener;

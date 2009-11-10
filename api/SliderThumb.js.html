@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Slider Widget&nbsp; <span class="subtitle">2.8.0_test3</span></h3>
+        <h3>Slider Widget&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_slider.html" title="slider">slider</a>
                 
@@ -47,276 +47,276 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-                        <div class="highlight" ><pre><span class="c">/**</span>
-<span class="c"> * A drag and drop implementation to be used as the thumb of a slider.</span>
-<span class="c"> * @class SliderThumb</span>
-<span class="c"> * @extends YAHOO.util.DD</span>
-<span class="c"> * @constructor</span>
-<span class="c"> * @param {String} id the id of the slider html element</span>
-<span class="c"> * @param {String} sGroup the group of related DragDrop items</span>
-<span class="c"> * @param {int} iLeft the number of pixels the element can move left</span>
-<span class="c"> * @param {int} iRight the number of pixels the element can move right</span>
-<span class="c"> * @param {int} iUp the number of pixels the element can move up</span>
-<span class="c"> * @param {int} iDown the number of pixels the element can move down</span>
-<span class="c"> * @param {int} iTickSize optional parameter for specifying that the element </span>
-<span class="c"> * should move a certain number pixels at a time.</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SliderThumb</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">,</span> <span class="nx">iLeft</span><span class="o">,</span> <span class="nx">iRight</span><span class="o">,</span> <span class="nx">iUp</span><span class="o">,</span> <span class="nx">iDown</span><span class="o">,</span> <span class="nx">iTickSize</span><span class="o">)</span> <span class="o">{</span>
+                        <div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * A drag and drop implementation to be used as the thumb of a slider.</span>
+<span class="cm"> * @class SliderThumb</span>
+<span class="cm"> * @extends YAHOO.util.DD</span>
+<span class="cm"> * @constructor</span>
+<span class="cm"> * @param {String} id the id of the slider html element</span>
+<span class="cm"> * @param {String} sGroup the group of related DragDrop items</span>
+<span class="cm"> * @param {int} iLeft the number of pixels the element can move left</span>
+<span class="cm"> * @param {int} iRight the number of pixels the element can move right</span>
+<span class="cm"> * @param {int} iUp the number of pixels the element can move up</span>
+<span class="cm"> * @param {int} iDown the number of pixels the element can move down</span>
+<span class="cm"> * @param {int} iTickSize optional parameter for specifying that the element </span>
+<span class="cm"> * should move a certain number pixels at a time.</span>
+<span class="cm"> */</span>
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SliderThumb</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">sGroup</span><span class="p">,</span> <span class="nx">iLeft</span><span class="p">,</span> <span class="nx">iRight</span><span class="p">,</span> <span class="nx">iUp</span><span class="p">,</span> <span class="nx">iDown</span><span class="p">,</span> <span class="nx">iTickSize</span><span class="p">)</span> <span class="p">{</span>
 
-    <span class="k">if</span> <span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SliderThumb</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">id</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SliderThumb</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">sGroup</span><span class="p">);</span>
 
-        <span class="c">/**</span>
-<span class="c">         * The id of the thumbs parent HTML element (the slider background </span>
-<span class="c">         * element).</span>
-<span class="c">         * @property parentElId</span>
-<span class="c">         * @type string</span>
-<span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">parentElId</span> <span class="o">=</span> <span class="nx">sGroup</span><span class="o">;</span>
-    <span class="o">}</span>
-
-
-    <span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
-
-    <span class="c">/**</span>
-<span class="c">     * Overrides the isTarget property in YAHOO.util.DragDrop</span>
-<span class="c">     * @property isTarget</span>
-<span class="c">     * @private</span>
-<span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">isTarget</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-
-    <span class="c">/**</span>
-<span class="c">     * The tick size for this slider</span>
-<span class="c">     * @property tickSize</span>
-<span class="c">     * @type int</span>
-<span class="c">     * @private</span>
-<span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">tickSize</span> <span class="o">=</span> <span class="nx">iTickSize</span><span class="o">;</span>
-
-    <span class="c">/**</span>
-<span class="c">     * Informs the drag and drop util that the offsets should remain when</span>
-<span class="c">     * resetting the constraints.  This preserves the slider value when</span>
-<span class="c">     * the constraints are reset</span>
-<span class="c">     * @property maintainOffset</span>
-<span class="c">     * @type boolean</span>
-<span class="c">     * @private</span>
-<span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">maintainOffset</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-
-    <span class="k">this</span><span class="o">.</span><span class="nx">initSlider</span><span class="o">(</span><span class="nx">iLeft</span><span class="o">,</span> <span class="nx">iRight</span><span class="o">,</span> <span class="nx">iUp</span><span class="o">,</span> <span class="nx">iDown</span><span class="o">,</span> <span class="nx">iTickSize</span><span class="o">);</span>
-
-    <span class="c">/**</span>
-<span class="c">     * Turns off the autoscroll feature in drag and drop</span>
-<span class="c">     * @property scroll</span>
-<span class="c">     * @private</span>
-<span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">scroll</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-
-<span class="o">};</span> 
-
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SliderThumb</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DD</span><span class="o">,</span> <span class="o">{</span>
-
-    <span class="c">/**</span>
-<span class="c">     * The (X and Y) difference between the thumb location and its parent </span>
-<span class="c">     * (the slider background) when the control is instantiated.</span>
-<span class="c">     * @property startOffset</span>
-<span class="c">     * @type [int, int]</span>
-<span class="c">     */</span>
-    <span class="nx">startOffset</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
-
-    <span class="c">/**</span>
-<span class="c">     * Override the default setting of dragOnly to true.</span>
-<span class="c">     * @property dragOnly</span>
-<span class="c">     * @type boolean</span>
-<span class="c">     * @default true</span>
-<span class="c">     */</span>
-    <span class="nx">dragOnly</span> <span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-
-    <span class="c">/**</span>
-<span class="c">     * Flag used to figure out if this is a horizontal or vertical slider</span>
-<span class="c">     * @property _isHoriz</span>
-<span class="c">     * @type boolean</span>
-<span class="c">     * @private</span>
-<span class="c">     */</span>
-    <span class="nx">_isHoriz</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
-
-    <span class="c">/**</span>
-<span class="c">     * Cache the last value so we can check for change</span>
-<span class="c">     * @property _prevVal</span>
-<span class="c">     * @type int</span>
-<span class="c">     * @private</span>
-<span class="c">     */</span>
-    <span class="nx">_prevVal</span><span class="o">:</span> <span class="m">0</span><span class="o">,</span>
-
-    <span class="c">/**</span>
-<span class="c">     * The slider is _graduated if there is a tick interval defined</span>
-<span class="c">     * @property _graduated</span>
-<span class="c">     * @type boolean</span>
-<span class="c">     * @private</span>
-<span class="c">     */</span>
-    <span class="nx">_graduated</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+        <span class="cm">/**</span>
+<span class="cm">         * The id of the thumbs parent HTML element (the slider background </span>
+<span class="cm">         * element).</span>
+<span class="cm">         * @property parentElId</span>
+<span class="cm">         * @type string</span>
+<span class="cm">         */</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">parentElId</span> <span class="o">=</span> <span class="nx">sGroup</span><span class="p">;</span>
+    <span class="p">}</span>
 
 
-    <span class="c">/**</span>
-<span class="c">     * Returns the difference between the location of the thumb and its parent.</span>
-<span class="c">     * @method getOffsetFromParent</span>
-<span class="c">     * @param {[int, int]} parentPos Optionally accepts the position of the parent</span>
-<span class="c">     * @type [int, int]</span>
-<span class="c">     */</span>
-    <span class="nx">getOffsetFromParent0</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">parentPos</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">myPos</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">()),</span>
-            <span class="nx">ppos</span>  <span class="o">=</span> <span class="nx">parentPos</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">parentElId</span><span class="o">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">LogWriter</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
 
-        <span class="k">return</span> <span class="o">[</span> <span class="o">(</span><span class="nx">myPos</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="o">[</span><span class="m">0</span><span class="o">]),</span> <span class="o">(</span><span class="nx">myPos</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="o">[</span><span class="m">1</span><span class="o">])</span> <span class="o">];</span>
-    <span class="o">},</span>
+    <span class="cm">/**</span>
+<span class="cm">     * Overrides the isTarget property in YAHOO.util.DragDrop</span>
+<span class="cm">     * @property isTarget</span>
+<span class="cm">     * @private</span>
+<span class="cm">     */</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">isTarget</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
 
-    <span class="nx">getOffsetFromParent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">parentPos</span><span class="o">)</span> <span class="o">{</span>
+    <span class="cm">/**</span>
+<span class="cm">     * The tick size for this slider</span>
+<span class="cm">     * @property tickSize</span>
+<span class="cm">     * @type int</span>
+<span class="cm">     * @private</span>
+<span class="cm">     */</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">tickSize</span> <span class="o">=</span> <span class="nx">iTickSize</span><span class="p">;</span>
 
-        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">(),</span> <span class="nx">newOffset</span><span class="o">,</span>
-            <span class="nx">myPos</span><span class="o">,</span><span class="nx">ppos</span><span class="o">,</span><span class="nx">l</span><span class="o">,</span><span class="nx">t</span><span class="o">,</span><span class="nx">deltaX</span><span class="o">,</span><span class="nx">deltaY</span><span class="o">,</span><span class="nx">newLeft</span><span class="o">,</span><span class="nx">newTop</span><span class="o">;</span>
+    <span class="cm">/**</span>
+<span class="cm">     * Informs the drag and drop util that the offsets should remain when</span>
+<span class="cm">     * resetting the constraints.  This preserves the slider value when</span>
+<span class="cm">     * the constraints are reset</span>
+<span class="cm">     * @property maintainOffset</span>
+<span class="cm">     * @type boolean</span>
+<span class="cm">     * @private</span>
+<span class="cm">     */</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">maintainOffset</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 
-        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">deltaOffset</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">initSlider</span><span class="p">(</span><span class="nx">iLeft</span><span class="p">,</span> <span class="nx">iRight</span><span class="p">,</span> <span class="nx">iUp</span><span class="p">,</span> <span class="nx">iDown</span><span class="p">,</span> <span class="nx">iTickSize</span><span class="p">);</span>
 
-            <span class="nx">myPos</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
-            <span class="nx">ppos</span>  <span class="o">=</span> <span class="nx">parentPos</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">parentElId</span><span class="o">);</span>
+    <span class="cm">/**</span>
+<span class="cm">     * Turns off the autoscroll feature in drag and drop</span>
+<span class="cm">     * @property scroll</span>
+<span class="cm">     * @private</span>
+<span class="cm">     */</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">scroll</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
 
-            <span class="nx">newOffset</span> <span class="o">=</span> <span class="o">[</span> <span class="o">(</span><span class="nx">myPos</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="o">[</span><span class="m">0</span><span class="o">]),</span> <span class="o">(</span><span class="nx">myPos</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="o">[</span><span class="m">1</span><span class="o">])</span> <span class="o">];</span>
+<span class="p">};</span> 
 
-            <span class="nx">l</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;left&quot;</span><span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
-            <span class="nx">t</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;top&quot;</span> <span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SliderThumb</span><span class="p">,</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">DD</span><span class="p">,</span> <span class="p">{</span>
 
-            <span class="nx">deltaX</span> <span class="o">=</span> <span class="nx">l</span> <span class="o">-</span> <span class="nx">newOffset</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
-            <span class="nx">deltaY</span> <span class="o">=</span> <span class="nx">t</span> <span class="o">-</span> <span class="nx">newOffset</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
+    <span class="cm">/**</span>
+<span class="cm">     * The (X and Y) difference between the thumb location and its parent </span>
+<span class="cm">     * (the slider background) when the control is instantiated.</span>
+<span class="cm">     * @property startOffset</span>
+<span class="cm">     * @type [int, int]</span>
+<span class="cm">     */</span>
+    <span class="nx">startOffset</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 
-            <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">deltaX</span><span class="o">)</span> <span class="o">||</span> <span class="nb">isNaN</span><span class="o">(</span><span class="nx">deltaY</span><span class="o">))</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;element does not have a position style def yet&quot;</span><span class="o">);</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">deltaOffset</span> <span class="o">=</span> <span class="o">[</span><span class="nx">deltaX</span><span class="o">,</span> <span class="nx">deltaY</span><span class="o">];</span>
-            <span class="o">}</span>
+    <span class="cm">/**</span>
+<span class="cm">     * Override the default setting of dragOnly to true.</span>
+<span class="cm">     * @property dragOnly</span>
+<span class="cm">     * @type boolean</span>
+<span class="cm">     * @default true</span>
+<span class="cm">     */</span>
+    <span class="nx">dragOnly</span> <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
 
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="nx">newLeft</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;left&quot;</span><span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
-            <span class="nx">newTop</span>  <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;top&quot;</span> <span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
+    <span class="cm">/**</span>
+<span class="cm">     * Flag used to figure out if this is a horizontal or vertical slider</span>
+<span class="cm">     * @property _isHoriz</span>
+<span class="cm">     * @type boolean</span>
+<span class="cm">     * @private</span>
+<span class="cm">     */</span>
+    <span class="nx">_isHoriz</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
 
-            <span class="nx">newOffset</span>  <span class="o">=</span> <span class="o">[</span><span class="nx">newLeft</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaOffset</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="nx">newTop</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]];</span>
-        <span class="o">}</span>
+    <span class="cm">/**</span>
+<span class="cm">     * Cache the last value so we can check for change</span>
+<span class="cm">     * @property _prevVal</span>
+<span class="cm">     * @type int</span>
+<span class="cm">     * @private</span>
+<span class="cm">     */</span>
+    <span class="nx">_prevVal</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
 
-        <span class="k">return</span> <span class="nx">newOffset</span><span class="o">;</span>
-    <span class="o">},</span>
-
-    <span class="c">/**</span>
-<span class="c">     * Set up the slider, must be called in the constructor of all subclasses</span>
-<span class="c">     * @method initSlider</span>
-<span class="c">     * @param {int} iLeft the number of pixels the element can move left</span>
-<span class="c">     * @param {int} iRight the number of pixels the element can move right</span>
-<span class="c">     * @param {int} iUp the number of pixels the element can move up</span>
-<span class="c">     * @param {int} iDown the number of pixels the element can move down</span>
-<span class="c">     * @param {int} iTickSize the width of the tick interval.</span>
-<span class="c">     */</span>
-    <span class="nx">initSlider</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">iLeft</span><span class="o">,</span> <span class="nx">iRight</span><span class="o">,</span> <span class="nx">iUp</span><span class="o">,</span> <span class="nx">iDown</span><span class="o">,</span> <span class="nx">iTickSize</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">initLeft</span> <span class="o">=</span> <span class="nx">iLeft</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">initRight</span> <span class="o">=</span> <span class="nx">iRight</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">initUp</span> <span class="o">=</span> <span class="nx">iUp</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">initDown</span> <span class="o">=</span> <span class="nx">iDown</span><span class="o">;</span>
-
-        <span class="k">this</span><span class="o">.</span><span class="nx">setXConstraint</span><span class="o">(</span><span class="nx">iLeft</span><span class="o">,</span> <span class="nx">iRight</span><span class="o">,</span> <span class="nx">iTickSize</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">setYConstraint</span><span class="o">(</span><span class="nx">iUp</span><span class="o">,</span> <span class="nx">iDown</span><span class="o">,</span> <span class="nx">iTickSize</span><span class="o">);</span>
-
-        <span class="k">if</span> <span class="o">(</span><span class="nx">iTickSize</span> <span class="o">&amp;&amp;</span> <span class="nx">iTickSize</span> <span class="o">&gt;</span> <span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_graduated</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="k">this</span><span class="o">.</span><span class="nx">_isHoriz</span>  <span class="o">=</span> <span class="o">(</span><span class="nx">iLeft</span> <span class="o">||</span> <span class="nx">iRight</span><span class="o">);</span> 
-        <span class="k">this</span><span class="o">.</span><span class="nx">_isVert</span>   <span class="o">=</span> <span class="o">(</span><span class="nx">iUp</span>   <span class="o">||</span> <span class="nx">iDown</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">_isRegion</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_isHoriz</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_isVert</span><span class="o">);</span> 
-
-    <span class="o">},</span>
-
-    <span class="c">/**</span>
-<span class="c">     * Clear&#39;s the slider&#39;s ticks</span>
-<span class="c">     * @method clearTicks</span>
-<span class="c">     */</span>
-    <span class="nx">clearTicks</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">SliderThumb</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">clearTicks</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">tickSize</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">_graduated</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-    <span class="o">},</span>
+    <span class="cm">/**</span>
+<span class="cm">     * The slider is _graduated if there is a tick interval defined</span>
+<span class="cm">     * @property _graduated</span>
+<span class="cm">     * @type boolean</span>
+<span class="cm">     * @private</span>
+<span class="cm">     */</span>
+    <span class="nx">_graduated</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
 
 
-    <span class="c">/**</span>
-<span class="c">     * Gets the current offset from the element&#39;s start position in</span>
-<span class="c">     * pixels.</span>
-<span class="c">     * @method getValue</span>
-<span class="c">     * @return {int} the number of pixels (positive or negative) the</span>
-<span class="c">     * slider has moved from the start position.</span>
-<span class="c">     */</span>
-    <span class="nx">getValue</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_isHoriz</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">getXValue</span><span class="o">()</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">getYValue</span><span class="o">();</span>
-    <span class="o">},</span>
+    <span class="cm">/**</span>
+<span class="cm">     * Returns the difference between the location of the thumb and its parent.</span>
+<span class="cm">     * @method getOffsetFromParent</span>
+<span class="cm">     * @param {[int, int]} parentPos Optionally accepts the position of the parent</span>
+<span class="cm">     * @type [int, int]</span>
+<span class="cm">     */</span>
+    <span class="nx">getOffsetFromParent0</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">parentPos</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">myPos</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getXY</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getEl</span><span class="p">()),</span>
+            <span class="nx">ppos</span>  <span class="o">=</span> <span class="nx">parentPos</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getXY</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">parentElId</span><span class="p">);</span>
 
-    <span class="c">/**</span>
-<span class="c">     * Gets the current X offset from the element&#39;s start position in</span>
-<span class="c">     * pixels.</span>
-<span class="c">     * @method getXValue</span>
-<span class="c">     * @return {int} the number of pixels (positive or negative) the</span>
-<span class="c">     * slider has moved horizontally from the start position.</span>
-<span class="c">     */</span>
-    <span class="nx">getXValue</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">available</span><span class="o">)</span> <span class="o">{</span> 
-            <span class="k">return</span> <span class="m">0</span><span class="o">;</span> 
-        <span class="o">}</span>
-        <span class="k">var</span> <span class="nx">newOffset</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getOffsetFromParent</span><span class="o">();</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">newOffset</span><span class="o">[</span><span class="m">0</span><span class="o">]))</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span> <span class="o">=</span> <span class="nx">newOffset</span><span class="o">;</span>
-            <span class="k">return</span> <span class="o">(</span><span class="nx">newOffset</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">startOffset</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;can&#39;t get offset, using old value: &quot;</span> <span class="o">+</span> 
-                <span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
-            <span class="k">return</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">startOffset</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
-        <span class="o">}</span>
-    <span class="o">},</span>
+        <span class="k">return</span> <span class="p">[</span> <span class="p">(</span><span class="nx">myPos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">(</span><span class="nx">myPos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">];</span>
+    <span class="p">},</span>
 
-    <span class="c">/**</span>
-<span class="c">     * Gets the current Y offset from the element&#39;s start position in</span>
-<span class="c">     * pixels.</span>
-<span class="c">     * @method getYValue</span>
-<span class="c">     * @return {int} the number of pixels (positive or negative) the</span>
-<span class="c">     * slider has moved vertically from the start position.</span>
-<span class="c">     */</span>
-    <span class="nx">getYValue</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">available</span><span class="o">)</span> <span class="o">{</span> 
-            <span class="k">return</span> <span class="m">0</span><span class="o">;</span> 
-        <span class="o">}</span>
-        <span class="k">var</span> <span class="nx">newOffset</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getOffsetFromParent</span><span class="o">();</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">newOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]))</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span> <span class="o">=</span> <span class="nx">newOffset</span><span class="o">;</span>
-            <span class="k">return</span> <span class="o">(</span><span class="nx">newOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">startOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]);</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;can&#39;t get offset, using old value: &quot;</span> <span class="o">+</span> 
-                <span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]);</span>
-            <span class="k">return</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">startOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]);</span>
-        <span class="o">}</span>
-    <span class="o">},</span>
+    <span class="nx">getOffsetFromParent</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">parentPos</span><span class="p">)</span> <span class="p">{</span>
 
-    <span class="c">/**</span>
-<span class="c">     * Thumb toString</span>
-<span class="c">     * @method toString</span>
-<span class="c">     * @return {string} string representation of the instance</span>
-<span class="c">     */</span>
-    <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span> 
-        <span class="k">return</span> <span class="s2">&quot;SliderThumb &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
-    <span class="o">},</span>
+        <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getEl</span><span class="p">(),</span> <span class="nx">newOffset</span><span class="p">,</span>
+            <span class="nx">myPos</span><span class="p">,</span><span class="nx">ppos</span><span class="p">,</span><span class="nx">l</span><span class="p">,</span><span class="nx">t</span><span class="p">,</span><span class="nx">deltaX</span><span class="p">,</span><span class="nx">deltaY</span><span class="p">,</span><span class="nx">newLeft</span><span class="p">,</span><span class="nx">newTop</span><span class="p">;</span>
 
-    <span class="c">/**</span>
-<span class="c">     * The onchange event for the handle/thumb is delegated to the YAHOO.widget.Slider</span>
-<span class="c">     * instance it belongs to.</span>
-<span class="c">     * @method onChange</span>
-<span class="c">     * @private</span>
-<span class="c">     */</span>
-    <span class="nx">onChange</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">)</span> <span class="o">{</span> 
-    <span class="o">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">deltaOffset</span><span class="p">)</span> <span class="p">{</span>
 
-<span class="o">});</span>
+            <span class="nx">myPos</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getXY</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+            <span class="nx">ppos</span>  <span class="o">=</span> <span class="nx">parentPos</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getXY</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">parentElId</span><span class="p">);</span>
+
+            <span class="nx">newOffset</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="nx">myPos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">(</span><span class="nx">myPos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">];</span>
+
+            <span class="nx">l</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">),</span> <span class="mi">10</span> <span class="p">);</span>
+            <span class="nx">t</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span> <span class="p">),</span> <span class="mi">10</span> <span class="p">);</span>
+
+            <span class="nx">deltaX</span> <span class="o">=</span> <span class="nx">l</span> <span class="o">-</span> <span class="nx">newOffset</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="nx">deltaY</span> <span class="o">=</span> <span class="nx">t</span> <span class="o">-</span> <span class="nx">newOffset</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">deltaX</span><span class="p">)</span> <span class="o">||</span> <span class="nb">isNaN</span><span class="p">(</span><span class="nx">deltaY</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;element does not have a position style def yet&quot;</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">deltaOffset</span> <span class="o">=</span> <span class="p">[</span><span class="nx">deltaX</span><span class="p">,</span> <span class="nx">deltaY</span><span class="p">];</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">newLeft</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">),</span> <span class="mi">10</span> <span class="p">);</span>
+            <span class="nx">newTop</span>  <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span> <span class="p">),</span> <span class="mi">10</span> <span class="p">);</span>
+
+            <span class="nx">newOffset</span>  <span class="o">=</span> <span class="p">[</span><span class="nx">newLeft</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">deltaOffset</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">newTop</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">deltaOffset</span><span class="p">[</span><span class="mi">1</span><span class="p">]];</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">newOffset</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Set up the slider, must be called in the constructor of all subclasses</span>
+<span class="cm">     * @method initSlider</span>
+<span class="cm">     * @param {int} iLeft the number of pixels the element can move left</span>
+<span class="cm">     * @param {int} iRight the number of pixels the element can move right</span>
+<span class="cm">     * @param {int} iUp the number of pixels the element can move up</span>
+<span class="cm">     * @param {int} iDown the number of pixels the element can move down</span>
+<span class="cm">     * @param {int} iTickSize the width of the tick interval.</span>
+<span class="cm">     */</span>
+    <span class="nx">initSlider</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">iLeft</span><span class="p">,</span> <span class="nx">iRight</span><span class="p">,</span> <span class="nx">iUp</span><span class="p">,</span> <span class="nx">iDown</span><span class="p">,</span> <span class="nx">iTickSize</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">initLeft</span> <span class="o">=</span> <span class="nx">iLeft</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">initRight</span> <span class="o">=</span> <span class="nx">iRight</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">initUp</span> <span class="o">=</span> <span class="nx">iUp</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">initDown</span> <span class="o">=</span> <span class="nx">iDown</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">setXConstraint</span><span class="p">(</span><span class="nx">iLeft</span><span class="p">,</span> <span class="nx">iRight</span><span class="p">,</span> <span class="nx">iTickSize</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">setYConstraint</span><span class="p">(</span><span class="nx">iUp</span><span class="p">,</span> <span class="nx">iDown</span><span class="p">,</span> <span class="nx">iTickSize</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">iTickSize</span> <span class="o">&amp;&amp;</span> <span class="nx">iTickSize</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">_graduated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">_isHoriz</span>  <span class="o">=</span> <span class="p">(</span><span class="nx">iLeft</span> <span class="o">||</span> <span class="nx">iRight</span><span class="p">);</span> 
+        <span class="k">this</span><span class="p">.</span><span class="nx">_isVert</span>   <span class="o">=</span> <span class="p">(</span><span class="nx">iUp</span>   <span class="o">||</span> <span class="nx">iDown</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_isRegion</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_isHoriz</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_isVert</span><span class="p">);</span> 
+
+    <span class="p">},</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Clear&#39;s the slider&#39;s ticks</span>
+<span class="cm">     * @method clearTicks</span>
+<span class="cm">     */</span>
+    <span class="nx">clearTicks</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">SliderThumb</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">clearTicks</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">tickSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_graduated</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">},</span>
+
+
+    <span class="cm">/**</span>
+<span class="cm">     * Gets the current offset from the element&#39;s start position in</span>
+<span class="cm">     * pixels.</span>
+<span class="cm">     * @method getValue</span>
+<span class="cm">     * @return {int} the number of pixels (positive or negative) the</span>
+<span class="cm">     * slider has moved from the start position.</span>
+<span class="cm">     */</span>
+    <span class="nx">getValue</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_isHoriz</span><span class="p">)</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">getXValue</span><span class="p">()</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">getYValue</span><span class="p">();</span>
+    <span class="p">},</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Gets the current X offset from the element&#39;s start position in</span>
+<span class="cm">     * pixels.</span>
+<span class="cm">     * @method getXValue</span>
+<span class="cm">     * @return {int} the number of pixels (positive or negative) the</span>
+<span class="cm">     * slider has moved horizontally from the start position.</span>
+<span class="cm">     */</span>
+    <span class="nx">getXValue</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">available</span><span class="p">)</span> <span class="p">{</span> 
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> 
+        <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">newOffset</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getOffsetFromParent</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">newOffset</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">lastOffset</span> <span class="o">=</span> <span class="nx">newOffset</span><span class="p">;</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">newOffset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">startOffset</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;can&#39;t get offset, using old value: &quot;</span> <span class="o">+</span> 
+                <span class="k">this</span><span class="p">.</span><span class="nx">lastOffset</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+            <span class="k">return</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">lastOffset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">startOffset</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Gets the current Y offset from the element&#39;s start position in</span>
+<span class="cm">     * pixels.</span>
+<span class="cm">     * @method getYValue</span>
+<span class="cm">     * @return {int} the number of pixels (positive or negative) the</span>
+<span class="cm">     * slider has moved vertically from the start position.</span>
+<span class="cm">     */</span>
+    <span class="nx">getYValue</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">available</span><span class="p">)</span> <span class="p">{</span> 
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> 
+        <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">newOffset</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getOffsetFromParent</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">newOffset</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">lastOffset</span> <span class="o">=</span> <span class="nx">newOffset</span><span class="p">;</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">newOffset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">startOffset</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;can&#39;t get offset, using old value: &quot;</span> <span class="o">+</span> 
+                <span class="k">this</span><span class="p">.</span><span class="nx">lastOffset</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+            <span class="k">return</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">lastOffset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">startOffset</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Thumb toString</span>
+<span class="cm">     * @method toString</span>
+<span class="cm">     * @return {string} string representation of the instance</span>
+<span class="cm">     */</span>
+    <span class="nx">toString</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+        <span class="k">return</span> <span class="s2">&quot;SliderThumb &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * The onchange event for the handle/thumb is delegated to the YAHOO.widget.Slider</span>
+<span class="cm">     * instance it belongs to.</span>
+<span class="cm">     * @method onChange</span>
+<span class="cm">     * @private</span>
+<span class="cm">     */</span>
+    <span class="nx">onChange</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="p">}</span>
+
+<span class="p">});</span>
 </pre></div>
 
                     </div>

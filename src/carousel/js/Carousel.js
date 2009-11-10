@@ -3785,7 +3785,7 @@
         },
 
         /**
-         * Get the last visible item.
+         * Get the index of the last visible item
          *
          * @method _getLastVisible
          * @protected

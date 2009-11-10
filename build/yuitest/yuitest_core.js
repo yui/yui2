@@ -125,6 +125,7 @@ YAHOO.namespace("tool");
     };
 
 })();
+
 YAHOO.namespace("tool");
 
 
@@ -204,6 +205,7 @@ YAHOO.tool.TestSuite.prototype = {
     }
     
 };
+
 YAHOO.namespace("tool");
 
 /**
@@ -211,7 +213,7 @@ YAHOO.namespace("tool");
  * @module yuitest
  * @namespace YAHOO.tool
  * @requires yahoo,dom,event,logger
- * @optional event-simulte
+ * @optional event-simulate
  */
 
 
@@ -330,7 +332,7 @@ YAHOO.tool.TestRunner = (function(){
          * @private
          * @static
          */
-        this.masterSuite /*:YAHOO.tool.TestSuite*/ = new YAHOO.tool.TestSuite("YUI Test Results");        
+        this.masterSuite = new YAHOO.tool.TestSuite("yuitests" + (new Date()).getTime());        
 
         /**
          * Pointer to the current node in the test tree.
@@ -339,7 +341,7 @@ YAHOO.tool.TestRunner = (function(){
          * @property _cur
          * @static
          */
-        this._cur = null;
+        this._cur = null;                
         
         /**
          * Pointer to the root node in the test tree.
@@ -349,6 +351,25 @@ YAHOO.tool.TestRunner = (function(){
          * @static
          */
         this._root = null;
+        
+        /**
+         * Indicates if the TestRunner is currently running tests.
+         * @type Boolean
+         * @private
+         * @property _running
+         * @static
+         */
+        this._running = false;
+        
+        /**
+         * Holds copy of the results object generated when all tests are
+         * complete.
+         * @type Object
+         * @private
+         * @property _lastResults
+         * @static
+         */
+        this._lastResults = null;
         
         //create events
         var events /*:Array*/ = [
@@ -431,6 +452,87 @@ YAHOO.tool.TestRunner = (function(){
          */        
         BEGIN_EVENT /*:String*/ : "begin",    
         
+        //-------------------------------------------------------------------------
+        // State-Related Methods
+        //-------------------------------------------------------------------------
+
+        /**
+         * Indicates that the TestRunner is busy running tests and therefore can't
+         * be stopped and results cannot be gathered.
+         * @return {Boolean} True if the TestRunner is running, false if not.
+         * @method isRunning
+         */
+        isRunning: function(){
+            return this._running;
+        },
+        
+        /**
+         * Returns the last complete results set from the TestRunner. Null is returned
+         * if the TestRunner is running or no tests have been run.
+         * @param {Function} format (Optional) A test format to return the results in.
+         * @return {Object|String} Either the results object or, if a test format is 
+         *      passed as the argument, a string representing the results in a specific
+         *      format.
+         * @method getResults
+         */
+        getResults: function(format){
+            if (!this._running && this._lastResults){
+                if (YAHOO.lang.isFunction(format)){
+                    return format(this._lastResults);                    
+                } else {
+                    return this._lastResults;
+                }
+            } else {
+                return null;
+            }
+        },
+
+        /**
+         * Returns the coverage report for the files that have been executed.
+         * This returns only coverage information for files that have been
+         * instrumented using YUI Test Coverage and only those that were run
+         * in the same pass.
+         * @param {Function} format (Optional) A coverage format to return results in.
+         * @return {Object|String} Either the coverage object or, if a coverage
+         *      format is specified, a string representing the results in that format.
+         * @method getCoverage
+         */
+        getCoverage: function(format){
+            if (!this._running && typeof _yuitest_coverage == "object"){
+                if (YAHOO.lang.isFunction(format)){
+                    return format(_yuitest_coverage);                    
+                } else {
+                    return _yuitest_coverage;
+                }
+            } else {
+                return null;
+            }            
+        },
+        
+        //-------------------------------------------------------------------------
+        // Misc Methods
+        //-------------------------------------------------------------------------
+
+        /**
+         * Retrieves the name of the current result set.
+         * @return {String} The name of the result set.
+         * @method getName
+         */
+        getName: function(){
+            return this.masterSuite.name;
+        },         
+
+        /**
+         * The name assigned to the master suite of the TestRunner. This is the name
+         * that is output as the root's name when results are retrieved.
+         * @param {String} name The name of the result set.
+         * @return {Void}
+         * @method setName
+         */
+        setName: function(name){
+            this.masterSuite.name = name;
+        },
+
         //-------------------------------------------------------------------------
         // Test Tree-Related Methods
         //-------------------------------------------------------------------------
@@ -564,7 +666,9 @@ YAHOO.tool.TestRunner = (function(){
                     this._cur.results.type = "report";
                     this._cur.results.timestamp = (new Date()).toLocaleString();
                     this._cur.results.duration = (new Date()) - this._cur.results.duration;
-                    this.fireEvent(this.COMPLETE_EVENT, { results: this._cur.results});
+                    this._lastResults = this._cur.results;
+                    this._running = false;
+                    this.fireEvent(this.COMPLETE_EVENT, { results: this._lastResults});
                     this._cur = null;
                 } else {
                     this._handleTestObjectComplete(this._cur);               
@@ -584,14 +688,22 @@ YAHOO.tool.TestRunner = (function(){
          * @static
          */
         _run : function () /*:Void*/ {
-        
+                                
             //flag to indicate if the TestRunner should wait before continuing
-            var shouldWait /*:Boolean*/ = false;
+            var shouldWait = false;
             
             //get the next test node
             var node = this._next();
+
             
             if (node !== null) {
+            
+                //set flag to say the testrunner is running
+                this._running = true;
+                
+                //eliminate last results
+                this._lastResult = null;            
+            
                 var testObject = node.testObject;
                 
                 //figure out what to do
@@ -849,6 +961,7 @@ YAHOO.tool.TestRunner = (function(){
          */
         clear : function () /*:Void*/ {
             this.masterSuite.items = [];
+            this.masterSuite.name = "yuitests" + (new Date()).getTime();
         },
         
         /**
@@ -891,6 +1004,7 @@ YAHOO.tool.TestRunner = (function(){
     return new TestRunner();
     
 })();
+
 YAHOO.namespace("util");
 
 //-----------------------------------------------------------------------------
@@ -1503,6 +1617,7 @@ YAHOO.util.UnexpectedError = function (cause /*:Object*/){
 
 //inherit methods
 YAHOO.lang.extend(YAHOO.util.UnexpectedError, YAHOO.util.AssertionError);
+
 //-----------------------------------------------------------------------------
 // ArrayAssert object
 //-----------------------------------------------------------------------------
@@ -1839,6 +1954,7 @@ YAHOO.util.ArrayAssert = {
     }
     
 };
+
 YAHOO.namespace("util");
 
 
@@ -1913,6 +2029,7 @@ YAHOO.util.ObjectAssert = {
         }     
     }
 };
+
 //-----------------------------------------------------------------------------
 // DateAssert object
 //-----------------------------------------------------------------------------
@@ -1967,4 +2084,5 @@ YAHOO.util.DateAssert = {
     }
     
 };
+
 YAHOO.register("yuitest_core", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});

@@ -2125,7 +2125,7 @@
                 }
             }
 
-            Dom.getElementsBy(isOverlayElement, "DIV", document.body);
+            Dom.getElementsBy(isOverlayElement, "div", document.body);
 
             aOverlays.sort(compareZIndexDesc);
 

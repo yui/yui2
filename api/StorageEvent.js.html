@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Storage&nbsp; <span class="subtitle">2.8.0_test3</span></h3>
+        <h3>Storage&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_storage.html" title="Storage">Storage</a>
                 
@@ -47,102 +47,102 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-                        <div class="highlight" ><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+                        <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
-<span class="c">/**</span>
-<span class="c"> * The StorageEvent class manages the storage events by emulating the HTML 5 implementation.</span>
-<span class="c"> * @namespace YAHOO.util</span>
-<span class="c"> * @class StorageEvent</span>
-<span class="c"> * @constructor</span>
-<span class="c"> * @param storageArea {Object} Required. The Storage object that was affected.</span>
-<span class="c"> * @param key {String} Required. The key being changed; DOMString in HTML 5 spec.</span>
-<span class="c"> * @param oldValue {String} Required. The old value of the key being changed; DOMString in HTML 5 spec.</span>
-<span class="c"> * @param newValue {String} Required. The new value of the key being changed; DOMString in HTML 5 spec.</span>
-<span class="c"> * @param type {String} Required. The storage event type.</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">StorageEvent</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">storageArea</span><span class="o">,</span> <span class="nx">key</span><span class="o">,</span> <span class="nx">oldValue</span><span class="o">,</span> <span class="nx">newValue</span><span class="o">,</span> <span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="o">;</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">oldValue</span> <span class="o">=</span> <span class="nx">oldValue</span><span class="o">;</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">newValue</span> <span class="o">=</span> <span class="nx">newValue</span><span class="o">;</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">url</span> <span class="o">=</span> <span class="nb">window</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">href</span><span class="o">;</span>
-	<span class="k">this</span><span class="o">.</span><span class="nb">window</span> <span class="o">=</span> <span class="nb">window</span><span class="o">;</span> <span class="c">// todo: think about the CAJA and innocent code</span>
-<span class="c"></span>	<span class="k">this</span><span class="o">.</span><span class="nx">storageArea</span> <span class="o">=</span> <span class="nx">storageArea</span><span class="o">;</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">type</span><span class="o">;</span>
-<span class="o">};</span>
+<span class="cm">/**</span>
+<span class="cm"> * The StorageEvent class manages the storage events by emulating the HTML 5 implementation.</span>
+<span class="cm"> * @namespace YAHOO.util</span>
+<span class="cm"> * @class StorageEvent</span>
+<span class="cm"> * @constructor</span>
+<span class="cm"> * @param storageArea {Object} Required. The Storage object that was affected.</span>
+<span class="cm"> * @param key {String} Required. The key being changed; DOMString in HTML 5 spec.</span>
+<span class="cm"> * @param oldValue {String} Required. The old value of the key being changed; DOMString in HTML 5 spec.</span>
+<span class="cm"> * @param newValue {String} Required. The new value of the key being changed; DOMString in HTML 5 spec.</span>
+<span class="cm"> * @param type {String} Required. The storage event type.</span>
+<span class="cm"> */</span>
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">StorageEvent</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">storageArea</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">oldValue</span><span class="p">,</span> <span class="nx">newValue</span><span class="p">,</span> <span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">oldValue</span> <span class="o">=</span> <span class="nx">oldValue</span><span class="p">;</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">newValue</span> <span class="o">=</span> <span class="nx">newValue</span><span class="p">;</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">url</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">;</span>
+	<span class="k">this</span><span class="p">.</span><span class="nb">window</span> <span class="o">=</span> <span class="nb">window</span><span class="p">;</span> <span class="c1">// todo: think about the CAJA and innocent code</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">storageArea</span> <span class="o">=</span> <span class="nx">storageArea</span><span class="p">;</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">type</span><span class="p">;</span>
+<span class="p">};</span>
 
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">augmentObject</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">StorageEvent</span><span class="o">,</span> <span class="o">{</span>
-	<span class="nx">TYPE_ADD_ITEM</span><span class="o">:</span> <span class="s1">&#39;addItem&#39;</span><span class="o">,</span>
-	<span class="nx">TYPE_REMOVE_ITEM</span><span class="o">:</span> <span class="s1">&#39;removeItem&#39;</span><span class="o">,</span>
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">augmentObject</span><span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">StorageEvent</span><span class="p">,</span> <span class="p">{</span>
+	<span class="nx">TYPE_ADD_ITEM</span><span class="o">:</span> <span class="s1">&#39;addItem&#39;</span><span class="p">,</span>
+	<span class="nx">TYPE_REMOVE_ITEM</span><span class="o">:</span> <span class="s1">&#39;removeItem&#39;</span><span class="p">,</span>
 	<span class="nx">TYPE_UPDATE_ITEM</span><span class="o">:</span> <span class="s1">&#39;updateItem&#39;</span>
-<span class="o">});</span>
+<span class="p">});</span>
 
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">StorageEvent</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">StorageEvent</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
 
-    <span class="c">/**</span>
-<span class="c">     * The &#39;key&#39; attribute represents the key being changed.</span>
-<span class="c">     * @property key</span>
-<span class="c">     * @type {String}</span>
-<span class="c">     * @static</span>
-<span class="c">     * @readonly</span>
-<span class="c">     */</span>
-    <span class="nx">key</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+    <span class="cm">/**</span>
+<span class="cm">     * The &#39;key&#39; attribute represents the key being changed.</span>
+<span class="cm">     * @property key</span>
+<span class="cm">     * @type {String}</span>
+<span class="cm">     * @static</span>
+<span class="cm">     * @readonly</span>
+<span class="cm">     */</span>
+    <span class="nx">key</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 
-    <span class="c">/**</span>
-<span class="c">     * The &#39;newValue&#39; attribute represents the new value of the key being changed.</span>
-<span class="c">     * @property newValue</span>
-<span class="c">     * @type {String}</span>
-<span class="c">     * @static</span>
-<span class="c">     * @readonly</span>
-<span class="c">     */</span>
-    <span class="nx">newValue</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+    <span class="cm">/**</span>
+<span class="cm">     * The &#39;newValue&#39; attribute represents the new value of the key being changed.</span>
+<span class="cm">     * @property newValue</span>
+<span class="cm">     * @type {String}</span>
+<span class="cm">     * @static</span>
+<span class="cm">     * @readonly</span>
+<span class="cm">     */</span>
+    <span class="nx">newValue</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 
-    <span class="c">/**</span>
-<span class="c">     * The &#39;oldValue&#39; attribute represents the old value of the key being changed.</span>
-<span class="c">     * @property oldValue</span>
-<span class="c">     * @type {String}</span>
-<span class="c">     * @static</span>
-<span class="c">     * @readonly</span>
-<span class="c">     */</span>
-    <span class="nx">oldValue</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+    <span class="cm">/**</span>
+<span class="cm">     * The &#39;oldValue&#39; attribute represents the old value of the key being changed.</span>
+<span class="cm">     * @property oldValue</span>
+<span class="cm">     * @type {String}</span>
+<span class="cm">     * @static</span>
+<span class="cm">     * @readonly</span>
+<span class="cm">     */</span>
+    <span class="nx">oldValue</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 
-    <span class="c">/**</span>
-<span class="c">     * The &#39;source&#39; attribute represents the WindowProxy object of the browsing context of the document whose key changed.</span>
-<span class="c">     * @property source</span>
-<span class="c">     * @type {Object}</span>
-<span class="c">     * @static</span>
-<span class="c">     * @readonly</span>
-<span class="c">     */</span>
-    <span class="nx">source</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+    <span class="cm">/**</span>
+<span class="cm">     * The &#39;source&#39; attribute represents the WindowProxy object of the browsing context of the document whose key changed.</span>
+<span class="cm">     * @property source</span>
+<span class="cm">     * @type {Object}</span>
+<span class="cm">     * @static</span>
+<span class="cm">     * @readonly</span>
+<span class="cm">     */</span>
+    <span class="nx">source</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 
-    <span class="c">/**</span>
-<span class="c">     * The &#39;storageArea&#39; attribute represents the Storage object that was affected.</span>
-<span class="c">     * @property storageArea</span>
-<span class="c">     * @type {Object}</span>
-<span class="c">     * @static</span>
-<span class="c">     * @readonly</span>
-<span class="c">     */</span>
-    <span class="nx">storageArea</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+    <span class="cm">/**</span>
+<span class="cm">     * The &#39;storageArea&#39; attribute represents the Storage object that was affected.</span>
+<span class="cm">     * @property storageArea</span>
+<span class="cm">     * @type {Object}</span>
+<span class="cm">     * @static</span>
+<span class="cm">     * @readonly</span>
+<span class="cm">     */</span>
+    <span class="nx">storageArea</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 
-    <span class="c">/**</span>
-<span class="c">     * The &#39;type&#39; attribute represents the Storage event type.</span>
-<span class="c">     * @property type</span>
-<span class="c">     * @type {Object}</span>
-<span class="c">     * @static</span>
-<span class="c">     * @readonly</span>
-<span class="c">     */</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+    <span class="cm">/**</span>
+<span class="cm">     * The &#39;type&#39; attribute represents the Storage event type.</span>
+<span class="cm">     * @property type</span>
+<span class="cm">     * @type {Object}</span>
+<span class="cm">     * @static</span>
+<span class="cm">     * @readonly</span>
+<span class="cm">     */</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 
-    <span class="c">/**</span>
-<span class="c">     * The &#39;url&#39; attribute represents the address of the document whose key changed.</span>
-<span class="c">     * @property url</span>
-<span class="c">     * @type {String}</span>
-<span class="c">     * @static</span>
-<span class="c">     * @readonly</span>
-<span class="c">     */</span>
+    <span class="cm">/**</span>
+<span class="cm">     * The &#39;url&#39; attribute represents the address of the document whose key changed.</span>
+<span class="cm">     * @property url</span>
+<span class="cm">     * @type {String}</span>
+<span class="cm">     * @static</span>
+<span class="cm">     * @readonly</span>
+<span class="cm">     */</span>
     <span class="nx">url</span><span class="o">:</span> <span class="kc">null</span>
-<span class="o">};</span>
+<span class="p">};</span>
 	
-<span class="o">}());</span>
+<span class="p">}());</span>
 </pre></div>
 
                     </div>
@@ -245,7 +245,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_addKey", "url": "YAHOO.util.StorageEngineKeyed.html#method__addKey", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "CE_CHANGE", "url": "YAHOO.util.Storage.html#property_CE_CHANGE", "type": "property"}, {"access": "", "host": "YAHOO.util.Storage", "name": "CE_READY", "url": "YAHOO.util.Storage.html#property_CE_READY", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_cfg", "url": "YAHOO.util.Storage.html#property__cfg", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_clear", "url": "YAHOO.util.Storage.html#method__clear", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "clear", "url": "YAHOO.util.Storage.html#method_clear", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_createValue", "url": "YAHOO.util.Storage.html#method__createValue", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "DELIMITER", "url": "YAHOO.util.Storage.html#property_DELIMITER", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageManager", "name": "get", "url": "YAHOO.util.StorageManager.html#method_get", "type": "method"}, {"access": "private", "host": "YAHOO.util.StorageManager", "name": "_getClass", "url": "YAHOO.util.StorageManager.html#method__getClass", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_getItem", "url": "YAHOO.util.Storage.html#method__getItem", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "getItem", "url": "YAHOO.util.Storage.html#method_getItem", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "getName", "url": "YAHOO.util.Storage.html#method_getName", "type": "method"}, {"access": "private", "host": "YAHOO.util.StorageManager", "name": "_getStorageEngine", "url": "YAHOO.util.StorageManager.html#method__getStorageEngine", "type": "method"}, {"access": "private", "host": "YAHOO.util.StorageManager", "name": "_getValidLocation", "url": "YAHOO.util.StorageManager.html#method__getValidLocation", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_getValue", "url": "YAHOO.util.Storage.html#method__getValue", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "hasKey", "url": "YAHOO.util.Storage.html#method_hasKey", "type": "method"}, {"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_indexOfKey", "url": "YAHOO.util.StorageEngineKeyed.html#method__indexOfKey", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "isReady", "url": "YAHOO.util.Storage.html#property_isReady", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_key", "url": "YAHOO.util.Storage.html#method__key", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "key", "url": "YAHOO.util.Storage.html#method_key", "type": "method"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "key", "url": "YAHOO.util.StorageEvent.html#property_key", "type": "property"}, {"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_keyMap", "url": "YAHOO.util.StorageEngineKeyed.html#property__keyMap", "type": "property"}, {"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_keys", "url": "YAHOO.util.StorageEngineKeyed.html#property__keys", "type": "property"}, {"access": "", "host": "YAHOO.util.Storage", "name": "length", "url": "YAHOO.util.Storage.html#property_length", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_location", "url": "YAHOO.util.Storage.html#property__location", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageManager", "name": "LOCATION_LOCAL", "url": "YAHOO.util.StorageManager.html#property_LOCATION_LOCAL", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageManager", "name": "LOCATION_SESSION", "url": "YAHOO.util.StorageManager.html#property_LOCATION_SESSION", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_name", "url": "YAHOO.util.Storage.html#property__name", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "newValue", "url": "YAHOO.util.StorageEvent.html#property_newValue", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "oldValue", "url": "YAHOO.util.StorageEvent.html#property_oldValue", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageManager", "name": "register", "url": "YAHOO.util.StorageManager.html#method_register", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_removeItem", "url": "YAHOO.util.Storage.html#method__removeItem", "type": "method"}, {"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_removeKey", "url": "YAHOO.util.StorageEngineKeyed.html#method__removeKey", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_setItem", "url": "YAHOO.util.Storage.html#method__setItem", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "setItem", "url": "YAHOO.util.Storage.html#method_setItem", "type": "method"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "source", "url": "YAHOO.util.StorageEvent.html#property_source", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "storageArea", "url": "YAHOO.util.StorageEvent.html#property_storageArea", "type": "property"}, {"access": "protected", "host": "YAHOO.util.StorageEngineSWF", "name": "_swf", "url": "YAHOO.util.StorageEngineSWF.html#property__swf", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "type", "url": "YAHOO.util.StorageEvent.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "url", "url": "YAHOO.util.StorageEvent.html#property_url", "type": "property"}];
+    ALL_YUI_PROPS = [{"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_addKey", "url": "YAHOO.util.StorageEngineKeyed.html#method__addKey", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "CE_CHANGE", "url": "YAHOO.util.Storage.html#property_CE_CHANGE", "type": "property"}, {"access": "", "host": "YAHOO.util.Storage", "name": "CE_READY", "url": "YAHOO.util.Storage.html#property_CE_READY", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_cfg", "url": "YAHOO.util.Storage.html#property__cfg", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_clear", "url": "YAHOO.util.Storage.html#method__clear", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "clear", "url": "YAHOO.util.Storage.html#method_clear", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_createValue", "url": "YAHOO.util.Storage.html#method__createValue", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "DELIMITER", "url": "YAHOO.util.Storage.html#property_DELIMITER", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageManager", "name": "get", "url": "YAHOO.util.StorageManager.html#method_get", "type": "method"}, {"access": "private", "host": "YAHOO.util.StorageManager", "name": "_getClass", "url": "YAHOO.util.StorageManager.html#method__getClass", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_getItem", "url": "YAHOO.util.Storage.html#method__getItem", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "getItem", "url": "YAHOO.util.Storage.html#method_getItem", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "getName", "url": "YAHOO.util.Storage.html#method_getName", "type": "method"}, {"access": "private", "host": "YAHOO.util.StorageManager", "name": "_getStorageEngine", "url": "YAHOO.util.StorageManager.html#method__getStorageEngine", "type": "method"}, {"access": "private", "host": "YAHOO.util.StorageManager", "name": "_getValidLocation", "url": "YAHOO.util.StorageManager.html#method__getValidLocation", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_getValue", "url": "YAHOO.util.Storage.html#method__getValue", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "hasKey", "url": "YAHOO.util.Storage.html#method_hasKey", "type": "method"}, {"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_indexOfKey", "url": "YAHOO.util.StorageEngineKeyed.html#method__indexOfKey", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "isReady", "url": "YAHOO.util.Storage.html#property_isReady", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "key", "url": "YAHOO.util.StorageEvent.html#property_key", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_key", "url": "YAHOO.util.Storage.html#method__key", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "key", "url": "YAHOO.util.Storage.html#method_key", "type": "method"}, {"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_keyMap", "url": "YAHOO.util.StorageEngineKeyed.html#property__keyMap", "type": "property"}, {"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_keys", "url": "YAHOO.util.StorageEngineKeyed.html#property__keys", "type": "property"}, {"access": "", "host": "YAHOO.util.Storage", "name": "length", "url": "YAHOO.util.Storage.html#property_length", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_location", "url": "YAHOO.util.Storage.html#property__location", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageManager", "name": "LOCATION_LOCAL", "url": "YAHOO.util.StorageManager.html#property_LOCATION_LOCAL", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageManager", "name": "LOCATION_SESSION", "url": "YAHOO.util.StorageManager.html#property_LOCATION_SESSION", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_name", "url": "YAHOO.util.Storage.html#property__name", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "newValue", "url": "YAHOO.util.StorageEvent.html#property_newValue", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "oldValue", "url": "YAHOO.util.StorageEvent.html#property_oldValue", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageManager", "name": "register", "url": "YAHOO.util.StorageManager.html#method_register", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_removeItem", "url": "YAHOO.util.Storage.html#method__removeItem", "type": "method"}, {"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_removeKey", "url": "YAHOO.util.StorageEngineKeyed.html#method__removeKey", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_setItem", "url": "YAHOO.util.Storage.html#method__setItem", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "setItem", "url": "YAHOO.util.Storage.html#method_setItem", "type": "method"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "source", "url": "YAHOO.util.StorageEvent.html#property_source", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "storageArea", "url": "YAHOO.util.StorageEvent.html#property_storageArea", "type": "property"}, {"access": "protected", "host": "YAHOO.util.StorageEngineSWF", "name": "_swf", "url": "YAHOO.util.StorageEngineSWF.html#property__swf", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "type", "url": "YAHOO.util.StorageEvent.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "url", "url": "YAHOO.util.StorageEvent.html#property_url", "type": "property"}];
 </script>
 </body>
 </html>
