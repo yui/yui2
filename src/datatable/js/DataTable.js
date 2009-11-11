@@ -10611,7 +10611,7 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
  * @return oPayload {MIXED} State values.
  */
 handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
-    return oPayload;
+    return oPayload || {};
 },
 
 /**
