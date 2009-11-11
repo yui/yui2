@@ -10617,10 +10617,11 @@ handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
 /**
  * Updates the DataTable with state data sent in an onDataReturn* payload.
  *  
- * @method handleDataReturnPayload
+ * @method _handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
  * @param oResponse {Object} Response object.
  * @param oPayload {MIXED} State values
+ * @private
  */
 _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
     oPayload = this.handleDataReturnPayload(oRequest, oResponse, oPayload);
