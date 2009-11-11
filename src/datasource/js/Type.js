@@ -69,7 +69,7 @@
             s = absN < 1 && absN >= 0.5 && !places ? '1' : absN.toFixed(places);
         }
 
-        if (absN > 1000) {
+        if (absN >= 1000) {
             bits  = s.split(/\D/);
             i  = bits[0].length % 3 || 3;
 
