@@ -4287,6 +4287,14 @@ _elTrTemplate : null,
  */
 _aDynFunctions : [],
 
+/**
+ * Disabled state.
+ *
+ * @property _disabled
+ * @type Boolean
+ * @private
+ */
+_disabled : false,
 
 
 
@@ -7406,6 +7414,7 @@ render : function() {
  * @method disable
  */
 disable : function() {
+    this._disabled = true;
     var elTable = this._elTable;
     var elMask = this._elMask;
     elMask.style.width = elTable.offsetWidth + "px";
@@ -7421,8 +7430,19 @@ disable : function() {
  * @method undisable
  */
 undisable : function() {
+    this._disabled = false;
     this._elMask.style.display = "none";
     this.fireEvent("undisableEvent");
+},
+
+ /**
+ * Returns disabled state.
+ *
+ * @method isDisabled
+ * @return {Boolean} True if UI is disabled, otherwise false
+ */
+isDisabled : function() {
+    return this._disabled;
 },
 
 /**
@@ -12862,7 +12882,9 @@ onEventFormatCell : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventShowCellEditor : function(oArgs) {
-    this.showCellEditor(oArgs.target);
+    if(!this.isDisabled()) {
+        this.showCellEditor(oArgs.target);
+    }
 },
 
 /**
