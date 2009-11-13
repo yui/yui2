@@ -928,7 +928,7 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
  *
  * @method handleResponse
  * @param sQuery {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 YAHOO.widget.AutoComplete.prototype.handleResponse = function(sQuery, oResponse, oPayload) {
@@ -942,7 +942,7 @@ YAHOO.widget.AutoComplete.prototype.handleResponse = function(sQuery, oResponse,
  *
  * @method doBeforeLoadData
  * @param sQuery {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  * @return {Boolean} Return true to continue loading data, false to cancel.
  */
@@ -1830,7 +1830,7 @@ YAHOO.widget.AutoComplete.prototype._populateListItem = function(elListItem, oRe
  *
  * @method _populateList
  * @param sQuery {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  * @private
  */

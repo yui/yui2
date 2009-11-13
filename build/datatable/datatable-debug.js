@@ -4287,6 +4287,14 @@ _elTrTemplate : null,
  */
 _aDynFunctions : [],
 
+/**
+ * Disabled state.
+ *
+ * @property _disabled
+ * @type Boolean
+ * @private
+ */
+_disabled : false,
 
 
 
@@ -7406,10 +7414,12 @@ render : function() {
  * @method disable
  */
 disable : function() {
+    this._disabled = true;
     var elTable = this._elTable;
     var elMask = this._elMask;
     elMask.style.width = elTable.offsetWidth + "px";
     elMask.style.height = elTable.offsetHeight + "px";
+    elMask.style.left = elTable.offsetLeft + "px";
     elMask.style.display = "";
     this.fireEvent("disableEvent");
 },
@@ -7420,8 +7430,19 @@ disable : function() {
  * @method undisable
  */
 undisable : function() {
+    this._disabled = false;
     this._elMask.style.display = "none";
     this.fireEvent("undisableEvent");
+},
+
+ /**
+ * Returns disabled state.
+ *
+ * @method isDisabled
+ * @return {Boolean} True if UI is disabled, otherwise false
+ */
+isDisabled : function() {
+    return this._disabled;
 },
 
 /**
@@ -12861,7 +12882,9 @@ onEventFormatCell : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventShowCellEditor : function(oArgs) {
-    this.showCellEditor(oArgs.target);
+    if(!this.isDisabled()) {
+        this.showCellEditor(oArgs.target);
+    }
 },
 
 /**
@@ -13123,16 +13146,17 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
  * @return oPayload {MIXED} State values.
  */
 handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
-    return oPayload;
+    return oPayload || {};
 },
 
 /**
  * Updates the DataTable with state data sent in an onDataReturn* payload.
  *  
- * @method handleDataReturnPayload
+ * @method _handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
  * @param oResponse {Object} Response object.
  * @param oPayload {MIXED} State values
+ * @private
  */
 _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
     oPayload = this.handleDataReturnPayload(oRequest, oResponse, oPayload);
@@ -16695,6 +16719,9 @@ renderForm : function() {
                 calContainer.id, this.calendarOptions);
         calendar.render();
         calContainer.style.cssFloat = "none";
+        
+        // Bug 2528576
+        calendar.hideEvent.subscribe(function() {this.cancel();}, this, true);
 
         if(ua.ie) {
             var calFloatClearer = this.getContainerEl().appendChild(document.createElement("div"));
@@ -16736,6 +16763,8 @@ resetForm : function() {
     var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
     this.calendar.cfg.setProperty("selected",selectedValue,false);
 	this.calendar.render();
+	// Bug 2528576
+	this.calendar.show();
 },
 
 /**
