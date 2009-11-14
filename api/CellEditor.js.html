@@ -572,7 +572,7 @@
             <span class="nx">oSelf</span><span class="p">.</span><span class="nx">cancel</span><span class="p">();</span>
         <span class="p">}</span>
         <span class="c1">// Pass through event</span>
-        <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;keydownEvent&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">editor</span><span class="o">:</span><span class="k">this</span><span class="p">,</span> <span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
+        <span class="nx">oSelf</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;keydownEvent&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">editor</span><span class="o">:</span><span class="nx">oSelf</span><span class="p">,</span> <span class="nx">event</span><span class="o">:</span><span class="nx">e</span><span class="p">});</span>
     <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
 
     <span class="k">this</span><span class="p">.</span><span class="nx">renderForm</span><span class="p">();</span>

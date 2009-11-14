@@ -523,7 +523,7 @@ render : function() {
             oSelf.cancel();
         }
         // Pass through event
-        oSelf.fireEvent("keydownEvent", {editor:this, event:e});
+        oSelf.fireEvent("keydownEvent", {editor:oSelf, event:e});
     }, this);
 
     this.renderForm();

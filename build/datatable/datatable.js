@@ -12417,7 +12417,7 @@ onEditorUnblockEvent : function(oArgs) {
  *
  * @method doBeforeLoadData
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} additional arguments
  * @return {Boolean} Return true to continue loading data into RecordSet and
  * updating DataTable with new Records, false to cancel.
@@ -12728,7 +12728,7 @@ onEventCancelCellEditor : function(oArgs) {
  *
  * @method onDataReturnInitializeTable
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
@@ -12746,7 +12746,7 @@ onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
  *  
  * @method onDataReturnReplaceRows
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
@@ -12794,7 +12794,7 @@ onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
  *
  * @method onDataReturnAppendRows
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
@@ -12828,7 +12828,7 @@ onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
  *
  * @method onDataReturnInsertRows
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} Argument payload, looks in oPayload.insertIndex.
  */
 onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
@@ -12862,7 +12862,7 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
  *
  * @method onDataReturnUpdateRows
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} Argument payload, looks in oPayload.updateIndex.
  */
 onDataReturnUpdateRows : function(sRequest, oResponse, oPayload) {
@@ -12893,7 +12893,7 @@ onDataReturnUpdateRows : function(sRequest, oResponse, oPayload) {
  *  
  * @method onDataReturnSetRows
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
@@ -12941,7 +12941,7 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
  *  
  * @method handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} State values.
  * @return oPayload {MIXED} State values.
  */
@@ -12954,7 +12954,7 @@ handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
  *  
  * @method _handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} State values
  * @private
  */
@@ -15883,7 +15883,7 @@ render : function() {
             oSelf.cancel();
         }
         // Pass through event
-        oSelf.fireEvent("keydownEvent", {editor:this, event:e});
+        oSelf.fireEvent("keydownEvent", {editor:oSelf, event:e});
     }, this);
 
     this.renderForm();
