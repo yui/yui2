@@ -261,7 +261,9 @@
         <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;#F2F2F2&quot;</span><span class="p">,</span>
         <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isString</span><span class="p">,</span>
         <span class="nx">method</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">oParam</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">_elHdContainer</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">oParam</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_elHdContainer</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">_elHdContainer</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">oParam</span><span class="p">;</span>
+            <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">});</span>
 <span class="p">},</span>
