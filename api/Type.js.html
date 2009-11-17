@@ -118,17 +118,17 @@
             <span class="nx">s</span> <span class="o">=</span> <span class="nx">absN</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">absN</span> <span class="o">&gt;=</span> <span class="mf">0.5</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">places</span> <span class="o">?</span> <span class="s1">&#39;1&#39;</span> <span class="o">:</span> <span class="nx">absN</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="nx">places</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">absN</span> <span class="o">&gt;=</span> <span class="mi">1000</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">bits</span>  <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\D/</span><span class="p">);</span>
+        <span class="nx">bits</span>  <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\D/</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">absN</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">i</span>  <span class="o">=</span> <span class="nx">bits</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">||</span> <span class="mi">3</span><span class="p">;</span>
 
             <span class="nx">bits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">bits</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">i</span><span class="p">)</span> <span class="o">+</span>
                       <span class="nx">bits</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">slice</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/(\d{3})/g</span><span class="p">,</span> <span class="nx">sep</span> <span class="o">+</span> <span class="s1">&#39;$1&#39;</span><span class="p">);</span>
 
-            <span class="nx">s</span> <span class="o">=</span> <span class="nx">bits</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">decimalSeparator</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="nx">s</span> <span class="o">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">prefix</span> <span class="o">+</span> <span class="nx">s</span> <span class="o">+</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">suffix</span><span class="p">;</span>
+        <span class="nx">s</span> <span class="o">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">prefix</span> <span class="o">+</span> <span class="nx">bits</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">decimalSeparator</span><span class="p">)</span> <span class="o">+</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">suffix</span><span class="p">;</span>
 
         <span class="k">return</span> <span class="nx">neg</span> <span class="o">?</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">negativeFormat</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/#/</span><span class="p">,</span><span class="nx">s</span><span class="p">)</span> <span class="o">:</span> <span class="nx">s</span><span class="p">;</span>
     <span class="p">}</span>
