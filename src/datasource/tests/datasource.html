@@ -612,6 +612,19 @@ var XMLDocument = function(rootTagName, namespaceURL) {
                 negativeFormat:"# (neg)"
             });
         Assert.areSame("&#165;123.123.123,18 (neg)", output, "Incorrect Yen formatting");
+
+
+        output = YAHOO.util.Number.format("99", {decimalSeparator:",", decimalPlaces:2 });
+        Assert.areSame("99,00", output, "Incorrect decimal separator");
+
+        output = YAHOO.util.Number.format("0", {decimalSeparator:",", decimalPlaces:2 });
+        Assert.areSame("0,00", output, "Incorrect decimal separator");
+
+        output = YAHOO.util.Number.format("1", {decimalSeparator:",", decimalPlaces:2 });
+        Assert.areSame("1,00", output, "Incorrect decimal separator");
+
+        output = YAHOO.util.Number.format("1199", {decimalSeparator:",", decimalPlaces:2 });
+        Assert.areSame("1199,00", output, "Incorrect decimal separator");
     }
 });
 
