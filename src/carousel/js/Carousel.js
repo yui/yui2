@@ -527,7 +527,10 @@
             left,
             rsz,
             styles = {},
-            index = 0;
+            index = 0,
+            itemsTable = carousel._itemsTable,
+            items = itemsTable.items,
+            loading = itemsTable.loading;
 
         isVertical = carousel.get("isVertical");
         sz  = getCarouselItemSize.call(carousel,
@@ -536,8 +539,7 @@
 
         // adjust for items not yet loaded
         while (index < pos) {
-            if (JS.isUndefined(carousel._itemsTable.items[index]) &&
-                JS.isUndefined(carousel._itemsTable.loading[index])) {
+            if (!items[index] && !loading[index]) {
                 delta++;
             }
             index++;
@@ -2005,7 +2007,7 @@
 
             carousel.on(renderEvent, function (ev) {
                 if (carousel.get("selectedItem") === null ||
-                    carousel.get("selectedItem") <= 0) {// in either case
+                    carousel.get("selectedItem") <= 0) { //in either case
                 carousel.set("selectedItem", carousel.get("firstVisible"));
                 }
                 syncNavigation.call(carousel, ev);
@@ -2221,10 +2223,11 @@
             var carousel = this,
                 n = carousel.get("numItems"),
                 i = 0,
+                items = carousel._itemsTable.items,
                 item;
 
             while (i < n) {
-                item = carousel._itemsTable.items[i] || {};
+                item = items[i] || {};
                 if(item.id == id) {
                     return i;
                 }
@@ -2516,7 +2519,10 @@
             var carousel   = this, animate, animCfg, isCircular, isVertical,
                 rows, delta, direction, firstItem, lastItem, itemsPerRow,
                 itemsPerCol, numItems, numPerPage, offset, page, rv, sentinel,
-                index, stopAutoScroll;
+                index, stopAutoScroll,
+                itemsTable = carousel._itemsTable,
+                items = itemsTable.items,
+                loading = itemsTable.loading;
 
             if (JS.isUndefined(item) || item == carousel._firstItem ||
                 carousel.isAnimating()) {
@@ -2592,8 +2598,7 @@
             // adjust for items not yet loaded
             index = 0;
             while (delta < 0 && index < item+numPerPage-1 && index < numItems) {
-                if (JS.isUndefined(carousel._itemsTable.items[index]) &&
-                    JS.isUndefined(carousel._itemsTable.loading[index])) {
+                if (!items[index] && !loading[index]) {
                     delta++;
                 }
                 index += itemsPerCol ? itemsPerCol : 1;
@@ -2761,7 +2766,7 @@
                     'selectedItem' : carousel.get('selectedItem')+1,
                     'currentPage' : currentPage,
                     'firstVisible' : firstVisible,
-                    'lastVisible' : carousel.get("lastVisible")
+                    'lastVisible' : carousel.get("lastVisible")+1
                 },
                 cb = pagination.callback || {},
                 scope = cb.scope && cb.obj ? cb.obj : carousel;
@@ -3780,7 +3785,7 @@
         },
 
         /**
-         * Get the last visible item.
+         * Get the index of the last visible item
          *
          * @method _getLastVisible
          * @protected
@@ -3789,7 +3794,7 @@
             var carousel = this;
             return carousel.get("currentPage") + 1 == carousel.get("numPages") ?
                    carousel.get("numItems") - 1:
-                   carousel.get("firstVisible") + carousel.get("numVisible");
+                   carousel.get("firstVisible") + carousel.get("numVisible") - 1;
         },
 
         /**
@@ -4006,13 +4011,16 @@
                 numItems = carousel.get("numItems"),
                 i,
                 itemsTable = carousel._itemsTable,
+                items = itemsTable.items,
+                loading = itemsTable.loading,
                 item,
                 styles;
 
             for (i = 0; i < numItems; i++) {
-                styles = getCarouselItemPosition.call(carousel, i);
-                item = itemsTable.items[i] || itemsTable.loading[i];
+                item = items[i] || loading[i];
+
                 if (item && item.id) {
+                    styles = getCarouselItemPosition.call(carousel, i);
                     item.styles = item.styles || {};
                     for (attr in styles) {
                         if (styles.hasOwnProperty(attr)) {
@@ -4373,4 +4381,3 @@
 ;;  indent-tabs-mode: nil **
 ;;  End: **
 */
-YAHOO.register("carousel", YAHOO.widget.Carousel, {version: "@VERSION@", build: "@BUILD@"});

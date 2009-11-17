@@ -176,7 +176,7 @@
 			 * @attribute direction
 			 * @description Direction of movement of the bar.  
 			 *    It can be any of 'ltr' (left to right), 'rtl' (the reverse) , 'ttb' (top to bottom) or 'btt'.
-			 *    Can only be set once and only before rendering.
+			 *    Can only be set before rendering.
 			 * @default 'ltr'
 			 * @type String (any of "ltr", "rtl", "ttb" or "btt")
 			 */			
@@ -193,9 +193,6 @@
 						default:
 							return false;
 					}
-				},
-				method: function(value) {
-					this._barSizeFunction = this._barSizeFunctions[this.get(ANIM)?1:0][value];
 				}
 			});
 			
@@ -298,7 +295,7 @@
 			
 			/**
 			 * @attribute anim
-			 * @description it accepts either a boolean (recommended) or an instance of <a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a>.
+			 * @description It accepts either a boolean (recommended) or an instance of <a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a>.
 			 *   If a boolean, it will enable/disable animation creating its own instance of the animation utility.  
 			 *   If given an instance of <a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a> it will use that instance.
 			 *   The <a href="YAHOO.util.Anim.html">animation</a> utility needs to be loaded.
@@ -327,7 +324,7 @@
 		 * @return {YAHOO.widget.ProgressBar}
 		 * @chainable
 		 */
-		render: function(parent,before) {
+		render: function(parent, before) {
 
 			YAHOO.log('start render','info','ProgressBar');
 			if (this._rendered) { return; }
@@ -350,15 +347,9 @@
 			this.appendTo(parent,before);
 			
 					
-			// I need to use the non-animated bar resizing function for initial redraw
-			this._barSizeFunction = this._barSizeFunctions[0][direction];
-			this.redraw();
+			this.redraw(false);
 			this._previousValue = this.get(VALUE);
 			this._fixEdges();
-			// I can now set the correct bar resizer
-			if (this.get(ANIM)) {
-				this._barSizeFunction = this._barSizeFunctions[1][direction];
-			}
 
 			this.on('minValueChange',this.redraw);
 			this.on('maxValueChange',this.redraw);
@@ -369,12 +360,13 @@
 		/** 
 		 * Recalculates the bar size and position and redraws it
 		 * @method redraw
+		 * @param noAnim {boolean} Don't use animation to redraw
 		 * @return  void
 		 */
-		redraw: function () {
+		redraw: function (noAnim) {
 			YAHOO.log('Redraw','info','ProgressBar');
 			this._recalculateConstants();
-			this._valueChange(this.get(VALUE));
+			this._valueChange(this.get(VALUE), noAnim);
 		},
 			
 		/** 
@@ -423,16 +415,6 @@
 		 */
 		_rendered:false,
 		
-		/**
-		 * Function to be used to calculate bar size.  
-		 * It is picked from <a href="#property_barSizeFunctions">_barSizeFunctions</a>
-		 * depending on direction and whether animation is active.
-		 * @property _barSizeFunction
-		 * @type {function}
-		 * @default null
-		 * @private
-		 */		
-		_barSizeFunction: null,
 		
 		/** 
 		 * Method called when the height attribute is changed
@@ -447,7 +429,7 @@
 			}
 			this.setStyle(HEIGHT,value);
 			this._fixEdges();
-			this.redraw();
+			this.redraw(false);
 		},
 
 		/** 
@@ -463,7 +445,7 @@
 			}
 			this.setStyle(WIDTH,value);
 			this._fixEdges();
-			this.redraw();
+			this.redraw(false);
 		},
 		
 		/** 
@@ -525,6 +507,7 @@
 		 * Called in response to a change in the <a href="#config_anim">anim</a> attribute.
 		 * It creates and sets up or destroys the instance of the animation utility that will move the bar
 		 * @method _animSetter
+		 * @param value {boolean ,YAHOO.util.Anim} Enable animation or set to specific instance
 		 * @return  void
 		 * @private
 		 */		
@@ -570,10 +553,15 @@
 				}
 				anim = null;
 			}
-			this._barSizeFunction = this._barSizeFunctions[anim?1:0][this.get(DIRECTION)];
 			return anim;
 		},
 		
+		/** 
+		 * Called when the animation signals it has completed.
+		 * @method _animComplete
+		 * @return  void
+		 * @private
+		 */			
 		_animComplete: function() {
 			YAHOO.log('Animation completed','info','ProgressBar');
 			var value = this.get(VALUE);
@@ -582,6 +570,14 @@
 			this.fireEvent(COMPLETE, value);
 			Dom.removeClass(this.get(BAR_EL),CLASS_ANIM);
 		},
+		/** 
+		 * Called for each onTween event of the animation instance.
+		 * @method _animComplete
+		 * @param name {string} Name of the event fired
+		 * @param oArgs {object} Arguments provided by the Anim instance
+		 * @return  void
+		 * @private
+		 */			
 		_animOnTween:function (name,oArgs) {
 			var value = Math.floor(this._tweenFactor * oArgs[0].currentFrame + this._previousValue);
 			// The following fills the logger window too fast
@@ -593,14 +589,15 @@
 		 * Called in response to a change in the <a href="#config_value">value</a> attribute.
 		 * Moves the bar to reflect the new value
 		 * @method _valueChange
+		 * @param value {number} New value to be set
+		 * @param noAnim {boolean} Disable animation for this redraw
 		 * @return  void
 		 * @private
 		 */		
-		_valueChange: function (value) {
+		_valueChange: function (value, noAnim) {
 			YAHOO.log('set value: ' + value,'info','ProgressBar');
 			var anim = this.get(ANIM),
-				pixelValue = Math.floor((value - this.get(MIN_VALUE)) * this._barFactor),
-				barEl = this.get(BAR_EL);
+				pixelValue = Math.floor((value - this.get(MIN_VALUE)) * this._barFactor);
 			
 			this._setAriaText(value);
 			if (this._rendered) {
@@ -609,13 +606,14 @@
 					if (anim.isAnimated()) { anim._onComplete.fire(); } // see: http://yuilibrary.com/projects/yui2/ticket/2528217
 				}
 				this.fireEvent(START,this._previousValue);
-				this._barSizeFunction(value, pixelValue, barEl, anim);
+				Prog._barSizeFunctions[((noAnim !== false) && anim)?1:0][this.get(DIRECTION)].call(this, value, pixelValue, this.get(BAR_EL), anim);
 			}
 		},
 
 		/** 
 		 * Utility method to set the ARIA value attributes
 		 * @method _setAriaText
+		 * @param value {number} Value to be voiced
 		 * @return  void
 		 * @private
 		 */
@@ -634,14 +632,15 @@
 		}
 	});
 	/**
-	 * Collection of functions used by to calculate the size of the bar.
+	 * Collection of functions used to calculate the size of the bar.
 	 * One of this will be used depending on direction and whether animation is active.
 	 * @property _barSizeFunctions
 	 * @type {collection of functions}
 	 * @private
+	 * @static
 	 */
 	var b = [{},{}];
-	Prog.prototype._barSizeFunctions = b;
+	Prog._barSizeFunctions = b;
 	
 	b[0][DIRECTION_LTR] = function(value, pixelValue, barEl, anim) {
 		Dom.setStyle(barEl,WIDTH,  pixelValue + 'px');

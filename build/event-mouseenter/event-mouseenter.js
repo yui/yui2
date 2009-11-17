@@ -201,7 +201,7 @@
 				listeners = getListeners.apply(Event, arguments);
 			}
 
-			return listeners.length ? listeners : null;
+            return (listeners && listeners.length) ? listeners : null;
 			
 		}
 		

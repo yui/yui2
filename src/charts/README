@@ -20,6 +20,9 @@ YUI Library - Charts - Release Notes
   * Fixed bug in which big numbers were not rounded properly
   * Fixed bug in which stacked bar and column charts do not display properly when both negative and positive values are present
   * Fixed bug in which line chart area fills were not calculated correctly when there are both positive and negative values and a maximum or minimum of have been set
+  * The following changes have been made to the charts.swf. (This will not impact the behavior or API of the Charts Control)
+	- The flashvar elementID has changed to YUISwfId
+	- The flashvar eventHandler has changed to YUIBridgeCallback
 
 2.7.0
   * Added ability to rotate axis labels and titles.

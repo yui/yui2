@@ -7,7 +7,9 @@
 }
 /* During resize, hide the handles */
 .yui-skin-sam .yui-layout .yui-resize-resizing .yui-resize-handle {
-    visibility: hidden;
+    /*visibility: hidden;*/
+    display: none;
+    zoom: 1;
 }
 /* Style the div inside the resize proxy */
 .yui-skin-sam .yui-layout .yui-resize-proxy div {
@@ -17,7 +19,7 @@
 }
 /* Set the color of the Active resize handle */
 .yui-skin-sam .yui-layout .yui-resize .yui-resize-handle-active {
-    /*background-color: #EDF5FF;*/
+    zoom: 1;
 }
 /* Styles for the left handle */
 .yui-skin-sam .yui-layout .yui-resize-proxy .yui-layout-handle-l {
@@ -25,6 +27,7 @@
     height: 100%;
     top: 0;
     left: 0;
+    zoom: 1;
 }
 /* Styles for the right handle */
 .yui-skin-sam .yui-layout .yui-resize-proxy .yui-layout-handle-r {
@@ -110,6 +113,7 @@
     font-weight: bold;
     color: #fff;
     padding: 3px;
+    margin: 0;
 }
 /* Style the body */
 .yui-skin-sam .yui-layout .yui-layout-unit div.yui-layout-bd {
@@ -149,17 +153,20 @@
 /* Remove the color from the resize handle */
 .yui-skin-sam .yui-layout-unit .yui-resize-handle {
     background-color: transparent;
+    zoom: 1;
 }
 /* Reposition the handles */
 .yui-skin-sam .yui-layout-unit .yui-resize-handle-r {
     right: 0;
     top: 0;
     background-image: none;
+    zoom: 1;
 }
 .yui-skin-sam .yui-layout-unit .yui-resize-handle-l {
     left: 0;
     top: 0;
     background-image: none;
+    zoom: 1;
 }
 .yui-skin-sam .yui-layout-unit .yui-resize-handle-b {
     right: 0;
@@ -179,6 +186,7 @@
     width: 6px;
     top: 45%;
     left: 0px;
+    display: block;
     background: transparent url(layout_sprite.png) no-repeat 0 -5px;
 }
 /* Add the gripper */
@@ -189,4 +197,5 @@
     width: 16px;
     left: 45%;
     background: transparent url(layout_sprite.png) no-repeat -20px 0;
+    zoom: 1;
 }

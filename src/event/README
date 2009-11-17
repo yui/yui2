@@ -11,9 +11,9 @@ YUI Library - Event - Release Notes
   * Added support for event delegation via the "delegate" and "removeDelegate"
     methods (requires inclusion of the event-delegate module)
   * Deprecated onFocus, onBlur, addFocusListener, addBlurListener, 
-    removeFocusListener, and removeBlurListener.  Going forward capture phase
-	focus and blur events can be listened for directly the addListener/on 
-	methods and removed via the removeListener method
+    removeFocusListener, and removeBlurListener.  Going forward listen for the 
+    focusin and focusout events when listening for focus and blur on an element's
+    descendants
 
 2.7.0
   * unsubscribeAll return value fixed.

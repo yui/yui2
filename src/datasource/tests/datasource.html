@@ -595,6 +595,10 @@ var XMLDocument = function(rootTagName, namespaceURL) {
         output = YAHOO.util.Number.format(123.123, {decimalPlaces:-1});
         Assert.areSame("120", output, "Incorrect decimal rounding: expected -1 places");
 
+        // Bug 2528567
+        output = YAHOO.util.Number.format(new Number(1000), {thousandsSeparator:','});
+        Assert.areSame("1,000", output, "Incorrect output for 1,000");
+
         output = YAHOO.util.Number.format("123123123", {thousandsSeparator:","});
         Assert.areSame("123,123,123", output, "Incorrect thousands separation");
 
