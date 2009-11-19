@@ -69,17 +69,17 @@
             s = absN < 1 && absN >= 0.5 && !places ? '1' : absN.toFixed(places);
         }
 
+        bits  = s.split(/\D/);
+
         if (absN > 1000) {
-            bits  = s.split(/\D/);
             i  = bits[0].length % 3 || 3;
 
             bits[0] = bits[0].slice(0,i) +
                       bits[0].slice(i).replace(/(\d{3})/g, sep + '$1');
 
-            s = bits.join(cfg.decimalSeparator);
         }
 
-        s = cfg.prefix + s + cfg.suffix;
+        s = cfg.prefix + bits.join(cfg.decimalSeparator) + cfg.suffix;
 
         return neg ? cfg.negativeFormat.replace(/#/,s) : s;
     }
