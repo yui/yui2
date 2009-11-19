@@ -463,7 +463,7 @@
         <span class="nx">_buildTestTree</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="cm">/*:Void*/</span> <span class="p">{</span>
         
             <span class="k">this</span><span class="p">.</span><span class="nx">_root</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TestNode</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">masterSuite</span><span class="p">);</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">_cur</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_root</span><span class="p">;</span>
+            <span class="c1">//this._cur = this._root;</span>
             
             <span class="c1">//iterate over the items in the master suite</span>
             <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">masterSuite</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
@@ -520,8 +520,10 @@
 <span class="cm">         * @method _next</span>
 <span class="cm">         */</span>
         <span class="nx">_next</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="cm">/*:TestNode*/</span> <span class="p">{</span>
-        
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_cur</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">)</span> <span class="p">{</span>
+                
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_cur</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">_cur</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_root</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_cur</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">_cur</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_cur</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">;</span>
             <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_cur</span><span class="p">.</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">this</span><span class="p">.</span><span class="nx">_cur</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_cur</span><span class="p">.</span><span class="nx">next</span><span class="p">;</span>            
