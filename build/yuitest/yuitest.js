@@ -278,7 +278,8 @@ YAHOO.tool.TestRunner = (function(){
             passed : 0,
             failed : 0,
             total : 0,
-            ignored : 0
+            ignored : 0,
+            duration: 0
         };
         
         //initialize results
@@ -450,7 +451,32 @@ YAHOO.tool.TestRunner = (function(){
          * Fires when the run() method is called.
          * @event begin
          */        
-        BEGIN_EVENT /*:String*/ : "begin",    
+        BEGIN_EVENT /*:String*/ : "begin",                
+        
+        //-------------------------------------------------------------------------
+        // Misc Methods
+        //-------------------------------------------------------------------------   
+
+        /**
+         * Retrieves the name of the current result set.
+         * @return {String} The name of the result set.
+         * @method getName
+         */
+        getName: function(){
+            return this.masterSuite.name;
+        },         
+
+        /**
+         * The name assigned to the master suite of the TestRunner. This is the name
+         * that is output as the root's name when results are retrieved.
+         * @param {String} name The name of the result set.
+         * @return {Void}
+         * @method setName
+         */
+        setName: function(name){
+            this.masterSuite.name = name;
+        },        
+        
         
         //-------------------------------------------------------------------------
         // State-Related Methods
@@ -632,8 +658,10 @@ YAHOO.tool.TestRunner = (function(){
             
                 if (node.testObject instanceof YAHOO.tool.TestSuite){
                     node.testObject.tearDown();
+                    node.results.duration = (new Date()) - node._start;
                     this.fireEvent(this.TEST_SUITE_COMPLETE_EVENT, { testSuite: node.testObject, results: node.results});
                 } else if (node.testObject instanceof YAHOO.tool.TestCase){
+                    node.results.duration = (new Date()) - node._start;
                     this.fireEvent(this.TEST_CASE_COMPLETE_EVENT, { testCase: node.testObject, results: node.results});
                 }      
             } 
@@ -665,7 +693,7 @@ YAHOO.tool.TestRunner = (function(){
                 if (this._cur == this._root){
                     this._cur.results.type = "report";
                     this._cur.results.timestamp = (new Date()).toLocaleString();
-                    this._cur.results.duration = (new Date()) - this._cur.results.duration;
+                    this._cur.results.duration = (new Date()) - this._cur._start;                       
                     this._lastResults = this._cur.results;
                     this._running = false;
                     this.fireEvent(this.COMPLETE_EVENT, { results: this._lastResults});
@@ -710,9 +738,11 @@ YAHOO.tool.TestRunner = (function(){
                 if (YAHOO.lang.isObject(testObject)){
                     if (testObject instanceof YAHOO.tool.TestSuite){
                         this.fireEvent(this.TEST_SUITE_BEGIN_EVENT, { testSuite: testObject });
+                        node._start = new Date();
                         testObject.setUp();
                     } else if (testObject instanceof YAHOO.tool.TestCase){
                         this.fireEvent(this.TEST_CASE_BEGIN_EVENT, { testCase: testObject });
+                        node._start = new Date();
                     }
                     
                     //some environments don't support setTimeout
@@ -837,13 +867,17 @@ YAHOO.tool.TestRunner = (function(){
             
             //run the tear down
             testCase.tearDown();
+        
+            //calculate duration
+            var duration = (new Date()) - node._start;            
             
             //update results
             node.parent.results[testName] = { 
                 result: failed ? "fail" : "pass",
                 message: error ? error.getMessage() : "Test passed",
                 type: "test",
-                name: testName
+                name: testName,
+                duration: duration
             };
             
             if (failed){
@@ -909,6 +943,9 @@ YAHOO.tool.TestRunner = (function(){
 
             } else {
             
+                //mark the start time
+                node._start = new Date();
+            
                 //run the setup
                 testCase.setUp();
                 
@@ -937,7 +974,7 @@ YAHOO.tool.TestRunner = (function(){
             data.type = type;
             TestRunner.superclass.fireEvent.call(this, type, data);
         },
-        
+
         //-------------------------------------------------------------------------
         // Public Methods
         //-------------------------------------------------------------------------   
@@ -991,8 +1028,8 @@ YAHOO.tool.TestRunner = (function(){
             runner._buildTestTree();
             
             //set when the test started
-            runner._root.results.duration = (new Date()).getTime();
-            
+            runner._root._start = new Date();
+                            
             //fire the begin event
             runner.fireEvent(runner.BEGIN_EVENT);
        
@@ -2635,16 +2672,13 @@ YAHOO.namespace("tool.TestFormat");
      * @return {String} The escaped text.
      */
     function xmlEscape(text){
-        return text.replace(/"'<>/g, function(c){
+        return text.replace(/["'<>&]/g, function(c){
             switch(c){
-                case "\"":
-                    return "&quot;";
-                case "'":
-                    return "&apos;";
-                case "<":
-                    return "&lt;";
-                case ">":
-                    return "&gt;";
+                case "<":   return "&lt;";
+                case ">":   return "&gt;";
+                case "\"":  return "&quot;";
+                case "'":   return "&apos;";
+                case "&":   return "&amp;";
             }
         });
     } 
@@ -3073,6 +3107,13 @@ YAHOO.tool.TestReporter.prototype = {
     
     }
 
+};
+
+/*Stub for future compatibility*/
+YUITest = {
+    Runner: YAHOO.tool.TestRunner,
+    ResultsFormat: YAHOO.tool.TestFormat,
+    CoverageFormat: YAHOO.tool.CoverageFormat
 };
 
 YAHOO.register("yuitest", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});
