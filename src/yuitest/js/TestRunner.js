@@ -789,8 +789,7 @@ YAHOO.tool.TestRunner = (function(){
          * @static
          */
         clear : function () /*:Void*/ {
-            this.masterSuite.items = [];
-            this.masterSuite.name = "yuitests" + (new Date()).getTime();
+            this.masterSuite = new YAHOO.tool.TestSuite("yuitests" + (new Date()).getTime());
         },
         
         /**
@@ -807,14 +806,21 @@ YAHOO.tool.TestRunner = (function(){
     
         /**
          * Runs the test suite.
+         * @param {Boolean} oldMode (Optional) Specifies that the <= 2.8 way of
+         *      internally managing test suites should be used.
          * @return {Void}
          * @method run
          * @static
          */
-        run : function (testObject /*:Object*/) /*:Void*/ {
+        run : function (oldMode) {
             
             //pointer to runner to avoid scope issues 
             var runner = YAHOO.tool.TestRunner;
+            
+            //if there's only one suite on the masterSuite, move it up
+            if (!oldMode && this.masterSuite.items.length == 1 && this.masterSuite.items[0] instanceof YAHOO.tool.TestSuite){
+                this.masterSuite = this.masterSuite.items[0];
+            }
 
             //build the test tree
             runner._buildTestTree();
