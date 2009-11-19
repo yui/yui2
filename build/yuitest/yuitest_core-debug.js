@@ -622,7 +622,7 @@ YAHOO.tool.TestRunner = (function(){
         _buildTestTree : function () /*:Void*/ {
         
             this._root = new TestNode(this.masterSuite);
-            this._cur = this._root;
+            //this._cur = this._root;
             
             //iterate over the items in the master suite
             for (var i=0; i < this.masterSuite.items.length; i++){
@@ -679,8 +679,10 @@ YAHOO.tool.TestRunner = (function(){
          * @method _next
          */
         _next : function () /*:TestNode*/ {
-        
-            if (this._cur.firstChild) {
+                
+            if (this._cur === null){
+                this._cur = this._root;
+            } else if (this._cur.firstChild) {
                 this._cur = this._cur.firstChild;
             } else if (this._cur.next) {
                 this._cur = this._cur.next;            
