@@ -3931,7 +3931,7 @@ initAttributes : function(oConfigs) {
      
     /**
      * @attribute currencySymbol
-     * @deprecated
+     * @deprecated Use currencyOptions.
      */
     this.setAttributeConfig("currencySymbol", {
         value: "$",
@@ -4204,6 +4204,14 @@ _elTrTemplate : null,
  */
 _aDynFunctions : [],
 
+/**
+ * Disabled state.
+ *
+ * @property _disabled
+ * @type Boolean
+ * @private
+ */
+_disabled : false,
 
 
 
@@ -4879,7 +4887,7 @@ _initThEl : function(elTh, oColumn) {
 /**
  * Outputs markup into the given TH based on given Column.
  *
- * @method DataTable.formatTheadCell
+ * @method formatTheadCell
  * @param elCellLabel {HTMLElement} The label SPAN element within the TH liner,
  * not the liner DIV element.     
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -7302,10 +7310,12 @@ render : function() {
  * @method disable
  */
 disable : function() {
+    this._disabled = true;
     var elTable = this._elTable;
     var elMask = this._elMask;
     elMask.style.width = elTable.offsetWidth + "px";
     elMask.style.height = elTable.offsetHeight + "px";
+    elMask.style.left = elTable.offsetLeft + "px";
     elMask.style.display = "";
     this.fireEvent("disableEvent");
 },
@@ -7316,8 +7326,19 @@ disable : function() {
  * @method undisable
  */
 undisable : function() {
+    this._disabled = false;
     this._elMask.style.display = "none";
     this.fireEvent("undisableEvent");
+},
+
+ /**
+ * Returns disabled state.
+ *
+ * @method isDisabled
+ * @return {Boolean} True if UI is disabled, otherwise false
+ */
+isDisabled : function() {
+    return this._disabled;
 },
 
 /**
@@ -12106,7 +12127,7 @@ showCellEditor : function(elCell, oRecord, oColumn) {
  *
  * @method _initCellEditorEl
  * @private
- * @deprecated 
+ * @deprecated Use BaseCellEditor class.
  */
 _initCellEditorEl : function() {
     // Attach Cell Editor container element as first child of body
@@ -12396,7 +12417,7 @@ onEditorUnblockEvent : function(oArgs) {
  *
  * @method doBeforeLoadData
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} additional arguments
  * @return {Boolean} Return true to continue loading data into RecordSet and
  * updating DataTable with new Records, false to cancel.
@@ -12662,7 +12683,9 @@ onEventFormatCell : function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventShowCellEditor : function(oArgs) {
-    this.showCellEditor(oArgs.target);
+    if(!this.isDisabled()) {
+        this.showCellEditor(oArgs.target);
+    }
 },
 
 /**
@@ -12705,7 +12728,7 @@ onEventCancelCellEditor : function(oArgs) {
  *
  * @method onDataReturnInitializeTable
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
@@ -12723,7 +12746,7 @@ onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
  *  
  * @method onDataReturnReplaceRows
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
@@ -12771,7 +12794,7 @@ onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
  *
  * @method onDataReturnAppendRows
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
@@ -12805,7 +12828,7 @@ onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
  *
  * @method onDataReturnInsertRows
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} Argument payload, looks in oPayload.insertIndex.
  */
 onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
@@ -12839,7 +12862,7 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
  *
  * @method onDataReturnUpdateRows
  * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} Argument payload, looks in oPayload.updateIndex.
  */
 onDataReturnUpdateRows : function(sRequest, oResponse, oPayload) {
@@ -12870,7 +12893,7 @@ onDataReturnUpdateRows : function(sRequest, oResponse, oPayload) {
  *  
  * @method onDataReturnSetRows
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
@@ -12918,21 +12941,22 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
  *  
  * @method handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} State values.
  * @return oPayload {MIXED} State values.
  */
 handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
-    return oPayload;
+    return oPayload || {};
 },
 
 /**
  * Updates the DataTable with state data sent in an onDataReturn* payload.
  *  
- * @method handleDataReturnPayload
+ * @method _handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
- * @param oResponse {Object} Response object.
+ * @param oResponse {Object} <a href="http://developer.yahoo.com/yui/datasource/#ds_oParsedResponse">Response object</a>.
  * @param oPayload {MIXED} State values
+ * @private
  */
 _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
     oPayload = this.handleDataReturnPayload(oRequest, oResponse, oPayload);
@@ -14019,12 +14043,6 @@ DT.prototype.onPaginatorChange = DT.prototype.onPaginatorChangeRequest;
 //
 /////////////////////////////////////////////////////////////////////////////
 /**
- * @method DataTable.formatTheadCell
- * @deprecated  Use formatTheadCell.
- */
-DT.formatTheadCell = function() {};
-
-/**
  * @method DataTable.editCheckbox
  * @deprecated  Use YAHOO.widget.CheckboxCellEditor.
  */
@@ -14276,7 +14294,9 @@ initAttributes : function(oConfigs) {
         value: "#F2F2F2",
         validator: lang.isString,
         method: function(oParam) {
-            this._elHdContainer.style.backgroundColor = oParam;
+            if(this._elHdContainer) {
+                this._elHdContainer.style.backgroundColor = oParam;
+            }
         }
     });
 },
@@ -15859,7 +15879,7 @@ render : function() {
             oSelf.cancel();
         }
         // Pass through event
-        oSelf.fireEvent("keydownEvent", {editor:this, event:e});
+        oSelf.fireEvent("keydownEvent", {editor:oSelf, event:e});
     }, this);
 
     this.renderForm();
@@ -16459,6 +16479,9 @@ renderForm : function() {
                 calContainer.id, this.calendarOptions);
         calendar.render();
         calContainer.style.cssFloat = "none";
+        
+        // Bug 2528576
+        calendar.hideEvent.subscribe(function() {this.cancel();}, this, true);
 
         if(ua.ie) {
             var calFloatClearer = this.getContainerEl().appendChild(document.createElement("div"));
@@ -16499,6 +16522,8 @@ resetForm : function() {
     var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
     this.calendar.cfg.setProperty("selected",selectedValue,false);
 	this.calendar.render();
+	// Bug 2528576
+	this.calendar.show();
 },
 
 /**

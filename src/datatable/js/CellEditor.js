@@ -523,7 +523,7 @@ render : function() {
             oSelf.cancel();
         }
         // Pass through event
-        oSelf.fireEvent("keydownEvent", {editor:this, event:e});
+        oSelf.fireEvent("keydownEvent", {editor:oSelf, event:e});
     }, this);
 
     this.renderForm();
@@ -1135,6 +1135,9 @@ renderForm : function() {
                 calContainer.id, this.calendarOptions);
         calendar.render();
         calContainer.style.cssFloat = "none";
+        
+        // Bug 2528576
+        calendar.hideEvent.subscribe(function() {this.cancel();}, this, true);
 
         if(ua.ie) {
             var calFloatClearer = this.getContainerEl().appendChild(document.createElement("div"));
@@ -1176,6 +1179,8 @@ resetForm : function() {
     var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
     this.calendar.cfg.setProperty("selected",selectedValue,false);
 	this.calendar.render();
+	// Bug 2528576
+	this.calendar.show();
 },
 
 /**
