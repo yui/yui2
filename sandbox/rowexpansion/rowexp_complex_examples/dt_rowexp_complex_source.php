@@ -199,7 +199,7 @@ YAHOO.util.Event.onDOMReady( function() {
 		* Create a YUI DataTable instance.
 		*
 		**/
-		var myDataTable = new YAHOO.widget.DataTable(
+		var myDataTable = new YAHOO.widget.RowExpansionDataTable(
 			"expandable_table",
 			[
 				{

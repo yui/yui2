@@ -73,7 +73,7 @@
 
 		};
 
-		var myDataTable = new YAHOO.widget.DataTable(
+		var myDataTable = new YAHOO.widget.RowExpansionDataTable(
 				( Dom.get( id ) || makeDiv() ),
 				myColumnDefs,
 				myDataSource,

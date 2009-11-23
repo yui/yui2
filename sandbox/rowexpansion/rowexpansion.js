@@ -28,8 +28,29 @@
 				return -1;
 			};
 
-	YAHOO.lang.augmentObject( 
-		YAHOO.widget.DataTable.prototype , 
+	/**
+	* The ScrollingDataTable class extends the DataTable class to provide
+	* functionality for x-scrolling, y-scrolling, and xy-scrolling.
+	*
+	* @namespace YAHOO.widget
+	* @class ScrollingDataTable
+	* @extends YAHOO.widget.DataTable
+	* @constructor
+	* @param elContainer {HTMLElement} Container element for the TABLE.
+	* @param aColumnDefs {Object[]} Array of object literal Column definitions.
+	* @param oDataSource {YAHOO.util.DataSource} DataSource instance.
+	* @param oConfigs {object} (optional) Object literal of configuration values.
+	*/
+	YAHOO.widget.RowExpansionDataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) {
+		oConfigs = oConfigs || {};
+
+		YAHOO.widget.RowExpansionDataTable.superclass.constructor.call(this, elContainer,aColumnDefs,oDataSource,oConfigs); 
+
+	};
+
+	YAHOO.lang.extend( 
+		YAHOO.widget.RowExpansionDataTable,
+		YAHOO.widget.DataTable, 
 		{
 
 			/////////////////////////////////////////////////////////////////////////////
@@ -101,7 +122,7 @@
 
 				oConfigs = oConfigs || {};
 
-				YAHOO.widget.DataTable.superclass.initAttributes.call( this, oConfigs );
+				YAHOO.widget.RowExpansionDataTable.superclass.initAttributes.call( this, oConfigs );
 
 					/**
 					* @attribute rowExpansionTemplate
@@ -376,7 +397,6 @@
 
 			}
 
-		}, true //This boolean is needed to override members of the original object
-	);
+		});
 
 })();
