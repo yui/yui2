@@ -29,11 +29,11 @@
 			};
 
 	/**
-	* The ScrollingDataTable class extends the DataTable class to provide
-	* functionality for x-scrolling, y-scrolling, and xy-scrolling.
+	* The RowExpansionDataTable class extends the DataTable class to provide
+	* functionality for expanding rows to show more contextual data.
 	*
 	* @namespace YAHOO.widget
-	* @class ScrollingDataTable
+	* @class RowExpansionDataTable
 	* @extends YAHOO.widget.DataTable
 	* @constructor
 	* @param elContainer {HTMLElement} Container element for the TABLE.
