@@ -2044,7 +2044,7 @@ asyncMode : "allowAll",
 /**
  * Callback string parameter name sent to the remote script. By default,
  * requests are sent to
- * &#60;URI&#62;?&#60;scriptCallbackParam&#62;=callbackFunction
+ * &#60;URI&#62;?&#60;scriptCallbackParam&#62;=callback
  *
  * @property scriptCallbackParam
  * @type String
@@ -2652,7 +2652,7 @@ lang.augmentObject(util.DataSource, DS);
             s = absN < 1 && absN >= 0.5 && !places ? '1' : absN.toFixed(places);
         }
 
-        if (absN > 1000) {
+        if (absN >= 1000) {
             bits  = s.split(/\D/);
             i  = bits[0].length % 3 || 3;
 

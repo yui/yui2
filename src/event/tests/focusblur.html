@@ -28,8 +28,8 @@
 			YAHOO.log("blur");
 		};
 
-		Event.on("button-1", "focus", onButtonFocus);
-		Event.on("button-1", "blur", onButtonBlur);
+		Event.onFocus("container-1", onButtonFocus);
+		Event.onBlur("container-1", onButtonBlur);
 
 		Event.onDOMReady(function () {
 
@@ -55,7 +55,9 @@
 		element (this didn't work in YUI 2.7 and versions prior)</li>
 	</ul>		
 	
-	<button id="button-1">Click Me!</button>
+	<div id="container-1">
+		<button id="button-1">Click Me!</button>
+	</div>
 
 </body>
 </html>

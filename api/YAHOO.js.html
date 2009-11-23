@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>YAHOO Global&nbsp; <span class="subtitle">2.8.0_test2</span></h3>
+        <h3>YAHOO Global&nbsp; <span class="subtitle">2.8.0r4</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_yahoo.html" title="yahoo">yahoo</a>
                 
@@ -47,190 +47,190 @@
                         <style>
                             #doc3 .classopts { display:none; }
                         </style>
-                        <div class="highlight" ><pre><span class="c">/**</span>
-<span class="c"> * The YAHOO object is the single global object used by YUI Library.  It</span>
-<span class="c"> * contains utility function for setting up namespaces, inheritance, and</span>
-<span class="c"> * logging.  YAHOO.util, YAHOO.widget, and YAHOO.example are namespaces</span>
-<span class="c"> * created automatically for and used by the library.</span>
-<span class="c"> * @module yahoo</span>
-<span class="c"> * @title  YAHOO Global</span>
-<span class="c"> */</span>
+                        <div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * The YAHOO object is the single global object used by YUI Library.  It</span>
+<span class="cm"> * contains utility function for setting up namespaces, inheritance, and</span>
+<span class="cm"> * logging.  YAHOO.util, YAHOO.widget, and YAHOO.example are namespaces</span>
+<span class="cm"> * created automatically for and used by the library.</span>
+<span class="cm"> * @module yahoo</span>
+<span class="cm"> * @title  YAHOO Global</span>
+<span class="cm"> */</span>
 
-<span class="c">/**</span>
-<span class="c"> * YAHOO_config is not included as part of the library.  Instead it is an </span>
-<span class="c"> * object that can be defined by the implementer immediately before </span>
-<span class="c"> * including the YUI library.  The properties included in this object</span>
-<span class="c"> * will be used to configure global properties needed as soon as the </span>
-<span class="c"> * library begins to load.</span>
-<span class="c"> * @class YAHOO_config</span>
-<span class="c"> * @static</span>
-<span class="c"> */</span>
+<span class="cm">/**</span>
+<span class="cm"> * YAHOO_config is not included as part of the library.  Instead it is an </span>
+<span class="cm"> * object that can be defined by the implementer immediately before </span>
+<span class="cm"> * including the YUI library.  The properties included in this object</span>
+<span class="cm"> * will be used to configure global properties needed as soon as the </span>
+<span class="cm"> * library begins to load.</span>
+<span class="cm"> * @class YAHOO_config</span>
+<span class="cm"> * @static</span>
+<span class="cm"> */</span>
 
-<span class="c">/**</span>
-<span class="c"> * A reference to a function that will be executed every time a YAHOO module</span>
-<span class="c"> * is loaded.  As parameter, this function will receive the version</span>
-<span class="c"> * information for the module. See &lt;a href=&quot;YAHOO.env.html#getVersion&quot;&gt;</span>
-<span class="c"> * YAHOO.env.getVersion&lt;/a&gt; for the description of the version data structure.</span>
-<span class="c"> * @property listener</span>
-<span class="c"> * @type Function</span>
-<span class="c"> * @static</span>
-<span class="c"> * @default undefined</span>
-<span class="c"> */</span>
+<span class="cm">/**</span>
+<span class="cm"> * A reference to a function that will be executed every time a YAHOO module</span>
+<span class="cm"> * is loaded.  As parameter, this function will receive the version</span>
+<span class="cm"> * information for the module. See &lt;a href=&quot;YAHOO.env.html#getVersion&quot;&gt;</span>
+<span class="cm"> * YAHOO.env.getVersion&lt;/a&gt; for the description of the version data structure.</span>
+<span class="cm"> * @property listener</span>
+<span class="cm"> * @type Function</span>
+<span class="cm"> * @static</span>
+<span class="cm"> * @default undefined</span>
+<span class="cm"> */</span>
 
-<span class="c">/**</span>
-<span class="c"> * Set to true if the library will be dynamically loaded after window.onload.</span>
-<span class="c"> * Defaults to false </span>
-<span class="c"> * @property injecting</span>
-<span class="c"> * @type boolean</span>
-<span class="c"> * @static</span>
-<span class="c"> * @default undefined</span>
-<span class="c"> */</span>
+<span class="cm">/**</span>
+<span class="cm"> * Set to true if the library will be dynamically loaded after window.onload.</span>
+<span class="cm"> * Defaults to false </span>
+<span class="cm"> * @property injecting</span>
+<span class="cm"> * @type boolean</span>
+<span class="cm"> * @static</span>
+<span class="cm"> * @default undefined</span>
+<span class="cm"> */</span>
 
-<span class="c">/**</span>
-<span class="c"> * Instructs the yuiloader component to dynamically load yui components and</span>
-<span class="c"> * their dependencies.  See the yuiloader documentation for more information</span>
-<span class="c"> * about dynamic loading</span>
-<span class="c"> * @property load</span>
-<span class="c"> * @static</span>
-<span class="c"> * @default undefined</span>
-<span class="c"> * @see yuiloader</span>
-<span class="c"> */</span>
+<span class="cm">/**</span>
+<span class="cm"> * Instructs the yuiloader component to dynamically load yui components and</span>
+<span class="cm"> * their dependencies.  See the yuiloader documentation for more information</span>
+<span class="cm"> * about dynamic loading</span>
+<span class="cm"> * @property load</span>
+<span class="cm"> * @static</span>
+<span class="cm"> * @default undefined</span>
+<span class="cm"> * @see yuiloader</span>
+<span class="cm"> */</span>
 
-<span class="c">/**</span>
-<span class="c"> * Forces the use of the supplied locale where applicable in the library</span>
-<span class="c"> * @property locale</span>
-<span class="c"> * @type string</span>
-<span class="c"> * @static</span>
-<span class="c"> * @default undefined</span>
-<span class="c"> */</span>
+<span class="cm">/**</span>
+<span class="cm"> * Forces the use of the supplied locale where applicable in the library</span>
+<span class="cm"> * @property locale</span>
+<span class="cm"> * @type string</span>
+<span class="cm"> * @static</span>
+<span class="cm"> * @default undefined</span>
+<span class="cm"> */</span>
 
-<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">||</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c">/**</span>
-<span class="c">     * The YAHOO global namespace object.  If YAHOO is already defined, the</span>
-<span class="c">     * existing YAHOO object will not be overwritten so that defined</span>
-<span class="c">     * namespaces are preserved.</span>
-<span class="c">     * @class YAHOO</span>
-<span class="c">     * @static</span>
-<span class="c">     */</span>
-    <span class="k">var</span> <span class="nx">YAHOO</span> <span class="o">=</span> <span class="o">{};</span>
-<span class="o">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">||</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/**</span>
+<span class="cm">     * The YAHOO global namespace object.  If YAHOO is already defined, the</span>
+<span class="cm">     * existing YAHOO object will not be overwritten so that defined</span>
+<span class="cm">     * namespaces are preserved.</span>
+<span class="cm">     * @class YAHOO</span>
+<span class="cm">     * @static</span>
+<span class="cm">     */</span>
+    <span class="kd">var</span> <span class="nx">YAHOO</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="p">}</span>
 
-<span class="c">/**</span>
-<span class="c"> * Returns the namespace specified and creates it if it doesn&#39;t exist</span>
-<span class="c"> * &lt;pre&gt;</span>
-<span class="c"> * YAHOO.namespace(&quot;property.package&quot;);</span>
-<span class="c"> * YAHOO.namespace(&quot;YAHOO.property.package&quot;);</span>
-<span class="c"> * &lt;/pre&gt;</span>
-<span class="c"> * Either of the above would create YAHOO.property, then</span>
-<span class="c"> * YAHOO.property.package</span>
-<span class="c"> *</span>
-<span class="c"> * Be careful when naming packages. Reserved words may work in some browsers</span>
-<span class="c"> * and not others. For instance, the following will fail in Safari:</span>
-<span class="c"> * &lt;pre&gt;</span>
-<span class="c"> * YAHOO.namespace(&quot;really.long.nested.namespace&quot;);</span>
-<span class="c"> * &lt;/pre&gt;</span>
-<span class="c"> * This fails because &quot;long&quot; is a future reserved word in ECMAScript</span>
-<span class="c"> *</span>
-<span class="c"> * For implementation code that uses YUI, do not create your components</span>
-<span class="c"> * in the namespaces defined by YUI (</span>
-<span class="c"> * &lt;code&gt;YAHOO.util&lt;/code&gt;, </span>
-<span class="c"> * &lt;code&gt;YAHOO.widget&lt;/code&gt;, </span>
-<span class="c"> * &lt;code&gt;YAHOO.lang&lt;/code&gt;, </span>
-<span class="c"> * &lt;code&gt;YAHOO.tool&lt;/code&gt;, </span>
-<span class="c"> * &lt;code&gt;YAHOO.example&lt;/code&gt;, </span>
-<span class="c"> * &lt;code&gt;YAHOO.env&lt;/code&gt;) -- create your own namespace (e.g., &#39;companyname&#39;).</span>
-<span class="c"> *</span>
-<span class="c"> * @method namespace</span>
-<span class="c"> * @static</span>
-<span class="c"> * @param  {String*} arguments 1-n namespaces to create </span>
-<span class="c"> * @return {Object}  A reference to the last namespace object created</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">var</span> <span class="nx">a</span><span class="o">=</span><span class="nx">arguments</span><span class="o">,</span> <span class="nx">o</span><span class="o">=</span><span class="kc">null</span><span class="o">,</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">j</span><span class="o">,</span> <span class="nx">d</span><span class="o">;</span>
-    <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">a</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">d</span><span class="o">=(</span><span class="s2">&quot;&quot;</span><span class="o">+</span><span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]).</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;.&quot;</span><span class="o">);</span>
-        <span class="nx">o</span><span class="o">=</span><span class="nx">YAHOO</span><span class="o">;</span>
+<span class="cm">/**</span>
+<span class="cm"> * Returns the namespace specified and creates it if it doesn&#39;t exist</span>
+<span class="cm"> * &lt;pre&gt;</span>
+<span class="cm"> * YAHOO.namespace(&quot;property.package&quot;);</span>
+<span class="cm"> * YAHOO.namespace(&quot;YAHOO.property.package&quot;);</span>
+<span class="cm"> * &lt;/pre&gt;</span>
+<span class="cm"> * Either of the above would create YAHOO.property, then</span>
+<span class="cm"> * YAHOO.property.package</span>
+<span class="cm"> *</span>
+<span class="cm"> * Be careful when naming packages. Reserved words may work in some browsers</span>
+<span class="cm"> * and not others. For instance, the following will fail in Safari:</span>
+<span class="cm"> * &lt;pre&gt;</span>
+<span class="cm"> * YAHOO.namespace(&quot;really.long.nested.namespace&quot;);</span>
+<span class="cm"> * &lt;/pre&gt;</span>
+<span class="cm"> * This fails because &quot;long&quot; is a future reserved word in ECMAScript</span>
+<span class="cm"> *</span>
+<span class="cm"> * For implementation code that uses YUI, do not create your components</span>
+<span class="cm"> * in the namespaces defined by YUI (</span>
+<span class="cm"> * &lt;code&gt;YAHOO.util&lt;/code&gt;, </span>
+<span class="cm"> * &lt;code&gt;YAHOO.widget&lt;/code&gt;, </span>
+<span class="cm"> * &lt;code&gt;YAHOO.lang&lt;/code&gt;, </span>
+<span class="cm"> * &lt;code&gt;YAHOO.tool&lt;/code&gt;, </span>
+<span class="cm"> * &lt;code&gt;YAHOO.example&lt;/code&gt;, </span>
+<span class="cm"> * &lt;code&gt;YAHOO.env&lt;/code&gt;) -- create your own namespace (e.g., &#39;companyname&#39;).</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method namespace</span>
+<span class="cm"> * @static</span>
+<span class="cm"> * @param  {String*} arguments 1-n namespaces to create </span>
+<span class="cm"> * @return {Object}  A reference to the last namespace object created</span>
+<span class="cm"> */</span>
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">namespace</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">a</span><span class="o">=</span><span class="nx">arguments</span><span class="p">,</span> <span class="nx">o</span><span class="o">=</span><span class="kc">null</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">,</span> <span class="nx">d</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">d</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">+</span><span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]).</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">);</span>
+        <span class="nx">o</span><span class="o">=</span><span class="nx">YAHOO</span><span class="p">;</span>
 
-        <span class="c">// YAHOO is implied, so it is ignored if it is included</span>
-<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="nx">j</span><span class="o">=(</span><span class="nx">d</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">==</span> <span class="s2">&quot;YAHOO&quot;</span><span class="o">)</span> <span class="o">?</span> <span class="m">1</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">d</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">j</span><span class="o">=</span><span class="nx">j</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">o</span><span class="o">[</span><span class="nx">d</span><span class="o">[</span><span class="nx">j</span><span class="o">]]=</span><span class="nx">o</span><span class="o">[</span><span class="nx">d</span><span class="o">[</span><span class="nx">j</span><span class="o">]]</span> <span class="o">||</span> <span class="o">{};</span>
-            <span class="nx">o</span><span class="o">=</span><span class="nx">o</span><span class="o">[</span><span class="nx">d</span><span class="o">[</span><span class="nx">j</span><span class="o">]];</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
+        <span class="c1">// YAHOO is implied, so it is ignored if it is included</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">j</span><span class="o">=</span><span class="p">(</span><span class="nx">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;YAHOO&quot;</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">d</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">=</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">o</span><span class="p">[</span><span class="nx">d</span><span class="p">[</span><span class="nx">j</span><span class="p">]]</span><span class="o">=</span><span class="nx">o</span><span class="p">[</span><span class="nx">d</span><span class="p">[</span><span class="nx">j</span><span class="p">]]</span> <span class="o">||</span> <span class="p">{};</span>
+            <span class="nx">o</span><span class="o">=</span><span class="nx">o</span><span class="p">[</span><span class="nx">d</span><span class="p">[</span><span class="nx">j</span><span class="p">]];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    <span class="k">return</span> <span class="nx">o</span><span class="o">;</span>
-<span class="o">};</span>
+    <span class="k">return</span> <span class="nx">o</span><span class="p">;</span>
+<span class="p">};</span>
 
-<span class="c">/**</span>
-<span class="c"> * Uses YAHOO.widget.Logger to output a log message, if the widget is</span>
-<span class="c"> * available.</span>
-<span class="c"> *</span>
-<span class="c"> * @method log</span>
-<span class="c"> * @static</span>
-<span class="c"> * @param  {String}  msg  The message to log.</span>
-<span class="c"> * @param  {String}  cat  The log category for the message.  Default</span>
-<span class="c"> *                        categories are &quot;info&quot;, &quot;warn&quot;, &quot;error&quot;, time&quot;.</span>
-<span class="c"> *                        Custom categories can be used as well. (opt)</span>
-<span class="c"> * @param  {String}  src  The source of the the message (opt)</span>
-<span class="c"> * @return {Boolean}      True if the log operation was successful.</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">msg</span><span class="o">,</span> <span class="nx">cat</span><span class="o">,</span> <span class="nx">src</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">var</span> <span class="nx">l</span><span class="o">=</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Logger</span><span class="o">;</span>
-    <span class="k">if</span><span class="o">(</span><span class="nx">l</span> <span class="o">&amp;&amp;</span> <span class="nx">l</span><span class="o">.</span><span class="nx">log</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nx">l</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">msg</span><span class="o">,</span> <span class="nx">cat</span><span class="o">,</span> <span class="nx">src</span><span class="o">);</span>
-    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">};</span>
+<span class="cm">/**</span>
+<span class="cm"> * Uses YAHOO.widget.Logger to output a log message, if the widget is</span>
+<span class="cm"> * available.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method log</span>
+<span class="cm"> * @static</span>
+<span class="cm"> * @param  {String}  msg  The message to log.</span>
+<span class="cm"> * @param  {String}  cat  The log category for the message.  Default</span>
+<span class="cm"> *                        categories are &quot;info&quot;, &quot;warn&quot;, &quot;error&quot;, time&quot;.</span>
+<span class="cm"> *                        Custom categories can be used as well. (opt)</span>
+<span class="cm"> * @param  {String}  src  The source of the the message (opt)</span>
+<span class="cm"> * @return {Boolean}      True if the log operation was successful.</span>
+<span class="cm"> */</span>
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">cat</span><span class="p">,</span> <span class="nx">src</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">l</span><span class="o">=</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">Logger</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">l</span> <span class="o">&amp;&amp;</span> <span class="nx">l</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">l</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">cat</span><span class="p">,</span> <span class="nx">src</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-<span class="c">/**</span>
-<span class="c"> * Registers a module with the YAHOO object</span>
-<span class="c"> * @method register</span>
-<span class="c"> * @static</span>
-<span class="c"> * @param {String}   name    the name of the module (event, slider, etc)</span>
-<span class="c"> * @param {Function} mainClass a reference to class in the module.  This</span>
-<span class="c"> *                             class will be tagged with the version info</span>
-<span class="c"> *                             so that it will be possible to identify the</span>
-<span class="c"> *                             version that is in use when multiple versions</span>
-<span class="c"> *                             have loaded</span>
-<span class="c"> * @param {Object}   data      metadata object for the module.  Currently it</span>
-<span class="c"> *                             is expected to contain a &quot;version&quot; property</span>
-<span class="c"> *                             and a &quot;build&quot; property at minimum.</span>
-<span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">register</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">name</span><span class="o">,</span> <span class="nx">mainClass</span><span class="o">,</span> <span class="nx">data</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">var</span> <span class="nx">mods</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">modules</span><span class="o">,</span> <span class="nx">m</span><span class="o">,</span> <span class="nx">v</span><span class="o">,</span> <span class="nx">b</span><span class="o">,</span> <span class="nx">ls</span><span class="o">,</span> <span class="nx">i</span><span class="o">;</span>
+<span class="cm">/**</span>
+<span class="cm"> * Registers a module with the YAHOO object</span>
+<span class="cm"> * @method register</span>
+<span class="cm"> * @static</span>
+<span class="cm"> * @param {String}   name    the name of the module (event, slider, etc)</span>
+<span class="cm"> * @param {Function} mainClass a reference to class in the module.  This</span>
+<span class="cm"> *                             class will be tagged with the version info</span>
+<span class="cm"> *                             so that it will be possible to identify the</span>
+<span class="cm"> *                             version that is in use when multiple versions</span>
+<span class="cm"> *                             have loaded</span>
+<span class="cm"> * @param {Object}   data      metadata object for the module.  Currently it</span>
+<span class="cm"> *                             is expected to contain a &quot;version&quot; property</span>
+<span class="cm"> *                             and a &quot;build&quot; property at minimum.</span>
+<span class="cm"> */</span>
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">register</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">mainClass</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">mods</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">modules</span><span class="p">,</span> <span class="nx">m</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">ls</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
 
-    <span class="k">if</span> <span class="o">(!</span><span class="nx">mods</span><span class="o">[</span><span class="nx">name</span><span class="o">])</span> <span class="o">{</span>
-        <span class="nx">mods</span><span class="o">[</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span> 
-            <span class="nx">versions</span><span class="o">:[],</span> 
-            <span class="nx">builds</span><span class="o">:[]</span> 
-        <span class="o">};</span>
-    <span class="o">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">mods</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="p">{</span>
+        <span class="nx">mods</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> 
+            <span class="nx">versions</span><span class="o">:</span><span class="p">[],</span> 
+            <span class="nx">builds</span><span class="o">:</span><span class="p">[]</span> 
+        <span class="p">};</span>
+    <span class="p">}</span>
 
-    <span class="nx">m</span>  <span class="o">=</span> <span class="nx">mods</span><span class="o">[</span><span class="nx">name</span><span class="o">];</span>
-    <span class="nx">v</span>  <span class="o">=</span> <span class="nx">data</span><span class="o">.</span><span class="nx">version</span><span class="o">;</span>
-    <span class="nx">b</span>  <span class="o">=</span> <span class="nx">data</span><span class="o">.</span><span class="nx">build</span><span class="o">;</span>
-    <span class="nx">ls</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">listeners</span><span class="o">;</span>
+    <span class="nx">m</span>  <span class="o">=</span> <span class="nx">mods</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
+    <span class="nx">v</span>  <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">version</span><span class="p">;</span>
+    <span class="nx">b</span>  <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">build</span><span class="p">;</span>
+    <span class="nx">ls</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">listeners</span><span class="p">;</span>
 
-    <span class="nx">m</span><span class="o">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="o">;</span>
-    <span class="nx">m</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nx">v</span><span class="o">;</span>
-    <span class="nx">m</span><span class="o">.</span><span class="nx">build</span> <span class="o">=</span> <span class="nx">b</span><span class="o">;</span>
-    <span class="nx">m</span><span class="o">.</span><span class="nx">versions</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">v</span><span class="o">);</span>
-    <span class="nx">m</span><span class="o">.</span><span class="nx">builds</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">b</span><span class="o">);</span>
-    <span class="nx">m</span><span class="o">.</span><span class="nx">mainClass</span> <span class="o">=</span> <span class="nx">mainClass</span><span class="o">;</span>
+    <span class="nx">m</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+    <span class="nx">m</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nx">v</span><span class="p">;</span>
+    <span class="nx">m</span><span class="p">.</span><span class="nx">build</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
+    <span class="nx">m</span><span class="p">.</span><span class="nx">versions</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">v</span><span class="p">);</span>
+    <span class="nx">m</span><span class="p">.</span><span class="nx">builds</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span>
+    <span class="nx">m</span><span class="p">.</span><span class="nx">mainClass</span> <span class="o">=</span> <span class="nx">mainClass</span><span class="p">;</span>
 
-    <span class="c">// fire the module load listeners</span>
-<span class="c"></span>    <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">ls</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span><span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">ls</span><span class="o">[</span><span class="nx">i</span><span class="o">](</span><span class="nx">m</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="c">// label the main class</span>
-<span class="c"></span>    <span class="k">if</span> <span class="o">(</span><span class="nx">mainClass</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">mainClass</span><span class="o">.</span><span class="nx">VERSION</span> <span class="o">=</span> <span class="nx">v</span><span class="o">;</span>
-        <span class="nx">mainClass</span><span class="o">.</span><span class="nx">BUILD</span> <span class="o">=</span> <span class="nx">b</span><span class="o">;</span>
-    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;mainClass is undefined for module &quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">};</span>
+    <span class="c1">// fire the module load listeners</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">ls</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">ls</span><span class="p">[</span><span class="nx">i</span><span class="p">](</span><span class="nx">m</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="c1">// label the main class</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">mainClass</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">mainClass</span><span class="p">.</span><span class="nx">VERSION</span> <span class="o">=</span> <span class="nx">v</span><span class="p">;</span>
+        <span class="nx">mainClass</span><span class="p">.</span><span class="nx">BUILD</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;mainClass is undefined for module &quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">,</span> <span class="s2">&quot;warn&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 </pre></div>
 
                     </div>

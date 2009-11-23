@@ -125,6 +125,7 @@ YAHOO.namespace("tool");
     };
 
 })();
+
 YAHOO.namespace("tool");
 
 
@@ -204,6 +205,7 @@ YAHOO.tool.TestSuite.prototype = {
     }
     
 };
+
 YAHOO.namespace("tool");
 
 /**
@@ -211,7 +213,7 @@ YAHOO.namespace("tool");
  * @module yuitest
  * @namespace YAHOO.tool
  * @requires yahoo,dom,event,logger
- * @optional event-simulte
+ * @optional event-simulate
  */
 
 
@@ -276,7 +278,8 @@ YAHOO.tool.TestRunner = (function(){
             passed : 0,
             failed : 0,
             total : 0,
-            ignored : 0
+            ignored : 0,
+            duration: 0
         };
         
         //initialize results
@@ -330,7 +333,7 @@ YAHOO.tool.TestRunner = (function(){
          * @private
          * @static
          */
-        this.masterSuite /*:YAHOO.tool.TestSuite*/ = new YAHOO.tool.TestSuite("YUI Test Results");        
+        this.masterSuite = new YAHOO.tool.TestSuite("yuitests" + (new Date()).getTime());        
 
         /**
          * Pointer to the current node in the test tree.
@@ -339,7 +342,7 @@ YAHOO.tool.TestRunner = (function(){
          * @property _cur
          * @static
          */
-        this._cur = null;
+        this._cur = null;                
         
         /**
          * Pointer to the root node in the test tree.
@@ -349,6 +352,25 @@ YAHOO.tool.TestRunner = (function(){
          * @static
          */
         this._root = null;
+        
+        /**
+         * Indicates if the TestRunner is currently running tests.
+         * @type Boolean
+         * @private
+         * @property _running
+         * @static
+         */
+        this._running = false;
+        
+        /**
+         * Holds copy of the results object generated when all tests are
+         * complete.
+         * @type Object
+         * @private
+         * @property _lastResults
+         * @static
+         */
+        this._lastResults = null;
         
         //create events
         var events /*:Array*/ = [
@@ -429,8 +451,114 @@ YAHOO.tool.TestRunner = (function(){
          * Fires when the run() method is called.
          * @event begin
          */        
-        BEGIN_EVENT /*:String*/ : "begin",    
+        BEGIN_EVENT /*:String*/ : "begin",                
         
+        //-------------------------------------------------------------------------
+        // Misc Methods
+        //-------------------------------------------------------------------------   
+
+        /**
+         * Retrieves the name of the current result set.
+         * @return {String} The name of the result set.
+         * @method getName
+         */
+        getName: function(){
+            return this.masterSuite.name;
+        },         
+
+        /**
+         * The name assigned to the master suite of the TestRunner. This is the name
+         * that is output as the root's name when results are retrieved.
+         * @param {String} name The name of the result set.
+         * @return {Void}
+         * @method setName
+         */
+        setName: function(name){
+            this.masterSuite.name = name;
+        },        
+        
+        
+        //-------------------------------------------------------------------------
+        // State-Related Methods
+        //-------------------------------------------------------------------------
+
+        /**
+         * Indicates that the TestRunner is busy running tests and therefore can't
+         * be stopped and results cannot be gathered.
+         * @return {Boolean} True if the TestRunner is running, false if not.
+         * @method isRunning
+         */
+        isRunning: function(){
+            return this._running;
+        },
+        
+        /**
+         * Returns the last complete results set from the TestRunner. Null is returned
+         * if the TestRunner is running or no tests have been run.
+         * @param {Function} format (Optional) A test format to return the results in.
+         * @return {Object|String} Either the results object or, if a test format is 
+         *      passed as the argument, a string representing the results in a specific
+         *      format.
+         * @method getResults
+         */
+        getResults: function(format){
+            if (!this._running && this._lastResults){
+                if (YAHOO.lang.isFunction(format)){
+                    return format(this._lastResults);                    
+                } else {
+                    return this._lastResults;
+                }
+            } else {
+                return null;
+            }
+        },
+
+        /**
+         * Returns the coverage report for the files that have been executed.
+         * This returns only coverage information for files that have been
+         * instrumented using YUI Test Coverage and only those that were run
+         * in the same pass.
+         * @param {Function} format (Optional) A coverage format to return results in.
+         * @return {Object|String} Either the coverage object or, if a coverage
+         *      format is specified, a string representing the results in that format.
+         * @method getCoverage
+         */
+        getCoverage: function(format){
+            if (!this._running && typeof _yuitest_coverage == "object"){
+                if (YAHOO.lang.isFunction(format)){
+                    return format(_yuitest_coverage);                    
+                } else {
+                    return _yuitest_coverage;
+                }
+            } else {
+                return null;
+            }            
+        },
+        
+        //-------------------------------------------------------------------------
+        // Misc Methods
+        //-------------------------------------------------------------------------
+
+        /**
+         * Retrieves the name of the current result set.
+         * @return {String} The name of the result set.
+         * @method getName
+         */
+        getName: function(){
+            return this.masterSuite.name;
+        },         
+
+        /**
+         * The name assigned to the master suite of the TestRunner. This is the name
+         * that is output as the root's name when results are retrieved.
+         * @param {String} name The name of the result set.
+         * @return {Void}
+         * @method setName
+         */
+        setName: function(name){
+            this.masterSuite.name = name;
+        },
+
         //-------------------------------------------------------------------------
         // Test Tree-Related Methods
         //-------------------------------------------------------------------------
@@ -494,7 +622,7 @@ YAHOO.tool.TestRunner = (function(){
         _buildTestTree : function () /*:Void*/ {
         
             this._root = new TestNode(this.masterSuite);
-            this._cur = this._root;
+            //this._cur = this._root;
             
             //iterate over the items in the master suite
             for (var i=0; i < this.masterSuite.items.length; i++){
@@ -530,8 +658,10 @@ YAHOO.tool.TestRunner = (function(){
             
                 if (node.testObject instanceof YAHOO.tool.TestSuite){
                     node.testObject.tearDown();
+                    node.results.duration = (new Date()) - node._start;
                     this.fireEvent(this.TEST_SUITE_COMPLETE_EVENT, { testSuite: node.testObject, results: node.results});
                 } else if (node.testObject instanceof YAHOO.tool.TestCase){
+                    node.results.duration = (new Date()) - node._start;
                     this.fireEvent(this.TEST_CASE_COMPLETE_EVENT, { testCase: node.testObject, results: node.results});
                 }      
             } 
@@ -549,8 +679,10 @@ YAHOO.tool.TestRunner = (function(){
          * @method _next
          */
         _next : function () /*:TestNode*/ {
-        
-            if (this._cur.firstChild) {
+                
+            if (this._cur === null){
+                this._cur = this._root;
+            } else if (this._cur.firstChild) {
                 this._cur = this._cur.firstChild;
             } else if (this._cur.next) {
                 this._cur = this._cur.next;            
@@ -563,8 +695,10 @@ YAHOO.tool.TestRunner = (function(){
                 if (this._cur == this._root){
                     this._cur.results.type = "report";
                     this._cur.results.timestamp = (new Date()).toLocaleString();
-                    this._cur.results.duration = (new Date()) - this._cur.results.duration;
-                    this.fireEvent(this.COMPLETE_EVENT, { results: this._cur.results});
+                    this._cur.results.duration = (new Date()) - this._cur._start;                       
+                    this._lastResults = this._cur.results;
+                    this._running = false;
+                    this.fireEvent(this.COMPLETE_EVENT, { results: this._lastResults});
                     this._cur = null;
                 } else {
                     this._handleTestObjectComplete(this._cur);               
@@ -584,23 +718,33 @@ YAHOO.tool.TestRunner = (function(){
          * @static
          */
         _run : function () /*:Void*/ {
-        
+                                
             //flag to indicate if the TestRunner should wait before continuing
-            var shouldWait /*:Boolean*/ = false;
+            var shouldWait = false;
             
             //get the next test node
             var node = this._next();
+
             
             if (node !== null) {
+            
+                //set flag to say the testrunner is running
+                this._running = true;
+                
+                //eliminate last results
+                this._lastResult = null;            
+            
                 var testObject = node.testObject;
                 
                 //figure out what to do
                 if (YAHOO.lang.isObject(testObject)){
                     if (testObject instanceof YAHOO.tool.TestSuite){
                         this.fireEvent(this.TEST_SUITE_BEGIN_EVENT, { testSuite: testObject });
+                        node._start = new Date();
                         testObject.setUp();
                     } else if (testObject instanceof YAHOO.tool.TestCase){
                         this.fireEvent(this.TEST_CASE_BEGIN_EVENT, { testCase: testObject });
+                        node._start = new Date();
                     }
                     
                     //some environments don't support setTimeout
@@ -725,13 +869,17 @@ YAHOO.tool.TestRunner = (function(){
             
             //run the tear down
             testCase.tearDown();
+        
+            //calculate duration
+            var duration = (new Date()) - node._start;            
             
             //update results
             node.parent.results[testName] = { 
                 result: failed ? "fail" : "pass",
                 message: error ? error.getMessage() : "Test passed",
                 type: "test",
-                name: testName
+                name: testName,
+                duration: duration
             };
             
             if (failed){
@@ -797,6 +945,9 @@ YAHOO.tool.TestRunner = (function(){
 
             } else {
             
+                //mark the start time
+                node._start = new Date();
+            
                 //run the setup
                 testCase.setUp();
                 
@@ -825,7 +976,7 @@ YAHOO.tool.TestRunner = (function(){
             data.type = type;
             TestRunner.superclass.fireEvent.call(this, type, data);
         },
-        
+
         //-------------------------------------------------------------------------
         // Public Methods
         //-------------------------------------------------------------------------   
@@ -848,7 +999,7 @@ YAHOO.tool.TestRunner = (function(){
          * @static
          */
         clear : function () /*:Void*/ {
-            this.masterSuite.items = [];
+            this.masterSuite = new YAHOO.tool.TestSuite("yuitests" + (new Date()).getTime());
         },
         
         /**
@@ -865,21 +1016,28 @@ YAHOO.tool.TestRunner = (function(){
     
         /**
          * Runs the test suite.
+         * @param {Boolean} oldMode (Optional) Specifies that the <= 2.8 way of
+         *      internally managing test suites should be used.
          * @return {Void}
          * @method run
          * @static
          */
-        run : function (testObject /*:Object*/) /*:Void*/ {
+        run : function (oldMode) {
             
             //pointer to runner to avoid scope issues 
             var runner = YAHOO.tool.TestRunner;
+            
+            //if there's only one suite on the masterSuite, move it up
+            if (!oldMode && this.masterSuite.items.length == 1 && this.masterSuite.items[0] instanceof YAHOO.tool.TestSuite){
+                this.masterSuite = this.masterSuite.items[0];
+            }
 
             //build the test tree
             runner._buildTestTree();
             
             //set when the test started
-            runner._root.results.duration = (new Date()).getTime();
-            
+            runner._root._start = new Date();
+                            
             //fire the begin event
             runner.fireEvent(runner.BEGIN_EVENT);
        
@@ -891,6 +1049,7 @@ YAHOO.tool.TestRunner = (function(){
     return new TestRunner();
     
 })();
+
 YAHOO.namespace("util");
 
 //-----------------------------------------------------------------------------
@@ -1503,6 +1662,7 @@ YAHOO.util.UnexpectedError = function (cause /*:Object*/){
 
 //inherit methods
 YAHOO.lang.extend(YAHOO.util.UnexpectedError, YAHOO.util.AssertionError);
+
 //-----------------------------------------------------------------------------
 // ArrayAssert object
 //-----------------------------------------------------------------------------
@@ -1839,6 +1999,7 @@ YAHOO.util.ArrayAssert = {
     }
     
 };
+
 YAHOO.namespace("util");
 
 
@@ -1913,6 +2074,7 @@ YAHOO.util.ObjectAssert = {
         }     
     }
 };
+
 //-----------------------------------------------------------------------------
 // DateAssert object
 //-----------------------------------------------------------------------------
@@ -1967,6 +2129,350 @@ YAHOO.util.DateAssert = {
     }
     
 };
+
+YAHOO.namespace("tool");
+
+//-----------------------------------------------------------------------------
+// TestManager object
+//-----------------------------------------------------------------------------
+
+/**
+ * Runs pages containing test suite definitions.
+ * @namespace YAHOO.tool
+ * @class TestManager
+ * @static
+ */
+YAHOO.tool.TestManager = {
+
+    /**
+     * Constant for the testpagebegin custom event
+     * @property TEST_PAGE_BEGIN_EVENT
+     * @static
+     * @type string
+     * @final
+     */
+    TEST_PAGE_BEGIN_EVENT /*:String*/ : "testpagebegin",
+
+    /**
+     * Constant for the testpagecomplete custom event
+     * @property TEST_PAGE_COMPLETE_EVENT
+     * @static
+     * @type string
+     * @final
+     */
+    TEST_PAGE_COMPLETE_EVENT /*:String*/ : "testpagecomplete",
+
+    /**
+     * Constant for the testmanagerbegin custom event
+     * @property TEST_MANAGER_BEGIN_EVENT
+     * @static
+     * @type string
+     * @final
+     */
+    TEST_MANAGER_BEGIN_EVENT /*:String*/ : "testmanagerbegin",
+
+    /**
+     * Constant for the testmanagercomplete custom event
+     * @property TEST_MANAGER_COMPLETE_EVENT
+     * @static
+     * @type string
+     * @final
+     */
+    TEST_MANAGER_COMPLETE_EVENT /*:String*/ : "testmanagercomplete",
+
+    //-------------------------------------------------------------------------
+    // Private Properties
+    //-------------------------------------------------------------------------
+    
+    
+    /**
+     * The URL of the page currently being executed.
+     * @type String
+     * @private
+     * @property _curPage
+     * @static
+     */
+    _curPage /*:String*/ : null,
+    
+    /**
+     * The frame used to load and run tests.
+     * @type Window
+     * @private
+     * @property _frame
+     * @static
+     */
+    _frame /*:Window*/ : null,
+    
+    /**
+     * The logger used to output results from the various tests.
+     * @type YAHOO.tool.TestLogger
+     * @private
+     * @property _logger
+     * @static
+     */
+    _logger : null,
+    
+    /**
+     * The timeout ID for the next iteration through the tests.
+     * @type int
+     * @private
+     * @property _timeoutId
+     * @static
+     */
+    _timeoutId /*:int*/ : 0,
+    
+    /**
+     * Array of pages to load.
+     * @type String[]
+     * @private
+     * @property _pages
+     * @static
+     */
+    _pages /*:String[]*/ : [],
+    
+    /**
+     * Aggregated results
+     * @type Object
+     * @private
+     * @property _results
+     * @static
+     */
+    _results: null,
+    
+    //-------------------------------------------------------------------------
+    // Private Methods
+    //-------------------------------------------------------------------------
+    
+    /**
+     * Handles TestRunner.COMPLETE_EVENT, storing the results and beginning
+     * the loop again.
+     * @param {Object} data Data about the event.
+     * @return {Void}
+     * @private
+     * @static
+     */
+    _handleTestRunnerComplete : function (data /*:Object*/) /*:Void*/ {
+
+        this.fireEvent(this.TEST_PAGE_COMPLETE_EVENT, {
+                page: this._curPage,
+                results: data.results
+            });
+    
+        //save results
+        //this._results[this.curPage] = data.results;
+        
+        //process 'em
+        this._processResults(this._curPage, data.results);
+        
+        this._logger.clearTestRunner();
+    
+        //if there's more to do, set a timeout to begin again
+        if (this._pages.length){
+            this._timeoutId = setTimeout(function(){
+                YAHOO.tool.TestManager._run();
+            }, 1000);
+        } else {
+            this.fireEvent(this.TEST_MANAGER_COMPLETE_EVENT, this._results);
+        }
+    },
+    
+    /**
+     * Processes the results of a test page run, outputting log messages
+     * for failed tests.
+     * @return {Void}
+     * @private
+     * @static
+     */
+    _processResults : function (page /*:String*/, results /*:Object*/) /*:Void*/ {
+
+        var r = this._results;
+        
+        r.passed += results.passed;
+        r.failed += results.failed;
+        r.ignored += results.ignored;
+        r.total += results.total;
+        r.duration += results.duration;
+        
+        if (results.failed){
+            r.failedPages.push(page);
+        } else {
+            r.passedPages.push(page);
+        }
+        
+        results.name = page;
+        results.type = "page";
+        
+        r[page] = results;
+    },
+    
+    /**
+     * Loads the next test page into the iframe.
+     * @return {Void}
+     * @static
+     * @private
+     */
+    _run : function () /*:Void*/ {
+    
+        //set the current page
+        this._curPage = this._pages.shift();
+
+        this.fireEvent(this.TEST_PAGE_BEGIN_EVENT, this._curPage);
+        
+        //load the frame - destroy history in case there are other iframes that
+        //need testing
+        this._frame.location.replace(this._curPage);
+    
+    },
+        
+    //-------------------------------------------------------------------------
+    // Public Methods
+    //-------------------------------------------------------------------------
+    
+    /**
+     * Signals that a test page has been loaded. This should be called from
+     * within the test page itself to notify the TestManager that it is ready.
+     * @return {Void}
+     * @static
+     */
+    load : function () /*:Void*/ {
+        if (parent.YAHOO.tool.TestManager !== this){
+            parent.YAHOO.tool.TestManager.load();
+        } else {
+            
+            if (this._frame) {
+                //assign event handling
+                var TestRunner = this._frame.YAHOO.tool.TestRunner;
+
+                this._logger.setTestRunner(TestRunner);
+                TestRunner.subscribe(TestRunner.COMPLETE_EVENT, this._handleTestRunnerComplete, this, true);
+                
+                //run it
+                TestRunner.run();
+            }
+        }
+    },
+    
+    /**
+     * Sets the pages to be loaded.
+     * @param {String[]} pages An array of URLs to load.
+     * @return {Void}
+     * @static
+     */
+    setPages : function (pages /*:String[]*/) /*:Void*/ {
+        this._pages = pages;
+    },
+    
+    /**
+     * Begins the process of running the tests.
+     * @return {Void}
+     * @static
+     */
+    start : function () /*:Void*/ {
+
+        if (!this._initialized) {
+
+            /**
+             * Fires when loading a test page
+             * @event testpagebegin
+             * @param curPage {string} the page being loaded
+             * @static
+             */
+            this.createEvent(this.TEST_PAGE_BEGIN_EVENT);
+
+            /**
+             * Fires when a test page is complete
+             * @event testpagecomplete
+             * @param obj {page: string, results: object} the name of the
+             * page that was loaded, and the test suite results
+             * @static
+             */
+            this.createEvent(this.TEST_PAGE_COMPLETE_EVENT);
+
+            /**
+             * Fires when the test manager starts running all test pages
+             * @event testmanagerbegin
+             * @static
+             */
+            this.createEvent(this.TEST_MANAGER_BEGIN_EVENT);
+
+            /**
+             * Fires when the test manager finishes running all test pages.  External
+             * test runners should subscribe to this event in order to get the
+             * aggregated test results.
+             * @event testmanagercomplete
+             * @param obj { pages_passed: int, pages_failed: int, tests_passed: int
+             *              tests_failed: int, passed: string[], failed: string[],
+             *              page_results: {} }
+             * @static
+             */
+            this.createEvent(this.TEST_MANAGER_COMPLETE_EVENT);
+
+            //create iframe if not already available
+            if (!this._frame){
+                var frame /*:HTMLElement*/ = document.createElement("iframe");
+                frame.style.visibility = "hidden";
+                frame.style.position = "absolute";
+                document.body.appendChild(frame);
+                this._frame = frame.contentWindow || frame.contentDocument.parentWindow;
+            }
+            
+            //create test logger if not already available
+            if (!this._logger){
+                this._logger = new YAHOO.tool.TestLogger();
+            }
+
+            this._initialized = true;
+        }
+
+
+        // reset the results cache
+        this._results = {
+        
+            passed: 0,
+            failed: 0,
+            ignored: 0,
+            total: 0,
+            type: "report",
+            name: "YUI Test Results",
+            duration: 0,
+            failedPages:[],
+            passedPages:[]
+            /*
+            // number of pages that pass
+            pages_passed: 0,
+            // number of pages that fail
+            pages_failed: 0,
+            // total number of tests passed
+            tests_passed: 0,
+            // total number of tests failed
+            tests_failed: 0,
+            // array of pages that passed
+            passed: [],
+            // array of pages that failed
+            failed: [],
+            // map of full results for each page
+            page_results: {}*/
+        };
+
+        this.fireEvent(this.TEST_MANAGER_BEGIN_EVENT, null);
+        this._run();
+    
+    },
+
+    /**
+     * Stops the execution of tests.
+     * @return {Void}
+     * @static
+     */
+    stop : function () /*:Void*/ {
+        clearTimeout(this._timeoutId);
+    }
+
+};
+
+YAHOO.lang.augmentObject(YAHOO.tool.TestManager, YAHOO.util.EventProvider.prototype);
+
+
 YAHOO.namespace("tool");
 
 //-----------------------------------------------------------------------------
@@ -2151,53 +2657,273 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
     }
     
 });
+
 YAHOO.namespace("tool.TestFormat");
 
-/**
- * Returns test results formatted as a JSON string. Requires JSON utility.
- * @param {Object} result The results object created by TestRunner.
- * @return {String} An XML-formatted string of results.
- * @namespace YAHOO.tool.TestFormat
- * @method JSON
- * @static
- */
-YAHOO.tool.TestFormat.JSON = function(results /*:Object*/) /*:String*/ {
-    return YAHOO.lang.JSON.stringify(results);
-};
+(function(){
 
-/**
- * Returns test results formatted as an XML string.
- * @param {Object} result The results object created by TestRunner.
- * @return {String} An XML-formatted string of results.
- * @namespace YAHOO.tool.TestFormat
- * @method XML
- * @static
- */
-YAHOO.tool.TestFormat.XML = function(results /*:Object*/) /*:String*/ {
+    /**
+     * Returns test results formatted as a JSON string. Requires JSON utility.
+     * @param {Object} result The results object created by TestRunner.
+     * @return {String} An XML-formatted string of results.
+     * @namespace YAHOO.tool.TestFormat
+     * @method JSON
+     * @static
+     */
+    YAHOO.tool.TestFormat.JSON = function(results) {
+        return YAHOO.lang.JSON.stringify(results);
+    };
 
-    var l = YAHOO.lang;
-    var xml /*:String*/ = "<" + results.type + " name=\"" + results.name.replace(/"/g, "&quot;").replace(/'/g, "&apos;") + "\"";
-    
-    if (l.isNumber(results.duration)){
-        xml += " duration=\"" + results.duration + "\"";
-    }
-    
-    if (results.type == "test"){
-        xml += " result=\"" + results.result + "\" message=\"" + results.message + "\">";
-    } else {
-        xml += " passed=\"" + results.passed + "\" failed=\"" + results.failed + "\" ignored=\"" + results.ignored + "\" total=\"" + results.total + "\">";
-        for (var prop in results) {
-            if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
-                xml += arguments.callee(results[prop]);
+    /* (intentionally not documented)
+     * Simple escape function for XML attribute values.
+     * @param {String} text The text to escape.
+     * @return {String} The escaped text.
+     */
+    function xmlEscape(text){
+        return text.replace(/["'<>&]/g, function(c){
+            switch(c){
+                case "<":   return "&lt;";
+                case ">":   return "&gt;";
+                case "\"":  return "&quot;";
+                case "'":   return "&apos;";
+                case "&":   return "&amp;";
             }
-        }        
+        });
+    } 
+
+    /**
+     * Returns test results formatted as an XML string.
+     * @param {Object} result The results object created by TestRunner.
+     * @return {String} An XML-formatted string of results.
+     * @namespace YAHOO.tool.TestFormat
+     * @method XML
+     * @static
+     */
+    YAHOO.tool.TestFormat.XML = function(results) {
+
+        function serializeToXML(results){
+            var l   = YAHOO.lang,
+                xml = "<" + results.type + " name=\"" + xmlEscape(results.name) + "\"";
+            
+            if (l.isNumber(results.duration)){
+                xml += " duration=\"" + results.duration + "\"";
+            }
+            
+            if (results.type == "test"){
+                xml += " result=\"" + results.result + "\" message=\"" + xmlEscape(results.message) + "\">";
+            } else {
+                xml += " passed=\"" + results.passed + "\" failed=\"" + results.failed + "\" ignored=\"" + results.ignored + "\" total=\"" + results.total + "\">";
+                for (var prop in results) {
+                    if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
+                        xml += serializeToXML(results[prop]);
+                    }
+                }        
+            }
+
+            xml += "</" + results.type + ">";
+            
+            return xml;    
+        }
+
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serializeToXML(results);
+
+    };
+
+
+    /**
+     * Returns test results formatted in JUnit XML format.
+     * @param {Object} result The results object created by TestRunner.
+     * @return {String} An XML-formatted string of results.
+     * @namespace YAHOO.tool.TestFormat
+     * @method JUnitXML
+     * @static
+     */
+    YAHOO.tool.TestFormat.JUnitXML = function(results) {
+
+
+        function serializeToJUnitXML(results){
+            var l   = YAHOO.lang,
+                xml = "",
+                prop;
+                
+            switch (results.type){
+                //equivalent to testcase in JUnit
+                case "test":
+                    if (results.result != "ignore"){
+                        xml = "<testcase name=\"" + xmlEscape(results.name) + "\">";
+                        if (results.result == "fail"){
+                            xml += "<failure message=\"" + xmlEscape(results.message) + "\"><![CDATA[" + results.message + "]]></failure>";
+                        }
+                        xml+= "</testcase>";
+                    }
+                    break;
+                    
+                //equivalent to testsuite in JUnit
+                case "testcase":
+                
+                    xml = "<testsuite name=\"" + xmlEscape(results.name) + "\" tests=\"" + results.total + "\" failures=\"" + results.failed + "\">";
+                
+                    for (prop in results) {
+                        if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
+                            xml += serializeToJUnitXML(results[prop]);
+                        }
+                    }              
+                    
+                    xml += "</testsuite>";
+                    break;
+                
+                case "testsuite":
+                    for (prop in results) {
+                        if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
+                            xml += serializeToJUnitXML(results[prop]);
+                        }
+                    } 
+
+                    //skip output - no JUnit equivalent                    
+                    break;
+                    
+                case "report":
+                
+                    xml = "<testsuites>";
+                
+                    for (prop in results) {
+                        if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
+                            xml += serializeToJUnitXML(results[prop]);
+                        }
+                    }              
+                    
+                    xml += "</testsuites>";            
+                
+                //no default
+            }
+            
+            return xml;
+     
+        }
+
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serializeToJUnitXML(results);
+    };
+    
+    /**
+     * Returns test results formatted in TAP format.
+     * For more information, see <a href="http://testanything.org/">Test Anything Protocol</a>.
+     * @param {Object} result The results object created by TestRunner.
+     * @return {String} A TAP-formatted string of results.
+     * @namespace YAHOO.tool.TestFormat
+     * @method TAP
+     * @static
+     */
+    YAHOO.tool.TestFormat.TAP = function(results) {
+    
+        var currentTestNum = 1;
+
+        function serializeToTAP(results){
+            var l   = YAHOO.lang,
+                text = "";
+                
+            switch (results.type){
+
+                case "test":
+                    if (results.result != "ignore"){
+
+                        text = "ok " + (currentTestNum++) + " - " + results.name;
+                        
+                        if (results.result == "fail"){
+                            text = "not " + text + " - " + results.message;
+                        }
+                        
+                        text += "\n";
+                    } else {
+                        text = "#Ignored test " + results.name + "\n";
+                    }
+                    break;
+                    
+                case "testcase":
+                
+                    text = "#Begin testcase " + results.name + "(" + results.failed + " failed of " + results.total + ")\n";
+                                    
+                                    
+                    for (prop in results) {
+                        if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
+                            text += serializeToTAP(results[prop]);
+                        }
+                    }              
+                                                        
+                    text += "#End testcase " + results.name + "\n";
+                    
+                    
+                    break;
+                
+                case "testsuite":
+
+                    text = "#Begin testsuite " + results.name + "(" + results.failed + " failed of " + results.total + ")\n";                
+                
+                    for (prop in results) {
+                        if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
+                            text += serializeToTAP(results[prop]);
+                        }
+                    }   
+
+                    text += "#End testsuite " + results.name + "\n";
+                    break;
+
+                case "report":
+                
+                    for (prop in results) {
+                        if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
+                            text += serializeToTAP(results[prop]);
+                        }
+                    }             
+                    
+                //no default
+            }
+            
+            return text;
+     
+        }
+
+        return "1.." + results.total + "\n" + serializeToTAP(results);
+    };   
+
+})();
+
+YAHOO.namespace("tool.CoverageFormat");
+
+/**
+ * Returns the coverage report in JSON format. This is the straight
+ * JSON representation of the native coverage report.
+ * @param {Object} coverage The coverage report object.
+ * @return {String} A JSON-formatted string of coverage data.
+ * @method JSON
+ * @namespace YAHOO.tool.CoverageFormat
+ */
+YAHOO.tool.CoverageFormat.JSON = function(coverage){
+    return YAHOO.lang.JSON.stringify(coverage);
+};
+
+/**
+ * Returns the coverage report in a JSON format compatible with
+ * Xdebug. See <a href="http://www.xdebug.com/docs/code_coverage">Xdebug Documentation</a>
+ * for more information. Note: function coverage is not available
+ * in this format.
+ * @param {Object} coverage The coverage report object.
+ * @return {String} A JSON-formatted string of coverage data.
+ * @method XdebugJSON
+ * @namespace YAHOO.tool.CoverageFormat
+ */
+YAHOO.tool.CoverageFormat.XdebugJSON = function(coverage){
+    var report = {},
+        prop;
+    for (prop in coverage){
+        if (coverage.hasOwnProperty(prop)){
+            report[prop] = coverage[prop].lines;
+        }
     }
 
-    xml += "</" + results.type + ">";
-    
-    return xml;
-
+    return YAHOO.lang.JSON.stringify(report);        
 };
+
+
 YAHOO.namespace("tool");
 
 /**
@@ -2390,4 +3116,12 @@ YAHOO.tool.TestReporter.prototype = {
     }
 
 };
+
+/*Stub for future compatibility*/
+YUITest = {
+    Runner: YAHOO.tool.TestRunner,
+    ResultsFormat: YAHOO.tool.TestFormat,
+    CoverageFormat: YAHOO.tool.CoverageFormat
+};
+
 YAHOO.register("yuitest", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});

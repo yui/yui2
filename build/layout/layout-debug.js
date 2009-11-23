@@ -348,9 +348,9 @@
 
             var unit = new YAHOO.widget.LayoutUnit(el, unitConfig);
 
-            unit.on('heightChange', this.resize, this, true);
-            unit.on('widthChange', this.resize, this, true);
-            unit.on('gutterChange', this.resize, this, true);
+            unit.on('heightChange', this.resize, { unit: unit }, this);
+            unit.on('widthChange', this.resize, { unit: unit }, this);
+            unit.on('gutterChange', this.resize, { unit: unit }, this);
             this._units[cfg.position] = unit;
 
             if (this._rendered) {
@@ -378,7 +378,7 @@
         * @description Starts the chain of resize routines that will resize all the units.
         * @return {<a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>} The Layout instance
         */
-        resize: function(set) {
+        resize: function(set, info) {
             /*
             * Fixes bug #2528175
             * If the event comes from an attribute and the value hasn't changed, don't process it.
@@ -386,7 +386,13 @@
             var ev = set;
             if (ev && ev.prevValue && ev.newValue) {
                 if (ev.prevValue == ev.newValue) {
-                    set = false;
+                    if (info) {
+                        if (info.unit) {
+                            if (!info.unit.get('animate')) {
+                                set = false;
+                            }
+                        }
+                    }
                 }
             }
             set = ((set === false) ? false : true);

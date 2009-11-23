@@ -167,10 +167,10 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		swfObj.addVariable("allowedDomain", document.location.hostname);
 
 		//tell the SWF which HTML element it is in
-		swfObj.addVariable("elementID", swfID);
+		swfObj.addVariable("YUISwfId", swfID);
 
 		// set the name of the function to call when the swf has an event
-		swfObj.addVariable("eventHandler", "YAHOO.widget.FlashAdapter.eventHandler");
+		swfObj.addVariable("YUIBridgeCallback", "YAHOO.widget.FlashAdapter.eventHandler");
 		if (buttonSkin) {
 		swfObj.addVariable("buttonSkin", buttonSkin);
 		}
