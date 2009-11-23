@@ -1,6 +1,6 @@
 /**********
 *
-* Row Expansion Plugin for the YUI DataTable
+* Row Expansion DataTable for YUI 2
 * Author: gelinase@yahoo-inc.com / Eric Gelinas
 * @submodule Row Expansion
 * @class YAHOO.widget.DataTable
