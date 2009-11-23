@@ -734,6 +734,14 @@ YAHOO.widget.Node.prototype = {
                 el.className = el.className.replace(/\bygtv(([tl][pmn]h?)|(loading))\b/gi,this.getStyle());
             }
         }
+		el = Dom.get('ygtvtableel' + this.index);
+        if (el) {
+			if (this.expanded) {
+				Dom.replaceClass(el,'ygtv-collapsed','ygtv-expanded');
+			} else {
+				Dom.replaceClass(el,'ygtv-expanded','ygtv-collapsed');
+			}
+        }
     },
 
     /**
@@ -1095,6 +1103,7 @@ YAHOO.widget.Node.prototype = {
         var sb = [];
 
         sb[sb.length] = '<table id="ygtvtableel' + this.index + '" border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth' + this.depth;
+		sb[sb.length] = ' ygtv-' + (this.expanded?'expanded':'collapsed');
         if (this.enableHighlight) {
             sb[sb.length] = ' ygtv-highlight' + this.highlightState;
         }

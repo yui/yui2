@@ -687,7 +687,7 @@ YAHOO.test.YUITest_test = (function(){
         testXmlFormat : function(){
             var xml = YAHOO.tool.TestFormat.XML(this.simpleReport);
             var expectedXml = 
-                "<?xml version=\"1.0\" charset=\"UTF-8\"?>" +
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<report name=\"YUI Test Results\" passed=\"2\" failed=\"2\" ignored=\"1\" total=\"5\">" +
                     "<testsuite name=\"Some Suite\" passed=\"2\" failed=\"2\" ignored=\"1\" total=\"5\">" +
                         "<testcase name=\"Some Tests\" passed=\"2\" failed=\"2\" ignored=\"1\" total=\"5\">" +
@@ -707,7 +707,7 @@ YAHOO.test.YUITest_test = (function(){
         testJUnitXmlFormat : function(){
             var xml = YAHOO.tool.TestFormat.JUnitXML(this.simpleReport);
             var expectedXml = 
-                "<?xml version=\"1.0\" charset=\"UTF-8\"?>" +
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<testsuites>" +
                     "<testsuite name=\"Some Tests\" tests=\"5\" failures=\"2\">" + 
                         "<testcase name=\"test1\"></testcase>" +
@@ -723,7 +723,24 @@ YAHOO.test.YUITest_test = (function(){
             
             Assert.areEqual(expectedXml, xml, "JUnit XML formatting is incorrect.");
         
-        }        
+        },
+
+        testTAPFormat : function(){
+            var text = YAHOO.tool.TestFormat.TAP(this.simpleReport);
+            var expectedText = 
+                "1..5\n" + 
+                "#Begin testsuite Some Suite(2 failed of 5)\n" +
+                "#Begin testcase Some Tests(2 failed of 5)\n" + 
+                "ok 1 - test1\n" +
+                "ok 2 - test2\n" + 
+                "#Ignored test test3\n" + 
+                "not ok 3 - test4 - Test failed.\n" + 
+                "not ok 4 - test5 - Test failed.\n" +
+                "#End testcase Some Tests\n" + 
+                "#End testsuite Some Suite\n";  
+            
+            Assert.areEqual(expectedText, text, "TAP formatting is incorrect.");
+        }
     }));
     
     reportSuite.add(new YAHOO.tool.TestCase({
@@ -1045,6 +1062,24 @@ YAHOO.test.YUITest_test = (function(){
             YAHOO.util.Assert.fail("This test should not be run.");
         }
         
+    }));
+    
+    //-------------------------------------------------------------------------
+    // TestRunner Tests
+    //-------------------------------------------------------------------------
+
+    reportSuite.add(new YAHOO.tool.TestCase({
+ 
+        name: "TestRunner Tests",  
+
+        
+        testRunnerIsRunning: function(){
+            var url = "http://www.yahoo.com/";
+            this.reporter = new YAHOO.tool.TestReporter(url);
+            
+            Assert.isTrue(YAHOO.tool.TestRunner.isRunning(), "TestRunner should be running.");
+            Assert.isNull(YAHOO.tool.TestRunner.getResults(), "Results should be null while TestRuner is running.");        
+        }
     }));
     
     //-------------------------------------------------------------------------

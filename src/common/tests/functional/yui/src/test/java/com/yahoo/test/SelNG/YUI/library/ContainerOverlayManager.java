@@ -8,7 +8,7 @@ import static org.testng.Assert.*;
 
 public class ContainerOverlayManager extends SelNGBase {
 
-	private static final int MOVE_X = 600;
+	private static final int MOVE_X = 100;
 	private static final int MOVE_Y = 150;
 
 	private static final String Z_INDEX = "z-index";
@@ -21,60 +21,60 @@ public class ContainerOverlayManager extends SelNGBase {
 		//assertEquals(session().getTitle(), "");
 
 		// Check initial state
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel3_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel3_c", "style", "visibility: hidden;"));
 		// nothing should be in focus
-		assertFalse(hasAttribute("panel1_c", "class", "focused"));
-		assertFalse(hasAttribute("panel2_c", "class", "focused"));
-		assertFalse(hasAttribute("panel3_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel1_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel2_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel3_c", "class", "focused"));
 		
 		// Click on Show panel 1
 		session().click("show1");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel3_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel3_c", "style", "visibility: hidden;"));
 		// nothing should be in focus
-		assertFalse(hasAttribute("panel1_c", "class", "focused"));
-		assertFalse(hasAttribute("panel2_c", "class", "focused"));
-		assertFalse(hasAttribute("panel3_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel1_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel2_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel3_c", "class", "focused"));
 		
 		// Click on show panel 2
 		session().click("show2");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel3_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel3_c", "style", "visibility: hidden;"));
 		// nothing should be in focus
-		assertFalse(hasAttribute("panel1_c", "class", "focused"));
-		assertFalse(hasAttribute("panel2_c", "class", "focused"));
-		assertFalse(hasAttribute("panel3_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel1_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel2_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel3_c", "class", "focused"));
 
 		// focus panel 1 and bring it to the top and check for focus
 		session().mouseDown("panel1_c");
-		assertTrue(hasAttribute("panel1_c", "class", "focused"));
-		assertFalse(hasAttribute("panel2_c", "class", "focused"));
-		assertFalse(hasAttribute("panel3_c", "class", "focused"));
+		assertTrue(Util.hasAttribute("panel1_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel2_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel3_c", "class", "focused"));
 		
 		// Click on Show panel 3
 		session().click("show3");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel3_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel1_c", "class", "focused"));
-		assertFalse(hasAttribute("panel2_c", "class", "focused"));
-		assertFalse(hasAttribute("panel3_c", "class", "focused"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel3_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel1_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel2_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel3_c", "class", "focused"));
 		
 		// Focus panel 2
 		session().mouseDown("panel2_c");
-		assertFalse(hasAttribute("panel1_c", "class", "focused"));
-		assertTrue(hasAttribute("panel2_c", "class", "focused"));
-		assertFalse(hasAttribute("panel3_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel1_c", "class", "focused"));
+		assertTrue(Util.hasAttribute("panel2_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel3_c", "class", "focused"));
 		
 		// Focus panel 3
 		session().mouseDown("panel3_c");
-		assertFalse(hasAttribute("panel1_c", "class", "focused"));
-		assertFalse(hasAttribute("panel2_c", "class", "focused"));
-		assertTrue(hasAttribute("panel3_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel1_c", "class", "focused"));
+		assertFalse(Util.hasAttribute("panel2_c", "class", "focused"));
+		assertTrue(Util.hasAttribute("panel3_c", "class", "focused"));
 		
 		// Move the panels
 		checkMove("panel1_h");
@@ -90,21 +90,21 @@ public class ContainerOverlayManager extends SelNGBase {
 		
 		// Hide all the panels
 		session().click("hideAll");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel3_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel3_c", "style", "visibility: hidden;"));
 		
 		// Show all the panels
 		session().click("showAll");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel3_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel3_c", "style", "visibility: visible;"));
 
 		// Bring panel1 to the top
 		session().click("focus1");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel3_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel3_c", "style", "visibility: visible;"));
 
 		// At this point, panel1 should be on the top
 		p1Z = getZindex("panel1_c");
@@ -114,9 +114,9 @@ public class ContainerOverlayManager extends SelNGBase {
 		
 		// Bring panel2 to the top
 		session().click("focus2");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel3_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel3_c", "style", "visibility: visible;"));
 
 		// At this point, panel2 should be on the top
 		p1Z = getZindex("panel1_c");
@@ -126,9 +126,9 @@ public class ContainerOverlayManager extends SelNGBase {
 		
 		// Bring panel3 to the top
 		session().click("focus3");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel3_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel3_c", "style", "visibility: visible;"));
 
 		// At this point, panel3 should be on the top
 		p1Z = getZindex("panel1_c");
@@ -138,21 +138,21 @@ public class ContainerOverlayManager extends SelNGBase {
 		
 		// Use the close icon to hide the panels starting with 3
 		session().click("//div[@id='panel3']/a");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel3_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel3_c", "style", "visibility: hidden;"));
 
 		// Hide panel2
 		session().click("//div[@id='panel2']/a");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: visible;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel3_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: visible;"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel3_c", "style", "visibility: hidden;"));
 
 		// Hide panel1
 		session().click("//div[@id='panel1']/a");
-		assertTrue(hasAttribute("panel1_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel2_c", "style", "visibility: hidden;"));
-		assertTrue(hasAttribute("panel3_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel1_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel2_c", "style", "visibility: hidden;"));
+		assertTrue(Util.hasAttribute("panel3_c", "style", "visibility: hidden;"));
 
 	}
 
@@ -172,7 +172,7 @@ public class ContainerOverlayManager extends SelNGBase {
 	
 	public static int getZindex(String el) {
 	
-		String style = session().getAttribute(el+"@style");
+		String style = (session().getAttribute(el+"@style")).toLowerCase();
 		assertTrue(style.contains(Z_INDEX));
 		String[] styles = style.split(";");
 
@@ -189,11 +189,5 @@ public class ContainerOverlayManager extends SelNGBase {
 	
 	}
 	
-	public static boolean hasAttribute(String elXpath, String attributeName, String attributeValue) {
-		
-		String attribute = session().getAttribute(elXpath + "@" + attributeName);
-		return ((attribute != null) && (attribute.contains(attributeValue)));
-
-	}
 
 }

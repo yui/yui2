@@ -20,16 +20,13 @@ YAHOO.namespace("tool.TestFormat");
      * @return {String} The escaped text.
      */
     function xmlEscape(text){
-        return text.replace(/"'<>/g, function(c){
+        return text.replace(/["'<>&]/g, function(c){
             switch(c){
-                case "\"":
-                    return "&quot;";
-                case "'":
-                    return "&apos;";
-                case "<":
-                    return "&lt;";
-                case ">":
-                    return "&gt;";
+                case "<":   return "&lt;";
+                case ">":   return "&gt;";
+                case "\"":  return "&quot;";
+                case "'":   return "&apos;";
+                case "&":   return "&amp;";
             }
         });
     } 
@@ -68,7 +65,7 @@ YAHOO.namespace("tool.TestFormat");
             return xml;    
         }
 
-        return "<?xml version=\"1.0\" charset=\"UTF-8\"?>" + serializeToXML(results);
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serializeToXML(results);
 
     };
 
@@ -144,8 +141,88 @@ YAHOO.namespace("tool.TestFormat");
      
         }
 
-        return "<?xml version=\"1.0\" charset=\"UTF-8\"?>" + serializeToJUnitXML(results);
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + serializeToJUnitXML(results);
     };
-  
+    
+    /**
+     * Returns test results formatted in TAP format.
+     * For more information, see <a href="http://testanything.org/">Test Anything Protocol</a>.
+     * @param {Object} result The results object created by TestRunner.
+     * @return {String} A TAP-formatted string of results.
+     * @namespace YAHOO.tool.TestFormat
+     * @method TAP
+     * @static
+     */
+    YAHOO.tool.TestFormat.TAP = function(results) {
+    
+        var currentTestNum = 1;
+
+        function serializeToTAP(results){
+            var l   = YAHOO.lang,
+                text = "";
+                
+            switch (results.type){
+
+                case "test":
+                    if (results.result != "ignore"){
+
+                        text = "ok " + (currentTestNum++) + " - " + results.name;
+                        
+                        if (results.result == "fail"){
+                            text = "not " + text + " - " + results.message;
+                        }
+                        
+                        text += "\n";
+                    } else {
+                        text = "#Ignored test " + results.name + "\n";
+                    }
+                    break;
+                    
+                case "testcase":
+                
+                    text = "#Begin testcase " + results.name + "(" + results.failed + " failed of " + results.total + ")\n";
+                                    
+                                    
+                    for (prop in results) {
+                        if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
+                            text += serializeToTAP(results[prop]);
+                        }
+                    }              
+                                                        
+                    text += "#End testcase " + results.name + "\n";
+                    
+                    
+                    break;
+                
+                case "testsuite":
+
+                    text = "#Begin testsuite " + results.name + "(" + results.failed + " failed of " + results.total + ")\n";                
+                
+                    for (prop in results) {
+                        if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
+                            text += serializeToTAP(results[prop]);
+                        }
+                    }   
+
+                    text += "#End testsuite " + results.name + "\n";
+                    break;
+
+                case "report":
+                
+                    for (prop in results) {
+                        if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
+                            text += serializeToTAP(results[prop]);
+                        }
+                    }             
+                    
+                //no default
+            }
+            
+            return text;
+     
+        }
+
+        return "1.." + results.total + "\n" + serializeToTAP(results);
+    };   
 
 })();

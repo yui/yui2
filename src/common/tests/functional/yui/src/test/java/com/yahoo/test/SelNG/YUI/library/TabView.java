@@ -2,123 +2,98 @@ package com.yahoo.test.SelNG.YUI.library;
 
 import com.yahoo.test.SelNG.framework.core.SelNGBase;
 import static com.yahoo.test.SelNG.framework.util.ThreadSafeSeleniumSessionStorage.session;
-// import static com.thoughtworks.selenium.*;
-import static org.testng.Assert.assertEquals;
-import java.util.Properties;
-import java.io.FileInputStream;
-import java.io.IOException;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+import static com.yahoo.test.SelNG.YUI.library.Util.*;
 
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
+import java.util.*;
+
+import org.w3c.dom.*;
+
+import javax.xml.xpath.*;
+
 
 public class TabView extends SelNGBase {
+	
+	private static final String SELECTED_CLASS = "selected";
+	private static final String HIDDEN_CLASS = "yui-hidden";
 
-/******	
-	public static void tabTest() {
-		session().open("http://developer.yahoo.com/yui/examples/tabview/frommarkup_clean.html");
-		session().click("//div[@id='demo']/ul/li[1]/a/em");
-		session().click("//div[@id='demo']/ul/li[2]/a/em");
-		session().click("//div[@id='demo']/ul/li[3]/a/em");
-		session().click("//div[@id='demo']/ul/li[2]/a/em");
-		session().click("//div[@id='demo']/ul/li[1]/a/em");
-	}
-*****/
 
-	public static void tabTest() {
-
-		/*******		
-		Properties hostProperties = new Properties();
-	    String hostName = "";
-	    try {
-	        hostProperties.load(new FileInputStream("host.properties"));
-            hostName = hostProperties.getProperty("DOMAIN");
-	    
-	    } catch (IOException e) {
-	    	//e.printStackTrace();
-	    }
-	    ******/
-
+	@SuppressWarnings("unchecked")
+	public static void tabTest(String uri, Document doc) throws Exception {
 		
+		ArrayList theTabClickLocators = new ArrayList();
+		ArrayList theTabLiLocators = new ArrayList();
+		ArrayList theContentLocators = new ArrayList();
+		ArrayList theSelecteds = new ArrayList();
 		
-//		session().open(hostName + "/yui2/latest_build/examples/tabview/frommarkup_clean.html"); 	    
-	    session().open("http://presentbright.corp.yahoo.com/yui2/latest_build/examples/tabview/frommarkup_clean.html");
-	    assertEquals(session().getTitle(), "Build from Markup");
+		session().open(uri);
 
-	    
-	    session().click("//a[@href='#tab1']/em");
+		XPathFactory factory = XPathFactory.newInstance();
+	    XPath xpath = factory.newXPath();
+	    XPathExpression containerExpr = xpath.compile("//container");
+	    Object containerResult = containerExpr.evaluate(doc, XPathConstants.NODESET);
+	    NodeList containerNodes = (NodeList) containerResult;
+	    //int numberOfContainers = containerNodes.getLength();
+	    String containerLocator = "";
+	    for (int i=0; i<containerNodes.getLength(); i++) {
+	    	NamedNodeMap containerAttributes = containerNodes.item(i).getAttributes();
+	    	//int numberOfContainerAttributes = containerAttributes.getLength();
+	    	containerLocator = containerAttributes.getNamedItem("locator").getNodeValue();
+	    	int ii = i+1;
+	    	XPathExpression tabExpr = xpath.compile("//container["+ii+"]/tab");
+	    	Object tabResult = tabExpr.evaluate(doc, XPathConstants.NODESET);
+	    	NodeList tabNodes = (NodeList) tabResult;
+	    	//int numberOfTabs = tabNodes.getLength();
+	    	for (int k=0; k<tabNodes.getLength(); k++) {
+		    	NamedNodeMap tabAttributes = tabNodes.item(k).getAttributes();
+		    	//int numberOfTabAttributes = tabAttributes.getLength();
+		    	String tabClickLocator = tabAttributes.getNamedItem("tabClickLocator").getNodeValue();
+		    	theTabClickLocators.add(k, tabClickLocator);
+		    	String tabLiLocator = tabAttributes.getNamedItem("tabLiLocator").getNodeValue();
+		    	theTabLiLocators.add(k, tabLiLocator);
+		    	String contentLocator = tabAttributes.getNamedItem("contentLocator").getNodeValue();
+		    	theContentLocators.add(k, contentLocator);
+		    	String selected = tabAttributes.getNamedItem("selected").getNodeValue();
+		    	theSelecteds.add(k, selected);
+	    	}
 
-	    try {
-	    	Robot robot = new Robot();
-	    	robot.keyPress(KeyEvent.VK_TAB);
-	    } catch(Exception e) {
-	    	e.printStackTrace();
+		    testContainer(containerLocator, theTabClickLocators, theTabLiLocators, theContentLocators, theSelecteds);
+		    theTabClickLocators.clear();
+		    theTabLiLocators.clear();
+		    theContentLocators.clear();
+		    theSelecteds.clear();
+		    
 	    }
-	    
-	    /*************
-	    try {
-	 
-	    	Thread.sleep(1000);
-	    	Robot robot = new Robot();
-	    	System.out.println("something");
-	    	robot.keyPress(KeyEvent.VK_TAB);
-	    	robot.keyPress(KeyEvent.VK_ENTER);
-	    	System.out.println("after");
-	    	Thread.sleep(1000);
-	    } catch(Exception e) {
-	    	e.printStackTrace();
-	    }
-	    ****************/
-	    
-	    
-	    /*******
-	    //session().windowMaximize();
-        //session().waitForPageToLoad("30000");
-        //session().windowFocus();
-	     *****/
 
-	
-	    /********
-	    
-	    assertEquals(session().getAttribute("//div[@id='demo']/ul/li[1]@class"), "selected");
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[2]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[3]@class"), null);
-	//assertEquals(session().getExpression("1"), "1");
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[1]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[2]@class"), "yui-hidden");
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[3]@class"), "yui-hidden");
-	session().click("//a[@href='#tab2']/em");
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[2]@class"), "selected");
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[1]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[3]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[2]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[1]@class"), "yui-hidden");
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[3]@class"), "yui-hidden");
-	session().click("//a[@href='#tab3']/em");
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[3]@class"), "selected");
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[1]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[2]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[3]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[1]@class"), "yui-hidden");
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[2]@class"), "yui-hidden");
-	session().click("//a[@href='#tab2']/em");
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[2]@class"), "selected");
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[1]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[3]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[2]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[1]@class"), "yui-hidden");
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[3]@class"), "yui-hidden");
-	session().click("//a[@href='#tab1']/em");
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[1]@class"), "selected");
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[2]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/ul/li[3]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[1]@class"), null);
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[2]@class"), "yui-hidden");
-	assertEquals(session().getAttribute("//div[@id='demo']/div/div[3]@class"), "yui-hidden");
-	// How to check for tab key??
-
-	************/
-	
-	
 	}
+
+	private static void testContainer(String containerLocator, ArrayList theTabClickLocators, ArrayList theTabLiLocators, ArrayList theContentLocators, ArrayList theSelecteds) {
+
+		int numberOfTabs = theTabClickLocators.size();
+		
+		for (int i=0; i<numberOfTabs; i++) {
+
+			// Click on tab 
+			String s = (String)theTabClickLocators.get(i);
+			session().click(s);
+			//session().click((String)theTabClickLocators.get(i));
+
+			// Check for correct classes
+			for (int k=0; k<numberOfTabs; k++) {
+				if (i == k) {
+					assertTrue(hasClass((String)theTabLiLocators.get(k), SELECTED_CLASS));
+					assertFalse(hasClass((String)theContentLocators.get(k), HIDDEN_CLASS));
+				} else {
+					assertFalse(hasClass((String)theTabLiLocators.get(k), SELECTED_CLASS));
+					assertTrue(hasClass((String)theContentLocators.get(k), HIDDEN_CLASS));
+					
+				}
+				
+			}
+		}
+
+	}
+
 
 }

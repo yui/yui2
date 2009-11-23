@@ -16,6 +16,13 @@ public class Util {
 		return ((attribute != null) && (attribute.contains(attributeValue.toLowerCase())));
 		
 	}
+	
+	public static boolean hasClass(String elXpath, String className) {
+		
+		String classAttribute = session().getAttribute(elXpath + "@class");
+		return ((classAttribute != null) && (classAttribute.contains(className)));
+	}
+
 
 	/**
 	 * The raw Java parseInt() will not handle a leading plus sign.
@@ -35,7 +42,7 @@ public class Util {
 	 * 
 	 * @return
 	 */
-	private static int getViewportHeight() {
+	public static int getViewportHeight() {
 		
 		String js = 
 			" var w = this.browserbot.getCurrentWindow(); " +
@@ -62,7 +69,7 @@ public class Util {
 	 * 
 	 * @return
 	 */
-	private static int getViewportWidth() {
+	public static int getViewportWidth() {
 
 		String js = 
 			" var w = this.browserbot.getCurrentWindow(); " +
@@ -84,6 +91,127 @@ public class Util {
 		//return Integer.parseInt(session().getEval("this.browserbot.getCurrentWindow().document.documentElement.clientWidth"));
 	}
 
+	/**
+	 * 
+	 * 
+	 */
+	public static void setViewportHeight(int h) {
+	
+		String js = 
+			" var w = this.browserbot.getCurrentWindow(); " +
+			" var myHeight = 0; " + 
+		    " if( typeof( w.innerHeight ) == 'number' ) { " +
+			"   w.innerWidth = " + h + ";" +
+			" } else if( w.document.documentElement && w.document.documentElement.clientHeight ) { " + 
+			"   w.document.documentElement.clientHeight = " + h + ";" +
+			" } else if( w.document.body && w.document.body.clientHeight ) { " +
+			"   w.document.body.clientHeight = " + h + ";" +
+			" } "; 
+
+		session().getEval(js);
+		
+	}
+	
+	/**
+	 * 
+	 * 
+	 */
+	public static void setViewportWidth(int w) {
+	
+		String js = 
+			" var w = this.browserbot.getCurrentWindow(); " +
+			" var myWidth = 0; " + 
+		    " if( typeof( w.innerWidth ) == 'number' ) { " +
+			"   w.innerWidth = " + w + ";" +
+			" } else if( w.document.documentElement && w.document.documentElement.clientWidth ) { " + 
+			"   w.document.documentElement.clientWidth = " + w + ";" +
+			" } else if( w.document.body && w.document.body.clientWidth ) { " +
+			"   w.document.body.clientWidth = " + w + ";" +
+			" } "; 
+
+		session().getEval(js);
+		
+	}
+	
+	/**
+	 * 
+	 * 
+	 */
+	public static int getScrollX() {
+		
+		String js =
+			" var w = this.browserbot.getCurrentWindow(); " +
+			" var scrOfX = 0; " +
+			" if( typeof( w.pageXOffset ) == 'number' ) { " +
+			"   scrOfX = w.pageXOffset; " +
+			" } else if( w.document.body && w.document.body.scrollLeft ) { " +
+			"   scrOfX = w.document.body.scrollLeft; " +
+			" } else if( w.document.documentElement && w.document.documentElement.scrollLeft ) { " +
+			"   scrOfX = w.document.documentElement.scrollLeft; " +
+			" } " +
+			" scrOfX; ";
+		
+		return Integer.parseInt(session().getEval(js));
+		
+	}
+	
+	/**
+	 * 
+	 * 
+	 */
+	public static int getScrollY() {
+
+		String js =
+			" var w = this.browserbot.getCurrentWindow(); " +
+			" var scrOfY = 0; " +
+			" if( typeof( w.pageYOffset ) == 'number' ) { " +
+			"   scrOfY = w.pageYOffset; " +
+			" } else if( w.document.body && w.document.body.scrollTop ) { " +
+			"   scrOfY = w.document.body.scrollTop; " +
+			" } else if( w.document.documentElement && w.document.documentElement.scrollTop ) { " +
+			"   scrOfY = w.document.documentElement.scrollTop; " +
+			" } " +
+			" scrOfY; ";
+			
+		return Integer.parseInt(session().getEval(js));
+
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public static void scrollWindow(int x, int y) {
+
+		String js = 
+			" var w = this.browserbot.getCurrentWindow(); " +
+			" if( typeof( w.pageYOffset ) == 'number' ) { " +
+			"   w.pageYOffset = " + y + ";" +
+			"   w.pageXOffset = " + x + ";" +
+			" } else if( w.document.body && ( w.document.body.scrollLeft || w.document.body.scrollTop ) ) { " +
+			"   w.document.body.scrollTop = " + y + ";" +
+			"   w.document.body.scrollLeft = " + x + ";" +
+			" } else if( w.document.documentElement && ( w.document.documentElement.scrollLeft || w.document.documentElement.scrollTop ) ) { " +
+			"   w.document.documentElement.scrollTop = " + y + ";" +
+			"   w.document.documentElement.scrollLeft = " + x + ";" +
+			" } ";
+
+		session().getEval(js);
+		
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public static boolean isIE6() {
+		
+		return false;
+		
+	}
+	
 	/******
 	 * function getScrollXY() {
   var scrOfX = 0, scrOfY = 0;
