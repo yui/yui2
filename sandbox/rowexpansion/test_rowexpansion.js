@@ -80,6 +80,7 @@
 					{ rowExpansionTemplate : template }
 				),
 
+				columns = myDataTable.getColumnSet().flat,
 				records = myDataTable.getRecordSet().getRecords(),
 				record_ids = [];
 
@@ -89,7 +90,7 @@
 
 		};
 
-		return { oDT : myDataTable, oDS : myDataSource, eContainer : Dom.get( 'testTable' ), aIds : record_ids }
+		return { oDT : myDataTable, oDS : myDataSource, eContainer : Dom.get( 'testTable' ), aIds : record_ids, aCols : columns }
 
 	};
 
@@ -103,10 +104,6 @@
 		}
 
 	};
-
-	YTest.RowExpansionCoreSuite.setUp = function(){
-		//
-	}
 
 	YTest.RowExpansionCoreSuite.add( new Ytool.TestCase({
 
@@ -555,10 +552,73 @@
 		}
 
 	}) );
+	
+	YTest.RowExpansionCoreSuite.add( new Ytool.TestCase({
 
-	YTest.RowExpansionCoreSuite.tearDown = function(){
-		//
-	}
+		name : "Sort Table",
+
+		setUp : function () {
+
+			this.table = YTest.RowExpansionCoreSuite.tableMaker();
+
+			this.data_table = this.table.oDT;
+
+			//Expand the first and third records
+			this.data_table.expandRow( this.table.aIds[ 0 ].getId() );
+			this.data_table.expandRow( this.table.aIds[ 1 ].getId() );
+			
+			//Sort column
+			this._columnHasSorted = false;
+			
+			this.data_table.subscribe( 'columnSortEvent', function(){ //The API doc says this is "Fired when a column is sorted"
+				this._columnHasSorted = true;
+			},null,this);
+			
+			this.data_table.sortColumn( this.table.aCols[0], YAHOO.widget.DataTable.CLASS_DESC );
+			
+			//Restore rows
+			this.data_table.restoreExpandedRows();
+			
+		},
+
+		testSortCompleted : function () {
+			
+			Assert.isTrue(
+				this._columnHasSorted,
+				"Column has not been sorted"
+			);
+
+		},
+
+		testIsReExpanded : function () {
+
+			ArrayAssert.contains(
+				true,
+				Dom.hasClass( this.data_table.getBody().getElementsByTagName( 'tr' ), 'yui-dt-expansion' ),
+				'There are not rows with "yui-dt-expansion" in the DataTable instance'
+			);
+			
+			ArrayAssert.contains(
+				true,
+				Dom.hasClass( this.data_table.getBody().getElementsByTagName( 'tr' ), 'yui-dt-expanded' ),
+				'There are not rows with class "yui-dt-expanded" in this DataTable instance'
+			);
+
+			ArrayAssert.isNotEmpty(
+				this.data_table.a_rowExpansions,
+				'The "a_rowExpansions" array is empty'
+			);
+
+		},
+
+		tearDown : function () {
+
+			YTest.RowExpansionCoreSuite.tableDestroyer( this.table );
+
+		}
+
+	}) );
+
 
 	Event.onDOMReady(function (){
 		//create the logger
