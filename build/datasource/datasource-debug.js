@@ -2580,7 +2580,6 @@ util.DataSource = function(oLiveData, oConfigs) {
 lang.augmentObject(util.DataSource, DS);
 
 })();
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -2597,37 +2596,55 @@ lang.augmentObject(util.DataSource, DS);
  YAHOO.util.Number = {
  
      /**
-     * Takes a native JavaScript Number and formats to string for display to user.
+     * Takes a native JavaScript Number and formats to a string for display.
      *
      * @method format
      * @param nData {Number} Number.
      * @param oConfig {Object} (Optional) Optional configuration values:
      *  <dl>
-     *   <dt>prefix {String}</dd>
-     *   <dd>String prepended before each number, like a currency designator "$"</dd>
-     *   <dt>decimalPlaces {Number}</dd>
-     *   <dd>Number of decimal places to round.</dd>
-     *   <dt>decimalSeparator {String}</dd>
-     *   <dd>Decimal separator</dd>
-     *   <dt>thousandsSeparator {String}</dd>
-     *   <dd>Thousands separator</dd>
-     *   <dt>suffix {String}</dd>
-     *   <dd>String appended after each number, like " items" (note the space)</dd>
+     *   <dt>format</dt>
+     *   <dd>String used as a template for formatting positive numbers.
+     *   {placeholders} in the string are applied from the values in this
+     *   config object. {number} is used to indicate where the numeric portion
+     *   of the output goes.  For example &quot;{prefix}{number} per item&quot;
+     *   might yield &quot;$5.25 per item&quot;.  The only required
+     *   {placeholder} is {number}.</dd>
+     *
      *   <dt>negativeFormat</dt>
-     *   <dd>String used as a guide for how to indicate negative numbers.  The first '#' character in the string will be replaced by the number.  Default '-#'.</dd>
+     *   <dd>Like format, but applied to negative numbers.  If set to null,
+     *   defaults from the configured format, prefixed with -.  This is
+     *   separate from format to support formats like &quot;($12,345.67)&quot;.
+     *
+     *   <dt>prefix {String} (deprecated, use format/negativeFormat)</dt>
+     *   <dd>String prepended before each number, like a currency designator "$"</dd>
+     *   <dt>decimalPlaces {Number}</dt>
+     *   <dd>Number of decimal places to round.</dd>
+     *   <dt>decimalSeparator {String}</dt>
+     *   <dd>Decimal separator</dd>
+     *   <dt>thousandsSeparator {String}</dt>
+     *   <dd>Thousands separator</dd>
+     *   <dt>suffix {String} (deprecated, use format/negativeFormat)</dt>
+     *   <dd>String appended after each number, like " items" (note the space)</dd>
      *  </dl>
      * @return {String} Formatted number for display. Note, the following values
      * return as "": null, undefined, NaN, "".
      */
     format : function(n, cfg) {
-        if (!isFinite(+n)) {
+        if (n === '' || n === null || !isFinite(n)) {
             return '';
         }
 
-        n   = !isFinite(+n) ? 0 : +n;
+        n   = +n;
         cfg = YAHOO.lang.merge(YAHOO.util.Number.format.defaults, (cfg || {}));
 
-        var neg    = n < 0,        absN   = Math.abs(n),
+        if (!cfg.negativeFormat) {
+            cfg.negativeFormat = '-' + cfg.format;
+        } else if (cfg.negativeFormat.indexOf('#') > -1) {
+            // for backward compatibility of negativeFormat supporting '-#'
+            cfg.negativeFormat = cfg.negativeFormat.replace(/#/, cfg.format);
+        }
+
+        var absN   = Math.abs(n),
             places = cfg.decimalPlaces,
             sep    = cfg.thousandsSeparator,
             s, bits, i;
@@ -2639,41 +2656,50 @@ lang.augmentObject(util.DataSource, DS);
 
             // avoid 123 vs decimalPlaces -4 (should return "0")
             if (i > 0) {
-                    // leverage toFixed by making 123 => 0.123 for the rounding
-                    // operation, then add the appropriate number of zeros back on
+                // leverage toFixed by making 123 => 0.123 for the rounding
+                // operation, then add the appropriate number of zeros back on
                 s = Number('.' + s).toFixed(i).slice(2) +
                     new Array(s.length - i + 1).join('0');
             } else {
                 s = "0";
             }
-        } else {        // There is a bug in IE's toFixed implementation:
+        } else {
+            // There is a bug in IE's toFixed implementation:
             // for n in {(-0.94, -0.5], [0.5, 0.94)} n.toFixed() returns 0
             // instead of -1 and 1. Manually handle that case.
             s = absN < 1 && absN >= 0.5 && !places ? '1' : absN.toFixed(places);
         }
 
+        bits  = s.split(/\D/);
+
         if (absN >= 1000) {
-            bits  = s.split(/\D/);
             i  = bits[0].length % 3 || 3;
 
             bits[0] = bits[0].slice(0,i) +
                       bits[0].slice(i).replace(/(\d{3})/g, sep + '$1');
 
-            s = bits.join(cfg.decimalSeparator);
         }
 
-        s = cfg.prefix + s + cfg.suffix;
-
-        return neg ? cfg.negativeFormat.replace(/#/,s) : s;
+        return YAHOO.util.Number.format._applyFormat(
+            (n < 0 ? cfg.negativeFormat : cfg.format),
+            bits.join(cfg.decimalSeparator),
+            cfg);
     }
 };
+
 YAHOO.util.Number.format.defaults = {
+    format : '{prefix}{number}{suffix}',
+    negativeFormat : null, // defaults to -(format)
     decimalSeparator : '.',
     decimalPlaces    : null,
-    thousandsSeparator : '',
-    prefix : '',
-    suffix : '',
-    negativeFormat : '-#'
+    thousandsSeparator : ''
+};
+
+YAHOO.util.Number.format._applyFormat = function (tmpl, num, data) {
+    return tmpl.replace(/\{(\w+)\}/g, function (_, token) {
+        return token === 'number' ? num :
+               token in data ? data[token] : '';
+    });
 };
 
 
@@ -3057,5 +3083,4 @@ var xPad=function (x, pad, r)
  YAHOO.util.DateLocale['en-AU'] = YAHOO.lang.merge(YAHOO.util.DateLocale['en']);
 
 })();
-
 YAHOO.register("datasource", YAHOO.util.DataSource, {version: "@VERSION@", build: "@BUILD@"});
