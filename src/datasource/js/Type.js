@@ -37,10 +37,13 @@
      *   <dd>String prepended before each number, like a currency designator "$"</dd>
      *   <dt>decimalPlaces {Number}</dt>
      *   <dd>Number of decimal places to round.</dd>
+     *
      *   <dt>decimalSeparator {String}</dt>
      *   <dd>Decimal separator</dd>
+     *
      *   <dt>thousandsSeparator {String}</dt>
      *   <dd>Thousands separator</dd>
+     *
      *   <dt>suffix {String} (deprecated, use format/negativeFormat)</dt>
      *   <dd>String appended after each number, like " items" (note the space)</dd>
      *  </dl>
@@ -105,6 +108,25 @@
     }
 };
 
+/**
+ * <p>Default values for Number.format behavior.  Override properties of this
+ * object if you want every call to Number.format in your system to use
+ * specific presets.</p>
+ *
+ * <p>Available keys include:</p>
+ * <ul>
+ *   <li>format</li>
+ *   <li>negativeFormat</li>
+ *   <li>decimalSeparator</li>
+ *   <li>decimalPlaces</li>
+ *   <li>thousandsSeparator</li>
+ *   <li>prefix/suffix or any other token you want to use in the format templates</li>
+ * </ul>
+ *
+ * @property Number.format.defaults
+ * @type {Object}
+ * @static
+ */
 YAHOO.util.Number.format.defaults = {
     format : '{prefix}{number}{suffix}',
     negativeFormat : null, // defaults to -(format)
@@ -113,6 +135,19 @@ YAHOO.util.Number.format.defaults = {
     thousandsSeparator : ''
 };
 
+/**
+ * Apply any special formatting to the "d,ddd.dd" string.  Takes either the
+ * cfg.format or cfg.negativeFormat template and replaces any {placeholders}
+ * with either the number or a value from a so-named property of the config
+ * object.
+ *
+ * @method Number.format._applyFormat
+ * @static
+ * @param tmpl {String} the cfg.format or cfg.numberFormat template string
+ * @param num {String} the number with separators and decimalPlaces applied
+ * @param data {Object} the config object, used here to populate {placeholder}s
+ * @return {String} the number with any decorators added
+ */
 YAHOO.util.Number.format._applyFormat = function (tmpl, num, data) {
     return tmpl.replace(/\{(\w+)\}/g, function (_, token) {
         return token === 'number' ? num :
