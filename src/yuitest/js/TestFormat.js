@@ -20,16 +20,13 @@ YAHOO.namespace("tool.TestFormat");
      * @return {String} The escaped text.
      */
     function xmlEscape(text){
-        return text.replace(/"'<>/g, function(c){
+        return text.replace(/["'<>&]/g, function(c){
             switch(c){
-                case "\"":
-                    return "&quot;";
-                case "'":
-                    return "&apos;";
-                case "<":
-                    return "&lt;";
-                case ">":
-                    return "&gt;";
+                case "<":   return "&lt;";
+                case ">":   return "&gt;";
+                case "\"":  return "&quot;";
+                case "'":   return "&apos;";
+                case "&":   return "&amp;";
             }
         });
     } 

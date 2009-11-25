@@ -616,6 +616,67 @@ var XMLDocument = function(rootTagName, namespaceURL) {
                 negativeFormat:"# (neg)"
             });
         Assert.areSame("&#165;123.123.123,18 (neg)", output, "Incorrect Yen formatting");
+
+
+        output = YAHOO.util.Number.format("99", {decimalSeparator:",", decimalPlaces:2 });
+        Assert.areSame("99,00", output, "Incorrect decimal separator");
+
+        output = YAHOO.util.Number.format("0", {decimalSeparator:",", decimalPlaces:2 });
+        Assert.areSame("0,00", output, "Incorrect decimal separator");
+
+        output = YAHOO.util.Number.format("1", {decimalSeparator:",", decimalPlaces:2 });
+        Assert.areSame("1,00", output, "Incorrect decimal separator");
+
+        output = YAHOO.util.Number.format("1199", {decimalSeparator:",", decimalPlaces:2 });
+        Assert.areSame("1199,00", output, "Incorrect decimal separator");
+
+        // bug 2528651
+        output = YAHOO.util.Number.format(null);
+        Assert.areSame("", output, "Incorrect output from null.");
+
+
+        output = YAHOO.util.Number.format(undefined);
+        Assert.areSame("", output, "Incorrect output from undefined.");
+
+
+        output = YAHOO.util.Number.format(NaN);
+        Assert.areSame("", output, "Incorrect output from NaN.");
+
+
+        output = YAHOO.util.Number.format("");
+        Assert.areSame("", output, "Incorrect output from empty string.");
+
+        // test format and back compat for lame negativeFormat string w/ #
+        output = YAHOO.util.Number.format("-123123123.176",{
+                format: "&#165;{number}",
+                decimalPlaces:2,
+                thousandsSeparator:".",
+                decimalSeparator:",",
+                negativeFormat:"# (neg)"
+            });
+        Assert.areSame("&#165;123.123.123,18 (neg)", output, "Incorrect Yen formatting");
+
+        output = YAHOO.util.Number.format(123123123.176,{
+                format: "({decimalPlaces}) x ${number} {foo}",
+                decimalPlaces:2,
+                thousandsSeparator:"^",
+                decimalSeparator:"_"
+            });
+        Assert.areSame("(2) x $123^123^123_18 ", output, "Incorrect template interpretation");
+
+        output = YAHOO.util.Number.format(123123.1,{
+                negativeFormat: "({number})",
+                thousandsSeparator: ",",
+                decimalPlaces:-2
+            });
+        Assert.areSame("123,100", output, "Incorrect format template interpretation");
+
+        output = YAHOO.util.Number.format(-123123.1,{
+                negativeFormat: "({number})",
+                thousandsSeparator: ",",
+                decimalPlaces:-2
+            });
+        Assert.areSame("(123,100)", output, "Incorrect negativeFormat template interpretation");
     }
 });
 

@@ -4014,7 +4014,7 @@ initAttributes : function(oConfigs) {
      
     /**
      * @attribute currencySymbol
-     * @deprecated
+     * @deprecated Use currencyOptions.
      */
     this.setAttributeConfig("currencySymbol", {
         value: "$",
@@ -4976,7 +4976,7 @@ _initThEl : function(elTh, oColumn) {
 /**
  * Outputs markup into the given TH based on given Column.
  *
- * @method DataTable.formatTheadCell
+ * @method formatTheadCell
  * @param elCellLabel {HTMLElement} The label SPAN element within the TH liner,
  * not the liner DIV element.     
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -12319,7 +12319,7 @@ showCellEditor : function(elCell, oRecord, oColumn) {
  *
  * @method _initCellEditorEl
  * @private
- * @deprecated 
+ * @deprecated Use BaseCellEditor class.
  */
 _initCellEditorEl : function() {
     // Attach Cell Editor container element as first child of body
@@ -14261,12 +14261,6 @@ DT.prototype.onPaginatorChange = DT.prototype.onPaginatorChangeRequest;
 //
 /////////////////////////////////////////////////////////////////////////////
 /**
- * @method DataTable.formatTheadCell
- * @deprecated  Use formatTheadCell.
- */
-DT.formatTheadCell = function() {};
-
-/**
  * @method DataTable.editCheckbox
  * @deprecated  Use YAHOO.widget.CheckboxCellEditor.
  */
@@ -14518,7 +14512,9 @@ initAttributes : function(oConfigs) {
         value: "#F2F2F2",
         validator: lang.isString,
         method: function(oParam) {
-            this._elHdContainer.style.backgroundColor = oParam;
+            if(this._elHdContainer) {
+                this._elHdContainer.style.backgroundColor = oParam;
+            }
         }
     });
 },
