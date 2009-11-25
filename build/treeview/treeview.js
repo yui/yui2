@@ -3180,14 +3180,16 @@ YAHOO.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
  * for dynamic nodes.
  * (deprecated; use oData.hasIcon) 
  */
-YAHOO.widget.HTMLNode = function(oData, oParent, expanded, hasIcon) {
+var HN =  function(oData, oParent, expanded, hasIcon) {
     if (oData) { 
         this.init(oData, oParent, expanded);
         this.initContent(oData, hasIcon);
     }
 };
 
-YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
+
+YAHOO.widget.HTMLNode = HN;
+YAHOO.extend(HN, YAHOO.widget.Node, {
 
     /**
      * The CSS class for the html content container.  Defaults to ygtvhtml, but 
@@ -3231,22 +3233,42 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     /**
      * Synchronizes the node.html, and the node's content
      * @property setHtml
-     * @param o {object} An html string or object containing an html property
+     * @param o {object |string | HTMLElement } An html string, an object containing an html property or an HTML element
      */
     setHtml: function(o) {
-
-        this.html = (typeof o === "string") ? o : o.html;
+		this.html = (Lang.isObject(o) && 'html' in o) ? o.html : o;
 
         var el = this.getContentEl();
         if (el) {
-            el.innerHTML = this.html;
+			if (o.nodeType && o.nodeType == 1 && o.tagName) {
+				el.innerHTML = "";
+			} else {
+				el.innerHTML = this.html;
+			}
         }
 
     },
 
     // overrides YAHOO.widget.Node
+	// If property html is a string, it sets the innerHTML for the node
+	// If it is an HTMLElement, it defers appending it to the tree until the HTML basic structure is built
     getContentHtml: function() { 
-        return this.html;
+		if (typeof this.html === "string") {
+			return this.html;
+		} else {
+			
+			HN._deferredNodes.push(this);
+			if (!HN._timer) {
+				HN._timer = window.setTimeout(function () {
+					var n;
+					while((n = HN._deferredNodes.pop())) {
+						n.getContentEl().appendChild(n.html);
+					}
+					HN._timer = null;
+				},0);
+			}
+			return "";			
+		}
     },
     
       /**
@@ -3257,13 +3279,33 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
      * @return {Object | false}  definition of the tree or false if any node is defined as dynamic
      */
     getNodeDefinition: function() {
-        var def = YAHOO.widget.HTMLNode.superclass.getNodeDefinition.call(this);
+        var def = HN.superclass.getNodeDefinition.call(this);
         if (def === false) { return false; }
         def.html = this.html;
         return def;
     
     }
 });
+
+    /**
+    * An array of HTMLNodes created with HTML Elements that had their rendering
+	* deferred until the basic tree structure is rendered.
+    * @property _deferredNodes
+    * @type YAHOO.widget.HTMLNode[]
+    * @default []
+    * @private
+	* @static
+    */	
+HN._deferredNodes = [];
+    /**
+    * A system timer value used to mark whether a deferred operation is pending.
+    * @property _timer
+    * @type System Timer
+    * @default null
+    * @private
+	* @static
+    */	
+HN._timer = null;
 })();
 
 (function () {
