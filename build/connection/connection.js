@@ -14,7 +14,7 @@
  * The Connection Manager singleton provides methods for creating and managing
  * asynchronous transactions.
  *
- * @class Connect
+ * @class
  */
 
 YAHOO.util.Connect =
@@ -382,12 +382,12 @@ YAHOO.util.Connect =
    */
 	asyncRequest:function(method, uri, callback, postData)
 	{
-		var o,t,args = (callback && callback.argument)?callback.argument:null;
+		var o, t, args = (callback && callback.argument)?callback.argument:null;
 
 		if(this._isFileUpload){
 			t = 'upload';
 		}
-		else if(callback.xdr){
+		else if(callback && callback.xdr){
 			t = 'xdr';
 		}
 

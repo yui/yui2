@@ -82,6 +82,6 @@ th.yui-dt-hidden .yui-dt-resizer {
 }
 
 /* editing */
-.yui-dt-editor {
+.yui-dt-editor, .yui-dt-editor-shim {
     position:absolute;z-index:9000;
 }

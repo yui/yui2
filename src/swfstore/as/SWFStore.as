@@ -126,7 +126,6 @@ package
 		 */
 		public function SWFStore() 
 		{
-			
 			loadWhitelist();
 			
 			var callbacks:Object = {};
@@ -737,6 +736,20 @@ package
 		}
 		protected function initializeSharedObject():void
 		{
+			var allowedDomain:String = loaderInfo.parameters.allowedDomain || null;
+			
+			if(allowedDomain)
+			{
+				//allows "cross-scripting" of html container and swf
+				Security.allowDomain(allowedDomain);
+			}
+			
+			else
+			{
+				var evt:Object = {type: "securityError", message: "The domain of the page does not have appropriate permissions.\nPage's URL: "};
+				yuibridge.sendEvent(evt);
+			}
+			
 			var localPath:String = null;//loaderInfo.parameters.localPath || null;
 			   
 			var browser:String = loaderInfo.parameters.browser || "other";
