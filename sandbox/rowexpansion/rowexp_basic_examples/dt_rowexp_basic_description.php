@@ -1,10 +1,65 @@
-/**********
+<!-- Example text. Note that code excerpts are housed in special
+textarea's that are used to do syntax highlighting -->
+
+<h2 class="first">Custom CSS for this Example</h2>
+<textarea name="code" class="CSS" cols="60" rows="1">
+/** 
 *
-* Row Expansion DataTable for YUI 2
-* Author: gelinase@yahoo-inc.com / Eric Gelinas
-* @submodule Row Expansion
-* @class YAHOO.widget.DataTable
-***********/
+* Style the yui-dt-expandablerow-trigger column 
+*
+**/
+.yui-dt-expandablerow-trigger{
+    width:18px;
+    height:22px;
+    cursor:pointer;
+}
+.yui-dt-expanded .yui-dt-expandablerow-trigger{
+    background:url(arrow_open.png) 4px 4px no-repeat;
+}
+.yui-dt-expandablerow-trigger, .yui-dt-collapsed .yui-dt-expandablerow-trigger{
+    background:url(arrow_closed.png) 4px 4px no-repeat;
+}
+.yui-dt-expanded .yui-dt-expandablerow-trigger.spinner{
+    background:url(spinner.gif) 1px 4px no-repeat;
+}
+
+/** 
+*
+* Style the expansion row
+*
+**/
+.yui-dt-expansion .yui-dt-liner{
+    padding:0;
+    border:solid 0 #bbb;
+    border-width: 0 0 2px 0;
+}
+.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table{
+    border:none;
+    background-color:#fff;
+}
+.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table th{
+    background-image:none;
+    background-color:#eee;
+}
+.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td{
+    border:solid 0 #eee;
+    border-width: 0 0 1px 1px;
+}
+.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td div{
+    padding:3px;
+    overflow:hidden;
+    width:100px;
+}
+.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td.big div{
+    width:300px;
+}
+.yui-dt-expansion .yui-dt-liner th, .yui-dt-expansion .yui-dt-liner table td ul{ padding:0;margin:0; }
+</textarea>
+
+<h2>DataTable RowExpansion extension code:</h2>
+<p>Also available <a href="<?php echo($assetsDirectory); ?>js/rowexpansion.js">here</a>.</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+/* This code should not be modified */
 (function(){
 
     var Dom = YAHOO.util.Dom
@@ -400,3 +455,61 @@
         });
 
 })();
+</textarea>
+
+<h2>JavaScript to run this example</h2>
+<textarea name="code" class="JScript" cols="60" rows="1">
+/* Modify as needed */
+
+YAHOO.util.Event.onDOMReady( function() {
+    YAHOO.example.Basic = function() {
+        var expansionFormatter  = function(el, oRecord, oColumn, oData) {
+            var cell_element    = el.parentNode;
+
+            //Set trigger
+            if( oData ){ //Row is closed
+                YAHOO.util.Dom.addClass( cell_element,
+                    "yui-dt-expandablerow-trigger" );
+            }
+
+        };
+
+        var myDataSource = new
+            YAHOO.util.DataSource(YAHOO.example.interestingness);
+            myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+            myDataSource.responseSchema = {
+                fields: ["title","farm","server","id","secret","owner"]
+            };
+
+        var myDataTable = new YAHOO.widget.RowExpansionDataTable(
+                "event_table",
+                [
+                    {
+                        key:"farm",
+                        label:"",
+                        formatter:expansionFormatter
+                    },
+                    {
+                        key:"title",
+                        label:"Interestingness",
+                        width : '200px',
+                        sortable:true
+                    }
+                ],
+                myDataSource,
+                    { rowExpansionTemplate :
+                    '<img src="http://farm{farm}.static.flickr.com/'+
+                    '{server}/{id}_{secret}_m_d.jpg" />' }
+                );
+
+        //Subscribe to a click event to bind to
+        myDataTable.subscribe( 'cellClickEvent',
+            myDataTable.onEventToggleRowExpansion );
+        
+        return {
+            oDS: myDataSource,
+            oDT: myDataTable
+        };
+    }();
+});
+</textarea>
