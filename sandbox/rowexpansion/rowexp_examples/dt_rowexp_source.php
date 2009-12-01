@@ -1,15 +1,17 @@
 
 <div id="expandable_table"></div>
 
-<script type="text/javascript" src="../../j/yui2/build/yahoo/yahoo-min.js"></script> 
-<script type="text/javascript" src="../../j/yui2/build/dom/dom-min.js"></script> 
-<script type="text/javascript" src="../../j/yui2/build/event/event-min.js"></script>
-<script type="text/javascript" src="../../j/yui2/build/element/element-min.js"></script> 
+<script type="text/javascript" src="../../j/yui2/build/yahoo/yahoo.js"></script> 
+<script type="text/javascript" src="../../j/yui2/build/dom/dom.js"></script> 
+<script type="text/javascript" src="../../j/yui2/build/event/event.js"></script>
+<script type="text/javascript" src="../../j/yui2/build/dragdrop/dragdrop.js"></script>
+<script type="text/javascript" src="../../j/yui2/build/element/element.js"></script> 
+<script type="text/javascript" src="../../j/yui2/build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../../j/yui2/build/yuitest/yuitest-min.js"></script>
 <script type="text/javascript" src="../../j/yui2/build/connection/connection-min.js"></script>
 <script type="text/javascript" src="../../j/yui2/build/json/json-min.js"></script>
-<script type="text/javascript" src="../../j/yui2/build/datasource/datasource-min.js"></script>
-<script type="text/javascript" src="../../j/yui2/build/datatable/datatable-min.js"></script>
+<script type="text/javascript" src="../../j/yui2/build/datasource/datasource.js"></script>
+<script type="text/javascript" src="../../j/yui2/build/datatable/datatable.js"></script>
 
 <script>
 
@@ -40,7 +42,7 @@ YAHOO.util.Event.onDOMReady( function() {
 				* Create a YUI DataTable instance.
 				*
 				**/
-				var myDataTable = new YAHOO.widget.DataTable(
+				var myDataTable = new YAHOO.widget.RowExpansionDataTable(
 						"expandable_table",
 						[
 							{
