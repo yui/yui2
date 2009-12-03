@@ -101,7 +101,7 @@
 					<span class="nx">fixedAttributes</span><span class="o">:</span>
 						<span class="p">{</span><span class="nx">allowScriptAccess</span><span class="o">:</span><span class="s2">&quot;always&quot;</span><span class="p">,</span> <span class="nx">allowNetworking</span><span class="o">:</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="nx">scale</span><span class="o">:</span><span class="s2">&quot;noScale&quot;</span><span class="p">},</span>
 						<span class="nx">flashVars</span><span class="o">:</span>
-							<span class="p">{</span><span class="nx">shareData</span><span class="o">:</span> <span class="nx">shareData</span><span class="p">,</span> <span class="nx">browser</span><span class="o">:</span> <span class="nx">newValue</span><span class="p">,</span> <span class="nx">useCompression</span><span class="o">:</span> <span class="nx">useCompression</span><span class="p">}</span>
+							<span class="p">{</span><span class="nx">allowedDomain</span> <span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hostname</span><span class="p">,</span> <span class="nx">shareData</span><span class="o">:</span> <span class="nx">shareData</span><span class="p">,</span> <span class="nx">browser</span><span class="o">:</span> <span class="nx">newValue</span><span class="p">,</span> <span class="nx">useCompression</span><span class="o">:</span> <span class="nx">useCompression</span><span class="p">}</span>
 				 <span class="p">};</span>
 	
 	
@@ -298,6 +298,13 @@
 <span class="cm">	    */</span>
 		<span class="nx">setItem</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">location</span><span class="p">,</span><span class="nx">data</span><span class="p">)</span> 
 		<span class="p">{</span>	
+			<span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">data</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="c1">//double encode strings to prevent parsing error</span>
+				<span class="c1">//http://yuilibrary.com/projects/yui2/ticket/2528593</span>
+				<span class="nx">data</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\\/g</span><span class="p">,</span> <span class="s1">&#39;\\\\&#39;</span><span class="p">);</span>
+			<span class="p">}</span>
+			
 			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;setting &quot;</span> <span class="o">+</span> <span class="nx">location</span> <span class="o">+</span> <span class="s2">&quot; to &quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
 			<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">embeddedSWF</span><span class="p">.</span><span class="nx">callSWF</span><span class="p">(</span><span class="s2">&quot;setItem&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">location</span><span class="p">,</span> <span class="nx">data</span><span class="p">]);</span>
 		<span class="p">}</span> <span class="p">,</span>

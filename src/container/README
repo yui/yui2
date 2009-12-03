@@ -70,6 +70,7 @@ Changes:
         // Display is used here as an example, you could also
         // set the height, or margin, or position for the table to 
         // hide it if required.
+
         display:none;
     }
 

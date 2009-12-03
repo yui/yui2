@@ -13,12 +13,12 @@
 	cursor:pointer;
 }
 .yui-dt-expanded .yui-dt-expandablerow-trigger{
-	background:url(../datatable/assets/images/arrow_open.png) 4px 4px no-repeat;
+	background:url(includes/rowexpansion/arrow_open.png) 4px 4px no-repeat;
 }
 .yui-dt-expandablerow-trigger, .yui-dt-collapsed .yui-dt-expandablerow-trigger{
-	background:url(../datatable/assets/images/arrow_closed.png) 4px 4px no-repeat;
+	background:url(includes/rowexpansion/arrow_closed.png) 4px 4px no-repeat;
 }
 .yui-dt-expanded .yui-dt-expandablerow-trigger.spinner{
-	background:url(../datatable/assets/img/spinner.gif) 1px 4px no-repeat;
+	background:url(includes/rowexpansion/spinner.gif) 1px 4px no-repeat;
 }
 </style>
