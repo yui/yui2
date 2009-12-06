@@ -75,7 +75,7 @@ var l = YAHOO.lang,
      * @static
      * @private
      */
-    _UNSAFE  = /^[\],:{}\s]*$/,
+    _UNSAFE  = /[^\],:{}\s]/,
 
 
 /* Variables used by stringify */
@@ -201,7 +201,7 @@ function _prepare(s) {
 
 function _isSafe(str) {
     return l.isString(str) &&
-            _UNSAFE.test(str.replace(_ESCAPES,'@').
+            !_UNSAFE.test(str.replace(_ESCAPES,'@').
                              replace(_VALUES,']').
                              replace(_BRACKETS,''));
 }

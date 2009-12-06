@@ -124,7 +124,7 @@
 <span class="cm">     * @static</span>
 <span class="cm">     * @private</span>
 <span class="cm">     */</span>
-    <span class="nx">_UNSAFE</span>  <span class="o">=</span> <span class="sr">/^[\],:{}\s]*$/</span><span class="p">,</span>
+    <span class="nx">_UNSAFE</span>  <span class="o">=</span> <span class="sr">/[^\],:{}\s]/</span><span class="p">,</span>
 
 
 <span class="cm">/* Variables used by stringify */</span>
@@ -250,7 +250,7 @@
 
 <span class="kd">function</span> <span class="nx">_isSafe</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">l</span><span class="p">.</span><span class="nx">isString</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
-            <span class="nx">_UNSAFE</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">_ESCAPES</span><span class="p">,</span><span class="s1">&#39;@&#39;</span><span class="p">).</span>
+            <span class="o">!</span><span class="nx">_UNSAFE</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">_ESCAPES</span><span class="p">,</span><span class="s1">&#39;@&#39;</span><span class="p">).</span>
                              <span class="nx">replace</span><span class="p">(</span><span class="nx">_VALUES</span><span class="p">,</span><span class="s1">&#39;]&#39;</span><span class="p">).</span>
                              <span class="nx">replace</span><span class="p">(</span><span class="nx">_BRACKETS</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">));</span>
 <span class="p">}</span>

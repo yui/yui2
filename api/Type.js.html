@@ -107,17 +107,16 @@
         <span class="nx">n</span>   <span class="o">=</span> <span class="o">+</span><span class="nx">n</span><span class="p">;</span>
         <span class="nx">cfg</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nb">Number</span><span class="p">.</span><span class="nx">format</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="p">(</span><span class="nx">cfg</span> <span class="o">||</span> <span class="p">{}));</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">negativeFormat</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">cfg</span><span class="p">.</span><span class="nx">negativeFormat</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">format</span><span class="p">;</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">negativeFormat</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// for backward compatibility of negativeFormat supporting &#39;-#&#39;</span>
-            <span class="nx">cfg</span><span class="p">.</span><span class="nx">negativeFormat</span> <span class="o">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">negativeFormat</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/#/</span><span class="p">,</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">format</span><span class="p">);</span>
-        <span class="p">}</span>
-
         <span class="kd">var</span> <span class="nx">absN</span>   <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">n</span><span class="p">),</span>
             <span class="nx">places</span> <span class="o">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">decimalPlaces</span><span class="p">,</span>
             <span class="nx">sep</span>    <span class="o">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">thousandsSeparator</span><span class="p">,</span>
+            <span class="nx">negFmt</span> <span class="o">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">negativeFormat</span> <span class="o">||</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">format</span><span class="p">),</span>
             <span class="nx">s</span><span class="p">,</span> <span class="nx">bits</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">negFmt</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// for backward compatibility of negativeFormat supporting &#39;-#&#39;</span>
+            <span class="nx">negFmt</span> <span class="o">=</span> <span class="nx">negFmt</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/#/</span><span class="p">,</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">format</span><span class="p">);</span>
+        <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nx">places</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
             <span class="c1">// Get rid of the decimal info</span>
@@ -151,7 +150,7 @@
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nb">Number</span><span class="p">.</span><span class="nx">format</span><span class="p">.</span><span class="nx">_applyFormat</span><span class="p">(</span>
-            <span class="p">(</span><span class="nx">n</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">negativeFormat</span> <span class="o">:</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">format</span><span class="p">),</span>
+            <span class="p">(</span><span class="nx">n</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="nx">negFmt</span> <span class="o">:</span> <span class="nx">cfg</span><span class="p">.</span><span class="nx">format</span><span class="p">),</span>
             <span class="nx">bits</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">decimalSeparator</span><span class="p">),</span>
             <span class="nx">cfg</span><span class="p">);</span>
     <span class="p">}</span>
