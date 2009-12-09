@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Drag and Drop&nbsp; <span class="subtitle">2.8.0r4</span></h3>
+        <h3>Drag and Drop&nbsp; <span class="subtitle">-s</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_dragdrop.html" title="dragdrop">dragdrop</a>
                  &gt; YAHOO.util.DragDrop 
@@ -164,36 +164,6 @@ padding, isTarget, maintainOffset, primaryButtonOnly,</span>
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <div class="private" rel="yui:property" resource="#property___ygDragDrop">
-                                    <h4><a name="property___ygDragDrop" property="yui:name">__ygDragDrop</a>
-                                        - <code>private <span property="yui:type">object</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Internal typeof flag
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__domRef">
-                                    <h4><a name="property__domRef" property="yui:name">_domRef</a>
-                                        - <code>private <span property="yui:type">object</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Cached reference to the linked element
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:property" resource="#property_available">
                                     <h4><a name="property_available" property="yui:name">available</a>
                                         - <code><span property="yui:type">boolean</span></code>
@@ -224,36 +194,6 @@ padding, isTarget, maintainOffset, primaryButtonOnly,</span>
 
                                     <hr />
                                     </div>
-                                    <div class="private" rel="yui:property" resource="#property_constrainX">
-                                    <h4><a name="property_constrainX" property="yui:name">constrainX</a>
-                                        - <code>private <span property="yui:type">boolean</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Set to true when horizontal contraints are applied
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_constrainY">
-                                    <h4><a name="property_constrainY" property="yui:name">constrainY</a>
-                                        - <code>private <span property="yui:type">boolean</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Set to true when vertical contraints are applied
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:property" resource="#property_cursorIsOver">
                                     <h4><a name="property_cursorIsOver" property="yui:name">cursorIsOver</a>
                                         - <code><span property="yui:type">boolean</span></code>
@@ -266,53 +206,6 @@ can be used in intersect mode to help determine the focus of
 the mouse interaction.  DDM.getBestMatch uses this property first to
 determine the closest match in INTERSECT mode when multiple targets
 are part of the same interaction.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_deltaX">
-                                    <h4><a name="property_deltaX" property="yui:name">deltaX</a>
-                                        - <code>private <span property="yui:type">int</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The difference between the click position and the source element's location
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_deltaY">
-                                    <h4><a name="property_deltaY" property="yui:name">deltaY</a>
-                                        - <code>private <span property="yui:type">int</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The difference between the click position and the source element's location
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_dragElId">
-                                    <h4><a name="property_dragElId" property="yui:name">dragElId</a>
-                                        - <code>private <span property="yui:type">String</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The id of the element that will be dragged.  By default this is same 
-as the linked element , but could be changed to another element. Ex: 
-YAHOO.util.DDProxy
                                         </div>
                                     </div>
      
@@ -362,24 +255,6 @@ By setting any of these to false, then event will not be fired.
 related.  Instances only get events when interacting with other 
 DragDrop object in the same group.  This lets us define multiple 
 groups using a single DragDrop subclass if we want.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_handleElId">
-                                    <h4><a name="property_handleElId" property="yui:name">handleElId</a>
-                                        - <code>private <span property="yui:type">String</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            the id of the element that initiates the drag operation.  By default 
-this is the linked element, but could be changed to be a child of this
-element.  This lets us do things like only starting the drag when the 
-header element within the linked html element is clicked.
                                         </div>
                                     </div>
      
@@ -490,22 +365,6 @@ setting isTarget to false.
 
                                     <hr />
                                     </div>
-                                    <div class="private" rel="yui:property" resource="#property_locked">
-                                    <h4><a name="property_locked" property="yui:name">locked</a>
-                                        - <code>private <span property="yui:type">boolean</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Individual drag/drop instances can be locked.  This will prevent 
-onmousedown start drag.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:property" resource="#property_maintainOffset">
                                     <h4><a name="property_maintainOffset" property="yui:name">maintainOffset</a>
                                         - <code><span property="yui:type">boolean</span></code>
@@ -515,66 +374,6 @@ onmousedown start drag.
                                             Maintain offsets when we resetconstraints.  Set to true when you want
 the position of the element relative to its parent to stay the same
 when the page changes
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_maxX">
-                                    <h4><a name="property_maxX" property="yui:name">maxX</a>
-                                        - <code>private <span property="yui:type">int</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The right constraint
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_maxY">
-                                    <h4><a name="property_maxY" property="yui:name">maxY</a>
-                                        - <code>private <span property="yui:type">int</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The down constraint
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_minX">
-                                    <h4><a name="property_minX" property="yui:name">minX</a>
-                                        - <code>private <span property="yui:type">int</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The left constraint
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_minY">
-                                    <h4><a name="property_minY" property="yui:name">minY</a>
-                                        - <code>private <span property="yui:type">int</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The up constraint
                                         </div>
                                     </div>
      
@@ -629,38 +428,6 @@ the drop zone intersection with this object.
 button click (left button for a right-handed mouse).  Set to true to
 allow drag and drop to start with any mouse click that is propogated
 by the browser
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_startPageX">
-                                    <h4><a name="property_startPageX" property="yui:name">startPageX</a>
-                                        - <code>private <span property="yui:type">int</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The linked element's absolute X position at the time the drag was 
-started
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_startPageY">
-                                    <h4><a name="property_startPageY" property="yui:name">startPageY</a>
-                                        - <code>private <span property="yui:type">int</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The linked element's absolute X position at the time the drag was 
-started
                                         </div>
                                     </div>
      
@@ -942,230 +709,6 @@ each object.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="private" rel="yui:method" resource="#method_b4Drag">
-                                    <h4>
-                                        <a name="method_b4Drag">b4Drag</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">b4Drag</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Code that executes immediately before the onDrag event
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_b4DragDrop">
-                                    <h4>
-                                        <a name="method_b4DragDrop">b4DragDrop</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">b4DragDrop</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Code that executes immediately before the onDragDrop event
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_b4DragOut">
-                                    <h4>
-                                        <a name="method_b4DragOut">b4DragOut</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">b4DragOut</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Code that executes immediately before the onDragOut event
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_b4DragOver">
-                                    <h4>
-                                        <a name="method_b4DragOver">b4DragOver</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">b4DragOver</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Code that executes immediately before the onDragOver event
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_b4EndDrag">
-                                    <h4>
-                                        <a name="method_b4EndDrag">b4EndDrag</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">b4EndDrag</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Code that executes immediately before the endDrag event
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_b4MouseDown">
-                                    <h4>
-                                        <a name="method_b4MouseDown">b4MouseDown</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">b4MouseDown</strong>
-                                           (
-                                                
-                                                        
-                                                         e
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Code executed immediately before the onMouseDown event
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">e</span>
-                                                        &lt;<span property="yui:type">Event</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the mousedown event</span>
-                                                        </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_b4StartDrag">
-                                    <h4>
-                                        <a name="method_b4StartDrag">b4StartDrag</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">b4StartDrag</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Code that executes immediately before the startDrag event
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:method" resource="#method_clearConstraints">
                                     <h4>
                                         <a name="method_clearConstraints">clearConstraints</a></h4>
@@ -1383,214 +926,6 @@ element. An example of this can be found in YAHOO.util.DDProxy
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">the html element</dd>
                                                 </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_getTargetCoord">
-                                    <h4>
-                                        <a name="method_getTargetCoord">getTargetCoord</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">getTargetCoord</strong>
-                                           (
-                                                
-                                                        
-                                                         iPageX
-                                                    
-                                                
-                                                        , 
-                                                         iPageY
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Finds the location the element should be placed if we want to move
-it to where the mouse location less the click offset would place us.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">iPageX</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the X coordinate of the click</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">iPageY</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the Y coordinate of the click</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">an object that contains the coordinates (Object.x and Object.y)</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_getTick">
-                                    <h4>
-                                        <a name="method_getTick">getTick</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        int
-                                            <strong property="yui:name">getTick</strong>
-                                           (
-                                                
-                                                        
-                                                         val
-                                                    
-                                                
-                                                        , 
-                                                         tickArray
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Normally the drag element is moved pixel by pixel, but we can specify 
-that it move a number of pixels at a time.  This method resolves the 
-location when we have it set up like this.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">val</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> where we want to place the object</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">tickArray</span>
-                                                        &lt;<span property="yui:type">int[]</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> sorted array of valid points</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                            int
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">the closest tick</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_handleMouseDown">
-                                    <h4>
-                                        <a name="method_handleMouseDown">handleMouseDown</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">handleMouseDown</strong>
-                                           (
-                                                
-                                                        
-                                                         e
-                                                    
-                                                
-                                                        , 
-                                                         oDD
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fired when this object is clicked
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">e</span>
-                                                        &lt;<span property="yui:type">Event</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"></span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">oDD</span>
-                                                        &lt;<span property="yui:type">YAHOO.util.DragDrop</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> the clicked dd object (this dd obj)</span>
-                                                        </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_handleOnAvailable">
-                                    <h4>
-                                        <a name="method_handleOnAvailable">handleOnAvailable</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">handleOnAvailable</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Executed when the linked element is available
-                                        </div>
-
-                                        <div class="description">
-
-
 
 
              
@@ -2618,60 +1953,6 @@ initiate the drag.</span>
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="private" rel="yui:method" resource="#method_setInitialPosition">
-                                    <h4>
-                                        <a name="method_setInitialPosition">setInitialPosition</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">setInitialPosition</strong>
-                                           (
-                                                
-                                                        
-                                                         diffX
-                                                    
-                                                
-                                                        , 
-                                                         diffY
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Stores the initial placement of the linked element.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">diffX</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">   the X offset, default 0</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">diffY</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">   the Y offset, default 0</span>
-                                                        </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:method" resource="#method_setOuterHandleElId">
                                     <h4>
                                         <a name="method_setOuterHandleElId">setOuterHandleElId</a></h4>
@@ -2795,51 +2076,6 @@ will have the first param, the left and right the second.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="private" rel="yui:method" resource="#method_setStartPosition">
-                                    <h4>
-                                        <a name="method_setStartPosition">setStartPosition</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">setStartPosition</strong>
-                                           (
-                                                
-                                                        
-                                                         pos
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Sets the start position of the element.  This is set when the obj
-is initialized, the reset when a drag is started.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">pos</span>
-                                                        &lt;<span property="yui:type">object</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> current position (from previous lookup)</span>
-                                                        </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:method" resource="#method_setXConstraint">
                                     <h4>
                                         <a name="method_setXConstraint">setXConstraint</a></h4>
@@ -2909,37 +2145,6 @@ should move iTickSize pixels at a time.</span>
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="private" rel="yui:method" resource="#method_setXTicks">
-                                    <h4>
-                                        <a name="method_setXTicks">setXTicks</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">setXTicks</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Create the array of horizontal tick marks if an interval was specified
-in setXConstraint().
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:method" resource="#method_setYConstraint">
                                     <h4>
                                         <a name="method_setYConstraint">setYConstraint</a></h4>
@@ -2997,37 +2202,6 @@ parameters if you want to lock the drag to the x axis.
 element should move iTickSize pixels at a time.</span>
                                                         </dd>
                                                 </dl>
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_setYTicks">
-                                    <h4>
-                                        <a name="method_setYTicks">setYTicks</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">setYTicks</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Create the array of vertical tick marks if an interval was specified in 
-setYConstraint().
-                                        </div>
-
-                                        <div class="description">
-
 
 
 
@@ -3769,7 +2943,6 @@ and the drag or mousedown time thresholds have beeen met.
                                 <li class=""><a href="YAHOO.util.DDTarget.html" title="YAHOO.util.DDTarget">YAHOO.util.DDTarget</a></li>
                                 <li class="selected"><a href="YAHOO.util.DragDrop.html" title="YAHOO.util.DragDrop">YAHOO.util.DragDrop</a></li>
                                 <li class=""><a href="YAHOO.util.DragDropMgr.html" title="YAHOO.util.DragDropMgr">YAHOO.util.DragDropMgr</a></li>
-                                <li class=""><a href="YAHOO.util.DragDropMgr.ElementWrapper.html" title="YAHOO.util.DragDropMgr.ElementWrapper">YAHOO.util.DragDropMgr.ElementWrapper</a></li>
                         </ul>
                     </div>
 
@@ -3787,37 +2960,22 @@ and the drag or mousedown time thresholds have beeen met.
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li class="private"><a href="#property___ygDragDrop" title="__ygDragDrop">__ygDragDrop</a></li>
-                                <li class="private"><a href="#property__domRef" title="_domRef">_domRef</a></li>
                                 <li class=""><a href="#property_available" title="available">available</a></li>
                                 <li class=""><a href="#property_config" title="config">config</a></li>
-                                <li class="private"><a href="#property_constrainX" title="constrainX">constrainX</a></li>
-                                <li class="private"><a href="#property_constrainY" title="constrainY">constrainY</a></li>
                                 <li class=""><a href="#property_cursorIsOver" title="cursorIsOver">cursorIsOver</a></li>
-                                <li class="private"><a href="#property_deltaX" title="deltaX">deltaX</a></li>
-                                <li class="private"><a href="#property_deltaY" title="deltaY">deltaY</a></li>
-                                <li class="private"><a href="#property_dragElId" title="dragElId">dragElId</a></li>
                                 <li class=""><a href="#property_dragOnly" title="dragOnly">dragOnly</a></li>
                                 <li class=""><a href="#property_events" title="events">events</a></li>
                                 <li class=""><a href="#property_groups" title="groups">groups</a></li>
-                                <li class="private"><a href="#property_handleElId" title="handleElId">handleElId</a></li>
                                 <li class=""><a href="#property_hasOuterHandles" title="hasOuterHandles">hasOuterHandles</a></li>
                                 <li class=""><a href="#property_id" title="id">id</a></li>
                                 <li class=""><a href="#property_invalidHandleClasses" title="invalidHandleClasses">invalidHandleClasses</a></li>
                                 <li class=""><a href="#property_invalidHandleIds" title="invalidHandleIds">invalidHandleIds</a></li>
                                 <li class=""><a href="#property_invalidHandleTypes" title="invalidHandleTypes">invalidHandleTypes</a></li>
                                 <li class=""><a href="#property_isTarget" title="isTarget">isTarget</a></li>
-                                <li class="private"><a href="#property_locked" title="locked">locked</a></li>
                                 <li class=""><a href="#property_maintainOffset" title="maintainOffset">maintainOffset</a></li>
-                                <li class="private"><a href="#property_maxX" title="maxX">maxX</a></li>
-                                <li class="private"><a href="#property_maxY" title="maxY">maxY</a></li>
-                                <li class="private"><a href="#property_minX" title="minX">minX</a></li>
-                                <li class="private"><a href="#property_minY" title="minY">minY</a></li>
                                 <li class=""><a href="#property_overlap" title="overlap">overlap</a></li>
                                 <li class=""><a href="#property_padding" title="padding">padding</a></li>
                                 <li class=""><a href="#property_primaryButtonOnly" title="primaryButtonOnly">primaryButtonOnly</a></li>
-                                <li class="private"><a href="#property_startPageX" title="startPageX">startPageX</a></li>
-                                <li class="private"><a href="#property_startPageY" title="startPageY">startPageY</a></li>
                                 <li class=""><a href="#property_useShim" title="useShim">useShim</a></li>
                                 <li class=""><a href="#property_xTicks" title="xTicks">xTicks</a></li>
                                 <li class=""><a href="#property_yTicks" title="yTicks">yTicks</a></li>
@@ -3832,23 +2990,12 @@ and the drag or mousedown time thresholds have beeen met.
                                 <li class=""><a href="#method_addInvalidHandleType" title="addInvalidHandleType">addInvalidHandleType</a></li>
                                 <li class=""><a href="#method_addToGroup" title="addToGroup">addToGroup</a></li>
                                 <li class=""><a href="#method_applyConfig" title="applyConfig">applyConfig</a></li>
-                                <li class="private"><a href="#method_b4Drag" title="b4Drag">b4Drag</a></li>
-                                <li class="private"><a href="#method_b4DragDrop" title="b4DragDrop">b4DragDrop</a></li>
-                                <li class="private"><a href="#method_b4DragOut" title="b4DragOut">b4DragOut</a></li>
-                                <li class="private"><a href="#method_b4DragOver" title="b4DragOver">b4DragOver</a></li>
-                                <li class="private"><a href="#method_b4EndDrag" title="b4EndDrag">b4EndDrag</a></li>
-                                <li class="private"><a href="#method_b4MouseDown" title="b4MouseDown">b4MouseDown</a></li>
-                                <li class="private"><a href="#method_b4StartDrag" title="b4StartDrag">b4StartDrag</a></li>
                                 <li class=""><a href="#method_clearConstraints" title="clearConstraints">clearConstraints</a></li>
                                 <li class=""><a href="#method_clearTicks" title="clearTicks">clearTicks</a></li>
                                 <li class=""><a href="#method_clickValidator" title="clickValidator">clickValidator</a></li>
                                 <li class=""><a href="#method_endDrag" title="endDrag">endDrag</a></li>
                                 <li class=""><a href="#method_getDragEl" title="getDragEl">getDragEl</a></li>
                                 <li class=""><a href="#method_getEl" title="getEl">getEl</a></li>
-                                <li class="private"><a href="#method_getTargetCoord" title="getTargetCoord">getTargetCoord</a></li>
-                                <li class="private"><a href="#method_getTick" title="getTick">getTick</a></li>
-                                <li class="private"><a href="#method_handleMouseDown" title="handleMouseDown">handleMouseDown</a></li>
-                                <li class="private"><a href="#method_handleOnAvailable" title="handleOnAvailable">handleOnAvailable</a></li>
                                 <li class=""><a href="#method_init" title="init">init</a></li>
                                 <li class=""><a href="#method_initTarget" title="initTarget">initTarget</a></li>
                                 <li class=""><a href="#method_isLocked" title="isLocked">isLocked</a></li>
@@ -3871,14 +3018,10 @@ and the drag or mousedown time thresholds have beeen met.
                                 <li class=""><a href="#method_resetConstraints" title="resetConstraints">resetConstraints</a></li>
                                 <li class=""><a href="#method_setDragElId" title="setDragElId">setDragElId</a></li>
                                 <li class=""><a href="#method_setHandleElId" title="setHandleElId">setHandleElId</a></li>
-                                <li class="private"><a href="#method_setInitialPosition" title="setInitialPosition">setInitialPosition</a></li>
                                 <li class=""><a href="#method_setOuterHandleElId" title="setOuterHandleElId">setOuterHandleElId</a></li>
                                 <li class=""><a href="#method_setPadding" title="setPadding">setPadding</a></li>
-                                <li class="private"><a href="#method_setStartPosition" title="setStartPosition">setStartPosition</a></li>
                                 <li class=""><a href="#method_setXConstraint" title="setXConstraint">setXConstraint</a></li>
-                                <li class="private"><a href="#method_setXTicks" title="setXTicks">setXTicks</a></li>
                                 <li class=""><a href="#method_setYConstraint" title="setYConstraint">setYConstraint</a></li>
-                                <li class="private"><a href="#method_setYTicks" title="setYTicks">setYTicks</a></li>
                                 <li class=""><a href="#method_startDrag" title="startDrag">startDrag</a></li>
                                 <li class=""><a href="#method_toString" title="toString">toString</a></li>
                                 <li class=""><a href="#method_unlock" title="unlock">unlock</a></li>
@@ -3919,7 +3062,7 @@ and the drag or mousedown time thresholds have beeen met.
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.DragDrop", "name": "addInvalidHandleClass", "url": "YAHOO.util.DragDrop.html#method_addInvalidHandleClass", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "addInvalidHandleId", "url": "YAHOO.util.DragDrop.html#method_addInvalidHandleId", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "addInvalidHandleType", "url": "YAHOO.util.DragDrop.html#method_addInvalidHandleType", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "addToGroup", "url": "YAHOO.util.DragDrop.html#method_addToGroup", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "alignElWithMouse", "url": "YAHOO.util.DD.html#method_alignElWithMouse", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "applyConfig", "url": "YAHOO.util.DragDrop.html#method_applyConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "autoOffset", "url": "YAHOO.util.DD.html#method_autoOffset", "type": "method"}, {"access": "private", "host": "YAHOO.util.DD", "name": "autoScroll", "url": "YAHOO.util.DD.html#method_autoScroll", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "available", "url": "YAHOO.util.DragDrop.html#property_available", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4Drag", "url": "YAHOO.util.DragDrop.html#method_b4Drag", "type": "method"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4DragDrop", "url": "YAHOO.util.DragDrop.html#method_b4DragDrop", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4DragDropEvent", "url": "YAHOO.util.DD.html#event_b4DragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4DragDropEvent", "url": "YAHOO.util.DDProxy.html#event_b4DragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4DragDropEvent", "url": "YAHOO.util.DragDrop.html#event_b4DragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4DragEvent", "url": "YAHOO.util.DD.html#event_b4DragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4DragEvent", "url": "YAHOO.util.DDProxy.html#event_b4DragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4DragEvent", "url": "YAHOO.util.DragDrop.html#event_b4DragEvent", "type": "event"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4DragOut", "url": "YAHOO.util.DragDrop.html#method_b4DragOut", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4DragOutEvent", "url": "YAHOO.util.DD.html#event_b4DragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4DragOutEvent", "url": "YAHOO.util.DDProxy.html#event_b4DragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4DragOutEvent", "url": "YAHOO.util.DragDrop.html#event_b4DragOutEvent", "type": "event"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4DragOver", "url": "YAHOO.util.DragDrop.html#method_b4DragOver", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4DragOverEvent", "url": "YAHOO.util.DD.html#event_b4DragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4DragOverEvent", "url": "YAHOO.util.DDProxy.html#event_b4DragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4DragOverEvent", "url": "YAHOO.util.DragDrop.html#event_b4DragOverEvent", "type": "event"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4EndDrag", "url": "YAHOO.util.DragDrop.html#method_b4EndDrag", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4EndDragEvent", "url": "YAHOO.util.DD.html#event_b4EndDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4EndDragEvent", "url": "YAHOO.util.DDProxy.html#event_b4EndDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4EndDragEvent", "url": "YAHOO.util.DragDrop.html#event_b4EndDragEvent", "type": "event"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4MouseDown", "url": "YAHOO.util.DragDrop.html#method_b4MouseDown", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4MouseDownEvent", "url": "YAHOO.util.DD.html#event_b4MouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4MouseDownEvent", "url": "YAHOO.util.DDProxy.html#event_b4MouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4MouseDownEvent", "url": "YAHOO.util.DragDrop.html#event_b4MouseDownEvent", "type": "event"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "b4StartDrag", "url": "YAHOO.util.DragDrop.html#method_b4StartDrag", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4StartDragEvent", "url": "YAHOO.util.DD.html#event_b4StartDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4StartDragEvent", "url": "YAHOO.util.DDProxy.html#event_b4StartDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4StartDragEvent", "url": "YAHOO.util.DragDrop.html#event_b4StartDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "cachePosition", "url": "YAHOO.util.DD.html#method_cachePosition", "type": "method"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "centerFrame", "url": "YAHOO.util.DDProxy.html#property_centerFrame", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "clearConstraints", "url": "YAHOO.util.DragDrop.html#method_clearConstraints", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "clearTicks", "url": "YAHOO.util.DragDrop.html#method_clearTicks", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "clickValidator", "url": "YAHOO.util.DragDrop.html#method_clickValidator", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "config", "url": "YAHOO.util.DragDrop.html#property_config", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "constrainX", "url": "YAHOO.util.DragDrop.html#property_constrainX", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "constrainY", "url": "YAHOO.util.DragDrop.html#property_constrainY", "type": "property"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "createFrame", "url": "YAHOO.util.DDProxy.html#method_createFrame", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "cursorIsOver", "url": "YAHOO.util.DragDrop.html#property_cursorIsOver", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "deltaX", "url": "YAHOO.util.DragDrop.html#property_deltaX", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "deltaY", "url": "YAHOO.util.DragDrop.html#property_deltaY", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "_domRef", "url": "YAHOO.util.DragDrop.html#property__domRef", "type": "property"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragDropEvent", "url": "YAHOO.util.DD.html#event_dragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragDropEvent", "url": "YAHOO.util.DDProxy.html#event_dragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "dragDropEvent", "url": "YAHOO.util.DragDrop.html#event_dragDropEvent", "type": "event"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "dragElId", "url": "YAHOO.util.DragDrop.html#property_dragElId", "type": "property"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragEnterEvent", "url": "YAHOO.util.DD.html#event_dragEnterEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragEnterEvent", "url": "YAHOO.util.DDProxy.html#event_dragEnterEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "dragEnterEvent", "url": "YAHOO.util.DragDrop.html#event_dragEnterEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragEvent", "url": "YAHOO.util.DD.html#event_dragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragEvent", "url": "YAHOO.util.DDProxy.html#event_dragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "dragEvent", "url": "YAHOO.util.DragDrop.html#event_dragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "dragOnly", "url": "YAHOO.util.DragDrop.html#property_dragOnly", "type": "property"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragOutEvent", "url": "YAHOO.util.DD.html#event_dragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragOutEvent", "url": "YAHOO.util.DDProxy.html#event_dragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "dragOutEvent", "url": "YAHOO.util.DragDrop.html#event_dragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragOverEvent", "url": "YAHOO.util.DD.html#event_dragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragOverEvent", "url": "YAHOO.util.DDProxy.html#event_dragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "dragOverEvent", "url": "YAHOO.util.DragDrop.html#event_dragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "endDrag", "url": "YAHOO.util.DragDrop.html#method_endDrag", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "endDragEvent", "url": "YAHOO.util.DD.html#event_endDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "endDragEvent", "url": "YAHOO.util.DDProxy.html#event_endDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "endDragEvent", "url": "YAHOO.util.DragDrop.html#event_endDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "events", "url": "YAHOO.util.DragDrop.html#property_events", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "getDragEl", "url": "YAHOO.util.DragDrop.html#method_getDragEl", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "getEl", "url": "YAHOO.util.DragDrop.html#method_getEl", "type": "method"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "getTargetCoord", "url": "YAHOO.util.DragDrop.html#method_getTargetCoord", "type": "method"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "getTick", "url": "YAHOO.util.DragDrop.html#method_getTick", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "groups", "url": "YAHOO.util.DragDrop.html#property_groups", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "handleElId", "url": "YAHOO.util.DragDrop.html#property_handleElId", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "handleMouseDown", "url": "YAHOO.util.DragDrop.html#method_handleMouseDown", "type": "method"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "handleOnAvailable", "url": "YAHOO.util.DragDrop.html#method_handleOnAvailable", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "hasOuterHandles", "url": "YAHOO.util.DragDrop.html#property_hasOuterHandles", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "id", "url": "YAHOO.util.DragDrop.html#property_id", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "init", "url": "YAHOO.util.DragDrop.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "initFrame", "url": "YAHOO.util.DDProxy.html#method_initFrame", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "initTarget", "url": "YAHOO.util.DragDrop.html#method_initTarget", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "invalidDropEvent", "url": "YAHOO.util.DD.html#event_invalidDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "invalidDropEvent", "url": "YAHOO.util.DDProxy.html#event_invalidDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "invalidDropEvent", "url": "YAHOO.util.DragDrop.html#event_invalidDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "invalidHandleClasses", "url": "YAHOO.util.DragDrop.html#property_invalidHandleClasses", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "invalidHandleIds", "url": "YAHOO.util.DragDrop.html#property_invalidHandleIds", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "invalidHandleTypes", "url": "YAHOO.util.DragDrop.html#property_invalidHandleTypes", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "isLocked", "url": "YAHOO.util.DragDrop.html#method_isLocked", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "isTarget", "url": "YAHOO.util.DragDrop.html#property_isTarget", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "isValidHandleChild", "url": "YAHOO.util.DragDrop.html#method_isValidHandleChild", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "lock", "url": "YAHOO.util.DragDrop.html#method_lock", "type": "method"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "locked", "url": "YAHOO.util.DragDrop.html#property_locked", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "maintainOffset", "url": "YAHOO.util.DragDrop.html#property_maintainOffset", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "maxX", "url": "YAHOO.util.DragDrop.html#property_maxX", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "maxY", "url": "YAHOO.util.DragDrop.html#property_maxY", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "minX", "url": "YAHOO.util.DragDrop.html#property_minX", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "minY", "url": "YAHOO.util.DragDrop.html#property_minY", "type": "property"}, {"access": "", "host": "YAHOO.util.DD", "name": "mouseDownEvent", "url": "YAHOO.util.DD.html#event_mouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "mouseDownEvent", "url": "YAHOO.util.DDProxy.html#event_mouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "mouseDownEvent", "url": "YAHOO.util.DragDrop.html#event_mouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "mouseUpEvent", "url": "YAHOO.util.DD.html#event_mouseUpEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "mouseUpEvent", "url": "YAHOO.util.DDProxy.html#event_mouseUpEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "mouseUpEvent", "url": "YAHOO.util.DragDrop.html#event_mouseUpEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "on", "url": "YAHOO.util.DragDrop.html#method_on", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onAvailable", "url": "YAHOO.util.DragDrop.html#method_onAvailable", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDrag", "url": "YAHOO.util.DragDrop.html#method_onDrag", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDragDrop", "url": "YAHOO.util.DragDrop.html#method_onDragDrop", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDragEnter", "url": "YAHOO.util.DragDrop.html#method_onDragEnter", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDragOut", "url": "YAHOO.util.DragDrop.html#method_onDragOut", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDragOver", "url": "YAHOO.util.DragDrop.html#method_onDragOver", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onInvalidDrop", "url": "YAHOO.util.DragDrop.html#method_onInvalidDrop", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onMouseDown", "url": "YAHOO.util.DragDrop.html#method_onMouseDown", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onMouseUp", "url": "YAHOO.util.DragDrop.html#method_onMouseUp", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "overlap", "url": "YAHOO.util.DragDrop.html#property_overlap", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "padding", "url": "YAHOO.util.DragDrop.html#property_padding", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "primaryButtonOnly", "url": "YAHOO.util.DragDrop.html#property_primaryButtonOnly", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "removeFromGroup", "url": "YAHOO.util.DragDrop.html#method_removeFromGroup", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "removeInvalidHandleClass", "url": "YAHOO.util.DragDrop.html#method_removeInvalidHandleClass", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "removeInvalidHandleId", "url": "YAHOO.util.DragDrop.html#method_removeInvalidHandleId", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "removeInvalidHandleType", "url": "YAHOO.util.DragDrop.html#method_removeInvalidHandleType", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "resetConstraints", "url": "YAHOO.util.DragDrop.html#method_resetConstraints", "type": "method"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "resizeFrame", "url": "YAHOO.util.DDProxy.html#property_resizeFrame", "type": "property"}, {"access": "private", "host": "YAHOO.util.DDProxy", "name": "_resizeProxy", "url": "YAHOO.util.DDProxy.html#method__resizeProxy", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "scroll", "url": "YAHOO.util.DD.html#property_scroll", "type": "property"}, {"access": "", "host": "YAHOO.util.DD", "name": "setDelta", "url": "YAHOO.util.DD.html#method_setDelta", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setDragElId", "url": "YAHOO.util.DragDrop.html#method_setDragElId", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "setDragElPos", "url": "YAHOO.util.DD.html#method_setDragElPos", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setHandleElId", "url": "YAHOO.util.DragDrop.html#method_setHandleElId", "type": "method"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "setInitialPosition", "url": "YAHOO.util.DragDrop.html#method_setInitialPosition", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setOuterHandleElId", "url": "YAHOO.util.DragDrop.html#method_setOuterHandleElId", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setPadding", "url": "YAHOO.util.DragDrop.html#method_setPadding", "type": "method"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "setStartPosition", "url": "YAHOO.util.DragDrop.html#method_setStartPosition", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setXConstraint", "url": "YAHOO.util.DragDrop.html#method_setXConstraint", "type": "method"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "setXTicks", "url": "YAHOO.util.DragDrop.html#method_setXTicks", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setYConstraint", "url": "YAHOO.util.DragDrop.html#method_setYConstraint", "type": "method"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "setYTicks", "url": "YAHOO.util.DragDrop.html#method_setYTicks", "type": "method"}, {"access": "private", "host": "YAHOO.util.DDProxy", "name": "showFrame", "url": "YAHOO.util.DDProxy.html#method_showFrame", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "startDrag", "url": "YAHOO.util.DragDrop.html#method_startDrag", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "startDragEvent", "url": "YAHOO.util.DD.html#event_startDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "startDragEvent", "url": "YAHOO.util.DDProxy.html#event_startDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "startDragEvent", "url": "YAHOO.util.DragDrop.html#event_startDragEvent", "type": "event"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "startPageX", "url": "YAHOO.util.DragDrop.html#property_startPageX", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "startPageY", "url": "YAHOO.util.DragDrop.html#property_startPageY", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "toString", "url": "YAHOO.util.DragDrop.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "unlock", "url": "YAHOO.util.DragDrop.html#method_unlock", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "unreg", "url": "YAHOO.util.DragDrop.html#method_unreg", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "useShim", "url": "YAHOO.util.DragDrop.html#property_useShim", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "xTicks", "url": "YAHOO.util.DragDrop.html#property_xTicks", "type": "property"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "YAHOO.util.DDProxy.dragElId", "url": "YAHOO.util.DDProxy.html#property_YAHOO.util.DDProxy.dragElId", "type": "property"}, {"access": "private", "host": "YAHOO.util.DragDrop", "name": "__ygDragDrop", "url": "YAHOO.util.DragDrop.html#property___ygDragDrop", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "yTicks", "url": "YAHOO.util.DragDrop.html#property_yTicks", "type": "property"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.DragDrop", "name": "addInvalidHandleClass", "url": "YAHOO.util.DragDrop.html#method_addInvalidHandleClass", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "addInvalidHandleId", "url": "YAHOO.util.DragDrop.html#method_addInvalidHandleId", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "addInvalidHandleType", "url": "YAHOO.util.DragDrop.html#method_addInvalidHandleType", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "addToGroup", "url": "YAHOO.util.DragDrop.html#method_addToGroup", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "alignElWithMouse", "url": "YAHOO.util.DD.html#method_alignElWithMouse", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "applyConfig", "url": "YAHOO.util.DragDrop.html#method_applyConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "autoOffset", "url": "YAHOO.util.DD.html#method_autoOffset", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "available", "url": "YAHOO.util.DragDrop.html#property_available", "type": "property"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4DragDropEvent", "url": "YAHOO.util.DD.html#event_b4DragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4DragDropEvent", "url": "YAHOO.util.DDProxy.html#event_b4DragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4DragDropEvent", "url": "YAHOO.util.DragDrop.html#event_b4DragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4DragEvent", "url": "YAHOO.util.DD.html#event_b4DragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4DragEvent", "url": "YAHOO.util.DDProxy.html#event_b4DragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4DragEvent", "url": "YAHOO.util.DragDrop.html#event_b4DragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4DragOutEvent", "url": "YAHOO.util.DD.html#event_b4DragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4DragOutEvent", "url": "YAHOO.util.DDProxy.html#event_b4DragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4DragOutEvent", "url": "YAHOO.util.DragDrop.html#event_b4DragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4DragOverEvent", "url": "YAHOO.util.DD.html#event_b4DragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4DragOverEvent", "url": "YAHOO.util.DDProxy.html#event_b4DragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4DragOverEvent", "url": "YAHOO.util.DragDrop.html#event_b4DragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4EndDragEvent", "url": "YAHOO.util.DD.html#event_b4EndDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4EndDragEvent", "url": "YAHOO.util.DDProxy.html#event_b4EndDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4EndDragEvent", "url": "YAHOO.util.DragDrop.html#event_b4EndDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4MouseDownEvent", "url": "YAHOO.util.DD.html#event_b4MouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4MouseDownEvent", "url": "YAHOO.util.DDProxy.html#event_b4MouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4MouseDownEvent", "url": "YAHOO.util.DragDrop.html#event_b4MouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "b4StartDragEvent", "url": "YAHOO.util.DD.html#event_b4StartDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "b4StartDragEvent", "url": "YAHOO.util.DDProxy.html#event_b4StartDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "b4StartDragEvent", "url": "YAHOO.util.DragDrop.html#event_b4StartDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "cachePosition", "url": "YAHOO.util.DD.html#method_cachePosition", "type": "method"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "centerFrame", "url": "YAHOO.util.DDProxy.html#property_centerFrame", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "clearConstraints", "url": "YAHOO.util.DragDrop.html#method_clearConstraints", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "clearTicks", "url": "YAHOO.util.DragDrop.html#method_clearTicks", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "clickValidator", "url": "YAHOO.util.DragDrop.html#method_clickValidator", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "config", "url": "YAHOO.util.DragDrop.html#property_config", "type": "property"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "createFrame", "url": "YAHOO.util.DDProxy.html#method_createFrame", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "cursorIsOver", "url": "YAHOO.util.DragDrop.html#property_cursorIsOver", "type": "property"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragDropEvent", "url": "YAHOO.util.DD.html#event_dragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragDropEvent", "url": "YAHOO.util.DDProxy.html#event_dragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "dragDropEvent", "url": "YAHOO.util.DragDrop.html#event_dragDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragEnterEvent", "url": "YAHOO.util.DD.html#event_dragEnterEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragEnterEvent", "url": "YAHOO.util.DDProxy.html#event_dragEnterEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "dragEnterEvent", "url": "YAHOO.util.DragDrop.html#event_dragEnterEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragEvent", "url": "YAHOO.util.DD.html#event_dragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragEvent", "url": "YAHOO.util.DDProxy.html#event_dragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "dragEvent", "url": "YAHOO.util.DragDrop.html#event_dragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "dragOnly", "url": "YAHOO.util.DragDrop.html#property_dragOnly", "type": "property"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragOutEvent", "url": "YAHOO.util.DD.html#event_dragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragOutEvent", "url": "YAHOO.util.DDProxy.html#event_dragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "dragOutEvent", "url": "YAHOO.util.DragDrop.html#event_dragOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "dragOverEvent", "url": "YAHOO.util.DD.html#event_dragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "dragOverEvent", "url": "YAHOO.util.DDProxy.html#event_dragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "dragOverEvent", "url": "YAHOO.util.DragDrop.html#event_dragOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "endDrag", "url": "YAHOO.util.DragDrop.html#method_endDrag", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "endDragEvent", "url": "YAHOO.util.DD.html#event_endDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "endDragEvent", "url": "YAHOO.util.DDProxy.html#event_endDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "endDragEvent", "url": "YAHOO.util.DragDrop.html#event_endDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "events", "url": "YAHOO.util.DragDrop.html#property_events", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "getDragEl", "url": "YAHOO.util.DragDrop.html#method_getDragEl", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "getEl", "url": "YAHOO.util.DragDrop.html#method_getEl", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "groups", "url": "YAHOO.util.DragDrop.html#property_groups", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "hasOuterHandles", "url": "YAHOO.util.DragDrop.html#property_hasOuterHandles", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "id", "url": "YAHOO.util.DragDrop.html#property_id", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "init", "url": "YAHOO.util.DragDrop.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "initFrame", "url": "YAHOO.util.DDProxy.html#method_initFrame", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "initTarget", "url": "YAHOO.util.DragDrop.html#method_initTarget", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "invalidDropEvent", "url": "YAHOO.util.DD.html#event_invalidDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "invalidDropEvent", "url": "YAHOO.util.DDProxy.html#event_invalidDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "invalidDropEvent", "url": "YAHOO.util.DragDrop.html#event_invalidDropEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "invalidHandleClasses", "url": "YAHOO.util.DragDrop.html#property_invalidHandleClasses", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "invalidHandleIds", "url": "YAHOO.util.DragDrop.html#property_invalidHandleIds", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "invalidHandleTypes", "url": "YAHOO.util.DragDrop.html#property_invalidHandleTypes", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "isLocked", "url": "YAHOO.util.DragDrop.html#method_isLocked", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "isTarget", "url": "YAHOO.util.DragDrop.html#property_isTarget", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "isValidHandleChild", "url": "YAHOO.util.DragDrop.html#method_isValidHandleChild", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "lock", "url": "YAHOO.util.DragDrop.html#method_lock", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "maintainOffset", "url": "YAHOO.util.DragDrop.html#property_maintainOffset", "type": "property"}, {"access": "", "host": "YAHOO.util.DD", "name": "mouseDownEvent", "url": "YAHOO.util.DD.html#event_mouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "mouseDownEvent", "url": "YAHOO.util.DDProxy.html#event_mouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "mouseDownEvent", "url": "YAHOO.util.DragDrop.html#event_mouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DD", "name": "mouseUpEvent", "url": "YAHOO.util.DD.html#event_mouseUpEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "mouseUpEvent", "url": "YAHOO.util.DDProxy.html#event_mouseUpEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "mouseUpEvent", "url": "YAHOO.util.DragDrop.html#event_mouseUpEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "on", "url": "YAHOO.util.DragDrop.html#method_on", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onAvailable", "url": "YAHOO.util.DragDrop.html#method_onAvailable", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDrag", "url": "YAHOO.util.DragDrop.html#method_onDrag", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDragDrop", "url": "YAHOO.util.DragDrop.html#method_onDragDrop", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDragEnter", "url": "YAHOO.util.DragDrop.html#method_onDragEnter", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDragOut", "url": "YAHOO.util.DragDrop.html#method_onDragOut", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onDragOver", "url": "YAHOO.util.DragDrop.html#method_onDragOver", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onInvalidDrop", "url": "YAHOO.util.DragDrop.html#method_onInvalidDrop", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onMouseDown", "url": "YAHOO.util.DragDrop.html#method_onMouseDown", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "onMouseUp", "url": "YAHOO.util.DragDrop.html#method_onMouseUp", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "overlap", "url": "YAHOO.util.DragDrop.html#property_overlap", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "padding", "url": "YAHOO.util.DragDrop.html#property_padding", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "primaryButtonOnly", "url": "YAHOO.util.DragDrop.html#property_primaryButtonOnly", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "removeFromGroup", "url": "YAHOO.util.DragDrop.html#method_removeFromGroup", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "removeInvalidHandleClass", "url": "YAHOO.util.DragDrop.html#method_removeInvalidHandleClass", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "removeInvalidHandleId", "url": "YAHOO.util.DragDrop.html#method_removeInvalidHandleId", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "removeInvalidHandleType", "url": "YAHOO.util.DragDrop.html#method_removeInvalidHandleType", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "resetConstraints", "url": "YAHOO.util.DragDrop.html#method_resetConstraints", "type": "method"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "resizeFrame", "url": "YAHOO.util.DDProxy.html#property_resizeFrame", "type": "property"}, {"access": "", "host": "YAHOO.util.DD", "name": "scroll", "url": "YAHOO.util.DD.html#property_scroll", "type": "property"}, {"access": "", "host": "YAHOO.util.DD", "name": "setDelta", "url": "YAHOO.util.DD.html#method_setDelta", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setDragElId", "url": "YAHOO.util.DragDrop.html#method_setDragElId", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "setDragElPos", "url": "YAHOO.util.DD.html#method_setDragElPos", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setHandleElId", "url": "YAHOO.util.DragDrop.html#method_setHandleElId", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setOuterHandleElId", "url": "YAHOO.util.DragDrop.html#method_setOuterHandleElId", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setPadding", "url": "YAHOO.util.DragDrop.html#method_setPadding", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setXConstraint", "url": "YAHOO.util.DragDrop.html#method_setXConstraint", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "setYConstraint", "url": "YAHOO.util.DragDrop.html#method_setYConstraint", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "startDrag", "url": "YAHOO.util.DragDrop.html#method_startDrag", "type": "method"}, {"access": "", "host": "YAHOO.util.DD", "name": "startDragEvent", "url": "YAHOO.util.DD.html#event_startDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "startDragEvent", "url": "YAHOO.util.DDProxy.html#event_startDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "startDragEvent", "url": "YAHOO.util.DragDrop.html#event_startDragEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "toString", "url": "YAHOO.util.DragDrop.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "unlock", "url": "YAHOO.util.DragDrop.html#method_unlock", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "unreg", "url": "YAHOO.util.DragDrop.html#method_unreg", "type": "method"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "useShim", "url": "YAHOO.util.DragDrop.html#property_useShim", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "xTicks", "url": "YAHOO.util.DragDrop.html#property_xTicks", "type": "property"}, {"access": "", "host": "YAHOO.util.DDProxy", "name": "YAHOO.util.DDProxy.dragElId", "url": "YAHOO.util.DDProxy.html#property_YAHOO.util.DDProxy.dragElId", "type": "property"}, {"access": "", "host": "YAHOO.util.DragDrop", "name": "yTicks", "url": "YAHOO.util.DragDrop.html#property_yTicks", "type": "property"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

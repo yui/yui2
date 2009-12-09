@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>ProgressBar Widget&nbsp; <span class="subtitle">2.8.0r4</span></h3>
+        <h3>ProgressBar Widget&nbsp; <span class="subtitle">-s</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_progressbar.html" title="progressbar">progressbar</a>
                  &gt; YAHOO.widget.ProgressBar 
@@ -99,76 +99,6 @@ It allows for highly customized styles including animation, vertical or horizont
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <div class="private" rel="yui:property" resource="#property__barSizeFunctions">
-                                    <h4><a name="property__barSizeFunctions" property="yui:name">_barSizeFunctions</a>
-                                        - <code>private static <span property="yui:type">{collection of functions}</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Collection of functions used to calculate the size of the bar.
-One of this will be used depending on direction and whether animation is active.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__barSpace">
-                                    <h4><a name="property__barSpace" property="yui:name">_barSpace</a>
-                                        - <code>private <span property="yui:type">Number</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The actual space (in pixels) available for the bar within the mask (excludes margins)
-                                        </div>
-                                    </div>
-     
-                                        
-                                    <div class="default" property="yui:defaultValue">
-                                        Default Value: 100
-                                    </div>        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__previousValue">
-                                    <h4><a name="property__previousValue" property="yui:name">_previousValue</a>
-                                        - <code>private <span property="yui:type">Number</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The previous value setting for the bar.  Used mostly as information to event listeners
-                                        </div>
-                                    </div>
-     
-                                        
-                                    <div class="default" property="yui:defaultValue">
-                                        Default Value: 0
-                                    </div>        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__rendered">
-                                    <h4><a name="property__rendered" property="yui:name">_rendered</a>
-                                        - <code>private <span property="yui:type">boolean</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            A flag to signal that rendering has already happened
-                                        </div>
-                                    </div>
-     
-                                        
-                                    <div class="default" property="yui:defaultValue">
-                                        Default Value: false
-                                    </div>        
-
-
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:property" resource="#property_ProgressBar.MARKUP">
                                     <h4><a name="property_ProgressBar.MARKUP" property="yui:name">ProgressBar.MARKUP</a>
                                         - <code>static final <span property="yui:type">String</span></code>
@@ -208,10 +138,6 @@ One of this will be used depending on direction and whether animation is active.
                             <div class="content" rel="yui:properties">
                                 <code>
                                     
-                                        <span rel="yui:property" resource="YAHOO.util.AttributeProvider.html#property__configs">
-                                        <a class="private" href="YAHOO.util.AttributeProvider.html#property__configs" property="yui:name" title="_configs">_configs</a>
-                                        </span>
-                                    
                                 </code>
                             </div>
                         </div>
@@ -219,14 +145,6 @@ One of this will be used depending on direction and whether animation is active.
                             <h4>Properties inherited from <a href="YAHOO.util.EventProvider.html" property="yui:name" title="YAHOO.util.EventProvider">YAHOO.util.EventProvider</a>:</h4>
                             <div class="content" rel="yui:properties">
                                 <code>
-                                    
-                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_events">
-                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events" property="yui:name" title="__yui_events">__yui_events</a><span class="private">,</span>
-                                        </span>
-                                    
-                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_subscribers">
-                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers" property="yui:name" title="__yui_subscribers">__yui_subscribers</a>
-                                        </span>
                                     
                                 </code>
                             </div>
@@ -238,181 +156,6 @@ One of this will be used depending on direction and whether animation is active.
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
-                                    <div class="private" rel="yui:method" resource="#method__animComplete">
-                                    <h4>
-                                        <a name="method__animComplete">_animComplete</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">_animComplete</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Called when the animation signals it has completed.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">void</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__animSetter">
-                                    <h4>
-                                        <a name="method__animSetter">_animSetter</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">_animSetter</strong>
-                                           (
-                                                
-                                                        
-                                                         value
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Called in response to a change in the <a href="#config_anim">anim</a> attribute.
-It creates and sets up or destroys the instance of the animation utility that will move the bar
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">value</span>
-                                                        &lt;<span property="yui:type">boolean ,YAHOO.util.Anim</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  Enable animation or set to specific instance</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">void</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__fixEdges">
-                                    <h4>
-                                        <a name="method__fixEdges">_fixEdges</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">_fixEdges</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Due to rounding differences, some browsers fail to cover the whole area 
-with the mask quadrants when the width or height is odd.  This method
-stretches the lower and/or right quadrants to make the difference.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">void</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__heightChange">
-                                    <h4>
-                                        <a name="method__heightChange">_heightChange</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">_heightChange</strong>
-                                           (
-                                                
-                                                        
-                                                         value
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Method called when the height attribute is changed
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">value</span>
-                                                        &lt;<span property="yui:type">int or string</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> New height, in pixels if int or string including units</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">void</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="protected" rel="yui:method" resource="#method__init">
                                     <h4>
                                         <a name="method__init">_init</a></h4>
@@ -458,203 +201,6 @@ It is called after <a href="#method_initAttributes">initAttributes</a>
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="private" rel="yui:method" resource="#method__recalculateConstants">
-                                    <h4>
-                                        <a name="method__recalculateConstants">_recalculateConstants</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">_recalculateConstants</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Calculates some auxiliary values to make the rendering faster
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">void</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__setAriaText">
-                                    <h4>
-                                        <a name="method__setAriaText">_setAriaText</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">_setAriaText</strong>
-                                           (
-                                                
-                                                        
-                                                         value
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Utility method to set the ARIA value attributes
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">value</span>
-                                                        &lt;<span property="yui:type">number</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  Value to be voiced</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">void</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__valueChange">
-                                    <h4>
-                                        <a name="method__valueChange">_valueChange</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">_valueChange</strong>
-                                           (
-                                                
-                                                        
-                                                         value
-                                                    
-                                                
-                                                        , 
-                                                         noAnim
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Called in response to a change in the <a href="#config_value">value</a> attribute.
-Moves the bar to reflect the new value
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">value</span>
-                                                        &lt;<span property="yui:type">number</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  New value to be set</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">noAnim</span>
-                                                        &lt;<span property="yui:type">boolean</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  Disable animation for this redraw</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">void</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__widthChange">
-                                    <h4>
-                                        <a name="method__widthChange">_widthChange</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">_widthChange</strong>
-                                           (
-                                                
-                                                        
-                                                         value
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Method called when the height attribute is changed
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">value</span>
-                                                        &lt;<span property="yui:type">int or string</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> New width, in pixels if int or string including units</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">void</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:method" resource="#method_destroy">
                                     <h4>
                                         <a name="method_destroy">destroy</a></h4>
@@ -682,50 +228,6 @@ Moves the bar to reflect the new value
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">void</dd>
                                                 </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_initAttributes">
-                                    <h4>
-                                        <a name="method_initAttributes">initAttributes</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">initAttributes</strong>
-                                           (
-                                                
-                                                        
-                                                         oConfigs
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Implementation of Element's abstract method. Sets up config values.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">oConfigs</span>
-                                                        &lt;<span property="yui:type">Object</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  (Optional) Object literal definition of configuration values.</span>
-                                                        </dd>
-                                                </dl>
-
 
 
              
@@ -853,9 +355,6 @@ The method is chainable since it returns a reference to this instance.
                                 <h4>Methods inherited from <a href="YAHOO.util.Element.html" property="yui:name" title="YAHOO.util.Element">YAHOO.util.Element</a>:</h4>
                                 <div class="content" rel="yui:methods">
                                     <code>
-                                            <span rel="yui:method" resource="YAHOO.util.Element.html#method__setHTMLAttrConfig">                                        
-                                            <a class="private" href="YAHOO.util.Element.html#method__setHTMLAttrConfig" property="yui:name" title="_setHTMLAttrConfig">_setHTMLAttrConfig</a><span class="private">,</span>
-                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.Element.html#method_addClass">                                        
                                             <a class="" href="YAHOO.util.Element.html#method_addClass" property="yui:name" title="addClass">addClass</a><span class="">,</span>
                                             </span>
@@ -941,9 +440,6 @@ The method is chainable since it returns a reference to this instance.
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_get">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_get" property="yui:name" title="get">get</a><span class="">,</span>
                                             </span>
-                                            <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_getAttributeConfig">                                        
-                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_getAttributeConfig" property="yui:name" title="getAttributeConfig">getAttributeConfig</a><span class="private">,</span>
-                                            </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_getAttributeKeys">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_getAttributeKeys" property="yui:name" title="getAttributeKeys">getAttributeKeys</a><span class="">,</span>
                                             </span>
@@ -952,9 +448,6 @@ The method is chainable since it returns a reference to this instance.
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_register">                                        
                                             <a class=" deprecated" href="YAHOO.util.AttributeProvider.html#method_register" property="yui:name" title="register">register</a><span class=" deprecated">,</span>
-                                            </span>
-                                            <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_resetAttributeConfig">                                        
-                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_resetAttributeConfig" property="yui:name" title="resetAttributeConfig">resetAttributeConfig</a><span class="private">,</span>
                                             </span>
                                             <span rel="yui:method" resource="YAHOO.util.AttributeProvider.html#method_resetValue">                                        
                                             <a class="" href="YAHOO.util.AttributeProvider.html#method_resetValue" property="yui:name" title="resetValue">resetValue</a><span class="">,</span>
@@ -1024,7 +517,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'anim' changes.
+                                            Fires when the value for the configuration attribute 'anim' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
                                         </div>
 
                                         <div class="description">
@@ -1034,9 +527,9 @@ The method is chainable since it returns a reference to this instance.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1068,7 +561,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'ariaTextTemplate' changes.
+                                            Fires when the value for the configuration attribute 'ariaTextTemplate' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
                                         </div>
 
                                         <div class="description">
@@ -1078,9 +571,9 @@ The method is chainable since it returns a reference to this instance.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1112,7 +605,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'barEl' changes.
+                                            Fires when the value for the configuration attribute 'barEl' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
                                         </div>
 
                                         <div class="description">
@@ -1122,449 +615,9 @@ The method is chainable since it returns a reference to this instance.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeAnimChange">
-                                    <h4>
-                                        <a name="event_beforeAnimChange">beforeAnimChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">beforeAnimChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'anim' changes. Return false to cancel the attribute change.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeAriaTextTemplateChange">
-                                    <h4>
-                                        <a name="event_beforeAriaTextTemplateChange">beforeAriaTextTemplateChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">beforeAriaTextTemplateChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'ariaTextTemplate' changes. Return false to cancel the attribute change.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeBarElChange">
-                                    <h4>
-                                        <a name="event_beforeBarElChange">beforeBarElChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">beforeBarElChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'barEl' changes. Return false to cancel the attribute change.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeDirectionChange">
-                                    <h4>
-                                        <a name="event_beforeDirectionChange">beforeDirectionChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">beforeDirectionChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'direction' changes. Return false to cancel the attribute change.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeHeightChange">
-                                    <h4>
-                                        <a name="event_beforeHeightChange">beforeHeightChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">beforeHeightChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'height' changes. Return false to cancel the attribute change.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeMaskElChange">
-                                    <h4>
-                                        <a name="event_beforeMaskElChange">beforeMaskElChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">beforeMaskElChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'maskEl' changes. Return false to cancel the attribute change.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeMaxValueChange">
-                                    <h4>
-                                        <a name="event_beforeMaxValueChange">beforeMaxValueChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">beforeMaxValueChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'maxValue' changes. Return false to cancel the attribute change.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeMinValueChange">
-                                    <h4>
-                                        <a name="event_beforeMinValueChange">beforeMinValueChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">beforeMinValueChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'minValue' changes. Return false to cancel the attribute change.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeValueChange">
-                                    <h4>
-                                        <a name="event_beforeValueChange">beforeValueChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">beforeValueChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'value' changes. Return false to cancel the attribute change.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
-                                                        </dd>
-                                                        
-                                                </dl>
-
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="" rel="yui:event" resource="#event_beforeWidthChange">
-                                    <h4>
-                                        <a name="event_beforeWidthChange">beforeWidthChange</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                            <strong property="yui:name">beforeWidthChange</strong>
-
-                                            (
-                                                
-                                                        
-                                                         event
-                                                    
-                                                
-                                            )
-
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires before the value for the configuration attribute 'width' changes. Return false to cancel the attribute change.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                            <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
-                                                            </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1640,7 +693,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'direction' changes.
+                                            Fires when the value for the configuration attribute 'direction' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
                                         </div>
 
                                         <div class="description">
@@ -1650,9 +703,9 @@ The method is chainable since it returns a reference to this instance.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1684,7 +737,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'height' changes.
+                                            Fires when the value for the configuration attribute 'height' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
                                         </div>
 
                                         <div class="description">
@@ -1694,9 +747,9 @@ The method is chainable since it returns a reference to this instance.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1728,7 +781,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'maskEl' changes.
+                                            Fires when the value for the configuration attribute 'maskEl' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
                                         </div>
 
                                         <div class="description">
@@ -1738,9 +791,9 @@ The method is chainable since it returns a reference to this instance.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1772,7 +825,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'maxValue' changes.
+                                            Fires when the value for the configuration attribute 'maxValue' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
                                         </div>
 
                                         <div class="description">
@@ -1782,9 +835,9 @@ The method is chainable since it returns a reference to this instance.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1816,7 +869,7 @@ The method is chainable since it returns a reference to this instance.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'minValue' changes.
+                                            Fires when the value for the configuration attribute 'minValue' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
                                         </div>
 
                                         <div class="description">
@@ -1826,9 +879,9 @@ The method is chainable since it returns a reference to this instance.
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1949,7 +1002,7 @@ If animation is not active, it will fire only once providing the end value
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'value' changes.
+                                            Fires when the value for the configuration attribute 'value' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
                                         </div>
 
                                         <div class="description">
@@ -1959,9 +1012,9 @@ If animation is not active, it will fire only once providing the end value
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -1993,7 +1046,7 @@ If animation is not active, it will fire only once providing the end value
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Fires when the value for the configuration attribute 'width' changes.
+                                            Fires when the value for the configuration attribute 'width' is changed. You can listen for the event using the <a href="Attribute.html#method_on">on</a> method if you wish to be notified before the attribute's value has changed, or using the <a href="Event.Target.html#method_after">after</a> method if you wish to be notified after the attribute's value has changed.
                                         </div>
 
                                         <div class="description">
@@ -2003,9 +1056,9 @@ If animation is not active, it will fire only once providing the end value
                                                     <dt>Parameters:</dt>
                                                         <dd rel="yui:parameter">
                                                             <code><span property="yui:name">event</span>
-                                                                &lt;<span property="yui:type">{oldValue: any, newValue: any}</span>&gt;
+                                                                &lt;<span property="yui:type">Event.Facade</span>&gt;
                                                             </code>
-                                                            <span property="yui:description">An object containing the previous attribute value and the new value.</span>
+                                                            <span property="yui:description">An Event Facade object with      the following attribute specific properties added:	<dl>		<dt>prevVal</dt>		<dd>The value of the attribute, prior to it being set</dd>		<dt>newVal</dt>		<dd>The value the attribute is to be set to</dd>		<dt>attrName</dt>		<dd>The name of the attribute being set</dd>		<dt>subAttrName</dt>		<dd>If setting a property within the attribute's value,           the name of the sub-attribute property being set</dd>	</dl></span>
                                                         </dd>
                                                         
                                                 </dl>
@@ -2033,9 +1086,6 @@ If animation is not active, it will fire only once providing the end value
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.util.Element.html#event_beforeAppendTo">
                                         <a class="" href="YAHOO.util.Element.html#event_beforeAppendTo" property="yui:name" title="beforeAppendTo">beforeAppendTo</a><span class="">,</span>
-                                        </span>
-                                                                            <span rel="yui:event" resource="YAHOO.util.Element.html#event_beforeElementChange">
-                                        <a class="" href="YAHOO.util.Element.html#event_beforeElementChange" property="yui:name" title="beforeElementChange">beforeElementChange</a><span class="">,</span>
                                         </span>
                                                                             <span rel="yui:event" resource="YAHOO.util.Element.html#event_contentReady">
                                         <a class="" href="YAHOO.util.Element.html#event_contentReady" property="yui:name" title="contentReady">contentReady</a><span class="">,</span>
@@ -2333,10 +1383,6 @@ It will always be returned as a string including units.
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li class="private"><a href="#property__barSizeFunctions" title="_barSizeFunctions">_barSizeFunctions</a></li>
-                                <li class="private"><a href="#property__barSpace" title="_barSpace">_barSpace</a></li>
-                                <li class="private"><a href="#property__previousValue" title="_previousValue">_previousValue</a></li>
-                                <li class="private"><a href="#property__rendered" title="_rendered">_rendered</a></li>
                                 <li class=""><a href="#property_ProgressBar.MARKUP" title="ProgressBar.MARKUP">ProgressBar.MARKUP</a></li>
                         </ul>
                     </div>
@@ -2344,17 +1390,8 @@ It will always be returned as a string including units.
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li class="private"><a href="#method__animComplete" title="_animComplete">_animComplete</a></li>
-                                <li class="private"><a href="#method__animSetter" title="_animSetter">_animSetter</a></li>
-                                <li class="private"><a href="#method__fixEdges" title="_fixEdges">_fixEdges</a></li>
-                                <li class="private"><a href="#method__heightChange" title="_heightChange">_heightChange</a></li>
                                 <li class="protected"><a href="#method__init" title="_init">_init</a></li>
-                                <li class="private"><a href="#method__recalculateConstants" title="_recalculateConstants">_recalculateConstants</a></li>
-                                <li class="private"><a href="#method__setAriaText" title="_setAriaText">_setAriaText</a></li>
-                                <li class="private"><a href="#method__valueChange" title="_valueChange">_valueChange</a></li>
-                                <li class="private"><a href="#method__widthChange" title="_widthChange">_widthChange</a></li>
                                 <li class=""><a href="#method_destroy" title="destroy">destroy</a></li>
-                                <li class="private"><a href="#method_initAttributes" title="initAttributes">initAttributes</a></li>
                                 <li class=""><a href="#method_redraw" title="redraw">redraw</a></li>
                                 <li class=""><a href="#method_render" title="render">render</a></li>
                         </ul>
@@ -2366,16 +1403,6 @@ It will always be returned as a string including units.
                                 <li class=""><a href="#event_animChange" title="animChange">animChange</a></li>
                                 <li class=""><a href="#event_ariaTextTemplateChange" title="ariaTextTemplateChange">ariaTextTemplateChange</a></li>
                                 <li class=""><a href="#event_barElChange" title="barElChange">barElChange</a></li>
-                                <li class=""><a href="#event_beforeAnimChange" title="beforeAnimChange">beforeAnimChange</a></li>
-                                <li class=""><a href="#event_beforeAriaTextTemplateChange" title="beforeAriaTextTemplateChange">beforeAriaTextTemplateChange</a></li>
-                                <li class=""><a href="#event_beforeBarElChange" title="beforeBarElChange">beforeBarElChange</a></li>
-                                <li class=""><a href="#event_beforeDirectionChange" title="beforeDirectionChange">beforeDirectionChange</a></li>
-                                <li class=""><a href="#event_beforeHeightChange" title="beforeHeightChange">beforeHeightChange</a></li>
-                                <li class=""><a href="#event_beforeMaskElChange" title="beforeMaskElChange">beforeMaskElChange</a></li>
-                                <li class=""><a href="#event_beforeMaxValueChange" title="beforeMaxValueChange">beforeMaxValueChange</a></li>
-                                <li class=""><a href="#event_beforeMinValueChange" title="beforeMinValueChange">beforeMinValueChange</a></li>
-                                <li class=""><a href="#event_beforeValueChange" title="beforeValueChange">beforeValueChange</a></li>
-                                <li class=""><a href="#event_beforeWidthChange" title="beforeWidthChange">beforeWidthChange</a></li>
                                 <li class=""><a href="#event_complete" title="complete">complete</a></li>
                                 <li class=""><a href="#event_directionChange" title="directionChange">directionChange</a></li>
                                 <li class=""><a href="#event_heightChange" title="heightChange">heightChange</a></li>
@@ -2414,7 +1441,7 @@ It will always be returned as a string including units.
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.ProgressBar", "name": "anim", "url": "YAHOO.widget.ProgressBar.html#config_anim", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "animChange", "url": "YAHOO.widget.ProgressBar.html#event_animChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_animComplete", "url": "YAHOO.widget.ProgressBar.html#method__animComplete", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_animSetter", "url": "YAHOO.widget.ProgressBar.html#method__animSetter", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplate", "url": "YAHOO.widget.ProgressBar.html#config_ariaTextTemplate", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_ariaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barEl", "url": "YAHOO.widget.ProgressBar.html#config_barEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barElChange", "url": "YAHOO.widget.ProgressBar.html#event_barElChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSizeFunctions", "url": "YAHOO.widget.ProgressBar.html#property__barSizeFunctions", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_barSpace", "url": "YAHOO.widget.ProgressBar.html#property__barSpace", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAnimChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAnimChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeAriaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeAriaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeBarElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeBarElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeDirectionChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeDirectionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeHeightChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeHeightChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaskElChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMaxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMaxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeMinValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeMinValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeValueChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "beforeWidthChange", "url": "YAHOO.widget.ProgressBar.html#event_beforeWidthChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "complete", "url": "YAHOO.widget.ProgressBar.html#event_complete", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "destroy", "url": "YAHOO.widget.ProgressBar.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "direction", "url": "YAHOO.widget.ProgressBar.html#config_direction", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "directionChange", "url": "YAHOO.widget.ProgressBar.html#event_directionChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_fixEdges", "url": "YAHOO.widget.ProgressBar.html#method__fixEdges", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "height", "url": "YAHOO.widget.ProgressBar.html#config_height", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_heightChange", "url": "YAHOO.widget.ProgressBar.html#method__heightChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "heightChange", "url": "YAHOO.widget.ProgressBar.html#event_heightChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ProgressBar", "name": "_init", "url": "YAHOO.widget.ProgressBar.html#method__init", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "initAttributes", "url": "YAHOO.widget.ProgressBar.html#method_initAttributes", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskEl", "url": "YAHOO.widget.ProgressBar.html#config_maskEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskElChange", "url": "YAHOO.widget.ProgressBar.html#event_maskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValue", "url": "YAHOO.widget.ProgressBar.html#config_maxValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_maxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValue", "url": "YAHOO.widget.ProgressBar.html#config_minValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValueChange", "url": "YAHOO.widget.ProgressBar.html#event_minValueChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_previousValue", "url": "YAHOO.widget.ProgressBar.html#property__previousValue", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "progress", "url": "YAHOO.widget.ProgressBar.html#event_progress", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ProgressBar.MARKUP", "url": "YAHOO.widget.ProgressBar.html#property_ProgressBar.MARKUP", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_recalculateConstants", "url": "YAHOO.widget.ProgressBar.html#method__recalculateConstants", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "redraw", "url": "YAHOO.widget.ProgressBar.html#method_redraw", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "render", "url": "YAHOO.widget.ProgressBar.html#method_render", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_rendered", "url": "YAHOO.widget.ProgressBar.html#property__rendered", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_setAriaText", "url": "YAHOO.widget.ProgressBar.html#method__setAriaText", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "start", "url": "YAHOO.widget.ProgressBar.html#event_start", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "value", "url": "YAHOO.widget.ProgressBar.html#config_value", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_valueChange", "url": "YAHOO.widget.ProgressBar.html#method__valueChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "valueChange", "url": "YAHOO.widget.ProgressBar.html#event_valueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "width", "url": "YAHOO.widget.ProgressBar.html#config_width", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ProgressBar", "name": "_widthChange", "url": "YAHOO.widget.ProgressBar.html#method__widthChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "widthChange", "url": "YAHOO.widget.ProgressBar.html#event_widthChange", "type": "event"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.ProgressBar", "name": "anim", "url": "YAHOO.widget.ProgressBar.html#config_anim", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "animChange", "url": "YAHOO.widget.ProgressBar.html#event_animChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplate", "url": "YAHOO.widget.ProgressBar.html#config_ariaTextTemplate", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ariaTextTemplateChange", "url": "YAHOO.widget.ProgressBar.html#event_ariaTextTemplateChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barEl", "url": "YAHOO.widget.ProgressBar.html#config_barEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "barElChange", "url": "YAHOO.widget.ProgressBar.html#event_barElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "complete", "url": "YAHOO.widget.ProgressBar.html#event_complete", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "destroy", "url": "YAHOO.widget.ProgressBar.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "direction", "url": "YAHOO.widget.ProgressBar.html#config_direction", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "directionChange", "url": "YAHOO.widget.ProgressBar.html#event_directionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "height", "url": "YAHOO.widget.ProgressBar.html#config_height", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "heightChange", "url": "YAHOO.widget.ProgressBar.html#event_heightChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ProgressBar", "name": "_init", "url": "YAHOO.widget.ProgressBar.html#method__init", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskEl", "url": "YAHOO.widget.ProgressBar.html#config_maskEl", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maskElChange", "url": "YAHOO.widget.ProgressBar.html#event_maskElChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValue", "url": "YAHOO.widget.ProgressBar.html#config_maxValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "maxValueChange", "url": "YAHOO.widget.ProgressBar.html#event_maxValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValue", "url": "YAHOO.widget.ProgressBar.html#config_minValue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "minValueChange", "url": "YAHOO.widget.ProgressBar.html#event_minValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "progress", "url": "YAHOO.widget.ProgressBar.html#event_progress", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "ProgressBar.MARKUP", "url": "YAHOO.widget.ProgressBar.html#property_ProgressBar.MARKUP", "type": "property"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "redraw", "url": "YAHOO.widget.ProgressBar.html#method_redraw", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "render", "url": "YAHOO.widget.ProgressBar.html#method_render", "type": "method"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "start", "url": "YAHOO.widget.ProgressBar.html#event_start", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "value", "url": "YAHOO.widget.ProgressBar.html#config_value", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "valueChange", "url": "YAHOO.widget.ProgressBar.html#event_valueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "width", "url": "YAHOO.widget.ProgressBar.html#config_width", "type": "config"}, {"access": "", "host": "YAHOO.widget.ProgressBar", "name": "widthChange", "url": "YAHOO.widget.ProgressBar.html#event_widthChange", "type": "event"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

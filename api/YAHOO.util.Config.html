@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Container&nbsp; <span class="subtitle">2.8.0r4</span></h3>
+        <h3>Container&nbsp; <span class="subtitle">-s</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_container.html" title="container">container</a>
                  &gt; YAHOO.util.Config 
@@ -100,54 +100,6 @@ to its initial state.
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <div class="private" rel="yui:property" resource="#property_config">
-                                    <h4><a name="property_config" property="yui:name">config</a>
-                                        - <code>private <span property="yui:type">Object</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Maintains the local collection of configuration property objects and 
-their specified values
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_eventQueue">
-                                    <h4><a name="property_eventQueue" property="yui:name">eventQueue</a>
-                                        - <code>private <span property="yui:type">Object</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Maintains the local, normalized CustomEvent queue
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_initialConfig">
-                                    <h4><a name="property_initialConfig" property="yui:name">initialConfig</a>
-                                        - <code>private <span property="yui:type">Object</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Maintains the local collection of configuration property objects as 
-they were initially applied.
-This object is used when resetting a property.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:property" resource="#property_owner">
                                     <h4><a name="property_owner" property="yui:name">owner</a>
                                         - <code><span property="yui:type">Object</span></code>
@@ -171,36 +123,6 @@ This object is used when resetting a property.
                                         <div class="description" property="yui:description">
                                             Boolean flag that specifies whether a queue is currently 
 being executed
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_YAHOO.util.Config.BOOLEAN_TYPE">
-                                    <h4><a name="property_YAHOO.util.Config.BOOLEAN_TYPE" property="yui:name">YAHOO.util.Config.BOOLEAN_TYPE</a>
-                                        - <code>private static final <span property="yui:type">object</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Constant representing the boolean type string
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property_YAHOO.util.Config.CONFIG_CHANGED_EVENT">
-                                    <h4><a name="property_YAHOO.util.Config.CONFIG_CHANGED_EVENT" property="yui:name">YAHOO.util.Config.CONFIG_CHANGED_EVENT</a>
-                                        - <code>private static final <span property="yui:type">object</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Constant representing the CustomEvent type for the config changed event.
                                         </div>
                                     </div>
      
@@ -455,60 +377,6 @@ property's change event and all listeners from the configChangedEvent.
 
                                         <div class="description">
 
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_fireEvent">
-                                    <h4>
-                                        <a name="method_fireEvent">fireEvent</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">fireEvent</strong>
-                                           (
-                                                
-                                                        
-                                                         key
-                                                    
-                                                
-                                                        , 
-                                                         Object
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Fires a configuration property event using the specified value.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">key</span>
-                                                        &lt;<span property="yui:type">String</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> The configuration property's name</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">Object</span>
-                                                        &lt;<span property="yui:type">value</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> The value of the correct type for the property</span>
-                                                        </dd>
-                                                </dl>
 
 
 
@@ -1399,13 +1267,8 @@ to the CustomEvent passed in</dd>
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li class="private"><a href="#property_config" title="config">config</a></li>
-                                <li class="private"><a href="#property_eventQueue" title="eventQueue">eventQueue</a></li>
-                                <li class="private"><a href="#property_initialConfig" title="initialConfig">initialConfig</a></li>
                                 <li class=""><a href="#property_owner" title="owner">owner</a></li>
                                 <li class=""><a href="#property_queueInProgress" title="queueInProgress">queueInProgress</a></li>
-                                <li class="private"><a href="#property_YAHOO.util.Config.BOOLEAN_TYPE" title="YAHOO.util.Config.BOOLEAN_TYPE">YAHOO.util.Config.BOOLEAN_TYPE</a></li>
-                                <li class="private"><a href="#property_YAHOO.util.Config.CONFIG_CHANGED_EVENT" title="YAHOO.util.Config.CONFIG_CHANGED_EVENT">YAHOO.util.Config.CONFIG_CHANGED_EVENT</a></li>
                         </ul>
                     </div>
 
@@ -1417,7 +1280,6 @@ to the CustomEvent passed in</dd>
                                 <li class=""><a href="#method_checkBoolean" title="checkBoolean">checkBoolean</a></li>
                                 <li class=""><a href="#method_checkNumber" title="checkNumber">checkNumber</a></li>
                                 <li class=""><a href="#method_destroy" title="destroy">destroy</a></li>
-                                <li class="private"><a href="#method_fireEvent" title="fireEvent">fireEvent</a></li>
                                 <li class=""><a href="#method_fireQueue" title="fireQueue">fireQueue</a></li>
                                 <li class=""><a href="#method_getConfig" title="getConfig">getConfig</a></li>
                                 <li class=""><a href="#method_getProperty" title="getProperty">getProperty</a></li>
@@ -1452,7 +1314,7 @@ to the CustomEvent passed in</dd>
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Config", "name": "addProperty", "url": "YAHOO.util.Config.html#method_addProperty", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "applyConfig", "url": "YAHOO.util.Config.html#method_applyConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "checkBoolean", "url": "YAHOO.util.Config.html#method_checkBoolean", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "checkNumber", "url": "YAHOO.util.Config.html#method_checkNumber", "type": "method"}, {"access": "private", "host": "YAHOO.util.Config", "name": "config", "url": "YAHOO.util.Config.html#property_config", "type": "property"}, {"access": "", "host": "YAHOO.util.Config", "name": "configChangedEvent", "url": "YAHOO.util.Config.html#event_configChangedEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.Config", "name": "destroy", "url": "YAHOO.util.Config.html#method_destroy", "type": "method"}, {"access": "private", "host": "YAHOO.util.Config", "name": "eventQueue", "url": "YAHOO.util.Config.html#property_eventQueue", "type": "property"}, {"access": "private", "host": "YAHOO.util.Config", "name": "fireEvent", "url": "YAHOO.util.Config.html#method_fireEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "fireQueue", "url": "YAHOO.util.Config.html#method_fireQueue", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "getConfig", "url": "YAHOO.util.Config.html#method_getConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "getProperty", "url": "YAHOO.util.Config.html#method_getProperty", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "init", "url": "YAHOO.util.Config.html#method_init", "type": "method"}, {"access": "private", "host": "YAHOO.util.Config", "name": "initialConfig", "url": "YAHOO.util.Config.html#property_initialConfig", "type": "property"}, {"access": "", "host": "YAHOO.util.Config", "name": "outputEventQueue", "url": "YAHOO.util.Config.html#method_outputEventQueue", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "owner", "url": "YAHOO.util.Config.html#property_owner", "type": "property"}, {"access": "", "host": "YAHOO.util.Config", "name": "queueInProgress", "url": "YAHOO.util.Config.html#property_queueInProgress", "type": "property"}, {"access": "", "host": "YAHOO.util.Config", "name": "queueProperty", "url": "YAHOO.util.Config.html#method_queueProperty", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "refireEvent", "url": "YAHOO.util.Config.html#method_refireEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "refresh", "url": "YAHOO.util.Config.html#method_refresh", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "resetProperty", "url": "YAHOO.util.Config.html#method_resetProperty", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "setProperty", "url": "YAHOO.util.Config.html#method_setProperty", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "subscribeToConfigEvent", "url": "YAHOO.util.Config.html#method_subscribeToConfigEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "toString", "url": "YAHOO.util.Config.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "unsubscribeFromConfigEvent", "url": "YAHOO.util.Config.html#method_unsubscribeFromConfigEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "YAHOO.util.Config.alreadySubscribed", "url": "YAHOO.util.Config.html#method_YAHOO.util.Config.alreadySubscribed", "type": "method"}, {"access": "private", "host": "YAHOO.util.Config", "name": "YAHOO.util.Config.BOOLEAN_TYPE", "url": "YAHOO.util.Config.html#property_YAHOO.util.Config.BOOLEAN_TYPE", "type": "property"}, {"access": "private", "host": "YAHOO.util.Config", "name": "YAHOO.util.Config.CONFIG_CHANGED_EVENT", "url": "YAHOO.util.Config.html#property_YAHOO.util.Config.CONFIG_CHANGED_EVENT", "type": "property"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Config", "name": "addProperty", "url": "YAHOO.util.Config.html#method_addProperty", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "applyConfig", "url": "YAHOO.util.Config.html#method_applyConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "checkBoolean", "url": "YAHOO.util.Config.html#method_checkBoolean", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "checkNumber", "url": "YAHOO.util.Config.html#method_checkNumber", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "configChangedEvent", "url": "YAHOO.util.Config.html#event_configChangedEvent", "type": "event"}, {"access": "", "host": "YAHOO.util.Config", "name": "destroy", "url": "YAHOO.util.Config.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "fireQueue", "url": "YAHOO.util.Config.html#method_fireQueue", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "getConfig", "url": "YAHOO.util.Config.html#method_getConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "getProperty", "url": "YAHOO.util.Config.html#method_getProperty", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "init", "url": "YAHOO.util.Config.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "outputEventQueue", "url": "YAHOO.util.Config.html#method_outputEventQueue", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "owner", "url": "YAHOO.util.Config.html#property_owner", "type": "property"}, {"access": "", "host": "YAHOO.util.Config", "name": "queueInProgress", "url": "YAHOO.util.Config.html#property_queueInProgress", "type": "property"}, {"access": "", "host": "YAHOO.util.Config", "name": "queueProperty", "url": "YAHOO.util.Config.html#method_queueProperty", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "refireEvent", "url": "YAHOO.util.Config.html#method_refireEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "refresh", "url": "YAHOO.util.Config.html#method_refresh", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "resetProperty", "url": "YAHOO.util.Config.html#method_resetProperty", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "setProperty", "url": "YAHOO.util.Config.html#method_setProperty", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "subscribeToConfigEvent", "url": "YAHOO.util.Config.html#method_subscribeToConfigEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "toString", "url": "YAHOO.util.Config.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "unsubscribeFromConfigEvent", "url": "YAHOO.util.Config.html#method_unsubscribeFromConfigEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Config", "name": "YAHOO.util.Config.alreadySubscribed", "url": "YAHOO.util.Config.html#method_YAHOO.util.Config.alreadySubscribed", "type": "method"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

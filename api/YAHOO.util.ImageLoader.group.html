@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>imageloader&nbsp; <span class="subtitle">2.8.0r4</span></h3>
+        <h3>imageloader&nbsp; <span class="subtitle">-s</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_imageloader.html" title="imageloader">imageloader</a>
                  &gt; YAHOO.util.ImageLoader.group 
@@ -114,84 +114,6 @@
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <div class="private" rel="yui:property" resource="#property__classImageEls">
-                                    <h4><a name="property__classImageEls" property="yui:name">_classImageEls</a>
-                                        - <code>private <span property="yui:type">Array</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            HTML elements having the class name that is associated with this group
-Elements are stored during the _foldCheck function and reused later during the fetch function. Gives a slight performance improvement when className and foldConditional are both used
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__customTriggers">
-                                    <h4><a name="property__customTriggers" property="yui:name">_customTriggers</a>
-                                        - <code>private <span property="yui:type">Array</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Collection of custom-event triggers for this group.
-Keeps track of each trigger's event object and event-listener-callback "fetch" function
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__imgObjs">
-                                    <h4><a name="property__imgObjs" property="yui:name">_imgObjs</a>
-                                        - <code>private <span property="yui:type">Object</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Collection of images registered with this group
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__timeout">
-                                    <h4><a name="property__timeout" property="yui:name">_timeout</a>
-                                        - <code>private <span property="yui:type">Object</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Timeout object to keep a handle on the time limit
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__triggers">
-                                    <h4><a name="property__triggers" property="yui:name">_triggers</a>
-                                        - <code>private <span property="yui:type">Array</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Collection of triggers for this group.
-Keeps track of each trigger's element, event, and event-listener-callback "fetch" function
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:property" resource="#property_className">
                                     <h4><a name="property_className" property="yui:name">className</a>
                                         - <code><span property="yui:type">String</span></code>
@@ -262,134 +184,6 @@ This class should have, in its CSS style definition, "background:none !important
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
-                                    <div class="private" rel="yui:method" resource="#method__fetchByClass">
-                                    <h4>
-                                        <a name="method__fetchByClass">_fetchByClass</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">_fetchByClass</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Finds all elements in the Dom with the class name specified in the group. Removes the class from the element in order to let the style definitions trigger the image fetching
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__foldCheck">
-                                    <h4>
-                                        <a name="method__foldCheck">_foldCheck</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">_foldCheck</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Checks the position of each image in the group. If any part of the image is within the client viewport, shows the image immediately.
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__getFetchTimeout">
-                                    <h4>
-                                        <a name="method__getFetchTimeout">_getFetchTimeout</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        Function
-                                            <strong property="yui:name">_getFetchTimeout</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Returns the group's fetch method, with the proper closure, for use with setTimeout
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                            Function
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">group's fetch method</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__onloadTasks">
-                                    <h4>
-                                        <a name="method__onloadTasks">_onloadTasks</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">_onloadTasks</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Setup to do in the window's onload
-Initiates time limit for group; executes the fold check for the images
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:method" resource="#method_addCustomTrigger">
                                     <h4>
                                         <a name="method_addCustomTrigger">addCustomTrigger</a></h4>
@@ -826,11 +620,6 @@ Valid properties are 'sizingMethod' and 'enabled'</span>
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li class="private"><a href="#property__classImageEls" title="_classImageEls">_classImageEls</a></li>
-                                <li class="private"><a href="#property__customTriggers" title="_customTriggers">_customTriggers</a></li>
-                                <li class="private"><a href="#property__imgObjs" title="_imgObjs">_imgObjs</a></li>
-                                <li class="private"><a href="#property__timeout" title="_timeout">_timeout</a></li>
-                                <li class="private"><a href="#property__triggers" title="_triggers">_triggers</a></li>
                                 <li class=""><a href="#property_className" title="className">className</a></li>
                                 <li class=""><a href="#property_foldConditional" title="foldConditional">foldConditional</a></li>
                                 <li class=""><a href="#property_name" title="name">name</a></li>
@@ -841,10 +630,6 @@ Valid properties are 'sizingMethod' and 'enabled'</span>
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li class="private"><a href="#method__fetchByClass" title="_fetchByClass">_fetchByClass</a></li>
-                                <li class="private"><a href="#method__foldCheck" title="_foldCheck">_foldCheck</a></li>
-                                <li class="private"><a href="#method__getFetchTimeout" title="_getFetchTimeout">_getFetchTimeout</a></li>
-                                <li class="private"><a href="#method__onloadTasks" title="_onloadTasks">_onloadTasks</a></li>
                                 <li class=""><a href="#method_addCustomTrigger" title="addCustomTrigger">addCustomTrigger</a></li>
                                 <li class=""><a href="#method_addTrigger" title="addTrigger">addTrigger</a></li>
                                 <li class=""><a href="#method_fetch" title="fetch">fetch</a></li>
@@ -865,7 +650,7 @@ Valid properties are 'sizingMethod' and 'enabled'</span>
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "addCustomTrigger", "url": "YAHOO.util.ImageLoader.group.html#method_addCustomTrigger", "type": "method"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "addTrigger", "url": "YAHOO.util.ImageLoader.group.html#method_addTrigger", "type": "method"}, {"access": "private", "host": "YAHOO.util.ImageLoader.group", "name": "_classImageEls", "url": "YAHOO.util.ImageLoader.group.html#property__classImageEls", "type": "property"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "className", "url": "YAHOO.util.ImageLoader.group.html#property_className", "type": "property"}, {"access": "private", "host": "YAHOO.util.ImageLoader.group", "name": "_customTriggers", "url": "YAHOO.util.ImageLoader.group.html#property__customTriggers", "type": "property"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "fetch", "url": "YAHOO.util.ImageLoader.group.html#method_fetch", "type": "method"}, {"access": "private", "host": "YAHOO.util.ImageLoader.group", "name": "_fetchByClass", "url": "YAHOO.util.ImageLoader.group.html#method__fetchByClass", "type": "method"}, {"access": "private", "host": "YAHOO.util.ImageLoader.group", "name": "_foldCheck", "url": "YAHOO.util.ImageLoader.group.html#method__foldCheck", "type": "method"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "foldConditional", "url": "YAHOO.util.ImageLoader.group.html#property_foldConditional", "type": "property"}, {"access": "private", "host": "YAHOO.util.ImageLoader.group", "name": "_getFetchTimeout", "url": "YAHOO.util.ImageLoader.group.html#method__getFetchTimeout", "type": "method"}, {"access": "private", "host": "YAHOO.util.ImageLoader.group", "name": "_imgObjs", "url": "YAHOO.util.ImageLoader.group.html#property__imgObjs", "type": "property"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "name", "url": "YAHOO.util.ImageLoader.group.html#property_name", "type": "property"}, {"access": "private", "host": "YAHOO.util.ImageLoader.group", "name": "_onloadTasks", "url": "YAHOO.util.ImageLoader.group.html#method__onloadTasks", "type": "method"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "registerBgImage", "url": "YAHOO.util.ImageLoader.group.html#method_registerBgImage", "type": "method"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "registerPngBgImage", "url": "YAHOO.util.ImageLoader.group.html#method_registerPngBgImage", "type": "method"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "registerSrcImage", "url": "YAHOO.util.ImageLoader.group.html#method_registerSrcImage", "type": "method"}, {"access": "private", "host": "YAHOO.util.ImageLoader.group", "name": "_timeout", "url": "YAHOO.util.ImageLoader.group.html#property__timeout", "type": "property"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "timeoutLen", "url": "YAHOO.util.ImageLoader.group.html#property_timeoutLen", "type": "property"}, {"access": "private", "host": "YAHOO.util.ImageLoader.group", "name": "_triggers", "url": "YAHOO.util.ImageLoader.group.html#property__triggers", "type": "property"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "addCustomTrigger", "url": "YAHOO.util.ImageLoader.group.html#method_addCustomTrigger", "type": "method"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "addTrigger", "url": "YAHOO.util.ImageLoader.group.html#method_addTrigger", "type": "method"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "className", "url": "YAHOO.util.ImageLoader.group.html#property_className", "type": "property"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "fetch", "url": "YAHOO.util.ImageLoader.group.html#method_fetch", "type": "method"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "foldConditional", "url": "YAHOO.util.ImageLoader.group.html#property_foldConditional", "type": "property"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "name", "url": "YAHOO.util.ImageLoader.group.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "registerBgImage", "url": "YAHOO.util.ImageLoader.group.html#method_registerBgImage", "type": "method"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "registerPngBgImage", "url": "YAHOO.util.ImageLoader.group.html#method_registerPngBgImage", "type": "method"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "registerSrcImage", "url": "YAHOO.util.ImageLoader.group.html#method_registerSrcImage", "type": "method"}, {"access": "", "host": "YAHOO.util.ImageLoader.group", "name": "timeoutLen", "url": "YAHOO.util.ImageLoader.group.html#property_timeoutLen", "type": "property"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

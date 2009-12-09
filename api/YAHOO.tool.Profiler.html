@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>profiler&nbsp; <span class="subtitle">2.8.0r4</span></h3>
+        <h3>profiler&nbsp; <span class="subtitle">-s</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_profiler.html" title="profiler">profiler</a>
                  &gt; YAHOO.tool.Profiler 
@@ -104,50 +104,6 @@
                                                         </code>
                                                         <span property="yui:description"> (Optional) The name of the report to clear. If
 omitted, then all report data is cleared.</span>
-                                                        </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_createReport">
-                                    <h4>
-                                        <a name="method_createReport">createReport</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        Void
-                                            <strong property="yui:name">createReport</strong>
-                                           (
-                                                
-                                                        
-                                                         name
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Creates a report object with the given name.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">name</span>
-                                                        &lt;<span property="yui:type">String</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> The name to store for the report object.</span>
                                                         </dd>
                                                 </dl>
 
@@ -841,63 +797,6 @@ using the same methodology.
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="private" rel="yui:method" resource="#method_saveDataPoint">
-                                    <h4>
-                                        <a name="method_saveDataPoint">saveDataPoint</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                         static 
-                                        
-                                        Void
-                                            <strong property="yui:name">saveDataPoint</strong>
-                                           (
-                                                
-                                                        
-                                                         name
-                                                    
-                                                
-                                                        , 
-                                                         duration
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Called when a method ends execution. Marks the start and end time of the 
-method so it can calculate how long the function took to execute. Also 
-updates min/max/avg calculations for the function.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">name</span>
-                                                        &lt;<span property="yui:type">String</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> The name of the function to mark as stopped.</span>
-                                                        </dd>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">duration</span>
-                                                        &lt;<span property="yui:type">int</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> The number of milliseconds it took the function to
-execute.</span>
-                                                        </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:method" resource="#method_start">
                                     <h4>
                                         <a name="method_start">start</a></h4>
@@ -1183,7 +1082,6 @@ unregistered.</span>
                         <h4>Methods</h4>
                         <ul class="content">        
                                 <li class=""><a href="#method_clear" title="clear">clear</a></li>
-                                <li class="private"><a href="#method_createReport" title="createReport">createReport</a></li>
                                 <li class=""><a href="#method_getAverage" title="getAverage">getAverage</a></li>
                                 <li class=""><a href="#method_getCallCount" title="getCallCount">getCallCount</a></li>
                                 <li class=""><a href="#method_getFullReport" title="getFullReport">getFullReport</a></li>
@@ -1197,7 +1095,6 @@ unregistered.</span>
                                 <li class=""><a href="#method_registerConstructor" title="registerConstructor">registerConstructor</a></li>
                                 <li class=""><a href="#method_registerFunction" title="registerFunction">registerFunction</a></li>
                                 <li class=""><a href="#method_registerObject" title="registerObject">registerObject</a></li>
-                                <li class="private"><a href="#method_saveDataPoint" title="saveDataPoint">saveDataPoint</a></li>
                                 <li class=""><a href="#method_start" title="start">start</a></li>
                                 <li class=""><a href="#method_stop" title="stop">stop</a></li>
                                 <li class=""><a href="#method_unregisterFunction" title="unregisterFunction">unregisterFunction</a></li>
@@ -1216,7 +1113,7 @@ unregistered.</span>
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.tool.Profiler", "name": "clear", "url": "YAHOO.tool.Profiler.html#method_clear", "type": "method"}, {"access": "private", "host": "YAHOO.tool.Profiler", "name": "createReport", "url": "YAHOO.tool.Profiler.html#method_createReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getAverage", "url": "YAHOO.tool.Profiler.html#method_getAverage", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getCallCount", "url": "YAHOO.tool.Profiler.html#method_getCallCount", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getFullReport", "url": "YAHOO.tool.Profiler.html#method_getFullReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getFunctionReport", "url": "YAHOO.tool.Profiler.html#method_getFunctionReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getMax", "url": "YAHOO.tool.Profiler.html#method_getMax", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getMin", "url": "YAHOO.tool.Profiler.html#method_getMin", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getOriginal", "url": "YAHOO.tool.Profiler.html#method_getOriginal", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getReport", "url": "YAHOO.tool.Profiler.html#method_getReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "instrument", "url": "YAHOO.tool.Profiler.html#method_instrument", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "pause", "url": "YAHOO.tool.Profiler.html#method_pause", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "registerConstructor", "url": "YAHOO.tool.Profiler.html#method_registerConstructor", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "registerFunction", "url": "YAHOO.tool.Profiler.html#method_registerFunction", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "registerObject", "url": "YAHOO.tool.Profiler.html#method_registerObject", "type": "method"}, {"access": "private", "host": "YAHOO.tool.Profiler", "name": "saveDataPoint", "url": "YAHOO.tool.Profiler.html#method_saveDataPoint", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "start", "url": "YAHOO.tool.Profiler.html#method_start", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "stop", "url": "YAHOO.tool.Profiler.html#method_stop", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "unregisterFunction", "url": "YAHOO.tool.Profiler.html#method_unregisterFunction", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "unregisterObject", "url": "YAHOO.tool.Profiler.html#method_unregisterObject", "type": "method"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.tool.Profiler", "name": "clear", "url": "YAHOO.tool.Profiler.html#method_clear", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getAverage", "url": "YAHOO.tool.Profiler.html#method_getAverage", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getCallCount", "url": "YAHOO.tool.Profiler.html#method_getCallCount", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getFullReport", "url": "YAHOO.tool.Profiler.html#method_getFullReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getFunctionReport", "url": "YAHOO.tool.Profiler.html#method_getFunctionReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getMax", "url": "YAHOO.tool.Profiler.html#method_getMax", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getMin", "url": "YAHOO.tool.Profiler.html#method_getMin", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getOriginal", "url": "YAHOO.tool.Profiler.html#method_getOriginal", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "getReport", "url": "YAHOO.tool.Profiler.html#method_getReport", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "instrument", "url": "YAHOO.tool.Profiler.html#method_instrument", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "pause", "url": "YAHOO.tool.Profiler.html#method_pause", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "registerConstructor", "url": "YAHOO.tool.Profiler.html#method_registerConstructor", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "registerFunction", "url": "YAHOO.tool.Profiler.html#method_registerFunction", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "registerObject", "url": "YAHOO.tool.Profiler.html#method_registerObject", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "start", "url": "YAHOO.tool.Profiler.html#method_start", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "stop", "url": "YAHOO.tool.Profiler.html#method_stop", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "unregisterFunction", "url": "YAHOO.tool.Profiler.html#method_unregisterFunction", "type": "method"}, {"access": "", "host": "YAHOO.tool.Profiler", "name": "unregisterObject", "url": "YAHOO.tool.Profiler.html#method_unregisterObject", "type": "method"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

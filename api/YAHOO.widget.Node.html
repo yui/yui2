@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>TreeView Widget&nbsp; <span class="subtitle">2.8.0r4</span></h3>
+        <h3>TreeView Widget&nbsp; <span class="subtitle">-s</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_treeview.html" title="treeview">treeview</a>
                  &gt; YAHOO.widget.Node 
@@ -143,71 +143,6 @@ the rest of the values will be stored in noderef.data</span>
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <div class="private" rel="yui:property" resource="#property__dynLoad">
-                                    <h4><a name="property__dynLoad" property="yui:name">_dynLoad</a>
-                                        - <code>private <span property="yui:type">boolean</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            We can set the node up to call an external method to get the child
-data dynamically.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__focusedItem">
-                                    <h4><a name="property__focusedItem" property="yui:name">_focusedItem</a>
-                                        - <code>private <span property="yui:type">DOM element</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            DOM element that actually got the browser focus
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__focusHighlightedItems">
-                                    <h4><a name="property__focusHighlightedItems" property="yui:name">_focusHighlightedItems</a>
-                                        - <code>private <span property="yui:type">Array of DOM elements</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            array of items that had the focus set on them
-so that they can be cleaned when focus is lost
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__type">
-                                    <h4><a name="property__type" property="yui:name">_type</a>
-                                        - <code>private <span property="yui:type">string</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The node type
-                                        </div>
-                                    </div>
-     
-                                        
-                                    <div class="default" property="yui:defaultValue">
-                                        Default Value: "Node"
-                                    </div>        
-
-
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:property" resource="#property_children">
                                     <h4><a name="property_children" property="yui:name">children</a>
                                         - <code><span property="yui:type">Node[]</span></code>
@@ -664,14 +599,6 @@ need this, and implement it if we do.
                             <div class="content" rel="yui:properties">
                                 <code>
                                     
-                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_events">
-                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events" property="yui:name" title="__yui_events">__yui_events</a><span class="private">,</span>
-                                        </span>
-                                    
-                                        <span rel="yui:property" resource="YAHOO.util.EventProvider.html#property___yui_subscribers">
-                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers" property="yui:name" title="__yui_subscribers">__yui_subscribers</a>
-                                        </span>
-                                    
                                 </code>
                             </div>
                         </div>
@@ -682,187 +609,6 @@ need this, and implement it if we do.
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
-                                    <div class="private" rel="yui:method" resource="#method__canHaveFocus">
-                                    <h4>
-                                        <a name="method__canHaveFocus">_canHaveFocus</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        boolean
-                                            <strong property="yui:name">_canHaveFocus</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Returns true if there are any elements in the node that can 
-accept the real actual browser focus
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                            boolean
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">success</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__childrenHighlighted">
-                                    <h4>
-                                        <a name="method__childrenHighlighted">_childrenHighlighted</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">_childrenHighlighted</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Checks whether all or part of the children of a node are highlighted and
-sets the node highlight to full, none or partial highlight.
-If set to propagate it will further call the parent
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__removeFocus">
-                                    <h4>
-                                        <a name="method__removeFocus">_removeFocus</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">_removeFocus</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Removes the focus of previously selected Node
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__setHighlightClassName">
-                                    <h4>
-                                        <a name="method__setHighlightClassName">_setHighlightClassName</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        void
-                                            <strong property="yui:name">_setHighlightClassName</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Changes the classNames on the toggle and content containers to reflect the current highlighting
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_appendChild">
-                                    <h4>
-                                        <a name="method_appendChild">appendChild</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        Node
-                                            <strong property="yui:name">appendChild</strong>
-                                           (
-                                                
-                                                        
-                                                         childNode
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Appends a node to the child collection.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">childNode</span>
-                                                        &lt;<span property="yui:type">Node</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  the new node</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                            Node
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">the child node</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:method" resource="#method_appendTo">
                                     <h4>
                                         <a name="method_appendTo">appendTo</a></h4>
@@ -1465,45 +1211,6 @@ If will fail in nodes that have no anchor
                                                             string
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">the element id for this node's children div</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_getChildrenHtml">
-                                    <h4>
-                                        <a name="method_getChildrenHtml">getChildrenHtml</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        string
-                                            <strong property="yui:name">getChildrenHtml</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Called when first rendering the tree.  We always build the div that will
-contain this nodes children, but we don't render the children themselves
-unless this node is expanded.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                            string
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">the children container div html and any expanded children</dd>
                                                 </dl>
 
 
@@ -2478,58 +2185,6 @@ be used to render this node</span>
                                     </div>
                                     <hr />
                                     </div>
-                                    <div class="private" rel="yui:method" resource="#method_isChildOf">
-                                    <h4>
-                                        <a name="method_isChildOf">isChildOf</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        boolean
-                                            <strong property="yui:name">isChildOf</strong>
-                                           (
-                                                
-                                                        
-                                                         parentNode
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Returns true if the Node is a child of supplied Node
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">parentNode</span>
-                                                        &lt;<span property="yui:type">Node</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description">  the Node to check</span>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                            boolean
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">The node index if this Node is a child of 
-supplied Node, else -1.</dd>
-                                                </dl>
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:method" resource="#method_isDynamic">
                                     <h4>
                                         <a name="method_isDynamic">isDynamic</a></h4>
@@ -2660,44 +2315,6 @@ node is expanded and new children have been added.
                                         <div class="description">
 
 
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method_renderChildren">
-                                    <h4>
-                                        <a name="method_renderChildren">renderChildren</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        string
-                                            <strong property="yui:name">renderChildren</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Generates the markup for the child nodes.  This is not done until the node
-is expanded.
-                                        </div>
-
-                                        <div class="description">
-
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code property="yui:return">
-                                                            string
-                                                    </code></dt>
-                                                    <dd property="yui:returnInfo">the html for this node's children</dd>
-                                                </dl>
 
 
              
@@ -3227,10 +2844,6 @@ one tree to another.
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li class="private"><a href="#property__dynLoad" title="_dynLoad">_dynLoad</a></li>
-                                <li class="private"><a href="#property__focusedItem" title="_focusedItem">_focusedItem</a></li>
-                                <li class="private"><a href="#property__focusHighlightedItems" title="_focusHighlightedItems">_focusHighlightedItems</a></li>
-                                <li class="private"><a href="#property__type" title="_type">_type</a></li>
                                 <li class=""><a href="#property_children" title="children">children</a></li>
                                 <li class=""><a href="#property_childrenRendered" title="childrenRendered">childrenRendered</a></li>
                                 <li class=""><a href="#property_className" title="className">className</a></li>
@@ -3264,11 +2877,6 @@ one tree to another.
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li class="private"><a href="#method__canHaveFocus" title="_canHaveFocus">_canHaveFocus</a></li>
-                                <li class="private"><a href="#method__childrenHighlighted" title="_childrenHighlighted">_childrenHighlighted</a></li>
-                                <li class="private"><a href="#method__removeFocus" title="_removeFocus">_removeFocus</a></li>
-                                <li class="private"><a href="#method__setHighlightClassName" title="_setHighlightClassName">_setHighlightClassName</a></li>
-                                <li class="private"><a href="#method_appendChild" title="appendChild">appendChild</a></li>
                                 <li class=""><a href="#method_appendTo" title="appendTo">appendTo</a></li>
                                 <li class=""><a href="#method_applyParent" title="applyParent">applyParent</a></li>
                                 <li class=""><a href="#method_collapse" title="collapse">collapse</a></li>
@@ -3284,7 +2892,6 @@ one tree to another.
                                 <li class=""><a href="#method_getAncestor" title="getAncestor">getAncestor</a></li>
                                 <li class=""><a href="#method_getChildrenEl" title="getChildrenEl">getChildrenEl</a></li>
                                 <li class=""><a href="#method_getChildrenElId" title="getChildrenElId">getChildrenElId</a></li>
-                                <li class="private"><a href="#method_getChildrenHtml" title="getChildrenHtml">getChildrenHtml</a></li>
                                 <li class=""><a href="#method_getContentEl" title="getContentEl">getContentEl</a></li>
                                 <li class=""><a href="#method_getContentHtml" title="getContentHtml">getContentHtml</a></li>
                                 <li class=""><a href="#method_getDepthStyle" title="getDepthStyle">getDepthStyle</a></li>
@@ -3308,12 +2915,10 @@ one tree to another.
                                 <li class=""><a href="#method_init" title="init">init</a></li>
                                 <li class=""><a href="#method_insertAfter" title="insertAfter">insertAfter</a></li>
                                 <li class=""><a href="#method_insertBefore" title="insertBefore">insertBefore</a></li>
-                                <li class="private"><a href="#method_isChildOf" title="isChildOf">isChildOf</a></li>
                                 <li class=""><a href="#method_isDynamic" title="isDynamic">isDynamic</a></li>
                                 <li class=""><a href="#method_isRoot" title="isRoot">isRoot</a></li>
                                 <li class=""><a href="#method_loadComplete" title="loadComplete">loadComplete</a></li>
                                 <li class=""><a href="#method_refresh" title="refresh">refresh</a></li>
-                                <li class="private"><a href="#method_renderChildren" title="renderChildren">renderChildren</a></li>
                                 <li class=""><a href="#method_saveEditorValue" title="saveEditorValue">saveEditorValue</a></li>
                                 <li class=""><a href="#method_setDynamicLoad" title="setDynamicLoad">setDynamicLoad</a></li>
                                 <li class=""><a href="#method_setNodesProperty" title="setNodesProperty">setNodesProperty</a></li>
@@ -3342,7 +2947,7 @@ one tree to another.
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "private", "host": "YAHOO.widget.Node", "name": "appendChild", "url": "YAHOO.widget.Node.html#method_appendChild", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "appendTo", "url": "YAHOO.widget.Node.html#method_appendTo", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "applyParent", "url": "YAHOO.widget.Node.html#method_applyParent", "type": "method"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "calendarConfig", "url": "YAHOO.widget.DateNode.html#property_calendarConfig", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_canHaveFocus", "url": "YAHOO.widget.Node.html#method__canHaveFocus", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "children", "url": "YAHOO.widget.Node.html#property_children", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_childrenHighlighted", "url": "YAHOO.widget.Node.html#method__childrenHighlighted", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "childrenRendered", "url": "YAHOO.widget.Node.html#property_childrenRendered", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "className", "url": "YAHOO.widget.Node.html#property_className", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "collapse", "url": "YAHOO.widget.Node.html#method_collapse", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "collapseAll", "url": "YAHOO.widget.Node.html#method_collapseAll", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "completeRender", "url": "YAHOO.widget.Node.html#method_completeRender", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "contentElId", "url": "YAHOO.widget.Node.html#property_contentElId", "type": "property"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "contentStyle", "url": "YAHOO.widget.HTMLNode.html#property_contentStyle", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "contentStyle", "url": "YAHOO.widget.Node.html#property_contentStyle", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "data", "url": "YAHOO.widget.Node.html#property_data", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "dataLoader", "url": "YAHOO.widget.Node.html#property_dataLoader", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "depth", "url": "YAHOO.widget.Node.html#property_depth", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "destroyEditorContents", "url": "YAHOO.widget.Node.html#method_destroyEditorContents", "type": "method"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "displayEditedValue", "url": "YAHOO.widget.DateNode.html#method_displayEditedValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "displayEditedValue", "url": "YAHOO.widget.Node.html#method_displayEditedValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "dynamicLoadComplete", "url": "YAHOO.widget.Node.html#property_dynamicLoadComplete", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_dynLoad", "url": "YAHOO.widget.Node.html#property__dynLoad", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "editable", "url": "YAHOO.widget.Node.html#property_editable", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "editNode", "url": "YAHOO.widget.Node.html#method_editNode", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "enableHighlight", "url": "YAHOO.widget.Node.html#property_enableHighlight", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "expand", "url": "YAHOO.widget.Node.html#method_expand", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "expandAll", "url": "YAHOO.widget.Node.html#method_expandAll", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "expanded", "url": "YAHOO.widget.Node.html#property_expanded", "type": "property"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "fillEditorContainer", "url": "YAHOO.widget.DateNode.html#method_fillEditorContainer", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "fillEditorContainer", "url": "YAHOO.widget.Node.html#method_fillEditorContainer", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "focus", "url": "YAHOO.widget.Node.html#method_focus", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_focusedItem", "url": "YAHOO.widget.Node.html#property__focusedItem", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_focusHighlightedItems", "url": "YAHOO.widget.Node.html#property__focusHighlightedItems", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getAncestor", "url": "YAHOO.widget.Node.html#method_getAncestor", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getChildrenEl", "url": "YAHOO.widget.Node.html#method_getChildrenEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getChildrenElId", "url": "YAHOO.widget.Node.html#method_getChildrenElId", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "getChildrenHtml", "url": "YAHOO.widget.Node.html#method_getChildrenHtml", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getContentEl", "url": "YAHOO.widget.Node.html#method_getContentEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getContentHtml", "url": "YAHOO.widget.Node.html#method_getContentHtml", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getDepthStyle", "url": "YAHOO.widget.Node.html#method_getDepthStyle", "type": "method"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "getEditorValue", "url": "YAHOO.widget.DateNode.html#method_getEditorValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getEditorValue", "url": "YAHOO.widget.Node.html#method_getEditorValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getEl", "url": "YAHOO.widget.Node.html#method_getEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getElId", "url": "YAHOO.widget.Node.html#method_getElId", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getHoverStyle", "url": "YAHOO.widget.Node.html#method_getHoverStyle", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getHtml", "url": "YAHOO.widget.Node.html#method_getHtml", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getIconMode", "url": "YAHOO.widget.Node.html#method_getIconMode", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getNodeCount", "url": "YAHOO.widget.Node.html#method_getNodeCount", "type": "method"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "getNodeDefinition", "url": "YAHOO.widget.DateNode.html#method_getNodeDefinition", "type": "method"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "getNodeDefinition", "url": "YAHOO.widget.HTMLNode.html#method_getNodeDefinition", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getNodeDefinition", "url": "YAHOO.widget.Node.html#method_getNodeDefinition", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getNodeHtml", "url": "YAHOO.widget.Node.html#method_getNodeHtml", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getSiblings", "url": "YAHOO.widget.Node.html#method_getSiblings", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getStyle", "url": "YAHOO.widget.Node.html#method_getStyle", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getToggleEl", "url": "YAHOO.widget.Node.html#method_getToggleEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getToggleElId", "url": "YAHOO.widget.Node.html#method_getToggleElId", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getToggleLink", "url": "YAHOO.widget.Node.html#method_getToggleLink", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "hasChildren", "url": "YAHOO.widget.Node.html#method_hasChildren", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "hasIcon", "url": "YAHOO.widget.Node.html#property_hasIcon", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "hideChildren", "url": "YAHOO.widget.Node.html#method_hideChildren", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "highlight", "url": "YAHOO.widget.Node.html#method_highlight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "highlightState", "url": "YAHOO.widget.Node.html#property_highlightState", "type": "property"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "html", "url": "YAHOO.widget.HTMLNode.html#property_html", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "iconMode", "url": "YAHOO.widget.Node.html#property_iconMode", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "index", "url": "YAHOO.widget.Node.html#property_index", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "init", "url": "YAHOO.widget.Node.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "initContent", "url": "YAHOO.widget.HTMLNode.html#property_initContent", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "insertAfter", "url": "YAHOO.widget.Node.html#method_insertAfter", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "insertBefore", "url": "YAHOO.widget.Node.html#method_insertBefore", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "isChildOf", "url": "YAHOO.widget.Node.html#method_isChildOf", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "isDynamic", "url": "YAHOO.widget.Node.html#method_isDynamic", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "isLeaf", "url": "YAHOO.widget.Node.html#property_isLeaf", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "isLoading", "url": "YAHOO.widget.Node.html#property_isLoading", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "isRoot", "url": "YAHOO.widget.Node.html#method_isRoot", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "loadComplete", "url": "YAHOO.widget.Node.html#method_loadComplete", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "multiExpand", "url": "YAHOO.widget.Node.html#property_multiExpand", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "nextSibling", "url": "YAHOO.widget.Node.html#property_nextSibling", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "nowrap", "url": "YAHOO.widget.Node.html#property_nowrap", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "parent", "url": "YAHOO.widget.Node.html#property_parent", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "parentChange", "url": "YAHOO.widget.Node.html#event_parentChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Node", "name": "previousSibling", "url": "YAHOO.widget.Node.html#property_previousSibling", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "propagateHighlightDown", "url": "YAHOO.widget.Node.html#property_propagateHighlightDown", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "propagateHighlightUp", "url": "YAHOO.widget.Node.html#property_propagateHighlightUp", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "refresh", "url": "YAHOO.widget.Node.html#method_refresh", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_removeFocus", "url": "YAHOO.widget.Node.html#method__removeFocus", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "renderChildren", "url": "YAHOO.widget.Node.html#method_renderChildren", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "renderHidden", "url": "YAHOO.widget.Node.html#property_renderHidden", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "saveEditorValue", "url": "YAHOO.widget.Node.html#method_saveEditorValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "setDynamicLoad", "url": "YAHOO.widget.Node.html#method_setDynamicLoad", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_setHighlightClassName", "url": "YAHOO.widget.Node.html#method__setHighlightClassName", "type": "method"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "setHtml", "url": "YAHOO.widget.HTMLNode.html#property_setHtml", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "setNodesProperty", "url": "YAHOO.widget.Node.html#method_setNodesProperty", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "showChildren", "url": "YAHOO.widget.Node.html#method_showChildren", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "toggle", "url": "YAHOO.widget.Node.html#method_toggle", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "toggleHighlight", "url": "YAHOO.widget.Node.html#method_toggleHighlight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "toString", "url": "YAHOO.widget.Node.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "tree", "url": "YAHOO.widget.Node.html#property_tree", "type": "property"}, {"access": "private", "host": "YAHOO.widget.DateNode", "name": "_type", "url": "YAHOO.widget.DateNode.html#property__type", "type": "property"}, {"access": "private", "host": "YAHOO.widget.HTMLNode", "name": "_type", "url": "YAHOO.widget.HTMLNode.html#property__type", "type": "property"}, {"access": "private", "host": "YAHOO.widget.MenuNode", "name": "_type", "url": "YAHOO.widget.MenuNode.html#property__type", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_type", "url": "YAHOO.widget.Node.html#property__type", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "unhighlight", "url": "YAHOO.widget.Node.html#method_unhighlight", "type": "method"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Node", "name": "appendTo", "url": "YAHOO.widget.Node.html#method_appendTo", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "applyParent", "url": "YAHOO.widget.Node.html#method_applyParent", "type": "method"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "calendarConfig", "url": "YAHOO.widget.DateNode.html#property_calendarConfig", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "children", "url": "YAHOO.widget.Node.html#property_children", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "childrenRendered", "url": "YAHOO.widget.Node.html#property_childrenRendered", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "className", "url": "YAHOO.widget.Node.html#property_className", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "collapse", "url": "YAHOO.widget.Node.html#method_collapse", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "collapseAll", "url": "YAHOO.widget.Node.html#method_collapseAll", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "completeRender", "url": "YAHOO.widget.Node.html#method_completeRender", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "contentElId", "url": "YAHOO.widget.Node.html#property_contentElId", "type": "property"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "contentStyle", "url": "YAHOO.widget.HTMLNode.html#property_contentStyle", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "contentStyle", "url": "YAHOO.widget.Node.html#property_contentStyle", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "data", "url": "YAHOO.widget.Node.html#property_data", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "dataLoader", "url": "YAHOO.widget.Node.html#property_dataLoader", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "depth", "url": "YAHOO.widget.Node.html#property_depth", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "destroyEditorContents", "url": "YAHOO.widget.Node.html#method_destroyEditorContents", "type": "method"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "displayEditedValue", "url": "YAHOO.widget.DateNode.html#method_displayEditedValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "displayEditedValue", "url": "YAHOO.widget.Node.html#method_displayEditedValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "dynamicLoadComplete", "url": "YAHOO.widget.Node.html#property_dynamicLoadComplete", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "editable", "url": "YAHOO.widget.Node.html#property_editable", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "editNode", "url": "YAHOO.widget.Node.html#method_editNode", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "enableHighlight", "url": "YAHOO.widget.Node.html#property_enableHighlight", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "expand", "url": "YAHOO.widget.Node.html#method_expand", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "expandAll", "url": "YAHOO.widget.Node.html#method_expandAll", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "expanded", "url": "YAHOO.widget.Node.html#property_expanded", "type": "property"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "fillEditorContainer", "url": "YAHOO.widget.DateNode.html#method_fillEditorContainer", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "fillEditorContainer", "url": "YAHOO.widget.Node.html#method_fillEditorContainer", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "focus", "url": "YAHOO.widget.Node.html#method_focus", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getAncestor", "url": "YAHOO.widget.Node.html#method_getAncestor", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getChildrenEl", "url": "YAHOO.widget.Node.html#method_getChildrenEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getChildrenElId", "url": "YAHOO.widget.Node.html#method_getChildrenElId", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getContentEl", "url": "YAHOO.widget.Node.html#method_getContentEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getContentHtml", "url": "YAHOO.widget.Node.html#method_getContentHtml", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getDepthStyle", "url": "YAHOO.widget.Node.html#method_getDepthStyle", "type": "method"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "getEditorValue", "url": "YAHOO.widget.DateNode.html#method_getEditorValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getEditorValue", "url": "YAHOO.widget.Node.html#method_getEditorValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getEl", "url": "YAHOO.widget.Node.html#method_getEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getElId", "url": "YAHOO.widget.Node.html#method_getElId", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getHoverStyle", "url": "YAHOO.widget.Node.html#method_getHoverStyle", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getHtml", "url": "YAHOO.widget.Node.html#method_getHtml", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getIconMode", "url": "YAHOO.widget.Node.html#method_getIconMode", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getNodeCount", "url": "YAHOO.widget.Node.html#method_getNodeCount", "type": "method"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "getNodeDefinition", "url": "YAHOO.widget.DateNode.html#method_getNodeDefinition", "type": "method"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "getNodeDefinition", "url": "YAHOO.widget.HTMLNode.html#method_getNodeDefinition", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getNodeDefinition", "url": "YAHOO.widget.Node.html#method_getNodeDefinition", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getNodeHtml", "url": "YAHOO.widget.Node.html#method_getNodeHtml", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getSiblings", "url": "YAHOO.widget.Node.html#method_getSiblings", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getStyle", "url": "YAHOO.widget.Node.html#method_getStyle", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getToggleEl", "url": "YAHOO.widget.Node.html#method_getToggleEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getToggleElId", "url": "YAHOO.widget.Node.html#method_getToggleElId", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getToggleLink", "url": "YAHOO.widget.Node.html#method_getToggleLink", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "hasChildren", "url": "YAHOO.widget.Node.html#method_hasChildren", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "hasIcon", "url": "YAHOO.widget.Node.html#property_hasIcon", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "hideChildren", "url": "YAHOO.widget.Node.html#method_hideChildren", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "highlight", "url": "YAHOO.widget.Node.html#method_highlight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "highlightState", "url": "YAHOO.widget.Node.html#property_highlightState", "type": "property"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "html", "url": "YAHOO.widget.HTMLNode.html#property_html", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "iconMode", "url": "YAHOO.widget.Node.html#property_iconMode", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "index", "url": "YAHOO.widget.Node.html#property_index", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "init", "url": "YAHOO.widget.Node.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "initContent", "url": "YAHOO.widget.HTMLNode.html#property_initContent", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "insertAfter", "url": "YAHOO.widget.Node.html#method_insertAfter", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "insertBefore", "url": "YAHOO.widget.Node.html#method_insertBefore", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "isDynamic", "url": "YAHOO.widget.Node.html#method_isDynamic", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "isLeaf", "url": "YAHOO.widget.Node.html#property_isLeaf", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "isLoading", "url": "YAHOO.widget.Node.html#property_isLoading", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "isRoot", "url": "YAHOO.widget.Node.html#method_isRoot", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "loadComplete", "url": "YAHOO.widget.Node.html#method_loadComplete", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "multiExpand", "url": "YAHOO.widget.Node.html#property_multiExpand", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "nextSibling", "url": "YAHOO.widget.Node.html#property_nextSibling", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "nowrap", "url": "YAHOO.widget.Node.html#property_nowrap", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "parent", "url": "YAHOO.widget.Node.html#property_parent", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "parentChange", "url": "YAHOO.widget.Node.html#event_parentChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Node", "name": "previousSibling", "url": "YAHOO.widget.Node.html#property_previousSibling", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "propagateHighlightDown", "url": "YAHOO.widget.Node.html#property_propagateHighlightDown", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "propagateHighlightUp", "url": "YAHOO.widget.Node.html#property_propagateHighlightUp", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "refresh", "url": "YAHOO.widget.Node.html#method_refresh", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "renderHidden", "url": "YAHOO.widget.Node.html#property_renderHidden", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "saveEditorValue", "url": "YAHOO.widget.Node.html#method_saveEditorValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "setDynamicLoad", "url": "YAHOO.widget.Node.html#method_setDynamicLoad", "type": "method"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "setHtml", "url": "YAHOO.widget.HTMLNode.html#property_setHtml", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "setNodesProperty", "url": "YAHOO.widget.Node.html#method_setNodesProperty", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "showChildren", "url": "YAHOO.widget.Node.html#method_showChildren", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "toggle", "url": "YAHOO.widget.Node.html#method_toggle", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "toggleHighlight", "url": "YAHOO.widget.Node.html#method_toggleHighlight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "toString", "url": "YAHOO.widget.Node.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "tree", "url": "YAHOO.widget.Node.html#property_tree", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "unhighlight", "url": "YAHOO.widget.Node.html#method_unhighlight", "type": "method"}];
     YAHOO.yuidoc.init();
 </script>
 </body>

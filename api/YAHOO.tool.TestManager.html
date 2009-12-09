@@ -16,7 +16,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>yuitest&nbsp; <span class="subtitle">2.8.0r4</span></h3>
+        <h3>yuitest&nbsp; <span class="subtitle">-s</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_yuitest.html" title="yuitest">yuitest</a>
                  &gt; YAHOO.tool.TestManager 
@@ -67,96 +67,6 @@
                         <div class="section field details">
                             <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <div class="private" rel="yui:property" resource="#property__curPage">
-                                    <h4><a name="property__curPage" property="yui:name">_curPage</a>
-                                        - <code>private static <span property="yui:type">String</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The URL of the page currently being executed.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__frame">
-                                    <h4><a name="property__frame" property="yui:name">_frame</a>
-                                        - <code>private static <span property="yui:type">Window</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The frame used to load and run tests.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__logger">
-                                    <h4><a name="property__logger" property="yui:name">_logger</a>
-                                        - <code>private static <span property="yui:type">YAHOO.tool.TestLogger</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The logger used to output results from the various tests.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__pages">
-                                    <h4><a name="property__pages" property="yui:name">_pages</a>
-                                        - <code>private static <span property="yui:type">String[]</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Array of pages to load.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__results">
-                                    <h4><a name="property__results" property="yui:name">_results</a>
-                                        - <code>private static <span property="yui:type">Object</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            Aggregated results
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:property" resource="#property__timeoutId">
-                                    <h4><a name="property__timeoutId" property="yui:name">_timeoutId</a>
-                                        - <code>private static <span property="yui:type">int</span></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description" property="yui:description">
-                                            The timeout ID for the next iteration through the tests.
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:property" resource="#property_TEST_MANAGER_BEGIN_EVENT">
                                     <h4><a name="property_TEST_MANAGER_BEGIN_EVENT" property="yui:name">TEST_MANAGER_BEGIN_EVENT</a>
                                         - <code>static final <span property="yui:type">string</span></code>
@@ -226,112 +136,6 @@
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
-                                    <div class="private" rel="yui:method" resource="#method__handleTestRunnerComplete">
-                                    <h4>
-                                        <a name="method__handleTestRunnerComplete">_handleTestRunnerComplete</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                         static 
-                                        
-                                        Void
-                                            <strong property="yui:name">_handleTestRunnerComplete</strong>
-                                           (
-                                                
-                                                        
-                                                         data
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Handles TestRunner.COMPLETE_EVENT, storing the results and beginning
-the loop again.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl rel="yui:parameters">
-                                                    <dt>Parameters:</dt>
-                                                        <dd rel="yui:parameter">
-                                                        <code><span property="yui:name">data</span>
-                                                        &lt;<span property="yui:type">Object</span>&gt;
-                                                        </code>
-                                                        <span property="yui:description"> Data about the event.</span>
-                                                        </dd>
-                                                </dl>
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__processResults">
-                                    <h4>
-                                        <a name="method__processResults">_processResults</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                         static 
-                                        
-                                        Void
-                                            <strong property="yui:name">_processResults</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Processes the results of a test page run, outputting log messages
-for failed tests.
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
-                                    <div class="private" rel="yui:method" resource="#method__run">
-                                    <h4>
-                                        <a name="method__run">_run</a></h4>
-                                    <div class="detail" >
-                                        <code>
-                                         private 
-                                         static 
-                                        
-                                        Void
-                                            <strong property="yui:name">_run</strong>
-                                           (
-                                            )
-                                        </code>
-                                        
-                                        <div class="description" property="yui:description">
-                                            Loads the next test page into the iframe.
-                                        </div>
-
-                                        <div class="description">
-
-
-
-
-             
-
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    </div>
                                     <div class="" rel="yui:method" resource="#method_load">
                                     <h4>
                                         <a name="method_load">load</a></h4>
@@ -718,7 +522,6 @@ page that was loaded, and the test suite results</span>
                                 <li class=""><a href="YAHOO.tool.TestCase.Wait.html" title="YAHOO.tool.TestCase.Wait">YAHOO.tool.TestCase.Wait</a></li>
                                 <li class=""><a href="YAHOO.tool.TestLogger.html" title="YAHOO.tool.TestLogger">YAHOO.tool.TestLogger</a></li>
                                 <li class="selected"><a href="YAHOO.tool.TestManager.html" title="YAHOO.tool.TestManager">YAHOO.tool.TestManager</a></li>
-                                <li class=""><a href="YAHOO.tool.TestNode.html" title="YAHOO.tool.TestNode">YAHOO.tool.TestNode</a></li>
                                 <li class=""><a href="YAHOO.tool.TestReporter.html" title="YAHOO.tool.TestReporter">YAHOO.tool.TestReporter</a></li>
                                 <li class=""><a href="YAHOO.tool.TestRunner.html" title="YAHOO.tool.TestRunner">YAHOO.tool.TestRunner</a></li>
                                 <li class=""><a href="YAHOO.tool.TestSuite.html" title="YAHOO.tool.TestSuite">YAHOO.tool.TestSuite</a></li>
@@ -757,12 +560,6 @@ page that was loaded, and the test suite results</span>
                     <div id="propertyList" class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li class="private"><a href="#property__curPage" title="_curPage">_curPage</a></li>
-                                <li class="private"><a href="#property__frame" title="_frame">_frame</a></li>
-                                <li class="private"><a href="#property__logger" title="_logger">_logger</a></li>
-                                <li class="private"><a href="#property__pages" title="_pages">_pages</a></li>
-                                <li class="private"><a href="#property__results" title="_results">_results</a></li>
-                                <li class="private"><a href="#property__timeoutId" title="_timeoutId">_timeoutId</a></li>
                                 <li class=""><a href="#property_TEST_MANAGER_BEGIN_EVENT" title="TEST_MANAGER_BEGIN_EVENT">TEST_MANAGER_BEGIN_EVENT</a></li>
                                 <li class=""><a href="#property_TEST_MANAGER_COMPLETE_EVENT" title="TEST_MANAGER_COMPLETE_EVENT">TEST_MANAGER_COMPLETE_EVENT</a></li>
                                 <li class=""><a href="#property_TEST_PAGE_BEGIN_EVENT" title="TEST_PAGE_BEGIN_EVENT">TEST_PAGE_BEGIN_EVENT</a></li>
@@ -773,9 +570,6 @@ page that was loaded, and the test suite results</span>
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li class="private"><a href="#method__handleTestRunnerComplete" title="_handleTestRunnerComplete">_handleTestRunnerComplete</a></li>
-                                <li class="private"><a href="#method__processResults" title="_processResults">_processResults</a></li>
-                                <li class="private"><a href="#method__run" title="_run">_run</a></li>
                                 <li class=""><a href="#method_load" title="load">load</a></li>
                                 <li class=""><a href="#method_setPages" title="setPages">setPages</a></li>
                                 <li class=""><a href="#method_start" title="start">start</a></li>
@@ -803,7 +597,7 @@ page that was loaded, and the test suite results</span>
 	</div>
 </div>
 <script type="text/javascript">
-    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.ComparisonFailure", "name": "actual", "url": "YAHOO.util.ComparisonFailure.html#property_actual", "type": "property"}, {"access": "", "host": "YAHOO.util.Assert", "name": "areEqual", "url": "YAHOO.util.Assert.html#method_areEqual", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "areNotEqual", "url": "YAHOO.util.Assert.html#method_areNotEqual", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "areNotSame", "url": "YAHOO.util.Assert.html#method_areNotSame", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "areSame", "url": "YAHOO.util.Assert.html#method_areSame", "type": "method"}, {"access": "", "host": "YAHOO.util.UnexpectedError", "name": "cause", "url": "YAHOO.util.UnexpectedError.html#property_cause", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestLogger", "name": "clearTestRunner", "url": "YAHOO.tool.TestLogger.html#method_clearTestRunner", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "contains", "url": "YAHOO.util.ArrayAssert.html#method_contains", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "containsItems", "url": "YAHOO.util.ArrayAssert.html#method_containsItems", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "containsMatch", "url": "YAHOO.util.ArrayAssert.html#method_containsMatch", "type": "method"}, {"access": "private", "host": "YAHOO.tool.TestManager", "name": "_curPage", "url": "YAHOO.tool.TestManager.html#property__curPage", "type": "property"}, {"access": "", "host": "YAHOO.util.DateAssert", "name": "datesAreEqual", "url": "YAHOO.util.DateAssert.html#method_datesAreEqual", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase.Wait", "name": "delay", "url": "YAHOO.tool.TestCase.Wait.html#property_delay", "type": "property"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "doesNotContain", "url": "YAHOO.util.ArrayAssert.html#method_doesNotContain", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "doesNotContainItems", "url": "YAHOO.util.ArrayAssert.html#method_doesNotContainItems", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "doesNotContainMatch", "url": "YAHOO.util.ArrayAssert.html#method_doesNotContainMatch", "type": "method"}, {"access": "", "host": "YAHOO.util.ComparisonFailure", "name": "expected", "url": "YAHOO.util.ComparisonFailure.html#property_expected", "type": "property"}, {"access": "", "host": "YAHOO.util.Assert", "name": "fail", "url": "YAHOO.util.Assert.html#method_fail", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Assert", "name": "_formatMessage", "url": "YAHOO.util.Assert.html#method__formatMessage", "type": "method"}, {"access": "private", "host": "YAHOO.tool.TestLogger", "name": "formatMsg", "url": "YAHOO.tool.TestLogger.html#method_formatMsg", "type": "method"}, {"access": "private", "host": "YAHOO.tool.TestManager", "name": "_frame", "url": "YAHOO.tool.TestManager.html#property__frame", "type": "property"}, {"access": "", "host": "YAHOO.util.AssertionError", "name": "getMessage", "url": "YAHOO.util.AssertionError.html#method_getMessage", "type": "method"}, {"access": "", "host": "YAHOO.util.UnexpectedValue", "name": "getMessage", "url": "YAHOO.util.UnexpectedValue.html#method_getMessage", "type": "method"}, {"access": "private", "host": "YAHOO.tool.TestManager", "name": "_handleTestRunnerComplete", "url": "YAHOO.tool.TestManager.html#method__handleTestRunnerComplete", "type": "method"}, {"access": "private", "host": "YAHOO.tool.TestLogger", "name": "_handleTestRunnerEvent", "url": "YAHOO.tool.TestLogger.html#method__handleTestRunnerEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.ObjectAssert", "name": "hasProperty", "url": "YAHOO.util.ObjectAssert.html#method_hasProperty", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "indexOf", "url": "YAHOO.util.ArrayAssert.html#method_indexOf", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isArray", "url": "YAHOO.util.Assert.html#method_isArray", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isBoolean", "url": "YAHOO.util.Assert.html#method_isBoolean", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "isEmpty", "url": "YAHOO.util.ArrayAssert.html#method_isEmpty", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isFalse", "url": "YAHOO.util.Assert.html#method_isFalse", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isFunction", "url": "YAHOO.util.Assert.html#method_isFunction", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isInstanceOf", "url": "YAHOO.util.Assert.html#method_isInstanceOf", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isNaN", "url": "YAHOO.util.Assert.html#method_isNaN", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "isNotEmpty", "url": "YAHOO.util.ArrayAssert.html#method_isNotEmpty", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isNotNaN", "url": "YAHOO.util.Assert.html#method_isNotNaN", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isNotNull", "url": "YAHOO.util.Assert.html#method_isNotNull", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isNotUndefined", "url": "YAHOO.util.Assert.html#method_isNotUndefined", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isNull", "url": "YAHOO.util.Assert.html#method_isNull", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isNumber", "url": "YAHOO.util.Assert.html#method_isNumber", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isObject", "url": "YAHOO.util.Assert.html#method_isObject", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isString", "url": "YAHOO.util.Assert.html#method_isString", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isTrue", "url": "YAHOO.util.Assert.html#method_isTrue", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isTypeOf", "url": "YAHOO.util.Assert.html#method_isTypeOf", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isUndefined", "url": "YAHOO.util.Assert.html#method_isUndefined", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "itemsAreEqual", "url": "YAHOO.util.ArrayAssert.html#method_itemsAreEqual", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "itemsAreEquivalent", "url": "YAHOO.util.ArrayAssert.html#method_itemsAreEquivalent", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "itemsAreSame", "url": "YAHOO.util.ArrayAssert.html#method_itemsAreSame", "type": "method"}, {"access": "", "host": "YAHOO.util.UnexpectedError", "name": "JSON", "url": "YAHOO.util.UnexpectedError.html#method_JSON", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase.Wait", "name": "JSON", "url": "YAHOO.tool.TestCase.Wait.html#method_JSON", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase.Wait", "name": "JUnitXML", "url": "YAHOO.tool.TestCase.Wait.html#method_JUnitXML", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "lastIndexOf", "url": "YAHOO.util.ArrayAssert.html#method_lastIndexOf", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "load", "url": "YAHOO.tool.TestManager.html#method_load", "type": "method"}, {"access": "private", "host": "YAHOO.tool.TestManager", "name": "_logger", "url": "YAHOO.tool.TestManager.html#property__logger", "type": "property"}, {"access": "", "host": "YAHOO.util.AssertionError", "name": "name", "url": "YAHOO.util.AssertionError.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.ComparisonFailure", "name": "name", "url": "YAHOO.util.ComparisonFailure.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.UnexpectedValue", "name": "name", "url": "YAHOO.util.UnexpectedValue.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.ShouldFail", "name": "name", "url": "YAHOO.util.ShouldFail.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.ShouldError", "name": "name", "url": "YAHOO.util.ShouldError.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.UnexpectedError", "name": "name", "url": "YAHOO.util.UnexpectedError.html#property_name", "type": "property"}, {"access": "private", "host": "YAHOO.tool.TestManager", "name": "_pages", "url": "YAHOO.tool.TestManager.html#property__pages", "type": "property"}, {"access": "private", "host": "YAHOO.tool.TestManager", "name": "_processResults", "url": "YAHOO.tool.TestManager.html#method__processResults", "type": "method"}, {"access": "", "host": "YAHOO.util.ObjectAssert", "name": "propertiesAreEqual", "url": "YAHOO.util.ObjectAssert.html#method_propertiesAreEqual", "type": "method"}, {"access": "private", "host": "YAHOO.tool.TestManager", "name": "_results", "url": "YAHOO.tool.TestManager.html#property__results", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestCase", "name": "resume", "url": "YAHOO.tool.TestCase.html#method_resume", "type": "method"}, {"access": "private", "host": "YAHOO.tool.TestManager", "name": "_run", "url": "YAHOO.tool.TestManager.html#method__run", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase.Wait", "name": "segment", "url": "YAHOO.tool.TestCase.Wait.html#property_segment", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "setPages", "url": "YAHOO.tool.TestManager.html#method_setPages", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestLogger", "name": "setTestRunner", "url": "YAHOO.tool.TestLogger.html#method_setTestRunner", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase", "name": "setUp", "url": "YAHOO.tool.TestCase.html#method_setUp", "type": "method"}, {"access": "", "host": "YAHOO.util.UnexpectedError", "name": "stack", "url": "YAHOO.util.UnexpectedError.html#property_stack", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "start", "url": "YAHOO.tool.TestManager.html#method_start", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "stop", "url": "YAHOO.tool.TestManager.html#method_stop", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase.Wait", "name": "TAP", "url": "YAHOO.tool.TestCase.Wait.html#method_TAP", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase", "name": "tearDown", "url": "YAHOO.tool.TestCase.html#method_tearDown", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "testmanagerbegin", "url": "YAHOO.tool.TestManager.html#event_testmanagerbegin", "type": "event"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "TEST_MANAGER_BEGIN_EVENT", "url": "YAHOO.tool.TestManager.html#property_TEST_MANAGER_BEGIN_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "testmanagercomplete", "url": "YAHOO.tool.TestManager.html#event_testmanagercomplete", "type": "event"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "TEST_MANAGER_COMPLETE_EVENT", "url": "YAHOO.tool.TestManager.html#property_TEST_MANAGER_COMPLETE_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "testpagebegin", "url": "YAHOO.tool.TestManager.html#event_testpagebegin", "type": "event"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "TEST_PAGE_BEGIN_EVENT", "url": "YAHOO.tool.TestManager.html#property_TEST_PAGE_BEGIN_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "testpagecomplete", "url": "YAHOO.tool.TestManager.html#event_testpagecomplete", "type": "event"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "TEST_PAGE_COMPLETE_EVENT", "url": "YAHOO.tool.TestManager.html#property_TEST_PAGE_COMPLETE_EVENT", "type": "property"}, {"access": "private", "host": "YAHOO.tool.TestManager", "name": "_timeoutId", "url": "YAHOO.tool.TestManager.html#property__timeoutId", "type": "property"}, {"access": "", "host": "YAHOO.util.DateAssert", "name": "timesAreEqual", "url": "YAHOO.util.DateAssert.html#method_timesAreEqual", "type": "method"}, {"access": "", "host": "YAHOO.util.AssertionError", "name": "toString", "url": "YAHOO.util.AssertionError.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.ComparisonFailure", "name": "toString", "url": "YAHOO.util.ComparisonFailure.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.UnexpectedValue", "name": "unexpected", "url": "YAHOO.util.UnexpectedValue.html#property_unexpected", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestCase", "name": "wait", "url": "YAHOO.tool.TestCase.html#method_wait", "type": "method"}, {"access": "", "host": "YAHOO.util.UnexpectedError", "name": "XdebugJSON", "url": "YAHOO.util.UnexpectedError.html#method_XdebugJSON", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase.Wait", "name": "XML", "url": "YAHOO.tool.TestCase.Wait.html#method_XML", "type": "method"}];
+    var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.ComparisonFailure", "name": "actual", "url": "YAHOO.util.ComparisonFailure.html#property_actual", "type": "property"}, {"access": "", "host": "YAHOO.util.Assert", "name": "areEqual", "url": "YAHOO.util.Assert.html#method_areEqual", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "areNotEqual", "url": "YAHOO.util.Assert.html#method_areNotEqual", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "areNotSame", "url": "YAHOO.util.Assert.html#method_areNotSame", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "areSame", "url": "YAHOO.util.Assert.html#method_areSame", "type": "method"}, {"access": "", "host": "YAHOO.util.UnexpectedError", "name": "cause", "url": "YAHOO.util.UnexpectedError.html#property_cause", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestLogger", "name": "clearTestRunner", "url": "YAHOO.tool.TestLogger.html#method_clearTestRunner", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "contains", "url": "YAHOO.util.ArrayAssert.html#method_contains", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "containsItems", "url": "YAHOO.util.ArrayAssert.html#method_containsItems", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "containsMatch", "url": "YAHOO.util.ArrayAssert.html#method_containsMatch", "type": "method"}, {"access": "", "host": "YAHOO.util.DateAssert", "name": "datesAreEqual", "url": "YAHOO.util.DateAssert.html#method_datesAreEqual", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase.Wait", "name": "delay", "url": "YAHOO.tool.TestCase.Wait.html#property_delay", "type": "property"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "doesNotContain", "url": "YAHOO.util.ArrayAssert.html#method_doesNotContain", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "doesNotContainItems", "url": "YAHOO.util.ArrayAssert.html#method_doesNotContainItems", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "doesNotContainMatch", "url": "YAHOO.util.ArrayAssert.html#method_doesNotContainMatch", "type": "method"}, {"access": "", "host": "YAHOO.util.ComparisonFailure", "name": "expected", "url": "YAHOO.util.ComparisonFailure.html#property_expected", "type": "property"}, {"access": "", "host": "YAHOO.util.Assert", "name": "fail", "url": "YAHOO.util.Assert.html#method_fail", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Assert", "name": "_formatMessage", "url": "YAHOO.util.Assert.html#method__formatMessage", "type": "method"}, {"access": "", "host": "YAHOO.util.AssertionError", "name": "getMessage", "url": "YAHOO.util.AssertionError.html#method_getMessage", "type": "method"}, {"access": "", "host": "YAHOO.util.UnexpectedValue", "name": "getMessage", "url": "YAHOO.util.UnexpectedValue.html#method_getMessage", "type": "method"}, {"access": "", "host": "YAHOO.util.ObjectAssert", "name": "hasProperty", "url": "YAHOO.util.ObjectAssert.html#method_hasProperty", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "indexOf", "url": "YAHOO.util.ArrayAssert.html#method_indexOf", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isArray", "url": "YAHOO.util.Assert.html#method_isArray", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isBoolean", "url": "YAHOO.util.Assert.html#method_isBoolean", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "isEmpty", "url": "YAHOO.util.ArrayAssert.html#method_isEmpty", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isFalse", "url": "YAHOO.util.Assert.html#method_isFalse", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isFunction", "url": "YAHOO.util.Assert.html#method_isFunction", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isInstanceOf", "url": "YAHOO.util.Assert.html#method_isInstanceOf", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isNaN", "url": "YAHOO.util.Assert.html#method_isNaN", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "isNotEmpty", "url": "YAHOO.util.ArrayAssert.html#method_isNotEmpty", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isNotNaN", "url": "YAHOO.util.Assert.html#method_isNotNaN", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isNotNull", "url": "YAHOO.util.Assert.html#method_isNotNull", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isNotUndefined", "url": "YAHOO.util.Assert.html#method_isNotUndefined", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isNull", "url": "YAHOO.util.Assert.html#method_isNull", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isNumber", "url": "YAHOO.util.Assert.html#method_isNumber", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isObject", "url": "YAHOO.util.Assert.html#method_isObject", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isString", "url": "YAHOO.util.Assert.html#method_isString", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isTrue", "url": "YAHOO.util.Assert.html#method_isTrue", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isTypeOf", "url": "YAHOO.util.Assert.html#method_isTypeOf", "type": "method"}, {"access": "", "host": "YAHOO.util.Assert", "name": "isUndefined", "url": "YAHOO.util.Assert.html#method_isUndefined", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "itemsAreEqual", "url": "YAHOO.util.ArrayAssert.html#method_itemsAreEqual", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "itemsAreEquivalent", "url": "YAHOO.util.ArrayAssert.html#method_itemsAreEquivalent", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "itemsAreSame", "url": "YAHOO.util.ArrayAssert.html#method_itemsAreSame", "type": "method"}, {"access": "", "host": "YAHOO.util.UnexpectedError", "name": "JSON", "url": "YAHOO.util.UnexpectedError.html#method_JSON", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase.Wait", "name": "JSON", "url": "YAHOO.tool.TestCase.Wait.html#method_JSON", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase.Wait", "name": "JUnitXML", "url": "YAHOO.tool.TestCase.Wait.html#method_JUnitXML", "type": "method"}, {"access": "", "host": "YAHOO.util.ArrayAssert", "name": "lastIndexOf", "url": "YAHOO.util.ArrayAssert.html#method_lastIndexOf", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "load", "url": "YAHOO.tool.TestManager.html#method_load", "type": "method"}, {"access": "", "host": "YAHOO.util.AssertionError", "name": "name", "url": "YAHOO.util.AssertionError.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.ComparisonFailure", "name": "name", "url": "YAHOO.util.ComparisonFailure.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.UnexpectedValue", "name": "name", "url": "YAHOO.util.UnexpectedValue.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.ShouldFail", "name": "name", "url": "YAHOO.util.ShouldFail.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.ShouldError", "name": "name", "url": "YAHOO.util.ShouldError.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.UnexpectedError", "name": "name", "url": "YAHOO.util.UnexpectedError.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.ObjectAssert", "name": "propertiesAreEqual", "url": "YAHOO.util.ObjectAssert.html#method_propertiesAreEqual", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase", "name": "resume", "url": "YAHOO.tool.TestCase.html#method_resume", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase.Wait", "name": "segment", "url": "YAHOO.tool.TestCase.Wait.html#property_segment", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "setPages", "url": "YAHOO.tool.TestManager.html#method_setPages", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestLogger", "name": "setTestRunner", "url": "YAHOO.tool.TestLogger.html#method_setTestRunner", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase", "name": "setUp", "url": "YAHOO.tool.TestCase.html#method_setUp", "type": "method"}, {"access": "", "host": "YAHOO.util.UnexpectedError", "name": "stack", "url": "YAHOO.util.UnexpectedError.html#property_stack", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "start", "url": "YAHOO.tool.TestManager.html#method_start", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "stop", "url": "YAHOO.tool.TestManager.html#method_stop", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase.Wait", "name": "TAP", "url": "YAHOO.tool.TestCase.Wait.html#method_TAP", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase", "name": "tearDown", "url": "YAHOO.tool.TestCase.html#method_tearDown", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "testmanagerbegin", "url": "YAHOO.tool.TestManager.html#event_testmanagerbegin", "type": "event"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "TEST_MANAGER_BEGIN_EVENT", "url": "YAHOO.tool.TestManager.html#property_TEST_MANAGER_BEGIN_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "testmanagercomplete", "url": "YAHOO.tool.TestManager.html#event_testmanagercomplete", "type": "event"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "TEST_MANAGER_COMPLETE_EVENT", "url": "YAHOO.tool.TestManager.html#property_TEST_MANAGER_COMPLETE_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "testpagebegin", "url": "YAHOO.tool.TestManager.html#event_testpagebegin", "type": "event"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "TEST_PAGE_BEGIN_EVENT", "url": "YAHOO.tool.TestManager.html#property_TEST_PAGE_BEGIN_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "testpagecomplete", "url": "YAHOO.tool.TestManager.html#event_testpagecomplete", "type": "event"}, {"access": "", "host": "YAHOO.tool.TestManager", "name": "TEST_PAGE_COMPLETE_EVENT", "url": "YAHOO.tool.TestManager.html#property_TEST_PAGE_COMPLETE_EVENT", "type": "property"}, {"access": "", "host": "YAHOO.util.DateAssert", "name": "timesAreEqual", "url": "YAHOO.util.DateAssert.html#method_timesAreEqual", "type": "method"}, {"access": "", "host": "YAHOO.util.AssertionError", "name": "toString", "url": "YAHOO.util.AssertionError.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.ComparisonFailure", "name": "toString", "url": "YAHOO.util.ComparisonFailure.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.util.UnexpectedValue", "name": "unexpected", "url": "YAHOO.util.UnexpectedValue.html#property_unexpected", "type": "property"}, {"access": "", "host": "YAHOO.tool.TestCase", "name": "wait", "url": "YAHOO.tool.TestCase.html#method_wait", "type": "method"}, {"access": "", "host": "YAHOO.util.UnexpectedError", "name": "XdebugJSON", "url": "YAHOO.util.UnexpectedError.html#method_XdebugJSON", "type": "method"}, {"access": "", "host": "YAHOO.tool.TestCase.Wait", "name": "XML", "url": "YAHOO.tool.TestCase.Wait.html#method_XML", "type": "method"}];
     YAHOO.yuidoc.init();
 </script>
 </body>
