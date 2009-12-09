@@ -128,7 +128,8 @@ Calendar Release Notes
     day of the week. Default is 0 (Sunday).
 
     janDate is the date in the first week of January, which
-    identifies the first week of the year. 
+    identifies the first week of the year.
+ 
     Default is YAHOO.widget.DateMath.WEEK_ONE_JAN_DATE (1)
 
   NOTE: Calendar instances themselves do not currently expose a 
